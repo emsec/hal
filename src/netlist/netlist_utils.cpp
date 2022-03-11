@@ -1146,7 +1146,7 @@ namespace hal
         }
 
         Result<std::vector<Gate*>>
-            get_gate_chain(Gate* start_gate, const std::set<const GatePin*>& input_pins, const std::set<const GatePin*>& output_pins, const std::function<bool(const Gate*)>& filter)
+            get_gate_chain(Gate* start_gate, const std::vector<const GatePin*>& input_pins, const std::vector<const GatePin*>& output_pins, const std::function<bool(const Gate*)>& filter)
         {
             if (start_gate == nullptr)
             {
@@ -1175,9 +1175,9 @@ namespace hal
                 std::vector<Endpoint*> successors = current_gate->get_successors([input_pins, output_pins, target_type, filter](const GatePin* ep_pin, Endpoint* ep) {
                     if (ep->get_gate()->get_type() == target_type)
                     {
-                        if (output_pins.empty() || output_pins.find(ep_pin) != output_pins.end())
+                        if (output_pins.empty() || std::find(output_pins.begin(), output_pins.end(), ep_pin) != output_pins.end())
                         {
-                            if (input_pins.empty() || input_pins.find(ep->get_pin()) != input_pins.end())
+                            if (input_pins.empty() || std::find(input_pins.begin(), input_pins.end(), ep->get_pin()) != input_pins.end())
                             {
                                 if (!filter || filter(ep->get_gate()))
                                 {
@@ -1225,9 +1225,9 @@ namespace hal
                 std::vector<Endpoint*> predecessors = current_gate->get_predecessors([input_pins, output_pins, target_type, filter](const GatePin* ep_pin, Endpoint* ep) {
                     if (ep->get_gate()->get_type() == target_type)
                     {
-                        if (input_pins.empty() || input_pins.find(ep_pin) != input_pins.end())
+                        if (input_pins.empty() || std::find(input_pins.begin(), input_pins.end(), ep_pin) != input_pins.end())
                         {
-                            if (output_pins.empty() || output_pins.find(ep->get_pin()) != output_pins.end())
+                            if (output_pins.empty() || std::find(output_pins.begin(), output_pins.end(), ep->get_pin()) != output_pins.end())
                             {
                                 if (!filter || filter(ep->get_gate()))
                                 {
@@ -1271,8 +1271,8 @@ namespace hal
 
         Result<std::vector<Gate*>> get_complex_gate_chain(Gate* start_gate,
                                                           const std::vector<GateType*>& chain_types,
-                                                          const std::map<GateType*, std::set<const GatePin*>>& input_pins,
-                                                          const std::map<GateType*, std::set<const GatePin*>>& output_pins,
+                                                          const std::map<GateType*, std::vector<const GatePin*>>& input_pins,
+                                                          const std::map<GateType*, std::vector<const GatePin*>>& output_pins,
                                                           const std::function<bool(const Gate*)>& filter)
         {
             if (start_gate == nullptr)
@@ -1308,15 +1308,15 @@ namespace hal
                 found_next_gate = false;
 
                 // check all successors of current gate
-                GateType* target_type                   = chain_types.at(current_index);
-                const std::set<const GatePin*>& inputs  = input_pins.at(target_type);
-                const std::set<const GatePin*>& outputs = output_pins.at(chain_types.at(last_index));
-                std::vector<Endpoint*> successors       = current_gate->get_successors([target_type, inputs, outputs, filter](const GatePin* ep_pin, Endpoint* ep) {
+                GateType* target_type                      = chain_types.at(current_index);
+                const std::vector<const GatePin*>& inputs  = input_pins.at(target_type);
+                const std::vector<const GatePin*>& outputs = output_pins.at(chain_types.at(last_index));
+                std::vector<Endpoint*> successors          = current_gate->get_successors([target_type, inputs, outputs, filter](const GatePin* ep_pin, Endpoint* ep) {
                     if (ep->get_gate()->get_type() == target_type)
                     {
-                        if (outputs.empty() || outputs.find(ep_pin) != outputs.end())
+                        if (outputs.empty() || std::find(outputs.begin(), outputs.end(), ep_pin) != outputs.end())
                         {
-                            if (inputs.empty() || inputs.find(ep->get_pin()) != inputs.end())
+                            if (inputs.empty() || std::find(inputs.begin(), inputs.end(), ep->get_pin()) != inputs.end())
                             {
                                 if (!filter || filter(ep->get_gate()))
                                 {
@@ -1373,15 +1373,15 @@ namespace hal
                 found_next_gate = false;
 
                 // check all predecessors of current gate
-                GateType* target_type                   = chain_types.at(current_index);
-                const std::set<const GatePin*>& inputs  = input_pins.at(chain_types.at(last_index));
-                const std::set<const GatePin*>& outputs = output_pins.at(target_type);
-                std::vector<Endpoint*> predecessors     = current_gate->get_predecessors([target_type, inputs, outputs, filter](const GatePin* ep_pin, Endpoint* ep) {
+                GateType* target_type                      = chain_types.at(current_index);
+                const std::vector<const GatePin*>& inputs  = input_pins.at(chain_types.at(last_index));
+                const std::vector<const GatePin*>& outputs = output_pins.at(target_type);
+                std::vector<Endpoint*> predecessors        = current_gate->get_predecessors([target_type, inputs, outputs, filter](const GatePin* ep_pin, Endpoint* ep) {
                     if (ep->get_gate()->get_type() == target_type)
                     {
-                        if (inputs.empty() || inputs.find(ep_pin) != inputs.end())
+                        if (inputs.empty() || std::find(inputs.begin(), inputs.end(), ep_pin) != inputs.end())
                         {
-                            if (outputs.empty() || outputs.find(ep->get_pin()) != outputs.end())
+                            if (outputs.empty() || std::find(outputs.begin(), outputs.end(), ep->get_pin()) != outputs.end())
                             {
                                 if (!filter || filter(ep->get_gate()))
                                 {

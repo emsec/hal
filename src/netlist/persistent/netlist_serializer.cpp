@@ -1090,7 +1090,7 @@ namespace hal
                 }
 
                 log_info("netlist_persistent", "deserialized '{}' in {:2.2f} seconds", hal_file.string(), DURATION(begin_time));
-                return std::move(netlist);
+                return netlist;
             }
         }
     }    // namespace netlist_serializer

@@ -334,7 +334,7 @@ namespace hal
             }
             else
             {
-                direction = (start < pin_index) ? 1 : -1;
+                direction = (start < (i32)pin_index) ? 1 : -1;
             }
         }
 

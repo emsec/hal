@@ -187,7 +187,7 @@ namespace hal
         Grouping* get_grouping() const;
 
         /**
-         * TODO pybind
+         * TODO test
          * Get the Boolean function specified by the given name.
          * This name can for example be an output pin of the gate or any other user-defined function name.
          *
@@ -197,7 +197,7 @@ namespace hal
         Result<BooleanFunction> get_boolean_function(const std::string& name) const;
 
         /**
-         * @brief TODO pybind
+         * TODO test
          * Get the Boolean function corresponding to the given output pin.
          * If `pin` is a `nullptr`, the Boolean function of the first output pin is returned.
          *
@@ -207,16 +207,16 @@ namespace hal
         Result<BooleanFunction> get_boolean_function(const GatePin* pin = nullptr) const;
 
         /**
-         * Get a map from function name to boolean function for all boolean functions associated with this gate.
+         * Get a map from function name to Boolean function containing all Boolean functions associated with the gate.
          *
-         * @param[in] only_custom_functions - If true, this returns only the functions which were set via add_boolean_function.
+         * @param[in] only_custom_functions - Set `true` to get only Boolean functions that are local to the gate, `false` otherwise.
          * @returns A map from function name to function on success, an error otherwise.
          */
         Result<std::unordered_map<std::string, BooleanFunction>> get_boolean_functions(bool only_custom_functions = false) const;
 
         /**
          * TODO pybind, test
-         * Add a Boolean function going by the given name to the gate.
+         * Add a Boolean function with the given name to the gate.
          *
          * @param[in] name - The function name.
          * @param[in] func - The function.
@@ -271,53 +271,53 @@ namespace hal
          */
 
         /**
-         * Get a list of all fan-in nets of the gate, i.e., all nets that are connected to one of the input pins.
+         * Get a vector of all fan-in nets of the gate, i.e., all nets that are connected to one of the input pins of the gate.
          *
-         * @returns A vector of all connected input nets.
+         * @returns A vector of all fan-in nets.
          */
         std::vector<Net*> get_fan_in_nets() const;
 
         /**
-         * Get a list of all fan-in endpoints of the gate, i.e., all connected endpoints that represent an input pin of this gate.
+         * Get a vector of all fan-in endpoints of the gate, i.e., all endpoints associated with an input pin of the gate.
          *
-         * @returns A vector of all connected input endpoints.
+         * @returns A vector of all fan-in endpoints.
          */
         std::vector<Endpoint*> get_fan_in_endpoints() const;
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Get the fan-in net which is connected to the specified input pin.
          *
          * @param[in] pin - The input pin.
-         * @returns The connected input net on success, an error otherwise.
+         * @returns The fan-in net on success, an error otherwise.
          */
         Result<Net*> get_fan_in_net(const GatePin* pin) const;
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Get the fan-in endpoint corresponding to the specified input pin.
          *
          * @param[in] pin - The input pin.
-         * @returns The endpoint on success, an error otherwise.
+         * @returns The fan-in endpoint on success, an error otherwise.
          */
         Result<Endpoint*> get_fan_in_endpoint(const GatePin* pin) const;
 
         /**
-         * Get a list of all fan-out nets of the gate, i.e., all nets that are connected to one of the output pins.
+         * Get a list of all fan-out nets of the gate, i.e., all nets that are connected to one of the output pins of the gate.
          *
          * @returns A vector of all connected output nets.
          */
         std::vector<Net*> get_fan_out_nets() const;
 
         /**
-         * Get a list of all fan-out endpoints of the gate, i.e., all connected endpoints that represent an output pin of this gate.
+         * Get a list of all fan-out endpoints of the gate, i.e., all endpoints associated with an output pin of the gate.
          *
          * @returns A vector of all connected output endpoints.
          */
         std::vector<Endpoint*> get_fan_out_endpoints() const;
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Get the fan-out net which is connected to the specified output pin.
          *
          * @param[in] pin - The output pin.
@@ -326,7 +326,7 @@ namespace hal
         Result<Net*> get_fan_out_net(const GatePin* pin) const;
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Get the fan-out endpoint corresponding to the specified output pin.
          *
          * @param[in] pin - The output pin type.
@@ -335,51 +335,51 @@ namespace hal
         Result<Endpoint*> get_fan_out_endpoint(const GatePin* pin) const;
 
         /**
-         * TODO pybind, test
-         * Get a list of all unique predecessor gates of the gate. 
-         * The user-defined filter is applied to all candidate tuples of destination pin and predecessor endpoint.
+         * TODO test
+         * Get a vector of all unique predecessor gates of the gate. 
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
-         * @param[in] filter - An (optional) filter.
+         * @param[in] filter - An optional filter being evaluated on the gate's input pin as well as the predecessor endpoint.
          * @returns A vector of unique predecessor gates.
          */
         std::vector<Gate*> get_unique_predecessors(const std::function<bool(const GatePin* pin, Endpoint* ep)>& filter = nullptr) const;
 
         /**
-         * TODO pybind, test
-         * Get a list of all direct predecessor endpoints of the gate, i.e., all predecessor endpoints that are connected to an input pin of the gate. 
-         * The user-defined filter is applied to all candidate tuples of destination pin and predecessor endpoint.
+         * TODO test
+         * Get a vector of all direct predecessor endpoints of the gate, i.e., all predecessor endpoints that are connected to an input pin of the gate. 
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
-         * @param[in] filter - An (optional) filter.
+         * @param[in] filter - An optional filter being evaluated on the gate's input pin as well as the predecessor endpoint.
          * @returns A vector of predecessor endpoints.
          */
         std::vector<Endpoint*> get_predecessors(const std::function<bool(const GatePin* pin, Endpoint* ep)>& filter = nullptr) const;
 
         /**
-         * TODO pybind, test
-         * Get a single direct predecessor endpoint that is connected to a specific input pin of the gate.
+         * TODO test
+         * Get a single direct predecessor endpoint that is connected to the specified input pin of the gate.
          * If there are no or more than one predecessors, an error is returned.
          *
-         * @param[in] pin - The target input pin of the gate.
+         * @param[in] pin - The input pin of the gate.
          * @returns The predecessor endpoint on success, an error otherwise.
          */
         Result<Endpoint*> get_predecessor(const GatePin* pin) const;
 
         /**
-         * TODO pybind, test
-         * Get a list of all unique successor gates of the gate. 
-         * The user-defined filter is applied to all candidate tuples of source pin and successor endpoint.
+         * TODO test
+         * Get a vector of all unique successor gates of the gate. 
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
-         * @param[in] filter - An (optional) filter.
+         * @param[in] filter - An optional filter being evaluated on the gate's output pin as well as the successor endpoint.
          * @returns A vector of unique successor gates.
          */
         std::vector<Gate*> get_unique_successors(const std::function<bool(const GatePin* pin, Endpoint* ep)>& filter = nullptr) const;
 
         /**
          * TODO pybind, test
-         * Get a list of all direct successor endpoints of the gate, i.e., all successor endpoints that are connected to an output pin of the gate. 
-         * The user-defined filter is applied to all candidate tuples of source pin and successor endpoint.
+         * Get a vector of all direct successor endpoints of the gate, i.e., all successor endpoints that are connected to an output pin of the gate. 
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
-         * @param[in] filter - An (optional) filter.
+         * @param[in] filter - An optional filter being evaluated on the gate's output pin as well as the successor endpoint.
          * @returns A vector of successor endpoints.
          */
         std::vector<Endpoint*> get_successors(const std::function<bool(const GatePin* pin, Endpoint* ep)>& filter = nullptr) const;

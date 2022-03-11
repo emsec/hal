@@ -58,11 +58,13 @@ namespace hal
             if (d_ports.size() != 1)
             {
                 log_error("solve_fsm", "currently not supporting flip-flops with multiple or no data inputs. ({})", d_ports.size());
+                return {};
             }
             hal::Net* input_net;
             if (auto res = ff->get_fan_in_net(d_ports.front()); res.is_error())
             {
                 log_error("solve_fsm", "error encountered while getting fan in net:\n{}", res.get_error().get());
+                return {};
             }
             else
             {
@@ -74,6 +76,7 @@ namespace hal
             if (auto res = netlist_utils::get_subgraph_function(input_net, subgraph_gates); res.is_error())
             {
                 log_error("solve_fsm", "error encountered while getting subgraph function:\n{}", res.get_error().get());
+                return {};
             }
             else
             {
@@ -214,6 +217,7 @@ namespace hal
             if (!ofs.is_open())
             {
                 log_error("solve_fsm", "could not open file '{}' for writing.", graph_path);
+                return {};
             }
             ofs << graph;
         }
@@ -264,11 +268,13 @@ namespace hal
             if (d_ports.size() != 1)
             {
                 log_error("solve_fsm", "currently not supporting flip-flops with multiple or no data inputs. ({})", d_ports.size());
+                return {};
             }
             hal::Net* input_net;
             if (auto res = ff->get_fan_in_net(d_ports.front()); res.is_error())
             {
                 log_error("solve_fsm", "error encountered while getting fan in net:\n{}", res.get_error().get());
+                return {};
             }
             else
             {
@@ -285,6 +291,7 @@ namespace hal
                 if (gnd_gate->get_fan_out_nets().size() != 1)
                 {
                     log_error("fsm_solve", "GND gate {} with {} outputs!", gnd_gate->get_id(), gnd_gate->get_fan_out_nets().size());
+                    return {};
                 }
 
                 Net* gnd_net   = gnd_gate->get_fan_out_nets().at(0);
@@ -307,6 +314,7 @@ namespace hal
                 if (vcc_gate->get_fan_out_nets().size() != 1)
                 {
                     log_error("fsm_solve", "GND gate {} with {} outputs!", vcc_gate->get_id(), vcc_gate->get_fan_out_nets().size());
+                    return {};
                 }
 
                 Net* vcc_net   = vcc_gate->get_fan_out_nets().at(0);
@@ -385,11 +393,13 @@ namespace hal
             if (d_ports.size() != 1)
             {
                 log_error("solve_fsm", "currently not supporting flip-flops with multiple or no data inputs. ({})", d_ports.size());
+                return {};
             }
             u32 net_id;
             if (auto res = gate->get_fan_in_net(d_ports.front()); res.is_error())
             {
                 log_error("solve_fsm", "error encountered while getting fan in net:\n{}", res.get_error().get());
+                return {};
             }
             else
             {
@@ -499,6 +509,7 @@ namespace hal
             if (!ofs.is_open())
             {
                 log_error("solve_fsm", "could not open file '{}' for writing.", graph_path);
+                return {};
             }
             ofs << graph;
         }
@@ -538,11 +549,13 @@ namespace hal
                 if (d_ports.size() != 1)
                 {
                     log_error("solve_fsm", "currently not supporting flip-flops with multiple or no data inputs. ({})", d_ports.size());
+                    return {};
                 }
                 hal::Net* input_net;
                 if (auto res = ff->get_fan_in_net(d_ports.front()); res.is_error())
                 {
                     log_error("solve_fsm", "error encountered while getting fan in net:\n{}", res.get_error().get());
+                    return {};
                 }
                 else
                 {

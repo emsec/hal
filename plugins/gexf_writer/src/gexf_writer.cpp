@@ -208,8 +208,8 @@ namespace hal
                 xmlOut.writeStartElement("attvalues");
                 writeEdgeAttribute(xmlOut, n, 3);
                 writeEdgeAttribute(xmlOut, n, 4);
-                writeEdgeAttribute(xmlOut, n, 5, epSrc->get_pin());
-                writeEdgeAttribute(xmlOut, n, 6, epDst->get_pin());
+                writeEdgeAttribute(xmlOut, n, 5, epSrc->get_pin()->get_name());
+                writeEdgeAttribute(xmlOut, n, 6, epDst->get_pin()->get_name());
                 writeEdgeAttribute(xmlOut, n, 7);
                 xmlOut.writeEndElement();
                 xmlOut.writeEndElement();

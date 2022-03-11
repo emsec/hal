@@ -119,7 +119,7 @@ namespace hal
          */
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Add a source endpoint to the net.
          *
          * @param[in] gate - The source gate.
@@ -129,8 +129,8 @@ namespace hal
         Result<Endpoint*> add_source(Gate* gate, GatePin* pin);
 
         /**
-         * TODO pybind, test
-         * Remove a source endpoint from the net.
+         * TODO test
+         * Remove a source endpoint specified by a gate and a pin from the net.
          *
          * @param[in] gate - The source gate.
          * @param[in] pin - The output pin of the source gate.
@@ -139,7 +139,7 @@ namespace hal
         Result<std::monostate> remove_source(Gate* gate, const GatePin* pin);
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Remove a source endpoint from the net. <br>
          *
          * @param[in] ep - The source endpoint.
@@ -148,17 +148,16 @@ namespace hal
         Result<std::monostate> remove_source(Endpoint* ep);
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Check whether a tuple of a gate and an output pin is a source endpoint of the net.
          *
-         * @param[in] gate - The source gate.
-         * @param[in] pin - The source output pin.
+         * @param[in] gate - The gate.
+         * @param[in] pin - The pin of the gate.
          * @returns `true` if it is a source of the net, `false` otherwise.
          */
         bool is_a_source(Gate* gate, const GatePin* pin) const;
 
         /**
-         * TODO pybind 
          * Check whether an endpoint is a source of the net.
          *
          * @param[in] ep - The endpoint.
@@ -167,18 +166,17 @@ namespace hal
         bool is_a_source(Endpoint* ep) const;
 
         /**
-         * Get the number of sources.<br>
-         * Faster than get_sources().size().
+         * Get the number of sources of the net.
          *
-         * @returns The number of sources of this net.
+         * @returns The number of sources.
          */
         u32 get_num_of_sources() const;
 
         /**
-         * Get a list of sources of the net.<br>
-         * A filter can be supplied which filters out all potential values that return false.
+         * Get a vector of sources of the net.
+         * The optional filter is evaluated on every candidate endpoint such that the result only contains endpoints matching the specified condition.
          *
-         * @param[in] filter - A filter for endpoints. Leave empty for no filtering.
+         * @param[in] filter - The optional filter function to be evaluated on each endpoint.
          * @returns A vector of source endpoints.
          */
         std::vector<Endpoint*> get_sources(const std::function<bool(Endpoint* ep)>& filter = nullptr) const;
@@ -188,7 +186,7 @@ namespace hal
          */
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Add a destination endpoint to the net.
          *
          * @param[in] gate - The destination gate.
@@ -198,7 +196,7 @@ namespace hal
         Result<Endpoint*> add_destination(Gate* gate, GatePin* pin);
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Remove a destination endpoint from the net.
          *
          * @param[in] gate - The destination gate.
@@ -208,7 +206,7 @@ namespace hal
         Result<std::monostate> remove_destination(Gate* gate, const GatePin* pin);
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Remove a destination endpoint from the net. <br>
          *
          * @param[in] ep - The destination endpoint.
@@ -217,7 +215,7 @@ namespace hal
         Result<std::monostate> remove_destination(Endpoint* ep);
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Check whether a tuple of a gate and an input pin is a destination endpoint of the net.
          *
          * @param[in] gate - The destination gate.
@@ -226,8 +224,7 @@ namespace hal
          */
         bool is_a_destination(Gate* gate, const GatePin* pin) const;
 
-        /**
-         * TODO pybind 
+        /** 
          * Check whether an endpoint is a destination of the net.
          *
          * @param[in] ep - The endpoint.
@@ -236,19 +233,18 @@ namespace hal
         bool is_a_destination(Endpoint* ep) const;
 
         /**
-         * Get the number of destinations.<br>
-         * Faster than get_destinations().size().
+         * Get the number of destinations of the net.
          *
-         * @returns The number of destinations of this net.
+         * @returns The number of destinations.
          */
         u32 get_num_of_destinations() const;
 
         /**
-         * Get a list of destinations of the net. <br>
-         * A filter can be supplied which filters out all potential values that return false.
+         * Get a vector of destinations of the net.
+         * The optional filter is evaluated on every candidate endpoint such that the result only contains endpoints matching the specified condition.
          *
-         * @param[in] filter - A filter for endpoints. Leave empty for no filtering.
-         * @returns A vector of destination-endpoints.
+         * @param[in] filter - The optional filter function to be evaluated on each endpoint.
+         * @returns A vector of destination endpoints.
          */
         std::vector<Endpoint*> get_destinations(const std::function<bool(Endpoint* ep)>& filter = nullptr) const;
 

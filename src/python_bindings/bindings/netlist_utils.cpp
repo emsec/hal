@@ -9,15 +9,28 @@ namespace hal
         )");
 
         py_netlist_utils.def(
-            "get_subgraph_function", py::overload_cast<const Net*, const std::vector<const Gate*>&>(&netlist_utils::get_subgraph_function), py::arg("net"), py::arg("subgraph_gates"), R"(
-            Get the combined Boolean function of a specific net, considering an entire subgraph.<br>
-            In other words, the Boolean functions of the subgraph gates that influence the target net are combined to one function.<br>
-            The variables of the resulting Boolean function are the net IDs of the nets that influence the output.
-            If this function is used extensively, consider using the above variant with a cache.
+            "get_subgraph_function",
+            [](const Net* net, const std::vector<const Gate*>& subgraph_gates) -> BooleanFunction {
+                auto res = netlist_utils::get_subgraph_function(net, subgraph_gates);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting subgraph function:\n{}", res.get_error().get());
+                    return BooleanFunction();
+                }
+            },
+            py::arg("net"),
+            py::arg("subgraph_gates"),
+            R"(
+            Get the combined Boolean function of a subgraph of combinational gates starting at the source of the given net.
+            The variables of the resulting Boolean function are made up of the IDs of the nets that influence the output ('net_[ID]').
 
             :param hal_py.Net net: The output net for which to generate the Boolean function.
             :param list[hal_py.Gate] subgraph_gates: The gates making up the subgraph.
-            :returns: The combined Boolean function of the subgraph.
+            :returns: The combined Boolean function of the subgraph on success, an empty Boolean function otherwise.
             :rtype: hal_py.BooleanFunction
         )");
 
@@ -30,15 +43,13 @@ namespace hal
             :rtype: hal_py.Netlist
         )");
 
-        py_netlist_utils.def(
-            "get_ff_dependency_matrix", &netlist_utils::get_ff_dependency_matrix, py::arg("nl"), R"(
+        py_netlist_utils.def("get_ff_dependency_matrix", &netlist_utils::get_ff_dependency_matrix, py::arg("nl"), R"(
             Get the FF dependency matrix of a netlist.
 
             :param hal_py.Netlist nl: The netlist to extract the dependency matrix from.
             :returns: A pair consisting of std::map<u32, Gate*>, which includes the mapping from the original gate
             :rtype: pair(dict(int, hal_py.Gate), list[list[int]])
         )");
-
 
         py_netlist_utils.def("get_next_gates", &netlist_utils::get_next_gates, py::arg("gate"), py::arg("get_successors"), py::arg("depth") = 0, py::arg("filter") = nullptr, R"(
             Find predecessors or successors of a gate. If depth is set to 1 only direct predecessors/successors will be returned. 
@@ -104,7 +115,6 @@ namespace hal
             :returns: All sequential successors or predecessors of the net.
             :rtype: list[hal_py.Net]
         )");
-
 
         py_netlist_utils.def("get_next_sequential_gates", py::overload_cast<const Net*, bool>(&netlist_utils::get_next_sequential_gates), py::arg("net"), py::arg("get_successors"), R"(
             Find all sequential predecessors or successors of a net.
@@ -183,28 +193,62 @@ namespace hal
             :rtype: list[hal_py.Net]
         )");
 
-        py_netlist_utils.def("get_nets_at_pins", netlist_utils::get_nets_at_pins, py::arg("gate"), py::arg("pins"), py::arg("is_inputs"), R"(
+        py_netlist_utils.def("get_nets_at_pins", netlist_utils::get_nets_at_pins, py::arg("gate"), py::arg("pins"), R"(
             Get the nets that are connected to a subset of pins of the specified gate.
         
             :param hal_py.Gate gate: The gate.
-            :param set[str] pins: The targeted pins.
-            :param bool is_input: True to look for fan-in nets, false for fan-out.
-            :returns: The set of nets connected to the pins.
-            :rtype: set[hal_py.Net]
+            :param list[hal_py.GatePin] pins: The targeted pins.
+            :returns: The list of nets connected to the pins.
+            :rtype: list[hal_py.Net]
         )");
 
-        py_netlist_utils.def("remove_buffers", netlist_utils::remove_buffers, py::arg("netlist"), py::arg("analyze_inputs") = false, R"(
+        py_netlist_utils.def(
+            "remove_buffers",
+            [](Netlist* netlist, bool analyze_inputs = false) -> i32 {
+                auto res = netlist_utils::remove_buffers(netlist, analyze_inputs);
+                if (res.is_ok())
+                {
+                    return (i32)res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while removing buffer gates from netlist:\n{}", res.get_error().get());
+                    return -1;
+                }
+            },
+            py::arg("netlist"),
+            py::arg("analyze_inputs") = false,
+            R"(
             Remove all buffer gates from the netlist and connect their fan-in to their fan-out nets.
             If enabled, analyzes every gate's inputs and removes fixed '0' or '1' inputs from the Boolean function.
 
             :param hal_py.Netlist netlist: The target netlist.
             :param bool analyze_inputs: Set True to dynamically analyze the inputs, False otherwise.
+            :returns: The number of removed buffers on success, -1 otherwise.
+            :rtype: int
         )");
 
-        py_netlist_utils.def("remove_unused_lut_endpoints", netlist_utils::remove_unused_lut_endpoints, py::arg("netlist"), R"(
+        py_netlist_utils.def(
+            "remove_unused_lut_endpoints",
+            [](Netlist* netlist) -> i32 {
+                auto res = netlist_utils::remove_unused_lut_endpoints(netlist);
+                if (res.is_ok())
+                {
+                    return (i32)res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while removing unused LUT endpoints from netlist:\n{}", res.get_error().get());
+                    return -1;
+                }
+            },
+            py::arg("netlist"),
+            R"(
             Remove all LUT fan-in endpoints that are not present within the Boolean function of the output of a gate.
         
             :param hal_py.Netlist netlist: The target netlist.
+            :returns: The number of removed endpionts on success, -1 otherwise.
+            :rtype: int
         )");
 
         py_netlist_utils.def("get_common_inputs", netlist_utils::get_common_inputs, py::arg("gates"), py::arg("threshold") = 0, R"(
@@ -218,61 +262,104 @@ namespace hal
             :rtype: list[hal_py.Net]
         )");
 
-        py_netlist_utils.def("replace_gate", netlist_utils::replace_gate, py::arg("gate"), py::arg("target_type"), py::arg("pin_map"), R"(
+        py_netlist_utils.def(
+            "replace_gate",
+            [](Gate* gate, GateType* target_type, std::map<GatePin*, GatePin*> pin_map) -> i32 {
+                auto res = netlist_utils::replace_gate(gate, target_type, pin_map);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while replacing gate:\n{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("gate"),
+            py::arg("target_type"),
+            py::arg("pin_map"),
+            R"(
             Replace the given gate with a gate of the specified gate type.
             A dict from old to new pins must be provided in order to correctly connect the gates inputs and outputs.
             A pin can be omitted if no connection at that pin is desired.
 
             :param hal_py.Gate gate: The gate to be replaced.
             :param hal_py.GateType target_type: The gate type of the replacement gate.
-            :param dict[str,str] pin_map: A dict from old to new pin names.
+            :param dict[hal_py.GatePin,hal_py.GatePin] pin_map: A dict from old to new pins.
             :returns: True on success, False otherwise.
             :rtype: bool
         )");
 
-        py_netlist_utils.def("get_gate_chain",
-                             netlist_utils::get_gate_chain,
-                             py::arg("start_gate"),
-                             py::arg("input_pins")  = std::set<std::string>(),
-                             py::arg("output_pins") = std::set<std::string>(),
-                             py::arg("filter")      = nullptr,
-                             R"(
-            Find a repeating sequence of identical gates that connect through the specified pins.
-            The start gate may be any gate within a chain of such sequences, it is not required to be the first or the last gate.
-            A pair of input and output pins can be specified through which the gates are interconnected.
-            If an empty set is given for input or output pins, every pin of the respective gate will be considered.
-            Before adding a gate to the chain, an optional user-defined filter is evaluated on every candidate gate.
+        py_netlist_utils.def(
+            "get_gate_chain",
+            [](Gate* start_gate, const std::vector<const GatePin*>& input_pins = {}, const std::vector<const GatePin*>& output_pins = {}, const std::function<bool(const Gate*)>& filter = nullptr)
+                -> std::vector<Gate*> {
+                auto res = netlist_utils::get_gate_chain(start_gate, input_pins, output_pins, filter);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while detecting gate chain:\n{}", res.get_error().get());
+                    return {};
+                }
+            },
+            py::arg("start_gate"),
+            py::arg("input_pins")  = std::vector<GatePin*>(),
+            py::arg("output_pins") = std::vector<GatePin*>(),
+            py::arg("filter")      = nullptr,
+            R"(
+            Find a sequence of identical gates that are connected via the specified input and output pins.
+            The start gate may be any gate within a such a sequence, it is not required to be the first or the last gate.
+            If input and/or output pins are specified, the gates must be connected through one of the input pins and/or one of the output pins.
+            The optional filter is evaluated on every gate such that the result only contains gates matching the specified condition.
 
             :param hal_py.Gate start_gate: The gate at which to start the chain detection.
-            :param set[str] input_pins: The input pins through which the gates are allowed to be connected.
-            :param set[str] output_pins: The output pins through which the gates are allowed to be connected.
-            :param lambda filter: A filter that is evaluated on all candidates.
-            :returns: A list of gates that form a chain.
+            :param list[hal_py.GatePin] input_pins: The input pins through which the gates must be connected. Defaults to an empty list.
+            :param set[hal_py.GatePin] output_pins: The output pins through which the gates must be connected. Defaults to an empty list.
+            :param lambda filter: An optional filter function to be evaluated on each gate.
+            :returns: A list of gates that form a chain on success, an empty list on error.
             :rtype: list[hal_py.Gate]
         )");
 
-        py_netlist_utils.def("get_complex_gate_chain",
-                             netlist_utils::get_complex_gate_chain,
-                             py::arg("start_gate"),
-                             py::arg("chain_types"),
-                             py::arg("input_pins")  = std::map<GateType*, std::set<std::string>>(),
-                             py::arg("output_pins") = std::map<GateType*, std::set<std::string>>(),
-                             py::arg("filter")      = nullptr,
-                             R"(
-            Find a repeating sequence of gates that are of the specified gate types and connect through the specified pins.
-            The start gate may be any gate within a chain of such sequences, it is not required to be the first or the last gate.
-            However, the start gate must be of the first gate type of the repeating sequence.
-            For every gate type, a pair of input and output pins can be specified through which the gates are interconnected.
-            If a None is given for a gate type, any gate fulfilling the other properties will be considered.
-            If an empty set is given for input or output pins, every pin of the respective gate will be considered.
-            Before adding a gate to the chain, an optional user-defined filter is evaluated on every candidate gate.
+        py_netlist_utils.def(
+            "get_complex_gate_chain",
+            [](Gate* start_gate,
+               const std::vector<GateType*>& chain_types,
+               const std::map<GateType*, std::vector<const GatePin*>>& input_pins,
+               const std::map<GateType*, std::vector<const GatePin*>>& output_pins,
+               const std::function<bool(const Gate*)>& filter = nullptr) -> std::vector<Gate*> {
+                auto res = netlist_utils::get_complex_gate_chain(start_gate, chain_types, input_pins, output_pins, filter);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while detecting complex gate chain:\n{}", res.get_error().get());
+                    return {};
+                }
+            },
+            py::arg("start_gate"),
+            py::arg("chain_types"),
+            py::arg("input_pins"),
+            py::arg("output_pins"),
+            py::arg("filter") = nullptr,
+            R"(
+            Find a sequence of gates (of the specified sequence of gate types) that are connected via the specified input and output pins.
+            The start gate may be any gate within a such a sequence, it is not required to be the first or the last gate.
+            However, the start gate must be of the first gate type within the repeating sequence.
+            If input and/or output pins are specified for a gate type, the gates must be connected through one of the input pins and/or one of the output pins.
+            The optional filter is evaluated on every gate such that the result only contains gates matching the specified condition.
 
             :param hal_py.Gate start_gate: The gate at which to start the chain detection.
             :param list[hal_py.GateType] chain_types: The sequence of gate types that is expected to make up the gate chain.
-            :param dict[hal_py.GateType,set[str]] input_pins: The input pins through which the gates are allowed to be connected.
-            :param dict[hal_py.GateType,set[str]] output_pins: The output pins through which the gates are allowed to be connected.
-            :param lambda filter: A filter that is evaluated on all candidates.
-            :returns: A list of gates that form a chain.
+            :param dict[hal_py.GateType,list[hal_py.GatePin]] input_pins: The input pins (of every gate type of the sequence) through which the gates must be connected.
+            :param dict[hal_py.GateType,list[hal_py.GatePin]] output_pins: The output pins (of every gate type of the sequence) through which the gates must be connected.
+            :param lambda filter: An optional filter function to be evaluated on each gate.
+            :returns: A list of gates that form a chain on success, an empty list on error.
             :rtype: list[hal_py.Gate]
         )");
 

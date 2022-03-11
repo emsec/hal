@@ -41,11 +41,10 @@ namespace hal
     namespace netlist_utils
     {
         /**
-         * TODO pybind, test
-         * Get the combined Boolean function of a specific net, considering an entire subgraph.<br>
-         * In other words, the Boolean functions of the subgraph gates that influence the target net are combined to one function.<br>
-         * The variables of the resulting Boolean function are the net IDs of the nets that influence the output.
-         * For high performance when used extensively, a cache is employed.
+         * TODO test
+         * Get the combined Boolean function of a subgraph of combinational gates starting at the source of the given net.
+         * The variables of the resulting Boolean function are made up of the IDs of the nets that influence the output ('net_[ID]').
+         * Utilizes a cache for speedup on consecutive calls.
          *
          * @param[in] net - The net for which to generate the Boolean function.
          * @param[in] subgraph_gates - The gates making up the subgraph to consider.
@@ -56,10 +55,8 @@ namespace hal
 
         /**
          * TODO pybind, test
-         * Get the combined Boolean function of a specific net, considering an entire subgraph.<br>
-         * In other words, the Boolean functions of the subgraph gates that influence the target net are combined to one function.<br>
-         * The variables of the resulting Boolean function are the net IDs of the nets that influence the output.
-         * If this function is used extensively, consider using the above variant with a cache.
+         * Get the combined Boolean function of a subgraph of combinational gates starting at the source of the given net.
+         * The variables of the resulting Boolean function are made up of the IDs of the nets that influence the output ('net_[ID]').
          *
          * @param[in] net - The net for which to generate the Boolean function.
          * @param[in] subgraph_gates - The gates making up the subgraph to consider.
@@ -215,7 +212,7 @@ namespace hal
         CORE_API std::vector<Gate*> get_path(const Net* net, bool get_successors, std::set<GateTypeProperty> stop_properties);
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Get the nets that are connected to a subset of pins of the specified gate.
          * 
          * @param[in] gate - The gate.
@@ -225,7 +222,7 @@ namespace hal
         std::vector<Net*> get_nets_at_pins(Gate* gate, std::vector<GatePin*> pins);
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Remove all buffer gates from the netlist and connect their fan-in to their fan-out nets.
          * If enabled, analyzes every gate's inputs and removes fixed '0' or '1' inputs from the Boolean function.
          * 
@@ -236,7 +233,7 @@ namespace hal
         Result<u32> remove_buffers(Netlist* netlist, bool analyze_inputs = false);
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Remove all LUT fan-in endpoints that are not present within the Boolean function of the output of a gate.
          * 
          * @param[in] netlist - The target netlist.
@@ -256,7 +253,7 @@ namespace hal
         std::vector<Net*> get_common_inputs(const std::vector<Gate*>& gates, u32 threshold = 0);
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Replace the given gate with a gate of the specified gate type.
          * A map from old to new pins must be provided in order to correctly connect the gates inputs and outputs.
          * A pin can be omitted if no connection at that pin is desired.
@@ -269,46 +266,43 @@ namespace hal
         Result<std::monostate> replace_gate(Gate* gate, GateType* target_type, std::map<GatePin*, GatePin*> pin_map);
 
         /**
-         * TODO pybind, test
-         * Find a repeating sequence of identical gates that connect through the specified pins.
-         * The start gate may be any gate within a chain of such sequences, it is not required to be the first or the last gate.
-         * A pair of input and output pins can be specified through which the gates are interconnected.
-         * If the connection pins are irrelevant, an empty string may be passed to the function.
-         * Before adding a gate to the chain, an optional user-defined filter is evaluated on every candidate gate.
+         * TODO test
+         * Find a sequence of identical gates that are connected via the specified input and output pins.
+         * The start gate may be any gate within a such a sequence, it is not required to be the first or the last gate.
+         * If input and/or output pins are specified, the gates must be connected through one of the input pins and/or one of the output pins.
+         * The optional filter is evaluated on every gate such that the result only contains gates matching the specified condition.
          * 
          * @param[in] start_gate - The gate at which to start the chain detection.
-         * @param[in] input_pins - The input pins through which the gates are allowed to be connected.
-         * @param[in] output_pins - The output pins through which the gates are allowed to be connected.
-         * @param[in] filter - A filter that is evaluated on all candidates.
+         * @param[in] input_pins - The input pins through which the gates must be connected. Defaults to an empty vector.
+         * @param[in] output_pins - The output pins through which the gates must be connected. Defaults to an empty vector.
+         * @param[in] filter - An optional filter function to be evaluated on each gate.
          * @returns A vector of gates that form a chain on success, an error otherwise.
          */
         Result<std::vector<Gate*>> get_gate_chain(Gate* start_gate,
-                                                  const std::set<const GatePin*>& input_pins     = {},
-                                                  const std::set<const GatePin*>& output_pins    = {},
+                                                  const std::vector<const GatePin*>& input_pins  = {},
+                                                  const std::vector<const GatePin*>& output_pins = {},
                                                   const std::function<bool(const Gate*)>& filter = nullptr);
 
         /**
-         * TODO pybind, test
-         * Find a repeating sequence of gates that are of the specified gate types and connect through the specified pins.
-         * The start gate may be any gate within a chain of such sequences, it is not required to be the first or the last gate.
-         * However, the start gate must be of the first gate type of the repeating sequence.
-         * For every gate type, a pair of input and output pins can be specified through which the gates are interconnected.
-         * If a nullptr is given for a gate type, any gate fulfilling the other properties will be considered.
-         * If an empty set is given for input or output pins, every pin of the respective gate will be considered.
-         * Before adding a gate to the chain, an optional user-defined filter is evaluated on every candidate gate.
+         * TODO test
+         * Find a sequence of gates (of the specified sequence of gate types) that are connected via the specified input and output pins.
+         * The start gate may be any gate within a such a sequence, it is not required to be the first or the last gate.
+         * However, the start gate must be of the first gate type within the repeating sequence.
+         * If input and/or output pins are specified for a gate type, the gates must be connected through one of the input pins and/or one of the output pins.
+         * The optional filter is evaluated on every gate such that the result only contains gates matching the specified condition.
          * 
          * @param[in] start_gate - The gate at which to start the chain detection.
          * @param[in] chain_types - The sequence of gate types that is expected to make up the gate chain.
-         * @param[in] input_pins - The input pins through which the gates are allowed to be connected.
-         * @param[in] output_pins - The output pins through which the gates are allowed to be connected.
-         * @param[in] filter - A filter that is evaluated on all candidates.
+         * @param[in] input_pins - The input pins (of every gate type of the sequence) through which the gates must be connected.
+         * @param[in] output_pins - The output pins (of every gate type of the sequence) through which the gates must be connected.
+         * @param[in] filter - An optional filter function to be evaluated on each gate.
          * @returns A vector of gates that form a chain on success, an error otherwise.
          */
         Result<std::vector<Gate*>> get_complex_gate_chain(Gate* start_gate,
                                                           const std::vector<GateType*>& chain_types,
-                                                          const std::map<GateType*, std::set<const GatePin*>>& input_pins  = {},
-                                                          const std::map<GateType*, std::set<const GatePin*>>& output_pins = {},
-                                                          const std::function<bool(const Gate*)>& filter                   = nullptr);
+                                                          const std::map<GateType*, std::vector<const GatePin*>>& input_pins,
+                                                          const std::map<GateType*, std::vector<const GatePin*>>& output_pins,
+                                                          const std::function<bool(const Gate*)>& filter = nullptr);
 
         /**
          * TODO test

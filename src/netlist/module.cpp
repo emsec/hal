@@ -1295,7 +1295,7 @@ namespace hal
                     index_counter = &m_next_output_index;
                     break;
                 default:
-                    break;
+                    return ERR("could not assign pin '" + name_internal + "' to net: invalid pin direction '" + enum_to_string(direction) + "'");
             }
             name_internal = port_prefix + "(" + std::to_string((*index_counter)++) + ")";
         }

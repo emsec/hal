@@ -38,7 +38,7 @@ namespace hal
          * @param[in] dst_pin - The destination pin at the specified destination gate.
          * @param[in] net_name - The name of the net, defaults to IDs of connected gates.
          */
-        Net* connect(Netlist* netlist, Gate* src_gate, const std::string& src_pin, Gate* dst_gate, const std::string& dst_pin, const std::string& net_name = "");
+        Result<Net*> connect(Netlist* netlist, Gate* src_gate, GatePin* src_pin, Gate* dst_gate, GatePin* dst_pin, const std::string& net_name = "");
 
         /**
          * Create a connection to a global input.
@@ -48,7 +48,7 @@ namespace hal
          * @param[in] dst_pin - The destination pin at the specified destination gate.
          * @param[in] net_name - The name of the net, defaults to ID of connected gate.
          */
-        Net* connect_global_in(Netlist* netlist, Gate* dst_gate, const std::string& dst_pin, const std::string& net_name = "");
+        Result<Net*> connect_global_in(Netlist* netlist, Gate* dst_gate, GatePin* dst_pin, const std::string& net_name = "");
 
         /**
          * Create a connection to a global input.
@@ -58,21 +58,21 @@ namespace hal
          * @param[in] src_pin - The source pin at the specified source gate.
          * @param[in] net_name - The name of the net, defaults to ID of connected gate.
          */
-        Net* connect_global_out(Netlist* netlist, Gate* src_gate, const std::string& src_pin, const std::string& net_name = "");
+        Result<Net*> connect_global_out(Netlist* netlist, Gate* src_gate, GatePin* src_pin, const std::string& net_name = "");
 
         /**
          * Remove all connections of the gate.
          * 
          * @param[in] gate - The gate.
          */
-        void clear_connections(Gate* gate);
+        Result<std::monostate> clear_connections(Gate* gate);
 
         /**
          * Remove all connections of the net.
          * 
          * @param[in] net - The net.
          */
-        void clear_connections(Net* net);
+        Result<std::monostate> clear_connections(Net* net);
 
         // TODO clean up everything below
 
@@ -137,21 +137,21 @@ namespace hal
          *
          * @param[in] nl - netlist
          * @param[in] gate_id - id of the Gate
-         * @param[in] pin_type - pin type
+         * @param[in] pin_name - pin 
          * @param[in] is_destination - direction of Endpoint
          * @returns the Endpoint* object
          */
-        Endpoint* get_endpoint(Netlist* nl, const int gate_id, const std::string& pin_type, bool is_destination);
+        Endpoint* get_endpoint(Netlist* nl, const int gate_id, const std::string& pin_name, bool is_destination);
 
         /**
          * Creating an Endpoint* object by passing the Gate and the pin_type. The is_destination flag is taken from the
          * Gate library of the Gate and the netlist by the Gate.
          *
          * @param[in] gate_id - id of the Gate
-         * @param[in] pin_type - pin type
+         * @param[in] pin_name - pin 
          * @returns the Endpoint* object
          */
-        Endpoint* get_endpoint(Gate* g, const std::string& pin_type);
+        Endpoint* get_endpoint(Gate* g, const std::string& pin_name);
 
         /**
          * Minimizes a truth table of a boolean function such that variables that do not matter are eliminated.
@@ -168,19 +168,19 @@ namespace hal
          * Given a vector of endpoints. Returns the first Endpoint* that has a certain pin type
          *
          * @param[in] dsts - vector of destination endpoints
-         * @param[in] pin_type - pin type
+         * @param[in] pin - pin 
          * @returns the first Endpoint* of a certain pin type. (nullptr, "") if no Endpoint* matches.
          */
-        Endpoint* get_destination_by_pin_type(const std::vector<Endpoint*> dsts, const std::string pin_type);
+        Endpoint* get_destination_by_pin_type(const std::vector<Endpoint*> dsts, const GatePin* pin);
 
         /**
          * Given a vector of endpoints. Returns the firstEndpoint* that has a certain pin type
          *
          * @param[in] dsts - vector of source endpoints
-         * @param[in] pin_type - pin type
+         * @param[in] pin - pin 
          * @returns the first Endpoint* of a certain pin type. (nullptr, "") if no Endpoint* matches.
          */
-        Endpoint* get_source_by_pin_type(const std::vector<Endpoint*> srcs, const std::string pin_type);
+        Endpoint* get_source_by_pin_type(const std::vector<Endpoint*> srcs, const GatePin* pin);
 
         /**
          * Checks if two vectors have the same content regardless of their order. Shouldn't be used for
@@ -263,11 +263,6 @@ namespace hal
          * @returns the absolute path of the file
          */
         std::filesystem::path create_sandbox_file(std::string file_name, std::string content);
-
-        /**
-         * Creates a Gate library dedicated solely to testing. Construction of that Gate library is independent of the Gate library parser.
-         */
-        GateLibrary* get_testing_gate_library();
 
         // ===== Example Netlists =====
 
@@ -489,18 +484,18 @@ namespace hal
         /**
          * Filter returns true for endpoints of type 'pin_type'
          *
-         * @param pin_type - the pin type (i.e. "I1" or "O")
+         * @param pin - the pin 
          * @return the std::function object of the filter function
          */
-        std::function<bool(Endpoint*)> endpoint_pin_type_filter(const std::string& pin_type);
+        std::function<bool(Endpoint*)> endpoint_pin_type_filter(const GatePin* pin);
 
         /**
          * Filter returns true, for all connected Endpoints (of adjacent gates) of type 'pin'
          *
-         * @param type - the type of the endpoints the filter is searching for
+         * @param pin - the pin
          * @return the std::function object of the filter function
          */
-        std::function<bool(const std::string&, Endpoint*)> adjacent_pin_filter(const std::string& pin);
+        std::function<bool(const GatePin*, Endpoint*)> adjacent_pin_filter(const GatePin* pin);
 
         /**
          * Filter returns true for all endpoints, that are connected to the pin of pintype 'pin' of the calling Gate
@@ -508,7 +503,7 @@ namespace hal
          * @param pin - the pin of the Gate, calling the get_predecessors/sucesseors function
          * @return the std::function object of the filter function
          */
-        std::function<bool(const std::string&, Endpoint*)> starting_pin_filter(const std::string& pin);
+        std::function<bool(const GatePin*, Endpoint*)> starting_pin_filter(const GatePin* pin);
 
         /**
          * Filter returns true for all endpoints of adjacent gates of Gate type 'type'
@@ -516,7 +511,7 @@ namespace hal
          * @param type - the type of adjacent gates, the filter is searching for
          * @return the std::function object of the filter function
          */
-        std::function<bool(const std::string&, Endpoint*)> adjacent_gate_type_filter(const std::string& type);
+        std::function<bool(const GatePin*, Endpoint*)> adjacent_gate_type_filter(const std::string& type);
 
         /**
          * Used to test the event system. It can create callback hooks (via get_callback/get_conditional_callback) and

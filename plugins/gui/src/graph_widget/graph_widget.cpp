@@ -453,7 +453,7 @@ namespace hal
             // TODO simplify (we do actually know if we're navigating left or right)
             for (const auto& pin : g->get_type()->get_input_pins())
             {
-                if (g->get_fan_in_net(pin) == n)    // input net
+                if (auto res = g->get_fan_in_net(pin); res.is_ok() && res.get() == n)    // input net
                 {
                     sfoc  = SelectionRelay::Subfocus::Left;
                     sfinx = cnt;
@@ -466,7 +466,7 @@ namespace hal
                 cnt = 0;
                 for (const auto& pin : g->get_type()->get_output_pins())
                 {
-                    if (g->get_fan_out_net(pin) == n)    // input net
+                    if (auto res = g->get_fan_out_net(pin); res.is_ok() && res.get() == n)    // input net
                     {
                         sfoc  = SelectionRelay::Subfocus::Right;
                         sfinx = cnt;
@@ -547,11 +547,15 @@ namespace hal
 
                 if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Left)
                 {
-                    std::string pin_type = g->get_type()->get_input_pins()[gSelectionRelay->subfocusIndex()];
-                    Net* n               = g->get_fan_in_net(pin_type);
-
-                    if (!n)
+                    Net* n;
+                    if (auto res = g->get_fan_in_net(g->get_type()->get_input_pins()[gSelectionRelay->subfocusIndex()]); res.is_error())
+                    {
                         return;
+                    }
+                    else
+                    {
+                        n = res.get();
+                    }
 
                     if (n->get_num_of_sources() == 0)
                     {
@@ -663,9 +667,15 @@ namespace hal
 
                 if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Right)
                 {
-                    auto n = g->get_fan_out_net(g->get_type()->get_output_pins()[gSelectionRelay->subfocusIndex()]);
-                    if (!n)
+                    Net* n;
+                    if (auto res = g->get_fan_out_net(g->get_type()->get_output_pins()[gSelectionRelay->subfocusIndex()]); res.is_error())
+                    {
                         return;
+                    }
+                    else
+                    {
+                        n = res.get();
+                    }
 
                     if (n->get_num_of_destinations() == 0)
                     {

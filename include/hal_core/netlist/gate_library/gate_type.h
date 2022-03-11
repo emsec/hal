@@ -219,7 +219,7 @@ namespace hal
         u32 get_unique_pin_group_id();
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Create a gate pin with the specified name.
          * 
          * @param[in] id - The ID of the pin.
@@ -232,7 +232,7 @@ namespace hal
         Result<GatePin*> create_pin(const u32 id, const std::string& name, PinDirection direction, PinType type = PinType::none);
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Create a gate pin with the specified name.
          * The ID of the pin is set automatically.
          * 
@@ -245,59 +245,59 @@ namespace hal
         Result<GatePin*> create_pin(const std::string& name, PinDirection direction, PinType type = PinType::none);
 
         /**
-         * TODO pybind, test
-         * Get the (ordered) pins of the gate type.
-         * The optional filter is evaluated on every pin such that the result only contains pins matching the specified condition.
+         * TODO test
+         * Get an ordered vector of all pins of the gate type.
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          * 
-         * @param[in] filter - Filter function to be evaluated on each pin.
-         * @returns A vector of pins.
+         * @param[in] filter - An optional filter.
+         * @returns An ordered vector of pins.
          */
         std::vector<GatePin*> get_pins(const std::function<bool(GatePin*)>& filter = nullptr) const;
 
         /**
-         * TODO pybind, test
-         * Get the (ordered) names of the pins of the gate type.
-         * The optional filter is evaluated on every pin such that the result only contains pins matching the specified condition.
+         * TODO test
+         * Get an ordered vector of the names of all pins of the gate type.
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          * 
-         * @param[in] filter - Filter function to be evaluated on each pin.
-         * @returns A vector of pin names.
+         * @param[in] filter - An optional filter.
+         * @returns An ordered vector of pin names.
          */
         std::vector<std::string> get_pin_names(const std::function<bool(GatePin*)>& filter = nullptr) const;
 
         /**
-         * TODO pybind, test
-         * Get the (ordered) input pins of the gate type (including 'PinDirection::inout').
+         * TODO test
+         * Get an ordered vector of all input pins of the gate type (including inout pins).
          * 
-         * @returns A vector of input pins.
+         * @returns An ordered vector of input pins.
          */
         std::vector<GatePin*> get_input_pins() const;
 
         /**
-         * TODO pybind, test
-         * Get the (ordered) names of the input pins of the gate type (including 'PinDirection::inout').
+         * TODO test
+         * Get an ordered vector of the names of all input pins of the gate type (including inout pins).
          * 
-         * @returns A vector of input pin names.
+         * @returns An ordered vector of input pin names.
          */
         std::vector<std::string> get_input_pin_names() const;
 
         /**
-         * TODO pybind, test
-         * Get the (ordered) input pins of the gate type (including 'PinDirection::inout').
+         * TODO test
+         * Get an ordered vector of all output pins of the gate type (including inout pins).
          * 
-         * @returns A vector of input pins.
+         * @returns An ordered vector of input pins.
          */
         std::vector<GatePin*> get_output_pins() const;
 
         /**
-         * TODO pybind, test
-         * Get the (ordered) names of the output pins of the gate type (including 'PinDirection::inout').
+         * TODO test
+         * Get an ordered vector of the names of all output pins of the gate type (including inout pins).
          * 
-         * @returns A vector of output pin names.
+         * @returns An ordered vector of output pin names.
          */
         std::vector<std::string> get_output_pin_names() const;
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Get the pin corresponding to the given ID.
          * 
          * @param[in] id - The ID of the pin.
@@ -306,7 +306,7 @@ namespace hal
         Result<GatePin*> get_pin_by_id(const u32 id) const;
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Get the pin corresponding to the given name.
          * Pin names may not be unique, hence if two or more pins have a matching name, an error is returned.
          * 
@@ -327,13 +327,13 @@ namespace hal
 
         /**
          * TODO pybind, test
-         * Create a new pin group with the given name.
+         * Create a pin group with the given name.
          * 
          * @param[in] id - The ID of the pin group.
          * @param[in] name - The name of the pin group.
          * @param[in] pins - The pins to be assigned to the pin group. Defaults to an empty vector.
-         * @param[in] direction - The direction of the pin group, if any.
-         * @param[in] type - The type of the pin group, if any. Defaults to `PinType::none`.
+         * @param[in] direction - The direction of the pin group. Defaults to `PinDirection::none`.
+         * @param[in] type - The type of the pin group. Defaults to `PinType::none`.
          * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `false`.
          * @param[in] start_index - The start index of the pin group. Defaults to `0`.
          * @returns The pin group on success, an error message otherwise.
@@ -348,13 +348,13 @@ namespace hal
 
         /**
          * TODO pybind, test
-         * Create a new pin group with the given name.
+         * Create a pin group with the given name.
          * The ID of the pin group is set automatically.
          * 
          * @param[in] name - The name of the pin group.
          * @param[in] pins - The pins to be assigned to the pin group. Defaults to an empty vector.
-         * @param[in] direction - The direction of the pin group, if any. Defaults to `PinDirection::none`.
-         * @param[in] type - The type of the pin group, if any. Defaults to `PinType::none`.
+         * @param[in] direction - The direction of the pin group. Defaults to `PinDirection::none`.
+         * @param[in] type - The type of the pin group. Defaults to `PinType::none`.
          * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `false`.
          * @param[in] start_index - The start index of the pin group. Defaults to `0`.
          * @returns The pin group on success, an error message otherwise.
@@ -368,11 +368,11 @@ namespace hal
 
         /**
          * TODO pybind, test
-         * Get all pin groups of the gate type.
-         * The optional filter is evaluated on every pin group such that the result only contains pin groups matching the specified condition.
+         * Get an ordered vector of all pin groups of the gate type.
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          * 
-         * @param[in] filter - Filter function to be evaluated on each pin group.
-         * @returns A vector of pin groups.
+         * @param[in] filter - An optional filter.
+         * @returns An ordered vector of pin groups.
          */
         std::vector<PinGroup<GatePin>*> get_pin_groups(const std::function<bool(PinGroup<GatePin>*)>& filter = nullptr) const;
 
@@ -416,17 +416,24 @@ namespace hal
         /**
          * Add multiple Boolean functions to the gate type.
          *
-         * @param[in] functions - A map from Boolean function names to Boolean functions.
+         * @param[in] functions - A map from names to Boolean functions.
          */
         void add_boolean_functions(const std::unordered_map<std::string, BooleanFunction>& functions);
 
         /**
-         * TODO pybind, test
+         * Get all Boolean functions of the gate type.
+         *
+         * @returns A map from names to Boolean functions.
+         */
+        const std::unordered_map<std::string, BooleanFunction>& get_boolean_functions() const;
+
+        /**
+         * TODO test
          * Get the Boolean function specified by the given name.
-         * This name can for example be an output pin of the gate or any other user-defined function name.<br>
+         * This name can for example be an output pin of the gate or any other user-defined function name.
          * 
-         * @param[in] name - The name.
-         * @returns The specified Boolean function.
+         * @param[in] name - The name of the Boolean function.
+         * @returns The Boolean function on success, an error otherwise.
          */
         Result<BooleanFunction> get_boolean_function(const std::string& name) const;
 
@@ -436,16 +443,9 @@ namespace hal
          * If `pin` is a `nullptr`, the Boolean function of the first output pin is returned.
          * 
          * @param[in] pin - The pin.
-         * @returns The specified Boolean function.
+         * @returns The Boolean function on success, an error otherwise.
          */
         Result<BooleanFunction> get_boolean_function(const GatePin* pin = nullptr) const;
-
-        /**
-         * Get all Boolean functions of the gate type.
-         *
-         * @returns A map from Boolean function names to Boolean functions.
-         */
-        const std::unordered_map<std::string, BooleanFunction>& get_boolean_functions() const;
 
     private:
         friend class GateLibrary;

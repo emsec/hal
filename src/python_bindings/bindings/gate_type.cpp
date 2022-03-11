@@ -181,234 +181,448 @@ namespace hal
             :rtype: bool
         )");
 
-        // py_gate_type.def("add_input_pin", &GateType::add_input_pin, py::arg("pin"), R"(
-        //     Add an input pin to the gate type.
+        py_gate_type.def(
+            "create_pin",
+            [](GateType& self, const u32 id, const std::string& name, PinDirection direction, PinType type = PinType::none) -> GatePin* {
+                auto res = self.create_pin(id, name, direction, type);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while creating pin:\n{}", res.get_error().get());
+                    return nullptr;
+                }
+            },
+            py::arg("id"),
+            py::arg("name"),
+            py::arg("direction"),
+            py::arg("type") = PinType::none,
+            R"(
+            Create a gate pin with the specified name.
 
-        //     :param str pin: The name of the input pin to add.
-        // )");
+            :param int id: The ID of the pin.
+            :param str name: The name of the pin.
+            :param hal_py.PinDirection direction: The direction of the pin.
+            :param hal_py.PinType type: The type of the pin. Defaults to hal_py.PinType.none.
+            :returns: The gate pin on success, None otherwise.
+            :rtype: hal_py.GatePin or None
+        )");
 
-        // py_gate_type.def("add_input_pins", &GateType::add_input_pins, py::arg("pins"), R"(
-        //     Add a list of input pins to the gate type.
+        py_gate_type.def(
+            "create_pin",
+            [](GateType& self, const std::string& name, PinDirection direction, PinType type = PinType::none) -> GatePin* {
+                auto res = self.create_pin(name, direction, type);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while creating pin:\n{}", res.get_error().get());
+                    return nullptr;
+                }
+            },
+            py::arg("name"),
+            py::arg("direction"),
+            py::arg("type") = PinType::none,
+            R"(
+            Create a gate pin with the specified name.
+            The ID of the pin is set automatically.
 
-        //     :param list[str] pins: The list of names of input pins to add.
-        // )");
+            :param str name: The name of the pin.
+            :param hal_py.PinDirection direction: The direction of the pin.
+            :param hal_py.PinType type: The type of the pin. Defaults to hal_py.PinType.none.
+            :returns: The gate pin on success, None otherwise.
+            :rtype: hal_py.GatePin or None
+        )");
 
-        // py_gate_type.def_property_readonly("input_pins", &GateType::get_input_pins, R"(
-        //     A list of input pin names of the gate type.
+        py_gate_type.def_property_readonly(
+            "pins",
+            [](const GateType& self) -> std::vector<GatePin*> { return self.get_pins(); },
+            R"(
+            An ordered list of all pins of the gate type.
 
-        //     :type: list[str]
-        // )");
+            :type: list[hal_py.GatePin]
+        )");
 
-        // py_gate_type.def("get_input_pins", &GateType::get_input_pins, R"(
-        //     Get a list of input pins of the gate type.
+        py_gate_type.def("get_pins", &GateType::get_pins, R"(
+            Get an ordered list of all pins of the gate type.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
-        //     :returns: A list of input pin names of the gate type.
-        //     :rtype: list[str]
-        // )");
+            :param lambda filter: An optional filter.
+            :returns: An ordered list of pins.
+            :rtype: list[hal_py.GatePin]
+        )");
 
-        // py_gate_type.def("add_output_pin", &GateType::add_output_pin, py::arg("pin"), R"(
-        //     Add an output pin to the gate type.
+        py_gate_type.def_property_readonly(
+            "pin_names",
+            [](const GateType& self) -> std::vector<std::string> { return self.get_pin_names(); },
+            R"(
+            An ordered list of the names of all pins of the gate type.
 
-        //     :param str pin: The name of the output pin to add.
-        // )");
+            :type: list[str]
+        )");
 
-        // py_gate_type.def("add_output_pins", &GateType::add_output_pins, py::arg("pins"), R"(
-        //     Add a list of output pins to the gate type.
+        py_gate_type.def("get_pin_names", &GateType::get_pin_names, R"(
+            Get an ordered list of the names of all pins of the gate type.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
-        //     :param list[str] pins: The list of names of output pins to add.
-        // )");
+            :param lambda filter: An optional filter.
+            :returns: An ordered list of pins.
+            :rtype: list[str]
+        )");
 
-        // py_gate_type.def_property_readonly("output_pins", &GateType::get_output_pins, R"(
-        //     A list of output pin names of the gate type.
+        py_gate_type.def_property_readonly("input_pins",
+                                           &GateType::get_input_pins,
+                                           R"(
+            An ordered list of all input pins of the gate type (including inout pins).
 
-        //     :type: list[str]
-        // )");
+            :type: list[hal_py.GatePin]
+        )");
 
-        // py_gate_type.def("get_output_pins", &GateType::get_output_pins, R"(
-        //     Get a list of output pins of the gate type.
+        py_gate_type.def("get_input_pins", &GateType::get_input_pins, R"(
+            Get an ordered list of all input pins of the gate type (including inout pins).
 
-        //     :returns: A list of output pin names of the gate type.
-        //     :rtype: list[str]
-        // )");
+            :returns: An ordered list of input pins.
+            :rtype: list[hal_py.GatePin]
+        )");
 
-        // py_gate_type.def("add_pin", &GateType::add_pin, py::arg("pin"), py::arg("direction"), py::arg("type"), R"(
-        //     Add a pin of the specified direction and type to the gate type.
-        
-        //     :param str pin: The pin.
-        //     :param hal_py.PinDirection direction: The pin direction to be assigned.
-        //     :param hal_py.PinType type: The pin type to be assigned.
-        //     :returns: True on success, false otherwise.
-        //     :rtype: bool
-        // )");
+        py_gate_type.def_property_readonly("input_pin_names",
+                                           &GateType::get_input_pin_names,
+                                           R"(
+            An ordered list of the names of all input pins of the gate type (including inout pins).
 
-        // py_gate_type.def("add_pins", &GateType::add_pin, py::arg("pins"), py::arg("direction"), py::arg("type"), R"(
-        //     Add a list of pin of the specified direction and type to the gate type.
-        
-        //     :param list[str] pins: The pins.
-        //     :param hal_py.PinDirection direction: The pin direction to be assigned.
-        //     :param hal_py.PinType type: The pin type to be assigned.
-        //     :returns: True on success, false otherwise.
-        //     :rtype: bool
-        // )");
+            :type: list[str]
+        )");
 
-        // py_gate_type.def("get_pins", &GateType::get_pins, R"(
-        //     Get all pins belonging to the gate type.
-        
-        //     :returns: A list of pins.
-        //     :rtype: list[str]
-        // )");
+        py_gate_type.def("get_input_pin_names", &GateType::get_input_pin_names, R"(
+            Get an ordered list of the names of all input pins of the gate type (including inout pins).
 
-        // py_gate_type.def_property_readonly("pins", &GateType::get_pins, R"(
-        //     A list of all pins belonging to the gate type.
+            :returns: An ordered list of input pin names.
+            :rtype: list[str]
+        )");
 
-        //     :type: list[str]
-        // )");
+        py_gate_type.def_property_readonly("output_pins",
+                                           &GateType::get_output_pins,
+                                           R"(
+            An ordered list of all output pins of the gate type (including inout pins).
 
-        // py_gate_type.def("get_pin_direction", &GateType::get_pin_direction, py::arg("pin"), R"(
-        //     Get the pin direction of the given pin. The user has to make sure that the pin exists before calling this function. If the pin does not exist, the direction 'internal' will be returned.
-        
-        //     :param str pin: The pin.
-        //     :returns: The pin direction.
-        //     :rtype: hal_py.PinDirection
-        // )");
+            :type: list[hal_py.GatePin]
+        )");
 
-        // py_gate_type.def("get_pin_directions", &GateType::get_pin_directions, R"(
-        //     Get the pin directions of all pins as a dict.
-         
-        //     :returns: A dict from pin to pin direction.
-        //     :rtype: dict[std,hal_py.PinDirection]
-        // )");
+        py_gate_type.def("get_output_pins", &GateType::get_output_pins, R"(
+            Get an ordered list of all output pins of the gate type (including inout pins).
 
-        // py_gate_type.def_property_readonly("pin_directions", &GateType::get_pin_directions, R"(
-        //     The pin directions of all pins as a dict.
-         
-        //     :type: dict[str,hal_py.PinDirection]
-        // )");
+            :returns: An ordered list of output pins.
+            :rtype: list[hal_py.GatePin]
+        )");
 
-        // py_gate_type.def("get_pins_of_direction", &GateType::get_pins_of_direction, py::arg("direction"), R"(
-        //     Get all pins of the specified pin direction.
-        
-        //     :param hal_py.PinDirection direction: The pin direction.
-        //     :returns: A set of pins.
-        //     :rtype: set[str]
-        // )");
+        py_gate_type.def_property_readonly("output_pin_names",
+                                           &GateType::get_output_pin_names,
+                                           R"(
+            An ordered list of the names of all output pins of the gate type (including inout pins).
 
-        // py_gate_type.def("assign_pin_type", &GateType::assign_pin_type, py::arg("pin"), py::arg("type"), R"(
-        //     Assign a pin type to the given pin. The pin must have been added to the gate type beforehand.
-    
-        //     :param str pin: The pin.
-        //     :param hal_py.PinType type: The pin type to be assigned.
-        //     :returns: True on success, false otherwise.
-        //     :rtype: bool
-        // )");
+            :type: list[str]
+        )");
 
-        // py_gate_type.def("get_pin_type", &GateType::get_pin_type, py::arg("pin"), R"(
-        //     Get the pin type of the given pin. The user has to make sure that the pin exists before calling this function. If the pin does not exist, the type 'none' will be returned.
-        
-        //     :param str pin: The pin.
-        //     :returns: The pin type.
-        //     :rtype: hal_py.PinType
-        // )");
+        py_gate_type.def("get_output_pin_names", &GateType::get_output_pin_names, R"(
+            Get an ordered list of the names of all output pins of the gate type (including inout pins).
 
-        // py_gate_type.def("get_pin_types", &GateType::get_pin_types, R"(
-        //     Get the pin types of all pins as a dict.
-         
-        //     :returns: A dict from pin to pin type.
-        //     :rtype: dict[str,hal_py.PinType]
-        // )");
+            :returns: An ordered list of output pin names.
+            :rtype: list[str]
+        )");
 
-        // py_gate_type.def_property_readonly("pin_types", &GateType::get_pin_types, R"(
-        //     The pin types of all pins as a dict.
-         
-        //     :type: dict[str,hal_py.PinType]
-        // )");
+        py_gate_type.def(
+            "get_pin_by_id",
+            [](GateType& self, const u32 id) -> GatePin* {
+                auto res = self.get_pin_by_id(id);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting pin by ID:\n{}", res.get_error().get());
+                    return nullptr;
+                }
+            },
+            py::arg("id"),
+            R"(
+            Get the pin corresponding to the given ID.
 
-        // py_gate_type.def("get_pins_of_type", &GateType::get_pins_of_type, py::arg("type"), R"(
-        //     Get all pins of the specified pin type.
-        
-        //     :param hal_py.PinType type: The pin type.
-        //     :returns: A set of pins.
-        //     :rtype: set[str]
-        // )");
+            :param int id: The ID of the pin.
+            :returns: The pin on success, None otherwise.
+            :rtype: hal_py.GatePin or None
+        )");
 
-        // py_gate_type.def("assign_pin_group", &GateType::assign_pin_group, py::arg("group"), py::arg("pins"), R"(
-        //     Assign existing pins to a pin group.
+        py_gate_type.def(
+            "get_pin_by_name",
+            [](GateType& self, const std::string& name) -> GatePin* {
+                auto res = self.get_pin_by_name(name);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting pin by name:\n{}", res.get_error().get());
+                    return nullptr;
+                }
+            },
+            py::arg("id"),
+            R"(
+            Get the pin corresponding to the given name.
+            Pin names may not be unique, hence if two or more pins have a matching name, None is returned.
 
-        //     :param str group: The name of the pin group.
-        //     :param list[tuple(int,str)] pins: The pins to be added to the group including their indices.
-        // )");
+            :param str name: The name of the pin.
+            :returns: The pin on success, None otherwise.
+            :rtype: hal_py.GatePin or None
+        )");
 
-        // py_gate_type.def("get_pin_group", &GateType::get_pin_group, py::arg("pin"), R"(
-        //     Get the pin type of the given pin. The user has to make sure that the pin exists before calling this function. If the pin is not in a group or the does not exist, an empty string will be returned.
-        
-        //     :param str pin: The pin.
-        //     :returns: The pin group.
-        //     :rtype: str
-        // )");
+        py_gate_type.def(
+            "get_pins_by_name",
+            [](GateType& self, const std::string& name) -> std::vector<GatePin*> {
+                auto res = self.get_pins_by_name(name);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting pins by name:\n{}", res.get_error().get());
+                    return {};
+                }
+            },
+            py::arg("id"),
+            R"(
+            Get all pins corresponding to the given name.
+            Pin names may not be unique, hence a list of pins is returned.
 
-        // py_gate_type.def_property_readonly("pin_groups", &GateType::get_pin_groups, R"(
-        //     All pin groups of the gate type as a dict from pin group names to the pins of each group including their indices.
+            :param str name: The name of the pins.
+            :returns: A list of pins on success, an empty list otherwise.
+            :rtype: list[hal_py.GatePin]
+        )");
 
-        //     :type: dict[str,list[tuple(int,str)]]
-        // )");
+        py_gate_type.def(
+            "create_pin_group",
+            [](GateType& self,
+               const u32 id,
+               const std::string& name,
+               const std::vector<GatePin*> pins = {},
+               PinDirection direction           = PinDirection::none,
+               PinType type                     = PinType::none,
+               bool ascending                   = false,
+               u32 start_index                  = 0) -> PinGroup<GatePin>* {
+                auto res = self.create_pin_group(id, name, pins, direction, type, ascending, start_index);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while creating pin group:\n{}", res.get_error().get());
+                    return nullptr;
+                }
+            },
+            py::arg("id"),
+            py::arg("name"),
+            py::arg("pins")        = std::vector<GatePin*>(),
+            py::arg("direction")   = PinDirection::none,
+            py::arg("type")        = PinType::none,
+            py::arg("ascending")   = false,
+            py::arg("start_index") = 0,
+            R"(
+            Create a gate pin group with the given name.
 
-        // py_gate_type.def("get_pin_groups", &GateType::get_pin_groups, R"(
-        //     Get all pin groups of the gate type.
+            :param int id: The ID of the pin group.
+            :param str name: The name of the pin group.
+            :param list[hal_py.GatePin] pins: The pins to be assigned to the pin group. Defaults to an empty list.
+            :param hal_py.PinDirection direction: The direction of the pin group. Defaults to hal_py.PinDirection.none.
+            :param hal_py.PinType type: The type of the pin group. Defaults to hal_py.PinType.none.
+            :param bool ascending: Set True for ascending pin order (from 0 to n-1), False otherwise (from n-1 to 0). Defaults to False.
+            :param int start_index: The start index of the pin group. Defaults to 0.
+            :returns: The pin group on success, None otherwise.
+            :rtype: hal_py.GatePinGroup or None
+        )");
 
-        //     :returns: A dict from pin group names to the pins of each group including their indices.
-        //     :rtype: dict[str,list[tuple(int,str)]]
-        // )");
+        py_gate_type.def(
+            "create_pin_group",
+            [](GateType& self,
+               const std::string& name,
+               const std::vector<GatePin*> pins = {},
+               PinDirection direction           = PinDirection::none,
+               PinType type                     = PinType::none,
+               bool ascending                   = false,
+               u32 start_index                  = 0) -> PinGroup<GatePin>* {
+                auto res = self.create_pin_group(name, pins, direction, type, ascending, start_index);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while creating pin group:\n{}", res.get_error().get());
+                    return nullptr;
+                }
+            },
+            py::arg("name"),
+            py::arg("pins")        = std::vector<GatePin*>(),
+            py::arg("direction")   = PinDirection::none,
+            py::arg("type")        = PinType::none,
+            py::arg("ascending")   = false,
+            py::arg("start_index") = 0,
+            R"(
+            Create a gate pin group with the given name.
+            The ID of the pin group is set automatically.
 
-        // py_gate_type.def("get_pins_of_group", &GateType::get_pins_of_group, py::arg("group"), R"(
-        //     Get all pins of the specified pin group including their indices.
-         
-        //     :param str group: The name of the pin group.
-        //     :returns: The pins including their indices.
-        //     :rtype: list[tuple(int,str)]
-        // )");
+            :param str name: The name of the pin group.
+            :param list[hal_py.GatePin] pins: The pins to be assigned to the pin group. Defaults to an empty list.
+            :param hal_py.PinDirection direction: The direction of the pin group. Defaults to hal_py.PinDirection.none.
+            :param hal_py.PinType type: The type of the pin group. Defaults to hal_py.PinType.none.
+            :param bool ascending: Set True for ascending pin order (from 0 to n-1), False otherwise (from n-1 to 0). Defaults to False.
+            :param int start_index: The start index of the pin group. Defaults to 0.
+            :returns: The pin group on success, None otherwise.
+            :rtype: hal_py.GatePinGroup or None
+        )");
 
-        // py_gate_type.def("get_pin_of_group_at_index", &GateType::get_pin_of_group_at_index, py::arg("group"), py::arg("index"), R"(
-        //     Get the pin at the specified index of the given group.
+        py_gate_type.def(
+            "get_pin_group_by_id",
+            [](GateType& self, const u32 id) -> PinGroup<GatePin>* {
+                auto res = self.get_pin_group_by_id(id);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting pin group by ID:\n{}", res.get_error().get());
+                    return nullptr;
+                }
+            },
+            py::arg("id"),
+            R"(
+            Get the pin group corresponding to the given ID.
 
-        //     :param str group: The name of the pin group.
-        //     :param int index: The index of the pin.
-        //     :returns: The pin.
-        //     :rtype: str
-        // )");
+            :param int id: The ID of the pin group.
+            :returns: The pin group on success, None otherwise.
+            :rtype: hal_py.GatePinGroup or None
+        )");
 
-        // py_gate_type.def("add_boolean_function", &GateType::add_boolean_function, py::arg("pin_name"), py::arg("function"), R"(
-        //     Add a Boolean function with the specified name to the gate type.
+        py_gate_type.def(
+            "get_pin_group_by_name",
+            [](GateType& self, const std::string& name) -> PinGroup<GatePin>* {
+                auto res = self.get_pin_group_by_name(name);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting pin group by name:\n{}", res.get_error().get());
+                    return nullptr;
+                }
+            },
+            py::arg("id"),
+            R"(
+            Get the pin group corresponding to the given name.
+            Pin group names may not be unique, hence if two or more pin groups have a matching name, None is returned.
 
-        //     :param str name: The name of the Boolean function.
-        //     :param hal_py.BooleanFunction function: The Boolean function.
-        // )");
+            :param str name: The name of the pin group.
+            :returns: The pin group on success, None otherwise.
+            :rtype: hal_py.GatePinGroup or None
+        )");
 
-        // py_gate_type.def("add_boolean_functions", &GateType::add_boolean_functions, py::arg("functions"), R"(
-        //     Add multiple boolean functions to the gate type.
+        py_gate_type.def(
+            "get_pin_groups_by_name",
+            [](GateType& self, const std::string& name) -> std::vector<PinGroup<GatePin>*> {
+                auto res = self.get_pin_groups_by_name(name);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting pin groups by name:\n{}", res.get_error().get());
+                    return {};
+                }
+            },
+            py::arg("id"),
+            R"(
+            Get all pin groups corresponding to the given name.
+            Pin group names may not be unique, hence a list of pin groups is returned.
 
-        //     :param dict[str,hal_py.BooleanFunction] functions: A dict from Boolean function names to Boolean functions.
-        // )");
+            :param str name: The name of the pin groups.
+            :returns: A list of pin groups on success, an empty list otherwise.
+            :rtype: list[hal_py.GatePinGroup]
+        )");
 
-        // py_gate_type.def_property_readonly("boolean_functions", &GateType::get_boolean_functions, R"(
-        //     All Boolean functions of the gate type as a dict from Boolean function names to Boolean functions.
-            
-        //     :type: dict[str,hal_py.BooleanFunction]
-        // )");
+        py_gate_type.def("add_boolean_function", &GateType::add_boolean_function, py::arg("name"), py::arg("function"), R"(
+            Add a Boolean function with the specified name to the gate type.
 
-        // py_gate_type.def("get_boolean_function", &GateType::get_boolean_function, py::arg("function_name"), R"(
-        //     Get the Boolean function specified by name.
-        //     If no Boolean function matches the name, an empty function is returned.
+            :param str name: The name of the Boolean function.
+            :param hal_py.BooleanFunction function: The Boolean function.
+        )");
 
-        //     :param str function_name: The name of the Boolean function.
-        //     :returns: The specified Boolean function.
-        //     :rtype: hal_py.BooleanFunction
-        // )");
+        py_gate_type.def("add_boolean_functions", &GateType::add_boolean_functions, py::arg("functions"), R"(
+            Add multiple boolean functions to the gate type.
 
-        // py_gate_type.def("get_boolean_functions", &GateType::get_boolean_functions, R"(
-        //     Get all Boolean functions of the gate type.
+            :param dict[str,hal_py.BooleanFunction] functions: A dict from names to Boolean functions.
+        )");
 
-        //     :returns: A dict from Boolean function names to Boolean functions.
-        //     :rtype: dict[str,hal_py.BooleanFunction]
-        // )");
+        py_gate_type.def_property_readonly("boolean_functions", &GateType::get_boolean_functions, R"(
+            All Boolean functions of the gate type as a dict from names to Boolean functions.
+
+            :type: dict[str,hal_py.BooleanFunction]
+        )");
+
+        py_gate_type.def(
+            "get_boolean_function",
+            [](GateType& self, const std::string& name) -> BooleanFunction {
+                auto res = self.get_boolean_function(name);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting Boolean function:\n{}", res.get_error().get());
+                    return BooleanFunction();
+                }
+            },
+            py::arg("name"),
+            R"(
+            Get the Boolean function specified by the given name.
+            This name can for example be an output pin of the gate or any other user-defined function name.
+
+            :param str name: The name of the Boolean function.
+            :returns: The Boolean function on success, an empty Boolean function otherwise.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_gate_type.def(
+            "get_boolean_function",
+            [](GateType& self, const GatePin* pin = nullptr) -> BooleanFunction {
+                auto res = self.get_boolean_function(pin);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting Boolean function:\n{}", res.get_error().get());
+                    return BooleanFunction();
+                }
+            },
+            py::arg("pin") = nullptr,
+            R"(
+            Get the Boolean function corresponding to the given output pin.
+            If pin is a None, the Boolean function of the first output pin is returned.
+
+            :param hal_py.GatePin pin: The pin.
+            :returns: The Boolean function on success, an empty Boolean function otherwise.
+            :rtype: hal_py.BooleanFunction
+        )");
     }
 }    // namespace hal

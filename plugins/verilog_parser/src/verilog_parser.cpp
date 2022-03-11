@@ -1576,7 +1576,10 @@ namespace hal
                         Gate* src_gate   = src->get_gate();
                         GatePin* src_pin = src->get_pin();
 
-                        slave_net->remove_source(src);
+                        if (auto res = slave_net->remove_source(src); res.is_error())
+                        {
+                            return ERR("could not construct netlist: failed to remove source from net '" + slave_net->get_name() + "' with ID " + std::to_string(slave_net->get_id()));
+                        }
 
                         if (!master_net->is_a_source(src_gate, src_pin))
                         {
@@ -1598,7 +1601,10 @@ namespace hal
                         Gate* dst_gate   = dst->get_gate();
                         GatePin* dst_pin = dst->get_pin();
 
-                        slave_net->remove_destination(dst);
+                        if (auto res = slave_net->remove_destination(dst); res.is_error())
+                        {
+                            return ERR("could not construct netlist: failed to remove destination from net '" + slave_net->get_name() + "' with ID " + std::to_string(slave_net->get_id()));
+                        }
 
                         if (!master_net->is_a_destination(dst_gate, dst_pin))
                         {

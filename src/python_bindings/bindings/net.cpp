@@ -82,47 +82,93 @@ namespace hal
             :rtype: hal_py.Grouping
         )");
 
-        py_net.def("add_source", &Net::add_source, py::arg("gate"), py::arg("pin"), R"(
-            Add a source-endpoint to this net.
+        py_net.def(
+            "add_source",
+            [](Net& self, Gate* gate, GatePin* pin) -> Endpoint* {
+                auto res = self.add_source(gate, pin);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while adding source:\n{}", res.get_error().get());
+                    return nullptr;
+                }
+            },
+            py::arg("gate"),
+            py::arg("pin"),
+            R"(
+            Add a source endpoint to the net.
 
             :param hal_py.Gate gate: The source gate.
-            :param str pin: The output pin of the source gate.
-            :returns: The new endpoint or *None* on error.
+            :param hal_py.GatePin pin: The output pin of the source gate.
+            :returns: The endpoint on success, None otherwise.
             :rtype: hal_py.Endpoint
         )");
 
-        py_net.def("remove_source", py::overload_cast<Gate*, const std::string&>(&Net::remove_source), py::arg("gate"), py::arg("pin"), R"(
-            Remove a source-endpoint from this net.
+        py_net.def(
+            "remove_source",
+            [](Net& self, Gate* gate, const GatePin* pin) -> bool {
+                auto res = self.remove_source(gate, pin);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while removing source:\n{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("gate"),
+            py::arg("pin"),
+            R"(
+            Remove a source endpoint specified by a gate and a pin from the net.
 
             :param hal_py.Gate gate: The source gate.
-            :param str pin: The output pin of the source gate.
-            :returns: True on success.
+            :param hal_py.GatePin pin: The output pin of the source gate.
+            :returns: True on success, False otherwise.
             :rtype: bool
         )");
 
-        py_net.def("remove_source", py::overload_cast<Endpoint*>(&Net::remove_source), py::arg("endpoint"), R"(
-            Remove a source-endpoint from this net.
+        py_net.def(
+            "remove_source",
+            [](Net& self, Endpoint* ep) -> bool {
+                auto res = self.remove_source(ep);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while removing source:\n{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("endpoint"),
+            R"(
+            Remove a source endpoint from the net.
 
-            :param endpoint: The source endpoint.
-            :type endpoint: hal_py.Endpoint
-            :returns: True on success
+            :param hal_py.Endpoint endpoint: The source endpoint.
+            :returns: True on success, False otherwise.
             :rtype: bool
         )");
 
-        py_net.def("is_a_source", py::overload_cast<Gate*, const std::string&>(&Net::is_a_source, py::const_), py::arg("gate"), py::arg("pin"), R"(
-            Check whether an endpoint, given by its gate and pin type, is a source-endpoint of this net.
+        py_net.def("is_a_source", py::overload_cast<Gate*, const GatePin*>(&Net::is_a_source, py::const_), py::arg("gate"), py::arg("pin"), R"(
+            Check whether a tuple of a gate and an output pin is a source endpoint of the net.
 
-            :param hal_py.Gate gate: The source gate.
-            :param str pin: The source output pin.
-            :returns: True if the gate's pin is a source of this net.
+            :param hal_py.Gate gate: The gate.
+            :param hal_py.GatePin pin: The pin of the gate.
+            :returns: True if it is a source of the net, False otherwise.
             :rtype: bool
         )");
 
         py_net.def("is_a_source", py::overload_cast<Endpoint*>(&Net::is_a_source, py::const_), py::arg("endpoint"), R"(
-            Check whether an endpoint is a source-endpoint of this net.
+            Check whether an endpoint is a source of the net.
 
             :param hal_py.Endpoint Endpoint: The endpoint.
-            :returns: True if the endpoint is a source of this net.
+            :returns: True if it is a source of the net, False otherwise.
             :rtype: bool
         )");
 
@@ -133,10 +179,9 @@ namespace hal
         )");
 
         py_net.def("get_num_of_sources", &Net::get_num_of_sources, R"(
-            Get the number of sources.
-            Faster than len(:func:`get_sources()`).
+            Get the number of sources of the net.
 
-            :returns: The number of sources of this net.
+            :returns: The number of sources.
             :rtype: int
         )");
 
@@ -149,54 +194,100 @@ namespace hal
 
         py_net.def("get_sources", &Net::get_sources, py::arg("filter") = nullptr, R"(
             Get a list of sources of the net.
-            A filter can be supplied which filters out all potential values that return false.
+            The optional filter is evaluated on every candidate endpoint such that the result only contains endpoints matching the specified condition.
 
-            :param lambda filter: A filter for endpoints. Leave empty for no filtering.
-            :returns: A list of source-endpoints.
+            :param lambda filter: The optional filter function to be evaluated on each endpoint.
+            :returns: A list of source endpoints.
             :rtype: list[hal_py.Endpoint]
         )");
 
-        py_net.def("add_destination", &Net::add_destination, py::arg("gate"), py::arg("pin"), R"(
-            Add a destination-endpoint to this net.
+        py_net.def(
+            "add_destination",
+            [](Net& self, Gate* gate, GatePin* pin) -> Endpoint* {
+                auto res = self.add_destination(gate, pin);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while adding destination:\n{}", res.get_error().get());
+                    return nullptr;
+                }
+            },
+            py::arg("gate"),
+            py::arg("pin"),
+            R"(
+            Add a destination endpoint to the net.
 
             :param hal_py.Gate gate: The destination gate.
-            :param str pin: The input pin of the destination gate.
-            :returns: The new endpoint or *None* on error.
+            :param hal_py.GatePin pin: The input pin of the destination gate.
+            :returns: The endpoint on success, None otherwise.
             :rtype: hal_py.Endpoint
         )");
 
-        py_net.def("remove_destination", py::overload_cast<Gate*, const std::string&>(&Net::remove_destination), py::arg("gate"), py::arg("pin"), R"(
-            Remove a destination from this net.
+        py_net.def(
+            "remove_destination",
+            [](Net& self, Gate* gate, const GatePin* pin) -> bool {
+                auto res = self.remove_destination(gate, pin);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while removing destination:\n{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("gate"),
+            py::arg("pin"),
+            R"(
+            Remove a destination endpoint specified by a gate and a pin from the net.
 
             :param hal_py.Gate gate: The destination gate.
-            :param str pin: The input pin of the destination gate.
-            :returns: True on success
+            :param hal_py.GatePin pin: The input pin of the destination gate.
+            :returns: True on success, False otherwise.
             :rtype: bool
         )");
 
-        py_net.def("remove_destination", py::overload_cast<Endpoint*>(&Net::remove_destination), py::arg("endpoint"), R"(
-            Remove a destination-endpoint from this net.
-            If the endpoint is no destination-endpoint of the net this function aborts.
+        py_net.def(
+            "remove_destination",
+            [](Net& self, Endpoint* ep) -> bool {
+                auto res = self.remove_destination(ep);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while removing destination:\n{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("endpoint"),
+            R"(
+            Remove a destination endpoint from the net.
 
             :param hal_py.Endpoint endpoint: The destination endpoint.
-            :returns: True on success
+            :returns: True on success, False otherwise.
             :rtype: bool
         )");
 
-        py_net.def("is_a_destination", py::overload_cast<Gate*, const std::string&>(&Net::is_a_destination, py::const_), py::arg("gate"), py::arg("pin"), R"(
-            Check whether an endpoint, given by its gate and pin type, is a destination-endpoint of this net.
+        py_net.def("is_a_destination", py::overload_cast<Gate*, const GatePin*>(&Net::is_a_destination, py::const_), py::arg("gate"), py::arg("pin"), R"(
+            Check whether a tuple of a gate and an output pin is a destination endpoint of the net.
 
-            :param hal_py.Gate gate: The destination gate.
-            :param str pin: The destination input pin.
-            :returns: True if the gate's pin is a destination of this net.
+            :param hal_py.Gate gate: The gate.
+            :param hal_py.GatePin pin: The pin of the gate.
+            :returns: True if it is a destination of the net, False otherwise.
             :rtype: bool
         )");
 
         py_net.def("is_a_destination", py::overload_cast<Endpoint*>(&Net::is_a_destination, py::const_), py::arg("endpoint"), R"(
-            Check whether an endpoint is a destination-endpoint of this net.
+            Check whether an endpoint is a destination of the net.
 
-            :param hal_py.Endpoint endpoint: The endpoint.
-            :returns: True if the endpoint is a destination of this net.
+            :param hal_py.Endpoint Endpoint: The endpoint.
+            :returns: True if it is a destination of the net, False otherwise.
             :rtype: bool
         )");
 
@@ -207,10 +298,9 @@ namespace hal
         )");
 
         py_net.def("get_num_of_destinations", &Net::get_num_of_destinations, R"(
-            Get the number of destinations.
-            Faster than len(:func:`get_destinations()`).
+            Get the number of destinations of the net.
 
-            :returns: The number of destinations of this net.
+            :returns: The number of destinations.
             :rtype: int
         )");
 
@@ -222,10 +312,11 @@ namespace hal
         )");
 
         py_net.def("get_destinations", &Net::get_destinations, py::arg("filter") = nullptr, R"(
-            Get the list of destinations of the net.
+            Get a list of destinations of the net.
+            The optional filter is evaluated on every candidate endpoint such that the result only contains endpoints matching the specified condition.
 
-            :param filter: A filter for endpoints. Leave empty for no filtering.
-            :returns: A list of destination-endpoints.
+            :param lambda filter: The optional filter function to be evaluated on each endpoint.
+            :returns: A list of destination endpoints.
             :rtype: list[hal_py.Endpoint]
         )");
 

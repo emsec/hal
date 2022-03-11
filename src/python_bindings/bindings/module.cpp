@@ -114,10 +114,10 @@ namespace hal
 
         py_module.def("get_parent_modules", &Module::get_parent_modules, py::arg("filter") = nullptr, py::arg("recursive") = true, R"(
             Get all direct parent of this module.
-            If recursive is set to true, all indirect parents are also included.
-            A filter can be applied to the result to only get parents matching the specified condition.
+            If recursive is set to True, all indirect parents are also included.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
-            :param lambda filter: Filter to be applied to the modules.
+            :param lambda filter: An optional filter.
             :param bool recursive: True to include indirect parents as well, False otherwise.
             :returns: A list of parent modules.
             :rtype: list[hal_py.Module]
@@ -151,9 +151,9 @@ namespace hal
         py_module.def("get_submodules", &Module::get_submodules, py::arg("filter") = nullptr, py::arg("recursive") = false, R"(
             Get all direct submodules of this module.
             If recursive is set to true, all indirect submodules are also included.
-            A filter can be applied to the result to only get submodules matching the specified condition.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
-            :param lambda filter: Filter to be applied to the modules.
+            :param lambda filter: An optional filter.
             :param bool recursive: True to include indirect submodules as well, false otherwise.
             :returns: A list of submodules.
             :rtype: list[hal_py.Module]
@@ -236,10 +236,10 @@ namespace hal
 
         py_module.def("get_nets", &Module::get_nets, py::arg("filter") = nullptr, py::arg("recursive") = false, R"(
             Get all nets that have at least one source or one destination within the module.
-            A filter can be applied to the result to only get nets matching the specified condition.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
             If recursive is True, nets in submodules are considered as well.
 
-            :param lambda filter: Filter to be applied to the nets.
+            :param lambda filter: An optional filter.
             :param bool recursive: True to also consider nets in submodules, False otherwise.
             :returns: A list of nets.
             :rtype: list[hal_py.Net]
@@ -372,12 +372,12 @@ namespace hal
         )");
 
         py_module.def("get_gates", &Module::get_gates, py::arg("filter") = nullptr, py::arg("recursive") = false, R"(
-            Get all gates contained within the module.<br>
-            A filter can be applied to the result to only get gates matching the specified condition.<br>
+            Get all gates contained within the module.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
             If recursive is True, gates in submodules are considered as well.
 
-            :param lambda filter: Filter to be applied to the gates.
-            :param bool recursive: True to also consider gates in submodules, false otherwise.
+            :param lambda filter: An optional filter.
+            :param bool recursive: True to also consider gates in submodules, False otherwise.
             :returns: A list of gates.
             :rtype: list[hal_py.Gate]
         )");
@@ -408,7 +408,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("python_context", "{}", res.get_error().get());
+                    log_error("python_context", "error encountered while creating pin:\n{}", res.get_error().get());
                     return nullptr;
                 }
             },
@@ -440,9 +440,9 @@ namespace hal
 
         py_module.def("get_pins", &Module::get_pins, py::arg("filter") = nullptr, R"(
             Get the (ordered) pins of the module.
-            The optional filter is evaluated on every pin such that the result only contains pins matching the specified condition.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
-            :param lambda filter: Filter function to be evaluated on each pin.
+            :param lambda filter: An optional filter.
             :returns: A list of pins.
             :rtype: list[hal_py.ModulePin]
         )");
@@ -455,9 +455,9 @@ namespace hal
 
         py_module.def("get_pin_groups", &Module::get_pin_groups, py::arg("filter") = nullptr, R"(
             Get all pin groups of the module.
-            The optional filter is evaluated on every pin group such that the result only contains pin groups matching the specified condition.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
-            :param lambda filter: Filter function to be evaluated on each pin group.
+            :param lambda filter: An optional filter.
             :returns: A list of pin groups.
             :rtype: list[hal_py.ModulePinGroup]
         )");
@@ -472,7 +472,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("python_context", "{}", res.get_error().get());
+                    log_error("python_context", "error encountered while getting pin by ID:\n{}", res.get_error().get());
                     return nullptr;
                 }
             },
@@ -495,7 +495,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("python_context", "{}", res.get_error().get());
+                    log_error("python_context", "error encountered while getting pin by net:\n{}", res.get_error().get());
                     return nullptr;
                 }
             },
@@ -518,7 +518,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("python_context", "{}", res.get_error().get());
+                    log_error("python_context", "error encountered while getting pin group by ID:\n{}", res.get_error().get());
                     return nullptr;
                 }
             },
@@ -541,7 +541,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("python_context", "{}", res.get_error().get());
+                    log_error("python_context", "error encountered while setting pin name:\n{}", res.get_error().get());
                     return false;
                 }
             },
@@ -566,7 +566,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("python_context", "{}", res.get_error().get());
+                    log_error("python_context", "error encountered while setting pin group name:\n{}", res.get_error().get());
                     return false;
                 }
             },
@@ -591,7 +591,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("python_context", "{}", res.get_error().get());
+                    log_error("python_context", "error encountered while setting pin type:\n{}", res.get_error().get());
                     return false;
                 }
             },
@@ -616,7 +616,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("python_context", "{}", res.get_error().get());
+                    log_error("python_context", "error encountered while setting pin group type:\n{}", res.get_error().get());
                     return false;
                 }
             },
@@ -641,7 +641,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("python_context", "{}", res.get_error().get());
+                    log_error("python_context", "error encountered while setting pin group direction:\n{}", res.get_error().get());
                     return false;
                 }
             },
@@ -673,7 +673,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("python_context", "{}", res.get_error().get());
+                    log_error("python_context", "error encountered while creating pin group:\n{}", res.get_error().get());
                     return nullptr;
                 }
             },
@@ -709,7 +709,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("python_context", "{}", res.get_error().get());
+                    log_error("python_context", "error encountered while deleting pin group:\n{}", res.get_error().get());
                     return false;
                 }
             },
@@ -732,7 +732,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("python_context", "{}", res.get_error().get());
+                    log_error("python_context", "error encountered while assigning pin to pin group:\n{}", res.get_error().get());
                     return false;
                 }
             },
@@ -760,7 +760,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("python_context", "{}", res.get_error().get());
+                    log_error("python_context", "error encountered while moving pin within pin group:\n{}", res.get_error().get());
                     return false;
                 }
             },
@@ -788,7 +788,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("python_context", "{}", res.get_error().get());
+                    log_error("python_context", "error encountered while removing pin from pin group:\n{}", res.get_error().get());
                     return false;
                 }
             },

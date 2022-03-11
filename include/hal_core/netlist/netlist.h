@@ -148,9 +148,10 @@ namespace hal
         const GateLibrary* get_gate_library() const;
 
         /**
+         * TODO test
          * Create a deep copy of the netlist.
          * 
-         * @returns The copy of the netlist.
+         * @returns The copy of the netlist on success, an error otherwise.
          */
         Result<std::unique_ptr<Netlist>> copy() const;
 

@@ -125,11 +125,25 @@ namespace hal
             :rtype: hal_py.GateLibrary
         )");
 
-        py_netlist.def("copy", &Netlist::copy, R"(
+        py_netlist.def(
+            "copy",
+            [](const Netlist& self) -> std::shared_ptr<Netlist> {
+                auto res = self.copy();
+                if (res.is_ok())
+                {
+                    return std::shared_ptr<Netlist>(res.get());
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while copying netlist:\n{}", res.get_error().get());
+                    return nullptr;
+                }
+            },
+            R"(
             Create a deep copy of the netlist.
 
-            :returns: The copy of the netlist.
-            :rtype: hal_py.Netlist
+            :returns: The copy of the netlist on success, None otherwise.
+            :rtype: hal_py.Netlist or None
         )");
 
         py_netlist.def("clear_caches", &Netlist::clear_caches, R"(

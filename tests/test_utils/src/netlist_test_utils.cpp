@@ -1,13 +1,13 @@
 
 #include "netlist_test_utils.h"
 
-#include "hal_core/netlist/gate_library/gate_type.h"
 #include "gate_library_test_utils.h"
+#include "hal_core/netlist/gate_library/gate_type.h"
 
 namespace hal
 {
-    namespace test_utils 
-    {   
+    namespace test_utils
+    {
         std::unique_ptr<Netlist> create_empty_netlist(const u32 id)
         {
             std::unique_ptr<Netlist> netlist = std::make_unique<Netlist>(get_gate_library());
@@ -20,117 +20,169 @@ namespace hal
             return netlist;
         }
 
-        Net* connect(Netlist* nl, Gate* src, const std::string& src_pin, Gate* dst, const std::string& dst_pin, const std::string& net_name)
+        Result<Net*> connect(Netlist* nl, Gate* src, GatePin* src_pin, Gate* dst, GatePin* dst_pin, const std::string& net_name)
         {
-            Net* n = nullptr;
-            if(src != nullptr && dst != nullptr)
+            Net* n           = nullptr;
+            std::string name = net_name;
+            if (src != nullptr && dst != nullptr)
             {
-                if (n = src->get_fan_out_net(src_pin); n != nullptr)
+                if (auto res = src->get_fan_out_net(src_pin); res.is_ok())
                 {
-                    n->add_destination(dst, dst_pin);
+                    n = res.get();
+                    if (auto res = n->add_destination(dst, dst_pin); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(), "could not connect gates: failed to add destination");
+                    }
                 }
-                else if (n = dst->get_fan_in_net(dst_pin); n != nullptr)
+                else if (auto res = dst->get_fan_in_net(dst_pin); res.is_ok())
                 {
-                    n->add_source(src, src_pin);
+                    n = res.get();
+                    if (auto res = n->add_source(src, src_pin); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(), "could not connect gates: failed to add source");
+                    }
                 }
                 else
                 {
-                    if (net_name.empty())
+                    if (name.empty())
                     {
-                    n = nl->create_net("net_" + std::to_string(src->get_id()) + "_" + std::to_string(dst->get_id()));
+                        name = "net_" + std::to_string(src->get_id()) + "_" + std::to_string(dst->get_id());
                     }
-                    else
+                    n = nl->create_net(name);
+                    if (n == nullptr)
                     {
-                        n = nl->create_net(net_name);
+                        return ERR("could not connect gates: failed to create net '" + name + "'");
                     }
-                    
-                    n->add_source(src, src_pin);
-                    n->add_destination(dst, dst_pin);
+
+                    if (auto res = n->add_source(src, src_pin); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(), "could not connect gates: failed to add source");
+                    }
+                    if (auto res = n->add_destination(dst, dst_pin); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(), "could not connect gates: failed to add destination");
+                    }
                 }
             }
-            return n;
+            return OK(n);
         }
 
-        Net* connect_global_in(Netlist* nl, Gate* dst, const std::string& dst_pin, const std::string& net_name)
+        Result<Net*> connect_global_in(Netlist* nl, Gate* dst, GatePin* dst_pin, const std::string& net_name)
         {
-            Net* n = nullptr;
-            if(dst != nullptr)
+            std::string name = net_name;
+            Net* n           = nullptr;
+            if (dst != nullptr)
             {
-                if (n = dst->get_fan_in_net(dst_pin); n != nullptr)
+                if (auto res = dst->get_fan_in_net(dst_pin); res.is_ok())
                 {
-                    n->mark_global_input_net();
+                    n = res.get();
+                    if (!n->mark_global_input_net())
+                    {
+                        return ERR("could not connect gate to global input: failed to mark global input net");
+                    }
                 }
                 else
                 {
-                    if (net_name.empty())
+                    if (name.empty())
                     {
-                    n = nl->create_net("net_" + std::to_string(dst->get_id()));
+                        name = "net_" + std::to_string(dst->get_id());
                     }
-                    else
+                    n = nl->create_net(name);
+                    if (n == nullptr)
                     {
-                        n = nl->create_net(net_name);
+                        return ERR("could not connect gate to global input: failed to create net '" + name + "'");
                     }
-                    
-                    n->add_destination(dst, dst_pin);
-                    n->mark_global_input_net();
+
+                    if (auto res = n->add_destination(dst, dst_pin); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(), "could not connect gate to global input: failed to add destination");
+                    }
+                    if (!n->mark_global_input_net())
+                    {
+                        return ERR("could not connect gate to global input: failed to mark global input net");
+                    }
                 }
             }
-            return n;
+            return OK(n);
         }
 
-        Net* connect_global_out(Netlist* nl, Gate* src, const std::string& src_pin, const std::string& net_name)
+        Result<Net*> connect_global_out(Netlist* nl, Gate* src, GatePin* src_pin, const std::string& net_name)
         {
-            Net* n = nullptr;
-            if(src != nullptr)
+            std::string name = net_name;
+            Net* n           = nullptr;
+            if (src != nullptr)
             {
-                if (n = src->get_fan_out_net(src_pin); n != nullptr)
+                if (auto res = src->get_fan_out_net(src_pin); res.is_ok())
                 {
-                    n->mark_global_output_net();
+                    n = res.get();
+                    if (!n->mark_global_output_net())
+                    {
+                        return ERR("could not connect gate to global output: failed to mark global output net");
+                    }
                 }
                 else
                 {
-                    if (net_name.empty())
+                    if (name.empty())
                     {
-                        n = nl->create_net("net_" + std::to_string(src->get_id()));
+                        name = "net_" + std::to_string(src->get_id());
                     }
-                    else
+                    n = nl->create_net(name);
+                    if (n == nullptr)
                     {
-                        n = nl->create_net(net_name);
+                        return ERR("could not connect gate to global output: failed to create net '" + name + "'");
                     }
-                    
-                    n->add_source(src, src_pin);
-                    n->mark_global_output_net();
+
+                    if (auto res = n->add_source(src, src_pin); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(), "could not connect gate to global output: failed to add source");
+                    }
+                    if (!n->mark_global_output_net())
+                    {
+                        return ERR("could not connect gate to global output: failed to mark global output net");
+                    }
                 }
             }
-            return n;
+            return OK(n);
         }
 
-        void clear_connections(Gate* gate) 
+        Result<std::monostate> clear_connections(Gate* gate)
         {
-            for (Endpoint* ep : gate->get_fan_in_endpoints()) 
+            for (Endpoint* ep : gate->get_fan_in_endpoints())
             {
-                ep->get_net()->remove_destination(ep);
+                if (auto res = ep->get_net()->remove_destination(ep); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not clear connections: failed to remove destination");
+                }
             }
 
-            for (Endpoint* ep : gate->get_fan_out_endpoints()) 
+            for (Endpoint* ep : gate->get_fan_out_endpoints())
             {
-                ep->get_net()->remove_source(ep);
+                if (auto res = ep->get_net()->remove_source(ep); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not clear connections: failed to remove source");
+                }
             }
         }
 
-        void clear_connections(Net* net) 
+        Result<std::monostate> clear_connections(Net* net)
         {
             for (Endpoint* ep : net->get_sources())
             {
-                net->remove_source(ep);
+                if (auto res = net->remove_source(ep); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not clear connections: failed to remove source");
+                }
             }
 
             for (Endpoint* ep : net->get_destinations())
             {
-                net->remove_destination(ep);
+                if (auto res = net->remove_destination(ep); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not clear connections: failed to remove destination");
+                }
             }
         }
-    }
+    }    // namespace test_utils
 
     // TODO clean up everything below
 
@@ -150,8 +202,6 @@ namespace hal
     {
         run_known_issue_tests = false;
     }
-
-    
 
     void test_utils::init_log_channels()
     {
@@ -186,28 +236,37 @@ namespace hal
         }
     }
 
-    Endpoint* test_utils::get_endpoint(Netlist* nl, const int gate_id, const std::string& pin_type, bool is_destination)
+    Endpoint* test_utils::get_endpoint(Netlist* nl, const int gate_id, const std::string& pin_name, bool is_destination)
     {
         Gate* g = nl->get_gate_by_id(gate_id);
         if (g != nullptr)
         {
-            return is_destination ? g->get_fan_in_endpoint(pin_type) : g->get_fan_out_endpoint(pin_type);
+            GatePin* pin;
+            if (const auto res = g->get_type()->get_pin_by_name(pin_name); res.is_error()) 
+            {
+                return nullptr;
+            } 
+            else 
+            {
+                pin = res.get();
+            }
+            return is_destination ? g->get_fan_in_endpoint(pin).get() : g->get_fan_out_endpoint(pin).get();
         }
         else
             return nullptr;
     }
 
-    Endpoint* test_utils::get_endpoint(Gate* g, const std::string& pin_type)
+    Endpoint* test_utils::get_endpoint(Gate* g, const std::string& pin_name)
     {
-        if (g == nullptr || pin_type == "")
+        if (g == nullptr || pin_name == "")
         {
             return nullptr;
         }
         auto nl             = g->get_netlist();
         int gate_id         = g->get_id();
         auto in_pins        = g->get_type()->get_input_pins();
-        bool is_destination = (std::find(in_pins.begin(), in_pins.end(), pin_type) != in_pins.end());
-        return get_endpoint(nl, gate_id, pin_type, is_destination);
+        bool is_destination = (std::find(in_pins.begin(), in_pins.end(), pin_name) != in_pins.end());
+        return get_endpoint(nl, gate_id, pin_name, is_destination);
     }
 
     std::vector<BooleanFunction::Value> test_utils::minimize_truth_table(const std::vector<BooleanFunction::Value> tt)
@@ -333,154 +392,10 @@ namespace hal
         return f_path;
     }
 
-    GateLibrary* test_utils::get_testing_gate_library()
-    {
-        static std::unique_ptr<GateLibrary> gl = nullptr;
-        if (gl != nullptr)
-        {
-            return gl.get();
-        }
-        gl = std::make_unique<GateLibrary>("imaginary_path", "Testing Library");
-
-        GateType* gt;
-
-        // combinational types
-
-        gt = gl->create_gate_type("gate_1_to_1");
-        gt->add_input_pins({"I"});
-        gt->add_output_pins({"O"});
-
-        gt = gl->create_gate_type("gate_2_to_2");
-        gt->add_input_pins({"I0", "I1"});
-        gt->add_output_pins({"O0", "O1"});
-
-        gt = gl->create_gate_type("gate_2_to_1");
-        gt->add_input_pins({"I0", "I1"});
-        gt->add_output_pins({"O"});
-
-        gt = gl->create_gate_type("gate_1_to_2");
-        gt->add_input_pins({"I"});
-        gt->add_output_pins({"O0", "O1"});
-
-        gt = gl->create_gate_type("gate_3_to_3");
-        gt->add_input_pins({"I0", "I1", "I2"});
-        gt->add_output_pins({"O0", "O1", "O2"});
-
-        gt = gl->create_gate_type("gate_3_to_1");
-        gt->add_input_pins({"I0", "I1", "I2"});
-        gt->add_output_pins({"O"});
-
-        gt = gl->create_gate_type("gate_1_to_3");
-        gt->add_input_pins({"I"});
-        gt->add_output_pins({"O0", "O1", "O2"});
-
-        gt = gl->create_gate_type("gate_4_to_4");
-        gt->add_input_pins({"I0", "I1", "I2", "I3"});
-        gt->add_output_pins({"O0", "O1", "O2", "O3"});
-
-        gt = gl->create_gate_type("gate_4_to_1");
-        gt->add_input_pins({"I0", "I1", "I2", "I3"});
-        gt->add_output_pins({"O"});
-
-        gt = gl->create_gate_type("gate_1_to_4");
-        gt->add_input_pins({"I"});
-        gt->add_output_pins({"O0", "O1", "O2", "O3"});
-
-        gt = gl->create_gate_type("gate_8_to_8");
-        gt->add_input_pins({"I0", "I1", "I2", "I3", "I4", "I5", "I6", "I7"});
-        gt->add_output_pins({"O0", "O1", "O2", "O3", "O4", "O5", "O6", "O7"});
-
-        gt = gl->create_gate_type("gate_8_to_1");
-        gt->add_input_pins({"I0", "I1", "I2", "I3", "I4", "I5", "I6", "I7"});
-        gt->add_output_pins({"O"});
-
-        gt = gl->create_gate_type("gate_1_to_8");
-        gt->add_input_pins({"I"});
-        gt->add_output_pins({"O0", "O1", "O2", "O3", "O4", "O5", "O6", "O7"});
-
-        gt = gl->create_gate_type("gate_2_to_0");
-        gt->add_input_pins({"I0", "I1"});
-
-        gt = gl->create_gate_type("pin_group_gate_4_to_4");
-        gt->add_input_pins({"I(0)", "I(1)", "I(2)", "I(3)"});
-        gt->add_output_pins({"O(0)", "O(1)", "O(2)", "O(3)"});
-        gt->assign_pin_group("I", {{0, "I(0)"}, {1, "I(1)"}, {2, "I(2)"}, {3, "I(3)"}});
-        gt->assign_pin_group("O", {{0, "O(0)"}, {1, "O(1)"}, {2, "O(2)"}, {3, "O(3)"}});
-
-        gt = gl->create_gate_type("gnd");
-        gt->add_output_pins({"O"});
-        gt->add_boolean_function("O", BooleanFunction::Const(0, 1));
-        gl->mark_gnd_gate_type(gt);
-
-        gt = gl->create_gate_type("vcc");
-        gt->add_output_pins({"O"});
-        gt->add_boolean_function("O", BooleanFunction::Const(1, 1));
-        gl->mark_vcc_gate_type(gt);
-
-        // sequential types
-
-        gt = gl->create_gate_type("gate_1_to_1_sequential", {GateTypeProperty::ff});
-        gt->add_input_pins({"I"});
-        gt->add_output_pins({"O"});
-
-        gt = gl->create_gate_type("gate_2_to_2_sequential", {GateTypeProperty::ff});
-        gt->add_input_pins({"I0", "I1"});
-        gt->add_output_pins({"O0", "O1"});
-
-        gt = gl->create_gate_type("gate_2_to_1_sequential", {GateTypeProperty::ff});
-        gt->add_input_pins({"I0", "I1"});
-        gt->add_output_pins({"O"});
-
-        gt = gl->create_gate_type("gate_1_to_2_sequential", {GateTypeProperty::ff});
-        gt->add_input_pins({"I"});
-        gt->add_output_pins({"O0", "O1"});
-
-        gt = gl->create_gate_type("gate_3_to_3_sequential", {GateTypeProperty::ff});
-        gt->add_input_pins({"I0", "I1", "I2"});
-        gt->add_output_pins({"O0", "O1", "O2"});
-
-        gt = gl->create_gate_type("gate_3_to_1_sequential", {GateTypeProperty::ff});
-        gt->add_input_pins({"I0", "I1", "I2"});
-        gt->add_output_pins({"O"});
-
-        gt = gl->create_gate_type("gate_1_to_3_sequential", {GateTypeProperty::ff});
-        gt->add_input_pins({"I"});
-        gt->add_output_pins({"O0", "O1", "O2"});
-
-        gt = gl->create_gate_type("gate_4_to_4_sequential", {GateTypeProperty::ff});
-        gt->add_input_pins({"I0", "I1", "I2", "I3"});
-        gt->add_output_pins({"O0", "O1", "O2", "O3"});
-
-        gt = gl->create_gate_type("gate_4_to_1_sequential", {GateTypeProperty::ff});
-        gt->add_input_pins({"I0", "I1", "I2", "I3"});
-        gt->add_output_pins({"O"});
-
-        gt = gl->create_gate_type("gate_1_to_4_sequential", {GateTypeProperty::ff});
-        gt->add_input_pins({"I"});
-        gt->add_output_pins({"O0", "O1", "O2", "O3"});
-
-        gt = gl->create_gate_type("gate_8_to_8_sequential", {GateTypeProperty::ff});
-        gt->add_input_pins({"I0", "I1", "I2", "I3", "I4", "I5", "I6", "I7"});
-        gt->add_output_pins({"O0", "O1", "O2", "O3", "O4", "O5", "O6", "O7"});
-
-        gt = gl->create_gate_type("gate_8_to_1_sequential", {GateTypeProperty::ff});
-        gt->add_input_pins({"I0", "I1", "I2", "I3", "I4", "I5", "I6", "I7"});
-        gt->add_output_pins({"O"});
-
-        gt = gl->create_gate_type("gate_1_to_8_sequential", {GateTypeProperty::ff});
-        gt->add_input_pins({"I"});
-        gt->add_output_pins({"O0", "O1", "O2", "O3", "O4", "O5", "O6", "O7"});
-
-        gt = gl->create_gate_type("gate_2_to_0_sequential", {GateTypeProperty::ff});
-        gt->add_input_pins({"I0", "I1"});
-
-        return gl.get();
-    }
-
     std::unique_ptr<Netlist> test_utils::create_example_netlist(const int id)
     {
         NO_COUT_BLOCK;
-        GateLibrary* gl             = get_testing_gate_library();
+        const GateLibrary* gl       = get_gate_library();
         std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(gl);
         nl->set_device_name("device_name");
         nl->set_design_name("design_name");
@@ -490,40 +405,40 @@ namespace hal
         }
 
         // Create the gates
-        Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_type_by_name("gate_2_to_1"), "gate_0");
-        Gate* gate_1 = nl->create_gate(MIN_GATE_ID + 1, gl->get_gate_type_by_name("gnd"), "gate_1");
-        Gate* gate_2 = nl->create_gate(MIN_GATE_ID + 2, gl->get_gate_type_by_name("vcc"), "gate_2");
-        Gate* gate_3 = nl->create_gate(MIN_GATE_ID + 3, gl->get_gate_type_by_name("gate_1_to_1"), "gate_3");
-        Gate* gate_4 = nl->create_gate(MIN_GATE_ID + 4, gl->get_gate_type_by_name("gate_1_to_1"), "gate_4");
-        Gate* gate_5 = nl->create_gate(MIN_GATE_ID + 5, gl->get_gate_type_by_name("gate_2_to_1"), "gate_5");
-        Gate* gate_6 = nl->create_gate(MIN_GATE_ID + 6, gl->get_gate_type_by_name("gate_2_to_0"), "gate_6");
-        Gate* gate_7 = nl->create_gate(MIN_GATE_ID + 7, gl->get_gate_type_by_name("gate_2_to_1"), "gate_7");
-        Gate* gate_8 = nl->create_gate(MIN_GATE_ID + 8, gl->get_gate_type_by_name("gate_2_to_1"), "gate_8");
+        Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_type_by_name("AND2"), "gate_0");
+        Gate* gate_1 = nl->create_gate(MIN_GATE_ID + 1, gl->get_gate_type_by_name("GND"), "gate_1");
+        Gate* gate_2 = nl->create_gate(MIN_GATE_ID + 2, gl->get_gate_type_by_name("VCC"), "gate_2");
+        Gate* gate_3 = nl->create_gate(MIN_GATE_ID + 3, gl->get_gate_type_by_name("BUF"), "gate_3");
+        Gate* gate_4 = nl->create_gate(MIN_GATE_ID + 4, gl->get_gate_type_by_name("BUF"), "gate_4");
+        Gate* gate_5 = nl->create_gate(MIN_GATE_ID + 5, gl->get_gate_type_by_name("AND2"), "gate_5");
+        Gate* gate_6 = nl->create_gate(MIN_GATE_ID + 6, gl->get_gate_type_by_name("OR2"), "gate_6");
+        Gate* gate_7 = nl->create_gate(MIN_GATE_ID + 7, gl->get_gate_type_by_name("XOR2"), "gate_7");
+        Gate* gate_8 = nl->create_gate(MIN_GATE_ID + 8, gl->get_gate_type_by_name("AND2"), "gate_8");
 
         gate_0->set_data("a", "b", "c", "d");
         gate_1->set_data("x", "y", "z", "w");
 
         // Add the nets (net_x_y1_y2... := Net between the Gate with id x and the gates y1,y2,...)
         Net* net_1_3 = nl->create_net(MIN_NET_ID + 13, "net_1_3");
-        net_1_3->add_source(gate_1, "O");
-        net_1_3->add_destination(gate_3, "I");
+        net_1_3->add_source(gate_1, gate_1->get_type()->get_pin_by_name("O").get());
+        net_1_3->add_destination(gate_3, gate_3->get_type()->get_pin_by_name("I").get());
 
         Net* net_3_0 = nl->create_net(MIN_NET_ID + 30, "net_3_0");
-        net_3_0->add_source(gate_3, "O");
-        net_3_0->add_destination(gate_0, "I0");
+        net_3_0->add_source(gate_3, gate_3->get_type()->get_pin_by_name("O").get());
+        net_3_0->add_destination(gate_0, gate_0->get_type()->get_pin_by_name("I0").get());
 
         Net* net_2_0 = nl->create_net(MIN_NET_ID + 20, "net_2_0");
-        net_2_0->add_source(gate_2, "O");
-        net_2_0->add_destination(gate_0, "I1");
+        net_2_0->add_source(gate_2, gate_2->get_type()->get_pin_by_name("O").get());
+        net_2_0->add_destination(gate_0, gate_0->get_type()->get_pin_by_name("I1").get());
 
         Net* net_0_4_5 = nl->create_net(MIN_NET_ID + 045, "net_0_4_5");
-        net_0_4_5->add_source(gate_0, "O");
-        net_0_4_5->add_destination(gate_4, "I");
-        net_0_4_5->add_destination(gate_5, "I0");
+        net_0_4_5->add_source(gate_0, gate_0->get_type()->get_pin_by_name("O").get());
+        net_0_4_5->add_destination(gate_4, gate_4->get_type()->get_pin_by_name("I").get());
+        net_0_4_5->add_destination(gate_5, gate_5->get_type()->get_pin_by_name("I0").get());
 
         Net* net_7_8 = nl->create_net(MIN_NET_ID + 78, "net_7_8");
-        net_7_8->add_source(gate_7, "O");
-        net_7_8->add_destination(gate_8, "I0");
+        net_7_8->add_source(gate_7, gate_7->get_type()->get_pin_by_name("O").get());
+        net_7_8->add_destination(gate_8, gate_8->get_type()->get_pin_by_name("I0").get());
 
         return nl;
     }
@@ -531,7 +446,7 @@ namespace hal
     std::unique_ptr<Netlist> test_utils::create_example_netlist_2(const int id)
     {
         NO_COUT_BLOCK;
-        GateLibrary* gl             = get_testing_gate_library();
+        const GateLibrary* gl       = get_gate_library();
         std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(gl);
         nl->set_device_name("device_name");
         nl->set_design_name("design_name");
@@ -541,23 +456,23 @@ namespace hal
         }
 
         // Create the gates
-        Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_type_by_name("gate_4_to_1"), "gate_0");
-        Gate* gate_1 = nl->create_gate(MIN_GATE_ID + 1, gl->get_gate_type_by_name("gate_4_to_1"), "gate_1");
-        Gate* gate_2 = nl->create_gate(MIN_GATE_ID + 2, gl->get_gate_type_by_name("gate_4_to_1"), "gate_2");
-        Gate* gate_3 = nl->create_gate(MIN_GATE_ID + 3, gl->get_gate_type_by_name("gate_4_to_1"), "gate_3");
+        Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_type_by_name("AND4"), "gate_0");
+        Gate* gate_1 = nl->create_gate(MIN_GATE_ID + 1, gl->get_gate_type_by_name("OR4"), "gate_1");
+        Gate* gate_2 = nl->create_gate(MIN_GATE_ID + 2, gl->get_gate_type_by_name("XOR4"), "gate_2");
+        Gate* gate_3 = nl->create_gate(MIN_GATE_ID + 3, gl->get_gate_type_by_name("AND4"), "gate_3");
 
         // Add the nets (net_x_y1_y2... := Net between the Gate with id x and the gates y1,y2,...)
 
         Net* net_0_1_3 = nl->create_net(MIN_NET_ID + 013, "net_0_1_3");
-        net_0_1_3->add_source(gate_0, "O");
-        net_0_1_3->add_destination(gate_1, "I0");
-        net_0_1_3->add_destination(gate_1, "I1");
-        net_0_1_3->add_destination(gate_1, "I2");
-        net_0_1_3->add_destination(gate_3, "I0");
+        net_0_1_3->add_source(gate_0, gate_0->get_type()->get_pin_by_name("O").get());
+        net_0_1_3->add_destination(gate_1, gate_1->get_type()->get_pin_by_name("I0").get());
+        net_0_1_3->add_destination(gate_1, gate_1->get_type()->get_pin_by_name("I1").get());
+        net_0_1_3->add_destination(gate_1, gate_1->get_type()->get_pin_by_name("I2").get());
+        net_0_1_3->add_destination(gate_3, gate_3->get_type()->get_pin_by_name("I0").get());
 
         Net* net_2_1 = nl->create_net(MIN_NET_ID + 21, "net_2_1");
-        net_2_1->add_source(gate_2, "O");
-        net_2_1->add_destination(gate_1, "I3");
+        net_2_1->add_source(gate_2, gate_2->get_type()->get_pin_by_name("O").get());
+        net_2_1->add_destination(gate_1, gate_1->get_type()->get_pin_by_name("I3").get());
 
         return nl;
     }
@@ -565,7 +480,7 @@ namespace hal
     std::unique_ptr<Netlist> test_utils::create_example_netlist_negative(const int id)
     {
         NO_COUT_BLOCK;
-        GateLibrary* gl             = get_testing_gate_library();
+        const GateLibrary* gl       = get_gate_library();
         std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(gl);
         nl->set_device_name("device_name");
         nl->set_design_name("design_name");
@@ -575,24 +490,24 @@ namespace hal
         }
 
         // Create the Gate
-        Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_type_by_name("gate_1_to_1"), "gate_0");
+        Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_type_by_name("BUF"), "gate_0");
 
         // Net connected to the input pin
         Net* net_X_1 = nl->create_net(MIN_GATE_ID + 0, "net_X_1");
-        net_X_1->add_destination(gate_0, "I");
+        net_X_1->add_destination(gate_0, gate_0->get_type()->get_pin_by_name("I").get());
 
         // Net connected to the output pin
         Net* net_1_X = nl->create_net(MIN_GATE_ID + 1, "net_1_X");
-        net_1_X->add_source(gate_0, "O");
+        net_1_X->add_source(gate_0, gate_0->get_type()->get_pin_by_name("O").get());
 
         return nl;
     }
 
-    Endpoint* test_utils::get_destination_by_pin_type(const std::vector<Endpoint*> dsts, const std::string pin_type)
+    Endpoint* test_utils::get_destination_by_pin_type(const std::vector<Endpoint*> dsts, const GatePin* pin)
     {
         for (auto dst : dsts)
         {
-            if (dst->get_pin() == pin_type)
+            if (*dst->get_pin() == *pin)
             {
                 return dst;
             }
@@ -600,11 +515,11 @@ namespace hal
         return nullptr;
     }
 
-    Endpoint* test_utils::get_source_by_pin_type(const std::vector<Endpoint*> srcs, const std::string pin_type)
+    Endpoint* test_utils::get_source_by_pin_type(const std::vector<Endpoint*> srcs, const GatePin* pin)
     {
         for (auto src : srcs)
         {
-            if (src->get_pin() == pin_type)
+            if (*src->get_pin() == *pin)
             {
                 return src;
             }
@@ -711,8 +626,8 @@ namespace hal
             log_info("test_utils", "gates_are_equal: Gates are not equal! Reason: One gate is a vcc gate, the other one isn't.");
             return false;
         }
-        std::unordered_map<std::string, BooleanFunction> g0_bf = g0->get_boolean_functions(true);
-        std::unordered_map<std::string, BooleanFunction> g1_bf = g1->get_boolean_functions(true);
+        std::unordered_map<std::string, BooleanFunction> g0_bf = g0->get_boolean_functions(true).get();
+        std::unordered_map<std::string, BooleanFunction> g1_bf = g1->get_boolean_functions(true).get();
         if (std::map<std::string, BooleanFunction>(g0_bf.begin(), g0_bf.end()) != std::map<std::string, BooleanFunction>(g1_bf.begin(), g1_bf.end()))
         {
             log_info("test_utils", "gates_are_equal: Gates are not equal! Reason: The stored boolean functions are different.");
@@ -805,18 +720,12 @@ namespace hal
         // Check that the pins and pin groups are the same
         if (m_0->get_pins().size() != m_0->get_pins().size())
         {
-            log_info("test_utils",
-                     "modules_are_equal: Modules are not equal! Reason: The number of pins is different ({} vs {})",
-                     m_0->get_pins().size(),
-                     m_1->get_pins().size());
+            log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: The number of pins is different ({} vs {})", m_0->get_pins().size(), m_1->get_pins().size());
             return false;
         }
         if (m_0->get_pin_groups().size() != m_0->get_pin_groups().size())
         {
-            log_info("test_utils",
-                     "modules_are_equal: Modules are not equal! Reason: The number of pin groups is different ({} vs {})",
-                     m_0->get_pin_groups().size(),
-                     m_1->get_pin_groups().size());
+            log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: The number of pin groups is different ({} vs {})", m_0->get_pin_groups().size(), m_1->get_pin_groups().size());
             return false;
         }
 
@@ -825,33 +734,44 @@ namespace hal
             if (auto res_group = m_1->get_pin_group_by_id(pg_0->get_id()); res_group.is_ok())
             {
                 const PinGroup<ModulePin>* pg_1 = res_group.get();
-                if ((!ignore_id && (pg_0->get_id() != pg_1->get_id())) || pg_0->get_name() != pg_1->get_name() || pg_0->get_start_index() != pg_1->get_start_index() || pg_0->is_ascending() != pg_1->is_ascending() || pg_0->size() != pg_1->size()) 
+                if ((!ignore_id && (pg_0->get_id() != pg_1->get_id())) || pg_0->get_name() != pg_1->get_name() || pg_0->get_start_index() != pg_1->get_start_index()
+                    || pg_0->is_ascending() != pg_1->is_ascending() || pg_0->size() != pg_1->size())
                 {
                     log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Two pin groups are different (\"{}\" vs \"{}\")", pg_0->get_name(), pg_1->get_name());
-                    return false; 
+                    return false;
                 }
-                
+
                 for (const ModulePin* p_0 : pg_0->get_pins())
                 {
-                    if(auto res_pin = m_1->get_pin_by_id(p_0->get_id()); res_pin.is_ok()) 
+                    if (auto res_pin = m_1->get_pin_by_id(p_0->get_id()); res_pin.is_ok())
                     {
                         const ModulePin* p_1 = res_pin.get();
-                        if((!ignore_id && (p_0->get_id() != p_1->get_id())) || p_0->get_name() != p_1->get_name() || p_0->get_type() != p_1->get_type() || p_0->get_direction() != p_1->get_direction() || !nets_are_equal(p_0->get_net(), p_1->get_net(), ignore_id, ignore_name)) 
+                        if ((!ignore_id && (p_0->get_id() != p_1->get_id())) || p_0->get_name() != p_1->get_name() || p_0->get_type() != p_1->get_type() || p_0->get_direction() != p_1->get_direction()
+                            || !nets_are_equal(p_0->get_net(), p_1->get_net(), ignore_id, ignore_name))
                         {
                             log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Two pins are different (\"{}\" vs \"{}\")", p_0->get_name(), p_1->get_name());
-                            return false; 
+                            return false;
                         }
                     }
-                    else 
+                    else
                     {
-                        log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: There is no pin with name '{}' in pin group '{}' of module '{}' with ID {} within netlist with ID {}", p_0->get_name(), pg_1->get_name(), m_1->get_name(), m_1->get_netlist()->get_id());
+                        log_info("test_utils",
+                                 "modules_are_equal: Modules are not equal! Reason: There is no pin with name '{}' in pin group '{}' of module '{}' with ID {} within netlist with ID {}",
+                                 p_0->get_name(),
+                                 pg_1->get_name(),
+                                 m_1->get_name(),
+                                 m_1->get_netlist()->get_id());
                         return false;
                     }
                 }
-            } 
-            else 
+            }
+            else
             {
-                log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: There is no pin group with name '{}' in module '{}' with ID {} within netlist with ID {}", pg_0->get_name(), m_1->get_name(), m_1->get_netlist()->get_id());
+                log_info("test_utils",
+                         "modules_are_equal: Modules are not equal! Reason: There is no pin group with name '{}' in module '{}' with ID {} within netlist with ID {}",
+                         pg_0->get_name(),
+                         m_1->get_name(),
+                         m_1->get_netlist()->get_id());
                 return false;
             }
         }
@@ -1299,21 +1219,21 @@ namespace hal
         return [name](auto ep) { return ep->get_gate()->get_name() == name; };
     }
 
-    std::function<bool(Endpoint*)> test_utils::endpoint_pin_type_filter(const std::string& pin_type)
+    std::function<bool(Endpoint*)> test_utils::endpoint_pin_type_filter(const GatePin* pin)
     {
-        return [pin_type](auto ep) { return ep->get_pin() == pin_type; };
+        return [pin](auto ep) { return *ep->get_pin() == *pin; };
     }
 
-    std::function<bool(const std::string&, Endpoint*)> test_utils::adjacent_pin_filter(const std::string& pin)
+    std::function<bool(const GatePin*, Endpoint*)> test_utils::adjacent_pin_filter(const GatePin* pin)
     {
-        return [pin](auto, auto ep) { return ep->get_pin() == pin; };
+        return [pin](auto, auto ep) { return *ep->get_pin() == *pin; };
     }
-    std::function<bool(const std::string&, Endpoint*)> test_utils::starting_pin_filter(const std::string& pin)
+    std::function<bool(const GatePin*, Endpoint*)> test_utils::starting_pin_filter(const GatePin* pin)
     {
-        return [pin](auto starting_pin, auto) { return starting_pin == pin; };
+        return [pin](auto starting_pin, auto) { return *starting_pin == *pin; };
     }
 
-    std::function<bool(const std::string&, Endpoint*)> test_utils::adjacent_gate_type_filter(const std::string& type)
+    std::function<bool(const GatePin*, Endpoint*)> test_utils::adjacent_gate_type_filter(const std::string& type)
     {
         return [type](auto, auto ep) { return ep->get_gate()->get_type()->get_name() == type; };
     }

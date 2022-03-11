@@ -146,9 +146,9 @@ namespace hal
         /**
          * Get all direct parent of this module.<br>
          * If \p recursive is set to true, all indirect parents are also included.<br>
-         * A filter can be applied to the result to only get parents matching the specified condition.
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
-         * @param[in] filter - Filter to be applied to the modules.
+         * @param[in] filter - An optional filter.
          * @param[in] recursive - True to include indirect parents as well, false otherwise.
          * @returns A vector of parent modules.
          */
@@ -175,9 +175,9 @@ namespace hal
         /**
          * Get all direct submodules of this module.<br>
          * If \p recursive is set to true, all indirect submodules are also included.<br>
-         * A filter can be applied to the result to only get submodules matching the specified condition.
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
-         * @param[in] filter - Filter to be applied to the modules.
+         * @param[in] filter - An optional filter.
          * @param[in] recursive - True to include indirect submodules as well, false otherwise.
          * @returns A vector of submodules.
          */
@@ -241,11 +241,11 @@ namespace hal
 
         /**
          * TODO add pybind
-         * Get all nets that have at least one source or one destination within the module.<br>
-         * A filter can be applied to the result to only get nets matching the specified condition.<br>
+         * Get all nets that have at least one source or one destination within the module.
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          * If \p recursive is true, nets in submodules are considered as well.
          *
-         * @param[in] filter - Filter to be applied to the nets.
+         * @param[in] filter - An optional filter.
          * @param[in] recursive - True to also consider nets in submodules, false otherwise.
          * @returns An unordered set of nets.
          */
@@ -357,18 +357,18 @@ namespace hal
 
         /**
          * Get the (ordered) pins of the module.
-         * The optional filter is evaluated on every pin such that the result only contains pins matching the specified condition.
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          * 
-         * @param[in] filter - Filter function to be evaluated on each pin.
+         * @param[in] filter - An optional filter.
          * @returns A vector of pins.
          */
         std::vector<ModulePin*> get_pins(const std::function<bool(ModulePin*)>& filter = nullptr) const;
 
         /**
          * Get all pin groups of the module.
-         * The optional filter is evaluated on every pin group such that the result only contains pin groups matching the specified condition.
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          * 
-         * @param[in] filter - Filter function to be evaluated on each pin group.
+         * @param[in] filter - An optional filter.
          * @returns A vector of pin groups.
          */
         std::vector<PinGroup<ModulePin>*> get_pin_groups(const std::function<bool(PinGroup<ModulePin>*)>& filter = nullptr) const;
@@ -570,31 +570,31 @@ namespace hal
 
         /**
          * Check whether a gate is contained in the module.<br>
-         * If \p recursive is true, gates in submodules are considered as well.
+         * If `recursive` is `true`, gates in submodules are considered as well.
          *
          * @param[in] gate - The gate to check for.
-         * @param[in] recursive - True to also consider gates in submodules, false otherwise.
-         * @returns True if the gate is contained in the module, false otherwise.
+         * @param[in] recursive - Set to `true` to also consider gates in submodules, `false` otherwise.
+         * @returns `true` if the gate is contained in the module, `false` otherwise.
          */
         bool contains_gate(Gate* gate, bool recursive = false) const;
 
         /**
          * Get a gate specified by the given ID.<br>
-         * If \p recursive is true, gates in submodules are considered as well.
+         * If `recursive` is `true`, gates in submodules are considered as well.
          *
          * @param[in] id - The unique ID of the gate.
-         * @param[in] recursive - True to also consider gates in submodules, false otherwise.
+         * @param[in] recursive - Set to `true` to also consider gates in submodules, `false` otherwise.
          * @returns The gate if found, a nullptr otherwise.
          */
         Gate* get_gate_by_id(const u32 id, bool recursive = false) const;
 
         /**
-         * Get all gates contained within the module.<br>
-         * A filter can be applied to the result to only get gates matching the specified condition.<br>
-         * If \p recursive is true, gates in submodules are considered as well.
+         * Get all gates contained within the module.
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+         * If `recursive` is `true`, gates in submodules are considered as well.
          *
-         * @param[in] filter - Filter to be applied to the gates.
-         * @param[in] recursive - True to also consider gates in submodules, false otherwise.
+         * @param[in] filter - An optional filter.
+         * @param[in] recursive - Set to `true` to also consider gates in submodules, `false` otherwise.
          * @return A vector of gates.
          */
         std::vector<Gate*> get_gates(const std::function<bool(Gate*)>& filter = nullptr, bool recursive = false) const;
