@@ -158,7 +158,7 @@ namespace hal
                 :param int tmax: Upper limit for time scale in wave viewer.
             )")
 
-            .def("set_timeframe", [](const NetlistSimulatorController& self, const u32 group_id, const Net* trigger_net, const std::vector<Net*>& enable_nets, BooleanFunction enable_condition, u32 start_time, u32 end_time) -> std::vector<u32> {
+            .def("trace_value_if", [](const NetlistSimulatorController& self, const u32 group_id, const Net* trigger_net, const std::vector<Net*>& enable_nets, BooleanFunction enable_condition, u32 start_time, u32 end_time) -> std::vector<u32> {
                     auto res = self.trace_value_if(group_id, trigger_net, enable_nets, enable_condition, start_time, end_time);
                     if (res.is_ok())
                     {
