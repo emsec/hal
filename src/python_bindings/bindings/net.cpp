@@ -20,7 +20,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_net.def ("__hash__", &Net::get_hash, R"(
+        py_net.def("__hash__", &Net::get_hash, R"(
             Python requires hash for set and dict container.
 
             :returns: The hash.
@@ -154,18 +154,6 @@ namespace hal
             :param lambda filter: A filter for endpoints. Leave empty for no filtering.
             :returns: A list of source-endpoints.
             :rtype: list[hal_py.Endpoint]
-        )");
-
-        py_net.def("get_source", &Net::get_source, R"(
-            .. deprecated:: 2.0
-                Use :func:`get_sources` instead.
-
-            Get the (first) source-endpoint of the net.
-            If there was no source assigned, the gate element of the returned endpoint is *None*.
-            If the net is multi-driven a warning is printed.
-
-            :returns: The (first) source endpoint.
-            :rtype: hal_py.Endpoint
         )");
 
         py_net.def("add_destination", &Net::add_destination, py::arg("gate"), py::arg("pin"), R"(

@@ -280,7 +280,7 @@ namespace hal
         }
 
         c_netlist->enable_automatic_net_checks(true);
-        return OK(c_netlist);
+        return OK(std::move(c_netlist));
     }
 
     //######################################################################
@@ -608,7 +608,7 @@ namespace hal
             assert(false);    // this should not trigger
             log_warning("net",
                         "output pin '{}' of gate '{}' with ID {} is not a source of net '{}' with ID {} in netlist with ID {}",
-                        ep->get_pin(),
+                        ep->get_pin()->get_name(),
                         gate->get_name(),
                         gate->get_id(),
                         net->get_name(),
@@ -754,7 +754,7 @@ namespace hal
             assert(false);    // should not trigger
             log_warning("net",
                         "input pin '{}' of gate '{}' with ID {} is not a destination of net '{}' with ID {} in netlist with ID {}",
-                        ep->get_pin(),
+                        ep->get_pin()->get_name(),
                         gate->get_name(),
                         gate->get_id(),
                         net->get_name(),

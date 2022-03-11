@@ -165,7 +165,7 @@ namespace hal
                 if (auto it = std::find(stack.begin(), stack.end(), n); it != stack.end())
                 {
                     return ERR("could not get subgraph function of net '" + n->get_name() + "' with ID " + std::to_string(n->get_id()) + ": subgraph contains a cyclic dependency: "
-                               + utils::join(" -> ", it, stack.end(), [](auto nlog) { return nlog->get_name() + " (ID: " + std::to_string(n_log->get_id()) + ")"; }) + " -> " + n->get_name()
+                               + utils::join(" -> ", it, stack.end(), [](auto nlog) { return nlog->get_name() + " (ID: " + std::to_string(nlog->get_id()) + ")"; }) + " -> " + n->get_name()
                                + " (ID: " + std::to_string(n->get_id()) + ")");
                 }
 
@@ -272,7 +272,15 @@ namespace hal
 
         std::unique_ptr<Netlist> copy_netlist(const Netlist* nl)
         {
-            return nl->copy();
+            if (auto res = nl->copy(); res.is_error())
+            {
+                log_error("netlist_utils", "error encountered while copying netlist:\n{}", res.get_error().get());
+                return nullptr;
+            }
+            else
+            {
+                return res.get();
+            }
         }
 
         std::pair<std::map<u32, Gate*>, std::vector<std::vector<int>>> get_ff_dependency_matrix(const Netlist* nl)
@@ -352,15 +360,20 @@ namespace hal
             for (const Gate* gate : subgraph_gates)
             {
                 Gate* new_gate = c_netlist->create_gate(gate->get_id(), gate->get_type(), gate->get_name(), gate->get_location_x(), gate->get_location_y());
-                if (auto res = gate->get_boolean_functions(true); res.is_error())
+                if (auto bf = gate->get_boolean_functions(true); bf.is_error())
                 {
-                    log_error("netlist_utils", "{}", res.get_error().get());
+                    log_error("netlist_utils", "error encountered while copying partial netlist:\n{}", bf.get_error().get());
+                    return nullptr;
                 }
                 else
                 {
-                    for (const auto& [name, func] : res.get())
+                    for (const auto& [name, func] : bf.get())
                     {
-                        new_gate->add_boolean_function(name, func);
+                        if (auto res = new_gate->add_boolean_function(name, func); res.is_error())
+                        {
+                            log_error("netlist_utils", "error encountered while copying partial netlist:\n{}", bf.get_error().get());
+                            return nullptr;
+                        }
                     }
                 }
 
@@ -698,7 +711,8 @@ namespace hal
 
             for (const auto& pin : pins)
             {
-                if (PinDirection direction = pin->get_direction(); direction == PinDirection::input || direction == PinDirection::inout)
+                PinDirection direction = pin->get_direction();
+                if (direction == PinDirection::input || direction == PinDirection::inout)
                 {
                     if (auto net = gate->get_fan_in_net(pin); net.is_ok())
                     {
@@ -709,7 +723,7 @@ namespace hal
                         log_error("netlist_utils", "{}", net.get_error().get());
                     }
                 }
-                else if (PinDirection direction = pin->get_direction(); direction == PinDirection::output)
+                else if (direction == PinDirection::output)
                 {
                     if (auto net = gate->get_fan_out_net(pin); net.is_ok())
                     {

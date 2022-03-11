@@ -75,7 +75,7 @@ namespace hal
                     entry.PushBack(JSON_STR_HELPER(std::get<1>(it.second)), allocator);
                     val.PushBack(entry, allocator);
                 }
-                return OK(val);
+                return OK(std::move(val));
             }
 
             Result<std::monostate> deserialize_data(DataContainer* c, const rapidjson::Value& val)
@@ -94,7 +94,7 @@ namespace hal
                 rapidjson::Value val(rapidjson::kObjectType);
                 val.AddMember("gate_id", ep->get_gate()->get_id(), allocator);
                 val.AddMember("pin_id", ep->get_pin()->get_id(), allocator);
-                return OK(val);
+                return OK(std::move(val));
             }
 
             Result<std::monostate> deserialize_destination(Netlist* nl, Net* net, const rapidjson::Value& val)
@@ -211,7 +211,7 @@ namespace hal
                         val.AddMember("custom_functions", functions, allocator);
                     }
                 }
-                return OK(val);
+                return OK(std::move(val));
             }
 
             Result<std::monostate> deserialize_gate(Netlist* nl, const rapidjson::Value& val, const std::unordered_map<std::string, hal::GateType*>& gate_types)
@@ -326,7 +326,7 @@ namespace hal
                     return ERR_APPEND(data_val.get_error(), "could not serialize net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": failed to serialize data map");
                 }
 
-                return OK(val);
+                return OK(std::move(val));
             }
 
             Result<std::monostate> deserialize_net(Netlist* nl, const rapidjson::Value& val)
@@ -444,7 +444,7 @@ namespace hal
                 {
                     return ERR_APPEND(data_val.get_error(), "could not serialize module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()) + ": failed to serialize data map");
                 }
-                return OK(val);
+                return OK(std::move(val));
             }
 
             Result<std::monostate> deserialize_module(Netlist* nl, const rapidjson::Value& val, std::unordered_map<Module*, std::vector<PinGroupInformation>>& pin_group_cache)
@@ -625,7 +625,7 @@ namespace hal
                     }
                 }
 
-                return OK(val);
+                return OK(std::move(val));
             }
 
             Result<std::monostate> deserialize_grouping(Netlist* nl, const rapidjson::Value& val)
@@ -978,7 +978,7 @@ namespace hal
                 // re-enable automatically checking module nets
                 nl->enable_automatic_net_checks(true);
 
-                return OK(nl);
+                return OK(std::move(nl));
             }
         }    // namespace
 
