@@ -497,6 +497,14 @@ namespace hal {
         QModelIndex i1 = createIndex(mRoot->size()-1,2,mRoot);
 
         Q_EMIT dataChanged(i0,i1);
+        for (WaveDataGroup* grp : mWaveDataList->mDataGroups.values())
+        {
+            int n = grp->size();
+            if (!n) continue;
+            i0 = createIndex(0,2,grp);
+            i1 = createIndex(n-1,2,grp);
+            Q_EMIT dataChanged(i0,i1);
+        }
     }
 
     bool WaveTreeModel::dropMimeData(const QMimeData *mimeData, Qt::DropAction action, int row, int column, const QModelIndex &dropParent)
