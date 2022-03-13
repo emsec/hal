@@ -37,6 +37,8 @@ namespace hal
 
     void ActionCreateObject::writeToXml(QXmlStreamWriter& xmlOut) const
     {
+        //todo: remove parentId, switch entirely to parentObject
+        writeParentObjectToXml(xmlOut);
         xmlOut.writeTextElement("objectname", mObjectName);
         xmlOut.writeTextElement("parentid", QString::number(mParentId));
     }
@@ -45,6 +47,8 @@ namespace hal
     {
         while (xmlIn.readNextStartElement())
         {
+            //todo: emove parentId, switch entirely to parentObject
+            readParentObjectFromXml(xmlIn);
             if (xmlIn.name() == "objectname")
                 mObjectName = xmlIn.readElementText();
             if (xmlIn.name() == "parentid")
@@ -58,6 +62,21 @@ namespace hal
 
         switch (mObject.type())
         {
+
+        case UserActionObjectType::PinGroup:
+        {
+            Module* parentModule = gNetlist->get_module_by_id(mParentObject.id());
+            if(parentModule)
+            {
+                auto res = parentModule->create_pin_group(mObjectName.toStdString());
+                if(res.is_error())
+                    return false;
+                setObject(UserActionObject(res.get()->get_id(), UserActionObjectType::PinGroup));
+                //todo: Implement delete-action for undo
+            }
+            return false;
+        }
+            break;
 
         case UserActionObjectType::Module:
         {

@@ -80,6 +80,7 @@ namespace hal
         if (!clickedIndex.isValid())
             return;
 
+
         //all relevant information
         TreeItem* clickedItem        = mPortModel->getItemFromIndex(clickedIndex);
         ModulePinsTreeModel::itemType type = mPortModel->getTypeOfItem(clickedItem);
