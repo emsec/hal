@@ -33,6 +33,11 @@ namespace hal
         Net*    net;
         GraphContext* ctx;
         switch (mObject.type()) {
+        case UserActionObjectType::PinGroup:
+        {
+            return false;//tmp
+        }
+            break;
         case UserActionObjectType::Module:
             mod = gNetlist->get_module_by_id(mObject.id());
             if (mod)

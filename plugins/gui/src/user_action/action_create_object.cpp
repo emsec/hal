@@ -72,6 +72,7 @@ namespace hal
                 if(res.is_error())
                     return false;
                 setObject(UserActionObject(res.get()->get_id(), UserActionObjectType::PinGroup));
+                setParentObject(mParentObject);
                 //todo: Implement delete-action for undo
             }
             return false;
