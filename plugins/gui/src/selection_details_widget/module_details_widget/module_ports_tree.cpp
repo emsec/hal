@@ -6,6 +6,7 @@
 #include "gui/python/py_code_provider.h"
 #include "gui/selection_details_widget/module_details_widget/port_tree_model.h"
 #include "gui/user_action/action_rename_object.h"
+#include "gui/user_action/action_delete_object.h"
 #include "hal_core/netlist/gate_library/enums/pin_direction.h"
 #include "hal_core/utilities/enums.h"
 
@@ -159,8 +160,12 @@ namespace hal
                 auto mod = gNetlist->get_module_by_id(modId);
                 if(!mod) return;
                 auto pinGroupRes = mod->get_pin_group_by_id(itemId);
-                if(pinGroupRes.is_ok())
-                    mod->delete_pin_group(pinGroupRes.get());
+                if(pinGroupRes.is_ok()){
+                    ActionDeleteObject* delObj = new ActionDeleteObject;
+                    delObj->setObject(UserActionObject(pinGroupRes.get()->get_id(), UserActionObjectType::PinGroup));
+                    delObj->setParentObject(UserActionObject(modId, UserActionObjectType::Module));
+                    delObj->exec();
+                }
             });
 
             if(selectionModel()->selectedRows().size() > 1)

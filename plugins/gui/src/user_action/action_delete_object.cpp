@@ -35,7 +35,18 @@ namespace hal
         switch (mObject.type()) {
         case UserActionObjectType::PinGroup:
         {
-            return false;//tmp
+            mod = gNetlist->get_module_by_id(mParentObject.id());
+            if(mod && mod->get_pin_group_by_id(mObject.id()).is_ok())
+            {
+                auto pinGroup = mod->get_pin_group_by_id(mObject.id()).get();
+                QSet<u32> pins;//make this to a list to preserve order? (used for undo action)
+                for(const auto &pin : pinGroup->get_pins())
+                    pins.insert(pin->get_id());
+                auto res = mod->delete_pin_group(pinGroup);
+                //todo: implement undo action (compound with create+add?)
+            }
+            else
+                return false;
         }
             break;
         case UserActionObjectType::Module:
