@@ -8,6 +8,7 @@
 #include <QMutex>
 #include "netlist_simulator_controller/saleae_directory.h"
 #include "waveform_viewer/wave_form_painted.h"
+#include "waveform_viewer/wave_transform.h"
 #include <QDir>
 #include <QTimer>
 #include <QTextStream>
@@ -21,6 +22,7 @@ namespace hal {
     class WaveGraphicsCanvas;
     class WaveDataList;
     class WaveItemHash;
+    class WaveDataTimeframe;
 
     class WaveLoaderThread : public QThread
     {
@@ -29,9 +31,10 @@ namespace hal {
         QDir mWorkDir;
         const WaveTransform* mTransform;
         const WaveScrollbar* mScrollbar;
+        const WaveDataTimeframe& mTimeframe;
     public:
         WaveLoaderThread(WaveItem* parentItem, const QString& workdir,
-                         const WaveTransform* trans, const WaveScrollbar* sbar);
+                         const WaveTransform* trans, const WaveScrollbar* sbar, const WaveDataTimeframe& tframe);
         void run() override;
     };
 
@@ -42,11 +45,11 @@ namespace hal {
         QDir mWorkDir;
         const WaveTransform* mTransform;
         const WaveScrollbar* mScrollbar;
-
+        const WaveDataTimeframe& mTimeframe;
     public:
         bool mLoop;
-        WaveLoaderBackbone(const QList<WaveItem*>& todo, const QString& workdir, const WaveTransform* trans, const WaveScrollbar* sbar, QObject* parent = nullptr)
-            : QThread(parent), mTodoList(todo), mWorkDir(workdir), mTransform(trans), mScrollbar(sbar), mLoop(true) {;}
+        WaveLoaderBackbone(const QList<WaveItem*>& todo, const QString& workdir, const WaveTransform* trans, const WaveScrollbar* sbar, const WaveDataTimeframe& tframe, QObject* parent = nullptr)
+            : QThread(parent), mTodoList(todo), mWorkDir(workdir), mTransform(trans), mScrollbar(sbar), mTimeframe(tframe), mLoop(true) {;}
         void run() override;
     };
 
@@ -57,13 +60,15 @@ namespace hal {
         WaveGraphicsCanvas* mWaveGraphicsCanvas;
         WaveDataList* mWaveDataList;
         WaveItemHash* mWaveItemHash;
-        WaveFormPaintValidity mValidity;
+        WaveZoomShift mValidity;
         int mY0;
         int mHeight;
 
         QTimer* mTimer;
         int mTimerTick;
         WaveLoaderBackbone* mBackbone;
+        QList<WaveZoomShift> mZoomHistory;
+        bool mOmitHistory;
     Q_SIGNALS:
         void updateSoon();
     private Q_SLOTS:
@@ -77,5 +82,8 @@ namespace hal {
 
         int maxHeight() const;
         int y0Entry(int irow) const;
+
+        QList<WaveZoomShift>& zoomHistory() { return mZoomHistory; }
+        void omitHistory() { mOmitHistory = true; }
     };
 }

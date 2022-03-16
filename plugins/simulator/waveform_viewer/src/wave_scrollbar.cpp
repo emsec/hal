@@ -4,7 +4,10 @@
 
 namespace hal {
     WaveScrollbar::WaveScrollbar(const WaveTransform* trans, QWidget* parent)
-      : QScrollBar(parent), mTransform(trans), mVleft(0), mVmaxScroll(0), mVieportWidth(0) {;}
+      : QScrollBar(parent), mTransform(trans), mVleft(0), mVmaxScroll(0), mVieportWidth(0)
+    {
+        setSingleStep(1);
+    }
 
     int WaveScrollbar::toUInt(double v)
     {
@@ -72,12 +75,25 @@ namespace hal {
     void WaveScrollbar::sliderChange(SliderChange change)
     {
         QScrollBar::sliderChange(change);
+        if (change == SliderChange::SliderValueChange && value() == mLastValue) return;
         if (!maximum())
             setVleftIntern(0);
         else if (maximum() < 4096)
             setVleftIntern(value());
         else
-            setVleftIntern(toUInt(value() * mVmaxScroll / 4096.));
+        {
+            int dx = mLastValue - value();
+            if (abs(dx)==1)
+            {
+                double v = mVleft - dx * mVieportWidth / 2;
+                if (v<0) v=0;
+                setVleftIntern(v);
+                setValue(toUInt(mVleft * 4096. / mVmaxScroll));
+            }
+            else
+                setVleftIntern(toUInt(value() * mVmaxScroll / 4096.));
+        }
+        mLastValue = value();
     }
 
     double WaveScrollbar::xPosF(double t) const

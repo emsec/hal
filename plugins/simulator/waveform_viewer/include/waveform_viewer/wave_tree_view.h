@@ -37,6 +37,7 @@ namespace hal {
         bool viewportEvent(QEvent *event) override;
         void resizeEvent(QResizeEvent *event) override;
         void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
+        void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) override;
 
     Q_SIGNALS:
         void viewportHeightChanged(int height);

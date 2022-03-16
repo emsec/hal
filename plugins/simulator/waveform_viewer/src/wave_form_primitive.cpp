@@ -1,5 +1,7 @@
 #include "waveform_viewer/wave_form_primitive.h"
 #include "netlist_simulator_controller/wave_data.h"
+#include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
+#include "netlist_simulator_controller/simulation_settings.h"
 #include <QPainter>
 #include <QFontMetrics>
 #include <QDebug>
@@ -21,7 +23,7 @@ namespace hal {
     {
         float y = 14 * 0.5 + y0;
         QPen savePen = painter.pen();
-        QPen dashPen(QColor("#ffb0c0"),0);
+        QPen dashPen(QColor(NetlistSimulatorControllerPlugin::sSimulationSettings->color(SimulationSettings::WaveformUndefined)),0);
         dashPen.setStyle(Qt::DotLine);
         painter.setPen(dashPen);
         painter.drawLine(QLineF(mX0,y,mX1,y));

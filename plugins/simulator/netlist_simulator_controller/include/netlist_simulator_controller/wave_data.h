@@ -42,10 +42,12 @@ namespace hal {
     {
     public:
         enum NetType { RegularNet, InputNet, OutputNet, ClockNet, NetGroup };
+        enum LoadPolicy { TooBigToLoad, LoadTimeframe, LoadAllData };
     private:
         u32 mId;
         int mFileIndex;
         u64 mFileSize;
+        u64 mTimeframeSize;
         QString mName;
         NetType mNetType;
         int mBits;
@@ -76,8 +78,9 @@ namespace hal {
         void setBits(int bts);
         void setDirty(bool dty)                     { mDirty = dty; }
         void setFileIndex(int inx)                  { mFileIndex = inx; }
-        void setFileSize(u64 siz)                   { mFileSize = siz; }
-        virtual bool isLoadable()             const { return mFileSize < 100000; }
+        void setFileSize(u64 siz);
+        void setTimeframeSize(u64 siz)              { mTimeframeSize = siz; }
+        virtual LoadPolicy loadPolicy() const;
 
         void loadSaleae(SaleaeInputFile& sif, const WaveDataTimeframe& tframe = WaveDataTimeframe());
         bool loadSaleae(const SaleaeDirectory& sd, const WaveDataTimeframe& tframe);
@@ -229,6 +232,6 @@ namespace hal {
         virtual int childIndex(WaveData* wd) const;
         virtual int netIndex(u32 id) const;
         virtual void replaceChild(WaveData* wd);
-        virtual bool isLoadable() const override;
+        virtual LoadPolicy loadPolicy() const override;
     };
 }

@@ -15,28 +15,6 @@ namespace hal {
         return mDuration < other.mDuration;   // both valid, smaller wins
     }
 
-    WaveFormPaintValidity::WaveFormPaintValidity(const WaveTransform* trans, const WaveScrollbar* sbar)
-        : mScale(0), mTleft(0), mWidth(0)
-    {
-        if (!trans || !sbar) return;
-        mScale = trans->scale();
-        mTleft = sbar->tLeftI();
-        mWidth = sbar->viewportWidth();
-    }
-
-    bool WaveFormPaintValidity::operator==(const WaveFormPaintValidity& other) const
-    {
-        if (isNull() || other.isNull())
-            return false;
-
-        return (mScale == other.mScale && mTleft == other.mTleft && mWidth == other.mWidth);
-    }
-
-    bool WaveFormPaintValidity::isNull() const
-    {
-        return (mWidth == 0 || mScale <= 0);
-    }
-
     WaveFormPainted::WaveFormPainted()
         : mCursorTime(-1), mCursorValue(SaleaeDataTuple::sReadError) {;}
 
@@ -51,7 +29,7 @@ namespace hal {
         for (WaveFormPrimitive* wfp : mPrimitives)
             delete wfp;
         mPrimitives.clear();
-        mValidity = WaveFormPaintValidity();
+        mValidity = WaveZoomShift();
         mShortestToggle = TimeInterval();
     }
 
@@ -160,7 +138,7 @@ namespace hal {
 
     void WaveFormPainted::generate(WaveDataProvider* wdp, const WaveTransform* trans, const WaveScrollbar* sbar, bool *loop)
     {
-        mValidity = WaveFormPaintValidity(trans, sbar);
+        mValidity = WaveZoomShift(trans, sbar);
         *loop = true;
         WaveFormPrimitive* pendingTransition = nullptr;
 
