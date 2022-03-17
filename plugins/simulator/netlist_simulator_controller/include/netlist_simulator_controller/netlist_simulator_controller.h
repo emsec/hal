@@ -308,6 +308,20 @@ public:
     WaveData* get_waveform_by_net(Net* n) const;
 
     /**
+     * Rename waveform and emit 'renamed' signal
+     * @param wd[in] Waveform to be renamed
+     * @param name[in] New name for waveform
+     */
+    void rename_waveform(WaveData* wd, std::string name);
+
+    /**
+     * Getter for waveform group
+     * @param id[in] Waveform group id
+     * @return The waveform group
+     */
+    WaveDataGroup* get_waveform_group_by_id(u32 id) const;
+
+    /**
      * Set timeframe for viewer
      * @param[in] tmin Lower limit for time scale in wave viewer
      * @param[in] tmax Upper limit for time scale in wave viewer

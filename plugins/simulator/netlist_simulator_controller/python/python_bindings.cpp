@@ -336,6 +336,22 @@ namespace hal
                 :param hal_py.Net net: The net waveform is associated with.
                 :rtype: hal_py.WaveData
             )")
+
+            .def("get_waveform_group_by_id", &NetlistSimulatorController::get_waveform_group_by_id, py::arg("id"), R"(
+                Getter for waveform group.
+
+                :param int id: Waveform group id.
+                :rtype: hal_py.WaveDataGroup
+            )")
+
+            .def("rename_waveform", &NetlistSimulatorController::rename_waveform, py::arg("wave"), py::arg("name"), R"(
+                Rename waveform and emit 'renamed' signal.
+
+                :param hal_py.WaveData wave: Waveform to be renamed.
+                :param str name: New name for waveform.
+            )")
+
+
             /*
             .def("set_simulation_state", &NetlistSimulator::set_simulation_state, py::arg("state"), R"(
                 Set the simulator state, i.e., net signals, to a given state.
@@ -482,6 +498,29 @@ namespace hal
                 :returns: Waveform events.
                 :rtype: list[tuple(int,int)]
         )");
+
+        py::class_<WaveDataGroup, WaveData, RawPtrWrapper<WaveDataGroup>> py_wave_data_group(m, "WaveDataGroup", R"(
+                Waveform data group.
+        )");
+
+        py_wave_data_group.def("add_waveform", &WaveDataGroup::add_waveform, py::arg("wave"), R"(
+                Add waveform to existing waveform group.
+
+                :param hal_py.WaveData wave: Waveform to be added.
+        )");
+
+        py_wave_data_group.def("remove_waveform", &WaveDataGroup::remove_waveform, py::arg("wave"), R"(
+                Remove waveform from waveform group.
+
+                :param hal_py.WaveData wave: Waveform to be removed.
+        )");
+
+        py_wave_data_group.def("get_waveforms", &WaveDataGroup::get_waveforms, R"(
+                Get list of waveforms contained by group.
+
+                :rtype: list[hal_py.WaveData]
+        )");
+
 
 #ifndef PYBIND11_MODULE
         return m.ptr();

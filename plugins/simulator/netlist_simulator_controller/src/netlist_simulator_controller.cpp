@@ -228,6 +228,25 @@ namespace hal
         return mWaveDataList->waveDataByNet(n);
     }
 
+    WaveDataGroup* NetlistSimulatorController::get_waveform_group_by_id(u32 id) const
+    {
+        return mWaveDataList->mDataGroups.value(id);
+    }
+
+    void NetlistSimulatorController::rename_waveform(WaveData* wd, std::string name)
+    {
+        WaveDataGroup* grp = dynamic_cast<WaveDataGroup*>(wd);
+        if (grp)
+        {
+            grp->rename(QString::fromStdString(name));
+            mWaveDataList->emitGroupUpdated(grp->id());
+            return;
+        }
+        int iwave = mWaveDataList->waveIndexByNetId(wd->id());
+        if (iwave >= 0)
+            mWaveDataList->updateWaveName(iwave, QString::fromStdString(name));
+    }
+
     std::vector<const Net *> NetlistSimulatorController::getFilterNets(FilterInputFlag filter) const
     {
         if (!mSimulationInput->has_gates()) return std::vector<const Net*>();

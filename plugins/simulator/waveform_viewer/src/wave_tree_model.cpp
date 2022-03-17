@@ -148,6 +148,8 @@ namespace hal {
 
     void WaveTreeModel::handleWaveAdded(int iwave)
     {
+        WaveItemIndex wii(iwave, WaveItemIndex::Wire, 0);
+        if (mWaveItemHash->contains(wii)) return; // already in model
         ReorderRequest req(this);
         WaveData* wd = mWaveDataList->at(iwave);
         insertItem(mRoot->size(),createIndex(0,0,nullptr),wd);
@@ -170,11 +172,25 @@ namespace hal {
         invalidateParent(createIndex(0,0,nullptr)); // update root
     }
 
-    void WaveTreeModel::handleNameUpdated(int iwave)
+    void WaveTreeModel::handleWaveRenamed(int iwave)
     {
         WaveData* wd = mWaveDataList->at(iwave);
         for (QModelIndex inx : indexes(wd))
             Q_EMIT dataChanged(inx,inx);
+    }
+
+    void WaveTreeModel::handleGroupRenamed(int grpId)
+    {
+        WaveDataGroup* grp = mWaveDataList->mDataGroups.value(grpId);
+        if (grp)
+        {
+            int irow = mRoot->childIndex(grp);
+            if (irow >= 0)
+            {
+                QModelIndex inx = createIndex(irow,0,mRoot);
+                Q_EMIT dataChanged(inx,inx);
+            }
+        }
     }
 
     void WaveTreeModel::handleWaveAddedToGroup(const QVector<u32> &netIds, int grpId)
@@ -692,6 +708,20 @@ namespace hal {
     {
         WaveItem* wi = mWaveItemHash->value(WaveItemIndex(grpId,WaveItemIndex::Group));
         if (wi) wi->setRequest(WaveItem::DataChanged);
+    }
+
+    void WaveTreeModel::handleWaveRemovedFromGroup(int iwave, int grpId)
+    {
+        WaveItemIndex wii(iwave, WaveItemIndex::Wire, grpId);
+        auto it = mWaveItemHash->find(wii);
+        if (it != mWaveItemHash->end())
+        {
+            beginResetModel();
+            WaveItem* wi = it.value();
+            mWaveItemHash->erase(it);
+            if (wi) mWaveItemHash->dispose(wi);
+            endResetModel();
+        }
     }
 
     void WaveTreeModel::handleGroupAboutToBeRemoved(WaveDataGroup* grp)

@@ -161,7 +161,8 @@ namespace hal {
         void triggerAddToView(u32 id) const;
         bool hasNet(u32 id) const { return mIds.contains(id); }
         QSet<u32> toSet() const;
-        void updateWaveName(int inx, const QString& nam);
+        void updateWaveName(int iwave, const QString& nam);
+        void updateGroupName(u32 grpId, const QString& nam);
         const WaveDataTimeframe& timeFrame() const { return mTimeframe; }
         void setValueForEmpty(int val);
         void dump() const;
@@ -170,6 +171,7 @@ namespace hal {
         void emitWaveAdded(int inx);
         void emitWaveUpdated(int inx);
         void emitGroupUpdated(int grpId);
+        void emitWaveRemovedFromGroup(int iwave, int grpId);
         void updateFromSaleae();
         SaleaeDirectory& saleaeDirectory() { return mSaleaeDirectory; }
         void insertBooleanValue(WaveData* wd, u64 t, BooleanFunction::Value bval);
@@ -181,9 +183,11 @@ namespace hal {
         void waveDataAboutToBeChanged(int inx);
         void waveUpdated(int inx, int grpId);
         void groupUpdated(int grpId);
-        void nameUpdated(int inx);
+        void waveRenamed(int iwave);
+        void groupRenamed(int grpId);
         void waveRemoved(int inx);
         void waveAddedToGroup(const QVector<u32>& netIds, int grpId);
+        void waveRemovedFromGroup(int iwave, int grpId);
         void timeframeChanged(const WaveDataTimeframe* tframe);
         void triggerBeginResetModel();
         void triggerEndResetModel();
@@ -233,5 +237,8 @@ namespace hal {
         virtual int netIndex(u32 id) const;
         virtual void replaceChild(WaveData* wd);
         virtual LoadPolicy loadPolicy() const override;
+        void add_waveform(WaveData* wd);
+        void remove_waveform(WaveData* wd);
+        std::vector<WaveData*> get_waveforms() const;
     };
 }

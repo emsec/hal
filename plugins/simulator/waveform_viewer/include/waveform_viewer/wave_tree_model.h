@@ -89,8 +89,10 @@ namespace hal {
     public Q_SLOTS:
         void handleUpdateValueColumn();
         void handleWaveAdded(int iwave);
-        void handleNameUpdated(int iwave);
+        void handleWaveRenamed(int iwave);
+        void handleGroupRenamed(int grpId);
         void handleWaveAddedToGroup(const QVector<u32>& netIds, int grpId);
+        void handleWaveRemovedFromGroup(int iwave, int grpId);
         void handleGroupAdded(int grpId);
         void handleGroupAboutToBeRemoved(WaveDataGroup* grp);
         void handleGroupUpdated(int grpId);
