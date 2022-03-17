@@ -30,8 +30,6 @@ function(target_compile_options_filtered target visibility)
     endforeach()
 endfunction()
 
-project(abc)
-
 list(APPEND ABC_READLINE_FLAGS "ABC_USE_NO_READLINE=1")
 
 if(ABC_USE_NAMESPACE)
