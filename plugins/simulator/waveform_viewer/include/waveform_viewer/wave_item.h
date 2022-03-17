@@ -49,7 +49,7 @@ namespace hal {
 
     public:
         WaveFormPainted mPainted;
-        WaveFormPaintValidity mLoadValidity;
+        WaveZoomShift mLoadValidity;
         QMutex mMutex;
         bool mVisibleRange;
         bool mLoop;
@@ -84,8 +84,8 @@ namespace hal {
         bool isSelected() const { return mSelected; }
         bool isThreadBusy() const { return isFinished() || isAborted(); }
         void deletePainted();
-        void startGeneratePainted(const QString& workdir, const WaveTransform* trans, const WaveScrollbar* sbar);
-        void startLoader(const QString& workdir, const WaveTransform* trans, const WaveScrollbar* sbar);
+        void startGeneratePainted(const QString& workdir, const WaveTransform* trans, const WaveScrollbar* sbar, const WaveDataTimeframe& tframe);
+        void startLoader(const QString& workdir, const WaveTransform* trans, const WaveScrollbar* sbar, const WaveDataTimeframe& tframe);
         void abortLoader();
         void setState(State stat);
         void dump(QTextStream& xout) const;
@@ -108,10 +108,9 @@ namespace hal {
         bool isDeleted() const;
         int loadeProgress() const { return mLoadProgress; }
         void incrementLoadProgress();
-        static bool sValuesAsText;
-        static const char* sLineColor[];
+        static const char* sBackgroundColor;
         bool isGroup() const { return mData->netType() == WaveData::NetGroup; }
-        int cursorValue(float tCursor, int xpos);
+        int cursorValue(double tCursor, int xpos);
     };
 
     class WaveItemHash : public QHash<WaveItemIndex,WaveItem*>

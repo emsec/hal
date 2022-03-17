@@ -1,6 +1,8 @@
 #include "waveform_viewer/wave_tree_model.h"
 #include "netlist_simulator_controller/wave_data.h"
 #include "netlist_simulator_controller/saleae_file.h"
+#include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
+#include "netlist_simulator_controller/simulation_settings.h"
 #include <QApplication>
 #include <QFont>
 #include <QMimeData>
@@ -8,9 +10,6 @@
 #include <stdlib.h>
 
 namespace hal {
-
-    const char* WaveTreeModel::sStateColor[3] = {"#707071", "#102080", "#802010"};
-
 
     WaveTreeModel::WaveTreeModel(WaveDataList *wdlist, WaveItemHash *wHash, QObject *obj)
         : QAbstractItemModel(obj), mWaveDataList(wdlist), mWaveItemHash(wHash),
@@ -142,7 +141,7 @@ namespace hal {
     {
         int oldCount = mWaveItemHash->size();
         WaveItem* wi = mWaveItemHash->addOrReplace(wd,tp,iwave,parentId);
-        connect(wi,&WaveItem::gotCursorValue,this,&WaveTreeModel::handleUpdateValueColumn);
+        connect(wi,&WaveItem::gotCursorValue,this,&WaveTreeModel::handleUpdateValueColumn,Qt::QueuedConnection);
         int count = mWaveItemHash->size();
         if (count != oldCount) Q_EMIT numberEntriesChanged(count);
     }
@@ -279,7 +278,7 @@ namespace hal {
                 return QColor::fromRgb(255,255,qrand()%256);
             if (v<-1) v=-1;
             if (v>1) v=1;
-            return QColor(sStateColor[v+1]);
+            return QColor(NetlistSimulatorControllerPlugin::sSimulationSettings->color((SimulationSettings::ColorSetting) (SimulationSettings::Value0+v)));
         }
         case Qt::DisplayRole:
         {
@@ -465,14 +464,13 @@ namespace hal {
         Q_EMIT inserted(index(targetRow,0,targetIndexParent));
     }
 
-    void WaveTreeModel::handleCursorMoved(float tCursor, int xpos)
+    void WaveTreeModel::handleCursorMoved(double tCursor, int xpos)
     {
         if (tCursor == mCursorTime && xpos == mCursorXpos) return;
         if (!mValueThreads.isEmpty())
         {
             for (WaveValueThread* wvt : mValueThreads.values())
                 wvt->abort();
-            mValueThreads.clear();
         }
         mCursorTime = tCursor;
         mCursorXpos = xpos;
@@ -481,9 +479,15 @@ namespace hal {
 
     void WaveTreeModel::handleEndValueThread(WaveItem* item)
     {
+        bool workDone = false;
         auto it = mValueThreads.find(item);
-        if (it != mValueThreads.end()) mValueThreads.erase(it);
-        handleUpdateValueColumn();
+        if (it != mValueThreads.end())
+        {
+            workDone = !it.value()->wasAborted();
+            mValueThreads.erase(it);
+        }
+        if (workDone)
+            handleUpdateValueColumn();
     }
 
     void WaveTreeModel::handleUpdateValueColumn()
@@ -492,6 +496,14 @@ namespace hal {
         QModelIndex i1 = createIndex(mRoot->size()-1,2,mRoot);
 
         Q_EMIT dataChanged(i0,i1);
+        for (WaveDataGroup* grp : mWaveDataList->mDataGroups.values())
+        {
+            int n = grp->size();
+            if (!n) continue;
+            i0 = createIndex(0,2,grp);
+            i1 = createIndex(n-1,2,grp);
+            Q_EMIT dataChanged(i0,i1);
+        }
     }
 
     bool WaveTreeModel::dropMimeData(const QMimeData *mimeData, Qt::DropAction action, int row, int column, const QModelIndex &dropParent)
@@ -605,7 +617,7 @@ namespace hal {
         {
             QString workdir = QString::fromStdString(mWaveDataList->saleaeDirectory().get_directory());
             WaveValueThread* wvt = new WaveValueThread(item,workdir,mCursorTime,mCursorXpos);
-            connect(wvt,&WaveValueThread::gotValue,this,&WaveTreeModel::handleEndValueThread);
+            connect(wvt,&WaveValueThread::valueThreadEnds,this,&WaveTreeModel::handleEndValueThread);
             wvt->start();
             mValueThreads.insert(item,wvt);
         }
@@ -704,14 +716,7 @@ namespace hal {
                 {
                     WaveItem* wi = it.value();
                     mWaveItemHash->erase(it);
-                    if (wi)
-                    {
-                        mWaveItemHash->dispose(wi);
-                        // put wave items into root unless that would cause duplicate
-                        if (mRoot->hasNetId(wd->id())) continue;
-                        mRoot->insert(irow,grp->childAt(i));
-                        mWaveItemHash->insert(WaveItemIndex(iwave,WaveItemIndex::Wire,0),wi);
-                    }
+                    if (wi) mWaveItemHash->dispose(wi);
                 }
             }
         }
@@ -766,6 +771,7 @@ namespace hal {
         if (!grp) return false;
         mGroupList.removeAt(sourceRow);
         mGroupList.insert( targetRow, grp);
+        restoreIndex();
         return true;
     }
 
@@ -784,6 +790,7 @@ namespace hal {
         void run() override;
     };
     */
+
 
         WaveValueThread::WaveValueThread(WaveItem* item, const QString& workdir, float tpos, int xpos, QObject *parent)
             : QThread(parent), mItem(item), mWorkDir(workdir), mTpos(tpos), mXpos(xpos), mAbort(false)
@@ -814,7 +821,7 @@ namespace hal {
 
         void WaveValueThread::handleValueThreadFinished()
         {
-            if (!mAbort) Q_EMIT gotValue(mItem);
+            Q_EMIT valueThreadEnds(mItem);
             deleteLater();
         }
 

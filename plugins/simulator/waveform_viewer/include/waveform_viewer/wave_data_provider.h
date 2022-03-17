@@ -8,6 +8,8 @@
 
 namespace hal {
 
+    class WaveDataTimeframe;
+
     class WaveDataProvider
     {
         bool mGroup;
@@ -36,14 +38,26 @@ namespace hal {
 
     class WaveDataProviderFile : public WaveDataProvider
     {
+    public:
+        enum StoreData { Off, Recording, Complete, Failed};
         SaleaeInputFile& mInputFile;
         SaleaeDataBuffer* mBuffer;
         u64 mIndex;
+        const WaveDataTimeframe& mTimeframe;
+        QMap<u64,int> mDataMap;
+        StoreData mStoreData;
+
+        bool isRecording() const { return mStoreData == Recording; }
+        void storeCurrentDatapoint();
     public:
-        WaveDataProviderFile(SaleaeInputFile& sif) : mInputFile(sif), mBuffer(nullptr), mIndex(0) {;}
+        WaveDataProviderFile(SaleaeInputFile& sif, const WaveDataTimeframe& tframe) : mInputFile(sif), mBuffer(nullptr), mIndex(0),
+            mTimeframe(tframe), mStoreData(Off) {;}
         ~WaveDataProviderFile();
         virtual int startValue(u64 t) override;
         virtual SaleaeDataTuple nextPoint() override;
+
+        StoreData storeDataState() const { return mStoreData; }
+        const QMap<u64,int>& dataMap() const { return mDataMap; }
     };
 
     class WaveDataProviderClock : public WaveDataProvider

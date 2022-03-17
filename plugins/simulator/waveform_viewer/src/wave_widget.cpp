@@ -18,6 +18,8 @@
 #include <QApplication>
 
 #include "netlist_simulator_controller/netlist_simulator_controller.h"
+#include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
+#include "netlist_simulator_controller/simulation_settings.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/utilities/log.h"
 #include "gui/content_manager/content_manager.h"
@@ -76,6 +78,7 @@ namespace hal {
             {
                 connect(mController,&NetlistSimulatorController::parseComplete,vv,&WaveformViewer::handleParseComplete);
                 connect(mController,&NetlistSimulatorController::loadProgress,vv,&WaveformViewer::showProgress);
+                connect(mGraphicsCanvas,&WaveGraphicsCanvas::undoStateChanged,vv,&WaveformViewer::testUndoEnable);
             }
         }
 
@@ -180,7 +183,7 @@ namespace hal {
                 if (!grp)
                 {
                     grp = gNetlist->create_grouping(grpNames[i]);
-                    gtm->recolorGrouping(grp->get_id(),QColor(WaveTreeModel::sStateColor[i]));
+                    gtm->recolorGrouping(grp->get_id(),QColor(NetlistSimulatorControllerPlugin::sSimulationSettings->color((SimulationSettings::ColorSetting) (SimulationSettings::Value0+i))));
                 }
                 mGroupIds[i] = grp->get_id();
             }
@@ -291,7 +294,7 @@ namespace hal {
             log_warning(mController->get_name(), "Cannot get simulation results");
     }
 
-    void WaveWidget::visualizeCurrentNetState(float tCursor, int xpos)
+    void WaveWidget::visualizeCurrentNetState(double tCursor, int xpos)
     {
         QSet<Net*> netState[3]; // x, 0, 1
 

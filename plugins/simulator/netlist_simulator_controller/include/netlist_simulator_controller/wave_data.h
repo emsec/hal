@@ -42,10 +42,12 @@ namespace hal {
     {
     public:
         enum NetType { RegularNet, InputNet, OutputNet, ClockNet, NetGroup };
+        enum LoadPolicy { TooBigToLoad, LoadTimeframe, LoadAllData };
     private:
         u32 mId;
         int mFileIndex;
         u64 mFileSize;
+        u64 mTimeframeSize;
         QString mName;
         NetType mNetType;
         int mBits;
@@ -54,7 +56,7 @@ namespace hal {
         QMap<u64,int> mData;
         bool mDirty;
 
-        QMap<u64,int>::const_iterator timeIterator(float t) const;
+        QMap<u64,int>::const_iterator timeIterator(double t) const;
         void resetWave();
     public:
         WaveData(const WaveData& other);
@@ -76,14 +78,15 @@ namespace hal {
         void setBits(int bts);
         void setDirty(bool dty)                     { mDirty = dty; }
         void setFileIndex(int inx)                  { mFileIndex = inx; }
-        void setFileSize(u64 siz)                   { mFileSize = siz; }
-        virtual bool isLoadable()             const { return mFileSize < 100000; }
+        void setFileSize(u64 siz);
+        void setTimeframeSize(u64 siz)              { mTimeframeSize = siz; }
+        virtual LoadPolicy loadPolicy() const;
 
         void loadSaleae(SaleaeInputFile& sif, const WaveDataTimeframe& tframe = WaveDataTimeframe());
         bool loadSaleae(const SaleaeDirectory& sd, const WaveDataTimeframe& tframe);
         void saveSaleae(SaleaeDirectory& sd);
         void setData(const QMap<u64,int>& dat);
-        int  intValue(float t) const;
+        int  intValue(double t) const;
         int get_value_at(u64 t) const;
         std::vector<std::pair<u64,int>> get_events() const;
         u64  maxTime() const;
@@ -94,7 +97,7 @@ namespace hal {
         void eraseAtTime(u64 t);
         bool insertToggleTime(u64 t);
         QString strValue(int val) const;
-        QString strValue(float t) const;
+        QString strValue(double t) const;
         QString strValue(const QMap<u64,int>::const_iterator& it) const;
         void setValueBase(int bas) { mValueBase = bas; }
         bool isEqual(const WaveData& other, int tolerance=0) const;
@@ -163,7 +166,7 @@ namespace hal {
         void setValueForEmpty(int val);
         void dump() const;
         QList<const WaveData*> toList() const;
-        QList<const WaveData*> partialList(u64 start_time, u64 end_time, std::set<const Net*>& nets) const;
+        QList<const WaveData*> partialList(u64 start_time, u64 end_time, const std::set<const Net*>& nets) const;
         void emitWaveAdded(int inx);
         void emitWaveUpdated(int inx);
         void emitGroupUpdated(int grpId);
@@ -229,6 +232,6 @@ namespace hal {
         virtual int childIndex(WaveData* wd) const;
         virtual int netIndex(u32 id) const;
         virtual void replaceChild(WaveData* wd);
-        virtual bool isLoadable() const override;
+        virtual LoadPolicy loadPolicy() const override;
     };
 }

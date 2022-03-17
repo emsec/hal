@@ -3,6 +3,8 @@
 #include <QtGlobal>
 
 namespace hal {
+    class WaveScrollbar;
+
     class WaveTransform
     {
         quint64 mTmin;
@@ -20,5 +22,21 @@ namespace hal {
         void setTmin(quint64 t0) { mTmin = t0; }
         void setTmax(quint64 t1) { mTmax = t1; }
         void setScale(double m11) { mMag = m11; }
+    };
+
+    class WaveZoomShift
+    {
+        double mScale;
+        quint64 mTleft;
+        int mWidth;
+    public:
+        WaveZoomShift(const WaveTransform* trans = nullptr, const WaveScrollbar* sbar = nullptr);
+        bool operator==(const WaveZoomShift& other) const;
+        bool operator!=(const WaveZoomShift& other) const { return ! operator==(other); }
+        bool isNull() const;
+        bool sameHistory(const WaveZoomShift& other) const;
+        int width() const { return mWidth; }
+        double scale() const { return mScale; }
+        quint64 leftTime() const { return mTleft; }
     };
 }

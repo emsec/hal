@@ -91,17 +91,17 @@ namespace hal
         void handleRunSimulation();
         void handleAddResultWave();
         void handleToggleMaxZoom();
+        void handleUndoZoomShift();
 
         void handleSelectGates();
         void handleClockSet();
         void handleEngineSelected(bool checked);
-        void handleSetEngineProperties();
+        void handleOpenSettingsDialog();
         void handleShowEngineOutput();
 
         void handleSelectionChanged(void* sender);
         void handleRefreshNetNames();
         void setVisualizeNetState(bool state);
-        void setGroupValuesAsText(bool state);
         void handleTabClosed(int inx);
 
     public Q_SLOTS:
@@ -113,6 +113,7 @@ namespace hal
         void currentTabChanged(int inx);
         void currentStateChanged(NetlistSimulatorController::SimulationState state);
         void showProgress(int percent);
+        void testUndoEnable();
 
     private:
         bool mVisualizeNetState;
@@ -124,6 +125,7 @@ namespace hal
         QAction* mRunSimulationAction;
         QAction* mAddResultWaveAction;
         QAction* mToggleMaxZoomAction;
+        QAction* mUndoZoomShiftAction;
 
         QTabWidget* mTabWidget;
         QStatusBar* mStatusBar;

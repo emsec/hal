@@ -13,9 +13,7 @@
 
 namespace hal {
 
-    const char* WaveItem::sLineColor[] = { "#10E0FF", "#60F0FF", "#C08010", "#0D293E"} ;
-
-    bool WaveItem::sValuesAsText = false;
+    const char* WaveItem::sBackgroundColor = "#0D293E" ;
 
     WaveItem::WaveItem(WaveData *dat, QObject *parent)
         : QObject(parent), mData(dat), mLoader(nullptr), mLoadProgress(0), mState(Null),
@@ -85,18 +83,18 @@ namespace hal {
         setState(Null);
     }
 
-    void WaveItem::startGeneratePainted(const QString& workdir, const WaveTransform* trans, const WaveScrollbar* sbar)
+    void WaveItem::startGeneratePainted(const QString& workdir, const WaveTransform* trans, const WaveScrollbar* sbar, const WaveDataTimeframe& tframe)
     {
         // precondition: mutex lock is set, state is Null
         mLoadProgress = 0;
 
-        if (mData->isLoadable())
+        if (mData->loadPolicy() != WaveData::TooBigToLoad)
         {
             if ((u64)mData->data().size() < mData->fileSize())
             {
                 // load map
                 setState(WaveItem::Loading);
-                startLoader(workdir, trans, sbar);
+                startLoader(workdir, trans, sbar, tframe);
             }
             else
             {
@@ -116,19 +114,19 @@ namespace hal {
         {
             // graphics from file
             setState(WaveItem::Loading);
-            startLoader(workdir,trans, sbar);
+            startLoader(workdir,trans, sbar, tframe);
         }
     }
 
-    void WaveItem::startLoader(const QString& workdir, const WaveTransform* trans, const WaveScrollbar* sbar)
+    void WaveItem::startLoader(const QString& workdir, const WaveTransform* trans, const WaveScrollbar* sbar, const WaveDataTimeframe& tframe)
     {
         Q_ASSERT(mState == Loading);
-        mLoadValidity = WaveFormPaintValidity(trans,sbar);
+        mLoadValidity = WaveZoomShift(trans,sbar);
         if (mLoader)
         {
             qDebug() << mData->fileIndex() << "*** warning *** : loader already running";
         }
-        mLoader = new WaveLoaderThread(this, workdir, trans, sbar);
+        mLoader = new WaveLoaderThread(this, workdir, trans, sbar, tframe);
         connect(mLoader, &QThread::finished, this, &WaveItem::handleWaveLoaderFinished);
         mLoader->start();
     }
@@ -163,7 +161,7 @@ namespace hal {
 
     }
 
-    int WaveItem::cursorValue(float tCursor, int xpos)
+    int WaveItem::cursorValue(double tCursor, int xpos)
     {
         // can deliver stored value
         int retval = mPainted.cursorValueStored(tCursor,xpos);
@@ -176,14 +174,16 @@ namespace hal {
             quint64 ntrans = floor(tCursor/clk.switch_time);
             retval = clk.start_at_zero ? ntrans % 2 : 1 - ntrans % 2;
             mPainted.setCursorValue(tCursor,xpos,retval);
+            Q_EMIT gotCursorValue();
             return retval;
         }
 
         // get value from memory map
-        if (mData->isLoadable())
+        if (mData->loadPolicy() != WaveData::TooBigToLoad)
         {
             retval = mData->intValue(tCursor);
             mPainted.setCursorValue(tCursor,xpos,retval);
+            Q_EMIT gotCursorValue();
             return retval;
         }
 
@@ -247,107 +247,6 @@ namespace hal {
         mData->loadSaleae(sif);
     }
 
-//------------------------
-
-    /** formerly paint handles request
-    Q_UNUSED(option);
-        Q_UNUSED(widget);
-
-        if (hasRequest(DeleteAcknowledged))
-            return;
-
-
-        if (mSelected)
-        {
-            painter->setBrush(QBrush(sLineColor[Background]));
-            painter->setPen(Qt::NoPen);
-            painter->drawRect(boundingRect());
-            painter->setBrush(Qt::NoBrush);
-        }
-
-        bool bboxChanged = setTimeframe();
-
-        if (hasRequest(DataChanged) || hasRequest(SelectionChanged) || bboxChanged)
-        {
-            construct();
-            clearRequest(DataChanged);
-            clearRequest(SelectionChanged);
-        }
-        else
-        {
-
-        -----------------------
-            if (false)  // TODO
-            {
-                if (mData->netType() == WaveData::ClockNet)
-                    construct();
-                else
-                    prepareGeometryChange();
-            }
-            else if (mData && mData->bits() > 1)
-            {
-         ----------------------------
-                if (sValuesAsText)
-                {
-                    if (!mGrpRects.isEmpty()) construct();
-                }
-                else
-                {
-                    if (!childItems().isEmpty()) construct();
-                }
-           }
-           --------------------------
-        }
-
-        painter->setRenderHint(QPainter::Antialiasing,true);
-        painter->setPen(QPen(QBrush(QColor(sLineColor[Dotted])),0.,Qt::DotLine)); // TODO : style
-        painter->drawLines(mDotLines);
-
-        painter->setPen(QPen(QBrush(QColor(sLineColor[mSelected?HiLight:Solid])),0.));  // TODO : style
-        painter->drawLines(mSolidLines);
-
-        float  y = 1;
-
-        if (mData->data().isEmpty())
-        {
-            painter->setPen(QPen(QBrush(QColor(sLineColor[Dotted])),0.,Qt::DotLine));
-            y -= 0.5;
-            painter->drawLine(QLineF(mMinTime,y,mMaxTime,y));
-            return;
-        }
-
-        if (sValuesAsText &&  mData->bits() > 1)
-        {
-            for (auto it = mData->data().constBegin(); it!=mData->data().constEnd();)
-            {
-                u64 t0 = it.key();
-       //         int v0 = it.value();
-                ++it;
-                u64 t1 = it==mData->data().constEnd() ? mMaxTime : it.key();
-                QRectF r(t0,-0.05,t1-t0,1.1);
-                painter->drawRoundedRect(r,50.0,0.5);
-            }
-        }
-
-        if (mMaxTransition < mMaxTime)
-        {
-            if (mData->data().last() < 0)
-            {
-                y -= 0.5;
-                painter->setPen(QPen(QBrush(QColor(sLineColor[Dotted])),0.,Qt::DotLine));
-            }
-            else
-                y -= mData->data().last();
-            painter->drawLine(QLineF(mMaxTransition,y,mMaxTime,y));
-        }
-
-        if (!sValuesAsText && !mGrpRects.isEmpty())
-        {
-            painter->setPen(QPen(QBrush(QColor(sLineColor[mSelected?HiLight:Solid])),0.));
-            painter->setBrush(Qt::NoBrush);
-            painter->drawRects(mGrpRects);
-        }
-    */
 
     bool WaveItem::hasRequest(Request rq) const
     {
