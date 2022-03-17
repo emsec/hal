@@ -382,6 +382,15 @@ namespace hal
         Result<ModulePin*> get_pin_by_id(const u32 id) const;
 
         /**
+         * TODO test
+         * Get the pin corresponding to the given name.
+         * 
+         * @param[in] name - The name of the pin.
+         * @returns The pin on success, an error message otherwise.
+         */
+        Result<ModulePin*> get_pin_by_name(const std::string& name) const;
+
+        /**
          * Get the pin that passes through the specified net.
          * 
          * @param[in] net - The net.
@@ -396,6 +405,15 @@ namespace hal
          * @returns The pin group on success, an error message otherwise.
          */
         Result<PinGroup<ModulePin>*> get_pin_group_by_id(const u32 id) const;
+
+        /**
+         * TODO test
+         * Get the pin group corresponding to the given name.
+         * 
+         * @param[in] name - The name of the pin group.
+         * @returns The pin group on success, an error message otherwise.
+         */
+        Result<PinGroup<ModulePin>*> get_pin_group_by_name(const std::string& name) const;
 
         /**
          * Set the name of the given pin.
@@ -649,10 +667,12 @@ namespace hal
         u32 m_next_output_index = 0;
 
         std::vector<std::unique_ptr<ModulePin>> m_pins;
-        std::vector<std::unique_ptr<PinGroup<ModulePin>>> m_pin_groups;
-        std::list<PinGroup<ModulePin>*> m_pin_groups_ordered;
         std::unordered_map<u32, ModulePin*> m_pins_map;
+        std::unordered_map<std::string, ModulePin*> m_pin_names_map;
+        std::vector<std::unique_ptr<PinGroup<ModulePin>>> m_pin_groups;
         std::unordered_map<u32, PinGroup<ModulePin>*> m_pin_groups_map;
+        std::unordered_map<std::string, PinGroup<ModulePin>*> m_pin_group_names_map;
+        std::list<PinGroup<ModulePin>*> m_pin_groups_ordered;
 
         /* stores gates sorted by id */
         std::unordered_map<u32, Gate*> m_gates_map;

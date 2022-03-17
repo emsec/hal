@@ -121,41 +121,76 @@ namespace hal
         /**
          * TODO test
          * Add a source endpoint to the net.
+         * The endpoint is specified by a tuple of a gate and an output pin of that gate.
          *
-         * @param[in] gate - The source gate.
-         * @param[in] pin - The output pin of the source gate.
+         * @param[in] gate - The gate.
+         * @param[in] pin - The output pin of the gate.
          * @returns The endpoint on success, an error otherwise.
          */
         Result<Endpoint*> add_source(Gate* gate, GatePin* pin);
 
         /**
          * TODO test
-         * Remove a source endpoint specified by a gate and a pin from the net.
+         * Add a source endpoint to the net.
+         * The endpoint is specified by a tuple of a gate and the name of an output pin of that gate.
          *
-         * @param[in] gate - The source gate.
-         * @param[in] pin - The output pin of the source gate.
+         * @param[in] gate - The gate.
+         * @param[in] pin_name - The name of an output pin of the gate.
+         * @returns The endpoint on success, an error otherwise.
+         */
+        Result<Endpoint*> add_source(Gate* gate, const std::string& pin_name);
+
+        /**
+         * TODO test
+         * Remove a source endpoint from the net.
+         * The endpoint is specified by a tuple of a gate and an output pin of that gate.
+         *
+         * @param[in] gate - The gate.
+         * @param[in] pin - The output pin of the gate.
          * @returns Ok on success, an error otherwise.
          */
         Result<std::monostate> remove_source(Gate* gate, const GatePin* pin);
 
         /**
          * TODO test
-         * Remove a source endpoint from the net. <br>
+         * Remove a source endpoint from the net.
+         * The endpoint is specified by a tuple of a gate and the name of an output pin of that gate.
          *
-         * @param[in] ep - The source endpoint.
+         * @param[in] gate - The gate.
+         * @param[in] pin_name - The name of an output pin of the gate.
+         * @returns Ok on success, an error otherwise.
+         */
+        Result<std::monostate> remove_source(Gate* gate, const std::string& pin_name);
+
+        /**
+         * TODO test
+         * Remove a source endpoint from the net.
+         *
+         * @param[in] ep - The endpoint.
          * @returns Ok on success, an error otherwise.
          */
         Result<std::monostate> remove_source(Endpoint* ep);
 
         /**
          * TODO test
-         * Check whether a tuple of a gate and an output pin is a source endpoint of the net.
+         * Check whether an endpoint is a source of the net.
+         * The endpoint is specified by a tuple of a gate and an output pin of that gate.
          *
          * @param[in] gate - The gate.
-         * @param[in] pin - The pin of the gate.
-         * @returns `true` if it is a source of the net, `false` otherwise.
+         * @param[in] pin - The output pin of the gate.
+         * @returns `true` if the endpoint is a source of the net, `false` otherwise.
          */
         bool is_a_source(Gate* gate, const GatePin* pin) const;
+
+        /**
+         * Check whether an endpoint is a source of the net.
+         * The endpoint is specified by a tuple of a gate and the name of an output pin of that gate.
+         *
+         * @param[in] gate - The gate.
+         * @param[in] pin_name - The name of an output pin of the gate.
+         * @returns `true` if the endpoint is a source of the net, `false` otherwise.
+         */
+        bool is_a_source(Gate* gate, const std::string& pin_name) const;
 
         /**
          * Check whether an endpoint is a source of the net.
@@ -174,9 +209,9 @@ namespace hal
 
         /**
          * Get a vector of sources of the net.
-         * The optional filter is evaluated on every candidate endpoint such that the result only contains endpoints matching the specified condition.
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
-         * @param[in] filter - The optional filter function to be evaluated on each endpoint.
+         * @param[in] filter - An optional filter.
          * @returns A vector of source endpoints.
          */
         std::vector<Endpoint*> get_sources(const std::function<bool(Endpoint* ep)>& filter = nullptr) const;
@@ -188,47 +223,82 @@ namespace hal
         /**
          * TODO test
          * Add a destination endpoint to the net.
+         * The endpoint is specified by a tuple of a gate and an input pin of that gate.
          *
-         * @param[in] gate - The destination gate.
-         * @param[in] pin - The input pin of the destination gate.
+         * @param[in] gate - The gate.
+         * @param[in] pin - The input pin of the gate.
          * @returns The endpoint on success, an error otherwise.
          */
         Result<Endpoint*> add_destination(Gate* gate, GatePin* pin);
 
         /**
          * TODO test
-         * Remove a destination endpoint from the net.
+         * Add a destination endpoint to the net.
+         * The endpoint is specified by a tuple of a gate and the name of an input pin of that gate.
          *
-         * @param[in] gate - The destination gate.
-         * @param[in] pin - The input pin of the destination gate.
+         * @param[in] gate - The gate.
+         * @param[in] pin_name - The name of an input pin of the gate.
+         * @returns The endpoint on success, an error otherwise.
+         */
+        Result<Endpoint*> add_destination(Gate* gate, const std::string& pin_name);
+
+        /**
+         * TODO test
+         * Remove a destination endpoint from the net.
+         * The endpoint is specified by a tuple of a gate and an input pin of that gate.
+         *
+         * @param[in] gate - The gate.
+         * @param[in] pin - The input pin of the gate.
          * @returns Ok on success, an error otherwise.
          */
         Result<std::monostate> remove_destination(Gate* gate, const GatePin* pin);
 
         /**
          * TODO test
-         * Remove a destination endpoint from the net. <br>
+         * Remove a destination endpoint from the net.
+         * The endpoint is specified by a tuple of a gate and the name of an input pin of that gate.
          *
-         * @param[in] ep - The destination endpoint.
+         * @param[in] gate - The gate.
+         * @param[in] pin_name - The name of an input pin of the gate.
+         * @returns Ok on success, an error otherwise.
+         */
+        Result<std::monostate> remove_destination(Gate* gate, const std::string& pin_name);
+
+        /**
+         * TODO test
+         * Remove a destination endpoint from the net.
+         *
+         * @param[in] ep - The endpoint.
          * @returns Ok on success, an error otherwise.
          */
         Result<std::monostate> remove_destination(Endpoint* ep);
 
         /**
          * TODO test
-         * Check whether a tuple of a gate and an input pin is a destination endpoint of the net.
+         * Check whether an endpoint is a destination of the net.
+         * The endpoint is specified by a tuple of a gate and an input pin of that gate.
          *
-         * @param[in] gate - The destination gate.
-         * @param[in] pin - The destination input pin.
-         * @returns `true` if it is a destination of the net, `false` otherwise.
+         * @param[in] gate - The gate.
+         * @param[in] pin - The input pin of the gate.
+         * @returns `true` if the endpoint is a destination of the net, `false` otherwise.
          */
         bool is_a_destination(Gate* gate, const GatePin* pin) const;
+
+        /**
+         * Check whether an endpoint is a destination of the net.
+         * The endpoint is specified by a tuple of a gate and the name of an input pin of that gate.
+         *
+         * @param[in] gate - The gate.
+         * @param[in] pin_name  - The name of an input pin of the gate.
+         * @returns `true` if it is a destination of the net, `false` otherwise.
+         */
+        bool is_a_destination(Gate* gate, const std::string& pin_name) const;
 
         /** 
          * Check whether an endpoint is a destination of the net.
          *
          * @param[in] ep - The endpoint.
-         * @returns `true` if is is a destination of the net, `false` otherwise.
+         * @returns `true` if the endpoint is a destination of the net, `false` otherwise.
          */
         bool is_a_destination(Endpoint* ep) const;
 
@@ -241,9 +311,9 @@ namespace hal
 
         /**
          * Get a vector of destinations of the net.
-         * The optional filter is evaluated on every candidate endpoint such that the result only contains endpoints matching the specified condition.
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
-         * @param[in] filter - The optional filter function to be evaluated on each endpoint.
+         * @param[in] filter - An optional filter.
          * @returns A vector of destination endpoints.
          */
         std::vector<Endpoint*> get_destinations(const std::function<bool(Endpoint* ep)>& filter = nullptr) const;

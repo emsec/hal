@@ -308,7 +308,6 @@ namespace hal
         /**
          * TODO test
          * Get the pin corresponding to the given name.
-         * Pin names may not be unique, hence if two or more pins have a matching name, an error is returned.
          * 
          * @param[in] name - The name of the pin.
          * @returns The pin on success, an error message otherwise.
@@ -316,17 +315,7 @@ namespace hal
         Result<GatePin*> get_pin_by_name(const std::string& name) const;
 
         /**
-         * TODO pybind, test
-         * Get all pins corresponding to the given name.
-         * Pin names may not be unique, hence a vector of pins is returned.
-         * 
-         * @param[in] name - The name of the pins.
-         * @returns A vector of pins on success, an error message otherwise.
-         */
-        Result<std::vector<GatePin*>> get_pins_by_name(const std::string& name) const;
-
-        /**
-         * TODO pybind, test
+         * TODO test
          * Create a pin group with the given name.
          * 
          * @param[in] id - The ID of the pin group.
@@ -367,7 +356,7 @@ namespace hal
                                                     u32 start_index                  = 0);
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Get an ordered vector of all pin groups of the gate type.
          * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          * 
@@ -377,7 +366,7 @@ namespace hal
         std::vector<PinGroup<GatePin>*> get_pin_groups(const std::function<bool(PinGroup<GatePin>*)>& filter = nullptr) const;
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Get the pin group corresponding to the given ID.
          * 
          * @param[in] id - The ID of the pin group.
@@ -386,24 +375,13 @@ namespace hal
         Result<PinGroup<GatePin>*> get_pin_group_by_id(const u32 id) const;
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Get the pin group corresponding to the given name.
-         * Pin group names may not be unique, hence if two or more pin groups have a matching name, an error is returned.
          * 
          * @param[in] name - The name of the pin group.
          * @returns The pin group on success, an error message otherwise.
          */
         Result<PinGroup<GatePin>*> get_pin_group_by_name(const std::string& name) const;
-
-        /**
-         * TODO pybind, test
-         * Get all pin groups corresponding to the given name.
-         * Pin group names may not be unique, hence a vector of pin groups is returned.
-         * 
-         * @param[in] name - The name of the pin groups.
-         * @returns A vector of pin groups on success, an error message otherwise.
-         */
-        Result<std::vector<PinGroup<GatePin>*>> get_pin_groups_by_name(const std::string& name) const;
 
         /**
          * Add a Boolean function with the specified name to the gate type.
@@ -438,7 +416,7 @@ namespace hal
         Result<BooleanFunction> get_boolean_function(const std::string& name) const;
 
         /**
-         * TODO pybind test
+         * TODO test
          * Get the Boolean function corresponding to the given output pin.
          * If `pin` is a `nullptr`, the Boolean function of the first output pin is returned.
          * 
@@ -466,8 +444,10 @@ namespace hal
 
         std::vector<std::unique_ptr<GatePin>> m_pins;
         std::unordered_map<u32, GatePin*> m_pins_map;
+        std::unordered_map<std::string, GatePin*> m_pin_names_map;
         std::vector<std::unique_ptr<PinGroup<GatePin>>> m_pin_groups;
         std::unordered_map<u32, PinGroup<GatePin>*> m_pin_groups_map;
+        std::unordered_map<std::string, PinGroup<GatePin>*> m_pin_group_names_map;
         std::list<PinGroup<GatePin>*> m_pin_groups_ordered;
 
         // Boolean functions

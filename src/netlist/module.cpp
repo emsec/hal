@@ -783,7 +783,6 @@ namespace hal
                        + ": unable to manually assign pin as automatic net checks are enabled. Disable these checks using 'Netlist::enable_automatic_net_checks(false)' in case you "
                          "want to manage pins manually.");
         }
-
         if (net == nullptr)
         {
             return ERR("could not create pin '" + name + "' for module '" + m_name + "' with ID " + std::to_string(m_id) + ": net is a 'nullptr'");
@@ -909,6 +908,21 @@ namespace hal
         return ERR("could not get pin by ID for module '" + m_name + "' with ID " + std::to_string(m_id) + ": no pin with ID " + std::to_string(id) + " exists");
     }
 
+    Result<ModulePin*> Module::get_pin_by_name(const std::string& name) const
+    {
+        if (name.empty())
+        {
+            return ERR("could not get pin by ID for module '" + m_name + "' with ID " + std::to_string(m_id) + ": empty string provided as name");
+        }
+
+        if (const auto it = m_pin_names_map.find(name); it != m_pin_names_map.end())
+        {
+            return OK(it->second);
+        }
+
+        return ERR("could not get pin by ID for module '" + m_name + "' with ID " + std::to_string(m_id) + ": no pin with name '" + name + "' exists");
+    }
+
     Result<ModulePin*> Module::get_pin_by_net(Net* net) const
     {
         if (net == nullptr)
@@ -940,6 +954,21 @@ namespace hal
         return ERR("could not get pin group by ID for module '" + m_name + "' with ID " + std::to_string(m_id) + ": no pin with ID " + std::to_string(id) + " exists");
     }
 
+    Result<PinGroup<ModulePin>*> Module::get_pin_group_by_name(const std::string& name) const
+    {
+        if (name.empty())
+        {
+            return ERR("could not get pin group by name for module '" + m_name + "' with ID " + std::to_string(m_id) + ": empty string provided as name");
+        }
+
+        if (const auto it = m_pin_group_names_map.find(name); it != m_pin_group_names_map.end())
+        {
+            return OK(it->second);
+        }
+
+        return ERR("could not get pin group by name for module '" + m_name + "' with ID " + std::to_string(m_id) + ": no pin with name '" + name + "' exists");
+    }
+
     Result<std::monostate> Module::set_pin_name(ModulePin* pin, const std::string& new_name)
     {
         if (pin == nullptr)
@@ -957,9 +986,11 @@ namespace hal
                        + ": pin does not belong to module");
         }
 
-        if (pin->get_name() != new_name)
+        if (const std::string& old_name = pin->get_name(); old_name != new_name)
         {
+            m_pin_names_map.erase(old_name);
             pin->set_name(new_name);
+            m_pin_names_map[new_name] = pin;
             m_event_handler->notify(ModuleEvent::event::pin_changed, this);
         }
 
@@ -983,9 +1014,11 @@ namespace hal
                        + std::to_string(m_id) + ": pin group does not belong to module");
         }
 
-        if (pin_group->get_name() != new_name)
+        if (const std::string& old_name = pin_group->get_name(); old_name != new_name)
         {
+            m_pin_group_names_map.erase(old_name);
             pin_group->set_name(new_name);
+            m_pin_group_names_map[new_name] = pin_group;
             m_event_handler->notify(ModuleEvent::event::pin_changed, this);
         }
 
@@ -1381,6 +1414,10 @@ namespace hal
         {
             return ERR("could not create pin '" + name + "' for module '" + m_name + "' with ID " + std::to_string(m_id) + ": ID " + std::to_string(id) + " is already taken");
         }
+        if (m_pin_names_map.find(name) != m_pin_names_map.end())
+        {
+            return ERR("could not create pin '" + name + "' for module '" + m_name + "' with ID " + std::to_string(m_id) + ": name '" + name + "' is already taken");
+        }
         if (net == nullptr)
         {
             return ERR("could not create pin '" + name + "' for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": net is a 'nullptr'");
@@ -1394,7 +1431,8 @@ namespace hal
         std::unique_ptr<ModulePin> pin_owner(new ModulePin(id, name, net, direction, type));
         ModulePin* pin = pin_owner.get();
         m_pins.push_back(std::move(pin_owner));
-        m_pins_map[id] = pin;
+        m_pins_map[id]        = pin;
+        m_pin_names_map[name] = pin;
 
         // mark pin ID as used
         if (auto free_id_it = m_free_pin_ids.find(id); free_id_it != m_free_pin_ids.end())
@@ -1420,13 +1458,15 @@ namespace hal
         }
 
         // erase pin
-        u32 id = pin->get_id();
-        m_pins_map.erase(id);
+        u32 del_id                  = pin->get_id();
+        const std::string& del_name = pin->get_name();
+        m_pins_map.erase(del_id);
+        m_pin_names_map.erase(del_name);
         m_pins.erase(std::find_if(m_pins.begin(), m_pins.end(), [pin](const auto& p) { return p.get() == pin; }));
 
         // free pin ID
-        m_free_pin_ids.insert(id);
-        m_used_pin_ids.erase(id);
+        m_free_pin_ids.insert(del_id);
+        m_used_pin_ids.erase(del_id);
 
         return OK({});
     }
@@ -1442,13 +1482,18 @@ namespace hal
         {
             return ERR("could not create pin group '" + name + "' for module '" + m_name + "' with ID " + std::to_string(m_id) + ": ID " + std::to_string(id) + " is already taken");
         }
+        if (m_pin_group_names_map.find(name) != m_pin_group_names_map.end())
+        {
+            return ERR("could not create pin group '" + name + "' for module '" + m_name + "' with ID " + std::to_string(m_id) + ": name '" + name + "' is already taken");
+        }
 
         // create pin group
         std::unique_ptr<PinGroup<ModulePin>> pin_group_owner(new PinGroup<ModulePin>(id, name, direction, type, ascending, start_index));
         PinGroup<ModulePin>* pin_group = pin_group_owner.get();
         m_pin_groups.push_back(std::move(pin_group_owner));
         m_pin_groups_ordered.push_back(pin_group);
-        m_pin_groups_map[id] = pin_group;
+        m_pin_groups_map[id]        = pin_group;
+        m_pin_group_names_map[name] = pin_group;
 
         // mark pin group ID as used
         if (auto free_id_it = m_free_pin_group_ids.find(id); free_id_it != m_free_pin_group_ids.end())
@@ -1474,14 +1519,16 @@ namespace hal
         }
 
         // erase pin group
-        u32 id = pin_group->get_id();
-        m_pin_groups_map.erase(id);
+        u32 del_id                  = pin_group->get_id();
+        const std::string& del_name = pin_group->get_name();
+        m_pin_groups_map.erase(del_id);
+        m_pin_group_names_map.erase(del_name);
         m_pin_groups_ordered.erase(std::find(m_pin_groups_ordered.begin(), m_pin_groups_ordered.end(), pin_group));
         m_pin_groups.erase(std::find_if(m_pin_groups.begin(), m_pin_groups.end(), [pin_group](const auto& pg) { return pg.get() == pin_group; }));
 
         // free pin group ID
-        m_free_pin_group_ids.insert(id);
-        m_used_pin_group_ids.erase(id);
+        m_free_pin_group_ids.insert(del_id);
+        m_used_pin_group_ids.erase(del_id);
 
         return OK({});
     }

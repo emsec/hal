@@ -155,6 +155,10 @@ namespace hal
         {
             return ERR("could not create pin '" + name + "' for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": ID " + std::to_string(id) + " is already taken");
         }
+        if (m_pin_names_map.find(name) != m_pin_names_map.end())
+        {
+            return ERR("could not create pin '" + name + "' for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": name '" + name + "' is already taken");
+        }
         if (direction == PinDirection::none || direction == PinDirection::internal)
         {
             return ERR("could not create pin '" + name + "' for gate type '" + m_name + "' with " + std::to_string(m_id) + ": direction '" + enum_to_string(direction) + "' is invalid");
@@ -164,7 +168,8 @@ namespace hal
         std::unique_ptr<GatePin> pin_owner(new GatePin(id, name, direction, type));
         GatePin* pin = pin_owner.get();
         m_pins.push_back(std::move(pin_owner));
-        m_pins_map[id] = pin;
+        m_pins_map[id]        = pin;
+        m_pin_names_map[name] = pin;
 
         // mark pin ID as used
         if (auto free_id_it = m_free_pin_ids.find(id); free_id_it != m_free_pin_ids.end())
@@ -294,45 +299,17 @@ namespace hal
 
     Result<GatePin*> GateType::get_pin_by_name(const std::string& name) const
     {
-        if (auto pins = get_pins_by_name(name); pins.is_error())
-        {
-            return ERR(pins.get_error());
-        }
-        else
-        {
-            auto res = pins.get();
-            if (res.empty())
-            {
-                return ERR("could not get pin by name '" + name + "' for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": no pin matches the given name");
-            }
-            else if (res.size() > 1)
-            {
-                return ERR("could not get pin by name '" + name + "' for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": multiple pins matche the given name");
-            }
-            else
-            {
-                return OK(res.front());
-            }
-        }
-    }
-
-    Result<std::vector<GatePin*>> GateType::get_pins_by_name(const std::string& name) const
-    {
         if (name.empty())
         {
-            return ERR("could not get pins by name for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": empty string provided as name");
+            return ERR("could not get pin by name for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": empty string provided as name");
         }
 
-        std::vector<GatePin*> res;
-        for (const auto& pin : m_pins)
+        if (const auto it = m_pin_names_map.find(name); it != m_pin_names_map.end())
         {
-            if (pin->get_name() == name)
-            {
-                res.push_back(pin.get());
-            }
+            return OK(it->second);
         }
 
-        return OK(res);
+        return ERR("could not get pin by name for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": no pin with name '" + name + "' exists");
     }
 
     Result<PinGroup<GatePin>*>
@@ -350,13 +327,18 @@ namespace hal
         {
             return ERR("could not create pin group'" + name + "' for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": ID " + std::to_string(id) + " is already taken");
         }
+        if (m_pin_group_names_map.find(name) != m_pin_group_names_map.end())
+        {
+            return ERR("could not create pin group'" + name + "' for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": name '" + name + "' is already taken");
+        }
 
         // create pin group
         std::unique_ptr<PinGroup<GatePin>> pin_group_owner(new PinGroup<GatePin>(id, name, direction, type, ascending, start_index));
         PinGroup<GatePin>* pin_group = pin_group_owner.get();
         m_pin_groups.push_back(std::move(pin_group_owner));
         m_pin_groups_ordered.push_back(pin_group);
-        m_pin_groups_map[id] = pin_group;
+        m_pin_groups_map[id]        = pin_group;
+        m_pin_group_names_map[name] = pin_group;
 
         // mark pin group ID as used
         if (auto free_id_it = m_free_pin_group_ids.find(id); free_id_it != m_free_pin_group_ids.end())
@@ -391,8 +373,10 @@ namespace hal
                 if (pg->empty())
                 {
                     // erase pin group
-                    u32 del_id = pin_group->get_id();
+                    u32 del_id                  = pin_group->get_id();
+                    const std::string& del_name = pin_group->get_name();
                     m_pin_groups_map.erase(del_id);
+                    m_pin_group_names_map.erase(del_name);
                     m_pin_groups_ordered.erase(std::find(m_pin_groups_ordered.begin(), m_pin_groups_ordered.end(), pin_group));
                     m_pin_groups.erase(std::find_if(m_pin_groups.begin(), m_pin_groups.end(), [pin_group](const auto& group) { return group.get() == pin_group; }));
 
@@ -454,45 +438,17 @@ namespace hal
 
     Result<PinGroup<GatePin>*> GateType::get_pin_group_by_name(const std::string& name) const
     {
-        if (auto pin_groups = get_pin_groups_by_name(name); pin_groups.is_error())
-        {
-            return ERR(pin_groups.get_error());
-        }
-        else
-        {
-            auto res = pin_groups.get();
-            if (res.empty())
-            {
-                return ERR("could not get pin group by name '" + name + "' for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": no pin group matches the given name");
-            }
-            else if (res.size() > 1)
-            {
-                return ERR("could not get pin group by name '" + name + "' for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": multiple pin groups matche the given name");
-            }
-            else
-            {
-                return OK(res.front());
-            }
-        }
-    }
-
-    Result<std::vector<PinGroup<GatePin>*>> GateType::get_pin_groups_by_name(const std::string& name) const
-    {
         if (name.empty())
         {
-            return ERR("could not get pin groups by name for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": empty string provided as name");
+            return ERR("could not get pin group by name for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": empty string provided as name");
         }
 
-        std::vector<PinGroup<GatePin>*> res;
-        for (const auto& pin_group : m_pin_groups)
+        if (const auto it = m_pin_group_names_map.find(name); it != m_pin_group_names_map.end())
         {
-            if (pin_group->get_name() == name)
-            {
-                res.push_back(pin_group.get());
-            }
+            return OK(it->second);
         }
 
-        return OK(res);
+        return ERR("could not get pin group by name for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": no pin group with name '" + name + "' exists");
     }
 
     void GateType::add_boolean_function(const std::string& pin_name, const BooleanFunction& bf)

@@ -371,38 +371,13 @@ namespace hal
                     return nullptr;
                 }
             },
-            py::arg("id"),
+            py::arg("name"),
             R"(
             Get the pin corresponding to the given name.
-            Pin names may not be unique, hence if two or more pins have a matching name, None is returned.
 
             :param str name: The name of the pin.
             :returns: The pin on success, None otherwise.
             :rtype: hal_py.GatePin or None
-        )");
-
-        py_gate_type.def(
-            "get_pins_by_name",
-            [](GateType& self, const std::string& name) -> std::vector<GatePin*> {
-                auto res = self.get_pins_by_name(name);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "error encountered while getting pins by name:\n{}", res.get_error().get());
-                    return {};
-                }
-            },
-            py::arg("id"),
-            R"(
-            Get all pins corresponding to the given name.
-            Pin names may not be unique, hence a list of pins is returned.
-
-            :param str name: The name of the pins.
-            :returns: A list of pins on success, an empty list otherwise.
-            :rtype: list[hal_py.GatePin]
         )");
 
         py_gate_type.def(
@@ -524,38 +499,13 @@ namespace hal
                     return nullptr;
                 }
             },
-            py::arg("id"),
+            py::arg("name"),
             R"(
             Get the pin group corresponding to the given name.
-            Pin group names may not be unique, hence if two or more pin groups have a matching name, None is returned.
 
             :param str name: The name of the pin group.
             :returns: The pin group on success, None otherwise.
             :rtype: hal_py.GatePinGroup or None
-        )");
-
-        py_gate_type.def(
-            "get_pin_groups_by_name",
-            [](GateType& self, const std::string& name) -> std::vector<PinGroup<GatePin>*> {
-                auto res = self.get_pin_groups_by_name(name);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "error encountered while getting pin groups by name:\n{}", res.get_error().get());
-                    return {};
-                }
-            },
-            py::arg("id"),
-            R"(
-            Get all pin groups corresponding to the given name.
-            Pin group names may not be unique, hence a list of pin groups is returned.
-
-            :param str name: The name of the pin groups.
-            :returns: A list of pin groups on success, an empty list otherwise.
-            :rtype: list[hal_py.GatePinGroup]
         )");
 
         py_gate_type.def("add_boolean_function", &GateType::add_boolean_function, py::arg("name"), py::arg("function"), R"(

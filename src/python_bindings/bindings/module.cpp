@@ -486,6 +486,29 @@ namespace hal
         )");
 
         py_module.def(
+            "get_pin_by_name",
+            [](const Module& self, const std::string& name) -> ModulePin* {
+                auto res = self.get_pin_by_name(name);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting pin by name:\n{}", res.get_error().get());
+                    return nullptr;
+                }
+            },
+            py::arg("name"),
+            R"(
+            Get the pin corresponding to the given name.
+
+            :param str name: The name of the pin.
+            :returns: The pin on success, None otherwise.
+            :rtype: hal_py.ModulePin or None
+        )");
+
+        py_module.def(
             "get_pin_by_net",
             [](const Module& self, Net* net) -> ModulePin* {
                 auto res = self.get_pin_by_net(net);
@@ -527,6 +550,29 @@ namespace hal
             Get the pin group corresponding to the given ID.
 
             :param int id: The ID of the pin group.
+            :returns: The pin group on success, None otherwise.
+            :rtype: hal_py.ModulePinGroup or None
+        )");
+
+        py_module.def(
+            "get_pin_group_by_name",
+            [](const Module& self, const std::string& name) -> PinGroup<ModulePin>* {
+                auto res = self.get_pin_group_by_name(name);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting pin group by name:\n{}", res.get_error().get());
+                    return nullptr;
+                }
+            },
+            py::arg("name"),
+            R"(
+            Get the pin group corresponding to the given name.
+
+            :param str name: The name of the pin group.
             :returns: The pin group on success, None otherwise.
             :rtype: hal_py.ModulePinGroup or None
         )");
