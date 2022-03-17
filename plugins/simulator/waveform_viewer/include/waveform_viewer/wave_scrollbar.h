@@ -11,6 +11,7 @@ namespace hal {
         double mVleft;
         double mVmaxScroll;
         int mVieportWidth;
+        int mLastValue;
         using QScrollBar::value;
         using QScrollBar::setValue;
         using QScrollBar::setMaximum;

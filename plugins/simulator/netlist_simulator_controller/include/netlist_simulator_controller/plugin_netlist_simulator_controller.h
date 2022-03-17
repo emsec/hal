@@ -30,10 +30,11 @@ namespace hal
 {
     class NetlistSimulatorController;
     class NetlistSimulator;
+    class SimulationSettings;
 
     class PLUGIN_API NetlistSimulatorControllerPlugin : public BasePluginInterface
     {
-        static u32 mMaxControllerId;
+        static u32 sMaxControllerId;
     public:
         /**
          * Get the name of the plugin.
@@ -72,5 +73,10 @@ namespace hal
          * @return Shared pointer to simulator
          */
         std::shared_ptr<NetlistSimulatorController> simulator_controller_by_id(u32 id) const;
+
+        /**
+         * Pointer to simulation controller settings. Use sync() to persist settings.
+         */
+        static SimulationSettings* sSimulationSettings;
     };
 }    // namespace hal

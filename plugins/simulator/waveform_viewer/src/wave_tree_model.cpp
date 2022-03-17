@@ -1,6 +1,8 @@
 #include "waveform_viewer/wave_tree_model.h"
 #include "netlist_simulator_controller/wave_data.h"
 #include "netlist_simulator_controller/saleae_file.h"
+#include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
+#include "netlist_simulator_controller/simulation_settings.h"
 #include <QApplication>
 #include <QFont>
 #include <QMimeData>
@@ -8,9 +10,6 @@
 #include <stdlib.h>
 
 namespace hal {
-
-    const char* WaveTreeModel::sStateColor[3] = {"#707071", "#102080", "#802010"};
-
 
     WaveTreeModel::WaveTreeModel(WaveDataList *wdlist, WaveItemHash *wHash, QObject *obj)
         : QAbstractItemModel(obj), mWaveDataList(wdlist), mWaveItemHash(wHash),
@@ -279,7 +278,7 @@ namespace hal {
                 return QColor::fromRgb(255,255,qrand()%256);
             if (v<-1) v=-1;
             if (v>1) v=1;
-            return QColor(sStateColor[v+1]);
+            return QColor(NetlistSimulatorControllerPlugin::sSimulationSettings->color((SimulationSettings::ColorSetting) (SimulationSettings::Value0+v)));
         }
         case Qt::DisplayRole:
         {
@@ -772,6 +771,7 @@ namespace hal {
         if (!grp) return false;
         mGroupList.removeAt(sourceRow);
         mGroupList.insert( targetRow, grp);
+        restoreIndex();
         return true;
     }
 

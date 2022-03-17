@@ -3,7 +3,6 @@
 # ABC_LIBRARY - Libraries needed to use ABC
 # ABC_INCLUDE_DIR - the ABC include directory
 
-project(abc)
 # check the path provided to cmake
 if (ABC_PATH)
     find_library(ABC_LIBRARY NAMES libabc.so PATHS ${ABC_PATH})

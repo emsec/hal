@@ -2,6 +2,7 @@
 #include <QList>
 #include <QMap>
 #include <QMutex>
+#include "waveform_viewer/wave_transform.h"
 
 class QPainter;
 
@@ -15,19 +16,6 @@ namespace hal {
     class WaveTransform;
     class WaveDataProvider;
 
-    class WaveFormPaintValidity
-    {
-        double mScale;
-        quint64 mTleft;
-        int mWidth;
-    public:
-        WaveFormPaintValidity(const WaveTransform* trans = nullptr, const WaveScrollbar* sbar = nullptr);
-        bool operator==(const WaveFormPaintValidity& other) const;
-        bool operator!=(const WaveFormPaintValidity& other) const { return ! operator==(other); }
-        bool isNull() const;
-        int width() const { return mWidth; }
-    };
-
     class TimeInterval
     {
     public:
@@ -40,7 +28,7 @@ namespace hal {
     class WaveFormPainted
     {
         QList<WaveFormPrimitive*> mPrimitives;
-        WaveFormPaintValidity mValidity;
+        WaveZoomShift mValidity;
         TimeInterval mShortestToggle;
         double mCursorTime;
         int mCursorXpos;
@@ -64,7 +52,7 @@ namespace hal {
 
         int valueXpos(int xpos);
 
-        const WaveFormPaintValidity& validity() const { return mValidity; }
+        const WaveZoomShift& validity() const { return mValidity; }
         bool isEmpty() const { return mPrimitives.isEmpty(); }
         QList<float> intervalLimits();
         TimeInterval shortestToggle() const { return mShortestToggle; }
