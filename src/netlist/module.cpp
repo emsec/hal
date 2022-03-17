@@ -1312,25 +1312,26 @@ namespace hal
         else
         {
             std::string port_prefix;
-            u32* index_counter;
+            u32 ctr = 0;
             switch (direction)
             {
                 case PinDirection::input:
-                    port_prefix   = "I";
-                    index_counter = &m_next_input_index;
+                    port_prefix = "I";
                     break;
                 case PinDirection::inout:
-                    port_prefix   = "IO";
-                    index_counter = &m_next_inout_index;
+                    port_prefix = "IO";
                     break;
                 case PinDirection::output:
-                    port_prefix   = "O";
-                    index_counter = &m_next_output_index;
+                    port_prefix = "O";
                     break;
                 default:
                     return ERR("could not assign pin '" + name_internal + "' to net: invalid pin direction '" + enum_to_string(direction) + "'");
             }
-            name_internal = port_prefix + "(" + std::to_string((*index_counter)++) + ")";
+            do
+            {
+                name_internal = port_prefix + "(" + std::to_string(ctr) + ")";
+                ctr++;
+            } while (m_pin_names_map.find(name_internal) != m_pin_names_map.end() || m_pin_group_names_map.find(name_internal) != m_pin_group_names_map.end());
         }
 
         // create pin
