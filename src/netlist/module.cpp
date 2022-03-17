@@ -645,85 +645,91 @@ namespace hal
 
         if (con.has_internal_source && con.has_internal_destination && con.has_external_source && con.has_external_destination)
         {
-            if (m_input_nets.find(net) == m_input_nets.end() || m_output_nets.find(net) == m_output_nets.end())
+            if (auto pin_res = get_pin_by_net(net); pin_res.is_ok())
             {
-                m_input_nets.insert(net);
-                m_output_nets.insert(net);
-                if (auto pin_res = get_pin_by_net(net); pin_res.is_ok())
+                ModulePin* pin = pin_res.get();
+                if (auto direction = pin->get_direction(); direction == PinDirection::input)
                 {
-                    pin_res.get()->set_direction(PinDirection::inout);
+                    m_output_nets.insert(net);
+                    pin->set_direction(PinDirection::inout);
                     m_event_handler->notify(ModuleEvent::event::pin_changed, this);
                 }
-                else
+                else if (auto direction = pin->get_direction(); direction == PinDirection::output)
                 {
-                    if (auto res = assign_pin_net(get_unique_pin_id(), net, PinDirection::inout); res.is_error())
-                    {
-                        return ERR(res.get_error());
-                    }
+                    m_input_nets.insert(net);
+                    pin->set_direction(PinDirection::inout);
+                    m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+                }
+            }
+            else
+            {
+                if (auto res = assign_pin_net(get_unique_pin_id(), net, PinDirection::inout); res.is_error())
+                {
+                    return ERR(res.get_error());
+                }
+            }
+        }
+        else if (con.has_external_source && con.has_internal_destination)
+        {
+            if (auto pin_res = get_pin_by_net(net); pin_res.is_ok())
+            {
+                ModulePin* pin = pin_res.get();
+                if (const auto direction = pin->get_direction(); direction == PinDirection::output || direction == PinDirection::inout)
+                {
+                    m_input_nets.insert(net);
+                    m_output_nets.erase(net);
+                    pin->set_direction(PinDirection::input);
+                    m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+                }
+            }
+            else
+            {
+                m_input_nets.insert(net);
+                if (auto res = assign_pin_net(get_unique_pin_id(), net, PinDirection::input); res.is_error())
+                {
+                    return ERR(res.get_error());
+                }
+            }
+        }
+        else if (con.has_internal_source && con.has_external_destination)
+        {
+            if (auto pin_res = get_pin_by_net(net); pin_res.is_ok())
+            {
+                ModulePin* pin = pin_res.get();
+                if (const auto direction = pin->get_direction(); direction == PinDirection::input || direction == PinDirection::inout)
+                {
+                    m_output_nets.insert(net);
+                    m_input_nets.erase(net);
+                    pin->set_direction(PinDirection::output);
+                    m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+                }
+            }
+            else
+            {
+                m_output_nets.insert(net);
+                if (auto res = assign_pin_net(get_unique_pin_id(), net, PinDirection::output); res.is_error())
+                {
+                    return ERR(res.get_error());
                 }
             }
         }
         else
         {
-            if (con.has_external_source && con.has_internal_destination)
+            if (auto pin_res = get_pin_by_net(net); pin_res.is_ok())
             {
-                if (m_input_nets.find(net) == m_input_nets.end())
-                {
-                    m_input_nets.insert(net);
-                    if (auto pin_res = get_pin_by_net(net); pin_res.is_ok())
-                    {
-                        pin_res.get()->set_direction(PinDirection::input);
-                        m_event_handler->notify(ModuleEvent::event::pin_changed, this);
-                    }
-                    else
-                    {
-                        if (auto res = assign_pin_net(get_unique_pin_id(), net, PinDirection::input); res.is_error())
-                        {
-                            return ERR(res.get_error());
-                        }
-                    }
-                }
-            }
-            else
-            {
-                if (m_input_nets.find(net) != m_input_nets.end())
+                ModulePin* pin = pin_res.get();
+                auto direction = pin->get_direction();
+                if (direction == PinDirection::input || direction == PinDirection::inout)
                 {
                     m_input_nets.erase(net);
-                    if (auto res = remove_pin_net(net); res.is_error())
-                    {
-                        return res;
-                    }
                 }
-            }
-
-            if (con.has_internal_source && con.has_external_destination)
-            {
-                if (m_output_nets.find(net) == m_output_nets.end())
-                {
-                    m_output_nets.insert(net);
-                    if (auto pin_res = get_pin_by_net(net); pin_res.is_ok())
-                    {
-                        pin_res.get()->set_direction(PinDirection::output);
-                        m_event_handler->notify(ModuleEvent::event::pin_changed, this);
-                    }
-                    else
-                    {
-                        if (auto res = assign_pin_net(get_unique_pin_id(), net, PinDirection::output); res.is_error())
-                        {
-                            return ERR(res.get_error());
-                        }
-                    }
-                }
-            }
-            else
-            {
-                if (m_output_nets.find(net) != m_output_nets.end())
+                if (direction == PinDirection::output || direction == PinDirection::inout)
                 {
                     m_output_nets.erase(net);
-                    if (auto res = remove_pin_net(net); res.is_error())
-                    {
-                        return res;
-                    }
+                }
+                if (auto res = remove_pin_net(net); res.is_error())
+                {
+                    return res;
                 }
             }
         }
@@ -1158,7 +1164,7 @@ namespace hal
 
             if (delete_empty_groups && pg->empty())
             {
-                if (auto res = delete_pin_group_internal(pg); res.is_error()) 
+                if (auto res = delete_pin_group_internal(pg); res.is_error())
                 {
                     return res;
                 }
