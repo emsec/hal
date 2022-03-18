@@ -25,27 +25,7 @@ namespace hal
             const auto OrAction  = [&tokens](auto& /* ctx */) { tokens.emplace_back(BooleanFunctionParser::Token::Or()); };
             const auto XorAction = [&tokens](auto& /* ctx */) { tokens.emplace_back(BooleanFunctionParser::Token::Xor()); };
 
-            const auto NotSuffixAction = [&tokens](auto ctx) {
-                // The liberty format defines a ' character as an inversion of the
-                // previous expression. Since the only occurrences in the liberty
-                // file format belong to variables (e.g., " TE' "), we limit the
-                // ability of suffix not operations to variable expressions only.
-                //
-                // In case a suffix not operation may occur in complex expressions,
-                // we should introduce a special not token type that is then handled
-                // by the translation to the reverse polish notation.
-                if (tokens.empty() || (tokens.back().type != TokenType::Variable))
-                {
-                    log_error("netlist", "Cannot handle not suffix character ' in liberty parser as it is required that the predecessor token is a variable.");
-                    _pass(ctx) = false;
-                    return;
-                }
-                auto variable = tokens.back();
-                tokens.pop_back();
-
-                tokens.emplace_back(Token::Not());
-                tokens.emplace_back(variable);
-            };
+            const auto NotSuffixAction = [&tokens](auto& /* ctx */) { tokens.emplace_back(BooleanFunctionParser::Token::NotSuffix()); };
 
             const auto BracketOpenAction  = [&tokens](auto& /* ctx */) { tokens.emplace_back(BooleanFunctionParser::Token::BracketOpen()); };
             const auto BracketCloseAction = [&tokens](auto& /* ctx */) { tokens.emplace_back(BooleanFunctionParser::Token::BracketClose()); };
@@ -78,7 +58,7 @@ namespace hal
             const auto AndRule       = x3::char_("& *")[AndAction];
             const auto NotRule       = x3::lit("!")[NotAction];
             const auto NotSuffixRule = x3::lit("'")[NotSuffixAction];
-            const auto OrRule        = x3::lit("|+")[OrAction];
+            const auto OrRule        = x3::char_("|+")[OrAction];
             const auto XorRule       = x3::lit("^")[XorAction];
 
             const auto BracketOpenRule  = x3::lit("(")[BracketOpenAction];

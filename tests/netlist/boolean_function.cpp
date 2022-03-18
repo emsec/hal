@@ -204,6 +204,21 @@ namespace hal {
             {"A'", 
                 ~BooleanFunction::Var("A")
             },
+            {"RSTB'",
+                ~BooleanFunction::Var("RSTB")
+            },
+            {"(INP)'",
+                ~BooleanFunction::Var("INP")
+            },
+            {"(IN2*IN1)'",
+                ~(BooleanFunction::Var("IN2") & BooleanFunction::Var("IN1"))
+            },
+            {"(D'*CLK*RSTB*SETB')",
+                ~BooleanFunction::Var("D") & (BooleanFunction::Var("CLK") & (BooleanFunction::Var("RSTB") & ~BooleanFunction::Var("SETB"))) 
+            },
+            {"(IN5*(IN2+IN1)*(IN3+IN4))'",
+                ~(BooleanFunction::Var("IN5") & ((BooleanFunction::Var("IN2") | BooleanFunction::Var("IN1")) & (BooleanFunction::Var("IN3") | BooleanFunction::Var("IN4"))))
+            }
         };
 
         for (const auto& [s, expected] : data) {
