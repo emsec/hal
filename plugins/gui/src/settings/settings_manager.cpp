@@ -87,4 +87,24 @@ namespace hal
         mUserSettingsFile->setValue("MainWindow/size", size);
         mUserSettingsFile->sync();
     }
+
+    LoggerSettings SettingsManager::loggerSettings() const
+    {
+        LoggerSettings settings;
+        settings.infoSeverity = mUserSettingsFile->value("Logger/infoSeverity", QVariant(true)).toBool();
+        settings.debugSeverity = mUserSettingsFile->value("Logger/debugSeverity", QVariant(false)).toBool();
+        settings.warningSeverity = mUserSettingsFile->value("Logger/warningSeverity", QVariant(true)).toBool();
+        settings.errorSeverity = mUserSettingsFile->value("Logger/errorSeverity", QVariant(true)).toBool();
+
+        return settings;
+    }
+
+    void SettingsManager::saveLoggerSettings(const LoggerSettings &settings)
+    {
+        mUserSettingsFile->setValue("Logger/infoSeverity", settings.infoSeverity);
+        mUserSettingsFile->setValue("Logger/debugSeverity", settings.debugSeverity);
+        mUserSettingsFile->setValue("Logger/warningSeverity", settings.warningSeverity);
+        mUserSettingsFile->setValue("Logger/errorSeverity", settings.errorSeverity);
+        mUserSettingsFile->sync();
+    }
 }

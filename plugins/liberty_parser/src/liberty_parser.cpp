@@ -857,10 +857,11 @@ namespace hal
         }
         else if (cell.latch.has_value())
         {
-            if (cell.latch->enable.empty() || cell.latch->data_in.empty())
-            {
-                return false;
-            }
+            // TODO make sure this does not cause errors in latch component
+            // if (cell.latch->enable.empty() || cell.latch->data_in.empty())
+            // {
+            //     return false;
+            // }
 
             std::unique_ptr<GateTypeComponent> state_component = GateTypeComponent::create_state_component(nullptr, cell.latch->state1, cell.latch->state2);
             bf_vars.push_back(cell.latch->state1);
@@ -870,22 +871,14 @@ namespace hal
             LatchComponent* latch_component = parent_component->convert_to<LatchComponent>();
             assert(latch_component != nullptr);
 
-            if (!cell.latch->data_in.empty() && !cell.latch->enable.empty())
+            if (!cell.latch->data_in.empty())
             {
                 latch_component->set_data_in_function(BooleanFunction::from_string(cell.latch->data_in, bf_vars));
+            }
+            if (!cell.latch->enable.empty())
+            {  
                 latch_component->set_enable_function(BooleanFunction::from_string(cell.latch->enable, bf_vars));
             }
-            else if (cell.latch->data_in.empty())
-            {
-                log_error("liberty_parser", "missing 'data_in' specification for latch gate type '{}'.", cell.name);
-                return false;
-            }
-            else if (cell.latch->enable.empty())
-            {
-                log_error("liberty_parser", "missing 'enable' specification for latch gate type '{}'.", cell.name);
-                return false;
-            }
-
             if (!cell.latch->clear.empty())
             {
                 latch_component->set_async_reset_function(BooleanFunction::from_string(cell.latch->clear, bf_vars));
