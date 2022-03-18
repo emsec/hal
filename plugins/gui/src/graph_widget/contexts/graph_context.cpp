@@ -169,7 +169,6 @@ namespace hal
         remove(mods, gats);
         add({m->get_id()}, {}, plc);
         endChange();
-        // setDirty(false);
         return true;
     }
 
@@ -239,7 +238,6 @@ namespace hal
             add(modules, gates, plc);
             endChange();
         }
-        // setDirty(false);
     }
 
     bool GraphContext::empty() const
@@ -324,14 +322,10 @@ namespace hal
 
         if (exclusively)
             return contextGates == moduleGates && contextModules == moduleModules;   
-        else if (contextGates.contains(moduleGates) && contextModules.contains(moduleModules) && !moduleGates.empty() && !moduleModules.empty())
-            return true;
-        else if (contextGates.contains(moduleGates) && !moduleGates.empty() && moduleModules.empty())
-            return true;
-        else if (contextModules.contains(moduleModules) && moduleGates.empty() && !moduleModules.empty())
-            return true;
         else
-            return false;
+            return (contextGates.contains(moduleGates) && contextModules.contains(moduleModules) && !moduleGates.empty() && !moduleModules.empty()) ||
+                   (contextGates.contains(moduleGates) && !moduleGates.empty() && moduleModules.empty()) ||
+                   (contextModules.contains(moduleModules) && moduleGates.empty() && !moduleModules.empty());
     }
 
     void GraphContext::getModuleChildrenRecursively(const u32 id, QSet<u32>* gates, QSet<u32>* modules) const

@@ -121,7 +121,6 @@ namespace hal
     {
         auto selected_modules = gSelectionRelay->selectedModules();
         auto selected_gates = gSelectionRelay->selectedGates();
-        // auto selected_nets = gSelectionRelay->selectedNets(); ?
 
         // When there is only one module selected, check if there is a context connected to that module
         // If yes, select the context
