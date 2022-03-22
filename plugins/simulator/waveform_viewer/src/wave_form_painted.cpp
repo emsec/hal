@@ -5,6 +5,7 @@
 #include "waveform_viewer/wave_transform.h"
 #include "waveform_viewer/wave_scrollbar.h"
 #include "waveform_viewer/wave_data_provider.h"
+#include <QDebug>
 
 namespace hal {
 
@@ -45,19 +46,21 @@ namespace hal {
         QMutexLocker lock(&mMutex);
         for (const WaveFormPrimitive* wfp : mPrimitives)
             if (wfp->isInRange(xpos))
+            {
+                qDebug() << "valx" << xpos << wfp->x0() << wfp->x1() << wfp->value();
                 return wfp->value();
+            }
         return SaleaeDataTuple::sReadError;
     }
 
-    QList<float> WaveFormPainted::intervalLimits()
+    QMap<float,int> WaveFormPainted::primitiveValues()
     {
+        QMap<float,int> retval;
         QMutexLocker lock(&mMutex);
-        QList<float> retval;
         for (const WaveFormPrimitive* wfp : mPrimitives)
         {
             if (wfp->x0() == wfp->x1()) continue;
-            retval.append(wfp->x0());
-            retval.append(wfp->x1());
+            retval.insert(wfp->x0(),wfp->value());
         }
         return retval;
     }
@@ -65,20 +68,92 @@ namespace hal {
     bool WaveFormPainted::generateGroup(const WaveData* wd, const WaveItemHash *hash)
     {
         clearPrimitives();
-        QList<WaveFormPainted*> wirePainted;
-        QMap<float,int> transitionPos;
+
+        class PrimitiveValue
+        {
+            u32 mTransition;
+            u32 mValue;
+            u32 mFilled;
+            u32 mUndefined;
+        public:
+            PrimitiveValue() : mTransition(0), mValue(0), mFilled(0), mUndefined(0) {;}
+            PrimitiveValue(int nbits) : mTransition(0), mValue(0), mFilled(0), mUndefined(0) {
+                for (int i=0; i<nbits; i++)
+                {
+                    u32 mask = 1<<i;
+                    mTransition |= mask;
+                    mUndefined  |= mask;
+                }
+            }
+
+            void setValue(u32 mask, int val)
+            {
+                mTransition |= mask;
+                if (val == WaveFormPrimitiveFilled::sFilledPrimitive)
+                {
+                    mFilled    |=   mask;
+                    mUndefined &= (~mask);
+                }
+                else if (val < 0)
+                {
+                    mFilled    &= (~mask);
+                    mUndefined |=   mask;
+                }
+                else
+                {
+                    mFilled    &= (~mask);
+                    mUndefined &= (~mask);
+                    if (val)
+                        mValue |= mask;
+                    else
+                        mValue &= (~mask);
+                }
+            }
+
+            PrimitiveValue mergePrevious(const PrimitiveValue& previous) const
+            {
+                PrimitiveValue retval(previous);
+                u32 mask = 1;
+                while (mask)
+                {
+                    if (mTransition & mask)
+                    {
+                        if (mUndefined & mask)
+                            retval.setValue(mask,-1);
+                        else if (mFilled & mask)
+                            retval.setValue(mask,WaveFormPrimitiveFilled::sFilledPrimitive);
+                        else
+                            retval.setValue(mask, (mValue&mask) ? 1 : 0);
+                    }
+                    mask <<= 1;
+                }
+                return retval;
+            }
+
+            int value() const
+            {
+                if (mUndefined > 0)
+                    return -1;
+                if (mFilled > 0)
+                    return WaveFormPrimitiveFilled::sFilledPrimitive;
+                return mValue;
+            }
+        };
+
+        QMap<float,PrimitiveValue> transitionValue;
         const WaveDataGroup* grp = dynamic_cast<const WaveDataGroup*>(wd);
         if (!grp) return false;
         bool firstWave = true;
+
+        int nbits = 0;
         for (int iwave : grp->childrenWaveIndex())
         {
             if (iwave<0) return false;
             WaveItemIndex wii(iwave, WaveItemIndex::Wire, grp->id());
             WaveItem* wi = hash->value(wii);
             if (!wi || wi->mPainted.isEmpty()) return false;
-            wirePainted.append(&(wi->mPainted));
-            for (float x : wi->mPainted.intervalLimits())
-                transitionPos[x]++;
+
+            // validity must be the same for all child elements
             if (firstWave)
             {
                 mValidity = wi->mPainted.validity();
@@ -88,50 +163,45 @@ namespace hal {
             {
                 if (mValidity != wi->mPainted.validity()) return false;
             }
+            QMap<float,int> pValues = wi->mPainted.primitiveValues();
+            for (auto it = pValues.constBegin(); it != pValues.constEnd(); ++it)
+            {
+                transitionValue[it.key()].setValue((1<<nbits),it.value());
+            }
+            ++nbits;
         }
 
         float lastX = -1;
-        int value = -1;
-        bool refreshCursor = transitionPos.isEmpty() ? false : mCursorTime >= transitionPos.constBegin().key();
-        for (auto it = transitionPos.constBegin(); it != transitionPos.constEnd(); ++it)
+        PrimitiveValue lastValue(nbits);
+
+        bool refreshCursor = transitionValue.isEmpty() ? false : mCursorTime >= transitionValue.constBegin().key();
+        for (auto it = transitionValue.constBegin(); it != transitionValue.constEnd(); ++it)
         {
             int nextX = it.key();
+            PrimitiveValue nextValue = it.value().mergePrevious(lastValue);
+            bool updateX = true;
             if (lastX >= 0) // not first loop -> valid lastX value
             {
-                if (value == WaveFormPrimitiveFilled::sFilledPrimitive)
+                int val = lastValue.value();
+                if (val == WaveFormPrimitiveFilled::sFilledPrimitive)
                     mPrimitives.append(new WaveFormPrimitiveFilled(lastX,nextX,0));
-                else if (value < 0)
+                else if (val < 0)
                     mPrimitives.append(new WaveFormPrimitiveUndefined(lastX,nextX));
+                else if (val != nextValue.value())
+                    mPrimitives.append(new WaveFormPrimitiveValue(lastX,nextX,val,grp->bits(),grp->valueBase()));
                 else
-                    mPrimitives.append(new WaveFormPrimitiveValue(lastX,nextX,value,grp->bits(),grp->valueBase()));
+                    updateX = false; // same value, will be painted at next transition
 
                 if (refreshCursor && nextX > mCursorTime)
                 {
-                    if (value != WaveFormPrimitiveFilled::sFilledPrimitive)
-                        mCursorValue = value;
+                    if (val != WaveFormPrimitiveFilled::sFilledPrimitive)
+                        mCursorValue = val;
                     refreshCursor = false;
                 }
+
             }
-            value = 0;
-            lastX = nextX;
-            int mask = 1;
-            for (WaveFormPainted* wfp : wirePainted)
-            {
-                int childVal = wfp->valueXpos(nextX);
-                if (childVal == WaveFormPrimitiveFilled::sFilledPrimitive)
-                {
-                    value = WaveFormPrimitiveFilled::sFilledPrimitive;
-                    break;
-                }
-                else if (childVal < 0)
-                {
-                    value = -1;
-                    break;
-                }
-                else if (childVal)
-                    value |= mask;
-                mask <<= 1;
-            }
+            if (updateX) lastX = nextX;
+            lastValue = nextValue;
         }
         return true;
     }

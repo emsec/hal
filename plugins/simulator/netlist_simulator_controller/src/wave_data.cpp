@@ -144,6 +144,13 @@ namespace hal {
         return intValue(t);
     }
 
+    void WaveData::setSaleaeFile(int saleaIndex, const QString &filename)
+    {
+        mFileIndex = saleaIndex;
+        mFileName = filename;
+    }
+
+
     bool WaveData::isEqual(const WaveData& other, int tolerance) const
     {
         if (mData.size() != other.mData.size()) return false;
@@ -245,7 +252,8 @@ namespace hal {
     void WaveData::saveSaleae(SaleaeDirectory& sd)
     {
         SaleaeDirectoryStoreRequest save(&sd);
-        mFileIndex = sd.get_datafile_index(mName.toStdString(),mId);
+        std::string nam = mName.toStdString();
+        mFileIndex = sd.get_datafile_index(nam,mId);
         if (mFileIndex < 0)
         {
             mFileIndex = sd.get_next_available_index();
@@ -253,11 +261,12 @@ namespace hal {
             if (!saleaeDir.exists()) saleaeDir.mkpath(saleaeDir.absolutePath());
         }
 
-        SaleaeDirectoryNetEntry sdne(mName.toStdString(),mId);
+        SaleaeDirectoryNetEntry sdne(nam,mId);
         sdne.addIndex(SaleaeDirectoryFileIndex(mFileIndex,0,maxTime(),mData.size()));
         sd.add_or_replace_net(sdne);
 
-        std::filesystem::path path = sd.get_datafile(mName.toStdString(),mId);
+        std::filesystem::path path = sd.get_datafile(nam,mId);
+        mFileName = QString::fromStdString(path.string());
 
         mFileSize = mData.size();
 
@@ -283,9 +292,17 @@ namespace hal {
 
     int WaveData::intValue(double t) const
     {
-        if (mData.isEmpty()) return -1;
-        QMap<u64,int>::const_iterator it = timeIterator(t);
-        return it.value();
+        LoadPolicy lpol = loadPolicy();
+        if (lpol == LoadAllData ||
+                (lpol == LoadTimeframe && !mData.isEmpty() && t>=mData.firstKey() && t < mData.lastKey() ))
+        {
+            if (mData.isEmpty()) return -1;
+            QMap<u64,int>::const_iterator it = timeIterator(t);
+            return it.value();
+        }
+        SaleaeInputFile sif(mFileName.toStdString());
+        if (!sif.good()) return -1;
+        return sif.get_int_value(t);
     }
 
     QString WaveData::strValue(double t) const
@@ -998,6 +1015,12 @@ namespace hal {
         triggerEndResetModel();
     }
 
+    void WaveDataList::setSaleaeFile(WaveData *wd, int saleaIndex) const
+    {
+        QDir saleaDir(QString::fromStdString(mSaleaeDirectory.get_directory()));
+        wd->setSaleaeFile(saleaIndex,saleaDir.absoluteFilePath(QString("digital_%1.bin").arg(saleaIndex)));
+    }
+
     void WaveDataList::updateFromSaleae()
     {
         mSaleaeDirectory.parse_json();
@@ -1010,7 +1033,7 @@ namespace hal {
         {
             QString name = QString::fromStdString(sdle.name);
             WaveData* wd = new WaveData(sdle.id, name);
-            wd->setFileIndex(sdle.fileIndex);
+            setSaleaeFile(wd, sdle.fileIndex);
             wd->setFileSize(sdle.size);
             saleaeWaves.insert(name,wd);
         }
@@ -1022,7 +1045,7 @@ namespace hal {
             auto it = saleaeWaves.find(wd->name());
             if (it == saleaeWaves.end()) continue;
             wd->setFileSize(it.value()->fileSize());
-            wd->setFileIndex(it.value()->fileIndex());
+            setSaleaeFile(wd,it.value()->fileIndex());
             if (wd->loadPolicy() == WaveData::LoadAllData)
                 wd->loadSaleae(mSaleaeDirectory,mTimeframe);
             emitWaveUpdated(i);

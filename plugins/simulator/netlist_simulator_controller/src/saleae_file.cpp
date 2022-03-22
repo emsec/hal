@@ -222,6 +222,58 @@ namespace hal
         return retval;
     }
 
+    int SaleaeInputFile::get_int_value(double t)
+    {
+        uint64_t max = mHeader.numTransitions();
+        uint64_t t0 = mHeader.beginTime();
+        uint64_t t1 = mHeader.endTime();
+        if (t < t0) return -1;
+        if (t == t0) return mHeader.value();
+        if (t > t1) return (max%2==0) ? mHeader.value() : 1 - mHeader.value();
+
+        uint64_t tuple1;
+        int64_t pos   = 0;
+        int64_t delta = max > 4 ? max / 4 : 1;
+        bool loop = true;
+        bool ok = true;
+        while (loop)
+        {
+            pos += delta;
+            if (pos < 0) pos = 0;
+            if (pos >= (int64_t) max-1) pos = max-1;
+            if (pos)
+            {
+                seekTransition(pos-1);
+                t0 = mReader(&ok) & 0x3fffffffffffffffull;
+            }
+            else
+            {
+                seekTransition(pos);
+                t0 = mHeader.beginTime();
+            }
+            tuple1 = mReader(&ok);
+            t1 = tuple1 & 0x3fffffffffffffffull;
+            if (t0 < t && t1 >= t)
+            {
+                if (mHeader.storageFormat() == SaleaeHeader::Coded)
+                    return ((tuple1 >> 62) & 0x3) - 2;
+                else
+                    return (pos%2==0) ? mHeader.value() : 1 - mHeader.value();
+            }
+            else if (t1 < t)
+            {
+                if (delta < 0) delta = - delta/2;
+                if (!delta) delta = 1;
+            }
+            else if (t0 > t)
+            {
+                if (delta > 0) delta = - delta/2;
+                if (!delta) delta = -1;
+            }
+        }
+        return -1;
+    }
+
     SaleaeOutputFile::SaleaeOutputFile(const std::string &filename, int index_)
         : std::ofstream(filename, std::ios::binary), mIndex(index_), mFilename(filename), mStatus(SaleaeStatus::Ok),
           mFirstValue(true), mLastWrittenValue(0), mLastWrittenTime(0)
@@ -307,7 +359,7 @@ namespace hal
 
     SaleaeOutputFile::~SaleaeOutputFile()
     {
-      //  qDebug()  << good() << "~SaleaeOutputFile" << hex << (quintptr) this;
+        //  qDebug()  << good() << "~SaleaeOutputFile" << hex << (quintptr) this;
         if (good()) close();
     }
 
