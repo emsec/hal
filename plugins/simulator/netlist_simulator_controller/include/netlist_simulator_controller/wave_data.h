@@ -54,6 +54,7 @@ namespace hal {
     protected:
         int mValueBase;
         QMap<u64,int> mData;
+        QString mFileName;
         bool mDirty;
 
         QMap<u64,int>::const_iterator timeIterator(double t) const;
@@ -77,7 +78,7 @@ namespace hal {
         bool rename(const QString& nam);
         void setBits(int bts);
         void setDirty(bool dty)                     { mDirty = dty; }
-        void setFileIndex(int inx)                  { mFileIndex = inx; }
+        void setSaleaeFile(int saleaIndex, const QString& filename);
         void setFileSize(u64 siz);
         void setTimeframeSize(u64 siz)              { mTimeframeSize = siz; }
         virtual LoadPolicy loadPolicy() const;
@@ -156,6 +157,7 @@ namespace hal {
         void updateClocks();
         void updateWaveData(int inx);
 
+        void setSaleaeFile(WaveData* wd, int saleaIndex) const;
         WaveData* waveDataByNet(const Net* n);
         int waveIndexByNetId(u32 id) const { return mIds.value(id,-1); }
         void triggerAddToView(u32 id) const;

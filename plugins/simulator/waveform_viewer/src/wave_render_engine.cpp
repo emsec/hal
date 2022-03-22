@@ -85,8 +85,9 @@ namespace hal {
                 {
                     try {
                         WaveDataProviderFile wdpFile(sif, mTimeframe);
-                        // TODO : test group
+                        mItem->mMutex.lock();
                         mItem->mPainted.generate(&wdpFile,mTransform,mScrollbar,&mItem->mLoop);
+                        mItem->mMutex.unlock();
                         mItem->setState(WaveItem::Finished);
                         if (wdpFile.storeDataState() == WaveDataProviderFile::Complete)
                         {

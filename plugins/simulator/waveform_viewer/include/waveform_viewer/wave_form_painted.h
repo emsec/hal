@@ -54,7 +54,7 @@ namespace hal {
 
         const WaveZoomShift& validity() const { return mValidity; }
         bool isEmpty() const { return mPrimitives.isEmpty(); }
-        QList<float> intervalLimits();
+        QMap<float,int> primitiveValues();
         TimeInterval shortestToggle() const { return mShortestToggle; }
         void setCursorValue(double tCursor, int xpos, int val);
         int cursorValueStored(double tCursor, int xpos) const;
