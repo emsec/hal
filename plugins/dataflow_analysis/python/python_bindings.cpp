@@ -51,7 +51,7 @@ namespace hal
                 :param str output_path: Path where the dataflow graph should be written to
                 :param list[int] sizes: Prioritized sizes.
                 :param bool draw_graph: Switch to turn on/off the generation of the graph.
-                :param set[set[int]] known_groups: Previously known groups that stay untouched.
+                :param list[list[int]] known_groups: Previously known groups that stay untouched.
                 :returns: Register groups created by DANA
                 :rtype: list[list[hal_py.Gate]]
                 )");
