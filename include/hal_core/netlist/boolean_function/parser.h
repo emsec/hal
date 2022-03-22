@@ -44,6 +44,7 @@ namespace hal
 
             And, /**< Boolean And operation (e.g., "&"). */
             Not, /**< Boolean Not operation (e.g., "!&"). */
+            NotSuffix, /** <Boolean Not operation as a expresion suffix (e.g., "'" for liberty grammar). */ 
             Or,  /**< Boolean Or operation (e.g., "|"). */
             Xor, /**< Boolean Xor operation (e.g., "^"). */
 
@@ -95,6 +96,13 @@ namespace hal
              * @returns The `NOT` token.
              */
             static Token Not();
+
+            /**
+             * Creates an `NOT_SUFFIX` token.
+             * 
+             * @returns The `NOT_SUFFIX` token.
+             */
+            static Token NotSuffix();
 
             /**
              * Creates an `OR` token.

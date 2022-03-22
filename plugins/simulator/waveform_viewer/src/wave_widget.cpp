@@ -53,8 +53,10 @@ namespace hal {
         connect(mWaveDataList,&WaveDataList::waveAdded,mTreeModel,&WaveTreeModel::handleWaveAdded);
         connect(mWaveDataList,&WaveDataList::groupAdded,mTreeModel,&WaveTreeModel::handleGroupAdded);
         connect(mWaveDataList,&WaveDataList::waveAddedToGroup,mTreeModel,&WaveTreeModel::handleWaveAddedToGroup);
+        connect(mWaveDataList,&WaveDataList::waveRemovedFromGroup,mTreeModel,&WaveTreeModel::handleWaveRemovedFromGroup);
         connect(mWaveDataList,&WaveDataList::groupAboutToBeRemoved,mTreeModel,&WaveTreeModel::handleGroupAboutToBeRemoved);
-        connect(mWaveDataList,&WaveDataList::nameUpdated,mTreeModel,&WaveTreeModel::handleNameUpdated);
+        connect(mWaveDataList,&WaveDataList::waveRenamed,mTreeModel,&WaveTreeModel::handleWaveRenamed);
+        connect(mWaveDataList,&WaveDataList::groupRenamed,mTreeModel,&WaveTreeModel::handleGroupRenamed);
         connect(mWaveDataList,&WaveDataList::groupUpdated,mTreeModel,&WaveTreeModel::handleGroupUpdated);
         connect(mWaveDataList,&WaveDataList::waveUpdated,mGraphicsCanvas,&WaveGraphicsCanvas::handleWaveUpdated);
         connect(mTreeModel,&WaveTreeModel::inserted,mTreeView,&WaveTreeView::handleInserted);
@@ -183,7 +185,7 @@ namespace hal {
                 if (!grp)
                 {
                     grp = gNetlist->create_grouping(grpNames[i]);
-                    gtm->recolorGrouping(grp->get_id(),QColor(NetlistSimulatorControllerPlugin::sSimulationSettings->color((SimulationSettings::ColorSetting) (SimulationSettings::Value0+i))));
+                    gtm->recolorGrouping(grp->get_id(),QColor(NetlistSimulatorControllerPlugin::sSimulationSettings->color((SimulationSettings::ColorSetting) (SimulationSettings::ValueX+i))));
                 }
                 mGroupIds[i] = grp->get_id();
             }

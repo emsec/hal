@@ -439,6 +439,31 @@ namespace hal {
             mWaveDataList->mDataGroups.erase(it);
     }
 
+    void WaveDataGroup::add_waveform(WaveData* wd)
+    {
+        QVector<WaveData*> wds;
+        wds.append(wd);
+        mWaveDataList->addWavesToGroup(id(),wds);
+    }
+
+    void WaveDataGroup::remove_waveform(WaveData* wd)
+    {
+        int irow = mIndex.value(WaveDataGroupIndex(wd),-1);
+        if (irow < 0) return;
+        removeAt(irow);
+        restoreIndex();
+        recalcData();
+        int iwave = mWaveDataList->waveIndexByNetId(wd->id());
+        if (iwave >= 0) mWaveDataList->emitWaveRemovedFromGroup(iwave,id());
+    }
+
+    std::vector<WaveData*> WaveDataGroup::get_waveforms() const
+    {
+        std::vector<WaveData*> retval;
+        for (WaveData* wd : mGroupList) retval.push_back(wd);
+        return retval;
+    }
+
     void WaveDataGroup::replaceChild(WaveData* wd)
     {
         int inx = childIndex(wd);
@@ -798,14 +823,29 @@ namespace hal {
 
     }
 
-    void WaveDataList::updateWaveName(int inx, const QString& nam)
+    void WaveDataList::updateWaveName(int iwave, const QString& nam)
     {
-        if (at(inx)->rename(nam))
+        if (at(iwave)->rename(nam))
         {
             SaleaeDirectoryStoreRequest save(&mSaleaeDirectory);
-            Q_EMIT nameUpdated(inx);
-            mSaleaeDirectory.rename_net(at(inx)->id(),nam.toStdString());
+            Q_EMIT waveRenamed(iwave);
+            mSaleaeDirectory.rename_net(at(iwave)->id(),nam.toStdString());
         }
+    }
+
+    void WaveDataList::updateGroupName(u32 grpId, const QString &nam)
+    {
+        WaveDataGroup* grp = mDataGroups.value(grpId);
+        if (grp && grp->rename(nam))
+        {
+            SaleaeDirectoryStoreRequest save(&mSaleaeDirectory);
+            Q_EMIT groupRenamed(grpId);
+        }
+    }
+
+    void WaveDataList::emitWaveRemovedFromGroup(int iwave, int grpId)
+    {
+        Q_EMIT waveRemovedFromGroup(iwave, grpId);
     }
 
     void WaveDataList::emitWaveAdded(int inx)
