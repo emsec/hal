@@ -18,7 +18,7 @@ namespace hal {
     public:
         WaveDataProvider() : mGroup(false), mBits(1), mValueBase(16) {;}
         virtual ~WaveDataProvider() {;}
-        virtual int startValue(u64 t) = 0;
+        virtual SaleaeDataTuple startValue(u64 t) = 0;
         virtual SaleaeDataTuple nextPoint() = 0;
         bool isGroup() const { return mGroup; }
         int bits() const { return mBits; }
@@ -32,7 +32,7 @@ namespace hal {
         QMap<u64,int>::const_iterator mIter;
     public:
         WaveDataProviderMap(const QMap<u64,int>& dmap) : mDataMap(dmap) {;}
-        virtual int startValue(u64 t) override;
+        virtual SaleaeDataTuple startValue(u64 t) override;
         virtual SaleaeDataTuple nextPoint() override;
     };
 
@@ -53,7 +53,7 @@ namespace hal {
         WaveDataProviderFile(SaleaeInputFile& sif, const WaveDataTimeframe& tframe) : mInputFile(sif), mBuffer(nullptr), mIndex(0),
             mTimeframe(tframe), mStoreData(Off) {;}
         ~WaveDataProviderFile();
-        virtual int startValue(u64 t) override;
+        virtual SaleaeDataTuple startValue(u64 t) override;
         virtual SaleaeDataTuple nextPoint() override;
 
         StoreData storeDataState() const { return mStoreData; }
@@ -67,7 +67,7 @@ namespace hal {
         int valueForTransition() const;
     public:
         WaveDataProviderClock(const SimulationInput::Clock& clk) : mClock(clk), mTransition(0) {;}
-        virtual int startValue(u64 t) override;
+        virtual SaleaeDataTuple startValue(u64 t) override;
         virtual SaleaeDataTuple nextPoint() override;
     };
 }

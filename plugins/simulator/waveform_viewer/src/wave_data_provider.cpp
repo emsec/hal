@@ -11,29 +11,32 @@ namespace hal {
         mValueBase = base;
     }
 
-    int WaveDataProviderMap::startValue(u64 t)
+    SaleaeDataTuple WaveDataProviderMap::startValue(u64 t)
     {
         mIter = mDataMap.lowerBound(t);
 
-        int retval = SaleaeDataTuple::sReadError; // assume empty
+        SaleaeDataTuple retval; // assume empty
 
         if (mIter != mDataMap.constEnd() && mIter.key() == t)
         {
             //exact hit
-            retval = mIter.value();
+            retval.mTime = mIter.key();
+            retval.mValue = mIter.value();
             ++mIter;
         }
         else if (mIter != mDataMap.constBegin())
         {
             //value of last data point before entering t-range
             --mIter;
-            retval = mIter.value();
+            retval.mTime = mIter.key();
+            retval.mValue = mIter.value();
             ++mIter;
         }
         else if (mIter != mDataMap.constEnd())
         {
             //no previous data but not empty
-            retval = -1;
+            retval.mTime = t;
+            retval.mValue = -1;
         }
         return retval;
     }
@@ -53,25 +56,26 @@ namespace hal {
         if (mBuffer) delete mBuffer;
     }
 
-    int WaveDataProviderFile::startValue(u64 t)
+    SaleaeDataTuple WaveDataProviderFile::startValue(u64 t)
     {
         mIndex = 0;
         mDataMap.clear();
         mStoreData = mTimeframe.hasUserTimeframe() ? Recording : Off;
 
         mBuffer = mInputFile.get_buffered_data();
-        while (mIndex < mBuffer->mCount && t < mBuffer->mTimeArray[mIndex])
+        while (mIndex < mBuffer->mCount && mBuffer->mTimeArray[mIndex] < t)
         {
             if (isRecording()) storeCurrentDatapoint();
             ++mIndex;
         }
 
-        int retval = SaleaeDataTuple::sReadError; // assume empty
+        SaleaeDataTuple retval;
 
         if (mIndex < mBuffer->mCount && mBuffer->mTimeArray[mIndex] == t)
         {
             //exact hit
-            retval = mBuffer->mValueArray[mIndex];
+            retval.mTime = mBuffer->mTimeArray[mIndex];
+            retval.mValue = mBuffer->mValueArray[mIndex];
             if (isRecording()) storeCurrentDatapoint();
             ++mIndex;
         }
@@ -79,13 +83,15 @@ namespace hal {
         {
             //value of last data point before entering t-range
             --mIndex;
-            retval = mBuffer->mValueArray[mIndex];
+            retval.mTime = mBuffer->mTimeArray[mIndex];
+            retval.mValue = mBuffer->mValueArray[mIndex];
             ++mIndex;
         }
         else if (mIndex < mBuffer->mCount)
         {
             //no previous data but not empty
-            retval = -1;
+            retval.mTime = t;
+            retval.mValue = -1;
         }
         return retval;
     }
@@ -126,10 +132,10 @@ namespace hal {
         return mClock.start_at_zero ? (mTransition%2) : 1 - (mTransition%2);
     }
 
-    int WaveDataProviderClock::startValue(u64 t)
+    SaleaeDataTuple WaveDataProviderClock::startValue(u64 t)
     {
         mTransition = t / mClock.switch_time;
-        int retval = valueForTransition();
+        SaleaeDataTuple retval(mTransition * mClock.switch_time, valueForTransition());
         ++mTransition;
         return retval;
     }

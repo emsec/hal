@@ -300,6 +300,20 @@ namespace hal {
             QMap<u64,int>::const_iterator it = timeIterator(t);
             return it.value();
         }
+        const WaveDataGroup* grp = dynamic_cast<const WaveDataGroup*>(this);
+        if (grp)
+        {
+            u32 mask = 1;
+            int retval = 0;
+            for (const WaveData* wd : grp->children())
+            {
+                int childVal = wd->intValue(t);
+                if (childVal < 0) return childVal;
+                if (childVal) retval |= mask;
+                mask <<= 1;
+            }
+            return retval;
+        }
         SaleaeInputFile sif(mFileName.toStdString());
         if (!sif.good()) return -1;
         return sif.get_int_value(t);
