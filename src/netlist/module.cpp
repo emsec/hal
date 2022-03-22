@@ -1119,10 +1119,15 @@ namespace hal
         for (ModulePin* pin : pins_copy)
         {
             removed_pins = true;
-            if (auto res = create_pin_group(pin->get_name(), {pin}, pin->get_direction(), pin->get_type()); res.is_error())
+            if (auto res = create_pin_group(pin->get_name(), {pin}, pin->get_direction(), pin->get_type(), false, 0, false); res.is_error())
             {
                 return ERR(res.get_error());
             }
+        }
+
+        if (auto res = delete_pin_group_internal(pin_group); res.is_error())
+        {
+            return ERR(res.get_error());
         }
 
         if (removed_pins)
