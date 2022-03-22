@@ -110,7 +110,7 @@ namespace hal
         return true;
     }
 
-    std::vector<std::vector<Gate*>> plugin_dataflow::execute(Netlist* nl, std::string output_path, const std::vector<u32> sizes, bool draw_graph, std::set<std::set<u32>> known_groups, u32 bad_group_size)
+    std::vector<std::vector<Gate*>> plugin_dataflow::execute(Netlist* nl, std::string output_path, const std::vector<u32> sizes, bool draw_graph, std::vector<std::vector<u32>> known_groups, u32 bad_group_size)
     {
         log("--- starting dataflow analysis ---");
 
