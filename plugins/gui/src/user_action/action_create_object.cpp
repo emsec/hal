@@ -72,10 +72,10 @@ namespace hal
                 if(res.is_error())
                     return false;
                 setObject(UserActionObject(res.get()->get_id(), UserActionObjectType::PinGroup));
-                setParentObject(mParentObject);
-                //todo: Implement delete-action for undo
+                standardUndo = true;
             }
-            return false;
+            else
+                return false;
         }
             break;
 
@@ -135,6 +135,7 @@ namespace hal
         {
             mUndoAction = new ActionDeleteObject;
             mUndoAction->setObject(mObject);
+            mUndoAction->setParentObject(mParentObject);
         }
         return UserAction::exec();
     }

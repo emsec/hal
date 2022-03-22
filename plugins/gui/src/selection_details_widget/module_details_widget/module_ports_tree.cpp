@@ -7,6 +7,7 @@
 #include "gui/selection_details_widget/module_details_widget/port_tree_model.h"
 #include "gui/user_action/action_rename_object.h"
 #include "gui/user_action/action_delete_object.h"
+#include "gui/user_action/action_create_object.h"
 #include "hal_core/netlist/gate_library/enums/pin_direction.h"
 #include "hal_core/utilities/enums.h"
 
@@ -18,7 +19,6 @@
 #include <QList>
 #include <QSet>
 #include <QMessageBox>
-#include <QDebug>
 
 namespace hal
 {
