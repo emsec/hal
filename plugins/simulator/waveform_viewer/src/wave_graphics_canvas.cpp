@@ -62,7 +62,7 @@ namespace hal {
         }
     }
 
-    void WaveGraphicsCanvas::setCursorPosition(float tCursor, int xpos)
+    void WaveGraphicsCanvas::setCursorPosition(double tCursor, int xpos)
     {
         if (mCursorTime == tCursor && mCursorXpos == xpos) return;
         mCursorTime = tCursor;
@@ -114,7 +114,7 @@ namespace hal {
                 mTransform.setScale(viewport()->width()/dt);
                 mScrollbar->adjust(viewport()->size().width());
                 mScrollbar->setVleft(mTransform.vPos(t0));
-                qDebug() << "zoom t0 dt vpos" << t0 << dt << mTransform.vPos(t0);
+//                qDebug() << "zoom t0 dt vpos" << t0 << dt << mTransform.vPos(t0);
                 mTimescale->setScale(viewport()->size().width());
                 mRenderEngine->update();
             }
@@ -163,14 +163,39 @@ namespace hal {
             return;
         if (newScale >= 100) return;
         if (newScale*mTransform.deltaT()*1.2<viewport()->width() && newScale < oldScale) return;
-        int xEvent = evt->pos().x();
-        double tEvent = mScrollbar->tPos(xEvent);
+        double tEvent = (evt->modifiers() & Qt::ShiftModifier)
+                ? mScrollbar->tPos(evt->pos().x())
+                : mCursorTime;
 
         mTransform.setScale(newScale);
         mScrollbar->updateScale(newScale-oldScale,tEvent,viewport()->width());
         mRenderEngine->update();
         mTimescale->setScale(viewport()->size().width());
     }
+
+    bool WaveGraphicsCanvas::canUndoZoom() const
+    {
+        return !mRenderEngine->zoomHistory().isEmpty();
+    }
+
+    void WaveGraphicsCanvas::emitUndoStateChanged()
+    {
+         Q_EMIT undoStateChanged();
+    }
+
+    void WaveGraphicsCanvas::undoZoom()
+    {
+        if (mRenderEngine->zoomHistory().isEmpty()) return;
+        WaveZoomShift lastZoom = mRenderEngine->zoomHistory().takeLast();
+        mTransform.setScale(lastZoom.scale());
+        mScrollbar->setVleft(mTransform.vPos(lastZoom.leftTime()));
+        mRenderEngine->omitHistory();
+        mRenderEngine->update();
+        mTimescale->setScale(viewport()->size().width());
+        if (mRenderEngine->zoomHistory().isEmpty())
+           emitUndoStateChanged();
+    }
+
 
     void  WaveGraphicsCanvas::toggleZoom()
     {
@@ -180,7 +205,12 @@ namespace hal {
         if (dt <= 0) return;
         double newScale = w / dt;
         double vleft = 0;
-        if (mTransform.scale() <= newScale)
+        if (dt * mTransform.scale() * 1.0001 < w)
+        {
+            // not using entire screen width, zoom in
+            mTransform.setScale(newScale);
+        }
+        else if (mTransform.scale() <= newScale)
         {
             // already zoomed out to max, try zoom in
             TimeInterval shortest;
@@ -198,7 +228,10 @@ namespace hal {
             if (vleft < 0) vleft = 0;
         }
         else
+        {
+            // zoom out
             mTransform.setScale(newScale);
+        }
         mScrollbar->setVleft(vleft);
         mRenderEngine->update();
         mTimescale->setScale(viewport()->size().width());

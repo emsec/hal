@@ -18,6 +18,11 @@ namespace hal
             return Token(TokenType::Not, {}, {});
         }
 
+        Token Token::NotSuffix()
+        {
+            return Token(TokenType::NotSuffix, {}, {});
+        }
+
         Token Token::Or()
         {
             return Token(TokenType::Or, {}, {});
@@ -53,6 +58,7 @@ namespace hal
             static const std::map<ParserType, std::map<TokenType, unsigned>> parser2precedence = {
                 {ParserType::Liberty,
                  std::map<TokenType, unsigned>({
+                     {TokenType::NotSuffix, 4},
                      {TokenType::Not, 4},
                      {TokenType::And, 3},
                      {TokenType::Xor, 2},
@@ -87,6 +93,7 @@ namespace hal
                 {TokenType::And, "And"},
                 {TokenType::Or, "Or"},
                 {TokenType::Not, "Not"},
+                {TokenType::NotSuffix, "NotSuffix"},
                 {TokenType::Xor, "Xor"},
 
                 {TokenType::BracketOpen, "BracketOpen"},
@@ -158,13 +165,24 @@ namespace hal
                         break;
                     }
 
-                    // (3) open brackets are always pushed into the operator stack
+                    // (3) the liberty grammar contains suffix not operations that
+                    //     invert the previous operation, i.e, acts similiar to  
+                    //     a "not" operation in reverse-polish notation. hence, 
+                    //     we simply push a "not" the output as the previous
+                    //     expression has been already translated to the reverse-
+                    //     polish notation in the output vector.
+                    case TokenType::NotSuffix: {
+                        output.emplace_back(Token::Not());
+                        break;
+                    }
+
+                    // (4) open brackets are always pushed into the operator stack
                     case TokenType::BracketOpen: {
                         operator_stack.push(token);
                         break;
                     }
 
-                    // (4) close brackets push remaining operations into the output
+                    // (5) close brackets push remaining operations into the output
                     //     queue until the bracket level is closed
                     case TokenType::BracketClose: {
                         while (!operator_stack.empty() && !operator_stack.top().is(TokenType::BracketOpen))

@@ -25,11 +25,12 @@ namespace hal {
         WaveTimescale* mTimescale;
         WaveCursor* mCursor;
         bool mMoveCursor;
-        float mCursorTime;
+        double mCursorTime;
         int mCursorXpos;
         QWidget* mDragZoom;
     Q_SIGNALS:
-        void cursorMoved(float tCursor, int xpos);
+        void cursorMoved(double tCursor, int xpos);
+        void undoStateChanged();
     public Q_SLOTS:
         void updateRequest();
         void handleWaveUpdated(int iwave, int groupId);
@@ -46,7 +47,10 @@ namespace hal {
         WaveGraphicsCanvas(WaveDataList* wdlist, WaveItemHash* wHash, QWidget* parent = nullptr);
         const WaveTransform* transform() const { return &mTransform; }
         const WaveItemHash* waveItemHash() const { return mWaveItemHash; }
+        bool canUndoZoom() const;
+        void undoZoom();
+        void emitUndoStateChanged();
         void toggleZoom();
-        void setCursorPosition(float tCursor, int xpos);
+        void setCursorPosition(double tCursor, int xpos);
     };
 }

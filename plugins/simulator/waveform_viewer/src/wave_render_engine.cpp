@@ -7,6 +7,8 @@
 #include <QDir>
 #include <QPaintEvent>
 #include "netlist_simulator_controller/saleae_file.h"
+#include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
+#include "netlist_simulator_controller/simulation_settings.h"
 #include "waveform_viewer/wave_data_provider.h"
 #include "waveform_viewer/wave_item.h"
 
@@ -14,8 +16,8 @@ namespace hal {
 
 
     WaveLoaderThread::WaveLoaderThread(WaveItem* parentItem, const QString &workdir,
-                                       const WaveTransform* trans, const WaveScrollbar* sbar)
-        : QThread(parentItem), mItem(parentItem), mWorkDir(workdir), mTransform(trans), mScrollbar(sbar)
+                                       const WaveTransform* trans, const WaveScrollbar* sbar, const WaveDataTimeframe &tframe)
+        : QThread(parentItem), mItem(parentItem), mWorkDir(workdir), mTransform(trans), mScrollbar(sbar), mTimeframe(tframe)
     {;}
 
 
@@ -36,7 +38,7 @@ namespace hal {
             }
             break;
         case WaveData::NetGroup:
-            if (wd->isLoadable())
+            if (wd->loadPolicy() != WaveData::TooBigToLoad)
             {
                 try {
                     const WaveDataGroup* grp = static_cast<const WaveDataGroup*>(wd);
@@ -63,7 +65,7 @@ namespace hal {
             SaleaeInputFile sif(mWorkDir.absoluteFilePath(QString("digital_%1.bin").arg(mItem->wavedata()->fileIndex())).toStdString());
             if (sif.good())
             {
-                if (mItem->wavedata()->isLoadable())
+                if (mItem->wavedata()->loadPolicy()==WaveData::LoadAllData)
                 {
                     try {
 
@@ -82,10 +84,17 @@ namespace hal {
                 else
                 {
                     try {
-                        WaveDataProviderFile wdpFile(sif);
-                        // TODO : test group
+                        WaveDataProviderFile wdpFile(sif, mTimeframe);
+                        mItem->mMutex.lock();
                         mItem->mPainted.generate(&wdpFile,mTransform,mScrollbar,&mItem->mLoop);
+                        mItem->mMutex.unlock();
                         mItem->setState(WaveItem::Finished);
+                        if (wdpFile.storeDataState() == WaveDataProviderFile::Complete)
+                        {
+                            WaveData* wd = (WaveData*) mItem->wavedata();
+                            wd->setData(wdpFile.dataMap());
+                            wd->setTimeframeSize(wdpFile.dataMap().size());
+                        }
                     } catch (...) {
                         mItem->setState(WaveItem::Failed);
                     }
@@ -129,7 +138,7 @@ namespace hal {
                     else
                     {
                         SaleaeInputFile sif(mWorkDir.absoluteFilePath(QString("digital_%1.bin").arg(wree->wavedata()->fileIndex())).toStdString());
-                        if (wree->wavedata()->isLoadable())
+                        if (wree->wavedata()->loadPolicy() == WaveData::LoadAllData)
                         {
                             try {
                                 if ((u64)wd->data().size() < wd->fileSize())
@@ -146,10 +155,16 @@ namespace hal {
                         else
                         {
                             try {
-                                WaveDataProviderFile wdpFile(sif);
+                                WaveDataProviderFile wdpFile(sif, mTimeframe);
                                 // TODO : test group
                                 wree->mPainted.generate(&wdpFile,mTransform,mScrollbar,&wree->mLoop);
                                 wree->setState(WaveItem::Painted);
+                                if (wdpFile.storeDataState() == WaveDataProviderFile::Complete)
+                                {
+                                    WaveData* wd = (WaveData*) wree->wavedata();
+                                    wd->setData(wdpFile.dataMap());
+                                    wd->setTimeframeSize(wdpFile.dataMap().size());
+                                }
                             } catch (...) {
                                 wree->setState(WaveItem::Failed);
                             }
@@ -167,7 +182,7 @@ namespace hal {
     //------------------------
     WaveRenderEngine::WaveRenderEngine(WaveGraphicsCanvas *wsa, WaveDataList *wdlist, WaveItemHash *wHash, QWidget *parent)
         : QWidget(parent), mWaveGraphicsCanvas(wsa), mWaveDataList(wdlist), mWaveItemHash(wHash),
-          mY0(0), mHeight(0), mTimerTick(0), mBackbone(nullptr)
+          mY0(0), mHeight(0), mTimerTick(0), mBackbone(nullptr), mOmitHistory(true)
     {
         connect(this,&WaveRenderEngine::updateSoon,this,&WaveRenderEngine::callUpdate,Qt::QueuedConnection);
         mTimer = new QTimer(this);
@@ -216,14 +231,27 @@ namespace hal {
         const WaveScrollbar* sbar  = static_cast<const WaveScrollbar*>(mWaveGraphicsCanvas->horizontalScrollBar());
         mTimerTick = 0;
 
-        WaveFormPaintValidity testValid(trans,sbar);
+        WaveZoomShift testValid(trans,sbar);
 
         if (testValid != mValidity)
         {
             if (mBackbone)
                 mBackbone->mLoop = false;
+
+            if (!mOmitHistory)
+            {
+                bool wasEmpty = mZoomHistory.isEmpty();
+                if (!testValid.sameHistory(mValidity))
+                {
+                    mZoomHistory.append(mValidity);
+                    if (wasEmpty) mWaveGraphicsCanvas->emitUndoStateChanged();
+                }
+            }
+
             mValidity = testValid;
         }
+
+        mOmitHistory = false;
 
         mY0 = top;
         mHeight = height();
@@ -270,7 +298,7 @@ namespace hal {
                 {
                 if (wree->isNull())
                 {
-                    if (wree->isGroup() && !wree->wavedata()->isLoadable())
+                    if (wree->isGroup() && wree->wavedata()->loadPolicy()==WaveData::TooBigToLoad)
                     {
                         if (wree->mPainted.generateGroup(wree->wavedata(),mWaveItemHash))
                         {
@@ -279,7 +307,7 @@ namespace hal {
                         }
                     }
                     else
-                        wree->startGeneratePainted(workdir,trans, sbar);
+                        wree->startGeneratePainted(workdir,trans, sbar, mWaveDataList->timeFrame());
                 }
                 else if (wree->isLoading() || wree->isThreadBusy())
                 {
@@ -302,21 +330,21 @@ namespace hal {
                         {
                             if (wree->isSelected())
                             {
-                                painter.fillRect(QRectF(0,y0-4,width(),28), QBrush(QColor(WaveItem::sLineColor[WaveItem::Background])));
-                                painter.setPen(QPen(QColor(WaveItem::sLineColor[WaveItem::HiLight]),0));
+                                painter.fillRect(QRectF(0,y0-4,width(),28), QBrush(QColor(WaveItem::sBackgroundColor)));
+                                painter.setPen(QPen(QColor(NetlistSimulatorControllerPlugin::sSimulationSettings->color(SimulationSettings::WaveformSelected)),0));
                             }
                             else
-                                painter.setPen(QPen(QColor(WaveItem::sLineColor[WaveItem::Solid]),0));
+                                painter.setPen(QPen(QColor(NetlistSimulatorControllerPlugin::sSimulationSettings->color(SimulationSettings::WaveformRegular)),0));
                             wree->mPainted.paint(y0,painter);
                         }
                     }
                     else
                     {
                         wree->deletePainted();
-                        if (wree->isGroup() && !wree->wavedata()->isLoadable())
+                        if (wree->isGroup() && wree->wavedata()->loadPolicy()==WaveData::TooBigToLoad)
                             wree->mPainted.generateGroup(wree->wavedata(),mWaveItemHash);
                         else
-                            wree->startGeneratePainted(workdir,trans, sbar);
+                            wree->startGeneratePainted(workdir,trans, sbar, mWaveDataList->timeFrame());
                         wree->clearRequest(WaveItem::DataChanged);
                     }
                 }
@@ -333,7 +361,7 @@ namespace hal {
 
         if (!todoList.isEmpty() && !mBackbone)
         {
-            mBackbone = new WaveLoaderBackbone(todoList, QString::fromStdString(mWaveDataList->saleaeDirectory().get_directory()), trans, sbar, this);
+            mBackbone = new WaveLoaderBackbone(todoList, QString::fromStdString(mWaveDataList->saleaeDirectory().get_directory()), trans, sbar, mWaveDataList->timeFrame(), this);
             connect(mBackbone, &QThread::finished, this, &WaveRenderEngine::handleBackboneFinished);
             mBackbone->start();
         }

@@ -18,6 +18,8 @@
 #include <QApplication>
 
 #include "netlist_simulator_controller/netlist_simulator_controller.h"
+#include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
+#include "netlist_simulator_controller/simulation_settings.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/utilities/log.h"
 #include "gui/content_manager/content_manager.h"
@@ -51,8 +53,10 @@ namespace hal {
         connect(mWaveDataList,&WaveDataList::waveAdded,mTreeModel,&WaveTreeModel::handleWaveAdded);
         connect(mWaveDataList,&WaveDataList::groupAdded,mTreeModel,&WaveTreeModel::handleGroupAdded);
         connect(mWaveDataList,&WaveDataList::waveAddedToGroup,mTreeModel,&WaveTreeModel::handleWaveAddedToGroup);
+        connect(mWaveDataList,&WaveDataList::waveRemovedFromGroup,mTreeModel,&WaveTreeModel::handleWaveRemovedFromGroup);
         connect(mWaveDataList,&WaveDataList::groupAboutToBeRemoved,mTreeModel,&WaveTreeModel::handleGroupAboutToBeRemoved);
-        connect(mWaveDataList,&WaveDataList::nameUpdated,mTreeModel,&WaveTreeModel::handleNameUpdated);
+        connect(mWaveDataList,&WaveDataList::waveRenamed,mTreeModel,&WaveTreeModel::handleWaveRenamed);
+        connect(mWaveDataList,&WaveDataList::groupRenamed,mTreeModel,&WaveTreeModel::handleGroupRenamed);
         connect(mWaveDataList,&WaveDataList::groupUpdated,mTreeModel,&WaveTreeModel::handleGroupUpdated);
         connect(mWaveDataList,&WaveDataList::waveUpdated,mGraphicsCanvas,&WaveGraphicsCanvas::handleWaveUpdated);
         connect(mTreeModel,&WaveTreeModel::inserted,mTreeView,&WaveTreeView::handleInserted);
@@ -76,6 +80,7 @@ namespace hal {
             {
                 connect(mController,&NetlistSimulatorController::parseComplete,vv,&WaveformViewer::handleParseComplete);
                 connect(mController,&NetlistSimulatorController::loadProgress,vv,&WaveformViewer::showProgress);
+                connect(mGraphicsCanvas,&WaveGraphicsCanvas::undoStateChanged,vv,&WaveformViewer::testUndoEnable);
             }
         }
 
@@ -180,7 +185,7 @@ namespace hal {
                 if (!grp)
                 {
                     grp = gNetlist->create_grouping(grpNames[i]);
-                    gtm->recolorGrouping(grp->get_id(),QColor(WaveTreeModel::sStateColor[i]));
+                    gtm->recolorGrouping(grp->get_id(),QColor(NetlistSimulatorControllerPlugin::sSimulationSettings->color((SimulationSettings::ColorSetting) (SimulationSettings::ValueX+i))));
                 }
                 mGroupIds[i] = grp->get_id();
             }
@@ -291,7 +296,7 @@ namespace hal {
             log_warning(mController->get_name(), "Cannot get simulation results");
     }
 
-    void WaveWidget::visualizeCurrentNetState(float tCursor, int xpos)
+    void WaveWidget::visualizeCurrentNetState(double tCursor, int xpos)
     {
         QSet<Net*> netState[3]; // x, 0, 1
 

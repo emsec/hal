@@ -33,13 +33,14 @@ namespace hal {
         int mValue;
         bool mAbort;
     Q_SIGNALS:
-        void gotValue(WaveItem* item);
+        void valueThreadEnds(WaveItem* item);
     private Q_SLOTS:
         void handleValueThreadFinished();
     public:
         WaveValueThread(WaveItem* item, const QString& workdir, float tpos, int xpos, QObject* parent = nullptr);
         void run() override;
         void abort() { mAbort = true; }
+        bool wasAborted() const { return mAbort; }
     };
 
     class WaveTreeModel : public QAbstractItemModel
@@ -66,7 +67,7 @@ namespace hal {
         QModelIndexList mDragIndexList;
         DragCommand mDragCommand;
         bool mDragIsGroup;
-        float mCursorTime;
+        double mCursorTime;
         int mCursorXpos;
         bool mIgnoreSignals;
         int mReorderRequestWaiting;
@@ -88,12 +89,14 @@ namespace hal {
     public Q_SLOTS:
         void handleUpdateValueColumn();
         void handleWaveAdded(int iwave);
-        void handleNameUpdated(int iwave);
+        void handleWaveRenamed(int iwave);
+        void handleGroupRenamed(int grpId);
         void handleWaveAddedToGroup(const QVector<u32>& netIds, int grpId);
+        void handleWaveRemovedFromGroup(int iwave, int grpId);
         void handleGroupAdded(int grpId);
         void handleGroupAboutToBeRemoved(WaveDataGroup* grp);
         void handleGroupUpdated(int grpId);
-        void handleCursorMoved(float tCursor, int xpos);
+        void handleCursorMoved(double tCursor, int xpos);
         void forwardBeginResetModel();
         void forwardEndResetModel();
         //void handleValueLoaderFinished();
@@ -131,8 +134,8 @@ namespace hal {
         void setGroupPosition(int ypos, const QModelIndex& index);
         void addWaves(const QVector<WaveData*>& wds);
 
-        float cursorTime() const { return mCursorTime; }
-        float cursorXpos() const { return mCursorXpos; }
+        double cursorTime() const { return mCursorTime; }
+        int cursorXpos() const { return mCursorXpos; }
 
         QSet<int> waveDataIndexSet() const;
 

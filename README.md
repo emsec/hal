@@ -67,7 +67,6 @@ If you want to build HAL on Ubuntu 20.04, run the following commands:
 3. `mkdir build && cd build` to create and move to the build folder
 4. `cmake .. [OPTIONS]` to run cmake
 5. `make` to compile HAL
-6. `make install` (optionally) to install HAL
 
 We do currently not support building on any other Linux distribution.
 

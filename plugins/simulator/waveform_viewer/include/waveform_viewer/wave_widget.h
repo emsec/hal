@@ -52,7 +52,7 @@ namespace hal {
         void handleSelectionHighlight(const QVector<const SelectionTreeItem*>& highlight);
         void handleNumberWaveformChanged(int count);
         void handleStateChanged(NetlistSimulatorController::SimulationState state);
-        void visualizeCurrentNetState(float tCursor, int xpos);
+        void visualizeCurrentNetState(double tCursor, int xpos);
 
     Q_SIGNALS:
         void stateChanged(NetlistSimulatorController::SimulationState state);

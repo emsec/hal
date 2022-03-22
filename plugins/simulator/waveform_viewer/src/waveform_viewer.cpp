@@ -1,12 +1,14 @@
 #include "waveform_viewer/waveform_viewer.h"
 
 #include "waveform_viewer/wave_widget.h"
+#include "waveform_viewer/simulation_setting_dialog.h"
 #include "netlist_simulator_controller/simulation_process.h"
 #include "netlist_simulator_controller/wave_data.h"
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
 #include "netlist_simulator_controller/simulation_engine.h"
 
 #include "netlist_simulator_controller/vcd_serializer.h"
+#include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
 #include "waveform_viewer/gate_selection_dialog.h"
 #include "waveform_viewer/plugin_waveform_viewer.h"
 #include "waveform_viewer/clock_set_dialog.h"
@@ -59,10 +61,12 @@ namespace hal
         mRunSimulationAction = new QAction(this);
         mAddResultWaveAction = new QAction(this);
         mToggleMaxZoomAction = new QAction(this);
+        mUndoZoomShiftAction = new QAction(this);
 
         mCreateControlAction->setIcon(gui_utility::getStyledSvgIcon("all->#FFFFFF",":/icons/plus"));
         mAddResultWaveAction->setIcon(QIcon(":/icons/add_waveform"));
         mToggleMaxZoomAction->setIcon(QIcon(":/icons/zoom_waveform"));
+        mUndoZoomShiftAction->setIcon(gui_utility::getStyledSvgIcon("all->#FFFFFF",":/icons/undo2"));
 
         mCreateControlAction->setToolTip("Create simulation controller");
         mSimulSettingsAction->setToolTip("Simulation settings");
@@ -71,6 +75,7 @@ namespace hal
         mRunSimulationAction->setToolTip("Run simulation");
         mAddResultWaveAction->setToolTip("Add waveform net");
         mToggleMaxZoomAction->setToolTip("Toggle max/min zoom");
+        mUndoZoomShiftAction->setToolTip("Undo last zoom or horizontal scroll");
 
         connect(mCreateControlAction, &QAction::triggered, this, &WaveformViewer::handleCreateControl);
         connect(mSimulSettingsAction, &QAction::triggered, this, &WaveformViewer::handleSimulSettings);
@@ -79,6 +84,7 @@ namespace hal
         connect(mRunSimulationAction, &QAction::triggered, this, &WaveformViewer::handleRunSimulation);
         connect(mAddResultWaveAction, &QAction::triggered, this, &WaveformViewer::handleAddResultWave);
         connect(mToggleMaxZoomAction, &QAction::triggered, this, &WaveformViewer::handleToggleMaxZoom);
+        connect(mUndoZoomShiftAction, &QAction::triggered, this, &WaveformViewer::handleUndoZoomShift);
 
         mTabWidget = new QTabWidget(this);
         mTabWidget->setTabsClosable(true);
@@ -158,6 +164,15 @@ namespace hal
         mAddResultWaveAction->setEnabled(mCurrentWaveWidget->canImportWires());
     }
 
+    void WaveformViewer::testUndoEnable()
+    {
+        if (!mCurrentWaveWidget)
+            mUndoZoomShiftAction->setDisabled(true);
+        else
+            mUndoZoomShiftAction->setEnabled(mCurrentWaveWidget->graphicCanvas()->canUndoZoom());
+        mUndoZoomShiftAction->setIcon(gui_utility::getStyledSvgIcon(mUndoZoomShiftAction->isEnabled() ? "all->#FFFFFF" : "all->#808080",":/icons/undo2"));
+    }
+
     void WaveformViewer::currentStateChanged(NetlistSimulatorController::SimulationState state)
     {
         if (!mCurrentWaveWidget || state == NetlistSimulatorController::SimulationRun || mProgress->isVisible())
@@ -182,6 +197,7 @@ namespace hal
         mOpenInputfileAction->setIcon(gui_utility::getStyledSvgIcon(mOpenInputfileAction->isEnabled() ? "all->#3192C5" : "all->#808080",":/icons/folder"));
         mSaveWaveformsAction->setIcon(gui_utility::getStyledSvgIcon(mSaveWaveformsAction->isEnabled() ? "all->#3192C5" : "all->#808080",":/icons/save"));
         mRunSimulationAction->setIcon(gui_utility::getStyledSvgIcon(mRunSimulationAction->isEnabled() ? "all->#20FF80" : "all->#808080",":/icons/run"));
+        testUndoEnable();
 
         if (!mCurrentWaveWidget)
             displayStatusMessage();
@@ -218,6 +234,7 @@ namespace hal
         toolbar->addAction(mRunSimulationAction);
         toolbar->addAction(mAddResultWaveAction);
         toolbar->addAction(mToggleMaxZoomAction);
+        toolbar->addAction(mUndoZoomShiftAction);
     }
 
     void WaveformViewer::handleTabClosed(int inx)
@@ -274,10 +291,6 @@ namespace hal
              engineGroup->addAction(act);
          }
 
-         act = new QAction("Set engine properties");
-         connect(act, &QAction::triggered, this, &WaveformViewer::handleSetEngineProperties);
-         settingMenu->addAction(act);
-
          act = new QAction("Show output of engine");
          connect(act, &QAction::triggered, this, &WaveformViewer::handleShowEngineOutput);
          settingMenu->addAction(act);
@@ -293,21 +306,17 @@ namespace hal
          connect (act, &QAction::triggered, this, &WaveformViewer::setVisualizeNetState);
          settingMenu->addAction(act);
 
-         act = new QAction("Net groups: display text value in graph", settingMenu);
-         act->setCheckable(true);
-         act->setChecked(WaveItem::sValuesAsText);
-         connect (act, &QAction::triggered, this, &WaveformViewer::setGroupValuesAsText);
+         act = new QAction("Settings ...");
+         connect(act, &QAction::triggered, this, &WaveformViewer::handleOpenSettingsDialog);
          settingMenu->addAction(act);
 
          settingMenu->exec(mapToGlobal(QPoint(10,3)));
     }
 
-    void WaveformViewer::handleSetEngineProperties()
+    void WaveformViewer::handleOpenSettingsDialog()
     {
-        if (!mCurrentWaveWidget) return;
-        SimulationEngine* eng = mCurrentWaveWidget->controller()->get_simulation_engine();
-        if (!eng) return;
-
+        SimulationSettingDialog ssd(NetlistSimulatorControllerPlugin::sSimulationSettings,this);
+        ssd.exec();
     }
 
     void WaveformViewer::handleShowEngineOutput()
@@ -350,17 +359,6 @@ namespace hal
         {
             WaveWidget* ww = static_cast<WaveWidget*>(mTabWidget->widget(inx));
             ww->setVisualizeNetState(mVisualizeNetState, inx==mTabWidget->currentIndex());
-        }
-    }
-
-    void WaveformViewer::setGroupValuesAsText(bool state)
-    {
-        if (state == WaveItem::sValuesAsText) return;
-        WaveItem::sValuesAsText = state;
-        for (int inx=0; inx < mTabWidget->count(); inx++)
-        {
-            WaveWidget* ww = static_cast<WaveWidget*>(mTabWidget->widget(inx));
-            ww->update();
         }
     }
 
@@ -421,6 +419,12 @@ namespace hal
     {
         if (!mCurrentWaveWidget) return;
         mCurrentWaveWidget->graphicCanvas()->toggleZoom();
+    }
+
+    void WaveformViewer::handleUndoZoomShift()
+    {
+        if (!mCurrentWaveWidget) return;
+        mCurrentWaveWidget->graphicCanvas()->undoZoom();
     }
 
     void WaveformViewer::handleAddResultWave()

@@ -308,11 +308,39 @@ public:
     WaveData* get_waveform_by_net(Net* n) const;
 
     /**
+     * Rename waveform and emit 'renamed' signal
+     * @param wd[in] Waveform to be renamed
+     * @param name[in] New name for waveform
+     */
+    void rename_waveform(WaveData* wd, std::string name);
+
+    /**
+     * Getter for waveform group
+     * @param id[in] Waveform group id
+     * @return The waveform group
+     */
+    WaveDataGroup* get_waveform_group_by_id(u32 id) const;
+
+    /**
      * Set timeframe for viewer
      * @param[in] tmin Lower limit for time scale in wave viewer
      * @param[in] tmax Upper limit for time scale in wave viewer
      */
     void set_timeframe(u64 tmin=0, u64 tmax=0);
+
+    /**
+     * Record a trace of the value of the group specified by the given ID.
+     * A value is recorded everytime the trigger net toggles and the enable condition evaluates to 'BooleanFunction::Value::ONE'.
+     * 
+     * @param[in] group_id - The ID of the target waveform group.
+     * @param[in] trigger_net - The net that triggers recording a value.
+     * @param[in] enable_nets - All nets that influence the enable condition.
+     * @param[in] enable_condition - A Boolean function that enables the recording of a value.
+     * @param[in] start_time - The time at which to start the recording.
+     * @param[in] end_time - The time at which to end the recording.
+     * @returns A vector of recorded values on success, an error otherwise.
+     */
+    Result<std::vector<u32>> trace_value_if(const u32 group_id, const Net* trigger_net, const std::vector<Net*>& enable_nets, BooleanFunction enable_condition, u32 start_time, u32 end_time) const;
 
     /**
      * Emit load progress when importing VCD, CSV, or SALEAE waveform

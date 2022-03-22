@@ -770,10 +770,8 @@ namespace hal
         bool has_inputs = false;
         u32 num_outputs = 0;
         std::string output_func;
-        std::vector<std::string> bf_vars;
         for (const auto& pin : cell.pins)
         {
-            bf_vars.insert(bf_vars.end(), pin.pin_names.begin(), pin.pin_names.end());
 
             if (pin.direction == PinDirection::input || pin.direction == PinDirection::inout)
             {
@@ -812,8 +810,6 @@ namespace hal
             }
 
             std::unique_ptr<GateTypeComponent> state_component = GateTypeComponent::create_state_component(nullptr, cell.ff->state1, cell.ff->state2);
-            bf_vars.push_back(cell.ff->state1);
-            bf_vars.push_back(cell.ff->state2);
 
             auto next_state_function = BooleanFunction::from_string(cell.ff->next_state);
             auto clocked_on_function = BooleanFunction::from_string(cell.ff->clocked_on);
@@ -864,38 +860,28 @@ namespace hal
         }
         else if (cell.latch.has_value())
         {
-            if (cell.latch->enable.empty() || cell.latch->data_in.empty())
-            {
-                return false;
-            }
+            // TODO make sure this does not cause errors in latch component
+            // if (cell.latch->enable.empty() || cell.latch->data_in.empty())
+            // {
+            //     return false;
+            // }
 
             std::unique_ptr<GateTypeComponent> state_component = GateTypeComponent::create_state_component(nullptr, cell.latch->state1, cell.latch->state2);
-            bf_vars.push_back(cell.latch->state1);
-            bf_vars.push_back(cell.latch->state2);
 
             parent_component                = GateTypeComponent::create_latch_component(std::move(state_component));
             LatchComponent* latch_component = parent_component->convert_to<LatchComponent>();
             assert(latch_component != nullptr);
 
-            if (!cell.latch->data_in.empty() && !cell.latch->enable.empty())
+            if (!cell.latch->data_in.empty())
             {
                 auto data_in_function = BooleanFunction::from_string(cell.latch->data_in);
                 latch_component->set_data_in_function((data_in_function.is_ok()) ? data_in_function.get() : BooleanFunction());
-
+            }
+            if (!cell.latch->enable.empty())
+            {  
                 auto enable_function = BooleanFunction::from_string(cell.latch->enable);
                 latch_component->set_enable_function((enable_function.is_ok()) ? enable_function.get() : BooleanFunction());
             }
-            else if (cell.latch->data_in.empty())
-            {
-                log_error("liberty_parser", "missing 'data_in' specification for latch gate type '{}'.", cell.name);
-                return false;
-            }
-            else if (cell.latch->enable.empty())
-            {
-                log_error("liberty_parser", "missing 'enable' specification for latch gate type '{}'.", cell.name);
-                return false;
-            }
-
             if (!cell.latch->clear.empty())
             {
                 auto clear_function = BooleanFunction::from_string(cell.latch->clear);
@@ -979,7 +965,7 @@ namespace hal
 
         if (!cell.buses.empty())
         {
-            auto functions = construct_bus_functions(cell, bf_vars);
+            auto functions = construct_bus_functions(cell);
             gt->add_boolean_functions(functions);
         }
         else
@@ -1209,7 +1195,7 @@ namespace hal
         return res;
     }
 
-    std::unordered_map<std::string, BooleanFunction> LibertyParser::construct_bus_functions(const cell_group& cell, const std::vector<std::string>& all_pins)
+    std::unordered_map<std::string, BooleanFunction> LibertyParser::construct_bus_functions(const cell_group& cell)
     {
         std::unordered_map<std::string, BooleanFunction> res;
 

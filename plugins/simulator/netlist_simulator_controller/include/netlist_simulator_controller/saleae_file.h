@@ -108,6 +108,7 @@ namespace hal
 
         std::function<uint64_t(bool*)> mReader;
 
+        void seekTransition(uint64_t pos) { seekg(pos*sizeof(uint64_t) + 44); }
     public:
         SaleaeInputFile(const std::string& filename);
         int startValue() const { return mHeader.value(); }
@@ -115,6 +116,7 @@ namespace hal
         SaleaeDataTuple nextValue(int lastValue);
         std::string get_last_error() const;
         SaleaeDataBuffer* get_buffered_data();
+        int get_int_value(double t);
 
         const SaleaeHeader* header() const { return &mHeader; }
     };

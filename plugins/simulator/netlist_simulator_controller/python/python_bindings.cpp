@@ -158,6 +158,32 @@ namespace hal
                 :param int tmax: Upper limit for time scale in wave viewer.
             )")
 
+            .def("trace_value_if", [](const NetlistSimulatorController& self, const u32 group_id, const Net* trigger_net, const std::vector<Net*>& enable_nets, BooleanFunction enable_condition, u32 start_time, u32 end_time) -> std::vector<u32> {
+                    auto res = self.trace_value_if(group_id, trigger_net, enable_nets, enable_condition, start_time, end_time);
+                    if (res.is_ok())
+                    {
+                        return res.get();
+                    }
+                    else
+                    {
+                        log_error("python_context", "{}", res.get_error().get());
+                        return {};
+                    }
+                }, 
+                py::arg("group_id"), py::arg("trigger_net"), py::arg("enable_nets"), py::arg("enable_condition"), py::arg("start_time"), py::arg("end_time"), R"(
+                Record a trace of the value of the group specified by the given ID.
+                A value is recorded everytime the trigger net toggles and the enable condition evaluates to 'BooleanFunction::Value::ONE'.
+
+                :param int group_id: The ID of the target waveform group.
+                :param hal_py.Net trigger_net: The net that triggers recording a value.
+                :param list[hal_py.Net] enable_nets: All nets that influence the enable condition.
+                :param hal_py.BooleanFunction enable_condition: A Boolean function that enables the recording of a value.
+                :param int start_time: The time at which to start the recording.
+                :param int end_time: The time at which to end the recording.
+                :returns: A vector of recorded values.
+                :rtype: list[int]
+            )")
+
             .def("get_engine_names", &NetlistSimulatorController::get_engine_names, R"(
                 Get a list of registered simulation engines.
 
@@ -310,6 +336,22 @@ namespace hal
                 :param hal_py.Net net: The net waveform is associated with.
                 :rtype: hal_py.WaveData
             )")
+
+            .def("get_waveform_group_by_id", &NetlistSimulatorController::get_waveform_group_by_id, py::arg("id"), R"(
+                Getter for waveform group.
+
+                :param int id: Waveform group id.
+                :rtype: hal_py.WaveDataGroup
+            )")
+
+            .def("rename_waveform", &NetlistSimulatorController::rename_waveform, py::arg("wave"), py::arg("name"), R"(
+                Rename waveform and emit 'renamed' signal.
+
+                :param hal_py.WaveData wave: Waveform to be renamed.
+                :param str name: New name for waveform.
+            )")
+
+
             /*
             .def("set_simulation_state", &NetlistSimulator::set_simulation_state, py::arg("state"), R"(
                 Set the simulator state, i.e., net signals, to a given state.
@@ -456,6 +498,29 @@ namespace hal
                 :returns: Waveform events.
                 :rtype: list[tuple(int,int)]
         )");
+
+        py::class_<WaveDataGroup, WaveData, RawPtrWrapper<WaveDataGroup>> py_wave_data_group(m, "WaveDataGroup", R"(
+                Waveform data group.
+        )");
+
+        py_wave_data_group.def("add_waveform", &WaveDataGroup::add_waveform, py::arg("wave"), R"(
+                Add waveform to existing waveform group.
+
+                :param hal_py.WaveData wave: Waveform to be added.
+        )");
+
+        py_wave_data_group.def("remove_waveform", &WaveDataGroup::remove_waveform, py::arg("wave"), R"(
+                Remove waveform from waveform group.
+
+                :param hal_py.WaveData wave: Waveform to be removed.
+        )");
+
+        py_wave_data_group.def("get_waveforms", &WaveDataGroup::get_waveforms, R"(
+                Get list of waveforms contained by group.
+
+                :rtype: list[hal_py.WaveData]
+        )");
+
 
 #ifndef PYBIND11_MODULE
         return m.ptr();

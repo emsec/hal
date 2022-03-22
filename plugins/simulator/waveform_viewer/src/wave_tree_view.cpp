@@ -158,6 +158,14 @@ namespace hal {
             act = menu->addAction(QString("Remove %1 selected items").arg(mContextIndexList.size()));
             connect(act,&QAction::triggered,this,&WaveTreeView::handleRemoveMulti);
         }
+        if (!mWaveDataList->mDataGroups.isEmpty())
+        {
+            menu->addSeparator();
+            act = menu->addAction("Collapse all groups");
+            connect(act,&QAction::triggered,this,&QTreeView::collapseAll);
+            act = menu->addAction("Expand all groups");
+            connect(act,&QAction::triggered,this,&QTreeView::expandAll);
+        }
         menu->popup(viewport()->mapToGlobal(pos));
     }
 
@@ -242,7 +250,7 @@ namespace hal {
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
         WaveTreeModel::ReorderRequest req(wtm);
         wtm->removeGroup(inx);
-        expandAll();
+//        expandAll();
     }
 
     void WaveTreeView::handleRemoveMulti()
@@ -260,7 +268,7 @@ namespace hal {
                 wtm->removeGroup(inx);
             }
         }
-        expandAll();
+//        expandAll();
     }
 
     void WaveTreeView::handleInsertGroup()
@@ -317,7 +325,6 @@ namespace hal {
         mItemOrder.clear();
         orderRecursion(QModelIndex());
 
-        QSet<QModelIndex>sel = selectionModel()->selectedRows().toSet();
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
         WaveItemHash notPlaced = *mWaveItemHash;
         int nVisible = mItemOrder.size();
@@ -348,7 +355,6 @@ namespace hal {
                     Q_ASSERT(wi);
                     wi->setYposition(i);
                     wi->setWaveVisible(true);
-                    wi->setWaveSelected(sel.contains(currentIndex));
                     auto it = notPlaced.find(wii);
                     if (it != notPlaced.end()) notPlaced.erase(it);
                 }
@@ -367,7 +373,6 @@ namespace hal {
                 Q_ASSERT(wi);
                 wi->setYposition(i);
                 wi->setWaveVisible(true);
-                wi->setWaveSelected(sel.contains(currentIndex));
                 auto it = notPlaced.find(wii);
                 if (it != notPlaced.end()) notPlaced.erase(it);
             }
@@ -377,6 +382,20 @@ namespace hal {
             wi->setWaveVisible(false);
 
         Q_EMIT triggerUpdateWaveItems();
+    }
+
+    void WaveTreeView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
+    {
+        QTreeView::selectionChanged(selected,deselected);
+        WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
+        for (WaveItem* wi : mWaveItemHash->values())
+            wi->setWaveSelected(false);
+        for (const QModelIndex& inx : sortedSelection())
+        {
+            WaveItemIndex wii = wtm->hashIndex(inx);
+            WaveItem* wi = mWaveItemHash->value(wii);
+            if (wi) wi->setWaveSelected(true);
+        }
     }
 
     void WaveTreeView::orderRecursion(const QModelIndex &parent)
