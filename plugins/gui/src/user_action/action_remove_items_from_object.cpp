@@ -29,25 +29,32 @@ namespace hal
         cryptoHash.addData(setToText(mGates).toUtf8());
         cryptoHash.addData("net",3);
         cryptoHash.addData(setToText(mNets).toUtf8());
+        cryptoHash.addData("pin", 3);
+        cryptoHash.addData(setToText(mPins).toUtf8());
     }
 
     void ActionRemoveItemsFromObject::writeToXml(QXmlStreamWriter& xmlOut) const
     {
+        writeParentObjectToXml(xmlOut);
         if (!mModules.isEmpty()) xmlOut.writeTextElement("modules",setToText(mModules));
         if (!mGates.isEmpty())   xmlOut.writeTextElement("gates",setToText(mGates));
         if (!mNets.isEmpty())    xmlOut.writeTextElement("nets",setToText(mNets));
+        if (!mPins.isEmpty()) xmlOut.writeTextElement("pins",setToText(mPins));
     }
 
     void ActionRemoveItemsFromObject::readFromXml(QXmlStreamReader& xmlIn)
     {
         while (xmlIn.readNextStartElement())
         {
+            readParentObjectFromXml(xmlIn);
             if (xmlIn.name()=="modules")
                 mModules = setFromText(xmlIn.readElementText());
             else if (xmlIn.name()=="gates")
                 mGates = setFromText(xmlIn.readElementText());
             else if (xmlIn.name()=="nets")
                 mNets = setFromText(xmlIn.readElementText());
+            else if (xmlIn.name()=="pins")
+                mPins = setFromText(xmlIn.readElementText());
         }
     }
 
@@ -100,6 +107,25 @@ namespace hal
             }
             else
                 return false;
+            break;
+        case UserActionObjectType::PinGroup:
+        {
+            auto mod = gNetlist->get_module_by_id(mParentObject.id());
+            if(mod)
+            {
+                auto pinGroupRes = mod->get_pin_group_by_id(mObject.id());
+                if(pinGroupRes.is_error())
+                    return false;
+
+                for(u32 id : mPins)
+                    if(mod->get_pin_by_id(id).is_error())
+                        return false;
+                for(u32 id : mPins)
+                    mod->remove_pin_from_group(pinGroupRes.get(), mod->get_pin_by_id(id).get());
+            }
+            else
+                return false;
+        }
             break;
         default:
             return false;
