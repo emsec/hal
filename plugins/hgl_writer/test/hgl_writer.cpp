@@ -18,11 +18,26 @@ namespace hal
             {
                 GateType* gt = gl->create_gate_type("gt_combinational", {GateTypeProperty::combinational});
 
-                gt->add_input_pins({"VDD", "GND", "A", "B"});
-                gt->add_output_pins({"B", "O"});
-
-                gt->assign_pin_type("VDD", PinType::power);
-                gt->assign_pin_type("GND", PinType::ground);
+                if (gt->create_pin("VDD", PinDirection::input, PinType::power).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin("GND", PinDirection::input, PinType::ground).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin("A", PinDirection::input).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin("B", PinDirection::inout).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin("VDD", PinDirection::output).is_error())
+                {
+                    return nullptr;
+                }
 
                 gt->add_boolean_function("O", BooleanFunction::from_string("A & B").get());
                 gt->add_boolean_function("O_undefined", BooleanFunction::from_string("!A & B").get());
@@ -32,15 +47,80 @@ namespace hal
             {
                 GateType* gt = gl->create_gate_type("gt_group", {GateTypeProperty::combinational});
 
-                gt->add_input_pins({"VDD", "GND", "A(0)", "A(1)", "B(0)", "B(1)"});
-                gt->add_output_pins({"B(0)", "B(1)", "C(0)", "C(1)", "O"});
+                std::vector<GatePin*> a_pins, b_pins, c_pins;
+                if (gt->create_pin("VDD", PinDirection::input, PinType::power).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin("GND", PinDirection::input, PinType::ground).is_error())
+                {
+                    return nullptr;
+                }
+                if (auto res = gt->create_pin("A(0)", PinDirection::input); res.is_error())
+                {
+                    return nullptr;
+                }
+                else 
+                {
+                    a_pins.push_back(res.get());
+                }
+                if (auto res = gt->create_pin("A(1)", PinDirection::input); res.is_error())
+                {
+                    return nullptr;
+                }
+                else 
+                {
+                    a_pins.push_back(res.get());
+                }
+                if (auto res = gt->create_pin("B(0)", PinDirection::inout); res.is_error())
+                {
+                    return nullptr;
+                }
+                else 
+                {
+                    b_pins.push_back(res.get());
+                }
+                if (auto res = gt->create_pin("B(1)", PinDirection::inout); res.is_error())
+                {
+                    return nullptr;
+                }
+                else 
+                {
+                    b_pins.push_back(res.get());
+                }
+                if (auto res = gt->create_pin("C(0)", PinDirection::output); res.is_error())
+                {
+                    return nullptr;
+                }
+                else 
+                {
+                    c_pins.push_back(res.get());
+                }
+                if (auto res = gt->create_pin("C(1)", PinDirection::output); res.is_error())
+                {
+                    return nullptr;
+                }
+                else 
+                {
+                    c_pins.push_back(res.get());
+                }
+                if (gt->create_pin("O", PinDirection::output).is_error())
+                {
+                    return nullptr;
+                }
 
-                gt->assign_pin_group("A", {{0, "A(0)"}, {1, "A(1)"}});
-                gt->assign_pin_group("B", {{0, "B(0)"}, {1, "B(1)"}});
-                gt->assign_pin_group("C", {{0, "C(0)"}, {1, "C(1)"}});
-
-                gt->assign_pin_type("VDD", PinType::power);
-                gt->assign_pin_type("GND", PinType::ground);
+                if (gt->create_pin_group("A", a_pins, PinDirection::input, PinType::none, false, 0).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin_group("B", b_pins, PinDirection::inout, PinType::none, false, 5).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin_group("C", c_pins, PinDirection::output, PinType::none, true, 0).is_error())
+                {
+                    return nullptr;
+                }
 
                 gt->add_boolean_function("O", BooleanFunction::from_string("A(1) & B(0)").get());
                 gt->add_boolean_function("O_undefined", BooleanFunction::from_string("!A(0) & B(0)").get());
@@ -50,20 +130,35 @@ namespace hal
             {
                 GateType* gt = gl->create_gate_type("gt_lut_asc", {GateTypeProperty::lut, GateTypeProperty::combinational}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", {"INIT"}), true));
 
-                gt->add_input_pins({"I1", "I2"});
-                gt->add_output_pins({"O"});
-
-                gt->assign_pin_type("O", PinType::lut);
+                if (gt->create_pin("I1", PinDirection::input).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin("I2", PinDirection::inout).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin("O", PinDirection::output, PinType::lut).is_error())
+                {
+                    return nullptr;
+                }
             }
 
             {
                 GateType* gt = gl->create_gate_type("gt_lut_desc", {GateTypeProperty::lut, GateTypeProperty::combinational}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", {"INIT"}), false));
 
-
-                gt->add_input_pins({"I1", "I2"});
-                gt->add_output_pins({"O"});
-
-                gt->assign_pin_type("O", PinType::lut);
+                if (gt->create_pin("I1", PinDirection::input).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin("I2", PinDirection::inout).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin("O", PinDirection::output, PinType::lut).is_error())
+                {
+                    return nullptr;
+                }
             }
 
             {
@@ -71,16 +166,34 @@ namespace hal
                 FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::ff; });
                 assert(ff_component != nullptr);
 
-                gt->add_input_pins({"CLK", "D", "EN", "R", "S"});
-                gt->add_output_pins({"Q", "QN"});
-
-                gt->assign_pin_type("CLK", PinType::clock);
-                gt->assign_pin_type("D", PinType::data);
-                gt->assign_pin_type("EN", PinType::enable);
-                gt->assign_pin_type("R", PinType::reset);
-                gt->assign_pin_type("S", PinType::set);
-                gt->assign_pin_type("Q", PinType::state);
-                gt->assign_pin_type("QN", PinType::neg_state);
+                if (gt->create_pin("CLK", PinDirection::input, PinType::clock).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin("D", PinDirection::input, PinType::data).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin("EN", PinDirection::input, PinType::enable).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin("R", PinDirection::input, PinType::reset).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin("S", PinDirection::input, PinType::set).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin("Q", PinDirection::output, PinType::state).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin("QN", PinDirection::output, PinType::neg_state).is_error())
+                {
+                    return nullptr;
+                }
 
                 ff_component->set_async_reset_function(BooleanFunction::Var("R"));
                 ff_component->set_async_set_function(BooleanFunction::Var("S"));
@@ -92,16 +205,34 @@ namespace hal
                 FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::ff; });
                 assert(ff_component != nullptr);
 
-                gt->add_input_pins({"CLK", "D", "EN", "R", "S"});
-                gt->add_output_pins({"Q", "QN"});
-
-                gt->assign_pin_type("CLK", PinType::clock);
-                gt->assign_pin_type("D", PinType::data);
-                gt->assign_pin_type("EN", PinType::enable);
-                gt->assign_pin_type("R", PinType::reset);
-                gt->assign_pin_type("S", PinType::set);
-                gt->assign_pin_type("Q", PinType::state);
-                gt->assign_pin_type("QN", PinType::neg_state);
+                if (gt->create_pin("CLK", PinDirection::input, PinType::clock).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin("D", PinDirection::input, PinType::data).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin("EN", PinDirection::input, PinType::enable).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin("R", PinDirection::input, PinType::reset).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin("S", PinDirection::input, PinType::set).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin("Q", PinDirection::output, PinType::state).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin("QN", PinDirection::output, PinType::neg_state).is_error())
+                {
+                    return nullptr;
+                }
 
                 ff_component->set_async_reset_function(BooleanFunction::Var("R"));
                 ff_component->set_async_set_function(BooleanFunction::Var("S"));
@@ -113,42 +244,125 @@ namespace hal
                 LatchComponent* latch_component = gt->get_component_as<LatchComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::latch; });
                 assert(latch_component != nullptr);
 
-                gt->add_input_pins({"D", "EN", "R", "S"});
-                gt->add_output_pins({"Q", "QN"});
+                if (gt->create_pin("D", PinDirection::input, PinType::data).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin("EN", PinDirection::input, PinType::enable).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin("R", PinDirection::input, PinType::reset).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin("S", PinDirection::input, PinType::set).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin("Q", PinDirection::output, PinType::state).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin("QN", PinDirection::output, PinType::neg_state).is_error())
+                {
+                    return nullptr;
+                }
 
-                gt->assign_pin_type("D", PinType::data);
-                gt->assign_pin_type("EN", PinType::enable);
-                gt->assign_pin_type("R", PinType::reset);
-                gt->assign_pin_type("S", PinType::set);
-                gt->assign_pin_type("Q", PinType::state);
-                gt->assign_pin_type("QN", PinType::neg_state);
-
-                latch_component->set_data_in_function(BooleanFunction::Var("D"));
-                latch_component->set_enable_function(BooleanFunction::Var("EN"));
-                latch_component->set_async_reset_function(BooleanFunction::Var("R"));
-                latch_component->set_async_set_function(BooleanFunction::Var("S"));
                 latch_component->set_async_set_reset_behavior(AsyncSetResetBehavior::L, AsyncSetResetBehavior::H);
             }
 
             {
                 GateType* gt = gl->create_gate_type("gt_ram", {GateTypeProperty::ram});
 
-                gt->add_input_pins({"DI(0)", "DI(1)", "DI(2)", "A(0)", "A(1)", "A(2)"});
-                gt->add_output_pins({"DO(0)", "DO(1)", "DO(2)"});
+                std::vector<GatePin*> din_pins, addr_pins, dout_pins;
+                if (auto res = gt->create_pin("DI(0)", PinDirection::input, PinType::data); res.is_error())
+                {
+                    return nullptr;
+                }
+                else 
+                {
+                    din_pins.push_back(res.get());
+                }
+                if (auto res = gt->create_pin("DI(1)", PinDirection::input, PinType::data); res.is_error())
+                {
+                    return nullptr;
+                }
+                else 
+                {
+                    din_pins.push_back(res.get());
+                }
+                if (auto res = gt->create_pin("DI(2)", PinDirection::input, PinType::data); res.is_error())
+                {
+                    return nullptr;
+                }
+                else 
+                {
+                    din_pins.push_back(res.get());
+                }
 
-                gt->assign_pin_group("DI", {{0, "DI(0)"}, {1, "DI(1)"}, {2, "DI(2)"}});
-                gt->assign_pin_group("A", {{0, "A(0)"}, {1, "A(1)"}, {2, "A(2)"}});
-                gt->assign_pin_group("DO", {{0, "DO(0)"}, {1, "DO(1)"}, {2, "DO(2)"}});
+                if (auto res = gt->create_pin("A(0)", PinDirection::input, PinType::address); res.is_error())
+                {
+                    return nullptr;
+                }
+                else 
+                {
+                    addr_pins.push_back(res.get());
+                }
+                if (auto res = gt->create_pin("A(1)", PinDirection::input, PinType::address); res.is_error())
+                {
+                    return nullptr;
+                }
+                else 
+                {
+                    addr_pins.push_back(res.get());
+                }
+                if (auto res = gt->create_pin("A(2)", PinDirection::input, PinType::address); res.is_error())
+                {
+                    return nullptr;
+                }
+                else 
+                {
+                    addr_pins.push_back(res.get());
+                }
 
-                gt->assign_pin_type("DI(0)", PinType::data);
-                gt->assign_pin_type("DI(1)", PinType::data);
-                gt->assign_pin_type("DI(2)", PinType::data);
-                gt->assign_pin_type("A(0)", PinType::address);
-                gt->assign_pin_type("A(1)", PinType::address);
-                gt->assign_pin_type("A(2)", PinType::address);
-                gt->assign_pin_type("DO(0)", PinType::data);
-                gt->assign_pin_type("DO(1)", PinType::data);
-                gt->assign_pin_type("DO(2)", PinType::data);
+                if (auto res = gt->create_pin("DO(0)", PinDirection::output, PinType::data); res.is_error())
+                {
+                    return nullptr;
+                }
+                else 
+                {
+                    dout_pins.push_back(res.get());
+                }
+                if (auto res = gt->create_pin("DO(1)", PinDirection::output, PinType::data); res.is_error())
+                {
+                    return nullptr;
+                }
+                else 
+                {
+                    dout_pins.push_back(res.get());
+                }
+                if (auto res = gt->create_pin("DO(2)", PinDirection::output, PinType::data); res.is_error())
+                {
+                    return nullptr;
+                }
+                else 
+                {
+                    dout_pins.push_back(res.get());
+                }
+
+                if (gt->create_pin_group("DI", din_pins, PinDirection::input, PinType::data).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin_group("A", addr_pins, PinDirection::input, PinType::address).is_error())
+                {
+                    return nullptr;
+                }
+                if (gt->create_pin_group("DO", dout_pins, PinDirection::output, PinType::data).is_error())
+                {
+                    return nullptr;
+                }
             }
 
             return gl;

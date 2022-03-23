@@ -63,10 +63,10 @@ namespace hal
             }    // namespace
 
             // serialize container data
-            Result<rapidjson::Value> serialize(const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& data, rapidjson::Document::AllocatorType& allocator)
+            rapidjson::Value serialize(const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& data, rapidjson::Document::AllocatorType& allocator)
             {
                 rapidjson::Value val(rapidjson::kArrayType);
-                for (const std::pair<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& it : data)
+                for (const auto& it : data)
                 {
                     rapidjson::Value entry(rapidjson::kArrayType);
                     entry.PushBack(JSON_STR_HELPER(std::get<0>(it.first)), allocator);
@@ -75,7 +75,7 @@ namespace hal
                     entry.PushBack(JSON_STR_HELPER(std::get<1>(it.second)), allocator);
                     val.PushBack(entry, allocator);
                 }
-                return OK(std::move(val));
+                return std::move(val);
             }
 
             Result<std::monostate> deserialize_data(DataContainer* c, const rapidjson::Value& val)
@@ -89,12 +89,12 @@ namespace hal
             }
 
             // serialize endpoint
-            Result<rapidjson::Value> serialize(const Endpoint* ep, rapidjson::Document::AllocatorType& allocator)
+            rapidjson::Value serialize(const Endpoint* ep, rapidjson::Document::AllocatorType& allocator)
             {
                 rapidjson::Value val(rapidjson::kObjectType);
                 val.AddMember("gate_id", ep->get_gate()->get_id(), allocator);
                 val.AddMember("pin_id", ep->get_pin()->get_id(), allocator);
-                return OK(std::move(val));
+                return std::move(val);
             }
 
             Result<std::monostate> deserialize_destination(Netlist* nl, Net* net, const rapidjson::Value& val)
@@ -173,32 +173,20 @@ namespace hal
             }
 
             // serialize gate
-            Result<rapidjson::Value> serialize(const Gate* gate, rapidjson::Document::AllocatorType& allocator)
+            rapidjson::Value serialize(const Gate* gate, rapidjson::Document::AllocatorType& allocator)
             {
                 rapidjson::Value val(rapidjson::kObjectType);
                 val.AddMember("id", gate->get_id(), allocator);
                 val.AddMember("name", gate->get_name(), allocator);
                 val.AddMember("type", gate->get_type()->get_name(), allocator);
-                auto data_val = serialize(gate->get_data_map(), allocator);
-                if (data_val.is_ok())
+                auto data = serialize(gate->get_data_map(), allocator);
+                if (!data.Empty())
                 {
-                    auto data = data_val.get();
-                    if (!data.Empty())
-                    {
-                        val.AddMember("data", data, allocator);
-                    }
-                }
-                else
-                {
-                    return ERR_APPEND(data_val.get_error(), "could not serialize gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": failed to serialize data map");
+                    val.AddMember("data", data, allocator);
                 }
                 {
                     rapidjson::Value functions(rapidjson::kObjectType);
-                    if (auto res = gate->get_boolean_functions(true); res.is_error())
-                    {
-                        return ERR_APPEND(res.get_error(), "could not serialize gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": failed to get Boolean functions");
-                    }
-                    else
+                    if (auto res = gate->get_boolean_functions(true); res.is_ok())
                     {
                         for (const auto& [name, function] : res.get())
                         {
@@ -211,7 +199,7 @@ namespace hal
                         val.AddMember("custom_functions", functions, allocator);
                     }
                 }
-                return OK(std::move(val));
+                return std::move(val);
             }
 
             Result<std::monostate> deserialize_gate(Netlist* nl, const rapidjson::Value& val, const std::unordered_map<std::string, hal::GateType*>& gate_types)
@@ -265,7 +253,7 @@ namespace hal
             }
 
             // serialize net
-            Result<rapidjson::Value> serialize(const Net* net, rapidjson::Document::AllocatorType& allocator)
+            rapidjson::Value serialize(const Net* net, rapidjson::Document::AllocatorType& allocator)
             {
                 rapidjson::Value val(rapidjson::kObjectType);
                 val.AddMember("id", net->get_id(), allocator);
@@ -277,14 +265,7 @@ namespace hal
                     std::sort(sorted.begin(), sorted.end(), [](Endpoint* lhs, Endpoint* rhs) { return lhs->get_gate()->get_id() < rhs->get_gate()->get_id(); });
                     for (const Endpoint* src : sorted)
                     {
-                        if (auto res = serialize(src, allocator); res.is_error())
-                        {
-                            return ERR_APPEND(res.get_error(), "could not serialize net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": failed to serialize source");
-                        }
-                        else
-                        {
-                            srcs.PushBack(res.get(), allocator);
-                        }
+                        srcs.PushBack(serialize(src, allocator), allocator);
                     }
                     if (!srcs.Empty())
                     {
@@ -298,35 +279,20 @@ namespace hal
                     std::sort(sorted.begin(), sorted.end(), [](Endpoint* lhs, Endpoint* rhs) { return lhs->get_gate()->get_id() < rhs->get_gate()->get_id(); });
                     for (const Endpoint* dst : sorted)
                     {
-                        if (auto res = serialize(dst, allocator); res.is_error())
-                        {
-                            return ERR_APPEND(res.get_error(), "could not serialize net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": failed to serialize destination");
-                        }
-                        else
-                        {
-                            dsts.PushBack(res.get(), allocator);
-                        }
+                        dsts.PushBack(serialize(dst, allocator), allocator);
                     }
                     if (!dsts.Empty())
                     {
                         val.AddMember("dsts", dsts, allocator);
                     }
                 }
-                auto data_val = serialize(net->get_data_map(), allocator);
-                if (data_val.is_ok())
+                auto data = serialize(net->get_data_map(), allocator);
+                if (!data.Empty())
                 {
-                    auto data = data_val.get();
-                    if (!data.Empty())
-                    {
-                        val.AddMember("data", data, allocator);
-                    }
-                }
-                else
-                {
-                    return ERR_APPEND(data_val.get_error(), "could not serialize net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": failed to serialize data map");
+                    val.AddMember("data", data, allocator);
                 }
 
-                return OK(std::move(val));
+                return std::move(val);
             }
 
             Result<std::monostate> deserialize_net(Netlist* nl, const rapidjson::Value& val)
@@ -373,7 +339,7 @@ namespace hal
             }
 
             // serialize module
-            Result<rapidjson::Value> serialize(const Module* module, rapidjson::Document::AllocatorType& allocator)
+            rapidjson::Value serialize(const Module* module, rapidjson::Document::AllocatorType& allocator)
             {
                 rapidjson::Value val(rapidjson::kObjectType);
                 val.AddMember("id", module->get_id(), allocator);
@@ -431,20 +397,12 @@ namespace hal
                     }
                 }
 
-                auto data_val = serialize(module->get_data_map(), allocator);
-                if (data_val.is_ok())
+                auto data = serialize(module->get_data_map(), allocator);
+                if (!data.Empty())
                 {
-                    auto data = data_val.get();
-                    if (!data.Empty())
-                    {
-                        val.AddMember("data", data, allocator);
-                    }
+                    val.AddMember("data", data, allocator);
                 }
-                else
-                {
-                    return ERR_APPEND(data_val.get_error(), "could not serialize module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()) + ": failed to serialize data map");
-                }
-                return OK(std::move(val));
+                return std::move(val);
             }
 
             Result<std::monostate> deserialize_module(Netlist* nl, const rapidjson::Value& val, std::unordered_map<Module*, std::vector<PinGroupInformation>>& pin_group_cache)
@@ -580,7 +538,7 @@ namespace hal
             }
 
             // serialize grouping
-            Result<rapidjson::Value> serialize(const Grouping* grouping, rapidjson::Document::AllocatorType& allocator)
+            rapidjson::Value serialize(const Grouping* grouping, rapidjson::Document::AllocatorType& allocator)
             {
                 rapidjson::Value val(rapidjson::kObjectType);
                 val.AddMember("id", grouping->get_id(), allocator);
@@ -625,7 +583,7 @@ namespace hal
                     }
                 }
 
-                return OK(std::move(val));
+                return std::move(val);
             }
 
             Result<std::monostate> deserialize_grouping(Netlist* nl, const rapidjson::Value& val)
@@ -696,7 +654,7 @@ namespace hal
             }
 
             // serialize netlist
-            Result<std::monostate> serialize(const Netlist* nl, rapidjson::Document& document)
+            void serialize(const Netlist* nl, rapidjson::Document& document)
             {
                 rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
                 rapidjson::Value root(rapidjson::kObjectType);
@@ -715,14 +673,7 @@ namespace hal
                     std::sort(sorted.begin(), sorted.end(), [](Gate* lhs, Gate* rhs) { return lhs->get_id() < rhs->get_id(); });
                     for (const Gate* gate : sorted)
                     {
-                        if (auto res = serialize(gate, allocator); res.is_error())
-                        {
-                            return ERR_APPEND(res.get_error(), "could not serialize netlist with ID " + std::to_string(nl->get_id()) + ": failed to serialize gate");
-                        }
-                        else
-                        {
-                            gates.PushBack(res.get(), allocator);
-                        }
+                        gates.PushBack(serialize(gate, allocator), allocator);
 
                         if (nl->is_gnd_gate(gate))
                         {
@@ -745,14 +696,7 @@ namespace hal
                     std::sort(sorted.begin(), sorted.end(), [](Net* lhs, Net* rhs) { return lhs->get_id() < rhs->get_id(); });
                     for (const Net* net : sorted)
                     {
-                        if (auto res = serialize(net, allocator); res.is_error())
-                        {
-                            return ERR_APPEND(res.get_error(), "could not serialize netlist with ID " + std::to_string(nl->get_id()) + ": failed to serialize net");
-                        }
-                        else
-                        {
-                            nets.PushBack(res.get(), allocator);
-                        }
+                        nets.PushBack(serialize(net, allocator), allocator);
 
                         if (nl->is_global_input_net(net))
                         {
@@ -778,14 +722,7 @@ namespace hal
                         const Module* module = q.front();
                         q.pop();
 
-                        if (auto res = serialize(module, allocator); res.is_error())
-                        {
-                            return ERR_APPEND(res.get_error(), "could not serialize netlist with ID " + std::to_string(nl->get_id()) + ": failed to serialize module");
-                        }
-                        else
-                        {
-                            modules.PushBack(res.get(), allocator);
-                        }
+                        modules.PushBack(serialize(module, allocator), allocator);
 
                         for (const Module* sm : module->get_submodules())
                         {
@@ -801,21 +738,12 @@ namespace hal
                     std::sort(sorted.begin(), sorted.end(), [](Grouping* lhs, Grouping* rhs) { return lhs->get_id() < rhs->get_id(); });
                     for (const Grouping* grouping : sorted)
                     {
-                        if (auto res = serialize(grouping, allocator); res.is_error())
-                        {
-                            return ERR_APPEND(res.get_error(), "could not serialize netlist with ID " + std::to_string(nl->get_id()) + ": failed to serialize grouping");
-                        }
-                        else
-                        {
-                            groupings.PushBack(res.get(), allocator);
-                        }
+                        groupings.PushBack(serialize(grouping, allocator), allocator);
                     }
                     root.AddMember("groupings", groupings, allocator);
                 }
 
                 document.AddMember("netlist", root, document.GetAllocator());
-
-                return OK({});
             }
 
             Result<std::unique_ptr<Netlist>> deserialize(const rapidjson::Document& document)
@@ -1004,11 +932,7 @@ namespace hal
 
             document.AddMember("serialization_format_version", SERIALIZATION_FORMAT_VERSION, document.GetAllocator());
 
-            if (auto res = serialize(nl, document); res.is_error())
-            {
-                log_error("netlist_persistent", "error encountered during netlist serialization:\n{}", res.get_error().get());
-                return false;
-            }
+            serialize(nl, document);
 
             if (!hal_file_manager::serialize(hal_file, nl, document))
             {

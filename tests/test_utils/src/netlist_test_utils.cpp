@@ -64,6 +64,7 @@ namespace hal
                     }
                 }
             }
+
             return OK(n);
         }
 
@@ -103,6 +104,7 @@ namespace hal
                     }
                 }
             }
+
             return OK(n);
         }
 
@@ -142,6 +144,7 @@ namespace hal
                     }
                 }
             }
+
             return OK(n);
         }
 
@@ -162,6 +165,8 @@ namespace hal
                     return ERR_APPEND(res.get_error(), "could not clear connections: failed to remove source");
                 }
             }
+
+            return OK({});
         }
 
         Result<std::monostate> clear_connections(Net* net)
@@ -181,6 +186,8 @@ namespace hal
                     return ERR_APPEND(res.get_error(), "could not clear connections: failed to remove destination");
                 }
             }
+
+            return OK({});
         }
     }    // namespace test_utils
 
@@ -242,11 +249,11 @@ namespace hal
         if (g != nullptr)
         {
             GatePin* pin;
-            if (const auto res = g->get_type()->get_pin_by_name(pin_name); res.is_error()) 
+            if (const auto res = g->get_type()->get_pin_by_name(pin_name); res.is_error())
             {
                 return nullptr;
-            } 
-            else 
+            }
+            else
             {
                 pin = res.get();
             }
