@@ -7,8 +7,6 @@
 #include "gui/user_action/user_action_compound.h"
 #include "hal_core/netlist/grouping.h"
 
-#include <QDebug>
-
 namespace hal
 {
     ActionAddItemsToObjectFactory::ActionAddItemsToObjectFactory() : UserActionFactory("AddItemsToObject")
@@ -36,10 +34,13 @@ namespace hal
         cryptoHash.addData(setToText(mGates).toUtf8());
         cryptoHash.addData("net", 3);
         cryptoHash.addData(setToText(mNets).toUtf8());
+        cryptoHash.addData("pin", 3);
+        cryptoHash.addData(setToText(mPins).toUtf8());
     }
 
     void ActionAddItemsToObject::writeToXml(QXmlStreamWriter& xmlOut) const
     {
+        writeParentObjectToXml(xmlOut);
         if (mPlacementHint.mode() != PlacementHint::Standard)
         {
             UserActionObjectType::ObjectType tp = UserActionObjectType::fromNodeType(mPlacementHint.preferredOrigin().type());
@@ -55,12 +56,15 @@ namespace hal
             xmlOut.writeTextElement("gates", setToText(mGates));
         if (!mNets.isEmpty())
             xmlOut.writeTextElement("nets", setToText(mNets));
+        if (!mPins.isEmpty())
+            xmlOut.writeTextElement("pins", setToText(mPins));
     }
 
     void ActionAddItemsToObject::readFromXml(QXmlStreamReader& xmlIn)
     {
         while (xmlIn.readNextStartElement())
         {
+            readParentObjectFromXml(xmlIn);
             if (xmlIn.name() == "placement")
             {
                 u32 id                                = xmlIn.attributes().value("id").toInt();
@@ -75,6 +79,8 @@ namespace hal
                 mGates = setFromText(xmlIn.readElementText());
             else if (xmlIn.name() == "nets")
                 mNets = setFromText(xmlIn.readElementText());
+            else if (xmlIn.name() == "pins")
+                mPins = setFromText(xmlIn.readElementText());
         }
     }
 
@@ -165,6 +171,22 @@ namespace hal
                 }
                 else
                     return false;
+                break;
+            case UserActionObjectType::PinGroup:
+            {
+                auto mod = gNetlist->get_module_by_id(mParentObject.id());
+                if(mod)
+                {
+                    auto pinGrpRes = mod->get_pin_group_by_id(mObject.id());
+                    if(pinGrpRes.is_error())
+                        return false;
+                    for(auto id : mPins)
+                        if(mod->get_pin_by_id(id).is_error())
+                            return false;
+                    for(auto id : mPins)
+                        mod->assign_pin_to_group(pinGrpRes.get(), mod->get_pin_by_id(id).get());//default delete = true
+                }
+            }
                 break;
             default:
                 return false;

@@ -41,6 +41,7 @@ namespace hal
         QSet<u32> mModules;
         QSet<u32> mGates;
         QSet<u32> mNets;
+        QSet<u32> mPins;
         PlacementHint mPlacementHint;
         Node mPlacementOrigin;
     public:
@@ -50,11 +51,13 @@ namespace hal
          * @param mods - The ids of the modules to add
          * @param gats - The ids of the gates to add
          * @param nets - The ids of the nets to add
+         * @param pins - The ids of the pins to add
          */
         ActionAddItemsToObject(const QSet<u32>& mods = QSet<u32>(),
                                const QSet<u32>& gats = QSet<u32>(),
-                               const QSet<u32>& nets = QSet<u32>())
-            : mModules(mods), mGates(gats), mNets(nets),
+                               const QSet<u32>& nets = QSet<u32>(),
+                               const QSet<u32>& pins = QSet<u32>())
+            : mModules(mods), mGates(gats), mNets(nets), mPins(pins),
               mPlacementHint(PlacementHint::Standard)
         {;}
         bool exec() override;
