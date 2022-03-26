@@ -39,11 +39,17 @@ namespace hal
             if(mod && mod->get_pin_group_by_id(mObject.id()).is_ok())
             {
                 auto pinGroup = mod->get_pin_group_by_id(mObject.id()).get();
-                QSet<u32> pins;//make this to a list to preserve order? (used for undo action)
+                QSet<u32> pins;//make this a list to preserve order? (->important for additemstoobject)
                 for(const auto &pin : pinGroup->get_pins())
                     pins.insert(pin->get_id());
+                UserActionCompound* act = new UserActionCompound;
+                act->setUseCreatedObject();
+                ActionCreateObject* actCreate = new ActionCreateObject(UserActionObjectType::PinGroup, QString::fromStdString(pinGroup->get_name()));
+                actCreate->setParentObject(mParentObject);
+                act->addAction(actCreate);
+                act->addAction(new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), pins));//setting of obj/parentobj handled in compound
+                mUndoAction = act;
                 auto res = mod->delete_pin_group(pinGroup);
-                //todo: implement undo action (compound with create+add?)
             }
             else
                 return false;
