@@ -549,7 +549,7 @@ namespace hal
         mWaveDataList->setUserTimeframe(tmin, tmax);
     }
 
-    Result<std::vector<u32>> NetlistSimulatorController::trace_value_if(const u32 group_id, const Net* trigger_net, const std::vector<Net*>& enable_nets, BooleanFunction enable_condition, u32 start_time, u32 end_time) const
+    Result<std::vector<u32>> NetlistSimulatorController::trace_value_if(const u32 group_id, const Net* trigger_net, const std::vector<Net*>& enable_nets, const BooleanFunction& enable_condition, u64 start_time, u64 end_time) const
     {
         const WaveDataGroup* const group = mWaveDataList->mDataGroups.value(group_id);
         QList<const WaveData*> partialList = mWaveDataList->partialList(start_time, end_time, {trigger_net});
