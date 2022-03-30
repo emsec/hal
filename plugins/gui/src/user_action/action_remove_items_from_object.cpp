@@ -3,6 +3,8 @@
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/gui_globals.h"
 #include "hal_core/netlist/grouping.h"
+#include "gui/user_action/user_action_compound.h"
+#include "gui/user_action/action_create_object.h"
 
 namespace hal
 {
@@ -121,7 +123,19 @@ namespace hal
                     if(mod->get_pin_by_id(id).is_error())
                         return false;
                 for(u32 id : mPins)
-                    mod->remove_pin_from_group(pinGroupRes.get(), mod->get_pin_by_id(id).get());
+                    mod->remove_pin_from_group(pinGroupRes.get(), mod->get_pin_by_id(id).get(), false);
+
+                if(pinGroupRes.get()->empty())//delete group and undo=create+add
+                {
+                    UserActionCompound* act = new UserActionCompound;
+                    act->setUseCreatedObject();
+                    ActionCreateObject* actCreate = new ActionCreateObject(UserActionObjectType::PinGroup, QString::fromStdString(pinGroupRes.get()->get_name()));
+                    actCreate->setParentObject(mParentObject);
+                    act->addAction(actCreate);
+                    act->addAction(new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), mPins));
+                    mUndoAction = act;
+                    mod->delete_pin_group(pinGroupRes.get());
+                }
             }
             else
                 return false;
@@ -133,8 +147,9 @@ namespace hal
 
         if (!mUndoAction)
         {
-            mUndoAction = new ActionAddItemsToObject(mModules,mGates,mNets);
+            mUndoAction = new ActionAddItemsToObject(mModules,mGates,mNets,mPins);
             mUndoAction->setObject(mObject);
+            mUndoAction->setParentObject(mParentObject);
         }
         return UserAction::exec();
     }
