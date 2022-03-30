@@ -103,7 +103,7 @@ namespace hal
     class SaleaeInputFile : public std::ifstream
     {
         SaleaeHeader mHeader;
-        uint64_t mNumRead;
+        uint64_t mReadPointer;
         SaleaeStatus::ErrorCode mStatus;
 
         std::function<uint64_t(bool*)> mReader;
@@ -111,11 +111,12 @@ namespace hal
         void seekTransition(uint64_t pos) { seekg(pos*sizeof(uint64_t) + 44); }
     public:
         SaleaeInputFile(const std::string& filename);
-        int startValue() const { return mHeader.value(); }
 
-        SaleaeDataTuple nextValue(int lastValue);
+        SaleaeDataTuple get_next_value();
         std::string get_last_error() const;
-        SaleaeDataBuffer* get_buffered_data();
+        SaleaeDataBuffer* get_buffered_data(uint64_t nread);
+        int64_t get_file_position(double t, bool successor=false);
+        void skip_transitions(int64_t delta);
         int get_int_value(double t);
 
         const SaleaeHeader* header() const { return &mHeader; }

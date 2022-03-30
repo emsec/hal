@@ -45,7 +45,7 @@ namespace hal
         wff.callback(wff.obj,it->first,wff.value);
         if (wff.file->good())
         {
-            SaleaeDataTuple sdt = wff.file->nextValue(wff.value);
+            SaleaeDataTuple sdt = wff.file->get_next_value();
             if (!sdt.readError())
             {
                 wff.value = sdt.mValue;
@@ -68,7 +68,7 @@ namespace hal
     bool SaleaeParser::register_callback(const Net *net, std::function<void(void*,uint64_t, int)> callback, void *obj)
     {
 //        std::cerr << "SaleaeParser::register_callback <" << net->get_name() << "> " << std::hex << (uintptr_t) obj << std::endl;
-        std::string path = mSaleaeDirectory.get_datafile(net->get_name(),net->get_id());
+        std::string path = mSaleaeDirectory.get_datafile_path(net->get_name(),net->get_id());
         if (path.empty()) return false;
         SaleaeInputFile* datafile = new SaleaeInputFile(path);
         if (!datafile->good())
@@ -77,7 +77,7 @@ namespace hal
             delete datafile;
             return false;
         }
-        mNextValueMap.insert(std::pair<uint64_t,DataFileHandle>(0,{callback, datafile, datafile->startValue(), obj}));
+        mNextValueMap.insert(std::pair<uint64_t,DataFileHandle>(0,{callback, datafile, datafile->get_next_value().mValue, obj}));
         return true;
     }
 }

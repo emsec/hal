@@ -38,6 +38,8 @@ namespace hal {
         void setSimulateMaxTime(u64 t) { mSimulateMaxTime = t; }
     };
 
+    class WaveDataList;
+
     class WaveData
     {
     public:
@@ -54,8 +56,8 @@ namespace hal {
     protected:
         int mValueBase;
         QMap<u64,int> mData;
-        QString mFileName;
         bool mDirty;
+        WaveDataList* mWaveDataList;
 
         QMap<u64,int>::const_iterator timeIterator(double t) const;
         void resetWave();
@@ -74,29 +76,28 @@ namespace hal {
         int     fileIndex()                 const { return mFileIndex; }
         u64     fileSize()                  const { return mFileSize; }
         int     valueBase()                 const { return mValueBase; }
+        std::string fileName()              const;
         void setId(u32 id_);
         bool rename(const QString& nam);
         void setBits(int bts);
         void setDirty(bool dty)                     { mDirty = dty; }
-        void setSaleaeFile(int saleaIndex, const QString& filename);
+        void setFileIndex(int saleaIndex)           { mFileIndex = saleaIndex; }
         void setFileSize(u64 siz);
         void setTimeframeSize(u64 siz)              { mTimeframeSize = siz; }
+        void setWaveDataList(WaveDataList* wdList)  { mWaveDataList = wdList; }
         virtual LoadPolicy loadPolicy() const;
 
-        void loadSaleae(SaleaeInputFile& sif, const WaveDataTimeframe& tframe = WaveDataTimeframe());
-        bool loadSaleae(const SaleaeDirectory& sd, const WaveDataTimeframe& tframe);
-        void saveSaleae(SaleaeDirectory& sd);
+        bool loadSaleae(const WaveDataTimeframe& tframe = WaveDataTimeframe());
+        void saveSaleae();
         void setData(const QMap<u64,int>& dat);
         int  intValue(double t) const;
         int get_value_at(u64 t) const;
-        std::vector<std::pair<u64,int>> get_events() const;
+        std::string get_name() const { return mName.toStdString(); }
+        std::vector<std::pair<u64,int>> get_events(u64 t0 = 0) const;
         u64  maxTime() const;
         void clear() { mData.clear(); }
         void insert(u64 t, int val) { mData.insert(t,val); }
-        void setStartvalue(int val);
         void insertBooleanValueWithoutSync(u64 t, BooleanFunction::Value bval);
-        void eraseAtTime(u64 t);
-        bool insertToggleTime(u64 t);
         QString strValue(int val) const;
         QString strValue(double t) const;
         QString strValue(const QMap<u64,int>::const_iterator& it) const;
@@ -127,6 +128,7 @@ namespace hal {
         QMap<u32,int>     mIds;
         WaveDataTimeframe mTimeframe;
         SaleaeDirectory   mSaleaeDirectory;
+        u32               mMaxGroupId;
         void testDoubleCount();
         void restoreIndex();
         void updateMaxTime();
@@ -141,11 +143,13 @@ namespace hal {
         /**
          * Map of groups indexed by non-zero group id
          */
+
         QMap<u32,WaveDataGroup*> mDataGroups;
         WaveDataList(const QString& sdFilename, QObject* parent = nullptr);
         ~WaveDataList();
 
         u32  createGroup(QString grpName);
+        u32  nextGroupId() { return ++mMaxGroupId; }
         void addWavesToGroup(u32 grpId, const QVector<WaveData*>& wds);
         void removeGroup(u32 grpId);
 
@@ -157,7 +161,6 @@ namespace hal {
         void updateClocks();
         void updateWaveData(int inx);
 
-        void setSaleaeFile(WaveData* wd, int saleaIndex) const;
         WaveData* waveDataByNet(const Net* n);
         int waveIndexByNetId(u32 id) const { return mIds.value(id,-1); }
         void triggerAddToView(u32 id) const;
@@ -209,10 +212,8 @@ namespace hal {
 
     class WaveDataGroup : public WaveData
     {
-        static u32 sMaxGroupId;
 
     protected:
-        WaveDataList* mWaveDataList;
         QList<WaveData*> mGroupList;
 
         QHash<WaveDataGroupIndex,int> mIndex;

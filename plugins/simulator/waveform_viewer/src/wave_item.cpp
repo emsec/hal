@@ -242,9 +242,9 @@ namespace hal {
             Q_EMIT doneLoading();
     }
 
-    void WaveItem::loadSaleae(SaleaeInputFile& sif)
+    void WaveItem::loadSaleae()
     {
-        mData->loadSaleae(sif);
+        mData->loadSaleae();
     }
 
 

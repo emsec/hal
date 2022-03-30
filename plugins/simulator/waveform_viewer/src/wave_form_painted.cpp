@@ -153,6 +153,7 @@ namespace hal {
             WaveItem* wi = hash->value(wii);
             if (!wi || wi->mPainted.isEmpty()) return false;
 
+            QMutexLocker lock(&wi->mMutex);
             // validity must be the same for all child elements
             if (firstWave)
             {
@@ -164,7 +165,8 @@ namespace hal {
             {
                 float testXmax = wi->mPainted.x1();
                 if (testXmax > xmax) xmax = testXmax;
-                if (mValidity != wi->mPainted.validity()) return false;
+                if (mValidity != wi->mPainted.validity())
+                    return false;
             }
             QMap<float,int> pValues = wi->mPainted.primitiveValues();
             u32 mask = 1<<nbits;

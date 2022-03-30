@@ -253,7 +253,7 @@ namespace hal {
                     {
                         iwave = mWaveDataList->size();
                         WaveData* wd = new WaveData(it.key().id(),it.key().name());
-                        if (wd->loadSaleae(*sd, mWaveDataList->timeFrame()))
+                        if (wd->loadSaleae(mWaveDataList->timeFrame()))
                         {
                             mWaveDataList->add(wd,false);
                             wavesToAdd.append(wd);

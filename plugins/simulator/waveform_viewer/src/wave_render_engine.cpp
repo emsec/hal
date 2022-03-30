@@ -70,7 +70,7 @@ namespace hal {
                     try {
 
                         if ((u64)wd->data().size() < wd->fileSize())
-                            mItem->loadSaleae(sif);
+                            mItem->loadSaleae();
                         mItem->mPainted.clearPrimitives();
                         if (mItem->isAborted()) return;
                         WaveDataProviderMap wdpMap(wd->data());
@@ -106,7 +106,6 @@ namespace hal {
             }
         }
     }
-
     //------------------------
 
     void WaveLoaderBackbone::run()
@@ -142,7 +141,7 @@ namespace hal {
                         {
                             try {
                                 if ((u64)wd->data().size() < wd->fileSize())
-                                    wree->loadSaleae(sif);
+                                    wree->loadSaleae();
                                 wree->mPainted.clearPrimitives();
                                 WaveDataProviderMap wdpMap(wd->data());
                                 wdpMap.setGroup(wree->isGroup(),wree->wavedata()->bits(),wree->wavedata()->valueBase());

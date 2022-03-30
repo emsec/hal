@@ -23,5 +23,8 @@ namespace hal {
 
         int maxSizeLoadable() const;
         void setMaxSizeLoadable(int msl);
+
+        int maxSizeEditor() const;
+        void setMaxSizeEditor(int mse);
     };
 }

@@ -1,4 +1,7 @@
 #include "waveform_viewer/wave_edit_dialog.h"
+#include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
+#include "netlist_simulator_controller/simulation_settings.h"
+#include "netlist_simulator_controller/saleae_file.h"
 #include <QTableView>
 #include <QGridLayout>
 #include <QDialogButtonBox>
@@ -10,12 +13,12 @@
 
 namespace hal {
 
-    WaveEditDialog::WaveEditDialog(const WaveData *wd, QWidget *parent)
+    WaveEditDialog::WaveEditDialog(WaveData *wd, double tCursor, QWidget *parent)
         : QDialog(parent)
     {
         QGridLayout* layout = new QGridLayout(this);
         QTableView* tv = new QTableView(this);
-        mWaveModel = new WaveEditTable(wd,tv);
+        mWaveModel = new WaveEditTable(wd,tCursor,tv);
         if (wd->bits() <= 1)
             tv->setItemDelegateForColumn(2, new WaveDeleteDelegate(mWaveModel));
         tv->setModel(mWaveModel);
@@ -38,7 +41,7 @@ namespace hal {
 
     const QMap<u64,int>& WaveEditDialog::dataMap() const
     {
-        return mWaveModel->mWaveData.data();
+        return mWaveModel->mEditData;
     }
 
     //-------------------------------------------
@@ -84,16 +87,61 @@ namespace hal {
     }
 
     //-------------------------------------------
-    WaveEditTable::WaveEditTable(const WaveData* wd, QObject* parent)
-        : QAbstractTableModel(parent), mWaveData(*wd)
+    WaveEditTable::WaveEditTable(WaveData *wd, double tCursor, QObject* parent)
+        : QAbstractTableModel(parent), mWaveDataInput(wd)
     {
-        if (mWaveData.data().isEmpty()) mWaveData.insert(0,0);
+        uint64_t wsize = mWaveDataInput->fileSize();
+        if (!wsize)
+        {
+            if (mWaveDataInput->data().isEmpty())
+                mEditData.insert(0,0);
+            else
+            {
+                mEditData = mWaveDataInput->data();
+                truncateData(tCursor);
+            }
+        }
+        else if (wsize <= (uint64_t) NetlistSimulatorControllerPlugin::sSimulationSettings->maxSizeLoadable())
+        {
+            if (mWaveDataInput->data().size() < (int) wsize)
+                mWaveDataInput->loadSaleae();
+            mEditData = mWaveDataInput->data();
+            truncateData(tCursor);
+        }
+        else
+        {
+            int n = NetlistSimulatorControllerPlugin::sSimulationSettings->maxSizeEditor();
+            SaleaeInputFile sif(mWaveDataInput->fileName());
+            sif.get_file_position(tCursor);
+            sif.skip_transitions(-n/2);
+            SaleaeDataBuffer* sdb = sif.get_buffered_data(n);
+            for (u64 i=0; i<sdb->mCount; i++)
+            {
+               mEditData.insert(sdb->mTimeArray[i],sdb->mValueArray[i]);
+            }
+            delete sdb;
+        }
+    }
+
+    void WaveEditTable::truncateData(double tCursor)
+    {
+        int n =  NetlistSimulatorControllerPlugin::sSimulationSettings->maxSizeEditor();
+        if (mEditData.size() <= n) return; // nothing to do
+        auto it = mEditData.upperBound(tCursor);
+        for (int i=0; i<n/2; i++)
+            if (it != mEditData.begin())
+                --it;
+        for (auto itDel = mEditData.begin(); itDel != it; itDel = mEditData.erase(itDel)) {;}
+        for (int i=0; i<n; i++)
+            if (it != mEditData.end())
+                ++it;
+        for (auto itDel = it; itDel != mEditData.end(); itDel = mEditData.erase(itDel)) {;}
     }
 
     int WaveEditTable::rowCount(const QModelIndex &parent) const
     {
         Q_UNUSED(parent);
-        return mWaveData.data().size() + 1;
+        return mEditData.size() + 1;
     }
 
     int WaveEditTable::columnCount(const QModelIndex &parent) const
@@ -105,14 +153,14 @@ namespace hal {
     QVariant WaveEditTable::data(const QModelIndex &index, int role) const
     {
         if (role != Qt::DisplayRole) return QVariant();
-        if (index.row() >= mWaveData.data().size()) return QString();
-        auto it = mWaveData.data().constBegin() + index.row();
-        if (it != mWaveData.data().constEnd())
+        if (index.row() >= mEditData.size()) return QString();
+        auto it = mEditData.constBegin() + index.row();
+        if (it != mEditData.constEnd())
         {
             switch (index.column())
             {
             case 0: return QVariant::fromValue(it.key());
-            case 1: return mWaveData.strValue(it);
+            case 1: return mWaveDataInput->strValue(it);
             case 2: return QString();
             default: return QVariant();
             }
@@ -120,24 +168,49 @@ namespace hal {
         return QString();
     }
 
+    void WaveEditTable::recalcTransitions()
+    {
+        int val = 0; // determine start value on begin
+        for (auto it = mEditData.begin(); it != mEditData.end(); ++it)
+        {
+            if (it == mEditData.begin())
+                val = it.value();
+            else
+            {
+                val = val ? 0 : 1;
+                *it = val;
+            }
+        }
+    }
+
     bool WaveEditTable::setData(const QModelIndex &index, const QVariant &value, int role)
     {
         if (role != Qt::EditRole) return false;
         bool numberOk;
         int iValue = value.toInt(&numberOk);
-        if (!numberOk) return false;
-
-        if (!index.row() && index.column()==1)
-        {
-            if (iValue < 0 || iValue > 1 || iValue == mWaveData.data().value(0)) return false;
-            mWaveData.setStartvalue(iValue);
-            Q_EMIT(dataChanged(this->index(0,1),this->index(mWaveData.data().size(),1)));
-            return true;
-        }
-        if (index.column() || mWaveData.data().contains(iValue)) return false;
+        if (!numberOk || iValue < 0) return false;
 
         beginResetModel();
-        mWaveData.insertToggleTime(iValue);
+        if (!index.row() && index.column()==1)
+        {
+            if (iValue <= 1)
+            {
+                if (mEditData.isEmpty())
+                    mEditData.insert(0,iValue);
+                else
+                    *(mEditData.begin()) = iValue;
+            }
+        }
+        else
+        {
+            if (index.row() < mEditData.size())
+            {
+                auto it = mEditData.begin() + index.row();
+                mEditData.erase(it);
+            }
+            mEditData[iValue] = 0;
+        }
+        recalcTransitions();
         endResetModel();
         return true;
     }
@@ -156,8 +229,12 @@ namespace hal {
 
     Qt::ItemFlags WaveEditTable::flags(const QModelIndex &index) const
     {
-        if (mWaveData.bits() > 1) return Qt::NoItemFlags;
-        if (index.column()==1) return Qt::NoItemFlags;
+        if (mWaveDataInput->bits() > 1) return Qt::NoItemFlags;
+        if (index.column()==1)
+        {
+            if (index.row()) return Qt::NoItemFlags;
+            return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled;
+        }
         if (index.column()==2 && (!index.row() || index.row() >= rowCount() - 1)) return Qt::NoItemFlags;
         return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled;
     }
@@ -168,7 +245,9 @@ namespace hal {
         if (!key) return;
 
         beginResetModel();
-        mWaveData.eraseAtTime(key);
+        auto it = mEditData.begin() + irow;
+        mEditData.erase(it);
+        recalcTransitions();
         endResetModel();
     }
 }

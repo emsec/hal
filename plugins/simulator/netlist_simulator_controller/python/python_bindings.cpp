@@ -470,7 +470,7 @@ namespace hal
                 Waveform data.
         )");
 
-        py_wave_data.def("get_name", &WaveData::name, R"(
+        py_wave_data.def("get_name", &WaveData::get_name, R"(
                 Get the name of waveform net.
 
                 :returns: The name of the waveform.
@@ -492,9 +492,10 @@ namespace hal
                 :rtype: int
         )");
 
-        py_wave_data.def("get_events", &WaveData::get_events, R"(
-                Get all waveform events.
+        py_wave_data.def("get_events", &WaveData::get_events, py::arg("t0")=0, R"(
+                Get up to maximum loadable waveform events.
 
+                :param int t0: Optional start time, only events t>=t0 will be returned.
                 :returns: Waveform events.
                 :rtype: list[tuple(int,int)]
         )");

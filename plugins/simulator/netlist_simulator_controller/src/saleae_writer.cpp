@@ -47,7 +47,7 @@ namespace hal
         if ( (fileIndex = mSaleaeDirectory.get_datafile_index(name,id)) >= 0)
         {
             // replace existing
-            path = mSaleaeDirectory.get_datafile(name, id);
+            path = mSaleaeDirectory.get_datafile_path(name, id);
             auto it = mDataFiles.find(fileIndex);
             if (it != mDataFiles.end())
             {

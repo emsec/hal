@@ -130,26 +130,10 @@ namespace hal {
         mDirty = true;
     }
 
-    void WaveData::setStartvalue(int val)
-    {
-        for (auto it=mData.begin(); it!=mData.end(); ++it)
-        {
-            *it = val;
-            val = val ? 0 : 1;
-        }
-    }
-
     int WaveData::get_value_at(u64 t) const
     {
         return intValue(t);
     }
-
-    void WaveData::setSaleaeFile(int saleaIndex, const QString &filename)
-    {
-        mFileIndex = saleaIndex;
-        mFileName = filename;
-    }
-
 
     bool WaveData::isEqual(const WaveData& other, int tolerance) const
     {
@@ -164,93 +148,94 @@ namespace hal {
         return true;
     }
 
-    std::vector<std::pair<u64,int>> WaveData::get_events() const
+    std::vector<std::pair<u64,int>> WaveData::get_events(u64 t0) const
     {
         std::vector<std::pair<u64,int>> retval;
-        for (auto it = mData.constBegin(); it != mData.constEnd(); ++it)
-            retval.push_back(std::make_pair(it.key(),it.value()));
+        if (loadPolicy() == LoadAllData)
+        {
+            for (auto it = mData.lowerBound(t0); it != mData.constEnd(); ++it)
+                retval.push_back(std::make_pair(it.key(),it.value()));
+        }
+        else
+        {
+            if (mWaveDataList && mFileIndex>=0)
+            {
+                std::filesystem::path path = mWaveDataList->saleaeDirectory().get_datafile_path(mFileIndex);
+                if (!path.empty())
+                {
+                    SaleaeInputFile sif(path);
+                    if (t0)
+                    {
+                        if (sif.get_file_position(t0,true) < 0)
+                            return retval;
+                    }
+                    SaleaeDataBuffer* sdb = sif.get_buffered_data(NetlistSimulatorControllerPlugin::sSimulationSettings->maxSizeLoadable());
+                    if (sdb)
+                    {
+                        for (u64 i=0; i<sdb->mCount; i++)
+                            retval.push_back(std::make_pair(sdb->mTimeArray[i],sdb->mValueArray[i]));
+                        delete sdb;
+                    }
+                }
+            }
+        }
         return retval;
     }
 
-
-    bool WaveData::insertToggleTime(u64 t)
-    {
-        if (mData.isEmpty()) return false; // no start value
-        auto it = mData.upperBound(t);
-        if (it == mData.begin()) return false; // cannot insert before 0
-        auto prevIt = it - 1;
-        if (prevIt.key() == t)
-            return false; // toggle time already exists
-        int val = prevIt.value() ? 0 : 1;
-        it = mData.insert(it, t, val);
-        for (auto nextIt = it+1; nextIt != mData.end(); ++nextIt)
-        {
-            val = val ? 0 : 1;
-            *nextIt = val;
-        }
-        return true;
-    }
-
-    bool WaveData::loadSaleae(const SaleaeDirectory& sd, const WaveDataTimeframe &tframe)
+    bool WaveData::loadSaleae(const WaveDataTimeframe& tframe)
     {
         resetWave();
-        std::filesystem::path path = sd.get_datafile(mName.toStdString(),mId);
+        if (!mWaveDataList || mFileIndex<0) return false;
+        std::filesystem::path path = mWaveDataList->saleaeDirectory().get_datafile_path(mFileIndex);
         if (path.empty()) return false;
-
         SaleaeInputFile sif(path);
-        loadSaleae(sif, tframe);
-        return true;
-    }
-
-    void WaveData::loadSaleae(SaleaeInputFile& sif, const WaveDataTimeframe& tframe)
-    {
-        resetWave();
-        SaleaeDataBuffer* sdb = sif.get_buffered_data();
-        u64 n = sdb->mCount;
-        if (!n)
-        {
-            mDirty = true;
-            delete sdb;
-            return;
-        }
+        if (!sif.good()) return false;
         u64 t0 = tframe.hasUserTimeframe() ? tframe.sceneMinTime() : 0;
-        u64 t1 = tframe.hasUserTimeframe() ? tframe.sceneMaxTime() : sdb->mTimeArray[n-1];
+        u64 t1 = tframe.hasUserTimeframe() ? tframe.sceneMaxTime() : 0;
         Q_ASSERT(t0 <= t1);
+
         int lastVal = BooleanFunction::X;
         bool valuePending = false;
-        for (u64 i=0; i<n; i++)
+        while (sif.good())
         {
-            u64 t = sdb->mTimeArray[i];
-            if (t < t0)
+            SaleaeDataBuffer* sdb = sif.get_buffered_data(NetlistSimulatorControllerPlugin::sSimulationSettings->maxSizeLoadable());
+            if (!sdb) break;
+            for (u64 i=0; i<sdb->mCount; i++)
             {
-                lastVal = sdb->mValueArray[i];
-                valuePending = true;
+                u64 t = sdb->mTimeArray[i];
+                if (t < t0)
+                {
+                    lastVal = sdb->mValueArray[i];
+                    valuePending = true;
+                }
+                else if (t == t0)
+                {
+                    mData.insert(t,sdb->mValueArray[i]);
+                    valuePending = false;
+                }
+                else if (!t1 || t <= t1)
+                {
+                    if (valuePending) mData.insert(t0,lastVal);
+                    mData.insert(t,sdb->mValueArray[i]);
+                    valuePending = false;
+                }
+                else
+                {
+                    if (valuePending) mData.insert(t0,lastVal);
+                    valuePending = false;
+                    break;
+                }
             }
-            else if (t == t0)
-            {
-                mData.insert(t,sdb->mValueArray[i]);
-                valuePending = false;
-            }
-            else if (t <= t1)
-            {
-                if (valuePending) mData.insert(t0,lastVal);
-                mData.insert(t,sdb->mValueArray[i]);
-                valuePending = false;
-            }
-            else
-            {
-                if (valuePending) mData.insert(t0,lastVal);
-                valuePending = false;
-                break;
-            }
+            delete sdb;
         }
         mDirty = true;
-        delete sdb;
-        return;
+        return true;
     }
 
-    void WaveData::saveSaleae(SaleaeDirectory& sd)
+    void WaveData::saveSaleae()
     {
+        if (!mWaveDataList) return;
+        SaleaeDirectory& sd = mWaveDataList->saleaeDirectory();
         SaleaeDirectoryStoreRequest save(&sd);
         std::string nam = mName.toStdString();
         mFileIndex = sd.get_datafile_index(nam,mId);
@@ -265,9 +250,6 @@ namespace hal {
         sdne.addIndex(SaleaeDirectoryFileIndex(mFileIndex,0,maxTime(),mData.size()));
         sd.add_or_replace_net(sdne);
 
-        std::filesystem::path path = sd.get_datafile(nam,mId);
-        mFileName = QString::fromStdString(path.string());
-
         mFileSize = mData.size();
 
         SaleaeDataBuffer sdb(mFileSize);
@@ -278,7 +260,7 @@ namespace hal {
             sdb.mValueArray[j] = it.value();
             ++j;
         }
-        SaleaeOutputFile sof(path.string(),mFileIndex);
+        SaleaeOutputFile sof(sd.get_datafile_path(mFileIndex),mFileIndex);
         sof.put_data(&sdb);
     }
 
@@ -314,7 +296,8 @@ namespace hal {
             }
             return retval;
         }
-        SaleaeInputFile sif(mFileName.toStdString());
+        if (!mWaveDataList) return -1;
+        SaleaeInputFile sif(mWaveDataList->saleaeDirectory().get_datafile_path(mFileIndex));
         if (!sif.good()) return -1;
         return sif.get_int_value(t);
     }
@@ -367,25 +350,16 @@ namespace hal {
         return QString::number(val,base);
     }
 
+    std::string WaveData::fileName() const
+    {
+        if (!mWaveDataList || mFileIndex < 0) return std::string();
+        return mWaveDataList->saleaeDirectory().get_datafile_path(mFileIndex);
+    }
+
     u64 WaveData::maxTime() const
     {
         if (mData.isEmpty()) return 0;
         return mData.lastKey();
-    }
-
-    void WaveData::eraseAtTime(u64 t)
-    {
-        auto it = mData.find(t);
-        if (it == mData.end()) return;
-        int val = it.value();
-        it = mData.erase(it);
-        if (mBits <= 1)
-            while (it != mData.end())
-            {
-                int nextVal = it.value();
-                *(it++) = val;
-                val = nextVal;
-            }
     }
 
 //--------------------------------------------
@@ -410,24 +384,25 @@ namespace hal {
     uint qHash(const WaveDataGroupIndex& wdgi) { return wdgi.mCode; }
 
 //--------------------------------------------
-    u32 WaveDataGroup::sMaxGroupId = 0;
-
     WaveDataGroup::WaveDataGroup(WaveDataList *wdList, int grpId, const QString& nam)
-        : WaveData(grpId,nam,WaveData::NetGroup), mWaveDataList(wdList)
+        : WaveData(grpId,nam,WaveData::NetGroup)
     {
+        mWaveDataList = wdList;
         mWaveDataList->registerGroup(this);
     }
 
     WaveDataGroup::WaveDataGroup(WaveDataList* wdList, const QString& nam)
-        : WaveData(++sMaxGroupId,nam,WaveData::NetGroup), mWaveDataList(wdList)
+        : WaveData(wdList->nextGroupId(),nam,WaveData::NetGroup)
     {
+        mWaveDataList = wdList;
         if (nam.isEmpty()) rename(QString("group_%1").arg(id()));
         mWaveDataList->registerGroup(this);
     }
 
     WaveDataGroup::WaveDataGroup(WaveDataList* wdList, const WaveData* wdGrp)
-        : WaveData(++sMaxGroupId,wdGrp->name(),WaveData::NetGroup), mWaveDataList(wdList)
+        : WaveData(wdList->nextGroupId(),wdGrp->name(),WaveData::NetGroup)
     {
+        mWaveDataList = wdList;
         int n = wdGrp->bits();
         if (!n) return;
 
@@ -649,7 +624,7 @@ namespace hal {
             undef |= (1 << ibit);
             WaveData* wd = mGroupList.at(ibit);
             if (wd->loadPolicy()!=WaveData::TooBigToLoad && wd->data().size() < (int) wd->fileSize())
-                wd->loadSaleae(mWaveDataList->saleaeDirectory(),mWaveDataList->timeFrame());
+                wd->loadSaleae(mWaveDataList->timeFrame());
             wdArray[ibit] = wd;
             if (!wd) continue;
             for (u64 t : wd->data().keys())
@@ -734,7 +709,7 @@ namespace hal {
 //--------------------------------------------
     WaveDataList::WaveDataList(const QString& sdFilename, QObject* parent)
         : QObject(parent),
-          mSaleaeDirectory(sdFilename.toStdString())
+          mSaleaeDirectory(sdFilename.toStdString()), mMaxGroupId(0)
     {;}
 
     WaveDataList::~WaveDataList()
@@ -903,7 +878,7 @@ namespace hal {
     void WaveDataList::updateWaveData(int inx)
     {
         WaveData* wd = at(inx);
-        wd->saveSaleae(mSaleaeDirectory);
+        wd->saveSaleae();
         u32 netId = wd->id();
         for (auto it = mDataGroups.begin(); it != mDataGroups.end(); ++it)
             if (it.value()->hasNetId(netId))
@@ -932,7 +907,8 @@ namespace hal {
             u64 tmaxWave = (*it)->maxTime();
             if (tmaxWave > tmax) tmax = tmaxWave;
         }
-        setMaxTime(tmax);
+        if (tmax>mTimeframe.mSceneMaxTime)
+            setMaxTime(tmax);
     }
 
     void WaveDataList::add(WaveData* wd, bool updateSaleae)
@@ -941,8 +917,9 @@ namespace hal {
 
         mIds[wd->id()] = n;
         append(wd);
+        wd->setWaveDataList(this);
         updateMaxTime();
-        if (updateSaleae) wd->saveSaleae(mSaleaeDirectory);
+        if (updateSaleae) wd->saveSaleae();
 //        if (!silent) Q_EMIT waveAdded(n);
         testDoubleCount();
     }
@@ -994,7 +971,7 @@ namespace hal {
     void WaveDataList::insertBooleanValue(WaveData *wd, u64 t, BooleanFunction::Value bval)
     {
         wd->insertBooleanValueWithoutSync(t, bval);
-        wd->saveSaleae(mSaleaeDirectory);
+        wd->saveSaleae();
     }
 
     void WaveDataList::removeGroup(u32 grpId)
@@ -1013,26 +990,21 @@ namespace hal {
         WaveData* wdOld = at(inx);
         Q_ASSERT(wdOld);
         Q_ASSERT(wdOld != wdNew);
-        wdNew->rename(wdOld->name()); // TODO : update saleae ?
+        wdNew->rename(wdOld->name());
         operator[](inx) = wdNew;
+        wdNew->setWaveDataList(this);
         for (WaveDataGroup* grp : mDataGroups.values())
             if (grp->hasNetId(wdNew->id()))
                 grp->replaceChild(wdNew);
         if (wdNew->maxTime() > mTimeframe.mSceneMaxTime)
             updateMaxTime();
 
-        wdNew->saveSaleae(mSaleaeDirectory);
+        wdNew->saveSaleae();
 
 
         emitWaveUpdated(inx);
         delete wdOld;
         triggerEndResetModel();
-    }
-
-    void WaveDataList::setSaleaeFile(WaveData *wd, int saleaIndex) const
-    {
-        QDir saleaDir(QString::fromStdString(mSaleaeDirectory.get_directory()));
-        wd->setSaleaeFile(saleaIndex,saleaDir.absoluteFilePath(QString("digital_%1.bin").arg(saleaIndex)));
     }
 
     void WaveDataList::updateFromSaleae()
@@ -1047,7 +1019,7 @@ namespace hal {
         {
             QString name = QString::fromStdString(sdle.name);
             WaveData* wd = new WaveData(sdle.id, name);
-            setSaleaeFile(wd, sdle.fileIndex);
+            wd->setFileIndex(sdle.fileIndex);
             wd->setFileSize(sdle.size);
             saleaeWaves.insert(name,wd);
         }
@@ -1059,9 +1031,9 @@ namespace hal {
             auto it = saleaeWaves.find(wd->name());
             if (it == saleaeWaves.end()) continue;
             wd->setFileSize(it.value()->fileSize());
-            setSaleaeFile(wd,it.value()->fileIndex());
+            wd->setFileIndex(it.value()->fileIndex());
             if (wd->loadPolicy() == WaveData::LoadAllData)
-                wd->loadSaleae(mSaleaeDirectory,mTimeframe);
+                wd->loadSaleae(mTimeframe);
             emitWaveUpdated(i);
             delete it.value();
             saleaeWaves.erase(it);
@@ -1090,7 +1062,7 @@ namespace hal {
         int inx = mIds.value(n->get_id(),-1);
         if (inx >= 0) return at(inx);
         WaveData* wd = new WaveData(n);
-        if (wd->loadSaleae(mSaleaeDirectory,mTimeframe))
+        if (wd->loadSaleae(mTimeframe))
         {
             add(wd,false);
             return wd;

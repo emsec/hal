@@ -49,9 +49,11 @@ namespace hal {
     {
         Q_OBJECT
         QSpinBox* mMaxSizeLoadable;
+        QSpinBox* mMaxSizeEditor;
     public:
         SimulationSettingGlobalTab(SimulationSettings* settings, QWidget* parent = nullptr);
         int maxSizeLoadable() const { return mMaxSizeLoadable->value(); }
+        int maxSizeEditor() const { return mMaxSizeEditor->value(); }
     };
 
     class SimulationSettingDialog : public QDialog

@@ -13,9 +13,13 @@ namespace hal {
     {
         friend class WaveEditDialog;
         Q_OBJECT
-        WaveData mWaveData;
+        WaveData* mWaveDataInput;
+        QMap<u64,int> mEditData;
+
+        void truncateData(double tCursor);
+        void recalcTransitions();
     public:
-        WaveEditTable(const WaveData* wd, QObject* parent = nullptr);
+        WaveEditTable(WaveData* wd, double tCursor, QObject* parent = nullptr);
         int rowCount(const QModelIndex &parent = QModelIndex()) const override;
         int columnCount(const QModelIndex &parent = QModelIndex()) const override;
         QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
@@ -49,9 +53,9 @@ namespace hal {
     class WaveEditDialog : public QDialog
     {
         Q_OBJECT
-        WaveEditTable* mWaveModel;
+        WaveEditTable* mWaveModel;        
     public:
-        WaveEditDialog(const WaveData* wd, QWidget* parent = nullptr);
+        WaveEditDialog(WaveData *wd, double tCursor, QWidget* parent = nullptr);
         const QMap<u64,int>& dataMap() const;
     };
 

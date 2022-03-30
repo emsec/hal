@@ -49,4 +49,14 @@ namespace hal {
     {
         setValue("global/max_loadable",msl);
     }
+
+    int SimulationSettings::maxSizeEditor() const
+    {
+        return value("global/max_editor",1000).toInt();
+    }
+
+    void SimulationSettings::setMaxSizeEditor(int mse)
+    {
+        setValue("global/max_editor",mse);
+    }
 }
