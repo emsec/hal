@@ -340,7 +340,7 @@ public:
      * @param[in] end_time - The time at which to end the recording.
      * @returns A vector of recorded values on success, an error otherwise.
      */
-    Result<std::vector<u32>> trace_value_if(const u32 group_id, const Net* trigger_net, const std::vector<Net*>& enable_nets, BooleanFunction enable_condition, u32 start_time, u32 end_time) const;
+    Result<std::vector<u32>> trace_value_if(const u32 group_id, const Net* trigger_net, const std::vector<Net*>& enable_nets, const BooleanFunction& enable_condition, u64 start_time, u64 end_time) const;
 
     /**
      * Emit load progress when importing VCD, CSV, or SALEAE waveform
