@@ -255,8 +255,10 @@ namespace hal {
 
     void WaveTreeView::handleRemoveMulti()
     {
+        if (mContextIndexList.isEmpty()) return;
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
         WaveTreeModel::ReorderRequest req(wtm);
+        SaleaeDirectoryStoreRequest save(&mWaveDataList->saleaeDirectory());
         for (const QModelIndex& inx : mContextIndexList)
         {
             if (wtm->isLeaveItem(inx))

@@ -50,6 +50,7 @@ namespace hal {
     void WaveGraphicsCanvas::scrollContentsBy(int dx, int dy)
     {
         QAbstractScrollArea::scrollContentsBy(dx,dy);
+        if (dx) mCursor->recalcTime();
     }
 
     void WaveGraphicsCanvas::mousePressEvent(QMouseEvent* evt)

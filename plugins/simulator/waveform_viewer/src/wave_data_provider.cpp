@@ -67,11 +67,14 @@ namespace hal {
 
         bool skipData = true;
 
+        int loadCycle = 0;
+
         while (skipData && mInputFile.good())
         {
             if (mBuffer) delete mBuffer;
             mBuffer = mInputFile.get_buffered_data(NetlistSimulatorControllerPlugin::sSimulationSettings->maxSizeLoadable());
             mIndex = 0;
+            ++loadCycle;
             if (!mBuffer) return SaleaeDataTuple();
 
             while (mIndex < mBuffer->mCount && mBuffer->mTimeArray[mIndex] < t)
@@ -93,7 +96,7 @@ namespace hal {
             if (isRecording()) storeCurrentDatapoint();
             ++mIndex;
         }
-        else if (mIndex)
+        else if (mIndex || loadCycle > 1)
         {
             //value of last data point before entering t-range
             retval = lastval;
