@@ -59,11 +59,11 @@ namespace hal {
         }
         else
         {
+            setVleftIntern(v);
             if (maximum() < 4096)
                 setValue(toUInt(mVleft));
             else
                 setValue(toUInt(mVleft * 4096. / mVmaxScroll));
-            setVleftIntern(v);
         }
     }
 

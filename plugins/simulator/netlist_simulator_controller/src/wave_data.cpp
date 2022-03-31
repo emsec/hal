@@ -735,14 +735,6 @@ namespace hal {
         if (mTimeframe.mSimulateMaxTime > mTimeframe.mSceneMaxTime)
             setMaxTime(mTimeframe.mSimulateMaxTime);
     }
-    
-    QList<const WaveData*> WaveDataList::toList() const
-    {
-        QList<const WaveData*> retval;
-        for (const WaveData* wd : *this)
-            retval.append(wd);
-        return retval;
-    }
 
     QList<const WaveData*> WaveDataList::partialList(u64 start_time, u64 end_time, const std::set<const Net*> &nets) const
     {
