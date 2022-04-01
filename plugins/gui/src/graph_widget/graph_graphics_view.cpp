@@ -878,6 +878,7 @@ namespace hal
         if (md.exec() == QDialog::Accepted)
         {
             // TODO: only available modules
+
             QSet<u32> module_to_add;
             module_to_add.insert(md.selectedId());
             ActionAddItemsToObject* act = new ActionAddItemsToObject(module_to_add,{});
@@ -889,24 +890,33 @@ namespace hal
 
     void GraphGraphicsView::handleAddGateToView()
     {
+        QSet<u32> gates_in_context = mGraphWidget->getContext()->gates();
+
+        qDebug() << gates_in_context.size();
         QSet<u32> selectableGates;
         for (Gate* g : gNetlist->get_gates())
         {
             // TODO: only available gates
-            selectableGates.insert(g->get_id());
+            if (!gates_in_context.contains(g->get_id())) {
+                qDebug() << g->get_id();
+                selectableGates.insert(g->get_id());
+            }
         }
-        /*
-         * TODO: add class CustomGateDialog with less features
-         * CRASH: when trying to pick gate from graph
-        */
-        GateDialog gd(0,true,selectableGates,this);
-        if (gd.exec() == QDialog::Accepted)
-        {
-            QSet<u32> gate_to_add;
-            gate_to_add.insert(gd.selectedId());
-            ActionAddItemsToObject* act = new ActionAddItemsToObject({},gate_to_add);
-            act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::Context));
-            act->exec();
+        if (!selectableGates.empty()) {
+            /*
+             * TODO: add class CustomGateDialog with less features
+             * CRASH: when trying to pick gate from graph
+            */
+
+            GateDialog gd(0,true,selectableGates,this);
+            if (gd.exec() == QDialog::Accepted)
+            {
+                QSet<u32> gate_to_add;
+                gate_to_add.insert(gd.selectedId());
+                ActionAddItemsToObject* act = new ActionAddItemsToObject({},gate_to_add);
+                act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::Context));
+                act->exec();
+            }
         }
     }
 
