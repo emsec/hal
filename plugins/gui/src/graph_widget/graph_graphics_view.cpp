@@ -905,15 +905,7 @@ namespace hal
             if (!not_selectable_gates.contains(g->get_id())) {
                 selectableGates.insert(g->get_id());
             }
-        }
-        /*
-         * BUG: if selectableGates is empty => every gate is listed
-         * TODO: move check in CustomGateDialog => show empty list instead of no list
-        */
-        /*
-         * TODO: add class CustomGateDialog with less features
-         * CRASH: when trying to pick gate from graph
-        */
+
         CustomGateDialog gd(0,true,selectableGates,this);
         if (gd.exec() == QDialog::Accepted)
         {
