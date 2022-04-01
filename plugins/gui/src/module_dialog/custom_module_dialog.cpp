@@ -27,19 +27,19 @@ namespace hal {
         setWindowTitle("Move to module …");
         QGridLayout* layout = new QGridLayout(this);
 
-        QPushButton* butNew = new QPushButton("Create new module", this);
-        connect(butNew, &QPushButton::pressed, this, &CustomModuleDialog::handleCreateNewModule);
-        layout->addWidget(butNew, 0, 0);
+        //QPushButton* butNew = new QPushButton("Create new module", this);
+        //connect(butNew, &QPushButton::pressed, this, &CustomModuleDialog::handleCreateNewModule);
+        //layout->addWidget(butNew, 0, 0);
 
-        mButtonPick = new QPushButton("Pick module from graph", this);
-        connect(mButtonPick, &QPushButton::pressed, this, &CustomModuleDialog::handlePickFromGraph);
-        layout->addWidget(mButtonPick, 0, 1);
+        //mButtonPick = new QPushButton("Pick module from graph", this);
+        //connect(mButtonPick, &QPushButton::pressed, this, &CustomModuleDialog::handlePickFromGraph);
+        //layout->addWidget(mButtonPick, 0, 1);
 
-        QPushButton* butSearch = new QPushButton("Search", this);
-        connect(butSearch, &QPushButton::pressed, this, &CustomModuleDialog::handleToggleSearchbar);
-        layout->addWidget(butSearch, 0, 2);
+        //QPushButton* butSearch = new QPushButton("Search", this);
+        //connect(butSearch, &QPushButton::pressed, this, &CustomModuleDialog::handleToggleSearchbar);
+        //layout->addWidget(butSearch, 0, 2);
 
-        layout->addWidget(mSearchbar, 1, 0, 1, 3);
+        layout->addWidget(mSearchbar, 1, 0, 1, 2);
         mTabWidget = new QTabWidget(this);
         mTreeView  = new QTreeView(mTabWidget);
         mTabWidget->addTab(mTreeView, "Module tree");
@@ -76,17 +76,17 @@ namespace hal {
         mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, this);
         layout->addWidget(mButtonBox, 3, 0, 1, 3, Qt::AlignHCenter);
 
-        mToggleSearchbar = new QAction(this);
-        mToggleSearchbar->setShortcut(QKeySequence(ContentManager::sSettingSearch->value().toString()));
-        addAction(mToggleSearchbar);
+        //mToggleSearchbar = new QAction(this);
+        //mToggleSearchbar->setShortcut(QKeySequence(ContentManager::sSettingSearch->value().toString()));
+        //addAction(mToggleSearchbar);
 
         mTabWidget->setCurrentIndex(1);
         enableButtons();
-        mSearchbar->hide();
+        //mSearchbar->hide();
 
 
         connect(mTabWidget, &QTabWidget::currentChanged, this, &CustomModuleDialog::handleCurrentTabChanged);
-        connect(mToggleSearchbar, &QAction::triggered, this, &CustomModuleDialog::handleToggleSearchbar);
+        //connect(mToggleSearchbar, &QAction::triggered, this, &CustomModuleDialog::handleToggleSearchbar);
         connect(mSearchbar, &Searchbar::textEdited, this, &CustomModuleDialog::filter);
         connect(ContentManager::sSettingSearch, &SettingsItemKeybind::keySequenceChanged, this, &CustomModuleDialog::keybindToggleSearchbar);
         connect(mButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
@@ -98,7 +98,7 @@ namespace hal {
     void CustomModuleDialog::enableButtons()
     {
         mButtonBox->button(QDialogButtonBox::Ok)->setEnabled(mSelectedId>0);
-        mButtonPick->setEnabled(mTableView->model()->rowCount()>0);
+        //mButtonPick->setEnabled(mTableView->model()->rowCount()>0);
         QString target = "…";
         if (mSelectedId>0)
         {
