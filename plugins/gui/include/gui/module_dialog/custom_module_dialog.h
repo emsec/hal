@@ -65,17 +65,8 @@ namespace hal {
          */
         u32 selectedId() const { return mSelectedId; }
 
-        /**
-         * Get the flag that states if a new module should be created.
-         *
-         * @return True if a new module should be created, False otherwise.
-         */
-        bool isNewModule() const { return mNewModule; }
 
     private Q_SLOTS:
-        void handlePickFromGraph();
-        void handleCreateNewModule();
-        void handleToggleSearchbar();
         void handleTreeSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
         void handleTreeDoubleClick(const QModelIndex& index);
         void handleCurrentTabChanged(int index);
@@ -127,8 +118,6 @@ namespace hal {
         QAction* mToggleSearchbar;
         ModuleSelectExclude mSelectExclude;
 
-        QPushButton* mButtonPick;
-        bool mNewModule;
 
         void enableButtons();
         u32 treeModuleId(const QModelIndex& index);
