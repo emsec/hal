@@ -914,7 +914,6 @@ namespace hal
          * TODO: add class CustomGateDialog with less features
          * CRASH: when trying to pick gate from graph
         */
-        selectableGates.insert(1);
         CustomGateDialog gd(0,true,selectableGates,this);
         if (gd.exec() == QDialog::Accepted)
         {

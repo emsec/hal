@@ -24,61 +24,72 @@ namespace hal {
         setWindowTitle("Select Gate …");
         QGridLayout* layout = new QGridLayout(this);
 
+        mNoAvailable = new QLabel(this);
+        mNoAvailable->setText("There is no addable gate");
+        layout->addWidget(mNoAvailable, 0, 1);
+
         //mButtonPick = new QPushButton("Pick gate from graph", this);
         //connect(mButtonPick, &QPushButton::pressed, this, &CustomGateDialog::handlePickFromGraph);
         //layout->addWidget(mButtonPick, 0, 1);
 
-        mSearchbar = new Searchbar(this);
-        layout->addWidget(mSearchbar, 1, 0, 1, 2);
+        if (!selectable.empty()) {
 
-        mTabWidget = new QTabWidget(this);
-//        mTreeView  = new QTreeView(mTabWidget);
-//        mTabWidget->addTab(mTreeView, "Gate tree");
+            mSearchbar = new Searchbar(this);
+            layout->addWidget(mSearchbar, 1, 0, 1, 2);
 
-        mTableView = new GateSelectView(false,mSearchbar,selectable,mTabWidget);
-        connect(mTableView,&GateSelectView::gateSelected,this,&CustomGateDialog::handleTableSelection);
-        mTabWidget->addTab(mTableView, "Gate list");
+            mTabWidget = new QTabWidget(this);
+    //        mTreeView  = new QTreeView(mTabWidget);
+    //        mTabWidget->addTab(mTreeView, "Gate tree");
 
-        if (!GateSelectHistory::instance()->isEmpty())
-        {
-            mLastUsed = new GateSelectView(true,mSearchbar,selectable,mTabWidget);
-            if (mLastUsed->model()->rowCount())
+
+            mTableView = new GateSelectView(false,mSearchbar,selectable,mTabWidget);
+            connect(mTableView,&GateSelectView::gateSelected,this,&CustomGateDialog::handleTableSelection);
+            mTabWidget->addTab(mTableView, "Gate list");
+
+            if (!GateSelectHistory::instance()->isEmpty())
             {
-                connect(mLastUsed,&GateSelectView::gateSelected,this,&CustomGateDialog::handleTableSelection);
-                mTabWidget->addTab(mLastUsed, "Recent selection");
+                mLastUsed = new GateSelectView(true,mSearchbar,selectable,mTabWidget);
+                if (mLastUsed->model()->rowCount())
+                {
+                    connect(mLastUsed,&GateSelectView::gateSelected,this,&CustomGateDialog::handleTableSelection);
+                    mTabWidget->addTab(mLastUsed, "Recent selection");
+                }
+                else
+                    delete mLastUsed;
             }
-            else
-                delete mLastUsed;
+
+            layout->addWidget(mTabWidget, 2, 0, 1, 2);
+
+            /*
+             *
+             * TODO : tree view
+            mGateTreeProxyModel = new GateProxyModel(this);
+            mGateTreeProxyModel->setFilterKeyColumn(-1);
+            mGateTreeProxyModel->setDynamicSortFilter(true);
+            mGateTreeProxyModel->setSourceModel(gNetlistRelay->getGateModel());
+           //mGateProxyModel->setRecursiveFilteringEnabled(true);
+            mGateTreeProxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
+            mTreeView->setModel(mGateTreeProxyModel);
+    */
+
+
+
+            mToggleSearchbar = new QAction(this);
+            mToggleSearchbar->setShortcut(QKeySequence(ContentManager::sSettingSearch->value().toString()));
+            addAction(mToggleSearchbar);
+
+            mTabWidget->setCurrentIndex(1);
+            enableButtons();
+
+            connect(mToggleSearchbar,&QAction::triggered,this,&CustomGateDialog::handleToggleSearchbar);
+            connect(ContentManager::sSettingSearch,&SettingsItemKeybind::keySequenceChanged,this,&CustomGateDialog::keybindToggleSearchbar);
+            mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, this);
+            layout->addWidget(mButtonBox, 3, 1);
+            connect(mButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+            connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
         }
 
-        layout->addWidget(mTabWidget, 2, 0, 1, 2);
 
-        /*
-         *
-         * TODO : tree view
-        mGateTreeProxyModel = new GateProxyModel(this);
-        mGateTreeProxyModel->setFilterKeyColumn(-1);
-        mGateTreeProxyModel->setDynamicSortFilter(true);
-        mGateTreeProxyModel->setSourceModel(gNetlistRelay->getGateModel());
-       //mGateProxyModel->setRecursiveFilteringEnabled(true);
-        mGateTreeProxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
-        mTreeView->setModel(mGateTreeProxyModel);
-*/
-
-        mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, this);
-        layout->addWidget(mButtonBox, 3, 1);
-
-        mToggleSearchbar = new QAction(this);
-        mToggleSearchbar->setShortcut(QKeySequence(ContentManager::sSettingSearch->value().toString()));
-        addAction(mToggleSearchbar);
-
-        mTabWidget->setCurrentIndex(1);
-        enableButtons();
-
-        connect(mToggleSearchbar,&QAction::triggered,this,&CustomGateDialog::handleToggleSearchbar);
-        connect(ContentManager::sSettingSearch,&SettingsItemKeybind::keySequenceChanged,this,&CustomGateDialog::keybindToggleSearchbar);
-        connect(mButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-        connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 //        connect(mTreeView->selectionModel(),&QItemSelectionModel::currentChanged,this,&CustomGateDialog::handleTreeSelectionChanged);
     }
 

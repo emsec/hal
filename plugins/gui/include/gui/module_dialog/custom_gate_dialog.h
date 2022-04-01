@@ -29,11 +29,13 @@
 #include <QAction>
 #include <QKeySequence>
 #include <QSet>
+#include <QLabel>
 
 class QDialogButtonBox;
 class QTreeView;
 class QTabWidget;
 class QPushButton;
+class QLabel;
 
 namespace hal {
 
@@ -118,6 +120,8 @@ namespace hal {
         QAction* mToggleSearchbar;
 
         QPushButton* mButtonPick;
+
+        QLabel* mNoAvailable;
 
         void enableButtons();
         u32 treeGateId(const QModelIndex& index);
