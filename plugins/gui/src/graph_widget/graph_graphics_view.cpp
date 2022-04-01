@@ -35,6 +35,7 @@
 #include "gui/user_action/user_action_compound.h"
 #include "gui/module_dialog/module_dialog.h"
 #include "gui/module_dialog/gate_dialog.h"
+#include "gui/module_dialog/custom_gate_dialog.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
@@ -909,20 +910,19 @@ namespace hal
          * BUG: if selectableGates is empty => every gate is listed
          * TODO: move check in CustomGateDialog => show empty list instead of no list
         */
-        if (!selectableGates.empty()) {
-            /*
-             * TODO: add class CustomGateDialog with less features
-             * CRASH: when trying to pick gate from graph
-            */
-            GateDialog gd(0,true,selectableGates,this);
-            if (gd.exec() == QDialog::Accepted)
-            {
-                QSet<u32> gate_to_add;
-                gate_to_add.insert(gd.selectedId());
-                ActionAddItemsToObject* act = new ActionAddItemsToObject({},gate_to_add);
-                act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::Context));
-                act->exec();
-            }
+        /*
+         * TODO: add class CustomGateDialog with less features
+         * CRASH: when trying to pick gate from graph
+        */
+        selectableGates.insert(1);
+        CustomGateDialog gd(0,true,selectableGates,this);
+        if (gd.exec() == QDialog::Accepted)
+        {
+            QSet<u32> gate_to_add;
+            gate_to_add.insert(gd.selectedId());
+            ActionAddItemsToObject* act = new ActionAddItemsToObject({},gate_to_add);
+            act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::Context));
+            act->exec();
         }
     }
 
