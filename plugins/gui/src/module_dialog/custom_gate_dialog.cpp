@@ -21,12 +21,10 @@ namespace hal {
         : QDialog(parent), mSelectedId(0), mOrigin(orig), mQuerySuccessor(succ),
           mSelectableGates(selectable)
     {
-        setWindowTitle("Select Gate …");
+        setWindowTitle("Add gate to view");
         QGridLayout* layout = new QGridLayout(this);
 
-        mNoAvailable = new QLabel(this);
-        mNoAvailable->setText("There is no addable gate");
-        layout->addWidget(mNoAvailable, 0, 1);
+
 
         //mButtonPick = new QPushButton("Pick gate from graph", this);
         //connect(mButtonPick, &QPushButton::pressed, this, &CustomGateDialog::handlePickFromGraph);
@@ -88,7 +86,15 @@ namespace hal {
             connect(mButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
             connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
         }
+        else {
+            mNoAvailable = new QLabel(this);
+            mNoAvailable->setText("There is no addable gate");
+            layout->addWidget(mNoAvailable, 0, 1);
 
+            mButtonBox = new QDialogButtonBox(QDialogButtonBox::Cancel, this);
+            layout->addWidget(mButtonBox, 3, 1);
+            connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+        }
 
 //        connect(mTreeView->selectionModel(),&QItemSelectionModel::currentChanged,this,&CustomGateDialog::handleTreeSelectionChanged);
     }
