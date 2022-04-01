@@ -905,6 +905,7 @@ namespace hal
             if (!not_selectable_gates.contains(g->get_id())) {
                 selectableGates.insert(g->get_id());
             }
+        }
 
         CustomGateDialog gd(0,true,selectableGates,this);
         if (gd.exec() == QDialog::Accepted)
