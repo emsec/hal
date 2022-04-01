@@ -16,6 +16,8 @@
 #include <QTableView>
 #include <QTreeView>
 
+#include <QDebug>
+
 namespace hal {
     CustomGateDialog::CustomGateDialog(u32 orig, bool succ, const QSet<u32> &selectable, QWidget* parent)
         : QDialog(parent), mSelectedId(0), mOrigin(orig), mQuerySuccessor(succ),
@@ -24,21 +26,12 @@ namespace hal {
         setWindowTitle("Add gate to view");
         QGridLayout* layout = new QGridLayout(this);
 
-
-
-        //mButtonPick = new QPushButton("Pick gate from graph", this);
-        //connect(mButtonPick, &QPushButton::pressed, this, &CustomGateDialog::handlePickFromGraph);
-        //layout->addWidget(mButtonPick, 0, 1);
-
         if (!selectable.empty()) {
 
             mSearchbar = new Searchbar(this);
             layout->addWidget(mSearchbar, 1, 0, 1, 2);
 
             mTabWidget = new QTabWidget(this);
-    //        mTreeView  = new QTreeView(mTabWidget);
-    //        mTabWidget->addTab(mTreeView, "Gate tree");
-
 
             mTableView = new GateSelectView(false,mSearchbar,selectable,mTabWidget);
             connect(mTableView,&GateSelectView::gateSelected,this,&CustomGateDialog::handleTableSelection);
@@ -58,57 +51,35 @@ namespace hal {
 
             layout->addWidget(mTabWidget, 2, 0, 1, 2);
 
-            /*
-             *
-             * TODO : tree view
-            mGateTreeProxyModel = new GateProxyModel(this);
-            mGateTreeProxyModel->setFilterKeyColumn(-1);
-            mGateTreeProxyModel->setDynamicSortFilter(true);
-            mGateTreeProxyModel->setSourceModel(gNetlistRelay->getGateModel());
-           //mGateProxyModel->setRecursiveFilteringEnabled(true);
-            mGateTreeProxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
-            mTreeView->setModel(mGateTreeProxyModel);
-    */
-
-
-
             mToggleSearchbar = new QAction(this);
             mToggleSearchbar->setShortcut(QKeySequence(ContentManager::sSettingSearch->value().toString()));
             addAction(mToggleSearchbar);
 
             mTabWidget->setCurrentIndex(1);
+            mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, this);
+            layout->addWidget(mButtonBox, 3, 1);
             enableButtons();
 
             connect(mToggleSearchbar,&QAction::triggered,this,&CustomGateDialog::handleToggleSearchbar);
             connect(ContentManager::sSettingSearch,&SettingsItemKeybind::keySequenceChanged,this,&CustomGateDialog::keybindToggleSearchbar);
-            mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, this);
-            layout->addWidget(mButtonBox, 3, 1);
+
             connect(mButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
             connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
         }
         else {
             mNoAvailable = new QLabel(this);
-            mNoAvailable->setText("There is no addable gate");
+            mNoAvailable->setText("There is no addable gate.");
             layout->addWidget(mNoAvailable, 0, 1);
 
             mButtonBox = new QDialogButtonBox(QDialogButtonBox::Cancel, this);
             layout->addWidget(mButtonBox, 3, 1);
             connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
         }
-
-//        connect(mTreeView->selectionModel(),&QItemSelectionModel::currentChanged,this,&CustomGateDialog::handleTreeSelectionChanged);
-    }
-
-    void CustomGateDialog::hidePicker()
-    {
-        //mButtonPick->setDisabled(true);
-        //mButtonPick->hide();
     }
 
     void CustomGateDialog::enableButtons()
     {
         mButtonBox->button(QDialogButtonBox::Ok)->setEnabled(mSelectedId>0);
-        //mButtonPick->setEnabled(mTableView->model()->rowCount()>0);
         QString target = "…";
         if (mSelectedId>0)
         {
@@ -118,50 +89,11 @@ namespace hal {
         setWindowTitle("Add gate to view");
     }
 
-     u32 CustomGateDialog::treeGateId(const QModelIndex& index)
-     {
-         return 0;
-         /*
-        GateModel* treeModel = static_cast<GateModel*>(mGateTreeProxyModel->sourceModel());
-        Q_ASSERT(treeModel);
-        QModelIndex sourceIndex = mGateTreeProxyModel->mapToSource(index);
-        if (!sourceIndex.isValid()) return 0;
-        GateItem* item = treeModel->getItem(sourceIndex);
-        if (!item) return 0;
-        return item->id();
-        */
-     }
-
-     void CustomGateDialog::handleTreeSelectionChanged(const QModelIndex& current, const QModelIndex& previous)
-     {
-         /*
-         Q_UNUSED(previous);
-         u32 moduleId = treeGateId(current);
-         if (moduleId) handleTableSelection(moduleId,false);
-         */
-     }
-
-     void CustomGateDialog::handleTreeDoubleClick(const QModelIndex& index)
-     {
-         u32 moduleId = treeGateId(index);
-         if (moduleId) handleTableSelection(moduleId,true);
-     }
-
     void CustomGateDialog::handleTableSelection(u32 id, bool doubleClick)
     {
         mSelectedId = GateSelectModel::isAccepted(id,mSelectableGates) ? id : 0;
         enableButtons();
         if (mSelectedId && doubleClick) accept();
-    }
-
-    void CustomGateDialog::handlePickFromGraph()
-    {
-        GateSelectPicker* msp = new GateSelectPicker(mOrigin, mQuerySuccessor, mSelectableGates);
-        connect(gSelectionRelay, &SelectionRelay::selectionChanged, msp, &GateSelectPicker::handleSelectionChanged);
-        GraphGraphicsView* ggv = dynamic_cast<GraphGraphicsView*>(parent());
-        if (ggv)
-            connect(msp, &GateSelectPicker::gatesPicked, ggv, &GraphGraphicsView::handleShortestPath);
-        reject(); // wait for picker, no selection done in dialog
     }
 
     void CustomGateDialog::accept()

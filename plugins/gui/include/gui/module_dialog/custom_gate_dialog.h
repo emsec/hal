@@ -69,16 +69,9 @@ namespace hal {
          */
         u32 selectedId() const { return mSelectedId; }
 
-        /**
-         * hide picker button
-         */
-        void hidePicker();
 
     private Q_SLOTS:
-        void handlePickFromGraph();
         void handleToggleSearchbar();
-        void handleTreeSelectionChanged(const QModelIndex& current, const QModelIndex& previous);
-        void handleTreeDoubleClick(const QModelIndex& index);
 
     public Q_SLOTS:
         /**
@@ -111,15 +104,11 @@ namespace hal {
         QSet<u32> mSelectableGates;
         QDialogButtonBox* mButtonBox;
         GateSelectView* mTableView;
-        QTreeView* mTreeView;
         GateSelectView* mLastUsed;
         QTabWidget* mTabWidget;
 
-        GateProxyModel* mGateTreeProxyModel;
         Searchbar* mSearchbar;
         QAction* mToggleSearchbar;
-
-        QPushButton* mButtonPick;
 
         QLabel* mNoAvailable;
 
