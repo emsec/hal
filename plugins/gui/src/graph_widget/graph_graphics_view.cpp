@@ -34,6 +34,7 @@
 #include "gui/user_action/action_unfold_module.h"
 #include "gui/user_action/user_action_compound.h"
 #include "gui/module_dialog/module_dialog.h"
+#include "gui/module_dialog/custom_module_dialog.h"
 #include "gui/module_dialog/gate_dialog.h"
 #include "gui/module_dialog/custom_gate_dialog.h"
 #include "hal_core/netlist/gate.h"
@@ -875,7 +876,7 @@ namespace hal
          * TODO: add class CustomModuleDialog with less features
          * CRASH: when trying to create new module
         */
-        ModuleDialog md(this);
+        CustomModuleDialog md(this);
         if (md.exec() == QDialog::Accepted)
         {
             // TODO: only available modules
