@@ -892,11 +892,10 @@ namespace hal
     {
         QSet<u32> not_selectable_gates = mGraphWidget->getContext()->gates();
 
-        // REM: don't forget about gates in submodules of a modul
         QSet<u32> modules_in_context = mGraphWidget->getContext()->modules();
         QSet<u32>::iterator i;
         for (i = modules_in_context.begin(); i != modules_in_context.end(); ++i)
-            for (Gate* g : gNetlist->get_module_by_id(*i)->get_gates())
+            for (Gate* g : gNetlist->get_module_by_id(*i)->get_gates(nullptr, true))
                 not_selectable_gates.insert(g->get_id());
 
         QSet<u32> selectableGates;
