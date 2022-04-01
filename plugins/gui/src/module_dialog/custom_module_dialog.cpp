@@ -24,7 +24,7 @@ namespace hal {
           mSearchbar(new Searchbar(this)),
           mNewModule(false)
     {
-        setWindowTitle("Move to module …");
+        setWindowTitle("Add module to view");
         QGridLayout* layout = new QGridLayout(this);
 
         //QPushButton* butNew = new QPushButton("Create new module", this);
@@ -105,7 +105,7 @@ namespace hal {
             Module* m = gNetlist->get_module_by_id(mSelectedId);
             if (m) target = QString("%1[%2]").arg(QString::fromStdString(m->get_name())).arg(mSelectedId);
         }
-        setWindowTitle("Move to module " + target);
+        setWindowTitle("Add module to view");
     }
 
      u32 CustomModuleDialog::treeModuleId(const QModelIndex& index)
