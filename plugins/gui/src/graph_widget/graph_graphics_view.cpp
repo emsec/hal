@@ -891,23 +891,22 @@ namespace hal
     void GraphGraphicsView::handleAddGateToView()
     {
         QSet<u32> gates_in_context = mGraphWidget->getContext()->gates();
-
-        qDebug() << gates_in_context.size();
         QSet<u32> selectableGates;
         for (Gate* g : gNetlist->get_gates())
         {
-            // TODO: only available gates
             if (!gates_in_context.contains(g->get_id())) {
-                qDebug() << g->get_id();
                 selectableGates.insert(g->get_id());
             }
         }
+        /*
+         * BUG: if selectableGates is empty => every gate is listed
+         * TODO: move check in CustomGateDialog => show empty list instead of no list
+        */
         if (!selectableGates.empty()) {
             /*
              * TODO: add class CustomGateDialog with less features
              * CRASH: when trying to pick gate from graph
             */
-
             GateDialog gd(0,true,selectableGates,this);
             if (gd.exec() == QDialog::Accepted)
             {
