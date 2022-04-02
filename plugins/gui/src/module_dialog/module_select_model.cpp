@@ -61,22 +61,40 @@ namespace hal
     }
 
     //---------------- MODEL ------------------------------------------
-    ModuleSelectModel::ModuleSelectModel(bool history, QObject* parent) : QAbstractTableModel(parent)
+    ModuleSelectModel::ModuleSelectModel(QObject* parent) : QAbstractTableModel(parent)
     {
-        ModuleSelectExclude excl;
+//        if (history)
+//        {
+//            for (u32 id : *ModuleSelectHistory::instance())
+//            {
+//                Module* m = gNetlist->get_module_by_id(id);
+//                if (m && mExcl.isAccepted(m->get_id()))
+//                    mEntries.append(ModuleSelectEntry(m));
+//            }
+//        }
+//        else
+//        {
+//            for (Module* m : gNetlist->get_modules())
+//                if (mExcl.isAccepted(m->get_id()))
+//                    mEntries.append(ModuleSelectEntry(m));
+//        }
+    }
+
+    void ModuleSelectModel::appendEntries(bool history)
+    {
         if (history)
         {
             for (u32 id : *ModuleSelectHistory::instance())
             {
                 Module* m = gNetlist->get_module_by_id(id);
-                if (m && excl.isAccepted(m->get_id()))
+                if (m && mExcl.isAccepted(m->get_id()))
                     mEntries.append(ModuleSelectEntry(m));
             }
         }
         else
         {
             for (Module* m : gNetlist->get_modules())
-                if (excl.isAccepted(m->get_id()))
+                if (mExcl.isAccepted(m->get_id()))
                     mEntries.append(ModuleSelectEntry(m));
         }
     }
@@ -218,6 +236,7 @@ namespace hal
             for (Module* sm : m->get_submodules(nullptr, true))
                 mExclude.insert(sm->get_id());
         }
+
     }
 
     QString ModuleSelectExclude::selectionToString() const
@@ -340,7 +359,11 @@ namespace hal
         ModuleSelectProxy* prox = new ModuleSelectProxy(this);
         connect(sbar, &Searchbar::textEdited, prox, &ModuleSelectProxy::searchTextChanged);
 
-        ModuleSelectModel* modl = new ModuleSelectModel(history, this);
+        ModuleSelectModel* modl = new ModuleSelectModel(this);
+        QSet<u32> e;
+        e.insert(2);
+        //modl->excludeModulesById(e);
+        modl->appendEntries(history);
         prox->setSourceModel(modl);
         setModel(prox);
 

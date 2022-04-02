@@ -73,6 +73,7 @@ namespace hal {
         ModuleSelectExclude();
         bool isAccepted(u32 modId) const { return !mExclude.contains(modId); }
 
+        void append(QSet<u32> mod_ids) { mExclude += mod_ids; }
         /**
          * @brief selectionToString function is used to generate selection as text for message box
          * @return selected items as formatted string
@@ -90,6 +91,7 @@ namespace hal {
         Q_OBJECT
 
         QList<ModuleSelectEntry> mEntries;
+        ModuleSelectExclude mExcl;
 
     public:
         /**
@@ -97,12 +99,16 @@ namespace hal {
          * @param history if true a list of modules previously selected gets generated
          * @param parent the parent object
          */
-        ModuleSelectModel(bool history, QObject* parent=nullptr);
+        ModuleSelectModel(QObject* parent=nullptr);
+
+        void appendEntries(bool history);
 
         int rowCount(const QModelIndex &parent = QModelIndex()) const override;
         int columnCount(const QModelIndex &parent = QModelIndex()) const override;
         QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
         QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+
+        void excludeModulesById(QSet<u32> id_set) { mExcl.append(id_set); }
 
         u32 moduleId(int irow) const;
         QColor moduleColor(int irow) const;
