@@ -623,8 +623,16 @@ namespace hal {
         {
             undef |= (1 << ibit);
             WaveData* wd = mGroupList.at(ibit);
-            if (wd->loadPolicy()!=WaveData::TooBigToLoad && wd->data().size() < (int) wd->fileSize())
+            if (wd->loadPolicy()==WaveData::TooBigToLoad)
+            {
+                // Would block, must determine group values in background thread
+                return;
+            }
+            else if (wd->data().size() < (int) wd->fileSize())
+            {
+                // Loadable but nut loaded yet
                 wd->loadSaleae(mWaveDataList->timeFrame());
+            }
             wdArray[ibit] = wd;
             if (!wd) continue;
             for (u64 t : wd->data().keys())

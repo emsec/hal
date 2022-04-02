@@ -297,7 +297,7 @@ namespace hal {
                 {
                 if (wree->isNull())
                 {
-                    if (wree->isGroup() && wree->wavedata()->loadPolicy()==WaveData::TooBigToLoad)
+                    if (wree->isGroup() && wree->wavedata()->loadPolicy()!=WaveData::LoadAllData)
                     {
                         if (wree->mPainted.generateGroup(wree->wavedata(),mWaveItemHash))
                         {
