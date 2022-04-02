@@ -873,8 +873,12 @@ namespace hal
     void GraphGraphicsView::handleAddModuleToView()
     {
         QSet<u32> not_selectable_modules;
-        //not_selectable_modules.insert(2);
-
+        QSet<u32> modules_in_context = mGraphWidget->getContext()->modules();
+        QSet<u32>::iterator i;
+        for (i = modules_in_context.begin(); i != modules_in_context.end(); ++i)
+            for (Module* m : gNetlist->get_module_by_id(*i)->get_submodules(nullptr, true))
+                not_selectable_modules.insert(m->get_id());
+        not_selectable_modules += modules_in_context;
 
         CustomModuleDialog md(not_selectable_modules, this);
         if (md.exec() == QDialog::Accepted)
@@ -908,7 +912,7 @@ namespace hal
             }
         }
 
-        CustomGateDialog gd(0,true,selectableGates,this);
+        CustomGateDialog gd(0, true, selectableGates, this);
         if (gd.exec() == QDialog::Accepted)
         {
             QSet<u32> gate_to_add;
