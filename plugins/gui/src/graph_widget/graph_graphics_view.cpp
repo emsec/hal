@@ -876,8 +876,22 @@ namespace hal
         QSet<u32> modules_in_context = mGraphWidget->getContext()->modules();
         QSet<u32>::iterator i;
         for (i = modules_in_context.begin(); i != modules_in_context.end(); ++i)
-            for (Module* m : gNetlist->get_module_by_id(*i)->get_submodules(nullptr, true))
+        {
+            Module* pm = gNetlist->get_module_by_id(*i);
+
+            for (Module* m : pm->get_submodules(nullptr, true))
                 not_selectable_modules.insert(m->get_id());
+
+            Module* tmp_pm = pm;
+            while (!tmp_pm->is_top_module())
+            {
+                Module* parent = tmp_pm->get_parent_module();
+                tmp_pm = parent;
+                not_selectable_modules.insert(parent->get_id());
+            }
+        }
+
+
         not_selectable_modules += modules_in_context;
 
         CustomModuleDialog md(not_selectable_modules, this);
