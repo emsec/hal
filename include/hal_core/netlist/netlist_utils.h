@@ -97,7 +97,8 @@ namespace hal
          * Find predecessors or successors of a gate. If depth is set to 1 only direct predecessors/successors
          * will be returned. Higher number of depth causes as many steps of recursive calls. If depth is set to 0
          * there is no limitation and the loop continues until no more predecessors/succesors are found.
-         * If a filter function is given only gates matching the filter will be added to the result vector.
+         * If a filter function is given, the recursion stops whenever the filter function evaluates to False. 
+         * Only gates matching the filter will be added to the result vector.
          * The result will not include the provided gate itself.
          *
          * @param gate[in] - The initial gate.
@@ -107,6 +108,23 @@ namespace hal
          * @return Vector of predecessor/successor gates.
          */
         CORE_API std::vector<Gate*> get_next_gates(const Gate* gate, bool get_successors, int depth = 0, const std::function<bool(const Gate*)>& filter = nullptr);
+
+        /**
+         * TODO test
+         * Find predecessors or successors of a net. If depth is set to 1 only direct predecessors/successors
+         * will be returned. Higher number of depth causes as many steps of recursive calls. If depth is set to 0
+         * there is no limitation and the loop continues until no more predecessors/succesors are found.
+         * If a filter function is given, the recursion stops whenever the filter function evaluates to False. 
+         * Only gates matching the filter will be added to the result vector.
+         * The result will not include the provided gate itself.
+         *
+         * @param net[in] - The initial net.
+         * @param get_successors[in] - True to return successors, false for Predecessors.
+         * @param depth[in] - Depth of recursion.
+         * @param filter[in] - User-defined filter function.
+         * @return Vector of predecessor/successor gates.
+         */
+        CORE_API std::vector<Gate*> get_next_gates(const Net* net, bool get_successors, int depth = 0, const std::function<bool(const Gate*)>& filter = nullptr);
 
         /**
          * Find all sequential predecessors or successors of a gate.

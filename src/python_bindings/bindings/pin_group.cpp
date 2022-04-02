@@ -80,7 +80,8 @@ namespace hal
             :rtype: hal_py.PinType
         )");
 
-        py_module_pin_group.def_property_readonly("pins", &PinGroup<ModulePin>::get_pins, R"(
+        py_module_pin_group.def_property_readonly(
+            "pins", [](const PinGroup<ModulePin>& self) -> std::vector<ModulePin*> { return self.get_pins(nullptr); }, R"(
             The (ordered) pins of the pin groups.
 
             :type: list[hal_py.ModulePin]
