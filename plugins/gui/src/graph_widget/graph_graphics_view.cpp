@@ -873,32 +873,72 @@ namespace hal
     void GraphGraphicsView::handleAddModuleToView()
     {
         QSet<u32> not_selectable_modules;
+        qDebug() << "1";
         QSet<u32> modules_in_context = mGraphWidget->getContext()->modules();
+        qDebug() << "2";
+
         QSet<u32>::iterator i;
         for (i = modules_in_context.begin(); i != modules_in_context.end(); ++i)
         {
-            Module* pm = gNetlist->get_module_by_id(*i);
-
-            for (Module* m : pm->get_submodules(nullptr, true))
+            qDebug() << "sub: " << *i;
+            for (Module* m : gNetlist->get_module_by_id(*i)->get_submodules(nullptr, true))
+            {
                 not_selectable_modules.insert(m->get_id());
 
-            Module* tmp_pm = pm;
+                qDebug() << "subsub: " << m->get_id();
+
+            }
+
+        }
+        qDebug() << "3";
+        int cur_id;
+        for (Module* m : gNetlist->get_modules())
+        {
+            // BUG: after removing a module the isShowingModule function doesn't work anymore => leads to a crash
+            qDebug() << "JAA: " << m->get_id();
+            if (mGraphWidget->getContext()->isShowingModule(m->get_id()))
+            {
+                //modules_in_context.insert(m->get_id());
+                cur_id = m->get_id();
+                not_selectable_modules.insert(cur_id);
+                qDebug() << "cur: " << cur_id;
+                break;
+            }
+        }
+        qDebug() << "4";
+        /*
+         *  separately, since the current module is added here.
+         *  Otherwise one could not add remote modules
+        */
+//        for (i = modules_in_context.begin(); i != modules_in_context.end(); ++i)
+//        {
+//            Module* tmp_pm = gNetlist->get_module_by_id(*i);
+//            while (!tmp_pm->is_top_module())
+//            {
+//                Module* parent = tmp_pm->get_parent_module();
+//                tmp_pm = parent;
+//                not_selectable_modules.insert(parent->get_id());
+//                qDebug() << "par: " << parent->get_id();
+//            }
+//        }
+        if (cur_id > 0)
+        {
+            Module* tmp_pm = gNetlist->get_module_by_id(cur_id);
             while (!tmp_pm->is_top_module())
             {
                 Module* parent = tmp_pm->get_parent_module();
                 tmp_pm = parent;
                 not_selectable_modules.insert(parent->get_id());
+                qDebug() << "par: " << parent->get_id();
             }
         }
-
-
+        qDebug() << "5";
         not_selectable_modules += modules_in_context;
 
         CustomModuleDialog md(not_selectable_modules, this);
+        qDebug() << "6";
         if (md.exec() == QDialog::Accepted)
         {
-            // TODO: only available modules
-
             QSet<u32> module_to_add;
             module_to_add.insert(md.selectedId());
             ActionAddItemsToObject* act = new ActionAddItemsToObject(module_to_add,{});
@@ -915,8 +955,12 @@ namespace hal
         QSet<u32> modules_in_context = mGraphWidget->getContext()->modules();
         QSet<u32>::iterator i;
         for (i = modules_in_context.begin(); i != modules_in_context.end(); ++i)
+        {
             for (Gate* g : gNetlist->get_module_by_id(*i)->get_gates(nullptr, true))
+            {
                 not_selectable_gates.insert(g->get_id());
+            }
+        }
 
         QSet<u32> selectableGates;
         for (Gate* g : gNetlist->get_gates())

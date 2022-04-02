@@ -16,6 +16,8 @@
 #include <QTableView>
 #include <QTreeView>
 
+#include <QDebug>
+
 namespace hal {
     CustomModuleDialog::CustomModuleDialog(QSet<u32> exclude_ids, QWidget* parent)
         : QDialog(parent),
@@ -24,20 +26,23 @@ namespace hal {
           mSearchbar(new Searchbar(this))
     {
 
-        setWindowTitle("Move to module …");
+        setWindowTitle("Add module to View");
         QGridLayout* layout = new QGridLayout(this);
 
-
+        qDebug() << "7";
 
         layout->addWidget(mSearchbar, 1, 0, 1, 2);
         mTabWidget = new QTabWidget(this);
         mTreeView  = new QTreeView(mTabWidget);
         mTabWidget->addTab(mTreeView, "Module tree");
 
+        qDebug() << "8";
+
         mTableView = new ModuleSelectView(false, mSearchbar, &exclude_ids, mTabWidget);
         connect(mTableView, &ModuleSelectView::moduleSelected, this, &CustomModuleDialog::handleTableSelection);
         mTabWidget->addTab(mTableView, "Module list");
 
+        qDebug() << "9";
         if (!ModuleSelectHistory::instance()->isEmpty())
         {
             mLastUsed = new ModuleSelectView(true, mSearchbar, &exclude_ids, mTabWidget);
@@ -89,7 +94,7 @@ namespace hal {
             Module* m = gNetlist->get_module_by_id(mSelectedId);
             if (m) target = QString("%1[%2]").arg(QString::fromStdString(m->get_name())).arg(mSelectedId);
         }
-        setWindowTitle("Move to module " + target);
+        setWindowTitle("Add module to View");
     }
 
      u32 CustomModuleDialog::treeModuleId(const QModelIndex& index)
