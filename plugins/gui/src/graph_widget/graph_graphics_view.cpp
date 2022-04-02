@@ -891,7 +891,7 @@ namespace hal
 
         }
         qDebug() << "3";
-        int cur_id;
+        int cur_id = 0;
         for (Module* m : gNetlist->get_modules())
         {
             // BUG: after removing a module the isShowingModule function doesn't work anymore => leads to a crash
@@ -921,7 +921,7 @@ namespace hal
 //                qDebug() << "par: " << parent->get_id();
 //            }
 //        }
-        if (cur_id > 0)
+        if (cur_id != 0)
         {
             Module* tmp_pm = gNetlist->get_module_by_id(cur_id);
             while (!tmp_pm->is_top_module())
