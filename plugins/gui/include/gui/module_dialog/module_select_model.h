@@ -185,7 +185,7 @@ namespace hal {
          * @param sbar the filter-string editor to connect with
          * @param parent the parent widget
          */
-        ModuleSelectView(bool history, Searchbar* sbar,
+        ModuleSelectView(bool history, Searchbar* sbar, QSet<u32>* exclude_ids,
                           QWidget* parent=nullptr);
 
     Q_SIGNALS:

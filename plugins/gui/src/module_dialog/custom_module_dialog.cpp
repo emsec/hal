@@ -37,13 +37,15 @@ namespace hal {
         mTreeView  = new QTreeView(mTabWidget);
         mTabWidget->addTab(mTreeView, "Module tree");
 
-        mTableView = new ModuleSelectView(false, mSearchbar, mTabWidget);
+        QSet<u32> e;
+        e.insert(4);
+        mTableView = new ModuleSelectView(false, mSearchbar, &e, mTabWidget);
         connect(mTableView, &ModuleSelectView::moduleSelected, this, &CustomModuleDialog::handleTableSelection);
         mTabWidget->addTab(mTableView, "Module list");
 
         if (!ModuleSelectHistory::instance()->isEmpty())
         {
-            mLastUsed = new ModuleSelectView(true,mSearchbar,mTabWidget);
+            mLastUsed = new ModuleSelectView(true, mSearchbar, &e, mTabWidget);
             if (mLastUsed->model()->rowCount())
             {
                 connect(mLastUsed, &ModuleSelectView::moduleSelected, this, &CustomModuleDialog::handleTableSelection);

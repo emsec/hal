@@ -351,7 +351,7 @@ namespace hal
     }
 
     //---------------- VIEW -------------------------------------------
-    ModuleSelectView::ModuleSelectView(bool history, Searchbar* sbar, QWidget* parent) : QTableView(parent)
+    ModuleSelectView::ModuleSelectView(bool history, Searchbar* sbar, QSet<u32>* exclude_ids, QWidget* parent) : QTableView(parent)
     {
         setSelectionBehavior(QAbstractItemView::SelectRows);
         setSelectionMode(QAbstractItemView::SingleSelection);
@@ -360,10 +360,13 @@ namespace hal
         connect(sbar, &Searchbar::textEdited, prox, &ModuleSelectProxy::searchTextChanged);
 
         ModuleSelectModel* modl = new ModuleSelectModel(this);
-        QSet<u32> e;
-        e.insert(2);
-        //modl->excludeModulesById(e);
+
+        if (exclude_ids != nullptr)
+        {
+            modl->excludeModulesById(*exclude_ids);
+        }
         modl->appendEntries(history);
+
         prox->setSourceModel(modl);
         setModel(prox);
 

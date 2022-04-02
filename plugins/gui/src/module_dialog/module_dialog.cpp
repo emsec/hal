@@ -44,13 +44,13 @@ namespace hal {
         mTreeView  = new QTreeView(mTabWidget);
         mTabWidget->addTab(mTreeView, "Module tree");
 
-        mTableView = new ModuleSelectView(false, mSearchbar, mTabWidget);
+        mTableView = new ModuleSelectView(false, mSearchbar, nullptr, mTabWidget);
         connect(mTableView, &ModuleSelectView::moduleSelected, this, &ModuleDialog::handleTableSelection);
         mTabWidget->addTab(mTableView, "Module list");
 
         if (!ModuleSelectHistory::instance()->isEmpty())
         {
-            mLastUsed = new ModuleSelectView(true,mSearchbar,mTabWidget);
+            mLastUsed = new ModuleSelectView(true,mSearchbar,nullptr, mTabWidget);
             if (mLastUsed->model()->rowCount())
             {
                 connect(mLastUsed, &ModuleSelectView::moduleSelected, this, &ModuleDialog::handleTableSelection);
