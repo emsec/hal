@@ -56,7 +56,7 @@ namespace hal {
          *
          * @param parent - The dialog's parent.
          */
-        CustomModuleDialog(QWidget* parent=nullptr);
+        CustomModuleDialog(QSet<u32> exclude_ids, QWidget* parent=nullptr);
 
         /**
          * Get the through this dialog selected id.

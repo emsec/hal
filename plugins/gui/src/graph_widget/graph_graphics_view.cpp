@@ -872,11 +872,11 @@ namespace hal
 
     void GraphGraphicsView::handleAddModuleToView()
     {
-        /*
-         * TODO: add class CustomModuleDialog with less features
-         * CRASH: when trying to create new module
-        */
-        CustomModuleDialog md(this);
+        QSet<u32> not_selectable_modules;
+        //not_selectable_modules.insert(2);
+
+
+        CustomModuleDialog md(not_selectable_modules, this);
         if (md.exec() == QDialog::Accepted)
         {
             // TODO: only available modules

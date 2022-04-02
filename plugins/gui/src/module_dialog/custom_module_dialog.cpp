@@ -17,15 +17,12 @@
 #include <QTreeView>
 
 namespace hal {
-    CustomModuleDialog::CustomModuleDialog(QWidget* parent)
+    CustomModuleDialog::CustomModuleDialog(QSet<u32> exclude_ids, QWidget* parent)
         : QDialog(parent),
           mSelectedId(0),
           mLastUsed(nullptr),
           mSearchbar(new Searchbar(this))
     {
-
-        // TODO: change in module_select_model.cpp: add not selectable set to mExclude Set
-
 
         setWindowTitle("Move to module …");
         QGridLayout* layout = new QGridLayout(this);
@@ -37,15 +34,13 @@ namespace hal {
         mTreeView  = new QTreeView(mTabWidget);
         mTabWidget->addTab(mTreeView, "Module tree");
 
-        QSet<u32> e;
-        e.insert(4);
-        mTableView = new ModuleSelectView(false, mSearchbar, &e, mTabWidget);
+        mTableView = new ModuleSelectView(false, mSearchbar, &exclude_ids, mTabWidget);
         connect(mTableView, &ModuleSelectView::moduleSelected, this, &CustomModuleDialog::handleTableSelection);
         mTabWidget->addTab(mTableView, "Module list");
 
         if (!ModuleSelectHistory::instance()->isEmpty())
         {
-            mLastUsed = new ModuleSelectView(true, mSearchbar, &e, mTabWidget);
+            mLastUsed = new ModuleSelectView(true, mSearchbar, &exclude_ids, mTabWidget);
             if (mLastUsed->model()->rowCount())
             {
                 connect(mLastUsed, &ModuleSelectView::moduleSelected, this, &CustomModuleDialog::handleTableSelection);
