@@ -163,7 +163,15 @@ namespace hal
     {
         for (GraphContext* context : mContextTableModel->list())
             if (context->modules().contains(m->get_id()))
+            {
+                if (context->getExclusiveModuleId() == m->get_id())
+                    context->setExclusiveModuleId(0, false);
+
                 context->remove({m->get_id()}, {});
+
+                if (context->empty())
+                    deleteGraphContext(context);
+            }
     }
 
     void GraphContextManager::handleModuleNameChanged(Module* m) const
@@ -244,12 +252,8 @@ namespace hal
 
         for (GraphContext* context : mContextTableModel->list())
         {
-            // Folded module
-            if (context->isShowingModule(m->get_id(), {}, {}, {removed_module}, {}, false))\
+            if (context->isShowingModule(m->get_id(), {}, {}, {removed_module}, {}, false))
                 context->remove({removed_module}, {});
-            // Unfolded module
-            else if (context->isShowingModule(removed_module, {}, {}, {}, {}, false) && !context->isShowingModule(removed_module, {}, {}, {}, {}, true))
-                context->removeModuleContents(removed_module);
             else
                 context->testIfAffected(m->get_id(), &removed_module, nullptr);
 

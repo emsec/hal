@@ -321,7 +321,7 @@ namespace hal
         auto moduleModules = (modules - minus_modules) + plus_modules;
 
         if (exclusively)
-            return contextGates == moduleGates && contextModules == moduleModules;   
+            return contextGates == moduleGates && contextModules == moduleModules;
         else
             return (contextGates.contains(moduleGates) && contextModules.contains(moduleModules) && !moduleGates.empty() && !moduleModules.empty()) ||
                    (contextGates.contains(moduleGates) && !moduleGates.empty() && moduleModules.empty()) ||
@@ -350,6 +350,10 @@ namespace hal
 
     bool GraphContext::isShowingModuleExclusively()
     {
+        // Module Context connection is lost when a unfolded submodule (visible in view) is deleted
+        // The connection is lost, because the deletion of an unfolded module does not add its submodules/gates
+        // to the view
+
         if (!mExclusiveModuleId) return false;
 
         auto containedModules = mModules + mAddedModules - mRemovedModules;
