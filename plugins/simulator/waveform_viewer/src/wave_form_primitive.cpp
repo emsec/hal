@@ -78,7 +78,9 @@ namespace hal {
             pts.append(QPointF(x1-4,14));
         }
         else
+        {
             pts.append(QPointF((x0+x1)/2.,14));
+        }
         pts.append(QPointF(x1,7));
         if (mX1-mX0 > 8)
         {
@@ -86,7 +88,9 @@ namespace hal {
             pts.append(QPointF(x0+4,0));
         }
         else
+        {
             pts.append(QPointF((x0+x1)/2.,0));
+        }
         mPolygon = QPolygonF(pts);
     }
 
@@ -100,10 +104,12 @@ namespace hal {
         QFontMetrics fm(font);
         QRectF r = fm.boundingRect(txt);
         r.setWidth(r.width()+4*txt.size());
-        float wMax = mX1 - mX0;
+        float wMax = mX0 < 0 ? mX1 : mX1 - mX0;
         if (r.width()+6 > wMax) return;
         r.setHeight(14);
-        r.moveTo(mX0 + (wMax - r.width())/2., y0-1);
+        float xText = mX0 + (wMax - r.width())/2.;
+        if (xText<0) xText = 0;
+        r.moveTo(xText, y0-1);
         painter.drawText(r,txt);
     }
 }

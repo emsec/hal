@@ -430,23 +430,88 @@ namespace hal
                     for (const Net* n : get_successors ? g0->get_fan_out_nets() : g0->get_fan_in_nets())
                     {
                         if (nets_handled.find(n) != nets_handled.end())
+                        {
                             continue;
+                        }
                         nets_handled.insert(n);
 
                         for (const Endpoint* ep : get_successors ? n->get_destinations() : n->get_sources())
                         {
                             Gate* g1 = ep->get_gate();
                             if (gats_handled.find(g1) != gats_handled.end())
+                            {
                                 continue;    // already handled
+                            }
                             gats_handled.insert(g1);
-                            v1.push_back(g1);
                             if (!filter || filter(g1))
+                            {
+                                v1.push_back(g1);
                                 retval.push_back(g1);
+                            }
                         }
                     }
                 }
                 if (v1.empty())
+                {
                     break;
+                }
+                v0 = v1;
+            }
+            return retval;
+        }
+
+        std::vector<Gate*> get_next_gates(const Net* net, bool get_successors, int depth, const std::function<bool(const Gate*)>& filter)
+        {
+            std::vector<Gate*> retval;
+            std::unordered_map<u32, std::vector<Gate*>> cache;
+            std::vector<const Gate*> v0;
+            std::unordered_set<const Gate*> gates_handled;
+            std::unordered_set<const Net*> nets_handled;
+            for (const Endpoint* ep : (get_successors ? net->get_destinations() : net->get_sources()))
+            {
+                Gate* g = ep->get_gate();
+                if (!filter || filter(g))
+                {
+                    v0.push_back(g);
+                    gates_handled.insert(g);
+                    nets_handled.insert(net);
+                    retval.push_back(g);
+                }
+            }
+
+            for (int round = 1; depth == 0 || round < depth; round++)
+            {
+                std::vector<const Gate*> v1;
+                for (const Gate* g0 : v0)
+                {
+                    for (const Net* n : get_successors ? g0->get_fan_out_nets() : g0->get_fan_in_nets())
+                    {
+                        if (nets_handled.find(n) != nets_handled.end())
+                        {
+                            continue;
+                        }
+                        nets_handled.insert(n);
+
+                        for (const Endpoint* ep : get_successors ? n->get_destinations() : n->get_sources())
+                        {
+                            Gate* g1 = ep->get_gate();
+                            if (gates_handled.find(g1) != gates_handled.end())
+                            {
+                                continue;    // already handled
+                            }
+                            gates_handled.insert(g1);
+                            if (!filter || filter(g1))
+                            {
+                                v1.push_back(g1);
+                                retval.push_back(g1);
+                            }
+                        }
+                    }
+                }
+                if (v1.empty())
+                {
+                    break;
+                }
                 v0 = v1;
             }
             return retval;

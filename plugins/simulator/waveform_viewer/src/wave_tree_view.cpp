@@ -56,16 +56,22 @@ namespace hal {
             }
             if (wd)
             {
-                WaveEditDialog wed(wd, this);
-                if (wed.exec() == QDialog::Accepted)
-                {
-                    wd->setData(wed.dataMap());
-                    mWaveDataList->updateWaveData(iwave);
-                }
+                editWaveData(wd);
                 return;
             }
         }
         QAbstractItemView::mouseDoubleClickEvent(event);
+    }
+
+    void WaveTreeView::editWaveData(WaveData *wd)
+    {
+        WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
+        WaveEditDialog wed(wd, wtm->cursorTime(), this);
+        if (wed.exec() == QDialog::Accepted)
+        {
+            wd->setData(wed.dataMap());
+            mWaveDataList->updateWaveData(mWaveDataList->waveIndexByNetId(wd->id()));
+        }
     }
 
     void WaveTreeView::scrollContentsBy(int dx, int dy)
@@ -225,13 +231,7 @@ namespace hal {
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
         WaveData* wd = wtm->item(inx);
         if (!wd) return;
-
-        WaveEditDialog wed(wd, this);
-        if (wed.exec() == QDialog::Accepted)
-        {
-            wd->setData(wed.dataMap());
-            mWaveDataList->updateWaveData(mWaveDataList->waveIndexByNetId(wd->id()));
-        }
+        editWaveData(wd);
     }
 
     void WaveTreeView::handleRemoveItem()
@@ -255,8 +255,10 @@ namespace hal {
 
     void WaveTreeView::handleRemoveMulti()
     {
+        if (mContextIndexList.isEmpty()) return;
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
         WaveTreeModel::ReorderRequest req(wtm);
+        SaleaeDirectoryStoreRequest save(&mWaveDataList->saleaeDirectory());
         for (const QModelIndex& inx : mContextIndexList)
         {
             if (wtm->isLeaveItem(inx))

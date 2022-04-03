@@ -24,11 +24,10 @@ namespace hal
 
         py::enum_<NetlistSimulatorController::FilterInputFlag>(m, "FilterInputFlag", R"(Defines the filter of input file.)")
             .value("GlobalInputs", NetlistSimulatorController::GlobalInputs, R"(Read data only for global inputs.)")
-            .value("PartialNetlist", NetlistSimulatorController::PartialNetlist,R"(Read data for partial netlist used in simulation.)")
+            .value("PartialNetlist", NetlistSimulatorController::PartialNetlist, R"(Read data for partial netlist used in simulation.)")
             .value("CompleteNetlist", NetlistSimulatorController::CompleteNetlist, R"(Read data for all nets in netlist.)")
             .value("NoFilter", NetlistSimulatorController::NoFilter, R"(No filter, read entire input file.)")
             .export_values();
-
 
         py::class_<NetlistSimulatorControllerPlugin, RawPtrWrapper<NetlistSimulatorControllerPlugin>, BasePluginInterface>(m, "NetlistSimulatorControllerPlugin")
             .def_property_readonly("name", &NetlistSimulatorControllerPlugin::get_name, R"(
@@ -151,14 +150,23 @@ namespace hal
                 :param hal_py.BooleanFunction.Value value: The value to set.
             )")
 
-            .def("set_timeframe", &NetlistSimulatorController::set_timeframe, py::arg("tmin")=0, py::arg("tmax")=0, R"(
+            .def("set_timeframe", &NetlistSimulatorController::set_timeframe, py::arg("tmin") = 0, py::arg("tmax") = 0, R"(
                 Set timeframe for viewer.
 
                 :param int tmin: Lower limit for time scale in wave viewer.
                 :param int tmax: Upper limit for time scale in wave viewer.
             )")
 
-            .def("trace_value_if", [](const NetlistSimulatorController& self, const u32 group_id, const Net* trigger_net, const std::vector<Net*>& enable_nets, BooleanFunction enable_condition, u32 start_time, u32 end_time) -> std::vector<u32> {
+            .def(
+                "trace_value_if",
+                [](NetlistSimulatorController& self,
+                   const u32 group_id,
+                   const Net* trigger_net,
+                   const std::vector<Net*>& enable_nets,
+                   const BooleanFunction& enable_condition,
+                   u64 start_time,
+                   u64 end_time
+                   ) -> std::vector<u32> {
                     auto res = self.trace_value_if(group_id, trigger_net, enable_nets, enable_condition, start_time, end_time);
                     if (res.is_ok())
                     {
@@ -169,8 +177,14 @@ namespace hal
                         log_error("python_context", "{}", res.get_error().get());
                         return {};
                     }
-                }, 
-                py::arg("group_id"), py::arg("trigger_net"), py::arg("enable_nets"), py::arg("enable_condition"), py::arg("start_time"), py::arg("end_time"), R"(
+                },
+                py::arg("group_id"),
+                py::arg("trigger_net"),
+                py::arg("enable_nets"),
+                py::arg("enable_condition"),
+                py::arg("start_time"),
+                py::arg("end_time"),
+                R"(
                 Record a trace of the value of the group specified by the given ID.
                 A value is recorded everytime the trigger net toggles and the enable condition evaluates to 'BooleanFunction::Value::ONE'.
 
@@ -351,7 +365,6 @@ namespace hal
                 :param str name: New name for waveform.
             )")
 
-
             /*
             .def("set_simulation_state", &NetlistSimulator::set_simulation_state, py::arg("state"), R"(
                 Set the simulator state, i.e., net signals, to a given state.
@@ -470,7 +483,7 @@ namespace hal
                 Waveform data.
         )");
 
-        py_wave_data.def("get_name", &WaveData::name, R"(
+        py_wave_data.def("get_name", &WaveData::get_name, R"(
                 Get the name of waveform net.
 
                 :returns: The name of the waveform.
@@ -492,9 +505,10 @@ namespace hal
                 :rtype: int
         )");
 
-        py_wave_data.def("get_events", &WaveData::get_events, R"(
-                Get all waveform events.
+        py_wave_data.def("get_events", &WaveData::get_events, py::arg("t0")=0, R"(
+                Get up to maximum loadable waveform events.
 
+                :param int t0: Optional start time, only events t>=t0 will be returned.
                 :returns: Waveform events.
                 :rtype: list[tuple(int,int)]
         )");
@@ -520,7 +534,6 @@ namespace hal
 
                 :rtype: list[hal_py.WaveData]
         )");
-
 
 #ifndef PYBIND11_MODULE
         return m.ptr();

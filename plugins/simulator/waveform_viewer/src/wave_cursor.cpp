@@ -11,7 +11,7 @@
 namespace hal {
 
     WaveCursor::WaveCursor(const WaveTransform* trans, const WaveScrollbar* scroll, QWidget* parent)
-        : QWidget(parent), mTransform(trans), mScrollbar(scroll), mPosition(100,400)
+        : QWidget(parent), mTransform(trans), mScrollbar(scroll), mPosition(100,400), mTimeValue(-1)
     {
         setWindowOpacity(0);
         setAttribute(Qt::WA_TransparentForMouseEvents);
@@ -49,10 +49,10 @@ namespace hal {
         font.setPointSizeF(10);
         paint.setFont(font);
 
-        double tval = mScrollbar->tPos(mPosition.x());
+        if (mTimeValue < 0) mTimeValue = mScrollbar->tPos(mPosition.x());
         WaveGraphicsCanvas* wgc = static_cast<WaveGraphicsCanvas*>(parent());
-        if (wgc) wgc->setCursorPosition(tval,mPosition.x());
-        paint.drawText(rectTvalue, QString::number(tval,'f',0), Qt::AlignHCenter | Qt::AlignVCenter);
+        if (wgc) wgc->setCursorPosition(mTimeValue,mPosition.x());
+        paint.drawText(rectTvalue, QString::number(mTimeValue,'f',0), Qt::AlignHCenter | Qt::AlignVCenter);
     }
 
     void WaveCursor::setViewportHeight(int height)
@@ -66,9 +66,27 @@ namespace hal {
         return QRect(mPosition.x()-sWidth/2,mPosition.y()-sLabHeight/2,sWidth,sLabHeight);
     }
 
+    void WaveCursor::setCursorToTime(double t)
+    {
+        Q_ASSERT(mScrollbar);
+        mTimeValue = t;
+        mPosition.setX(mScrollbar->xPosI(mTimeValue));
+        move(mPosition.x()-sWidth/2,0);
+        update();
+    }
+
+    void WaveCursor::recalcTime()
+    {
+        Q_ASSERT(mScrollbar);
+        mTimeValue = mScrollbar->tPos(mPosition.x());
+        update();
+    }
+
     void WaveCursor::setCursorPosition(const QPoint& pos)
     {
+        Q_ASSERT(mScrollbar);
         mPosition = pos;
+        mTimeValue = mScrollbar->tPos(mPosition.x());
         move(pos.x()-sWidth/2,0);
         update();
     }

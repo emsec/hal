@@ -57,6 +57,7 @@ namespace hal {
 
     class WaveFormPrimitiveValue : public WaveFormPrimitive
     {
+    private:
         int mValue;
         int mBits;
         int mBase;

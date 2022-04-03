@@ -31,6 +31,11 @@ namespace hal {
     Q_SIGNALS:
         void cursorMoved(double tCursor, int xpos);
         void undoStateChanged();
+    private Q_SLOTS:
+        void handleContextMenuRequested(const QPoint& pos);
+        void handleCopyCursorTime();
+        void handleEnterCursorTime();
+
     public Q_SLOTS:
         void updateRequest();
         void handleWaveUpdated(int iwave, int groupId);

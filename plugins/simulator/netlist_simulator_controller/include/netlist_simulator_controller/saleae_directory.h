@@ -56,7 +56,6 @@ namespace hal
         const std::vector<SaleaeDirectoryFileIndex>& indexes() const { return mFileIndexes; }
         void addIndex(const SaleaeDirectoryFileIndex& sdfe) { mFileIndexes.push_back(sdfe); }
         void rename(const std::string nam) { mName = nam; }
-        std::string dataFilename() const; // TODO : time as argument
         int dataFileIndex() const; // TODO : time as argument
     };
 
@@ -97,7 +96,6 @@ namespace hal
         std::unordered_map<uint32_t,int> mById;
         std::unordered_map<std::string, int> mByName;
 
-        std::string dataFilename(const SaleaeDirectoryNetEntry& sdnep) const;
         int getIndex(const SaleaeDirectoryNetEntry& sdnep) const;
         int mNextAvailableIndex;
         int mStoreRequest;
@@ -112,7 +110,9 @@ namespace hal
         void update_file_indexes(std::unordered_map<int, SaleaeDirectoryFileIndex>& fileIndexes);
         void rename_net(uint32_t id, const std::string& nam);
 
-        std::string get_datafile(const std::string& nam, uint32_t id) const;
+        std::string get_datafile_name(int index) const;
+        std::string get_datafile_path(int index) const;
+        std::string get_datafile_path(const std::string& nam, uint32_t id) const;
         int get_datafile_index(const std::string& nam, uint32_t id) const;
 
         int get_next_available_index() const { return mNextAvailableIndex; }

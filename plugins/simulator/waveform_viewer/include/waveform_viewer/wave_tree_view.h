@@ -29,6 +29,7 @@ namespace hal {
         WaveItemHash* mWaveItemHash;
 
         QModelIndexList sortedSelection() const;
+        void editWaveData(WaveData* wd);
 
     protected:
         void mouseDoubleClickEvent(QMouseEvent *event) override;

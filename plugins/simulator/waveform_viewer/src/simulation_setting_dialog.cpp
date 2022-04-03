@@ -140,6 +140,11 @@ namespace hal {
         mMaxSizeLoadable->setMinimum(50);
         mMaxSizeLoadable->setValue(settings->maxSizeLoadable());
         layout->addRow("Load waveform to memory if number transitions <", mMaxSizeLoadable);
+        mMaxSizeEditor = new QSpinBox(this);
+        mMaxSizeEditor->setMaximum(5000);
+        mMaxSizeEditor->setMinimum(10);
+        mMaxSizeEditor->setValue(settings->maxSizeLoadable());
+        layout->addRow("Load waveform to memory if number transitions <", mMaxSizeEditor);
     }
 
     //-----------------------------------

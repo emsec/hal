@@ -90,7 +90,7 @@ namespace hal {
         void setState(State stat);
         void dump(QTextStream& xout) const;
         bool hasLoader() const { return mLoader != nullptr; }
-        void loadSaleae(SaleaeInputFile& sif);
+        void loadSaleae();
         State state() const { return mState; }
 
    //     int waveIndex() const { return mWaveIndex; }

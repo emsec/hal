@@ -211,9 +211,9 @@ namespace hal
             if (sdfi.index() >= mNextAvailableIndex) mNextAvailableIndex = sdfi.index() + 1;
     }
 
-    std::string SaleaeDirectory::dataFilename(const SaleaeDirectoryNetEntry& sdnep) const
+    std::string SaleaeDirectory::get_datafile_path(int index) const
     {
-        return get_directory() + folderSeparator + sdnep.dataFilename();
+        return get_directory() + folderSeparator + get_datafile_name(index);
     }
 
     int SaleaeDirectory::getIndex(const SaleaeDirectoryNetEntry& sdnep) const
@@ -221,17 +221,11 @@ namespace hal
         return sdnep.dataFileIndex();
     }
 
-    std::string SaleaeDirectory::get_datafile(const std::string& nam, uint32_t id) const
+    std::string SaleaeDirectory::get_datafile_path(const std::string& nam, uint32_t id) const
     {
-        if (id)
-        {
-            auto it = mById.find(id);
-            if (it != mById.end()) return dataFilename(mNetEntries.at(it->second));
-        }
-
-        auto jt = mByName.find(nam);
-        if (jt == mByName.end()) return std::string();
-        return dataFilename(mNetEntries.at(jt->second));
+        int index = get_datafile_index(nam, id);
+        if (index < 0) return std::string();
+        return get_datafile_path(index);
     }
 
     int SaleaeDirectory::get_datafile_index(const std::string &nam, uint32_t id) const
@@ -292,11 +286,11 @@ namespace hal
         return mFileIndexes.back().index();
     }
 
-    std::string SaleaeDirectoryNetEntry::dataFilename() const
+    std::string SaleaeDirectory::get_datafile_name(int index) const
     {
-        if (mFileIndexes.empty()) return std::string();
+        if (index < 0) return std::string();
         std::ostringstream fname;
-        fname << "digital_" << mFileIndexes.back().index() << ".bin";
+        fname << "digital_" << index << ".bin";
         return fname.str();
     }
 

@@ -47,7 +47,6 @@ namespace hal {
         for (const WaveFormPrimitive* wfp : mPrimitives)
             if (wfp->isInRange(xpos))
             {
-                qDebug() << "valx" << xpos << wfp->x0() << wfp->x1() << wfp->value();
                 return wfp->value();
             }
         return SaleaeDataTuple::sReadError;
@@ -59,7 +58,7 @@ namespace hal {
         QMutexLocker lock(&mMutex);
         for (const WaveFormPrimitive* wfp : mPrimitives)
         {
-            if (wfp->x0() == wfp->x1()) continue;
+            if (wfp->x1() <= wfp->x0()) continue;
             retval.insert(wfp->x0(),wfp->value());
         }
         return retval;
@@ -145,6 +144,7 @@ namespace hal {
         if (!grp) return false;
         bool firstWave = true;
 
+        float xmax = 0;
         int nbits = 0;
         for (int iwave : grp->childrenWaveIndex())
         {
@@ -153,26 +153,35 @@ namespace hal {
             WaveItem* wi = hash->value(wii);
             if (!wi || wi->mPainted.isEmpty()) return false;
 
+            QMutexLocker lock(&wi->mMutex);
             // validity must be the same for all child elements
             if (firstWave)
             {
                 mValidity = wi->mPainted.validity();
+                xmax = wi->mPainted.x1();
                 firstWave = false;
             }
             else
             {
-                if (mValidity != wi->mPainted.validity()) return false;
+                float testXmax = wi->mPainted.x1();
+                if (testXmax > xmax) xmax = testXmax;
+                if (mValidity != wi->mPainted.validity())
+                    return false;
             }
             QMap<float,int> pValues = wi->mPainted.primitiveValues();
+            u32 mask = 1<<nbits;
             for (auto it = pValues.constBegin(); it != pValues.constEnd(); ++it)
             {
-                transitionValue[it.key()].setValue((1<<nbits),it.value());
+                transitionValue[it.key()].setValue(mask,it.value());
             }
             ++nbits;
         }
 
         float lastX = -1;
+        bool firstLoop = true;
         PrimitiveValue lastValue(nbits);
+
+        transitionValue[xmax] = lastValue;
 
         bool refreshCursor = transitionValue.isEmpty() ? false : mCursorTime >= transitionValue.constBegin().key();
         for (auto it = transitionValue.constBegin(); it != transitionValue.constEnd(); ++it)
@@ -180,7 +189,7 @@ namespace hal {
             int nextX = it.key();
             PrimitiveValue nextValue = it.value().mergePrevious(lastValue);
             bool updateX = true;
-            if (lastX >= 0) // not first loop -> valid lastX value
+            if (!firstLoop) // not first loop -> valid lastX value
             {
                 int val = lastValue.value();
                 if (val == WaveFormPrimitiveFilled::sFilledPrimitive)
@@ -202,6 +211,7 @@ namespace hal {
             }
             if (updateX) lastX = nextX;
             lastValue = nextValue;
+            firstLoop = false;
         }
         return true;
     }
@@ -216,8 +226,9 @@ namespace hal {
         bool refreshCursor = (mCursorTime >= tleft);
         int width = sbar->viewportWidth();
 
-        int valNext = wdp->startValue(tleft);
-        float xNext = 0;
+        SaleaeDataTuple startval = wdp->startValue(tleft);
+        int valNext = startval.mValue;
+        float xNext = sbar->xPosF(startval.mTime);
         quint64 tNext = trans->tMin();
         if (valNext == SaleaeDataTuple::sReadError) *loop = false;
         float xMax = width;

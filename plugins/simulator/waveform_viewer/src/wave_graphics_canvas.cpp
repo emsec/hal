@@ -9,6 +9,10 @@
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include <QDebug>
+#include <QMenu>
+#include <QInputDialog>
+#include <QApplication>
+#include <QClipboard>
 #include <math.h>
 
 namespace hal {
@@ -27,6 +31,8 @@ namespace hal {
         mTimescale->show();
         mCursor = new WaveCursor(&mTransform,mScrollbar,this);
         mCursor->show();
+        setContextMenuPolicy(Qt::CustomContextMenu);
+        connect(this,&QWidget::customContextMenuRequested,this,&WaveGraphicsCanvas::handleContextMenuRequested);
     }
 
     void WaveGraphicsCanvas::resizeEvent(QResizeEvent* evt)
@@ -36,6 +42,7 @@ namespace hal {
         mScrollbar->adjust(viewport()->size().width());
         mTimescale->setScale(viewport()->size().width());
         mCursor->setViewportHeight(viewport()->size().height());
+        mCursor->recalcTime();
         int yScrollMax = mRenderEngine->maxHeight()-viewport()->size().height();
         verticalScrollBar()->setMaximum(yScrollMax<0 ? 0 : yScrollMax);
     }
@@ -43,6 +50,7 @@ namespace hal {
     void WaveGraphicsCanvas::scrollContentsBy(int dx, int dy)
     {
         QAbstractScrollArea::scrollContentsBy(dx,dy);
+        if (dx) mCursor->recalcTime();
     }
 
     void WaveGraphicsCanvas::mousePressEvent(QMouseEvent* evt)
@@ -68,6 +76,40 @@ namespace hal {
         mCursorTime = tCursor;
         mCursorXpos = xpos;
         Q_EMIT cursorMoved(tCursor,xpos);
+    }
+
+    void WaveGraphicsCanvas::handleContextMenuRequested(const QPoint& pos)
+    {
+        QMenu* menu = new QMenu(this);
+        QAction* act;
+        act = menu->addAction("Enter cursor time value ...");
+        connect(act,&QAction::triggered,this,&WaveGraphicsCanvas::handleEnterCursorTime);
+        act = menu->addAction("Copy cursor time value to clipboard");
+        connect(act,&QAction::triggered,this,&WaveGraphicsCanvas::handleCopyCursorTime);
+        menu->popup(viewport()->mapToGlobal(pos));
+    }
+
+    void WaveGraphicsCanvas::handleCopyCursorTime()
+    {
+        QApplication::clipboard()->setText(QString::number(mCursorTime,'f',0));
+    }
+
+    void WaveGraphicsCanvas::handleEnterCursorTime()
+    {
+        bool ok;
+        double tCursor = QInputDialog::getDouble(this, "Enter cursor time", "New value:", mCursorTime, mTransform.tMin(), mTransform.tMax(), 0, &ok);
+        if (ok && tCursor != mCursorTime)
+        {
+            double wHalf = 0.5 * mScrollbar->viewportWidth();
+            double vpos = mTransform.vPos(tCursor);
+            if (vpos + wHalf > mTransform.vMax()) vpos = mTransform.vMax() - wHalf;
+            if (vpos - wHalf < mTransform.vMin()) vpos = mTransform.vMin() + wHalf;
+            mScrollbar->setVleft(vpos - wHalf);
+            mCursorXpos = mScrollbar->xPosI(tCursor);
+            mTimescale->update();
+            mCursor->setCursorToTime(tCursor);
+            mRenderEngine->update();
+        }
     }
 
     void WaveGraphicsCanvas::mouseMoveEvent(QMouseEvent* evt)
@@ -116,6 +158,7 @@ namespace hal {
                 mScrollbar->setVleft(mTransform.vPos(t0));
 //                qDebug() << "zoom t0 dt vpos" << t0 << dt << mTransform.vPos(t0);
                 mTimescale->setScale(viewport()->size().width());
+                mCursor->recalcTime();
                 mRenderEngine->update();
             }
         }
@@ -171,6 +214,7 @@ namespace hal {
         mScrollbar->updateScale(newScale-oldScale,tEvent,viewport()->width());
         mRenderEngine->update();
         mTimescale->setScale(viewport()->size().width());
+        mCursor->recalcTime();
     }
 
     bool WaveGraphicsCanvas::canUndoZoom() const
@@ -192,6 +236,7 @@ namespace hal {
         mRenderEngine->omitHistory();
         mRenderEngine->update();
         mTimescale->setScale(viewport()->size().width());
+        mCursor->recalcTime();
         if (mRenderEngine->zoomHistory().isEmpty())
            emitUndoStateChanged();
     }
@@ -235,6 +280,7 @@ namespace hal {
         mScrollbar->setVleft(vleft);
         mRenderEngine->update();
         mTimescale->setScale(viewport()->size().width());
+        mCursor->recalcTime();
     }
 
 }

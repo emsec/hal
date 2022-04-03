@@ -833,19 +833,9 @@ namespace hal {
             SaleaeInputFile sif(mWorkDir.absoluteFilePath(QString("digital_%1.bin").arg(mItem->wavedata()->fileIndex())).toStdString());
             if (sif.good())
             {
-                SaleaeDataBuffer* sdb = sif.get_buffered_data();
-                if (!sdb->isNull() && !mAbort)
-                {
-                    int lastValue = sdb->mValueArray[0];
-                    for (quint64 i=0; i<sdb->mCount; i++)
-                    {
-                        if (mAbort || sdb->mTimeArray[i] > mTpos) break;
-                        lastValue = sdb->mValueArray[i];
-                    }
-                    if (!mAbort)
-                        mItem->mPainted.setCursorValue(mTpos,mXpos,lastValue);
-                }
-                delete sdb;
+                int val = sif.get_int_value(mTpos);
+                if (!mAbort)
+                    mItem->mPainted.setCursorValue(mTpos,mXpos,val);
             }
         }
 

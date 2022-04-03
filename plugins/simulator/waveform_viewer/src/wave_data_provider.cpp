@@ -2,6 +2,7 @@
 #include "netlist_simulator_controller/wave_data.h"
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
 #include "netlist_simulator_controller/simulation_settings.h"
+#include <QDebug>
 
 namespace hal {
     void WaveDataProvider::setGroup(bool grp, int bts, int base)
@@ -11,29 +12,32 @@ namespace hal {
         mValueBase = base;
     }
 
-    int WaveDataProviderMap::startValue(u64 t)
+    SaleaeDataTuple WaveDataProviderMap::startValue(u64 t)
     {
         mIter = mDataMap.lowerBound(t);
 
-        int retval = SaleaeDataTuple::sReadError; // assume empty
+        SaleaeDataTuple retval; // assume empty
 
         if (mIter != mDataMap.constEnd() && mIter.key() == t)
         {
             //exact hit
-            retval = mIter.value();
+            retval.mTime = mIter.key();
+            retval.mValue = mIter.value();
             ++mIter;
         }
         else if (mIter != mDataMap.constBegin())
         {
             //value of last data point before entering t-range
             --mIter;
-            retval = mIter.value();
+            retval.mTime = mIter.key();
+            retval.mValue = mIter.value();
             ++mIter;
         }
         else if (mIter != mDataMap.constEnd())
         {
             //no previous data but not empty
-            retval = -1;
+            retval.mTime = t;
+            retval.mValue = -1;
         }
         return retval;
     }
@@ -53,41 +57,58 @@ namespace hal {
         if (mBuffer) delete mBuffer;
     }
 
-    int WaveDataProviderFile::startValue(u64 t)
+    SaleaeDataTuple WaveDataProviderFile::startValue(u64 t)
     {
-        mIndex = 0;
         mDataMap.clear();
         mStoreData = mTimeframe.hasUserTimeframe() ? Recording : Off;
 
-        mBuffer = mInputFile.get_buffered_data();
-        while (mIndex < mBuffer->mCount && t < mBuffer->mTimeArray[mIndex])
-        {
-            if (isRecording()) storeCurrentDatapoint();
-            ++mIndex;
-        }
+        SaleaeDataTuple lastval;
+        SaleaeDataTuple retval;
 
-        int retval = SaleaeDataTuple::sReadError; // assume empty
+        bool skipData = true;
+
+        int loadCycle = 0;
+
+        while (skipData && mInputFile.good())
+        {
+            if (mBuffer) delete mBuffer;
+            mBuffer = mInputFile.get_buffered_data(NetlistSimulatorControllerPlugin::sSimulationSettings->maxSizeLoadable());
+            mIndex = 0;
+            ++loadCycle;
+            if (!mBuffer) return SaleaeDataTuple();
+
+            while (mIndex < mBuffer->mCount && mBuffer->mTimeArray[mIndex] < t)
+            {
+                if (isRecording()) storeCurrentDatapoint();
+                lastval.mTime = mBuffer->mTimeArray[mIndex];
+                lastval.mValue = mBuffer->mValueArray[mIndex];
+                ++mIndex;
+            }
+
+            skipData = (mBuffer->mTimeArray[mIndex] < t);
+        }
 
         if (mIndex < mBuffer->mCount && mBuffer->mTimeArray[mIndex] == t)
         {
             //exact hit
-            retval = mBuffer->mValueArray[mIndex];
+            retval.mTime = mBuffer->mTimeArray[mIndex];
+            retval.mValue = mBuffer->mValueArray[mIndex];
             if (isRecording()) storeCurrentDatapoint();
             ++mIndex;
         }
-        else if (mIndex)
+        else if (mIndex || loadCycle > 1)
         {
             //value of last data point before entering t-range
-            --mIndex;
-            retval = mBuffer->mValueArray[mIndex];
-            ++mIndex;
+            retval = lastval;
         }
         else if (mIndex < mBuffer->mCount)
         {
             //no previous data but not empty
-            retval = -1;
+            retval.mTime = t;
+            retval.mValue = -1;
         }
         return retval;
+
     }
 
     void WaveDataProviderFile::storeCurrentDatapoint()
@@ -114,7 +135,13 @@ namespace hal {
         if (isRecording()) storeCurrentDatapoint();
 
         if (mIndex >= mBuffer->mCount)
-            return SaleaeDataTuple();
+        {
+            if (!mInputFile.good()) return SaleaeDataTuple();
+            if (mBuffer) delete mBuffer;
+            mBuffer = mInputFile.get_buffered_data(NetlistSimulatorControllerPlugin::sSimulationSettings->maxSizeLoadable());
+            mIndex = 0;
+            if (!mBuffer) return SaleaeDataTuple();
+       }
 
         SaleaeDataTuple retval(mBuffer->mTimeArray[mIndex],mBuffer->mValueArray[mIndex]);
         ++mIndex;
@@ -126,10 +153,10 @@ namespace hal {
         return mClock.start_at_zero ? (mTransition%2) : 1 - (mTransition%2);
     }
 
-    int WaveDataProviderClock::startValue(u64 t)
+    SaleaeDataTuple WaveDataProviderClock::startValue(u64 t)
     {
         mTransition = t / mClock.switch_time;
-        int retval = valueForTransition();
+        SaleaeDataTuple retval(mTransition * mClock.switch_time, valueForTransition());
         ++mTransition;
         return retval;
     }

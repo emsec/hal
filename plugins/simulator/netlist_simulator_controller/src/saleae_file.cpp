@@ -96,7 +96,7 @@ namespace hal
     }
 
     SaleaeInputFile::SaleaeInputFile(const std::string &filename)
-        : std::ifstream(filename, std::ios::binary), mNumRead(0),
+        : std::ifstream(filename, std::ios::binary), mReadPointer(0),
           mStatus(SaleaeStatus::Ok)
     {
         if (good())
@@ -135,51 +135,66 @@ namespace hal
         // printf("<%s> %d %d %d %.7f %.7f %lu\n", mIdent, mVersion, mType, mValue, mBeginTime, mEndTime, mNumTransitions );
     }
 
-    SaleaeDataBuffer* SaleaeInputFile::get_buffered_data()
+    SaleaeDataBuffer* SaleaeInputFile::get_buffered_data(uint64_t nread)
     {
-        int n = mHeader.numTransitions();
-        int val = mHeader.value();
-        SaleaeDataBuffer* retval = new SaleaeDataBuffer;
+        uint64_t n = nread;
+        if (mReadPointer + n > mHeader.numTransitions() + 1)
+            n = mHeader.numTransitions() + 1 - mReadPointer;
+        if (!n) return nullptr;
 
-        retval->mCount = n + 1;
-        retval->mTimeArray  = new uint64_t[retval->mCount];
-        retval->mValueArray = new int[retval->mCount];
-        retval->mTimeArray[0] = mHeader.beginTime();
-        retval->mValueArray[0] = val;
-        if (!n) return retval;
+        SaleaeDataBuffer* retval = new SaleaeDataBuffer;
+        retval->mCount = n;
+        retval->mTimeArray  = new uint64_t[n];
+        retval->mValueArray = new int[n];
+
+        uint64_t i = 0;
+        int val = (mReadPointer % 2 == 0) ? mHeader.value() : 1-mHeader.value();
+        if (!mReadPointer)
+        {
+            retval->mTimeArray[0] = mHeader.beginTime();
+            retval->mValueArray[0] = val;
+            val = val ? 0 : 1;
+            mReadPointer = 1;
+            i = 1;
+            --n;
+            if (!n) return retval;
+        }
+
         switch (mHeader.storageFormat())
         {
         case SaleaeHeader::Double:
         {
             double* tmp = new double[n];
             this->read((char*)tmp,sizeof(double)*n);
-            for (int i=0; i<n; i++)
+            for (uint64_t j=0; j<n; j++)
             {
+                retval->mValueArray[i+j] = val;
+                retval->mTimeArray[i+j] = floor(tmp[j] * SaleaeParser::sTimeScaleFactor + 0.5) - mHeader.beginTime();
                 val = val ? 0 : 1;
-                retval->mValueArray[i+1] = val;
-                retval->mTimeArray[i+1] = floor(tmp[i] * SaleaeParser::sTimeScaleFactor + 0.5) - mHeader.beginTime();
             }
             delete [] tmp;
         }
             break;
         case SaleaeHeader::Uint64:
-            this->read((char*)(retval->mTimeArray+1),sizeof(uint64_t)*n);
-            for (int i=0; i<n; i++)
+            this->read((char*)(retval->mTimeArray+i),sizeof(uint64_t)*n);
+            for (uint64_t j=0; j<n; j++)
             {
+                retval->mValueArray[i+j] = val;
                 val = val ? 0 : 1;
-                retval->mValueArray[i+1] = val;
             }
             break;
         case SaleaeHeader::Coded:
-            this->read((char*)(retval->mTimeArray+1),sizeof(uint64_t)*n);
-            for (int i=0; i<n; i++)
+            this->read((char*)(retval->mTimeArray+i),sizeof(uint64_t)*n);
+            for (uint64_t j=0; j<n; j++)
             {
-                retval->mValueArray[i+1] = ((retval->mTimeArray[i+1] >> 62) & 0x3) -2;
-                retval->mTimeArray[i+1] &= 0x3fffffffffffffffull;
+                retval->mValueArray[i+j] = ((retval->mTimeArray[i+j] >> 62) & 0x3) -2;
+                retval->mTimeArray[i+j] &= 0x3fffffffffffffffull;
             }
             break;
         }
 
+        mReadPointer += n;
+        if (mReadPointer > mHeader.numTransitions()) setstate(eofbit);
         return retval;
     }
 
@@ -199,18 +214,25 @@ namespace hal
         return std::string();
     }
 
-    SaleaeDataTuple SaleaeInputFile::nextValue(int lastValue)
+    SaleaeDataTuple SaleaeInputFile::get_next_value()
     {
         SaleaeDataTuple retval;
-        bool ok;
+        if (!mReadPointer)
+        {
+            retval.mTime = mHeader.beginTime();
+            retval.mValue = mHeader.value();
+            ++mReadPointer;
+            seekTransition(0);
+            return retval;
+        }
+
+        bool ok = true;
         retval.mTime = mReader(&ok);
         if (!ok)
         {
             retval.mValue = SaleaeDataTuple::sReadError;
             return retval;
         }
-        ++mNumRead;
-        if (mNumRead >= mHeader.numTransitions()) setstate(eofbit);
 
         if (mHeader.storageFormat() == SaleaeHeader::Coded)
         {
@@ -218,20 +240,58 @@ namespace hal
             retval.mTime  &= 0x3fffffffffffffffull;
         }
         else
-            retval.mValue = lastValue ? 0 : 1;
+            retval.mValue = (mReadPointer%2==0) ? mHeader.value() : 1-mHeader.value();
+
+        ++mReadPointer;
+        if (mReadPointer > mHeader.numTransitions()) setstate(eofbit);
+
         return retval;
     }
 
-    int SaleaeInputFile::get_int_value(double t)
+    void SaleaeInputFile::skip_transitions(int64_t delta)
+    {
+        if (!delta) return;
+        if (delta < 0)
+        {
+            if ((uint64_t)-delta > mReadPointer)
+                mReadPointer = 0;
+            else
+                mReadPointer += delta;
+        }
+        else
+        {
+            if (delta + mReadPointer > mHeader.numTransitions())
+                mReadPointer = mHeader.numTransitions();
+            else
+                mReadPointer += delta;
+        }
+
+        if (mReadPointer)
+            seekTransition(mReadPointer-1);
+        else
+            seekTransition(0);
+    }
+
+    int64_t SaleaeInputFile::get_file_position(double t, bool successor)
     {
         uint64_t max = mHeader.numTransitions();
         uint64_t t0 = mHeader.beginTime();
         uint64_t t1 = mHeader.endTime();
+        mReadPointer = 0;
         if (t < t0) return -1;
-        if (t == t0) return mHeader.value();
-        if (t > t1) return (max%2==0) ? mHeader.value() : 1 - mHeader.value();
+        if (t == t0) return 0;
+        if (t >= t1)
+        {
+            mReadPointer = max;
+            if (successor && t > t1)
+            {
+                // attempt to get successor pos of last transition
+                setstate(eofbit);
+                return -1;
+            }
+            return max;
+        }
 
-        uint64_t tuple1;
         int64_t pos   = 0;
         int64_t delta = max > 4 ? max / 4 : 1;
         bool loop = true;
@@ -251,16 +311,15 @@ namespace hal
                 seekTransition(pos);
                 t0 = mHeader.beginTime();
             }
-            tuple1 = mReader(&ok);
-            t1 = tuple1 & 0x3fffffffffffffffull;
-            if (t0 < t && t1 >= t)
+            t1 = mReader(&ok) & 0x3fffffffffffffffull;
+            if (t0 <= t && t1 > t)
             {
-                if (mHeader.storageFormat() == SaleaeHeader::Coded)
-                    return ((tuple1 >> 62) & 0x3) - 2;
-                else
-                    return (pos%2==0) ? mHeader.value() : 1 - mHeader.value();
+                if (successor && t0 < t) ++pos;
+                mReadPointer = pos;
+                seekTransition(pos ? pos-1 : 0);
+                return pos;
             }
-            else if (t1 < t)
+            else if (t1 <= t)
             {
                 if (delta < 0) delta = - delta/2;
                 if (!delta) delta = 1;
@@ -272,6 +331,22 @@ namespace hal
             }
         }
         return -1;
+    }
+
+    int SaleaeInputFile::get_int_value(double t)
+    {
+        int64_t pos = get_file_position(t);
+        if (pos < 0) return -1;
+        bool ok = true;
+
+        if (mHeader.storageFormat() == SaleaeHeader::Coded)
+        {
+            seekTransition(pos);
+            uint64_t tuple = mReader(&ok);
+            return ((tuple >> 62) & 0x3) - 2;
+        }
+
+        return (pos%2==0) ? mHeader.value() : 1 - mHeader.value();
     }
 
     SaleaeOutputFile::SaleaeOutputFile(const std::string &filename, int index_)
@@ -291,7 +366,7 @@ namespace hal
         mHeader.write(*this);
         flush();
         SaleaeInputFile sif(mFilename);
-        SaleaeDataBuffer* sdf = sif.get_buffered_data();
+        SaleaeDataBuffer* sdf = sif.get_buffered_data(sif.header()->numTransitions()+1);
         sif.close();
         seekp(std::ios_base::beg);
         mHeader.setStorageFormat(SaleaeHeader::Coded);

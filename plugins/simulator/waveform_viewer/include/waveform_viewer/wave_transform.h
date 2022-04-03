@@ -17,6 +17,7 @@ namespace hal {
         quint64 deltaT() const { return mTmax - mTmin; }
         double vPos(double t) const;
         double vMax() const { return vPos(mTmax); }
+        double vMin() const { return vPos(mTmin); }
         double tPos(quint64 v) const;
         double scale() const { return mMag; }
         void setTmin(quint64 t0) { mTmin = t0; }
