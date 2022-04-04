@@ -875,6 +875,8 @@ namespace hal
         QSet<u32> not_selectable_modules;
         QSet<u32> modules_in_context = mGraphWidget->getContext()->modules();
 
+        not_selectable_modules += modules_in_context;
+
         QSet<u32>::iterator i;
         for (i = modules_in_context.begin(); i != modules_in_context.end(); ++i)
         {
@@ -888,21 +890,6 @@ namespace hal
             }
 
         }
-//        for (Module* m : gNetlist->get_modules())
-//        {
-//            // BUG: after removing a module the isShowingModule function doesn't work anymore => leads to a crash
-//            qDebug() << "JAA: " << m->get_id();
-//            if (mGraphWidget->getContext()->isShowingModule(m->get_id()))
-//            {
-//                //modules_in_context.insert(m->get_id());
-//                cur_id = m->get_id();
-//                not_selectable_modules.insert(cur_id);
-//                qDebug() << "cur: " << cur_id;
-//                break;
-//            }
-//        }
-        //qDebug() << "cur: " << gNetlist->get_gate_by_id(mGraphWidget->getContext()->gates().values().at(0))->get_module()->get_id();
-        //qDebug() << "gate: " << mGraphWidget->getContext()->gates().values().at(0);
 
         QSet<u32> gates_in_context = mGraphWidget->getContext()->gates();
         int cur_mod_id = 0;
@@ -931,33 +918,8 @@ namespace hal
                 qDebug() << "par: " << parent->get_id();
             }
         }
-        /*
-         *  separately, since the current module is added here.
-         *  Otherwise one could not add remote modules
-        */
-//        for (i = modules_in_context.begin(); i != modules_in_context.end(); ++i)
-//        {
-//            Module* tmp_pm = gNetlist->get_module_by_id(*i);
-//            while (!tmp_pm->is_top_module())
-//            {
-//                Module* parent = tmp_pm->get_parent_module();
-//                tmp_pm = parent;
-//                not_selectable_modules.insert(parent->get_id());
-//                qDebug() << "par: " << parent->get_id();
-//            }
-//        }
-//        if (cur_id != 0)
-//        {
-//            Module* tmp_pm = gNetlist->get_module_by_id(cur_id);
-//            while (!tmp_pm->is_top_module())
-//            {
-//                Module* parent = tmp_pm->get_parent_module();
-//                tmp_pm = parent;
-//                not_selectable_modules.insert(parent->get_id());
-//                qDebug() << "par: " << parent->get_id();
-//            }
-//        }
-        not_selectable_modules += modules_in_context;
+
+
 
         CustomModuleDialog md(not_selectable_modules, this);
         if (md.exec() == QDialog::Accepted)

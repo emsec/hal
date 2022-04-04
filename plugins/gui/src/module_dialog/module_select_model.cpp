@@ -14,6 +14,8 @@
 #include <QMessageBox>
 #include <QSortFilterProxyModel>
 
+#include <QDebug>
+
 namespace hal
 {
     //---------------- HISTORY ----------------------------------------
@@ -63,21 +65,7 @@ namespace hal
     //---------------- MODEL ------------------------------------------
     ModuleSelectModel::ModuleSelectModel(QObject* parent) : QAbstractTableModel(parent)
     {
-//        if (history)
-//        {
-//            for (u32 id : *ModuleSelectHistory::instance())
-//            {
-//                Module* m = gNetlist->get_module_by_id(id);
-//                if (m && mExcl.isAccepted(m->get_id()))
-//                    mEntries.append(ModuleSelectEntry(m));
-//            }
-//        }
-//        else
-//        {
-//            for (Module* m : gNetlist->get_modules())
-//                if (mExcl.isAccepted(m->get_id()))
-//                    mEntries.append(ModuleSelectEntry(m));
-//        }
+
     }
 
     void ModuleSelectModel::appendEntries(bool history)
@@ -94,8 +82,12 @@ namespace hal
         else
         {
             for (Module* m : gNetlist->get_modules())
+            {
                 if (mExcl.isAccepted(m->get_id()))
+                {
                     mEntries.append(ModuleSelectEntry(m));
+                }
+            }
         }
     }
 
