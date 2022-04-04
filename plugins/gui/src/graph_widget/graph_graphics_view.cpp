@@ -907,6 +907,7 @@ namespace hal
         }
         if (cur_mod_id != 0)
         {
+            // BUG: when adding a gate to a view. The current module may not be correct
             not_selectable_modules.insert(cur_mod_id);
             qDebug() << "cur: " << cur_mod_id;
             Module* tmp_pm = gNetlist->get_module_by_id(cur_mod_id);
