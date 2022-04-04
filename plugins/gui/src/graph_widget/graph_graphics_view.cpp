@@ -891,7 +891,6 @@ namespace hal
 
         }
         qDebug() << "3";
-        int cur_id = 0;
 //        for (Module* m : gNetlist->get_modules())
 //        {
 //            // BUG: after removing a module the isShowingModule function doesn't work anymore => leads to a crash
@@ -911,7 +910,17 @@ namespace hal
         QSet<u32> gates_in_context = mGraphWidget->getContext()->gates();
         if (!gates_in_context.empty())
         {
-            qDebug() << "cur: " << gNetlist->get_gate_by_id(gates_in_context.values().at(0))->get_module()->get_id();
+            int cur_mod_id = gNetlist->get_gate_by_id(gates_in_context.values().at(0))->get_module()->get_id();
+            qDebug() << "cur: " << cur_mod_id;
+            Module* tmp_pm = gNetlist->get_module_by_id(cur_mod_id);
+            Module* tmp_pm = gNetlist->get_module_by_id(*i);
+            while (!tmp_pm->is_top_module())
+            {
+                Module* parent = tmp_pm->get_parent_module();
+                tmp_pm = parent;
+                not_selectable_modules.insert(parent->get_id());
+                qDebug() << "par: " << parent->get_id();
+            }
         }
 
         qDebug() << "4";
@@ -930,17 +939,17 @@ namespace hal
 //                qDebug() << "par: " << parent->get_id();
 //            }
 //        }
-        if (cur_id != 0)
-        {
-            Module* tmp_pm = gNetlist->get_module_by_id(cur_id);
-            while (!tmp_pm->is_top_module())
-            {
-                Module* parent = tmp_pm->get_parent_module();
-                tmp_pm = parent;
-                not_selectable_modules.insert(parent->get_id());
-                qDebug() << "par: " << parent->get_id();
-            }
-        }
+//        if (cur_id != 0)
+//        {
+//            Module* tmp_pm = gNetlist->get_module_by_id(cur_id);
+//            while (!tmp_pm->is_top_module())
+//            {
+//                Module* parent = tmp_pm->get_parent_module();
+//                tmp_pm = parent;
+//                not_selectable_modules.insert(parent->get_id());
+//                qDebug() << "par: " << parent->get_id();
+//            }
+//        }
         qDebug() << "5";
         not_selectable_modules += modules_in_context;
 
