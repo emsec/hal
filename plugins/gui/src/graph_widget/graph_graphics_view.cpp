@@ -892,19 +892,28 @@ namespace hal
         }
         qDebug() << "3";
         int cur_id = 0;
-        for (Module* m : gNetlist->get_modules())
+//        for (Module* m : gNetlist->get_modules())
+//        {
+//            // BUG: after removing a module the isShowingModule function doesn't work anymore => leads to a crash
+//            qDebug() << "JAA: " << m->get_id();
+//            if (mGraphWidget->getContext()->isShowingModule(m->get_id()))
+//            {
+//                //modules_in_context.insert(m->get_id());
+//                cur_id = m->get_id();
+//                not_selectable_modules.insert(cur_id);
+//                qDebug() << "cur: " << cur_id;
+//                break;
+//            }
+//        }
+        //qDebug() << "cur: " << gNetlist->get_gate_by_id(mGraphWidget->getContext()->gates().values().at(0))->get_module()->get_id();
+        //qDebug() << "gate: " << mGraphWidget->getContext()->gates().values().at(0);
+
+        QSet<u32> gates_in_context = mGraphWidget->getContext()->gates();
+        if (!gates_in_context.empty())
         {
-            // BUG: after removing a module the isShowingModule function doesn't work anymore => leads to a crash
-            qDebug() << "JAA: " << m->get_id();
-            if (mGraphWidget->getContext()->isShowingModule(m->get_id()))
-            {
-                //modules_in_context.insert(m->get_id());
-                cur_id = m->get_id();
-                not_selectable_modules.insert(cur_id);
-                qDebug() << "cur: " << cur_id;
-                break;
-            }
+            qDebug() << "cur: " << gNetlist->get_gate_by_id(gates_in_context.values().at(0))->get_module()->get_id();
         }
+
         qDebug() << "4";
         /*
          *  separately, since the current module is added here.
