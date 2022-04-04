@@ -66,7 +66,8 @@ namespace hal {
             connect(mButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
             connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
         }
-        else {
+        else
+        {
             mNoAvailable = new QLabel(this);
             mNoAvailable->setText("There is no addable gate.");
             layout->addWidget(mNoAvailable, 0, 1);

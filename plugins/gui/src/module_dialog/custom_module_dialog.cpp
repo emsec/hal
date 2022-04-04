@@ -22,64 +22,77 @@ namespace hal {
     CustomModuleDialog::CustomModuleDialog(QSet<u32> exclude_ids, QWidget* parent)
         : QDialog(parent),
           mSelectedId(0),
-          mLastUsed(nullptr),
-          mSearchbar(new Searchbar(this))
+          mLastUsed(nullptr)
     {
 
-        setWindowTitle("Add module to View");
+        setWindowTitle("Add module to view");
         QGridLayout* layout = new QGridLayout(this);
 
-
-        layout->addWidget(mSearchbar, 1, 0, 1, 2);
-        mTabWidget = new QTabWidget(this);
-        mTreeView  = new QTreeView(mTabWidget);
-        mTabWidget->addTab(mTreeView, "Module tree");
-
-
-        mTableView = new ModuleSelectView(false, mSearchbar, &exclude_ids, mTabWidget);
-        connect(mTableView, &ModuleSelectView::moduleSelected, this, &CustomModuleDialog::handleTableSelection);
-        mTabWidget->addTab(mTableView, "Module list");
-
-        if (!ModuleSelectHistory::instance()->isEmpty())
+        if (exclude_ids.size() < gNetlist->get_modules().size())
         {
-            mLastUsed = new ModuleSelectView(true, mSearchbar, &exclude_ids, mTabWidget);
-            if (mLastUsed->model()->rowCount())
+            mSearchbar = new Searchbar(this);
+            layout->addWidget(mSearchbar, 1, 0, 1, 2);
+            mTabWidget = new QTabWidget(this);
+            mTreeView  = new QTreeView(mTabWidget);
+            mTabWidget->addTab(mTreeView, "Module tree");
+
+
+            mTableView = new ModuleSelectView(false, mSearchbar, &exclude_ids, mTabWidget);
+            connect(mTableView, &ModuleSelectView::moduleSelected, this, &CustomModuleDialog::handleTableSelection);
+            mTabWidget->addTab(mTableView, "Module list");
+
+            if (!ModuleSelectHistory::instance()->isEmpty())
             {
-                connect(mLastUsed, &ModuleSelectView::moduleSelected, this, &CustomModuleDialog::handleTableSelection);
-                mTabWidget->addTab(mLastUsed, "Recent selection");
-            }
-            else
-            {
-                delete mLastUsed;
-                mLastUsed = nullptr;
+                mLastUsed = new ModuleSelectView(true, mSearchbar, &exclude_ids, mTabWidget);
+                if (mLastUsed->model()->rowCount())
+                {
+                    connect(mLastUsed, &ModuleSelectView::moduleSelected, this, &CustomModuleDialog::handleTableSelection);
+                    mTabWidget->addTab(mLastUsed, "Recent selection");
+                }
+                else
+                {
+                    delete mLastUsed;
+                    mLastUsed = nullptr;
+                }
+
             }
 
+            layout->addWidget(mTabWidget, 2, 0, 1, 3);
+
+            mModuleTreeProxyModel = new ModuleProxyModel(this);
+            mModuleTreeProxyModel->setFilterKeyColumn(-1);
+            mModuleTreeProxyModel->setDynamicSortFilter(true);
+            mModuleTreeProxyModel->setSourceModel(gNetlistRelay->getModuleModel());
+            mTreeView->setModel(mModuleTreeProxyModel);
+            mTreeView->expandAll();
+
+            mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, this);
+            layout->addWidget(mButtonBox, 3, 0, 1, 3, Qt::AlignHCenter);
+
+
+            mTabWidget->setCurrentIndex(1);
+            enableButtons();
+
+
+            connect(mTabWidget, &QTabWidget::currentChanged, this, &CustomModuleDialog::handleCurrentTabChanged);
+            connect(mSearchbar, &Searchbar::textEdited, this, &CustomModuleDialog::filter);
+            connect(ContentManager::sSettingSearch, &SettingsItemKeybind::keySequenceChanged, this, &CustomModuleDialog::keybindToggleSearchbar);
+            connect(mButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+            connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+            connect(mTreeView, &QTreeView::doubleClicked, this, &CustomModuleDialog::handleTreeDoubleClick);
+            connect(mTreeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &CustomModuleDialog::handleTreeSelectionChanged);
+        }
+        else
+        {
+            mNoAvailable = new QLabel(this);
+            mNoAvailable->setText("There is no addable module.");
+            layout->addWidget(mNoAvailable, 0, 1);
+
+            mButtonBox = new QDialogButtonBox(QDialogButtonBox::Cancel, this);
+            layout->addWidget(mButtonBox, 3, 1);
+            connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
         }
 
-        layout->addWidget(mTabWidget, 2, 0, 1, 3);
-
-        mModuleTreeProxyModel = new ModuleProxyModel(this);
-        mModuleTreeProxyModel->setFilterKeyColumn(-1);
-        mModuleTreeProxyModel->setDynamicSortFilter(true);
-        mModuleTreeProxyModel->setSourceModel(gNetlistRelay->getModuleModel());
-        mTreeView->setModel(mModuleTreeProxyModel);
-        mTreeView->expandAll();
-
-        mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, this);
-        layout->addWidget(mButtonBox, 3, 0, 1, 3, Qt::AlignHCenter);
-
-
-        mTabWidget->setCurrentIndex(1);
-        enableButtons();
-
-
-        connect(mTabWidget, &QTabWidget::currentChanged, this, &CustomModuleDialog::handleCurrentTabChanged);
-        connect(mSearchbar, &Searchbar::textEdited, this, &CustomModuleDialog::filter);
-        connect(ContentManager::sSettingSearch, &SettingsItemKeybind::keySequenceChanged, this, &CustomModuleDialog::keybindToggleSearchbar);
-        connect(mButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-        connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-        connect(mTreeView, &QTreeView::doubleClicked, this, &CustomModuleDialog::handleTreeDoubleClick);
-        connect(mTreeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &CustomModuleDialog::handleTreeSelectionChanged);
     }
 
     void CustomModuleDialog::enableButtons()

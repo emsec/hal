@@ -29,11 +29,13 @@
 #include <QAction>
 #include <QKeySequence>
 #include <QSet>
+#include <QLabel>
 
 class QDialogButtonBox;
 class QTreeView;
 class QTabWidget;
 class QPushButton;
+class QLabel;
 
 namespace hal {
 
@@ -117,6 +119,8 @@ namespace hal {
         Searchbar* mSearchbar;
         QAction* mToggleSearchbar;
         ModuleSelectExclude mSelectExclude;
+
+        QLabel* mNoAvailable;
 
 
         void enableButtons();
