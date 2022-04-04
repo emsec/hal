@@ -14,7 +14,6 @@
 #include <QPushButton>
 #include <QTabWidget>
 #include <QTableView>
-#include <QTreeView>
 
 #include <QDebug>
 
@@ -33,10 +32,6 @@ namespace hal {
             mSearchbar = new Searchbar(this);
             layout->addWidget(mSearchbar, 1, 0, 1, 2);
             mTabWidget = new QTabWidget(this);
-            mTreeView  = new QTreeView(mTabWidget);
-            mTabWidget->addTab(mTreeView, "Module tree");
-
-
             mTableView = new ModuleSelectView(false, mSearchbar, &exclude_ids, mTabWidget);
             connect(mTableView, &ModuleSelectView::moduleSelected, this, &CustomModuleDialog::handleTableSelection);
             mTabWidget->addTab(mTableView, "Module list");
@@ -59,28 +54,14 @@ namespace hal {
 
             layout->addWidget(mTabWidget, 2, 0, 1, 3);
 
-            mModuleTreeProxyModel = new ModuleProxyModel(this);
-            mModuleTreeProxyModel->setFilterKeyColumn(-1);
-            mModuleTreeProxyModel->setDynamicSortFilter(true);
-            mModuleTreeProxyModel->setSourceModel(gNetlistRelay->getModuleModel());
-            mTreeView->setModel(mModuleTreeProxyModel);
-            mTreeView->expandAll();
-
             mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, this);
             layout->addWidget(mButtonBox, 3, 0, 1, 3, Qt::AlignHCenter);
 
-
-            mTabWidget->setCurrentIndex(1);
             enableButtons();
 
-
-            connect(mTabWidget, &QTabWidget::currentChanged, this, &CustomModuleDialog::handleCurrentTabChanged);
-            connect(mSearchbar, &Searchbar::textEdited, this, &CustomModuleDialog::filter);
             connect(ContentManager::sSettingSearch, &SettingsItemKeybind::keySequenceChanged, this, &CustomModuleDialog::keybindToggleSearchbar);
             connect(mButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
             connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-            connect(mTreeView, &QTreeView::doubleClicked, this, &CustomModuleDialog::handleTreeDoubleClick);
-            connect(mTreeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &CustomModuleDialog::handleTreeSelectionChanged);
         }
         else
         {
@@ -107,33 +88,6 @@ namespace hal {
         setWindowTitle("Add module to View");
     }
 
-     u32 CustomModuleDialog::treeModuleId(const QModelIndex& index)
-     {
-        ModuleModel* treeModel = static_cast<ModuleModel*>(mModuleTreeProxyModel->sourceModel());
-        Q_ASSERT(treeModel);
-        QModelIndex sourceIndex = mModuleTreeProxyModel->mapToSource(index);
-        if (!sourceIndex.isValid()) return 0;
-        ModuleItem* item = treeModel->getItem(sourceIndex);
-        if (!item) return 0;
-        return item->id();
-     }
-
-     void CustomModuleDialog::handleTreeSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
-     {
-        Q_UNUSED(deselected);
-        auto sel = selected.indexes();
-        if (sel.empty())
-            handleTableSelection(0, false);
-        else
-            handleTableSelection(treeModuleId(sel.at(0)), false);
-     }
-
-     void CustomModuleDialog::handleTreeDoubleClick(const QModelIndex& index)
-     {
-        u32 moduleId = treeModuleId(index);
-        handleTableSelection(moduleId, true);
-     }
-
     void CustomModuleDialog::handleTableSelection(u32 id, bool doubleClick)
     {
         mSelectedId = mSelectExclude.isAccepted(id) ? id : 0;
@@ -147,28 +101,9 @@ namespace hal {
         QDialog::accept();
     }
 
-    void CustomModuleDialog::handleCurrentTabChanged(int index)
-    {
-        Q_UNUSED(index);
-        mTreeView->clearSelection();
-        mTableView->clearSelection();
-        mSearchbar->clear();
-        if (mLastUsed) mLastUsed->clearSelection();
-    }
-
     void CustomModuleDialog::keybindToggleSearchbar(const QKeySequence& seq)
     {
         mToggleSearchbar->setShortcut(seq);
-    }
-
-    void CustomModuleDialog::filter(const QString& text)
-    {
-        mModuleTreeProxyModel->setFilterRegularExpression(text);
-        static_cast<ModuleSelectProxy*>(mTableView->model())->setFilterRegularExpression(text);
-        if (mLastUsed)
-            static_cast<ModuleSelectProxy*>(mLastUsed->model())->setFilterRegularExpression(text);
-        QString output = "navigation regular expression '" + text + "' entered.";
-        log_info("user", output.toStdString());
     }
 }
 

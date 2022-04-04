@@ -32,7 +32,6 @@
 #include <QLabel>
 
 class QDialogButtonBox;
-class QTreeView;
 class QTabWidget;
 class QPushButton;
 class QLabel;
@@ -67,12 +66,6 @@ namespace hal {
          */
         u32 selectedId() const { return mSelectedId; }
 
-
-    private Q_SLOTS:
-        void handleTreeSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
-        void handleTreeDoubleClick(const QModelIndex& index);
-        void handleCurrentTabChanged(int index);
-
     public Q_SLOTS:
         /**
          *
@@ -97,24 +90,12 @@ namespace hal {
          */
         void keybindToggleSearchbar(const QKeySequence& seq);
 
-        /**
-         * Q_SLOT to overwrite the filter with the regular expression given in <i>text</i>.
-         *
-         * @param text - Contains the regular expression filter as a string
-         */
-        void filter(const QString& text);
-
     private:
         u32 mSelectedId;
         QDialogButtonBox* mButtonBox;
         ModuleSelectView* mTableView;
-        QTreeView* mTreeView;
         ModuleSelectView* mLastUsed;
         QTabWidget* mTabWidget;
-
-        ModuleProxyModel* mModuleTreeProxyModel;
-        ModuleSelectProxy* mModuleTableProxyModel;
-        ModuleSelectModel* mModuleSelectModel;
 
         Searchbar* mSearchbar;
         QAction* mToggleSearchbar;
@@ -122,9 +103,8 @@ namespace hal {
 
         QLabel* mNoAvailable;
 
-
         void enableButtons();
-        u32 treeModuleId(const QModelIndex& index);
+
     };
 }
 
