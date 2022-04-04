@@ -872,26 +872,25 @@ namespace hal
 
     void GraphGraphicsView::handleAddModuleToView()
     {
+        GraphContext* context = mGraphWidget->getContext();
+
         QSet<u32> not_selectable_modules;
-        QSet<u32> modules_in_context = mGraphWidget->getContext()->modules();
+        QSet<u32> modules_in_context = context->modules();
 
         not_selectable_modules += modules_in_context;
 
         QSet<u32>::iterator i;
         for (i = modules_in_context.begin(); i != modules_in_context.end(); ++i)
         {
-            qDebug() << "sub: " << *i;
+            //qDebug() << "sub: " << *i;
             for (Module* m : gNetlist->get_module_by_id(*i)->get_submodules(nullptr, true))
             {
                 not_selectable_modules.insert(m->get_id());
-
-                qDebug() << "subsub: " << m->get_id();
-
+                //qDebug() << "subsub: " << m->get_id();
             }
-
         }
 
-        QSet<u32> gates_in_context = mGraphWidget->getContext()->gates();
+        QSet<u32> gates_in_context = context->gates();
         int cur_mod_id = 0;
         if (!gates_in_context.empty())
         {
@@ -909,18 +908,16 @@ namespace hal
         {
             // BUG: when adding a gate to a view. The current module may not be correct
             not_selectable_modules.insert(cur_mod_id);
-            qDebug() << "cur: " << cur_mod_id;
-            Module* tmp_pm = gNetlist->get_module_by_id(cur_mod_id);
-            while (!tmp_pm->is_top_module())
+            //qDebug() << "cur: " << cur_mod_id;
+            Module* tmp_m = gNetlist->get_module_by_id(cur_mod_id);
+            while (!tmp_m->is_top_module())
             {
-                Module* parent = tmp_pm->get_parent_module();
-                tmp_pm = parent;
-                not_selectable_modules.insert(parent->get_id());
-                qDebug() << "par: " << parent->get_id();
+                Module* par_m = tmp_m->get_parent_module();
+                tmp_m = par_m;
+                not_selectable_modules.insert(par_m->get_id());
+                //qDebug() << "par: " << parent->get_id();
             }
         }
-
-
 
         CustomModuleDialog md(not_selectable_modules, this);
         if (md.exec() == QDialog::Accepted)
@@ -928,7 +925,7 @@ namespace hal
             QSet<u32> module_to_add;
             module_to_add.insert(md.selectedId());
             ActionAddItemsToObject* act = new ActionAddItemsToObject(module_to_add,{});
-            act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::Context));
+            act->setObject(UserActionObject(context->id(),UserActionObjectType::Context));
             act->exec();
         }
     }
@@ -936,9 +933,10 @@ namespace hal
 
     void GraphGraphicsView::handleAddGateToView()
     {
-        QSet<u32> not_selectable_gates = mGraphWidget->getContext()->gates();
+        GraphContext* context = mGraphWidget->getContext();
 
-        QSet<u32> modules_in_context = mGraphWidget->getContext()->modules();
+        QSet<u32> not_selectable_gates = context->gates();
+        QSet<u32> modules_in_context = context->modules();
         QSet<u32>::iterator i;
         for (i = modules_in_context.begin(); i != modules_in_context.end(); ++i)
         {
@@ -962,7 +960,7 @@ namespace hal
             QSet<u32> gate_to_add;
             gate_to_add.insert(gd.selectedId());
             ActionAddItemsToObject* act = new ActionAddItemsToObject({},gate_to_add);
-            act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::Context));
+            act->setObject(UserActionObject(context->id(),UserActionObjectType::Context));
             act->exec();
         }
     }
