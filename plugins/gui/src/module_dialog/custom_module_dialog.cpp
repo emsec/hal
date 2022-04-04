@@ -29,20 +29,17 @@ namespace hal {
         setWindowTitle("Add module to View");
         QGridLayout* layout = new QGridLayout(this);
 
-        qDebug() << "7";
 
         layout->addWidget(mSearchbar, 1, 0, 1, 2);
         mTabWidget = new QTabWidget(this);
         mTreeView  = new QTreeView(mTabWidget);
         mTabWidget->addTab(mTreeView, "Module tree");
 
-        qDebug() << "8";
 
         mTableView = new ModuleSelectView(false, mSearchbar, &exclude_ids, mTabWidget);
         connect(mTableView, &ModuleSelectView::moduleSelected, this, &CustomModuleDialog::handleTableSelection);
         mTabWidget->addTab(mTableView, "Module list");
 
-        qDebug() << "9";
         if (!ModuleSelectHistory::instance()->isEmpty())
         {
             mLastUsed = new ModuleSelectView(true, mSearchbar, &exclude_ids, mTabWidget);
