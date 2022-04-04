@@ -876,6 +876,32 @@ namespace hal
 
         QSet<u32> not_selectable_modules;
         QSet<u32> modules_in_context = context->modules();
+        QSet<u32> gates_in_context = context->gates();
+
+        for (Module* m : gNetlist->get_modules())
+        {
+            bool mod_in_context = false;
+            for (Module* sub_m : m->get_submodules(nullptr, true))
+            {
+                if (modules_in_context.contains(sub_m->get_id()))
+                {
+                    mod_in_context = true;
+                    break;
+                }
+            }
+            for (Gate* sub_g : m->get_gates(nullptr, true))
+            {
+                if (gates_in_context.contains(sub_g->get_id()))
+                {
+                    mod_in_context = true;
+                    break;
+                }
+            }
+            if (mod_in_context)
+            {
+                not_selectable_modules.insert(m->get_id());
+            }
+        }
 
         not_selectable_modules += modules_in_context;
 
@@ -890,7 +916,7 @@ namespace hal
             }
         }
 
-        QSet<u32> gates_in_context = context->gates();
+
         int cur_mod_id = 0;
         if (!gates_in_context.empty())
         {
@@ -915,7 +941,7 @@ namespace hal
                 Module* par_m = tmp_m->get_parent_module();
                 tmp_m = par_m;
                 not_selectable_modules.insert(par_m->get_id());
-                //qDebug() << "par: " << parent->get_id();
+                //qDebug() << "par: " << par_m->get_id();
             }
         }
 
