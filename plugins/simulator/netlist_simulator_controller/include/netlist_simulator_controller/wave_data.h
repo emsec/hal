@@ -43,7 +43,7 @@ namespace hal {
     class WaveData
     {
     public:
-        enum NetType { RegularNet, InputNet, OutputNet, ClockNet, NetGroup };
+        enum NetType { RegularNet, InputNet, OutputNet, ClockNet, BooleanNet, NetGroup };
         enum LoadPolicy { TooBigToLoad, LoadTimeframe, LoadAllData };
     private:
         u32 mId;
@@ -119,16 +119,19 @@ namespace hal {
     };
 
     class WaveDataGroup;
+    class WaveDataBoolean;
 
     class WaveDataList : public QObject, public QList<WaveData*>
     {
         friend class WaveDataGroup;
+        friend class WaveDataBoolean;
         Q_OBJECT
 
         QMap<u32,int>     mIds;
         WaveDataTimeframe mTimeframe;
         SaleaeDirectory   mSaleaeDirectory;
         u32               mMaxGroupId;
+        u32               mMaxBooleanId;
         void testDoubleCount();
         void restoreIndex();
         void updateMaxTime();
@@ -139,17 +142,20 @@ namespace hal {
 
         void replaceWaveData(int inx, WaveData *wdNew);
         void registerGroup(WaveDataGroup* grp);
+        void registerBoolean(WaveDataBoolean* wdBool);
     public:
         /**
          * Map of groups indexed by non-zero group id
          */
 
         QMap<u32,WaveDataGroup*> mDataGroups;
+        QMap<u32,WaveDataBoolean*> mDataBooleans;
         WaveDataList(const QString& sdFilename, QObject* parent = nullptr);
         ~WaveDataList();
 
         u32  createGroup(QString grpName);
         u32  nextGroupId() { return ++mMaxGroupId; }
+        u32  nextBooleanId() { return ++ mMaxBooleanId; }
         void addWavesToGroup(u32 grpId, const QVector<WaveData*>& wds);
         void removeGroup(u32 grpId);
 
@@ -162,6 +168,7 @@ namespace hal {
         void updateWaveData(int inx);
 
         WaveData* waveDataByNet(const Net* n);
+        WaveData* waveDataByName(const std::string& nam) const;
         int waveIndexByNetId(u32 id) const { return mIds.value(id,-1); }
         void triggerAddToView(u32 id) const;
         bool hasNet(u32 id) const { return mIds.contains(id); }
@@ -183,6 +190,7 @@ namespace hal {
     Q_SIGNALS:
         void waveAdded(int inx) const;
         void groupAdded(int grpId);
+        void booleanAdded(int boolId);
         void groupAboutToBeRemoved(WaveDataGroup* grp);
         void waveDataAboutToBeChanged(int inx);
         void waveUpdated(int inx, int grpId);
@@ -208,6 +216,20 @@ namespace hal {
     };
 
     uint qHash(const WaveDataGroupIndex& wdgi);
+
+    class WaveDataBoolean : public WaveData
+    {
+        int mInputCount;
+        WaveData** mInputWaves;
+        WaveData* mTriggerWave;
+        QHash<WaveDataGroupIndex,int> mIndex;
+        char* mTruthTable;
+    public:
+        WaveDataBoolean(WaveDataList* wdList, QString boolFunc);
+        ~WaveDataBoolean();
+        void recalcData();
+        virtual LoadPolicy loadPolicy() const override;
+    };
 
     class WaveDataGroup : public WaveData
     {

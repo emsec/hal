@@ -125,6 +125,9 @@ namespace hal {
             act = menu->addAction("Insert new group");
             connect(act,&QAction::triggered,this,&WaveTreeView::handleInsertGroup);
 
+            act = menu->addAction("Insert new boolean expression");
+            connect(act,&QAction::triggered,this,&WaveTreeView::handleInsertBoolean);
+
             act = menu->addAction("Rename '" + selName + "'");
             connect(act,&QAction::triggered,this,&WaveTreeView::handleRenameItem);
 
@@ -280,6 +283,15 @@ namespace hal {
         wtm->insertGroup(mContextIndexList.at(0));
     }
 
+    void WaveTreeView::handleInsertBoolean()
+    {
+        if (mContextIndexList.size() != 1) return;
+        WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
+        QString boolExpr = QInputDialog::getText(this,"Enter boolean expression", "Enter expression:");
+        if (boolExpr.isEmpty()) return;
+        wtm->insertBoolean(mContextIndexList.at(0),boolExpr);
+    }
+
     QModelIndexList WaveTreeView::sortedSelection() const
     {
         QMap<int,QModelIndex> sortInx;
@@ -344,15 +356,26 @@ namespace hal {
             int iwave = wtm->waveIndex(currentIndex);
             if (iwave < 0)
             {
-                int groupId = wtm->groupId(currentIndex);
-                if (groupId > 0)
+                int id = 0;
+                WaveItemIndex::IndexType tp = WaveItemIndex::Invalid;
+                if (iwave == -1)
                 {
-                    WaveItemIndex wii(groupId, WaveItemIndex::Group);
+                    id = wtm->groupId(currentIndex);
+                    tp = WaveItemIndex::Group;
+                }
+                else if (iwave == -2)
+                {
+                    id = wtm->booleanId(currentIndex);
+                    tp = WaveItemIndex::Bool;
+                }
+                if (id > 0 && tp != WaveItemIndex::Invalid)
+                {
+                    WaveItemIndex wii(id, tp, 0);
                     WaveItem* wi = mWaveItemHash->value(wii);
                     if (!wi)
                     {
                         mWaveItemHash->dump("Crash");
-                        qDebug() << "group wii not found" << groupId;
+                        qDebug() << "group/boolean wii not found" << id << tp;
                     }
                     Q_ASSERT(wi);
                     wi->setYposition(i);

@@ -127,6 +127,16 @@ namespace hal {
         Q_EMIT triggerReorder();
     }
 
+    void WaveTreeModel::handleBooleanAdded(int boolId)
+    {
+        ReorderRequest req(this);
+        if (mIgnoreSignals) return;
+        WaveDataBoolean* wdBool = mWaveDataList->mDataBooleans.value(boolId);
+        if (!wdBool) return;
+        insertBoolean(createIndex(mRoot->size(),0,mRoot),QString(),wdBool);
+        addOrReplaceItem(wdBool, WaveItemIndex::Bool, wdBool->id(), 0);
+    }
+
     void WaveTreeModel::handleGroupAdded(int grpId)
     {
         ReorderRequest req(this);
@@ -327,7 +337,15 @@ namespace hal {
          WaveData* wd = item(index);
          if (!wd) return -1;
          if (dynamic_cast<WaveDataGroup*>(wd)) return -1;
+         if (dynamic_cast<WaveDataBoolean*>(wd)) return -2;
          return mWaveDataList->waveIndexByNetId(wd->id());
+    }
+
+    int WaveTreeModel::booleanId(const QModelIndex& boolIndex) const
+    {
+        WaveDataBoolean* wdBool = dynamic_cast<WaveDataBoolean*>(item(boolIndex));
+        if (!wdBool) return -1;
+        return wdBool->id();
     }
 
     int WaveTreeModel::groupId(const QModelIndex& grpIndex) const
@@ -616,7 +634,16 @@ namespace hal {
             addOrReplaceItem(wd, WaveItemIndex::Group, wdGrp->id(), 0);
         }
         else
-            handleWaveAddedToGroup({wd->id()},grp->id());
+        {
+            WaveDataBoolean* wdBool = dynamic_cast<WaveDataBoolean*>(wd);
+            if (wdBool)
+            {
+                wdBool->recalcData();
+                addOrReplaceItem(wd, WaveItemIndex::Bool, wd->id(),0);
+            }
+            else
+                handleWaveAddedToGroup({wd->id()},grp->id());
+        }
         invalidateParent(parent);
         return true;
     }
@@ -642,15 +669,22 @@ namespace hal {
     int WaveTreeModel::valueAtCursor(const QModelIndex& index) const
     {
         WaveData* wd = item(index);
-        WaveDataGroup* grp = dynamic_cast<WaveDataGroup*>(wd);
         WaveItemIndex wii;
-        if (grp) wii = WaveItemIndex(grp->id(), WaveItemIndex::Group);
-        else
+        switch (wd->netType())
         {
-            grp = static_cast<WaveDataGroup*>(index.internalPointer());
+        case WaveData::NetGroup:
+            wii = WaveItemIndex(wd->id(), WaveItemIndex::Group);
+            break;
+        case WaveData::BooleanNet:
+            wii = WaveItemIndex(wd->id(), WaveItemIndex::Bool);
+            break;
+        default:
+            WaveDataGroup* grp = static_cast<WaveDataGroup*>(index.internalPointer());
             int iwave = mWaveDataList->waveIndexByNetId(wd->id());
             wii = WaveItemIndex(iwave, WaveItemIndex::Wire, grp->id());
+            break;
         }
+
         WaveItem* wi = mWaveItemHash->value(wii);
         if (!wi) return SaleaeDataTuple::sReadError;
         int retval = wi->cursorValue(mCursorTime,mCursorXpos);
@@ -753,6 +787,20 @@ namespace hal {
         endResetModel();
         WaveItem* wi = mWaveItemHash->value(WaveItemIndex(grp->id(),WaveItemIndex::Group));
         if (wi) wi->setRequest(WaveItem::DeleteRequest);
+    }
+
+    void WaveTreeModel::insertBoolean(const QModelIndex& boolIndex, const QString &boolExpression, WaveDataBoolean *wdBool)
+    {
+        if (boolIndex.internalPointer() != mRoot) return;
+
+        ReorderRequest req(this);
+        mIgnoreSignals = true;
+        if (!wdBool) wdBool = new WaveDataBoolean(mWaveDataList,boolExpression);
+        beginResetModel();
+        insertItem(boolIndex.row(),boolIndex.parent(),wdBool);
+        endResetModel();
+        mIgnoreSignals = false;
+        wdBool->recalcData();
     }
 
     void WaveTreeModel::insertGroup(const QModelIndex &groupIndex, WaveDataGroup* grp)

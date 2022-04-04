@@ -280,7 +280,7 @@ namespace hal {
     uint qHash(const WaveItemIndex& wii)
     {
         if (!wii.isValid()) return 0;
-        return (wii.parentId() << 20) | ((wii.index()+1) << 1) | (wii.isGroup() ? 1 : 0);
+        return (wii.parentId() << 20) | ((wii.index()+1) << 2) | wii.intType();
     }
 
     int WaveItemHash::importedWires() const

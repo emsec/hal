@@ -17,7 +17,7 @@ namespace hal {
     class WaveItemIndex
     {
     public:
-        enum IndexType { Invalid, Wire, Group };
+        enum IndexType { Invalid, Wire, Bool, Group };
     private:
         IndexType mType;
         u32 mIndex;
@@ -28,6 +28,7 @@ namespace hal {
         bool isValid() const { return mType != Invalid; }
         bool isGroup() const { return mType == Group; }
         bool isWire() const  { return mType == Wire; }
+        u32 intType() const { return mType; }
         u32 index() const { return mIndex; }
         u32 parentId() const { return mParentId; }
         bool operator== (const WaveItemIndex& other) const;
