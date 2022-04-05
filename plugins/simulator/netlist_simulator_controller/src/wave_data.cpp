@@ -1245,6 +1245,9 @@ namespace hal {
         for (WaveData* wd : *this)
             if (wd->name()==needle)
                 return wd;
+        for (WaveDataBoolean* wdb : mDataBooleans.values())
+            if (wdb->name()==needle)
+                return wdb;
         return nullptr;
     }
 

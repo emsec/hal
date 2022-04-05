@@ -49,8 +49,15 @@ namespace hal {
     {
         WaveData* wd = item(index);
         if (!wd) return WaveItemIndex();
-        WaveDataGroup* grp = dynamic_cast<WaveDataGroup*>(wd);
-        if (grp) return WaveItemIndex(grp->id(),WaveItemIndex::Group);
+        switch (wd->netType())
+        {
+        case WaveData::NetGroup:
+            return WaveItemIndex(wd->id(),WaveItemIndex::Group);
+        case WaveData::BooleanNet:
+            return WaveItemIndex(wd->id(),WaveItemIndex::Bool);
+        default:
+            break;
+        }
         int iwave = mWaveDataList->waveIndexByNetId(wd->id());
         WaveDataGroup* parentGrp = static_cast<WaveDataGroup*>(index.internalPointer());
         if (!parentGrp || parentGrp == mRoot) return WaveItemIndex(iwave,WaveItemIndex::Wire);

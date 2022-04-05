@@ -122,6 +122,7 @@ namespace hal {
         if (singleSelection)
         {
             QString selName =  wtm->netName(mContextIndexList.at(0));
+            selName.replace(QChar('&'),"&&");
             act = menu->addAction("Insert new group");
             connect(act,&QAction::triggered,this,&WaveTreeView::handleInsertGroup);
 
