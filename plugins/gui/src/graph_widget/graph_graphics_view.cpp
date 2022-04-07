@@ -878,80 +878,61 @@ namespace hal
         QSet<u32> modules_in_context = context->modules();
         QSet<u32> gates_in_context = context->gates();
 
-        for (Module* m : gNetlist->get_modules())
+        for (Module* module : gNetlist->get_modules())
         {
-            bool mod_in_context = false;
-            for (Module* sub_m : m->get_submodules(nullptr, true))
+            bool module_in_context = false;
+            for (Module* submodule: module->get_submodules(nullptr, true))
             {
-                if (modules_in_context.contains(sub_m->get_id()))
+                if (modules_in_context.contains(submodule->get_id()))
                 {
-                    mod_in_context = true;
+                    module_in_context = true;
                     break;
                 }
             }
-            for (Gate* sub_g : m->get_gates(nullptr, true))
+            for (Gate* subgate : module->get_gates(nullptr, true))
             {
-                if (gates_in_context.contains(sub_g->get_id()))
+                if (gates_in_context.contains(subgate->get_id()))
                 {
-                    mod_in_context = true;
+                    module_in_context = true;
                     break;
                 }
             }
-            if (mod_in_context)
+            if (module_in_context)
             {
-                not_selectable_modules.insert(m->get_id());
+                not_selectable_modules.insert(module->get_id());
             }
         }
 
         not_selectable_modules += modules_in_context;
 
-        //QSet<u32>::iterator it;
-        //for (it = modules_in_context.begin(); it != modules_in_context.end(); ++it)
         QSet<u32> direct_par_modules;
         for (u32 id : modules_in_context)
         {
             //qDebug() << "sub: " << id;
             Module* cur_module = gNetlist->get_module_by_id(id);
-            for (Module* m : cur_module->get_submodules(nullptr, true))
+            for (Module* module : cur_module->get_submodules(nullptr, true))
             {
-                not_selectable_modules.insert(m->get_id());
-                //qDebug() << "subsub: " << m->get_id();
+                not_selectable_modules.insert(module->get_id());
+                //qDebug() << "subsub: " << module->get_id();
             }
 
             if (!cur_module->is_top_module())
             {
-                //cur_mod_id = m->get_parent_module()->get_id();
-                //u32 par_id = cur_module->get_parent_module()->get_id();
                 direct_par_modules.insert(cur_module->get_parent_module()->get_id());
-                //not_selectable_modules.insert(par_id);
             }
         }
 
-        //int cur_mod_id = 0;
         if (!gates_in_context.empty())
         {
-
-            //cur_mod_id = gNetlist->get_gate_by_id(gates_in_context.values().at(0))->get_module()->get_id();
-
             for (u32 id : gates_in_context)
             {
-                //u32 par_id = gNetlist->get_gate_by_id(id)->get_module()->get_id();
                 direct_par_modules.insert(gNetlist->get_gate_by_id(id)->get_module()->get_id());
-                //not_selectable_modules.insert(par_id);
             }
         }
-
-//        else if (!modules_in_context.empty())
-//        {
-//            Module* m = gNetlist->get_module_by_id(modules_in_context.values().at(0));
-//            if (!m->is_top_module())
-//            {
-//                cur_mod_id = m->get_parent_module()->get_id();
-//            }
-//        }
 
         for (u32 id : direct_par_modules)
         {
+            //qDebug() << "dirpar: " << id;
             not_selectable_modules.insert(id);
 
             Module* tmp_module = gNetlist->get_module_by_id(id);
@@ -964,28 +945,13 @@ namespace hal
             }
         }
 
-//        if (cur_mod_id != 0)
-//        {
-//            // BUG: when adding a gate to a view. The current module may not be correct
-//            not_selectable_modules.insert(cur_mod_id);
-//            //qDebug() << "cur: " << cur_mod_id;
-//            Module* tmp_m = gNetlist->get_module_by_id(cur_mod_id);
-//            while (!tmp_m->is_top_module())
-//            {
-//                Module* par_m = tmp_m->get_parent_module();
-//                tmp_m = par_m;
-//                not_selectable_modules.insert(par_m->get_id());
-//                //qDebug() << "par: " << par_m->get_id();
-//            }
-//        }
-
-        CustomModuleDialog md(not_selectable_modules, this);
-        if (md.exec() == QDialog::Accepted)
+        CustomModuleDialog module_dialog(not_selectable_modules, this);
+        if (module_dialog.exec() == QDialog::Accepted)
         {
             QSet<u32> module_to_add;
-            module_to_add.insert(md.selectedId());
-            ActionAddItemsToObject* act = new ActionAddItemsToObject(module_to_add,{});
-            act->setObject(UserActionObject(context->id(),UserActionObjectType::Context));
+            module_to_add.insert(module_dialog.selectedId());
+            ActionAddItemsToObject* act = new ActionAddItemsToObject(module_to_add, {});
+            act->setObject(UserActionObject(context->id(), UserActionObjectType::Context));
             act->exec();
         }
     }
@@ -997,30 +963,31 @@ namespace hal
 
         QSet<u32> not_selectable_gates = context->gates();
         QSet<u32> modules_in_context = context->modules();
-        QSet<u32>::iterator i;
-        for (i = modules_in_context.begin(); i != modules_in_context.end(); ++i)
+
+        for (u32 module_id : modules_in_context)
         {
-            for (Gate* g : gNetlist->get_module_by_id(*i)->get_gates(nullptr, true))
+            for (Gate* gate : gNetlist->get_module_by_id(module_id)->get_gates(nullptr, true))
             {
-                not_selectable_gates.insert(g->get_id());
+                not_selectable_gates.insert(gate->get_id());
             }
         }
 
-        QSet<u32> selectableGates;
-        for (Gate* g : gNetlist->get_gates())
+        QSet<u32> selectable_gates;
+        for (Gate* gate : gNetlist->get_gates())
         {
-            if (!not_selectable_gates.contains(g->get_id())) {
-                selectableGates.insert(g->get_id());
+            if (!not_selectable_gates.contains(gate->get_id()))
+            {
+                selectable_gates.insert(gate->get_id());
             }
         }
 
-        CustomGateDialog gd(0, true, selectableGates, this);
-        if (gd.exec() == QDialog::Accepted)
+        CustomGateDialog gate_dialog(0, true, selectable_gates, this);
+        if (gate_dialog.exec() == QDialog::Accepted)
         {
             QSet<u32> gate_to_add;
-            gate_to_add.insert(gd.selectedId());
-            ActionAddItemsToObject* act = new ActionAddItemsToObject({},gate_to_add);
-            act->setObject(UserActionObject(context->id(),UserActionObjectType::Context));
+            gate_to_add.insert(gate_dialog.selectedId());
+            ActionAddItemsToObject* act = new ActionAddItemsToObject({}, gate_to_add);
+            act->setObject(UserActionObject(context->id(), UserActionObjectType::Context));
             act->exec();
         }
     }
