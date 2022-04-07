@@ -908,12 +908,10 @@ namespace hal
         QSet<u32> direct_par_modules;
         for (u32 id : modules_in_context)
         {
-            //qDebug() << "sub: " << id;
             Module* cur_module = gNetlist->get_module_by_id(id);
             for (Module* module : cur_module->get_submodules(nullptr, true))
             {
                 not_selectable_modules.insert(module->get_id());
-                //qDebug() << "subsub: " << module->get_id();
             }
 
             if (!cur_module->is_top_module())
@@ -932,7 +930,6 @@ namespace hal
 
         for (u32 id : direct_par_modules)
         {
-            //qDebug() << "dirpar: " << id;
             not_selectable_modules.insert(id);
 
             Module* tmp_module = gNetlist->get_module_by_id(id);
@@ -941,7 +938,6 @@ namespace hal
                 Module* par_module = tmp_module->get_parent_module();
                 tmp_module = par_module;
                 not_selectable_modules.insert(par_module->get_id());
-                //qDebug() << "par: " << par_module->get_id();
             }
         }
 

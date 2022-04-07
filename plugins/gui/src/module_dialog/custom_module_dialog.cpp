@@ -116,11 +116,17 @@ namespace hal {
 
     void CustomModuleDialog::handleTableSelection(u32 id, bool doubleClick)
     {
+        qDebug() << "id: " << id;
         //mSelectedId = mSelectExclude.isAccepted(id) ? id : 0;
         if (mExcludeIds.contains(id))
         {
             mSelectedId = 0;
         }
+        else
+        {
+            mSelectedId = id;
+        }
+        qDebug() << "seid: " << mSelectedId;
         enableButtons();
         if (mSelectedId && doubleClick)
         {
