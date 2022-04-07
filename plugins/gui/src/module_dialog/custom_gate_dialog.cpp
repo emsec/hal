@@ -14,7 +14,6 @@
 #include <QPushButton>
 #include <QTabWidget>
 #include <QTableView>
-#include <QTreeView>
 
 #include <QDebug>
 
@@ -23,6 +22,7 @@ namespace hal {
         : QDialog(parent), mSelectedId(0), mOrigin(orig), mQuerySuccessor(succ),
           mSelectableGates(selectable)
     {
+        this->resize(400,400);
         setWindowTitle("Add gate to view");
         QGridLayout* layout = new QGridLayout(this);
 
@@ -69,7 +69,7 @@ namespace hal {
     {
         mButtonBox->button(QDialogButtonBox::Ok)->setEnabled(mSelectedId>0);
         QString target = "…";
-        if (mSelectedId>0)
+        if (mSelectedId > 0)
         {
             Gate* g = gNetlist->get_gate_by_id(mSelectedId);
             if (g) target = QString("%1[%2]").arg(QString::fromStdString(g->get_name())).arg(mSelectedId);

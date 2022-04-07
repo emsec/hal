@@ -32,14 +32,12 @@
 #include <QLabel>
 
 class QDialogButtonBox;
-class QTreeView;
 class QTabWidget;
 class QPushButton;
 class QLabel;
 
 namespace hal {
 
-    class GateProxyModel;
     class Searchbar;
 
     /**
@@ -112,7 +110,6 @@ namespace hal {
         QLabel* mNoAvailable;
 
         void enableButtons();
-        u32 treeGateId(const QModelIndex& index);
     };
 }
 
