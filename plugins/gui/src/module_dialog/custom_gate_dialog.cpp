@@ -22,7 +22,6 @@ namespace hal {
         : QDialog(parent), mSelectedId(0), mOrigin(orig), mQuerySuccessor(succ),
           mSelectableGates(selectable)
     {
-        this->resize(400,400);
         setWindowTitle("Add gate to view");
         QGridLayout* layout = new QGridLayout(this);
 
