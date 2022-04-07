@@ -94,7 +94,6 @@ namespace hal {
         u32 mSelectedId;
         QDialogButtonBox* mButtonBox;
         ModuleSelectView* mTableView;
-        ModuleSelectView* mLastUsed;
         QTabWidget* mTabWidget;
 
         Searchbar* mSearchbar;

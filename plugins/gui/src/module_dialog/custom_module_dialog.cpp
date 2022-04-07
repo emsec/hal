@@ -20,8 +20,7 @@
 namespace hal {
     CustomModuleDialog::CustomModuleDialog(QSet<u32> exclude_ids, QWidget* parent)
         : QDialog(parent),
-          mSelectedId(0),
-          mLastUsed(nullptr)
+          mSelectedId(0)
     {
 
         setWindowTitle("Add module to view");
@@ -35,22 +34,6 @@ namespace hal {
             mTableView = new ModuleSelectView(false, mSearchbar, &exclude_ids, mTabWidget);
             connect(mTableView, &ModuleSelectView::moduleSelected, this, &CustomModuleDialog::handleTableSelection);
             mTabWidget->addTab(mTableView, "Module list");
-
-            if (!ModuleSelectHistory::instance()->isEmpty())
-            {
-                mLastUsed = new ModuleSelectView(true, mSearchbar, &exclude_ids, mTabWidget);
-                if (mLastUsed->model()->rowCount())
-                {
-                    connect(mLastUsed, &ModuleSelectView::moduleSelected, this, &CustomModuleDialog::handleTableSelection);
-                    mTabWidget->addTab(mLastUsed, "Recent selection");
-                }
-                else
-                {
-                    delete mLastUsed;
-                    mLastUsed = nullptr;
-                }
-
-            }
 
             layout->addWidget(mTabWidget, 2, 0, 1, 3);
 
