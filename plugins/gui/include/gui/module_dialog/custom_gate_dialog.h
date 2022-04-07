@@ -104,7 +104,6 @@ namespace hal {
         QSet<u32> mSelectableGates;
         QDialogButtonBox* mButtonBox;
         GateSelectView* mTableView;
-        GateSelectView* mLastUsed;
         QTabWidget* mTabWidget;
 
         Searchbar* mSearchbar;

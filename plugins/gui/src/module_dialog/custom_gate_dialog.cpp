@@ -33,21 +33,9 @@ namespace hal {
 
             mTabWidget = new QTabWidget(this);
 
-            mTableView = new GateSelectView(false,mSearchbar,selectable,mTabWidget);
-            connect(mTableView,&GateSelectView::gateSelected,this,&CustomGateDialog::handleTableSelection);
+            mTableView = new GateSelectView(false, mSearchbar, selectable, mTabWidget);
+            connect(mTableView,&GateSelectView::gateSelected, this, &CustomGateDialog::handleTableSelection);
             mTabWidget->addTab(mTableView, "Gate list");
-
-            if (!GateSelectHistory::instance()->isEmpty())
-            {
-                mLastUsed = new GateSelectView(true,mSearchbar,selectable,mTabWidget);
-                if (mLastUsed->model()->rowCount())
-                {
-                    connect(mLastUsed,&GateSelectView::gateSelected,this,&CustomGateDialog::handleTableSelection);
-                    mTabWidget->addTab(mLastUsed, "Recent selection");
-                }
-                else
-                    delete mLastUsed;
-            }
 
             layout->addWidget(mTabWidget, 2, 0, 1, 2);
 
@@ -55,7 +43,6 @@ namespace hal {
             mToggleSearchbar->setShortcut(QKeySequence(ContentManager::sSettingSearch->value().toString()));
             addAction(mToggleSearchbar);
 
-            mTabWidget->setCurrentIndex(1);
             mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, this);
             layout->addWidget(mButtonBox, 3, 1);
             enableButtons();
