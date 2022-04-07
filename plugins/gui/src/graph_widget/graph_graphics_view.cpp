@@ -905,45 +905,79 @@ namespace hal
 
         not_selectable_modules += modules_in_context;
 
-        QSet<u32>::iterator i;
-        for (i = modules_in_context.begin(); i != modules_in_context.end(); ++i)
+        //QSet<u32>::iterator it;
+        //for (it = modules_in_context.begin(); it != modules_in_context.end(); ++it)
+        QSet<u32> direct_par_modules;
+        for (u32 id : modules_in_context)
         {
-            //qDebug() << "sub: " << *i;
-            for (Module* m : gNetlist->get_module_by_id(*i)->get_submodules(nullptr, true))
+            //qDebug() << "sub: " << id;
+            Module* cur_module = gNetlist->get_module_by_id(id);
+            for (Module* m : cur_module->get_submodules(nullptr, true))
             {
                 not_selectable_modules.insert(m->get_id());
                 //qDebug() << "subsub: " << m->get_id();
             }
+
+            if (!cur_module->is_top_module())
+            {
+                //cur_mod_id = m->get_parent_module()->get_id();
+                //u32 par_id = cur_module->get_parent_module()->get_id();
+                direct_par_modules.insert(cur_module->get_parent_module()->get_id());
+                //not_selectable_modules.insert(par_id);
+            }
         }
 
-
-        int cur_mod_id = 0;
+        //int cur_mod_id = 0;
         if (!gates_in_context.empty())
         {
-            cur_mod_id = gNetlist->get_gate_by_id(gates_in_context.values().at(0))->get_module()->get_id();
-        }
-        else if (!modules_in_context.empty())
-        {
-            Module* m = gNetlist->get_module_by_id(modules_in_context.values().at(0));
-            if (!m->is_top_module())
+
+            //cur_mod_id = gNetlist->get_gate_by_id(gates_in_context.values().at(0))->get_module()->get_id();
+
+            for (u32 id : gates_in_context)
             {
-                cur_mod_id = m->get_parent_module()->get_id();
+                //u32 par_id = gNetlist->get_gate_by_id(id)->get_module()->get_id();
+                direct_par_modules.insert(gNetlist->get_gate_by_id(id)->get_module()->get_id());
+                //not_selectable_modules.insert(par_id);
             }
         }
-        if (cur_mod_id != 0)
+
+//        else if (!modules_in_context.empty())
+//        {
+//            Module* m = gNetlist->get_module_by_id(modules_in_context.values().at(0));
+//            if (!m->is_top_module())
+//            {
+//                cur_mod_id = m->get_parent_module()->get_id();
+//            }
+//        }
+
+        for (u32 id : direct_par_modules)
         {
-            // BUG: when adding a gate to a view. The current module may not be correct
-            not_selectable_modules.insert(cur_mod_id);
-            //qDebug() << "cur: " << cur_mod_id;
-            Module* tmp_m = gNetlist->get_module_by_id(cur_mod_id);
-            while (!tmp_m->is_top_module())
+            not_selectable_modules.insert(id);
+
+            Module* tmp_module = gNetlist->get_module_by_id(id);
+            while (!tmp_module->is_top_module())
             {
-                Module* par_m = tmp_m->get_parent_module();
-                tmp_m = par_m;
-                not_selectable_modules.insert(par_m->get_id());
-                //qDebug() << "par: " << par_m->get_id();
+                Module* par_module = tmp_module->get_parent_module();
+                tmp_module = par_module;
+                not_selectable_modules.insert(par_module->get_id());
+                //qDebug() << "par: " << par_module->get_id();
             }
         }
+
+//        if (cur_mod_id != 0)
+//        {
+//            // BUG: when adding a gate to a view. The current module may not be correct
+//            not_selectable_modules.insert(cur_mod_id);
+//            //qDebug() << "cur: " << cur_mod_id;
+//            Module* tmp_m = gNetlist->get_module_by_id(cur_mod_id);
+//            while (!tmp_m->is_top_module())
+//            {
+//                Module* par_m = tmp_m->get_parent_module();
+//                tmp_m = par_m;
+//                not_selectable_modules.insert(par_m->get_id());
+//                //qDebug() << "par: " << par_m->get_id();
+//            }
+//        }
 
         CustomModuleDialog md(not_selectable_modules, this);
         if (md.exec() == QDialog::Accepted)
