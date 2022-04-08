@@ -66,14 +66,7 @@ namespace hal {
 
     void CustomGateDialog::enableButtons()
     {
-        mButtonBox->button(QDialogButtonBox::Ok)->setEnabled(mSelectedId>0);
-        QString target = "…";
-        if (mSelectedId > 0)
-        {
-            Gate* g = gNetlist->get_gate_by_id(mSelectedId);
-            if (g) target = QString("%1[%2]").arg(QString::fromStdString(g->get_name())).arg(mSelectedId);
-        }
-        setWindowTitle("Add gate to view");
+        mButtonBox->button(QDialogButtonBox::Ok)->setEnabled(mSelectedId > 0);
     }
 
     void CustomGateDialog::handleTableSelection(u32 id, bool doubleClick)

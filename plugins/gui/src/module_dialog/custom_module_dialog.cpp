@@ -76,14 +76,7 @@ namespace hal {
 
     void CustomModuleDialog::enableButtons()
     {
-        mButtonBox->button(QDialogButtonBox::Ok)->setEnabled(mSelectedId>0);
-        QString target = "…";
-        if (mSelectedId>0)
-        {
-            Module* m = gNetlist->get_module_by_id(mSelectedId);
-            if (m) target = QString("%1[%2]").arg(QString::fromStdString(m->get_name())).arg(mSelectedId);
-        }
-        setWindowTitle("Add module to View");
+        mButtonBox->button(QDialogButtonBox::Ok)->setEnabled(mSelectedId > 0);
     }
 
 
@@ -116,8 +109,6 @@ namespace hal {
 
     void CustomModuleDialog::handleTableSelection(u32 id, bool doubleClick)
     {
-        qDebug() << "id: " << id;
-        //mSelectedId = mSelectExclude.isAccepted(id) ? id : 0;
         if (mExcludeIds.contains(id))
         {
             mSelectedId = 0;
@@ -126,7 +117,6 @@ namespace hal {
         {
             mSelectedId = id;
         }
-        qDebug() << "seid: " << mSelectedId;
         enableButtons();
         if (mSelectedId && doubleClick)
         {
@@ -146,7 +136,6 @@ namespace hal {
         mTreeView->clearSelection();
         mTableView->clearSelection();
         mSearchbar->clear();
-        //if (mLastUsed) mLastUsed->clearSelection();
     }
 
     void CustomModuleDialog::keybindToggleSearchbar(const QKeySequence& seq)
