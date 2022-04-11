@@ -885,7 +885,8 @@ namespace hal {
 
         void WaveValueThread::run()
         {
-            SaleaeInputFile sif(mWorkDir.absoluteFilePath(QString("digital_%1.bin").arg(mItem->wavedata()->fileIndex())).toStdString());
+            int fileIndex = mItem->wavedata()->fileIndex();
+            SaleaeInputFile sif(mWorkDir.absoluteFilePath(QString("digital_%1.bin").arg(fileIndex)).toStdString());
             if (sif.good())
             {
                 int val = sif.get_int_value(mTpos);

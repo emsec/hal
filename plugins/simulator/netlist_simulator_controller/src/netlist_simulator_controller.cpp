@@ -118,6 +118,14 @@ namespace hal
         checkReadyState();
     }
 
+    u32 NetlistSimulatorController::add_boolean_waveform(const std::string &expression)
+    {
+        if (expression.empty()) return 0;
+        WaveDataBoolean* wdBool = new WaveDataBoolean(mWaveDataList, QString::fromStdString(expression));
+        if (!wdBool) return 0;
+        return wdBool->id();
+    }
+
     u32 NetlistSimulatorController::add_waveform_group(const std::string& name, const std::vector<Net*> nets)
     {
         if (name.empty()) return 0;

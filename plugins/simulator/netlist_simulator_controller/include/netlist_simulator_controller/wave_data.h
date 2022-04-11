@@ -86,7 +86,10 @@ namespace hal {
         void setTimeframeSize(u64 siz)              { mTimeframeSize = siz; }
         void setWaveDataList(WaveDataList* wdList)  { mWaveDataList = wdList; }
         virtual LoadPolicy loadPolicy() const;
+        int dataIndex() const;
 
+        u64 neighborTransition(double t, bool next) const;
+        void loadDataUnlessAlreadyLoaded();
         bool loadSaleae(const WaveDataTimeframe& tframe = WaveDataTimeframe());
         void saveSaleae();
         void setData(const QMap<u64,int>& dat);
@@ -155,6 +158,7 @@ namespace hal {
 
         u32  createGroup(QString grpName);
         u32  nextGroupId() { return ++mMaxGroupId; }
+        u32  maxGroupId() const { return mMaxGroupId; }
         u32  nextBooleanId() { return ++ mMaxBooleanId; }
         void addWavesToGroup(u32 grpId, const QVector<WaveData*>& wds);
         void removeGroup(u32 grpId);
@@ -229,6 +233,8 @@ namespace hal {
         ~WaveDataBoolean();
         void recalcData();
         virtual LoadPolicy loadPolicy() const override;
+        QList<WaveData*> children() const;
+        const char* truthTable() const { return mTruthTable; }
     };
 
     class WaveDataGroup : public WaveData

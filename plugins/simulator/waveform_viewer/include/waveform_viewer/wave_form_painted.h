@@ -9,6 +9,7 @@ class QPainter;
 namespace hal {
     class WaveData;
     class WaveItemHash;
+    class WaveDataList;
     class WaveFormPrimitive;
     class WaveFormPrimitiveFilled;
 
@@ -44,6 +45,7 @@ namespace hal {
 
         void generate(WaveDataProvider* wdp, const WaveTransform* trans, const WaveScrollbar* sbar, bool* loop);
         bool generateGroup(const WaveData* wd, const WaveItemHash *hash);
+        bool generateBoolean(const WaveData* wd, const WaveDataList* wdList, const WaveItemHash *hash);
 
         int numberPrimitives() const { return mPrimitives.size(); }
 

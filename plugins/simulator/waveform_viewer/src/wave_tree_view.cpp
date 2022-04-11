@@ -414,13 +414,19 @@ namespace hal {
     {
         QTreeView::selectionChanged(selected,deselected);
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
+        mWaveItemHash->setSelected();
         for (WaveItem* wi : mWaveItemHash->values())
             wi->setWaveSelected(false);
         for (const QModelIndex& inx : sortedSelection())
         {
             WaveItemIndex wii = wtm->hashIndex(inx);
             WaveItem* wi = mWaveItemHash->value(wii);
-            if (wi) wi->setWaveSelected(true);
+            if (wi)
+            {
+                wi->setWaveSelected(true);
+                if (!mWaveItemHash->firstSelected())
+                    mWaveItemHash->setSelected(wi);
+            }
         }
     }
 

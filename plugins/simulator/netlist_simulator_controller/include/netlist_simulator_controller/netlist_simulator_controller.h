@@ -122,6 +122,13 @@ public:
     u32 add_waveform_group(const std::string& name, const std::vector<Net*> nets);
 
     /**
+     * Add waveform based on boolean expression.
+     * @param expression The boolean expression based on names of existing waveforms.
+     * @return ID of new boolean waveform
+     */
+    u32 add_boolean_waveform(const std::string& expression);
+
+    /**
      * Remove waveform group identified by group ID. Waveform for nets will still be shown but they are not bundled.
      * @param group_id The ID of waveform group to be removed
      */

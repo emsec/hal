@@ -44,6 +44,7 @@ namespace hal
     public:
         SaleaeParser(const std::string& filename);
         uint64_t get_max_time() const;
+        bool register_callback(const std::string& name, uint32_t id, std::function<void(void*,uint64_t, int)> callback, void* obj);
         bool register_callback(const Net* net, std::function<void(void*,uint64_t, int)> callback, void* obj);
         bool next_event();
 
