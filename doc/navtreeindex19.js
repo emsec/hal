@@ -1,5 +1,14 @@
 var NAVTREEINDEX19 =
 {
+"namespaces.html":[11,0],
+"namespacestd.html":[12,0,1],
+"namespacestd.html":[11,0,3],
+"namespacesubprocess.html":[12,0,2],
+"namespacesubprocess.html":[11,0,4],
+"namespacesubprocess_1_1detail.html":[11,0,4,0],
+"namespacesubprocess_1_1detail.html":[12,0,2,0],
+"namespacesubprocess_1_1util.html":[11,0,4,1],
+"net_8h.html":[13,0,0,0,1,12],
 "net_8h_source.html":[13,0,0,0,1,12],
 "net__details__widget_8cpp.html":[13,0,1,0,2,36,9],
 "net__details__widget_8cpp_source.html":[13,0,1,0,2,36,9],
@@ -240,14 +249,5 @@ var NAVTREEINDEX19 =
 "plugin__gui_8h_source.html":[13,0,1,0,0,0,54],
 "plugin__interface__base_8cpp.html":[13,0,2,1,0],
 "plugin__interface__base_8cpp_source.html":[13,0,2,1,0],
-"plugin__interface__base_8h.html":[13,0,0,0,2,0],
-"plugin__interface__base_8h.html#a10e7df18d8a816af76f947453883ff42":[13,0,0,0,2,0,4],
-"plugin__interface__base_8h.html#a42221ae13c427234b08a21d229eb2ad9":[13,0,0,0,2,0,2],
-"plugin__interface__base_8h.html#a9280bc62af1b57e6460d0b1c251908bd":[13,0,0,0,2,0,3],
-"plugin__interface__base_8h.html#aa8127688230d54c42984bdd3c2bb1f72":[13,0,0,0,2,0,1],
-"plugin__interface__base_8h.html#af1388a5c4377a81f3215cac5d274fd60":[13,0,0,0,2,0,0],
-"plugin__interface__base_8h_source.html":[13,0,0,0,2,0],
-"plugin__interface__cli_8h.html":[13,0,0,0,2,1],
-"plugin__interface__cli_8h_source.html":[13,0,0,0,2,1],
-"plugin__interface__gui_8h.html":[13,0,0,0,2,2]
+"plugin__interface__base_8h.html":[13,0,0,0,2,0]
 };

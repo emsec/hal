@@ -1,5 +1,14 @@
 var NAVTREEINDEX9 =
 {
+"classhal_1_1_net_layout_connection_factory.html#a3487f02ccfc043bb7af7124ee7cde998":[10,0,0,2,15,0],
+"classhal_1_1_net_layout_connection_factory.html#a3d24a41876ae685e433d96f4eda72e80":[10,0,0,2,15,1],
+"classhal_1_1_net_layout_connection_factory.html#a56eeaad0dbec8f252e11fae3d07a610d":[10,0,0,2,15,3],
+"classhal_1_1_net_layout_connection_factory.html#ad564e79e59b3996cf408ac9ac53a2692":[10,0,0,2,15,4],
+"classhal_1_1_net_layout_connection_factory.html#ae6f69a095feb85bc598830b6977fe49e":[10,0,0,2,15,2],
+"classhal_1_1_net_layout_connection_metric.html":[10,0,0,2,16],
+"classhal_1_1_net_layout_connection_metric.html#a17689089aac6e551df581a711fc34b7d":[10,0,0,2,16,2],
+"classhal_1_1_net_layout_connection_metric.html#a190ac8f593b8881d4bc5358d0e678d34":[10,0,0,2,16,1],
+"classhal_1_1_net_layout_connection_metric.html#a845dbe628894a1a52e12c2b867d621d3":[10,0,0,2,16,0],
 "classhal_1_1_net_layout_direction.html":[10,0,0,2,10],
 "classhal_1_1_net_layout_direction.html#a1875e8fd7c430a51fad1331fea1c7e82":[10,0,0,2,10,6],
 "classhal_1_1_net_layout_direction.html#a2448ca4e938c62b77851d3fb01e0991f":[10,0,0,2,10,2],
@@ -240,14 +249,5 @@ var NAVTREEINDEX9 =
 "classhal_1_1_netlist_parser.html":[10,1,0,0,1],
 "classhal_1_1_netlist_parser.html#a7462742a845f79a59a2a46817ff7ce65":[10,1,0,0,1,2],
 "classhal_1_1_netlist_parser.html#aabd5469ba4820abbb513dcbf9c9e5627":[10,1,0,0,1,0],
-"classhal_1_1_netlist_parser.html#aacbccffdad2fb9c214148f5152ed4f2e":[10,1,0,0,1,1],
-"classhal_1_1_netlist_parser.html#aee94aac1a2d93608e5a283931dd931df":[10,1,0,0,1,3],
-"classhal_1_1_netlist_parser.html#afbfa5b65c9d4ac75b48b3390c7f6ab41":[10,1,0,0,1,4],
-"classhal_1_1_netlist_relay.html":[10,0,30],
-"classhal_1_1_netlist_relay.html#a048b017170c30892f76cbeb624b5ba15":[10,0,30,5],
-"classhal_1_1_netlist_relay.html#a0aace5e1d0b09660b931813a834884fe":[10,0,30,39],
-"classhal_1_1_netlist_relay.html#a1386c8a55dee80d82f38269186dfb14a":[10,0,30,15],
-"classhal_1_1_netlist_relay.html#a1c0e5d65d4d0e2c61dee5bda180c8af3":[10,0,30,6],
-"classhal_1_1_netlist_relay.html#a22a082e1959ef3a4c98ecaaa694b68e9":[10,0,30,29],
-"classhal_1_1_netlist_relay.html#a29ada1855be416514d0fa3a4a4cb9e01":[10,0,30,16]
+"classhal_1_1_netlist_parser.html#aacbccffdad2fb9c214148f5152ed4f2e":[10,1,0,0,1,1]
 };

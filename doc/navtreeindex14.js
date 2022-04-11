@@ -1,5 +1,14 @@
 var NAVTREEINDEX14 =
 {
+"classhal_1_1_toolbar.html#af19289b807b4ce3d19d464b6a74cf033":[10,0,39,0],
+"classhal_1_1_u_i_plugin_interface.html":[10,1,1,4],
+"classhal_1_1_u_i_plugin_interface.html#a3609d54ad57e3a0348e26d95dc960be7":[10,1,1,4,1],
+"classhal_1_1_u_i_plugin_interface.html#a45c1916c2006b814eaf24adf43f61190":[10,1,1,4,2],
+"classhal_1_1_u_i_plugin_interface.html#aa402ba253b62f31e37ffa2f140600da3":[10,1,1,4,3],
+"classhal_1_1_u_i_plugin_interface.html#ae94df09f5acb09d4c5ee7a0f9a49fc78":[10,1,1,4,0],
+"classhal_1_1_unique_string_validator.html":[10,0,42],
+"classhal_1_1_unique_string_validator.html#a37629c18daad1071fe957e0dbe5b5601":[10,0,42,1],
+"classhal_1_1_unique_string_validator.html#af312d8ef62d53c1de74f66377de013b0":[10,0,42,0],
 "classhal_1_1_user_action.html":[10,0,5,24],
 "classhal_1_1_user_action.html#a086c2074270db533c9e41d4c0a60e3a5":[10,0,5,24,20],
 "classhal_1_1_user_action.html#a0a21a47562362b7a154f7843381c1e0b":[10,0,5,24,13],
@@ -240,14 +249,5 @@ var NAVTREEINDEX14 =
 "content__frame_8h_source.html":[13,0,1,0,0,0,4,0],
 "content__layout__area_8cpp.html":[13,0,1,0,2,4,0],
 "content__layout__area_8cpp_source.html":[13,0,1,0,2,4,0],
-"content__layout__area_8h.html":[13,0,1,0,0,0,5,0],
-"content__layout__area_8h.html#a5183c9d870930c09f0bff0a061797b45":[13,0,1,0,0,0,5,0,0],
-"content__layout__area_8h.html#a5183c9d870930c09f0bff0a061797b45a71f262d796bed1ab30e8a2d5a8ddee6f":[13,0,1,0,0,0,5,0,0,3],
-"content__layout__area_8h.html#a5183c9d870930c09f0bff0a061797b45a7c4f29407893c334a6cb7a87bf045c0d":[13,0,1,0,0,0,5,0,0,2],
-"content__layout__area_8h.html#a5183c9d870930c09f0bff0a061797b45a811882fecd5c7618d7099ebbd39ea254":[13,0,1,0,0,0,5,0,0,1],
-"content__layout__area_8h.html#a5183c9d870930c09f0bff0a061797b45aadb115059e28d960fa8badfac5516667":[13,0,1,0,0,0,5,0,0,0],
-"content__layout__area_8h_source.html":[13,0,1,0,0,0,5,0],
-"content__manager_8cpp.html":[13,0,1,0,2,5,0],
-"content__manager_8cpp_source.html":[13,0,1,0,2,5,0],
-"content__manager_8h.html":[13,0,1,0,0,0,6,0]
+"content__layout__area_8h.html":[13,0,1,0,0,0,5,0]
 };

@@ -9,6 +9,7 @@ var classhal_1_1_graph_context_manager =
     [ "deleteGraphContext", "classhal_1_1_graph_context_manager.html#a8fa3dd9ecfc01e66b2103e0af003bdd1", null ],
     [ "deletingContext", "classhal_1_1_graph_context_manager.html#aeb4defe0bb3118a4420dee21608231f5", null ],
     [ "getCleanContext", "classhal_1_1_graph_context_manager.html#a6c751ee6b445bf6fbd85068e6623ad9d", null ],
+    [ "getContextByExclusiveModuleId", "classhal_1_1_graph_context_manager.html#a498710b4eafdb473943a7c62f04d69b2", null ],
     [ "getContextById", "classhal_1_1_graph_context_manager.html#a3640a87fa70d4cf511cbd5a5a94bede8", null ],
     [ "getContexts", "classhal_1_1_graph_context_manager.html#aea8a44ab7f0ea8b246d5643ce8b566e3", null ],
     [ "getContextTableModel", "classhal_1_1_graph_context_manager.html#ae3c067d3f1d75ba89f070df3ddca98dd", null ],

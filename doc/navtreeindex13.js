@@ -1,5 +1,14 @@
 var NAVTREEINDEX13 =
 {
+"classhal_1_1_settings_item_dropdown.html":[10,0,4,11],
+"classhal_1_1_settings_item_dropdown.html#a0ce94ea9cf6220049ae186a97905c273":[10,0,4,11,7],
+"classhal_1_1_settings_item_dropdown.html#a0d362357e30fb60b5b6260ec5acd6b4c":[10,0,4,11,6],
+"classhal_1_1_settings_item_dropdown.html#a29b5240b6cf8ef4998b550f6e26a75f4":[10,0,4,11,8],
+"classhal_1_1_settings_item_dropdown.html#a3de8cd46cea34c0a8f64a726bd4e4b2c":[10,0,4,11,0],
+"classhal_1_1_settings_item_dropdown.html#a5929c8ed61fbf2c5e4d6e51fe31df07c":[10,0,4,11,10],
+"classhal_1_1_settings_item_dropdown.html#a5a1025c9f5581eb7ea7167d4a38d01d8":[10,0,4,11,2],
+"classhal_1_1_settings_item_dropdown.html#a75a0260ac558e16ff4fe6bc67b1b2e7b":[10,0,4,11,9],
+"classhal_1_1_settings_item_dropdown.html#a81507fdb71ae980c3c1ca1c0e8a42f02":[10,0,4,11,3],
 "classhal_1_1_settings_item_dropdown.html#a8759ce38f6166d7e4a8342e6b919883f":[10,0,4,11,1],
 "classhal_1_1_settings_item_dropdown.html#ad17f7b2db93bc40284f6319289693bc6":[10,0,4,11,5],
 "classhal_1_1_settings_item_dropdown.html#af25d2c474b0df442d145ce1fbd47c16f":[10,0,4,11,4],
@@ -240,14 +249,5 @@ var NAVTREEINDEX13 =
 "classhal_1_1_token_stream.html#af64360cce9f13a282476c397f247f525":[10,1,2,8,21],
 "classhal_1_1_toolbar.html":[10,0,39],
 "classhal_1_1_toolbar.html#aa6c31190221a870e24a222ab323a10dd":[10,0,39,1],
-"classhal_1_1_toolbar.html#aca44709fea709ca91894a5a2c0cc8e85":[10,0,39,2],
-"classhal_1_1_toolbar.html#af19289b807b4ce3d19d464b6a74cf033":[10,0,39,0],
-"classhal_1_1_u_i_plugin_interface.html":[10,1,1,4],
-"classhal_1_1_u_i_plugin_interface.html#a3609d54ad57e3a0348e26d95dc960be7":[10,1,1,4,1],
-"classhal_1_1_u_i_plugin_interface.html#a45c1916c2006b814eaf24adf43f61190":[10,1,1,4,2],
-"classhal_1_1_u_i_plugin_interface.html#aa402ba253b62f31e37ffa2f140600da3":[10,1,1,4,3],
-"classhal_1_1_u_i_plugin_interface.html#ae94df09f5acb09d4c5ee7a0f9a49fc78":[10,1,1,4,0],
-"classhal_1_1_unique_string_validator.html":[10,0,42],
-"classhal_1_1_unique_string_validator.html#a37629c18daad1071fe957e0dbe5b5601":[10,0,42,1],
-"classhal_1_1_unique_string_validator.html#af312d8ef62d53c1de74f66377de013b0":[10,0,42,0]
+"classhal_1_1_toolbar.html#aca44709fea709ca91894a5a2c0cc8e85":[10,0,39,2]
 };

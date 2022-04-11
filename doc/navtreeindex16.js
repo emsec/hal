@@ -1,5 +1,14 @@
 var NAVTREEINDEX16 =
 {
+"dock__bar_8cpp_source.html":[13,0,1,0,2,8,1],
+"dock__bar_8h.html":[13,0,1,0,0,0,9,1],
+"dock__bar_8h_source.html":[13,0,1,0,0,0,9,1],
+"dock__button_8cpp.html":[13,0,1,0,2,8,2],
+"dock__button_8cpp_source.html":[13,0,1,0,2,8,2],
+"dock__button_8h.html":[13,0,1,0,0,0,9,2],
+"dock__button_8h.html#ga96c899c45d7192341d04caf575c7f02c":[13,0,1,0,0,0,9,2,0],
+"dock__button_8h.html#gga96c899c45d7192341d04caf575c7f02ca4505cad087312551a6fbbe6ebe163e0f":[13,0,1,0,0,0,9,2,0,0],
+"dock__button_8h.html#gga96c899c45d7192341d04caf575c7f02ca6f50993948b855a8efa011b6915164d6":[13,0,1,0,0,0,9,2,0,1],
 "dock__button_8h.html#gga96c899c45d7192341d04caf575c7f02cae2a44fa65a0cf99e723e1887fc5eda0a":[13,0,1,0,0,0,9,2,0,2],
 "dock__button_8h_source.html":[13,0,1,0,0,0,9,2],
 "dock__mime__data_8cpp.html":[13,0,1,0,2,8,3],
@@ -72,8 +81,8 @@ var NAVTREEINDEX16 =
 "file__status__manager_8h.html":[13,0,1,0,0,0,14,0],
 "file__status__manager_8h_source.html":[13,0,1,0,0,0,14,0],
 "files.html":[13,0],
-"functions.html":[12,3,0,0],
 "functions.html":[12,3,0],
+"functions.html":[12,3,0,0],
 "functions_b.html":[12,3,0,1],
 "functions_c.html":[12,3,0,2],
 "functions_d.html":[12,3,0,3],
@@ -240,14 +249,5 @@ var NAVTREEINDEX16 =
 "gatelibrary__table__model_8cpp_source.html":[13,0,1,0,2,15,2],
 "gatelibrary__table__model_8h.html":[13,0,1,0,0,0,16,2],
 "gatelibrary__table__model_8h_source.html":[13,0,1,0,0,0,16,2],
-"gatelibrary__table__view_8cpp.html":[13,0,1,0,2,15,3],
-"gatelibrary__table__view_8cpp_source.html":[13,0,1,0,2,15,3],
-"gatelibrary__table__view_8h.html":[13,0,1,0,0,0,16,3],
-"gatelibrary__table__view_8h_source.html":[13,0,1,0,0,0,16,3],
-"geometry_8cpp.html":[13,0,1,0,2,22,1],
-"geometry_8cpp.html#ga284a43cae48443fa22ac672a8b6ea8a0":[13,0,1,0,2,22,1,0],
-"geometry_8cpp_source.html":[13,0,1,0,2,22,1],
-"geometry_8h.html":[13,0,1,0,0,0,23,1],
-"geometry_8h.html#ga284a43cae48443fa22ac672a8b6ea8a0":[13,0,1,0,0,0,23,1,0],
-"geometry_8h_source.html":[13,0,1,0,0,0,23,1]
+"gatelibrary__table__view_8cpp.html":[13,0,1,0,2,15,3]
 };
