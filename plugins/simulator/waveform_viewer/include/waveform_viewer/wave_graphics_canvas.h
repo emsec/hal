@@ -28,6 +28,8 @@ namespace hal {
         double mCursorTime;
         int mCursorXpos;
         QWidget* mDragZoom;
+
+        void setCursorTimeInternal(double tCursor);
     Q_SIGNALS:
         void cursorMoved(double tCursor, int xpos);
         void undoStateChanged();
@@ -35,6 +37,8 @@ namespace hal {
         void handleContextMenuRequested(const QPoint& pos);
         void handleCopyCursorTime();
         void handleEnterCursorTime();
+        void handleJumpPreviousTransition();
+        void handleJumpNextTransition();
 
     public Q_SLOTS:
         void updateRequest();

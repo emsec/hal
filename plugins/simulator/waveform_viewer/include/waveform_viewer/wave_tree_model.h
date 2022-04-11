@@ -93,6 +93,7 @@ namespace hal {
         void handleGroupRenamed(int grpId);
         void handleWaveAddedToGroup(const QVector<u32>& netIds, int grpId);
         void handleWaveRemovedFromGroup(int iwave, int grpId);
+        void handleBooleanAdded(int boolId);
         void handleGroupAdded(int grpId);
         void handleGroupAboutToBeRemoved(WaveDataGroup* grp);
         void handleGroupUpdated(int grpId);
@@ -125,9 +126,11 @@ namespace hal {
         void insertExisting(int row, const QModelIndex& parent, WaveItem* wi);
         WaveItem* removeItemFromHash(int row, const QModelIndex &parent);
         void removeGroup(const QModelIndex& groupIndex);
+        void insertBoolean(const QModelIndex& boolIndex, const QString& boolExpression, WaveDataBoolean* wdBool=nullptr);
         void insertGroup(const QModelIndex& groupIndex, WaveDataGroup *grp=nullptr);
         int waveIndex(const QModelIndex& index) const;
         int groupId(const QModelIndex& grpIndex) const;
+        int booleanId(const QModelIndex& boolIndex) const;
         WaveData* item(const QModelIndex& index) const;
         WaveItemIndex hashIndex(const QModelIndex& index) const;
 

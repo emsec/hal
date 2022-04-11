@@ -9,7 +9,7 @@
 #include "netlist_simulator_controller/saleae_file.h"
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
 #include "netlist_simulator_controller/simulation_settings.h"
-#include "waveform_viewer/wave_data_provider.h"
+#include "netlist_simulator_controller/wave_data_provider.h"
 #include "waveform_viewer/wave_item.h"
 
 namespace hal {
@@ -35,6 +35,44 @@ namespace hal {
                 mItem->setState(WaveItem::Finished);
             } catch (...) {
                 mItem->setState(WaveItem::Failed);
+            }
+            break;
+        case WaveData::BooleanNet:
+            if (wd->loadPolicy() == WaveData::LoadAllData)
+            {
+                try {
+                    const WaveDataBoolean* wdBool = static_cast<const WaveDataBoolean*>(wd);
+                    for (WaveData* wdChild : wdBool->children())
+                    {
+                        if ((u64)wdChild->data().size() < wdChild->fileSize())
+                        {
+                            mItem->setState(WaveItem::Aborted);
+                            break;
+                        }
+                    }
+                    mItem->mPainted.clearPrimitives();
+                    if (mItem->isAborted()) return;
+                    WaveDataProviderMap wdpMap(wd->data());
+                    wdpMap.setBoolean(true,wd->bits());
+                    mItem->mPainted.generate(&wdpMap,mTransform,mScrollbar,&mItem->mLoop);
+                    mItem->setState(WaveItem::Finished);
+                } catch (...) {
+                    mItem->setState(WaveItem::Failed);
+                }
+            }
+            else
+            {
+                try {
+                    const WaveDataBoolean* wdBool = static_cast<const WaveDataBoolean*>(wd);
+                    std::string saleaeDirectory = QDir(mWorkDir).absoluteFilePath("saleae.json").toStdString();
+                    WaveDataProviderBoolean wdpBool(saleaeDirectory,wdBool->children(),wdBool->truthTable());
+                    mItem->mPainted.clearPrimitives();
+                    if (mItem->isAborted()) return;
+                    mItem->mPainted.generate(&wdpBool,mTransform,mScrollbar,&mItem->mLoop);
+                    mItem->setState(WaveItem::Finished);
+                } catch (...) {
+                    mItem->setState(WaveItem::Failed);
+                }
             }
             break;
         case WaveData::NetGroup:
@@ -136,7 +174,6 @@ namespace hal {
                     }
                     else
                     {
-                        SaleaeInputFile sif(mWorkDir.absoluteFilePath(QString("digital_%1.bin").arg(wree->wavedata()->fileIndex())).toStdString());
                         if (wree->wavedata()->loadPolicy() == WaveData::LoadAllData)
                         {
                             try {
@@ -154,16 +191,35 @@ namespace hal {
                         else
                         {
                             try {
-                                WaveDataProviderFile wdpFile(sif, mTimeframe);
-                                // TODO : test group
-                                wree->mPainted.generate(&wdpFile,mTransform,mScrollbar,&wree->mLoop);
+                                WaveDataProvider* wdp = nullptr;
+                                std::string saleaeDirectory = mWorkDir.absoluteFilePath("saleae.json").toStdString();
+                                const WaveDataGroup* wdGrp = dynamic_cast<const WaveDataGroup*>(wree->wavedata());
+                                if (wdGrp)
+                                    wdp = new WaveDataProviderGroup(saleaeDirectory, wdGrp->children());
+                                else
+                                {
+                                    const WaveDataBoolean* wdBool = dynamic_cast<const WaveDataBoolean*>(wree->wavedata());
+                                    if (wdBool)
+                                        wdp = new WaveDataProviderBoolean(saleaeDirectory, wdBool->children(), wdBool->truthTable());
+                                    else
+                                    {
+                                        QString dataFilename = mWorkDir.absoluteFilePath(QString("digital_%1.bin").arg(wree->wavedata()->fileIndex()));
+                                        SaleaeInputFile sif(dataFilename.toStdString());
+                                        if (sif.good()) wdp = new WaveDataProviderFile(sif, mTimeframe);
+                                        else
+                                           qDebug() << "cannot open file" << dataFilename;
+                                    }
+                                }
+                                wree->mPainted.generate(wdp,mTransform,mScrollbar,&wree->mLoop);
                                 wree->setState(WaveItem::Painted);
-                                if (wdpFile.storeDataState() == WaveDataProviderFile::Complete)
+                                /* TODO : fix for derived classes
+                                if (wdp->storeDataState() == WaveDataProviderFile::Complete)
                                 {
                                     WaveData* wd = (WaveData*) wree->wavedata();
                                     wd->setData(wdpFile.dataMap());
                                     wd->setTimeframeSize(wdpFile.dataMap().size());
                                 }
+                                */
                             } catch (...) {
                                 wree->setState(WaveItem::Failed);
                             }
@@ -305,6 +361,14 @@ namespace hal {
                             Q_EMIT updateSoon();
                         }
                     }
+                    else if (wree->isBoolean() && wree->wavedata()->loadPolicy()!=WaveData::LoadAllData)
+                    {
+                        if (wree->mPainted.generateBoolean(wree->wavedata(),mWaveDataList,mWaveItemHash))
+                        {
+                            wree->setState(WaveItem::Painted);
+                            Q_EMIT updateSoon();
+                        }
+                    }
                     else
                         wree->startGeneratePainted(workdir,trans, sbar, mWaveDataList->timeFrame());
                 }
@@ -342,6 +406,8 @@ namespace hal {
                         wree->deletePainted();
                         if (wree->isGroup() && wree->wavedata()->loadPolicy()==WaveData::TooBigToLoad)
                             wree->mPainted.generateGroup(wree->wavedata(),mWaveItemHash);
+                        else if (wree->isBoolean() && wree->wavedata()->loadPolicy()==WaveData::TooBigToLoad)
+                            wree->mPainted.generateBoolean(wree->wavedata(),mWaveDataList,mWaveItemHash);
                         else
                             wree->startGeneratePainted(workdir,trans, sbar, mWaveDataList->timeFrame());
                         wree->clearRequest(WaveItem::DataChanged);

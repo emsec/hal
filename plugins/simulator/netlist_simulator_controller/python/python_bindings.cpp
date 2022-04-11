@@ -137,6 +137,14 @@ namespace hal
                 :rtype: int
             )")
 
+            .def("add_boolean_waveform", &NetlistSimulatorController::add_boolean_waveform, py::arg("expression"), R"(
+                Add waveform based on boolean expression.
+
+                :param str expression: The boolean expression based on names of existing waveforms.
+                :returns: ID of new boolean waveform.
+                :rtype: int
+            )")
+
             .def("remove_waveform_group", &NetlistSimulatorController::remove_waveform_group, py::arg("group_id"), R"(
                 Remove waveform group identified by group ID. Waveform for nets will still be shown but they are not bundled.
 

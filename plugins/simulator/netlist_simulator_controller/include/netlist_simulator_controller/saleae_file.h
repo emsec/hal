@@ -116,6 +116,7 @@ namespace hal
         std::string get_last_error() const;
         SaleaeDataBuffer* get_buffered_data(uint64_t nread);
         int64_t get_file_position(double t, bool successor=false);
+        void set_file_position(int64_t pos);
         void skip_transitions(int64_t delta);
         int get_int_value(double t);
 

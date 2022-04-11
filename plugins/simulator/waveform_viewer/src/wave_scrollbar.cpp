@@ -1,10 +1,11 @@
 #include "waveform_viewer/wave_scrollbar.h"
 #include "waveform_viewer/wave_transform.h"
 #include <math.h>
+#include <QDebug>
 
 namespace hal {
     WaveScrollbar::WaveScrollbar(const WaveTransform* trans, QWidget* parent)
-      : QScrollBar(parent), mTransform(trans), mVleft(0), mVmaxScroll(0), mVieportWidth(0)
+      : QScrollBar(parent), mTransform(trans), mVleft(0), mVmaxScroll(0), mVieportWidth(0), mHandleSliderChange(true)
     {
         setSingleStep(1);
     }
@@ -60,10 +61,12 @@ namespace hal {
         else
         {
             setVleftIntern(v);
+            mHandleSliderChange = false;
             if (maximum() < 4096)
                 setValue(toUInt(mVleft));
             else
                 setValue(toUInt(mVleft * 4096. / mVmaxScroll));
+            mHandleSliderChange = true;
         }
     }
 
@@ -74,8 +77,8 @@ namespace hal {
 
     void WaveScrollbar::sliderChange(SliderChange change)
     {
-        QScrollBar::sliderChange(change);
-        if (change == SliderChange::SliderValueChange && value() == mLastValue) return;
+        if (change == SliderChange::SliderValueChange &&
+                (!mHandleSliderChange || value() == mLastValue)) return;
         if (!maximum())
             setVleftIntern(0);
         else if (maximum() < 4096)
