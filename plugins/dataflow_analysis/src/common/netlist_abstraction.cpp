@@ -14,7 +14,7 @@ namespace hal
         {
         }
 
-        std::shared_ptr<Grouping> NetlistAbstraction::create_initial_grouping(std::set<std::set<u32>> known_groups) const
+        std::shared_ptr<Grouping> NetlistAbstraction::create_initial_grouping(std::vector<std::vector<u32>> known_groups) const
         {
             /* create state */
             auto new_state = std::make_shared<Grouping>(*this);
