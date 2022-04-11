@@ -151,6 +151,7 @@ namespace hal
             ActionRenameObject* act = new ActionRenameObject(ipd.textValue());
             act->setObject(UserActionObject(clicked_context->id(),UserActionObjectType::Context));
             act->exec();
+            clicked_context->setExclusiveModuleId(0, false);
         }
     }
 
