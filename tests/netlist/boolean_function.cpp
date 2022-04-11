@@ -195,6 +195,14 @@ namespace hal {
             {"(!I0 & I1 & I2) | (I0 & I1 & I2)", 
                 (~BooleanFunction::Var("I0") & (BooleanFunction::Var("I1") & BooleanFunction::Var("I2"))) | (BooleanFunction::Var("I0") & (BooleanFunction::Var("I1") & BooleanFunction::Var("I2")))
             },
+            {"(((0b1 & O[0]) & c3) | (RDATA[0] & (! c3)))",
+                ((BooleanFunction::Const(1, 1) & BooleanFunction::Var("O[0]")) & BooleanFunction::Var("c3"))
+                | (BooleanFunction::Var("RDATA[0]") & (~ BooleanFunction::Var("c3")))
+            },
+            {"(((0b1 & \\O[0] ) & c3) | (\\RDATA[0]  & (! c3)))",
+                ((BooleanFunction::Const(1, 1) & BooleanFunction::Var("O[0]")) & BooleanFunction::Var("c3"))
+                | (BooleanFunction::Var("RDATA[0]") & (~ BooleanFunction::Var("c3")))
+            },
             ////////////////////////////////////////////////////////////////////
             // LIBERTY PARSER
             ////////////////////////////////////////////////////////////////////
