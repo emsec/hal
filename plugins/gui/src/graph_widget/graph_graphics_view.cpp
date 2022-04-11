@@ -119,21 +119,52 @@ namespace hal
 
     void GraphGraphicsView::handleIsolationViewAction()
     {
+        auto selected_modules = gSelectionRelay->selectedModules();
+        auto selected_gates = gSelectionRelay->selectedGates();
+
+        // When there is only one module selected, check if there is a context connected to that module
+        // If yes, select the context
+        // If no, create a new context and connect the module to the context
+        if (selected_modules.size() == 1 && selected_gates.empty())
+        {
+            u32 module_id = *selected_modules.begin();
+            auto module_context = gGraphContextManager->getContextByExclusiveModuleId(module_id);
+            if (module_context)
+            {
+                gContentManager->getContextManagerWidget()->selectViewContext(module_context);
+                gContentManager->getContextManagerWidget()->handleOpenContextClicked();
+            }
+            else
+            {
+                UserActionCompound* act = new UserActionCompound;
+                act->setUseCreatedObject();
+                QString name = QString::fromStdString(gNetlist->get_module_by_id(module_id)->get_name()) + " (ID: " + QString::number(module_id) + ")";
+                act->addAction(new ActionCreateObject(UserActionObjectType::Context, name));
+                act->addAction(new ActionAddItemsToObject(selected_modules, selected_gates));
+                act->exec();
+                GraphContext* context = gGraphContextManager->getContextById(act->object().id());
+                context->setDirty(false);
+                context->setExclusiveModuleId(module_id);
+            }
+            return;
+        }
+
         u32 cnt = 0;
         while (true)
         {
             ++cnt;
             QString name = "Isolated View " + QString::number(cnt);
+
             if (!gGraphContextManager->contextWithNameExists(name))
             {
                 UserActionCompound* act = new UserActionCompound;
                 act->setUseCreatedObject();
-                act->addAction(new ActionCreateObject(UserActionObjectType::Context,name));
-                act->addAction(new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
-                                                          gSelectionRelay->selectedGates()));
+                act->addAction(new ActionCreateObject(UserActionObjectType::Context, name));
+                act->addAction(new ActionAddItemsToObject(selected_modules, selected_gates));
                 act->exec();
                 GraphContext* context = gGraphContextManager->getContextById(act->object().id());
                 context->setDirty(false);
+
                 return;
             }
         }

@@ -10,6 +10,7 @@
 #include "gui/gui_def.h"
 #include "gui/implementations/qpoint_extension.h"
 #include "gui/user_action/user_action_manager.h"
+#include "gui/user_action/action_rename_object.h"
 #include <QVector>
 #include <QJsonArray>
 #include "gui/main_window/main_window.h"
@@ -31,11 +32,14 @@ namespace hal
           mUnappliedChanges(false),
           mSceneUpdateRequired(false),
           mSceneUpdateInProgress(false),
-          mSpecialUpdate(false)
+          mSpecialUpdate(false),
+          mExclusiveModuleId(0)
     {
         mTimestamp = QDateTime::currentDateTime();
         UserActionManager::instance()->clearWaitCount();
         connect(MainWindow::sSettingStyle,&SettingsItemDropdown::intChanged,this,&GraphContext::handleStyleChanged);
+        connect(gNetlistRelay, &NetlistRelay::moduleNameChanged, this, &GraphContext::handleModuleNameChanged);
+        connect(this, &GraphContext::exclusiveModuleLost, this, &GraphContext::handleExclusiveModuleLost);
     }
 
     GraphContext::~GraphContext()
@@ -174,6 +178,25 @@ namespace hal
         return containedGates.contains(gateId);
     }
 
+    bool GraphContext::isModuleUnfolded(const u32 moduleId) const
+    {
+        QSet<u32> containedGates = mGates + mAddedGates - mRemovedGates;
+        QSet<u32> containedModules = mModules + mAddedModules - mRemovedModules;
+
+        auto m = gNetlist->get_module_by_id(moduleId);
+
+        for (const Gate* g : m->get_gates())
+        {
+            if (!containedGates.contains(g->get_id())) return false;
+        }
+        for (const Module* sm : m->get_submodules())
+        {
+            if (!isModuleUnfolded(sm->get_id()) && !containedModules.contains(sm->get_id()))
+                return false;
+        }
+        return true;
+    }
+
     void GraphContext::unfoldModule(const u32 id)
     {
         auto contained_modules = mModules + mAddedModules - mRemovedModules;
@@ -215,7 +238,6 @@ namespace hal
             add(modules, gates, plc);
             endChange();
         }
-        setDirty(false);
     }
 
     bool GraphContext::empty() const
@@ -253,12 +275,28 @@ namespace hal
         return false;
     }
 
+    void GraphContext::removeModuleContents(const u32 moduleId)
+    {
+        QSet<u32> childGates;
+        QSet<u32> childModules;
+
+        for (const Gate* g : gNetlist->get_module_by_id(moduleId)->get_gates(nullptr, true))
+        {
+            childGates.insert(g->get_id());
+        }
+        for (const Module* sm : gNetlist->get_module_by_id(moduleId)->get_submodules(nullptr, true))
+        {
+            childModules.insert(sm->get_id());
+        }
+        remove(childModules, childGates);
+    }
+
     bool GraphContext::isShowingModule(const u32 id) const
     {
         return isShowingModule(id, {}, {}, {}, {});
     }
 
-    bool GraphContext::isShowingModule(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates) const
+    bool GraphContext::isShowingModule(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates, bool exclusively) const
     {
         // There are all sorts of problems when we allow this, since now any empty
         // module thinks that it is every other empty module. Blocking this,
@@ -271,20 +309,63 @@ namespace hal
             return false;
         }
 
-        Module* m = gNetlist->get_module_by_id(id);
         // TODO deduplicate
         QSet<u32> gates;
         QSet<u32> modules;
+
+        getModuleChildrenRecursively(id, &gates, &modules);
+
+        auto contextGates = (mGates - mRemovedGates) + mAddedGates;
+        auto contextModules = (mModules - mRemovedModules) + mAddedModules;
+        auto moduleGates = (gates - minus_gates) + plus_gates;
+        auto moduleModules = (modules - minus_modules) + plus_modules;
+
+        if (exclusively)
+            return contextGates == moduleGates && contextModules == moduleModules;
+        else
+            return (contextGates.contains(moduleGates) && contextModules.contains(moduleModules) && !moduleGates.empty() && !moduleModules.empty()) ||
+                   (contextGates.contains(moduleGates) && !moduleGates.empty() && moduleModules.empty()) ||
+                   (contextModules.contains(moduleModules) && moduleGates.empty() && !moduleModules.empty());
+    }
+
+    void GraphContext::getModuleChildrenRecursively(const u32 id, QSet<u32>* gates, QSet<u32>* modules) const
+    {
+
+        auto containedModules = mModules + mAddedModules - mRemovedModules;
+
+        Module* m = gNetlist->get_module_by_id(id);
+
         for (const Gate* g : m->get_gates())
         {
-            gates.insert(g->get_id());
+            gates->insert(g->get_id());
         }
         for (const Module* sm : m->get_submodules())
         {
-            modules.insert(sm->get_id());
+            if (!containedModules.contains(sm->get_id()) && isModuleUnfolded(sm->get_id()))
+                getModuleChildrenRecursively(sm->get_id(), gates, modules);
+            else
+                modules->insert(sm->get_id());
         }
-        return (mGates - mRemovedGates) + mAddedGates == (gates - minus_gates) + plus_gates
-                && (mModules - mRemovedModules) + mAddedModules == (modules - minus_modules) + plus_modules;
+    }
+
+    bool GraphContext::isShowingModuleExclusively()
+    {
+        // Module Context connection is lost when a unfolded submodule (visible in view) is deleted
+        // The connection is lost, because the deletion of an unfolded module does not add its submodules/gates
+        // to the view
+
+        if (!mExclusiveModuleId) return false;
+
+        auto containedModules = mModules + mAddedModules - mRemovedModules;
+        auto containedGates = mGates + mAddedGates - mRemovedGates;
+
+        // folded module
+        if (containedGates.empty() && containedModules.size() == 1 && *containedModules.begin() == mExclusiveModuleId)
+            return true;
+        // unfolded module
+        if (isShowingModule(mExclusiveModuleId, {}, {}, {}, {}, true))
+            return true;
+        return false;
     }
 
     bool GraphContext::isShowingNetSource(const u32 mNetId) const
@@ -369,6 +450,11 @@ namespace hal
     }
 
     QString GraphContext::name() const
+    {
+        return mName;
+    }
+
+    QString GraphContext::getNameWithDirtyState() const
     {
         if (mDirty) return mName + "*";
         return mName;
@@ -570,6 +656,8 @@ namespace hal
     //    connect(task, &LayouterTask::finished, this, &GraphContext::handleLayouterFinished, Qt::ConnectionType::QueuedConnection);
     //    gThreadPool->queueTask(task);
 
+        exclusiveModuleCheck();
+
         mLayouter->layout();
         handleLayouterFinished();
     }
@@ -597,6 +685,24 @@ namespace hal
     {
         Q_UNUSED(istyle);
         handleLayouterFinished();
+    }
+
+    void GraphContext::exclusiveModuleCheck()
+    {
+        if (!isShowingModuleExclusively())
+            setExclusiveModuleId(0);
+    }
+    
+    void GraphContext::handleModuleNameChanged(Module* m)
+    {
+        if (mExclusiveModuleId == m->get_id())
+        {
+            QString name = QString::fromStdString(m->get_name()) + " (ID: " + QString::number(m->get_id()) + ")";
+            ActionRenameObject* act = new ActionRenameObject(name);
+            act->setObject(UserActionObject(this->id(), UserActionObjectType::Context));
+            act->exec();
+        }
+        Q_EMIT(dataChanged());
     }
 
     QDateTime GraphContext::getTimestamp() const
@@ -673,6 +779,7 @@ namespace hal
         json["id"] = (int) mId;
         json["name"] = mName;
         json["timestamp"] = mTimestamp.toString();
+        json["exclusiveModuleId"] = (int) mExclusiveModuleId;
 
         /// modules
         QJsonArray jsonMods;
@@ -726,5 +833,49 @@ namespace hal
     void GraphContext::setSpecialUpdate(bool state)
     {
         mSpecialUpdate = state;
+    }
+
+    void GraphContext::setExclusiveModuleId(u32 id, bool emitSignal)
+    {
+        u32 old_id = mExclusiveModuleId;
+        mExclusiveModuleId = id;
+
+        // Emit signal if context is not showing an exclusive module anymore
+        if ((id == 0 && old_id != 0) && emitSignal)
+            Q_EMIT(exclusiveModuleLost(old_id));
+    }
+
+    void GraphContext::handleExclusiveModuleLost(u32 old_id)
+    {
+        Module* m = gNetlist->get_module_by_id(old_id);
+        assert(m);
+
+        u32 cnt = 0;
+        while (true)
+        {
+            ++cnt;
+            QString new_name = QString::fromStdString(m->get_name()) + " modified";
+            if (cnt > 1)
+            {
+                new_name += " (" + QString::number(cnt) + ")";
+            }
+            bool found = false;
+            for (const auto& ctx : gGraphContextManager->getContexts())
+            {
+                if (ctx->name() == new_name)
+                {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                ActionRenameObject* act = new ActionRenameObject(new_name);
+                act->setObject(UserActionObject(this->id(),UserActionObjectType::Context));
+                act->exec();
+                break;
+            }
+        }
+        Q_EMIT(dataChanged());
     }
 }
