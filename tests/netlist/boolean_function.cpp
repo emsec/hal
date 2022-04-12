@@ -61,7 +61,7 @@ namespace hal {
                    b = BooleanFunction::Var("B"),
                    c = BooleanFunction::Var("C"),
                   _0 = BooleanFunction::Const(0, 1),
-                _1 = BooleanFunction::Const(1, 1);
+                  _1 = BooleanFunction::Const(1, 1);
 
         const auto data = std::vector<std::tuple<std::string, BooleanFunction>>{
             {"<empty>", BooleanFunction()},
@@ -70,6 +70,7 @@ namespace hal {
             {"((A & B) ^ (B & C))", ((a.clone() & b.clone()) ^ (b.clone() & c.clone()))},
             {"(A ^ 0b1)", a.clone() ^ _1.clone()}, 
             {"(A ^ 0b0)", a.clone() ^ _0.clone()},
+            {"((A + B) - C)", (a.clone() + b.clone()) - c.clone()},
             {"(! A)", ~a.clone()},
         };
 
@@ -274,9 +275,19 @@ namespace hal {
         EXPECT_TRUE((_0.clone() ^ _1.clone()).simplify().has_constant_value(1));
         EXPECT_TRUE((_1.clone() ^ _1.clone()).simplify().has_constant_value(0));
 
+        EXPECT_TRUE((_0.clone() + _0.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((_0.clone() + _1.clone()).simplify().has_constant_value(1));
+        EXPECT_TRUE((_1.clone() + _0.clone()).simplify().has_constant_value(1));
+        EXPECT_TRUE((_1.clone() + _1.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((_0.clone() - _0.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((_0.clone() - _1.clone()).simplify().has_constant_value(1));
+        EXPECT_TRUE((_1.clone() - _0.clone()).simplify().has_constant_value(1));
+        EXPECT_TRUE((_1.clone() - _1.clone()).simplify().has_constant_value(0));
+
         EXPECT_TRUE((a.clone() | _1.clone()).simplify().has_constant_value(1));
         EXPECT_TRUE((a.clone() ^ a.clone()).simplify().has_constant_value(0));
         EXPECT_TRUE((a.clone() & _0.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((a.clone() - a.clone()).simplify().has_constant_value(0));
     }
 
     TEST(BooleanFunction, SimplificationRules) {
@@ -409,6 +420,22 @@ namespace hal {
         EXPECT_EQ((a.clone() ^ ~a.clone()).simplify(), _1.clone());
 
         ////////////////////////////////////////////////////////////////////////
+        // ADD RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // (a + 0)   =>    a
+        EXPECT_EQ((a.clone() + _0.clone()).simplify(), a.clone());
+
+        ////////////////////////////////////////////////////////////////////////
+        // SUB RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // (a - 0)   =>    a
+        EXPECT_EQ((a.clone() - _0.clone()).simplify(), a.clone());
+        // (a - a)   =>    0
+        EXPECT_EQ((a.clone() - a.clone()).simplify(), _0.clone());
+
+        ////////////////////////////////////////////////////////////////////////
         // GENERAL SIMPLIFICATION RULES
         ////////////////////////////////////////////////////////////////////////
 
@@ -520,6 +547,16 @@ namespace hal {
             {a ^ b, {{"A", {Value::ONE, Value::ZERO}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ZERO, Value::ONE}},
             {a ^ b, {{"A", {Value::ZERO, Value::ONE}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ONE, Value::ZERO}},
             {a ^ b, {{"A", {Value::ONE, Value::ONE}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ZERO, Value::ZERO}},
+
+            {a + b, {{"A", {Value::ZERO, Value::ZERO}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ONE, Value::ONE}},
+            {a + b, {{"A", {Value::ONE, Value::ZERO}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ZERO, Value::ZERO}},
+            {a + b, {{"A", {Value::ZERO, Value::ONE}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ONE, Value::ZERO}},
+            {a + b, {{"A", {Value::ONE, Value::ONE}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ZERO, Value::ONE}},
+
+            {a - b, {{"A", {Value::ZERO, Value::ZERO}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ONE, Value::ZERO}},
+            {a - b, {{"A", {Value::ONE, Value::ZERO}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ZERO, Value::ONE}},
+            {a - b, {{"A", {Value::ZERO, Value::ONE}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ONE, Value::ONE}},
+            {a - b, {{"A", {Value::ONE, Value::ONE}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ZERO, Value::ZERO}},
         };
         
         for (const auto& [function, input, expected]: data) {

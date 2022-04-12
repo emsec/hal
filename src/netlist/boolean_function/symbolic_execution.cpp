@@ -123,6 +123,59 @@ namespace hal
                 return BooleanFunction::Const(simplified);
             }
 
+            /**
+             * Helper function to simplify a constant ADD operation.
+             * 
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
+            BooleanFunction Add(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+            {
+                if (std::any_of(p0.begin(), p0.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; })
+                    || std::any_of(p1.begin(), p1.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; }))
+                {
+                    return BooleanFunction::Const(std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::X));
+                }
+
+                std::vector<BooleanFunction::Value> simplified;
+                simplified.reserve(p0.size());
+                auto carry = BooleanFunction::Value::ZERO;
+                for (auto i = 0u; i < p0.size(); i++)
+                {
+                    auto res = p0[i] + p1[i] + carry;
+                    simplified.emplace_back(static_cast<BooleanFunction::Value>(res & 0x1));
+                    carry = static_cast<BooleanFunction::Value>(res >> 1);
+                }
+                return BooleanFunction::Const(simplified);
+            }
+
+            /**
+             * Helper function to simplify a constant SUB operation.
+             * 
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
+            BooleanFunction Sub(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+            {
+                if (std::any_of(p0.begin(), p0.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; })
+                    || std::any_of(p1.begin(), p1.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; }))
+                {
+                    return BooleanFunction::Const(std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::X));
+                }
+
+                std::vector<BooleanFunction::Value> simplified;
+                simplified.reserve(p0.size());
+                auto carry = BooleanFunction::Value::ONE;
+                for (auto i = 0u; i < p0.size(); i++)
+                {
+                    auto res = p0[i] + !(p1[i]) + carry;
+                    simplified.emplace_back(static_cast<BooleanFunction::Value>(res & 0x1));
+                    carry = static_cast<BooleanFunction::Value>(res >> 1);
+                }
+                return BooleanFunction::Const(simplified);
+            }
         }    // namespace ConstantPropagation
 
         namespace
@@ -607,7 +660,7 @@ namespace hal
                     return OK(p[0] | p[1]);
                 }
                 case BooleanFunction::NodeType::Xor: {
-                    // X ^ 0   =>   x
+                    // X ^ 0   =>   X
                     if (p[1].has_constant_value(0))
                     {
                         return OK(p[0]);
@@ -629,6 +682,29 @@ namespace hal
                     }
 
                     return OK(p[0] ^ p[1]);
+                }
+                case BooleanFunction::NodeType::Add: {
+                    // X + 0    =>   X
+                    if (p[1].has_constant_value(0))
+                    {
+                        return OK(p[0]);
+                    }
+
+                    return OK(p[0] + p[1]);
+                }
+                case BooleanFunction::NodeType::Sub: {
+                    // X - 0    =>   X
+                    if (p[1].has_constant_value(0))
+                    {
+                        return OK(p[0]);
+                    }
+                    // X - X    =>   0
+                    if (p[0] == p[1])
+                    {
+                        return OK(BooleanFunction::Const(0, node.size));
+                    }
+
+                    return OK(p[0] - p[1]);
                 }
                 case BooleanFunction::NodeType::Slice: {
                     // SLICE(p, 0, 0)   =>   p (if p is 1-bit wide)
@@ -666,6 +742,10 @@ namespace hal
                     return OK(ConstantPropagation::Not(values[0]));
                 case BooleanFunction::NodeType::Xor:
                     return OK(ConstantPropagation::Xor(values[0], values[1]));
+                case BooleanFunction::NodeType::Add:
+                    return OK(ConstantPropagation::Add(values[0], values[1]));
+                case BooleanFunction::NodeType::Sub:
+                    return OK(ConstantPropagation::Sub(values[0], values[1]));
 
                 default:
                     return ERR("could not propagate constants: not implemented for given node type");

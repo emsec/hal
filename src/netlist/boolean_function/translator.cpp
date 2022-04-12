@@ -49,6 +49,8 @@ namespace hal
 
                     case BooleanFunction::NodeType::Add:
                         return OK("(bvadd " + p[0] + " " + p[1] + ")");
+                    case BooleanFunction::NodeType::Sub:
+                        return OK("(bvsub " + p[0] + " " + p[1] + ")");
 
                     case BooleanFunction::NodeType::Concat:
                         return OK("(concat " + p[0] + " " + p[1] + ")");
