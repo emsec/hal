@@ -236,12 +236,8 @@ namespace hal
     {
         // FIXME this also triggers on module deletion (not only moving)
         // and collides with handleModuleRemoved
-<<<<<<< HEAD
-        //        dump("ModuleSubmoduleRemoved", m->get_id(), removed_module);
-=======
         //        dump("ModuleSubmoduleRemoved", m->get_id(), removed_module);
 
->>>>>>> master
         for (GraphContext* context : mContextTableModel->list())
         {
             if (context->isShowingModule(m->get_id(), {}, {}, {removed_module}, {}, false))
@@ -281,13 +277,8 @@ namespace hal
                 for (u32 id : module_ids)
                     if (modules.contains(id))
                     {
-<<<<<<< HEAD
-                        context->remove({}, {inserted_gate});
-                        return;
-=======
                         context->remove({}, {inserted_gate});
                         break;
->>>>>>> master
                     }
             }
         }
