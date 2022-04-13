@@ -137,15 +137,36 @@ namespace hal {
 
     bool WaveData::isEqual(const WaveData& other, int tolerance) const
     {
-        if (mData.size() != other.mData.size()) return false;
-        auto jt = other.mData.constBegin();
-        for (auto it = mData.begin(); it != mData.end(); ++it)
+        if (mFileSize != other.mFileSize) return false;
+        if (loadPolicy() == LoadAllData)
         {
-            if (it.value() != jt.value()) return false;
-            if (abs((int)(it.key()-jt.key())) > tolerance) return false;
-            ++jt;
+            if (mData.size() != other.mData.size()) return false;
+            auto jt = other.mData.constBegin();
+            for (auto it = mData.begin(); it != mData.end(); ++it)
+            {
+                if (it.value() != jt.value()) return false;
+                if (abs((int64_t)it.key()-(int64_t)jt.key()) > tolerance) return false;
+                ++jt;
+            }
+            return true;
         }
-        return true;
+        u64 t0 = 0;
+        for (;;)
+        {
+            std::vector<std::pair<u64,int>> evtsThis = get_events(t0);
+            std::vector<std::pair<u64,int>> evtsOther = other.get_events(t0);
+            if (evtsThis.empty()&&evtsOther.empty()) return true; // all tested
+            if (evtsThis.size()!=evtsOther.size()) return false;
+            auto jt = evtsOther.begin();
+            for (auto it = evtsThis.begin(); it != evtsThis.end(); ++it)
+            {
+                if (it->second != jt->second) return false;
+                if (abs((int64_t)it->first-(int64_t)jt->first)> tolerance) return false;
+                ++jt;
+                t0 = it->first;
+            }
+            t0++;
+        }
     }
 
     int WaveData::dataIndex() const

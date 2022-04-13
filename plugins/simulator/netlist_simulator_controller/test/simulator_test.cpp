@@ -110,20 +110,23 @@ namespace hal
 
             std::set<u32> unmatching_nets;
 
-            for (auto it_ref : *reference_simulation)
+            for (WaveData* wdRefer : *reference_simulation)
             {
-                int iwave_sim = engine_simulation->waveIndexByNetId(it_ref->id());
+                int iwave_sim = engine_simulation->waveIndexByNetId(wdRefer->id());
                 if (iwave_sim < 0)
                 {
                     no_errors = false;
-                    std::cout << "error: net: " << it_ref->name().toStdString() << " (" << it_ref->id() << ") in reference, but not in simulated output" << std::endl;
+                    std::cout << "error: net: " << wdRefer->name().toStdString() << " (" << wdRefer->id() << ") in reference, but not in simulated output" << std::endl;
                 }
                 else
                 {
-                    if (!it_ref->isEqual(*engine_simulation->at(iwave_sim), tolerance))
+                    WaveData* wdSimul = engine_simulation->at(iwave_sim);
+                    if (wdSimul->loadPolicy() == WaveData::LoadAllData) wdSimul->loadDataUnlessAlreadyLoaded();
+                    if (wdRefer->loadPolicy() == WaveData::LoadAllData) wdRefer->loadDataUnlessAlreadyLoaded();
+                    if (!wdRefer->isEqual(*wdSimul, tolerance))
                     {
                         no_errors = false;
-                        unmatching_nets.insert(it_ref->id());
+                        unmatching_nets.insert(wdRefer->id());
                     }
                 }
             }
@@ -152,104 +155,123 @@ namespace hal
 
             for (auto net_id : unmatching_nets)
             {
-                std::vector<std::pair<u64, int>> events_a;
-                WaveData* wave_data_a;
-                for (auto it_sim : *reference_simulation)
+                u64 t0 = 0;
+                int iwave_a = reference_simulation->waveIndexByNetId(net_id);
+                if (iwave_a<0)
                 {
-                    if (it_sim->id() == net_id)
+                    std::cout << "No waveform found for net ID " << net_id << " in reference" << std::endl;
+                    continue;
+                }
+                WaveData* wave_data_a = reference_simulation->at(iwave_a);
+
+                int iwave_b = engine_simulation->waveIndexByNetId(net_id);
+                if (iwave_b<0)
+                {
+                    std::cout << "No waveform found for net ID " << net_id << " in simulation" << std::endl;
+                    continue;
+                }
+                WaveData* wave_data_b = reference_simulation->at(iwave_b);
+
+                bool loop = true;
+                while (loop)
+                {
+                    std::vector<std::pair<u64, int>> events_a = wave_data_a->get_events(t0);
+                    std::vector<std::pair<u64, int>> events_b = wave_data_b->get_events(t0);
+                    if (events_a.empty()&&events_b.empty())
                     {
-                        wave_data_a = it_sim;
-                        events_a    = it_sim->get_events();
+                        loop = false;
+                        break;
                     }
-                }
-
-                std::vector<std::pair<u64, int>> events_b;
-                WaveData* wave_data_b;
-                for (auto it_sim : *engine_simulation)
-                {
-                    if (it_sim->id() == net_id)
+                    for (auto it_sim : *engine_simulation)
                     {
-                        wave_data_b = it_sim;
-                        events_b    = it_sim->get_events();
-                    }
-                }
-
-                u32 max_number_length = 0;
-                if (!events_a.empty() && !events_b.empty())
-                {
-                    max_number_length = std::to_string(std::max(events_a.back().first, events_b.back().first)).size();
-                }
-
-                std::cout << "difference in net " << wave_data_a->name().toStdString() << " id=" << net_id << ":" << std::endl;
-                std::cout << "reference:" << std::setfill(' ') << std::setw(max_number_length + 5) << ""
-                          << "engine:" << std::endl;
-
-                for (u32 i = 0, j = 0; i < events_a.size() || j < events_b.size();)
-                {
-                    if (i < events_a.size() && j < events_b.size())
-                    {
-                        if (abs((int)(events_a[i].first - events_b[j].first)) < tolerance)
+                        if (it_sim->id() == net_id)
                         {
-                            if (events_a[i].second == events_b[j].second)
+                            wave_data_b = it_sim;
+                            events_b    = it_sim->get_events();
+                        }
+                    }
+
+                    u32 max_number_length = 0;
+                    if (!events_a.empty() && !events_b.empty())
+                    {
+                        max_number_length = std::to_string(std::max(events_a.back().first, events_b.back().first)).size();
+                    }
+
+                    std::cout << "difference in net " << wave_data_a->name().toStdString() << " id=" << net_id << ":" << std::endl;
+                    std::cout << "reference:" << std::setfill(' ') << std::setw(max_number_length + 5) << ""
+                              << "engine:" << std::endl;
+
+                    for (u32 i = 0, j = 0; i < events_a.size() || j < events_b.size();)
+                    {
+                        if (i < events_a.size() && j < events_b.size())
+                        {
+                            t0 = (events_a[i].first < events_b[j].first) ? events_b[j].first : events_a[i].first;
+                            if (abs((int)(events_a[i].first - events_b[j].first)) < tolerance)
                             {
-                                std::cout << signal_to_string(events_a[i].second) << " @ " << std::setfill(' ') << std::setw(max_number_length) << events_a[i].first << "ns";
-                                std::cout << " | ";
-                                std::cout << signal_to_string(events_b[j].second) << " @ " << std::setfill(' ') << std::setw(max_number_length) << events_b[j].first << "ns";
-                                std::cout << std::endl;
-                                i++;
-                                j++;
+                                if (events_a[i].second == events_b[j].second)
+                                {
+                                    std::cout << signal_to_string(events_a[i].second) << " @ " << std::setfill(' ') << std::setw(max_number_length) << events_a[i].first << "ns";
+                                    std::cout << " | ";
+                                    std::cout << signal_to_string(events_b[j].second) << " @ " << std::setfill(' ') << std::setw(max_number_length) << events_b[j].first << "ns";
+                                    std::cout << std::endl;
+                                    i++;
+                                    j++;
+                                }
+                                else
+                                {
+                                    update_mismatch(events_a[i].first, net_id);
+                                    std::cout << signal_to_string(events_a[i].second) << " @ " << std::setfill(' ') << std::setw(max_number_length) << events_a[i].first << "ns";
+                                    std::cout << " | ";
+                                    std::cout << signal_to_string(events_b[j].second) << " @ " << std::setfill(' ') << std::setw(max_number_length) << events_b[j].first << "ns";
+                                    std::cout << "  <--" << std::endl;
+                                    i++;
+                                    j++;
+                                }
                             }
                             else
                             {
-                                update_mismatch(events_a[i].first, net_id);
-                                std::cout << signal_to_string(events_a[i].second) << " @ " << std::setfill(' ') << std::setw(max_number_length) << events_a[i].first << "ns";
-                                std::cout << " | ";
-                                std::cout << signal_to_string(events_b[j].second) << " @ " << std::setfill(' ') << std::setw(max_number_length) << events_b[j].first << "ns";
-                                std::cout << "  <--" << std::endl;
-                                i++;
-                                j++;
+                                if (events_a[i].first < events_b[j].first)
+                                {
+                                    update_mismatch(events_a[i].first, net_id);
+                                    std::cout << signal_to_string(events_a[i].second) << " @ " << std::setfill(' ') << std::setw(max_number_length) << events_a[i].first << "ns";
+                                    std::cout << " | ";
+                                    std::cout << std::endl;
+                                    i++;
+                                }
+                                else
+                                {
+                                    update_mismatch(events_b[j].first, net_id);
+                                    std::cout << "    " << std::setfill(' ') << std::setw(max_number_length) << ""
+                                              << "  ";
+                                    std::cout << " | ";
+                                    std::cout << signal_to_string(events_b[j].second) << " @ " << std::setfill(' ') << std::setw(max_number_length) << events_b[j].first << "ns";
+                                    std::cout << std::endl;
+                                    j++;
+                                }
                             }
+                        }
+                        else if (i < events_a.size())
+                        {
+                            t0 = events_a[i].first;
+                            update_mismatch(events_a[i].first, net_id);
+                            std::cout << signal_to_string(events_a[i].second) << " @ " << std::setfill(' ') << std::setw(max_number_length) << events_a[i].first << "ns";
+                            std::cout << " | ";
+                            std::cout << std::endl;
+                            i++;
                         }
                         else
                         {
-                            if (events_a[i].first < events_b[j].first)
-                            {
-                                update_mismatch(events_a[i].first, net_id);
-                                std::cout << signal_to_string(events_a[i].second) << " @ " << std::setfill(' ') << std::setw(max_number_length) << events_a[i].first << "ns";
-                                std::cout << " | ";
-                                std::cout << std::endl;
-                                i++;
-                            }
-                            else
-                            {
-                                update_mismatch(events_b[j].first, net_id);
-                                std::cout << "    " << std::setfill(' ') << std::setw(max_number_length) << ""
-                                          << "  ";
-                                std::cout << " | ";
-                                std::cout << signal_to_string(events_b[j].second) << " @ " << std::setfill(' ') << std::setw(max_number_length) << events_b[j].first << "ns";
-                                std::cout << std::endl;
-                                j++;
-                            }
+                            t0 = events_b[j].first;
+                            update_mismatch(events_b[j].first, net_id);
+                            std::cout << "    " << std::setfill(' ') << std::setw(max_number_length) << ""
+                                      << "  ";
+                            std::cout << " | ";
+                            std::cout << signal_to_string(events_b[j].second) << " @ " << std::setfill(' ') << std::setw(max_number_length) << events_b[j].first << "ns";
+                            std::cout << std::endl;
+                            j++;
                         }
                     }
-                    else if (i < events_a.size())
-                    {
-                        update_mismatch(events_a[i].first, net_id);
-                        std::cout << signal_to_string(events_a[i].second) << " @ " << std::setfill(' ') << std::setw(max_number_length) << events_a[i].first << "ns";
-                        std::cout << " | ";
-                        std::cout << std::endl;
-                        i++;
-                    }
-                    else
-                    {
-                        update_mismatch(events_b[j].first, net_id);
-                        std::cout << "    " << std::setfill(' ') << std::setw(max_number_length) << ""
-                                  << "  ";
-                        std::cout << " | ";
-                        std::cout << signal_to_string(events_b[j].second) << " @ " << std::setfill(' ') << std::setw(max_number_length) << events_b[j].first << "ns";
-                        std::cout << std::endl;
-                        j++;
-                    }
+                    ++t0;
                 }
                 std::cout << std::endl;
             }
@@ -316,6 +338,7 @@ namespace hal
         }
 
     };    // namespace hal
+
     TEST_F(SimulatorTest, half_adder)
     {
         // return;
@@ -365,11 +388,9 @@ namespace hal
         sim_ctrl_verilator->add_gates(nl->get_gates());
         sim_ctrl_verilator->set_no_clock_used();
         EXPECT_TRUE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::ParameterSetup);
-        sim_ctrl_verilator->initialize();
 
         sim_ctrl_reference->add_gates(nl->get_gates());
         sim_ctrl_reference->set_no_clock_used();
-        sim_ctrl_reference->initialize();
 
         //read vcd
         EXPECT_TRUE(sim_ctrl_reference->import_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist));
@@ -415,12 +436,6 @@ namespace hal
         EXPECT_FALSE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::EngineFailed);
 
         sim_ctrl_verilator->get_results();
-
-        for (Net* n : nl->get_nets())
-        {
-            sim_ctrl_verilator->get_waveform_by_net(n);
-            sim_ctrl_reference->get_waveform_by_net(n);
-        }
 
         // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
         EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int)nl->get_nets().size());
@@ -476,14 +491,11 @@ namespace hal
         sim_ctrl_verilator->add_gates(nl->get_gates());
         sim_ctrl_verilator->set_no_clock_used();
         EXPECT_TRUE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::ParameterSetup);
-        sim_ctrl_verilator->initialize();
 
         sim_ctrl_reference->add_gates(nl->get_gates());
 
         Net* clock = *(nl->get_nets([](const Net* net) { return net->get_name() == "Clock"; }).begin());
         sim_ctrl_verilator->add_clock_period(clock, 10000);
-
-        sim_ctrl_reference->initialize();
 
         //read vcd
         EXPECT_TRUE(sim_ctrl_reference->import_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist));
@@ -521,7 +533,6 @@ namespace hal
                 //#3 additional traces á 10 NS to get 300 NS simulation time
             sim_ctrl_verilator->simulate(17 * 1000);    //# remaining 17 NS to simulate 300 NS in total
 
-            sim_ctrl_verilator->initialize();
             sim_ctrl_verilator->run_simulation();
 
             EXPECT_FALSE(verilator_engine->get_state() == SimulationEngine::State::Failed);
@@ -541,12 +552,6 @@ namespace hal
         EXPECT_FALSE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::EngineFailed);
 
         sim_ctrl_verilator->get_results();
-
-        for (Net* n : nl->get_nets())
-        {
-            sim_ctrl_verilator->get_waveform_by_net(n);
-            sim_ctrl_reference->get_waveform_by_net(n);
-        }
 
         // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
         EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int)nl->get_nets().size());
@@ -600,13 +605,13 @@ namespace hal
             FAIL() << "dump for toycipher-test not found: " << path_vcd;
 
         sim_ctrl_reference->add_gates(nl->get_gates());
-        sim_ctrl_reference->initialize();
+        sim_ctrl_reference->get_waves()->add(new WaveData(1,"'0'",WaveData::RegularNet,{{0,0}}),true);
+        sim_ctrl_reference->get_waves()->add(new WaveData(2,"'1'",WaveData::RegularNet,{{0,1}}),true);
         EXPECT_TRUE(sim_ctrl_reference->import_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist));
 
         //prepare simulation
         sim_ctrl_verilator->add_gates(nl->get_gates());
         EXPECT_TRUE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::ParameterSetup);
-        sim_ctrl_verilator->initialize();
 
         // retrieve nets
         auto clk = *(nl->get_nets([](auto net) { return net->get_name() == "CLK"; }).begin());
@@ -702,7 +707,6 @@ namespace hal
 
             sim_ctrl_verilator->simulate(25 * 1000);
 
-            sim_ctrl_verilator->initialize();
             sim_ctrl_verilator->run_simulation();
 
             EXPECT_FALSE(verilator_engine->get_state() == SimulationEngine::State::Failed);
@@ -723,15 +727,9 @@ namespace hal
 
         sim_ctrl_verilator->get_results();
 
-        for (Net* n : nl->get_nets())
-        {
-            sim_ctrl_verilator->get_waveform_by_net(n);
-            sim_ctrl_reference->get_waveform_by_net(n);
-        }
-
         // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
         EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int)nl->get_nets().size());
-        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() <= (int)nl->get_nets().size());    // net might have additional '0' and '1'
+        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == (int)nl->get_nets().size());    // net might have additional '0' and '1'
 
         //Test if maps are equal
         bool equal = cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get());
@@ -795,15 +793,14 @@ namespace hal
         if (!utils::file_exists(path_vcd))
             FAIL() << "dump for sha256 not found: " << path_vcd;
         //read vcd
-        sim_ctrl_reference->initialize();
         sim_ctrl_reference->add_gates(nl->get_gates());
+        sim_ctrl_reference->get_waves()->add(new WaveData(1,"'0'",WaveData::RegularNet,{{0,0}}),true);
+        sim_ctrl_reference->get_waves()->add(new WaveData(2,"'1'",WaveData::RegularNet,{{0,1}}),true);
         EXPECT_TRUE(sim_ctrl_reference->import_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist));
 
         //prepare simulation
         sim_ctrl_verilator->add_gates(nl->get_gates());
         EXPECT_TRUE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::ParameterSetup);
-
-        sim_ctrl_verilator->initialize();
 
         // retrieve nets
         auto clk = *(nl->get_nets([](auto net) { return net->get_name() == "clk"; }).begin());
@@ -868,7 +865,6 @@ namespace hal
 
             sim_ctrl_verilator->simulate(1995 * 1000);
 
-            sim_ctrl_verilator->initialize();
             sim_ctrl_verilator->run_simulation();
 
             EXPECT_FALSE(verilator_engine->get_state() == SimulationEngine::State::Failed);
@@ -889,37 +885,12 @@ namespace hal
 
         sim_ctrl_verilator->get_results();
 
-        int netCount = 0;
-        for (Net* n : nl->get_nets())
-        {
-            if (netCount % 1000 == 0)
-            {
-                if (netCount)
-                {
-                    std::cerr << "load in memory done for " << netCount << " nets" << std::endl;
-                    bool equal = cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get());
-                    EXPECT_TRUE(equal);
-                }
-                sim_ctrl_reference->get_waves()->clearAll();
-                sim_ctrl_verilator->get_waves()->clearAll();
-            }
-            //            std::cerr << ++netCount << " import net " << n->get_id() << " [" << n->get_name() << "]" << std::endl;
-            sim_ctrl_verilator->get_waveform_by_net(n);
-            sim_ctrl_reference->get_waveform_by_net(n);
-            ++netCount;
-        }
-        std::cerr << "load in memory done for " << netCount << " nets" << std::endl;
-
         // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
-        EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int)nl->get_nets().size() % 1000 );
-        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == (int)nl->get_nets().size() % 1000 );
+        EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int)nl->get_nets().size());
+        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == (int)nl->get_nets().size()); // net '0' and '1' not in reference
 
         //Test if maps are equal
-        if (!sim_ctrl_reference->get_waves()->isEmpty())
-        {
-            bool equal = cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get());
-            EXPECT_TRUE(equal);
-        }
+        EXPECT_TRUE(cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get()));
         TEST_END
     }
 
@@ -977,7 +948,6 @@ namespace hal
             FAIL() << "dump for bram not found: " << path_vcd;
 
         sim_ctrl_reference->add_gates(nl->get_gates());
-        sim_ctrl_reference->initialize();
         EXPECT_TRUE(sim_ctrl_reference->import_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist));
 
         std::cout << "read simulation file" << std::endl;
@@ -985,7 +955,6 @@ namespace hal
         //prepare simulation
         sim_ctrl_verilator->add_gates(nl->get_gates());
         EXPECT_TRUE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::ParameterSetup);
-        sim_ctrl_verilator->initialize();
 
         auto clk         = *(nl->get_nets([](auto net) { return net->get_name() == "clk"; }).begin());
         u32 clock_period = 10000;
@@ -1352,7 +1321,6 @@ namespace hal
 
             sim_ctrl_verilator->simulate(100 * clock_period);    // WAIT FOR 100*10 NS;
 
-            sim_ctrl_verilator->initialize();
             sim_ctrl_verilator->run_simulation();
 
             EXPECT_FALSE(verilator_engine->get_state() == SimulationEngine::State::Failed);
