@@ -207,6 +207,30 @@ namespace hal
         static Result<BooleanFunction> Xor(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
+         * Joins two Boolean functions by an 'ADD' operation. 
+         * Requires both Boolean functions to be of the specified bit-size.
+         * 
+         * 
+         * @param[in] p0 - First Boolean function.
+         * @param[in] p1 - Second Boolean function.
+         * @param[in] size - Bit-size of the operation.
+         * @returns Ok() and the joined Boolean function on success, an error otherwise.
+         */
+        static Result<BooleanFunction> Add(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+
+        /**
+         * Joins two Boolean functions by an 'SUB' operation. 
+         * Requires both Boolean functions to be of the specified bit-size.
+         * 
+         * 
+         * @param[in] p0 - First Boolean function.
+         * @param[in] p1 - Second Boolean function.
+         * @param[in] size - Bit-size of the operation.
+         * @returns Ok() and the joined Boolean function on success, an error otherwise.
+         */
+        static Result<BooleanFunction> Sub(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+
+        /**
          * Slices a Boolean function based on a start and end index (inclusive) starting from 0.
          * 
          * @param[in] p0 - Boolean function to slice.
@@ -302,6 +326,46 @@ namespace hal
          * @returns The joined Boolean function.
          */
         BooleanFunction& operator^=(const BooleanFunction& other);
+
+        /**
+         * Joins two Boolean functions by an 'ADD' operation. 
+         * Requires both Boolean functions to be of the same bit-size.
+         * \warning Fails if the Boolean functions have different bit-sizes.
+         * 
+         * @param[in] other - The other Boolean function.
+         * @returns The joined Boolean function.
+         */
+        BooleanFunction operator+(const BooleanFunction& other) const;
+
+        /**
+         * Joins two Boolean functions by an 'ADD' operation in-place. 
+         * Requires both Boolean functions to be of the same bit-size.
+         * \warning Fails if the Boolean functions have different bit-sizes.
+         * 
+         * @param[in] other - The other Boolean function.
+         * @returns The joined Boolean function.
+         */
+        BooleanFunction& operator+=(const BooleanFunction& other);
+
+        /**
+         * Joins two Boolean functions by an 'SUB' operation. 
+         * Requires both Boolean functions to be of the same bit-size.
+         * \warning Fails if the Boolean functions have different bit-sizes.
+         * 
+         * @param[in] other - The other Boolean function.
+         * @returns The joined Boolean function.
+         */
+        BooleanFunction operator-(const BooleanFunction& other) const;
+
+        /**
+         * Joins two Boolean functions by an 'SUB' operation in-place. 
+         * Requires both Boolean functions to be of the same bit-size.
+         * \warning Fails if the Boolean functions have different bit-sizes.
+         * 
+         * @param[in] other - The other Boolean function.
+         * @returns The joined Boolean function.
+         */
+        BooleanFunction& operator-=(const BooleanFunction& other);
 
         /**
          * Checks whether two Boolean functions are equal.
@@ -811,6 +875,7 @@ namespace hal
         static constexpr u16 Xor = 0x0003;
 
         static constexpr u16 Add = 0x0010;
+        static constexpr u16 Sub = 0x0011;
 
         static constexpr u16 Concat = 0x0100;
         static constexpr u16 Slice  = 0x0101;

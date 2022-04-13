@@ -316,45 +316,6 @@ namespace hal
         // qDebug() << "remove modules" << remove_modules;
     }
 
-    void GraphWidget::setModifiedIfModule()
-    {
-        // if our name matches that of a module, add the "modified" label and
-        // optionally a number if a "modified"-labeled context already exists
-        for (const auto m : gNetlist->get_modules())
-        {
-            if (m->get_name() == mContext->name().toStdString())
-            {
-                u32 cnt = 0;
-                while (true)
-                {
-                    ++cnt;
-                    QString new_name = mContext->name() + " modified";
-                    if (cnt > 1)
-                    {
-                        new_name += " (" + QString::number(cnt) + ")";
-                    }
-                    bool found = false;
-                    for (const auto& ctx : gGraphContextManager->getContexts())
-                    {
-                        if (ctx->name() == new_name)
-                        {
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (!found)
-                    {
-                        ActionRenameObject* act = new ActionRenameObject(new_name);
-                        act->setObject(UserActionObject(mContext->id(), UserActionObjectType::Context));
-                        act->exec();
-                        break;
-                    }
-                }
-                break;
-            }
-        }
-    }
-
     void GraphWidget::handleNavigationJumpRequested(const Node& origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules)
     {
         //        bool bail_animation = false;
@@ -386,9 +347,6 @@ namespace hal
         // if we don't have all gates and modules, we need to add them
         if (!nonvisible_gates.empty() || !nonvisible_modules.empty())
         {
-            // display the "modified" label if we're showing a module context
-            setModifiedIfModule();
-
             // hint the layouter at the direction we're navigating in
             // (so the cone view nicely extends to the right or left)
             // either they're all inputs or all outputs, so just check the first one

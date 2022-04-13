@@ -4,6 +4,7 @@
 #include "gui/user_action/action_set_object_color.h"
 #include "gui/user_action/action_set_object_type.h"
 #include "gui/user_action/user_action_compound.h"
+#include "gui/graph_widget/layout_locker.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
 #include "gui/module_model/module_model.h"
@@ -32,6 +33,9 @@ namespace hal
         Gate*   gat;
         Net*    net;
         GraphContext* ctx;
+
+        LayoutLocker llock;
+
         switch (mObject.type()) {
         case UserActionObjectType::Module:
             mod = gNetlist->get_module_by_id(mObject.id());

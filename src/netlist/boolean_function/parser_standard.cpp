@@ -28,17 +28,26 @@ namespace hal
             const auto BracketCloseAction = [&tokens](auto& /* ctx */) { tokens.emplace_back(BooleanFunctionParser::Token::BracketClose()); };
 
             const auto VariableAction = [&tokens](auto& ctx) {
-                // combines the first matched character with the remaining string
+                // # Developer Note
+                // We combine the first matched character with the remaining 
+                // string and do not remove any preceding '/' character.
                 std::stringstream name;
-                name << std::string(1, boost::fusion::at_c<0>(_attr(ctx))) << boost::fusion::at_c<1>(_attr(ctx));
+                name << std::string(1, boost::fusion::at_c<0>(_attr(ctx)));
+                name << boost::fusion::at_c<1>(_attr(ctx));
 
                 tokens.emplace_back(BooleanFunctionParser::Token::Variable(name.str(), 1));
             };
             const auto VariableIndexAction = [&tokens](auto& ctx) {
-                // combines the first matched character with the remaining string
+                // # Developer Note 
+                // Since the first character is an optional '\' character and 
+                // generally escaped a.k.a. removed within HAL, we also do not 
+                // touch the part and only assemble the remaining string.
                 std::stringstream name;
-                name << std::string(1, boost::fusion::at_c<0>(_attr(ctx))) << boost::fusion::at_c<1>(_attr(ctx)) << boost::fusion::at_c<2>(_attr(ctx)) << boost::fusion::at_c<3>(_attr(ctx))
-                     << boost::fusion::at_c<4>(_attr(ctx));
+                name << std::string(1, boost::fusion::at_c<1>(_attr(ctx)));
+                name << boost::fusion::at_c<2>(_attr(ctx));
+                name << boost::fusion::at_c<3>(_attr(ctx));
+                name << boost::fusion::at_c<4>(_attr(ctx));
+                name << boost::fusion::at_c<5>(_attr(ctx));
                 tokens.emplace_back(BooleanFunctionParser::Token::Variable(name.str(), 1));
             };
             const auto ConstantAction = [&tokens](auto& ctx) {
@@ -61,7 +70,9 @@ namespace hal
             const auto BracketCloseRule = x3::lit(")")[BracketCloseAction];
 
             const auto VariableRule      = x3::lexeme[(x3::char_("a-zA-Z") >> *x3::char_("a-zA-Z0-9_"))][VariableAction];
-            const auto VariableIndexRule = x3::lexeme[(x3::char_("a-zA-Z") >> *x3::char_("a-zA-Z0-9_") >> x3::char_("([") >> x3::int_ >> x3::char_(")]"))][VariableIndexAction];
+            const auto VariableIndexRoundBracketRule = x3::lexeme[(-(x3::char_("\\")) >> x3::char_("a-zA-Z") >> *x3::char_("a-zA-Z0-9_") >> x3::char_("(") >> x3::int_ >> x3::char_(")"))] [VariableIndexAction];
+            const auto VariableIndexSquareBracketRule = x3::lexeme[(-(x3::char_("\\")) >> x3::char_("a-zA-Z") >> *x3::char_("a-zA-Z0-9_") >> x3::char_("[") >> x3::int_ >> x3::char_("]"))] [VariableIndexAction];
+            const auto VariableIndexRule = VariableIndexRoundBracketRule | VariableIndexSquareBracketRule;
 
             const auto ConstantRule       = x3::lexeme[x3::char_("0-1")][ConstantAction];
             const auto ConstantPrefixRule = x3::lit("0b") >> x3::lexeme[x3::char_("0-1")][ConstantAction];

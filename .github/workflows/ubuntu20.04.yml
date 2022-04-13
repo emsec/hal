@@ -2,9 +2,9 @@ name: Ubuntu 20.04
 
 on:
   push:
-    branches: [ master, fix-release]
-  pull_request:
-    branches: [ master ]
+#  create:
+#    tags:
+#      - v*
 
 jobs:
   release-doc:

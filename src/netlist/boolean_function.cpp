@@ -298,6 +298,28 @@ namespace hal
         return OK(BooleanFunction(Node::Operation(NodeType::Xor, size), std::move(p0), std::move(p1)));
     }
 
+    Result<BooleanFunction> BooleanFunction::Add(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if ((p0.size() != p1.size()) || (p0.size() != size))
+        {
+            return ERR("could not join Boolean functions using ADD operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size())
+                       + ", size = " + std::to_string(size) + ").");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Add, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Sub(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if ((p0.size() != p1.size()) || (p0.size() != size))
+        {
+            return ERR("could not join Boolean functions using SUB operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size())
+                       + ", size = " + std::to_string(size) + ").");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Sub, size), std::move(p0), std::move(p1)));
+    }
+
     Result<BooleanFunction> BooleanFunction::Slice(BooleanFunction&& p0, BooleanFunction&& p1, BooleanFunction&& p2, u16 size)
     {
         if (!p1.is_index() || !p2.is_index())
@@ -371,6 +393,28 @@ namespace hal
     BooleanFunction& BooleanFunction::operator^=(const BooleanFunction& other)
     {
         *this = BooleanFunction::Xor(this->clone(), other.clone(), this->size()).get();
+        return *this;
+    }
+
+    BooleanFunction BooleanFunction::operator+(const BooleanFunction& other) const
+    {
+        return BooleanFunction::Add(this->clone(), other.clone(), this->size()).get();
+    }
+
+    BooleanFunction& BooleanFunction::operator+=(const BooleanFunction& other)
+    {
+        *this = BooleanFunction::Add(this->clone(), other.clone(), this->size()).get();
+        return *this;
+    }
+
+    BooleanFunction BooleanFunction::operator-(const BooleanFunction& other) const
+    {
+        return BooleanFunction::Sub(this->clone(), other.clone(), this->size()).get();
+    }
+
+    BooleanFunction& BooleanFunction::operator-=(const BooleanFunction& other)
+    {
+        *this = BooleanFunction::Sub(this->clone(), other.clone(), this->size()).get();
         return *this;
     }
 
@@ -548,6 +592,8 @@ namespace hal
 
             case BooleanFunction::NodeType::Add:
                 return OK("(" + operands[0] + " + " + operands[1] + ")");
+            case BooleanFunction::NodeType::Sub:
+                return OK("(" + operands[0] + " - " + operands[1] + ")");
 
             case BooleanFunction::NodeType::Concat:
                 return OK("(" + operands[0] + " ++ " + operands[1] + ")");
@@ -644,9 +690,9 @@ namespace hal
 
     BooleanFunction BooleanFunction::simplify() const
     {
-        auto simplified = Simplification::local_simplification(*this)
-                              .map<BooleanFunction>([](const auto& s) { return Simplification::abc_simplification(s); })
-                              .map<BooleanFunction>([](const auto& s) { return Simplification::local_simplification(s); });
+        auto simplified = Simplification::local_simplification(*this).map<BooleanFunction>([](const auto& s) { return Simplification::abc_simplification(s); }).map<BooleanFunction>([](const auto& s) {
+            return Simplification::local_simplification(s);
+        });
 
         return (simplified.is_ok()) ? simplified.get() : this->clone();
     }
@@ -1087,6 +1133,8 @@ namespace hal
 
             case NodeType::Add:
                 return "+";
+            case NodeType::Sub:
+                return "-";
 
             case NodeType::Concat:
                 return "++";
@@ -1114,6 +1162,7 @@ namespace hal
             {BooleanFunction::NodeType::Xor, 2},
 
             {BooleanFunction::NodeType::Add, 2},
+            {BooleanFunction::NodeType::Sub, 2},
 
             {BooleanFunction::NodeType::Concat, 2},
             {BooleanFunction::NodeType::Slice, 3},
