@@ -7,7 +7,6 @@
 #include "gui/user_action/action_create_object.h"
 #include "gui/user_action/user_action_compound.h"
 #include "hal_core/netlist/grouping.h"
-#include <QDebug>
 
 namespace hal
 {
@@ -183,43 +182,43 @@ namespace hal
                 if(mod)
                 {
                     auto pinGrpRes = mod->get_pin_group_by_id(mObject.id());
-                    QHash<u32, QSet<u32>> p;
+                    QHash<u32, QSet<u32>> sourceGroups;
                     if(pinGrpRes.is_error())
                         return false;
                     for(auto id : mPins)
                         if(auto res = mod->get_pin_by_id(id); res.is_ok())
-                            p[res.get()->get_group().first->get_id()].insert(id);
+                            sourceGroups[res.get()->get_group().first->get_id()].insert(id);
                         else
                             return false;
-//                    for(auto it = p.constBegin(); it != p.constEnd(); it++)
-//                        qDebug() << it.key() << " ," << it.value().size();
+
                     for(auto id : mPins)
-                        mod->assign_pin_to_group(pinGrpRes.get(), mod->get_pin_by_id(id).get(),false);//default delete = true
-                    //go through all groups from which pins were removed and check if they must be manually deleted and construct
-                    //for all groups the undo action
+                        mod->assign_pin_to_group(pinGrpRes.get(), mod->get_pin_by_id(id).get(), false);
+
                     UserActionCompound* undo = new UserActionCompound;
-                    for(auto it = p.constBegin(); it != p.constEnd(); it++)
+                    for(auto it = sourceGroups.constBegin(); it != sourceGroups.constEnd(); it++)
                     {
                         auto group = mod->get_pin_group_by_id(it.key()).get();
-                        if(group->empty())//create compound with create+add, then delete group
+                        if(group->empty())
                         {
                             UserActionCompound* act = new UserActionCompound;
                             act->setUseCreatedObject();
                             ActionCreateObject* crtAct = new ActionCreateObject(UserActionObjectType::PinGroup, QString::fromStdString(group->get_name()));
                             crtAct->setParentObject(mParentObject);
+                            ActionAddItemsToObject* addAction = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), it.value());
+                            if(mUsedInCreateContext) addAction->mDeleteSource = false;
                             act->addAction(crtAct);
-                            act->addAction(new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), it.value()));
+                            act->addAction(addAction);
                             undo->addAction(act);
-                            if(mod->delete_pin_group(group).is_ok())
-                                qDebug() << "Successfull deleted";
+                            if(mDeleteSource)
+                                mod->delete_pin_group(group);
                         }
-                        else//simply add the pins back to still existing group
+                        else
                         {
                             ActionAddItemsToObject* act = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), it.value());
                             act->setObject(UserActionObject(it.key(), UserActionObjectType::PinGroup));
                             act->setParentObject(mParentObject);
+                            if(mUsedInCreateContext) act->mDeleteSource = false;
                             undo->addAction(act);
-                            qDebug() << "standard additemstoobject";
                         }
                     }
                     mUndoAction = undo;

@@ -44,6 +44,9 @@ namespace hal
         QSet<u32> mPins;
         PlacementHint mPlacementHint;
         Node mPlacementOrigin;
+        bool mUsedInCreateContext;
+        bool mDeleteSource;
+
     public:
         /**
          * Action constructor.
@@ -58,7 +61,8 @@ namespace hal
                                const QSet<u32>& nets = QSet<u32>(),
                                const QSet<u32>& pins = QSet<u32>())
             : mModules(mods), mGates(gats), mNets(nets), mPins(pins),
-              mPlacementHint(PlacementHint::Standard)
+              mPlacementHint(PlacementHint::Standard), mUsedInCreateContext(false),
+              mDeleteSource(true)
         {;}
         bool exec() override;
 
@@ -68,6 +72,13 @@ namespace hal
          * @param hint - The new placement hint
          */
         void setPlacementHint(PlacementHint hint) { mPlacementHint = hint; }
+
+        /**
+         * Must be called when adding pins to a pingroup and the pingroup was
+         * created in the same compound action. Sets a flag so that the undo
+         * action does not delete the source pingroup.
+         */
+        void setUsedInCreateContext() { mUsedInCreateContext = true; }
         QString tagname() const override;
         void writeToXml(QXmlStreamWriter& xmlOut) const override;
         void readFromXml(QXmlStreamReader& xmlIn) override;

@@ -39,7 +39,7 @@ namespace hal
             if(mod && mod->get_pin_group_by_id(mObject.id()).is_ok())
             {
                 auto pinGroup = mod->get_pin_group_by_id(mObject.id()).get();
-                QSet<u32> pins;//make this a list to preserve order? (->important for additemstoobject)
+                QSet<u32> pins;
                 for(const auto &pin : pinGroup->get_pins())
                     pins.insert(pin->get_id());
                 UserActionCompound* act = new UserActionCompound;
