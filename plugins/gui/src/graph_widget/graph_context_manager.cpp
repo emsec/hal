@@ -127,6 +127,16 @@ namespace hal
         return nullptr;
     }
 
+    GraphContext* GraphContextManager::getContextByExclusiveModuleId(u32 module_id) const
+    {
+        for (GraphContext* ctx : mContextTableModel->list())
+        {
+            if (ctx->getExclusiveModuleId() == module_id)
+                return ctx;
+        }
+        return nullptr;
+    }
+
     bool GraphContextManager::contextWithNameExists(const QString& name) const
     {
         for (GraphContext* ctx : mContextTableModel->list())
@@ -153,7 +163,15 @@ namespace hal
     {
         for (GraphContext* context : mContextTableModel->list())
             if (context->modules().contains(m->get_id()))
+            {
+                if (context->getExclusiveModuleId() == m->get_id())
+                    context->setExclusiveModuleId(0, false);
+
                 context->remove({m->get_id()}, {});
+
+                if (context->empty())
+                    deleteGraphContext(context);
+            }
     }
 
     void GraphContextManager::handleModuleNameChanged(Module* m) const
@@ -200,12 +218,14 @@ namespace hal
 
         for (GraphContext* context : mContextTableModel->list())
         {
-            if (context->isShowingModule(m->get_id(), {added_module}, {}, {}, {}))
+            if (context->isShowingModule(m->get_id(), {added_module}, {}, {}, {}, false) && !context->isShowingModule(added_module, {}, {}, {}, {}, false))
                 context->add({added_module}, {});
             else
                 context->testIfAffected(m->get_id(), &added_module, nullptr);
 
-            if (context->modules().contains(added_module))
+            // When the module is unfolded and was moved to another folded module visible in view,
+            // remove all gates and submodules of added_module from view
+            if (context->isShowingModule(added_module, {}, {}, {}, {}, false))
             {
                 QSet<u32> modules = context->modules();
                 modules.remove(added_module);
@@ -217,7 +237,7 @@ namespace hal
                 for (u32 id : module_ids)
                     if (modules.contains(id))
                     {
-                        context->remove({added_module},{});
+                        context->removeModuleContents(added_module);
                         return;
                     }
             }
@@ -229,17 +249,17 @@ namespace hal
         // FIXME this also triggers on module deletion (not only moving)
         // and collides with handleModuleRemoved
 //        dump("ModuleSubmoduleRemoved", m->get_id(), removed_module);
+
         for (GraphContext* context : mContextTableModel->list())
-            if (context->isShowingModule(m->get_id(), {}, {}, {removed_module}, {}))
-            {
+        {
+            if (context->isShowingModule(m->get_id(), {}, {}, {removed_module}, {}, false))
                 context->remove({removed_module}, {});
-                if (context->empty())
-                {
-                    deleteGraphContext(context);
-                }
-            }
             else
                 context->testIfAffected(m->get_id(), &removed_module, nullptr);
+
+            if (context->empty())
+                deleteGraphContext(context);
+        }
     }
 
     void GraphContextManager::handleModuleGateAssigned(Module* m, const u32 inserted_gate) const
@@ -258,7 +278,7 @@ namespace hal
 
         for (GraphContext* context : mContextTableModel->list())
         {
-            if (context->isShowingModule(m->get_id(), {}, {inserted_gate}, {}, {}))
+            if (context->isShowingModule(m->get_id(), {}, {inserted_gate}, {}, {}, false))
                 context->add({}, {inserted_gate});
             else
                 context->testIfAffected(m->get_id(), nullptr, &inserted_gate);
@@ -271,10 +291,9 @@ namespace hal
                     if (modules.contains(id))
                     {
                         context->remove({},{inserted_gate});
-                        return;
+                        break;
                     }
             }
-
         }
     }
 
@@ -283,12 +302,17 @@ namespace hal
 //        dump("ModuleGateRemoved", m->get_id(), removed_gate);
         for (GraphContext* context : mContextTableModel->list())
         {
-            if (context->isShowingModule(m->get_id(), {}, {}, {}, {removed_gate}))
+            if (context->isShowingModule(m->get_id(), {}, {}, {}, {removed_gate}, false))
             {
                 context->remove({}, {removed_gate});
                 if (context->empty())
                 {
                     deleteGraphContext(context);
+                }
+                // when the module is empty, add the empty folded module to the view
+                else if (m->get_gates().empty() && m->get_submodules().empty())
+                {
+                    context->add({m->get_id()}, {});
                 }
             }
             // if a module is unfolded, then the gate is not deleted from the view
@@ -542,9 +566,11 @@ namespace hal
                 QString viewName = jsonView["name"].toString();
                 if (viewId > mMaxContextId)
                     mMaxContextId = viewId;
+                u32 exclusiveModuleId = jsonView["exclusiveModuleId"].toInt();
                 GraphContext* context = new GraphContext(viewId, viewName);
                 context->setLayouter(getDefaultLayouter(context));
                 context->setShader(getDefaultShader(context));
+                context->setExclusiveModuleId(exclusiveModuleId);
                 context->scene()->setDebugGridEnabled(mSettingDebugGrid->value().toBool());
                 connect(mSettingDebugGrid, &SettingsItemCheckbox::boolChanged, context->scene(), &GraphicsScene::setDebugGridEnabled);
 
