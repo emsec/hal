@@ -1,0 +1,5 @@
+<map id="nlohmann::detail::type_error" name="nlohmann::detail::type_error">
+<area shape="rect" id="node1" title="exception indicating executing a member function with a wrong type" alt="" coords="23,285,192,377"/>
+<area shape="rect" id="node2" href="$classnlohmann_1_1detail_1_1exception.html" title="general exception of the basic_json class" alt="" coords="5,131,209,237"/>
+<area shape="rect" id="node3" title=" " alt="" coords="50,5,165,83"/>
+</map>

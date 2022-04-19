@@ -329,9 +329,9 @@ $(document).ready(function(){initNavTree('net__details__widget_8cpp_source.html'
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#update">update</a>(<a class="code" href="classhal_1_1_details_widget.html#a37eddd5dc46d23cc25a8dbf38a3d938d">mCurrentId</a>);</div>
 <div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;    }</div>
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160; </div>
-<div class="line"><a name="l00244"></a><span class="lineno"><a class="line" href="classhal_1_1_net_details_widget.html#ad71bb5a577f0a4db4e867123a572fdda">  244</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_net_details_widget.html#ad71bb5a577f0a4db4e867123a572fdda">NetDetailsWidget::handleGateNameChanged</a>(<a class="code" href="classhal_1_1_gate.html">Gate</a>* g)</div>
+<div class="line"><a name="l00244"></a><span class="lineno"><a class="line" href="classhal_1_1_net_details_widget.html#ad71bb5a577f0a4db4e867123a572fdda">  244</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_net_details_widget.html#ad71bb5a577f0a4db4e867123a572fdda">NetDetailsWidget::handleGateNameChanged</a>(<a class="code" href="classhal_1_1_gate.html">Gate</a>* <a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a>)</div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;    {</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        Q_UNUSED(g)</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        Q_UNUSED(<a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a>)</div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160; </div>
 <div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="classhal_1_1_details_widget.html#a37eddd5dc46d23cc25a8dbf38a3d938d">mCurrentId</a> == 0)</div>
 <div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;            <span class="keywordflow">return</span>;</div>
@@ -530,6 +530,7 @@ $(document).ready(function(){initNavTree('net__details__widget_8cpp_source.html'
 <div class="ttc" id="aclasshal_1_1_netlist_relay_html_ab02f9f5376b48c985eaaa8e0fc5abf80"><div class="ttname"><a href="classhal_1_1_netlist_relay.html#ab02f9f5376b48c985eaaa8e0fc5abf80">hal::NetlistRelay::gateNameChanged</a></div><div class="ttdeci">void gateNameChanged(Gate *g) const</div></div>
 <div class="ttc" id="aqwidget_html_enabled-prop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html#enabled-prop">QWidget::setEnabled</a></div><div class="ttdeci">void setEnabled(bool)</div></div>
 <div class="ttc" id="aclasshal_1_1_net_details_widget_html_a6a2bf78987acc5a9d9e57fbcf55799c6"><div class="ttname"><a href="classhal_1_1_net_details_widget.html#a6a2bf78987acc5a9d9e57fbcf55799c6">hal::NetDetailsWidget::handleNetDestinationRemoved</a></div><div class="ttdeci">void handleNetDestinationRemoved(Net *n, const u32 dst_gate_id)</div><div class="ttdef"><b>Definition:</b> <a href="net__details__widget_8cpp_source.html#l00236">net_details_widget.cpp:236</a></div></div>
+<div class="ttc" id="atest__manual_8txt_html_a0c1cc4000b37ba97b39f660cc2b692f6"><div class="ttname"><a href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a></div><div class="ttdeci">How to generate a vcd file for a new test netlist Synthesize netlist in your favorite e g</div><div class="ttdef"><b>Definition:</b> <a href="test__manual_8txt_source.html#l00003">test_manual.txt:3</a></div></div>
 <div class="ttc" id="aqwidget_html_minimumHeight-prop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html#minimumHeight-prop">QWidget::setMinimumHeight</a></div><div class="ttdeci">void setMinimumHeight(int minh)</div></div>
 <div class="ttc" id="aqwidget_html_setFixedSize"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html#setFixedSize">QWidget::setFixedSize</a></div><div class="ttdeci">void setFixedSize(const QSize &amp;s)</div></div>
 <div class="ttc" id="aclasshal_1_1_details_widget_html_a37eddd5dc46d23cc25a8dbf38a3d938d"><div class="ttname"><a href="classhal_1_1_details_widget.html#a37eddd5dc46d23cc25a8dbf38a3d938d">hal::DetailsWidget::mCurrentId</a></div><div class="ttdeci">u32 mCurrentId</div><div class="ttdef"><b>Definition:</b> <a href="details__widget_8h_source.html#l00101">details_widget.h:101</a></div></div>
@@ -584,7 +585,7 @@ $(document).ready(function(){initNavTree('net__details__widget_8cpp_source.html'
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_78f3dec0c5ef157ac74258fc012bc3cd.html">selection_details_widget</a></li><li class="navelem"><a class="el" href="net__details__widget_8cpp.html">net_details_widget.cpp</a></li>
-    <li class="footer">Generated on Mon Apr 11 2022 13:34:44 for HAL by
+    <li class="footer">Generated on Tue Apr 19 2022 13:11:32 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

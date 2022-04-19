@@ -1,23 +1,44 @@
 var hierarchy =
 [
+    [ "nlohmann::adl_serializer< typename, typename >", "structnlohmann_1_1adl__serializer.html", null ],
     [ "subprocess::detail::ArgumentDeducer", "structsubprocess_1_1detail_1_1_argument_deducer.html", null ],
     [ "hal::AssignedKeybindMap", "classhal_1_1_assigned_keybind_map.html", null ],
+    [ "B1", null, [
+      [ "nlohmann::detail::conjunction< B1 >", "structnlohmann_1_1detail_1_1conjunction_3_01_b1_01_4.html", null ]
+    ] ],
     [ "base_sink", null, [
       [ "hal::log_gui_sink", "classhal_1_1log__gui__sink.html", null ]
     ] ],
     [ "hal::BasePluginInterface", "classhal_1_1_base_plugin_interface.html", [
-      [ "hal::CLIPluginInterface", "classhal_1_1_c_l_i_plugin_interface.html", null ],
+      [ "hal::BooleanInfluencePlugin", "classhal_1_1_boolean_influence_plugin.html", null ],
+      [ "hal::CLIPluginInterface", "classhal_1_1_c_l_i_plugin_interface.html", [
+        [ "hal::plugin_dataflow", "classhal_1_1plugin__dataflow.html", null ]
+      ] ],
+      [ "hal::GraphAlgorithmPlugin", "classhal_1_1_graph_algorithm_plugin.html", null ],
       [ "hal::GUIPluginInterface", "classhal_1_1_g_u_i_plugin_interface.html", [
         [ "hal::Pyi_gui", "classhal_1_1_pyi__gui.html", null ]
       ] ],
+      [ "hal::HGLParserPlugin", "classhal_1_1_h_g_l_parser_plugin.html", null ],
+      [ "hal::HGLWriterPlugin", "classhal_1_1_h_g_l_writer_plugin.html", null ],
+      [ "hal::LibertyParserPlugin", "classhal_1_1_liberty_parser_plugin.html", null ],
+      [ "hal::NetlistSimulatorPlugin", "classhal_1_1_netlist_simulator_plugin.html", null ],
       [ "hal::Pyi_base", "classhal_1_1_pyi__base.html", null ],
+      [ "hal::SolveFsmPlugin", "classhal_1_1_solve_fsm_plugin.html", null ],
       [ "hal::UIPluginInterface", "classhal_1_1_u_i_plugin_interface.html", [
         [ "hal::PluginGui", "classhal_1_1_plugin_gui.html", null ]
-      ] ]
+      ] ],
+      [ "hal::VerilogParserPlugin", "classhal_1_1_verilog_parser_plugin.html", null ],
+      [ "hal::VerilogWriterPlugin", "classhal_1_1_verilog_writer_plugin.html", null ],
+      [ "hal::VHDLParserPlugin", "classhal_1_1_v_h_d_l_parser_plugin.html", null ]
     ] ],
+    [ "nlohmann::basic_json< ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer >", "classnlohmann_1_1basic__json.html", null ],
+    [ "nlohmann::detail::binary_reader< BasicJsonType, SAX >", "classnlohmann_1_1detail_1_1binary__reader.html", null ],
+    [ "nlohmann::detail::binary_writer< BasicJsonType, CharType >", "classnlohmann_1_1detail_1_1binary__writer.html", null ],
     [ "hal::BooleanFunction", "classhal_1_1_boolean_function.html", null ],
+    [ "nlohmann::detail::dtoa_impl::boundaries", "structnlohmann_1_1detail_1_1dtoa__impl_1_1boundaries.html", null ],
     [ "subprocess::Buffer", "classsubprocess_1_1_buffer.html", null ],
     [ "subprocess::bufsize", "structsubprocess_1_1bufsize.html", null ],
+    [ "nlohmann::detail::dtoa_impl::cached_power", "structnlohmann_1_1detail_1_1dtoa__impl_1_1cached__power.html", null ],
     [ "hal::CallbackHook< class >", "classhal_1_1_callback_hook.html", null ],
     [ "hal::CallbackHook< R(ArgTypes...)>", "classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html", null ],
     [ "hal::CallbackHook< void(const spdlog::level::level_enum &, const std::string &, const std::string &)>", "classhal_1_1_callback_hook.html", null ],
@@ -37,11 +58,15 @@ var hierarchy =
     [ "hal::CommonSuccessorPredecessor", "classhal_1_1_common_successor_predecessor.html", null ],
     [ "hal::CommonSuccessorPredecessorGateQueue", "classhal_1_1_common_successor_predecessor_gate_queue.html", null ],
     [ "subprocess::detail::Communication", "classsubprocess_1_1detail_1_1_communication.html", null ],
+    [ "hal::dataflow::evaluation::Configuration", "structhal_1_1dataflow_1_1evaluation_1_1_configuration.html", null ],
+    [ "hal::dataflow::processing::Configuration", "structhal_1_1dataflow_1_1processing_1_1_configuration.html", null ],
     [ "hal::SMT::Constraint", "structhal_1_1_s_m_t_1_1_constraint.html", null ],
     [ "hal::ContentAnchor", "classhal_1_1_content_anchor.html", [
       [ "hal::SplitterAnchor", "classhal_1_1_splitter_anchor.html", null ],
       [ "hal::TabWidget", "classhal_1_1_tab_widget.html", null ]
     ] ],
+    [ "hal::dataflow::evaluation::Context", "structhal_1_1dataflow_1_1evaluation_1_1_context.html", null ],
+    [ "hal::dataflow::processing::Context", "structhal_1_1dataflow_1_1processing_1_1_context.html", null ],
     [ "hal::DataContainer", "classhal_1_1_data_container.html", [
       [ "hal::Gate", "classhal_1_1_gate.html", null ],
       [ "hal::Module", "classhal_1_1_module.html", null ],
@@ -51,17 +76,86 @@ var hierarchy =
     [ "hal::DetailsGeneralCommonInfo< T >", "classhal_1_1_details_general_common_info.html", null ],
     [ "hal::DetailsGeneralModelEntry", "classhal_1_1_details_general_model_entry.html", null ],
     [ "hal::DetailsTableUtilities", "classhal_1_1_details_table_utilities.html", null ],
+    [ "nlohmann::detail::detector< Default, AlwaysVoid, Op, Args >", "structnlohmann_1_1detail_1_1detector.html", null ],
+    [ "nlohmann::detail::detector< Default, void_t< Op< Args... > >, Op, Args... >", "structnlohmann_1_1detail_1_1detector_3_01_default_00_01void__t_3_01_op_3_01_args_8_8_8_01_4_01_4_00_01_op_00_01_args_8_8_8_01_4.html", null ],
     [ "hal::utils::DirectoryRange", "classhal_1_1utils_1_1_directory_range.html", null ],
+    [ "nlohmann::detail::dtoa_impl::diyfp", "structnlohmann_1_1detail_1_1dtoa__impl_1_1diyfp.html", null ],
     [ "hal::Endpoint", "classhal_1_1_endpoint.html", null ],
     [ "hal::EnumStrings< T, typename >", "structhal_1_1_enum_strings.html", null ],
     [ "subprocess::environment", "structsubprocess_1_1environment.html", null ],
     [ "subprocess::error", "structsubprocess_1_1error.html", null ],
+    [ "hal::Event", "structhal_1_1_event.html", null ],
     [ "hal::EventHandler", "classhal_1_1_event_handler.html", null ],
+    [ "exception", null, [
+      [ "nlohmann::detail::exception", "classnlohmann_1_1detail_1_1exception.html", [
+        [ "nlohmann::detail::invalid_iterator", "classnlohmann_1_1detail_1_1invalid__iterator.html", null ],
+        [ "nlohmann::detail::other_error", "classnlohmann_1_1detail_1_1other__error.html", null ],
+        [ "nlohmann::detail::out_of_range", "classnlohmann_1_1detail_1_1out__of__range.html", null ],
+        [ "nlohmann::detail::parse_error", "classnlohmann_1_1detail_1_1parse__error.html", null ],
+        [ "nlohmann::detail::type_error", "classnlohmann_1_1detail_1_1type__error.html", null ]
+      ] ]
+    ] ],
     [ "hal::ExportRegisteredFormat", "classhal_1_1_export_registered_format.html", null ],
+    [ "nlohmann::detail::external_constructor< value_t >", "structnlohmann_1_1detail_1_1external__constructor.html", null ],
+    [ "nlohmann::detail::external_constructor< value_t::array >", "structnlohmann_1_1detail_1_1external__constructor_3_01value__t_1_1array_01_4.html", null ],
+    [ "nlohmann::detail::external_constructor< value_t::boolean >", "structnlohmann_1_1detail_1_1external__constructor_3_01value__t_1_1boolean_01_4.html", null ],
+    [ "nlohmann::detail::external_constructor< value_t::number_float >", "structnlohmann_1_1detail_1_1external__constructor_3_01value__t_1_1number__float_01_4.html", null ],
+    [ "nlohmann::detail::external_constructor< value_t::number_integer >", "structnlohmann_1_1detail_1_1external__constructor_3_01value__t_1_1number__integer_01_4.html", null ],
+    [ "nlohmann::detail::external_constructor< value_t::number_unsigned >", "structnlohmann_1_1detail_1_1external__constructor_3_01value__t_1_1number__unsigned_01_4.html", null ],
+    [ "nlohmann::detail::external_constructor< value_t::object >", "structnlohmann_1_1detail_1_1external__constructor_3_01value__t_1_1object_01_4.html", null ],
+    [ "nlohmann::detail::external_constructor< value_t::string >", "structnlohmann_1_1detail_1_1external__constructor_3_01value__t_1_1string_01_4.html", null ],
+    [ "false_type", null, [
+      [ "nlohmann::detail::is_compatible_array_type_impl< BasicJsonType, CompatibleArrayType >", "structnlohmann_1_1detail_1_1is__compatible__array__type__impl.html", [
+        [ "nlohmann::detail::is_compatible_array_type< BasicJsonType, CompatibleArrayType >", "structnlohmann_1_1detail_1_1is__compatible__array__type.html", null ]
+      ] ],
+      [ "nlohmann::detail::is_compatible_integer_type_impl< RealIntegerType, CompatibleNumberIntegerType >", "structnlohmann_1_1detail_1_1is__compatible__integer__type__impl.html", [
+        [ "nlohmann::detail::is_compatible_integer_type< RealIntegerType, CompatibleNumberIntegerType >", "structnlohmann_1_1detail_1_1is__compatible__integer__type.html", null ]
+      ] ],
+      [ "nlohmann::detail::is_compatible_object_type_impl< BasicJsonType, CompatibleObjectType >", "structnlohmann_1_1detail_1_1is__compatible__object__type__impl.html", [
+        [ "nlohmann::detail::is_compatible_object_type< BasicJsonType, CompatibleObjectType >", "structnlohmann_1_1detail_1_1is__compatible__object__type.html", null ]
+      ] ],
+      [ "nlohmann::detail::is_compatible_string_type_impl< BasicJsonType, ConstructibleStringType >", "structnlohmann_1_1detail_1_1is__compatible__string__type__impl.html", [
+        [ "nlohmann::detail::is_compatible_string_type< BasicJsonType, ConstructibleStringType >", "structnlohmann_1_1detail_1_1is__compatible__string__type.html", null ]
+      ] ],
+      [ "nlohmann::detail::is_compatible_type_impl< BasicJsonType, CompatibleType >", "structnlohmann_1_1detail_1_1is__compatible__type__impl.html", [
+        [ "nlohmann::detail::is_compatible_type< BasicJsonType, CompatibleType >", "structnlohmann_1_1detail_1_1is__compatible__type.html", null ]
+      ] ],
+      [ "nlohmann::detail::is_constructible_array_type_impl< BasicJsonType, ConstructibleArrayType >", "structnlohmann_1_1detail_1_1is__constructible__array__type__impl.html", [
+        [ "nlohmann::detail::is_constructible_array_type< BasicJsonType, ConstructibleArrayType >", "structnlohmann_1_1detail_1_1is__constructible__array__type.html", null ]
+      ] ],
+      [ "nlohmann::detail::is_constructible_object_type_impl< BasicJsonType, ConstructibleObjectType >", "structnlohmann_1_1detail_1_1is__constructible__object__type__impl.html", [
+        [ "nlohmann::detail::is_constructible_object_type< BasicJsonType, ConstructibleObjectType >", "structnlohmann_1_1detail_1_1is__constructible__object__type.html", null ]
+      ] ],
+      [ "nlohmann::detail::is_constructible_string_type_impl< BasicJsonType, ConstructibleStringType >", "structnlohmann_1_1detail_1_1is__constructible__string__type__impl.html", [
+        [ "nlohmann::detail::is_constructible_string_type< BasicJsonType, ConstructibleStringType >", "structnlohmann_1_1detail_1_1is__constructible__string__type.html", null ]
+      ] ],
+      [ "nlohmann::detail::has_from_json< BasicJsonType, T, typename >", "structnlohmann_1_1detail_1_1has__from__json.html", null ],
+      [ "nlohmann::detail::has_non_default_from_json< BasicJsonType, T, typename >", "structnlohmann_1_1detail_1_1has__non__default__from__json.html", null ],
+      [ "nlohmann::detail::has_to_json< BasicJsonType, T, typename >", "structnlohmann_1_1detail_1_1has__to__json.html", null ],
+      [ "nlohmann::detail::is_basic_json< typename >", "structnlohmann_1_1detail_1_1is__basic__json.html", null ],
+      [ "nlohmann::detail::is_compatible_array_type_impl< BasicJsonType, CompatibleArrayType, typename >", "structnlohmann_1_1detail_1_1is__compatible__array__type__impl.html", null ],
+      [ "nlohmann::detail::is_compatible_integer_type_impl< RealIntegerType, CompatibleNumberIntegerType, typename >", "structnlohmann_1_1detail_1_1is__compatible__integer__type__impl.html", null ],
+      [ "nlohmann::detail::is_compatible_object_type_impl< BasicJsonType, CompatibleObjectType, typename >", "structnlohmann_1_1detail_1_1is__compatible__object__type__impl.html", null ],
+      [ "nlohmann::detail::is_compatible_string_type_impl< BasicJsonType, CompatibleStringType, typename >", "structnlohmann_1_1detail_1_1is__compatible__string__type__impl.html", null ],
+      [ "nlohmann::detail::is_compatible_type_impl< BasicJsonType, CompatibleType, typename >", "structnlohmann_1_1detail_1_1is__compatible__type__impl.html", null ],
+      [ "nlohmann::detail::is_complete_type< T, typename >", "structnlohmann_1_1detail_1_1is__complete__type.html", null ],
+      [ "nlohmann::detail::is_constructible_array_type_impl< BasicJsonType, ConstructibleArrayType, typename >", "structnlohmann_1_1detail_1_1is__constructible__array__type__impl.html", null ],
+      [ "nlohmann::detail::is_constructible_object_type_impl< BasicJsonType, ConstructibleObjectType, typename >", "structnlohmann_1_1detail_1_1is__constructible__object__type__impl.html", null ],
+      [ "nlohmann::detail::is_constructible_string_type_impl< BasicJsonType, ConstructibleStringType, typename >", "structnlohmann_1_1detail_1_1is__constructible__string__type__impl.html", null ],
+      [ "nlohmann::detail::is_constructible_tuple< T1, T2 >", "structnlohmann_1_1detail_1_1is__constructible__tuple.html", null ],
+      [ "nlohmann::detail::is_iterator_traits< T, typename >", "structnlohmann_1_1detail_1_1is__iterator__traits.html", null ]
+    ] ],
+    [ "nlohmann::detail::from_json_fn", "structnlohmann_1_1detail_1_1from__json__fn.html", null ],
+    [ "hal::FsmTransition", "structhal_1_1_fsm_transition.html", null ],
     [ "hal::GateEvent", "classhal_1_1_gate_event.html", null ],
     [ "hal::GateLibrary", "classhal_1_1_gate_library.html", null ],
-    [ "hal::GateLibraryParser", "classhal_1_1_gate_library_parser.html", null ],
-    [ "hal::GateLibraryWriter", "classhal_1_1_gate_library_writer.html", null ],
+    [ "hal::GateLibraryParser", "classhal_1_1_gate_library_parser.html", [
+      [ "hal::HGLParser", "classhal_1_1_h_g_l_parser.html", null ],
+      [ "hal::LibertyParser", "classhal_1_1_liberty_parser.html", null ]
+    ] ],
+    [ "hal::GateLibraryWriter", "classhal_1_1_gate_library_writer.html", [
+      [ "hal::HGLWriter", "classhal_1_1_h_g_l_writer.html", null ]
+    ] ],
     [ "hal::GateSelectEntry", "classhal_1_1_gate_select_entry.html", null ],
     [ "hal::GateType", "classhal_1_1_gate_type.html", null ],
     [ "hal::GateTypeComponent", "classhal_1_1_gate_type_component.html", [
@@ -77,22 +171,85 @@ var hierarchy =
     [ "hal::GraphShader", "classhal_1_1_graph_shader.html", [
       [ "hal::ModuleShader", "classhal_1_1_module_shader.html", null ]
     ] ],
+    [ "hal::dataflow::Grouping", "structhal_1_1dataflow_1_1_grouping.html", null ],
     [ "hal::Grouping", "classhal_1_1_grouping.html", null ],
     [ "hal::GroupingEvent", "classhal_1_1_grouping_event.html", null ],
     [ "hal::GroupingTableEntry", "classhal_1_1_grouping_table_entry.html", null ],
+    [ "nlohmann::detail::has_from_json< BasicJsonType, T, enable_if_t< not is_basic_json< T >::value > >", "structnlohmann_1_1detail_1_1has__from__json_3_01_basic_json_type_00_01_t_00_01enable__if__t_3_01e29213c543deddccc314d19cbaf9f3b4.html", null ],
+    [ "nlohmann::detail::has_non_default_from_json< BasicJsonType, T, enable_if_t< not is_basic_json< T >::value > >", "structnlohmann_1_1detail_1_1has__non__default__from__json_3_01_basic_json_type_00_01_t_00_01enab81bd4c814ac1146ff15f3f4636933207.html", null ],
+    [ "nlohmann::detail::has_to_json< BasicJsonType, T, enable_if_t< not is_basic_json< T >::value > >", "structnlohmann_1_1detail_1_1has__to__json_3_01_basic_json_type_00_01_t_00_01enable__if__t_3_01nob111e71d40e2273c290d1ce5c6a3b84f.html", null ],
     [ "subprocess::detail::has_type< F, T >", "structsubprocess_1_1detail_1_1has__type.html", null ],
     [ "subprocess::detail::has_type< F, param_pack< F, T... > >", "structsubprocess_1_1detail_1_1has__type_3_01_f_00_01param__pack_3_01_f_00_01_t_8_8_8_01_4_01_4.html", null ],
     [ "subprocess::detail::has_type< F, param_pack< H, T... > >", "structsubprocess_1_1detail_1_1has__type_3_01_f_00_01param__pack_3_01_h_00_01_t_8_8_8_01_4_01_4.html", null ],
     [ "subprocess::detail::has_type< F, param_pack<> >", "structsubprocess_1_1detail_1_1has__type_3_01_f_00_01param__pack_3_4_01_4.html", null ],
     [ "std::hash< hal::core_strings::CaseInsensitiveString >", "structstd_1_1hash_3_01hal_1_1core__strings_1_1_case_insensitive_string_01_4.html", null ],
+    [ "std::hash< nlohmann::json >", "structstd_1_1hash_3_01nlohmann_1_1json_01_4.html", null ],
     [ "hal::StandardGraphicsNet::HLine", "structhal_1_1_standard_graphics_net_1_1_h_line.html", null ],
+    [ "nlohmann::detail::index_sequence< Ints >", "structnlohmann_1_1detail_1_1index__sequence.html", null ],
+    [ "nlohmann::detail::index_sequence< 0 >", "structnlohmann_1_1detail_1_1index__sequence.html", [
+      [ "nlohmann::detail::make_index_sequence< 1 >", "structnlohmann_1_1detail_1_1make__index__sequence_3_011_01_4.html", null ]
+    ] ],
+    [ "nlohmann::detail::index_sequence< I1...,(sizeof...(I1)+I2)... >", "structnlohmann_1_1detail_1_1index__sequence.html", [
+      [ "nlohmann::detail::merge_and_renumber< index_sequence< I1... >, index_sequence< I2... > >", "structnlohmann_1_1detail_1_1merge__and__renumber_3_01index__sequence_3_01_i1_8_8_8_01_4_00_01indf5ec8c9c7b5107e4b381e3ca4c1be2ca.html", null ]
+    ] ],
+    [ "nlohmann::detail::index_sequence<>", "structnlohmann_1_1detail_1_1index__sequence.html", [
+      [ "nlohmann::detail::make_index_sequence< 0 >", "structnlohmann_1_1detail_1_1make__index__sequence_3_010_01_4.html", null ]
+    ] ],
     [ "subprocess::input", "structsubprocess_1_1input.html", null ],
+    [ "nlohmann::detail::input_adapter", "classnlohmann_1_1detail_1_1input__adapter.html", null ],
+    [ "nlohmann::detail::input_adapter_protocol", "structnlohmann_1_1detail_1_1input__adapter__protocol.html", [
+      [ "nlohmann::detail::file_input_adapter", "classnlohmann_1_1detail_1_1file__input__adapter.html", null ],
+      [ "nlohmann::detail::input_buffer_adapter", "classnlohmann_1_1detail_1_1input__buffer__adapter.html", null ],
+      [ "nlohmann::detail::input_stream_adapter", "classnlohmann_1_1detail_1_1input__stream__adapter.html", null ],
+      [ "nlohmann::detail::wide_string_input_adapter< WideStringType >", "classnlohmann_1_1detail_1_1wide__string__input__adapter.html", null ]
+    ] ],
+    [ "integral_constant", null, [
+      [ "std::tuple_size<::nlohmann::detail::iteration_proxy_value< IteratorType > >", "classstd_1_1tuple__size_3_1_1nlohmann_1_1detail_1_1iteration__proxy__value_3_01_iterator_type_01_4_01_4.html", null ]
+    ] ],
+    [ "nlohmann::detail::internal_iterator< BasicJsonType >", "structnlohmann_1_1detail_1_1internal__iterator.html", null ],
+    [ "nlohmann::detail::internal_iterator< typename std::remove_const< BasicJsonType >::type >", "structnlohmann_1_1detail_1_1internal__iterator.html", null ],
+    [ "nlohmann::detail::is_compatible_array_type_impl< BasicJsonType, CompatibleArrayType, enable_if_t< is_detected< value_type_t, CompatibleArrayType >::value and is_detected< iterator_t, CompatibleArrayType >::value and not is_iterator_traits< iterator_traits< CompatibleArrayType > >::value > >", "structnlohmann_1_1detail_1_1is__compatible__array__type__impl_3_01_basic_json_type_00_01_compati04c4671a9fa75002365be1949a74f972.html", null ],
+    [ "nlohmann::detail::is_compatible_integer_type_impl< RealIntegerType, CompatibleNumberIntegerType, enable_if_t< std::is_integral< RealIntegerType >::value and std::is_integral< CompatibleNumberIntegerType >::value and not std::is_same< bool, CompatibleNumberIntegerType >::value > >", "structnlohmann_1_1detail_1_1is__compatible__integer__type__impl_3_01_real_integer_type_00_01_com5aa74bcf254245a639da00509f4d2655.html", null ],
+    [ "nlohmann::detail::is_compatible_object_type_impl< BasicJsonType, CompatibleObjectType, enable_if_t< is_detected< mapped_type_t, CompatibleObjectType >::value and is_detected< key_type_t, CompatibleObjectType >::value > >", "structnlohmann_1_1detail_1_1is__compatible__object__type__impl_3_01_basic_json_type_00_01_compatfbe9a153c4ecce445c98bbdd2d65f605.html", null ],
+    [ "nlohmann::detail::is_compatible_string_type_impl< BasicJsonType, CompatibleStringType, enable_if_t< is_detected_exact< typename BasicJsonType::string_t::value_type, value_type_t, CompatibleStringType >::value > >", "structnlohmann_1_1detail_1_1is__compatible__string__type__impl_3_01_basic_json_type_00_01_compat6590904cab40fc73f430e4c7518179a2.html", null ],
+    [ "nlohmann::detail::is_compatible_type_impl< BasicJsonType, CompatibleType, enable_if_t< is_complete_type< CompatibleType >::value > >", "structnlohmann_1_1detail_1_1is__compatible__type__impl_3_01_basic_json_type_00_01_compatible_typ632bee7ec037fc0233f1bbe9dd7d8874.html", null ],
+    [ "nlohmann::detail::is_constructible_array_type_impl< BasicJsonType, ConstructibleArrayType, enable_if_t< not std::is_same< ConstructibleArrayType, typename BasicJsonType::value_type >::value and std::is_default_constructible< ConstructibleArrayType >::value and(std::is_move_assignable< ConstructibleArrayType >::value or std::is_copy_assignable< ConstructibleArrayType >::value) andis_detected< value_type_t, ConstructibleArrayType >::value andis_detected< iterator_t, ConstructibleArrayType >::value andis_complete_type< detected_t< value_type_t, ConstructibleArrayType > >::value > >", "structnlohmann_1_1detail_1_1is__constructible__array__type__impl_3_01_basic_json_type_00_01_cons437c79c936c626a4ffcf289ee9218c26.html", null ],
+    [ "nlohmann::detail::is_constructible_object_type_impl< BasicJsonType, ConstructibleObjectType, enable_if_t< is_detected< mapped_type_t, ConstructibleObjectType >::value and is_detected< key_type_t, ConstructibleObjectType >::value > >", "structnlohmann_1_1detail_1_1is__constructible__object__type__impl_3_01_basic_json_type_00_01_con6e3270de8050717120afcafe87648413.html", null ],
+    [ "nlohmann::detail::is_constructible_string_type_impl< BasicJsonType, ConstructibleStringType, enable_if_t< is_detected_exact< typename BasicJsonType::string_t::value_type, value_type_t, ConstructibleStringType >::value > >", "structnlohmann_1_1detail_1_1is__constructible__string__type__impl_3_01_basic_json_type_00_01_con83e8ebfe9593f851a60fdb8360df1512.html", null ],
+    [ "nlohmann::detail::is_iterator_traits< iterator_traits< T > >", "structnlohmann_1_1detail_1_1is__iterator__traits_3_01iterator__traits_3_01_t_01_4_01_4.html", null ],
+    [ "nlohmann::detail::is_sax< SAX, BasicJsonType >", "structnlohmann_1_1detail_1_1is__sax.html", null ],
+    [ "nlohmann::detail::is_sax_static_asserts< SAX, BasicJsonType >", "structnlohmann_1_1detail_1_1is__sax__static__asserts.html", null ],
+    [ "nlohmann::detail::iter_impl< BasicJsonType >", "classnlohmann_1_1detail_1_1iter__impl.html", null ],
+    [ "nlohmann::detail::iteration_proxy< IteratorType >", "classnlohmann_1_1detail_1_1iteration__proxy.html", null ],
+    [ "nlohmann::detail::iteration_proxy_value< IteratorType >", "classnlohmann_1_1detail_1_1iteration__proxy__value.html", null ],
+    [ "nlohmann::detail::iterator_traits< T, typename >", "structnlohmann_1_1detail_1_1iterator__traits.html", null ],
+    [ "nlohmann::detail::iterator_traits< T *, enable_if_t< std::is_object< T >::value > >", "structnlohmann_1_1detail_1_1iterator__traits_3_01_t_01_5_00_01enable__if__t_3_01std_1_1is__objec8d960665487688165530972cda4f1bea.html", null ],
+    [ "nlohmann::detail::iterator_types< It, typename >", "structnlohmann_1_1detail_1_1iterator__types.html", null ],
+    [ "nlohmann::detail::iterator_types< It, void_t< typename It::difference_type, typename It::value_type, typename It::pointer, typename It::reference, typename It::iterator_category > >", "structnlohmann_1_1detail_1_1iterator__types_3_01_it_00_01void__t_3_01typename_01_it_1_1differenc4a413e9bd546446175f10f15c5631361.html", null ],
+    [ "nlohmann::detail::iterator_types< T >", "structnlohmann_1_1detail_1_1iterator__types.html", [
+      [ "nlohmann::detail::iterator_traits< T, enable_if_t< !std::is_pointer< T >::value > >", "structnlohmann_1_1detail_1_1iterator__traits_3_01_t_00_01enable__if__t_3_01_9std_1_1is__pointer_3_01_t_01_4_1_1value_01_4_01_4.html", null ]
+    ] ],
+    [ "nlohmann::json_pointer< BasicJsonType >", "classnlohmann_1_1json__pointer.html", null ],
+    [ "nlohmann::detail::json_ref< BasicJsonType >", "classnlohmann_1_1detail_1_1json__ref.html", null ],
+    [ "nlohmann::json_sax< BasicJsonType >", "structnlohmann_1_1json__sax.html", null ],
+    [ "nlohmann::detail::json_sax_acceptor< BasicJsonType >", "classnlohmann_1_1detail_1_1json__sax__acceptor.html", null ],
+    [ "nlohmann::detail::json_sax_dom_callback_parser< BasicJsonType >", "classnlohmann_1_1detail_1_1json__sax__dom__callback__parser.html", null ],
+    [ "nlohmann::detail::json_sax_dom_parser< BasicJsonType >", "classnlohmann_1_1detail_1_1json__sax__dom__parser.html", null ],
     [ "hal::LayoutLocker", "classhal_1_1_layout_locker.html", null ],
     [ "hal::LayoutLockerManager", "classhal_1_1_layout_locker_manager.html", null ],
+    [ "std::less<::nlohmann::detail::value_t >", "structstd_1_1less_3_1_1nlohmann_1_1detail_1_1value__t_01_4.html", null ],
+    [ "nlohmann::detail::lexer< BasicJsonType >", "classnlohmann_1_1detail_1_1lexer.html", null ],
     [ "hal::StandardGraphicsNet::Lines", "structhal_1_1_standard_graphics_net_1_1_lines.html", null ],
     [ "hal::LogManager::log_sink", "structhal_1_1_log_manager_1_1log__sink.html", null ],
     [ "hal::LoggerSettings", "structhal_1_1_logger_settings.html", null ],
     [ "hal::LogManager", "classhal_1_1_log_manager.html", null ],
+    [ "nlohmann::detail::make_void< Ts >", "structnlohmann_1_1detail_1_1make__void.html", null ],
+    [ "hal::dataflow::measure_block_time_t", "classhal_1_1dataflow_1_1measure__block__time__t.html", null ],
+    [ "hal::measure_block_time_t", "classhal_1_1measure__block__time__t.html", null ],
+    [ "nlohmann::detail::merge_and_renumber< Sequence1, Sequence2 >", "structnlohmann_1_1detail_1_1merge__and__renumber.html", null ],
+    [ "nlohmann::detail::merge_and_renumber< make_index_sequence< N/2 >::type, make_index_sequence< N - N/2 >::type >", "structnlohmann_1_1detail_1_1merge__and__renumber.html", [
+      [ "nlohmann::detail::make_index_sequence< N >", "structnlohmann_1_1detail_1_1make__index__sequence.html", null ]
+    ] ],
     [ "hal::SMT::Model", "structhal_1_1_s_m_t_1_1_model.html", null ],
     [ "hal::ModuleEvent", "classhal_1_1_module_event.html", null ],
     [ "hal::ModuleItem", "classhal_1_1_module_item.html", null ],
@@ -111,10 +268,17 @@ var hierarchy =
     [ "hal::NetLayoutMetric", "classhal_1_1_net_layout_metric.html", null ],
     [ "hal::NetLayoutWire", "classhal_1_1_net_layout_wire.html", null ],
     [ "hal::Netlist", "classhal_1_1_netlist.html", null ],
+    [ "hal::dataflow::NetlistAbstraction", "structhal_1_1dataflow_1_1_netlist_abstraction.html", null ],
     [ "hal::NetlistEvent", "classhal_1_1_netlist_event.html", null ],
     [ "hal::NetlistInternalManager", "classhal_1_1_netlist_internal_manager.html", null ],
-    [ "hal::NetlistParser", "classhal_1_1_netlist_parser.html", null ],
-    [ "hal::NetlistWriter", "classhal_1_1_netlist_writer.html", null ],
+    [ "hal::NetlistParser", "classhal_1_1_netlist_parser.html", [
+      [ "hal::VerilogParser", "classhal_1_1_verilog_parser.html", null ],
+      [ "hal::VHDLParser", "classhal_1_1_v_h_d_l_parser.html", null ]
+    ] ],
+    [ "hal::NetlistSimulator", "classhal_1_1_netlist_simulator.html", null ],
+    [ "hal::NetlistWriter", "classhal_1_1_netlist_writer.html", [
+      [ "hal::VerilogWriter", "classhal_1_1_verilog_writer.html", null ]
+    ] ],
     [ "hal::BooleanFunction::Node", "structhal_1_1_boolean_function_1_1_node.html", [
       [ "hal::BooleanFunction::OperandNode", "structhal_1_1_boolean_function_1_1_operand_node.html", null ],
       [ "hal::BooleanFunction::OperationNode", "structhal_1_1_boolean_function_1_1_operation_node.html", null ]
@@ -122,16 +286,31 @@ var hierarchy =
     [ "hal::Node", "classhal_1_1_node.html", null ],
     [ "hal::NodeBox", "classhal_1_1_node_box.html", null ],
     [ "hal::BooleanFunction::NodeType", "structhal_1_1_boolean_function_1_1_node_type.html", null ],
+    [ "nlohmann::detail::nonesuch", "structnlohmann_1_1detail_1_1nonesuch.html", null ],
     [ "subprocess::output", "structsubprocess_1_1output.html", null ],
+    [ "nlohmann::detail::output_adapter< CharType, StringType >", "classnlohmann_1_1detail_1_1output__adapter.html", null ],
+    [ "nlohmann::detail::output_adapter_protocol< CharType >", "structnlohmann_1_1detail_1_1output__adapter__protocol.html", [
+      [ "nlohmann::detail::output_stream_adapter< CharType >", "classnlohmann_1_1detail_1_1output__stream__adapter.html", null ],
+      [ "nlohmann::detail::output_string_adapter< CharType, StringType >", "classnlohmann_1_1detail_1_1output__string__adapter.html", null ],
+      [ "nlohmann::detail::output_vector_adapter< CharType >", "classnlohmann_1_1detail_1_1output__vector__adapter.html", null ]
+    ] ],
     [ "subprocess::detail::param_pack< T >", "structsubprocess_1_1detail_1_1param__pack.html", null ],
+    [ "nlohmann::detail::parser< BasicJsonType >", "classnlohmann_1_1detail_1_1parser.html", null ],
     [ "hal::SMT::ModelParser::ParserContext", "structhal_1_1_s_m_t_1_1_model_parser_1_1_parser_context.html", null ],
+    [ "hal::dataflow::processing::PassConfiguration", "structhal_1_1dataflow_1_1processing_1_1_pass_configuration.html", null ],
     [ "hal::PlacementEntry", "classhal_1_1_placement_entry.html", null ],
     [ "hal::PlacementHint", "classhal_1_1_placement_hint.html", null ],
     [ "subprocess::Popen", "classsubprocess_1_1_popen.html", null ],
+    [ "hal::NetlistSimulator::SimulationGateRAM::Port", "structhal_1_1_netlist_simulator_1_1_simulation_gate_r_a_m_1_1_port.html", null ],
+    [ "nlohmann::detail::position_t", "structnlohmann_1_1detail_1_1position__t.html", null ],
     [ "hal::PositionGenerator", "classhal_1_1_position_generator.html", null ],
     [ "subprocess::preexec_func", "classsubprocess_1_1preexec__func.html", null ],
+    [ "nlohmann::detail::primitive_iterator_t", "classnlohmann_1_1detail_1_1primitive__iterator__t.html", null ],
+    [ "nlohmann::detail::priority_tag< N >", "structnlohmann_1_1detail_1_1priority__tag.html", null ],
+    [ "nlohmann::detail::priority_tag< 0 >", "structnlohmann_1_1detail_1_1priority__tag_3_010_01_4.html", null ],
     [ "hal::ProgramArguments", "classhal_1_1_program_arguments.html", null ],
     [ "hal::ProgramOptions", "classhal_1_1_program_options.html", null ],
+    [ "hal::dataflow::progress_printer", "classhal_1_1dataflow_1_1progress__printer.html", null ],
     [ "hal::PythonConsoleHistory", "classhal_1_1_python_console_history.html", null ],
     [ "hal::PythonContextSubscriber", "classhal_1_1_python_context_subscriber.html", [
       [ "hal::PythonConsole", "classhal_1_1_python_console.html", null ],
@@ -424,7 +603,12 @@ var hierarchy =
       [ "hal::NodeBoxes", "classhal_1_1_node_boxes.html", null ]
     ] ],
     [ "hal::utils::RecursiveDirectoryRange", "classhal_1_1utils_1_1_recursive_directory_range.html", null ],
+    [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
+    [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
     [ "hal::SMT::Result", "structhal_1_1_s_m_t_1_1_result.html", null ],
+    [ "reverse_iterator", null, [
+      [ "nlohmann::detail::json_reverse_iterator< Base >", "classnlohmann_1_1detail_1_1json__reverse__iterator.html", null ]
+    ] ],
     [ "runtime_error", null, [
       [ "subprocess::CalledProcessError", "classsubprocess_1_1_called_process_error.html", null ],
       [ "subprocess::OSError", "classsubprocess_1_1_o_s_error.html", null ]
@@ -437,18 +621,47 @@ var hierarchy =
       ] ],
       [ "hal::SelectionTreeItemNet", "classhal_1_1_selection_tree_item_net.html", null ]
     ] ],
+    [ "nlohmann::detail::serializer< BasicJsonType >", "classnlohmann_1_1detail_1_1serializer.html", null ],
     [ "subprocess::session_leader", "structsubprocess_1_1session__leader.html", null ],
     [ "hal::GraphShader::Shading", "structhal_1_1_graph_shader_1_1_shading.html", null ],
     [ "subprocess::shell", "structsubprocess_1_1shell.html", null ],
+    [ "hal::Simulation", "classhal_1_1_simulation.html", null ],
     [ "hal::SMT::Solver", "classhal_1_1_s_m_t_1_1_solver.html", null ],
+    [ "nlohmann::detail::static_const< T >", "structnlohmann_1_1detail_1_1static__const.html", null ],
     [ "subprocess::detail::Streams", "classsubprocess_1_1detail_1_1_streams.html", null ],
     [ "subprocess::string_arg", "structsubprocess_1_1string__arg.html", [
       [ "subprocess::cwd", "structsubprocess_1_1cwd.html", null ],
       [ "subprocess::executable", "structsubprocess_1_1executable.html", null ]
     ] ],
+    [ "Test", null, [
+      [ "hal::HGLParserTest", "classhal_1_1_h_g_l_parser_test.html", null ],
+      [ "hal::HGLWriterTest", "classhal_1_1_h_g_l_writer_test.html", null ],
+      [ "hal::LibertyParserTest", "classhal_1_1_liberty_parser_test.html", null ],
+      [ "hal::SimulatorTest", "classhal_1_1_simulator_test.html", null ],
+      [ "hal::VerilogParserTest", "classhal_1_1_verilog_parser_test.html", null ],
+      [ "hal::VerilogWriterTest", "classhal_1_1_verilog_writer_test.html", null ],
+      [ "hal::VHDLParserTest", "classhal_1_1_v_h_d_l_parser_test.html", null ]
+    ] ],
+    [ "TESTB< VA >", "class_t_e_s_t_b.html", null ],
+    [ "nlohmann::detail::to_json_fn", "structnlohmann_1_1detail_1_1to__json__fn.html", null ],
     [ "hal::Token< T >", "structhal_1_1_token.html", null ],
     [ "hal::TokenStream< T >", "classhal_1_1_token_stream.html", null ],
+    [ "hal::TokenStream< ci_string >", "classhal_1_1_token_stream.html", null ],
+    [ "hal::TokenStream< std::string >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< T >::TokenStreamException", "structhal_1_1_token_stream_1_1_token_stream_exception.html", null ],
+    [ "true_type", null, [
+      [ "nlohmann::detail::conjunction< std::is_constructible< T1, Args >... >", "structnlohmann_1_1detail_1_1conjunction.html", [
+        [ "nlohmann::detail::is_constructible_tuple< T1, std::tuple< Args... > >", "structnlohmann_1_1detail_1_1is__constructible__tuple_3_01_t1_00_01std_1_1tuple_3_01_args_8_8_8_01_4_01_4.html", null ]
+      ] ],
+      [ "nlohmann::detail::conjunction<... >", "structnlohmann_1_1detail_1_1conjunction.html", null ],
+      [ "nlohmann::detail::is_basic_json< basic_json< ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer > >", "structnlohmann_1_1detail_1_1is__basic__json_3_01basic__json_3_01_object_type_00_01_array_type_0003b7300f70a161f2a79dcaaba1e567bb.html", null ],
+      [ "nlohmann::detail::is_complete_type< T, decltype(void(sizeof(T)))>", "structnlohmann_1_1detail_1_1is__complete__type_3_01_t_00_01decltype_07void_07sizeof_07_t_08_08_08_4.html", null ],
+      [ "nlohmann::detail::is_constructible_array_type_impl< BasicJsonType, ConstructibleArrayType, enable_if_t< std::is_same< ConstructibleArrayType, typename BasicJsonType::value_type >::value > >", "structnlohmann_1_1detail_1_1is__constructible__array__type__impl_3_01_basic_json_type_00_01_cons8cf88e17d5eaa68665a8fb4b97604b0e.html", null ]
+    ] ],
+    [ "std::tuple_element< N, ::nlohmann::detail::iteration_proxy_value< IteratorType > >", "classstd_1_1tuple__element_3_01_n_00_01_1_1nlohmann_1_1detail_1_1iteration__proxy__value_3_01_iterator_type_01_4_01_4.html", null ],
+    [ "type", null, [
+      [ "nlohmann::detail::conjunction< B1, Bn... >", "structnlohmann_1_1detail_1_1conjunction_3_01_b1_00_01_bn_8_8_8_01_4.html", null ]
+    ] ],
     [ "hal::UserAction", "classhal_1_1_user_action.html", [
       [ "hal::ActionAddItemsToObject", "classhal_1_1_action_add_items_to_object.html", null ],
       [ "hal::ActionCreateObject", "classhal_1_1_action_create_object.html", null ],
@@ -486,8 +699,12 @@ var hierarchy =
       [ "hal::StackedValidator", "classhal_1_1_stacked_validator.html", null ],
       [ "hal::UniqueStringValidator", "classhal_1_1_unique_string_validator.html", null ]
     ] ],
+    [ "hal::VerilogModule", "structhal_1_1_verilog_module.html", null ],
+    [ "hal::VHDLEntity", "structhal_1_1_v_h_d_l_entity.html", null ],
     [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
     [ "hal::GraphicsNode::Visuals", "structhal_1_1_graphics_node_1_1_visuals.html", null ],
     [ "hal::StandardGraphicsNet::VLine", "structhal_1_1_standard_graphics_net_1_1_v_line.html", null ],
-    [ "hal::WaitToBeSeatedEntry", "classhal_1_1_wait_to_be_seated_entry.html", null ]
+    [ "hal::WaitToBeSeatedEntry", "classhal_1_1_wait_to_be_seated_entry.html", null ],
+    [ "nlohmann::detail::wide_string_input_helper< WideStringType, T >", "structnlohmann_1_1detail_1_1wide__string__input__helper.html", null ],
+    [ "nlohmann::detail::wide_string_input_helper< WideStringType, 2 >", "structnlohmann_1_1detail_1_1wide__string__input__helper_3_01_wide_string_type_00_012_01_4.html", null ]
 ];

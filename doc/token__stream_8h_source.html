@@ -213,7 +213,7 @@ $(document).ready(function(){initNavTree('token__stream_8h_source.html',''); ini
 <div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;            {</div>
 <div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;                <span class="keywordflow">if</span> (throw_on_error)</div>
 <div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;                {</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;                    <span class="keywordflow">throw</span> <a class="code" href="structhal_1_1_token_stream_1_1_token_stream_exception.html">TokenStreamException</a>({<span class="stringliteral">&quot;expected Token &#39;&quot;</span> + expected + <span class="stringliteral">&quot;&#39; but reached the end of the stream&quot;</span>, get_current_line_number()});</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;                    <span class="keywordflow">throw</span> TokenStreamException({<span class="stringliteral">&quot;expected Token &#39;&quot;</span> + expected + <span class="stringliteral">&quot;&#39; but reached the end of the stream&quot;</span>, get_current_line_number()});</div>
 <div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;                }</div>
 <div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;            }</div>
@@ -222,7 +222,7 @@ $(document).ready(function(){initNavTree('token__stream_8h_source.html',''); ini
 <div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;            {</div>
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;                <span class="keywordflow">if</span> (throw_on_error)</div>
 <div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;                {</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;                    <span class="keywordflow">throw</span> <a class="code" href="structhal_1_1_token_stream_1_1_token_stream_exception.html">TokenStreamException</a>({<span class="stringliteral">&quot;expected Token &#39;&quot;</span> + expected + <span class="stringliteral">&quot;&#39; but got &#39;&quot;</span> + at(m_pos).string + <span class="stringliteral">&quot;&#39;&quot;</span>, get_current_line_number()});</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;                    <span class="keywordflow">throw</span> TokenStreamException({<span class="stringliteral">&quot;expected Token &#39;&quot;</span> + expected + <span class="stringliteral">&quot;&#39; but got &#39;&quot;</span> + at(m_pos).string + <span class="stringliteral">&quot;&#39;&quot;</span>, get_current_line_number()});</div>
 <div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;                }</div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;            }</div>
@@ -236,7 +236,7 @@ $(document).ready(function(){initNavTree('token__stream_8h_source.html',''); ini
 <div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;            <span class="keyword">auto</span> found = find_next(expected, end, level_aware);</div>
 <div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;            <span class="keywordflow">if</span> (found &gt; size() &amp;&amp; throw_on_error)</div>
 <div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;            {</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;                <span class="keywordflow">throw</span> <a class="code" href="structhal_1_1_token_stream_1_1_token_stream_exception.html">TokenStreamException</a>({<span class="stringliteral">&quot;expected Token &#39;&quot;</span> + expected + <span class="stringliteral">&quot;&#39; not found&quot;</span>, get_current_line_number()});</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;                <span class="keywordflow">throw</span> TokenStreamException({<span class="stringliteral">&quot;expected Token &#39;&quot;</span> + expected + <span class="stringliteral">&quot;&#39; not found&quot;</span>, get_current_line_number()});</div>
 <div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;            }</div>
 <div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;            m_pos = std::min(size(), found);</div>
 <div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;            <span class="keywordflow">return</span> at(m_pos - 1);</div>
@@ -260,7 +260,7 @@ $(document).ready(function(){initNavTree('token__stream_8h_source.html',''); ini
 <div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;            <span class="keyword">auto</span> found = find_next(expected, end, level_aware);</div>
 <div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;            <span class="keywordflow">if</span> (found &gt; size() &amp;&amp; throw_on_error)</div>
 <div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;            {</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;                <span class="keywordflow">throw</span> <a class="code" href="structhal_1_1_token_stream_1_1_token_stream_exception.html">TokenStreamException</a>({<span class="stringliteral">&quot;expected Token &#39;&quot;</span> + expected + <span class="stringliteral">&quot;&#39; not found&quot;</span>, get_current_line_number()});</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;                <span class="keywordflow">throw</span> TokenStreamException({<span class="stringliteral">&quot;expected Token &#39;&quot;</span> + expected + <span class="stringliteral">&quot;&#39; not found&quot;</span>, get_current_line_number()});</div>
 <div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;            }</div>
 <div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;            <span class="keyword">auto</span> end_pos = std::min(size(), found);</div>
 <div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;            <a class="code" href="classhal_1_1_token_stream.html">TokenStream</a> res(m_increase_level_tokens, m_decrease_level_tokens);</div>
@@ -276,7 +276,7 @@ $(document).ready(function(){initNavTree('token__stream_8h_source.html',''); ini
 <div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;            <span class="keyword">auto</span> found     = find_next(match, end, level_aware);</div>
 <div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;            <span class="keywordflow">if</span> (found &gt; size() &amp;&amp; throw_on_error)</div>
 <div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;            {</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;                <span class="keywordflow">throw</span> <a class="code" href="structhal_1_1_token_stream_1_1_token_stream_exception.html">TokenStreamException</a>({<span class="stringliteral">&quot;match Token &#39;&quot;</span> + match + <span class="stringliteral">&quot;&#39; not found&quot;</span>, start_line});</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;                <span class="keywordflow">throw</span> TokenStreamException({<span class="stringliteral">&quot;match Token &#39;&quot;</span> + match + <span class="stringliteral">&quot;&#39; not found&quot;</span>, start_line});</div>
 <div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;            }</div>
 <div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;            <span class="keyword">auto</span> end_pos = std::min(size(), found);</div>
 <div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;            <a class="code" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">T</a> result;</div>
@@ -320,7 +320,7 @@ $(document).ready(function(){initNavTree('token__stream_8h_source.html',''); ini
 <div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;        {</div>
 <div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;            <span class="keywordflow">if</span> (position &gt;= m_data.size())</div>
 <div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;            {</div>
-<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;                <span class="keywordflow">throw</span> <a class="code" href="structhal_1_1_token_stream_1_1_token_stream_exception.html">TokenStreamException</a>({<span class="stringliteral">&quot;reached the end of the stream&quot;</span>, get_current_line_number()});</div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;                <span class="keywordflow">throw</span> TokenStreamException({<span class="stringliteral">&quot;reached the end of the stream&quot;</span>, get_current_line_number()});</div>
 <div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;            }</div>
 <div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;            <span class="keywordflow">return</span> m_data[position];</div>
 <div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;        }</div>
@@ -329,7 +329,7 @@ $(document).ready(function(){initNavTree('token__stream_8h_source.html',''); ini
 <div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;<span class="keyword">        </span>{</div>
 <div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;            <span class="keywordflow">if</span> (position &gt;= m_data.size())</div>
 <div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;            {</div>
-<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;                <span class="keywordflow">throw</span> <a class="code" href="structhal_1_1_token_stream_1_1_token_stream_exception.html">TokenStreamException</a>({<span class="stringliteral">&quot;reached the end of the stream&quot;</span>, get_current_line_number()});</div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;                <span class="keywordflow">throw</span> TokenStreamException({<span class="stringliteral">&quot;reached the end of the stream&quot;</span>, get_current_line_number()});</div>
 <div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;            }</div>
 <div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;            <span class="keywordflow">return</span> m_data[position];</div>
 <div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;        }</div>
@@ -448,7 +448,7 @@ $(document).ready(function(){initNavTree('token__stream_8h_source.html',''); ini
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_8cff0e4740b4a22580dd05764b73d449.html">utilities</a></li><li class="navelem"><a class="el" href="token__stream_8h.html">token_stream.h</a></li>
-    <li class="footer">Generated on Mon Apr 11 2022 13:34:42 for HAL by
+    <li class="footer">Generated on Tue Apr 19 2022 13:11:29 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

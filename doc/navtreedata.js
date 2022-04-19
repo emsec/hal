@@ -23,31 +23,31 @@ for the JavaScript code in this file
 var NAVTREE =
 [
   [ "HAL", "index.html", [
-    [ "Welcome to HAL!", "index.html#autotoc_md9", null ],
-    [ "Navigation", "index.html#autotoc_md10", [
-      [ "What the hell is HAL?", "index.html#autotoc_md11", null ],
-      [ "Shipped Plugins", "index.html#autotoc_md12", null ],
-      [ "Documentation", "index.html#autotoc_md13", null ],
-      [ "Slack, Contact and Support", "index.html#autotoc_md14", null ]
+    [ "Welcome to HAL!", "index.html#autotoc_md44", null ],
+    [ "Navigation", "index.html#autotoc_md45", [
+      [ "What the hell is HAL?", "index.html#autotoc_md46", null ],
+      [ "Shipped Plugins", "index.html#autotoc_md47", null ],
+      [ "Documentation", "index.html#autotoc_md48", null ],
+      [ "Slack, Contact and Support", "index.html#autotoc_md49", null ]
     ] ],
-    [ "Build Instructions", "index.html#autotoc_md15", [
-      [ "Ubuntu 20.04", "index.html#autotoc_md16", null ],
-      [ "macOS", "index.html#autotoc_md17", null ],
-      [ "Windows", "index.html#autotoc_md18", null ],
-      [ "CMake Options", "index.html#autotoc_md19", [
-        [ "Troubleshooting", "index.html#autotoc_md20", [
-          [ "pybind11 Trouble", "index.html#autotoc_md21", null ]
+    [ "Build Instructions", "index.html#autotoc_md50", [
+      [ "Ubuntu 20.04", "index.html#autotoc_md51", null ],
+      [ "macOS", "index.html#autotoc_md52", null ],
+      [ "Windows", "index.html#autotoc_md53", null ],
+      [ "CMake Options", "index.html#autotoc_md54", [
+        [ "Troubleshooting", "index.html#autotoc_md55", [
+          [ "pybind11 Trouble", "index.html#autotoc_md56", null ]
         ] ]
       ] ]
     ] ],
-    [ "Quickstart Guide", "index.html#autotoc_md22", null ],
-    [ "Contributing", "index.html#autotoc_md23", [
-      [ "Run static checks and clang format locally", "index.html#autotoc_md24", null ],
-      [ "Generate Changelog", "index.html#autotoc_md25", null ]
+    [ "Quickstart Guide", "index.html#autotoc_md57", null ],
+    [ "Contributing", "index.html#autotoc_md58", [
+      [ "Run static checks and clang format locally", "index.html#autotoc_md59", null ],
+      [ "Generate Changelog", "index.html#autotoc_md60", null ]
     ] ],
-    [ "Academic Context", "index.html#autotoc_md26", null ],
-    [ "Licensing", "index.html#autotoc_md27", null ],
-    [ "Disclaimer", "index.html#autotoc_md28", null ],
+    [ "Academic Context", "index.html#autotoc_md61", null ],
+    [ "Licensing", "index.html#autotoc_md62", null ],
+    [ "Disclaimer", "index.html#autotoc_md63", null ],
     [ "LICENSE", "md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html", [
       [ "SIL Open Font License v1.1", "md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html#autotoc_md4", [
         [ "Preamble", "md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html#autotoc_md5", null ],
@@ -55,6 +55,18 @@ var NAVTREE =
         [ "Permission & Conditions", "md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html#autotoc_md7", null ],
         [ "Termination", "md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html#autotoc_md8", null ]
       ] ]
+    ] ],
+    [ "Dataflow Analysis (DANA)", "md__home_runner_work_hal_hal_plugins_dataflow_analysis__r_e_a_d_m_e.html", [
+      [ "Running the plugin", "md__home_runner_work_hal_hal_plugins_dataflow_analysis__r_e_a_d_m_e.html#autotoc_md35", null ],
+      [ "Recreating the paper results", "md__home_runner_work_hal_hal_plugins_dataflow_analysis__r_e_a_d_m_e.html#autotoc_md36", null ],
+      [ "Want to create your own pass?", "md__home_runner_work_hal_hal_plugins_dataflow_analysis__r_e_a_d_m_e.html#autotoc_md37", null ],
+      [ "Future Plans", "md__home_runner_work_hal_hal_plugins_dataflow_analysis__r_e_a_d_m_e.html#autotoc_md38", null ],
+      [ "Get in touch", "md__home_runner_work_hal_hal_plugins_dataflow_analysis__r_e_a_d_m_e.html#autotoc_md39", null ],
+      [ "Directory Overview", "md__home_runner_work_hal_hal_plugins_dataflow_analysis__r_e_a_d_m_e.html#autotoc_md40", null ]
+    ] ],
+    [ "Netlist Simulator Plugin", "md__home_runner_work_hal_hal_plugins_netlist_simulator_readme.html", [
+      [ "Quickstart Guide", "md__home_runner_work_hal_hal_plugins_netlist_simulator_readme.html#autotoc_md42", null ],
+      [ "Known Issues / TODOs", "md__home_runner_work_hal_hal_plugins_netlist_simulator_readme.html#autotoc_md43", null ]
     ] ],
     [ "Deprecated List", "deprecated.html", null ],
     [ "Modules", "modules.html", "modules" ],
@@ -87,7 +99,7 @@ var NAVTREE =
     [ "Files", "files.html", [
       [ "File List", "files.html", "files_dup" ],
       [ "File Members", "globals.html", [
-        [ "All", "globals.html", null ],
+        [ "All", "globals.html", "globals_dup" ],
         [ "Functions", "globals_func.html", null ],
         [ "Variables", "globals_vars.html", null ],
         [ "Typedefs", "globals_type.html", null ],
@@ -100,29 +112,40 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "about__dialog_8cpp.html",
-"classhal_1_1_action_unfold_module_factory.html#a05fb3ca9167b5e8b15988330959c40e3",
-"classhal_1_1_content_widget.html#a4c6a567e4b2c6b1bab14e328999f8bce",
-"classhal_1_1_event_handler.html",
-"classhal_1_1_gate_type.html#a3ba546749f9e5d47c5ec0ec94afaf8cd",
-"classhal_1_1_graph_layouter.html#a5691840af28d6c8fd39fa1dccbff5ca2",
-"classhal_1_1_grouping.html#ad253f42f616ed52a57d9384385e1155f",
-"classhal_1_1_latch_component.html#a34c3ac8011c0ce4534c33ba1cd3f08e7",
-"classhal_1_1_module.html#a370196feae56179863816e89fbb5ceb9",
-"classhal_1_1_net_layout_connection_factory.html#a3487f02ccfc043bb7af7124ee7cde998",
-"classhal_1_1_netlist_parser.html#aee94aac1a2d93608e5a283931dd931df",
-"classhal_1_1_python_console_history.html#add8d28f16071f60c44d2f91a70e27fbf",
-"classhal_1_1_searchbar.html#ab01ebf92f7d0597e6db933c357892fc4",
-"classhal_1_1_settings_item_dropdown.html",
-"classhal_1_1_toolbar.html#af19289b807b4ce3d19d464b6a74cf033",
-"content__layout__area_8h.html#a5183c9d870930c09f0bff0a061797b45",
-"dock__bar_8cpp_source.html",
-"gatelibrary__table__view_8cpp_source.html",
-"hal__file__manager_8cpp.html#a21e15d2eb9ddbc3e429a5df8bafda532",
-"namespaces.html",
-"plugin__interface__base_8h.html#a10e7df18d8a816af76f947453883ff42",
-"searchbar_8h_source.html",
-"structhal_1_1_graphics_module_1_1_module_pin.html#a7d48bfe8c1ccb6d8a2c375f1b937f350",
-"utils_8cpp.html#a7b4623be57665e39318991c7344de89d"
+"classhal_1_1_action_delete_object_factory.html#ae711a60ceacbe8f731344bc89d024be9",
+"classhal_1_1_code_editor.html#a5d246f0934a424a0ffb4f0c78941a0af",
+"classhal_1_1_details_general_model_entry.html#a55551bdee71c38d6492dce3f0d2c84f4",
+"classhal_1_1_gate.html#adbd389b40d0f3bbcc8ebdcf46b3a28d0",
+"classhal_1_1_graph_context.html#a65460fd497821ff48e6106590a71bb83",
+"classhal_1_1_graphics_node.html#a4ce794805fad439ac26dd10210a67dba",
+"classhal_1_1_gui_api.html",
+"classhal_1_1_logger_widget.html#a5d80ab99a06b9cf52308589c0c014f18",
+"classhal_1_1_module_model.html#a37147ee3ccd0f7401622dd6a8337dc4d",
+"classhal_1_1_net_layout_junction_wire_intersection.html",
+"classhal_1_1_node.html#adacd3a9d2917a4d6761653f840e72d86",
+"classhal_1_1_python_editor.html#a8b3df58d6af4128a4b7e8db578fe9635",
+"classhal_1_1_selection_relay.html#a5024fcd32bdf07e0b8fced9b915b559a",
+"classhal_1_1_settings_widget.html#a79a1427162e26fc692bac65e045530c3",
+"classhal_1_1_user_action_manager.html#a7ded721ef7419eca338d8cc794a67c7e",
+"classnlohmann_1_1basic__json.html#a9d55e3e63b05e03a2b70cea3761f84cb",
+"classnlohmann_1_1detail_1_1json__sax__dom__callback__parser.html#af1ce6c746e3ebadb7994170725fcdbb5",
+"classsha__256__core.html#a26afc7f397c9644f35792c4574971b52",
+"classsha__256__core.html#a73efc323dec32aeeeaf7ec1a731e212f",
+"classsha__256__core.html#ac1d67be934b65f06268f87916339998c",
+"classsubprocess_1_1detail_1_1_streams.html#a9aa54f747386b4b0086e8172fbc9cd60",
+"dir_52d8599c6bb83c62f35a48666f22a880.html",
+"expanding__list__button_8h_source.html",
+"globals_j.html",
+"gui__def_8h.html#ggaab0cd38a41c1215ae70822b1d501daa1a5012af45088eb8e999bb8350077b12ca",
+"json_8hpp.html#aa554fc6a11519e4f347deb25a9f0db40a0b6879b186bfb2b1ec65d2460e4eccd4",
+"namespacehal_1_1dataflow_1_1processing.html",
+"netlist__utils_8h.html#a172560a7199c07a507db7b51a08057c7",
+"plugins_2solve__fsm_2python_2python__bindings_8cpp.html#aa0beecf81a444ab07294784926724675",
+"settings__display_8cpp_source.html",
+"structhal_1_1_boolean_function_1_1_operand_node.html#ace2b1e76c3a54e4a0907f769325b3dde",
+"structhal_1_1dataflow_1_1evaluation_1_1_configuration.html#ac5e6fc9cf9ce30376e457b3d8246e9cf",
+"structsubprocess_1_1output.html#a1d42f67b75c7ea084c170cc32f61127a",
+"utils_8py.html#a1b7a816300f9b0080fed658cb0c47415"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

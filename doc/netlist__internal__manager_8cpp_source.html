@@ -92,7 +92,7 @@ $(document).ready(function(){initNavTree('netlist__internal__manager_8cpp_source
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="event__handler_8h.html">hal_core/netlist/event_system/event_handler.h</a>&quot;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="gate_8h.html">hal_core/netlist/gate.h</a>&quot;</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="gate__type_8h.html">hal_core/netlist/gate_library/gate_type.h</a>&quot;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="grouping_8h.html">hal_core/netlist/grouping.h</a>&quot;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="include_2hal__core_2netlist_2grouping_8h.html">hal_core/netlist/grouping.h</a>&quot;</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="module_8h.html">hal_core/netlist/module.h</a>&quot;</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="net_8h.html">hal_core/netlist/net.h</a>&quot;</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="include_2hal__core_2netlist_2netlist_8h.html">hal_core/netlist/netlist.h</a>&quot;</span></div>
@@ -207,9 +207,9 @@ $(document).ready(function(){initNavTree('netlist__internal__manager_8cpp_source
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        }</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        <span class="comment">// remove from grouping</span></div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="classhal_1_1_netlist_internal_manager.html#ab61c4d8e4b1799e5578ebdd78701c76c">Grouping</a>* g = gate-&gt;get_grouping(); g != <span class="keyword">nullptr</span>)</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="classhal_1_1_netlist_internal_manager.html#ab61c4d8e4b1799e5578ebdd78701c76c">Grouping</a>* <a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a> = gate-&gt;get_grouping(); <a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a> != <span class="keyword">nullptr</span>)</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        {</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;            g-&gt;remove_gate(gate);</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;            <a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a>-&gt;remove_gate(gate);</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        }</div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        <span class="comment">// check global_gnd and global_vcc gates</span></div>
@@ -311,9 +311,9 @@ $(document).ready(function(){initNavTree('netlist__internal__manager_8cpp_source
 <div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;        }</div>
 <div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160; </div>
 <div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;        <span class="comment">// remove from grouping</span></div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="classhal_1_1_netlist_internal_manager.html#ab61c4d8e4b1799e5578ebdd78701c76c">Grouping</a>* g = <a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a>-&gt;<a class="code" href="classhal_1_1_net.html#a871510d25bdfd08d2b40e5013868a13c">get_grouping</a>(); g != <span class="keyword">nullptr</span>)</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="classhal_1_1_netlist_internal_manager.html#ab61c4d8e4b1799e5578ebdd78701c76c">Grouping</a>* <a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a> = <a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a>-&gt;<a class="code" href="classhal_1_1_net.html#a871510d25bdfd08d2b40e5013868a13c">get_grouping</a>(); <a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a> != <span class="keyword">nullptr</span>)</div>
 <div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;        {</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;            g-&gt;remove_net(<a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a>);</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;            <a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a>-&gt;remove_net(<a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a>);</div>
 <div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        }</div>
 <div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160; </div>
 <div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;        <span class="comment">// check global_input and global_output gates</span></div>
@@ -661,9 +661,9 @@ $(document).ready(function(){initNavTree('netlist__internal__manager_8cpp_source
 <div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;        <span class="comment">// at this point parent is guaranteed to be not null</span></div>
 <div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160; </div>
 <div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;        <span class="comment">// remove from grouping</span></div>
-<div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="classhal_1_1_netlist_internal_manager.html#ab61c4d8e4b1799e5578ebdd78701c76c">Grouping</a>* g = to_remove-&gt;get_grouping(); g != <span class="keyword">nullptr</span>)</div>
+<div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="classhal_1_1_netlist_internal_manager.html#ab61c4d8e4b1799e5578ebdd78701c76c">Grouping</a>* <a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a> = to_remove-&gt;get_grouping(); <a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a> != <span class="keyword">nullptr</span>)</div>
 <div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;        {</div>
-<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;            g-&gt;remove_module(to_remove);</div>
+<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;            <a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a>-&gt;remove_module(to_remove);</div>
 <div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;        }</div>
 <div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160; </div>
 <div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160;        <span class="comment">// move gates and nets to parent, work on a copy since assign_gate will modify m_gates</span></div>
@@ -705,9 +705,9 @@ $(document).ready(function(){initNavTree('netlist__internal__manager_8cpp_source
 <div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;    }</div>
 <div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160; </div>
-<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160;    <span class="keywordtype">bool</span> NetlistInternalManager::module_assign_gate(Module* m, Gate* g)</div>
+<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160;    <span class="keywordtype">bool</span> NetlistInternalManager::module_assign_gate(Module* m, Gate* <a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a>)</div>
 <div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160;    {</div>
-<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160;        <span class="keywordflow">if</span> (g == <span class="keyword">nullptr</span>)</div>
+<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a> == <span class="keyword">nullptr</span>)</div>
 <div class="line"><a name="l00623"></a><span class="lineno">  623</span>&#160;        {</div>
 <div class="line"><a name="l00624"></a><span class="lineno">  624</span>&#160;            <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;module&quot;</span>, <span class="stringliteral">&quot;gate cannot be a nullptr.&quot;</span>);</div>
 <div class="line"><a name="l00625"></a><span class="lineno">  625</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
@@ -719,13 +719,13 @@ $(document).ready(function(){initNavTree('netlist__internal__manager_8cpp_source
 <div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;        }</div>
 <div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160; </div>
-<div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160;        <span class="keyword">auto</span> prev_module = g-&gt;m_module;</div>
+<div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160;        <span class="keyword">auto</span> prev_module = <a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a>-&gt;m_module;</div>
 <div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160;        <span class="keywordflow">if</span> (prev_module == m)</div>
 <div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160;        {</div>
 <div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160;            <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;module&quot;</span>,</div>
 <div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160;                      <span class="stringliteral">&quot;gate &#39;{}&#39; with ID {} is already contained in module &#39;{}&#39; with ID {} in netlist with ID {}.&quot;</span>,</div>
-<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160;                      g-&gt;get_name(),</div>
-<div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160;                      g-&gt;get_id(),</div>
+<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160;                      <a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a>-&gt;get_name(),</div>
+<div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160;                      <a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a>-&gt;get_id(),</div>
 <div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160;                      m-&gt;get_name(),</div>
 <div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160;                      m-&gt;get_id(),</div>
 <div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;                      m_netlist-&gt;m_netlist_id);</div>
@@ -737,13 +737,13 @@ $(document).ready(function(){initNavTree('netlist__internal__manager_8cpp_source
 <div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;        prev_module-&gt;set_cache_dirty();</div>
 <div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160; </div>
 <div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;        <span class="comment">// remove gate from old module</span></div>
-<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;        <span class="keyword">auto</span> it = prev_module-&gt;m_gates_map.find(g-&gt;get_id());</div>
+<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;        <span class="keyword">auto</span> it = prev_module-&gt;m_gates_map.find(<a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a>-&gt;get_id());</div>
 <div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160;        <span class="keywordflow">if</span> (it == m-&gt;m_gates_map.end())</div>
 <div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160;        {</div>
 <div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160;            <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;module&quot;</span>,</div>
 <div class="line"><a name="l00656"></a><span class="lineno">  656</span>&#160;                      <span class="stringliteral">&quot;gate &#39;{}&#39; with ID {} does not belong to module &#39;{}&#39; with ID {} in netlist with ID {}.&quot;</span>,</div>
-<div class="line"><a name="l00657"></a><span class="lineno">  657</span>&#160;                      g-&gt;get_name(),</div>
-<div class="line"><a name="l00658"></a><span class="lineno">  658</span>&#160;                      g-&gt;get_id(),</div>
+<div class="line"><a name="l00657"></a><span class="lineno">  657</span>&#160;                      <a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a>-&gt;get_name(),</div>
+<div class="line"><a name="l00658"></a><span class="lineno">  658</span>&#160;                      <a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a>-&gt;get_id(),</div>
 <div class="line"><a name="l00659"></a><span class="lineno">  659</span>&#160;                      prev_module-&gt;get_name(),</div>
 <div class="line"><a name="l00660"></a><span class="lineno">  660</span>&#160;                      prev_module-&gt;get_id(),</div>
 <div class="line"><a name="l00661"></a><span class="lineno">  661</span>&#160;                      m_netlist-&gt;m_netlist_id);</div>
@@ -751,16 +751,16 @@ $(document).ready(function(){initNavTree('netlist__internal__manager_8cpp_source
 <div class="line"><a name="l00663"></a><span class="lineno">  663</span>&#160;        }</div>
 <div class="line"><a name="l00664"></a><span class="lineno">  664</span>&#160; </div>
 <div class="line"><a name="l00665"></a><span class="lineno">  665</span>&#160;        prev_module-&gt;m_gates_map.erase(it);</div>
-<div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160;        unordered_vector_erase(prev_module-&gt;m_gates, g);</div>
+<div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160;        unordered_vector_erase(prev_module-&gt;m_gates, <a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a>);</div>
 <div class="line"><a name="l00667"></a><span class="lineno">  667</span>&#160; </div>
 <div class="line"><a name="l00668"></a><span class="lineno">  668</span>&#160;        <span class="comment">// move gate to new module</span></div>
-<div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160;        m-&gt;m_gates_map[g-&gt;get_id()] = g;</div>
-<div class="line"><a name="l00670"></a><span class="lineno">  670</span>&#160;        m-&gt;m_gates.push_back(g);</div>
-<div class="line"><a name="l00671"></a><span class="lineno">  671</span>&#160;        g-&gt;m_module = m;</div>
+<div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160;        m-&gt;m_gates_map[<a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a>-&gt;get_id()] = <a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a>;</div>
+<div class="line"><a name="l00670"></a><span class="lineno">  670</span>&#160;        m-&gt;m_gates.push_back(<a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a>);</div>
+<div class="line"><a name="l00671"></a><span class="lineno">  671</span>&#160;        <a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a>-&gt;m_module = m;</div>
 <div class="line"><a name="l00672"></a><span class="lineno">  672</span>&#160; </div>
 <div class="line"><a name="l00673"></a><span class="lineno">  673</span>&#160;        <span class="comment">// notify event handlers</span></div>
-<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160;        m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa5bf6888f7204acd17fd29978733807dd">ModuleEvent::event::gate_removed</a>,prev_module,g-&gt;get_id());</div>
-<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160;        m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa43159fd1b72c5cef395389b38e4d7c25">ModuleEvent::event::gate_assigned</a>,m,g-&gt;get_id());</div>
+<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160;        m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa5bf6888f7204acd17fd29978733807dd">ModuleEvent::event::gate_removed</a>,prev_module,<a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a>-&gt;get_id());</div>
+<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160;        m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa43159fd1b72c5cef395389b38e4d7c25">ModuleEvent::event::gate_assigned</a>,m,<a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a>-&gt;get_id());</div>
 <div class="line"><a name="l00676"></a><span class="lineno">  676</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160;    }</div>
 <div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160; </div>
@@ -1071,7 +1071,6 @@ $(document).ready(function(){initNavTree('netlist__internal__manager_8cpp_source
 <div class="ttc" id="aclasshal_1_1_module_html_af771e486709f93e4abab9f0fe092010b"><div class="ttname"><a href="classhal_1_1_module.html#af771e486709f93e4abab9f0fe092010b">hal::Module::get_id</a></div><div class="ttdeci">u32 get_id() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2module_8cpp_source.html#l00094">module.cpp:94</a></div></div>
 <div class="ttc" id="anetlist__internal__manager_8h_html"><div class="ttname"><a href="netlist__internal__manager_8h.html">netlist_internal_manager.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1_grouping_event_html_ad0d01ce67e65c0bab6e13308f15666c8ab07286ebbb5bc7aa91cc3eaa8bc19711"><div class="ttname"><a href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8ab07286ebbb5bc7aa91cc3eaa8bc19711">hal::GroupingEvent::event::removed</a></div><div class="ttdeci">@ removed</div><div class="ttdoc">no associated_data</div></div>
-<div class="ttc" id="agrouping_8h_html"><div class="ttname"><a href="grouping_8h.html">grouping.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1_module_html_a87cf9f30579e5e461f525ab78274e1df"><div class="ttname"><a href="classhal_1_1_module.html#a87cf9f30579e5e461f525ab78274e1df">hal::Module::get_name</a></div><div class="ttdeci">std::string get_name() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2module_8cpp_source.html#l00099">module.cpp:99</a></div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_internal_manager_html_ad8205f09f8efdf8fab19078d103cd6e7"><div class="ttname"><a href="classhal_1_1_netlist_internal_manager.html#ad8205f09f8efdf8fab19078d103cd6e7">hal::NetlistInternalManager::Gate</a></div><div class="ttdeci">friend class Gate</div><div class="ttdef"><b>Definition:</b> <a href="netlist__internal__manager_8h_source.html#l00052">netlist_internal_manager.h:52</a></div></div>
 <div class="ttc" id="aclasshal_1_1_net_html_a086e0fa561405ac8b0beae95d8caa69d"><div class="ttname"><a href="classhal_1_1_net.html#a086e0fa561405ac8b0beae95d8caa69d">hal::Net::get_id</a></div><div class="ttdeci">u32 get_id() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2net_8cpp_source.html#l00088">net.cpp:88</a></div></div>
@@ -1114,6 +1113,7 @@ $(document).ready(function(){initNavTree('netlist__internal__manager_8cpp_source
 <div class="ttc" id="agroup__gui_html_ggaab0cd38a41c1215ae70822b1d501daa1a5012af45088eb8e999bb8350077b12ca"><div class="ttname"><a href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1a5012af45088eb8e999bb8350077b12ca">hal::ItemType::Net</a></div><div class="ttdeci">@ Net</div></div>
 <div class="ttc" id="aclasshal_1_1_module_event_html_ac760774ea38bdeb7c7fc7f9f9e96c53faad2650767a6bde46731f82ac16b5a690"><div class="ttname"><a href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53faad2650767a6bde46731f82ac16b5a690">hal::ModuleEvent::event::submodule_added</a></div><div class="ttdeci">@ submodule_added</div><div class="ttdoc">associated_data = id of added module</div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_html_a864fc657cbaad83a16f9dcdd75663fb8"><div class="ttname"><a href="classhal_1_1_netlist.html#a864fc657cbaad83a16f9dcdd75663fb8">hal::Netlist::is_grouping_in_netlist</a></div><div class="ttdeci">bool is_grouping_in_netlist(Grouping *grouping) const</div><div class="ttdef"><b>Definition:</b> <a href="src_2netlist_2netlist_8cpp_source.html#l00652">netlist.cpp:652</a></div></div>
+<div class="ttc" id="atest__manual_8txt_html_a0c1cc4000b37ba97b39f660cc2b692f6"><div class="ttname"><a href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a></div><div class="ttdeci">How to generate a vcd file for a new test netlist Synthesize netlist in your favorite e g</div><div class="ttdef"><b>Definition:</b> <a href="test__manual_8txt_source.html#l00003">test_manual.txt:3</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_event_html_afdc7242126c9534b4ec92e285983c6fbae2fa538867c3830a859a5b17ab24644b"><div class="ttname"><a href="classhal_1_1_gate_event.html#afdc7242126c9534b4ec92e285983c6fbae2fa538867c3830a859a5b17ab24644b">hal::GateEvent::event::created</a></div><div class="ttdeci">@ created</div><div class="ttdoc">no associated_data</div></div>
 <div class="ttc" id="aclasshal_1_1_module_event_html_ac760774ea38bdeb7c7fc7f9f9e96c53fab07286ebbb5bc7aa91cc3eaa8bc19711"><div class="ttname"><a href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fab07286ebbb5bc7aa91cc3eaa8bc19711">hal::ModuleEvent::event::removed</a></div><div class="ttdeci">@ removed</div><div class="ttdoc">no associated_data</div></div>
 <div class="ttc" id="aclasshal_1_1_net_event_html_a3ca22a15fd2d33990c22eadb808579dfa460a687d619131a1a3f60f2e03d0a911"><div class="ttname"><a href="classhal_1_1_net_event.html#a3ca22a15fd2d33990c22eadb808579dfa460a687d619131a1a3f60f2e03d0a911">hal::NetEvent::event::src_removed</a></div><div class="ttdeci">@ src_removed</div><div class="ttdoc">associated_data = id of src gate</div></div>
@@ -1126,6 +1126,7 @@ $(document).ready(function(){initNavTree('netlist__internal__manager_8cpp_source
 <div class="ttc" id="aclasshal_1_1_grouping_event_html_ad0d01ce67e65c0bab6e13308f15666c8a43159fd1b72c5cef395389b38e4d7c25"><div class="ttname"><a href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8a43159fd1b72c5cef395389b38e4d7c25">hal::GroupingEvent::event::gate_assigned</a></div><div class="ttdeci">@ gate_assigned</div><div class="ttdoc">associated_data = id of inserted gate</div></div>
 <div class="ttc" id="aclasshal_1_1_module_event_html_ac760774ea38bdeb7c7fc7f9f9e96c53fae2fa538867c3830a859a5b17ab24644b"><div class="ttname"><a href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fae2fa538867c3830a859a5b17ab24644b">hal::ModuleEvent::event::created</a></div><div class="ttdeci">@ created</div><div class="ttdoc">no associated_data</div></div>
 <div class="ttc" id="aendpoint_8h_html"><div class="ttname"><a href="endpoint_8h.html">endpoint.h</a></div></div>
+<div class="ttc" id="ainclude_2hal__core_2netlist_2grouping_8h_html"><div class="ttname"><a href="include_2hal__core_2netlist_2grouping_8h.html">grouping.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1_grouping_event_html_ad0d01ce67e65c0bab6e13308f15666c8a3498343970b2fc238d834cc62603463b"><div class="ttname"><a href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8a3498343970b2fc238d834cc62603463b">hal::GroupingEvent::event::module_removed</a></div><div class="ttdeci">@ module_removed</div><div class="ttdoc">associated_data = id of removed module</div></div>
 <div class="ttc" id="anet_8h_html"><div class="ttname"><a href="net_8h.html">net.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1_net_event_html_a3ca22a15fd2d33990c22eadb808579dfa4393b219397d923f8e93bbd586590487"><div class="ttname"><a href="classhal_1_1_net_event.html#a3ca22a15fd2d33990c22eadb808579dfa4393b219397d923f8e93bbd586590487">hal::NetEvent::event::dst_removed</a></div><div class="ttdeci">@ dst_removed</div><div class="ttdoc">associated_data = id of dst gate</div></div>
@@ -1139,7 +1140,7 @@ $(document).ready(function(){initNavTree('netlist__internal__manager_8cpp_source
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="netlist__internal__manager_8cpp.html">netlist_internal_manager.cpp</a></li>
-    <li class="footer">Generated on Mon Apr 11 2022 13:34:44 for HAL by
+    <li class="footer">Generated on Tue Apr 19 2022 13:11:35 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

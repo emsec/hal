@@ -185,11 +185,11 @@ $(document).ready(function(){initNavTree('netlist_2gate__library_2gate__library_
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keywordflow">if</span> (filter)</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        {</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;            std::unordered_map&lt;std::string, GateType*&gt; res;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; type : m_gate_types)</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; <a class="code" href="namespacecontrol.html#a83d2dd7bc3c232a13fa9f62a01b5ba80">type</a> : m_gate_types)</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            {</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;                <span class="keywordflow">if</span> (filter(type.get()))</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;                <span class="keywordflow">if</span> (filter(<a class="code" href="namespacecontrol.html#a83d2dd7bc3c232a13fa9f62a01b5ba80">type</a>.get()))</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;                {</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;                    res[type-&gt;get_name()] = type.get();</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;                    res[<a class="code" href="namespacecontrol.html#a83d2dd7bc3c232a13fa9f62a01b5ba80">type</a>-&gt;get_name()] = <a class="code" href="namespacecontrol.html#a83d2dd7bc3c232a13fa9f62a01b5ba80">type</a>.get();</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                }</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;            }</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            <span class="keywordflow">return</span> res;</div>
@@ -299,12 +299,13 @@ $(document).ready(function(){initNavTree('netlist_2gate__library_2gate__library_
 <div class="ttc" id="aclasshal_1_1_gate_library_html_af63f080c714ecfd2e5d569200a92b397"><div class="ttname"><a href="classhal_1_1_gate_library.html#af63f080c714ecfd2e5d569200a92b397">hal::GateLibrary::get_gate_location_data_category</a></div><div class="ttdeci">const std::string &amp; get_gate_location_data_category() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2gate__library_2gate__library_8cpp_source.html#l00028">gate_library.cpp:28</a></div></div>
 <div class="ttc" id="agate__library_8h_html"><div class="ttname"><a href="gate__library_8h.html">gate_library.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_library_html_a87ff461bac5e8b03736eb909fe9eee5a"><div class="ttname"><a href="classhal_1_1_gate_library.html#a87ff461bac5e8b03736eb909fe9eee5a">hal::GateLibrary::contains_gate_type</a></div><div class="ttdeci">bool contains_gate_type(GateType *gate_type) const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2gate__library_2gate__library_8cpp_source.html#l00059">gate_library.cpp:59</a></div></div>
+<div class="ttc" id="anamespacecontrol_html_a83d2dd7bc3c232a13fa9f62a01b5ba80"><div class="ttname"><a href="namespacecontrol.html#a83d2dd7bc3c232a13fa9f62a01b5ba80">control.type</a></div><div class="ttdeci">type</div><div class="ttdef"><b>Definition:</b> <a href="control_8py_source.html#l00014">control.py:14</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_library_html_a4f3f32d464c6cc8bc93704d317e86428"><div class="ttname"><a href="classhal_1_1_gate_library.html#a4f3f32d464c6cc8bc93704d317e86428">hal::GateLibrary::get_vcc_gate_types</a></div><div class="ttdeci">std::unordered_map&lt; std::string, GateType * &gt; get_vcc_gate_types() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2gate__library_2gate__library_8cpp_source.html#l00136">gate_library.cpp:136</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="dir_ff3bf91c1fe6286d1ab9e3da0ed2d8ad.html">gate_library</a></li><li class="navelem"><a class="el" href="netlist_2gate__library_2gate__library_8cpp.html">gate_library.cpp</a></li>
-    <li class="footer">Generated on Mon Apr 11 2022 13:34:44 for HAL by
+    <li class="footer">Generated on Tue Apr 19 2022 13:11:35 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

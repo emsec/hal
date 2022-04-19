@@ -7,6 +7,21 @@ var group__netlist =
     [ "Event System", "group__events.html", "group__events" ],
     [ "netlist_factory", "namespacenetlist__factory.html", null ],
     [ "netlist_utils", "namespacehal_1_1netlist__utils.html", null ],
+    [ "HGLParser", "classhal_1_1_h_g_l_parser.html", [
+      [ "HGLParser", "classhal_1_1_h_g_l_parser.html#a392638eac4e33667403a50d84e1d4f29", null ],
+      [ "~HGLParser", "classhal_1_1_h_g_l_parser.html#a5e62397b77b75f4f05b8820cb06614d3", null ],
+      [ "parse", "classhal_1_1_h_g_l_parser.html#ad0c291fa12c4fce6df5ac7ad1a762d25", null ]
+    ] ],
+    [ "HGLWriter", "classhal_1_1_h_g_l_writer.html", [
+      [ "HGLWriter", "classhal_1_1_h_g_l_writer.html#af971e3ff7221a533e14885c329e2f4d1", null ],
+      [ "~HGLWriter", "classhal_1_1_h_g_l_writer.html#a47352a14d43e63fcd48265578fefef27", null ],
+      [ "write", "classhal_1_1_h_g_l_writer.html#aeeeddcf73de629199064b19764a7dab9", null ]
+    ] ],
+    [ "LibertyParser", "classhal_1_1_liberty_parser.html", [
+      [ "LibertyParser", "classhal_1_1_liberty_parser.html#a31d56a1e5dc2758f134a9e9837804537", null ],
+      [ "~LibertyParser", "classhal_1_1_liberty_parser.html#a9b42e79acc9e12ce902dc79e71dfe215", null ],
+      [ "parse", "classhal_1_1_liberty_parser.html#a9004dd5312ba339b2add120046c914b1", null ]
+    ] ],
     [ "Node", "structhal_1_1_boolean_function_1_1_node.html", [
       [ "Node", "structhal_1_1_boolean_function_1_1_node.html#a9bdd0c10418360c69e60a7ab3c213db5", null ],
       [ "~Node", "structhal_1_1_boolean_function_1_1_node.html#ae44a1156777a74609c9e64cbf6d6dfb0", null ],

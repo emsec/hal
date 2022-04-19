@@ -10,7 +10,7 @@ var dir_2b1fe3a00210b132c6a6c3a6780f4f6e =
     [ "data_container.cpp", "netlist_2data__container_8cpp.html", null ],
     [ "endpoint.cpp", "netlist_2endpoint_8cpp.html", null ],
     [ "gate.cpp", "netlist_2gate_8cpp.html", null ],
-    [ "grouping.cpp", "netlist_2grouping_8cpp.html", null ],
+    [ "grouping.cpp", "src_2netlist_2grouping_8cpp.html", null ],
     [ "module.cpp", "netlist_2module_8cpp.html", null ],
     [ "net.cpp", "netlist_2net_8cpp.html", null ],
     [ "netlist.cpp", "src_2netlist_2netlist_8cpp.html", null ],

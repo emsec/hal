@@ -1,9 +1,8 @@
 var searchData=
 [
-  ['i16_34804',['i16',['../defines_8h.html#a977685259fe8059c48e92450967d46a8',1,'defines.h']]],
-  ['i32_34805',['i32',['../defines_8h.html#aec41e5f8e4b7aef2540e84268692fa84',1,'defines.h']]],
-  ['i64_34806',['i64',['../defines_8h.html#a86025ec3a0bc201ca893caac2cb2acbd',1,'defines.h']]],
-  ['i8_34807',['i8',['../defines_8h.html#a196513547113c3f96a078ee3e658a6ef',1,'defines.h']]],
-  ['instantiate_5fplugin_5ffunction_34808',['instantiate_plugin_function',['../namespacehal.html#af1388a5c4377a81f3215cac5d274fd60',1,'hal']]],
-  ['iterator_34809',['iterator',['../classhal_1_1utils_1_1_recursive_directory_range.html#a3352aa0beb99907d05f526cad21a78e9',1,'hal::utils::RecursiveDirectoryRange::iterator()'],['../classhal_1_1utils_1_1_directory_range.html#ac58e3e6f46f8e5a746540806063aac58',1,'hal::utils::DirectoryRange::iterator()']]]
+  ['detected_5for_38103',['detected_or',['../namespacenlohmann_1_1detail.html#a240ce21919ab08e8a6cb3a5cfa412bce',1,'nlohmann::detail']]],
+  ['detected_5for_5ft_38104',['detected_or_t',['../namespacenlohmann_1_1detail.html#a7ac5b8ef0363101275a2827b3b117dcf',1,'nlohmann::detail']]],
+  ['detected_5ft_38105',['detected_t',['../namespacenlohmann_1_1detail.html#a37e97a32d0b94ce5f745427e4e40204d',1,'nlohmann::detail']]],
+  ['difference_5ftype_38106',['difference_type',['../structnlohmann_1_1detail_1_1iterator__types_3_01_it_00_01void__t_3_01typename_01_it_1_1differenc4a413e9bd546446175f10f15c5631361.html#a1ce16c1c8c1d6a195f5a3d3ad31820f0',1,'nlohmann::detail::iterator_types&lt; It, void_t&lt; typename It::difference_type, typename It::value_type, typename It::pointer, typename It::reference, typename It::iterator_category &gt; &gt;::difference_type()'],['../structnlohmann_1_1detail_1_1iterator__traits_3_01_t_01_5_00_01enable__if__t_3_01std_1_1is__objec8d960665487688165530972cda4f1bea.html#ae7be99eb434f5b5f34692874c272b759',1,'nlohmann::detail::iterator_traits&lt; T *, enable_if_t&lt; std::is_object&lt; T &gt;::value &gt; &gt;::difference_type()'],['../classnlohmann_1_1detail_1_1iteration__proxy__value.html#ada6b4e6d55d8ed7ac79e49a03e9d1fe2',1,'nlohmann::detail::iteration_proxy_value::difference_type()'],['../classnlohmann_1_1detail_1_1iter__impl.html#a2f7ea9f7022850809c60fc3263775840',1,'nlohmann::detail::iter_impl::difference_type()'],['../classnlohmann_1_1detail_1_1json__reverse__iterator.html#a9ab55987c05ec6427ad36082e351cc45',1,'nlohmann::detail::json_reverse_iterator::difference_type()'],['../classnlohmann_1_1basic__json.html#afe7c1303357e19cea9527af4e9a31d8f',1,'nlohmann::basic_json::difference_type()']]],
+  ['difference_5ftype_5ft_38107',['difference_type_t',['../namespacenlohmann_1_1detail.html#a3603b59a17d1c5e15050743b847992f2',1,'nlohmann::detail']]]
 ];

@@ -1,0 +1,4 @@
+var structnlohmann_1_1detail_1_1has__to__json_3_01_basic_json_type_00_01_t_00_01enable__if__t_3_01nob111e71d40e2273c290d1ce5c6a3b84f =
+[
+    [ "serializer", "structnlohmann_1_1detail_1_1has__to__json_3_01_basic_json_type_00_01_t_00_01enable__if__t_3_01nob111e71d40e2273c290d1ce5c6a3b84f.html#a479098e9480e0adb30fb3fe3586a8005", null ]
+];

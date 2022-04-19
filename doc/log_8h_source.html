@@ -198,11 +198,11 @@ $(document).ready(function(){initNavTree('log_8h_source.html',''); initResizable
 <div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160; </div>
 <div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        <span class="keywordtype">void</span> deactivate_all_channels();</div>
 <div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160; </div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;        <a class="code" href="classhal_1_1_callback_hook.html">CallbackHook</a>&lt;void(<span class="keyword">const</span> spdlog::level::level_enum&amp;, <span class="keyword">const</span> std::string&amp;, <span class="keyword">const</span> std::string&amp;)&gt;&amp; get_gui_callback();</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;        <a class="code" href="classhal_1_1_callback_hook.html">CallbackHook</a>&lt;<a class="code" href="namespacenlohmann_1_1detail.html#a59fca69799f6b9e366710cb9043aa77d">void</a>(<span class="keyword">const</span> spdlog::level::level_enum&amp;, <span class="keyword">const</span> std::string&amp;, <span class="keyword">const</span> std::string&amp;)&gt;&amp; get_gui_callback();</div>
 <div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160; </div>
 <div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;        <a class="code" href="classhal_1_1_program_options.html">ProgramOptions</a>&amp; get_option_descriptions();</div>
 <div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160; </div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;        <span class="keywordtype">void</span> handle_options(<a class="code" href="classhal_1_1_program_arguments.html">ProgramArguments</a>&amp; args);</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;        <span class="keywordtype">void</span> handle_options(<a class="code" href="classhal_1_1_program_arguments.html">ProgramArguments</a>&amp; <a class="code" href="namespacecontrol.html#a3cdfe36ea256f5d4c35f5d89c9f22d46">args</a>);</div>
 <div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160; </div>
 <div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        <span class="keyword">static</span> std::shared_ptr&lt;log_sink&gt; create_stdout_sink(<span class="keyword">const</span> <span class="keywordtype">bool</span> colored = <span class="keyword">true</span>);</div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160; </div>
@@ -233,7 +233,7 @@ $(document).ready(function(){initNavTree('log_8h_source.html',''); initResizable
 <div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160; </div>
 <div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;        std::map&lt;std::string, std::vector&lt;std::shared_ptr&lt;log_sink&gt;&gt;&gt; m_logger_sinks;</div>
 <div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160; </div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        <a class="code" href="classhal_1_1_callback_hook.html">CallbackHook</a>&lt;void(<span class="keyword">const</span> spdlog::level::level_enum&amp;, <span class="keyword">const</span> std::string&amp;, <span class="keyword">const</span> std::string&amp;)&gt; m_gui_callback;</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        <a class="code" href="classhal_1_1_callback_hook.html">CallbackHook</a>&lt;<a class="code" href="namespacenlohmann_1_1detail.html#a59fca69799f6b9e366710cb9043aa77d">void</a>(<span class="keyword">const</span> spdlog::level::level_enum&amp;, <span class="keyword">const</span> std::string&amp;, <span class="keyword">const</span> std::string&amp;)&gt; m_gui_callback;</div>
 <div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160; </div>
 <div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;        <a class="code" href="classhal_1_1_program_options.html">ProgramOptions</a> m_descriptions;</div>
 <div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    };</div>
@@ -266,7 +266,9 @@ $(document).ready(function(){initNavTree('log_8h_source.html',''); initResizable
 <div class="ttc" id="autils_8h_html"><div class="ttname"><a href="utils_8h.html">utils.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1log__gui__sink_html_a3c967dd201e147778004bddbd196ca9e"><div class="ttname"><a href="classhal_1_1log__gui__sink.html#a3c967dd201e147778004bddbd196ca9e">hal::log_gui_sink::flush_</a></div><div class="ttdeci">void flush_() override</div><div class="ttdef"><b>Definition:</b> <a href="log_8cpp_source.html#l00395">log.cpp:395</a></div></div>
 <div class="ttc" id="aclasshal_1_1_program_options_html"><div class="ttname"><a href="classhal_1_1_program_options.html">hal::ProgramOptions</a></div><div class="ttdef"><b>Definition:</b> <a href="program__options_8h_source.html#l00045">program_options.h:45</a></div></div>
+<div class="ttc" id="anamespacenlohmann_1_1detail_html_a59fca69799f6b9e366710cb9043aa77d"><div class="ttname"><a href="namespacenlohmann_1_1detail.html#a59fca69799f6b9e366710cb9043aa77d">nlohmann::detail::void</a></div><div class="ttdeci">j template void())</div><div class="ttdef"><b>Definition:</b> <a href="json_8hpp_source.html#l03108">json.hpp:3108</a></div></div>
 <div class="ttc" id="astructhal_1_1_log_manager_1_1log__sink_html_aa6c054fb308f53d9786ee4134413de27"><div class="ttname"><a href="structhal_1_1_log_manager_1_1log__sink.html#aa6c054fb308f53d9786ee4134413de27">hal::LogManager::log_sink::spdlog_sink</a></div><div class="ttdeci">std::shared_ptr&lt; spdlog::sinks::sink &gt; spdlog_sink</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00106">log.h:106</a></div></div>
+<div class="ttc" id="anamespacecontrol_html_a3cdfe36ea256f5d4c35f5d89c9f22d46"><div class="ttname"><a href="namespacecontrol.html#a3cdfe36ea256f5d4c35f5d89c9f22d46">control.args</a></div><div class="ttdeci">args</div><div class="ttdef"><b>Definition:</b> <a href="control_8py_source.html#l00033">control.py:33</a></div></div>
 <div class="ttc" id="astructhal_1_1_log_manager_1_1log__sink_html"><div class="ttname"><a href="structhal_1_1_log_manager_1_1log__sink.html">hal::LogManager::log_sink</a></div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00104">log.h:104</a></div></div>
 <div class="ttc" id="aclasshal_1_1_log_manager_html"><div class="ttname"><a href="classhal_1_1_log_manager.html">hal::LogManager</a></div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00101">log.h:101</a></div></div>
 <div class="ttc" id="aclasshal_1_1log__gui__sink_html_a3452384d9bbfec21011da245e7c7045e"><div class="ttname"><a href="classhal_1_1log__gui__sink.html#a3452384d9bbfec21011da245e7c7045e">hal::log_gui_sink::sink_it_</a></div><div class="ttdeci">void sink_it_(const spdlog::details::log_msg &amp;msg) override</div><div class="ttdef"><b>Definition:</b> <a href="log_8cpp_source.html#l00388">log.cpp:388</a></div></div>
@@ -276,7 +278,7 @@ $(document).ready(function(){initNavTree('log_8h_source.html',''); initResizable
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_8cff0e4740b4a22580dd05764b73d449.html">utilities</a></li><li class="navelem"><a class="el" href="log_8h.html">log.h</a></li>
-    <li class="footer">Generated on Mon Apr 11 2022 13:34:42 for HAL by
+    <li class="footer">Generated on Tue Apr 19 2022 13:11:29 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

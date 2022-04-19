@@ -1,12 +1,10 @@
 var searchData=
 [
-  ['tab_18204',['Tab',['https://doc.qt.io/qt-5/qtextoption-tab.html',1,'QTextOption']]],
-  ['tabwidget_18205',['TabWidget',['../classhal_1_1_tab_widget.html',1,'hal']]],
-  ['takerowresult_18206',['TakeRowResult',['https://doc.qt.io/qt-5/qformlayout-takerowresult.html',1,'QFormLayout']]],
-  ['timerinfo_18207',['TimerInfo',['https://doc.qt.io/qt-5/qabstracteventdispatcher-timerinfo.html',1,'QAbstractEventDispatcher']]],
-  ['token_18208',['Token',['../structhal_1_1_token.html',1,'hal']]],
-  ['tokenstream_18209',['TokenStream',['../classhal_1_1_token_stream.html',1,'hal']]],
-  ['tokenstreamexception_18210',['TokenStreamException',['../structhal_1_1_token_stream_1_1_token_stream_exception.html',1,'hal::TokenStream']]],
-  ['toolbar_18211',['Toolbar',['../classhal_1_1_toolbar.html',1,'hal']]],
-  ['touchpoint_18212',['TouchPoint',['https://doc.qt.io/qt-5/qtouchevent-touchpoint.html',1,'QTouchEvent']]]
+  ['ramcomponent_20021',['RAMComponent',['../classhal_1_1_r_a_m_component.html',1,'hal']]],
+  ['ramportcomponent_20022',['RAMPortComponent',['../classhal_1_1_r_a_m_port_component.html',1,'hal']]],
+  ['recentfileitem_20023',['RecentFileItem',['../classhal_1_1_recent_file_item.html',1,'hal']]],
+  ['recentfileswidget_20024',['RecentFilesWidget',['../classhal_1_1_recent_files_widget.html',1,'hal']]],
+  ['recursivedirectoryrange_20025',['RecursiveDirectoryRange',['../classhal_1_1utils_1_1_recursive_directory_range.html',1,'hal::utils']]],
+  ['result_20026',['Result',['../structhal_1_1dataflow_1_1evaluation_1_1_result.html',1,'hal::dataflow::evaluation::Result'],['../structhal_1_1dataflow_1_1processing_1_1_result.html',1,'hal::dataflow::processing::Result'],['../structhal_1_1_s_m_t_1_1_result.html',1,'hal::SMT::Result']]],
+  ['runtimelibrary_20027',['RuntimeLibrary',['../classhal_1_1_runtime_library.html',1,'hal']]]
 ];

@@ -1,0 +1,14 @@
+<map id="/home/runner/work/hal/hal/plugins/solve_fsm/include/solve_fsm/plugin_solve_fsm.h" name="/home/runner/work/hal/hal/plugins/solve_fsm/include/solve_fsm/plugin_solve_fsm.h">
+<area shape="rect" id="node1" title=" " alt="" coords="588,5,776,76"/>
+<area shape="rect" id="node2" href="$plugin__interface__base_8h.html" title=" " alt="" coords="24,124,206,165"/>
+<area shape="rect" id="node5" title=" " alt="" coords="640,303,691,329"/>
+<area shape="rect" id="node6" title=" " alt="" coords="36,303,79,329"/>
+<area shape="rect" id="node8" href="$fsm__transition_8h.html" title=" " alt="" coords="602,131,762,158"/>
+<area shape="rect" id="node11" title=" " alt="" coords="848,221,918,247"/>
+<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="332,303,472,329"/>
+<area shape="rect" id="node4" href="$log_8h.html" title=" " alt="" coords="50,213,180,255"/>
+<area shape="rect" id="node7" title=" " alt="" coords="142,303,200,329"/>
+<area shape="rect" id="node9" href="$net_8h.html" title=" " alt="" coords="205,221,364,247"/>
+<area shape="rect" id="node10" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="439,221,618,247"/>
+<area shape="rect" id="node12" title=" " alt="" coords="642,221,722,247"/>
+</map>

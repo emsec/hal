@@ -1,0 +1,34 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" title=" " alt="" coords="5,998,96,1025"/>
+<area shape="rect" id="node2" href="$structnlohmann_1_1detail_1_1is__compatible__array__type__impl.html" title=" " alt="" coords="149,5,397,76"/>
+<area shape="rect" id="node4" href="$structnlohmann_1_1detail_1_1is__compatible__integer__type__impl.html" title=" " alt="" coords="151,100,395,171"/>
+<area shape="rect" id="node6" href="$structnlohmann_1_1detail_1_1is__compatible__object__type__impl.html" title=" " alt="" coords="149,195,397,265"/>
+<area shape="rect" id="node8" href="$structnlohmann_1_1detail_1_1is__compatible__string__type__impl.html" title=" " alt="" coords="144,289,403,360"/>
+<area shape="rect" id="node10" href="$structnlohmann_1_1detail_1_1is__compatible__type__impl.html" title=" " alt="" coords="145,385,402,441"/>
+<area shape="rect" id="node12" href="$structnlohmann_1_1detail_1_1is__constructible__array__type__impl.html" title=" " alt="" coords="171,465,376,536"/>
+<area shape="rect" id="node14" href="$structnlohmann_1_1detail_1_1is__constructible__object__type__impl.html" title=" " alt="" coords="171,560,376,631"/>
+<area shape="rect" id="node16" href="$structnlohmann_1_1detail_1_1is__constructible__string__type__impl.html" title=" " alt="" coords="171,655,376,725"/>
+<area shape="rect" id="node18" href="$structnlohmann_1_1detail_1_1has__from__json.html" title=" " alt="" coords="171,750,376,806"/>
+<area shape="rect" id="node19" href="$structnlohmann_1_1detail_1_1has__non__default__from__json.html" title=" " alt="" coords="156,830,391,886"/>
+<area shape="rect" id="node20" href="$structnlohmann_1_1detail_1_1has__to__json.html" title=" " alt="" coords="180,910,367,966"/>
+<area shape="rect" id="node21" href="$structnlohmann_1_1detail_1_1is__basic__json.html" title=" " alt="" coords="177,991,370,1032"/>
+<area shape="rect" id="node22" href="$structnlohmann_1_1detail_1_1is__compatible__array__type__impl.html" title=" " alt="" coords="149,1056,397,1127"/>
+<area shape="rect" id="node23" href="$structnlohmann_1_1detail_1_1is__compatible__integer__type__impl.html" title=" " alt="" coords="157,1151,390,1237"/>
+<area shape="rect" id="node24" href="$structnlohmann_1_1detail_1_1is__compatible__object__type__impl.html" title=" " alt="" coords="149,1261,397,1332"/>
+<area shape="rect" id="node25" href="$structnlohmann_1_1detail_1_1is__compatible__string__type__impl.html" title=" " alt="" coords="149,1356,397,1427"/>
+<area shape="rect" id="node26" href="$structnlohmann_1_1detail_1_1is__compatible__type__impl.html" title=" " alt="" coords="150,1451,397,1521"/>
+<area shape="rect" id="node27" href="$structnlohmann_1_1detail_1_1is__complete__type.html" title=" " alt="" coords="154,1545,393,1587"/>
+<area shape="rect" id="node28" href="$structnlohmann_1_1detail_1_1is__constructible__array__type__impl.html" title=" " alt="" coords="171,1611,376,1697"/>
+<area shape="rect" id="node29" href="$structnlohmann_1_1detail_1_1is__constructible__object__type__impl.html" title=" " alt="" coords="171,1721,376,1806"/>
+<area shape="rect" id="node30" href="$structnlohmann_1_1detail_1_1is__constructible__string__type__impl.html" title=" " alt="" coords="171,1830,376,1915"/>
+<area shape="rect" id="node31" href="$structnlohmann_1_1detail_1_1is__constructible__tuple.html" title=" " alt="" coords="197,1939,350,1995"/>
+<area shape="rect" id="node32" href="$structnlohmann_1_1detail_1_1is__iterator__traits.html" title=" " alt="" coords="198,2019,349,2075"/>
+<area shape="rect" id="node3" href="$structnlohmann_1_1detail_1_1is__compatible__array__type.html" title=" " alt="" coords="466,5,713,76"/>
+<area shape="rect" id="node5" href="$structnlohmann_1_1detail_1_1is__compatible__integer__type.html" title=" " alt="" coords="451,100,728,171"/>
+<area shape="rect" id="node7" href="$structnlohmann_1_1detail_1_1is__compatible__object__type.html" title=" " alt="" coords="462,195,717,265"/>
+<area shape="rect" id="node9" href="$structnlohmann_1_1detail_1_1is__compatible__string__type.html" title=" " alt="" coords="478,289,701,360"/>
+<area shape="rect" id="node11" href="$structnlohmann_1_1detail_1_1is__compatible__type.html" title=" " alt="" coords="482,385,697,441"/>
+<area shape="rect" id="node13" href="$structnlohmann_1_1detail_1_1is__constructible__array__type.html" title=" " alt="" coords="493,465,685,536"/>
+<area shape="rect" id="node15" href="$structnlohmann_1_1detail_1_1is__constructible__object__type.html" title=" " alt="" coords="490,560,689,631"/>
+<area shape="rect" id="node17" href="$structnlohmann_1_1detail_1_1is__constructible__string__type.html" title=" " alt="" coords="492,655,687,725"/>
+</map>

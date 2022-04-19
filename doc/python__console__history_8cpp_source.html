@@ -103,10 +103,10 @@ $(document).ready(function(){initNavTree('python__console__history_8cpp_source.h
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    {</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    }</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="classhal_1_1_python_console_history.html#ad6c9a158ab9448a7b42725a4cf920cd3">   18</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_python_console_history.html#ad6c9a158ab9448a7b42725a4cf920cd3">PythonConsoleHistory::addHistory</a>(<span class="keyword">const</span> std::string&amp; command)</div>
+<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="classhal_1_1_python_console_history.html#ad6c9a158ab9448a7b42725a4cf920cd3">   18</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_python_console_history.html#ad6c9a158ab9448a7b42725a4cf920cd3">PythonConsoleHistory::addHistory</a>(<span class="keyword">const</span> std::string&amp; <a class="code" href="namespacecontrol.html#afd9eb2b1b752938d8b63684f7d1fecde">command</a>)</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    {</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        mHistory.push_back(command);</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        appendToFile(command);</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        mHistory.push_back(<a class="code" href="namespacecontrol.html#afd9eb2b1b752938d8b63684f7d1fecde">command</a>);</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        appendToFile(<a class="code" href="namespacecontrol.html#afd9eb2b1b752938d8b63684f7d1fecde">command</a>);</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    }</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
 <div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classhal_1_1_python_console_history.html#a720587a5ac6d094e2a74e078188bcde6">   24</a></span>&#160;    <span class="keyword">const</span> std::string&amp; <a class="code" href="classhal_1_1_python_console_history.html#a720587a5ac6d094e2a74e078188bcde6">PythonConsoleHistory::getHistoryItem</a>(<span class="keyword">const</span> <span class="keywordtype">int</span>&amp; index)<span class="keyword"> const</span></div>
@@ -130,10 +130,10 @@ $(document).ready(function(){initNavTree('python__console__history_8cpp_source.h
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        }</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    }</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordtype">void</span> PythonConsoleHistory::appendToFile(<span class="keyword">const</span> std::string&amp; command)</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordtype">void</span> PythonConsoleHistory::appendToFile(<span class="keyword">const</span> std::string&amp; <a class="code" href="namespacecontrol.html#afd9eb2b1b752938d8b63684f7d1fecde">command</a>)</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    {</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        std::ofstream f(mFileName, std::ios::out | std::ios::app);</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        f &lt;&lt; command &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        f &lt;&lt; <a class="code" href="namespacecontrol.html#afd9eb2b1b752938d8b63684f7d1fecde">command</a> &lt;&lt; std::endl;</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    }</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
@@ -146,12 +146,13 @@ $(document).ready(function(){initNavTree('python__console__history_8cpp_source.h
 <div class="ttc" id="aclasshal_1_1_python_console_history_html_ad6c9a158ab9448a7b42725a4cf920cd3"><div class="ttname"><a href="classhal_1_1_python_console_history.html#ad6c9a158ab9448a7b42725a4cf920cd3">hal::PythonConsoleHistory::addHistory</a></div><div class="ttdeci">void addHistory(const std::string &amp;command)</div><div class="ttdef"><b>Definition:</b> <a href="python__console__history_8cpp_source.html#l00018">python_console_history.cpp:18</a></div></div>
 <div class="ttc" id="aclasshal_1_1_python_console_history_html_add8d28f16071f60c44d2f91a70e27fbf"><div class="ttname"><a href="classhal_1_1_python_console_history.html#add8d28f16071f60c44d2f91a70e27fbf">hal::PythonConsoleHistory::PythonConsoleHistory</a></div><div class="ttdeci">PythonConsoleHistory()</div><div class="ttdef"><b>Definition:</b> <a href="python__console__history_8cpp_source.html#l00009">python_console_history.cpp:9</a></div></div>
 <div class="ttc" id="apython__console__history_8h_html"><div class="ttname"><a href="python__console__history_8h.html">python_console_history.h</a></div></div>
+<div class="ttc" id="anamespacecontrol_html_afd9eb2b1b752938d8b63684f7d1fecde"><div class="ttname"><a href="namespacecontrol.html#afd9eb2b1b752938d8b63684f7d1fecde">control.command</a></div><div class="ttdeci">string command</div><div class="ttdef"><b>Definition:</b> <a href="control_8py_source.html#l00076">control.py:76</a></div></div>
 <div class="ttc" id="aclasshal_1_1_python_console_history_html_aa475c3d950cf6297b6aef02132b4ae8b"><div class="ttname"><a href="classhal_1_1_python_console_history.html#aa475c3d950cf6297b6aef02132b4ae8b">hal::PythonConsoleHistory::~PythonConsoleHistory</a></div><div class="ttdeci">~PythonConsoleHistory()</div><div class="ttdef"><b>Definition:</b> <a href="python__console__history_8cpp_source.html#l00014">python_console_history.cpp:14</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_609dd161604b7aa86c7b630207f12412.html">python</a></li><li class="navelem"><a class="el" href="python__console__history_8cpp.html">python_console_history.cpp</a></li>
-    <li class="footer">Generated on Mon Apr 11 2022 13:34:44 for HAL by
+    <li class="footer">Generated on Tue Apr 19 2022 13:11:31 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -9,7 +9,7 @@ var dir_ded422ec9f163017e5e46b66204ec4a3 =
     [ "gate_library_manager.cpp", "python__bindings_2bindings_2gate__library__manager_8cpp.html", "python__bindings_2bindings_2gate__library__manager_8cpp" ],
     [ "gate_type.cpp", "python__bindings_2bindings_2gate__type_8cpp.html", "python__bindings_2bindings_2gate__type_8cpp" ],
     [ "gate_type_components.cpp", "gate__type__components_8cpp.html", "gate__type__components_8cpp" ],
-    [ "grouping.cpp", "python__bindings_2bindings_2grouping_8cpp.html", "python__bindings_2bindings_2grouping_8cpp" ],
+    [ "grouping.cpp", "src_2python__bindings_2bindings_2grouping_8cpp.html", "src_2python__bindings_2bindings_2grouping_8cpp" ],
     [ "module.cpp", "python__bindings_2bindings_2module_8cpp.html", "python__bindings_2bindings_2module_8cpp" ],
     [ "net.cpp", "python__bindings_2bindings_2net_8cpp.html", "python__bindings_2bindings_2net_8cpp" ],
     [ "netlist.cpp", "src_2python__bindings_2bindings_2netlist_8cpp.html", "src_2python__bindings_2bindings_2netlist_8cpp" ],

@@ -124,7 +124,7 @@ $(document).ready(function(){initNavTree('program__options_8cpp_source.html','')
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        std::vector&lt;std::string&gt; current_parameters;</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keywordtype">size_t</span> param_pos = 0;</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <a class="code" href="classhal_1_1_program_arguments.html">ProgramArguments</a> args(argc, argv);</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <a class="code" href="classhal_1_1_program_arguments.html">ProgramArguments</a> <a class="code" href="namespacecontrol.html#a3cdfe36ea256f5d4c35f5d89c9f22d46">args</a>(argc, argv);</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="comment">// i=1: ignore first argument as it is the program itself</span></div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 1; i &lt; argc; ++i)</div>
@@ -149,7 +149,7 @@ $(document).ready(function(){initNavTree('program__options_8cpp_source.html','')
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                        }</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                        <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                        {</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                            args.<a class="code" href="classhal_1_1_program_arguments.html#af747a0b76c84b11d3d44fa998038df79">set_option</a>(current_flag, current_option-&gt;flags, current_parameters);</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                            <a class="code" href="namespacecontrol.html#a3cdfe36ea256f5d4c35f5d89c9f22d46">args</a>.set_option(current_flag, current_option-&gt;flags, current_parameters);</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                        }</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                    }</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
@@ -179,7 +179,7 @@ $(document).ready(function(){initNavTree('program__options_8cpp_source.html','')
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            <span class="comment">// if the current option got all expected parameters, it is finished</span></div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;            <span class="keywordflow">if</span> (current_option != <span class="keyword">nullptr</span> &amp;&amp; param_pos &gt;= current_option-&gt;parameters.size())</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;            {</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;                args.<a class="code" href="classhal_1_1_program_arguments.html#af747a0b76c84b11d3d44fa998038df79">set_option</a>(current_flag, current_option-&gt;flags, current_parameters);</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;                <a class="code" href="namespacecontrol.html#a3cdfe36ea256f5d4c35f5d89c9f22d46">args</a>.set_option(current_flag, current_option-&gt;flags, current_parameters);</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                current_option = <span class="keyword">nullptr</span>;</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                current_parameters.clear();</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                current_flag = <span class="stringliteral">&quot;&quot;</span>;</div>
@@ -196,10 +196,10 @@ $(document).ready(function(){initNavTree('program__options_8cpp_source.html','')
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;                    <a class="code" href="namespacehal_1_1utils.html#a6da84185634d8a00ea82c3b3bf6798b3">utils::join</a>(<span class="stringliteral">&quot; &quot;</span>, std::vector&lt;std::string&gt;(current_option-&gt;flags.begin(), current_option-&gt;flags.end())));</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;            }</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;            args.<a class="code" href="classhal_1_1_program_arguments.html#af747a0b76c84b11d3d44fa998038df79">set_option</a>(current_flag, current_option-&gt;flags, current_parameters);</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;            <a class="code" href="namespacecontrol.html#a3cdfe36ea256f5d4c35f5d89c9f22d46">args</a>.set_option(current_flag, current_option-&gt;flags, current_parameters);</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        }</div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        <span class="keywordflow">return</span> args;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="namespacecontrol.html#a3cdfe36ea256f5d4c35f5d89c9f22d46">args</a>;</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    }</div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
 <div class="line"><a name="l00117"></a><span class="lineno"><a class="line" href="classhal_1_1_program_options.html#a751129e8ad6e0b07d7258279e3c59b85">  117</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_program_options.html#a751129e8ad6e0b07d7258279e3c59b85">ProgramOptions::is_registered</a>(<span class="keyword">const</span> std::string&amp; flag)<span class="keyword"> const</span></div>
@@ -536,7 +536,6 @@ $(document).ready(function(){initNavTree('program__options_8cpp_source.html','')
 <div class="ttc" id="aclasshal_1_1_program_arguments_html"><div class="ttname"><a href="classhal_1_1_program_arguments.html">hal::ProgramArguments</a></div><div class="ttdef"><b>Definition:</b> <a href="program__arguments_8h_source.html#l00043">program_arguments.h:43</a></div></div>
 <div class="ttc" id="aclasshal_1_1_program_options_html_a90f4f3a1d46824e398c29044f47e6b6a"><div class="ttname"><a href="classhal_1_1_program_options.html#a90f4f3a1d46824e398c29044f47e6b6a">hal::ProgramOptions::get_options</a></div><div class="ttdeci">std::vector&lt; std::tuple&lt; std::set&lt; std::string &gt;, std::string &gt; &gt; get_options() const</div><div class="ttdef"><b>Definition:</b> <a href="program__options_8cpp_source.html#l00285">program_options.cpp:285</a></div></div>
 <div class="ttc" id="aprogram__arguments_8h_html"><div class="ttname"><a href="program__arguments_8h.html">program_arguments.h</a></div></div>
-<div class="ttc" id="aclasshal_1_1_program_arguments_html_af747a0b76c84b11d3d44fa998038df79"><div class="ttname"><a href="classhal_1_1_program_arguments.html#af747a0b76c84b11d3d44fa998038df79">hal::ProgramArguments::set_option</a></div><div class="ttdeci">void set_option(const std::string &amp;flag, const std::string &amp;parameter)</div><div class="ttdef"><b>Definition:</b> <a href="program__arguments_8cpp_source.html#l00043">program_arguments.cpp:43</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00009">solver.cpp:9</a></div></div>
 <div class="ttc" id="aprogram__options_8h_html"><div class="ttname"><a href="program__options_8h.html">program_options.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1_program_options_html_af558ab13189b6d4442edfd7bff2a832d"><div class="ttname"><a href="classhal_1_1_program_options.html#af558ab13189b6d4442edfd7bff2a832d">hal::ProgramOptions::A_REQUIRED_PARAMETER</a></div><div class="ttdeci">static const std::string A_REQUIRED_PARAMETER</div><div class="ttdoc">constant to specify that a parameter is required and does not have a default value.</div><div class="ttdef"><b>Definition:</b> <a href="program__options_8h_source.html#l00049">program_options.h:49</a></div></div>
@@ -551,13 +550,14 @@ $(document).ready(function(){initNavTree('program__options_8cpp_source.html','')
 <div class="ttc" id="aclasshal_1_1_program_options_html_a34dc05683ea51eaa706c5b0d30c94820"><div class="ttname"><a href="classhal_1_1_program_options.html#a34dc05683ea51eaa706c5b0d30c94820">hal::ProgramOptions::get_options_string</a></div><div class="ttdeci">std::string get_options_string() const</div><div class="ttdef"><b>Definition:</b> <a href="program__options_8cpp_source.html#l00265">program_options.cpp:265</a></div></div>
 <div class="ttc" id="alog_8h_html"><div class="ttname"><a href="log_8h.html">log.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1_program_options_html_a7946b5dc6662a17e747bdcc65537459b"><div class="ttname"><a href="classhal_1_1_program_options.html#a7946b5dc6662a17e747bdcc65537459b">hal::ProgramOptions::remove</a></div><div class="ttdeci">bool remove(const std::string &amp;flag)</div><div class="ttdef"><b>Definition:</b> <a href="program__options_8cpp_source.html#l00237">program_options.cpp:237</a></div></div>
+<div class="ttc" id="anamespacecontrol_html_a3cdfe36ea256f5d4c35f5d89c9f22d46"><div class="ttname"><a href="namespacecontrol.html#a3cdfe36ea256f5d4c35f5d89c9f22d46">control.args</a></div><div class="ttdeci">args</div><div class="ttdef"><b>Definition:</b> <a href="control_8py_source.html#l00033">control.py:33</a></div></div>
 <div class="ttc" id="aclasshal_1_1_program_options_html_a92aa887fce50724339aebea1ab3836ee"><div class="ttname"><a href="classhal_1_1_program_options.html#a92aa887fce50724339aebea1ab3836ee">hal::ProgramOptions::parse</a></div><div class="ttdeci">ProgramArguments parse(int argc, const char *argv[])</div><div class="ttdef"><b>Definition:</b> <a href="program__options_8cpp_source.html#l00027">program_options.cpp:27</a></div></div>
 <div class="ttc" id="aclasshal_1_1_program_options_html_a9dd3cc27b3d0a9bfaa87999390594fa5"><div class="ttname"><a href="classhal_1_1_program_options.html#a9dd3cc27b3d0a9bfaa87999390594fa5">hal::ProgramOptions::add</a></div><div class="ttdeci">bool add(const std::string &amp;flag, const std::string &amp;description, const std::initializer_list&lt; std::string &gt; &amp;parameters={})</div><div class="ttdef"><b>Definition:</b> <a href="program__options_8cpp_source.html#l00129">program_options.cpp:129</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_7b5d38f1875f1b693f62ca6a108a1129.html">utilities</a></li><li class="navelem"><a class="el" href="program__options_8cpp.html">program_options.cpp</a></li>
-    <li class="footer">Generated on Mon Apr 11 2022 13:34:44 for HAL by
+    <li class="footer">Generated on Tue Apr 19 2022 13:11:35 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -120,7 +120,7 @@ $(document).ready(function(){initNavTree('plugin__system_2plugin__manager_8cpp_s
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;            std::unordered_map&lt;std::string, std::string&gt; m_cli_option_to_ui_plugin_name;</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;            <span class="comment">// stores the GUI callback</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            <a class="code" href="classhal_1_1_callback_hook.html">CallbackHook</a>&lt;void(<span class="keywordtype">bool</span>, std::string <span class="keyword">const</span>&amp;, std::string <span class="keyword">const</span>&amp;)&gt; m_hook;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            <a class="code" href="classhal_1_1_callback_hook.html">CallbackHook</a>&lt;<a class="code" href="namespacenlohmann_1_1detail.html#a59fca69799f6b9e366710cb9043aa77d">void</a>(<span class="keywordtype">bool</span>, std::string <span class="keyword">const</span>&amp;, std::string <span class="keyword">const</span>&amp;)&gt; m_hook;</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            <span class="comment">// stores the generic option parser</span></div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            <a class="code" href="classhal_1_1_program_options.html">ProgramOptions</a> m_existing_options(<span class="stringliteral">&quot;existing options&quot;</span>);</div>
@@ -498,6 +498,7 @@ $(document).ready(function(){initNavTree('plugin__system_2plugin__manager_8cpp_s
 <div class="ttc" id="aclasshal_1_1_u_i_plugin_interface_html_aa402ba253b62f31e37ffa2f140600da3"><div class="ttname"><a href="classhal_1_1_u_i_plugin_interface.html#aa402ba253b62f31e37ffa2f140600da3">hal::UIPluginInterface::get_cli_options</a></div><div class="ttdeci">virtual ProgramOptions get_cli_options() const =0</div></div>
 <div class="ttc" id="aplugin__interface__cli_8h_html"><div class="ttname"><a href="plugin__interface__cli_8h.html">plugin_interface_cli.h</a></div></div>
 <div class="ttc" id="anamespacehal_1_1plugin__manager_html_acb6d1f3c164b832fb19257b1df06aa53"><div class="ttname"><a href="namespacehal_1_1plugin__manager.html#acb6d1f3c164b832fb19257b1df06aa53">hal::plugin_manager::unload_all_plugins</a></div><div class="ttdeci">bool unload_all_plugins()</div><div class="ttdef"><b>Definition:</b> <a href="plugin__system_2plugin__manager_8cpp_source.html#l00274">plugin_manager.cpp:274</a></div></div>
+<div class="ttc" id="anamespacenlohmann_1_1detail_html_a59fca69799f6b9e366710cb9043aa77d"><div class="ttname"><a href="namespacenlohmann_1_1detail.html#a59fca69799f6b9e366710cb9043aa77d">nlohmann::detail::void</a></div><div class="ttdeci">j template void())</div><div class="ttdef"><b>Definition:</b> <a href="json_8hpp_source.html#l03108">json.hpp:3108</a></div></div>
 <div class="ttc" id="aruntime__library_8h_html"><div class="ttname"><a href="runtime__library_8h.html">runtime_library.h</a></div></div>
 <div class="ttc" id="anamespacehal_1_1plugin__manager_html_af13862a2a5565fb995d7cc93c0bfd980"><div class="ttname"><a href="namespacehal_1_1plugin__manager.html#af13862a2a5565fb995d7cc93c0bfd980">hal::plugin_manager::load_all_plugins</a></div><div class="ttdeci">bool load_all_plugins(const std::vector&lt; std::filesystem::path &gt; &amp;directory_names)</div><div class="ttdef"><b>Definition:</b> <a href="plugin__system_2plugin__manager_8cpp_source.html#l00119">plugin_manager.cpp:119</a></div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_a0de77a47a2551c69619fd6e3fce84674"><div class="ttname"><a href="namespacehal_1_1utils.html#a0de77a47a2551c69619fd6e3fce84674">hal::utils::ends_with</a></div><div class="ttdeci">CORE_API bool ends_with(const T &amp;s, const T &amp;end)</div><div class="ttdef"><b>Definition:</b> <a href="utils_8h_source.html#l00102">utils.h:102</a></div></div>
@@ -518,7 +519,7 @@ $(document).ready(function(){initNavTree('plugin__system_2plugin__manager_8cpp_s
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_305084980f5b1614aa764d430f06c863.html">plugin_system</a></li><li class="navelem"><a class="el" href="plugin__system_2plugin__manager_8cpp.html">plugin_manager.cpp</a></li>
-    <li class="footer">Generated on Mon Apr 11 2022 13:34:44 for HAL by
+    <li class="footer">Generated on Tue Apr 19 2022 13:11:35 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['rawptrwrapper_34813',['RawPtrWrapper',['../group__pybind.html#ga81181bacca930bfda574ce3a51a01e9c',1,'hal']]]
+  ['handle_5fptr_5ft_38121',['handle_ptr_t',['../namespacehal.html#a974188318f6c3613e6fa1993cea21a1e',1,'hal']]]
 ];

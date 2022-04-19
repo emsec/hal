@@ -152,9 +152,9 @@ $(document).ready(function(){initNavTree('plugin__interface__base_8h_source.html
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keywordtype">bool</span> has_type(PluginInterfaceType t) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</div>
-<div class="line"><a name="l00105"></a><span class="lineno"><a class="line" href="classhal_1_1_base_plugin_interface.html#a05a8364dad5101585d352f97c98ff527">  105</a></span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_base_plugin_interface.html#a05a8364dad5101585d352f97c98ff527">log</a>(<span class="keyword">const</span> Args&amp;... args)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno"><a class="line" href="classhal_1_1_base_plugin_interface.html#a05a8364dad5101585d352f97c98ff527">  105</a></span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_base_plugin_interface.html#a05a8364dad5101585d352f97c98ff527">log</a>(<span class="keyword">const</span> Args&amp;... <a class="code" href="namespacecontrol.html#a3cdfe36ea256f5d4c35f5d89c9f22d46">args</a>)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(get_name(), args...);</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(get_name(), <a class="code" href="namespacecontrol.html#a3cdfe36ea256f5d4c35f5d89c9f22d46">args</a>...);</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        }</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        <span class="keyword">virtual</span> std::set&lt;std::string&gt; get_dependencies() <span class="keyword">const</span>;</div>
@@ -183,12 +183,13 @@ $(document).ready(function(){initNavTree('plugin__interface__base_8h_source.html
 <div class="ttc" id="anamespacehal_html_a45f4052286462e64763c142a3e26ab93"><div class="ttname"><a href="namespacehal.html#a45f4052286462e64763c142a3e26ab93">hal::initialize</a></div><div class="ttdeci">void initialize()</div><div class="ttdef"><b>Definition:</b> <a href="event__log_8cpp_source.html#l00278">event_log.cpp:278</a></div></div>
 <div class="ttc" id="alog_8h_html"><div class="ttname"><a href="log_8h.html">log.h</a></div></div>
 <div class="ttc" id="aarch__linux_8h_html_afcb1b0bf7320fa3ebfc13fd896ebca4d"><div class="ttname"><a href="arch__linux_8h.html#afcb1b0bf7320fa3ebfc13fd896ebca4d">PLUGIN_API</a></div><div class="ttdeci">#define PLUGIN_API</div><div class="ttdef"><b>Definition:</b> <a href="arch__linux_8h_source.html#l00030">arch_linux.h:30</a></div></div>
+<div class="ttc" id="anamespacecontrol_html_a3cdfe36ea256f5d4c35f5d89c9f22d46"><div class="ttname"><a href="namespacecontrol.html#a3cdfe36ea256f5d4c35f5d89c9f22d46">control.args</a></div><div class="ttdeci">args</div><div class="ttdef"><b>Definition:</b> <a href="control_8py_source.html#l00033">control.py:33</a></div></div>
 <div class="ttc" id="aplugin__interface__base_8h_html_a42221ae13c427234b08a21d229eb2ad9"><div class="ttname"><a href="plugin__interface__base_8h.html#a42221ae13c427234b08a21d229eb2ad9">base</a></div><div class="ttdeci">base</div><div class="ttdef"><b>Definition:</b> <a href="plugin__interface__base_8h_source.html#l00055">plugin_interface_base.h:55</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_6df68e7c4858c229578de4afea200fae.html">plugin_system</a></li><li class="navelem"><a class="el" href="plugin__interface__base_8h.html">plugin_interface_base.h</a></li>
-    <li class="footer">Generated on Mon Apr 11 2022 13:34:42 for HAL by
+    <li class="footer">Generated on Tue Apr 19 2022 13:11:29 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -1,0 +1,12 @@
+<map id="/home/runner/work/hal/hal/plugins/dataflow_analysis/src/processing/passes/merge_successor_predecessor_groupings.cpp" name="/home/runner/work/hal/hal/plugins/dataflow_analysis/src/processing/passes/merge_successor_predecessor_groupings.cpp">
+<area shape="rect" id="node1" title=" " alt="" coords="426,5,633,91"/>
+<area shape="rect" id="node2" href="$merge__successor__predecessor__groupings_8h.html" title=" " alt="" coords="5,139,280,195"/>
+<area shape="rect" id="node4" href="$netlist__abstraction_8h.html" title=" " alt="" coords="779,146,979,187"/>
+<area shape="rect" id="node9" href="$group__by__successors__predecessors_8h.html" title=" " alt="" coords="304,139,517,195"/>
+<area shape="rect" id="node10" href="$merge__states_8h.html" title=" " alt="" coords="541,146,755,187"/>
+<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="425,243,565,269"/>
+<area shape="rect" id="node5" title=" " alt="" coords="615,243,739,269"/>
+<area shape="rect" id="node6" title=" " alt="" coords="764,243,879,269"/>
+<area shape="rect" id="node7" title=" " alt="" coords="903,243,966,269"/>
+<area shape="rect" id="node8" title=" " alt="" coords="991,243,1033,269"/>
+</map>

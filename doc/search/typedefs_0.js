@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['caseinsensitivestring_34796',['CaseInsensitiveString',['../namespacehal_1_1core__strings.html#a939599c80f140610abb0390b66acf8a6',1,'hal::core_strings']]]
+  ['allocator_5ftype_38091',['allocator_type',['../classnlohmann_1_1basic__json.html#a86ce930490cf7773b26f5ef49c04a350',1,'nlohmann::basic_json']]],
+  ['array_5ft_38092',['array_t',['../classnlohmann_1_1basic__json.html#ae095578e03df97c5b3991787f1056374',1,'nlohmann::basic_json']]]
 ];
