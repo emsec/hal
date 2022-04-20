@@ -206,7 +206,7 @@ namespace hal
         BooleanFunction get_boolean_function(const GatePin* pin = nullptr) const;
 
         /**
-         * Get a map from function name to boolean function for all boolean functions associated with this gate.
+         * Get a map from function name to Boolean function for all boolean functions associated with this gate.
          *
          * @param[in] only_custom_functions - Set `true` to get only Boolean functions that are local to the gate, `false` otherwise.
          * @returns A map from function name to function on success, an empty map otherwise.
@@ -387,7 +387,7 @@ namespace hal
          * Get a single direct predecessor endpoint that is connected to the input pin specified by name.
          * Fails if there are no or more than one predecessors.
          *
-         * @param[in] pin_name - The input pin.
+         * @param[in] pin_name - The input pin name.
          * @returns The predecessor endpoint on success, a `nullptr` otherwise.
          */
         Endpoint* get_predecessor(const std::string& pin_name) const;
@@ -426,7 +426,7 @@ namespace hal
          * Get a single direct successor endpoint that is connected to the output pin specified by name.
          * Fails if there are no or more than one successors.
          *
-         * @param[in] pin_name - The output pin.
+         * @param[in] pin_name - The output pin name.
          * @returns The successor endpoint on success, a `nullptr` otherwise.
          */
         Endpoint* get_successor(const std::string& pin_name) const;

@@ -1,7 +1,9 @@
 #include "hal_core/utilities/json_write_document.h"
-#include <fstream>
-#include "rapidjson/stringbuffer.h"
+
 #include "rapidjson/filereadstream.h"
+#include "rapidjson/stringbuffer.h"
+
+#include <fstream>
 
 #define PRETTY_JSON_OUTPUT 0
 #if PRETTY_JSON_OUTPUT == 1
@@ -10,22 +12,24 @@
 #include "rapidjson/writer.h"
 #endif
 
-namespace hal {
-//--- Data -------
-    JsonWriteData::JsonWriteData(const std::string& tag, JsonWriteComplex *parent)
-        : mTagname(tag), mParent(parent)
-    {;}
+namespace hal
+{
+    //--- Data -------
+    JsonWriteData::JsonWriteData(const std::string& tag, JsonWriteComplex* parent) : mTagname(tag), mParent(parent)
+    {
+        ;
+    }
 
     rapidjson::Document::AllocatorType& JsonWriteData::allocator()
     {
         JsonWriteComplex* p = mParent;
         if (!p)
-            p = static_cast<JsonWriteObject*>(this); // no parent: must be document
+            p = static_cast<JsonWriteObject*>(this);    // no parent: must be document
         else
             while (p->mParent)
             {
-                 p = p->mParent;
-                assert( p != p->mParent);
+                p = p->mParent;
+                assert(p != p->mParent);
             }
         JsonWriteDocument* doc = dynamic_cast<JsonWriteDocument*>(p);
         assert(doc);
@@ -36,9 +40,7 @@ namespace hal {
     {
         JsonWriteObject* p = dynamic_cast<JsonWriteObject*>(mParent);
         assert(p);
-        p->add_member(rapidjson::Value(mTagname, allocator()),
-                      rapidjson::Value(txt, allocator()),
-                      allocator());
+        p->add_member(rapidjson::Value(mTagname, allocator()), rapidjson::Value(txt, allocator()), allocator());
         return *this;
     }
 
@@ -46,9 +48,7 @@ namespace hal {
     {
         JsonWriteObject* p = dynamic_cast<JsonWriteObject*>(mParent);
         assert(p);
-        p->add_member(rapidjson::Value(mTagname, allocator()),
-                      rapidjson::Value(ivalue),
-                      allocator());
+        p->add_member(rapidjson::Value(mTagname, allocator()), rapidjson::Value(ivalue), allocator());
         return *this;
     }
 
@@ -56,16 +56,15 @@ namespace hal {
     {
         JsonWriteObject* p = dynamic_cast<JsonWriteObject*>(mParent);
         assert(p);
-        p->add_member(rapidjson::Value(mTagname, allocator()),
-                      rapidjson::Value(u64Value),
-                      allocator());
+        p->add_member(rapidjson::Value(mTagname, allocator()), rapidjson::Value(u64Value), allocator());
         return *this;
     }
 
-//--- Complex ----
-    JsonWriteComplex::JsonWriteComplex(const std::string& tag, JsonWriteComplex *parent)
-        : JsonWriteData(tag, parent)
-    {;}
+    //--- Complex ----
+    JsonWriteComplex::JsonWriteComplex(const std::string& tag, JsonWriteComplex* parent) : JsonWriteData(tag, parent)
+    {
+        ;
+    }
 
     JsonWriteComplex::~JsonWriteComplex()
     {
@@ -79,90 +78,82 @@ namespace hal {
         mParent->finalize(this);
     }
 
-
-//--- Object -----
-    JsonWriteObject::JsonWriteObject(const std::string& tag, JsonWriteComplex *parent)
-        : JsonWriteComplex(tag, parent)
+    //--- Object -----
+    JsonWriteObject::JsonWriteObject(const std::string& tag, JsonWriteComplex* parent) : JsonWriteComplex(tag, parent)
     {
         mRapidValue.SetObject();
     }
 
-    void JsonWriteObject::add_member(rapidjson::Document::ValueType&& name,
-                                rapidjson::Document::ValueType&& value,
-                                rapidjson::Document::AllocatorType& allocator)
+    void JsonWriteObject::add_member(rapidjson::Document::ValueType&& name, rapidjson::Document::ValueType&& value, rapidjson::Document::AllocatorType& allocator)
     {
-        mRapidValue.AddMember(name,value,allocator);
+        mRapidValue.AddMember(name, value, allocator);
     }
-
 
     JsonWriteData& JsonWriteObject::operator[](const std::string& tag)
     {
-        JsonWriteData* dat = new JsonWriteData(tag,this);
+        JsonWriteData* dat = new JsonWriteData(tag, this);
         mChildData.push_back(dat);
         return *dat;
     }
 
     JsonWriteObject& JsonWriteObject::add_object(const std::string& tag)
     {
-        JsonWriteObject* obj = new JsonWriteObject(tag,this);
+        JsonWriteObject* obj = new JsonWriteObject(tag, this);
         mChildData.push_back(obj);
         return *obj;
     }
 
     JsonWriteArray& JsonWriteObject::add_array(const std::string& tag)
     {
-        JsonWriteArray* arr = new JsonWriteArray(tag,this);
+        JsonWriteArray* arr = new JsonWriteArray(tag, this);
         mChildData.push_back(arr);
         return *arr;
     }
 
-    void JsonWriteObject::finalize(JsonWriteComplex *cplx)
+    void JsonWriteObject::finalize(JsonWriteComplex* cplx)
     {
-        mRapidValue.AddMember(rapidjson::Value(cplx->mTagname, allocator()),
-                              cplx->mRapidValue,
-                              allocator());
+        mRapidValue.AddMember(rapidjson::Value(cplx->mTagname, allocator()), cplx->mRapidValue, allocator());
     }
 
-//--- Array ------
-    JsonWriteArray::JsonWriteArray(const std::string& tag, JsonWriteComplex *parent)
-        : JsonWriteComplex(tag, parent)
+    //--- Array ------
+    JsonWriteArray::JsonWriteArray(const std::string& tag, JsonWriteComplex* parent) : JsonWriteComplex(tag, parent)
     {
         mRapidValue.SetArray();
     }
 
     JsonWriteArray& JsonWriteArray::operator<<(const std::string& txt)
     {
-        mRapidValue.PushBack(rapidjson::Value(txt, allocator()),allocator());
+        mRapidValue.PushBack(rapidjson::Value(txt, allocator()), allocator());
         return *this;
     }
 
     JsonWriteArray& JsonWriteArray::operator<<(int ivalue)
     {
-        mRapidValue.PushBack(rapidjson::Value(ivalue),allocator());
+        mRapidValue.PushBack(rapidjson::Value(ivalue), allocator());
         return *this;
     }
 
     JsonWriteArray& JsonWriteArray::add_array()
     {
-        JsonWriteArray* arr = new JsonWriteArray(std::string(),this);
+        JsonWriteArray* arr = new JsonWriteArray(std::string(), this);
         mChildData.push_back(arr);
         return *arr;
     }
 
-    JsonWriteObject& JsonWriteArray::add_object() {
-        JsonWriteObject* obj = new JsonWriteObject(std::string(),this);
+    JsonWriteObject& JsonWriteArray::add_object()
+    {
+        JsonWriteObject* obj = new JsonWriteObject(std::string(), this);
         mChildData.push_back(obj);
         return *obj;
     }
 
     void JsonWriteArray::finalize(JsonWriteComplex* cplx)
     {
-        mRapidValue.PushBack(cplx->mRapidValue,allocator());
+        mRapidValue.PushBack(cplx->mRapidValue, allocator());
     }
 
-//--- Document ---
-    JsonWriteDocument::JsonWriteDocument()
-        : JsonWriteObject(std::string(),nullptr)
+    //--- Document ---
+    JsonWriteDocument::JsonWriteDocument() : JsonWriteObject(std::string(), nullptr)
     {
         mRapidDocument.SetObject();
     }
@@ -174,23 +165,19 @@ namespace hal {
 
     void JsonWriteDocument::finalize(JsonWriteComplex* cplx)
     {
-        mRapidDocument.AddMember(rapidjson::Value(cplx->mTagname, allocator()),
-                                 cplx->mRapidValue,
-                                 allocator());
+        mRapidDocument.AddMember(rapidjson::Value(cplx->mTagname, allocator()), cplx->mRapidValue, allocator());
     }
 
-    void JsonWriteDocument::add_member(rapidjson::Document::ValueType&& name,
-                                  rapidjson::Document::ValueType&& value,
-                                  rapidjson::Document::AllocatorType& allocator)
+    void JsonWriteDocument::add_member(rapidjson::Document::ValueType&& name, rapidjson::Document::ValueType&& value, rapidjson::Document::AllocatorType& allocator)
     {
-        mRapidDocument.AddMember(name,value,allocator);
+        mRapidDocument.AddMember(name, value, allocator);
     }
 
     bool JsonWriteDocument::serialize(const std::string& filename)
     {
         std::ofstream of(filename);
-        if (!of.good()) return false;
-
+        if (!of.good())
+            return false;
 
         rapidjson::StringBuffer strbuf;
 #if PRETTY_JSON_OUTPUT == 1
@@ -209,9 +196,11 @@ namespace hal {
         dump(mRapidDocument);
     }
 
-    void JsonWriteDocument::dump(rapidjson::Value &parent)
+    void JsonWriteDocument::dump(rapidjson::Value& parent)
     {
-/*        for (rapidjson::Document::MemberIterator it = parent.MemberBegin(); it!=parent.MemberEnd(); ++it)
+        UNUSED(parent);
+        /*        
+        for (rapidjson::Document::MemberIterator it = parent.MemberBegin(); it!=parent.MemberEnd(); ++it)
         {
             qDebug() << "x" << it->name.GetString();
             switch(it->value.GetType())
@@ -236,6 +225,6 @@ namespace hal {
                 break;
             }
         }
-*/
+    */
     }
-}
+}    // namespace hal

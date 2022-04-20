@@ -6,7 +6,7 @@
 
 namespace hal
 {
-    Endpoint::Endpoint(Gate* gate, const GatePin* pin, Net* net, bool is_a_destination) : m_gate(gate), m_pin(pin), m_net(net), m_is_a_destination(is_a_destination)
+    Endpoint::Endpoint(Gate* gate, GatePin* pin, Net* net, bool is_a_destination) : m_gate(gate), m_pin(pin), m_net(net), m_is_a_destination(is_a_destination)
     {
     }
 
