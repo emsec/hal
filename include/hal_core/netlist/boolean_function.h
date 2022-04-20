@@ -244,12 +244,93 @@ namespace hal
         /**
          * Concatenates two Boolean functions.
          * 
-         * @param[in] p0 - Boolean function (higher-bit part)
-         * @param[in] p1 - Boolean function (lower-bit part)
+         * @param[in] p0 - Boolean function (higher-bit part).
+         * @param[in] p1 - Boolean function (lower-bit part).
          * @param[in] size - Size of concatenated Boolean function.
          * @returns Ok() and the concatenated Boolean function on success, an error otherwise.
          */
         static Result<BooleanFunction> Concat(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+
+        /**
+         * Zero-extends a Boolean function.
+         * 
+         * @param[in] p0 - Boolean function to extend.
+         * @param[in] p1 - Constant Boolean function describing the size of the zero-extended result.
+         * @param[in] size - Size of the zero-extended Boolean function result.
+         * @returns Ok() and the extended Boolean function on success, an error otherwise.
+         */
+        static Result<BooleanFunction> Zext(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+
+        /**
+         * Sign-extends a Boolean function.
+         * 
+         * @param[in] p0 - Boolean function to extend.
+         * @param[in] p1 - Constant Boolean function describing the size of the sign-extended result.
+         * @param[in] size - Size of the sign-extended Boolean function result.
+         * @returns Ok() and the extended Boolean function on success, an error otherwise.
+         */
+        static Result<BooleanFunction> Sext(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+
+        /**
+         * Checks two Boolean functions for equality and yields a 1-bit vector constant as result.
+         * 
+         * @param[in] p0 - Boolean function.
+         * @param[in] p1 - Boolean function.
+         * @param[in] size - Bit-size of the operation (always =1).
+         * @returns Ok() and the Boolean function on success, an error otherwise.
+         */
+        static Result<BooleanFunction> Eq(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+
+        /**
+         * Checks two Boolean functions for signed less equal and yields a 1-bit vector constant as result.
+         * 
+         * @param[in] p0 - Boolean function.
+         * @param[in] p1 - Boolean function.
+         * @param[in] size - Bit-size of the operation (always =1).
+         * @returns Ok() and the Boolean function on success, an error otherwise.
+         */
+        static Result<BooleanFunction> Sle(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+
+        /**
+         * Checks two Boolean functions for signed less than and yields a 1-bit vector constant as result.
+         * 
+         * @param[in] p0 - Boolean function.
+         * @param[in] p1 - Boolean function.
+         * @param[in] size - Bit-size of the operation (always =1).
+         * @returns Ok() and the Boolean function on success, an error otherwise.
+         */
+        static Result<BooleanFunction> Slt(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+
+        /**
+         * Checks two Boolean functions for unsigned less equal and yields a 1-bit vector constant as result.
+         * 
+         * @param[in] p0 - Boolean function.
+         * @param[in] p1 - Boolean function.
+         * @param[in] size - Bit-size of the operation (always =1).
+         * @returns Ok() and the Boolean function on success, an error otherwise.
+         */
+        static Result<BooleanFunction> Ule(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+
+        /**
+         * Checks two Boolean functions for unsigned less than and yields a 1-bit vector constant as result.
+         * 
+         * @param[in] p0 - Boolean function.
+         * @param[in] p1 - Boolean function.
+         * @param[in] size - Bit-size of the operation (always =1).
+         * @returns Ok() and the Boolean function on success, an error otherwise.
+         */
+        static Result<BooleanFunction> Ult(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+
+        /**
+         * Performs an if-then-else operation with p0 as the condition, p1 as true-case, and p2 as false-case.
+         * 
+         * @param[in] p0 - Boolean function condition.
+         * @param[in] p1 - Boolean function.
+         * @param[in] p2 - Boolean function.
+         * @param[in] size - Bit-size of the operation, i.e., size of p1 and p2.
+         * @returns Ok() and the Boolean function on success, an error otherwise.
+         */
+        static Result<BooleanFunction> Ite(BooleanFunction&& p0, BooleanFunction&& p1, BooleanFunction&& p2, u16 size);
 
         /**
          * The ostream operator that forwards to_string of a boolean function.
@@ -446,6 +527,13 @@ namespace hal
          */
         bool has_constant_value(u64 value) const;
 
+        /**
+         * Get the value of a Boolean function of type `Constant` as long as it has a size <= 64-bit.
+         * 
+         * @returns The constant value on success, an error otherwise.
+         */
+        Result<u64> get_constant_value() const;
+
         /** 
          * Checks whether the tpo-level node of the Boolean function is of type `Index`. 
          * 
@@ -460,6 +548,13 @@ namespace hal
          * @returns `true` if the Boolean function is of type `Index` and holds the given value, `false` otherwise.
          */
         bool has_index_value(u16 index) const;
+
+        /**
+         * Get the value of a Boolean function of type `Index` as long as it has a size <= 16-bit.
+         * 
+         * @returns The constant value on success, an error otherwise.
+         */
+        Result<u16> get_index_value() const;
 
         /**
          * Returns the top-level node of the Boolean function.
@@ -880,6 +975,14 @@ namespace hal
         static constexpr u16 Concat = 0x0100;
         static constexpr u16 Slice  = 0x0101;
         static constexpr u16 Zext   = 0x0102;
+        static constexpr u16 Sext   = 0x0103;
+
+        static constexpr u16 Eq  = 0x0400;
+        static constexpr u16 Sle = 0x0401;
+        static constexpr u16 Slt = 0x0402;
+        static constexpr u16 Ule = 0x0403;
+        static constexpr u16 Ult = 0x0404;
+        static constexpr u16 Ite = 0x0405;
 
         static constexpr u16 Constant = 0x1000;
         static constexpr u16 Index    = 0x1001;

@@ -176,6 +176,167 @@ namespace hal
                 }
                 return BooleanFunction::Const(simplified);
             }
+
+            /**
+             * Helper function to simplify a constant SLE operation.
+             * 
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
+            BooleanFunction Sle(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+            {
+                if (std::any_of(p0.begin(), p0.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; })
+                    || std::any_of(p1.begin(), p1.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; }))
+                {
+                    return BooleanFunction::Const({BooleanFunction::Value::X});
+                }
+
+                auto msb_p0 = p0.back();
+                auto msb_p1 = p1.back();
+                if (msb_p0 == BooleanFunction::Value::ONE && msb_p1 == BooleanFunction::Value::ZERO)
+                {
+                    return BooleanFunction::Const(1, 1);
+                }
+                else if (msb_p0 == BooleanFunction::Value::ZERO && msb_p1 == BooleanFunction::Value::ONE)
+                {
+                    return BooleanFunction::Const(0, 1);
+                }
+
+                std::vector<BooleanFunction::Value> simplified;
+                u8 carry = 1;
+                u8 neq   = 0;
+                u8 res   = 0;
+                for (auto i = 0u; i < p0.size(); i++)
+                {
+                    res   = p0[i] + !(p1[i]) + carry;
+                    carry = res >> 1;
+                    neq |= res & 1;
+                }
+
+                return BooleanFunction::Const({static_cast<BooleanFunction::Value>((res & 1) | !neq)});
+            }
+
+            /**
+             * Helper function to simplify a constant SLT operation.
+             * 
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
+            BooleanFunction Slt(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+            {
+                if (std::any_of(p0.begin(), p0.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; })
+                    || std::any_of(p1.begin(), p1.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; }))
+                {
+                    return BooleanFunction::Const({BooleanFunction::Value::X});
+                }
+
+                auto msb_p0 = p0.back();
+                auto msb_p1 = p1.back();
+                if (msb_p0 == BooleanFunction::Value::ONE && msb_p1 == BooleanFunction::Value::ZERO)
+                {
+                    return BooleanFunction::Const(1, 1);
+                }
+                else if (msb_p0 == BooleanFunction::Value::ZERO && msb_p1 == BooleanFunction::Value::ONE)
+                {
+                    return BooleanFunction::Const(0, 1);
+                }
+
+                std::vector<BooleanFunction::Value> simplified;
+                u8 res   = 0;
+                u8 carry = 1;
+                for (auto i = 0u; i < p0.size(); i++)
+                {
+                    res   = p0[i] + !(p1[i]) + carry;
+                    carry = (res >> 1) & 1;
+                }
+
+                return BooleanFunction::Const({static_cast<BooleanFunction::Value>(res & 1)});
+            }
+
+            /**
+             * Helper function to simplify a constant ULE operation.
+             * 
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
+            BooleanFunction Ule(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+            {
+                if (std::any_of(p0.begin(), p0.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; })
+                    || std::any_of(p1.begin(), p1.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; }))
+                {
+                    return BooleanFunction::Const({BooleanFunction::Value::X});
+                }
+
+                for (i32 i = p0.size() - 1; i >= 0; i--)
+                {
+                    if (p0[i] == BooleanFunction::Value::ONE && p1[i] == BooleanFunction::Value::ZERO)
+                    {
+                        return BooleanFunction::Const(0, 1);
+                    }
+                    else if (p0[i] == BooleanFunction::Value::ZERO && p1[i] == BooleanFunction::Value::ONE)
+                    {
+                        return BooleanFunction::Const(1, 1);
+                    }
+                }
+                return BooleanFunction::Const(1, 1);
+            }
+
+            /**
+             * Helper function to simplify a constant ULT operation.
+             * 
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
+            BooleanFunction Ult(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+            {
+                if (std::any_of(p0.begin(), p0.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; })
+                    || std::any_of(p1.begin(), p1.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; }))
+                {
+                    return BooleanFunction::Const({BooleanFunction::Value::X});
+                }
+
+                for (i32 i = p0.size() - 1; i >= 0; i--)
+                {
+                    if (p0[i] == BooleanFunction::Value::ONE && p1[i] == BooleanFunction::Value::ZERO)
+                    {
+                        return BooleanFunction::Const(0, 1);
+                    }
+                    else if (p0[i] == BooleanFunction::Value::ZERO && p1[i] == BooleanFunction::Value::ONE)
+                    {
+                        return BooleanFunction::Const(1, 1);
+                    }
+                }
+                return BooleanFunction::Const(0, 1);
+            }
+
+            /**
+             * Helper function to simplify a constant ITE operation.
+             * 
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @param[in] p2 - Boolean function parameter 2.
+             * @returns Boolean function with a simplified constant value.
+             */
+            BooleanFunction Ite(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1, const std::vector<BooleanFunction::Value>& p2)
+            {
+                if (p0.front() == BooleanFunction::Value::ONE)
+                {
+                    return BooleanFunction::Const(p1);
+                }
+                else if (p0.front() == BooleanFunction::Value::ZERO)
+                {
+                    return BooleanFunction::Const(p2);
+                }
+                else
+                {
+                    return BooleanFunction::Const(std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::X));
+                }
+            }
+
         }    // namespace ConstantPropagation
 
         namespace
@@ -259,7 +420,7 @@ namespace hal
 
         Result<BooleanFunction> SymbolicExecution::simplify(const BooleanFunction::Node& node, std::vector<BooleanFunction>&& p) const
         {
-            if (!p.empty() && std::all_of(p.begin(), p.end(), [](const auto& function) { return function.is_constant(); }))
+            if (!p.empty() && std::all_of(p.begin(), p.end(), [](const auto& function) { return function.is_constant() || function.is_index(); }))
             {
                 if (auto res = SymbolicExecution::constant_propagation(node, std::move(p)); res.is_error())
                 {
@@ -714,6 +875,84 @@ namespace hal
                     }
                     return BooleanFunction::Slice(p[0].clone(), p[1].clone(), p[2].clone(), node.size);
                 }
+                case BooleanFunction::NodeType::Concat: {
+                    return BooleanFunction::Concat(p[0].clone(), p[1].clone(), node.size);
+                }
+                case BooleanFunction::NodeType::Zext: {
+                    return BooleanFunction::Zext(p[0].clone(), p[1].clone(), node.size);
+                }
+                case BooleanFunction::NodeType::Sext: {
+                    return BooleanFunction::Sext(p[0].clone(), p[1].clone(), node.size);
+                }
+                case BooleanFunction::NodeType::Eq: {
+                    // X == X   =>   1
+                    if (p[0] == p[1])
+                    {
+                        return OK(BooleanFunction::Const(1, node.size));
+                    }
+
+                    return BooleanFunction::Eq(p[0].clone(), p[1].clone(), node.size);
+                }
+                case BooleanFunction::NodeType::Sle: {
+                    // X <=s X   =>   1
+                    if (p[0] == p[1])
+                    {
+                        return OK(BooleanFunction::Const(1, node.size));
+                    }
+
+                    return BooleanFunction::Sle(p[0].clone(), p[1].clone(), node.size);
+                }
+                case BooleanFunction::NodeType::Slt: {
+                    // X <s X   =>   0
+                    if (p[0] == p[1])
+                    {
+                        return OK(BooleanFunction::Const(0, node.size));
+                    }
+
+                    return BooleanFunction::Slt(p[0].clone(), p[1].clone(), node.size);
+                }
+                case BooleanFunction::NodeType::Ule: {
+                    // X <= X   =>   1
+                    if (p[0] == p[1])
+                    {
+                        return OK(BooleanFunction::Const(1, node.size));
+                    }
+
+                    return BooleanFunction::Ule(p[0].clone(), p[1].clone(), node.size);
+                }
+                case BooleanFunction::NodeType::Ult: {
+                    // X < 0   =>   0
+                    if (p[1].has_constant_value(0))
+                    {
+                        return OK(BooleanFunction::Const(0, node.size));
+                    }
+                    // X < X   =>   0
+                    if (p[0] == p[1])
+                    {
+                        return OK(BooleanFunction::Const(0, node.size));
+                    }
+
+                    return BooleanFunction::Ult(p[0].clone(), p[1].clone(), node.size);
+                }
+                case BooleanFunction::NodeType::Ite: {
+                    // ITE(0, a, b)  =>  b
+                    if (p[0].has_constant_value(0))
+                    {
+                        return OK(p[2]);
+                    }
+                    // ITE(1, a, b)  =>  a
+                    if (p[0].has_constant_value(1))
+                    {
+                        return OK(p[1]);
+                    }
+                    // ITE(a, b, b)  =>  b
+                    if (p[1] == p[2])
+                    {
+                        return OK(p[1]);
+                    }
+
+                    return BooleanFunction::Ite(p[0].clone(), p[1].clone(), p[2].clone(), node.size);
+                }
                 default:
                     return ERR("could not simplify sub-expression in abstract syntax tree: not implemented for given node type");
             }
@@ -742,10 +981,42 @@ namespace hal
                     return OK(ConstantPropagation::Not(values[0]));
                 case BooleanFunction::NodeType::Xor:
                     return OK(ConstantPropagation::Xor(values[0], values[1]));
+
                 case BooleanFunction::NodeType::Add:
                     return OK(ConstantPropagation::Add(values[0], values[1]));
                 case BooleanFunction::NodeType::Sub:
                     return OK(ConstantPropagation::Sub(values[0], values[1]));
+
+                case BooleanFunction::NodeType::Slice: {
+                    auto start = p[1].get_index_value().get();
+                    auto end   = p[2].get_index_value().get();
+                    return OK(BooleanFunction::Const(std::vector<BooleanFunction::Value>(values[0].begin() + start, values[0].begin() + end)));
+                }
+                case BooleanFunction::NodeType::Concat: {
+                    values[1].insert(values[1].end(), values[0].begin(), values[0].end());
+                    return OK(BooleanFunction::Const(values[1]));
+                }
+                case BooleanFunction::NodeType::Zext: {
+                    values[0].resize(node.size, BooleanFunction::Value::ZERO);
+                    return OK(BooleanFunction::Const(values[0]));
+                }
+                case BooleanFunction::NodeType::Sext: {
+                    values[0].resize(node.size, static_cast<BooleanFunction::Value>(values[0].back()));
+                    return OK(BooleanFunction::Const(values[0]));
+                }
+
+                case BooleanFunction::NodeType::Eq:
+                    return OK((values[0] == values[1]) ? BooleanFunction::Const(1, 1) : BooleanFunction::Const(0, 1));
+                case BooleanFunction::NodeType::Sle:
+                    return OK(ConstantPropagation::Sle(values[0], values[1]));
+                case BooleanFunction::NodeType::Slt:
+                    return OK(ConstantPropagation::Slt(values[0], values[1]));
+                case BooleanFunction::NodeType::Ule:
+                    return OK(ConstantPropagation::Ule(values[0], values[1]));
+                case BooleanFunction::NodeType::Ult:
+                    return OK(ConstantPropagation::Ult(values[0], values[1]));
+                case BooleanFunction::NodeType::Ite:
+                    return OK(ConstantPropagation::Ite(values[0], values[1], values[2]));
 
                 default:
                     return ERR("could not propagate constants: not implemented for given node type");
