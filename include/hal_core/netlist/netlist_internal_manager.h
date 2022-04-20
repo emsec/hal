@@ -25,6 +25,7 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/event_system/event_handler.h"
+#include "hal_core/netlist/pins/gate_pin.h"
 
 #include <map>
 #include <vector>
@@ -70,9 +71,9 @@ namespace hal
         // net functions
         Net* create_net(u32 id, const std::string& name);
         bool delete_net(Net* net);
-        Endpoint* net_add_source(Net* net, Gate* gate, const std::string& pin);
+        Endpoint* net_add_source(Net* net, Gate* gate, GatePin* pin);
         bool net_remove_source(Net* net, Endpoint* ep);
-        Endpoint* net_add_destination(Net* net, Gate* gate, const std::string& pin);
+        Endpoint* net_add_destination(Net* net, Gate* gate, GatePin* pin);
         bool net_remove_destination(Net* net, Endpoint* ep);
 
         // module functions
@@ -94,7 +95,7 @@ namespace hal
 
         // caches
         void clear_caches();
-        mutable std::map<std::pair<std::vector<std::string>, u64>, BooleanFunction> m_lut_function_cache;
+        mutable std::map<std::pair<std::vector<GatePin*>, u64>, BooleanFunction> m_lut_function_cache;
         bool m_net_checks_enabled = true;
     };
 }    // namespace hal

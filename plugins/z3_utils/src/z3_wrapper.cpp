@@ -1,4 +1,4 @@
-#include "z3Wrapper.h"
+#include "z3_wrapper.h"
 
 #include "converter/cpp_converter.h"
 #include "converter/verilog_converter.h"

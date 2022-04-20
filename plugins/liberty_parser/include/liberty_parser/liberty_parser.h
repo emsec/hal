@@ -61,9 +61,9 @@ namespace hal
          * direction describes whether the least significant bit of the configuration is the output for inputs 000... (ascending) or 111... (descending).
          *
          * @param[in] file_path - Path to the file containing the gate library definition.
-         * @returns The gate library or a nullptr on error.
+         * @returns The gate library on success, an error otherwise.
          */
-        std::unique_ptr<GateLibrary> parse(const std::filesystem::path& file_path) override;
+        Result<std::unique_ptr<GateLibrary>> parse(const std::filesystem::path& file_path) override;
 
     private:
         struct type_group

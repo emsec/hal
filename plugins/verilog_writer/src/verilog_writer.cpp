@@ -229,7 +229,7 @@ namespace hal
         res_stream << " " << aliases.at(gate);
 
         // collect all endpoints (i.e., pins that are actually in use)
-        std::unordered_map<std::string, Net*> connections;
+        std::unordered_map<const GatePin*, const Net*> connections;
         for (const Endpoint* ep : gate->get_fan_in_endpoints())
         {
             connections[ep->get_pin()] = ep->get_net();
@@ -242,45 +242,24 @@ namespace hal
 
         // extract pin assignments (in order, respecting pin groups)
         std::vector<std::pair<std::string, std::vector<const Net*>>> pin_assignments;
-        std::unordered_set<std::string> visited_pins;
-        for (const std::string& pin : gate_type->get_pins())
+        for (const PinGroup<GatePin>* pin_group : gate_type->get_pin_groups())
         {
-            // check if pin was contained in a group that has already been dealt with
-            if (visited_pins.find(pin) != visited_pins.end())
+            std::vector<const Net*> nets;
+            for (const GatePin* pin : pin_group->get_pins())
             {
-                continue;
-            }
-
-            if (std::string pin_group = gate_type->get_pin_group(pin); !pin_group.empty())
-            {
-                // if pin is of pin group, deal with the entire group at once (i.e., collect all connected nets)
-                std::vector<const Net*> nets;
-                for (const auto& [index, group_pin] : gate_type->get_pins_of_group(pin_group))
+                if (const auto ep_it = connections.find(pin); ep_it != connections.end())
                 {
-                    visited_pins.insert(group_pin);
-
-                    if (const auto ep_it = connections.find(group_pin); ep_it != connections.end())
-                    {
-                        nets.push_back(ep_it->second);
-                    }
-                    else
-                    {
-                        nets.push_back(nullptr);
-                    }
+                    nets.push_back(ep_it->second);
+                }
+                else
+                {
+                    nets.push_back(nullptr);
                 }
 
                 // only append if at least one pin of the group is connected
                 if (std::any_of(nets.begin(), nets.end(), [](const Net* net) { return net != nullptr; }))
                 {
-                    pin_assignments.push_back(std::make_pair(pin_group, nets));
-                }
-            }
-            else
-            {
-                // append all connected pins
-                if (const auto ep_it = connections.find(pin); ep_it != connections.end())
-                {
-                    pin_assignments.push_back(std::make_pair(pin, std::vector<const Net*>({ep_it->second})));
+                    pin_assignments.push_back(std::make_pair(pin_group->get_name(), nets));
                 }
             }
         }

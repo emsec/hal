@@ -84,20 +84,22 @@ namespace hal
             auto parser = factory();
 
             auto begin_time = std::chrono::high_resolution_clock::now();
-            auto gate_lib   = parser->parse(file_path);
-            if (gate_lib == nullptr)
+
+            if (auto res = parser->parse(file_path); res.is_error())
             {
-                log_error("gate_library_parser", "failed to parse gate library from file '{}'.", file_path.string());
+                log_error("gate_library_parser", "error encountered while parsing gate library from file '{}':\n{}", file_path.string(), res.get_error().get());
                 return nullptr;
             }
-
-            log_info("gate_library_parser",
-                     "parsed gate library '{}' from file '{}' in {:2.2f} seconds.",
-                     gate_lib->get_name(),
-                     file_path.string(),
-                     (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);
-
-            return gate_lib;
+            else
+            {
+                std::unique_ptr<GateLibrary> gate_lib = res.get();
+                log_info("gate_library_parser",
+                         "parsed gate library '{}' from file '{}' in {:2.2f} seconds.",
+                         gate_lib->get_name(),
+                         file_path.string(),
+                         (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);
+                return gate_lib;
+            }
         }
     }    // namespace gate_library_parser_manager
 }    // namespace hal

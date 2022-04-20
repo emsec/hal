@@ -155,9 +155,9 @@ namespace hal
 
         /**
          * Get the (ordered) pins of the pin groups.
-         * The optional filter is evaluated on every pin such that the result only contains pins matching the specified condition.
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          * 
-         * @param[in] filter - Filter applied to the pins.
+         * @param[in] filter - An optional filter.
          * @returns The ordered pins.
          */
         std::vector<T*> get_pins(const std::function<bool(T*)>& filter = nullptr) const
@@ -186,7 +186,7 @@ namespace hal
          * @param[in] index - The index of the pin within the pin group.
          * @returns The pin on success, an error message otherwise.
          */
-        Result<T*> get_pin(u32 index) const
+        Result<T*> get_pin_at_index(u32 index) const
         {
             if (index >= m_start_index && index < m_next_index)
             {

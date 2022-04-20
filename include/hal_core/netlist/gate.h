@@ -187,28 +187,36 @@ namespace hal
         Grouping* get_grouping() const;
 
         /**
-         * Get the boolean function associated with a specific name.
-         * This name can for example be an output pin of the gate or a defined functionality like "reset".<br>
-         * If name is empty, the function of the first output pin is returned.<br>
-         * If there is no function for the given name, an empty function is returned.
+         * Get the Boolean function specified by the given name.
+         * This name can for example be an output pin of the gate or any other user-defined function name.
          *
-         * @param[in] name - The function name.
-         * @returns The boolean function.
+         * @param[in] name - The name.
+         * @returns The Boolean function on success, an empty Boolean function otherwise.
          */
-        BooleanFunction get_boolean_function(std::string name = "") const;
+        BooleanFunction get_boolean_function(const std::string& name) const;
+
+        /**
+          * TODO test
+          * Get the Boolean function corresponding to the given output pin.
+          * If `pin` is a `nullptr`, the Boolean function of the first output pin is returned.
+          *
+          * @param[in] pin - The pin.
+          * @returns The Boolean function on success, an empty Boolean function otherwise.
+         */
+        BooleanFunction get_boolean_function(const GatePin* pin = nullptr) const;
 
         /**
          * Get a map from function name to boolean function for all boolean functions associated with this gate.
          *
-         * @param[in] only_custom_functions - If true, this returns only the functions which were set via add_boolean_function.
-         * @returns A map from function name to function.
+         * @param[in] only_custom_functions - Set `true` to get only Boolean functions that are local to the gate, `false` otherwise.
+         * @returns A map from function name to function on success, an empty map otherwise.
          */
         std::unordered_map<std::string, BooleanFunction> get_boolean_functions(bool only_custom_functions = false) const;
 
         /**
-         * Add the boolean function with the specified name only for this gate.
+         * Add a Boolean function with the given name to the gate.
          *
-         * @param[in] name - The function name, usually an output port.
+         * @param[in] name - The name.
          * @param[in] func - The function.
          */
         void add_boolean_function(const std::string& name, const BooleanFunction& func);
@@ -260,147 +268,178 @@ namespace hal
          */
 
         /**
-         * \deprecated
-         * DEPRECATED <br>
-         * Get a list of all input pin types of the gate.
+         * Get a vector of all fan-in nets of the gate, i.e., all nets that are connected to one of the input pins.
          *
-         * @returns A vector of input pin types.
-         */
-        [[deprecated("Will be removed in a future version. Use get_type()->get_input_pins() instead.")]] std::vector<std::string> get_input_pins() const;
-
-        /**
-         * \deprecated
-         * DEPRECATED <br>
-         * Get a list of all output pin types of the gate.
-         *
-         * @returns A vector of output pin types.
-         */
-        [[deprecated("Will be removed in a future version. Use get_type()->get_output_pins() instead.")]] std::vector<std::string> get_output_pins() const;
-
-        /**
-         * Get a list of all fan-in nets of the gate, i.e., all nets that are connected to one of the input pins.
-         *
-         * @returns A vector of all connected input nets.
+         * @returns A vector of all fan-in nets.
          */
         std::vector<Net*> get_fan_in_nets() const;
 
         /**
-         * Get a list of all fan-in endpoints of the gate, i.e., all connected endpoints that represent an input pin of this gate.
+         * Get a vector of all fan-in endpoints of the gate, i.e., all endpoints associated with an input pin of the gate.
          *
-         * @returns A vector of all connected input endpoints.
+         * @returns A vector of all fan-in endpoints.
          */
         std::vector<Endpoint*> get_fan_in_endpoints() const;
 
         /**
-         * Get the fan-in net which is connected to a specific input pin. <br>
-         * If the input pin type is unknown or no net is connected, a nullptr is returned.
+         * Get the fan-in endpoint corresponding to the input pin specified by name.
          *
-         * @param[in] pin - The input pin type.
-         * @returns The connected input net.
+         * @param[in] pin_name - The input pin name.
+         * @returns The fan-in net on success, a `nullptr` otherwise.
          */
-        Net* get_fan_in_net(const std::string& pin) const;
+        Net* get_fan_in_net(const std::string& pin_name) const;
 
         /**
-         * Get the fan-in endpoint which represents a specific input pin. <br>
-         * If the input pin type is unknown or no net is connected to the respective pin, a nullptr is returned.
+         * TODO test
+         * Get the fan-in endpoint corresponding to the specified input pin.
          *
-         * @param[in] pin - The input pin type.
-         * @returns The endpoint.
+         * @param[in] pin - The input pin.
+         * @returns The fan-in net on success, a nullptr otherwise.
          */
-        Endpoint* get_fan_in_endpoint(const std::string& pin) const;
+        Net* get_fan_in_net(const GatePin* pin) const;
 
         /**
-         * Get a list of all fan-out nets of the gate, i.e., all nets that are connected to one of the output pins.
+         * Get the fan-in endpoint corresponding to the input pin specified by name.
          *
-         * @returns A vector of all connected output nets.
+         * @param[in] pin_name - The input pin name.
+         * @returns The endpoint on success, a `nullptr` otherwise.
+         */
+        Endpoint* get_fan_in_endpoint(const std::string& pin_name) const;
+
+        /**
+         * TODO test
+         * Get the fan-in endpoint corresponding to the specified input pin.
+         *
+         * @param[in] pin - The input pin.
+         * @returns The endpoint on success, a `nullptr` otherwise.
+         */
+        Endpoint* get_fan_in_endpoint(const GatePin* pin) const;
+
+        /**
+         * Get a vector of all fan-out nets of the gate, i.e., all nets that are connected to one of the output pins.
+         *
+         * @returns A vector of all fan-out nets.
          */
         std::vector<Net*> get_fan_out_nets() const;
 
         /**
-         * Get a list of all fan-out endpoints of the gate, i.e., all connected endpoints that represent an output pin of this gate.
+         * Get a vector of all fan-out endpoints of the gate, i.e., all endpoints associated with an output pin of the gate.
          *
-         * @returns A vector of all connected output endpoints.
+         * @returns A vector of all fan-out endpoints.
          */
         std::vector<Endpoint*> get_fan_out_endpoints() const;
 
         /**
-         * Get the fan-out net which is connected to a specific output pin. <br>
-         * If the output pin type is unknown or no net is connected, a nullptr is returned.
+         * Get the fan-out endpoint corresponding to the output pin specified by name.
          *
-         * @param[in] pin - The output pin type.
-         * @returns The connected output net.
+         * @param[in] pin_name - The output pin name.
+         * @returns The fan-out net on success, a `nullptr` otherwise.
          */
-        Net* get_fan_out_net(const std::string& pin) const;
+        Net* get_fan_out_net(const std::string& pin_name) const;
 
         /**
-         * Get the fan-out endpoint which represents a specific output pin. <br>
-         * If the input pin type is unknown or no net is connected to the respective pin, a nullptr is returned.
+         * TODO test
+         * Get the fan-out endpoint corresponding to the specified output pin.
          *
-         * @param[in] pin - The output pin type.
-         * @returns The endpoint.
+         * @param[in] pin - The output pin.
+         * @returns The fan-out net on success, a nullptr otherwise.
          */
-        Endpoint* get_fan_out_endpoint(const std::string& pin) const;
+        Net* get_fan_out_net(const GatePin* pin) const;
 
         /**
-         * Get a list of all unique predecessor gates of the gate. <br>
-         * A filter can be supplied which filters out all potential values that return false.
+         * Get the fan-out endpoint corresponding to the output pin specified by name.
          *
-         * @param[in] filter - A function to filter the output, using the input pin type of the gate (1st param) and
-         *                     a connected predecessor endpoint (2nd param). Leave empty for no filtering.
+         * @param[in] pin_name - The output pin name.
+         * @returns The endpoint on success, a `nullptr` otherwise.
+         */
+        Endpoint* get_fan_out_endpoint(const std::string& pin_name) const;
+
+        /**
+         * TODO test
+         * Get the fan-out endpoint corresponding to the specified input pin.
+         *
+         * @param[in] pin - The output pin.
+         * @returns The endpoint on success, a `nullptr` otherwise.
+         */
+        Endpoint* get_fan_out_endpoint(const GatePin* pin) const;
+
+        /**
+         * TODO test
+         * Get a vector of all unique predecessor gates of the gate. 
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+         *
+         * @param[in] filter - An optional filter being evaluated on the gate's input pin as well as the predecessor endpoint.
          * @returns A vector of unique predecessor gates.
          */
-        std::vector<Gate*> get_unique_predecessors(const std::function<bool(const std::string& starting_pin, Endpoint* ep)>& filter = nullptr) const;
+        std::vector<Gate*> get_unique_predecessors(const std::function<bool(const GatePin* pin, Endpoint* ep)>& filter = nullptr) const;
 
         /**
-         * Get a list of all direct predecessor endpoints of the gate,
-         * i.e. all output endpoints that are connected to an input pin of the gate. <br>
-         * A filter can be supplied which filters out all potential values that return false.
+         * TODO test
+         * Get a vector of all direct predecessor endpoints of the gate, i.e., all predecessor endpoints that are connected to an input pin of the gate. 
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
-         * @param[in] filter - A function to filter the output, using the input pin type of the gate (1st param) and
-         *                     a connected predecessor endpoint (2nd param). Leave empty for no filtering.
+         * @param[in] filter - An optional filter being evaluated on the gate's input pin as well as the predecessor endpoint.
          * @returns A vector of predecessor endpoints.
          */
-        std::vector<Endpoint*> get_predecessors(const std::function<bool(const std::string& starting_pin, Endpoint* ep)>& filter = nullptr) const;
+        std::vector<Endpoint*> get_predecessors(const std::function<bool(const GatePin* pin, Endpoint* ep)>& filter = nullptr) const;
 
         /**
-         * Get the direct predecessor endpoint of the gate connected to a specific input pin. <br>
-         * If the input pin type is unknown or there is no predecessor endpoint or there are multiple predecessor
-         * endpoints, a nullptr is returned.
+         * Get a single direct predecessor endpoint that is connected to the input pin specified by name.
+         * Fails if there are no or more than one predecessors.
          *
-         * @param[in] which_pin - the input pin type of this gate to get the predecessor from.
-         * @returns The predecessor endpoint.
+         * @param[in] pin_name - The input pin.
+         * @returns The predecessor endpoint on success, a `nullptr` otherwise.
          */
-        Endpoint* get_predecessor(const std::string& which_pin) const;
+        Endpoint* get_predecessor(const std::string& pin_name) const;
 
         /**
-         * Get a list of all unique successor gates of the gate. <br>
-         * A filter can be supplied which filters out all potential values that return false.
+         * TODO test
+         * Get a single direct predecessor endpoint that is connected to the specified input pin.
+         * Fails if there are no or more than one predecessors.
          *
-         * @param[in] filter - A function to filter the output, using the output pin type of the gate (1st param) and
-         *                     a connected successor endpoint (2nd param). Leave empty for no filtering.
+         * @param[in] pin - The input pin.
+         * @returns The predecessor endpoint on success, a `nullptr` otherwise.
+         */
+        Endpoint* get_predecessor(const GatePin* pin) const;
+
+        /**
+         * TODO test
+         * Get a vector of all unique successor gates of the gate. 
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+         *
+         * @param[in] filter - An optional filter being evaluated on the gate's output pin as well as the successor endpoint.
          * @returns A vector of unique successor gates.
          */
-        std::vector<Gate*> get_unique_successors(const std::function<bool(const std::string& starting_pin, Endpoint* ep)>& filter = nullptr) const;
+        std::vector<Gate*> get_unique_successors(const std::function<bool(const GatePin* pin, Endpoint* ep)>& filter = nullptr) const;
 
         /**
-         * Get a list of all direct successor endpoints of the gate. <br>
-         * A filter can be supplied which filters out all potential values that return false.
+         * TODO test
+         * Get a vector of all direct successor endpoints of the gate, i.e., all successor endpoints that are connected to an output pin of the gate. 
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
-         * @param[in] filter - A function to filter the output, using the output pin type of the gate (1st param) and
-         *                     a connected successor endpoint (2nd param). Leave empty for no filtering.
+         * @param[in] filter - An optional filter being evaluated on the gate's output pin as well as the successor endpoint.
          * @returns A vector of successor endpoints.
          */
-        std::vector<Endpoint*> get_successors(const std::function<bool(const std::string& starting_pin, Endpoint* ep)>& filter = nullptr) const;
+        std::vector<Endpoint*> get_successors(const std::function<bool(const GatePin* pin, Endpoint* ep)>& filter = nullptr) const;
 
         /**
-         * Get the direct successor endpoint of the gate connected to a specific input pin. <br>
-         * If the input pin type is unknown or there is no successor endpoint or there are multiple successor
-         * endpoints, a nullptr is returned.
+         * Get a single direct successor endpoint that is connected to the output pin specified by name.
+         * Fails if there are no or more than one successors.
          *
-         * @param[in] which_pin - The output pin type of this gate to get the successor from.
-         * @returns The successor endpoint.
+         * @param[in] pin_name - The output pin.
+         * @returns The successor endpoint on success, a `nullptr` otherwise.
          */
-        Endpoint* get_successor(const std::string& which_pin) const;
+        Endpoint* get_successor(const std::string& pin_name) const;
+
+        /**
+         * TODO test
+         * Get a single direct successor endpoint that is connected to the specified output pin.
+         * Fails if there are no or more than one successors.
+         *
+         * @param[in] pin - The output pin.
+         * @returns The successor endpoint on success, a `nullptr` otherwise.
+         */
+        Endpoint* get_successor(const GatePin* pin) const;
 
     private:
         friend class NetlistInternalManager;
@@ -411,7 +450,7 @@ namespace hal
         Gate& operator=(const Gate&) = delete;
         Gate& operator=(Gate&&) = delete;
 
-        BooleanFunction get_lut_function(const std::string& pin) const;
+        BooleanFunction get_lut_function(const GatePin* pin) const;
 
         /* pointer to corresponding netlist parent */
         NetlistInternalManager* m_internal_manager;

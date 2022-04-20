@@ -692,16 +692,16 @@ namespace hal
         {
             if (!m_zero_net->get_destinations().empty())
             {
-                GateType* gnd_type           = m_gnd_gate_types.begin()->second;
-                const std::string output_pin = *gnd_type->get_pins_of_direction(PinDirection::output).begin();
-                Gate* gnd                    = m_netlist->create_gate(m_netlist->get_unique_gate_id(), gnd_type, "global_gnd");
+                GateType* gnd_type  = m_gnd_gate_types.begin()->second;
+                GatePin* output_pin = gnd_type->get_output_pins().front();
+                Gate* gnd           = m_netlist->create_gate(m_netlist->get_unique_gate_id(), gnd_type, "global_gnd");
 
                 if (!m_netlist->mark_gnd_gate(gnd))
                 {
                     return ERR("could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': failed to mark GND gate");
                 }
 
-                if (!m_zero_net->add_source(gnd, output_pin))
+                if (m_zero_net->add_source(gnd, output_pin) == nullptr)
                 {
                     return ERR("could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': failed to add source to GND gate");
                 }
@@ -717,16 +717,16 @@ namespace hal
         {
             if (!m_one_net->get_destinations().empty())
             {
-                GateType* vcc_type           = m_vcc_gate_types.begin()->second;
-                const std::string output_pin = *vcc_type->get_pins_of_direction(PinDirection::output).begin();
-                Gate* vcc                    = m_netlist->create_gate(m_netlist->get_unique_gate_id(), vcc_type, "global_vcc");
+                GateType* vcc_type  = m_vcc_gate_types.begin()->second;
+                GatePin* output_pin = vcc_type->get_output_pins().front();
+                Gate* vcc           = m_netlist->create_gate(m_netlist->get_unique_gate_id(), vcc_type, "global_vcc");
 
                 if (!m_netlist->mark_vcc_gate(vcc))
                 {
                     return ERR("could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': failed to mark VCC gate");
                 }
 
-                if (!m_one_net->add_source(vcc, output_pin))
+                if (m_one_net->add_source(vcc, output_pin) == nullptr)
                 {
                     return ERR("could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': failed to add source to VCC gate");
                 }
@@ -1443,11 +1443,11 @@ namespace hal
                 {
                     // cache pin groups
                     std::unordered_map<std::string, std::vector<std::string>> pin_groups;
-                    for (const auto& [group_name, pins] : gate_type_it->second->get_pin_groups())
+                    for (const auto pin_group : gate_type_it->second->get_pin_groups())
                     {
-                        for (const auto& pin : pins)
+                        for (const auto pin : pin_group->get_pins())
                         {
-                            pin_groups[group_name].push_back(pin.second);
+                            pin_groups[pin_group->get_name()].push_back(pin->get_name());
                         }
                     }
 
@@ -1571,14 +1571,20 @@ namespace hal
 
                     for (auto src : slave_net->get_sources())
                     {
-                        Gate* src_gate      = src->get_gate();
-                        std::string src_pin = src->get_pin();
+                        Gate* src_gate   = src->get_gate();
+                        GatePin* src_pin = src->get_pin();
 
-                        slave_net->remove_source(src);
+                        if (!slave_net->remove_source(src))
+                        {
+                            return ERR("could not construct netlist: failed to remove source from net '" + slave_net->get_name() + "' with ID " + std::to_string(slave_net->get_id()));
+                        }
 
                         if (!master_net->is_a_source(src_gate, src_pin))
                         {
-                            master_net->add_source(src_gate, src_pin);
+                            if (!master_net->add_source(src_gate, src_pin))
+                            {
+                                return ERR("could not construct netlist: failed to add source to net '" + master_net->get_name() + "' with ID " + std::to_string(master_net->get_id()));
+                            }
                         }
                     }
 
@@ -1590,14 +1596,20 @@ namespace hal
 
                     for (auto dst : slave_net->get_destinations())
                     {
-                        Gate* dst_gate      = dst->get_gate();
-                        std::string dst_pin = dst->get_pin();
+                        Gate* dst_gate   = dst->get_gate();
+                        GatePin* dst_pin = dst->get_pin();
 
-                        slave_net->remove_destination(dst);
+                        if (!slave_net->remove_destination(dst))
+                        {
+                            return ERR("could not construct netlist: failed to remove destination from net '" + slave_net->get_name() + "' with ID " + std::to_string(slave_net->get_id()));
+                        }
 
                         if (!master_net->is_a_destination(dst_gate, dst_pin))
                         {
-                            master_net->add_destination(dst_gate, dst_pin);
+                            if (!master_net->add_destination(dst_gate, dst_pin))
+                            {
+                                return ERR("could not construct netlist: failed to add destination to net '" + master_net->get_name() + "' with ID " + std::to_string(master_net->get_id()));
+                            }
                         }
                     }
 
@@ -1904,8 +1916,12 @@ namespace hal
                                + "' as VCC gate");
                 }
 
-                // cache pin directions
-                std::unordered_map<std::string, PinDirection> pin_to_direction = gate_type_it->second->get_pin_directions();
+                // cache pin names
+                std::unordered_map<std::string, GatePin*> pin_names_map;
+                for (auto* pin : gate_type_it->second->get_pins())
+                {
+                    pin_names_map[pin->get_name()] = pin;
+                }
 
                 // expand pin assignments
                 for (const auto& [pin, assignment] : instance->m_expanded_port_assignments)
@@ -1948,14 +1964,15 @@ namespace hal
                         bool is_input  = false;
                         bool is_output = false;
 
-                        if (const auto it = pin_to_direction.find(pin); it != pin_to_direction.end())
+                        if (const auto it = pin_names_map.find(pin); it != pin_names_map.end())
                         {
-                            if (it->second == PinDirection::input || it->second == PinDirection::inout)
+                            PinDirection direction = it->second->get_direction();
+                            if (direction == PinDirection::input || direction == PinDirection::inout)
                             {
                                 is_input = true;
                             }
 
-                            if (it->second == PinDirection::output || it->second == PinDirection::inout)
+                            if (direction == PinDirection::output || direction == PinDirection::inout)
                             {
                                 is_output = true;
                             }

@@ -30,6 +30,7 @@ namespace hal
     /* forward declaration */
     class Gate;
     class Net;
+    class GatePin;
 
     /**
      * An endpoint comprises the pin of a gate, the respective gate, and the connected net.
@@ -63,11 +64,11 @@ namespace hal
         Gate* get_gate() const;
 
         /**
-         * Get the name of the pin associated with the endpoint.
+         * Get the pin associated with the endpoint.
          *
-         * @returns The name of the pin.
+         * @returns The pin.
          */
-        std::string get_pin() const;
+        GatePin* get_pin() const;
 
         /**
          * Get the net associated with the endpoint.
@@ -92,7 +93,7 @@ namespace hal
 
     private:
         friend class NetlistInternalManager;
-        Endpoint(Gate* gate, const std::string& pin, Net* net, bool is_a_destination);
+        Endpoint(Gate* gate, GatePin* pin, Net* net, bool is_a_destination);
 
         Endpoint(const Endpoint&) = delete;
         Endpoint(Endpoint&&)      = delete;
@@ -100,7 +101,7 @@ namespace hal
         Endpoint& operator=(Endpoint&&) = delete;
 
         Gate* m_gate;
-        std::string m_pin;
+        GatePin* m_pin;
         Net* m_net;
         bool m_is_a_destination;
     };

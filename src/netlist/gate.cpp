@@ -87,7 +87,7 @@ namespace hal
 
     ssize_t Gate::get_hash() const
     {
-        return (uintptr_t) this;
+        return (uintptr_t)this;
     }
 
     u32 Gate::get_id() const
@@ -195,10 +195,10 @@ namespace hal
 
         if (m_type->has_component_of_type(GateTypeComponent::ComponentType::lut))
         {
-            auto lut_pins = m_type->get_pins_of_type(PinType::lut);
-            if (std::find(lut_pins.begin(), lut_pins.end(), name) != lut_pins.end())
+            auto lut_pins = m_type->get_pins([name](const GatePin* pin) { return pin->get_type() == PinType::lut && pin->get_name() == name; });
+            if (!lut_pins.empty())
             {
-                return get_lut_function(name);
+                return get_lut_function(lut_pins.at(0));
             }
         }
 
@@ -213,7 +213,28 @@ namespace hal
             return it->second;
         }
 
+        log_warning("gate", "could not get Boolean function of pin '{}' at gate '{}' with ID {}: no function with that name exists", pin->get_name(), m_name, std::to_string(m_id));
         return BooleanFunction();
+    }
+
+    BooleanFunction Gate::get_boolean_function(const GatePin* pin) const
+    {
+        if (pin == nullptr)
+        {
+            auto output_pins = m_type->get_output_pins();
+            if (output_pins.empty())
+            {
+                log_warning("could not get Boolean function of gate '{}' with ID {}: gate type '{}' with ID {} has no output pins",
+                            m_name,
+                            std::to_string(m_id),
+                            m_type->get_name(),
+                            std::to_string(m_type->get_id()));
+                return BooleanFunction();
+            }
+            pin = output_pins.at(0);
+        }
+
+        return get_boolean_function(pin->get_name());
     }
 
     std::unordered_map<std::string, BooleanFunction> Gate::get_boolean_functions(bool only_custom_functions) const
@@ -232,7 +253,7 @@ namespace hal
 
         if (!only_custom_functions && m_type->has_component_of_type(GateTypeComponent::ComponentType::lut))
         {
-            for (auto pin : m_type->get_pins_of_type(PinType::lut))
+            for (auto pin : m_type->get_pins([](const GatePin* pin) { return pin->get_type() == PinType::lut; }))
             {
                 res.emplace(pin, get_lut_function(pin));
             }
@@ -241,7 +262,7 @@ namespace hal
         return res;
     }
 
-    BooleanFunction Gate::get_lut_function(const std::string& pin) const
+    BooleanFunction Gate::get_lut_function(const GatePin* pin) const
     {
         UNUSED(pin);
 
@@ -258,11 +279,11 @@ namespace hal
             return BooleanFunction();
         }
 
-        const std::string& category     = init_component->get_init_category();
-        const std::string& key          = init_component->get_init_identifiers().front();
-        std::string config_str          = std::get<1>(get_data(category, key));
-        auto is_ascending               = lut_component->is_init_ascending();
-        std::vector<std::string> inputs = m_type->get_input_pins();
+        const std::string& category  = init_component->get_init_category();
+        const std::string& key       = init_component->get_init_identifiers().front();
+        std::string config_str       = std::get<1>(get_data(category, key));
+        auto is_ascending            = lut_component->is_init_ascending();
+        std::vector<GatePin*> inputs = m_type->get_input_pins();
 
         auto result = BooleanFunction::Const(BooleanFunction::Value::ZERO);
 
@@ -337,17 +358,17 @@ namespace hal
             config >>= 1;
             if (bit == 1)
             {
-                auto conjunction = BooleanFunction::Const(1, 1);
+                auto conjunction  = BooleanFunction::Const(1, 1);
                 auto input_values = i;
                 for (auto input : inputs)
                 {
                     if ((input_values & 1) == 1)
                     {
-                        conjunction &= BooleanFunction::Var(input);
+                        conjunction &= BooleanFunction::Var(input->get_name());
                     }
                     else
                     {
-                        conjunction &= ~BooleanFunction::Var(input);
+                        conjunction &= ~BooleanFunction::Var(input->get_name());
                     }
                     input_values >>= 1;
                 }
@@ -369,16 +390,18 @@ namespace hal
                 lut_component->get_component_as<InitComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::init; });
             if (init_component != nullptr)
             {
-                std::vector<std::string> output_pins = m_type->get_output_pins();
+                std::vector<GatePins*> output_pins = m_type->get_output_pins();
                 if (!output_pins.empty() && name == output_pins[0])
                 {
                     auto tt = func.compute_truth_table(m_type->get_input_pins());
-                    if (tt.is_error()) {
+                    if (tt.is_error())
+                    {
                         log_error("netlist", "Boolean function '{} = {}' cannot be added to LUT gate '{}' wiht ID {}.", name, func.to_string(), m_name, m_id);
                         return;
                     }
                     auto truth_table = tt.get();
-                    if (truth_table.size() > 1) {
+                    if (truth_table.size() > 1)
+                    {
                         log_error("netlist", "Boolean function '{} = {}' cannot be added to LUT gate '{}' with ID {} (= function is > 1-bit in output size). ", name, func.to_string(), m_name, m_id);
                         return;
                     }
@@ -449,16 +472,6 @@ namespace hal
         return m_internal_manager->m_netlist->is_gnd_gate(this);
     }
 
-    std::vector<std::string> Gate::get_input_pins() const
-    {
-        return m_type->get_input_pins();
-    }
-
-    std::vector<std::string> Gate::get_output_pins() const
-    {
-        return m_type->get_output_pins();
-    }
-
     std::vector<Net*> Gate::get_fan_in_nets() const
     {
         return m_in_nets;
@@ -467,6 +480,16 @@ namespace hal
     std::vector<Endpoint*> Gate::get_fan_in_endpoints() const
     {
         return m_in_endpoints;
+    }
+
+    Net* Gate::get_fan_in_net(const GatePin* pin) const
+    {
+        auto ep = get_fan_in_endpoint(pin);
+        if (ep == nullptr)
+        {
+            return nullptr;
+        }
+        return ep->get_net();
     }
 
     Net* Gate::get_fan_in_net(const std::string& pin) const
@@ -479,17 +502,42 @@ namespace hal
         return ep->get_net();
     }
 
-    Endpoint* Gate::get_fan_in_endpoint(const std::string& pin) const
+    Endpoint* Gate::get_fan_in_endpoint(const GatePin* pin) const
     {
-        auto it = std::find_if(m_in_endpoints.begin(), m_in_endpoints.end(), [&pin](auto& ep) { return ep->get_pin() == pin; });
-
+        if (pin == nullptr)
+        {
+            log_warning("gate", "could not get fan-in endpoint of gate '{}' with ID {}: 'nullptr' given as pin", m_name, std::to_string(m_id));
+            return nullptr;
+        }
+        if (PinDirection direction = pin->get_direction(); direction != PinDirection::input && direction != PinDirection::inout)
+        {
+            log_warning("gate", "could not get fan-out endpoint of pin '{}' at gate '{}' with ID {}: pin is not an input pin", pin->get_name(), m_name, std::to_string(m_id));
+            return nullptr;
+        }
+        auto it = std::find_if(m_in_endpoints.begin(), m_in_endpoints.end(), [&pin](auto& ep) { return *ep->get_pin() == *pin; });
         if (it == m_in_endpoints.end())
         {
-            log_debug("gate", "no net is connected to input pin '{}' of gate '{}' with ID {} in netlist with ID {}.", pin, m_name, m_id, m_internal_manager->m_netlist->get_id());
+            log_warning("gate", "could not get fan-in endpoint of pin '{}' at gate '{}' with ID {}: no net is connected to pin", pin->get_name(), m_name, std::to_string(m_id));
             return nullptr;
         }
 
         return *it;
+    }
+
+    Endpoint* Gate::get_fan_in_endpoint(const std::string& pin_name) const
+    {
+        const GatePin* pin = m_type->get_pin_by_name(pin_name);
+        if (pin == nullptr)
+        {
+            log_warning("gate",
+                        "could not get fan-in endpoint of pin '{}' at gate '{}' with ID {}: no pin with that name exists for gate type '{}'",
+                        pin_name,
+                        m_name,
+                        std::to_string(m_id),
+                        m_type->get_name());
+            return nullptr;
+        }
+        return get_fan_in_endpoint(pin);
     }
 
     std::vector<Net*> Gate::get_fan_out_nets() const
@@ -502,6 +550,16 @@ namespace hal
         return m_out_endpoints;
     }
 
+    Net* Gate::get_fan_out_net(const GatePin* pin) const
+    {
+        auto ep = get_fan_out_endpoint(pin);
+        if (ep == nullptr)
+        {
+            return nullptr;
+        }
+        return ep->get_net();
+    }
+
     Net* Gate::get_fan_out_net(const std::string& pin) const
     {
         auto ep = get_fan_out_endpoint(pin);
@@ -512,23 +570,48 @@ namespace hal
         return ep->get_net();
     }
 
-    Endpoint* Gate::get_fan_out_endpoint(const std::string& pin) const
+    Endpoint* Gate::get_fan_out_endpoint(const GatePin* pin) const
     {
-        auto it = std::find_if(m_out_endpoints.begin(), m_out_endpoints.end(), [&pin](auto& ep) { return ep->get_pin() == pin; });
-
-        if (it == m_out_endpoints.end())
+        if (pin == nullptr)
         {
-            log_debug("gate", "no net is connected to output pin '{}' of gate '{}' with ID {} in netlist with ID {}.", pin, m_name, m_id, m_internal_manager->m_netlist->get_id());
+            log_warning("gate", "could not get fan-out endpoint of gate '{}' with ID {}: 'nullptr' given as pin", m_name, std::to_string(m_id));
+            return nullptr;
+        }
+        if (PinDirection direction = pin->get_direction(); direction != PinDirection::output && direction != PinDirection::inout)
+        {
+            log_warning("gate", "could not get fan-out endpoint of pin '{}' at gate '{}' with ID {}: pin is not an output pin", pin->get_name(), m_name, std::to_string(m_id));
+            return nullptr;
+        }
+        auto it = std::find_if(m_in_endpoints.begin(), m_in_endpoints.end(), [&pin](auto& ep) { return *ep->get_pin() == *pin; });
+        if (it == m_in_endpoints.end())
+        {
+            log_warning("gate", "could not get fan-out endpoint of pin '{}' at gate '{}' with ID {}: no net is connected to pin", pin->get_name(), m_name, std::to_string(m_id));
             return nullptr;
         }
 
         return *it;
     }
 
-    std::vector<Gate*> Gate::get_unique_predecessors(const std::function<bool(const std::string& starting_pin, Endpoint*)>& filter) const
+    Endpoint* Gate::get_fan_out_endpoint(const std::string& pin_name) const
+    {
+        const GatePin* pin = m_type->get_pin_by_name(pin_name);
+        if (pin == nullptr)
+        {
+            log_warning("gate",
+                        "could not get fan-out endpoint of pin '{}' at gate '{}' with ID {}: no pin with that name exists for gate type '{}'",
+                        pin_name,
+                        m_name,
+                        std::to_string(m_id),
+                        m_type->get_name());
+            return nullptr;
+        }
+        return get_fan_out_endpoint(pin);
+    }
+
+    std::vector<Gate*> Gate::get_unique_predecessors(const std::function<bool(const GatePin* pin, Endpoint*)>& filter) const
     {
         std::unordered_set<Gate*> res;
-        auto endpoints = this->get_predecessors(filter);
+        auto endpoints = get_predecessors(filter);
         res.reserve(endpoints.size());
         for (auto ep : endpoints)
         {
@@ -537,12 +620,12 @@ namespace hal
         return std::vector<Gate*>(res.begin(), res.end());
     }
 
-    std::vector<Endpoint*> Gate::get_predecessors(const std::function<bool(const std::string& starting_pin, Endpoint*)>& filter) const
+    std::vector<Endpoint*> Gate::get_predecessors(const std::function<bool(const GatePin* pin, Endpoint*)>& filter) const
     {
         std::vector<Endpoint*> result;
         for (auto ep : m_in_endpoints)
         {
-            auto pin          = ep->get_pin();
+            auto pred_pin     = ep->get_pin();
             auto predecessors = ep->get_net()->get_sources();
             if (!filter)
             {
@@ -552,7 +635,7 @@ namespace hal
             {
                 for (auto pre : predecessors)
                 {
-                    if (!filter(pin, pre))
+                    if (!filter(pred_pin, pre))
                     {
                         continue;
                     }
@@ -563,26 +646,52 @@ namespace hal
         return result;
     }
 
-    Endpoint* Gate::get_predecessor(const std::string& input_pin) const
+    Endpoint* Gate::get_predecessor(const GatePin* pin) const
     {
-        auto predecessors = this->get_predecessors([&input_pin](auto& starting_pin, auto) -> bool { return starting_pin == input_pin; });
+        if (pin == nullptr)
+        {
+            log_warning("gate", "could not get predecessor endpoint of gate '{}' with ID {}: 'nullptr' given as pin", m_name, std::to_string(m_id));
+            return nullptr;
+        }
+        if (auto direction = pin->get_direction(); direction != PinDirection::input && direction != PinDirection::inout)
+        {
+            log_warning("gate", "could not get predecessor endpoint of pin '{}' at gate '{}' with ID {}: pin is not an input pin", pin->get_name(), m_name, std::to_string(m_id));
+            return nullptr;
+        }
+        auto predecessors = get_predecessors([pin](auto& p, auto) -> bool { return p == pin; });
         if (predecessors.size() == 0)
         {
             return nullptr;
         }
         if (predecessors.size() > 1)
         {
-            log_error("gate", "gate '{}' with ID {} has multiple predecessors at input pin '{}' in netlist with ID {}.", m_name, m_id, input_pin, m_internal_manager->m_netlist->get_id());
+            log_warning("gate", "gate '{}' with ID {} has multiple predecessors at input pin '{}' in netlist with ID {}.", m_name, m_id, pin->get_name(), m_internal_manager->m_netlist->get_id());
             return nullptr;
         }
 
         return predecessors[0];
     }
 
-    std::vector<Gate*> Gate::get_unique_successors(const std::function<bool(const std::string& starting_pin, Endpoint*)>& filter) const
+    Endpoint* Gate::get_predecessor(const std::string& pin_name) const
+    {
+        const GatePin* pin = m_type->get_pin_by_name(pin_name);
+        if (pin == nullptr)
+        {
+            log_warning("gate",
+                        "could not get predecessor endpoint of pin '{}' at gate '{}' with ID {}: no pin with that name exists for gate type '{}'",
+                        pin_name,
+                        m_name,
+                        std::to_string(m_id),
+                        m_type->get_name());
+            return nullptr;
+        }
+        return get_predecessor(pin);
+    }
+
+    std::vector<Gate*> Gate::get_unique_successors(const std::function<bool(const GatePin* pin, Endpoint*)>& filter) const
     {
         std::unordered_set<Gate*> res;
-        auto endpoints = this->get_successors(filter);
+        auto endpoints = get_successors(filter);
         res.reserve(endpoints.size());
         for (auto ep : endpoints)
         {
@@ -591,12 +700,12 @@ namespace hal
         return std::vector<Gate*>(res.begin(), res.end());
     }
 
-    std::vector<Endpoint*> Gate::get_successors(const std::function<bool(const std::string& starting_pin, Endpoint*)>& filter) const
+    std::vector<Endpoint*> Gate::get_successors(const std::function<bool(const GatePin* pin, Endpoint*)>& filter) const
     {
         std::vector<Endpoint*> result;
         for (auto ep : m_out_endpoints)
         {
-            auto pin        = ep->get_pin();
+            auto suc_pin    = ep->get_pin();
             auto successors = ep->get_net()->get_destinations();
             if (!filter)
             {
@@ -606,7 +715,7 @@ namespace hal
             {
                 for (auto suc : successors)
                 {
-                    if (!filter(pin, suc))
+                    if (!filter(suc_pin, suc))
                     {
                         continue;
                     }
@@ -617,19 +726,45 @@ namespace hal
         return result;
     }
 
-    Endpoint* Gate::get_successor(const std::string& output_pin) const
+    Endpoint* Gate::get_successor(const GatePin* pin) const
     {
-        auto successors = this->get_successors([&output_pin](auto& starting_pin, auto) -> bool { return starting_pin == output_pin; });
+        if (pin == nullptr)
+        {
+            log_warning("gate", "could not get successor endpoint of gate '{}' with ID {}: 'nullptr' given as pin", m_name, std::to_string(m_id));
+            return nullptr;
+        }
+        if (auto direction = pin->get_direction(); direction != PinDirection::output && direction != PinDirection::inout)
+        {
+            log_warning("gate", "could not get successor endpoint of pin '{}' at gate '{}' with ID {}: pin is not an output pin", pin->get_name(), m_name, std::to_string(m_id));
+            return nullptr;
+        }
+        auto successors = get_successors([pin](auto& p, auto) -> bool { return p == pin; });
         if (successors.size() == 0)
         {
             return nullptr;
         }
         if (successors.size() > 1)
         {
-            log_error("gate", "gate '{}' with ID {} has multiple successors at output pin '{}' in netlist with ID {}.", m_name, m_id, output_pin, m_internal_manager->m_netlist->get_id());
+            log_warning("gate", "gate '{}' with ID {} has multiple successor at output pin '{}' in netlist with ID {}.", m_name, m_id, pin->get_name(), m_internal_manager->m_netlist->get_id());
             return nullptr;
         }
 
         return successors[0];
+    }
+
+    Endpoint* Gate::get_successor(const std::string& pin_name) const
+    {
+        const GatePin* pin = m_type->get_pin_by_name(pin_name);
+        if (pin == nullptr)
+        {
+            log_warning("gate",
+                        "could not get successor endpoint of pin '{}' at gate '{}' with ID {}: no pin with that name exists for gate type '{}'",
+                        pin_name,
+                        m_name,
+                        std::to_string(m_id),
+                        m_type->get_name());
+            return nullptr;
+        }
+        return get_successor(pin);
     }
 }    // namespace hal

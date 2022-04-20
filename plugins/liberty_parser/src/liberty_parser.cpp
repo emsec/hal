@@ -11,7 +11,7 @@
 
 namespace hal
 {
-    std::unique_ptr<GateLibrary> LibertyParser::parse(const std::filesystem::path& file_path)
+    Result<std::unique_ptr<GateLibrary>> LibertyParser::parse(const std::filesystem::path& file_path)
     {
         m_path = file_path;
 
@@ -20,44 +20,39 @@ namespace hal
             ifs.open(m_path.string(), std::ifstream::in);
             if (!ifs.is_open())
             {
-                log_error("liberty_parser", "unable to open '{}'.", m_path.string());
-                return nullptr;
+                return ERR("could not parse Liberty file '" + m_path.string() + "' : unable to open file");
             }
             m_fs << ifs.rdbuf();
             ifs.close();
         }
 
         // tokenize file
-        if (!tokenize())
-        {
-            return nullptr;
-        }
+        tokenize();
 
         // parse tokens into intermediate format
         try
         {
-            if (!parse_tokens())
+            if (auto res = parse_tokens(); res.is_error())
             {
-                return nullptr;
+                return ERR_APPEND(res.get_error(), "could not parse Liberty file '" + file_path.string() + "': unable to parse tokens");
             }
         }
         catch (TokenStream<std::string>::TokenStreamException& e)
         {
             if (e.line_number != (u32)-1)
             {
-                log_error("liberty_parser", "{} near line {}.", e.message, e.line_number);
+                return ERR("could not parse Liberty file '" + m_path.string() + "': " + e.message + " (line " + std::to_string(e.line_number) + ")");
             }
             else
             {
-                log_error("liberty_parser", "{}.", e.message);
+                return ERR("could not parse Liberty file '" + m_path.string() + "': " + e.message);
             }
-            return nullptr;
         }
 
-        return std::move(m_gate_lib);
+        return OK(std::move(m_gate_lib));
     }
 
-    bool LibertyParser::tokenize()
+    void LibertyParser::tokenize()
     {
         std::string delimiters = "{}()[];:\",";
         std::string current_token;
@@ -116,10 +111,9 @@ namespace hal
         }
 
         m_token_stream = TokenStream<std::string>(parsed_tokens, {"(", "{"}, {")", "}"});
-        return true;
     }
 
-    bool LibertyParser::parse_tokens()
+    Result<std::monostate> LibertyParser::parse_tokens()
     {
         m_token_stream.consume("library", true);
         m_token_stream.consume("(", true);
@@ -140,39 +134,45 @@ namespace hal
             }
             else if (next_token == "cell" && library_str.peek() == "(")
             {
-                auto cell = parse_cell(library_str);
-                if (!cell.has_value())
+                if (auto cell = parse_cell(library_str); cell.is_error())
                 {
-                    return false;
+                    return ERR_APPEND(cell.get_error(), "could not parse tokens: unable to parse cell (line " + std::to_string(next_token.number) + ")");
                 }
-
-                if (!construct_gate_type(cell.value()))
+                else
                 {
-                    return false;
+                    if (auto res = construct_gate_type(cell.get()); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(), "could not parse tokens: unable to construct gate type (line " + std::to_string(next_token.number) + ")");
+                    }
                 }
             }
             else if (next_token == "type" && library_str.peek() == "(")
             {
-                auto type = parse_type(library_str);
-                if (!type.has_value())
+                if (auto res = parse_type(library_str); res.is_error())
                 {
-                    return false;
+                    return ERR_APPEND(res.get_error(), "could not parse tokens: unable to parse type (line " + std::to_string(next_token.number) + ")");
                 }
-                m_bus_types.emplace(type->name, type.value());
+                else
+                {
+                    auto type              = res.get();
+                    m_bus_types[type.name] = std::move(type);
+                }
             }
         } while (library_str.remaining() > 0);
 
-        return m_token_stream.remaining() == 0;
+        if (const u32 unparsed = m_token_stream.remaining(); unparsed == 0)
+        {
+            return OK({});
+        }
+        else
+        {
+            return ERR("could not parse tokens: " + std::to_string(unparsed) + " unparsed tokens remaining");
+        }
     }
 
-    std::optional<LibertyParser::type_group> LibertyParser::parse_type(TokenStream<std::string>& str)
+    Result<LibertyParser::type_group> LibertyParser::parse_type(TokenStream<std::string>& str)
     {
         type_group type;
-        i32 width     = 1;
-        i32 start     = 0;
-        i32 end       = 0;
-        i32 direction = 1;
-
         type.line_number = str.peek().number;
         str.consume("(", true);
         type.name = str.consume().string;
@@ -181,6 +181,9 @@ namespace hal
         auto type_str = str.extract_until("}", TokenStream<std::string>::END_OF_STREAM, true, true);
         str.consume("}", true);
 
+        type.start_index = 0;
+        type.width       = 1;
+        type.ascending   = true;
         while (type_str.remaining() > 0)
         {
             auto next_token = type_str.consume();
@@ -202,60 +205,44 @@ namespace hal
             else if (next_token == "bit_width")
             {
                 type_str.consume(":", true);
-                width = std::stol(type_str.consume().string);
+                type.width = std::stol(type_str.consume().string);
             }
             else if (next_token == "bit_from")
             {
                 type_str.consume(":", true);
-                start = std::stol(type_str.consume().string);
+                type.start_index = std::stol(type_str.consume().string);
             }
             else if (next_token == "bit_to")
             {
                 type_str.consume(":", true);
-                end = std::stol(type_str.consume().string);
             }
             else if (next_token == "downto")
             {
                 type_str.consume(":", true);
-                if (type_str.consume("false"))
+                auto bval = type_str.consume();
+                if (bval == "false")
                 {
-                    direction = 1;
+                    type.ascending = true;
                 }
-                else if (type_str.consume("true"))
+                else if (bval == "true")
                 {
-                    direction = -1;
+                    type.ascending = false;
                 }
                 else
                 {
-                    log_error(
-                        "liberty_parser", "invalid token '{}' for boolean value in 'downto' statement in type group '{}' near line {}.", type_str.peek().string, type.name, type_str.peek().number);
-                    return std::nullopt;
+                    return ERR("could not parse type '" + type.name + "': invalid Boolean value '" + bval.string + "' (line " + std::to_string(bval.number) + ")");
                 }
             }
             else
             {
-                log_error("liberty_parser", "invalid token '{}' in type group '{}' near line {}.", type_str.peek().string, type.name, type_str.peek().number);
-                return std::nullopt;
+                return ERR("could not parse type '" + type.name + "': invalid token '" + next_token.string + "' (line " + std::to_string(next_token.number) + ")");
             }
-
-            type_str.consume(";");
+            type_str.consume(";", true);
         }
-
-        if (width != (direction * (end - start)) + 1)
-        {
-            log_error("liberty_parser", "invalid 'bit_width' value {} for type group '{}' near line {}.", width, type.name, type.line_number);
-            return std::nullopt;
-        }
-
-        for (int i = start; i != end + direction; i += direction)
-        {
-            type.range.push_back((u32)i);
-        }
-
-        return type;
+        return OK(type);
     }
 
-    std::optional<LibertyParser::cell_group> LibertyParser::parse_cell(TokenStream<std::string>& str)
+    Result<LibertyParser::cell_group> LibertyParser::parse_cell(TokenStream<std::string>& str)
     {
         cell_group cell;
 
@@ -269,8 +256,7 @@ namespace hal
 
         if (const auto cell_it = m_cell_names.find(cell.name); cell_it != m_cell_names.end())
         {
-            log_error("liberty_parser", "a cell with the name '{}' does already exist.", cell.name);
-            return std::nullopt;
+            return ERR("could not parse cell '" + cell.name + "': a cell with that name already exists");
         }
 
         m_cell_names.insert(cell.name);
@@ -285,58 +271,66 @@ namespace hal
             }
             else if (next_token == "pin")
             {
-                auto pin = parse_pin(cell_str, cell);
-                if (!pin.has_value())
+                if (auto pin = parse_pin(cell_str, cell); pin.is_error())
                 {
-                    return std::nullopt;
+                    return ERR_APPEND(pin.get_error(), "could not parse cell '" + cell.name + "': failed to parse 'pin' group (line " + std::to_string(next_token.number) + ")");
                 }
-                cell.pins.push_back(pin.value());
+                else
+                {
+                    cell.pins.push_back(pin.get());
+                }
             }
             else if (next_token == "pg_pin")
             {
-                auto pin = parse_pg_pin(cell_str, cell);
-                if (pin.has_value())
+                if (auto pin = parse_pg_pin(cell_str, cell); pin.is_ok())
                 {
-                    cell.pins.push_back(pin.value());
+                    cell.pins.push_back(pin.get());
                 }
             }
             else if (next_token == "bus")
             {
-                auto bus = parse_bus(cell_str, cell);
-                if (!bus.has_value())
+                if (auto res = parse_bus(cell_str, cell); res.is_error())
                 {
-                    return std::nullopt;
+                    return ERR_APPEND(res.get_error(), "could not parse cell '" + cell.name + "': failed to parse 'bus' group (line " + std::to_string(next_token.number) + ")");
                 }
-                cell.buses.emplace(bus->name, bus.value());
+                else
+                {
+                    auto bus             = res.get();
+                    cell.buses[bus.name] = std::move(bus);
+                }
             }
             else if (next_token == "ff")
             {
-                auto ff = parse_ff(cell_str);
-                if (!ff.has_value())
+                if (auto ff = parse_ff(cell_str); ff.is_error())
                 {
-                    return std::nullopt;
+                    return ERR_APPEND(ff.get_error(), "could not parse cell '" + cell.name + "': failed to parse 'ff' group (line " + std::to_string(next_token.number) + ")");
                 }
-                cell.properties.insert(GateTypeProperty::ff);
-                cell.properties.insert(GateTypeProperty::sequential);
-                cell.ff = ff.value();
+                else
+                {
+                    cell.properties.insert(GateTypeProperty::ff);
+                    cell.properties.insert(GateTypeProperty::sequential);
+                    cell.ff = ff.get();
+                }
             }
             else if (next_token == "latch")
             {
-                auto latch = parse_latch(cell_str);
-                if (!latch.has_value())
+                if (auto latch = parse_latch(cell_str); latch.is_error())
                 {
-                    return std::nullopt;
+                    return ERR_APPEND(latch.get_error(), "could not parse cell '" + cell.name + "': failed to parse 'latch' group (line " + std::to_string(next_token.number) + ")");
                 }
-                cell.properties.insert(GateTypeProperty::latch);
-                cell.properties.insert(GateTypeProperty::sequential);
-                cell.latch = latch.value();
+                else
+                {
+                    cell.properties.insert(GateTypeProperty::latch);
+                    cell.properties.insert(GateTypeProperty::sequential);
+                    cell.latch = latch.get();
+                }
             }
         }
 
-        return cell;
+        return OK(cell);
     }
 
-    std::optional<LibertyParser::pin_group> LibertyParser::parse_pin(TokenStream<std::string>& str, cell_group& cell, PinDirection direction, const std::string& external_pin_name)
+    Result<LibertyParser::pin_group> LibertyParser::parse_pin(TokenStream<std::string>& str, cell_group& cell, PinDirection direction, const std::string& external_pin_name)
     {
         pin_group pin;
 
@@ -350,8 +344,7 @@ namespace hal
 
         if (pin_names_str.size() == 0)
         {
-            log_error("liberty_parser", "no pin name given near line {}.", pin.line_number);
-            return std::nullopt;
+            return ERR("could not parse pin: no pin name given (line " + std::to_string(pin.line_number) + ")");
         }
 
         do
@@ -359,8 +352,7 @@ namespace hal
             std::string name = pin_names_str.consume().string;
             if (!external_pin_name.empty() && name != external_pin_name)
             {
-                log_error("liberty_parser", "invalid pin name '{}' near line {}.", name, pin.line_number);
-                return std::nullopt;
+                return ERR("could not parse pin '" + name + "': pin name does not match external pin name '" + external_pin_name + "' (line " + std::to_string(pin.line_number) + ")");
             }
 
             if (pin_names_str.consume("["))
@@ -378,12 +370,11 @@ namespace hal
 
                         if (const auto pin_it = cell.pin_names.find(new_name); pin_it != cell.pin_names.end())
                         {
-                            log_error("liberty_parser", "a pin with name '{}' does already exist for cell '{}'.", new_name, cell.name);
-                            return std::nullopt;
+                            return ERR("could not parse pin '" + new_name + "': a pin with that name already exists (line " + std::to_string(pin.line_number) + ")");
                         }
 
                         cell.pin_names.insert(new_name);
-                        pin.pin_names.push_back(new_name);
+                        pin.pin_names.push_back(std::move(new_name));
                     }
                 }
                 else
@@ -393,12 +384,11 @@ namespace hal
 
                     if (const auto pin_it = cell.pin_names.find(new_name); pin_it != cell.pin_names.end())
                     {
-                        log_error("liberty_parser", "a pin with name '{}' does already exist for cell '{}'.", new_name, cell.name);
-                        return std::nullopt;
+                        return ERR("could not parse pin '" + new_name + "': a pin with that name already exists (line " + std::to_string(pin.line_number) + ")");
                     }
 
                     cell.pin_names.insert(new_name);
-                    pin.pin_names.push_back(new_name);
+                    pin.pin_names.push_back(std::move(new_name));
                 }
 
                 pin_names_str.consume("]", true);
@@ -407,12 +397,11 @@ namespace hal
             {
                 if (const auto pin_it = cell.pin_names.find(name); pin_it != cell.pin_names.end())
                 {
-                    log_error("liberty_parser", "a pin with name '{}' does already exist for cell '{}'.", name, cell.name);
-                    return std::nullopt;
+                    return ERR("could not parse pin '" + name + "': a pin with that name already exists (line " + std::to_string(pin.line_number) + ")");
                 }
 
                 cell.pin_names.insert(name);
-                pin.pin_names.push_back(name);
+                pin.pin_names.push_back(std::move(name));
             }
 
             pin_names_str.consume(",", pin_names_str.remaining() > 0);
@@ -433,8 +422,7 @@ namespace hal
                 }
                 catch (const std::runtime_error&)
                 {
-                    log_warning("liberty_parser", "invalid pin direction '{}' near line {}.", direction_str, pin.line_number);
-                    return std::nullopt;
+                    return ERR("could not parse pin: invalid pin direction '" + direction_str + "' (line " + std::to_string(pin.line_number) + ")");
                 }
                 pin_str.consume(";", true);
             }
@@ -469,14 +457,13 @@ namespace hal
 
         if (pin.direction == PinDirection::none)
         {
-            log_error("liberty_parser", "no pin direction given near line {}.", pin.line_number);
-            return std::nullopt;
+            return ERR("could not parse pin: no pin direction given (line " + std::to_string(pin.line_number) + ")");
         }
 
-        return pin;
+        return OK(pin);
     }
 
-    std::optional<LibertyParser::pin_group> LibertyParser::parse_pg_pin(TokenStream<std::string>& str, cell_group& cell)
+    Result<LibertyParser::pin_group> LibertyParser::parse_pg_pin(TokenStream<std::string>& str, cell_group& cell)
     {
         pin_group pin;
 
@@ -490,27 +477,18 @@ namespace hal
 
         if (pin_names_str.size() == 0)
         {
-            log_warning("liberty_parser", "no pg_pin name given near line {}.", pin.line_number);
-            return std::nullopt;
+            return ERR("could not parse power/ground pin: no pin name given (line " + std::to_string(pin.line_number) + ")");
         }
         else if (pin_names_str.size() > 1)
         {
-            log_warning("liberty_parser", "more than one pg_pin name given near line {}.", pin.line_number);
-            return std::nullopt;
+            return ERR("could not parse power/ground pins '" + pin_names_str.join("").string + "': more than one pin name given (line " + std::to_string(pin.line_number) + ")");
         }
 
         std::string name = pin_names_str.consume().string;
-
         if (const auto pin_it = cell.pin_names.find(name); pin_it != cell.pin_names.end())
         {
-            log_warning("liberty_parser", "a pin with name '{}' does already exist for cell '{}'.", name, cell.name);
-            return std::nullopt;
+            return ERR("could not parse power/ground pin '" + name + "': a pin with that name already exists (line " + std::to_string(pin.line_number) + ")");
         }
-
-        cell.pin_names.insert(name);
-        pin.pin_names.push_back(name);
-
-        pin.direction = PinDirection::input;
 
         while (pin_str.remaining() > 0)
         {
@@ -529,16 +507,20 @@ namespace hal
                 }
                 else
                 {
-                    return std::nullopt;
+                    return ERR("could not parse power/ground pin '" + name + "': invalid pin type '" + type + "' (line " + std::to_string(pin.line_number) + ")");
                 }
                 pin_str.consume(";", true);
             }
         }
 
-        return pin;
+        pin.direction = PinDirection::input;
+        cell.pin_names.insert(name);
+        pin.pin_names.push_back(std::move(name));
+
+        return OK(pin);
     }
 
-    std::optional<LibertyParser::bus_group> LibertyParser::parse_bus(TokenStream<std::string>& str, cell_group& cell)
+    Result<LibertyParser::bus_group> LibertyParser::parse_bus(TokenStream<std::string>& str, cell_group& cell)
     {
         bus_group bus;
         std::vector<u32> range;
@@ -558,14 +540,20 @@ namespace hal
             {
                 bus_str.consume(":", true);
                 auto bus_type_str = bus_str.consume().string;
-                if (const auto& it = m_bus_types.find(bus_type_str); it != m_bus_types.end())
+                if (const auto& it = m_bus_types.find(bus_type_str); it == m_bus_types.end())
                 {
-                    range = it->second.range;
+                    return ERR("could not parse bus '" + bus.name + "': invalid bus type '" + bus_type_str + "' (line " + std::to_string(bus.line_number) + ")");
                 }
                 else
                 {
-                    log_error("liberty_parser", "invalid bus type '{}' near line {}.", bus_type_str, bus.line_number);
-                    return std::nullopt;
+                    auto& type      = it->second;
+                    bus.ascending   = type.ascending;
+                    bus.start_index = type.start_index;
+                    i32 dir         = (type.ascending ? 1 : -1);
+                    for (i32 i = type.start_index; i != (i32)type.start_index + dir * type.width; i += dir)
+                    {
+                        range.push_back(i);
+                    }
                 }
                 bus_str.consume(";", true);
             }
@@ -591,21 +579,22 @@ namespace hal
                 }
                 else
                 {
-                    log_error("liberty_parser", "invalid pin direction '{}' near line {}.", direction_str, bus.line_number);
-                    return std::nullopt;
+                    return ERR("could not parse bus '" + bus.name + "': invalid bus direction '" + direction_str + "' (line " + std::to_string(bus.line_number) + ")");
                 }
                 bus_str.consume(";", true);
             }
             else if (next_token == "pin")
             {
-                auto pin = parse_pin(bus_str, cell, bus.direction, bus.name);
-                if (!pin.has_value())
+                if (auto res = parse_pin(bus_str, cell, bus.direction, bus.name); res.is_error())
                 {
-                    return std::nullopt;
+                    return ERR("could not parse bus '" + bus.name + "': failed to parse pin (line " + std::to_string(bus.line_number) + ")");
                 }
-
-                cell.pins.push_back(pin.value());
-                bus.pins.push_back(pin.value());
+                else
+                {
+                    auto pin = res.get();
+                    cell.pins.push_back(pin);
+                    bus.pins.push_back(std::move(pin));
+                }
             }
         } while (bus_str.remaining() > 0);
 
@@ -613,20 +602,18 @@ namespace hal
         {
             auto pin_name = bus.name + "(" + std::to_string(index) + ")";
             bus.pin_names.push_back(pin_name);
-            bus.pin_indices.push_back(std::make_pair(index, pin_name));
-            bus.index_to_pin.emplace(index, pin_name);
+            bus.index_to_pin[index] = pin_name;
         }
 
         if (bus.direction == PinDirection::none)
         {
-            log_error("liberty_parser", "no bus direction given near line {}.", bus.line_number);
-            return std::nullopt;
+            return ERR("could not parse bus '" + bus.name + "': no bus direction given (line " + std::to_string(bus.line_number) + ")");
         }
 
-        return bus;
+        return OK(bus);
     }
 
-    std::optional<LibertyParser::ff_group> LibertyParser::parse_ff(TokenStream<std::string>& str)
+    Result<LibertyParser::ff_group> LibertyParser::parse_ff(TokenStream<std::string>& str)
     {
         ff_group ff;
 
@@ -686,16 +673,15 @@ namespace hal
                 }
                 else
                 {
-                    log_error("liberty_parser", "invalid clear_preset behavior '{}' near line {}.", behav_str.string, behav_str.number);
-                    return std::nullopt;
+                    return ERR("could not parse 'ff' group: invalid clear_preset behavior '" + behav_str.string + "' (line " + std::to_string(behav_str.number) + ")");
                 }
             }
         } while (ff_str.remaining() > 0);
 
-        return ff;
+        return OK(ff);
     }
 
-    std::optional<LibertyParser::latch_group> LibertyParser::parse_latch(TokenStream<std::string>& str)
+    Result<LibertyParser::latch_group> LibertyParser::parse_latch(TokenStream<std::string>& str)
     {
         latch_group latch;
 
@@ -755,16 +741,15 @@ namespace hal
                 }
                 else
                 {
-                    log_error("liberty_parser", "invalid clear_preset behavior '{}' near line {}.", behav_str.string, behav_str.number);
-                    return std::nullopt;
+                    return ERR("could not parse 'latch' group: invalid clear_preset behavior '" + behav_str.string + "' (line " + std::to_string(behav_str.number) + ")");
                 }
             }
         } while (latch_str.remaining() > 0);
 
-        return latch;
+        return OK(latch);
     }
 
-    bool LibertyParser::construct_gate_type(cell_group& cell)
+    Result<std::monostate> LibertyParser::construct_gate_type(cell_group&& cell)
     {
         // get input and from pin groups
         bool has_inputs = false;
@@ -772,7 +757,6 @@ namespace hal
         std::string output_func;
         for (const auto& pin : cell.pins)
         {
-
             if (pin.direction == PinDirection::input || pin.direction == PinDirection::inout)
             {
                 if (!pin.power && !pin.ground)
@@ -788,7 +772,6 @@ namespace hal
         }
 
         std::unique_ptr<GateTypeComponent> parent_component = nullptr;
-        std::unordered_map<std::string, PinType> pin_types;
         if (!has_inputs && num_outputs == 1)
         {
             if (output_func == "0")
@@ -806,29 +789,41 @@ namespace hal
         {
             if (cell.ff->clocked_on.empty() || cell.ff->next_state.empty())
             {
-                return false;
+                return ERR("could not construct gate type '" + cell.name + "': missing 'clocked_on' or 'next_state' function (or both)");
             }
 
             std::unique_ptr<GateTypeComponent> state_component = GateTypeComponent::create_state_component(nullptr, cell.ff->state1, cell.ff->state2);
 
             auto next_state_function = BooleanFunction::from_string(cell.ff->next_state);
+            if (next_state_function.is_error())
+            {
+                return ERR_APPEND(next_state_function.get_error(), "could not construct gate type '" + cell.name + "': failed parsing 'next_state' function from string");
+            }
             auto clocked_on_function = BooleanFunction::from_string(cell.ff->clocked_on);
-
-            parent_component =
-                GateTypeComponent::create_ff_component(std::move(state_component),
-                                                       (next_state_function.is_ok()) ? next_state_function.get() : BooleanFunction(),
-                                                       (clocked_on_function.is_ok()) ? clocked_on_function.get() : BooleanFunction());
+            if (clocked_on_function.is_error())
+            {
+                return ERR_APPEND(next_state_function.get_error(), "could not construct gate type '" + cell.name + "': failed parsing 'clocked_on' function from string");
+            }
+            parent_component = GateTypeComponent::create_ff_component(std::move(state_component), next_state_function.get(), clocked_on_function.get());
 
             FFComponent* ff_component = parent_component->convert_to<FFComponent>();
             if (!cell.ff->clear.empty())
             {
                 auto clear_function = BooleanFunction::from_string(cell.ff->clear);
-                ff_component->set_async_reset_function((clear_function.is_ok()) ? clear_function.get() : BooleanFunction());
+                if (clear_function.is_error())
+                {
+                    return ERR_APPEND(next_state_function.get_error(), "could not construct gate type '" + cell.name + "': failed parsing 'clear' function from string");
+                }
+                ff_component->set_async_reset_function(clear_function.get());
             }
             if (!cell.ff->preset.empty())
             {
                 auto preset_function = BooleanFunction::from_string(cell.ff->preset);
-                ff_component->set_async_set_function((preset_function.is_ok()) ? preset_function.get() : BooleanFunction());
+                if (preset_function.is_error())
+                {
+                    return ERR_APPEND(next_state_function.get_error(), "could not construct gate type '" + cell.name + "': failed parsing 'preset' function from string");
+                }
+                ff_component->set_async_set_function(preset_function.get());
             }
 
             ff_component->set_async_set_reset_behavior(cell.ff->special_behavior_var1, cell.ff->special_behavior_var2);
@@ -837,35 +832,20 @@ namespace hal
             {
                 if (pin.clock == true)
                 {
-                    for (const auto& pin_name : pin.pin_names)
-                    {
-                        pin_types[pin_name] = PinType::clock;
-                    }
+                    pin.type = PinType::clock;
                 }
                 else if (pin.function == cell.ff->state1)
                 {
-                    for (const auto& pin_name : pin.pin_names)
-                    {
-                        pin_types[pin_name] = PinType::state;
-                    }
+                    pin.type = PinType::state;
                 }
                 else if (pin.function == cell.ff->state2)
                 {
-                    for (const auto& pin_name : pin.pin_names)
-                    {
-                        pin_types[pin_name] = PinType::neg_state;
-                    }
+                    pin.type = PinType::neg_state;
                 }
             }
         }
         else if (cell.latch.has_value())
         {
-            // TODO make sure this does not cause errors in latch component
-            // if (cell.latch->enable.empty() || cell.latch->data_in.empty())
-            // {
-            //     return false;
-            // }
-
             std::unique_ptr<GateTypeComponent> state_component = GateTypeComponent::create_state_component(nullptr, cell.latch->state1, cell.latch->state2);
 
             parent_component                = GateTypeComponent::create_latch_component(std::move(state_component));
@@ -874,23 +854,39 @@ namespace hal
 
             if (!cell.latch->data_in.empty())
             {
-                auto data_in_function = BooleanFunction::from_string(cell.latch->data_in);
-                latch_component->set_data_in_function((data_in_function.is_ok()) ? data_in_function.get() : BooleanFunction());
+                auto res = BooleanFunction::from_string(cell.latch->data_in);
+                if (res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not construct gate type '" + cell.name + "': failed parsing 'data_in' function from string");
+                }
+                latch_component->set_data_in_function(res.get());
             }
             if (!cell.latch->enable.empty())
-            {  
-                auto enable_function = BooleanFunction::from_string(cell.latch->enable);
-                latch_component->set_enable_function((enable_function.is_ok()) ? enable_function.get() : BooleanFunction());
+            {
+                auto res = BooleanFunction::from_string(cell.latch->enable);
+                if (res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not construct gate type '" + cell.name + "': failed parsing 'enable' function from string");
+                }
+                latch_component->set_enable_function(res.get());
             }
             if (!cell.latch->clear.empty())
             {
-                auto clear_function = BooleanFunction::from_string(cell.latch->clear);
-                latch_component->set_async_reset_function((clear_function.is_ok()) ? clear_function.get() : BooleanFunction());
+                auto res = BooleanFunction::from_string(cell.latch->clear);
+                if (res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not construct gate type '" + cell.name + "': failed parsing 'clear' function from string");
+                }
+                latch_component->set_async_reset_function(res.get());
             }
             if (!cell.latch->preset.empty())
             {
-                auto preset_function = BooleanFunction::from_string(cell.latch->preset);
-                latch_component->set_async_set_function((preset_function.is_ok()) ? preset_function.get() : BooleanFunction());
+                auto res = BooleanFunction::from_string(cell.latch->preset);
+                if (res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not construct gate type '" + cell.name + "': failed parsing 'preset' function from string");
+                }
+                latch_component->set_async_set_function(res.get());
             }
 
             latch_component->set_async_set_reset_behavior(cell.latch->special_behavior_var1, cell.latch->special_behavior_var2);
@@ -899,24 +895,15 @@ namespace hal
             {
                 if (pin.clock == true)
                 {
-                    for (const auto& pin_name : pin.pin_names)
-                    {
-                        pin_types[pin_name] = PinType::clock;
-                    }
+                    pin.type = PinType::clock;
                 }
                 else if (pin.function == cell.latch->state1)
                 {
-                    for (const auto& pin_name : pin.pin_names)
-                    {
-                        pin_types[pin_name] = PinType::state;
-                    }
+                    pin.type = PinType::state;
                 }
                 else if (pin.function == cell.latch->state2)
                 {
-                    for (const auto& pin_name : pin.pin_names)
-                    {
-                        pin_types[pin_name] = PinType::neg_state;
-                    }
+                    pin.type = PinType::neg_state;
                 }
             }
         }
@@ -929,44 +916,64 @@ namespace hal
         GateType* gt = m_gate_lib->create_gate_type(cell.name, cell.properties, std::move(parent_component));
 
         // get input and output pins from pin groups
-        for (const auto& pin : cell.pins)
+        for (auto& pin : cell.pins)
         {
-            gt->add_pins(pin.pin_names, pin.direction);
-
             if (pin.power == true)
             {
-                for (const auto& pin_name : pin.pin_names)
-                {
-                    pin_types[pin_name] = PinType::power;
-                }
+                pin.type = PinType::power;
             }
 
             if (pin.ground == true)
             {
-                for (const auto& pin_name : pin.pin_names)
+                pin.type = PinType::ground;
+            }
+
+            for (const auto& pin_name : pin.pin_names)
+            {
+                GatePin* pin_inst;
+                if (auto res = gt->create_pin(pin_name, pin.direction, pin.type); res.is_error())
                 {
-                    pin_types[pin_name] = PinType::ground;
+                    return ERR_APPEND(res.get_error(), "could not construct gate type '" + cell.name + "': failed to create pin '" + pin_name + "'");
+                }
+                else
+                {
+                    pin_inst = res.get();
+                }
+                if (auto res = gt->create_pin_group(pin_name, {pin_inst}, pin.direction, pin.type); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not construct gate type '" + cell.name + "': failed to create pin group '" + pin_name + "'");
                 }
             }
         }
 
         for (const auto& [bus_name, bus_info] : cell.buses)
         {
-            if (!gt->assign_pin_group(bus_name, bus_info.pin_indices))
+            std::vector<GatePin*> pins;
+            for (const auto& pin_name : bus_info.pin_names)
             {
-                return false;
+                if (auto res = gt->get_pin_by_name(pin_name); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not construct gate type '" + cell.name + "': failed to get pin by name '" + pin_name + "'");
+                }
+                else
+                {
+                    pins.push_back(res.get());
+                }
             }
-        }
-
-        for (const auto& [pin, type] : pin_types)
-        {
-            gt->assign_pin_type(pin, type);
+            if (auto res = gt->create_pin_group(bus_name, pins, bus_info.direction, PinType::none, bus_info.ascending, bus_info.start_index); res.is_error())
+            {
+                return ERR_APPEND(res.get_error(), "could not construct gate type '" + cell.name + "': failed to create pin group '" + bus_name + "'");
+            }
         }
 
         if (!cell.buses.empty())
         {
             auto functions = construct_bus_functions(cell);
-            gt->add_boolean_functions(functions);
+            if (functions.is_error())
+            {
+                return ERR_APPEND(functions.get_error(), "could not construct gate type '" + cell.name + "': failed to construct bus functions");
+            }
+            gt->add_boolean_functions(functions.get());
         }
         else
         {
@@ -977,7 +984,11 @@ namespace hal
                     for (const auto& name : pin.pin_names)
                     {
                         auto function = BooleanFunction::from_string(pin.function);
-                        gt->add_boolean_function(name, (function.is_ok()) ? function.get() : BooleanFunction());
+                        if (function.is_error())
+                        {
+                            return ERR_APPEND(function.get_error(), "could not construct gate type '" + cell.name + "': failed parsing output function from string");
+                        }
+                        gt->add_boolean_function(name, function.get());
                     }
                 }
 
@@ -986,7 +997,11 @@ namespace hal
                     for (const auto& name : pin.pin_names)
                     {
                         auto function = BooleanFunction::from_string(pin.x_function);
-                        gt->add_boolean_function(name + "_undefined", (function.is_ok()) ? function.get() : BooleanFunction());
+                        if (function.is_error())
+                        {
+                            return ERR_APPEND(function.get_error(), "could not construct gate type '" + cell.name + "': failed parsing undefined function from string");
+                        }
+                        gt->add_boolean_function(name + "_undefined", function.get());
                     }
                 }
 
@@ -995,13 +1010,17 @@ namespace hal
                     for (const auto& name : pin.pin_names)
                     {
                         auto function = BooleanFunction::from_string(pin.z_function);
-                        gt->add_boolean_function(name + "_tristate", (function.is_ok()) ? function.get() : BooleanFunction());
+                        if (function.is_error())
+                        {
+                            return ERR_APPEND(function.get_error(), "could not construct gate type '" + cell.name + "': failed parsing tristate function from string");
+                        }
+                        gt->add_boolean_function(name + "_tristate", function.get());
                     }
                 }
             }
         }
 
-        return true;
+        return OK({});
     }
 
     void LibertyParser::remove_comments(std::string& line, bool& multi_line_comment)
@@ -1195,7 +1214,7 @@ namespace hal
         return res;
     }
 
-    std::unordered_map<std::string, BooleanFunction> LibertyParser::construct_bus_functions(const cell_group& cell)
+    Result<std::unordered_map<std::string, BooleanFunction>> LibertyParser::construct_bus_functions(const cell_group& cell)
     {
         std::unordered_map<std::string, BooleanFunction> res;
 
@@ -1215,7 +1234,11 @@ namespace hal
                     for (auto [pin_name, function] : expand_bus_function(cell.buses, pin.pin_names, pin.function))
                     {
                         auto bf = BooleanFunction::from_string(function);
-                        res.emplace(pin_name, (bf.is_ok()) ? bf.get() : BooleanFunction());
+                        if (bf.is_error())
+                        {
+                            return ERR_APPEND(bf.get_error(), "could not construct gate type '" + cell.name + "': failed parsing output function from string");
+                        }
+                        res.emplace(pin_name, bf.get());
                     }
                 }
 
@@ -1224,7 +1247,11 @@ namespace hal
                     for (auto [pin_name, function] : expand_bus_function(cell.buses, pin.pin_names, pin.x_function))
                     {
                         auto bf = BooleanFunction::from_string(function);
-                        res.emplace(pin_name + "_undefined", (bf.is_ok()) ? bf.get() : BooleanFunction());
+                        if (bf.is_error())
+                        {
+                            return ERR_APPEND(bf.get_error(), "could not construct gate type '" + cell.name + "': failed parsing undefined function from string");
+                        }
+                        res.emplace(pin_name + "_undefined", bf.get());
                     }
                 }
 
@@ -1233,7 +1260,11 @@ namespace hal
                     for (auto [pin_name, function] : expand_bus_function(cell.buses, pin.pin_names, pin.z_function))
                     {
                         auto bf = BooleanFunction::from_string(function);
-                        res.emplace(pin_name + "_tristate", (bf.is_ok()) ? bf.get() : BooleanFunction());
+                        if (bf.is_error())
+                        {
+                            return ERR_APPEND(bf.get_error(), "could not construct gate type '" + cell.name + "': failed parsing tristate function from string");
+                        }
+                        res.emplace(pin_name + "_tristate", bf.get());
                     }
                 }
             }
@@ -1248,7 +1279,11 @@ namespace hal
                     for (const auto& pin_name : pin.pin_names)
                     {
                         auto bf = BooleanFunction::from_string(function);
-                        res.emplace(pin_name, (bf.is_ok()) ? bf.get() : BooleanFunction());
+                        if (bf.is_error())
+                        {
+                            return ERR_APPEND(bf.get_error(), "could not construct gate type '" + cell.name + "': failed parsing output function from string");
+                        }
+                        res.emplace(pin_name, bf.get());
                     }
                 }
             }
@@ -1260,7 +1295,11 @@ namespace hal
                     for (const auto& pin_name : pin.pin_names)
                     {
                         auto bf = BooleanFunction::from_string(function);
-                        res.emplace(pin_name + "_undefined", (bf.is_ok()) ? bf.get() : BooleanFunction());
+                        if (bf.is_error())
+                        {
+                            return ERR_APPEND(bf.get_error(), "could not construct gate type '" + cell.name + "': failed parsing undefined function from string");
+                        }
+                        res.emplace(pin_name + "_undefined", bf.get());
                     }
                 }
             }
@@ -1272,12 +1311,16 @@ namespace hal
                     for (const auto& pin_name : pin.pin_names)
                     {
                         auto bf = BooleanFunction::from_string(function);
-                        res.emplace(pin_name + "_tristate", (bf.is_ok()) ? bf.get() : BooleanFunction());
+                        if (bf.is_error())
+                        {
+                            return ERR_APPEND(bf.get_error(), "could not construct gate type '" + cell.name + "': failed parsing tristate function from string");
+                        }
+                        res.emplace(pin_name + "_tristate", bf.get());
                     }
                 }
             }
         }
 
-        return res;
+        return OK(res);
     }
 }    // namespace hal
