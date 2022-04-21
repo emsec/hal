@@ -53,6 +53,7 @@ namespace hal {
         connect(mWaveDataList,&WaveDataList::waveAdded,mTreeModel,&WaveTreeModel::handleWaveAdded);
         connect(mWaveDataList,&WaveDataList::groupAdded,mTreeModel,&WaveTreeModel::handleGroupAdded);
         connect(mWaveDataList,&WaveDataList::booleanAdded,mTreeModel,&WaveTreeModel::handleBooleanAdded);
+        connect(mWaveDataList,&WaveDataList::triggerAdded,mTreeModel,&WaveTreeModel::handleTriggerAdded);
         connect(mWaveDataList,&WaveDataList::waveAddedToGroup,mTreeModel,&WaveTreeModel::handleWaveAddedToGroup);
         connect(mWaveDataList,&WaveDataList::waveRemovedFromGroup,mTreeModel,&WaveTreeModel::handleWaveRemovedFromGroup);
         connect(mWaveDataList,&WaveDataList::groupAboutToBeRemoved,mTreeModel,&WaveTreeModel::handleGroupAboutToBeRemoved);

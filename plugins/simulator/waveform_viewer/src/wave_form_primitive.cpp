@@ -19,6 +19,23 @@ namespace hal {
         painter.drawLine(QLineF(mX0,y0,mX0,y0+14));
     }
 
+    void WaveFormPrimitiveTrigger::paint(int y0, QPainter& painter)
+    {
+        QBrush saveBrush = painter.brush();
+        painter.setBrush(painter.pen().color());
+        painter.drawLine(QLineF(mX0,y0+2,mX0,y0+10));
+        QPoint pts[5];
+        const int px[5] = { 0, 3, 0, -3, 0 } ;
+        const int py[5] = { 3, 6, 0,  6, 3 } ;
+        for (int i=0; i<5; i++)
+        {
+            pts[i] = QPoint(px[i]+mX0, py[i]+y0+2);
+        }
+        painter.drawPolygon(pts,5);
+        painter.setBrush(saveBrush);
+    }
+
+
     void WaveFormPrimitiveUndefined::paint(int y0, QPainter& painter)
     {
         float y = 14 * 0.5 + y0;

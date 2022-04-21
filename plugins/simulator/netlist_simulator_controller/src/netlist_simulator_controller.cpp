@@ -118,10 +118,36 @@ namespace hal
         checkReadyState();
     }
 
-    u32 NetlistSimulatorController::add_boolean_waveform(const std::string &expression)
+    u32 NetlistSimulatorController::add_trigger_time(const std::vector<WaveData*>& trigger_waves, const std::vector<int>& trigger_on_values)
+    {
+        if (trigger_waves.empty()) return 0;
+        QList<WaveData*> triglist;
+        QList<int> trigOnVal;
+        for (WaveData*wd : trigger_waves)
+            triglist.append(wd);
+        for (int tov : trigger_on_values)
+            trigOnVal.append(tov);
+        WaveDataTrigger* wdTrig = new WaveDataTrigger(mWaveDataList,triglist,trigOnVal);
+        if (!wdTrig) return 0;
+        return wdTrig->id();
+    }
+
+    u32 NetlistSimulatorController::add_boolean_expression_waveform(const std::string &expression)
     {
         if (expression.empty()) return 0;
         WaveDataBoolean* wdBool = new WaveDataBoolean(mWaveDataList, QString::fromStdString(expression));
+        if (!wdBool) return 0;
+        return wdBool->id();
+    }
+
+    u32 NetlistSimulatorController::add_boolean_accept_list_waveform(const std::vector<WaveData *> &input_waves, const std::vector<int> &accepted_combination)
+    {
+        if (input_waves.empty() || accepted_combination.empty()) return 0;
+        QList<WaveData*> inpWaves;
+        QList<int> acceptVal;
+        for (WaveData* wd : input_waves) inpWaves.append(wd);
+        for (int acc : accepted_combination) acceptVal.append(acc);
+        WaveDataBoolean* wdBool = new WaveDataBoolean(mWaveDataList,inpWaves,acceptVal);
         if (!wdBool) return 0;
         return wdBool->id();
     }
@@ -239,6 +265,16 @@ namespace hal
     WaveDataGroup* NetlistSimulatorController::get_waveform_group_by_id(u32 id) const
     {
         return mWaveDataList->mDataGroups.value(id);
+    }
+
+    WaveDataBoolean* NetlistSimulatorController::get_waveform_boolean_by_id(u32 id) const
+    {
+        return mWaveDataList->mDataBooleans.value(id);
+    }
+
+    WaveDataTrigger* NetlistSimulatorController::get_trigger_time_by_id(u32 id) const
+    {
+        return mWaveDataList->mDataTrigger.value(id);
     }
 
     void NetlistSimulatorController::rename_waveform(WaveData* wd, std::string name)

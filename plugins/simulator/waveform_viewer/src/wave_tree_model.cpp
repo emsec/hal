@@ -55,6 +55,8 @@ namespace hal {
             return WaveItemIndex(wd->id(),WaveItemIndex::Group);
         case WaveData::BooleanNet:
             return WaveItemIndex(wd->id(),WaveItemIndex::Bool);
+        case WaveData::TriggerTime:
+            return WaveItemIndex(wd->id(),WaveItemIndex::Trig);
         default:
             break;
         }
@@ -132,6 +134,16 @@ namespace hal {
     void WaveTreeModel::emitReorder()
     {
         Q_EMIT triggerReorder();
+    }
+
+    void WaveTreeModel::handleTriggerAdded(int trigId)
+    {
+        ReorderRequest req(this);
+        if (mIgnoreSignals) return;
+        WaveDataTrigger* wdTrig = mWaveDataList->mDataTrigger.value(trigId);
+        if (!wdTrig) return;
+        insertTrigger(createIndex(mRoot->size(),0,mRoot),QList<WaveData*>(),QList<int>(),nullptr,wdTrig);
+        addOrReplaceItem(wdTrig, WaveItemIndex::Trig, wdTrig->id(), 0);
     }
 
     void WaveTreeModel::handleBooleanAdded(int boolId)
@@ -345,7 +357,15 @@ namespace hal {
          if (!wd) return -1;
          if (dynamic_cast<WaveDataGroup*>(wd)) return -1;
          if (dynamic_cast<WaveDataBoolean*>(wd)) return -2;
+         if (dynamic_cast<WaveDataTrigger*>(wd)) return -3;
          return mWaveDataList->waveIndexByNetId(wd->id());
+    }
+
+    int WaveTreeModel::triggerId(const QModelIndex& trigIndex) const
+    {
+        WaveDataTrigger* wdTrig = dynamic_cast<WaveDataTrigger*>(item(trigIndex));
+        if (!wdTrig) return -1;
+        return wdTrig->id();
     }
 
     int WaveTreeModel::booleanId(const QModelIndex& boolIndex) const
@@ -607,17 +627,46 @@ namespace hal {
         if (row < 0) row = 0;
         if (row > grp->size()) row = grp->size();
 
-        int iwave = mWaveDataList->waveIndexByNetId(wi->wavedata()->id());
-        WaveData* wd = mWaveDataList->at(iwave);
+        const WaveData* wdConst = wi->wavedata();
+        WaveData* wd = nullptr;
+        int iwave = -1;
+        WaveItemIndex::IndexType inxTp = WaveItemIndex::Invalid;
+        int grpId = grp->id();
+
+        switch (wdConst->netType())
+        {
+        case WaveData::NetGroup:
+            inxTp = WaveItemIndex::Group;
+            iwave = wdConst->id();
+            grpId = 0;
+            wd = mWaveDataList->mDataGroups.value(iwave);
+            break;
+        case WaveData::BooleanNet:
+            inxTp = WaveItemIndex::Bool;
+            iwave = wdConst->id();
+            grpId = 0;
+            wd = mWaveDataList->mDataBooleans.value(iwave);
+            break;
+        case WaveData::TriggerTime:
+            inxTp = WaveItemIndex::Trig;
+            iwave = wdConst->id();
+            grpId = 0;
+            wd = mWaveDataList->mDataTrigger.value(iwave);
+            break;
+        default:
+            inxTp = WaveItemIndex::Wire;
+            iwave = mWaveDataList->waveIndexByNetId(wi->wavedata()->id());
+            wd = mWaveDataList->at(iwave);
+            break;
+        }
+        if (iwave < 0 || !wd) return;
+
         beginResetModel();
         grp->insert(row,wd);
         grp->recalcData();
         endResetModel();
 
-        WaveDataGroup* wdGrp = dynamic_cast<WaveDataGroup*>(wd);
-        WaveItemIndex wii = wdGrp
-                ? WaveItemIndex(wdGrp->id(),WaveItemIndex::Group,0)
-                : WaveItemIndex(iwave, WaveItemIndex::Wire, grp->id());
+        WaveItemIndex wii(iwave, inxTp, grpId);
         mWaveItemHash->insert(wii,wi);
         invalidateParent(parent);
     }
@@ -635,22 +684,33 @@ namespace hal {
         grp->recalcData();
         endResetModel();
 
-        WaveDataGroup* wdGrp = dynamic_cast<WaveDataGroup*>(wd);
-        if (wdGrp)
+        switch (wd->netType())
         {
+        case WaveData::NetGroup:
+        {
+            WaveDataGroup* wdGrp = static_cast<WaveDataGroup*>(wd);
             addOrReplaceItem(wd, WaveItemIndex::Group, wdGrp->id(), 0);
+            break;
         }
-        else
+        case WaveData::BooleanNet:
         {
-            WaveDataBoolean* wdBool = dynamic_cast<WaveDataBoolean*>(wd);
-            if (wdBool)
-            {
-                wdBool->recalcData();
-                addOrReplaceItem(wd, WaveItemIndex::Bool, wd->id(),0);
-            }
-            else
-                handleWaveAddedToGroup({wd->id()},grp->id());
+            WaveDataBoolean* wdBool = static_cast<WaveDataBoolean*>(wd);
+            wdBool->recalcData();
+            addOrReplaceItem(wd, WaveItemIndex::Bool, wdBool->id(),0);
+            break;
         }
+        case WaveData::TriggerTime:
+        {
+            WaveDataTrigger* wdTrig = static_cast<WaveDataTrigger*>(wd);
+            wdTrig->recalcData();
+            addOrReplaceItem(wd, WaveItemIndex::Trig, wdTrig->id(),0);
+            break;
+        }
+        default:
+            handleWaveAddedToGroup({wd->id()},grp->id());
+            break;
+        }
+
         invalidateParent(parent);
         return true;
     }
@@ -685,6 +745,9 @@ namespace hal {
         case WaveData::BooleanNet:
             wii = WaveItemIndex(wd->id(), WaveItemIndex::Bool);
             break;
+        case WaveData::TriggerTime:
+            wii = WaveItemIndex(wd->id(), WaveItemIndex::Trig);
+            break;
         default:
             WaveDataGroup* grp = static_cast<WaveDataGroup*>(index.internalPointer());
             int iwave = mWaveDataList->waveIndexByNetId(wd->id());
@@ -712,11 +775,26 @@ namespace hal {
         ReorderRequest req(this);
         beginRemoveRows(parent,row,row);
         WaveData* wd = grp->removeAt(row);
+        WaveItemIndex::IndexType inxTp = WaveItemIndex::Invalid;
         endRemoveRows();
         invalidateParent(parent);
         grp->recalcData();
         int iwave = mWaveDataList->waveIndexByNetId(wd->id());
-        WaveItemIndex wii(iwave, WaveItemIndex::Wire, grp->id());
+        switch (wd->netType())
+        {
+        case WaveData::TriggerTime:
+            inxTp = WaveItemIndex::Trig;
+            iwave = wd->id();
+            break;
+        case WaveData::BooleanNet:
+            inxTp = WaveItemIndex::Bool;
+            iwave = wd->id();
+            break;
+        default:
+            inxTp = WaveItemIndex::Wire;
+            break;
+        }
+        WaveItemIndex wii(iwave, inxTp, grp->id());
         auto it = mWaveItemHash->find(wii);
         WaveItem* retval = nullptr;
         if (it != mWaveItemHash->end())
@@ -796,6 +874,24 @@ namespace hal {
         if (wi) wi->setRequest(WaveItem::DeleteRequest);
     }
 
+    void WaveTreeModel::insertTrigger(const QModelIndex& trigIndex, const QList<WaveData*>& trigWaves, const QList<int>& toVal, WaveData *wdFilter, WaveDataTrigger *wdTrig)
+    {
+        if (trigIndex.internalPointer() != mRoot) return;
+
+        ReorderRequest req(this);
+        mIgnoreSignals = true;
+        if (!wdTrig)
+        {
+            wdTrig = new WaveDataTrigger(mWaveDataList,trigWaves,toVal);
+            if (wdFilter) wdTrig->set_filter_wave(wdFilter);
+        }
+        beginResetModel();
+        insertItem(trigIndex.row(),trigIndex.parent(),wdTrig);
+        endResetModel();
+        mIgnoreSignals = false;
+        wdTrig->recalcData();
+    }
+
     void WaveTreeModel::insertBoolean(const QModelIndex& boolIndex, const QString &boolExpression, WaveDataBoolean *wdBool)
     {
         if (boolIndex.internalPointer() != mRoot) return;
@@ -803,6 +899,20 @@ namespace hal {
         ReorderRequest req(this);
         mIgnoreSignals = true;
         if (!wdBool) wdBool = new WaveDataBoolean(mWaveDataList,boolExpression);
+        beginResetModel();
+        insertItem(boolIndex.row(),boolIndex.parent(),wdBool);
+        endResetModel();
+        mIgnoreSignals = false;
+        wdBool->recalcData();
+    }
+
+    void WaveTreeModel::insertBoolean(const QModelIndex& boolIndex, const QList<WaveData *> &boolWaves, const QList<int>& acceptMask)
+    {
+        if (boolIndex.internalPointer() != mRoot) return;
+
+        ReorderRequest req(this);
+        mIgnoreSignals = true;
+        WaveDataBoolean* wdBool = new WaveDataBoolean(mWaveDataList,boolWaves,acceptMask);
         beginResetModel();
         insertItem(boolIndex.row(),boolIndex.parent(),wdBool);
         endResetModel();
@@ -845,6 +955,14 @@ namespace hal {
             }
         }
         return retval;
+    }
+
+    bool WaveTreeModel::onlyRootItemsSelected(const QModelIndexList& selectList) const
+    {
+        for (const QModelIndex& inx : selectList)
+            if (inx.internalPointer() != mRoot)
+                return false;
+        return true;
     }
 
     // ---- WaveDataRoot

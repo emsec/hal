@@ -162,7 +162,7 @@ namespace hal {
             int iwave = wdChild->dataIndex();
             if (iwave<0) return false;
             WaveItem* wi = nullptr;
-            for (int grpId = 0; grpId <= wdList->maxGroupId(); ++grpId)
+            for (u32 grpId = 0; grpId <= wdList->maxGroupId(); ++grpId)
             {
                 WaveItemIndex wii(iwave, WaveItemIndex::Wire, grpId);
                 WaveItem* wi = hash->value(wii);
@@ -239,8 +239,40 @@ namespace hal {
         return true;
     }
 
+    void WaveFormPainted::generateTrigger(WaveDataProvider *wdp, const WaveTransform *trans, const WaveScrollbar *sbar, bool *loop)
+    {
+        mValidity = WaveZoomShift(trans, sbar);
+        *loop = true;
+
+        quint64 tleft = sbar->tLeftI();
+        bool refreshCursor = (mCursorTime >= tleft);
+        int width = sbar->viewportWidth();
+
+        SaleaeDataTuple tuple = wdp->startValue(tleft);
+        float xpos = sbar->xPosF(tuple.mTime);
+
+        while(*loop && tuple.mValue != SaleaeDataTuple::sReadError && xpos <= width && tuple.mTime <= trans->tMax())
+        {
+            if (xpos >= 0 && tuple.mValue==1) mPrimitives.append(new WaveFormPrimitiveTrigger(xpos));
+            if (refreshCursor && tuple.mTime >= mCursorTime)
+            {
+                if (tuple.mTime == mCursorTime)
+                    mCursorValue = 1;
+                else
+                    mCursorValue = 0;
+            }
+            tuple = wdp->nextPoint();
+            xpos = sbar->xPosF(tuple.mTime);
+        }
+    }
+
     void WaveFormPainted::generate(WaveDataProvider* wdp, const WaveTransform* trans, const WaveScrollbar* sbar, bool *loop)
     {
+        if (wdp->isTrigger())
+        {
+            generateTrigger(wdp,trans,sbar,loop);
+            return;
+        }
         mValidity = WaveZoomShift(trans, sbar);
         *loop = true;
         WaveFormPrimitive* pendingTransition = nullptr;
@@ -325,7 +357,9 @@ namespace hal {
                 pendingTransition = filled;
             }
             if (loop && valLast >= 0 && valNext >= 0 && valLast != valNext && !pendingTransition && !wdp->isGroup())
+            {
                 pendingTransition = new WaveFormPrimitiveTransition(xNext);
+            }
         }
         if (pendingTransition)
             mPrimitives.append(pendingTransition);

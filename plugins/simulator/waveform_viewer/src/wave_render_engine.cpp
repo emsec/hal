@@ -53,7 +53,7 @@ namespace hal {
                     mItem->mPainted.clearPrimitives();
                     if (mItem->isAborted()) return;
                     WaveDataProviderMap wdpMap(wd->data());
-                    wdpMap.setBoolean(true,wd->bits());
+                    wdpMap.setWaveType(WaveData::BooleanNet,wd->bits());
                     mItem->mPainted.generate(&wdpMap,mTransform,mScrollbar,&mItem->mLoop);
                     mItem->setState(WaveItem::Finished);
                 } catch (...) {
@@ -91,13 +91,15 @@ namespace hal {
                     mItem->mPainted.clearPrimitives();
                     if (mItem->isAborted()) return;
                     WaveDataProviderMap wdpMap(wd->data());
-                    wdpMap.setGroup(true,wd->bits(),wd->valueBase());
+                    wdpMap.setWaveType(WaveData::NetGroup,wd->bits(),wd->valueBase());
                     mItem->mPainted.generate(&wdpMap,mTransform,mScrollbar,&mItem->mLoop);
                     mItem->setState(WaveItem::Finished);
                 } catch (...) {
                     mItem->setState(WaveItem::Failed);
                 }
             }
+            break;
+       case WaveData::TriggerTime:
             break;
        default:
             SaleaeInputFile sif(mWorkDir.absoluteFilePath(QString("digital_%1.bin").arg(mItem->wavedata()->fileIndex())).toStdString());
@@ -112,7 +114,7 @@ namespace hal {
                         mItem->mPainted.clearPrimitives();
                         if (mItem->isAborted()) return;
                         WaveDataProviderMap wdpMap(wd->data());
-                        wdpMap.setGroup(mItem->isGroup(),mItem->wavedata()->bits(),mItem->wavedata()->valueBase());
+                        wdpMap.setWaveType(mItem->wavedata()->netType(),mItem->wavedata()->bits(),mItem->wavedata()->valueBase());
                         mItem->mPainted.generate(&wdpMap,mTransform,mScrollbar,&mItem->mLoop);
                         mItem->setState(WaveItem::Finished);
                     } catch (...) {
@@ -181,7 +183,7 @@ namespace hal {
                                     wree->loadSaleae();
                                 wree->mPainted.clearPrimitives();
                                 WaveDataProviderMap wdpMap(wd->data());
-                                wdpMap.setGroup(wree->isGroup(),wree->wavedata()->bits(),wree->wavedata()->valueBase());
+                                wdpMap.setWaveType(wree->wavedata()->netType(),wree->wavedata()->bits(),wree->wavedata()->valueBase());
                                 wree->mPainted.generate(&wdpMap,mTransform,mScrollbar,&wree->mLoop);
                                 wree->setState(WaveItem::Painted);
                             } catch (...) {
@@ -396,6 +398,8 @@ namespace hal {
                                 painter.fillRect(QRectF(0,y0-4,width(),28), QBrush(QColor(WaveItem::sBackgroundColor)));
                                 painter.setPen(QPen(QColor(NetlistSimulatorControllerPlugin::sSimulationSettings->color(SimulationSettings::WaveformSelected)),0));
                             }
+                            else if (wree->isTrigger())
+                                painter.setPen(QPen(QColor(NetlistSimulatorControllerPlugin::sSimulationSettings->color(SimulationSettings::WaveformUndefined)),0));
                             else
                                 painter.setPen(QPen(QColor(NetlistSimulatorControllerPlugin::sSimulationSettings->color(SimulationSettings::WaveformRegular)),0));
                             wree->mPainted.paint(y0,painter);

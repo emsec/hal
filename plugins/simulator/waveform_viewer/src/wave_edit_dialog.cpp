@@ -31,7 +31,7 @@ namespace hal {
         layout->addWidget(tv,0,0,1,2);
         QDialogButtonBox* dbb = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
         connect(dbb, &QDialogButtonBox::rejected, this, &QDialog::reject);
-        if (wd->bits() > 1)
+        if (wd->netType() != WaveData::RegularNet)
             dbb->button(QDialogButtonBox::Ok)->setDisabled(true);
         else
             connect(dbb, &QDialogButtonBox::accepted, this, &QDialog::accept);

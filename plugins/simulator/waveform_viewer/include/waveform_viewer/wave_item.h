@@ -17,7 +17,7 @@ namespace hal {
     class WaveItemIndex
     {
     public:
-        enum IndexType { Invalid, Wire, Bool, Group };
+        enum IndexType { Invalid, Wire, Trig, Bool, Group };
     private:
         IndexType mType;
         u32 mIndex;
@@ -112,6 +112,7 @@ namespace hal {
         static const char* sBackgroundColor;
         bool isGroup()   const { return mData->netType() == WaveData::NetGroup; }
         bool isBoolean() const { return mData->netType() == WaveData::BooleanNet; }
+        bool isTrigger() const { return mData->netType() == WaveData::TriggerTime; }
         int cursorValue(double tCursor, int xpos);
     };
 

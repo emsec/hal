@@ -7,6 +7,7 @@
 #include "netlist_simulator_controller/saleae_parser.h"
 #include "netlist_simulator_controller/simulation_input.h"
 #include "netlist_simulator_controller/wave_group_value.h"
+#include "netlist_simulator_controller/wave_data.h"
 
 namespace hal {
 
@@ -15,21 +16,20 @@ namespace hal {
 
     class WaveDataProvider
     {
-        bool mGroup;
-        bool mBoolean;
+        WaveData::NetType mWaveType;
         int mBits;
         int mValueBase;
     public:
-        WaveDataProvider() : mGroup(false), mBoolean(false), mBits(1), mValueBase(16) {;}
+        WaveDataProvider() : mWaveType(WaveData::RegularNet), mBits(1), mValueBase(16) {;}
         virtual ~WaveDataProvider() {;}
         virtual SaleaeDataTuple startValue(u64 t) = 0;
         virtual SaleaeDataTuple nextPoint() = 0;
-        bool isGroup() const { return mGroup; }
-        bool isBoolean() const { return mBoolean; }
+        bool isGroup()   const { return mWaveType == WaveData::NetGroup; }
+        bool isBoolean() const { return mWaveType == WaveData::BooleanNet; }
+        bool isTrigger() const { return mWaveType == WaveData::TriggerTime; }
         int bits() const { return mBits; }
         int valueBase() const { return mValueBase; }
-        void setGroup(bool grp, int bts, int base);
-        void setBoolean(bool bl, int bts);
+        void setWaveType(WaveData::NetType type, int bts=1, int base=16);
     };
 
     class WaveDataProviderMap : public WaveDataProvider
@@ -105,6 +105,22 @@ namespace hal {
     public:
         WaveDataProviderBoolean(const std::string& saleaeDirectoryPath, const QList<WaveData*>& wdList, const char* ttable);
         virtual ~WaveDataProviderBoolean();
+        virtual SaleaeDataTuple startValue(u64 t) override;
+        virtual SaleaeDataTuple nextPoint() override;
+    };
+
+    class WaveDataProviderTrigger : public WaveDataProvider
+    {
+        SaleaeParser mParser;
+        SaleaeInputFile* mFilterFile;
+        SaleaeDataBuffer* mFilterBuffer;
+        int* mTransitionToValue;
+        u64 mCurrentTime;
+        bool mCurrentTrigger;
+        qint64 mReportedTime;
+    public:
+        WaveDataProviderTrigger(const std::string& saleaeDirectoryPath, const QList<WaveData*>& wdList, const QList<int>& toValue, WaveData* filter=nullptr);
+        virtual ~WaveDataProviderTrigger();
         virtual SaleaeDataTuple startValue(u64 t) override;
         virtual SaleaeDataTuple nextPoint() override;
     };
