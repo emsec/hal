@@ -42,7 +42,7 @@ namespace hal
 
                 for (auto const& output_pin : output_pins_that_are_also_function_inputs)
                 {
-                    gate_func = gate->get_boolean_function(output_pin);
+                    const auto gate_func = gate->get_boolean_function(output_pin);
                     if (auto res = bf.substitute(output_pin, gate_func); res.is_error())
                     {
                         log_error("z3_utils",
@@ -214,7 +214,7 @@ namespace hal
 
                 for (auto const& output_pin : output_pins_that_are_also_function_inputs)
                 {
-                    auto gate_func =  gate->get_boolean_function(output_pin));
+                    const auto gate_func = gate->get_boolean_function(output_pin);
                     if (auto res = bf.substitute(output_pin, gate_func); res.is_error())
                     {
                         log_error("z3_utils",

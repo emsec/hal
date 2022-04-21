@@ -408,7 +408,7 @@ namespace hal
          * @param[in] name - The name of the Boolean function.
          * @returns The Boolean function on success, an empty Boolean function otherwise.
          */
-        const BooleanFunction get_boolean_function(const std::string& name) const;
+        BooleanFunction get_boolean_function(const std::string& name) const;
 
         /**
          * TODO test
@@ -418,7 +418,7 @@ namespace hal
          * @param[in] pin - The pin.
          * @returns The Boolean function on success, an empty Boolean function otherwise.
          */
-        const BooleanFunction get_boolean_function(const GatePin* pin = nullptr) const;
+        BooleanFunction get_boolean_function(const GatePin* pin = nullptr) const;
 
     private:
         friend class GateLibrary;

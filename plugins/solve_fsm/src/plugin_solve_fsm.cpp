@@ -63,7 +63,7 @@ namespace hal
             hal::Net* input_net;
             if (auto res = ff->get_fan_in_net(d_ports.front()); res == nullptr)
             {
-                log_error("solve_fsm", "could not get fan-in net at pin {} of gate '{}' with ID {}", d_ports.front(), ff->get_name(), ff->get_id());
+                log_error("solve_fsm", "could not get fan-in net at pin {} of gate '{}' with ID {}", d_ports.front()->get_name(), ff->get_name(), ff->get_id());
                 return {};
             }
             else
@@ -273,7 +273,7 @@ namespace hal
             hal::Net* input_net;
             if (auto res = ff->get_fan_in_net(d_ports.front()); res == nullptr)
             {
-                log_error("solve_fsm", "could not get fan-in net at pin {} of gate '{}' with ID {}", d_ports.front(), ff->get_name(), ff->get_id());
+                log_error("solve_fsm", "could not get fan-in net at pin {} of gate '{}' with ID {}", d_ports.front()->get_name(), ff->get_name(), ff->get_id());
                 return {};
             }
             else
@@ -398,7 +398,7 @@ namespace hal
             u32 net_id;
             if (auto res = gate->get_fan_in_net(d_ports.front()); res == nullptr)
             {
-                log_error("solve_fsm", "could not get fan-in net at pin {} of gate '{}' with ID {}", d_ports.front(), gate->get_name(), gate->get_id());
+                log_error("solve_fsm", "could not get fan-in net at pin {} of gate '{}' with ID {}", d_ports.front()->get_name(), gate->get_name(), gate->get_id());
                 return {};
             }
             else
@@ -554,7 +554,7 @@ namespace hal
                 hal::Net* input_net;
                 if (auto res = ff->get_fan_in_net(d_ports.front()); res == nullptr)
                 {
-                    log_error("solve_fsm", "could not get fan-in net at pin {} of gate '{}' with ID {}", d_ports.front(), ff->get_name(), ff->get_id());
+                    log_error("solve_fsm", "could not get fan-in net at pin {} of gate '{}' with ID {}", d_ports.front()->get_name(), ff->get_name(), ff->get_id());
                     return {};
                 }
                 else

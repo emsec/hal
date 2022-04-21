@@ -182,7 +182,7 @@ namespace hal
         return m_grouping;
     }
 
-    BooleanFunction Gate::get_boolean_function(std::string name) const
+    BooleanFunction Gate::get_boolean_function(const std::string& name) const
     {
         if (name.empty())
         {
@@ -191,7 +191,7 @@ namespace hal
             {
                 return BooleanFunction();
             }
-            name = output_pins[0];
+            name = output_pins.front()->get_name();
         }
 
         if (m_type->has_component_of_type(GateTypeComponent::ComponentType::lut))
@@ -199,7 +199,7 @@ namespace hal
             auto lut_pins = m_type->get_pins([name](const GatePin* pin) { return pin->get_type() == PinType::lut && pin->get_name() == name; });
             if (!lut_pins.empty())
             {
-                return get_lut_function(lut_pins.at(0));
+                return get_lut_function(lut_pins.front());
             }
         }
 
@@ -214,7 +214,7 @@ namespace hal
             return it->second;
         }
 
-        log_warning("gate", "could not get Boolean function of pin '{}' at gate '{}' with ID {}: no function with that name exists", pin->get_name(), m_name, std::to_string(m_id));
+        log_warning("gate", "could not get Boolean function '{}' of gate '{}' with ID {}: no function with that name exists", name, m_name, std::to_string(m_id));
         return BooleanFunction();
     }
 
@@ -225,14 +225,10 @@ namespace hal
             auto output_pins = m_type->get_output_pins();
             if (output_pins.empty())
             {
-                log_warning("could not get Boolean function of gate '{}' with ID {}: gate type '{}' with ID {} has no output pins",
-                            m_name,
-                            std::to_string(m_id),
-                            m_type->get_name(),
-                            std::to_string(m_type->get_id()));
+                log_warning("could not get Boolean function of gate '{}' with ID {}: gate type '{}' with ID {} has no output pins", m_name, m_id, m_type->get_name(), m_type->get_id());
                 return BooleanFunction();
             }
-            pin = output_pins.at(0);
+            pin = output_pins.front();
         }
 
         return get_boolean_function(pin->get_name());
@@ -659,7 +655,7 @@ namespace hal
             log_warning("gate", "could not get predecessor endpoint of pin '{}' at gate '{}' with ID {}: pin is not an input pin", pin->get_name(), m_name, std::to_string(m_id));
             return nullptr;
         }
-        auto predecessors = get_predecessors([pin](const auto p, auto) -> bool { return p == pin; });
+        auto predecessors = get_predecessors([pin](const auto p, auto) -> bool { return *p == *pin; });
         if (predecessors.size() == 0)
         {
             return nullptr;
@@ -739,7 +735,7 @@ namespace hal
             log_warning("gate", "could not get successor endpoint of pin '{}' at gate '{}' with ID {}: pin is not an output pin", pin->get_name(), m_name, std::to_string(m_id));
             return nullptr;
         }
-        auto successors = get_successors([pin](auto& p, auto) -> bool { return p == pin; });
+        auto successors = get_successors([pin](const auto p, auto) -> bool { return *p == *pin; });
         if (successors.size() == 0)
         {
             return nullptr;

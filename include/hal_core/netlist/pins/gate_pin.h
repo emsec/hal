@@ -18,7 +18,7 @@ namespace hal
      */
     class GatePin : public BasePin<GatePin>
     {
-    protected:
+    public:
         /**
          * Construct a new gate pin from its name, direction and type.
          * 
