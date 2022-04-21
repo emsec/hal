@@ -951,13 +951,13 @@ namespace hal
             std::vector<GatePin*> pins;
             for (const auto& pin_name : bus_info.pin_names)
             {
-                if (auto res = gt->get_pin_by_name(pin_name); res.is_error())
+                if (auto res = gt->get_pin_by_name(pin_name); res == nullptr)
                 {
-                    return ERR_APPEND(res.get_error(), "could not construct gate type '" + cell.name + "': failed to get pin by name '" + pin_name + "'");
+                    return ERR("could not construct gate type '" + cell.name + "': failed to get pin by name '" + pin_name + "'");
                 }
                 else
                 {
-                    pins.push_back(res.get());
+                    pins.push_back(res);
                 }
             }
             if (auto res = gt->create_pin_group(bus_name, pins, bus_info.direction, PinType::none, bus_info.ascending, bus_info.start_index); res.is_error())

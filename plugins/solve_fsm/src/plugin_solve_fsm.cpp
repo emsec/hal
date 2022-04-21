@@ -61,14 +61,14 @@ namespace hal
                 return {};
             }
             hal::Net* input_net;
-            if (auto res = ff->get_fan_in_net(d_ports.front()); res.is_error())
+            if (auto res = ff->get_fan_in_net(d_ports.front()); res == nullptr)
             {
-                log_error("solve_fsm", "error encountered while getting fan in net:\n{}", res.get_error().get());
+                log_error("solve_fsm", "could not get fan-in net at pin {} of gate '{}' with ID {}", d_ports.front(), ff->get_name(), ff->get_id());
                 return {};
             }
             else
             {
-                input_net = res.get();
+                input_net = res;
             }
             state_input_net_ids.push_back(input_net->get_id());
 
@@ -271,14 +271,14 @@ namespace hal
                 return {};
             }
             hal::Net* input_net;
-            if (auto res = ff->get_fan_in_net(d_ports.front()); res.is_error())
+            if (auto res = ff->get_fan_in_net(d_ports.front()); res == nullptr)
             {
-                log_error("solve_fsm", "error encountered while getting fan in net:\n{}", res.get_error().get());
+                log_error("solve_fsm", "could not get fan-in net at pin {} of gate '{}' with ID {}", d_ports.front(), ff->get_name(), ff->get_id());
                 return {};
             }
             else
             {
-                input_net = res.get();
+                input_net = res;
             }
 
             z3::expr r(ctx);
@@ -396,14 +396,14 @@ namespace hal
                 return {};
             }
             u32 net_id;
-            if (auto res = gate->get_fan_in_net(d_ports.front()); res.is_error())
+            if (auto res = gate->get_fan_in_net(d_ports.front()); res == nullptr)
             {
-                log_error("solve_fsm", "error encountered while getting fan in net:\n{}", res.get_error().get());
+                log_error("solve_fsm", "could not get fan-in net at pin {} of gate '{}' with ID {}", d_ports.front(), gate->get_name(), gate->get_id());
                 return {};
             }
             else
             {
-                net_id = res.get()->get_id();
+                net_id = res->get_id();
             }
 
             // bitvector representing the previous state
@@ -552,14 +552,14 @@ namespace hal
                     return {};
                 }
                 hal::Net* input_net;
-                if (auto res = ff->get_fan_in_net(d_ports.front()); res.is_error())
+                if (auto res = ff->get_fan_in_net(d_ports.front()); res == nullptr)
                 {
-                    log_error("solve_fsm", "error encountered while getting fan in net:\n{}", res.get_error().get());
+                    log_error("solve_fsm", "could not get fan-in net at pin {} of gate '{}' with ID {}", d_ports.front(), ff->get_name(), ff->get_id());
                     return {};
                 }
                 else
                 {
-                    input_net = res.get();
+                    input_net = res;
                 }
                 output_net_to_input_net.insert({back_net, input_net});
             }

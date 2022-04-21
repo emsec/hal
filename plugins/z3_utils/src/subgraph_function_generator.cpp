@@ -69,7 +69,7 @@ namespace hal
                     log_debug("z3_utils", "Pin ({}) has no input net. Gate id: ({})", input_pin->get_name(), gate->get_id());
                     continue;
                 }
-                bf = bf.substitute(input_pin, std::to_string(input_net->get_id()));
+                bf = bf.substitute(input_pin->get_name(), std::to_string(input_net->get_id()));
             }
 
             m_cache.emplace(std::make_tuple(gate->get_id(), out_pin), bf);
@@ -214,7 +214,7 @@ namespace hal
 
                 for (auto const& output_pin : output_pins_that_are_also_function_inputs)
                 {
-                    auto gate_func =  gate->get_boolean_function(output_pin)).get();
+                    auto gate_func =  gate->get_boolean_function(output_pin));
                     if (auto res = bf.substitute(output_pin, gate_func); res.is_error())
                     {
                         log_error("z3_utils",
@@ -287,10 +287,10 @@ namespace hal
                 Net* in_net = src->get_fan_in_net(pin_name);
                 if (in_net == nullptr)
                 {
-                    log_error("z3_utils", "Cannot find in_net at pin {} of gate {}!", pin, src->get_id());
+                    log_error("z3_utils", "Cannot find in_net at pin {} of gate {}!", pin_name, src->get_id());
                 }
 
-                pin_to_expr.insert({pin, get_function_of_net(in_net, ctx, subgraph_gates)});
+                pin_to_expr.insert({pin_name, get_function_of_net(in_net, ctx, subgraph_gates)});
             }
 
             z3::expr ret = bf.to_z3(ctx, pin_to_expr);

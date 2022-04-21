@@ -130,8 +130,9 @@ namespace hal
         Grouping* get_grouping() const;
 
         /**
-         * Get submodule depth of module
-         * @returns 0=top_level module, 1=submodule from top_level, 2=submodule from submodule, ...
+         * Get the depth of the module within the module hierarchie (0 = top module, 1 = direct child of top module, ...).
+         * 
+         * @returns The depth within the module hierarchie.
          */
         int get_submodule_depth() const;
 

@@ -53,7 +53,7 @@ namespace hal
 
         for (const PinGroup<ModulePin>* pin_group : get_pin_groups())
         {
-            if (const auto other_pin_group_res = other.get_pin_group_by_id(pin_group->get_id()); other_pin_group_res.is_error() || *(other_pin_group_res.get()) != *pin_group)
+            if (const auto other_pin_group_res = other.get_pin_group_by_id(pin_group->get_id()); other_pin_group_res == nullptr || *other_pin_group_res != *pin_group)
             {
                 log_info("module", "the modules with IDs {} and {} are not equal due to an unequal pin group.", m_id, other.get_id());
                 return false;
@@ -645,16 +645,16 @@ namespace hal
 
         if (con.has_internal_source && con.has_internal_destination && con.has_external_source && con.has_external_destination)
         {
-            if (auto pin_res = get_pin_by_net(net); pin_res.is_ok())
+            if (auto pin = get_pin_by_net(net); pin != nullptr)
             {
-                ModulePin* pin = pin_res.get();
-                if (auto direction = pin->get_direction(); direction == PinDirection::input)
+                auto direction = pin->get_direction();
+                if (direction == PinDirection::input)
                 {
                     m_output_nets.insert(net);
                     pin->set_direction(PinDirection::inout);
                     m_event_handler->notify(ModuleEvent::event::pin_changed, this);
                 }
-                else if (auto direction = pin->get_direction(); direction == PinDirection::output)
+                else if (direction == PinDirection::output)
                 {
                     m_input_nets.insert(net);
                     pin->set_direction(PinDirection::inout);
@@ -671,10 +671,10 @@ namespace hal
         }
         else if (con.has_external_source && con.has_internal_destination)
         {
-            if (auto pin_res = get_pin_by_net(net); pin_res.is_ok())
+            if (auto pin = get_pin_by_net(net); pin_res != nullptr)
             {
-                ModulePin* pin = pin_res.get();
-                if (const auto direction = pin->get_direction(); direction == PinDirection::output || direction == PinDirection::inout)
+                const auto direction = pin->get_direction();
+                if (direction == PinDirection::output || direction == PinDirection::inout)
                 {
                     m_input_nets.insert(net);
                     m_output_nets.erase(net);
@@ -693,10 +693,10 @@ namespace hal
         }
         else if (con.has_internal_source && con.has_external_destination)
         {
-            if (auto pin_res = get_pin_by_net(net); pin_res.is_ok())
+            if (auto pin = get_pin_by_net(net); pin != nullptr)
             {
-                ModulePin* pin = pin_res.get();
-                if (const auto direction = pin->get_direction(); direction == PinDirection::input || direction == PinDirection::inout)
+                const auto direction = pin->get_direction();
+                if (direction == PinDirection::input || direction == PinDirection::inout)
                 {
                     m_output_nets.insert(net);
                     m_input_nets.erase(net);
@@ -715,9 +715,8 @@ namespace hal
         }
         else
         {
-            if (auto pin_res = get_pin_by_net(net); pin_res.is_ok())
+            if (auto pin = get_pin_by_net(net); pin != nullptr)
             {
-                ModulePin* pin = pin_res.get();
                 auto direction = pin->get_direction();
                 if (direction == PinDirection::input || direction == PinDirection::inout)
                 {

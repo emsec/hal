@@ -10,6 +10,7 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_internal_manager.h"
+#include "hal_core/netlist/pins/gate_pin.h"
 #include "hal_core/utilities/log.h"
 
 #include <assert.h>
@@ -393,7 +394,7 @@ namespace hal
                 std::vector<GatePins*> output_pins = m_type->get_output_pins();
                 if (!output_pins.empty() && name == output_pins[0])
                 {
-                    auto tt = func.compute_truth_table(m_type->get_input_pins());
+                    auto tt = func.compute_truth_table(m_type->get_input_pin_names());
                     if (tt.is_error())
                     {
                         log_error("netlist", "Boolean function '{} = {}' cannot be added to LUT gate '{}' wiht ID {}.", name, func.to_string(), m_name, m_id);
@@ -658,7 +659,7 @@ namespace hal
             log_warning("gate", "could not get predecessor endpoint of pin '{}' at gate '{}' with ID {}: pin is not an input pin", pin->get_name(), m_name, std::to_string(m_id));
             return nullptr;
         }
-        auto predecessors = get_predecessors([pin](auto& p, auto) -> bool { return p == pin; });
+        auto predecessors = get_predecessors([pin](const auto p, auto) -> bool { return p == pin; });
         if (predecessors.size() == 0)
         {
             return nullptr;

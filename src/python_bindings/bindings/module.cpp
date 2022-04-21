@@ -90,6 +90,19 @@ namespace hal
             :rtype: hal_py.Grouping
         )");
 
+        py_module.def_property_readonly("submodule_depth", &Module::get_submodule_depth, R"(
+            The depth of the module within the module hierarchie (0 = top module, 1 = direct child of top module, ...).
+
+            :type: int
+        )");
+
+        py_module.def("get_submodule_depth", &Module::get_submodule_depth, R"(
+            Get the depth of the module within the module hierarchie (0 = top module, 1 = direct child of top module, ...).
+
+            :returns: The depth within the module hierarchie.
+            :rtype: int
+        )");
+
         py_module.def_property("parent_module", &Module::get_parent_module, &Module::set_parent_module, R"(
             The parent module of this module.
             Is set to None for the top module, but cannot be set to None by the user.
@@ -114,10 +127,10 @@ namespace hal
 
         py_module.def("get_parent_modules", &Module::get_parent_modules, py::arg("filter") = nullptr, py::arg("recursive") = true, R"(
             Get all direct parent of this module.
-            If recursive is set to true, all indirect parents are also included.
-            A filter can be applied to the result to only get parents matching the specified condition.
+            If recursive is set to True, all indirect parents are also included.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
-            :param lambda filter: Filter to be applied to the modules.
+            :param lambda filter: An optional filter.
             :param bool recursive: True to include indirect parents as well, False otherwise.
             :returns: A list of parent modules.
             :rtype: list[hal_py.Module]
@@ -128,7 +141,7 @@ namespace hal
             If the new parent is a submodule of this module, the new parent is added as a direct submodule to the old parent first.
 
             :param hal_py.Module new_parent: The new parent module.
-            :returns: True if the parent was changed, false otherwise.
+            :returns: True if the parent was changed, False otherwise.
             :rtype: bool
         )");
 
@@ -150,11 +163,11 @@ namespace hal
 
         py_module.def("get_submodules", &Module::get_submodules, py::arg("filter") = nullptr, py::arg("recursive") = false, R"(
             Get all direct submodules of this module.
-            If recursive is set to true, all indirect submodules are also included.
-            A filter can be applied to the result to only get submodules matching the specified condition.
+            If recursive is set to True, all indirect submodules are also included.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
-            :param lambda filter: Filter to be applied to the modules.
-            :param bool recursive: True to include indirect submodules as well, false otherwise.
+            :param lambda filter: An optional filter.
+            :param bool recursive: True to include indirect submodules as well, False otherwise.
             :returns: A list of submodules.
             :rtype: list[hal_py.Module]
         )");
@@ -175,7 +188,7 @@ namespace hal
             :param recursive: True to include indirect submodules as well.
             :type other: hal_py.Module
             :type recursive: bool
-            :returns: True if the other module is a submodule, false otherwise.
+            :returns: True if the other module is a submodule, False otherwise.
             :rtype: bool
         )");
 
@@ -222,7 +235,7 @@ namespace hal
             If recursive is set to true, nets in submodules are considered as well.
         
             :param hal_py.Net net: The net to check for.
-            :param bool recursive: True to also consider nets in submodules, false otherwise.
+            :param bool recursive: True to also consider nets in submodules, False otherwise.
             :returns: True if the net is contained in the module, False otherwise.
             :rtype: bool
         )");
@@ -236,10 +249,10 @@ namespace hal
 
         py_module.def("get_nets", &Module::get_nets, py::arg("filter") = nullptr, py::arg("recursive") = false, R"(
             Get all nets that have at least one source or one destination within the module.
-            A filter can be applied to the result to only get nets matching the specified condition.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
             If recursive is True, nets in submodules are considered as well.
 
-            :param lambda filter: Filter to be applied to the nets.
+            :param lambda filter: An optional filter.
             :param bool recursive: True to also consider nets in submodules, False otherwise.
             :returns: A list of nets.
             :rtype: list[hal_py.Net]
@@ -313,7 +326,7 @@ namespace hal
             The gate is removed from its previous module in the process.
 
             :param hal_py.Gate gate: The gate to assign.
-            :returns: True on success, false otherwise.
+            :returns: True on success, False otherwise.
             :rtype: bool
         )");
 
@@ -331,7 +344,7 @@ namespace hal
             Automatically moves the gate to the top module of the netlist.
 
             :param hal_py.Gate gate: The gate to remove.
-            :returns: True on success, false otherwise.
+            :returns: True on success, False otherwise.
             :rtype: bool
         )");
 
@@ -344,13 +357,13 @@ namespace hal
             :rtype: bool
         )");
 
-        py_module.def("contains_gate", &Module::contains_gate, py::arg("gate"), py::arg("recusive") = false, R"(
+        py_module.def("contains_gate", &Module::contains_gate, py::arg("gate"), py::arg("recursive") = false, R"(
             Check whether a gate is contained in the module.
             If recursive is True, gates in submodules are considered as well.
 
             :param hal_py.Gate gate: The gate to check for.
-            :param bool recursive: True to also consider gates in submodules, false otherwise.
-            :returns: True if the gate is contained in the module, false otherwise.
+            :param bool recursive: True to also consider gates in submodules, False otherwise.
+            :returns: True if the gate is contained in the module, False otherwise.
             :rtype: bool
         )");
 
@@ -359,7 +372,7 @@ namespace hal
             If recursive is True, gates in submodules are considered as well.
 
             :param int id: The unique ID of the gate.
-            :param bool recursive: True to also consider gates in submodules, false otherwise.
+            :param bool recursive: True to also consider gates in submodules, False otherwise.
             :returns: The gate if found, None otherwise.
             :rtype: hal_py.Gate or None
         )");
@@ -372,12 +385,12 @@ namespace hal
         )");
 
         py_module.def("get_gates", &Module::get_gates, py::arg("filter") = nullptr, py::arg("recursive") = false, R"(
-            Get all gates contained within the module.<br>
-            A filter can be applied to the result to only get gates matching the specified condition.<br>
+            Get all gates contained within the module.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
             If recursive is True, gates in submodules are considered as well.
 
-            :param lambda filter: Filter to be applied to the gates.
-            :param bool recursive: True to also consider gates in submodules, false otherwise.
+            :param lambda filter: An optional filter.
+            :param bool recursive: True to also consider gates in submodules, False otherwise.
             :returns: A list of gates.
             :rtype: list[hal_py.Gate]
         )");
@@ -408,7 +421,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("python_context", "{}", res.get_error().get());
+                    log_error("python_context", "error encountered while creating pin:\n{}", res.get_error().get());
                     return nullptr;
                 }
             },
@@ -440,9 +453,9 @@ namespace hal
 
         py_module.def("get_pins", &Module::get_pins, py::arg("filter") = nullptr, R"(
             Get the (ordered) pins of the module.
-            The optional filter is evaluated on every pin such that the result only contains pins matching the specified condition.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
-            :param lambda filter: Filter function to be evaluated on each pin.
+            :param lambda filter: An optional filter.
             :returns: A list of pins.
             :rtype: list[hal_py.ModulePin]
         )");
@@ -455,29 +468,14 @@ namespace hal
 
         py_module.def("get_pin_groups", &Module::get_pin_groups, py::arg("filter") = nullptr, R"(
             Get all pin groups of the module.
-            The optional filter is evaluated on every pin group such that the result only contains pin groups matching the specified condition.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
-            :param lambda filter: Filter function to be evaluated on each pin group.
+            :param lambda filter: An optional filter.
             :returns: A list of pin groups.
             :rtype: list[hal_py.ModulePinGroup]
         )");
 
-        py_module.def(
-            "get_pin_by_id",
-            [](const Module& self, const u32 id) -> ModulePin* {
-                auto res = self.get_pin_by_id(id);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return nullptr;
-                }
-            },
-            py::arg("id"),
-            R"(
+        py_module.def("get_pin_by_id", &Module::get_pin_by_id, py::arg("id"), R"(
             Get the pin corresponding to the given ID.
 
             :param int id: The ID of the pin.
@@ -485,22 +483,15 @@ namespace hal
             :rtype: hal_py.ModulePin or None
         )");
 
-        py_module.def(
-            "get_pin_by_net",
-            [](const Module& self, Net* net) -> ModulePin* {
-                auto res = self.get_pin_by_net(net);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return nullptr;
-                }
-            },
-            py::arg("net"),
-            R"(
+        py_module.def("get_pin_by_name", &Module::get_pin_by_name, py::arg("name"), R"(
+             Get the pin corresponding to the given name.
+
+             :param str name: The name of the pin.
+             :returns: The pin on success, None otherwise.
+             :rtype: hal_py.ModulePin or None
+         )");
+
+        py_module.def("get_pin_by_net", &Module::get_pin_by_net, py::arg("net"), R"(
             Get the pin that passes through the specified net.
 
             :param hal_py.Net net: The net.
@@ -508,22 +499,7 @@ namespace hal
             :rtype: hal_py.ModulePin or None
         )");
 
-        py_module.def(
-            "get_pin_group_by_id",
-            [](const Module& self, const u32 id) -> PinGroup<ModulePin>* {
-                auto res = self.get_pin_group_by_id(id);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return nullptr;
-                }
-            },
-            py::arg("id"),
-            R"(
+        py_module.def("get_pin_group_by_id", &Module::get_pin_group_by_id, py::arg("id"), R"(
             Get the pin group corresponding to the given ID.
 
             :param int id: The ID of the pin group.
@@ -531,23 +507,15 @@ namespace hal
             :rtype: hal_py.ModulePinGroup or None
         )");
 
-        py_module.def(
-            "set_pin_name",
-            [](Module& self, ModulePin* pin, const std::string& new_name) {
-                auto res = self.set_pin_name(pin, new_name);
-                if (res.is_ok())
-                {
-                    return true;
-                }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return false;
-                }
-            },
-            py::arg("pin"),
-            py::arg("new_name"),
-            R"(
+        py_module.def("get_pin_group_by_name", &Module::get_pin_group_by_name, py::arg("name"), R"(
+             Get the pin group corresponding to the given name.
+
+             :param str name: The name of the pin group.
+             :returns: The pin group on success, None otherwise.
+             :rtype: hal_py.ModulePinGroup or None
+         )");
+
+        py_module.def("set_pin_name", &Module::set_pin_name, py::arg("pin"), py::arg("new_name"), R"(
             Set the name of the given pin.
 
             :param hal_py.ModulePin pin: The pin.
@@ -556,23 +524,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_module.def(
-            "set_pin_group_name",
-            [](Module& self, PinGroup<ModulePin>* pin_group, const std::string& new_name) {
-                auto res = self.set_pin_group_name(pin_group, new_name);
-                if (res.is_ok())
-                {
-                    return true;
-                }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return false;
-                }
-            },
-            py::arg("pin_group"),
-            py::arg("new_name"),
-            R"(
+        py_module.def("set_pin_group_name", &Module::set_pin_group_name, py::arg("pin_group"), py::arg("new_name"), R"(
             Set the name of the given pin group.
 
             :param hal_py.ModulePinGroup pin_group: The pin group.
@@ -581,23 +533,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_module.def(
-            "set_pin_type",
-            [](Module& self, ModulePin* pin, PinType new_type) {
-                auto res = self.set_pin_type(pin, new_type);
-                if (res.is_ok())
-                {
-                    return true;
-                }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return false;
-                }
-            },
-            py::arg("pin"),
-            py::arg("new_type"),
-            R"(
+        py_module.def("set_pin_type", &Module::set_pin_type, py::arg("pin"), py::arg("new_type"), R"(
             Set the type of the given pin.
 
             :param hal_py.ModulePin pin: The pin.
@@ -606,23 +542,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_module.def(
-            "set_pin_group_type",
-            [](Module& self, PinGroup<ModulePin>* pin_group, PinType new_type) {
-                auto res = self.set_pin_group_type(pin_group, new_type);
-                if (res.is_ok())
-                {
-                    return true;
-                }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return false;
-                }
-            },
-            py::arg("pin_group"),
-            py::arg("new_type"),
-            R"(
+        py_module.def("set_pin_group_type", &Module::set_pin_group_type, py::arg("pin_group"), py::arg("new_type"), R"(
             Set the type of the given pin group.
 
             :param hal_py.ModulePinGroup pin_group: The pin group.
@@ -631,23 +551,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_module.def(
-            "set_pin_group_direction",
-            [](Module& self, PinGroup<ModulePin>* pin_group, PinDirection new_direction) {
-                auto res = self.set_pin_group_direction(pin_group, new_direction);
-                if (res.is_ok())
-                {
-                    return true;
-                }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return false;
-                }
-            },
-            py::arg("pin_group"),
-            py::arg("new_direction"),
-            R"(
+        py_module.def("set_pin_group_direction", &Module::set_pin_group_direction, py::arg("pin_group"), py::arg("new_direction"), R"(
             Set the direction of the given pin group.
 
             :param hal_py.ModulePinGroup pin_group: The pin group.
@@ -673,7 +577,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("python_context", "{}", res.get_error().get());
+                    log_error("python_context", "error encountered while creating pin group:\n{}", res.get_error().get());
                     return nullptr;
                 }
             },
@@ -709,7 +613,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("python_context", "{}", res.get_error().get());
+                    log_error("python_context", "error encountered while creating pin group:\n{}", res.get_error().get());
                     return false;
                 }
             },
@@ -732,7 +636,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("python_context", "{}", res.get_error().get());
+                    log_error("python_context", "error encountered while creating pin group:\n{}", res.get_error().get());
                     return false;
                 }
             },
@@ -760,7 +664,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("python_context", "{}", res.get_error().get());
+                    log_error("python_context", "error encountered while creating pin group:\n{}", res.get_error().get());
                     return false;
                 }
             },
@@ -788,7 +692,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("python_context", "{}", res.get_error().get());
+                    log_error("python_context", "error encountered while creating pin group:\n{}", res.get_error().get());
                     return false;
                 }
             },

@@ -319,13 +319,13 @@ namespace hal
             const auto pin_val   = pin_obj.GetObject().MemberBegin();
             u32 pin_index        = std::stoul(pin_val->name.GetString());
             std::string pin_name = pin_val->value.GetString();
-            if (auto res = gt->get_pin_by_name(pin_name); res.is_error())
+            if (auto res = gt->get_pin_by_name(pin_name); res == nullptr)
             {
-                return ERR_APPEND(res.get_error(), "could not parse pin group '" + name + "': failed to get pin by name '" + pin_name + "'");
+                return ERR("could not parse pin group '" + name + "': failed to get pin by name '" + pin_name + "'");
             }
             else
             {
-                pins.push_back(res.get());
+                pins.push_back(res);
             }
 
             if (start == -1)

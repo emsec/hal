@@ -1331,7 +1331,7 @@ namespace hal
                     }
 
                     // merge generics and attributes
-                    for (const auto it : slave_net->get_data_map())
+                    for (const auto& it : slave_net->get_data_map())
                     {
                         if (!master_net->set_data(std::get<0>(it.first), std::get<1>(it.first), std::get<0>(it.second), std::get<1>(it.second)))
                         {
@@ -1390,7 +1390,7 @@ namespace hal
             std::unordered_set<Net*> input_nets  = module->get_input_nets();
             std::unordered_set<Net*> output_nets = module->get_input_nets();
 
-            if (module->get_pin_by_net(m_one_net).is_error() && (input_nets.find(m_one_net) != input_nets.end() || output_nets.find(m_one_net) != input_nets.end()))
+            if ((module->get_pin_by_net(m_one_net) == nullptr) && (input_nets.find(m_one_net) != input_nets.end() || output_nets.find(m_one_net) != input_nets.end()))
             {
                 if (auto res = module->create_pin("'1'", m_one_net); res.is_error())
                 {
@@ -1400,7 +1400,7 @@ namespace hal
                 }
             }
 
-            if (module->get_pin_by_net(m_zero_net).is_error() && (input_nets.find(m_zero_net) != input_nets.end() || output_nets.find(m_zero_net) != input_nets.end()))
+            if ((module->get_pin_by_net(m_zero_net) == nullptr) && (input_nets.find(m_zero_net) != input_nets.end() || output_nets.find(m_zero_net) != input_nets.end()))
             {
                 if (auto res = module->create_pin("'0'", m_zero_net); res.is_error())
                 {
