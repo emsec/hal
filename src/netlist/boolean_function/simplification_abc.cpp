@@ -553,11 +553,10 @@ namespace hal
         Result<BooleanFunction> slice_at(const BooleanFunction& function, const u16 index)
         {
             // (1) setup the sliced Boolean function
-            if (auto res =
-                    BooleanFunction::Slice(function.clone(), BooleanFunction::Index(index, function.size()), BooleanFunction::Index(index, function.size()), 1).map<BooleanFunction>([](auto function) {
-                        // (2) perform a local simplification in order to remove unnecessary slices
-                        return Simplification::local_simplification(function);
-                    });
+            if (auto res = BooleanFunction::Slice(function.clone(), BooleanFunction::Index(index, function.size()), BooleanFunction::Index(index, function.size()), 1).map<BooleanFunction>([](auto f) {
+                    // (2) perform a local simplification in order to remove unnecessary slices
+                    return Simplification::local_simplification(f);
+                });
                 res.is_error())
             {
                 return ERR(res.get_error());
