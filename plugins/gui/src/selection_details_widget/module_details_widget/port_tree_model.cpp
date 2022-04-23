@@ -9,6 +9,7 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/enums.h"
 #include "gui/user_action/action_reorder_object.h"
+#include "gui/user_action/action_add_items_to_object.h"
 #include <QMimeData>
 
 namespace hal
@@ -143,12 +144,21 @@ namespace hal
                 if(pinGroupRes.is_error()) return false;
                 auto pinGroup = pinGroupRes.get();
                 mIgnoreNextPinsChanged = true;
-                bool ret = mod->assign_pin_to_group(pinGroup, droppedPin).is_ok();
+                //bool ret = mod->assign_pin_to_group(pinGroup, droppedPin).is_ok();
+                //SHOULD BE DONE IN A COMPOUND ACTION SO THE USER DOES NOT HAVE TO CLICK TWICE TO UNDO
+                ActionAddItemsToObject* addAct = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), QSet<u32>() << droppedPin->get_id());
+                addAct->setObject(UserActionObject(pinGroup->get_id(), UserActionObjectType::PinGroup));
+                addAct->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+                bool ret = addAct->exec();
                 mIgnoreNextPinsChanged = false;//if action above failed
                 if(ret)
                 {
                     mIgnoreNextPinsChanged = true;
-                    ret = mod->move_pin_within_group(pinGroup, droppedPin, bottomEdge ? desiredIndex+1 : desiredIndex).is_ok();
+                    //ret = mod->move_pin_within_group(pinGroup, droppedPin, bottomEdge ? desiredIndex+1 : desiredIndex).is_ok();
+                    ActionReorderObject* reordAct = new ActionReorderObject(bottomEdge ? desiredIndex+1 : desiredIndex);
+                    reordAct->setObject(UserActionObject(droppedPin->get_id(), UserActionObjectType::Pin));
+                    reordAct->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+                    ret = reordAct->exec();
                     if(ret)
                     {
                         removeItem(droppedItem);
@@ -174,7 +184,11 @@ namespace hal
             if(droppedParentItem == mRootItem)
             {
                 mIgnoreNextPinsChanged = true;
-                int ret = mod->assign_pin_to_group(onDroppedGroup, droppedPin).is_ok();
+                //int ret = mod->assign_pin_to_group(onDroppedGroup, droppedPin).is_ok();
+                ActionAddItemsToObject* addAct = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), QSet<u32>() << droppedPin->get_id());
+                addAct->setObject(UserActionObject(onDroppedGroup->get_id(), UserActionObjectType::PinGroup));
+                addAct->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+                bool ret = addAct->exec();
                 if(ret)
                 {
                     removeItem(droppedItem);
