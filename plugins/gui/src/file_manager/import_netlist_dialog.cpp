@@ -1,6 +1,7 @@
 #include "gui/file_manager/import_netlist_dialog.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
+#include "gui/gui_utils/graphics.h"
 
 #include <QGridLayout>
 #include <QLabel>
@@ -8,12 +9,14 @@
 #include <QComboBox>
 #include <QCheckBox>
 #include <QDialogButtonBox>
+#include <QPushButton>
 #include <QSpacerItem>
 #include <QRegularExpression>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QFile>
 #include <QFileInfo>
+#include <QFileDialog>
 #include <QDebug>
 
 QLineEdit* mEditProjectdir;
@@ -24,6 +27,9 @@ namespace hal {
     ImportNetlistDialog::ImportNetlistDialog(const QString& filename, QWidget *parent)
         : QDialog(parent)
     {
+        QStyle* s = style();
+        s->unpolish(this);
+        s->polish(this);
         QString suggestedGateLibraryPath;
         QString suggestedGateLibraryName;
         if (filename.endsWith(".hal"))
@@ -47,48 +53,66 @@ namespace hal {
         setWindowTitle("Import netlist");
         layout->addWidget(new QLabel("Create new hal project from netlist\n" + filename, this), irow++, 0, Qt::AlignLeft);
         layout->addItem(new QSpacerItem(30,30),irow++,0);
+        layout->setRowStretch(irow-1,20);
 
         layout->addWidget(new QLabel("Project directory:",this),irow++,0,Qt::AlignLeft);
         mProjectdir = filename;
         mProjectdir.remove(QRegularExpression("\\.\\w*$"));
-        mEditProjectdir = new QLineEdit(mProjectdir,this);
+        QFrame* frameProjectdir = new QFrame(this);
+        QHBoxLayout* layProjectdir = new QHBoxLayout(frameProjectdir);
+        mEditProjectdir = new QLineEdit(mProjectdir,frameProjectdir);
+        layProjectdir->addWidget(mEditProjectdir);
+        QPushButton* butFiledialog = new QPushButton(gui_utility::getStyledSvgIcon(mSaveIconStyle,mSaveIconPath),"",frameProjectdir);
+        connect (butFiledialog, &QPushButton::clicked, this, &ImportNetlistDialog::handleFileDialogTriggered);
+        layProjectdir->addWidget(butFiledialog);
         mEditProjectdir->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
-        layout->addWidget(mEditProjectdir,irow++,0);
+        layout->addWidget(frameProjectdir,irow++,0);
         layout->addItem(new QSpacerItem(30,30),irow++,0);
 
-        layout->addWidget(new QLabel("Gate library:",this),irow++,0,Qt::AlignLeft);
+        QLabel* labGatelib = new QLabel("Gate library:",this);
+        layout->addWidget(labGatelib,irow++,0,Qt::AlignLeft);
         mComboGatelib = new QComboBox(this);
-        mComboGatelib->addItem("(Auto detect)");
-        for (const std::filesystem::path path : gate_library_manager::get_all_path())
+        if (filename.endsWith(".hal"))
         {
-            int n = mGateLibraryPath.size();
-            QString qName = QString::fromStdString(path.filename());
-            mGateLibraryMap.insert(qName,n);
-            QString qPath = QString::fromStdString(path.string());
-            mGateLibraryPath.append(qPath);
-            if (qPath == suggestedGateLibraryPath) suggestedGateLibraryName = qName;
+            mComboGatelib->setDisabled(true);
+            labGatelib->setDisabled(true);
         }
-        if (suggestedGateLibraryName.isEmpty() && !suggestedGateLibraryPath.isEmpty())
+        else
         {
-            // suggested gate library not found in default path
-            QFileInfo info(suggestedGateLibraryPath);
-            suggestedGateLibraryName = info.fileName();
-            int n = mGateLibraryPath.size();
-            mGateLibraryMap.insert(suggestedGateLibraryName,n);
-            mGateLibraryPath.append(suggestedGateLibraryPath);
+            mComboGatelib->addItem("(Auto detect)");
+            for (const std::filesystem::path path : gate_library_manager::get_all_path())
+            {
+                int n = mGateLibraryPath.size();
+                QString qName = QString::fromStdString(path.filename());
+                mGateLibraryMap.insert(qName,n);
+                QString qPath = QString::fromStdString(path.string());
+                mGateLibraryPath.append(qPath);
+                if (qPath == suggestedGateLibraryPath) suggestedGateLibraryName = qName;
+            }
+            if (suggestedGateLibraryName.isEmpty() && !suggestedGateLibraryPath.isEmpty())
+            {
+                // suggested gate library not found in default path
+                QFileInfo info(suggestedGateLibraryPath);
+                suggestedGateLibraryName = info.fileName();
+                int n = mGateLibraryPath.size();
+                mGateLibraryMap.insert(suggestedGateLibraryName,n);
+                mGateLibraryPath.append(suggestedGateLibraryPath);
+            }
+            mComboGatelib->addItems(mGateLibraryMap.keys());
+            if (!suggestedGateLibraryName.isEmpty())
+                mComboGatelib->setCurrentText(suggestedGateLibraryName);
         }
-        mComboGatelib->addItems(mGateLibraryMap.keys());
-        if (!suggestedGateLibraryName.isEmpty())
-            mComboGatelib->setCurrentText(suggestedGateLibraryName);
         mComboGatelib->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
         layout->addWidget(mComboGatelib,irow++,0);
 
         layout->addItem(new QSpacerItem(30,30),irow++,0);
+        layout->setRowStretch(irow-1,20);
         mCheckMoveNetlist = new QCheckBox("Move imported netlist into project directory");
         layout->addWidget(mCheckMoveNetlist,irow++,0,Qt::AlignLeft);
         mCheckCopyGatelib = new QCheckBox("Copy gate library into project directory");
         layout->addWidget(mCheckCopyGatelib,irow++,0,Qt::AlignLeft);
         layout->addItem(new QSpacerItem(30,30),irow++,0);
+        layout->setRowStretch(irow-1,100);
         QDialogButtonBox* dbb = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, Qt::Horizontal, this);
         connect(dbb,&QDialogButtonBox::accepted,this,&QDialog::accept);
         connect(dbb,&QDialogButtonBox::rejected,this,&QDialog::reject);
@@ -100,6 +124,13 @@ namespace hal {
     QString ImportNetlistDialog::projectDirectory() const
     {
         return mEditProjectdir->text();
+    }
+
+    void ImportNetlistDialog::handleFileDialogTriggered()
+    {
+        QString dir = QFileDialog::getSaveFileName(this, "Enter new project directory", QFileInfo(mProjectdir).path(), "", nullptr, QFileDialog::ShowDirsOnly);
+        if (dir.isEmpty()) return;
+        mEditProjectdir->setText(dir);
     }
 
     void ImportNetlistDialog::handleGateLibraryPathChanged(const QString& txt)

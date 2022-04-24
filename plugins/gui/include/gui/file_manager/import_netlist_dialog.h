@@ -37,6 +37,8 @@ namespace hal {
     class ImportNetlistDialog : public QDialog
     {
         Q_OBJECT
+        Q_PROPERTY(QString saveIconPath READ saveIconPath WRITE setSaveIconPath)
+        Q_PROPERTY(QString saveIconStyle READ saveIconStyle WRITE setSaveIconStyle)
         QString mProjectdir;
         QLineEdit* mEditProjectdir;
         QComboBox* mComboGatelib;
@@ -45,13 +47,20 @@ namespace hal {
 
         QStringList mGateLibraryPath;
         QMap<QString,int> mGateLibraryMap;
+        QString mSaveIconPath;
+        QString mSaveIconStyle;
     private Q_SLOTS:
         void handleGateLibraryPathChanged(const QString& txt);
+        void handleFileDialogTriggered();
     public:
         ImportNetlistDialog(const QString& filename, QWidget* parent = nullptr);
         QString projectDirectory() const;
         QString gateLibraryPath() const;
         bool isMoveNetlistChecked() const;
         bool isCopyGatelibChecked() const;
+        QString saveIconPath() const { return mSaveIconPath; }
+        QString saveIconStyle() const { return mSaveIconStyle; }
+        void setSaveIconPath(const QString& path) { mSaveIconPath = path; }
+        void setSaveIconStyle(const QString& sty) { mSaveIconStyle = sty; }
     };
 }
