@@ -387,17 +387,39 @@ namespace hal
 
         Result<std::monostate> SymbolicExecution::evaluate(const Constraint& constraint)
         {
-            if (auto res = this->evaluate(constraint.rhs).map<std::monostate>([&](auto&& rhs) -> Result<std::monostate> {
-                    this->state.set(constraint.lhs.clone(), std::move(rhs));
-                    return OK({});
-                });
-                res.is_error())
+            if (constraint.is_assignment())
             {
-                return ERR_APPEND(res.get_error(), "could not to evaluate equality constraint within the symbolic state: evaluation failed");
+                const auto& assignment = constraint.get_assignment().get();
+                if (auto res = this->evaluate(assignment->first).map<std::monostate>([&](auto&& rhs) -> Result<std::monostate> {
+                        this->state.set(assignment->second.clone(), std::move(rhs));
+                        return OK({});
+                    });
+                    res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not to evaluate assignment constraint within the symbolic state: evaluation failed");
+                }
+                else
+                {
+                    return OK({});
+                }
             }
             else
             {
-                return res;
+                const auto& function = constraint.get_function().get();
+                auto node_type       = function->get_top_level_node().type;
+                if (!(node_type == BooleanFunction::NodeType::Eq || node_type == BooleanFunction::NodeType::Slt || node_type == BooleanFunction::NodeType::Sle
+                      || node_type == BooleanFunction::NodeType::Ult || node_type == BooleanFunction::NodeType::Ule))
+                {
+                    return ERR("invalid node type in function '" + function->to_string() + "'");
+                }
+                if (auto res = this->evaluate(*function); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not to evaluate function constraint within the symbolic state: evaluation failed");
+                }
+                else
+                {
+                    return OK({});
+                }
             }
         }
 

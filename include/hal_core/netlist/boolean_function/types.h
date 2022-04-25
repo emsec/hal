@@ -122,7 +122,8 @@ namespace hal
         };
 
         /**
-		 * Represents a constraint to the SMT query, i.e., an assignment of two Boolean function that is true.
+		 * Represents a constraint to the SMT query.
+         * A constraint is either an assignment of two Boolean functions or a single Boolean function, e.g., an equality check or similar.
 		 */
         struct Constraint final
         {
@@ -130,14 +131,19 @@ namespace hal
             // Member
             ////////////////////////////////////////////////////////////////////////
 
-            /// Left-hand side of equality constraint.
-            BooleanFunction lhs;
-            /// Right-hand side of equality constraint.
-            BooleanFunction rhs;
+            /// A constraint that is either an assignment of two Boolean functions or a single Boolean function, e.g., an equality check or similar.
+            std::variant<BooleanFunction, std::pair<BooleanFunction, BooleanFunction>> constraint;
 
             ////////////////////////////////////////////////////////////////////////
             // Constructors, Destructors, Operators
             ////////////////////////////////////////////////////////////////////////
+
+            /**
+             * Constructs a new constraint from one Boolean function.
+             * 
+             * @param[in] constraint - The equality constraint
+             */
+            explicit Constraint(BooleanFunction&& _constraint);
 
             /**
              * Constructs a new constraint from two Boolean functions.
@@ -145,7 +151,7 @@ namespace hal
              * @param[in] lhs - The left-hand side of the equality constraint
              * @param[in] rhs - The right-hand side of the equality constraint
              */
-            Constraint(const BooleanFunction& lhs, const BooleanFunction& rhs);
+            explicit Constraint(BooleanFunction&& lhs, BooleanFunction&& rhs);
 
             /**
              * Passes a human-readable description of the SMT constraint to the output stream.
@@ -162,6 +168,27 @@ namespace hal
              * @returns A string representing the SMT constraint.
              */
             std::string to_string() const;
+
+            /**
+             * Checks whether the constraint is an assignment constraint.
+             * 
+             * @returns `true` if the constraint is an assignment, `false` otherwise.
+             */
+            bool is_assignment() const;
+
+            /**
+             * Returns the assignment constraint.
+             * 
+             * @returns The assignment constraint.
+             */
+            Result<const std::pair<BooleanFunction, BooleanFunction>*> get_assignment() const;
+
+            /**
+             * Returns the function constraint.
+             * 
+             * @returns The function constraint.
+             */
+            Result<const BooleanFunction*> get_function() const;
         };
 
         /**

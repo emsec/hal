@@ -66,27 +66,28 @@ namespace hal
         )");
 
         py::class_<SMT::Constraint> py_smt_constraint(py_smt, "Constraint", R"(
-            Represents a constraint to the SMT query, i.e., an assignment of two Boolean function that is true.
+            Represents a constraint to the SMT query.
+            A constraint is either an assignment of two Boolean functions or a single Boolean function, e.g., an equality check or similar.
         )");
 
-        py_smt_constraint.def_readwrite("lhs", &SMT::Constraint::lhs, R"(
-            The left-hand side of the equality constraint.
+        py_smt_constraint.def_readwrite("constraint", &SMT::Constraint::constraint, R"(
+            A constraint that is either an assignment of two Boolean functions or a single Boolean function, e.g., an equality check or similar.
 
-            :type: hal_py.BooleanFunction    
+            :type: hal_py.BooleanFunction or tuple(hal_py.BooleanFunction, hal_py.BooleanFunction)  
         )");
 
-        py_smt_constraint.def_readwrite("rhs", &SMT::Constraint::rhs, R"(
-            The right-hand side of the equality constraint.
+        // py_smt_constraint.def(py::init<BooleanFunction&&>(), py::arg("lhs"), R"(
+        //     Constructs a new equality constraint from one Boolean function.
 
-            :type: hal_py.BooleanFunction    
-        )");
+        //     :param hal_py.BooleanFunction lhs: The left-hand side of the equality constraint.
+        // )");
 
-        py_smt_constraint.def(py::init<const BooleanFunction&, const BooleanFunction&>(), py::arg("lhs"), py::arg("rhs"), R"(
-            Constructs a new equality constraint from two Boolean functions.
+        // py_smt_constraint.def(py::init<BooleanFunction&&, BooleanFunction&&>(), py::arg("lhs"), py::arg("rhs"), R"(
+        //     Constructs a new equality constraint from two Boolean functions.
 
-            :param hal_py.BooleanFunction lhs: The left-hand side of the equality constraint.
-            :param hal_py.BooleanFunction rhs: The right-hand side of the equality constraint.
-        )");
+        //     :param hal_py.BooleanFunction lhs: The left-hand side of the equality constraint.
+        //     :param hal_py.BooleanFunction rhs: The right-hand side of the equality constraint.
+        // )");
 
         py::enum_<SMT::SolverResultType> py_smt_result_type(py_smt, "SolverResultType", R"(
             Result type of an SMT solver query.

@@ -914,6 +914,8 @@ namespace hal {
     TEST(BooleanFunction, SatisfiableConstraint) {
         const auto  a = BooleanFunction::Var("A"),
                     b = BooleanFunction::Var("B"),
+                    c = BooleanFunction::Var("C", 4),
+                    d = BooleanFunction::Var("D", 4),
                    _0 = BooleanFunction::Const(0, 1),
                    _1 = BooleanFunction::Const(1, 1);
 
@@ -934,7 +936,15 @@ namespace hal {
             {
                 SMT::Constraint((a.clone() & ~b.clone()) | (~a.clone() & b.clone()), _1.clone()),
                 SMT::Constraint(a.clone(), _1.clone()),
-            }
+            },
+            {
+                SMT::Constraint(BooleanFunction::Add(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(5, 4)),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(0, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Sub(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(4, 4)),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(6, 4)),
+            },
         });
 
         for (auto&& constraints : formulas) {
@@ -964,6 +974,8 @@ namespace hal {
     TEST(BooleanFunction, UnSatisfiableConstraint) {
         const auto  a = BooleanFunction::Var("A"),
                     b = BooleanFunction::Var("B"),
+                    c = BooleanFunction::Var("C", 4),
+                    d = BooleanFunction::Var("D", 4),
                    _0 = BooleanFunction::Const(0, 1),
                    _1 = BooleanFunction::Const(1, 1);
 
@@ -992,6 +1004,45 @@ namespace hal {
                 SMT::Constraint((a.clone() & ~b.clone()) | (~a.clone() & b.clone()), _1.clone()),
                 SMT::Constraint(a.clone(), _1.clone()),
                 SMT::Constraint(b.clone(), _1.clone()),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Add(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(0, 4)),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(1, 4)),
+                SMT::Constraint(d.clone(), BooleanFunction::Const(0, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Sub(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(0, 4)),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(1, 4)),
+                SMT::Constraint(d.clone(), BooleanFunction::Const(0, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Ult(c.clone(), d.clone(), 1).get()),
+                SMT::Constraint(d.clone(), BooleanFunction::Const(0, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Ult(c.clone(), d.clone(), 1).get()),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(1, 4)),
+                SMT::Constraint(d.clone(), BooleanFunction::Const(0, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Ule(c.clone(), d.clone(), 1).get()),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(1, 4)),
+                SMT::Constraint(d.clone(), BooleanFunction::Const(0, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Slt(c.clone(), d.clone(), 1).get()),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(1, 4)),
+                SMT::Constraint(d.clone(), BooleanFunction::Const(0, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Sle(c.clone(), d.clone(), 1).get()),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(1, 4)),
+                SMT::Constraint(d.clone(), BooleanFunction::Const(0, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Eq(c.clone(), d.clone(), 1).get()),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(1, 4)),
+                SMT::Constraint(d.clone(), BooleanFunction::Const(0, 4)),
             }
         });
 
@@ -1018,9 +1069,58 @@ namespace hal {
         }
     }
 
+    TEST(BooleanFunction, FunctionConstraint) {
+        const auto  a = BooleanFunction::Var("A"),
+                    b = BooleanFunction::Var("B"),
+                   _0 = BooleanFunction::Const(0, 1),
+                   _1 = BooleanFunction::Const(1, 1);
+
+        auto formulas = std::vector<std::tuple<std::vector<SMT::Constraint>, SMT::Model>>({
+            {
+                {
+                    SMT::Constraint(BooleanFunction::Eq(a.clone(), b.clone(), 1).get()), 
+                    SMT::Constraint(a.clone(), _1.clone())
+                },
+                SMT::Model({{"A", {1, 1}}, {"B", {1, 1}}})
+            },
+            {
+                {
+                    SMT::Constraint(BooleanFunction::Eq(a.clone(), b.clone(), 1).get()), 
+                    SMT::Constraint(a.clone(), _0.clone())
+                },
+                SMT::Model({{"A", {0, 1}}, {"B", {0, 1}}})
+            },
+        });
+
+        for (auto&& [constraints, model] : formulas) {
+            const auto solver = SMT::Solver(std::move(constraints));
+
+            for (auto&& solver_type : {SMT::SolverType::Z3}) {
+                if (!SMT::Solver::has_local_solver_for(solver_type)) {
+                    continue;
+                }
+
+                auto result = solver.query(
+                    SMT::QueryConfig()
+                        .with_solver(solver_type)
+                        .with_local_solver()
+                        .with_model_generation()
+                        .with_timeout(1000)
+                );
+
+                ASSERT_TRUE(result.is_ok());
+                auto solver_result = result.get();
+                EXPECT_EQ(solver_result.type, SMT::SolverResultType::Sat);
+                EXPECT_EQ(*solver_result.model, model);
+            }
+        }
+    }
+
     TEST(BooleanFunction, Model) {
         const auto  a = BooleanFunction::Var("A"),
                     b = BooleanFunction::Var("B"),
+                    c = BooleanFunction::Var("C", 4),
+                    d = BooleanFunction::Var("D", 4),
                    _0 = BooleanFunction::Const(0, 1),
                    _1 = BooleanFunction::Const(1, 1);
 
@@ -1051,7 +1151,21 @@ namespace hal {
                     SMT::Constraint(a.clone(), _1.clone()),
                 },
                 SMT::Model({{"A", {1, 1}}, {"B", {0, 1}}})
-            }
+            },
+            {
+                {
+                    SMT::Constraint(BooleanFunction::Add(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(5, 4)),
+                    SMT::Constraint(c.clone(), BooleanFunction::Const(0, 4)),
+                },
+                SMT::Model({{"C", {0, 4}}, {"D", {5, 4}}})
+            },
+            {
+                {
+                    SMT::Constraint(BooleanFunction::Sub(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(4, 4)),
+                    SMT::Constraint(c.clone(), BooleanFunction::Const(6, 4)),
+                },
+                SMT::Model({{"C", {6, 4}}, {"D", {2, 4}}})
+            },
         });
 
         for (auto&& [constraints, model] : formulas) {
