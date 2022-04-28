@@ -275,6 +275,7 @@ namespace hal {
         int n = (mInputCount + 7) / 8;
         mTruthTable = new char[n];
         memcpy(mTruthTable, ttable, n);
+        setWaveType(WaveData::BooleanNet);
     }
 
     WaveDataProviderBoolean::~WaveDataProviderBoolean()
@@ -336,6 +337,7 @@ namespace hal {
                     mCurrentTrigger = true;
             }, mTransitionToValue+i);
         }
+        setWaveType(WaveData::TriggerTime);
     }
 
     WaveDataProviderTrigger::~WaveDataProviderTrigger()

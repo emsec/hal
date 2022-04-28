@@ -100,6 +100,50 @@ namespace hal {
             }
             break;
        case WaveData::TriggerTime:
+            if (wd->loadPolicy() == WaveData::LoadAllData)
+            {
+                try {
+                    const WaveDataTrigger* wdTrig = static_cast<const WaveDataTrigger*>(wd);
+                    mItem->mPainted.clearPrimitives();
+                    for (WaveData* wdChild : wdTrig->children())
+                    {
+                        if ((u64)wdChild->data().size() < wdChild->fileSize())
+                        {
+                            mItem->setState(WaveItem::Aborted);
+                            return;
+                        }
+                    }
+                    if (wdTrig->get_filter_wave())
+                    {
+                        if ((u64)wdTrig->get_filter_wave()->data().size() < wdTrig->get_filter_wave()->fileSize() )
+                        {
+                            mItem->setState(WaveItem::Aborted);
+                            return;
+                        }
+                    }
+                    WaveDataProviderMap wdpMap(wd->data());
+                    wdpMap.setWaveType(WaveData::TriggerTime,wd->bits());
+                    mItem->mPainted.generate(&wdpMap,mTransform,mScrollbar,&mItem->mLoop);
+                    mItem->setState(WaveItem::Finished);
+                } catch (...) {
+                    mItem->setState(WaveItem::Failed);
+                }
+            }
+                else
+                {
+                    try {
+                        const WaveDataTrigger* wdTrig = static_cast<const WaveDataTrigger*>(wd);
+                        std::string saleaeDirectory = QDir(mWorkDir).absoluteFilePath("saleae.json").toStdString();
+                        WaveDataProviderTrigger wdpTrig(saleaeDirectory,wdTrig->children(),wdTrig->toValueList(),wdTrig->get_filter_wave());
+                        mItem->mPainted.clearPrimitives();
+                        if (mItem->isAborted()) return;
+                        mItem->mPainted.generate(&wdpTrig,mTransform,mScrollbar,&mItem->mLoop);
+                        mItem->setState(WaveItem::Finished);
+                    } catch (...) {
+                        mItem->setState(WaveItem::Failed);
+                    }
+                }
+                break;
             break;
        default:
             SaleaeInputFile sif(mWorkDir.absoluteFilePath(QString("digital_%1.bin").arg(mItem->wavedata()->fileIndex())).toStdString());

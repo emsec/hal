@@ -262,6 +262,8 @@ namespace hal {
         virtual u64 neighborTransition(double t, bool next) const override;
         virtual int intValue(double t) const override;
         void set_filter_wave(WaveData* wd);
+        QList<int> toValueList() const;
+        WaveData* get_filter_wave() const { return mFilterWave; }
     };
 
     class WaveDataGroup : public WaveData

@@ -866,6 +866,14 @@ namespace hal {
         return t;
     }
 
+    QList<int> WaveDataTrigger::toValueList() const
+    {
+        QList<int> retval;
+        for (int i=0; i<mTriggerCount; i++)
+            retval.append(mToValue[i]);
+        return retval;
+    }
+
 //--------------------------------------------
     WaveDataGroup::WaveDataGroup(WaveDataList *wdList, int grpId, const QString& nam)
         : WaveData(grpId,nam,WaveData::NetGroup)

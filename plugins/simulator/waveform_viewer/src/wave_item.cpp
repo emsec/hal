@@ -209,7 +209,10 @@ namespace hal {
         }
 
         // try get from painted primitives, will store time
-        retval = mPainted.cursorValuePainted(tCursor,xpos);
+        if (isTrigger())
+            retval = mPainted.cursorValueTrigger(tCursor,xpos);
+        else
+            retval = mPainted.cursorValuePainted(tCursor,xpos);
         return retval;
     }
 
