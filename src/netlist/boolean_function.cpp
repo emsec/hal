@@ -332,7 +332,7 @@ namespace hal
                        + " - sizes must be equal)");
         }
 
-        auto start = p1.get_top_level_node().index, end = p2.get_top_level_node().index;
+        auto start = p1.get_index_value().get(), end = p2.get_index_value().get();
 
         if ((start > end) || (start >= p0.size()) || (end >= p0.size()) || (end - start + 1) != size)
         {
@@ -351,6 +351,104 @@ namespace hal
         }
 
         return OK(BooleanFunction(Node::Operation(NodeType::Concat, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Zext(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if (p0.size() > size || p1.size() != size)
+        {
+            return ERR("could not apply ZEXT operation: function input width does not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, size = " + std::to_string(size) + ").");
+        }
+
+        if (!p1.has_index_value(size))
+        {
+            return ERR("could not apply ZEXT operation: p1 does not encode size (p1 = " + p1.to_string() + ", size = " + std::to_string(size) + ").");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Zext, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Sext(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if (p0.size() > size || p1.size() != size)
+        {
+            return ERR("could not apply SEXT operation: function input width does not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, size = " + std::to_string(size) + ").");
+        }
+
+        if (!p1.has_index_value(size))
+        {
+            return ERR("could not apply SEXT operation: p1 does not encode size (p1 = " + p1.to_string() + ", size = " + std::to_string(size) + ").");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Sext, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Eq(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if (p0.size() != p1.size() || size != 1)
+        {
+            return ERR("could not apply EQ operation: function input width does not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, size = " + std::to_string(size) + ").");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Eq, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Sle(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if (p0.size() != p1.size() || size != 1)
+        {
+            return ERR("could not apply SLE operation: function input width does not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, size = " + std::to_string(size) + ").");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Sle, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Slt(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if (p0.size() != p1.size() || size != 1)
+        {
+            return ERR("could not apply SLT operation: function input width does not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, size = " + std::to_string(size) + ").");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Slt, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Ule(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if (p0.size() != p1.size() || size != 1)
+        {
+            return ERR("could not apply ULE operation: function input width does not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, size = " + std::to_string(size) + ").");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Ule, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Ult(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if (p0.size() != p1.size() || size != 1)
+        {
+            return ERR("could not apply ULT operation: function input width does not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, size = " + std::to_string(size) + ").");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Ult, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Ite(BooleanFunction&& p0, BooleanFunction&& p1, BooleanFunction&& p2, u16 size)
+    {
+        if (p0.size() != 1 || p1.size() != size || p2.size() != size)
+        {
+            return ERR("could not apply ITE operation: function input width does not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, p2 = " + std::to_string(p2.size()) + "-bit, size = " + std::to_string(size) + ").");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Ite, size), std::move(p0), std::move(p1), std::move(p2)));
     }
 
     std::ostream& operator<<(std::ostream& os, const BooleanFunction& function)
@@ -497,6 +595,33 @@ namespace hal
         return (this->is_empty()) ? false : this->get_top_level_node().has_constant_value(value);
     }
 
+    Result<u64> BooleanFunction::get_constant_value() const
+    {
+        if (!this->is_constant())
+        {
+            return ERR("Boolean function is not a constant");
+        }
+
+        if (this->size() > 64)
+        {
+            return ERR("Boolean function constant has size > 64");
+        }
+
+        if (std::any_of(this->m_nodes[0].constant.begin(), this->m_nodes[0].constant.end(), [](auto v) { return v != BooleanFunction::Value::ONE && v != BooleanFunction::Value::ZERO; }))
+        {
+            return ERR("Boolean function constant is undefined or high-impedance");
+        }
+
+        u64 val = 0;
+        for (auto it = this->m_nodes[0].constant.rbegin(); it != this->m_nodes[0].constant.rend(); it++)
+        {
+            val <<= 1;
+            val |= *it;
+        }
+
+        return OK(val);
+    }
+
     bool BooleanFunction::is_index() const
     {
         return (this->is_empty()) ? false : this->get_top_level_node().is_index();
@@ -505,6 +630,16 @@ namespace hal
     bool BooleanFunction::has_index_value(u16 value) const
     {
         return (this->is_empty()) ? false : this->get_top_level_node().has_index_value(value);
+    }
+
+    Result<u16> BooleanFunction::get_index_value() const
+    {
+        if (!this->is_index())
+        {
+            return ERR("Boolean function is not an index");
+        }
+
+        return OK(this->m_nodes[0].index);
     }
 
     const BooleanFunction::Node& BooleanFunction::get_top_level_node() const
@@ -601,6 +736,21 @@ namespace hal
                 return OK("Slice(" + operands[0] + ", " + operands[1] + ", " + operands[2] + ")");
             case BooleanFunction::NodeType::Zext:
                 return OK("Zext(" + operands[0] + ", " + operands[1] + ")");
+            case BooleanFunction::NodeType::Sext:
+                return OK("Sext(" + operands[0] + ", " + operands[1] + ")");
+
+            case BooleanFunction::NodeType::Eq:
+                return OK("(" + operands[0] + " == " + operands[1] + ")");
+            case BooleanFunction::NodeType::Slt:
+                return OK("(" + operands[0] + " <s " + operands[1] + ")");
+            case BooleanFunction::NodeType::Sle:
+                return OK("(" + operands[0] + " <=s " + operands[1] + ")");
+            case BooleanFunction::NodeType::Ult:
+                return OK("(" + operands[0] + " < " + operands[1] + ")");
+            case BooleanFunction::NodeType::Ule:
+                return OK("(" + operands[0] + " <= " + operands[1] + ")");
+            case BooleanFunction::NodeType::Ite:
+                return OK("Ite(" + operands[0] + ", " + operands[1] + ", " + operands[2] + ")");
 
             default:
                 return ERR("could not print Boolean function: unsupported node type '" + std::to_string(node.type) + "'");
@@ -1142,6 +1292,21 @@ namespace hal
                 return "Slice";
             case NodeType::Zext:
                 return "Zext";
+            case NodeType::Sext:
+                return "Sext";
+
+            case NodeType::Eq:
+                return "==";
+            case NodeType::Sle:
+                return "<=s";
+            case NodeType::Slt:
+                return "<s";
+            case NodeType::Ule:
+                return "<=";
+            case NodeType::Ult:
+                return "<";
+            case NodeType::Ite:
+                return "Ite";
 
             default:
                 return "unsupported node type '" + std::to_string(this->type) + "'.";
@@ -1156,21 +1321,16 @@ namespace hal
     u16 BooleanFunction::Node::get_arity_of_type(u16 type)
     {
         static const std::map<u16, u16> type2arity = {
-            {BooleanFunction::NodeType::And, 2},
-            {BooleanFunction::NodeType::Or, 2},
-            {BooleanFunction::NodeType::Not, 1},
-            {BooleanFunction::NodeType::Xor, 2},
+            {BooleanFunction::NodeType::And, 2},      {BooleanFunction::NodeType::Or, 2},    {BooleanFunction::NodeType::Not, 1},      {BooleanFunction::NodeType::Xor, 2},
 
-            {BooleanFunction::NodeType::Add, 2},
-            {BooleanFunction::NodeType::Sub, 2},
+            {BooleanFunction::NodeType::Add, 2},      {BooleanFunction::NodeType::Sub, 2},
 
-            {BooleanFunction::NodeType::Concat, 2},
-            {BooleanFunction::NodeType::Slice, 3},
-            {BooleanFunction::NodeType::Zext, 2},
+            {BooleanFunction::NodeType::Concat, 2},   {BooleanFunction::NodeType::Slice, 3}, {BooleanFunction::NodeType::Zext, 2},     {BooleanFunction::NodeType::Sext, 2},
 
-            {BooleanFunction::NodeType::Constant, 0},
-            {BooleanFunction::NodeType::Index, 0},
-            {BooleanFunction::NodeType::Variable, 0},
+            {BooleanFunction::NodeType::Eq, 2},       {BooleanFunction::NodeType::Sle, 2},   {BooleanFunction::NodeType::Slt, 2},      {BooleanFunction::NodeType::Ule, 2},
+            {BooleanFunction::NodeType::Ult, 2},      {BooleanFunction::NodeType::Ite, 3},
+
+            {BooleanFunction::NodeType::Constant, 0}, {BooleanFunction::NodeType::Index, 0}, {BooleanFunction::NodeType::Variable, 0},
         };
 
         return type2arity.at(type);
@@ -1197,7 +1357,7 @@ namespace hal
         bv_value.reserve(this->size);
         for (auto i = 0u; i < this->constant.size(); i++)
         {
-            bv_value.emplace_back((value << (1 << i)) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO);
+            bv_value.emplace_back((value & (1 << i)) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO);
         }
         return this->constant == bv_value;
     }
@@ -1234,7 +1394,7 @@ namespace hal
 
     bool BooleanFunction::Node::is_commutative() const
     {
-        return (this->type == NodeType::And) || (this->type == NodeType::Or) || (this->type == NodeType::Xor) || (this->type == NodeType::Add);
+        return (this->type == NodeType::And) || (this->type == NodeType::Or) || (this->type == NodeType::Xor) || (this->type == NodeType::Add) || (this->type == NodeType::Eq);
     }
 
     BooleanFunction::Node::Node(u16 _type, u16 _size, std::vector<BooleanFunction::Value> _constant, u16 _index, std::string _variable)
