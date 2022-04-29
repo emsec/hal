@@ -1,0 +1,181 @@
+# image: $CI_REGISTRY_IMAGE:latest
+
+# stages:
+#   - build-image
+#   - release-image
+#   - compile
+#   - test
+#   - deploy
+
+# variables:
+#   GIT_SSL_NO_VERIFY: "1"
+#   TEST_IMAGE_TAG: $CI_REGISTRY_IMAGE:latest
+#   RELEASE_IMAGE_TAG: $CI_REGISTRY_IMAGE:latest
+
+# cache:
+#   untracked: true
+#   paths:
+#     - ccache/
+#     - build/
+
+# build-image:
+#    image: docker:latest
+#    stage: build-image
+#    script:
+#      - apk update && apk upgrade && apk add --no-cache bash git openssh
+# #     - git log --name-only --format="%H" HEAD^..HEAD | grep 'Dockerfile' && echo "change detected" || { echo ”skipping” && exit 0; }
+# #     - echo ”Change detected”
+#      - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+#      - docker build --pull -t $TEST_IMAGE_TAG .
+#      - docker push $TEST_IMAGE_TAG
+
+# release-image:
+#   image: docker:latest
+#   stage: release-image
+#   script:
+#     - apk update && apk upgrade && apk add --no-cache bash git openssh
+#     - git log --name-only --format="%H" HEAD^..HEAD | grep 'Dockerfile' && echo "change detected" || { echo “skipping” && exit 0; }
+#     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+#     - docker pull $TEST_IMAGE_TAG
+#     - docker tag $TEST_IMAGE_TAG $RELEASE_IMAGE_TAG
+#     - docker push $RELEASE_IMAGE_TAG
+
+# compile:package:ubuntu:
+#   stage: compile
+#   script:
+#     - rm -rf build
+#     - mkdir -p build
+#     - cd build
+#     - export HAL_BASE_PATH=$(pwd)
+#     - export BUILD_TYPE=MinSizeRel
+#     - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=OFF -DPL_GUI=ON -DBUILD_DOCUMENTATION=ON -DNO_SIGN_PPA=ON -DENABLE_PPA=ON -DPACKAGE_DEB=ON
+#     - export CCACHE_DIR=$(pwd)/../ccache
+#     - ninja debuild_$(lsb_release -c -s)
+#     - cd Debian/$(lsb_release -c -s)/
+#     - dpkg-source -x *.dsc test_build
+#     - cd test_build
+#     - DEB_BUILD_OPTIONS="parallel=4" fakeroot debian/rules binary
+#     - du -h .
+#   artifacts:
+#     paths:
+#       - build/Debian/*/hal-reverse*.deb
+#     expire_in: 1 week
+#   cache:
+#     key: build-cache-ubuntu
+#     policy: push
+#     paths:
+#       - ccache/
+#       - build/
+#   only:
+#     - master
+#     - triggers
+#     - /^v.*$/ #For aptly deployment
+#     - web #Triggered by run pipeline
+
+# compile:test:ubuntu:
+#   stage: compile
+#   script:
+#     - rm -rf build
+#     - mkdir -p build
+#     - cd build
+#     - export HAL_BASE_PATH=$(pwd)
+#     - export BUILD_TYPE=Debug
+#     - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DPL_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/
+#     - export CCACHE_DIR=$(pwd)/../ccache
+#     - cmake --build . --target all --clean-first -- -j4
+#   cache:
+#     key: test-build-cache-ubuntu
+#     paths:
+#     - ccache/
+#     - build/
+
+# compile:doc:doxygen:
+#   stage: compile
+#   script:
+#     - rm -rf build
+#     - mkdir -p build
+#     - cd build
+#     - export HAL_BASE_PATH=$(pwd)
+#     - export BUILD_TYPE=Debug
+#     - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DPL_GUI=ON -DBUILD_DOCUMENTATION=ON -DPACKAGE_DEB=OFF -DCMAKE_INSTALL_PREFIX=/usr/
+#     - cmake --build . --target doc --clean-first -- -j4
+#   artifacts:
+#     paths:
+#       - build/documentation/*
+#     expire_in: 1 week
+#   cache:
+#     key: doc-build-cache
+#     paths:
+#       - ccache/
+#       - build/
+
+# compile:doc:python:
+#   stage: compile
+#   script:
+#     - rm -rf build
+#     - mkdir -p build
+#     - cd build
+#     - export HAL_BASE_PATH=$(pwd)
+#     - export BUILD_TYPE=Debug
+#     - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DPL_GUI=ON -DBUILD_DOCUMENTATION=ON -DPACKAGE_DEB=OFF -DCMAKE_INSTALL_PREFIX=/usr/
+#     - cmake --build . --target pydoc --clean-first -- -j4
+#   artifacts:
+#     paths:
+#       - build/python-doc/*
+#     expire_in: 1 week
+#   cache:
+#     key: doc-build-cache
+#     paths:
+#       - ccache/
+#       - build/
+
+# test:package:ubuntu:
+#   stage: test
+#   image: ubuntu:latest
+#   dependencies:
+#     - compile:package:ubuntu
+#   cache: {}
+#   only:
+#     - master
+#     - triggers
+#     - /^v.*$/ #For aptly deployment
+#     - web #Triggered by run pipeline
+#   script:
+#     - apt update
+#     - dpkg --force-all -i build/Debian/*/hal-reverse*.deb
+#     - export DEBIAN_FRONTEND=noninteractive
+#     - apt-get install -f -y -q
+#     - hal --version
+#     - apt-get purge -y hal-reverse
+#     - apt autoremove -y
+
+# test:check-core-documentation:
+#   stage: test
+#   script:
+#     - python3 tools/check_documentation.py include/ -i include/hal_core/utilities/process.h
+#   cache: {}
+
+# deploy-ppa:
+#   stage: deploy
+#   only:
+#     - /^v.*$/
+#   except:
+#     - branches
+#   script:
+#     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+#     - mkdir -p ~/.ssh
+#     - eval $(ssh-agent -s)
+#     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+#     - ssh-add <(echo "$HAL_DEPLOYMENT_KEY")
+#     - 'ssh-keyscan ppa.launchpad.net > ~/.ssh/known_hosts'
+#     - (echo "$HAL_GPG_PASSPHRASE") > hal_pass
+#     - export PW_FILE_NAME=$(pwd)/hal_pass
+#     - gpg -v --passphrase-file hal_pass --batch --import <(echo "$HAL_GPG_KEY")
+#     - rm -rf build
+#     - mkdir -p build
+#     - cd build
+#     - export HAL_BASE_PATH=$(pwd)
+#     - export BUILD_TYPE=MinSizeRel
+#     - cmake .. -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=OFF -DPL_GUI=ON -DBUILD_DOCUMENTATION=ON -DNO_SIGN_PPA=OFF -DENABLE_PPA=ON -DUPLOAD_PPA=ON -DPACKAGE_DEB=ON -DSIMULATE_DPUT=OFF -DPPA_GPG_PASSPHRASE_FILE=$PW_FILE_NAME -DPPA_GPG_KEY_ID="C61868710D13DD90"
+#     - make dput_$(lsb_release -c -s)
+#     - rm $PW_FILE_NAME
