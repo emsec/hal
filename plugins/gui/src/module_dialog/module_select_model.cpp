@@ -207,28 +207,6 @@ namespace hal
     {
         mModules = gSelectionRelay->selectedModulesList();
         mGates   = gSelectionRelay->selectedGatesList();
-
-        for (u32 gid : mGates)
-        {
-            Gate* g = gNetlist->get_gate_by_id(gid);
-            if (!g)
-                continue;
-            mExclude.insert(g->get_module()->get_id());
-        }
-
-        for (u32 mid : mModules)
-        {
-            mExclude.insert(mid);
-            Module* m = gNetlist->get_module_by_id(mid);
-            if (!m)
-                continue;
-            Module* pm = m->get_parent_module();
-            if (pm)
-                mExclude.insert(pm->get_id());
-            for (Module* sm : m->get_submodules(nullptr, true))
-                mExclude.insert(sm->get_id());
-        }
-
     }
 
     QString ModuleSelectExclude::selectionToString() const

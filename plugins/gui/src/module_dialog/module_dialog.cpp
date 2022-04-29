@@ -44,13 +44,41 @@ namespace hal {
         mTreeView  = new QTreeView(mTabWidget);
         mTabWidget->addTab(mTreeView, "Module tree");
 
-        mTableView = new ModuleSelectView(false, mSearchbar, nullptr, mTabWidget);
+
+        QSet<u32> exclude_ids;
+        QList<u32> modules = gSelectionRelay->selectedModulesList();
+        QList<u32> gates   = gSelectionRelay->selectedGatesList();
+
+        for (u32 gid : gates)
+        {
+            Gate* g = gNetlist->get_gate_by_id(gid);
+            if (!g)
+                continue;
+            exclude_ids.insert(g->get_module()->get_id());
+        }
+
+        for (u32 mid : modules)
+        {
+            exclude_ids.insert(mid);
+            Module* m = gNetlist->get_module_by_id(mid);
+            if (!m)
+                continue;
+            Module* pm = m->get_parent_module();
+            if (pm)
+                exclude_ids.insert(pm->get_id());
+            for (Module* sm : m->get_submodules(nullptr, true))
+                exclude_ids.insert(sm->get_id());
+        }
+
+
+
+        mTableView = new ModuleSelectView(false, mSearchbar, &exclude_ids, mTabWidget);
         connect(mTableView, &ModuleSelectView::moduleSelected, this, &ModuleDialog::handleTableSelection);
         mTabWidget->addTab(mTableView, "Module list");
 
         if (!ModuleSelectHistory::instance()->isEmpty())
         {
-            mLastUsed = new ModuleSelectView(true,mSearchbar,nullptr, mTabWidget);
+            mLastUsed = new ModuleSelectView(true, mSearchbar, &exclude_ids, mTabWidget);
             if (mLastUsed->model()->rowCount())
             {
                 connect(mLastUsed, &ModuleSelectView::moduleSelected, this, &ModuleDialog::handleTableSelection);
