@@ -11,6 +11,7 @@
 #include "gui/user_action/action_reorder_object.h"
 #include "gui/user_action/action_add_items_to_object.h"
 #include <QMimeData>
+#include <QDebug>
 
 namespace hal
 {
@@ -138,7 +139,9 @@ namespace hal
             }
 
             //different parents v1 (dropped's parent = mRoot, onDropped's parent=group)
-            if(droppedParentItem == mRootItem && onDroppedParentItem != mRootItem)
+            //+ different parents v2(droppedItem's parent != root, ondropped's != root)
+            if((droppedParentItem == mRootItem && onDroppedParentItem != mRootItem) ||
+                    (droppedParentItem != mRootItem && onDroppedParentItem != mRootItem))
             {
                 auto pinGroupRes = mod->get_pin_group_by_id(getIdOfItem(onDroppedParentItem));
                 if(pinGroupRes.is_error()) return false;
@@ -172,7 +175,6 @@ namespace hal
                 }
                 return false;
             }
-            //different parents v2(droppedItem's parent != root, ondropped's != root)
         }
         else// on item
         {
@@ -181,7 +183,8 @@ namespace hal
             if(onDroppedGroupRes.is_error()) return false;
             auto onDroppedGroup = onDroppedGroupRes.get();
             //on group (dropped parent = mRoot)
-            if(droppedParentItem == mRootItem)
+            //if(droppedParentItem == mRootItem)//item which is dropped
+            if(droppedParentItem != onDroppedItem)
             {
                 mIgnoreNextPinsChanged = true;
                 //int ret = mod->assign_pin_to_group(onDroppedGroup, droppedPin).is_ok();
