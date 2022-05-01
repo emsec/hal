@@ -10,7 +10,7 @@
 #include <vector>
 #include <QString>
 #include <QVector>
-#include <QSet>
+#include <QMap>
 #include <QDir>
 #include <stdio.h>
 #include <QDebug>
@@ -189,21 +189,45 @@ namespace hal {
     {
         std::vector<std::pair<u64,int>> retval;
         if (loadPolicy() == LoadAllData)
-        {
+        {       
             for (auto it = mData.lowerBound(t0); it != mData.constEnd(); ++it)
                 retval.push_back(std::make_pair(it.key(),it.value()));
         }
         else
         {
-            const WaveDataGroup* grp = dynamic_cast<const WaveDataGroup*>(this);
-            if (grp)
+            WaveDataProvider* wdp = nullptr;
+            std::string saleaeDirectory = mWaveDataList->saleaeDirectory().get_filename();
+            switch (mNetType)
             {
-                WaveDataProviderGroup wdpg(mWaveDataList->saleaeDirectory().get_filename(),grp->children());
-                SaleaeDataTuple sdt = wdpg.startValue(t0);
+            case WaveData::NetGroup:
+            {
+                const WaveDataGroup* wdGrp = static_cast<const WaveDataGroup*>(this);
+                wdp = new WaveDataProviderGroup(saleaeDirectory, wdGrp->children());
+                break;
+            }
+            case WaveData::BooleanNet:
+            {
+                const WaveDataBoolean* wdBool = static_cast<const WaveDataBoolean*>(this);
+                wdp = new WaveDataProviderBoolean(saleaeDirectory, wdBool->children(), wdBool->truthTable());
+                break;
+            }
+            case WaveData::TriggerTime:
+            {
+                const WaveDataTrigger* wdTrig = static_cast<const WaveDataTrigger*>(this);
+                wdp = new WaveDataProviderTrigger(saleaeDirectory, wdTrig->children(), wdTrig->toValueList(), wdTrig->get_filter_wave());
+                break;
+            }
+            default:
+                break;
+            }
+
+            if (wdp)
+            {
+                SaleaeDataTuple sdt = wdp->startValue(t0);
                 while (sdt.mValue != SaleaeDataTuple::sReadError)
                 {
                     retval.push_back(std::make_pair(sdt.mTime,sdt.mValue));
-                    sdt = wdpg.nextPoint();
+                    sdt = wdp->nextPoint();
                 }
                 return retval;
             }
@@ -664,15 +688,17 @@ namespace hal {
             break;
         }
 
-        QSet<u64> triggerTime;
+        QMap<u64,int> transitionTime;
         // TODO : not loadable
         for (int i=0; i<mInputCount; i++)
         {
             mInputWaves[i]->loadDataUnlessAlreadyLoaded();
-            triggerTime += mInputWaves[i]->data().keys().toSet();
+            for (u64 t : mInputWaves[i]->data().keys())
+                ++transitionTime[t];
         }
 
-        for (u64 t : triggerTime)
+        int lastval = SaleaeDataTuple::sReadError;
+        for (u64 t : transitionTime.keys())
         {
             int ttInx = 0;
             for (int i=0; i<mInputCount; i++)
@@ -686,13 +712,19 @@ namespace hal {
                 if (val == 1)
                     ttInx |= (1<<i);
             }
+            int nextval = SaleaeDataTuple::sReadError;
             if (ttInx < 0)
-                mData.insert(t,-1);
+                nextval = -1;
             else
             {
                 int j = ttInx / 8;
                 int k = ttInx % 8;
-                mData.insert(t, (mTruthTable[j] & (1<<k)) ? 1 : 0);
+                nextval = (mTruthTable[j] & (1<<k)) ? 1 : 0;
+            }
+            if (nextval != lastval)
+            {
+                mData.insert(t,nextval);
+                lastval = nextval;
             }
         }
     }
@@ -744,6 +776,7 @@ namespace hal {
         : WaveData(wdList->nextTriggerId(),"",TriggerTime),
           mTriggerCount(wdTrigger.size()), mTriggerWaves(nullptr), mFilterWave(nullptr), mToValue(nullptr)
     {
+        mWaveDataList = wdList;
         rename(QString("trigger%1").arg(id()));
         if (!mTriggerCount) return;
         mTriggerWaves = new WaveData*[mTriggerCount];

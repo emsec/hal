@@ -32,7 +32,11 @@ namespace hal
     bool SaleaeDirectory::parse_json()
     {
         FILE* ff = fopen(mDirectoryFile.c_str(), "rb");
-        if (!ff) return false;
+        if (!ff)
+        {
+            std::cerr << "cannot open SALEAE directory file <" << mDirectoryFile << ">" << std::endl;
+            return false;
+        }
 
         mNetEntries.clear();
         mById.clear();
@@ -44,7 +48,11 @@ namespace hal
         document.ParseStream<0, rapidjson::UTF8<>, rapidjson::FileReadStream>(frs);
         fclose(ff);
 
-        if (document.HasParseError() || !document.HasMember("saleae")) return false;
+        if (document.HasParseError() || !document.HasMember("saleae"))
+        {
+            std::cerr << "cannot parse SALEAE directory file <" << mDirectoryFile << ">" << std::endl;
+            return false;
+        }
         auto jsaleae = document["saleae"].GetObject();
         if (jsaleae.HasMember("nets"))
         {
