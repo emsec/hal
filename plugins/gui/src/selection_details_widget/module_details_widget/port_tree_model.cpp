@@ -10,12 +10,13 @@
 #include "hal_core/utilities/enums.h"
 #include "gui/user_action/action_reorder_object.h"
 #include "gui/user_action/action_add_items_to_object.h"
+#include "gui/user_action/user_action_compound.h"
 #include <QMimeData>
 #include <QDebug>
 
 namespace hal
 {
-    ModulePinsTreeModel::ModulePinsTreeModel(QObject* parent) : BaseTreeModel(parent), mIgnoreNextPinsChanged(false)
+    ModulePinsTreeModel::ModulePinsTreeModel(QObject* parent) : BaseTreeModel(parent), mIgnoreNextPinsChanged(false), mIgnoreChange(0)
     {
         setHeaderLabels(QList<QVariant>() << "Name"
                                           << "Direction"
@@ -114,6 +115,7 @@ namespace hal
 
                 removeItem(droppedItem);
                 mIgnoreNextPinsChanged = true;
+                mIgnoreChange++;
                 if(bottomEdge)
                 {
                     insertItem(newItem, droppedParentItem, row-1);
@@ -146,34 +148,50 @@ namespace hal
                 auto pinGroupRes = mod->get_pin_group_by_id(getIdOfItem(onDroppedParentItem));
                 if(pinGroupRes.is_error()) return false;
                 auto pinGroup = pinGroupRes.get();
-                mIgnoreNextPinsChanged = true;
-                //bool ret = mod->assign_pin_to_group(pinGroup, droppedPin).is_ok();
-                //SHOULD BE DONE IN A COMPOUND ACTION SO THE USER DOES NOT HAVE TO CLICK TWICE TO UNDO
+                mIgnoreChange++;
+                mIgnoreChange++;
+                UserActionCompound* comp = new UserActionCompound;
                 ActionAddItemsToObject* addAct = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), QSet<u32>() << droppedPin->get_id());
                 addAct->setObject(UserActionObject(pinGroup->get_id(), UserActionObjectType::PinGroup));
                 addAct->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
-                bool ret = addAct->exec();
-                mIgnoreNextPinsChanged = false;//if action above failed
-                if(ret)
-                {
-                    mIgnoreNextPinsChanged = true;
-                    //ret = mod->move_pin_within_group(pinGroup, droppedPin, bottomEdge ? desiredIndex+1 : desiredIndex).is_ok();
-                    ActionReorderObject* reordAct = new ActionReorderObject(bottomEdge ? desiredIndex+1 : desiredIndex);
-                    reordAct->setObject(UserActionObject(droppedPin->get_id(), UserActionObjectType::Pin));
-                    reordAct->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
-                    ret = reordAct->exec();
-                    if(ret)
-                    {
-                        removeItem(droppedItem);
-                        insertItem(newItem, onDroppedParentItem, row);
-                        return true;
-                    }
-                    mIgnoreNextPinsChanged = false;
-                    removeItem(droppedItem);
-                    insertItem(newItem, onDroppedParentItem, onDroppedParentItem->getChildCount());
-                    return false;
-                }
-                return false;
+                ActionReorderObject* reordAct = new ActionReorderObject(bottomEdge ? desiredIndex+1 : desiredIndex);
+                reordAct->setObject(UserActionObject(droppedPin->get_id(), UserActionObjectType::Pin));
+                reordAct->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+                comp->addAction(addAct);
+                comp->addAction(reordAct);
+                comp->exec();
+                removeItem(droppedItem);
+                insertItem(newItem, onDroppedParentItem, row);
+
+
+//                mIgnoreNextPinsChanged = true;
+//                //bool ret = mod->assign_pin_to_group(pinGroup, droppedPin).is_ok();
+//                //SHOULD BE DONE IN A COMPOUND ACTION SO THE USER DOES NOT HAVE TO CLICK TWICE TO UNDO
+//                ActionAddItemsToObject* addAct = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), QSet<u32>() << droppedPin->get_id());
+//                addAct->setObject(UserActionObject(pinGroup->get_id(), UserActionObjectType::PinGroup));
+//                addAct->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+//                bool ret = addAct->exec();
+//                mIgnoreNextPinsChanged = false;//if action above failed
+//                if(ret)
+//                {
+//                    mIgnoreNextPinsChanged = true;
+//                    //ret = mod->move_pin_within_group(pinGroup, droppedPin, bottomEdge ? desiredIndex+1 : desiredIndex).is_ok();
+//                    ActionReorderObject* reordAct = new ActionReorderObject(bottomEdge ? desiredIndex+1 : desiredIndex);
+//                    reordAct->setObject(UserActionObject(droppedPin->get_id(), UserActionObjectType::Pin));
+//                    reordAct->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+//                    ret = reordAct->exec();
+//                    if(ret)
+//                    {
+//                        removeItem(droppedItem);
+//                        insertItem(newItem, onDroppedParentItem, row);
+//                        return true;
+//                    }
+//                    mIgnoreNextPinsChanged = false;
+//                    removeItem(droppedItem);
+//                    insertItem(newItem, onDroppedParentItem, onDroppedParentItem->getChildCount());
+//                    return false;
+//                }
+//                return false;
             }
         }
         else// on item
@@ -187,6 +205,7 @@ namespace hal
             if(droppedParentItem != onDroppedItem)
             {
                 mIgnoreNextPinsChanged = true;
+                mIgnoreChange++;
                 //int ret = mod->assign_pin_to_group(onDroppedGroup, droppedPin).is_ok();
                 ActionAddItemsToObject* addAct = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), QSet<u32>() << droppedPin->get_id());
                 addAct->setObject(UserActionObject(onDroppedGroup->get_id(), UserActionObjectType::PinGroup));
@@ -199,6 +218,7 @@ namespace hal
                     return true;
                 }
                 mIgnoreNextPinsChanged = false;
+                mIgnoreChange--;
                 return false;
             }
         }
@@ -311,8 +331,12 @@ namespace hal
     {
         if ((int)m->get_id() == mModuleId)
         {
-            if(mIgnoreNextPinsChanged)
-                mIgnoreNextPinsChanged = false;
+//            if(mIgnoreNextPinsChanged)
+//                mIgnoreNextPinsChanged = false;
+//            else
+//                setModule(m);
+            if(mIgnoreChange > 0)
+                mIgnoreChange--;
             else
                 setModule(m);
         }

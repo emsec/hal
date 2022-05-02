@@ -142,6 +142,7 @@ namespace hal
         QMap<int, TreeItem*> mIdToPinItem;
         QMap<int, TreeItem*> mIdToGroupItem;
         bool mIgnoreNextPinsChanged;
+        int mIgnoreChange;
 
         void insertItem(TreeItem* item, TreeItem* parent, int index);
         void removeItem(TreeItem* item);
