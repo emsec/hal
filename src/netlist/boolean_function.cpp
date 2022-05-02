@@ -332,8 +332,8 @@ namespace hal
                        + " - sizes must be equal)");
         }
 
-        auto start = p1.get_index_value().get(), end = p2.get_index_value().get();
-
+        auto start = p1.get_index_value().get();
+        auto end   = p2.get_index_value().get();
         if ((start > end) || (start >= p0.size()) || (end >= p0.size()) || (end - start + 1) != size)
         {
             return ERR("could not apply SLICE operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(start) + ", p2 = " + std::to_string(end) + ")");

@@ -137,7 +137,7 @@ namespace hal
         static BooleanFunction Const(const BooleanFunction::Value& value);
 
         /**
-         * Creates a constant multi-bit  Boolean function from a vector of values.
+         * Creates a constant multi-bit Boolean function from a vector of values.
          * 
          * @param[in] value - The vector of values.
          * @returns The Boolean function.
@@ -163,8 +163,8 @@ namespace hal
         static BooleanFunction Index(u16 index, u16 size);
 
         /**
-         * Joins two Boolean functions by an 'AND' operation. 
-         * Requires both Boolean functions to be of the specified bit-size.
+         * Joins two Boolean functions by applying an 'AND' operation. 
+         * Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.
          * 
          * @param[in] p0 - First Boolean function.
          * @param[in] p1 - Second Boolean function.
@@ -174,8 +174,8 @@ namespace hal
         static Result<BooleanFunction> And(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
-         * Joins two Boolean functions by an 'OR' operation. 
-         * Requires both Boolean functions to be of the specified bit-size.
+         * Joins two Boolean functions by applying an 'OR' operation. 
+         * Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.
          * 
          * @param[in] p0 - First Boolean function.
          * @param[in] p1 - Second Boolean function.
@@ -186,7 +186,7 @@ namespace hal
 
         /**
          * Negates the given Boolean function. 
-         * Requires the Boolean function to be of the specified bit-size.
+         * Requires the Boolean function to be of the specified bit-size and produces a new Boolean function of the same bit-size.
          * 
          * @param[in] p0 - The Boolean function to negate.
          * @param[in] size - Bit-size of the operation.
@@ -195,8 +195,8 @@ namespace hal
         static Result<BooleanFunction> Not(BooleanFunction&& p0, u16 size);
 
         /**
-         * Joins two Boolean functions by an 'XOR' operation. 
-         * Requires both Boolean functions to be of the specified bit-size.
+         * Joins two Boolean functions by applying an 'XOR' operation. 
+         * Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.
          * 
          * 
          * @param[in] p0 - First Boolean function.
@@ -207,8 +207,8 @@ namespace hal
         static Result<BooleanFunction> Xor(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
-         * Joins two Boolean functions by an 'ADD' operation. 
-         * Requires both Boolean functions to be of the specified bit-size.
+         * Joins two Boolean functions by applying an 'ADD' operation. 
+         * Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.
          * 
          * 
          * @param[in] p0 - First Boolean function.
@@ -219,8 +219,8 @@ namespace hal
         static Result<BooleanFunction> Add(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
-         * Joins two Boolean functions by an 'SUB' operation. 
-         * Requires both Boolean functions to be of the specified bit-size.
+         * Joins two Boolean functions by applying an 'SUB' operation. 
+         * Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.
          * 
          * 
          * @param[in] p0 - First Boolean function.
@@ -231,104 +231,106 @@ namespace hal
         static Result<BooleanFunction> Sub(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
-         * Slices a Boolean function based on a start and end index (inclusive) starting from 0.
+         * Returns the slice `[i:j]` of a Boolean function specified by a start index `i` and an end index `j` beginning at 0.
+         * Note that slice `[i:j]` includes positions `i` and `j` as well. 
          * 
          * @param[in] p0 - Boolean function to slice.
-         * @param[in] p1 - Boolean function start index at which p0 is sliced.
-         * @param[in] p2 - Boolean function end index at which p0 is sliced (inclusive).
-         * @param[in] size - Size of the sliced Boolean function, i.e. p0 + p1 + 1.
-         * @returns OK() and the sliced Boolean function on success, an error otherwise.
+         * @param[in] p1 - Boolean function start index.
+         * @param[in] p2 - Boolean function end index.
+         * @param[in] size - Bit-size of the resulting Boolean function slice, i.e., |p2| - |p1| + 1.
+         * @returns OK() and the Boolean function slice on success, an error otherwise.
          */
         static Result<BooleanFunction> Slice(BooleanFunction&& p0, BooleanFunction&& p1, BooleanFunction&& p2, u16 size);
 
         /**
-         * Concatenates two Boolean functions.
+         * Concatenates two Boolean functions of potentially different bit-sizes `n` and `m` to form a single Boolean function of bit-size `n+m`.
          * 
-         * @param[in] p0 - Boolean function (higher-bit part).
-         * @param[in] p1 - Boolean function (lower-bit part).
-         * @param[in] size - Size of concatenated Boolean function.
+         * @param[in] p0 - First Boolean function (MSBs).
+         * @param[in] p1 - Second Boolean function (LSBs).
+         * @param[in] size - Bit-size of the concatenated Boolean function.
          * @returns Ok() and the concatenated Boolean function on success, an error otherwise.
          */
         static Result<BooleanFunction> Concat(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
-         * Zero-extends a Boolean function.
+         * Zero-extends a Boolean function to the specified bit-size.
          * 
          * @param[in] p0 - Boolean function to extend.
          * @param[in] p1 - Constant Boolean function describing the size of the zero-extended result.
-         * @param[in] size - Size of the zero-extended Boolean function result.
+         * @param[in] size - Bit-size of the zero-extended Boolean function.
          * @returns Ok() and the extended Boolean function on success, an error otherwise.
          */
         static Result<BooleanFunction> Zext(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
-         * Sign-extends a Boolean function.
+         * Sign-extends a Boolean function to the specified bit-size.
          * 
          * @param[in] p0 - Boolean function to extend.
          * @param[in] p1 - Constant Boolean function describing the size of the sign-extended result.
-         * @param[in] size - Size of the sign-extended Boolean function result.
+         * @param[in] size - Bit-size of the sign-extended Boolean function.
          * @returns Ok() and the extended Boolean function on success, an error otherwise.
          */
         static Result<BooleanFunction> Sext(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
-         * Checks two Boolean functions for equality and yields a 1-bit vector constant as result.
+         * Joins two Boolean functions by an equality check that produces a single-bit result.
          * 
-         * @param[in] p0 - Boolean function.
-         * @param[in] p1 - Boolean function.
+         * @param[in] p0 - First Boolean function.
+         * @param[in] p1 - Second Boolean function.
          * @param[in] size - Bit-size of the operation (always =1).
-         * @returns Ok() and the Boolean function on success, an error otherwise.
+         * @returns Ok() and the joined Boolean function on success, an error otherwise.
          */
         static Result<BooleanFunction> Eq(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
-         * Checks two Boolean functions for signed less equal and yields a 1-bit vector constant as result.
+         * Joins two Boolean functions by a signed less-than-equal check that produces a single-bit result.
          * 
-         * @param[in] p0 - Boolean function.
-         * @param[in] p1 - Boolean function.
+         * @param[in] p0 - First Boolean function.
+         * @param[in] p1 - Second Boolean function.
          * @param[in] size - Bit-size of the operation (always =1).
-         * @returns Ok() and the Boolean function on success, an error otherwise.
+         * @returns Ok() and the joined Boolean function on success, an error otherwise.
          */
         static Result<BooleanFunction> Sle(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
-         * Checks two Boolean functions for signed less than and yields a 1-bit vector constant as result.
+         * Joins two Boolean functions by a signed less-than check that produces a single-bit result.
          * 
-         * @param[in] p0 - Boolean function.
-         * @param[in] p1 - Boolean function.
+         * @param[in] p0 - First Boolean function.
+         * @param[in] p1 - Second Boolean function.
          * @param[in] size - Bit-size of the operation (always =1).
-         * @returns Ok() and the Boolean function on success, an error otherwise.
+         * @returns Ok() and the joined Boolean function on success, an error otherwise.
          */
         static Result<BooleanFunction> Slt(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
-         * Checks two Boolean functions for unsigned less equal and yields a 1-bit vector constant as result.
+         * Joins two Boolean functions by an unsigned less-than-equal check that produces a single-bit result.
          * 
-         * @param[in] p0 - Boolean function.
-         * @param[in] p1 - Boolean function.
+         * @param[in] p0 - First Boolean function.
+         * @param[in] p1 - Second Boolean function.
          * @param[in] size - Bit-size of the operation (always =1).
-         * @returns Ok() and the Boolean function on success, an error otherwise.
+         * @returns Ok() and the joined Boolean function on success, an error otherwise.
          */
         static Result<BooleanFunction> Ule(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
-         * Checks two Boolean functions for unsigned less than and yields a 1-bit vector constant as result.
+         * Joins two Boolean functions by an unsigned less-than check that produces a single-bit result.
          * 
-         * @param[in] p0 - Boolean function.
-         * @param[in] p1 - Boolean function.
+         * @param[in] p0 - First Boolean function.
+         * @param[in] p1 - Second Boolean function.
          * @param[in] size - Bit-size of the operation (always =1).
-         * @returns Ok() and the Boolean function on success, an error otherwise.
+         * @returns Ok() and the joined Boolean function on success, an error otherwise.
          */
         static Result<BooleanFunction> Ult(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
-         * Performs an if-then-else operation with p0 as the condition, p1 as true-case, and p2 as false-case.
+         * Joins three Boolean functions by an if-then-else operation with p0 as the condition, p1 as true-case, and p2 as false-case.
+         * Requires `p1` to be of bit-size 1, both Boolean functions `p1` and `p2` to be of the specified bit-size, and produces a new Boolean function of the specified bit-size.
          * 
          * @param[in] p0 - Boolean function condition.
-         * @param[in] p1 - Boolean function.
-         * @param[in] p2 - Boolean function.
+         * @param[in] p1 - Boolean function for true-case.
+         * @param[in] p2 - Boolean function for false-case.
          * @param[in] size - Bit-size of the operation, i.e., size of p1 and p2.
-         * @returns Ok() and the Boolean function on success, an error otherwise.
+         * @returns Ok() and the joined Boolean function on success, an error otherwise.
          */
         static Result<BooleanFunction> Ite(BooleanFunction&& p0, BooleanFunction&& p1, BooleanFunction&& p2, u16 size);
 
@@ -513,6 +515,21 @@ namespace hal
         bool is_variable() const;
 
         /**
+         * Checks whether the top-level node of the Boolean function is of type `Variable` and holds a specific variable name.
+         * 
+         * @param variable_name - The variable name to check for.
+         * @returns `true` if the Boolean function is of type `Variable` and holds the given variable name, `false` otherwise.
+         */
+        bool has_variable_name(const std::string& variable_name) const;
+
+        /**
+         * Get the variable name of the top-level node of the Boolean function of type `Variable`.
+         * 
+         * @returns The variable name on success, an error otherwise.
+         */
+        Result<std::string> get_variable_name() const;
+
+        /**
          * Checks whether the top-level node of the Boolean function is of type `Constant`.
          * 
          * @returns `true` if the top-level node of the Boolean function is of type `Constant`, `false` otherwise.
@@ -520,29 +537,29 @@ namespace hal
         bool is_constant() const;
 
         /**
-         * Checks whether the Boolean function is of type `Constant` and holds a specific value.
+         * Checks whether the top-level node of the Boolean function is of type `Constant` and holds a specific value.
          * 
-         * @param[in] value - The value to check for.
+         * @param[in] value - The constant value to check for.
          * @returns `true` if the Boolean function is of type `Constant` and holds the given value, `false` otherwise.
          */
         bool has_constant_value(u64 value) const;
 
         /**
-         * Get the value of a Boolean function of type `Constant` as long as it has a size <= 64-bit.
+         * Get the value of the top-level node of the Boolean function of type `Constant` as long as it has a size <= 64-bit.
          * 
          * @returns The constant value on success, an error otherwise.
          */
         Result<u64> get_constant_value() const;
 
         /** 
-         * Checks whether the tpo-level node of the Boolean function is of type `Index`. 
+         * Checks whether the top-level node of the Boolean function is of type `Index`. 
          * 
          * @returns `true` if the top-level node of the Boolean function is of type `Index`, `false` otherwise.
          */
         bool is_index() const;
 
         /**
-         * Checks whether the Boolean function is of type `Index` and holds a specific value.
+         * Checks whether the top-level node of the Boolean function is of type `Index` and holds a specific value.
          * 
          * @param[in] index - The index value to check for.
          * @returns `true` if the Boolean function is of type `Index` and holds the given value, `false` otherwise.
@@ -550,7 +567,7 @@ namespace hal
         bool has_index_value(u16 index) const;
 
         /**
-         * Get the value of a Boolean function of type `Index` as long as it has a size <= 16-bit.
+         * Get the value of the top-level node of the Boolean function of type `Index`.
          * 
          * @returns The constant value on success, an error otherwise.
          */
