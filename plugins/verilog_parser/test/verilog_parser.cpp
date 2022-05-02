@@ -1615,10 +1615,10 @@ namespace hal {
                 // Testing all comment types with attributes
                 std::string netlist_input("/*here comes a module*/ module top (\n"
                                         "  global_in,\n"
-                                        "  global_out\n"
+                                        "  \\global_out_with//comment \n"
                                         " ) ;\n"
-                                        "  input global_in ;\n"
-                                        "  output global_out ;\n"
+                                        "  input global_in;\n"
+                                        "  output \\global_out_with//comment ;\n"
                                         "\n"
                                         "gate_1_to_1 #(\n"
                                         "  .no_comment_0(123), //.comment_0(123),\n"
@@ -1636,10 +1636,9 @@ namespace hal {
                                         ") \n"
                                         "test_gate (\n"
                                         "  .I (global_in ),\n"
-                                        "  .O (global_out )\n"
+                                        "  .O (\\global_out_with//comment )\n"
                                         " ) ;\n"
                                         "endmodule");
-                test_def::capture_stdout();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
                 auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
@@ -1670,6 +1669,9 @@ namespace hal {
                         std::cout << "comment failed for: " << key << std::endl;
                     }
                 }
+
+                // comment within escaped identifier
+                EXPECT_EQ(test_gate->get_fan_out_net("O")->get_name(), "global_out_with//comment");
             }
         TEST_END
     }
