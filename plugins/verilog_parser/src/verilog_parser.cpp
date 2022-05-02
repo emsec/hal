@@ -740,8 +740,10 @@ namespace hal
         // delete unused nets
         for (auto net : m_netlist->get_nets())
         {
-            const bool no_source      = net->get_num_of_sources() == 0 && !net->is_global_input_net();
-            const bool no_destination = net->get_num_of_destinations() == 0 && !net->is_global_output_net();
+            const u32 num_of_sources = net->get_num_of_sources();
+            const u32 num_of_destinations = net->get_num_of_destinations();
+            const bool no_source      = num_of_sources == 0 && !(net->is_global_input_net() && num_of_destinations != 0);
+            const bool no_destination = num_of_destinations == 0 && !(net->is_global_output_net() && num_of_sources != 0);
             if (no_source && no_destination)
             {
                 m_netlist->delete_net(net);
@@ -1479,7 +1481,7 @@ namespace hal
                         }
                     }
 
-                    for (const auto port_assignment : instance->m_port_assignments)
+                    for (const auto& port_assignment : instance->m_port_assignments)
                     {
                         std::vector<std::string> left_port;
                         if (!port_assignment.m_port_name.has_value())
@@ -1674,12 +1676,17 @@ namespace hal
         // assign module pins
         for (const auto& [net, port_info] : m_module_ports)
         {
+            if (net->get_num_of_sources() == 0 && net->get_num_of_destinations() == 0)
+            {
+                continue;
+            }
+
             Module* mod = std::get<2>(port_info);
             if (auto res = mod->create_pin(std::get<1>(port_info), net); res.is_error())
             {
                 return ERR_APPEND(res.get_error(),
                                   "could not construct netlist: failed to create pin '" + std::get<1>(port_info) + "' at net '" + net->get_name() + "' with ID " + std::to_string(net->get_id())
-                                      + "within module '" + mod->get_name() + "' with ID " + std::to_string(mod->get_id()));
+                                      + " within module '" + mod->get_name() + "' with ID " + std::to_string(mod->get_id()));
             }
         }
 
@@ -2055,7 +2062,7 @@ namespace hal
     // ###########################################################################
     // ###################          Helper Functions          ####################
     // ###########################################################################
-
+    
     std::string VerilogParser::get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const
     {
         // if the name only appears once, we don't have to suffix it
