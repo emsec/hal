@@ -585,6 +585,21 @@ namespace hal
         return (this->is_empty()) ? false : this->get_top_level_node().is_variable();
     }
 
+    bool BooleanFunction::has_variable_name(const std::string& variable_name) const
+    {
+        return (this->is_empty()) ? false : this->get_top_level_node().has_variable_name(variable_name);
+    }
+
+    Result<std::string> BooleanFunction::get_variable_name() const
+    {
+        if (!this->is_variable())
+        {
+            return ERR("Boolean function is not a variable");
+        }
+
+        return OK(this->m_nodes[0].variable);
+    }
+
     bool BooleanFunction::is_constant() const
     {
         return (this->is_empty()) ? false : this->get_top_level_node().is_constant();
