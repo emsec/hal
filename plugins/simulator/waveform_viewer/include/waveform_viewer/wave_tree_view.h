@@ -54,6 +54,8 @@ namespace hal {
         void handleEditOrBrowseItem();
         void handleRemoveGroup();
         void handleInsertGroup();
+        void handleInsertBoolean();
+        void handleInsertTrigger();
         void handleSetValueFormat();
         void handleRemoveMulti();
 

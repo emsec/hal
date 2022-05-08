@@ -272,6 +272,12 @@ namespace hal
             seekTransition(0);
     }
 
+    void SaleaeInputFile::set_file_position(int64_t pos)
+    {
+        mReadPointer = pos;
+        seekTransition(pos ? pos-1 : 0);
+    }
+
     int64_t SaleaeInputFile::get_file_position(double t, bool successor)
     {
         uint64_t max = mHeader.numTransitions();

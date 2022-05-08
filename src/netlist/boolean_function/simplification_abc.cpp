@@ -553,11 +553,10 @@ namespace hal
         Result<BooleanFunction> slice_at(const BooleanFunction& function, const u16 index)
         {
             // (1) setup the sliced Boolean function
-            if (auto res =
-                    BooleanFunction::Slice(function.clone(), BooleanFunction::Index(index, function.size()), BooleanFunction::Index(index, function.size()), 1).map<BooleanFunction>([](auto function) {
-                        // (2) perform a local simplification in order to remove unnecessary slices
-                        return Simplification::local_simplification(function);
-                    });
+            if (auto res = BooleanFunction::Slice(function.clone(), BooleanFunction::Index(index, function.size()), BooleanFunction::Index(index, function.size()), 1).map<BooleanFunction>([](auto f) {
+                    // (2) perform a local simplification in order to remove unnecessary slices
+                    return Simplification::local_simplification(f);
+                });
                 res.is_error())
             {
                 return ERR(res.get_error());
@@ -834,8 +833,8 @@ namespace hal
                 ////////////////////////////////////////////////////////////////////////
 
                 const auto EndOfLineRule = x3::lit(";") >> *x3::space;
-                const auto RHSRule       = x3::lexeme[*x3::char_("a-zA-Z0-9_+*~|&!' ")][RHSAction];
-                const auto EqualSignRule = *x3::space >> x3::lit("=");
+                const auto RHSRule       = x3::lexeme[*x3::char_("a-zA-Z0-9_+*~|&!'()[]\\ ")][RHSAction];
+                const auto EqualSignRule = *x3::space >> x3::lit("=") >> *x3::space;
                 const auto LHSRule       = x3::lexeme[*x3::char_("a-zA-Z0-9_")][LHSAction];
                 const auto AssignRule    = *x3::space >> x3::lit("assign") >> *x3::space;
 
@@ -854,16 +853,16 @@ namespace hal
 
                 if (!ok || (iter != assignment.end()))
                 {
-                    return ERR("could not parse assignment from Verilog notation: '" + assignment + "'");
+                    return ERR("could not parse assignment from Verilog notation: '" + assignment + "' (remaining '" + std::string(iter, assignment.end()) + "')");
                 }
 
                 if (lhs.is_error())
                 {
-                    return ERR_APPEND(lhs.get_error(), "could not parse assignment from Verilog notation: unable to translate left side of assignment '" + assignment + "' into a Boolean function");
+                    return ERR_APPEND(lhs.get_error(), "cannot parse assignment from Verilog notation: unable to translate left side of assignment '" + assignment + "' into a Boolean function");
                 }
                 if (rhs.is_error())
                 {
-                    return ERR_APPEND(rhs.get_error(), "could not parse assignment from Verilog notation: unable to translate right side of assignment '" + assignment + "' into a Boolean function");
+                    return ERR_APPEND(rhs.get_error(), "cannot parse assignment from Verilog notation: unable to translate right side of assignment '" + assignment + "' into a Boolean function");
                 }
 
                 return OK({lhs.get(), rhs.get()});

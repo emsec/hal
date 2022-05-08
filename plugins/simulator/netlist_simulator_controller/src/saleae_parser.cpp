@@ -67,13 +67,19 @@ namespace hal
 
     bool SaleaeParser::register_callback(const Net *net, std::function<void(void*,uint64_t, int)> callback, void *obj)
     {
+        return register_callback(net->get_name(), net->get_id(), callback, obj);
+    }
+
+    bool SaleaeParser::register_callback(const std::string& name, uint32_t id, std::function<void(void*,uint64_t, int)> callback, void *obj)
+    {
 //        std::cerr << "SaleaeParser::register_callback <" << net->get_name() << "> " << std::hex << (uintptr_t) obj << std::endl;
-        std::string path = mSaleaeDirectory.get_datafile_path(net->get_name(),net->get_id());
+        std::string path = mSaleaeDirectory.get_datafile_path(name,id);
         if (path.empty()) return false;
         SaleaeInputFile* datafile = new SaleaeInputFile(path);
         if (!datafile->good())
         {
-            std::cerr << "Error loading SALEAE datafile <" << datafile->get_last_error() << ">" << std::endl;
+            std::cerr << "Error loading SALEAE datafile <" << datafile->get_last_error()
+                      << "> path: <" << path << "> net: <" << name << "> id: " << id << std::endl;
             delete datafile;
             return false;
         }

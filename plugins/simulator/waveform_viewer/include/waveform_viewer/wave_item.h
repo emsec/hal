@@ -17,7 +17,7 @@ namespace hal {
     class WaveItemIndex
     {
     public:
-        enum IndexType { Invalid, Wire, Group };
+        enum IndexType { Invalid, Wire, Trig, Bool, Group };
     private:
         IndexType mType;
         u32 mIndex;
@@ -28,6 +28,7 @@ namespace hal {
         bool isValid() const { return mType != Invalid; }
         bool isGroup() const { return mType == Group; }
         bool isWire() const  { return mType == Wire; }
+        u32 intType() const { return mType; }
         u32 index() const { return mIndex; }
         u32 parentId() const { return mParentId; }
         bool operator== (const WaveItemIndex& other) const;
@@ -109,7 +110,9 @@ namespace hal {
         int loadeProgress() const { return mLoadProgress; }
         void incrementLoadProgress();
         static const char* sBackgroundColor;
-        bool isGroup() const { return mData->netType() == WaveData::NetGroup; }
+        bool isGroup()   const { return mData->netType() == WaveData::NetGroup; }
+        bool isBoolean() const { return mData->netType() == WaveData::BooleanNet; }
+        bool isTrigger() const { return mData->netType() == WaveData::TriggerTime; }
         int cursorValue(double tCursor, int xpos);
     };
 
@@ -117,13 +120,17 @@ namespace hal {
     {
         int mVisibleEntries;
         QList<WaveItem*> mTrashCan;
+        WaveItem* mFirstSelected;
     public:
+        WaveItemHash() : mFirstSelected(nullptr) {;}
         int visibleEntries() const { return mVisibleEntries; }
         int importedWires() const;
         void setVisibleEntries(int ve) { mVisibleEntries = ve; }
         WaveItem* addOrReplace(WaveData*wd, WaveItemIndex::IndexType tp, int iwave, int parentId);
         void dump(const char* stub);
         void dispose(WaveItem* wi);
+        WaveItem* firstSelected() const { return mFirstSelected; }
+        void setSelected(WaveItem* wi=nullptr) { mFirstSelected = wi; }
         void emptyTrash();
     };
 }

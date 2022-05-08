@@ -1,8 +1,8 @@
 #include <QPainter>
 #include "waveform_viewer/wave_item.h"
-#include "waveform_viewer/wave_data_provider.h"
 #include "waveform_viewer/wave_render_engine.h"
 #include "netlist_simulator_controller/wave_data.h"
+#include "netlist_simulator_controller/wave_data_provider.h"
 #include <QGraphicsScene>
 #include <QTextStream>
 #include <math.h>
@@ -103,7 +103,7 @@ namespace hal {
                 if (!mData->data().isEmpty())
                 {
                     WaveDataProviderMap wdp(mData->data());
-                    wdp.setGroup(isGroup(),mData->bits(),mData->valueBase());
+                    wdp.setWaveType(mData->netType(),mData->bits(),mData->valueBase());
                     mPainted.generate(&wdp,trans,sbar,&mLoop);
                     setState(WaveItem::Painted);
                     if (mVisibleRange) Q_EMIT doneLoading();
@@ -181,37 +181,38 @@ namespace hal {
         // get value from memory map
         if (mData->loadPolicy() != WaveData::TooBigToLoad)
         {
-            retval = mData->intValue(tCursor);
-            mPainted.setCursorValue(tCursor,xpos,retval);
-            Q_EMIT gotCursorValue();
-            return retval;
+            if (mData->data().isEmpty())
+            {
+                if (isGroup())
+                {
+                    WaveDataGroup* wdGrp = static_cast<WaveDataGroup*>(mData);
+                    wdGrp->recalcData();
+                }
+                else if (isBoolean())
+                {
+                    WaveDataBoolean* wdBool = static_cast<WaveDataBoolean*>(mData);
+                    wdBool->recalcData();
+                }
+                else if (isTrigger())
+                {
+                    WaveDataTrigger* wdTrig = static_cast<WaveDataTrigger*>(mData);
+                    wdTrig->recalcData();
+                }
+            }
+            if (!mData->data().isEmpty())
+            {
+                retval = mData->intValue(tCursor);
+                mPainted.setCursorValue(tCursor,xpos,retval);
+                Q_EMIT gotCursorValue();
+                return retval;
+            }
         }
 
         // try get from painted primitives, will store time
-        retval = mPainted.cursorValuePainted(tCursor,xpos);
-        /*
-        if (retval == SaleaeDataTuple::sReadError && !mWorkdir.isEmpty())
-        {
-            bool canLoad = false;
-            if (mMutex.tryLock())
-            {
-                if (!isLoading() && !isThreadBusy())
-                {
-                    setState(Loading);
-                    canLoad = true;
-                }
-                mMutex.unlock();
-            }
-
-            // start value loader thread
-            if (canLoad)
-            {
-                mLoader = new WaveValueThread(this,mWorkdir,tCursor,xpos);
-                connect(mLoader,&QThread::finished,this,&WaveItem::handleValueLoaderFinished);
-                mLoader->start();
-            }
-        }
-        */
+        if (isTrigger())
+            retval = mPainted.cursorValueTrigger(tCursor,xpos);
+        else
+            retval = mPainted.cursorValuePainted(tCursor,xpos);
         return retval;
     }
 
@@ -280,7 +281,7 @@ namespace hal {
     uint qHash(const WaveItemIndex& wii)
     {
         if (!wii.isValid()) return 0;
-        return (wii.parentId() << 20) | ((wii.index()+1) << 1) | (wii.isGroup() ? 1 : 0);
+        return (wii.parentId() << 20) | ((wii.index()+1) << 3) | wii.intType();
     }
 
     int WaveItemHash::importedWires() const

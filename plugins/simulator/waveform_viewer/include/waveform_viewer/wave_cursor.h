@@ -14,7 +14,6 @@ namespace hal {
         QPoint mPosition;
         double mTimeValue;
 
-        static const int sWidth = 91;
         static const int sLabHeight = 31;
 
     protected:
@@ -26,5 +25,6 @@ namespace hal {
         void setViewportHeight(int height);
         void recalcTime();
         QRect labelRect() const;
+        static const int sWidth = 91;
     };
 }

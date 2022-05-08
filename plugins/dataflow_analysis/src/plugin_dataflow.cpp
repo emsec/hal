@@ -91,7 +91,6 @@ namespace hal
             }
         }
 
-
         if (args.is_option_set("--bad_group_size"))
         {
             std::istringstream f(args.get_parameter("--bad_group_size"));
@@ -110,7 +109,8 @@ namespace hal
         return true;
     }
 
-    std::vector<std::vector<Gate*>> plugin_dataflow::execute(Netlist* nl, std::string output_path, const std::vector<u32> sizes, bool draw_graph, std::vector<std::vector<u32>> known_groups, u32 bad_group_size)
+    std::vector<std::vector<Gate*>>
+        plugin_dataflow::execute(Netlist* nl, std::string output_path, const std::vector<u32> sizes, bool draw_graph, std::vector<std::vector<u32>> known_groups, u32 bad_group_size)
     {
         log("--- starting dataflow analysis ---");
 
@@ -176,14 +176,13 @@ namespace hal
 
         dataflow::evaluation::Configuration eval_config;
         eval_config.prioritized_sizes = sizes;
-        eval_config.bad_group_size = bad_group_size;
+        eval_config.bad_group_size    = bad_group_size;
 
         if (!eval_config.prioritized_sizes.empty())
         {
             log_info("dataflow", "will prioritize sizes {}", utils::join(", ", sizes));
             log_info("dataflow", "");
         }
-
 
         auto nl_copy       = nl->copy();
         auto netlist_abstr = dataflow::pre_processing::run(nl_copy.get());

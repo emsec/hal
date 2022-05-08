@@ -3,13 +3,14 @@
 #include "netlist_simulator_controller/wave_event.h"
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
 #include "netlist_simulator_controller/simulation_settings.h"
+#include "netlist_simulator_controller/wave_data_provider.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/log.h"
 #include <math.h>
 #include <vector>
 #include <QString>
 #include <QVector>
-#include <QSet>
+#include <QMap>
 #include <QDir>
 #include <stdio.h>
 #include <QDebug>
@@ -107,7 +108,6 @@ namespace hal {
         mDirty = true;
     }
 
-
     void WaveData::insertBooleanValueWithoutSync(u64 t, BooleanFunction::Value bval)
     {
         int val = (int) bval;
@@ -137,27 +137,100 @@ namespace hal {
 
     bool WaveData::isEqual(const WaveData& other, int tolerance) const
     {
-        if (mData.size() != other.mData.size()) return false;
-        auto jt = other.mData.constBegin();
-        for (auto it = mData.begin(); it != mData.end(); ++it)
+        if (mFileSize != other.mFileSize) return false;
+        if (loadPolicy() == LoadAllData)
         {
-            if (it.value() != jt.value()) return false;
-            if (abs((int)(it.key()-jt.key())) > tolerance) return false;
-            ++jt;
+            if (mData.size() != other.mData.size()) return false;
+            auto jt = other.mData.constBegin();
+            for (auto it = mData.begin(); it != mData.end(); ++it)
+            {
+                if (it.value() != jt.value()) return false;
+                if (abs((int64_t)it.key()-(int64_t)jt.key()) > tolerance) return false;
+                ++jt;
+            }
+            return true;
         }
-        return true;
+        u64 t0 = 0;
+        for (;;)
+        {
+            std::vector<std::pair<u64,int>> evtsThis = get_events(t0);
+            std::vector<std::pair<u64,int>> evtsOther = other.get_events(t0);
+            if (evtsThis.empty()&&evtsOther.empty()) return true; // all tested
+            if (evtsThis.size()!=evtsOther.size()) return false;
+            auto jt = evtsOther.begin();
+            for (auto it = evtsThis.begin(); it != evtsThis.end(); ++it)
+            {
+                if (it->second != jt->second) return false;
+                if (abs((int64_t)it->first-(int64_t)jt->first)> tolerance) return false;
+                ++jt;
+                t0 = it->first;
+            }
+            t0++;
+        }
+    }
+
+    int WaveData::dataIndex() const
+    {
+        return mWaveDataList->waveIndexByNetId(mId);
+    }
+
+    std::vector<std::pair<u64,int>> WaveData::get_triggered_events(const WaveDataTrigger* wdTrig, u64 t0)
+    {
+        std::vector<std::pair<u64,int>> retval = wdTrig->get_events(t0);
+        for (auto it=retval.begin(); it!=retval.end(); ++it)
+        {
+            u64 t = it->first;
+            it->second = intValue(t);
+        }
+        return retval;
     }
 
     std::vector<std::pair<u64,int>> WaveData::get_events(u64 t0) const
     {
         std::vector<std::pair<u64,int>> retval;
         if (loadPolicy() == LoadAllData)
-        {
+        {       
             for (auto it = mData.lowerBound(t0); it != mData.constEnd(); ++it)
                 retval.push_back(std::make_pair(it.key(),it.value()));
         }
         else
         {
+            WaveDataProvider* wdp = nullptr;
+            std::string saleaeDirectory = mWaveDataList->saleaeDirectory().get_filename();
+            switch (mNetType)
+            {
+            case WaveData::NetGroup:
+            {
+                const WaveDataGroup* wdGrp = static_cast<const WaveDataGroup*>(this);
+                wdp = new WaveDataProviderGroup(saleaeDirectory, wdGrp->children());
+                break;
+            }
+            case WaveData::BooleanNet:
+            {
+                const WaveDataBoolean* wdBool = static_cast<const WaveDataBoolean*>(this);
+                wdp = new WaveDataProviderBoolean(saleaeDirectory, wdBool->children(), wdBool->truthTable());
+                break;
+            }
+            case WaveData::TriggerTime:
+            {
+                const WaveDataTrigger* wdTrig = static_cast<const WaveDataTrigger*>(this);
+                wdp = new WaveDataProviderTrigger(saleaeDirectory, wdTrig->children(), wdTrig->toValueList(), wdTrig->get_filter_wave());
+                break;
+            }
+            default:
+                break;
+            }
+
+            if (wdp)
+            {
+                SaleaeDataTuple sdt = wdp->startValue(t0);
+                while (sdt.mValue != SaleaeDataTuple::sReadError)
+                {
+                    retval.push_back(std::make_pair(sdt.mTime,sdt.mValue));
+                    sdt = wdp->nextPoint();
+                }
+                return retval;
+            }
             if (mWaveDataList && mFileIndex>=0)
             {
                 std::filesystem::path path = mWaveDataList->saleaeDirectory().get_datafile_path(mFileIndex);
@@ -180,6 +253,12 @@ namespace hal {
             }
         }
         return retval;
+    }
+
+    void WaveData::loadDataUnlessAlreadyLoaded()
+    {
+        if ((u64)mData.size() >= mFileSize) return;
+        loadSaleae();
     }
 
     bool WaveData::loadSaleae(const WaveDataTimeframe& tframe)
@@ -272,6 +351,100 @@ namespace hal {
         return retval;
     }
 
+    u64 WaveData::neighborTransition(double t, bool next) const
+    {
+        u64 notFound = (u64) floor(t);
+        LoadPolicy lpol = loadPolicy();
+        if (lpol ==LoadAllData ||
+                (lpol == LoadTimeframe && !mData.isEmpty() && t>=mData.firstKey() && t < mData.lastKey() ))
+        {
+            if (next)
+            {
+                QMap<u64,int>::const_iterator it = mData.upperBound((u64)floor(t));
+                if (it == mData.end()) return notFound;
+                return it.key();
+            }
+            else
+            {
+                QMap<u64,int>::const_iterator it = mData.lowerBound((u64)floor(t));
+                if (it == mData.begin()) return notFound;
+                --it;
+                return it.key();
+            }
+        }
+
+        QList<WaveData*> childList;
+        switch (mNetType)
+        {
+        case NetGroup:
+        {
+            const WaveDataGroup* wdGrp = static_cast<const WaveDataGroup*>(this);
+            childList = wdGrp->children();
+            break;
+        }
+        case BooleanNet:
+        {
+            const WaveDataBoolean* wdBool = static_cast<const WaveDataBoolean*>(this);
+            childList = wdBool->children();
+            break;
+        }
+            // case TriggerNet: overwrite
+        default:
+            break;
+        }
+
+        if (!childList.isEmpty())
+        {
+            bool first = true;
+            u64 retval = notFound;
+            for (const WaveData* wd : childList)
+            {
+                double tChild = wd->neighborTransition(t,next);
+                if (tChild == notFound) continue;
+                if (first)
+                {
+                    retval = tChild;
+                    first = false;
+                }
+                else if (next)
+                {
+                    if (tChild < retval) retval = tChild;
+                }
+                else
+                {
+                    if (tChild > retval) retval = tChild;
+                }
+            }
+            return retval;
+        }
+
+
+        if (!mWaveDataList) return notFound;
+        SaleaeInputFile sif(mWaveDataList->saleaeDirectory().get_datafile_path(mFileIndex));
+        if (!sif.good()) return notFound;
+
+        int64_t pos = sif.get_file_position(t,next);
+
+        while (pos >= 0 && pos <= (int64_t) sif.header()->numTransitions())
+        {
+            SaleaeDataTuple sdt = sif.get_next_value();
+            if (sdt.readError()) return notFound;
+            if (next)
+            {
+                if (sdt.mTime > t) return sdt.mTime;
+                ++pos;
+            }
+            else
+            {
+                if (sdt.mTime < t) return sdt.mTime;
+                --pos;
+            }
+            sif.set_file_position(pos);
+        }
+
+        return notFound;
+    }
+
     int WaveData::intValue(double t) const
     {
         LoadPolicy lpol = loadPolicy();
@@ -282,20 +455,7 @@ namespace hal {
             QMap<u64,int>::const_iterator it = timeIterator(t);
             return it.value();
         }
-        const WaveDataGroup* grp = dynamic_cast<const WaveDataGroup*>(this);
-        if (grp)
-        {
-            u32 mask = 1;
-            int retval = 0;
-            for (const WaveData* wd : grp->children())
-            {
-                int childVal = wd->intValue(t);
-                if (childVal < 0) return childVal;
-                if (childVal) retval |= mask;
-                mask <<= 1;
-            }
-            return retval;
-        }
+
         if (!mWaveDataList) return -1;
         SaleaeInputFile sif(mWaveDataList->saleaeDirectory().get_datafile_path(mFileIndex));
         if (!sif.good()) return -1;
@@ -382,6 +542,370 @@ namespace hal {
     }
 
     uint qHash(const WaveDataGroupIndex& wdgi) { return wdgi.mCode; }
+
+    //--------------------------------------------
+    WaveDataBoolean::WaveDataBoolean(WaveDataList* wdList, const QList<WaveData*>& boolInput, const QList<int>& acceptMask)
+        : WaveData(wdList->nextBooleanId(),"",WaveData::BooleanNet), mInputCount(boolInput.size()),
+          mInputWaves(nullptr), mTruthTable(nullptr)
+    {
+        mWaveDataList = wdList;
+        if (!mInputCount) return;
+        if (mInputCount > 16)
+        {
+            mInputCount = 0;
+            return;
+        }
+
+        mInputWaves = new WaveData*[mInputCount];
+        for (int i = 0; i<mInputCount; i++)
+            mInputWaves[i] = boolInput.at(i);
+        rename(QString("boolean_%1").arg(id()));
+
+
+        int truthTableLen = (1 << mInputCount);
+        int nByte = (truthTableLen+7) / 8;
+        mTruthTable = new char[nByte];
+        memset (mTruthTable, 0, nByte);
+
+        for (int accept : acceptMask)
+        {
+            int j = accept/8;
+            int k = accept%8;
+            mTruthTable[j] |= (1<<k);
+        }
+        mWaveDataList->registerBoolean(this);
+    }
+
+    WaveDataBoolean::WaveDataBoolean(WaveDataList* wdList, QString boolFunc)
+        : WaveData(wdList->nextBooleanId(),boolFunc,WaveData::BooleanNet),
+          mInputCount(0), mInputWaves(nullptr), mTruthTable(nullptr)
+    {
+        mWaveDataList = wdList;
+        auto bf = BooleanFunction::from_string(boolFunc.toStdString());
+        if (bf.is_error()) return;
+        std::vector<std::string> netNames;
+        for (std::string netName : bf.get().get_variable_names())
+            netNames.push_back(netName);
+        if ((mInputCount = netNames.size()) <= 0) return;
+        if (mInputCount > 16)
+        {
+            mInputCount = 0;
+            return;
+        }
+        mInputWaves = new WaveData*[mInputCount];
+
+        bool failed = false;
+        for (int i = 0; i<mInputCount; i++)
+        {
+            const std::string& netName = netNames.at(i);
+            WaveData* wd = mWaveDataList->waveDataByName(netName);
+            if (!wd)
+            {
+                failed = true;
+                break;
+            }
+            mInputWaves[i] = wd;
+        }
+
+        if (!failed)
+        {
+            auto tt = bf.get().compute_truth_table(netNames);
+            if (tt.is_error())
+                failed = true;
+            else
+            {
+                /* dump truth table
+                std::cerr << "----" << std::endl;
+                for (const std::string& nam : bf.get().get_variable_names())
+                {
+                    std::cerr << " " << nam;
+                }
+                std::cerr << std::endl;
+                for (std::vector<BooleanFunction::Value> row : tt.get())
+                {
+                    for (BooleanFunction::Value val : row)
+                        std::cerr << " " << BooleanFunction::to_string(val);
+                    std::cerr << std::endl;
+                }
+                std::cerr << "----" << std::endl;
+                */
+
+                int truthTableLen = (1 << mInputCount);
+                int nByte = (truthTableLen+7) / 8;
+                mTruthTable = new char[nByte];
+                memset (mTruthTable, 0, nByte);
+                for (int i=0; i<truthTableLen; i++)
+                {
+                    switch (tt.get().at(0).at(i))
+                    {
+                    case BooleanFunction::Z:
+                    case BooleanFunction::X:
+                        failed = true;
+                        break;
+                    case BooleanFunction::ZERO:
+                        break;
+                    case BooleanFunction::ONE:
+                        int j = i/8;
+                        int k = i%8;
+                        mTruthTable[j] |= (1<<k);
+                        break;
+                    }
+                    if (failed) break;
+                }
+            }
+        }
+
+        if (failed)
+        {
+            delete [] mInputWaves;
+            mInputWaves = 0;
+            mInputCount = 0;
+            return;
+        }
+        else
+            mWaveDataList->registerBoolean(this);
+    }
+
+    WaveDataBoolean::~WaveDataBoolean()
+    {
+        if (mInputWaves) delete [] mInputWaves;
+        if (mTruthTable) delete [] mTruthTable;
+    }
+
+    void WaveDataBoolean::recalcData()
+    {
+        mData.clear();
+        switch (loadPolicy())
+        {
+        case WaveData::TooBigToLoad:
+            return;
+        case WaveData::LoadTimeframe:
+            for (int i=0; i<mInputCount; i++)
+                if (mInputWaves[i]->data().isEmpty())
+                    return;
+            break;
+        default:
+            break;
+        }
+
+        QMap<u64,int> transitionTime;
+        // TODO : not loadable
+        for (int i=0; i<mInputCount; i++)
+        {
+            mInputWaves[i]->loadDataUnlessAlreadyLoaded();
+            for (u64 t : mInputWaves[i]->data().keys())
+                ++transitionTime[t];
+        }
+
+        int lastval = SaleaeDataTuple::sReadError;
+        for (u64 t : transitionTime.keys())
+        {
+            int ttInx = 0;
+            for (int i=0; i<mInputCount; i++)
+            {
+                int val = mInputWaves[i]->get_value_at(t);
+                if (val < 0 || val > 1)
+                {
+                    ttInx = 1;
+                    break;
+                }
+                if (val == 1)
+                    ttInx |= (1<<i);
+            }
+            int nextval = SaleaeDataTuple::sReadError;
+            if (ttInx < 0)
+                nextval = -1;
+            else
+            {
+                int j = ttInx / 8;
+                int k = ttInx % 8;
+                nextval = (mTruthTable[j] & (1<<k)) ? 1 : 0;
+            }
+            if (nextval != lastval)
+            {
+                mData.insert(t,nextval);
+                lastval = nextval;
+            }
+        }
+    }
+
+    QList<WaveData*> WaveDataBoolean::children() const
+    {
+        QList<WaveData*> retval;
+        for (int i=0; i<mInputCount; i++)
+            retval.append(mInputWaves[i]);
+        return retval;
+    }
+
+    WaveData::LoadPolicy WaveDataBoolean::loadPolicy() const
+    {
+        LoadPolicy retval = LoadAllData;
+        for (int i=0; i<mInputCount; i++)
+        {
+            const WaveData* wd = mInputWaves[i];
+            switch (wd->loadPolicy())
+            {
+            case TooBigToLoad:
+                return TooBigToLoad;
+            case LoadTimeframe:
+                retval = LoadTimeframe;
+                break;
+            default:
+                break;
+            }
+        }
+        return retval;
+    }
+
+    int WaveDataBoolean::intValue(double t) const
+    {
+        u32 mask = 1;
+        int val = 0;
+        for (int i=0; i<mInputCount; i++)
+        {
+            int childVal = mInputWaves[i]->intValue(t);
+            if (childVal < 0) return childVal;
+            if (childVal) val |= mask;
+            mask <<= 1;
+        }
+        return (mTruthTable[val/8] & (1<<val%8)) ? 1 : 0;
+    }
+
+//--------------------------------------------
+    WaveDataTrigger::WaveDataTrigger(WaveDataList* wdList, const QList<WaveData *> &wdTrigger, const QList<int>& toVal)
+        : WaveData(wdList->nextTriggerId(),"",TriggerTime),
+          mTriggerCount(wdTrigger.size()), mTriggerWaves(nullptr), mFilterWave(nullptr), mToValue(nullptr)
+    {
+        mWaveDataList = wdList;
+        rename(QString("trigger%1").arg(id()));
+        if (!mTriggerCount) return;
+        mTriggerWaves = new WaveData*[mTriggerCount];
+        mToValue = new int[mTriggerCount];
+        int nVal = toVal.size();
+        for (int i=0; i<mTriggerCount; i++)
+        {
+            mTriggerWaves[i] = wdTrigger.at(i);
+            mToValue[i] = i < nVal ? toVal[i] : -1;
+        }
+        wdList->registerTrigger(this);
+    }
+
+    WaveDataTrigger::~WaveDataTrigger()
+    {
+        if (mTriggerWaves) delete [] mTriggerWaves;
+        if (mToValue) delete [] mToValue;
+    }
+
+    void WaveDataTrigger::set_filter_wave(WaveData* wd)
+    {
+        if (wd && (wd->netType() == WaveData::NetGroup || wd->netType() == WaveData::TriggerTime)) return;
+        mFilterWave = wd;
+        recalcData();
+    }
+
+    int WaveDataTrigger::intValue(double t) const
+    {
+        if (loadPolicy() == LoadAllData)
+        {
+            for (int i=0; i<mTriggerCount; i++)
+            {
+                mTriggerWaves[i]->loadDataUnlessAlreadyLoaded();
+                auto it = mTriggerWaves[i]->data().find(floor(t+0.5));
+                if (it != mTriggerWaves[i]->data().constEnd())
+                {
+                    if (mToValue[i] < 0 || mToValue[i] == it.value()) return 1;
+                }
+            }
+            return 0;
+        }
+        // TODO : check disk file
+        return 0;
+    }
+
+    void WaveDataTrigger::recalcData()
+    {
+        mData.clear();
+        switch (loadPolicy())
+        {
+        case TooBigToLoad:
+            return;
+        case LoadTimeframe:
+            for (int i=0; i<mTriggerCount; i++)
+                if (mTriggerWaves[i]->data().isEmpty())
+                    return;
+            break;
+        default:
+            for (int i=0; i<mTriggerCount; i++)
+                mTriggerWaves[i]->loadDataUnlessAlreadyLoaded();
+            break;
+        }
+
+        for (int i=0; i<mTriggerCount; i++)
+            for (auto it = mTriggerWaves[i]->data().constBegin(); it != mTriggerWaves[i]->data().constEnd(); ++it)
+                if (mToValue[i] < 0 || mToValue[i] == it.value())
+                    if (!mFilterWave || mFilterWave->intValue(it.key())==1)
+                        mData.insert(it.key(),1);
+    }
+
+    WaveData::LoadPolicy WaveDataTrigger::loadPolicy() const
+    {
+        LoadPolicy retval = WaveData::LoadAllData;
+        for (int i=0; i<=mTriggerCount; i++)
+        {
+            const WaveData* wd = nullptr;
+            if (i<mTriggerCount)
+                wd = mTriggerWaves[i];
+            else
+                wd = mFilterWave;
+            if (!wd) continue;
+            switch (wd->loadPolicy())
+            {
+            case TooBigToLoad:
+                return TooBigToLoad;
+            case LoadTimeframe:
+                retval = LoadTimeframe;
+                break;
+            default:
+                break;
+            }
+        }
+        return retval;
+    }
+
+    QList<WaveData*> WaveDataTrigger::children() const
+    {
+        QList<WaveData*> retval;
+        for (int i=0; i<mTriggerCount; i++)
+            retval.append(mTriggerWaves[i]);
+        return retval;
+    }
+
+    u64 WaveDataTrigger::neighborTransition(double t, bool next) const
+    {
+        if (!mData.empty() && loadPolicy() != TooBigToLoad)
+        {
+            if (next)
+            {
+                auto it = mData.upperBound(t);
+                if (it != mData.constEnd()) return it.key();
+                return t;
+            }
+            auto it = mData.lowerBound(t);
+            if (it == mData.constEnd()) --it;
+            while (it != mData.constBegin() && it.key()>=t) --it;
+            return it.key()>=t ? t : it.key();
+        }
+        //TODO : from file
+        return t;
+    }
+
+    QList<int> WaveDataTrigger::toValueList() const
+    {
+        QList<int> retval;
+        for (int i=0; i<mTriggerCount; i++)
+            retval.append(mToValue[i]);
+        return retval;
+    }
 
 //--------------------------------------------
     WaveDataGroup::WaveDataGroup(WaveDataList *wdList, int grpId, const QString& nam)
@@ -666,6 +1190,20 @@ namespace hal {
         mWaveDataList->emitGroupUpdated(id());
     }
 
+    int WaveDataGroup::intValue(double t) const
+    {
+        u32 mask = 1;
+        int retval = 0;
+        for (const WaveData* wd : mGroupList)
+        {
+            int childVal = wd->intValue(t);
+            if (childVal < 0) return childVal;
+            if (childVal) retval |= mask;
+            mask <<= 1;
+        }
+        return retval;
+    }
+
 //--------------------------------------------
     WaveDataTimeframe::WaveDataTimeframe()
             : mSceneMaxTime(sMinSceneWidth), mSimulateMaxTime(0), mUserdefMaxTime(0), mUserdefMinTime(0) {;}
@@ -717,7 +1255,7 @@ namespace hal {
 //--------------------------------------------
     WaveDataList::WaveDataList(const QString& sdFilename, QObject* parent)
         : QObject(parent),
-          mSaleaeDirectory(sdFilename.toStdString()), mMaxGroupId(0)
+          mSaleaeDirectory(sdFilename.toStdString()), mMaxGroupId(0), mMaxBooleanId(0), mMaxTriggerid(0)
     {;}
 
     WaveDataList::~WaveDataList()
@@ -931,6 +1469,22 @@ namespace hal {
         Q_EMIT waveAdded(iwave);
     }
 
+    void WaveDataList::registerTrigger(WaveDataTrigger *wdTrig)
+    {
+        u32 trigId = wdTrig->id();
+        Q_ASSERT(!mDataTrigger.contains(trigId));
+        mDataTrigger.insert(trigId,wdTrig);
+        Q_EMIT triggerAdded(trigId);
+    }
+
+    void WaveDataList::registerBoolean(WaveDataBoolean *wdBool)
+    {
+       u32 boolId = wdBool->id();
+       Q_ASSERT(!mDataBooleans.contains(boolId));
+       mDataBooleans.insert(boolId,wdBool);
+       Q_EMIT booleanAdded(boolId);
+    }
+
     void WaveDataList::registerGroup(WaveDataGroup *grp)
     {
         u32 grpId = grp->id();
@@ -940,7 +1494,7 @@ namespace hal {
         {
             mSaleaeDirectory.add_group(SaleaeDirectoryGroupEntry(grp->name().toStdString(),grpId));
             updateMaxTime();
-            Q_EMIT groupAdded(grp->id());
+            Q_EMIT groupAdded(grpId);
         }
     }
 
@@ -1068,6 +1622,18 @@ namespace hal {
             return wd;
         }
         delete wd;
+        return nullptr;
+    }
+
+    WaveData* WaveDataList::waveDataByName(const std::string& nam) const
+    {
+        QString needle = QString::fromStdString(nam);
+        for (WaveData* wd : *this)
+            if (wd->name()==needle)
+                return wd;
+        for (WaveDataBoolean* wdb : mDataBooleans.values())
+            if (wdb->name()==needle)
+                return wdb;
         return nullptr;
     }
 

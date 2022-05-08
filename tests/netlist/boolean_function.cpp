@@ -61,7 +61,7 @@ namespace hal {
                    b = BooleanFunction::Var("B"),
                    c = BooleanFunction::Var("C"),
                   _0 = BooleanFunction::Const(0, 1),
-                _1 = BooleanFunction::Const(1, 1);
+                  _1 = BooleanFunction::Const(1, 1);
 
         const auto data = std::vector<std::tuple<std::string, BooleanFunction>>{
             {"<empty>", BooleanFunction()},
@@ -70,6 +70,7 @@ namespace hal {
             {"((A & B) ^ (B & C))", ((a.clone() & b.clone()) ^ (b.clone() & c.clone()))},
             {"(A ^ 0b1)", a.clone() ^ _1.clone()}, 
             {"(A ^ 0b0)", a.clone() ^ _0.clone()},
+            {"((A + B) - C)", (a.clone() + b.clone()) - c.clone()},
             {"(! A)", ~a.clone()},
         };
 
@@ -195,6 +196,14 @@ namespace hal {
             {"(!I0 & I1 & I2) | (I0 & I1 & I2)", 
                 (~BooleanFunction::Var("I0") & (BooleanFunction::Var("I1") & BooleanFunction::Var("I2"))) | (BooleanFunction::Var("I0") & (BooleanFunction::Var("I1") & BooleanFunction::Var("I2")))
             },
+            {"(((0b1 & O[0]) & c3) | (RDATA[0] & (! c3)))",
+                ((BooleanFunction::Const(1, 1) & BooleanFunction::Var("O[0]")) & BooleanFunction::Var("c3"))
+                | (BooleanFunction::Var("RDATA[0]") & (~ BooleanFunction::Var("c3")))
+            },
+            {"(((0b1 & \\O[0] ) & c3) | (\\RDATA[0]  & (! c3)))",
+                ((BooleanFunction::Const(1, 1) & BooleanFunction::Var("O[0]")) & BooleanFunction::Var("c3"))
+                | (BooleanFunction::Var("RDATA[0]") & (~ BooleanFunction::Var("c3")))
+            },
             ////////////////////////////////////////////////////////////////////
             // LIBERTY PARSER
             ////////////////////////////////////////////////////////////////////
@@ -245,7 +254,12 @@ namespace hal {
     TEST(BooleanFunction, ConstantSimplification) {
         const auto _0 = BooleanFunction::Const(0, 1),
                    _1 = BooleanFunction::Const(1, 1),
-                    a = BooleanFunction::Var("A");
+                   _A = BooleanFunction::Const(0xA, 4),
+                    a = BooleanFunction::Var("A"),
+                   i1 = BooleanFunction::Index(1, 4),
+                   i2 = BooleanFunction::Index(2, 4),
+                   i4 = BooleanFunction::Index(4, 4);
+                   
 
         EXPECT_TRUE(_0.has_constant_value(0));
         EXPECT_TRUE(_1.has_constant_value(1));
@@ -266,9 +280,191 @@ namespace hal {
         EXPECT_TRUE((_0.clone() ^ _1.clone()).simplify().has_constant_value(1));
         EXPECT_TRUE((_1.clone() ^ _1.clone()).simplify().has_constant_value(0));
 
+        EXPECT_TRUE((_0.clone() + _0.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((_0.clone() + _1.clone()).simplify().has_constant_value(1));
+        EXPECT_TRUE((_1.clone() + _0.clone()).simplify().has_constant_value(1));
+        EXPECT_TRUE((_1.clone() + _1.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((_0.clone() - _0.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((_0.clone() - _1.clone()).simplify().has_constant_value(1));
+        EXPECT_TRUE((_1.clone() - _0.clone()).simplify().has_constant_value(1));
+        EXPECT_TRUE((_1.clone() - _1.clone()).simplify().has_constant_value(0));
+
         EXPECT_TRUE((a.clone() | _1.clone()).simplify().has_constant_value(1));
         EXPECT_TRUE((a.clone() ^ a.clone()).simplify().has_constant_value(0));
         EXPECT_TRUE((a.clone() & _0.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((a.clone() - a.clone()).simplify().has_constant_value(0));
+
+        {
+            {
+                auto res = BooleanFunction::Slice(_A.clone(), i1.clone(), i1.clone(), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+            {
+                auto res = BooleanFunction::Slice(_A.clone(), i2.clone(), i2.clone(), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+            {
+                auto res = BooleanFunction::Slice(_A.clone(), i1.clone(), i2.clone(), 2);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+            {
+                auto res = BooleanFunction::Concat(_1.clone(), _0.clone(), 2);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(2));
+            }
+            {
+                auto res = BooleanFunction::Concat(_A.clone(), _0.clone(), 5);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(20));
+            }
+            {
+                auto res = BooleanFunction::Zext(_1.clone(), i4.clone(), 4);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+            {
+                auto res = BooleanFunction::Sext(_0.clone(), i4.clone(), 4);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+            {
+                auto res = BooleanFunction::Sext(_1.clone(), i4.clone(), 4);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(15));
+            }
+        } 
+
+        {
+            {
+                auto res = BooleanFunction::Eq(_0.clone(), _0.clone(), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+            {
+                auto res = BooleanFunction::Eq(_0.clone(), _1.clone(), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+            {
+                auto res = BooleanFunction::Eq(_1.clone(), _0.clone(), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+            {
+                auto res = BooleanFunction::Eq(_1.clone(), _1.clone(), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+
+            {
+                auto res = BooleanFunction::Slt(BooleanFunction::Const(0x0, 4), BooleanFunction::Const(0xF, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+            {
+                auto res = BooleanFunction::Slt(BooleanFunction::Const(0xE, 4), BooleanFunction::Const(0xF, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+            {
+                auto res = BooleanFunction::Slt(BooleanFunction::Const(0xF, 4), BooleanFunction::Const(0xF, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+            {
+                auto res = BooleanFunction::Slt(BooleanFunction::Const(0xC, 4), BooleanFunction::Const(0x3, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+            {
+                auto res = BooleanFunction::Slt(BooleanFunction::Const(0xF, 4), BooleanFunction::Const(0xA, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+
+            {
+                auto res = BooleanFunction::Sle(BooleanFunction::Const(0x0, 4), BooleanFunction::Const(0xF, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+            {
+                auto res = BooleanFunction::Sle(BooleanFunction::Const(0xE, 4), BooleanFunction::Const(0xF, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+            {
+                auto res = BooleanFunction::Sle(BooleanFunction::Const(0xF, 4), BooleanFunction::Const(0xF, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+            {
+                auto res = BooleanFunction::Sle(BooleanFunction::Const(0xC, 4), BooleanFunction::Const(0x3, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+            {
+                auto res = BooleanFunction::Sle(BooleanFunction::Const(0xF, 4), BooleanFunction::Const(0xA, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+
+            {
+                auto res = BooleanFunction::Ule(BooleanFunction::Const(0x0, 4), BooleanFunction::Const(0xF, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+            {
+                auto res = BooleanFunction::Ule(BooleanFunction::Const(0xE, 4), BooleanFunction::Const(0xF, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+            {
+                auto res = BooleanFunction::Ule(BooleanFunction::Const(0xF, 4), BooleanFunction::Const(0xF, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+            {
+                auto res = BooleanFunction::Ule(BooleanFunction::Const(0xF, 4), BooleanFunction::Const(0xA, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+
+            {
+                auto res = BooleanFunction::Ult(BooleanFunction::Const(0x0, 4), BooleanFunction::Const(0xF, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+            {
+                auto res = BooleanFunction::Ult(BooleanFunction::Const(0xE, 4), BooleanFunction::Const(0xF, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+            {
+                auto res = BooleanFunction::Ult(BooleanFunction::Const(0xF, 4), BooleanFunction::Const(0xF, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+            {
+                auto res = BooleanFunction::Ult(BooleanFunction::Const(0xF, 4), BooleanFunction::Const(0xA, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+
+            {
+                auto res = BooleanFunction::Ite(_0.clone(), _1.clone(), _0.clone(), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+            {
+                auto res = BooleanFunction::Ite(_1.clone(), _1.clone(), _0.clone(), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+        }
+
     }
 
     TEST(BooleanFunction, SimplificationRules) {
@@ -276,7 +472,8 @@ namespace hal {
                    b = BooleanFunction::Var("B"),
                    c = BooleanFunction::Var("C"),
                   _0 = BooleanFunction::Const(0, 1),
-                  _1 = BooleanFunction::Const(1, 1);
+                  _1 = BooleanFunction::Const(1, 1),
+                  i0 = BooleanFunction::Index(0, 1);
 
         ////////////////////////////////////////////////////////////////////////
         // AND RULES
@@ -401,6 +598,117 @@ namespace hal {
         EXPECT_EQ((a.clone() ^ ~a.clone()).simplify(), _1.clone());
 
         ////////////////////////////////////////////////////////////////////////
+        // ADD RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // (a + 0)   =>    a
+        EXPECT_EQ((a.clone() + _0.clone()).simplify(), a.clone());
+
+        ////////////////////////////////////////////////////////////////////////
+        // SUB RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // (a - 0)   =>    a
+        EXPECT_EQ((a.clone() - _0.clone()).simplify(), a.clone());
+        // (a - a)   =>    0
+        EXPECT_EQ((a.clone() - a.clone()).simplify(), _0.clone());
+
+        ////////////////////////////////////////////////////////////////////////
+        // SLICE RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // SLICE(p, 0, 0)   =>   p (if p is 1-bit wide)
+        {
+            auto res = BooleanFunction::Slice(a.clone(), i0.clone(), i0.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), a.clone());
+        }
+
+        ////////////////////////////////////////////////////////////////////////
+        // EQUALITY RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // X == X   =>   1
+        {
+            auto res = BooleanFunction::Eq(a.clone(), a.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), _1.clone());
+        }
+
+        ////////////////////////////////////////////////////////////////////////
+        // SIGNED LESS THAN RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // X <=s X   =>   1
+        {
+            auto res = BooleanFunction::Sle(a.clone(), a.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), _1.clone());
+        }
+
+        ////////////////////////////////////////////////////////////////////////
+        // SIGNED LESS THAN RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // X <s X   =>   0
+        {
+            auto res = BooleanFunction::Slt(a.clone(), a.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), _0.clone());
+        }
+
+        ////////////////////////////////////////////////////////////////////////
+        // UNSIGNED LESS THAN RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // X <= X   =>   1
+        {
+            auto res = BooleanFunction::Ule(a.clone(), a.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), _1.clone());
+        }
+
+        ////////////////////////////////////////////////////////////////////////
+        // UNSIGNED LESS THAN RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // X < 0   =>   0
+        {
+            auto res = BooleanFunction::Ult(a.clone(), _0.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), _0.clone());
+        }
+        // X < X   =>   0
+        {
+            auto res = BooleanFunction::Ult(a.clone(), a.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), _0.clone());
+        }
+
+        ////////////////////////////////////////////////////////////////////////
+        // IF-THEN-ELSE RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // ITE(0, a, b)  =>  b
+        {
+            auto res = BooleanFunction::Ite(_0.clone(), a.clone(), b.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), b.clone());
+        }
+        // ITE(1, a, b)  =>  a
+        {
+            auto res = BooleanFunction::Ite(_1.clone(), a.clone(), b.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), a.clone());
+        }
+        // ITE(a, b, b)  =>  b
+        {
+            auto res = BooleanFunction::Ite(a.clone(), b.clone(), b.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), b.clone());
+        }
+
+        ////////////////////////////////////////////////////////////////////////
         // GENERAL SIMPLIFICATION RULES
         ////////////////////////////////////////////////////////////////////////
 
@@ -512,6 +820,16 @@ namespace hal {
             {a ^ b, {{"A", {Value::ONE, Value::ZERO}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ZERO, Value::ONE}},
             {a ^ b, {{"A", {Value::ZERO, Value::ONE}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ONE, Value::ZERO}},
             {a ^ b, {{"A", {Value::ONE, Value::ONE}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ZERO, Value::ZERO}},
+
+            {a + b, {{"A", {Value::ZERO, Value::ZERO}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ONE, Value::ONE}},
+            {a + b, {{"A", {Value::ONE, Value::ZERO}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ZERO, Value::ZERO}},
+            {a + b, {{"A", {Value::ZERO, Value::ONE}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ONE, Value::ZERO}},
+            {a + b, {{"A", {Value::ONE, Value::ONE}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ZERO, Value::ONE}},
+
+            {a - b, {{"A", {Value::ZERO, Value::ZERO}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ONE, Value::ZERO}},
+            {a - b, {{"A", {Value::ONE, Value::ZERO}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ZERO, Value::ONE}},
+            {a - b, {{"A", {Value::ZERO, Value::ONE}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ONE, Value::ONE}},
+            {a - b, {{"A", {Value::ONE, Value::ONE}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ZERO, Value::ZERO}},
         };
         
         for (const auto& [function, input, expected]: data) {

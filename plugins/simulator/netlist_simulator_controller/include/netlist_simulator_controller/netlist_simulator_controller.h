@@ -122,6 +122,29 @@ public:
     u32 add_waveform_group(const std::string& name, const std::vector<Net*> nets);
 
     /**
+     * Add waveform based on boolean expression.
+     * @param expression The boolean expression based on names of existing waveforms.
+     * @return ID of new boolean waveform
+     */
+    u32 add_boolean_expression_waveform(const std::string& expression);
+
+    /**
+     * Add boolean waveform based on list of accepted combinations
+     * @param input_waves List of input waveforms
+     * @param accept_combination List of accepted combinations. Each combination is coded as binary integer value which is matched bitwise with value of input waveform.
+     * @return ID of new boolean waveform
+     */
+    u32 add_boolean_accept_list_waveform(const std::vector<WaveData*>& input_waves, const std::vector<int>& accepted_combination);
+
+    /**
+     * Add trigger time vector based on wave transitions.
+     * @param trigger_waves List of source waveform to generate trigger time
+     * @param trigger_on_values Optional list of values. Order of values must match order of waveform. Trigger will only be generated upon transition to value.
+     * @return ID of new trigger time
+     */
+    u32 add_trigger_time(const std::vector<WaveData*>& trigger_waves, const std::vector<int>& trigger_on_values = std::vector<int>());
+
+    /**
      * Remove waveform group identified by group ID. Waveform for nets will still be shown but they are not bundled.
      * @param group_id The ID of waveform group to be removed
      */
@@ -317,9 +340,23 @@ public:
     /**
      * Getter for waveform group
      * @param id[in] Waveform group id
-     * @return The waveform group
+     * @return The waveform group object
      */
     WaveDataGroup* get_waveform_group_by_id(u32 id) const;
+
+    /**
+     * Getter for boolean waveform (which is a combination of several other waveform by boolean operation).
+     * @param id[in] Boolean waveform id
+     * @return The boolean waveform object
+     */
+    WaveDataBoolean* get_waveform_boolean_by_id(u32 id) const;
+
+    /**
+     * Getter for trigger time set.
+     * @param id[in] Trigger time id
+     * @return The trigger time object which derives from WaveData.
+     */
+    WaveDataTrigger* get_trigger_time_by_id(u32 id) const;
 
     /**
      * Set timeframe for viewer

@@ -32,10 +32,12 @@
 #include <QStatusBar>
 #include <QAction>
 #include <QMenu>
+#include <QDebug>
 #include <QApplication>
 #include <QScreen>
 #include <QVBoxLayout>
 #include <QProgressBar>
+#include <QInputDialog>
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "netlist_simulator/plugin_netlist_simulator.h"
 #include "netlist_simulator/netlist_simulator.h"

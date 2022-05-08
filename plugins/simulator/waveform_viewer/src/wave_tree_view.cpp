@@ -2,6 +2,8 @@
 #include "waveform_viewer/wave_tree_model.h"
 #include "waveform_viewer/wave_widget.h"
 #include "waveform_viewer/wave_edit_dialog.h"
+#include "waveform_viewer/boolean_dialog.h"
+#include "waveform_viewer/trigger_dialog.h"
 #include "netlist_simulator_controller/wave_data.h"
 #include <QScrollBar>
 #include <QDragMoveEvent>
@@ -116,14 +118,22 @@ namespace hal {
         bool singleSelection = mContextIndexList.size() == 1;
 
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
+        bool onlyRootSel = wtm->onlyRootItemsSelected(mContextIndexList);
         QMenu* menu = new QMenu(this);
         QAction* act;
 
         if (singleSelection)
         {
             QString selName =  wtm->netName(mContextIndexList.at(0));
+            selName.replace(QChar('&'),"&&");
             act = menu->addAction("Insert new group");
             connect(act,&QAction::triggered,this,&WaveTreeView::handleInsertGroup);
+
+            act = menu->addAction("Insert new boolean expression");
+            connect(act,&QAction::triggered,this,&WaveTreeView::handleInsertBoolean);
+
+            act = menu->addAction("Insert new trigger based on selection");
+            connect(act,&QAction::triggered,this,&WaveTreeView::handleInsertTrigger);
 
             act = menu->addAction("Rename '" + selName + "'");
             connect(act,&QAction::triggered,this,&WaveTreeView::handleRenameItem);
@@ -161,6 +171,13 @@ namespace hal {
         }
         else
         {
+            if (onlyRootSel)
+            {
+                act = menu->addAction(QString("Boolean expression based on %1 selected items").arg(mContextIndexList.size()));
+                connect(act,&QAction::triggered,this,&WaveTreeView::handleInsertBoolean);
+                act = menu->addAction(QString("Trigger time set based on %1 selected items").arg(mContextIndexList.size()));
+                connect(act,&QAction::triggered,this,&WaveTreeView::handleInsertTrigger);
+            }
             act = menu->addAction(QString("Remove %1 selected items").arg(mContextIndexList.size()));
             connect(act,&QAction::triggered,this,&WaveTreeView::handleRemoveMulti);
         }
@@ -280,6 +297,66 @@ namespace hal {
         wtm->insertGroup(mContextIndexList.at(0));
     }
 
+    void WaveTreeView::handleInsertBoolean()
+    {
+        if (mContextIndexList.empty()) return;
+        WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
+        QList<WaveData*> selectedWaves;
+        for (const QModelIndex& inx : mContextIndexList)
+        {
+            WaveData* wd = wtm->item(inx);
+            if (wd) selectedWaves.append(wd);
+        }
+        BooleanDialog bd(selectedWaves,this);
+        if (bd.exec() == QDialog::Accepted)
+        {
+            if (bd.hasExpression())
+            {
+                QString boolExpr = bd.expression();
+                if (!boolExpr.isEmpty())
+                {
+                    wtm->insertBoolean(mContextIndexList.last(),boolExpr);
+                    selectionModel()->select(mContextIndexList.last(),QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+                }
+            }
+            else
+            {
+                wtm->insertBoolean(mContextIndexList.last(),selectedWaves,bd.tableValues());
+                selectionModel()->select(mContextIndexList.last(),QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+            }
+        }
+    }
+
+    void WaveTreeView::handleInsertTrigger()
+    {
+        if (mContextIndexList.empty()) return;
+        WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
+        QList<WaveData*> trigList;
+        for (const QModelIndex& inx : mContextIndexList)
+        {
+            WaveData* wd = wtm->item(inx);
+            if (wd) trigList.append(wd);
+        }
+        QModelIndex insertInx = wtm->index(mContextIndexList.first().row()+1,0);
+        QList<WaveData*> filterList;
+        for (WaveDataBoolean* wdb : mWaveDataList->mDataBooleans.values())
+            filterList.append(wdb);
+        QSet<int> iwaveAdded;
+        for (auto it = mWaveItemHash->constBegin(); it != mWaveItemHash->constEnd(); ++it)
+        {
+            if (it.key().intType()!=WaveItemIndex::Wire) continue;
+            int iwave = it.key().index();
+            if (iwave < 0 || iwaveAdded.contains(iwave)) continue;
+            filterList.append(mWaveDataList->at(iwave));
+            iwaveAdded.insert(iwave);
+        }
+        TriggerDialog td(trigList,filterList,this);
+        if (td.exec() == QDialog::Accepted)
+        {
+            wtm->insertTrigger(insertInx,trigList,td.transitionToValue(),td.filterWave());
+        }
+    }
+
     QModelIndexList WaveTreeView::sortedSelection() const
     {
         QMap<int,QModelIndex> sortInx;
@@ -344,15 +421,31 @@ namespace hal {
             int iwave = wtm->waveIndex(currentIndex);
             if (iwave < 0)
             {
-                int groupId = wtm->groupId(currentIndex);
-                if (groupId > 0)
+                int id = 0;
+                WaveItemIndex::IndexType tp = WaveItemIndex::Invalid;
+                if (iwave == -1)
                 {
-                    WaveItemIndex wii(groupId, WaveItemIndex::Group);
+                    id = wtm->groupId(currentIndex);
+                    tp = WaveItemIndex::Group;
+                }
+                else if (iwave == -2)
+                {
+                    id = wtm->booleanId(currentIndex);
+                    tp = WaveItemIndex::Bool;
+                }
+                else if (iwave == -3)
+                {
+                    id = wtm->triggerId(currentIndex);
+                    tp = WaveItemIndex::Trig;
+                }
+                if (id > 0 && tp != WaveItemIndex::Invalid)
+                {
+                    WaveItemIndex wii(id, tp, 0);
                     WaveItem* wi = mWaveItemHash->value(wii);
                     if (!wi)
                     {
                         mWaveItemHash->dump("Crash");
-                        qDebug() << "group wii not found" << groupId;
+                        qDebug() << "group/boolean wii not found" << id << tp;
                     }
                     Q_ASSERT(wi);
                     wi->setYposition(i);
@@ -390,13 +483,19 @@ namespace hal {
     {
         QTreeView::selectionChanged(selected,deselected);
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
+        mWaveItemHash->setSelected();
         for (WaveItem* wi : mWaveItemHash->values())
             wi->setWaveSelected(false);
         for (const QModelIndex& inx : sortedSelection())
         {
             WaveItemIndex wii = wtm->hashIndex(inx);
             WaveItem* wi = mWaveItemHash->value(wii);
-            if (wi) wi->setWaveSelected(true);
+            if (wi)
+            {
+                wi->setWaveSelected(true);
+                if (!mWaveItemHash->firstSelected())
+                    mWaveItemHash->setSelected(wi);
+            }
         }
     }
 

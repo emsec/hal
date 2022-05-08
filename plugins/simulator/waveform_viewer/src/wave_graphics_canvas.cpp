@@ -80,13 +80,42 @@ namespace hal {
 
     void WaveGraphicsCanvas::handleContextMenuRequested(const QPoint& pos)
     {
+        if (mDragZoom)
+        {
+            mDragZoom->deleteLater();
+            mDragZoom = nullptr;
+        }
         QMenu* menu = new QMenu(this);
         QAction* act;
         act = menu->addAction("Enter cursor time value ...");
         connect(act,&QAction::triggered,this,&WaveGraphicsCanvas::handleEnterCursorTime);
         act = menu->addAction("Copy cursor time value to clipboard");
         connect(act,&QAction::triggered,this,&WaveGraphicsCanvas::handleCopyCursorTime);
+        if (mWaveItemHash->firstSelected())
+        {
+            QString wavename = mWaveItemHash->firstSelected()->wavedata()->name();
+            act = menu->addAction("Jump to next transition " + wavename);
+            connect(act,&QAction::triggered,this,&WaveGraphicsCanvas::handleJumpNextTransition);
+            act = menu->addAction("Jump to previous transition " + wavename);
+            connect(act,&QAction::triggered,this,&WaveGraphicsCanvas::handleJumpPreviousTransition);
+        }
         menu->popup(viewport()->mapToGlobal(pos));
+    }
+
+    void WaveGraphicsCanvas::handleJumpPreviousTransition()
+    {
+        WaveItem* wi = mWaveItemHash->firstSelected();
+        if (!wi) return;
+        double tCursor = wi->wavedata()->neighborTransition(mCursorTime,false);
+        setCursorTimeInternal(tCursor);
+    }
+
+    void WaveGraphicsCanvas::handleJumpNextTransition()
+    {
+        WaveItem* wi = mWaveItemHash->firstSelected();
+        if (!wi) return;
+        double tCursor = wi->wavedata()->neighborTransition(mCursorTime,true);
+        setCursorTimeInternal(tCursor);
     }
 
     void WaveGraphicsCanvas::handleCopyCursorTime()
@@ -99,17 +128,22 @@ namespace hal {
         bool ok;
         double tCursor = QInputDialog::getDouble(this, "Enter cursor time", "New value:", mCursorTime, mTransform.tMin(), mTransform.tMax(), 0, &ok);
         if (ok && tCursor != mCursorTime)
-        {
-            double wHalf = 0.5 * mScrollbar->viewportWidth();
-            double vpos = mTransform.vPos(tCursor);
-            if (vpos + wHalf > mTransform.vMax()) vpos = mTransform.vMax() - wHalf;
-            if (vpos - wHalf < mTransform.vMin()) vpos = mTransform.vMin() + wHalf;
-            mScrollbar->setVleft(vpos - wHalf);
-            mCursorXpos = mScrollbar->xPosI(tCursor);
-            mTimescale->update();
-            mCursor->setCursorToTime(tCursor);
-            mRenderEngine->update();
-        }
+            setCursorTimeInternal(tCursor);
+    }
+
+    void WaveGraphicsCanvas::setCursorTimeInternal(double tCursor)
+    {
+        if (tCursor < mTransform.tMin()) tCursor = mTransform.tMin();
+        if (tCursor > mTransform.tMax()) tCursor = mTransform.tMax();
+        double wHalf = 0.5 * mScrollbar->viewportWidth();
+        double vpos = mTransform.vPos(tCursor);
+        if (vpos + wHalf > mTransform.vMax()) vpos = mTransform.vMax() - wHalf;
+        if (vpos - wHalf < mTransform.vMin()) vpos = mTransform.vMin() + wHalf;
+        mScrollbar->setVleft(vpos - wHalf);
+        mCursorXpos = mScrollbar->xPosI(tCursor);
+        mTimescale->update();
+        mCursor->setCursorToTime(tCursor);
+        mRenderEngine->update();
     }
 
     void WaveGraphicsCanvas::mouseMoveEvent(QMouseEvent* evt)
@@ -214,7 +248,16 @@ namespace hal {
         mScrollbar->updateScale(newScale-oldScale,tEvent,viewport()->width());
         mRenderEngine->update();
         mTimescale->setScale(viewport()->size().width());
-        mCursor->recalcTime();
+        if (evt->modifiers() & Qt::ShiftModifier)
+            mCursor->recalcTime();
+        else
+        {
+            int xpos = mScrollbar->xPosI(mCursorTime);
+            if (xpos < WaveCursor::sWidth/2 || xpos > viewport()->width()-WaveCursor::sWidth/2)
+                mCursor->recalcTime();
+            else
+                mCursor->setCursorToTime(mCursorTime);
+        }
     }
 
     bool WaveGraphicsCanvas::canUndoZoom() const

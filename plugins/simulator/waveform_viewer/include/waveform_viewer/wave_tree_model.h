@@ -93,6 +93,8 @@ namespace hal {
         void handleGroupRenamed(int grpId);
         void handleWaveAddedToGroup(const QVector<u32>& netIds, int grpId);
         void handleWaveRemovedFromGroup(int iwave, int grpId);
+        void handleBooleanAdded(int boolId);
+        void handleTriggerAdded(int trigId);
         void handleGroupAdded(int grpId);
         void handleGroupAboutToBeRemoved(WaveDataGroup* grp);
         void handleGroupUpdated(int grpId);
@@ -125,14 +127,21 @@ namespace hal {
         void insertExisting(int row, const QModelIndex& parent, WaveItem* wi);
         WaveItem* removeItemFromHash(int row, const QModelIndex &parent);
         void removeGroup(const QModelIndex& groupIndex);
+        void insertBoolean(const QModelIndex& boolIndex, const QString& boolExpression, WaveDataBoolean* wdBool=nullptr);
+        void insertBoolean(const QModelIndex& boolIndex, const QList<WaveData*>& boolWaves, const QList<int>& acceptMask);
+        void insertTrigger(const QModelIndex& trigIndex, const QList<WaveData*>& trigWaves, const QList<int>& toVal,
+                           WaveData* wdFilter=nullptr, WaveDataTrigger *wdTrig=nullptr);
         void insertGroup(const QModelIndex& groupIndex, WaveDataGroup *grp=nullptr);
         int waveIndex(const QModelIndex& index) const;
         int groupId(const QModelIndex& grpIndex) const;
+        int booleanId(const QModelIndex& boolIndex) const;
+        int triggerId(const QModelIndex& trigIndex) const;
         WaveData* item(const QModelIndex& index) const;
         WaveItemIndex hashIndex(const QModelIndex& index) const;
 
         void setGroupPosition(int ypos, const QModelIndex& index);
         void addWaves(const QVector<WaveData*>& wds);
+        bool onlyRootItemsSelected(const QModelIndexList& selectList) const;
 
         double cursorTime() const { return mCursorTime; }
         int cursorXpos() const { return mCursorXpos; }

@@ -115,7 +115,6 @@ namespace hal
             instantiate_module(const std::string& instance_name, VerilogModule* verilog_module, Module* parent, const std::unordered_map<std::string, std::string>& parent_module_assignments);
 
         // helper functions
-        void remove_comments(std::string& line, bool& multi_line_comment) const;
         std::string get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const;
     };
 }    // namespace hal

@@ -31,7 +31,7 @@ namespace hal {
         layout->addWidget(tv,0,0,1,2);
         QDialogButtonBox* dbb = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
         connect(dbb, &QDialogButtonBox::rejected, this, &QDialog::reject);
-        if (wd->bits() > 1)
+        if (wd->netType() != WaveData::RegularNet)
             dbb->button(QDialogButtonBox::Ok)->setDisabled(true);
         else
             connect(dbb, &QDialogButtonBox::accepted, this, &QDialog::accept);
@@ -229,10 +229,14 @@ namespace hal {
 
     Qt::ItemFlags WaveEditTable::flags(const QModelIndex &index) const
     {
-        if (mWaveDataInput->bits() > 1) return Qt::NoItemFlags;
+        if (mWaveDataInput->bits() > 1)
+        {
+            if (index.column()==2) return Qt::NoItemFlags;
+            return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+        }
         if (index.column()==1)
         {
-            if (index.row()) return Qt::NoItemFlags;
+            if (index.row()) return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
             return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled;
         }
         if (index.column()==2 && (!index.row() || index.row() >= rowCount() - 1)) return Qt::NoItemFlags;

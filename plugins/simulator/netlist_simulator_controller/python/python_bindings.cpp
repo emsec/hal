@@ -137,6 +137,33 @@ namespace hal
                 :rtype: int
             )")
 
+            .def("add_boolean_expression_waveform", &NetlistSimulatorController::add_boolean_expression_waveform, py::arg("expression"), R"(
+                Add waveform based on boolean expression.
+
+                :param str expression: The boolean expression based on names of existing waveforms.
+                :returns: ID of new boolean waveform.
+                :rtype: int
+            )")
+
+            .def("add_boolean_accept_list_waveform", &NetlistSimulatorController::add_boolean_accept_list_waveform, py::arg("input_waves"), py::arg("accepted_combination"), R"(
+                Add boolean waveform based on list of accepted combinations.
+
+                :param list[hal_py.WaveData] input_waves: List of input waveforms.
+                :param list[int] accept_combination: List of accepted combinations. Each combination is coded as binary integer value which is matched bitwise with value of input waveform.
+                :returns: ID of new boolean waveform.
+                :rtype: int
+            )")
+
+
+            .def("add_trigger_time", &NetlistSimulatorController::add_trigger_time, py::arg("trigger_waves"), py::arg("trigger_on_values"), R"(
+                Add trigger time vector based on wave transitions.
+
+                :param list[hal_py.WaveData] trigger_waves: The list of source waveform to generate trigger time.
+                :param list[int] trigger_on_values: Optional list of values. Order of values must match order of waveform. Trigger will only be generated upon transition to value.
+                :returns: ID of new trigger time.
+                :rtype: int
+            )")
+
             .def("remove_waveform_group", &NetlistSimulatorController::remove_waveform_group, py::arg("group_id"), R"(
                 Remove waveform group identified by group ID. Waveform for nets will still be shown but they are not bundled.
 
@@ -348,6 +375,7 @@ namespace hal
                 Getter for a single waveform.
 
                 :param hal_py.Net net: The net waveform is associated with.
+                :returns: The waveform object.
                 :rtype: hal_py.WaveData
             )")
 
@@ -355,7 +383,24 @@ namespace hal
                 Getter for waveform group.
 
                 :param int id: Waveform group id.
+                :returns: The waveform group object.
                 :rtype: hal_py.WaveDataGroup
+            )")
+
+            .def("get_waveform_boolean_by_id", &NetlistSimulatorController::get_waveform_boolean_by_id, py::arg("id"), R"(
+                Getter for boolean waveform.
+
+                :param int id: Boolean waveform id.
+                :returns: The boolean waveform object.
+                :rtype: hal_py.WaveDataBoolean
+            )")
+
+            .def("get_trigger_time_by_id", &NetlistSimulatorController::get_trigger_time_by_id, py::arg("id"), R"(
+                Getter for trigger time.
+
+                :param int id: Trigger time id.
+                :returns: The trigger time object which derives from WaveData.
+                :rtype: hal_py.WaveDataTrigger
             )")
 
             .def("rename_waveform", &NetlistSimulatorController::rename_waveform, py::arg("wave"), py::arg("name"), R"(
@@ -513,6 +558,15 @@ namespace hal
                 :rtype: list[tuple(int,int)]
         )");
 
+        py_wave_data.def("get_triggered_events", &WaveData::get_triggered_events, py::arg("trigger"), py::arg("t0")=0, R"(
+                Get waveform events for trigger time set.
+
+                :param hal_py.WaveDataTrigger trigger: Trigger time set.
+                :param int t0: Optional start time, only events t>=t0 will be returned.
+                :returns: Waveform events.
+                :rtype: list[tuple(int,int)]
+        )");
+
         py::class_<WaveDataGroup, WaveData, RawPtrWrapper<WaveDataGroup>> py_wave_data_group(m, "WaveDataGroup", R"(
                 Waveform data group.
         )");
@@ -535,6 +589,19 @@ namespace hal
                 :rtype: list[hal_py.WaveData]
         )");
 
+        py::class_<WaveDataBoolean, WaveData, RawPtrWrapper<WaveDataBoolean>> py_wave_data_boolean(m, "WaveDataBoolean", R"(
+                Boolean Waveform (combines several waveform by boolean operation).
+        )");
+
+        py::class_<WaveDataTrigger, WaveData, RawPtrWrapper<WaveDataTrigger>> py_wave_data_trigger(m, "WaveDataTrigger", R"(
+                Trigger time set (derived from WaveData).
+        )");
+
+        py_wave_data_trigger.def("set_filter_wave", &WaveDataTrigger::set_filter_wave, py::arg("wave"), R"(
+                Add wave which works as filter allowing trigger only upon value one.
+
+                :param hal_py.WaveData wave: Regular or boolean waveform as filter.
+        )");
 #ifndef PYBIND11_MODULE
         return m.ptr();
 #endif    // PYBIND11_MODULE

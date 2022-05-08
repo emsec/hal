@@ -1,6 +1,7 @@
 #pragma once
 #include <QPolygonF>
 #include "netlist_simulator_controller/saleae_file.h"
+#include "netlist_simulator_controller/wave_group_value.h"
 
 class QPainter;
 
@@ -36,6 +37,13 @@ namespace hal {
         void paint(int y0, QPainter& painter);
     };
 
+    class WaveFormPrimitiveTrigger : public WaveFormPrimitive
+    {
+    public:
+        WaveFormPrimitiveTrigger(float x) : WaveFormPrimitive(x,x) {;}
+        void paint(int y0, QPainter& painter);
+    };
+
     class WaveFormPrimitiveUndefined : public WaveFormPrimitive
     {
     public:
@@ -48,11 +56,10 @@ namespace hal {
     {
         double mAccumTime[2];
     public:
-        static const int sFilledPrimitive = -96;
         WaveFormPrimitiveFilled(float x0, float x1, int val);
         void paint(int y0, QPainter& painter);
         void add(const WaveFormPrimitiveFilled& other);
-        int value() const { return sFilledPrimitive; }
+        int value() const { return WaveGroupValue::sTooManyTransitions; }
     };
 
     class WaveFormPrimitiveValue : public WaveFormPrimitive
