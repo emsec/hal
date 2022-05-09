@@ -116,6 +116,11 @@ namespace hal
         void copyId() const;
 
         /**
+         * Copies the python code to retrieve the module's id to the clipvoard.
+         */
+        void pyCopyId() const;
+
+        /**
          * Opens a Dialog to change the modules's type.
          */
         void changeType();

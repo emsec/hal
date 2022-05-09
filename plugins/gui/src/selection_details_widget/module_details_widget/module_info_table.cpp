@@ -14,44 +14,46 @@ namespace hal
 {
     const QString ModuleInfoTable::nameRowKey = "Name";
     const QString ModuleInfoTable::idRowKey = "ID";
-    const QString ModuleInfoTable::typeRowKey = "Module Type";
-    const QString ModuleInfoTable::moduleRowKey = "Parent module";
+    const QString ModuleInfoTable::typeRowKey = "Type";
+    const QString ModuleInfoTable::moduleRowKey = "Parent";
     const QString ModuleInfoTable::noOfGatesRowKey = "No. of Gates";
-    const QString ModuleInfoTable::noOfModulesRowKey = "No. of Submodules";
-    const QString ModuleInfoTable::noOfNetsRowKey = "No. of Nets";
+    const QString ModuleInfoTable::noOfModulesRowKey = "Number of submodules";
+    const QString ModuleInfoTable::noOfNetsRowKey = "Number of nets";
 
     ModuleInfoTable::ModuleInfoTable(QWidget* parent) : GeneralTableWidget(parent), mModule(nullptr)
     {
         mNameEntryContextMenu = new QMenu();
-        mNameEntryContextMenu->addAction("Extract module name as plain text", std::bind(&ModuleInfoTable::copyName, this));
+        mNameEntryContextMenu->addAction("Name to clipboard", std::bind(&ModuleInfoTable::copyName, this));
         mNameEntryContextMenu->addSection("Misc");
-        mNameEntryContextMenu->addAction("Change module name", std::bind(&ModuleInfoTable::changeName, this));
+        mNameEntryContextMenu->addAction("Change name", std::bind(&ModuleInfoTable::changeName, this));
         mNameEntryContextMenu->addSection("Python");
-        mNameEntryContextMenu->addAction(QIcon(":/icons/python"), "Extract module name as phyton code", std::bind(&ModuleInfoTable::pyCopyName, this));
+        mNameEntryContextMenu->addAction(QIcon(":/icons/python"), "Get name", std::bind(&ModuleInfoTable::pyCopyName, this));
 
         mIdEntryContextMenu = new QMenu();
-        mIdEntryContextMenu->addAction("Extract module ID as plain text", std::bind(&ModuleInfoTable::copyId, this));
+        mIdEntryContextMenu->addAction("ID to clipboard", std::bind(&ModuleInfoTable::copyId, this));
+        mIdEntryContextMenu->addSection("Python");
+        mIdEntryContextMenu->addAction(QIcon(":/icons/python"), "Get ID", std::bind(&ModuleInfoTable::pyCopyId, this));
 
         mTypeEntryContextMenu = new QMenu();
-        mTypeEntryContextMenu->addAction("Extract module type as plain text", std::bind(&ModuleInfoTable::copyType, this));
+        mTypeEntryContextMenu->addAction("Type to clipboard", std::bind(&ModuleInfoTable::copyType, this));
         mTypeEntryContextMenu->addSection("Misc");
-        mTypeEntryContextMenu->addAction("Change module type", std::bind(&ModuleInfoTable::changeType, this));
+        mTypeEntryContextMenu->addAction("Change type", std::bind(&ModuleInfoTable::changeType, this));
         mTypeEntryContextMenu->addSection("Python");
-        mTypeEntryContextMenu->addAction(QIcon(":/icons/python"), "Extract module type as python code", std::bind(&ModuleInfoTable::pyCopyType, this));
+        mTypeEntryContextMenu->addAction(QIcon(":/icons/python"), "Get type", std::bind(&ModuleInfoTable::pyCopyType, this));
 
         mModuleEntryContextMenu = new QMenu();
-        mModuleEntryContextMenu->addAction("Extract parent module name plain text", std::bind(&ModuleInfoTable::copyModule, this));
+        mModuleEntryContextMenu->addAction("Parent name to clipboard", std::bind(&ModuleInfoTable::copyModule, this));
         mModuleEntryContextMenu->addSection("Python");
-        mModuleEntryContextMenu->addAction(QIcon(":/icons/python"), "Extract parent module name python code", std::bind(&ModuleInfoTable::pyCopyModule, this));
+        mModuleEntryContextMenu->addAction(QIcon(":/icons/python"), "Get parent", std::bind(&ModuleInfoTable::pyCopyModule, this));
 
         mNumOfGatesContextMenu = new QMenu();
-        mNumOfGatesContextMenu->addAction("Extract number of gates as plain text", std::bind(&ModuleInfoTable::copyNumberOfGates, this));
+        mNumOfGatesContextMenu->addAction("Number of gates to clipboard", std::bind(&ModuleInfoTable::copyNumberOfGates, this));
 
         mNumOfSubmodulesContextMenu = new QMenu();
-        mNumOfSubmodulesContextMenu->addAction("Extract number of submodule as plain text", std::bind(&ModuleInfoTable::copyNumberOfSubmodules, this));
+        mNumOfSubmodulesContextMenu->addAction("Number of submodules to clipboard", std::bind(&ModuleInfoTable::copyNumberOfSubmodules, this));
 
         mNumOfNetsContextMenu = new QMenu();
-        mNumOfNetsContextMenu->addAction("Extract number of nets to clipboard", std::bind(&ModuleInfoTable::copyNumberOfNets, this));
+        mNumOfNetsContextMenu->addAction("Number of nets to clipboard", std::bind(&ModuleInfoTable::copyNumberOfNets, this));
 
         mModuleDoubleClickedAction = std::bind(&ModuleInfoTable::navModule, this);
 
@@ -174,6 +176,11 @@ namespace hal
     void ModuleInfoTable::copyId() const
     {
         copyToClipboard(id());
+    }
+
+    void ModuleInfoTable::pyCopyId() const
+    {
+        copyToClipboard(PyCodeProvider::pyCodeModuleId(mModule->get_id()));
     }
 
     void ModuleInfoTable::changeType()
