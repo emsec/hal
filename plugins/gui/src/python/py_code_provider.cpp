@@ -25,6 +25,13 @@ namespace hal
         return gateCodePrefix.arg(gateId);
     }
 
+    QString PyCodeProvider::pyCodeGateId(u32 gateId)
+    {
+        const QString suffix = "get_id()";
+
+        return buildPyCode(gateCodePrefix, suffix, gateId);
+    }
+
     QString PyCodeProvider::pyCodeGateName(u32 gateId)
     {
         const QString suffix = "get_name()";
@@ -188,6 +195,13 @@ namespace hal
         return netCodePrefix.arg(netId);
     }
 
+    QString PyCodeProvider::pyCodeNetId(u32 netId)
+    {
+        const QString suffix = "get_id()";
+
+        return buildPyCode(netCodePrefix, suffix, netId);
+    }
+
     QString PyCodeProvider::pyCodeNetName(u32 netId)
     {
         const QString suffix = "get_name()";
@@ -229,6 +243,13 @@ namespace hal
     QString PyCodeProvider::pyCodeModule(u32 moduleId)
     {
         return moduleCodePrefix.arg(moduleId);
+    }
+
+    QString PyCodeProvider::pyCodeModuleId(u32 moduleId)
+    {
+        const QString suffix = "get_id()";
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
     }
 
     QString PyCodeProvider::pyCodeModuleName(u32 moduleId)
