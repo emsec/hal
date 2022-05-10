@@ -19,6 +19,7 @@ namespace hal
     const QString ModuleInfoTable::noOfGatesRowKey = "No. of Gates";
     const QString ModuleInfoTable::noOfModulesRowKey = "Number of submodules";
     const QString ModuleInfoTable::noOfNetsRowKey = "Number of nets";
+    const QString ModuleInfoTable::noOfPinsKey = "Number of pins";
 
     ModuleInfoTable::ModuleInfoTable(QWidget* parent) : GeneralTableWidget(parent), mModule(nullptr)
     {
@@ -51,9 +52,15 @@ namespace hal
 
         mNumOfSubmodulesContextMenu = new QMenu();
         mNumOfSubmodulesContextMenu->addAction("Number of submodules to clipboard", std::bind(&ModuleInfoTable::copyNumberOfSubmodules, this));
+        mNumOfSubmodulesContextMenu->addAction(QIcon(":/icons/python"), "Get submodules", std::bind(&ModuleInfoTable::pyCopyGetSubmodules, this));
 
         mNumOfNetsContextMenu = new QMenu();
         mNumOfNetsContextMenu->addAction("Number of nets to clipboard", std::bind(&ModuleInfoTable::copyNumberOfNets, this));
+        mNumOfNetsContextMenu->addAction(QIcon(":/icons/python"), "Get nets", std::bind(&ModuleInfoTable::pyCopyGetNets, this));
+
+        mNumOfPinsContextMenu = new QMenu(this);
+        mNumOfPinsContextMenu->addAction("Number of pins to clipboard", std::bind(&ModuleInfoTable::copyNumberOfPins, this));
+        mNumOfPinsContextMenu->addAction(QIcon(":/icons/python"), "Get pins", std::bind(&ModuleInfoTable::pyCopyGetPins, this));
 
         mModuleDoubleClickedAction = std::bind(&ModuleInfoTable::navModule, this);
 
@@ -84,6 +91,7 @@ namespace hal
             setRow(noOfGatesRowKey, numberOfGates(), mNumOfGatesContextMenu);
             setRow(noOfModulesRowKey, numberOfSubModules(), mNumOfSubmodulesContextMenu);
             setRow(noOfNetsRowKey, numberOfNets(), mNumOfNetsContextMenu);
+            setRow(noOfPinsKey, numberOfPins(), mNumOfPinsContextMenu);
             
             adjustSize();
         }
@@ -145,6 +153,11 @@ namespace hal
     QString ModuleInfoTable::numberOfNets() const
     {
         return QString::number(mModule->get_internal_nets().size());
+    }
+
+    QString ModuleInfoTable::numberOfPins() const
+    {
+        return QString::number(mModule->get_pins().size());
     }
 
     void ModuleInfoTable::changeName()
@@ -228,9 +241,29 @@ namespace hal
         copyToClipboard(numberOfSubModules());
     }
 
+    void ModuleInfoTable::pyCopyGetSubmodules() const
+    {
+        copyToClipboard(PyCodeProvider::pyCodeModuleSubmodules(mModule->get_id()));
+    }
+
     void ModuleInfoTable::copyNumberOfNets() const
     {
         copyToClipboard(numberOfNets());
+    }
+
+    void ModuleInfoTable::pyCopyGetNets() const
+    {
+        copyToClipboard(PyCodeProvider::pyCodeModuleNets(mModule->get_id()));
+    }
+
+    void ModuleInfoTable::copyNumberOfPins() const
+    {
+        copyToClipboard(numberOfPins());
+    }
+
+    void ModuleInfoTable::pyCopyGetPins() const
+    {
+        copyToClipboard(PyCodeProvider::pyCodeModulePins(mModule->get_id()));
     }
 
     void ModuleInfoTable::navModule()

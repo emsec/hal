@@ -96,6 +96,11 @@ namespace hal
         QString numberOfNets() const;
 
         /**
+         * Returns the module's number of pins.
+         */
+        QString numberOfPins() const;
+
+        /**
          * Opens a Dialog to change the modules's name.
          */
         void changeName();
@@ -156,9 +161,29 @@ namespace hal
         void copyNumberOfSubmodules() const;
 
         /**
+         * Copies the python code to retrieve the submodules to the clipboard.
+         */
+        void pyCopyGetSubmodules() const;
+
+        /**
          * Copies the number of nets contained in the module to the clipboard.
          */
         void copyNumberOfNets() const;
+
+        /**
+         * Copies the python code to retrieve the nets to the clipboard.
+         */
+        void pyCopyGetNets() const;
+
+        /**
+         * Copies the number of pins to the clipboard.
+         */
+        void copyNumberOfPins() const;
+
+        /**
+         * Copies the python code to retrieve the module's pins to the clipboard.
+         */
+        void pyCopyGetPins() const;
 
         /**
          * Changes the selection to the modules's parent module.
@@ -217,6 +242,7 @@ namespace hal
         QMenu* mNumOfGatesContextMenu;
         QMenu* mNumOfSubmodulesContextMenu;
         QMenu* mNumOfNetsContextMenu;
+        QMenu* mNumOfPinsContextMenu;
 
         std::function<void()> mModuleDoubleClickedAction;
 
@@ -227,6 +253,7 @@ namespace hal
         static const QString noOfGatesRowKey;
         static const QString noOfModulesRowKey;
         static const QString noOfNetsRowKey;
+        static const QString noOfPinsKey;
 
     }; 
 }

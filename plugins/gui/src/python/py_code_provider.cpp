@@ -274,6 +274,48 @@ namespace hal
         return buildPyCode(moduleCodePrefix, suffix, moduleId);
     }
 
+    QString PyCodeProvider::pyCodeModuleSubmodules(u32 moduleId)
+    {
+        const QString suffix = "get_submodules()";
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
+    }
+
+    QString PyCodeProvider::pyCodeModuleNets(u32 moduleId)
+    {
+        const QString suffix = "get_nets()";
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
+    }
+
+    QString PyCodeProvider::pyCodeModuleInputNets(u32 moduleId)
+    {
+        const QString suffix = "get_input_nets()";
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
+    }
+
+    QString PyCodeProvider::pyCodeModuleOutputNets(u32 moduleId)
+    {
+        const QString suffix = "get_output_nets()";
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
+    }
+
+    QString PyCodeProvider::pyCodeModuleInternalNets(u32 moduleId)
+    {
+        const QString suffix = "get_internal_nets()";
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
+    }
+
+    QString PyCodeProvider::pyCodeModuleIsTopModule(u32 moduleId)
+    {
+        const QString suffix = "is_top_module()";
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
+    }
+
     QString PyCodeProvider::pyCodeModuleData(u32 moduleId, QString category, QString key)
     {
         const QString suffix = QString("data[(\"%1\", \"%2\")]").arg(category, key);
@@ -290,6 +332,13 @@ namespace hal
     QString PyCodeProvider::pyCodeModulePinGroup(u32 moduleId, QString groupName)
     {
         const QString suffix = QString("get_pin_group(\"%1\")").arg(groupName);
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
+    }
+
+    QString PyCodeProvider::pyCodeModulePinGroups(u32 moduleId)
+    {
+        const QString suffix = "get_pin_groups";
 
         return buildPyCode(moduleCodePrefix, suffix, moduleId);
     }
@@ -319,6 +368,13 @@ namespace hal
     QString PyCodeProvider::pyCodeModulePinType(u32 moduleId, QString pinName)
     {
         return pyCodeModulePinByName(moduleId, pinName) + ".get_type()";
+    }
+
+    QString PyCodeProvider::pyCodeModulePins(u32 moduleId)
+    {
+        static QString suffix = "get_pins()";
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
     }
 
     QString PyCodeProvider::pyCodeGrouping(u32 groupingId)

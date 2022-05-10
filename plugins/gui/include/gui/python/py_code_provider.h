@@ -79,14 +79,22 @@ namespace hal
         static QString pyCodeModuleName(u32 moduleId);
         static QString pyCodeModuleType(u32 moduleId);
         static QString pyCodeModuleModule(u32 moduleId);
+        static QString pyCodeModuleSubmodules(u32 moduleId);
+        static QString pyCodeModuleNets(u32 moduleId);
+        static QString pyCodeModuleInputNets(u32 moduleId);
+        static QString pyCodeModuleOutputNets(u32 moduleId);
+        static QString pyCodeModuleInternalNets(u32 moduleId);
+        static QString pyCodeModuleIsTopModule(u32 moduleId);
         static QString pyCodeModuleData(u32 moduleId, QString category, QString key);
         static QString pyCodeModuleDataMap(u32 moduleId);
         static QString pyCodeModulePinGroup(u32 moduleId, QString groupName);
+        static QString pyCodeModulePinGroups(u32 moduleId);
         static QString pyCodeModulePinGroupName(u32 moduleId, QString groupName);
         static QString pyCodeModulePinByName(u32 moduleId, QString pinName);
         static QString pyCodeModulePinName(u32 moduleId, QString pinName);
         static QString pyCodeModulePinDirection(u32 moduleId, QString pinName);
         static QString pyCodeModulePinType(u32 moduleId, QString pinName);
+        static QString pyCodeModulePins(u32 moduleId);
 
         static QString pyCodeGrouping(u32 groupingId);
         static QString pyCodeGroupingName(u32 groupingId);
