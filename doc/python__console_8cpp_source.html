@@ -386,96 +386,101 @@ $(document).ready(function(){initNavTree('python__console_8cpp_source.html','');
 <div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160; </div>
 <div class="line"><a name="l00299"></a><span class="lineno"><a class="line" href="classhal_1_1_python_console.html#a3cd612661b945b5b76cdf313e399acd2">  299</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_python_console.html#a3cd612661b945b5b76cdf313e399acd2">PythonConsole::handleUpKeyPressed</a>()</div>
 <div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;    {</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        <span class="keyword">auto</span> length = mHistory-&gt;size() - 1;</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160; </div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        <span class="keywordflow">if</span> (mCurrentHistoryIndex == -1)</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        {</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;            mCurrentInput         = <a class="code" href="classhal_1_1_python_console.html#a61fee6a9b36d7d121f6ca71b49b03f17">getCurrentCommand</a>();</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;            mCurrentHistoryIndex = length;</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;            <a class="code" href="classhal_1_1_python_console.html#a901c7170886a7a03b1a4d769a030475f">replaceCurrentCommand</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(mHistory-&gt;getHistoryItem(mCurrentHistoryIndex)));</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;        }</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;        {</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;            <span class="keywordflow">if</span> (mCurrentHistoryIndex == 0)</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;            {</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;                <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;            }</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160; </div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;            mCurrentHistoryIndex--;</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;            <a class="code" href="classhal_1_1_python_console.html#a901c7170886a7a03b1a4d769a030475f">replaceCurrentCommand</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(mHistory-&gt;getHistoryItem(mCurrentHistoryIndex)));</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;        }</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;    }</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        <span class="keyword">auto</span> lastIndex = mHistory-&gt;size() - 1;</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;        <span class="keywordflow">if</span> (lastIndex &lt; 0)</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        {</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;            <span class="comment">// history empty</span></div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;            <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;        }</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160; </div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;        <span class="keywordflow">if</span> (mCurrentHistoryIndex == -1)</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        {</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;            mCurrentInput         = <a class="code" href="classhal_1_1_python_console.html#a61fee6a9b36d7d121f6ca71b49b03f17">getCurrentCommand</a>();</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;            mCurrentHistoryIndex = lastIndex;</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;            <a class="code" href="classhal_1_1_python_console.html#a901c7170886a7a03b1a4d769a030475f">replaceCurrentCommand</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(mHistory-&gt;getHistoryItem(mCurrentHistoryIndex)));</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        }</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;        {</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;            <span class="keywordflow">if</span> (mCurrentHistoryIndex == 0)</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;            {</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;                <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;            }</div>
 <div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160; </div>
-<div class="line"><a name="l00321"></a><span class="lineno"><a class="line" href="classhal_1_1_python_console.html#a54b4c7366c7b842bab6d0692cad26836">  321</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_python_console.html#a54b4c7366c7b842bab6d0692cad26836">PythonConsole::handleDownKeyPressed</a>()</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;    {</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;        <span class="keyword">auto</span> length = mHistory-&gt;size() - 1;</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160; </div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        <span class="keywordflow">if</span> (mCurrentHistoryIndex == -1)</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;        {</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;            <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;        }</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;            mCurrentHistoryIndex--;</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;            <a class="code" href="classhal_1_1_python_console.html#a901c7170886a7a03b1a4d769a030475f">replaceCurrentCommand</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(mHistory-&gt;getHistoryItem(mCurrentHistoryIndex)));</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;        }</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;    }</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160; </div>
+<div class="line"><a name="l00326"></a><span class="lineno"><a class="line" href="classhal_1_1_python_console.html#a54b4c7366c7b842bab6d0692cad26836">  326</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_python_console.html#a54b4c7366c7b842bab6d0692cad26836">PythonConsole::handleDownKeyPressed</a>()</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;    {</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;        <span class="keyword">auto</span> lastIndex = mHistory-&gt;size() - 1;</div>
 <div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160; </div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;        <span class="keywordflow">if</span> (mCurrentHistoryIndex == length)</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;        <span class="keywordflow">if</span> (mCurrentHistoryIndex == -1)</div>
 <div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;        {</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;            mCurrentHistoryIndex = -1;</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;            <a class="code" href="classhal_1_1_python_console.html#a901c7170886a7a03b1a4d769a030475f">replaceCurrentCommand</a>(mCurrentInput);</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;        }</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;            <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;        }</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160; </div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;        <span class="keywordflow">if</span> (mCurrentHistoryIndex == lastIndex)</div>
 <div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        {</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;            mCurrentHistoryIndex++;</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;            <a class="code" href="classhal_1_1_python_console.html#a901c7170886a7a03b1a4d769a030475f">replaceCurrentCommand</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(mHistory-&gt;getHistoryItem(mCurrentHistoryIndex)));</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;            mCurrentHistoryIndex = -1;</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;            <a class="code" href="classhal_1_1_python_console.html#a901c7170886a7a03b1a4d769a030475f">replaceCurrentCommand</a>(mCurrentInput);</div>
 <div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;        }</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;    }</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160; </div>
-<div class="line"><a name="l00342"></a><span class="lineno"><a class="line" href="classhal_1_1_python_console.html#a4703019c5f08d8f180ea292a40955c4d">  342</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_python_console.html#a4703019c5f08d8f180ea292a40955c4d">PythonConsole::handleTabKeyPressed</a>()</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;    {</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;        <span class="keywordflow">if</span> (mInCompoundPrompt)</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;        {</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;            mCurrentInput = mCurrentCompoundInput + <a class="code" href="classhal_1_1_python_console.html#a61fee6a9b36d7d121f6ca71b49b03f17">getCurrentCommand</a>();</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;        }</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;        <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;        {</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;            mCurrentInput = <a class="code" href="classhal_1_1_python_console.html#a61fee6a9b36d7d121f6ca71b49b03f17">getCurrentCommand</a>();</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;        }</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> current_line = <a class="code" href="classhal_1_1_python_console.html#a61fee6a9b36d7d121f6ca71b49b03f17">getCurrentCommand</a>();</div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;        <span class="keywordflow">if</span> (current_line.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">isEmpty</a>())</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;        {</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;            mCurrentHistoryIndex++;</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;            <a class="code" href="classhal_1_1_python_console.html#a901c7170886a7a03b1a4d769a030475f">replaceCurrentCommand</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(mHistory-&gt;getHistoryItem(mCurrentHistoryIndex)));</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;        }</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    }</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160; </div>
+<div class="line"><a name="l00347"></a><span class="lineno"><a class="line" href="classhal_1_1_python_console.html#a4703019c5f08d8f180ea292a40955c4d">  347</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_python_console.html#a4703019c5f08d8f180ea292a40955c4d">PythonConsole::handleTabKeyPressed</a>()</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    {</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;        <span class="keywordflow">if</span> (mInCompoundPrompt)</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;        {</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;            mCurrentInput = mCurrentCompoundInput + <a class="code" href="classhal_1_1_python_console.html#a61fee6a9b36d7d121f6ca71b49b03f17">getCurrentCommand</a>();</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;        }</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;        <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;        {</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qtextedit.html#insertPlainText">insertPlainText</a>(<span class="stringliteral">&quot;\t&quot;</span>);</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;            mCurrentInput = <a class="code" href="classhal_1_1_python_console.html#a61fee6a9b36d7d121f6ca71b49b03f17">getCurrentCommand</a>();</div>
 <div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;        }</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;        <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;        {</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;            <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;python&quot;</span>, <span class="stringliteral">&quot;completing: &#39;{}&#39;&quot;</span>, mCurrentInput.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">toStdString</a>());</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;            <span class="keyword">auto</span> r = <a class="code" href="namespacehal.html#a54235e7df25a78fa437937569928dc84">gPythonContext</a>-&gt;complete(mCurrentInput, <span class="keyword">true</span>);</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;            <span class="keywordflow">if</span> (r.size() == 1)</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;            {</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;                <a class="code" href="classhal_1_1_python_console.html#ac2c922dfa813947910ac8a420aff64e6">appendToCurrentCommand</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(std::get&lt;1&gt;(r.at(0))));</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;            }</div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (r.size() &gt; 1)</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;            {</div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;                mInCompletion         = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> candidates      = <span class="stringliteral">&quot;\n&quot;</span>;</div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> matching_prefix = <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(std::get&lt;1&gt;(r[0]));</div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; tup : r)</div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;                {</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;                    <span class="keyword">auto</span> candidate  = <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(std::get&lt;0&gt;(tup));</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;                    <span class="keyword">auto</span> completion = <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(std::get&lt;1&gt;(tup));</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;                    candidates += candidate + <span class="stringliteral">&quot;    &quot;</span>;</div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;                    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; matching_prefix.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#size">size</a>() &amp;&amp; i &lt; completion.size(); ++i)</div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;                    {</div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;                        <span class="keywordflow">if</span> (matching_prefix[i] != completion[i])</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;                        {</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;                            matching_prefix = matching_prefix.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#mid">mid</a>(0, i);</div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;                        }</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;                    }</div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;                }</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;                candidates += <span class="stringliteral">&quot;\n&quot;</span>;</div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;                <a class="code" href="classhal_1_1_python_console.html#a4f718e12610e89012ad39bcd756fd037">handleStdout</a>(candidates);</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;                <a class="code" href="classhal_1_1_python_console.html#a3b1a404856192fa11b09c9b6ca602e6d">displayPrompt</a>();</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;                <a class="code" href="classhal_1_1_python_console.html#a901c7170886a7a03b1a4d769a030475f">replaceCurrentCommand</a>(current_line + matching_prefix);</div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;            }</div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;        }</div>
-<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;    }</div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;}</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> current_line = <a class="code" href="classhal_1_1_python_console.html#a61fee6a9b36d7d121f6ca71b49b03f17">getCurrentCommand</a>();</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;        <span class="keywordflow">if</span> (current_line.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">isEmpty</a>())</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;        {</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qtextedit.html#insertPlainText">insertPlainText</a>(<span class="stringliteral">&quot;\t&quot;</span>);</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;        }</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;        {</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;            <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;python&quot;</span>, <span class="stringliteral">&quot;completing: &#39;{}&#39;&quot;</span>, mCurrentInput.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">toStdString</a>());</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;            <span class="keyword">auto</span> r = <a class="code" href="namespacehal.html#a54235e7df25a78fa437937569928dc84">gPythonContext</a>-&gt;complete(mCurrentInput, <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;            <span class="keywordflow">if</span> (r.size() == 1)</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;            {</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;                <a class="code" href="classhal_1_1_python_console.html#ac2c922dfa813947910ac8a420aff64e6">appendToCurrentCommand</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(std::get&lt;1&gt;(r.at(0))));</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;            }</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (r.size() &gt; 1)</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;            {</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;                mInCompletion         = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> candidates      = <span class="stringliteral">&quot;\n&quot;</span>;</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> matching_prefix = <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(std::get&lt;1&gt;(r[0]));</div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; tup : r)</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;                {</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;                    <span class="keyword">auto</span> candidate  = <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(std::get&lt;0&gt;(tup));</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;                    <span class="keyword">auto</span> completion = <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(std::get&lt;1&gt;(tup));</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;                    candidates += candidate + <span class="stringliteral">&quot;    &quot;</span>;</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;                    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; matching_prefix.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#size">size</a>() &amp;&amp; i &lt; completion.size(); ++i)</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;                    {</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;                        <span class="keywordflow">if</span> (matching_prefix[i] != completion[i])</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;                        {</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;                            matching_prefix = matching_prefix.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#mid">mid</a>(0, i);</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;                        }</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;                    }</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;                }</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;                candidates += <span class="stringliteral">&quot;\n&quot;</span>;</div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;                <a class="code" href="classhal_1_1_python_console.html#a4f718e12610e89012ad39bcd756fd037">handleStdout</a>(candidates);</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;                <a class="code" href="classhal_1_1_python_console.html#a3b1a404856192fa11b09c9b6ca602e6d">displayPrompt</a>();</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;                <a class="code" href="classhal_1_1_python_console.html#a901c7170886a7a03b1a4d769a030475f">replaceCurrentCommand</a>(current_line + matching_prefix);</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;            }</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;        }</div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;    }</div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclasshal_1_1_python_console_html_a1a9c74ad14277dca87092ad872dc887e"><div class="ttname"><a href="classhal_1_1_python_console.html#a1a9c74ad14277dca87092ad872dc887e">hal::PythonConsole::mousePressEvent</a></div><div class="ttdeci">void mousePressEvent(QMouseEvent *event) override</div><div class="ttdef"><b>Definition:</b> <a href="python__console_8cpp_source.html#l00159">python_console.cpp:159</a></div></div>
@@ -519,7 +524,7 @@ $(document).ready(function(){initNavTree('python__console_8cpp_source.html','');
 <div class="ttc" id="aclasshal_1_1_python_console_history_html"><div class="ttname"><a href="classhal_1_1_python_console_history.html">hal::PythonConsoleHistory</a></div><div class="ttdoc">Stores the history of python commands.</div><div class="ttdef"><b>Definition:</b> <a href="python__console__history_8h_source.html#l00037">python_console_history.h:37</a></div></div>
 <div class="ttc" id="aqstring_html_length"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstring.html#length">QString::length</a></div><div class="ttdeci">int length() const const</div></div>
 <div class="ttc" id="aclasshal_1_1_python_console_html_a7b65a898c367dd958163933b42ca93e6"><div class="ttname"><a href="classhal_1_1_python_console.html#a7b65a898c367dd958163933b42ca93e6">hal::PythonConsole::interpretCommand</a></div><div class="ttdeci">void interpretCommand()</div><div class="ttdef"><b>Definition:</b> <a href="python__console_8cpp_source.html#l00229">python_console.cpp:229</a></div></div>
-<div class="ttc" id="aclasshal_1_1_python_console_html_a54b4c7366c7b842bab6d0692cad26836"><div class="ttname"><a href="classhal_1_1_python_console.html#a54b4c7366c7b842bab6d0692cad26836">hal::PythonConsole::handleDownKeyPressed</a></div><div class="ttdeci">void handleDownKeyPressed()</div><div class="ttdef"><b>Definition:</b> <a href="python__console_8cpp_source.html#l00321">python_console.cpp:321</a></div></div>
+<div class="ttc" id="aclasshal_1_1_python_console_html_a54b4c7366c7b842bab6d0692cad26836"><div class="ttname"><a href="classhal_1_1_python_console.html#a54b4c7366c7b842bab6d0692cad26836">hal::PythonConsole::handleDownKeyPressed</a></div><div class="ttdeci">void handleDownKeyPressed()</div><div class="ttdef"><b>Definition:</b> <a href="python__console_8cpp_source.html#l00326">python_console.cpp:326</a></div></div>
 <div class="ttc" id="aclasshal_1_1_python_console_html_a777f0b2ca34c7c7118f76646d2fe390f"><div class="ttname"><a href="classhal_1_1_python_console.html#a777f0b2ca34c7c7118f76646d2fe390f">hal::PythonConsole::selectionEditable</a></div><div class="ttdeci">bool selectionEditable()</div><div class="ttdef"><b>Definition:</b> <a href="python__console_8cpp_source.html#l00292">python_console.cpp:292</a></div></div>
 <div class="ttc" id="aclasshal_1_1_python_console_qss_adapter_html_ac13817e812a6ee008c30ebeaf01b293f"><div class="ttname"><a href="classhal_1_1_python_console_qss_adapter.html#ac13817e812a6ee008c30ebeaf01b293f">hal::PythonConsoleQssAdapter::instance</a></div><div class="ttdeci">static PythonConsoleQssAdapter * instance()</div><div class="ttdef"><b>Definition:</b> <a href="python__console__qss__adapter_8cpp_source.html#l00014">python_console_qss_adapter.cpp:14</a></div></div>
 <div class="ttc" id="aqtextedit_html_clear"><div class="ttname"><a href="https://doc.qt.io/qt-5/qtextedit.html#clear">QTextEdit::clear</a></div><div class="ttdeci">void clear()</div></div>
@@ -549,7 +554,7 @@ $(document).ready(function(){initNavTree('python__console_8cpp_source.html','');
 <div class="ttc" id="aqtextedit_html_undoRedoEnabled-prop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qtextedit.html#undoRedoEnabled-prop">QTextEdit::setUndoRedoEnabled</a></div><div class="ttdeci">void setUndoRedoEnabled(bool enable)</div></div>
 <div class="ttc" id="aqtextcursor_html_position"><div class="ttname"><a href="https://doc.qt.io/qt-5/qtextcursor.html#position">QTextCursor::position</a></div><div class="ttdeci">int position() const const</div></div>
 <div class="ttc" id="aqtextcursor_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qtextcursor.html">QTextCursor</a></div></div>
-<div class="ttc" id="aclasshal_1_1_python_console_html_a4703019c5f08d8f180ea292a40955c4d"><div class="ttname"><a href="classhal_1_1_python_console.html#a4703019c5f08d8f180ea292a40955c4d">hal::PythonConsole::handleTabKeyPressed</a></div><div class="ttdeci">void handleTabKeyPressed()</div><div class="ttdef"><b>Definition:</b> <a href="python__console_8cpp_source.html#l00342">python_console.cpp:342</a></div></div>
+<div class="ttc" id="aclasshal_1_1_python_console_html_a4703019c5f08d8f180ea292a40955c4d"><div class="ttname"><a href="classhal_1_1_python_console.html#a4703019c5f08d8f180ea292a40955c4d">hal::PythonConsole::handleTabKeyPressed</a></div><div class="ttdeci">void handleTabKeyPressed()</div><div class="ttdef"><b>Definition:</b> <a href="python__console_8cpp_source.html#l00347">python_console.cpp:347</a></div></div>
 <div class="ttc" id="aqwidget_html_cursor-prop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html#cursor-prop">QWidget::cursor</a></div><div class="ttdeci">cursor</div></div>
 <div class="ttc" id="aqevent_html_accept"><div class="ttname"><a href="https://doc.qt.io/qt-5/qevent.html#accept">QEvent::accept</a></div><div class="ttdeci">void accept()</div></div>
 <div class="ttc" id="aqtextedit_html_ensureCursorVisible"><div class="ttname"><a href="https://doc.qt.io/qt-5/qtextedit.html#ensureCursorVisible">QTextEdit::ensureCursorVisible</a></div><div class="ttdeci">void ensureCursorVisible()</div></div>
@@ -558,7 +563,7 @@ $(document).ready(function(){initNavTree('python__console_8cpp_source.html','');
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_609dd161604b7aa86c7b630207f12412.html">python</a></li><li class="navelem"><a class="el" href="python__console_8cpp.html">python_console.cpp</a></li>
-    <li class="footer">Generated on Wed Apr 27 2022 16:48:27 for HAL by
+    <li class="footer">Generated on Tue May 10 2022 13:46:25 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
