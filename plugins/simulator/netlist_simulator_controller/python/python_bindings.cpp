@@ -59,8 +59,17 @@ namespace hal
             .def("create_simulator_controller", &NetlistSimulatorControllerPlugin::create_simulator_controller, py::arg("name") = std::string(), R"(
                 Create a netlist simulation controller instance.
 
-                :returns: The simulator controller instance.
                 :param str name: Optional name for new controller.
+                :returns: The simulator controller instance.
+                :rtype: netlist_simulator_controller.NetlistSimulatorController
+            )")
+
+            .def("restore_simulator_controller", &NetlistSimulatorControllerPlugin::restore_simulator_controller, py::arg("netlist"), py::arg("filename"), R"(
+                Restore controller with waveform data from previous simulation.
+
+                :param hal_py.Netlist netlist: The netlist the simulation was performed with.
+                :param str filename: The netlist the simulation was performed with.
+                :returns: The simulator controller instance.
                 :rtype: netlist_simulator_controller.NetlistSimulatorController
             )")
 

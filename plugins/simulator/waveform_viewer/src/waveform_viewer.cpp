@@ -177,10 +177,11 @@ namespace hal
 
     void WaveformViewer::currentStateChanged(NetlistSimulatorController::SimulationState state)
     {
+        mOpenInputfileAction->setEnabled(true);
+        mOpenInputfileAction->setIcon(gui_utility::getStyledSvgIcon("all->#3192C5",":/icons/folder"));
         if (!mCurrentWaveWidget || state == NetlistSimulatorController::SimulationRun || mProgress->isVisible())
         {
             mSimulSettingsAction->setDisabled(true);
-            mOpenInputfileAction->setDisabled(true);
             mSaveWaveformsAction->setDisabled(true);
             mRunSimulationAction->setDisabled(true);
             mAddResultWaveAction->setDisabled(true);
@@ -189,14 +190,12 @@ namespace hal
         else
         {
             mSimulSettingsAction->setEnabled(true);
-            mOpenInputfileAction->setEnabled(state == NetlistSimulatorController::ParameterSetup
-                                             || state == NetlistSimulatorController::ParameterReady);
             mSaveWaveformsAction->setEnabled(state != NetlistSimulatorController::NoGatesSelected);
             mRunSimulationAction->setEnabled(state == NetlistSimulatorController::ParameterReady);
             mToggleMaxZoomAction->setEnabled(!mCurrentWaveWidget->isEmpty());
        }
         mSimulSettingsAction->setIcon(gui_utility::getStyledSvgIcon(mSimulSettingsAction->isEnabled() ? "all->#FFFFFF" : "all->#808080",":/icons/preferences"));
-        mOpenInputfileAction->setIcon(gui_utility::getStyledSvgIcon(mOpenInputfileAction->isEnabled() ? "all->#3192C5" : "all->#808080",":/icons/folder"));
+
         mSaveWaveformsAction->setIcon(gui_utility::getStyledSvgIcon(mSaveWaveformsAction->isEnabled() ? "all->#3192C5" : "all->#808080",":/icons/save"));
         mRunSimulationAction->setIcon(gui_utility::getStyledSvgIcon(mRunSimulationAction->isEnabled() ? "all->#20FF80" : "all->#808080",":/icons/run"));
         testUndoEnable();
@@ -255,16 +254,7 @@ namespace hal
             return;
         }
         std::unique_ptr<NetlistSimulatorController> ctrlRef = ctrlPlug->create_simulator_controller();
-        u32 ctrlId = ctrlRef.get()->get_id();
-        for (int inx=0; inx<mTabWidget->count(); inx++)
-        {
-            WaveWidget* ww = static_cast<WaveWidget*>(mTabWidget->widget(inx));
-            if (ctrlId == ww->controllerId())
-            {
-                ww->takeOwnership(ctrlRef);
-                break;
-            }
-        }
+        takeControllerOwnership(ctrlRef);
     }
 
     void WaveformViewer::handleSimulSettings()
@@ -387,17 +377,42 @@ namespace hal
 
     void WaveformViewer::handleOpenInputFile()
     {
-        if (!mCurrentWaveWidget) return;
+        QString filter = QString("Saved data (%1)").arg(NetlistSimulatorController::sPersistFile);
+        if (mCurrentWaveWidget)
+            filter += ";; VCD files (*.vcd);; CSV files (*.csv)";
 
         QString filename =
-                QFileDialog::getOpenFileName(this, "Load input wave file", ".", ("VCD files (*.vcd);; CSV files (*.csv)") );
+                QFileDialog::getOpenFileName(this, "Load input wave file", ".", filter);
         if (filename.isEmpty()) return;
-        if (filename.toLower().endsWith(".vcd"))
+        if (filename.endsWith(NetlistSimulatorController::sPersistFile))
+        {
+            NetlistSimulatorControllerPlugin* ctrlPlug = static_cast<NetlistSimulatorControllerPlugin*>(plugin_manager::get_plugin_instance("netlist_simulator_controller"));
+            if (!ctrlPlug) return;
+            std::unique_ptr<NetlistSimulatorController> ctrlRef = ctrlPlug->restore_simulator_controller(gNetlist,filename.toStdString());
+            takeControllerOwnership(ctrlRef);
+        }
+        else if (mCurrentWaveWidget && mCurrentWaveWidget->controller()->can_import_data() && filename.toLower().endsWith(".vcd"))
             mCurrentWaveWidget->controller()->import_vcd(filename.toStdString(),NetlistSimulatorController::GlobalInputs);
-        else if (filename.toLower().endsWith(".csv"))
+        else if (mCurrentWaveWidget && mCurrentWaveWidget->controller()->can_import_data() && filename.toLower().endsWith(".csv"))
             mCurrentWaveWidget->controller()->import_csv(filename.toStdString(),NetlistSimulatorController::GlobalInputs);
+        else if (mCurrentWaveWidget)
+            log_warning(mCurrentWaveWidget->controller()->get_name(), "Cannot parse file '{}' (unknown extension ore wrong state).", filename.toStdString());
         else
-            log_warning(mCurrentWaveWidget->controller()->get_name(), "Unknown extension, cannot parse file '{}'.", filename.toStdString());
+            log_warning("simulation_plugin", "Unable to restore saved data from file '{}'.", filename.toStdString());
+    }
+
+    void WaveformViewer::takeControllerOwnership(std::unique_ptr<NetlistSimulatorController> &ctrlRef)
+    {
+        u32 ctrlId = ctrlRef.get()->get_id();
+        for (int inx=0; inx<mTabWidget->count(); inx++)
+        {
+            WaveWidget* ww = static_cast<WaveWidget*>(mTabWidget->widget(inx));
+            if (ctrlId == ww->controllerId())
+            {
+                ww->takeOwnership(ctrlRef);
+                break;
+            }
+        }
     }
 
     void WaveformViewer::handleSaveWaveforms()

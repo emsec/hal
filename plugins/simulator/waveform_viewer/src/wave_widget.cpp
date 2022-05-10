@@ -91,6 +91,7 @@ namespace hal {
         connect(mController, &NetlistSimulatorController::stateChanged, this, &WaveWidget::handleStateChanged);
         mTreeView->verticalScrollBar()->setValue(0);
         setSizes({320,880});
+        mTreeModel->restore();
     }
 
     WaveWidget::~WaveWidget()

@@ -229,11 +229,12 @@ namespace hal {
             if (wd->rename(newName))
             {
                 SaleaeDirectoryStoreRequest save(&mWaveDataList->saleaeDirectory());
-                WaveDataGroup* wdg = dynamic_cast<WaveDataGroup*>(wd);
-                if (wdg)
+                SaleaeDirectoryNetEntry::Type tp = wd->composedType();
+
+                if (tp != SaleaeDirectoryNetEntry::None)
                 {
-                    SaleaeDirectoryGroupEntry* sdge = mWaveDataList->saleaeDirectory().get_group(wdg->id());
-                    if (sdge) sdge->rename(newName.toStdString());
+                    SaleaeDirectoryComposedEntry* sdce = mWaveDataList->saleaeDirectory().get_composed(wd->id(),tp);
+                    if (sdce) sdce->rename(newName.toStdString());
                 }
                 else
                     mWaveDataList->saleaeDirectory().rename_net(wd->id(),newName.toStdString());
@@ -476,6 +477,7 @@ namespace hal {
         for (WaveItem* wi : notPlaced.values())
             wi->setWaveVisible(false);
 
+        wtm->persist();
         Q_EMIT triggerUpdateWaveItems();
     }
 

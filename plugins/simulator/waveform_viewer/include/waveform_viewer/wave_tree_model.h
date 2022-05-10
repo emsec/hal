@@ -21,6 +21,8 @@ namespace hal {
             : WaveDataGroup(wdList,0,"root") {;}
         void recalcData() override {;}
         bool moveGroupPosition(int sourceRow, int targetRow);
+        void clearAll() { mGroupList.clear(); }
+        void dump() const;
     };
 
     class WaveValueThread : public QThread
@@ -149,5 +151,7 @@ namespace hal {
         QSet<int> waveDataIndexSet() const;
 
         static const char* sStateColor[3];
+        bool persist() const;
+        void restore();
     };
 }

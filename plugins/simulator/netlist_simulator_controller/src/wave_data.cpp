@@ -135,6 +135,18 @@ namespace hal {
         return intValue(t);
     }
 
+    SaleaeDirectoryNetEntry::Type WaveData::composedType() const
+    {
+        switch (mNetType)
+        {
+        case NetGroup: return SaleaeDirectoryNetEntry::Group;
+        case BooleanNet: return SaleaeDirectoryNetEntry::Boolean;
+        case TriggerTime: return SaleaeDirectoryNetEntry::Trigger;
+        default: break;
+        }
+        return SaleaeDirectoryNetEntry::None;
+    }
+
     bool WaveData::isEqual(const WaveData& other, int tolerance) const
     {
         if (mFileSize != other.mFileSize) return false;
@@ -801,6 +813,12 @@ namespace hal {
         if (wd && (wd->netType() == WaveData::NetGroup || wd->netType() == WaveData::TriggerTime)) return;
         mFilterWave = wd;
         recalcData();
+        SaleaeDirectoryComposedEntry* sdce = mWaveDataList->saleaeDirectory().get_composed(id(),SaleaeDirectoryNetEntry::Trigger);
+        if (sdce)
+        {
+            SaleaeDirectoryStoreRequest save(&mWaveDataList->saleaeDirectory());
+            sdce->set_filter_entry(SaleaeDirectoryNetEntry(wd->name().toStdString(),wd->id(),wd->composedType()));
+        }
     }
 
     int WaveDataTrigger::intValue(double t) const
@@ -1005,15 +1023,15 @@ namespace hal {
     void WaveDataGroup::restoreIndex()
     {
         SaleaeDirectoryStoreRequest save(&mWaveDataList->saleaeDirectory());
-        SaleaeDirectoryGroupEntry* sdge = mWaveDataList->saleaeDirectory().get_group(id());
-        if (sdge) sdge->get_nets().clear();
+        SaleaeDirectoryComposedEntry* sdce = mWaveDataList->saleaeDirectory().get_composed(id(),SaleaeDirectoryNetEntry::Group);
+        if (sdce) sdce->get_nets().clear();
 
         mIndex.clear();
         int inx = 0;
         for (const WaveData* wd : mGroupList)
         {
-            if (sdge)
-                sdge->add_net(SaleaeDirectoryNetEntry(wd->name().toStdString(),wd->id()));
+            if (sdce)
+                sdce->add_net(SaleaeDirectoryNetEntry(wd->name().toStdString(),wd->id()));
             mIndex[WaveDataGroupIndex(wd)] = inx++;
         }
     }
@@ -1275,6 +1293,11 @@ namespace hal {
         Q_EMIT timeframeChanged(&mTimeframe);
     }
 
+    void WaveDataList::emitTimeframeChanged()
+    {
+        Q_EMIT timeframeChanged(&mTimeframe);
+    }
+
     void WaveDataList::incrementSimulTime(u64 deltaT)
     {
         mTimeframe.mSimulateMaxTime += deltaT;
@@ -1474,6 +1497,21 @@ namespace hal {
         u32 trigId = wdTrig->id();
         Q_ASSERT(!mDataTrigger.contains(trigId));
         mDataTrigger.insert(trigId,wdTrig);
+        SaleaeDirectoryComposedEntry sdce(wdTrig->name().toStdString(),trigId,SaleaeDirectoryNetEntry::Trigger);
+        for (WaveData* wd : wdTrig->children())
+        {
+            sdce.add_net(SaleaeDirectoryNetEntry(wd->name().toStdString(),wd->id()));
+        }
+        std::vector<int> toValue;
+        for (int tval : wdTrig->toValueList())
+            toValue.push_back(tval);
+        sdce.set_data(toValue);
+
+        WaveData* wdFilt = wdTrig->get_filter_wave();
+        if (wdFilt)
+            sdce.set_filter_entry(SaleaeDirectoryNetEntry(wdFilt->name().toStdString(),wdFilt->id(),wdFilt->composedType()));
+        if (!mSaleaeDirectory.get_composed(trigId,SaleaeDirectoryNetEntry::Trigger))
+            mSaleaeDirectory.add_composed(sdce);
         Q_EMIT triggerAdded(trigId);
     }
 
@@ -1482,6 +1520,24 @@ namespace hal {
        u32 boolId = wdBool->id();
        Q_ASSERT(!mDataBooleans.contains(boolId));
        mDataBooleans.insert(boolId,wdBool);
+       SaleaeDirectoryComposedEntry sdce(wdBool->name().toStdString(),boolId,SaleaeDirectoryNetEntry::Boolean);
+       int n = 1;
+       for (WaveData* wd : wdBool->children())
+       {
+           n <<= 1;
+           sdce.add_net(SaleaeDirectoryNetEntry(wd->name().toStdString(),wd->id()));
+       }
+       std::vector<int> acceptVal;
+       const char* ttable = wdBool->truthTable();
+       for (int i=0; i<n; i++)
+       {
+           int j = i/8;
+           int k = i%8;
+           if (ttable[j] & (1<<k)) acceptVal.push_back(i);
+       }
+       sdce.set_data(acceptVal);
+       if (!mSaleaeDirectory.get_composed(boolId,SaleaeDirectoryNetEntry::Boolean))
+           mSaleaeDirectory.add_composed(sdce);
        Q_EMIT booleanAdded(boolId);
     }
 
@@ -1492,16 +1548,11 @@ namespace hal {
         mDataGroups.insert(grpId,grp);
         if (grpId)
         {
-            mSaleaeDirectory.add_group(SaleaeDirectoryGroupEntry(grp->name().toStdString(),grpId));
+            if (!mSaleaeDirectory.get_composed(grpId,SaleaeDirectoryNetEntry::Group))
+                mSaleaeDirectory.add_composed(SaleaeDirectoryComposedEntry(grp->name().toStdString(),grpId,SaleaeDirectoryNetEntry::Group));
             updateMaxTime();
             Q_EMIT groupAdded(grpId);
         }
-    }
-
-    u32 WaveDataList::createGroup(QString grpName)
-    {
-        WaveDataGroup* grp = new WaveDataGroup(this, grpName);
-        return grp->id();
     }
 
     void WaveDataList::addWavesToGroup(u32 grpId, const QVector<WaveData*>& wds)
@@ -1533,7 +1584,7 @@ namespace hal {
         WaveDataGroup* grp = mDataGroups.value(grpId);
         if (!grp) return;
         Q_EMIT groupAboutToBeRemoved(grp);
-        mSaleaeDirectory.remove_group(grpId);
+        mSaleaeDirectory.remove_composed(grpId,SaleaeDirectoryNetEntry::Group);
         delete grp;
     }
 
