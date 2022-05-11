@@ -35,10 +35,11 @@ namespace hal {
         : QSplitter(parent), mController(ctrl), mControllerOwner(nullptr),
           mOngoingYscroll(false), mVisualizeNetState(false), mAutoAddWaves(true)
     {
-        mWaveItemHash = new WaveItemHash;
-        mWaveDataList = ctrl->get_waves();
-        mTreeView     = new WaveTreeView(mWaveDataList,  mWaveItemHash, this);
-        mTreeModel    = new WaveTreeModel(mWaveDataList, mWaveItemHash, this);
+        mWaveItemHash   = new WaveItemHash;
+        mWaveDataList   = ctrl->get_waves();
+        mTreeView       = new WaveTreeView(mWaveDataList,  mWaveItemHash, this);
+        mGraphicsCanvas = new WaveGraphicsCanvas(mWaveDataList,  mWaveItemHash, this);
+        mTreeModel      = new WaveTreeModel(mWaveDataList, mWaveItemHash, mGraphicsCanvas, this);
         mTreeView->setModel(mTreeModel);
         mTreeView->expandAll();
         mTreeView->setColumnWidth(0,200);
@@ -47,7 +48,6 @@ namespace hal {
         mTreeView->header()->setStretchLastSection(true);
         addWidget(mTreeView);
 
-        mGraphicsCanvas = new WaveGraphicsCanvas(mWaveDataList,  mWaveItemHash, this);
         addWidget(mGraphicsCanvas);
 
         connect(mWaveDataList,&WaveDataList::waveAdded,mTreeModel,&WaveTreeModel::handleWaveAdded);

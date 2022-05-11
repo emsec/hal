@@ -13,6 +13,7 @@ namespace hal {
     class WaveData;
     class WaveDataList;
     class WaveDataGroup;
+    class WaveGraphicsCanvas;
 
     class WaveDataRoot : public WaveDataGroup
     {
@@ -65,6 +66,7 @@ namespace hal {
     private:
         WaveDataList* mWaveDataList;
         WaveItemHash* mWaveItemHash;
+        WaveGraphicsCanvas* mGraphicsCanvas;
         WaveDataRoot* mRoot;
         QModelIndexList mDragIndexList;
         DragCommand mDragCommand;
@@ -108,7 +110,7 @@ namespace hal {
         void handleEndValueThread(WaveItem* item);
 
     public:
-        WaveTreeModel(WaveDataList* wdlist, WaveItemHash* wHash, QObject* obj=nullptr);
+        WaveTreeModel(WaveDataList* wdlist, WaveItemHash* wHash, WaveGraphicsCanvas* wgc, QObject* obj=nullptr);
         bool isLeaveItem(const QModelIndex &index) const;
         QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
         QModelIndexList indexes(const WaveData* wd) const;

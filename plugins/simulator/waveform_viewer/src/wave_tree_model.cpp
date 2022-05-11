@@ -4,6 +4,8 @@
 #include "netlist_simulator_controller/saleae_directory.h"
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
 #include "netlist_simulator_controller/simulation_settings.h"
+#include "waveform_viewer/wave_render_engine.h"
+#include "waveform_viewer/wave_graphics_canvas.h"
 #include "hal_core/utilities/json_write_document.h"
 #include "rapidjson/document.h"
 #include "rapidjson/reader.h"
@@ -16,8 +18,8 @@
 
 namespace hal {
 
-    WaveTreeModel::WaveTreeModel(WaveDataList *wdlist, WaveItemHash *wHash, QObject *obj)
-        : QAbstractItemModel(obj), mWaveDataList(wdlist), mWaveItemHash(wHash),
+    WaveTreeModel::WaveTreeModel(WaveDataList *wdlist, WaveItemHash *wHash, WaveGraphicsCanvas *wgc, QObject *obj)
+        : QAbstractItemModel(obj), mWaveDataList(wdlist), mWaveItemHash(wHash), mGraphicsCanvas(wgc),
           mDragCommand(None), mDragIsGroup(false),
           mCursorTime(0), mCursorXpos(0), mIgnoreSignals(false),
           mReorderRequestWaiting(0)
@@ -95,6 +97,20 @@ namespace hal {
             jitem.close();
         }
         jitems.close();
+
+        if (!mGraphicsCanvas->renderEngine()->zoomHistory().isEmpty())
+        {
+            JsonWriteArray& jzooms = jwfv.add_array("zoom_history");
+            for (const WaveZoomShift& wzs : mGraphicsCanvas->renderEngine()->zoomHistory())
+            {
+                JsonWriteObject& jzoom = jzooms.add_object();
+                jzoom["scale"] = (double)   wzs.scale();
+                jzoom["tleft"] = (uint64_t) wzs.leftTime();
+                jzoom["width"] = (int)      wzs.width();
+                jzoom.close();
+            }
+            jzooms.close();
+        }
         jwfv.close();
         return jwd.serialize(workDir.absoluteFilePath("waveform_viewer.json").toStdString());
     }
@@ -178,6 +194,19 @@ namespace hal {
                 }
                 }
             }
+        }
+        if (jwfv.HasMember("zoom_history"))
+        {
+            QList<WaveZoomShift> zh;
+            for (auto& jzoom : jwfv["zoom_history"].GetArray())
+            {
+                float sc = jzoom.HasMember("scale") ? jzoom["scale"].GetDouble() : 1.;
+                float tl = jzoom.HasMember("tleft") ? jzoom["tleft"].GetUint64() : 0;
+                float wd = jzoom.HasMember("width") ? jzoom["width"].GetInt() : 640;
+                zh.append(WaveZoomShift(sc,tl,wd));
+            }
+            mGraphicsCanvas->renderEngine()->setZoomHistory(zh);
+            mGraphicsCanvas->undoZoom();
         }
         mWaveDataList->emitTimeframeChanged();
         emitReorder();

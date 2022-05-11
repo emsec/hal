@@ -61,5 +61,6 @@ namespace hal {
         void emitUndoStateChanged();
         void toggleZoom();
         void setCursorPosition(double tCursor, int xpos);
+        WaveRenderEngine* renderEngine() { return mRenderEngine; }
     };
 }

@@ -119,6 +119,12 @@ namespace hal
         int dataFileIndex() const; // TODO : time as argument
     };
 
+    /**
+     * @brief The SaleaeDirectoryComposedEntry class represents a composed waveform.
+     * There are currently three types of composed waveforms: net groups, boolean combinations and trigger time sets
+     * which are all calculated from a set of regular waveform. Additional data like data or filter are dependend
+     * of the used type.
+     */
     class SaleaeDirectoryComposedEntry : public SaleaeDirectoryNetEntry
     {
         friend class SaleaeDirectory;
@@ -131,14 +137,29 @@ namespace hal
             : SaleaeDirectoryNetEntry(nam,id_,tp), mFilterEntry(nullptr) {;}
         SaleaeDirectoryComposedEntry(const SaleaeDirectoryComposedEntry& other);
         ~SaleaeDirectoryComposedEntry();
+
+        /// Add an additional child net to net group
         void add_net(SaleaeDirectoryNetEntry sdne) { mNetEntries.push_back(sdne); }
+
+        /// Remove child entry from net group
         void remove_net(const SaleaeDirectoryNetEntry& sdne);
-        void rename(const std::string nam) { mName = nam; }
+
+        /// Returns reference to child entries allowing modifications
         std::vector<SaleaeDirectoryNetEntry>& get_nets() { return mNetEntries; }
+
+        /// Access to child entries without allowing modifications
         const std::vector<SaleaeDirectoryNetEntry>& get_nets() const { return mNetEntries; }
+
+        /// Getter for data list which is used  a) Boolean: list of accepted(=true) net combinations b) Trigger: target value when to trigger
         const std::vector<int>& get_data() const { return mData; }
-        const SaleaeDirectoryNetEntry* get_filter_entry() const { return mFilterEntry; }
+
+        /// Setter for data list described above
         void set_data(const std::vector<int>& dat);
+
+        /// Only used for trigger: Pointer to filter (suppress trigger unless value 1), null if no filter used
+        const SaleaeDirectoryNetEntry* get_filter_entry() const { return mFilterEntry; }
+
+        /// Setter for filter pointer described above.
         void set_filter_entry(const SaleaeDirectoryNetEntry& sdne);
     };
 
@@ -220,13 +241,16 @@ namespace hal
         /// Getter for all net entries
         std::vector<ListEntry> get_net_list() const;
 
-
+        /// Add composed waveform entry (Group, Boolean, Trigger)
         void add_composed(SaleaeDirectoryComposedEntry sdce);
 
+        /// Remove composed waveform entry identified by id an type
         void remove_composed(uint32_t id, SaleaeDirectoryNetEntry::Type tp);
 
+        /// Getter for pointer to composed waveform entry allowing modifications
         SaleaeDirectoryComposedEntry* get_composed(uint32_t id, SaleaeDirectoryNetEntry::Type tp);
 
+        /// Getter for readonly list of all composed waveform entries
         const std::vector<SaleaeDirectoryComposedEntry>& get_composed() const { return mComposedEntries; };
     };
 }
