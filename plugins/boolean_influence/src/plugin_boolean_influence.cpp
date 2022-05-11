@@ -117,35 +117,39 @@ namespace hal
             return {};
         }
         std::string data_pin = *d_ports.begin();
-        log_debug("boolean_influence", "Data pin: {}", data_pin);
+        log_info("boolean_influence", "Data pin: {}", data_pin);
 
         // Extract all gates in front of the data port and iterate backwards until another flip flop is found.
         std::vector<Gate*> function_gates = extract_function_gates(gate, data_pin);
 
-        log_debug("boolean_influence", "Extracted {} gates infront of the gate.", function_gates.size());
+        log_info("boolean_influence", "Extracted {} gates infront of the gate.", function_gates.size());
 
         // Generate function for the data port
-        z3_utils::SubgraphFunctionGenerator g;
 
         std::unique_ptr ctx  = std::make_unique<z3::context>();
         std::unique_ptr func = std::make_unique<z3::expr>(*ctx);
-        std::unordered_set<u32> net_ids;
+        // std::unordered_set<u32> net_ids;
+
+        z3_utils::RecursiveSubgraphFunctionGenerator g = {*ctx, function_gates};
+
+        log_info("boolean_influence", "Created context, function and generator. Trying to generator function now: ");
 
         if (!function_gates.empty())
         {
-            g.get_subgraph_z3_function(gate->get_fan_in_net(data_pin), function_gates, *ctx, *func, net_ids);
+            // g.get_subgraph_z3_function(gate->get_fan_in_net(data_pin), function_gates, *ctx, *func, net_ids);
+            g.get_subgraph_z3_function_recursive(gate->get_fan_in_net(data_pin), *func);
         }
         // edge case if the function gates are empty
         else
         {
             Net* in_net = gate->get_fan_in_net(data_pin);
             *func       = ctx->bv_const(std::to_string(in_net->get_id()).c_str(), 1);
-            net_ids.insert(in_net->get_id());
+            // net_ids.insert(in_net->get_id());
         }
 
         z3_utils::z3Wrapper func_wrapper = z3_utils::z3Wrapper(std::move(ctx), std::move(func));
 
-        log_debug("boolean_influence", "Built subgraph function, now trying to extract boolean influence.");
+        log_info("boolean_influence", "Built subgraph function, now trying to extract boolean influence.");
 
         // Generate boolean influence
         std::unordered_map<u32, double> net_ids_to_inf = func_wrapper.get_boolean_influence();

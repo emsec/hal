@@ -132,11 +132,11 @@ namespace hal
             std::string directory = "/tmp/boolean_influence_tmp/";
             std::filesystem::create_directory(directory);
 
-            log_debug("z3_utils", "directory created");
+            log_info("z3_utils", "directory created");
 
             std::string filename = directory + "boolean_func_" + std::to_string(omp_get_thread_num()) + "_" + std::to_string(m_z3_wrapper_id) + ".cpp";
 
-            log_debug("z3_utils", "creating file: {}", filename);
+            log_info("z3_utils", "creating file: {}", filename);
 
             if (!this->write_c_file(filename))
             {
@@ -144,14 +144,14 @@ namespace hal
                 return std::unordered_map<u32, double>();
             }
 
-            log_debug("z3_utils", "file created: {}", filename);
+            log_info("z3_utils", "file created: {}", filename);
 
             const std::string program_name    = filename.substr(0, filename.size() - 2);
             const std::string compile_command = "g++ -o " + program_name + " " + filename + " -O3";
             int res = system(compile_command.c_str());
             UNUSED(res);
 
-            log_debug("z3_utils", "{}", compile_command);
+            log_info("z3_utils", "{}", compile_command);
 
             // run boolean function program for every input
             for (auto it = m_inputs_net_ids.begin(); it < m_inputs_net_ids.end(); it++)
@@ -161,7 +161,7 @@ namespace hal
                 std::array<char, 128> buffer;
                 std::string result;
 
-                log_debug("z3_utils", "{}", run_command);
+                log_info("z3_utils", "{}", run_command);
 
                 FILE* pipe = popen(run_command.c_str(), "r");
                 if (!pipe)
@@ -178,7 +178,7 @@ namespace hal
                 const u32 count = std::stoi(result);
                 double cv       =  (double)(count) / (double)(num_evaluations);
 
-                log_debug("z3_utils", "calculation done");
+                log_info("z3_utils", "calculation done");
 
                 influences.insert({*it, cv});
             }
@@ -189,7 +189,7 @@ namespace hal
 
             //std::filesystem::remove(directory);
 
-            log_debug("z3_utils", "returning influences");
+            log_info("z3_utils", "returning influences");
 
             return influences;
         }
