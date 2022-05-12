@@ -80,6 +80,11 @@ namespace hal {
 
     void WaveGraphicsCanvas::handleContextMenuRequested(const QPoint& pos)
     {
+        if (mDragZoom)
+        {
+            mDragZoom->deleteLater();
+            mDragZoom = nullptr;
+        }
         QMenu* menu = new QMenu(this);
         QAction* act;
         act = menu->addAction("Enter cursor time value ...");

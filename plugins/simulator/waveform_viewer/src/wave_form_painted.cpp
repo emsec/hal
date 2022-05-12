@@ -7,6 +7,7 @@
 #include "waveform_viewer/wave_transform.h"
 #include "waveform_viewer/wave_scrollbar.h"
 #include <QDebug>
+#include <math.h>
 
 namespace hal {
 
@@ -260,6 +261,7 @@ namespace hal {
                     mCursorValue = 1;
                 else
                     mCursorValue = 0;
+                refreshCursor = false;
             }
             tuple = wdp->nextPoint();
             xpos = sbar->xPosF(tuple.mTime);
@@ -401,6 +403,20 @@ namespace hal {
             return SaleaeDataTuple::sReadError;
 
         // can deliver value - might be invalid though
+        return mCursorValue;
+    }
+
+    int WaveFormPainted::cursorValueTrigger(double tCursor, int xpos)
+    {
+        QMutexLocker lock(&mMutex);
+        mCursorValue = 0;
+        for (const WaveFormPrimitive* wfp : mPrimitives)
+        {
+            if (fabs(wfp->x0()-xpos)<0.5)
+                mCursorValue = 1;
+        }
+        mCursorTime = tCursor;
+        mCursorXpos = xpos;
         return mCursorValue;
     }
 

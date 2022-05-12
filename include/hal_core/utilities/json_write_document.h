@@ -76,10 +76,18 @@ namespace hal
         /**
          * Assign int value to JSON field.
          * 
-         * @param[in] ivalue - The numerical content.
+         * @param[in] ivalue - The numerical content (integer).
          * @return The instance of the class.
          */
         JsonWriteData& operator=(int ivalue);
+
+        /**
+         * Assign int value to JSON field.
+         *
+         * @param[in] value - The numerical content (floating point).
+         * @return The instance of the class.
+         */
+        JsonWriteData& operator=(double value);
 
         /**
          * Assign unsigned 64 bit value to JSON field.

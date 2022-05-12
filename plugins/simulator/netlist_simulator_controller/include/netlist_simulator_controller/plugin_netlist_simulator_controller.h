@@ -28,6 +28,7 @@
 
 namespace hal
 {
+    class Netlist;
     class NetlistSimulatorController;
     class NetlistSimulator;
     class SimulationSettings;
@@ -66,6 +67,15 @@ namespace hal
          * @returns The simulator instance.
          */
         std::unique_ptr<NetlistSimulatorController> create_simulator_controller(const std::string& nam=std::string()) const;
+
+        /**
+         * Restore controller with waveform data from previous simulation.
+         * @param[in] nl The netlist the simulation was performed with.
+         * @param[in] filename Full path and filename of 'netlist_simulator_controller.json'.
+         *
+         * @returns The simulator instance.
+         */
+        std::unique_ptr<NetlistSimulatorController> restore_simulator_controller(Netlist* nl, const std::string& filename) const;
 
         /**
          * Share netlist simulator controller instance addressed by id

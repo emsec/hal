@@ -275,6 +275,7 @@ namespace hal {
         int n = (mInputCount + 7) / 8;
         mTruthTable = new char[n];
         memcpy(mTruthTable, ttable, n);
+        setWaveType(WaveData::BooleanNet);
     }
 
     WaveDataProviderBoolean::~WaveDataProviderBoolean()
@@ -305,13 +306,9 @@ namespace hal {
 
     //-----------------------------------------------------
     WaveDataProviderTrigger::WaveDataProviderTrigger(const std::string& saleaeDirectoryPath, const QList<WaveData*>& wdList, const QList<int>& toValue, WaveData* filter)
-        : mParser(saleaeDirectoryPath), mFilterFile(nullptr), mFilterBuffer(nullptr), mTransitionToValue(nullptr), mCurrentTime(0), mCurrentTrigger(false), mReportedTime(-1)
+        : mParser(saleaeDirectoryPath), mFilter(filter), mTransitionToValue(nullptr), mCurrentTime(0), mCurrentTrigger(false), mReportedTime(-1)
     {
         int n = wdList.size();
-        if (filter)
-        {
-            mFilterFile = nullptr;
-        }
 
         mTransitionToValue = new int[n];
         for (int i=0; i<n; i++)
@@ -336,13 +333,13 @@ namespace hal {
                     mCurrentTrigger = true;
             }, mTransitionToValue+i);
         }
+        setWaveType(WaveData::TriggerTime);
+        if (mFilter) mFilter->loadDataUnlessAlreadyLoaded();
     }
 
     WaveDataProviderTrigger::~WaveDataProviderTrigger()
     {
         if (mTransitionToValue) delete [] mTransitionToValue;
-        if (mFilterBuffer)      delete mFilterBuffer;
-        if (mFilterFile)        delete mFilterFile;
     }
 
     //TODO: recording?
@@ -351,6 +348,10 @@ namespace hal {
         while (mParser.next_event())
             if (mCurrentTime >= t && (qint64)mCurrentTime > mReportedTime && mCurrentTrigger)
             {
+                if (mFilter)
+                {
+                    if (!mFilter->intValue(mCurrentTime)) continue;
+                }
                 mReportedTime = mCurrentTime;
                 return SaleaeDataTuple(mCurrentTime,1);
             }
@@ -362,6 +363,10 @@ namespace hal {
         while (mParser.next_event())
             if ((qint64)mCurrentTime > mReportedTime && mCurrentTrigger)
             {
+                if (mFilter)
+                {
+                    if (!mFilter->intValue(mCurrentTime)) continue;
+                }
                 mReportedTime = mCurrentTime;
                 return SaleaeDataTuple(mCurrentTime,1);
             }

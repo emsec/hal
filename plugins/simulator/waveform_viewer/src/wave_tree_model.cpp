@@ -1,8 +1,15 @@
 #include "waveform_viewer/wave_tree_model.h"
 #include "netlist_simulator_controller/wave_data.h"
 #include "netlist_simulator_controller/saleae_file.h"
+#include "netlist_simulator_controller/saleae_directory.h"
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
 #include "netlist_simulator_controller/simulation_settings.h"
+#include "waveform_viewer/wave_render_engine.h"
+#include "waveform_viewer/wave_graphics_canvas.h"
+#include "hal_core/utilities/json_write_document.h"
+#include "rapidjson/document.h"
+#include "rapidjson/reader.h"
+#include "rapidjson/filereadstream.h"
 #include <QApplication>
 #include <QFont>
 #include <QMimeData>
@@ -11,8 +18,8 @@
 
 namespace hal {
 
-    WaveTreeModel::WaveTreeModel(WaveDataList *wdlist, WaveItemHash *wHash, QObject *obj)
-        : QAbstractItemModel(obj), mWaveDataList(wdlist), mWaveItemHash(wHash),
+    WaveTreeModel::WaveTreeModel(WaveDataList *wdlist, WaveItemHash *wHash, WaveGraphicsCanvas *wgc, QObject *obj)
+        : QAbstractItemModel(obj), mWaveDataList(wdlist), mWaveItemHash(wHash), mGraphicsCanvas(wgc),
           mDragCommand(None), mDragIsGroup(false),
           mCursorTime(0), mCursorXpos(0), mIgnoreSignals(false),
           mReorderRequestWaiting(0)
@@ -73,6 +80,136 @@ namespace hal {
         WaveDataGroup* grp = dynamic_cast<WaveDataGroup*>(wd);
         if (!grp || row >= grp->size()) return QModelIndex();
         return createIndex(row,column,grp);
+    }
+
+    bool WaveTreeModel::persist() const
+    {
+        QDir workDir(QFileInfo(QString::fromStdString(mWaveDataList->saleaeDirectory().get_directory())).path());
+        JsonWriteDocument jwd;
+        JsonWriteObject& jwfv = jwd.add_object("waveform_viewer");
+        JsonWriteArray& jitems = jwfv.add_array("items");
+        for (WaveData* wd : mRoot->children())
+        {
+            JsonWriteObject& jitem = jitems.add_object();
+            jitem["id"] = (int) wd->id();
+            jitem["name"] = wd->name().toStdString();
+            jitem["type"] = (int) wd->composedType();
+            jitem.close();
+        }
+        jitems.close();
+
+        if (!mGraphicsCanvas->renderEngine()->zoomHistory().isEmpty())
+        {
+            JsonWriteArray& jzooms = jwfv.add_array("zoom_history");
+            for (const WaveZoomShift& wzs : mGraphicsCanvas->renderEngine()->zoomHistory())
+            {
+                JsonWriteObject& jzoom = jzooms.add_object();
+                jzoom["scale"] = (double)   wzs.scale();
+                jzoom["tleft"] = (uint64_t) wzs.leftTime();
+                jzoom["width"] = (int)      wzs.width();
+                jzoom.close();
+            }
+            jzooms.close();
+        }
+        jwfv.close();
+        return jwd.serialize(workDir.absoluteFilePath("waveform_viewer.json").toStdString());
+    }
+
+    void WaveTreeModel::restore()
+    {
+        QDir workDir(QFileInfo(QString::fromStdString(mWaveDataList->saleaeDirectory().get_directory())).path());
+        FILE* ff = fopen(workDir.absoluteFilePath("waveform_viewer.json").toUtf8().data(), "rb");
+        if (!ff) return;
+
+        char buffer[65536];
+        rapidjson::FileReadStream frs(ff, buffer, sizeof(buffer));
+        rapidjson::Document document;
+        document.ParseStream<0, rapidjson::UTF8<>, rapidjson::FileReadStream>(frs);
+        fclose(ff);
+
+        if (document.HasParseError() || !document.HasMember("waveform_viewer")) return;
+        auto jwfv = document["waveform_viewer"].GetObject();
+        ReorderRequest req(this);
+
+        mRoot->clearAll();
+        for (auto it = mWaveItemHash->begin(); it != mWaveItemHash->end(); ++it)
+            delete it.value();
+        mWaveItemHash->clear();
+
+        if (jwfv.HasMember("items"))
+        {
+            for (auto& jitem : jwfv["items"].GetArray())
+            {
+
+                u32 id = jitem.HasMember("id") ? jitem["id"].GetUint() : 0;
+                if (!id) continue;
+                std::string name = jitem.HasMember("name") ? jitem["name"].GetString() : std::string();
+                int composedType = jitem.HasMember("type") ? jitem["type"].GetInt() : 0;
+
+                switch (composedType)
+                {
+                case SaleaeDirectoryNetEntry::Group:
+                {
+                    WaveDataGroup* wdGrp = mWaveDataList->mDataGroups.value(id);
+                    if (wdGrp)
+                    {
+                        handleGroupAdded(id);
+                        for (WaveData* wd : wdGrp->children())
+                        {
+                            int iwave = mWaveDataList->waveIndexByNetId(wd->id());
+                            WaveItemIndex wii(iwave, WaveItemIndex::Wire, wdGrp->id());
+                            if (!mWaveItemHash->contains(wii)) // unless already in model
+                            {
+                                addOrReplaceItem(wd, WaveItemIndex::Wire, iwave, wdGrp->id());
+                            }
+                        }
+                    }
+                    break;
+                }
+                case SaleaeDirectoryNetEntry::Boolean:
+                {
+                    WaveDataBoolean* wdBool = mWaveDataList->mDataBooleans.value(id);
+                    if (wdBool)
+                    {
+                        handleBooleanAdded(id);
+                    }
+                    break;
+                }
+                case SaleaeDirectoryNetEntry::Trigger:
+                {
+                    WaveDataTrigger* wdTrig = mWaveDataList->mDataTrigger.value(id);
+                    if (wdTrig)
+                    {
+                        handleTriggerAdded(id);
+                    }
+                    break;
+                }
+                default:
+                {
+                    int iwave = mWaveDataList->waveIndexByNetId(id);
+                    if (iwave >= 0)
+                    {
+                        handleWaveAdded(iwave);
+                    }
+                }
+                }
+            }
+        }
+        if (jwfv.HasMember("zoom_history"))
+        {
+            QList<WaveZoomShift> zh;
+            for (auto& jzoom : jwfv["zoom_history"].GetArray())
+            {
+                float sc = jzoom.HasMember("scale") ? jzoom["scale"].GetDouble() : 1.;
+                float tl = jzoom.HasMember("tleft") ? jzoom["tleft"].GetUint64() : 0;
+                float wd = jzoom.HasMember("width") ? jzoom["width"].GetInt() : 640;
+                zh.append(WaveZoomShift(sc,tl,wd));
+            }
+            mGraphicsCanvas->renderEngine()->setZoomHistory(zh);
+            mGraphicsCanvas->undoZoom();
+        }
+        mWaveDataList->emitTimeframeChanged();
+        emitReorder();
     }
 
     QModelIndexList WaveTreeModel::indexes(const WaveData* wd) const
@@ -976,6 +1113,18 @@ namespace hal {
         mGroupList.insert( targetRow, grp);
         restoreIndex();
         return true;
+    }
+
+    void WaveDataRoot::dump() const
+    {
+        QTextStream xout(stderr, QIODevice::WriteOnly);
+        const char* ctype = ".GBT   ";
+        xout.setFieldWidth(5);
+        xout << "---\n";
+        for (WaveData* wd : mGroupList)
+        {
+            xout << wd->id() << ctype[wd->composedType()] << " <" << wd->name() << ">\n";
+        }
     }
 
     //------------------------

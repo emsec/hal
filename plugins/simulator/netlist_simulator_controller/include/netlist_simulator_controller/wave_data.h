@@ -78,6 +78,7 @@ namespace hal {
         u64     fileSize()                  const { return mFileSize; }
         int     valueBase()                 const { return mValueBase; }
         std::string fileName()              const;
+        SaleaeDirectoryNetEntry::Type composedType() const;
         void setId(u32 id_);
         bool rename(const QString& nam);
         void setBits(int bts);
@@ -162,7 +163,6 @@ namespace hal {
         WaveDataList(const QString& sdFilename, QObject* parent = nullptr);
         ~WaveDataList();
 
-        u32  createGroup(QString grpName);
         u32  nextGroupId() { return ++mMaxGroupId; }
         u32  maxGroupId() const { return mMaxGroupId; }
         u32  nextBooleanId() { return ++ mMaxBooleanId; }
@@ -194,6 +194,7 @@ namespace hal {
         void emitWaveUpdated(int inx);
         void emitGroupUpdated(int grpId);
         void emitWaveRemovedFromGroup(int iwave, int grpId);
+        void emitTimeframeChanged();
         void updateFromSaleae();
         SaleaeDirectory& saleaeDirectory() { return mSaleaeDirectory; }
         void insertBooleanValue(WaveData* wd, u64 t, BooleanFunction::Value bval);
@@ -262,6 +263,8 @@ namespace hal {
         virtual u64 neighborTransition(double t, bool next) const override;
         virtual int intValue(double t) const override;
         void set_filter_wave(WaveData* wd);
+        QList<int> toValueList() const;
+        WaveData* get_filter_wave() const { return mFilterWave; }
     };
 
     class WaveDataGroup : public WaveData

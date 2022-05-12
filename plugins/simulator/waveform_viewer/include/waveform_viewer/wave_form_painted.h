@@ -62,5 +62,6 @@ namespace hal {
         void setCursorValue(double tCursor, int xpos, int val);
         int cursorValueStored(double tCursor, int xpos) const;
         int cursorValuePainted(double tCursor, int xpos);
+        int cursorValueTrigger(double tCursor, int xpos);
     };
 }

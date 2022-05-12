@@ -34,6 +34,17 @@ namespace hal
         return std::unique_ptr<NetlistSimulatorController>(new NetlistSimulatorController(++sMaxControllerId, nam));
     }
 
+    std::unique_ptr<NetlistSimulatorController> NetlistSimulatorControllerPlugin::restore_simulator_controller(Netlist* nl, const std::string &filename) const
+    {
+        NetlistSimulatorController* nsc = new NetlistSimulatorController(++sMaxControllerId,nl,filename);
+        if (nsc->get_working_directory().empty())
+        {
+            delete nsc;
+            return nullptr;
+        }
+        return std::unique_ptr<NetlistSimulatorController>(nsc);
+    }
+
     std::shared_ptr<NetlistSimulatorController> NetlistSimulatorControllerPlugin::simulator_controller_by_id(u32 id) const
     {
         NetlistSimulatorController* ctrl = NetlistSimulatorControllerMap::instance()->controller(id);
@@ -50,6 +61,8 @@ namespace hal
 
     void NetlistSimulatorControllerPlugin::on_load()
     {
+        // report simulation warnings and error messages not related to specific controller to common channel
+        LogManager::get_instance().add_channel("simulation_plugin", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
         QResource::registerResource("simulator_resources.rcc");
         QDir userConfigDir(QString::fromStdString(utils::get_user_config_directory()));
         sSimulationSettings = new SimulationSettings(userConfigDir.absoluteFilePath("simulationsettings.ini"));

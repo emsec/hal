@@ -32,6 +32,7 @@
 #include <QObject>
 #include <QString>
 #include <QTemporaryDir>
+#include <QDir>
 #include <functional>
 #include <map>
 #include <memory>
@@ -71,6 +72,9 @@ public:
     };
 
     NetlistSimulatorController(u32 id, const std::string nam, QObject* parent = nullptr);
+
+    NetlistSimulatorController(u32 id, Netlist* nl, const std::string& filename, QObject* parent = nullptr);
+
     ~NetlistSimulatorController();
 
     /**
@@ -385,6 +389,20 @@ public:
      */
     void emitLoadProgress(int percent);
 
+    /**
+     * Controller is in a state that allows import from VCD, CSV, or SALEAE waveform data
+     * @return True if import is allowed, false otherwise.
+     */
+    bool can_import_data() const;
+
+    /**
+     * Store significant information into working directory
+     * @return True if JSON file created successfully, false otherwise.
+     */
+    bool persist() const;
+
+    static const char* sPersistFile;
+
 public Q_SLOTS:
     void handleOpenInputFile(const QString& filename);
     void handleSelectGates();
@@ -405,6 +423,8 @@ private:
     bool isClockSet() const;
     bool isInputSet() const;
     void checkReadyState();
+    void restoreComposed(const SaleaeDirectory& sd);
+    void loadStoredController(const QDir& workDir);
 
     u32 mId;
     QString mName;
@@ -413,6 +433,7 @@ private:
     SimulationEngine* mSimulationEngine;
 
     QTemporaryDir* mTempDir;
+    QString mWorkDir;
     WaveDataList* mWaveDataList;
 
     SimulationInput* mSimulationInput;
