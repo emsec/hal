@@ -681,6 +681,14 @@ namespace hal
                 return {BooleanFunction(std::vector<Node>({this->m_nodes.begin(), this->m_nodes.begin() + index})),
                         BooleanFunction(std::vector<Node>({this->m_nodes.begin() + index, this->m_nodes.end() - 1}))};
             }
+            case 3: {
+                auto index0 = this->length() - coverage[this->length() - 3] - coverage[this->length() - 2] - 1;
+                auto index1 = this->length() - coverage[this->length() - 2] - 1;
+
+                return {BooleanFunction(std::vector<Node>({this->m_nodes.begin(), this->m_nodes.begin() + index0})),
+                        BooleanFunction(std::vector<Node>({this->m_nodes.begin() + index0, this->m_nodes.begin() + index1})),
+                        BooleanFunction(std::vector<Node>({this->m_nodes.begin() + index1, this->m_nodes.end() - 1}))};
+            }
 
             default:
                 assert(false && "not implemented reached.");
