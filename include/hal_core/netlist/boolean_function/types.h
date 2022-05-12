@@ -56,11 +56,11 @@ namespace hal
 
             /// The SMT solver identifier.
             SolverType solver = SolverType::Z3;
-            /// refers to whether SMT query is performed on a local/remote machine.
+            /// Controls whether the SMT query is performed on a local or a remote machine.
             bool local = true;
-            /// refers to whether the SMT solver should generate a model (in case formula is satisfiable)
+            /// Controls whether the SMT solver should generate a model in case formula is satisfiable.
             bool generate_model = true;
-            /// refers to the timeout after which the SMT solver is killed (seconds)
+            /// The timeout after which the SMT solver is killed in seconds.
             u64 timeout_in_seconds = 10;
 
             ////////////////////////////////////////////////////////////////////////
@@ -139,14 +139,14 @@ namespace hal
             ////////////////////////////////////////////////////////////////////////
 
             /**
-             * Constructs a new constraint from one Boolean function.
+             * Constructs a new constraint from one Boolean function that evaluates to a single bit.
              * 
-             * @param[in] constraint - The equality constraint
+             * @param[in] constraint - The constraint function.
              */
-            explicit Constraint(BooleanFunction&& _constraint);
+            explicit Constraint(BooleanFunction&& constraint);
 
             /**
-             * Constructs a new constraint from two Boolean functions.
+             * Constructs a new equality constraint from two Boolean functions.
              * 
              * @param[in] lhs - The left-hand side of the equality constraint
              * @param[in] rhs - The right-hand side of the equality constraint
@@ -177,16 +177,16 @@ namespace hal
             bool is_assignment() const;
 
             /**
-             * Returns the assignment constraint.
+             * Returns the assignment constraint as a pair of Boolean functions.
              * 
-             * @returns The assignment constraint.
+             * @returns The assignment constraint on success, an error otherwise.
              */
             Result<const std::pair<BooleanFunction, BooleanFunction>*> get_assignment() const;
 
             /**
              * Returns the function constraint.
              * 
-             * @returns The function constraint.
+             * @returns The function constraint on success, an error otherwise.
              */
             Result<const BooleanFunction*> get_function() const;
         };
