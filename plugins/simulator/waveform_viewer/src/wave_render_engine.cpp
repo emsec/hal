@@ -239,25 +239,41 @@ namespace hal {
                             try {
                                 WaveDataProvider* wdp = nullptr;
                                 std::string saleaeDirectory = mWorkDir.absoluteFilePath("saleae.json").toStdString();
-                                const WaveDataGroup* wdGrp = dynamic_cast<const WaveDataGroup*>(wree->wavedata());
-                                if (wdGrp)
-                                    wdp = new WaveDataProviderGroup(saleaeDirectory, wdGrp->children());
-                                else
+                                switch (wree->wavedata()->netType())
                                 {
-                                    const WaveDataBoolean* wdBool = dynamic_cast<const WaveDataBoolean*>(wree->wavedata());
-                                    if (wdBool)
-                                        wdp = new WaveDataProviderBoolean(saleaeDirectory, wdBool->children(), wdBool->truthTable());
-                                    else
-                                    {
-                                        QString dataFilename = mWorkDir.absoluteFilePath(QString("digital_%1.bin").arg(wree->wavedata()->fileIndex()));
-                                        SaleaeInputFile sif(dataFilename.toStdString());
-                                        if (sif.good()) wdp = new WaveDataProviderFile(sif, mTimeframe);
-                                        else
-                                           qDebug() << "cannot open file" << dataFilename;
-                                    }
+                                case WaveData::NetGroup:
+                                {
+                                    const WaveDataGroup* wdGrp = static_cast<const WaveDataGroup*>(wree->wavedata());
+                                    wdp = new WaveDataProviderGroup(saleaeDirectory, wdGrp->children());
+                                    break;
                                 }
-                                wree->mPainted.generate(wdp,mTransform,mScrollbar,&wree->mLoop);
-                                wree->setState(WaveItem::Painted);
+                                case WaveData::BooleanNet:
+                                {
+                                    const WaveDataBoolean* wdBool = static_cast<const WaveDataBoolean*>(wree->wavedata());
+                                    wdp = new WaveDataProviderBoolean(saleaeDirectory, wdBool->children(), wdBool->truthTable());
+                                    break;
+                                }
+                                case WaveData::TriggerTime:
+                                {
+                                    const WaveDataTrigger* wdTrig = static_cast<const WaveDataTrigger*>(wree->wavedata());
+                                    wdp = new WaveDataProviderTrigger(saleaeDirectory, wdTrig->children(), wdTrig->toValueList(), wdTrig->get_filter_wave());
+                                    break;
+                                }
+                                default:
+                                {
+                                    QString dataFilename = mWorkDir.absoluteFilePath(QString("digital_%1.bin").arg(wree->wavedata()->fileIndex()));
+                                    SaleaeInputFile sif(dataFilename.toStdString());
+                                    if (sif.good()) wdp = new WaveDataProviderFile(sif, mTimeframe);
+                                    else
+                                        qDebug() << "cannot open file" << dataFilename;
+                                }
+                                }
+                                if (wdp)
+                                {
+                                    wree->mPainted.generate(wdp,mTransform,mScrollbar,&wree->mLoop);
+                                    wree->setState(WaveItem::Painted);
+                                    delete wdp;
+                                }
                                 /* TODO : fix for derived classes
                                 if (wdp->storeDataState() == WaveDataProviderFile::Complete)
                                 {
