@@ -706,7 +706,7 @@ namespace hal {
         }
         // ITE(a, b, b)  =>  b
         {
-            auto res = BooleanFunction::Ite(a.clone(), b.clone(), b.clone(), 1);<
+            auto res = BooleanFunction::Ite(a.clone(), b.clone(), b.clone(), 1);
             ASSERT_TRUE(res.is_ok());
             EXPECT_EQ(res.get().simplify(), b.clone());
         }
