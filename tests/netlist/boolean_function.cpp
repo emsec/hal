@@ -471,6 +471,9 @@ namespace hal {
         const auto a = BooleanFunction::Var("A"),
                    b = BooleanFunction::Var("B"),
                    c = BooleanFunction::Var("C"),
+                   d = BooleanFunction::Var("D", 16),
+                   e = BooleanFunction::Var("E", 16),
+                   f = BooleanFunction::Var("F", 16),
                   _0 = BooleanFunction::Const(0, 1),
                   _1 = BooleanFunction::Const(1, 1),
                   i0 = BooleanFunction::Index(0, 1);
@@ -703,9 +706,126 @@ namespace hal {
         }
         // ITE(a, b, b)  =>  b
         {
-            auto res = BooleanFunction::Ite(a.clone(), b.clone(), b.clone(), 1);
+            auto res = BooleanFunction::Ite(a.clone(), b.clone(), b.clone(), 1);<
             ASSERT_TRUE(res.is_ok());
             EXPECT_EQ(res.get().simplify(), b.clone());
+        }
+
+        ////////////////////////////////////////////////////////////////////////
+        // CONCAT RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // CONCAT(SLICE(X, j+1, k), SLICE(X, i, j)) => SLICE(X, i, k)
+        {
+            auto s1 = BooleanFunction::Slice(d.clone(), BooleanFunction::Index(0, d.size()), BooleanFunction::Index(7, d.size()), 8);
+            auto s2 = BooleanFunction::Slice(d.clone(), BooleanFunction::Index(8, d.size()), BooleanFunction::Index(15, d.size()), 8);
+            auto s3 = BooleanFunction::Slice(d.clone(), BooleanFunction::Index(0, d.size()), BooleanFunction::Index(15, d.size()), 16);
+
+            ASSERT_TRUE(s1.is_ok());
+            ASSERT_TRUE(s2.is_ok());
+            ASSERT_TRUE(s3.is_ok());
+
+            auto res = BooleanFunction::Concat(s2.get(), s1.get(), s1.get().size() + s2.get().size());
+
+            ASSERT_TRUE(res.is_ok());
+
+            EXPECT_EQ(res.get().simplify(), s3.get());
+        }
+
+        // CONCAT(SLICE(X, 0, 7), CONCAT(SLICE(X, 8, 15), Y)) => CONCAT(CONCAT(SLICE(X, 0, 7), SLICE(X, 8, 15)), Y))
+        {
+            auto s1 = BooleanFunction::Slice(d.clone(), BooleanFunction::Index(0, d.size()), BooleanFunction::Index(7, d.size()), 8);
+            auto s2 = BooleanFunction::Slice(d.clone(), BooleanFunction::Index(8, d.size()), BooleanFunction::Index(15, d.size()), 8);
+
+            ASSERT_TRUE(s1.is_ok());
+            ASSERT_TRUE(s2.is_ok());
+
+            auto c1 = BooleanFunction::Concat(s2.get().clone(), a.clone(), s2.get().size() + a.size());
+            auto c2 = BooleanFunction::Concat(s1.get().clone(), s2.get().clone(), s1.get().size() + s2.get().size());
+
+            ASSERT_TRUE(c1.is_ok());
+            ASSERT_TRUE(c2.is_ok());
+
+            auto c3 = BooleanFunction::Concat(c2.get().clone(), a.clone(), c2.get().size() + a.size());
+
+            auto res = BooleanFunction::Concat(s1.get().clone(), c1.get().clone(), s1.get().size() + c1.get().size());
+
+            ASSERT_TRUE(c3.is_ok());
+            ASSERT_TRUE(res.is_ok());
+
+            EXPECT_EQ(res.get().simplify(), c3.get());
+        }
+
+        // CONCAT(SLICE(X, 0, 7), CONCAT(SLICE(X, 8, 15), SLICE(Z, 8, 15))) => CONCAT(CONCAT(SLICE(X, 0, 7), SLICE(X, 8, 15)), SLICE(Z, 8, 15)))
+        {
+            auto s1 = BooleanFunction::Slice(d.clone(), BooleanFunction::Index(0, d.size()), BooleanFunction::Index(7, d.size()), 8);
+            auto s2 = BooleanFunction::Slice(d.clone(), BooleanFunction::Index(8, d.size()), BooleanFunction::Index(15, d.size()), 8);
+            auto s3 = BooleanFunction::Slice(e.clone(), BooleanFunction::Index(8, e.size()), BooleanFunction::Index(15, e.size()), 8);
+
+            ASSERT_TRUE(s1.is_ok());
+            ASSERT_TRUE(s2.is_ok());
+            ASSERT_TRUE(s3.is_ok());
+
+            auto c1 = BooleanFunction::Concat(s2.get().clone(), s3.get().clone(), s2.get().size() + s3.get().size());
+            auto c2 = BooleanFunction::Concat(s1.get().clone(), s2.get().clone(), s1.get().size() + s2.get().size());
+
+            ASSERT_TRUE(c1.is_ok());
+            ASSERT_TRUE(c2.is_ok());
+
+            auto c3 = BooleanFunction::Concat(c2.get().clone(), s3.get().clone(), c2.get().size() + s3.get().size());
+
+            auto res = BooleanFunction::Concat(s1.get().clone(), c1.get().clone(), s1.get().size() + c1.get().size());
+
+            ASSERT_TRUE(c3.is_ok());
+            ASSERT_TRUE(res.is_ok());
+
+            EXPECT_EQ(res.get().simplify(), c3.get());
+        }
+
+        // CONCAT(SLICE(X, 0, 7), CONCAT(SLICE(X, 8, 15), SLICE(X, 8, 15))) => CONCAT(SLICE(X, 0, 7), CONCAT(SLICE(X, 8, 15), SLICE(X, 8, 15)))
+        {
+            auto s1 = BooleanFunction::Slice(d.clone(), BooleanFunction::Index(0, d.size()), BooleanFunction::Index(7, d.size()), 8);
+            auto s2 = BooleanFunction::Slice(d.clone(), BooleanFunction::Index(8, d.size()), BooleanFunction::Index(15, d.size()), 8);
+            auto s3 = BooleanFunction::Slice(d.clone(), BooleanFunction::Index(8, d.size()), BooleanFunction::Index(15, d.size()), 8);
+
+            ASSERT_TRUE(s1.is_ok());
+            ASSERT_TRUE(s2.is_ok());
+            ASSERT_TRUE(s3.is_ok());
+
+            auto c1 = BooleanFunction::Concat(s2.get().clone(), s3.get().clone(), s2.get().size() + s3.get().size());
+
+            ASSERT_TRUE(c1.is_ok());
+
+            auto res = BooleanFunction::Concat(s1.get().clone(), c1.get().clone(), s1.get().size() + c1.get().size());
+
+            ASSERT_TRUE(res.is_ok());
+
+            EXPECT_EQ(res.get().simplify(), res.get());
+        }
+
+        // CONCAT(SLICE(X, 8, 15), CONCAT(SLICE(X, 0, 7), SLICE(Y, 0, 7))) => CONCAT(SLICE(X, 15, 0), SLICE(Y, 0, 7))
+        {
+            auto s1 = BooleanFunction::Slice(d.clone(), BooleanFunction::Index(0, d.size()), BooleanFunction::Index(7, d.size()), 8);
+            auto s2 = BooleanFunction::Slice(d.clone(), BooleanFunction::Index(8, d.size()), BooleanFunction::Index(15, d.size()), 8);
+            auto s3 = BooleanFunction::Slice(d.clone(), BooleanFunction::Index(0, d.size()), BooleanFunction::Index(15, d.size()), 16);
+            auto s4 = BooleanFunction::Slice(e.clone(), BooleanFunction::Index(0, e.size()), BooleanFunction::Index(7, e.size()), 8);
+
+            ASSERT_TRUE(s1.is_ok());
+            ASSERT_TRUE(s2.is_ok());
+            ASSERT_TRUE(s3.is_ok());
+            ASSERT_TRUE(s4.is_ok());
+
+            auto c1 = BooleanFunction::Concat(s1.get().clone(), s4.get().clone(), s1.get().size() + s4.get().size());
+            auto c2 = BooleanFunction::Concat(s3.get().clone(), s4.get().clone(), s3.get().size() + s4.get().size());
+
+            ASSERT_TRUE(c1.is_ok());
+            ASSERT_TRUE(c2.is_ok());
+
+            auto res = BooleanFunction::Concat(s2.get().clone(), c1.get().clone(), s2.get().size() + c1.get().size());
+
+            ASSERT_TRUE(res.is_ok());
+
+            EXPECT_EQ(res.get().simplify(), c2.get());
         }
 
         ////////////////////////////////////////////////////////////////////////
