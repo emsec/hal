@@ -101,6 +101,31 @@ namespace hal
         QString numberOfPins() const;
 
         /**
+         * Returns the module's number of pin groups.
+         */
+        QString numberOfPinGroups() const;
+
+        /**
+         * Returns the module's number of input nets.
+         */
+        QString numberOfInputNets() const;
+
+        /**
+         * Returns the module's number of output nets.
+         */
+        QString numberOfOutputNets() const;
+
+        /**
+         * Returns the module's number of internal nets.
+         */
+        QString numberOfInternalNets() const;
+
+        /**
+         * Returns True as a QString if the module is the top module, False otherwise.
+         */
+        QString isTopModule() const;
+
+        /**
          * Opens a Dialog to change the modules's name.
          */
         void changeName();
@@ -166,12 +191,12 @@ namespace hal
         void pyCopyGetSubmodules() const;
 
         /**
-         * Copies the number of nets contained in the module to the clipboard.
+         * Copies the number of ALL nets contained in the module to the clipboard.
          */
         void copyNumberOfNets() const;
 
         /**
-         * Copies the python code to retrieve the nets to the clipboard.
+         * Copies the python code to retrieve ALL nets to the clipboard.
          */
         void pyCopyGetNets() const;
 
@@ -184,6 +209,51 @@ namespace hal
          * Copies the python code to retrieve the module's pins to the clipboard.
          */
         void pyCopyGetPins() const;
+
+        /**
+         * Copies the number of pin groups to the clipboard.
+         */
+        void copyNumberOfPinGroups() const;
+
+        /**
+         * Copies the python code to retrieve the module's pin groups to the clipboard.
+         */
+        void pyCopyGetPinGroups() const;
+
+        /**
+         * Copies the module's number of inputs.
+         */
+        void copyNumberOfInputs() const;
+
+        /**
+         * Copies the python code to retrieve the module's input nets.
+         */
+        void pyCopyGetInputNets() const;
+
+        /**
+         * Copies the module's number of outputs.
+         */
+        void copyNumberOfOutputs() const;
+
+        /**
+         * Copies the python code to retrieve the module's output nets.
+         */
+        void pyCopyGetOutputNets() const;
+
+        /**
+         * Copies the module's number of internal nets to the clipboard.
+         */
+        void copyNumberOfInternalNets() const;
+
+        /**
+         * Copies the python code to retrieve the internal nets to the clipboard.
+         */
+        void pyCopyGetInternalNets() const;
+
+        /**
+         * Copies the python code to check if the module is the top module.
+         */
+        void pyCopyIsTopModule() const;
 
         /**
          * Changes the selection to the modules's parent module.
@@ -243,8 +313,14 @@ namespace hal
         QMenu* mNumOfSubmodulesContextMenu;
         QMenu* mNumOfNetsContextMenu;
         QMenu* mNumOfPinsContextMenu;
+        QMenu* mNumOfPinGroupsContextMenu;
+        QMenu* mNumOfInputNetsContextMenu;
+        QMenu* mNumOfOutputNetsContextMenu;
+        QMenu* mNumOfInternalNetsContextMenu;
+        QMenu* mIsTopModuleContextMenu;
 
         std::function<void()> mModuleDoubleClickedAction;
+        QIcon mPyIcon;
 
         static const QString nameRowKey;
         static const QString idRowKey;
@@ -254,6 +330,11 @@ namespace hal
         static const QString noOfModulesRowKey;
         static const QString noOfNetsRowKey;
         static const QString noOfPinsKey;
+        static const QString noOfPinGroupsKey;
+        static const QString noOfInputNetsKey;
+        static const QString noOfOutputNetsKey;
+        static const QString noOfInternalNetsKey;
+        static const QString isTopModuleKey;
 
     }; 
 }

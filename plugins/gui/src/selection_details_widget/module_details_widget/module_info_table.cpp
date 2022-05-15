@@ -20,47 +20,71 @@ namespace hal
     const QString ModuleInfoTable::noOfModulesRowKey = "Number of submodules";
     const QString ModuleInfoTable::noOfNetsRowKey = "Number of nets";
     const QString ModuleInfoTable::noOfPinsKey = "Number of pins";
+    const QString ModuleInfoTable::noOfPinGroupsKey = "Number of pin groups";
+    const QString ModuleInfoTable::noOfInputNetsKey = "Number of inputs";
+    const QString ModuleInfoTable::noOfOutputNetsKey = "Number of outputs";
+    const QString ModuleInfoTable::noOfInternalNetsKey = "Number of internal nets";
+    const QString ModuleInfoTable::isTopModuleKey = "Is top module?";
 
-    ModuleInfoTable::ModuleInfoTable(QWidget* parent) : GeneralTableWidget(parent), mModule(nullptr)
+    ModuleInfoTable::ModuleInfoTable(QWidget* parent) : GeneralTableWidget(parent), mModule(nullptr), mPyIcon(":/icons/python")
     {
         mNameEntryContextMenu = new QMenu();
         mNameEntryContextMenu->addAction("Name to clipboard", std::bind(&ModuleInfoTable::copyName, this));
         mNameEntryContextMenu->addSection("Misc");
         mNameEntryContextMenu->addAction("Change name", std::bind(&ModuleInfoTable::changeName, this));
         mNameEntryContextMenu->addSection("Python");
-        mNameEntryContextMenu->addAction(QIcon(":/icons/python"), "Get name", std::bind(&ModuleInfoTable::pyCopyName, this));
+        mNameEntryContextMenu->addAction(mPyIcon, "Get name", std::bind(&ModuleInfoTable::pyCopyName, this));
 
         mIdEntryContextMenu = new QMenu();
         mIdEntryContextMenu->addAction("ID to clipboard", std::bind(&ModuleInfoTable::copyId, this));
         mIdEntryContextMenu->addSection("Python");
-        mIdEntryContextMenu->addAction(QIcon(":/icons/python"), "Get ID", std::bind(&ModuleInfoTable::pyCopyId, this));
+        mIdEntryContextMenu->addAction(mPyIcon, "Get ID", std::bind(&ModuleInfoTable::pyCopyId, this));
 
         mTypeEntryContextMenu = new QMenu();
         mTypeEntryContextMenu->addAction("Type to clipboard", std::bind(&ModuleInfoTable::copyType, this));
         mTypeEntryContextMenu->addSection("Misc");
         mTypeEntryContextMenu->addAction("Change type", std::bind(&ModuleInfoTable::changeType, this));
         mTypeEntryContextMenu->addSection("Python");
-        mTypeEntryContextMenu->addAction(QIcon(":/icons/python"), "Get type", std::bind(&ModuleInfoTable::pyCopyType, this));
+        mTypeEntryContextMenu->addAction(mPyIcon, "Get type", std::bind(&ModuleInfoTable::pyCopyType, this));
 
         mModuleEntryContextMenu = new QMenu();
         mModuleEntryContextMenu->addAction("Parent name to clipboard", std::bind(&ModuleInfoTable::copyModule, this));
         mModuleEntryContextMenu->addSection("Python");
-        mModuleEntryContextMenu->addAction(QIcon(":/icons/python"), "Get parent", std::bind(&ModuleInfoTable::pyCopyModule, this));
+        mModuleEntryContextMenu->addAction(mPyIcon, "Get parent", std::bind(&ModuleInfoTable::pyCopyModule, this));
 
         mNumOfGatesContextMenu = new QMenu();
         mNumOfGatesContextMenu->addAction("Number of gates to clipboard", std::bind(&ModuleInfoTable::copyNumberOfGates, this));
 
         mNumOfSubmodulesContextMenu = new QMenu();
         mNumOfSubmodulesContextMenu->addAction("Number of submodules to clipboard", std::bind(&ModuleInfoTable::copyNumberOfSubmodules, this));
-        mNumOfSubmodulesContextMenu->addAction(QIcon(":/icons/python"), "Get submodules", std::bind(&ModuleInfoTable::pyCopyGetSubmodules, this));
+        mNumOfSubmodulesContextMenu->addAction(mPyIcon, "Get submodules", std::bind(&ModuleInfoTable::pyCopyGetSubmodules, this));
 
         mNumOfNetsContextMenu = new QMenu();
         mNumOfNetsContextMenu->addAction("Number of nets to clipboard", std::bind(&ModuleInfoTable::copyNumberOfNets, this));
-        mNumOfNetsContextMenu->addAction(QIcon(":/icons/python"), "Get nets", std::bind(&ModuleInfoTable::pyCopyGetNets, this));
+        mNumOfNetsContextMenu->addAction(mPyIcon, "Get nets", std::bind(&ModuleInfoTable::pyCopyGetNets, this));
 
-        mNumOfPinsContextMenu = new QMenu(this);
+        mNumOfPinsContextMenu = new QMenu;
         mNumOfPinsContextMenu->addAction("Number of pins to clipboard", std::bind(&ModuleInfoTable::copyNumberOfPins, this));
-        mNumOfPinsContextMenu->addAction(QIcon(":/icons/python"), "Get pins", std::bind(&ModuleInfoTable::pyCopyGetPins, this));
+        mNumOfPinsContextMenu->addAction(mPyIcon, "Get pins", std::bind(&ModuleInfoTable::pyCopyGetPins, this));
+
+        mNumOfPinGroupsContextMenu = new QMenu;
+        mNumOfPinGroupsContextMenu->addAction("Number of pin groups to clipboard", std::bind(&ModuleInfoTable::copyNumberOfPinGroups, this));
+        mNumOfPinGroupsContextMenu->addAction(mPyIcon, "Get pin groups", std::bind(&ModuleInfoTable::pyCopyGetPinGroups, this));
+
+        mNumOfInputNetsContextMenu = new QMenu;//making this widget the parent changes the context menu's background color...
+        mNumOfInputNetsContextMenu->addAction("Number of input nets to clipboard", std::bind(&ModuleInfoTable::copyNumberOfInputs, this));
+        mNumOfInputNetsContextMenu->addAction(mPyIcon, "Get input nets", std::bind(&ModuleInfoTable::pyCopyGetInputNets,this));
+
+        mNumOfOutputNetsContextMenu = new QMenu;
+        mNumOfOutputNetsContextMenu->addAction("Number of output nets to clipboard", std::bind(&ModuleInfoTable::copyNumberOfOutputs, this));
+        mNumOfOutputNetsContextMenu->addAction(mPyIcon, "Get output nets", std::bind(&ModuleInfoTable::pyCopyGetOutputNets, this));
+
+        mNumOfInternalNetsContextMenu = new QMenu;
+        mNumOfInternalNetsContextMenu->addAction("Number of internal nets to clipboard", std::bind(&ModuleInfoTable::copyNumberOfInternalNets, this));
+        mNumOfInternalNetsContextMenu->addAction(mPyIcon, "Get internal nets", std::bind(&ModuleInfoTable::pyCopyGetInternalNets, this));
+
+        mIsTopModuleContextMenu = new QMenu;
+        mIsTopModuleContextMenu->addAction(mPyIcon, "Check if module is top module", std::bind(&ModuleInfoTable::pyCopyIsTopModule, this));
 
         mModuleDoubleClickedAction = std::bind(&ModuleInfoTable::navModule, this);
 
@@ -92,6 +116,11 @@ namespace hal
             setRow(noOfModulesRowKey, numberOfSubModules(), mNumOfSubmodulesContextMenu);
             setRow(noOfNetsRowKey, numberOfNets(), mNumOfNetsContextMenu);
             setRow(noOfPinsKey, numberOfPins(), mNumOfPinsContextMenu);
+            setRow(noOfPinGroupsKey, numberOfPinGroups(), mNumOfPinGroupsContextMenu);
+            setRow(noOfInputNetsKey, numberOfInputNets(), mNumOfInputNetsContextMenu);
+            setRow(noOfOutputNetsKey, numberOfOutputNets(), mNumOfOutputNetsContextMenu);
+            setRow(noOfInternalNetsKey, numberOfInternalNets(), mNumOfInternalNetsContextMenu);
+            setRow(isTopModuleKey, isTopModule(), mIsTopModuleContextMenu);
             
             adjustSize();
         }
@@ -158,6 +187,31 @@ namespace hal
     QString ModuleInfoTable::numberOfPins() const
     {
         return QString::number(mModule->get_pins().size());
+    }
+
+    QString ModuleInfoTable::numberOfPinGroups() const
+    {
+        return QString::number(mModule->get_pin_groups().size());
+    }
+
+    QString ModuleInfoTable::numberOfInputNets() const
+    {
+        return QString::number(mModule->get_input_nets().size());
+    }
+
+    QString ModuleInfoTable::numberOfOutputNets() const
+    {
+        return QString::number(mModule->get_output_nets().size());
+    }
+
+    QString ModuleInfoTable::numberOfInternalNets() const
+    {
+        return QString::number(mModule->get_internal_nets().size());
+    }
+
+    QString ModuleInfoTable::isTopModule() const
+    {
+        return mModule->is_top_module() ? "True" : "False";
     }
 
     void ModuleInfoTable::changeName()
@@ -259,6 +313,51 @@ namespace hal
     void ModuleInfoTable::copyNumberOfPins() const
     {
         copyToClipboard(numberOfPins());
+    }
+
+    void ModuleInfoTable::copyNumberOfPinGroups() const
+    {
+        copyToClipboard(numberOfPinGroups());
+    }
+
+    void ModuleInfoTable::pyCopyGetPinGroups() const
+    {
+        copyToClipboard(PyCodeProvider::pyCodeModulePinGroups(mModule->get_id()));
+    }
+
+    void ModuleInfoTable::copyNumberOfInputs() const
+    {
+        copyToClipboard(numberOfInputNets());
+    }
+
+    void ModuleInfoTable::pyCopyGetInputNets() const
+    {
+        copyToClipboard(PyCodeProvider::pyCodeModuleInputNets(mModule->get_id()));
+    }
+
+    void ModuleInfoTable::copyNumberOfOutputs() const
+    {
+        copyToClipboard(numberOfOutputNets());
+    }
+
+    void ModuleInfoTable::pyCopyGetOutputNets() const
+    {
+        copyToClipboard(PyCodeProvider::pyCodeModuleOutputNets(mModule->get_id()));
+    }
+
+    void ModuleInfoTable::copyNumberOfInternalNets() const
+    {
+        copyToClipboard(numberOfInternalNets());
+    }
+
+    void ModuleInfoTable::pyCopyGetInternalNets() const
+    {
+        copyToClipboard(PyCodeProvider::pyCodeModuleInternalNets(mModule->get_id()));
+    }
+
+    void ModuleInfoTable::pyCopyIsTopModule() const
+    {
+        copyToClipboard(PyCodeProvider::pyCodeModuleIsTopModule(mModule->get_id()));
     }
 
     void ModuleInfoTable::pyCopyGetPins() const

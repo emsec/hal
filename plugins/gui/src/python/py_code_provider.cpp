@@ -338,7 +338,7 @@ namespace hal
 
     QString PyCodeProvider::pyCodeModulePinGroups(u32 moduleId)
     {
-        const QString suffix = "get_pin_groups";
+        const QString suffix = "get_pin_groups()";
 
         return buildPyCode(moduleCodePrefix, suffix, moduleId);
     }
