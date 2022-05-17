@@ -409,12 +409,12 @@ namespace hal
 
         gt = gl->create_gate_type("gnd");
         gt->add_output_pins({"O"});
-        gt->add_boolean_function("O", BooleanFunction::from_string("0"));
+        gt->add_boolean_function("O", BooleanFunction::Const(0, 1));
         gl->mark_gnd_gate_type(gt);
 
         gt = gl->create_gate_type("vcc");
         gt->add_output_pins({"O"});
-        gt->add_boolean_function("O", BooleanFunction::from_string("1"));
+        gt->add_boolean_function("O", BooleanFunction::Const(1, 1));
         gl->mark_vcc_gate_type(gt);
 
         // sequential types
@@ -802,70 +802,56 @@ namespace hal
             }
         }
 
-        // Check that the port names are the same
-        // -- input ports
-        if (m_0->get_input_port_names().size() != m_0->get_input_port_names().size())
+        // Check that the pins and pin groups are the same
+        if (m_0->get_pins().size() != m_0->get_pins().size())
         {
             log_info("test_utils",
-                     "modules_are_equal: Modules are not equal! Reason: The number of input port names are different ({} vs {})",
-                     m_0->get_input_port_names().size(),
-                     m_1->get_input_port_names().size());
+                     "modules_are_equal: Modules are not equal! Reason: The number of pins is different ({} vs {})",
+                     m_0->get_pins().size(),
+                     m_1->get_pins().size());
             return false;
         }
-        auto m_1_input_port_names = m_1->get_input_port_names();
-        for (auto const& [n_0, p_name_0] : m_0->get_input_port_names())
+        if (m_0->get_pin_groups().size() != m_0->get_pin_groups().size())
         {
-            auto n_1_list = m_1->get_netlist()->get_nets(net_name_filter(n_0->get_name()));
-            if (n_1_list.size() > 1)
-            {
-                log_info("test_utils", "modules_are_equal: Modules can't be compared! Reason: Multiple nets with name \"{}\" are found in the second netlist.", n_0->get_name());
-                return false;
-            }
-            if (n_1_list.size() < 1)
-            {
-                log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Cannot find a net with name \"{}\" in second netlist.", n_0->get_name());
-                return false;
-            }
-            Net* n_1 = *n_1_list.begin();
-            if (m_1_input_port_names.find(n_1) == m_1_input_port_names.end())
-            {
-                log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Cannot find an input port name for net \"{}\" in second netlist.", n_1->get_name());
-                return false;
-            }
-            if (m_1_input_port_names[n_1] != p_name_0)
-            {
-                log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Two input port names are different (\"{}\" vs \"{}\")", p_name_0, m_1_input_port_names[n_1]);
-                return false;
-            }
-        }
-        // -- output ports
-        if (m_0->get_output_port_names().size() != m_0->get_output_port_names().size())
-        {
+            log_info("test_utils",
+                     "modules_are_equal: Modules are not equal! Reason: The number of pin groups is different ({} vs {})",
+                     m_0->get_pin_groups().size(),
+                     m_1->get_pin_groups().size());
             return false;
         }
-        auto m_1_output_port_names = m_1->get_output_port_names();
-        for (auto const& [n_0, p_name_0] : m_0->get_output_port_names())
+
+        for (const PinGroup<ModulePin>* pg_0 : m_0->get_pin_groups())
         {
-            auto n_1_list = m_1->get_netlist()->get_nets(net_name_filter(n_0->get_name()));
-            if (n_1_list.size() > 1)
+            if (auto res_group = m_1->get_pin_group_by_id(pg_0->get_id()); res_group.is_ok())
             {
-                log_info("test_utils", "modules_are_equal: Modules can't be compared! Reason: Multiple nets with name \"{}\" are found in the second netlist.", n_0->get_name());
-                return false;
-            }
-            if (n_1_list.size() < 1)
+                const PinGroup<ModulePin>* pg_1 = res_group.get();
+                if ((!ignore_id && (pg_0->get_id() != pg_1->get_id())) || pg_0->get_name() != pg_1->get_name() || pg_0->get_start_index() != pg_1->get_start_index() || pg_0->is_ascending() != pg_1->is_ascending() || pg_0->size() != pg_1->size()) 
+                {
+                    log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Two pin groups are different (\"{}\" vs \"{}\")", pg_0->get_name(), pg_1->get_name());
+                    return false; 
+                }
+                
+                for (const ModulePin* p_0 : pg_0->get_pins())
+                {
+                    if(auto res_pin = m_1->get_pin_by_id(p_0->get_id()); res_pin.is_ok()) 
+                    {
+                        const ModulePin* p_1 = res_pin.get();
+                        if((!ignore_id && (p_0->get_id() != p_1->get_id())) || p_0->get_name() != p_1->get_name() || p_0->get_type() != p_1->get_type() || p_0->get_direction() != p_1->get_direction() || !nets_are_equal(p_0->get_net(), p_1->get_net(), ignore_id, ignore_name)) 
+                        {
+                            log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Two pins are different (\"{}\" vs \"{}\")", p_0->get_name(), p_1->get_name());
+                            return false; 
+                        }
+                    }
+                    else 
+                    {
+                        log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: There is no pin with name '{}' in pin group '{}' of module '{}' with ID {} within netlist with ID {}", p_0->get_name(), pg_1->get_name(), m_1->get_name(), m_1->get_netlist()->get_id());
+                        return false;
+                    }
+                }
+            } 
+            else 
             {
-                log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Cannot find a net with name \"{}\" in second netlist.", n_0->get_name());
-                return false;
-            }
-            Net* n_1 = *n_1_list.begin();
-            if (m_1_output_port_names.find(n_1) == m_1_output_port_names.end())
-            {
-                log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Cannot find an output port name for net \"{}\" in second netlist.", n_1->get_name());
-                return false;
-            }
-            if (m_1_output_port_names[n_1] != p_name_0)
-            {
-                log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Two output port names are different (\"{}\" vs \"{}\")", p_name_0, m_1_output_port_names[n_1]);
+                log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: There is no pin group with name '{}' in module '{}' with ID {} within netlist with ID {}", pg_0->get_name(), m_1->get_name(), m_1->get_netlist()->get_id());
                 return false;
             }
         }

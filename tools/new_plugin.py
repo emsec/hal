@@ -42,7 +42,7 @@ endif()
 
 PLUGIN_H_TEMPLATE = """#pragma once
 
-#include "core/plugin_interface_base.h"
+#include "hal_core/plugin_system/plugin_interface_base.h"
 
 namespace hal
 {
@@ -95,6 +95,7 @@ PYTHON_CPP_TEMPLATE = """#include "pybind11/operators.h"
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
 #include "pybind11/stl_bind.h"
+#include "hal_core/python_bindings/python_bindings.h"
 
 #include "##LOWER##/plugin_##LOWER##.h"
 

@@ -57,6 +57,8 @@ namespace hal
 
         description.add("--sizes", "(optional) sizes which should be prioritized", {""});
 
+        description.add("--bad_group_size", "(optional) defines the bad group size", {""});
+
         return description;
     }
 
@@ -65,6 +67,7 @@ namespace hal
         UNUSED(args);
         std::string path;
         std::vector<u32> sizes;
+        u32 bad_group_size = 7;
 
         if (args.is_option_set("--path"))
         {
@@ -88,7 +91,17 @@ namespace hal
             }
         }
 
-        if (execute(nl, path, sizes, false, {{}}).empty())
+        if (args.is_option_set("--bad_group_size"))
+        {
+            std::istringstream f(args.get_parameter("--bad_group_size"));
+            std::string s;
+            while (std::getline(f, s, ','))
+            {
+                bad_group_size = std::stoi(s);
+            }
+        }
+
+        if (execute(nl, path, sizes, false, {{}}).empty(), bad_group_size)
         {
             return false;
         }
@@ -96,7 +109,8 @@ namespace hal
         return true;
     }
 
-    std::vector<std::vector<Gate*>> plugin_dataflow::execute(Netlist* nl, std::string output_path, const std::vector<u32> sizes, bool draw_graph, std::set<std::set<u32>> known_groups)
+    std::vector<std::vector<Gate*>>
+        plugin_dataflow::execute(Netlist* nl, std::string output_path, const std::vector<u32> sizes, bool draw_graph, std::vector<std::vector<u32>> known_groups, u32 bad_group_size)
     {
         log("--- starting dataflow analysis ---");
 
@@ -162,6 +176,7 @@ namespace hal
 
         dataflow::evaluation::Configuration eval_config;
         eval_config.prioritized_sizes = sizes;
+        eval_config.bad_group_size    = bad_group_size;
 
         if (!eval_config.prioritized_sizes.empty())
         {
@@ -169,7 +184,7 @@ namespace hal
             log_info("dataflow", "");
         }
 
-        auto nl_copy       = netlist_utils::copy_netlist(nl);
+        auto nl_copy       = nl->copy();
         auto netlist_abstr = dataflow::pre_processing::run(nl_copy.get());
 
         auto initial_grouping = netlist_abstr.create_initial_grouping(known_groups);

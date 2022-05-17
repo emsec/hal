@@ -195,6 +195,7 @@ namespace hal {
         bool conflict(int ihoriz, int iroad, const NetLayoutJunctionRange& testRng) const;
         void place(int ihoriz, int iroad, const NetLayoutJunctionRange& range);
         bool canJoin(int ihoriz, int iroad, u32 netId, int pos) const;
+        int* canJoinAny(int ihoriz, u32 netId, int pos) const;
 
         QRect mRect;
         NetLayoutJunctionEntries mEntries;

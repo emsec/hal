@@ -40,5 +40,5 @@ namespace hal
     };
 
     template<>
-    std::vector<std::string> EnumStrings<PinDirection>::data;
+    std::map<PinDirection, std::string> EnumStrings<PinDirection>::data;
 }    // namespace hal

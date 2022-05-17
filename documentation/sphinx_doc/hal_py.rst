@@ -4,22 +4,30 @@ HAL Core Documentation
 .. toctree::
    :maxdepth: 1
 
-   core_utils
+   base_plugin_interface
    boolean_function
-   path
-   gate_type
+   core_utils
+   data_container
+   endpoint
+   gate
    gate_library
    gate_library_manager
-   data_container
-   gate
-   net
-   module
+   gate_type
+   gate_type_component
+   gate_type_property
    grouping
-   endpoint
-   netlist
-   netlist_utils
-   base_plugin_interface
    gui_plugin_interface
-   plugin_manager
+   module
+   module_pin
+   module_pin_group
+   net
+   netlist
    netlist_factory
+   netlist_utils
+   netlist_serializer
    netlist_writer_manager
+   path
+   pin_direction
+   pin_type
+   plugin_manager
+   smt

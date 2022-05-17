@@ -11,80 +11,80 @@ namespace hal
             {
                 GateType* gnd = lib->create_gate_type("GND", {GateTypeProperty::combinational, GateTypeProperty::ground});
                 gnd->add_pin("O", PinDirection::output);
-                gnd->add_boolean_function("O", BooleanFunction::from_string("0"));
+                gnd->add_boolean_function("O", BooleanFunction::from_string("0").get());
                 lib->mark_gnd_gate_type(gnd);
             }
             {
                 GateType* vcc = lib->create_gate_type("VCC", {GateTypeProperty::combinational, GateTypeProperty::power});
                 vcc->add_pin("O", PinDirection::output);
-                vcc->add_boolean_function("O", BooleanFunction::from_string("1"));
+                vcc->add_boolean_function("O", BooleanFunction::from_string("1").get());
                 lib->mark_vcc_gate_type(vcc);
             }
             {
                 GateType* buf = lib->create_gate_type("BUF", {GateTypeProperty::combinational, GateTypeProperty::buffer});
                 buf->add_pin("I", PinDirection::input);
                 buf->add_pin("O", PinDirection::output);
-                buf->add_boolean_function("O", BooleanFunction::from_string("I"));
+                buf->add_boolean_function("O", BooleanFunction::from_string("I").get());
             }
             {
                 GateType* buf = lib->create_gate_type("INV", {GateTypeProperty::combinational});
                 buf->add_pin("I", PinDirection::input);
                 buf->add_pin("O", PinDirection::output);
-                buf->add_boolean_function("O", BooleanFunction::from_string("!I"));
+                buf->add_boolean_function("O", BooleanFunction::from_string("!I").get());
             }
             {
                 GateType* and2 = lib->create_gate_type("AND2", {GateTypeProperty::combinational});
                 and2->add_pins({"I0", "I1"}, PinDirection::input);
                 and2->add_pin("O", PinDirection::output);
-                and2->add_boolean_function("O", BooleanFunction::from_string("I0 & I1"));
+                and2->add_boolean_function("O", BooleanFunction::from_string("I0 & I1").get());
             }
             {
                 GateType* and3 = lib->create_gate_type("AND3", {GateTypeProperty::combinational});
                 and3->add_pins({"I0", "I1", "I2"}, PinDirection::input);
                 and3->add_pin("O", PinDirection::output);
-                and3->add_boolean_function("O", BooleanFunction::from_string("I0 & I1 & I2"));
+                and3->add_boolean_function("O", BooleanFunction::from_string("I0 & I1 & I2").get());
             }
             {
                 GateType* and4 = lib->create_gate_type("AND4", {GateTypeProperty::combinational});
                 and4->add_pins({"I0", "I1", "I2", "I3"}, PinDirection::input);
                 and4->add_pin("O", PinDirection::output);
-                and4->add_boolean_function("O", BooleanFunction::from_string("I0 & I1 & I2 & I3"));
+                and4->add_boolean_function("O", BooleanFunction::from_string("I0 & I1 & I2 & I3").get());
             }
             {
                 GateType* or2 = lib->create_gate_type("OR2", {GateTypeProperty::combinational});
                 or2->add_pins({"I0", "I1"}, PinDirection::input);
                 or2->add_pin("O", PinDirection::output);
-                or2->add_boolean_function("O", BooleanFunction::from_string("I0 | I1"));
+                or2->add_boolean_function("O", BooleanFunction::from_string("I0 | I1").get());
             }
             {
                 GateType* or3 = lib->create_gate_type("OR3", {GateTypeProperty::combinational});
                 or3->add_pins({"I0", "I1", "I2"}, PinDirection::input);
                 or3->add_pin("O", PinDirection::output);
-                or3->add_boolean_function("O", BooleanFunction::from_string("I0 | I1 | I2"));
+                or3->add_boolean_function("O", BooleanFunction::from_string("I0 | I1 | I2").get());
             }
             {
                 GateType* or4 = lib->create_gate_type("OR4", {GateTypeProperty::combinational});
                 or4->add_pins({"I0", "I1", "I2", "I3"}, PinDirection::input);
                 or4->add_pin("O", PinDirection::output);
-                or4->add_boolean_function("O", BooleanFunction::from_string("I0 | I1 | I2 | I3"));
+                or4->add_boolean_function("O", BooleanFunction::from_string("I0 | I1 | I2 | I3").get());
             }
             {
                 GateType* or2 = lib->create_gate_type("XOR2", {GateTypeProperty::combinational});
                 or2->add_pins({"I0", "I1"}, PinDirection::input);
                 or2->add_pin("O", PinDirection::output);
-                or2->add_boolean_function("O", BooleanFunction::from_string("I0 ^ I1"));
+                or2->add_boolean_function("O", BooleanFunction::from_string("I0 ^ I1").get());
             }
             {
                 GateType* or3 = lib->create_gate_type("XOR3", {GateTypeProperty::combinational});
                 or3->add_pins({"I0", "I1", "I2"}, PinDirection::input);
                 or3->add_pin("O", PinDirection::output);
-                or3->add_boolean_function("O", BooleanFunction::from_string("I0 ^ I1 ^ I2"));
+                or3->add_boolean_function("O", BooleanFunction::from_string("I0 ^ I1 ^ I2").get());
             }
             {
                 GateType* or4 = lib->create_gate_type("XOR4", {GateTypeProperty::combinational});
                 or4->add_pins({"I0", "I1", "I2", "I3"}, PinDirection::input);
                 or4->add_pin("O", PinDirection::output);
-                or4->add_boolean_function("O", BooleanFunction::from_string("I0 ^ I1 ^ I2 ^ I3"));
+                or4->add_boolean_function("O", BooleanFunction::from_string("I0 ^ I1 ^ I2 ^ I3").get());
             }
             {
                 GateType* lut2 = lib->create_gate_type("LUT2", {GateTypeProperty::combinational, GateTypeProperty::lut}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", {"INIT"}), true));
@@ -115,17 +115,17 @@ namespace hal
                 GateType* carry = lib->create_gate_type("CARRY", {GateTypeProperty::combinational, GateTypeProperty::carry});
                 carry->add_pins({"CI", "I0", "I1"}, PinDirection::input);
                 carry->add_pin("CO", PinDirection::output);
-                carry->add_boolean_function("CO", BooleanFunction::from_string("(I0 & I1) | ((I0 | I1) & CI)"));
+                carry->add_boolean_function("CO", BooleanFunction::from_string("(I0 & I1) | ((I0 | I1) & CI)").get());
             }
             {
-                GateType* dff = lib->create_gate_type("DFF", {GateTypeProperty::sequential, GateTypeProperty::ff}, GateTypeComponent::create_ff_component(nullptr, BooleanFunction::from_string("D"), BooleanFunction::from_string("CLK")));
+                GateType* dff = lib->create_gate_type("DFF", {GateTypeProperty::sequential, GateTypeProperty::ff}, GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(nullptr, "IQ", "IQN"), BooleanFunction::from_string("D").get(), BooleanFunction::from_string("CLK").get()));
                 dff->add_pin("CLK", PinDirection::input, PinType::clock);
                 dff->add_pin("D", PinDirection::input, PinType::data);
                 dff->add_pin("Q", PinDirection::output, PinType::state);
                 dff->add_pin("QN", PinDirection::output, PinType::neg_state);
             }
             {
-                GateType* dff_e = lib->create_gate_type("DFFE", {GateTypeProperty::sequential, GateTypeProperty::ff}, GateTypeComponent::create_ff_component(nullptr, BooleanFunction::from_string("D"), BooleanFunction::from_string("CLK & EN")));
+                GateType* dff_e = lib->create_gate_type("DFFE", {GateTypeProperty::sequential, GateTypeProperty::ff}, GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(nullptr, "IQ", "IQN"), BooleanFunction::from_string("D").get(), BooleanFunction::from_string("CLK & EN").get()));
                 dff_e->add_pin("CLK", PinDirection::input, PinType::clock);
                 dff_e->add_pin("D", PinDirection::input, PinType::data);
                 dff_e->add_pin("EN", PinDirection::input, PinType::enable);
@@ -133,10 +133,10 @@ namespace hal
                 dff_e->add_pin("QN", PinDirection::output, PinType::neg_state);
             }
             {
-                GateType* dff_s = lib->create_gate_type("DFFS", {GateTypeProperty::sequential, GateTypeProperty::ff}, GateTypeComponent::create_ff_component(nullptr, BooleanFunction::from_string("D"), BooleanFunction::from_string("CLK")));
+                GateType* dff_s = lib->create_gate_type("DFFS", {GateTypeProperty::sequential, GateTypeProperty::ff}, GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(nullptr, "IQ", "IQN"), BooleanFunction::from_string("D").get(), BooleanFunction::from_string("CLK").get()));
                 FFComponent* ff_component = dff_s->get_component_as<FFComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::ff; });
                 assert(ff_component != nullptr);
-                ff_component->set_async_set_function(BooleanFunction::from_string("S"));
+                ff_component->set_async_set_function(BooleanFunction::from_string("S").get());
                 dff_s->add_pin("CLK", PinDirection::input, PinType::clock);
                 dff_s->add_pin("D", PinDirection::input, PinType::data);
                 dff_s->add_pin("S", PinDirection::input, PinType::set);
@@ -144,10 +144,10 @@ namespace hal
                 dff_s->add_pin("QN", PinDirection::output, PinType::neg_state);
             }
             {
-                GateType* dff_r = lib->create_gate_type("DFFR", {GateTypeProperty::sequential, GateTypeProperty::ff}, GateTypeComponent::create_ff_component(nullptr, BooleanFunction::from_string("D"), BooleanFunction::from_string("CLK")));
+                GateType* dff_r = lib->create_gate_type("DFFR", {GateTypeProperty::sequential, GateTypeProperty::ff}, GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(nullptr, "IQ", "IQN"), BooleanFunction::from_string("D").get(), BooleanFunction::from_string("CLK").get()));
                 FFComponent* ff_component = dff_r->get_component_as<FFComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::ff; });
                 assert(ff_component != nullptr);
-                ff_component->set_async_reset_function(BooleanFunction::from_string("R"));
+                ff_component->set_async_reset_function(BooleanFunction::from_string("R").get());
                 dff_r->add_pin("CLK", PinDirection::input, PinType::clock);
                 dff_r->add_pin("D", PinDirection::input, PinType::data);
                 dff_r->add_pin("R", PinDirection::input, PinType::reset);
@@ -155,11 +155,11 @@ namespace hal
                 dff_r->add_pin("QN", PinDirection::output, PinType::neg_state);
             }
             {
-                GateType* dff_rs = lib->create_gate_type("DFFRS", {GateTypeProperty::sequential, GateTypeProperty::ff}, GateTypeComponent::create_ff_component(nullptr, BooleanFunction::from_string("D"), BooleanFunction::from_string("CLK")));
+                GateType* dff_rs = lib->create_gate_type("DFFRS", {GateTypeProperty::sequential, GateTypeProperty::ff}, GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(nullptr, "IQ", "IQN"), BooleanFunction::from_string("D").get(), BooleanFunction::from_string("CLK").get()));
                 FFComponent* ff_component = dff_rs->get_component_as<FFComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::ff; });
                 assert(ff_component != nullptr);
-                ff_component->set_async_set_function(BooleanFunction::from_string("S"));
-                ff_component->set_async_reset_function(BooleanFunction::from_string("R"));
+                ff_component->set_async_set_function(BooleanFunction::from_string("S").get());
+                ff_component->set_async_reset_function(BooleanFunction::from_string("R").get());
                 ff_component->set_async_set_reset_behavior(AsyncSetResetBehavior::H, AsyncSetResetBehavior::L);
                 dff_rs->add_pin("CLK", PinDirection::input, PinType::clock);
                 dff_rs->add_pin("D", PinDirection::input, PinType::data);
@@ -169,10 +169,10 @@ namespace hal
                 dff_rs->add_pin("QN", PinDirection::output, PinType::neg_state);
             }
             {
-                GateType* dff_se = lib->create_gate_type("DFFSE", {GateTypeProperty::sequential, GateTypeProperty::ff}, GateTypeComponent::create_ff_component(nullptr, BooleanFunction::from_string("D"), BooleanFunction::from_string("CLK & EN")));
+                GateType* dff_se = lib->create_gate_type("DFFSE", {GateTypeProperty::sequential, GateTypeProperty::ff}, GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(nullptr, "IQ", "IQN"), BooleanFunction::from_string("D").get(), BooleanFunction::from_string("CLK & EN").get()));
                 FFComponent* ff_component = dff_se->get_component_as<FFComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::ff; });
                 assert(ff_component != nullptr);
-                ff_component->set_async_set_function(BooleanFunction::from_string("S"));
+                ff_component->set_async_set_function(BooleanFunction::from_string("S").get());
                 dff_se->add_pin("CLK", PinDirection::input, PinType::clock);
                 dff_se->add_pin("D", PinDirection::input, PinType::data);
                 dff_se->add_pin("EN", PinDirection::input, PinType::enable);
@@ -181,10 +181,10 @@ namespace hal
                 dff_se->add_pin("QN", PinDirection::output, PinType::neg_state);
             }
             {
-                GateType* dff_re = lib->create_gate_type("DFFRE", {GateTypeProperty::sequential, GateTypeProperty::ff}, GateTypeComponent::create_ff_component(nullptr, BooleanFunction::from_string("D"), BooleanFunction::from_string("CLK & EN")));
+                GateType* dff_re = lib->create_gate_type("DFFRE", {GateTypeProperty::sequential, GateTypeProperty::ff}, GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(nullptr, "IQ", "IQN"), BooleanFunction::from_string("D").get(), BooleanFunction::from_string("CLK & EN").get()));
                 FFComponent* ff_component = dff_re->get_component_as<FFComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::ff; });
                 assert(ff_component != nullptr);
-                ff_component->set_async_reset_function(BooleanFunction::from_string("R"));
+                ff_component->set_async_reset_function(BooleanFunction::from_string("R").get());
                 dff_re->add_pin("CLK", PinDirection::input, PinType::clock);
                 dff_re->add_pin("D", PinDirection::input, PinType::data);
                 dff_re->add_pin("EN", PinDirection::input, PinType::enable);
@@ -193,11 +193,11 @@ namespace hal
                 dff_re->add_pin("QN", PinDirection::output, PinType::neg_state);
             }
             {
-                GateType* dff_rse = lib->create_gate_type("DFFRSE", {GateTypeProperty::sequential, GateTypeProperty::ff}, GateTypeComponent::create_ff_component(nullptr, BooleanFunction::from_string("D"), BooleanFunction::from_string("CLK & EN")));
+                GateType* dff_rse = lib->create_gate_type("DFFRSE", {GateTypeProperty::sequential, GateTypeProperty::ff}, GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(nullptr, "IQ", "IQN"), BooleanFunction::from_string("D").get(), BooleanFunction::from_string("CLK & EN").get()));
                 FFComponent* ff_component = dff_rse->get_component_as<FFComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::ff; });
                 assert(ff_component != nullptr);
-                ff_component->set_async_set_function(BooleanFunction::from_string("S"));
-                ff_component->set_async_reset_function(BooleanFunction::from_string("R"));
+                ff_component->set_async_set_function(BooleanFunction::from_string("S").get());
+                ff_component->set_async_reset_function(BooleanFunction::from_string("R").get());
                 ff_component->set_async_set_reset_behavior(AsyncSetResetBehavior::H, AsyncSetResetBehavior::L);
                 dff_rse->add_pin("CLK", PinDirection::input, PinType::clock);
                 dff_rse->add_pin("D", PinDirection::input, PinType::data);

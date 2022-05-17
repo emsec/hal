@@ -73,6 +73,14 @@ namespace hal
         NETLIST_API bool save(std::filesystem::path file_path, GateLibrary* gate_lib, bool overwrite = false);
 
         /**
+         * Remove a gate library.
+         *
+         * @param[in] file_path - The input path.
+         */
+        // TODO test
+        NETLIST_API void remove(std::filesystem::path file_path);
+
+        /**
          * Get a gate library by file path. If no library with the given name is loaded, loading the gate library from file will be attempted.
          *
          * @param[in] file_path - The input path.

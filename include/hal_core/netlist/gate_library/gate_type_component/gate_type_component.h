@@ -37,6 +37,8 @@ namespace hal
     class GateTypeComponent
     {
     public:
+        virtual ~GateTypeComponent() = default;
+
         /**
          * The type of a gate type component.
          */
@@ -48,6 +50,7 @@ namespace hal
             ram,     /**< RAM component type. */
             mac,     /**< MAC component type. */
             init,    /**< Initialization component type. */
+            state,   /**< State component type. */
             ram_port /**< RAM port component type. */
         };
 
@@ -73,11 +76,10 @@ namespace hal
         /**
          * Create a new LatchComponent with given child component and the Boolean functions describing the data input and the enable signal.
          * 
-         * @param[in] data_in_bf - The function describing the internal state.
-         * @param[in] enable_bf - The function describing the enable behavior.
+         * @param[in] component - Another component to be added as a child component.
          * @returns The LatchComponent.
          */
-        static std::unique_ptr<GateTypeComponent> create_latch_component(const BooleanFunction& data_in_bf, const BooleanFunction& enable_bf);
+        static std::unique_ptr<GateTypeComponent> create_latch_component(std::unique_ptr<GateTypeComponent> component);
 
         /**
          * Create a new RAMComponent with given child component.
@@ -103,6 +105,16 @@ namespace hal
          * @returns The InitComponent.
          */
         static std::unique_ptr<GateTypeComponent> create_init_component(const std::string& init_category, const std::vector<std::string>& init_identifiers);
+
+        /**
+         * Create a new StateComponent with given child component and the internal state identifiers.
+         * 
+         * @param[in] component - Another component to be added as a child component.
+         * @param[in] state_identifier - The identifier of the internal state.
+         * @param[in] neg_state_identifier - The identifier of the negated internal state.
+         * @returns The StateComponent.
+         */
+        static std::unique_ptr<GateTypeComponent> create_state_component(std::unique_ptr<GateTypeComponent> component, const std::string& state_identifier, const std::string& neg_state_identifier);
 
         /**
          * Create a new RAMPortComponent with given child component, the write/read data/address pin groups, and the write/read clock/enable functions.
@@ -201,5 +213,5 @@ namespace hal
     };
 
     template<>
-    std::vector<std::string> EnumStrings<GateTypeComponent::ComponentType>::data;
+    std::map<GateTypeComponent::ComponentType, std::string> EnumStrings<GateTypeComponent::ComponentType>::data;
 }    // namespace hal

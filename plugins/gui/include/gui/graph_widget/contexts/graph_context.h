@@ -34,7 +34,7 @@
 
 namespace hal
 {
-    class GraphContextSubscriber;
+    class GraphWidget;
 
     /**
      * @ingroup graph-contexts
@@ -45,12 +45,13 @@ namespace hal
      * Afterwards this scene can be shown in the GraphWidget's GraphGraphicsView. <br>
      * Moreover the context may be changed (e.g. add/remove Gate%s or Module%s). In this case the scene will be adapted
      * as well. <br>
-     * This class implements an observer pattern to notify subscribers (currently only GraphWidget objects) about
+     * This class notifies the GraphWidget parent about
      * certain events.
      */
     class GraphContext : public QObject
     {
         friend class GraphContextManager;
+        friend class LayoutLockerManager;
         Q_OBJECT
 
     public:
@@ -69,20 +70,6 @@ namespace hal
          * Used to notify all subscribers about the deletion.
          */
         ~GraphContext();
-
-        /**
-         * Register a subscriber that will notified about certain changes (see GraphContextSubscriber).
-         *
-         * @param subscriber - The GraphContextSubscriber to subscribe
-         */
-        void subscribe(GraphContextSubscriber* const subscriber);
-
-        /**
-         * Remove a subscriber.
-         *
-         * @param subscriber - The GraphContextSubscriber to unsubscribe
-         */
-        void unsubscribe(GraphContextSubscriber* const subscriber);
 
         /**
          * Mark the beginning of a block of changes that are done successively. Used to prevent the scene from updating
@@ -131,6 +118,13 @@ namespace hal
         bool isGateUnfolded(u32 gateId) const;
 
         /**
+         * Checks whether a module is unfolded or not.
+         *
+         * @param moduleId - The id of the module
+         */
+        bool isModuleUnfolded(const u32 moduleId) const;
+
+        /**
          * Folds a given module with a given placement hint.
          *
          * @param moduleId - The module to fold.
@@ -177,11 +171,45 @@ namespace hal
          * @param minus_gates - The ids of the Gate%s that are removed for comparison
          * @param plus_modules - The ids of the Module%s that are added for comparison
          * @param plus_gates - The ids of the Gate%s that are added for comparison
+         * @param exclusively - If false, return true if context contents contain module contents,
+         *                      If true, return true if context contents match module contents
          * @returns <b>true</b> if the context Show%s the content of the module.
          */
-        bool isShowingModule(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates) const;
+        bool isShowingModule(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates, bool exclusively = true) const;
 
-	void testIfAffected(const u32 id, const u32* moduleId, const u32* gateId);
+        /**
+         * Checks wether the context shows an module exclusively or not.
+         */
+        bool isShowingModuleExclusively();
+
+        /**
+         * Recursively get all gates and submodules of module visible in graph context
+         *
+         * @param moduleId - The id of the module
+         * @param gates - Gates of module
+         * @param modules - Submodules of module
+         */
+        void getModuleChildrenRecursively(const u32 moduleId, QSet<u32>* gates, QSet<u32>* modules) const;
+
+        /**
+         * Convenience function to allow calls to GraphWidget::storeViewport via context
+         */
+        void storeViewport();
+
+        /**
+         * Called by layouter to signal progress
+         * @param percent
+         */
+        void layoutProgress(int percent) const;
+
+        /**
+         * Checks whether a modification affects the context and schedules an scene update if necessary.
+         *
+         * @param id - The id of the modified module
+         * @param moduleId - The id of the module which was added/removed
+         * @param gateId - The id of the gate which was added/removed
+         */
+        void testIfAffected(const u32 id, const u32* moduleId, const u32* gateId);
 
         /**
          * Given a net, this function checks if any of the Net's source Gate%s appear in the context.
@@ -249,6 +277,13 @@ namespace hal
          * @returns the context's name.
          */
         QString name() const;
+
+        /**
+         * Get the name of the context with dirty state.
+         *
+         * @returns the context's name with an asterisk if the dirty is set to true.
+         */
+        QString getNameWithDirtyState() const;
 
         /**
          * Get the id of the context.
@@ -343,28 +378,70 @@ namespace hal
          *
          * @return The dirty state.
          */
-        bool isDirty() const {return mDirty; }
+        bool isDirty() const { return mDirty; }
+
+        /**
+         * Set the special update state.
+         */
+        void setSpecialUpdate(bool state);
+
+        /**
+         * Get the special update state.
+         *
+         * @return The special update state.
+         */
+        bool getSpecialUpdate() const { return mSpecialUpdate; }
+
+        /**
+         * Set pointer to parent graph widget
+         * @param[in] gw parent of class GraphWidget
+         */
+        void setParentWidget(GraphWidget* gw) { mParentWidget = gw; }
+
+        /**
+         * Get the exclusive module id.
+         *
+         * @return The exclusive module id.
+         */
+        u32 getExclusiveModuleId() { return mExclusiveModuleId; }
+
+        /**
+         * Sets the exclusive module id.
+         */
+        void setExclusiveModuleId(u32 id, bool emitSignal = true);
+
+        /**
+         * Checks whether context still shows module with id mExclusiveModuleId exclusively. If not, mExclusiveModuleId is set to 0.
+         */
+        void exclusiveModuleCheck();
 
     Q_SIGNALS:
         void dataChanged();
+        void exclusiveModuleLost(u32 old_id);
+
+    public Q_SLOTS:
+        void abortLayout();
 
     private Q_SLOTS:
-        void handleLayouterUpdate(const int percent);
-        void handleLayouterUpdate(const QString& message);
         void handleLayouterFinished();
         void handleStyleChanged(int istyle);
+        void handleExclusiveModuleLost(u32 old_id);
+        void handleModuleNameChanged(Module* m);
 
     private:
         void evaluateChanges();
         void update();
         void applyChanges();
+        void requireSceneUpdate();
         void startSceneUpdate();
         bool testIfAffectedInternal(const u32 id, const u32* moduleId, const u32* gateId);
+        void removeModuleContents(const u32 moduleId);
 
-        QList<GraphContextSubscriber*> mSubscribers;
 
         u32 mId;
         QString mName;
+        GraphWidget* mParentWidget;
+
         bool mDirty;
 
         GraphLayouter* mLayouter;
@@ -389,5 +466,9 @@ namespace hal
         bool mSceneUpdateInProgress;
 
         QDateTime mTimestamp;
+
+        bool mSpecialUpdate;
+
+        u32 mExclusiveModuleId;
     };
 }

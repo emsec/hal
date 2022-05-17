@@ -1,5 +1,10 @@
 {
     "library": "NangateOpenCellLibrary",
+    "gate_locations": {
+        "data_category": "generic",
+        "data_x_identifier": "X_COORDINATE",
+        "data_y_identifier": "Y_COORDINATE"
+    },
     "cells": [
         {
             "name": "AND2_X1",
@@ -1396,10 +1401,13 @@
         },
         {
             "name": "DFFRS_X1",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "D",
                 "clocked_on": "CK",
                 "clear_on": "!RN",
@@ -1441,21 +1449,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "DFFRS_X2",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "D",
                 "clocked_on": "CK",
                 "clear_on": "!RN",
@@ -1497,21 +1510,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "DFFR_X1",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "D",
                 "clocked_on": "CK",
                 "clear_on": "!RN"
@@ -1545,21 +1563,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "DFFR_X2",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "D",
                 "clocked_on": "CK",
                 "clear_on": "!RN"
@@ -1593,21 +1616,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "DFFS_X1",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "D",
                 "clocked_on": "CK",
                 "preset_on": "!SN"
@@ -1641,21 +1669,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "DFFS_X2",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "D",
                 "clocked_on": "CK",
                 "preset_on": "!SN"
@@ -1689,21 +1722,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "DFF_X1",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "D",
                 "clocked_on": "CK"
             },
@@ -1731,21 +1769,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "DFF_X2",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "D",
                 "clocked_on": "CK"
             },
@@ -1773,19 +1816,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "DLH_X1",
-            "types": ["latch"],
+            "types": [
+                "sequential",
+                "latch"
+            ],
             "latch_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
                 "data_in": "D",
                 "enable_on": "G"
             },
@@ -1812,14 +1862,20 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 }
             ]
         },
         {
             "name": "DLH_X2",
-            "types": ["latch"],
+            "types": [
+                "sequential",
+                "latch"
+            ],
             "latch_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
                 "data_in": "D",
                 "enable_on": "G"
             },
@@ -1846,14 +1902,19 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 }
             ]
         },
         {
             "name": "DLL_X1",
-            "types": ["latch"],
+            "types": [
+                "sequential",
+                "latch"],
             "latch_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
                 "data_in": "D",
                 "enable_on": "!GN"
             },
@@ -1880,14 +1941,19 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 }
             ]
         },
         {
             "name": "DLL_X2",
-            "types": ["latch"],
+            "types": [
+                "sequential",
+                "latch"],
             "latch_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
                 "data_in": "D",
                 "enable_on": "!GN"
             },
@@ -1914,6 +1980,7 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 }
             ]
@@ -3861,10 +3928,13 @@
         },
         {
             "name": "SDFFRS_X1",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "(SE & SI) | (D & !SE)",
                 "clocked_on": "CK",
                 "clear_on": "!RN",
@@ -3916,21 +3986,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "SDFFRS_X2",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "(SE & SI) | (D & !SE)",
                 "clocked_on": "CK",
                 "clear_on": "!RN",
@@ -3982,21 +4057,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "SDFFR_X1",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "(SE & SI) | (D & !SE)",
                 "clocked_on": "CK",
                 "clear_on": "!RN"
@@ -4040,21 +4120,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "SDFFR_X2",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "(SE & SI) | (D & !SE)",
                 "clocked_on": "CK",
                 "clear_on": "!RN"
@@ -4098,21 +4183,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "SDFFS_X1",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "(SE & SI) | (D & !SE)",
                 "clocked_on": "CK",
                 "preset_on": "!SN"
@@ -4156,21 +4246,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "SDFFS_X2",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "(SE & SI) | (D & !SE)",
                 "clocked_on": "CK",
                 "preset_on": "!SN"
@@ -4214,21 +4309,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "SDFF_X1",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "(SE & SI) | (D & !SE)",
                 "clocked_on": "CK"
             },
@@ -4266,21 +4366,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "SDFF_X2",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "(SE & SI) | (D & !SE)",
                 "clocked_on": "CK"
             },
@@ -4318,11 +4423,13 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
@@ -4509,8 +4616,12 @@
         },
         {
             "name": "TLAT_X1",
-            "types": ["latch"],
+            "types": [
+                "sequential",
+                "latch"],
             "latch_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
                 "data_in": "D",
                 "enable_on": "G"
             },
@@ -4541,6 +4652,7 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state",
                     "z_function": "!OE"
                 }

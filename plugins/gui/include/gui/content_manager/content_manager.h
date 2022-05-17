@@ -46,6 +46,23 @@ namespace hal
     class SettingsItemKeybind;
     class GraphContextSerializer;
 
+    class ContentFactory
+    {
+        QString mName;
+    public:
+        ContentFactory(const QString& nam=QString()) : mName(nam) {;}
+        QString name() const {return mName; }
+        virtual ContentWidget* contentFactory() const = 0;
+    };
+
+    class ExternalContent : public QList<ContentFactory*>
+    {
+        static ExternalContent* inst;
+        ExternalContent() {;}
+    public:
+        static ExternalContent* instance();
+    };
+
 
     /**
      * @ingroup gui

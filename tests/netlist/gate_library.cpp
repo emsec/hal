@@ -51,27 +51,27 @@ namespace hal
             ASSERT_TRUE(gt_and != nullptr);
             gt_and->add_input_pins(std::vector<std::string>({"I0", "I1"}));
             gt_and->add_output_pins(std::vector<std::string>({"O"}));
-            gt_and->add_boolean_function("O", BooleanFunction::from_string("I0 & I1"));
+            gt_and->add_boolean_function("O", BooleanFunction::from_string("I0 & I1").get());
 
             // OR gate type
             auto gt_or = gl->create_gate_type("gt_or", {GateTypeProperty::combinational});
             ASSERT_TRUE(gt_or != nullptr);
             gt_or->add_input_pins(std::vector<std::string>({"I0", "I1"}));
             gt_or->add_output_pins(std::vector<std::string>({"O"}));
-            gt_or->add_boolean_function("O", BooleanFunction::from_string("I0 | I1"));
+            gt_or->add_boolean_function("O", BooleanFunction::from_string("I0 | I1").get());
 
             // GND gate type
             auto gt_gnd = gl->create_gate_type("gt_gnd");
             ASSERT_TRUE(gt_gnd != nullptr);
             gt_gnd->add_output_pins(std::vector<std::string>({"O"}));
-            gt_gnd->add_boolean_function("O", BooleanFunction(BooleanFunction::ZERO));
+            gt_gnd->add_boolean_function("O", BooleanFunction::Const(BooleanFunction::Value::ZERO));
             gl->mark_gnd_gate_type(gt_gnd);
 
             // VCC gate type
             auto gt_vcc = gl->create_gate_type("gt_vcc");
             ASSERT_TRUE(gt_vcc != nullptr);
             gt_vcc->add_output_pins(std::vector<std::string>({"O"}));
-            gt_vcc->add_boolean_function("O", BooleanFunction(BooleanFunction::ONE));
+            gt_vcc->add_boolean_function("O",  BooleanFunction::Const(BooleanFunction::Value::ONE));
             gl->mark_vcc_gate_type(gt_vcc);
 
             // FF gate type

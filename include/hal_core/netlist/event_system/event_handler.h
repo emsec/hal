@@ -52,16 +52,13 @@ namespace hal
             unmarked_global_gnd,       ///< associated_data = id of gate
             marked_global_input,       ///< associated_data = id of net
             marked_global_output,      ///< associated_data = id of net
-            marked_global_inout,       ///< associated_data = id of net
             unmarked_global_input,     ///< associated_data = id of net
             unmarked_global_output,    ///< associated_data = id of net
-            unmarked_global_inout,     ///< associated_data = id of net
-
         };
     };
 
     template<>
-    std::vector<std::string> EnumStrings<NetlistEvent::event>::data;
+    std::map<NetlistEvent::event, std::string> EnumStrings<NetlistEvent::event>::data;
 
     class GateEvent
     {
@@ -77,7 +74,7 @@ namespace hal
     };
 
     template<>
-    std::vector<std::string> EnumStrings<GateEvent::event>::data;
+    std::map<GateEvent::event, std::string> EnumStrings<GateEvent::event>::data;
 
     class NetEvent
     {
@@ -95,29 +92,32 @@ namespace hal
     };
 
     template<>
-    std::vector<std::string> EnumStrings<NetEvent::event>::data;
+    std::map<NetEvent::event, std::string> EnumStrings<NetEvent::event>::data;
 
     class ModuleEvent
     {
     public:
         enum class event
         {
-            created,                    ///< no associated_data
-            removed,                    ///< no associated_data
-            name_changed,               ///< no associated_data
-            type_changed,               ///< no associated_data
-            parent_changed,             ///< no associated_data
-            submodule_added,            ///< associated_data = id of added module
-            submodule_removed,          ///< associated_data = id of removed module
-            gate_assigned,              ///< associated_data = id of inserted gate
-            gate_removed,               ///< associated_data = id of removed gate
-            input_port_name_changed,    ///< associated_data = id of respective net
-            output_port_name_changed    ///< associated_data = id of respective net
+            created,               ///< no associated_data
+            removed,               ///< no associated_data
+            name_changed,          ///< no associated_data
+            type_changed,          ///< no associated_data
+            parent_changed,        ///< no associated_data
+            submodule_added,       ///< associated_data = id of added module
+            submodule_removed,     ///< associated_data = id of removed module
+            gates_assign_begin,    ///< associated_data = number of gates to assign
+            gates_assign_end,      ///< associated_data = number of assigned gates
+            gate_assigned,         ///< associated_data = id of inserted gate
+            gates_remove_begin,    ///< associated_data = number of gates to remove
+            gates_remove_end,      ///< associated_data = number of removed gates
+            gate_removed,          ///< associated_data = id of removed gate
+            pin_changed,           ///< no associated_data
         };
     };
 
     template<>
-    std::vector<std::string> EnumStrings<ModuleEvent::event>::data;
+    std::map<ModuleEvent::event, std::string> EnumStrings<ModuleEvent::event>::data;
 
     class GroupingEvent
     {
@@ -138,7 +138,7 @@ namespace hal
     };
 
     template<>
-    std::vector<std::string> EnumStrings<GroupingEvent::event>::data;
+    std::map<GroupingEvent::event, std::string> EnumStrings<GroupingEvent::event>::data;
 
     class EventHandler
     {
@@ -158,104 +158,103 @@ namespace hal
         EventHandler();
 
         /**
-             * Enables/disables callbacks for all handler.<br>
-             * Enabled by default.
-             *
-             * @param[in] flag - True to enable, false to disable.
-             */
+         * Enables/disables callbacks for all handler.<br>
+         * Enabled by default.
+         *
+         * @param[in] flag - True to enable, false to disable.
+         */
         NETLIST_API void event_enable_all(bool flag);
-        //TODO add other notify/register functions
 
         /**
-             * Executes all registered callbacks.
-             *
-             * @param[in] ev - the event which occured.
-             * @param[in] netlist - The affected object.
-             * @param[in] associated_data - may have a meaning depending on the event type.
-             */
+         * Executes all registered callbacks.
+         *
+         * @param[in] ev - the event which occured.
+         * @param[in] netlist - The affected object.
+         * @param[in] associated_data - may have a meaning depending on the event type.
+         */
         NETLIST_API void notify(NetlistEvent::event ev, Netlist* netlist, u32 associated_data = 0xFFFFFFFF);
 
         /**
-             * Executes all registered callbacks.
-             *
-             * @param[in] ev - the event which occured.
-             * @param[in] module - The affected object.
-             * @param[in] associated_data - may have a meaning depending on the event type.
-             */
+         * Executes all registered callbacks.
+         *
+         * @param[in] ev - the event which occured.
+         * @param[in] module - The affected object.
+         * @param[in] associated_data - may have a meaning depending on the event type.
+         */
         NETLIST_API void notify(ModuleEvent::event ev, Module* module, u32 associated_data = 0xFFFFFFFF);
 
         /**
-             * Executes all registered callbacks.
-             *
-             * @param[in] ev - the event which occured.
-             * @param[in] gate - The affected object.
-             * @param[in] associated_data - may have a meaning depending on the event type.
-             */
+         * Executes all registered callbacks.
+         *
+         * @param[in] ev - the event which occured.
+         * @param[in] gate - The affected object.
+         * @param[in] associated_data - may have a meaning depending on the event type.
+         */
         NETLIST_API void notify(GateEvent::event ev, Gate* gate, u32 associated_data = 0xFFFFFFFF);
 
         /**
-             * Executes all registered callbacks.
-             *
-             * @param[in] ev - the event which occured.
-             * @param[in] net - The affected object.
-             * @param[in] associated_data - may have a meaning depending on the event type.
-             */
+         * Executes all registered callbacks.
+         *
+         * @param[in] ev - the event which occured.
+         * @param[in] net - The affected object.
+         * @param[in] associated_data - may have a meaning depending on the event type.
+         */
         NETLIST_API void notify(NetEvent::event ev, Net* net, u32 associated_data = 0xFFFFFFFF);
 
         /**
-             * Executes all registered callbacks.
-             *
-             * @param[in] ev - the event which occured.
-             * @param[in] grouping - The affected object.
-             * @param[in] associated_data - may have a meaning depending on the event type.
-             */
+         * Executes all registered callbacks.
+         *
+         * @param[in] ev - the event which occured.
+         * @param[in] grouping - The affected object.
+         * @param[in] associated_data - may have a meaning depending on the event type.
+         */
         NETLIST_API void notify(GroupingEvent::event ev, Grouping* grouping, u32 associated_data = 0xFFFFFFFF);
 
         /**
-             * Registers a callback function.
-             *
-             * @param[in] name - name of the callback, used for callback removal.
-             * @param[in] function - The callback function.
-             */
+         * Registers a callback function.
+         *
+         * @param[in] name - name of the callback, used for callback removal.
+         * @param[in] function - The callback function.
+         */
         NETLIST_API void register_callback(const std::string& name, std::function<void(NetlistEvent::event e, Netlist* netlist, u32 associated_data)> function);
 
         /**
-             * Registers a callback function.
-             *
-             * @param[in] name - name of the callback, used for callback removal.
-             * @param[in] function - The callback function.
-             */
+         * Registers a callback function.
+         *
+         * @param[in] name - name of the callback, used for callback removal.
+         * @param[in] function - The callback function.
+         */
         NETLIST_API void register_callback(const std::string& name, std::function<void(ModuleEvent::event e, Module* module, u32 associated_data)> function);
 
         /**
-             * Registers a callback function.
-             *
-             * @param[in] name - name of the callback, used for callback removal.
-             * @param[in] function - The callback function.
-             */
+         * Registers a callback function.
+         *
+         * @param[in] name - name of the callback, used for callback removal.
+         * @param[in] function - The callback function.
+         */
         NETLIST_API void register_callback(const std::string& name, std::function<void(GateEvent::event e, Gate*, u32 associated_data)> function);
 
         /**
-             * Registers a callback function.
-             *
-             * @param[in] name - name of the callback, used for callback removal.
-             * @param[in] function - The callback function.
-             */
+         * Registers a callback function.
+         *
+         * @param[in] name - name of the callback, used for callback removal.
+         * @param[in] function - The callback function.
+         */
         NETLIST_API void register_callback(const std::string& name, std::function<void(NetEvent::event e, Net*, u32 associated_data)> function);
 
         /**
-             * Registers a callback function.
-             *
-             * @param[in] name - name of the callback, used for callback removal.
-             * @param[in] function - The callback function.
-             */
+         * Registers a callback function.
+         *
+         * @param[in] name - name of the callback, used for callback removal.
+         * @param[in] function - The callback function.
+         */
         NETLIST_API void register_callback(const std::string& name, std::function<void(GroupingEvent::event e, Grouping* grouping, u32 associated_data)> function);
 
         /**
-             * Removes a callback function.
-             *
-             * @param[in] name - name of the callback.
-             */
+         * Removes a callback function.
+         *
+         * @param[in] name - name of the callback.
+         */
         NETLIST_API void unregister_callback(const std::string& name);
 
     };    // class event_handler

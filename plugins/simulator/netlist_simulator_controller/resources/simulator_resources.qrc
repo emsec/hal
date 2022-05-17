@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/include">
+        <file alias="saleae_file.h">../include/netlist_simulator_controller/saleae_file.h</file>
+        <file alias="saleae_parser.h">../include/netlist_simulator_controller/saleae_parser.h</file>
+        <file alias="saleae_directory.h">../include/netlist_simulator_controller/saleae_directory.h</file>
+    </qresource>
+    <qresource prefix="/src">
+        <file alias="saleae_file.cpp">../src/saleae_file.cpp</file>
+        <file alias="saleae_parser.cpp">../src/saleae_parser.cpp</file>
+        <file alias="saleae_directory.cpp">../src/saleae_directory.cpp</file>
+    </qresource>
+</RCC>

@@ -20,7 +20,7 @@ namespace hal {
         : ProjectSerializer("groupings")
     {;}
 
-    std::string GroupingSerializer::serialize(Netlist* netlist, const std::filesystem::path& savedir, bool isAutosave)
+    std::string GroupingSerializer::serialize(Netlist* netlist, const std::filesystem::path& savedir, bool)
     {
         std::filesystem::path groupingFilePath(savedir);
         groupingFilePath.append("groupings.json");
@@ -32,7 +32,7 @@ namespace hal {
         for (Grouping* grp : netlist->get_groupings())
         {
             JsonWriteObject& grpObj = grpArr.add_object();
-            grpObj["id"]   = grp->get_id();
+            grpObj["id"]   = (int)grp->get_id();
             grpObj["name"] = grp->get_name();
 
             JsonWriteArray& grpMod = grpObj.add_array("modules");

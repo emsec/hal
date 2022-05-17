@@ -31,7 +31,7 @@ namespace hal
             auto output_pins = gate->get_type()->get_output_pins();
             while (true)
             {
-                auto vars = bf.get_variables();
+                auto vars = bf.get_variable_names();
                 std::vector<std::string> output_pins_that_are_also_function_inputs;
                 std::set_intersection(vars.begin(), vars.end(), output_pins.begin(), output_pins.end(), std::back_inserter(output_pins_that_are_also_function_inputs));
 
@@ -42,7 +42,7 @@ namespace hal
 
                 for (auto const& output_pin : output_pins_that_are_also_function_inputs)
                 {
-                    bf = bf.substitute(output_pin, gate->get_boolean_function(output_pin));
+                    bf = bf.substitute(output_pin, gate->get_boolean_function(output_pin)).get();
                 }
             }
 
@@ -52,7 +52,7 @@ namespace hal
                 const auto& input_net = gate->get_fan_in_net(input_pin);
                 if (!input_net)
                 {
-                    log_info("z3_utils", "Pin ({}) has no input net. Gate id: ({})", input_pin, gate->get_id());
+                    log_debug("z3_utils", "Pin ({}) has no input net. Gate id: ({})", input_pin, gate->get_id());
                     continue;
                 }
                 bf = bf.substitute(input_pin, std::to_string(input_net->get_id()));
@@ -101,7 +101,7 @@ namespace hal
 
                 auto f = get_function_of_gate(start_gate, source->get_pin());
 
-                for (auto id_string : f.get_variables())
+                for (auto id_string : f.get_variable_names())
                 {
                     input_net_ids.insert(std::stoi(id_string));
                 }
@@ -152,7 +152,7 @@ namespace hal
 
                     // replace the net id which was substituted with all input ids of the substituted function
                     input_net_ids.erase(n->get_id());
-                    for (auto id_string : f.get_variables())
+                    for (auto id_string : f.get_variable_names())
                     {
                         input_net_ids.insert(std::stoi(id_string));
                     }
@@ -189,7 +189,7 @@ namespace hal
             std::vector<std::string> output_pins = gate->get_type()->get_output_pins();
             while (true)
             {
-                auto vars = bf.get_variables();
+                auto vars = bf.get_variable_names();
                 std::vector<std::string> output_pins_that_are_also_function_inputs;
                 std::set_intersection(vars.begin(), vars.end(), output_pins.begin(), output_pins.end(), std::back_inserter(output_pins_that_are_also_function_inputs));
 
@@ -200,7 +200,7 @@ namespace hal
 
                 for (auto const& output_pin : output_pins_that_are_also_function_inputs)
                 {
-                    bf = bf.substitute(output_pin, gate->get_boolean_function(output_pin));
+                    bf = bf.substitute(output_pin, gate->get_boolean_function(output_pin)).get();
                 }
             }
 
@@ -254,7 +254,7 @@ namespace hal
 
             std::map<std::string, z3::expr> pin_to_expr;
 
-            for (const std::string& pin : bf.get_variables())
+            for (const std::string& pin : bf.get_variable_names())
             {
                 Net* in_net = src->get_fan_in_net(pin);
 

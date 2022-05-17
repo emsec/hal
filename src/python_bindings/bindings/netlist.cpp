@@ -125,6 +125,13 @@ namespace hal
             :rtype: hal_py.GateLibrary
         )");
 
+        py_netlist.def("copy", &Netlist::copy, R"(
+            Create a deep copy of the netlist.
+
+            :returns: The copy of the netlist.
+            :rtype: hal_py.Netlist
+        )");
+
         py_netlist.def("clear_caches", &Netlist::clear_caches, R"(
             Clear all internal caches of the netlist.
             In a typical application, calling this function is not required.
@@ -443,6 +450,14 @@ namespace hal
 
             :returns: A list of nets.
             :rtype: list[hal_py.Net]
+        )");
+
+        py_netlist.def("enable_automatic_net_checks", &Netlist::enable_automatic_net_checks, py::arg("enable_checks") = true, R"(
+            Enables or disables automatic checks on nets that determine whether a net is an input or output of a module.
+            
+            WARNING: if disabled, the user is responsible to assign correct input and output nets and create respective module pins. Wrong usage may result in unknown behavior or crashes.
+
+            :param bool enable_checks: Set True to enable automatic checks, False otherwise.
         )");
 
         py_netlist.def("get_unique_module_id", &Netlist::get_unique_module_id, R"(
@@ -773,6 +788,17 @@ namespace hal
             Set a set of all grouping IDs that have previously been used but been freed ever since.
 
             :param set[int] ids: All freed grouping IDs.
+        )");
+
+        py_netlist.def(
+            "load_gate_locations_from_data", &Netlist::load_gate_locations_from_data, py::arg("data_category") = std::string(), py::arg("data_identifiers") = std::pair<std::string, std::string>(), R"(
+            Load the locations of the gates in the netlist from their associated data using the specified category and identifier.
+            If no parameter is given, the data is querried using the default category and identifier stored with the gate library.
+
+            :param str data_category: The data category.
+            :param tuple(str,str) data_identifiers: The data identifiers for the x- and y-coordinates.
+            :returns: True on success, False otherwise.
+            :rtype: bool
         )");
     }
 }    // namespace hal

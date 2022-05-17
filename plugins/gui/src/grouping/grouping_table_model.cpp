@@ -366,6 +366,18 @@ namespace hal {
         return QColor();
     }
 
+    QColor GroupingTableModel::colorForGrouping(Grouping* grouping) const
+    {
+        if (grouping != nullptr)
+        {
+            for (const GroupingTableEntry& gte : mGroupings)
+                if (gte.grouping() == grouping)
+                    return gte.color();
+
+        }
+        return QColor();
+    }
+
     Grouping* GroupingTableModel::groupingByName(const QString& name) const
     {
         for (const GroupingTableEntry& gte : mGroupings)
@@ -385,6 +397,8 @@ namespace hal {
     //---------------- HISTORY ----------------------------------------
     GroupingTableHistory* GroupingTableHistory::inst = nullptr;
 
+    const int GroupingTableHistory::sMaxEntries = 10;
+
     GroupingTableHistory* GroupingTableHistory::instance()
     {
         if (!inst)
@@ -396,6 +410,7 @@ namespace hal {
     {
         removeAll(id);
         prepend(id);
+        while (size() > sMaxEntries) takeLast();
     }
 
     //---------------- VIEW -------------------------------------------

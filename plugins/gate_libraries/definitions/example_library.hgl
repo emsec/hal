@@ -777,8 +777,10 @@
                 "ff"
             ],
             "ff_config": {
-                "next_state": "D",
-                "clocked_on": "CE & C"
+                "state": "IQ",
+                "neg_state": "IQN",
+                "next_state": "D & CE",
+                "clocked_on": "C"
             },
             "pins": [
                 {
@@ -799,6 +801,7 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 }
             ]
@@ -810,8 +813,10 @@
                 "ff"
             ],
             "ff_config": {
-                "next_state": "D",
-                "clocked_on": "CE & C",
+                "state": "IQ",
+                "neg_state": "IQN",
+                "next_state": "D & CE",
+                "clocked_on": "C",
                 "preset_on": "S"
             },
             "pins": [
@@ -838,6 +843,7 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 }
             ]
@@ -849,8 +855,10 @@
                 "ff"
             ],
             "ff_config": {
-                "next_state": "D",
-                "clocked_on": "CE & C",
+                "state": "IQ",
+                "neg_state": "IQN",
+                "next_state": "D & CE",
+                "clocked_on": "C",
                 "clear_on": "R"
             },
             "pins": [
@@ -877,6 +885,7 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 }
             ]
@@ -888,8 +897,10 @@
                 "ff"
             ],
             "ff_config": {
-                "next_state": "D",
-                "clocked_on": "CE & C",
+                "state": "IQ",
+                "neg_state": "IQN",
+                "next_state": "D & CE",
+                "clocked_on": "C",
                 "clear_on": "R",
                 "preset_on": "S",
                 "state_clear_preset": "L",
@@ -924,6 +935,7 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 }
             ]

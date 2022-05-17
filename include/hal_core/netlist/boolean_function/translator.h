@@ -39,10 +39,9 @@ namespace Translator
 	 * Translates a Boolean function into a SMT-LIB compatible string.
 	 *
 	 * @param[in] function - Boolean function to translate.
-	 * @returns (1) status (true on success, false otherwise), and 
-	 *          (2) SMT-LIB compatible string.
+	 * @returns Ok() and SMT-LIB v2 compatible string on success, Err() otherwise.
 	 */
-	std::tuple<bool, std::string> translate_to_smt2(const BooleanFunction& function);
+	Result<std::string> translate_to_smt2(const BooleanFunction& function);
 }  // namespace Translator
 }  // namespace SMT
 }  // namespace hal

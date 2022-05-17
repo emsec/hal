@@ -24,9 +24,9 @@ namespace hal
                 gt->assign_pin_type("VDD", PinType::power);
                 gt->assign_pin_type("GND", PinType::ground);
 
-                gt->add_boolean_function("O", BooleanFunction::from_string("A & B"));
-                gt->add_boolean_function("O_undefined", BooleanFunction::from_string("!A & B"));
-                gt->add_boolean_function("O_tristate", BooleanFunction::from_string("!A & !B"));
+                gt->add_boolean_function("O", BooleanFunction::from_string("A & B").get());
+                gt->add_boolean_function("O_undefined", BooleanFunction::from_string("!A & B").get());
+                gt->add_boolean_function("O_tristate", BooleanFunction::from_string("!A & !B").get());
             }
 
             {
@@ -42,9 +42,9 @@ namespace hal
                 gt->assign_pin_type("VDD", PinType::power);
                 gt->assign_pin_type("GND", PinType::ground);
 
-                gt->add_boolean_function("O", BooleanFunction::from_string("A(1) & B(0)", {"A(1)", "B(0)"}));
-                gt->add_boolean_function("O_undefined", BooleanFunction::from_string("!A(0) & B(0)", {"A(0)", "B(0)"}));
-                gt->add_boolean_function("O_tristate", BooleanFunction::from_string("!A(1) & !B(1)", {"A(1)", "B(1)"}));
+                gt->add_boolean_function("O", BooleanFunction::from_string("A(1) & B(0)").get());
+                gt->add_boolean_function("O_undefined", BooleanFunction::from_string("!A(0) & B(0)").get());
+                gt->add_boolean_function("O_tristate", BooleanFunction::from_string("!A(1) & !B(1)").get());
             }
 
             {
@@ -67,7 +67,7 @@ namespace hal
             }
 
             {
-                GateType* gt = gl->create_gate_type("gt_ff", {GateTypeProperty::ff}, GateTypeComponent::create_ff_component(nullptr, BooleanFunction::from_string("D"), BooleanFunction::from_string("CLK & EN")));
+                GateType* gt = gl->create_gate_type("gt_ff", {GateTypeProperty::ff}, GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(nullptr, "IQ", "IQN"), BooleanFunction::Var("D"), BooleanFunction::from_string("CLK & EN").get()));
                 FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::ff; });
                 assert(ff_component != nullptr);
 
@@ -82,13 +82,13 @@ namespace hal
                 gt->assign_pin_type("Q", PinType::state);
                 gt->assign_pin_type("QN", PinType::neg_state);
 
-                ff_component->set_async_reset_function(BooleanFunction::from_string("R"));
-                ff_component->set_async_set_function(BooleanFunction::from_string("S"));
+                ff_component->set_async_reset_function(BooleanFunction::Var("R"));
+                ff_component->set_async_set_function(BooleanFunction::Var("S"));
                 ff_component->set_async_set_reset_behavior(AsyncSetResetBehavior::L, AsyncSetResetBehavior::H);
             }
 
             {
-                GateType* gt = gl->create_gate_type("gt_ff_init", {GateTypeProperty::ff}, GateTypeComponent::create_ff_component(GateTypeComponent::create_init_component("generic", {"INIT"}), BooleanFunction::from_string("D"), BooleanFunction::from_string("CLK & EN")));
+                GateType* gt = gl->create_gate_type("gt_ff_init", {GateTypeProperty::ff}, GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"), BooleanFunction::Var("D"), BooleanFunction::from_string("CLK & EN").get()));
                 FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::ff; });
                 assert(ff_component != nullptr);
 
@@ -103,13 +103,13 @@ namespace hal
                 gt->assign_pin_type("Q", PinType::state);
                 gt->assign_pin_type("QN", PinType::neg_state);
 
-                ff_component->set_async_reset_function(BooleanFunction::from_string("R"));
-                ff_component->set_async_set_function(BooleanFunction::from_string("S"));
+                ff_component->set_async_reset_function(BooleanFunction::Var("R"));
+                ff_component->set_async_set_function(BooleanFunction::Var("S"));
                 ff_component->set_async_set_reset_behavior(AsyncSetResetBehavior::L, AsyncSetResetBehavior::H);
             }
 
             {
-                GateType* gt = gl->create_gate_type("gt_latch", {GateTypeProperty::latch}, GateTypeComponent::create_latch_component(BooleanFunction::from_string("D"), BooleanFunction::from_string("EN")));
+                GateType* gt = gl->create_gate_type("gt_latch", {GateTypeProperty::latch}, GateTypeComponent::create_latch_component(GateTypeComponent::create_state_component(nullptr, "IQ", "IQN")));
                 LatchComponent* latch_component = gt->get_component_as<LatchComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::latch; });
                 assert(latch_component != nullptr);
 
@@ -123,8 +123,10 @@ namespace hal
                 gt->assign_pin_type("Q", PinType::state);
                 gt->assign_pin_type("QN", PinType::neg_state);
 
-                latch_component->set_async_reset_function(BooleanFunction::from_string("R"));
-                latch_component->set_async_set_function(BooleanFunction::from_string("S"));
+                latch_component->set_data_in_function(BooleanFunction::Var("D"));
+                latch_component->set_enable_function(BooleanFunction::Var("EN"));
+                latch_component->set_async_reset_function(BooleanFunction::Var("R"));
+                latch_component->set_async_set_function(BooleanFunction::Var("S"));
                 latch_component->set_async_set_reset_behavior(AsyncSetResetBehavior::L, AsyncSetResetBehavior::H);
             }
 

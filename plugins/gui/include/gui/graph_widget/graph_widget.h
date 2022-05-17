@@ -28,7 +28,6 @@
 #include "gui/gui_globals.h"
 #include "gui/gui_def.h"
 #include "gui/content_widget/content_widget.h"
-#include "gui/graph_widget/contexts/graph_context_subscriber.h"
 
 #include <deque>
 
@@ -38,7 +37,9 @@ namespace hal
     class GraphContext;
     class GraphGraphicsView;
     class SpinnerWidget;
+    class SettingsItemSpinbox;
     class GraphNavigationWidget;
+    class ProgressBar;
 
     /**
      * @ingroup graph
@@ -47,7 +48,7 @@ namespace hal
      * The content widget that wraps a graph view of a certain GraphContext. <br>
      * It represents one tab of the GraphTabWidgets QTabWidget.
      */
-    class GraphWidget : public ContentWidget, public GraphContextSubscriber
+    class GraphWidget : public ContentWidget
     {
         Q_OBJECT
 
@@ -71,33 +72,22 @@ namespace hal
          * Should be called whenever the scene becomes available (after a new layout). <br>
          * Used to enable interactions and show the loaded scene.
          */
-        void handleSceneAvailable() override;
+        void handleSceneAvailable();
         /**
          * Should be called whenever the scene becomes unavailable (at the beginning of a new layout or a scene update). <br>
          * Used to disable interactions.
          */
-        void handleSceneUnavailable() override;
+        void handleSceneUnavailable();
 
         /**
          * Notifies that the context this graph widget manages is about to be deleted.
          */
-        void handleContextAboutToBeDeleted() override;
+        void handleContextAboutToBeDeleted();
 
         /**
-         * Currently unused. <br>
-         * Update the loading(?) progress of the layouter that layouts the context this graph widget manages.
-         *
-         * @param percent - The progress in percent (in range 0-100(?))
+         * Subscriber should store the scene mapping to viewport so it can be restored upon handleSceneAvailable
          */
-        void handleStatusUpdate(const int percent) override;
-
-        /**
-         * Currently unused. <br>
-         * Update the status message of the layouters progress that layouts the context this graph widget manages.
-         *
-         * @param message - The new status message
-         */
-        void handleStatusUpdate(const QString& message) override;
+        void storeViewport();
 
         /**
          * Get the GraphGraphicsView this object manages.
@@ -110,6 +100,12 @@ namespace hal
          * Used to move and scale the camera of the view so that the whole selection can be seen.
          */
         void ensureSelectionVisible();
+
+        /**
+         * Show progress in overlay
+         * @param percent percent done
+         */
+        void showProgress(int percent, const QString& text=QString());
 
         void focusGate(u32 gateId);
         void focusNet(u32 netId);
@@ -137,7 +133,6 @@ namespace hal
 
         void substituteByVisibleModules(const QSet<u32>& gates, const QSet<u32>& modules, QSet<u32>& insert_gates, QSet<u32>& insert_modules,
                                            QSet<u32>& remove_gates, QSet<u32>& remove_modules) const;
-        void setModifiedIfModule();
 
         void handleEnterModuleRequested(const u32 id);
 
@@ -150,11 +145,28 @@ namespace hal
 
         WidgetOverlay* mOverlay;
         GraphNavigationWidget* mNavigationWidgetV3;
+        ProgressBar* mProgressBar;
+
         SpinnerWidget* mSpinnerWidget;
 
         u32 mCurrentExpansion;
 
         QRectF mRectAfterFocus;
         QRectF mLastTargetRect;
+
+        class StoreViewport
+        {
+        public:
+            bool mValid;
+            QRectF mRect;
+            QVector<QPoint> mGrid;
+            StoreViewport() : mValid(false) {;}
+        };
+
+        QRectF restoreViewport(bool reset = true);
+
+        StoreViewport mStoreViewport;
+
+        static SettingsItemSpinbox* sSettingAnimationDuration;
     };
 }

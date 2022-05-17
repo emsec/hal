@@ -92,11 +92,18 @@ namespace hal
         /**
          * Gets a list of all current GraphContext%s.
          *
-         * @returns a list of all GrapgContext%s.
+         * @returns a list of all GraphContext%s.
          */
         QVector<GraphContext*> getContexts() const;
         GraphContext* getCleanContext(const QString& name) const;
         GraphContext* getContextById(u32 id) const;
+
+        /**
+         * Gets the context which is exclusively showing the module with the id module_id.
+         *
+         * @returns a context exclusively showing the module with id module_id or <i>nullptr</i>.%s.
+         */
+        GraphContext* getContextByExclusiveModuleId(u32 module_id) const;
 
         /**
          * Checks if a context with the given name exists.
@@ -106,7 +113,13 @@ namespace hal
          */
         bool contextWithNameExists(const QString& name) const;
 
-        //void handle_module_created(Module* m) const;
+        /**
+         * Handler to be called after a module has been created. Used to apply the changes in the affected contexts.<br>
+         *
+         * @param m - The module that has been created
+         */
+        void handleModuleCreated(Module* m) const;
+
         /**
          * Handler to be called after a module has been removed. Used to apply the changes in the affected contexts.<br>
          * The module is already removed from the netlist at this point. However the module isn't deleted yet (not <i>nullptr</i>).
@@ -173,22 +186,20 @@ namespace hal
         void handleModuleGateRemoved(Module* m, const u32 removed_gate);
 
         /**
-         * Handler to be called after an input port of a module has been renamed. <br>
+         * Handler to be called after a port of a module has been changed. <br>
          * Used to apply the changes in the affected contexts.
          *
-         * @param m - The module with the renamed input port
-         * @param net - The net that is connected to the renamed input port
+         * @param m - The module with the changed port
          */
-        void handleModuleInputPortNameChanged(Module* m, const u32 net);
+        void handleModulePortsChanged(Module* m);
 
         /**
-         * Handler to be called after an output port of a module has been renamed. <br>
+         * Handler to be called after a gate has been removed. <br>
          * Used to apply the changes in the affected contexts.
          *
-         * @param m - The module with the renamed output port
-         * @param net - The net that is connected to the renamed output port
+         * @param g - The removed gate
          */
-        void handleModuleOutputPortNameChanged(Module* m, const u32 net);
+        void handleGateRemoved(Gate* g) const;
 
         /**
          * Handler to be called after a gate has been renamed. <br>
@@ -332,7 +343,12 @@ namespace hal
         bool handleSaveTriggered(const QString& filename);
         bool restoreFromFile(const QString &filename);
 
-        QString nextDefaultName() const { return QString("view %1").arg(mMaxContextId+1);}
+        QString nextDefaultName() const
+        {
+            return QString("view %1").arg(mMaxContextId + 1);
+        }
+
+        static SettingsItemCheckbox* sSettingNetGroupingToPins;
     Q_SIGNALS:
         /**
          * Q_SIGNAL that notifies about the creation of a new context by the context manager.
@@ -357,7 +373,7 @@ namespace hal
         void deletingContext(GraphContext* context);
 
     private:
-//        QVector<GraphContext*> mGraphContexts;
+        //        QVector<GraphContext*> mGraphContexts;
 
         ContextTableModel* mContextTableModel;
         u32 mMaxContextId;
@@ -367,4 +383,4 @@ namespace hal
         SettingsItemCheckbox* mSettingParseLayout;
         SettingsItemCheckbox* mSettingLayoutBoxes;
     };
-}
+}    // namespace hal

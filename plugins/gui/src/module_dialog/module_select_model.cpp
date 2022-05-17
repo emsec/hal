@@ -198,9 +198,6 @@ namespace hal
         mModules = gSelectionRelay->selectedModulesList();
         mGates   = gSelectionRelay->selectedGatesList();
 
-        // Exclude top_module
-        mExclude.insert(1);
-
         for (u32 gid : mGates)
         {
             Gate* g = gNetlist->get_gate_by_id(gid);

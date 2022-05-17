@@ -117,7 +117,7 @@ namespace hal
          *
          * @returns The name of the design.
          */
-        std::string get_design_name() const;
+        const std::string& get_design_name() const;
 
         /**
          * Set the name of the design.
@@ -131,7 +131,7 @@ namespace hal
          *
          * @return The name of the target device.
          */
-        std::string get_device_name() const;
+        const std::string& get_device_name() const;
 
         /**
          * Set the name of the target device.
@@ -148,10 +148,11 @@ namespace hal
         const GateLibrary* get_gate_library() const;
 
         /**
-         * Clear all internal caches of the netlist.<br>
-         * In a typical application, calling this function is not required.
+         * Create a deep copy of the netlist.
+         * 
+         * @returns The copy of the netlist.
          */
-        void clear_caches();
+        std::unique_ptr<Netlist> copy() const;
 
         /*
          * ################################################################
@@ -426,6 +427,14 @@ namespace hal
          * @returns A vector of nets.
          */
         const std::vector<Net*>& get_global_output_nets() const;
+
+        /**
+         * Enables or disables automatic checks on nets that determine whether a net is an input or output of a module.
+         * \warning{\b WARNING: if disabled, the user is responsible to assign correct input and output nets and create respective module pins. Wrong usage may result in unknown behavior or crashes.}
+         * 
+         * @param[in] enable_checks - Set `true` to enable automatic checks, `false` otherwise.
+         */
+        void enable_automatic_net_checks(bool enable_checks = true);
 
         /*
          * ################################################################
@@ -755,6 +764,28 @@ namespace hal
          * @return Pointer to netlist event handler
          */
         EventHandler* get_event_handler() const;
+
+        /*
+         * ################################################################
+         *      utility functions
+         * ################################################################
+         */
+
+        /**
+         * Clear all internal caches of the netlist.<br>
+         * In a typical application, calling this function is not required.
+         */
+        void clear_caches();
+
+        /**
+         * Load the locations of the gates in the netlist from their associated data using the specified category and identifier.
+         * If no parameter is given, the data is querried using the default category and identifier stored with the gate library.
+         * 
+         * @param[in] data_category - The data category.
+         * @param[in] data_identifiers - The data identifiers for the x- and y-coordinates.
+         * @returns True on success, false otherwise.
+         */
+        bool load_gate_locations_from_data(const std::string& data_category = "", const std::pair<std::string, std::string>& data_identifiers = std::pair<std::string, std::string>());
 
     private:
         /* stores the gate library */

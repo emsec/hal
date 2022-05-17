@@ -1130,6 +1130,12 @@ hal--SelectionDetailsWidget
     qproperty-toModuleIconPath: ":/icons/to_module";
 }
 
+hal--LoggerWidget
+{
+    qproperty-searchIconStyle: "all->#FFFFFF";
+    qproperty-searchIconPath: ":/icons/search";
+}
+
 hal--MainWindow
 {
     qproperty-halIconStyle: "";
@@ -1293,4 +1299,31 @@ hal--GraphicsQssAdapter
 QToolBar QToolButton
 {
     color : white;
+}
+
+hal--DetailsFrameWidget QPushButton
+{
+    font: bold "Iosevka";
+    font-size: 12px;
+    background: rgb(200, 200, 200);;
+    border-color: #666666;
+    border-width: 1px;
+    color: #222222;
+    height: 12px;
+}
+
+hal--DetailsFrameWidget QPushButton:checked
+{
+    font: bold "Iosevka";
+    font-size: 12px;
+    background: rgb(200, 200, 200);;
+    border-color: #999999;
+    border-width: 1px;
+    color: black;
+    height: 12px;
+}
+
+hal--DetailsFrameWidget QPushButton:hover
+{
+    background-color : rgba(220, 220, 220, 1);
 }

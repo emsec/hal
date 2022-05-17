@@ -2,7 +2,12 @@
 
 #include "hal_core/netlist/gate.h"
 
+#include "gui/content_manager/content_manager.h"
 #include "gui/graph_widget/graph_widget_constants.h"
+#include "gui/grouping/grouping_manager_widget.h"
+#include "gui/grouping/grouping_table_model.h"
+#include "gui/settings/settings_items/settings_item_checkbox.h"
+#include "gui/graph_widget/graph_context_manager.h"
 #include "gui/gui_globals.h"
 
 #include <QFont>
@@ -112,6 +117,9 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
     }
     else
     {
+        QList<u32> inpNets = inputNets();
+        QList<u32> outNets = outputNets();
+
         painter->fillRect(QRectF(0, 0, mWidth, sColorBarHeight), mColor);
         painter->fillRect(QRectF(0, sColorBarHeight, mWidth, mHeight - sColorBarHeight), QColor(0, 0, 0, 200));
 //        QRectF iconRect(sIconPadding,sIconPadding,sIconSize.width(),sIconSize.height());
@@ -136,10 +144,23 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
         sPen.setColor(sTextColor);
         painter->setPen(sPen);
 
-        QPointF text_pos(sPinOuterHorizontalSpacing, sColorBarHeight + sPinUpperVerticalSpacing + sPinFontAscent + sBaseline);
+        int yFirstTextline = sColorBarHeight + sPinUpperVerticalSpacing + sPinFontAscent + sBaseline;
 
         for (int i = 0; i < mInputPins.size(); ++i)
         {
+            int yText = yFirstTextline + i * (sPinFontHeight + sPinInnerVerticalSpacing);
+            if (gGraphContextManager->sSettingNetGroupingToPins->value().toBool())
+            {
+                QColor pinBackground = gContentManager->getGroupingManagerWidget()->getModel()->colorForItem(ItemType::Net, inpNets.at(i));
+                if (pinBackground.isValid())
+                {
+                    QBrush lastBrush = painter->brush();
+                    painter->setBrush(pinBackground);
+                    painter->setPen(QPen(pinBackground,0));
+                    painter->drawRoundRect(sPinOuterHorizontalSpacing,yText-sPinFontAscent,sPinFontHeight,sPinFontHeight,35,35);
+                    painter->setBrush(lastBrush);
+                }
+            }
             if (gateHasFocus)
                 if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Left
                         && i == subFocusIndex)
@@ -149,12 +170,24 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
             else
                 sPen.setColor(penColor(option->state,sTextColor));
             painter->setPen(sPen);
-            painter->drawText(text_pos, mInputPins.at(i));
-            text_pos.setY(text_pos.y() + sPinFontHeight + sPinInnerVerticalSpacing);
+            painter->drawText(QPointF(sPinOuterHorizontalSpacing,yText), mInputPins.at(i));
         }
 
         for (int i = 0; i < mOutputPins.size(); ++i)
         {
+            int yText = yFirstTextline + i * (sPinFontHeight + sPinInnerVerticalSpacing);
+            if (gGraphContextManager->sSettingNetGroupingToPins->value().toBool())
+            {
+                QColor pinBackground = gContentManager->getGroupingManagerWidget()->getModel()->colorForItem(ItemType::Net, outNets.at(i));
+                if (pinBackground.isValid())
+                {
+                    QBrush lastBrush = painter->brush();
+                    painter->setBrush(pinBackground);
+                    painter->setPen(QPen(pinBackground,0));
+                    painter->drawRoundRect(mWidth - sPinOuterHorizontalSpacing - sPinFontHeight,yText-sPinFontAscent,sPinFontHeight,sPinFontHeight,35,35);
+                    painter->setBrush(lastBrush);
+                }
+            }
             if (gateHasFocus)
                 if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Right
                         && i == subFocusIndex)

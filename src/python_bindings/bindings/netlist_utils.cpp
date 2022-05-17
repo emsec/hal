@@ -30,14 +30,51 @@ namespace hal
             :rtype: hal_py.Netlist
         )");
 
-        py_netlist_utils.def("get_next_gates", &netlist_utils::get_next_gates, py::arg("gate"), py::arg("get_successors"), py::arg("depth") = 0, py::arg("filter") = nullptr, R"(
+        py_netlist_utils.def("get_ff_dependency_matrix", &netlist_utils::get_ff_dependency_matrix, py::arg("nl"), R"(
+            Get the FF dependency matrix of a netlist.
+
+            :param hal_py.Netlist nl: The netlist to extract the dependency matrix from.
+            :returns: A pair consisting of std::map<u32, Gate*>, which includes the mapping from the original gate
+            :rtype: pair(dict(int, hal_py.Gate), list[list[int]])
+        )");
+
+        py_netlist_utils.def("get_next_gates",
+                             py::overload_cast<const Gate*, bool, int, const std::function<bool(const Gate*)>&>(&netlist_utils::get_next_gates),
+                             py::arg("gate"),
+                             py::arg("get_successors"),
+                             py::arg("depth")  = 0,
+                             py::arg("filter") = nullptr,
+                             R"(
             Find predecessors or successors of a gate. If depth is set to 1 only direct predecessors/successors will be returned. 
             Higher number of depth causes as many steps of recursive calls. 
             If depth is set to 0 there is no limitation and the loop  continues until no more predecessors/succesors are found.
-            If a filter function is given only gates matching the filter will be added to the result vector.
+            If a filter function is given, the recursion stops whenever the filter function evaluates to False. 
+            Only gates matching the filter will be added to the result vector.
             The result will not include the provided gate itself.
 
             :param hal_py.Gate gate: The initial gate.
+            :param bool get_successors: True to return successors, False for Predecessors.
+            :param int depth: Depth of recursion.
+            :param lambda filter: User-defined filter function.
+            :returns: List of predecessor/successor gates.
+            :rtype: list[hal_py.Gate]
+        )");
+
+        py_netlist_utils.def("get_next_gates",
+                             py::overload_cast<const Net*, bool, int, const std::function<bool(const Gate*)>&>(&netlist_utils::get_next_gates),
+                             py::arg("net"),
+                             py::arg("get_successors"),
+                             py::arg("depth")  = 0,
+                             py::arg("filter") = nullptr,
+                             R"(
+            Find predecessors or successors of a net. If depth is set to 1 only direct predecessors/successors will be returned. 
+            Higher number of depth causes as many steps of recursive calls. 
+            If depth is set to 0 there is no limitation and the loop  continues until no more predecessors/succesors are found.
+            If a filter function is given, the recursion stops whenever the filter function evaluates to False. 
+            Only gates matching the filter will be added to the result vector.
+            The result will not include the provided gate itself.
+
+            :param hal_py.Net net: The initial net.
             :param bool get_successors: True to return successors, False for Predecessors.
             :param int depth: Depth of recursion.
             :param lambda filter: User-defined filter function.
@@ -192,12 +229,6 @@ namespace hal
 
         py_netlist_utils.def("remove_unused_lut_endpoints", netlist_utils::remove_unused_lut_endpoints, py::arg("netlist"), R"(
             Remove all LUT fan-in endpoints that are not present within the Boolean function of the output of a gate.
-        
-            :param hal_py.Netlist netlist: The target netlist.
-        )");
-
-        py_netlist_utils.def("rename_luts_according_to_function", netlist_utils::rename_luts_according_to_function, py::arg("netlist"), R"(
-            Rename LUTs that implement simple functions to better reflect their functionality.
         
             :param hal_py.Netlist netlist: The target netlist.
         )");

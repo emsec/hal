@@ -148,6 +148,16 @@ namespace hal {
     {
     public:
         /**
+         * Constructor
+         */
+        NodeBoxes() {;}
+
+        /**
+         * Destructor
+         */
+        ~NodeBoxes();
+
+        /**
          * @brief addBox call NodeBox constructor and store pointer in vector
          * @param nd Node to be created and added
          * @param px grid x-position

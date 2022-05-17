@@ -51,7 +51,7 @@ namespace hal
          * @param[inout] cache - Cache to speed up computations. The cache is filled by this function.
          * @returns The combined Boolean function of the subgraph.
          */
-        CORE_API BooleanFunction get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates, std::unordered_map<u32, BooleanFunction>& cache);
+        CORE_API BooleanFunction get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates, std::map<std::pair<u32, std::string>, BooleanFunction>& cache);
 
         /**
          * Get the combined Boolean function of a specific net, considering an entire subgraph.<br>
@@ -66,19 +66,39 @@ namespace hal
         CORE_API BooleanFunction get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates);
 
         /**
+         * \deprecated
          * Get a deep copy of an entire netlist including all of its gates, nets, modules, and groupings.
          *
          * @param[in] nl - The netlist to copy.
          * @returns The deep copy of the netlist.
          */
-        CORE_API std::unique_ptr<Netlist> copy_netlist(const Netlist* nl);
+        [[deprecated("Will be removed in a future version, use Netlist::copy instead.")]] CORE_API std::unique_ptr<Netlist> copy_netlist(const Netlist* nl);
+
+        /**
+         * Get the FF dependency matrix of a netlist.
+         *
+         * @param[in] nl - The netlist to extract the dependency matrix from.
+         * @returns A pair consisting of std::map<u32, Gate*>, which includes the mapping from the original gate
+         *          IDs to the ones in the matrix, and a std::vector<std::vector<int>, which is the ff dependency matrix
+         */
+        std::pair<std::map<u32, Gate*>, std::vector<std::vector<int>>> get_ff_dependency_matrix(const Netlist* nl);
+
+        /**
+         * Get a deep copy of an entire partial netlist including all of its gates, nets, excluding modules and groupings.
+         *
+         * @param[in] nl - The netlist consisting of the subgraph.
+         * @param[in] subgraph_gates - The gates the subgraph is supposed to consist of.
+         * @returns The deep copy of the netlist.
+         */
+        CORE_API std::unique_ptr<Netlist> get_partial_netlist(const Netlist* nl, const std::vector<const Gate*>& subgraph_gates);
 
         /**
          * TODO test
          * Find predecessors or successors of a gate. If depth is set to 1 only direct predecessors/successors
          * will be returned. Higher number of depth causes as many steps of recursive calls. If depth is set to 0
          * there is no limitation and the loop continues until no more predecessors/succesors are found.
-         * If a filter function is given only gates matching the filter will be added to the result vector.
+         * If a filter function is given, the recursion stops whenever the filter function evaluates to False. 
+         * Only gates matching the filter will be added to the result vector.
          * The result will not include the provided gate itself.
          *
          * @param gate[in] - The initial gate.
@@ -88,6 +108,23 @@ namespace hal
          * @return Vector of predecessor/successor gates.
          */
         CORE_API std::vector<Gate*> get_next_gates(const Gate* gate, bool get_successors, int depth = 0, const std::function<bool(const Gate*)>& filter = nullptr);
+
+        /**
+         * TODO test
+         * Find predecessors or successors of a net. If depth is set to 1 only direct predecessors/successors
+         * will be returned. Higher number of depth causes as many steps of recursive calls. If depth is set to 0
+         * there is no limitation and the loop continues until no more predecessors/succesors are found.
+         * If a filter function is given, the recursion stops whenever the filter function evaluates to False. 
+         * Only gates matching the filter will be added to the result vector.
+         * The result will not include the provided gate itself.
+         *
+         * @param net[in] - The initial net.
+         * @param get_successors[in] - True to return successors, false for Predecessors.
+         * @param depth[in] - Depth of recursion.
+         * @param filter[in] - User-defined filter function.
+         * @return Vector of predecessor/successor gates.
+         */
+        CORE_API std::vector<Gate*> get_next_gates(const Net* net, bool get_successors, int depth = 0, const std::function<bool(const Gate*)>& filter = nullptr);
 
         /**
          * Find all sequential predecessors or successors of a gate.
@@ -218,15 +255,6 @@ namespace hal
          * @param[in] netlist - The target netlist.
          */
         void remove_unused_lut_endpoints(Netlist* netlist);
-
-        /**
-         * \deprecated
-         * DEPRECATED <br>
-         * Rename LUTs that implement simple functions to better reflect their functionality.
-         * 
-         * @param[in] netlist - The target netlist.
-         */
-        [[deprecated("Will be removed in a future version.")]] void rename_luts_according_to_function(Netlist* netlist);
 
         /**
          * Returns all nets that are considered to be common inputs to the provided gates.

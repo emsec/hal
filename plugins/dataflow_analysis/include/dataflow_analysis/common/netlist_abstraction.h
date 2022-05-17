@@ -44,7 +44,7 @@ namespace hal
         {
             NetlistAbstraction(Netlist* nl_arg);
 
-            std::shared_ptr<Grouping> create_initial_grouping(std::set<std::set<u32>> known_groups) const;
+            std::shared_ptr<Grouping> create_initial_grouping(std::vector<std::vector<u32>> known_groups) const;
 
             // netlist
             Netlist* nl;

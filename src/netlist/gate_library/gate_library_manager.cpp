@@ -43,7 +43,7 @@ namespace hal
 
                     GateType* gt = lib->create_gate_type(name, {GateTypeProperty::combinational, GateTypeProperty::ground});
                     gt->add_output_pin("O");
-                    gt->add_boolean_function("O", BooleanFunction::ZERO);
+                    gt->add_boolean_function("O", BooleanFunction::Const(BooleanFunction::Value::ZERO));
                     lib->mark_gnd_gate_type(gt);
                     log_info("gate_library_manager", "gate library did not contain a GND gate, auto-generated type '{}'.", name);
                 }
@@ -59,7 +59,7 @@ namespace hal
 
                     GateType* gt = lib->create_gate_type(name, {GateTypeProperty::combinational, GateTypeProperty::power});
                     gt->add_output_pin("O");
-                    gt->add_boolean_function("O", BooleanFunction::ONE);
+                    gt->add_boolean_function("O", BooleanFunction::Const(BooleanFunction::Value::ONE));
                     lib->mark_vcc_gate_type(gt);
                     log_info("gate_library_manager", "gate library did not contain a VDD gate, auto-generated type '{}'.", name);
                 }
@@ -159,6 +159,11 @@ namespace hal
             }
 
             return gate_library_writer_manager::write(gate_lib, file_path);
+        }
+
+        void remove(std::filesystem::path file_path)
+        {
+            m_gate_libraries.erase(file_path);
         }
 
         GateLibrary* get_gate_library(const std::string& file_path)

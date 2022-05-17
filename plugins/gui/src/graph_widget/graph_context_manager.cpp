@@ -3,12 +3,12 @@
 #include "gui/context_manager_widget/models/context_table_model.h"
 #include "gui/file_manager/file_manager.h"
 #include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/layouters/physical_graph_layouter.h"
 #include "gui/graph_widget/layouters/standard_graph_layouter.h"
 #include "gui/graph_widget/shaders/module_shader.h"
 #include "gui/gui_globals.h"
 #include "gui/settings/settings_items/settings_item_checkbox.h"
-#include "gui/graph_widget/graphics_scene.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/netlist.h"
@@ -24,39 +24,25 @@
 
 namespace hal
 {
+    SettingsItemCheckbox* GraphContextManager::sSettingNetGroupingToPins = new SettingsItemCheckbox("Net Grouping Color to Gate Pins",
+                                                                                                    "graph_view/net_grp_pin",
+                                                                                                    true,
+                                                                                                    "Appearance:Graph View",
+                                                                                                    "If set net grouping colors are also applied to input and output pins of gates");
+
     GraphContextManager::GraphContextManager() : mContextTableModel(new ContextTableModel()), mMaxContextId(0)
-    {    
-        mSettingDebugGrid = new SettingsItemCheckbox(
-            "GUI Debug Grid",
-            "debug/grid",
-            false,
-            "eXpert Settings:Debug",
-            "Specifies whether the debug grid is displayed in the Graph View. The gird represents the scene as the layouter interprets it."
-        );
-    
-        mSettingNetLayout = new SettingsItemCheckbox(
-            "Optimize Net Layout",
-            "graph_view/layout_nets",
-            true,
-            "Graph View",
-            "Net optimization - not fully tested yet."
-        );
+    {
+        mSettingDebugGrid = new SettingsItemCheckbox("GUI Debug Grid",
+                                                     "debug/grid",
+                                                     false,
+                                                     "eXpert Settings:Debug",
+                                                     "Specifies whether the debug grid is displayed in the Graph View. The gird represents the scene as the layouter interprets it.");
 
-        mSettingParseLayout = new SettingsItemCheckbox(
-            "Apply Parsed Position",
-            "graph_view/layout_parse",
-            true,
-            "Graph View",
-            "Use parsed verilog coordinates if available."
-        );
+        mSettingNetLayout = new SettingsItemCheckbox("Optimize Net Layout", "graph_view/layout_nets", true, "Graph View", "Net optimization - not fully tested yet.");
 
-        mSettingLayoutBoxes = new SettingsItemCheckbox(
-            "Optimize Box Layout",
-            "graph_view/layout_boxes",
-            true,
-            "Graph View",
-            "If disabled faster randomized placement."
-        );
+        mSettingParseLayout = new SettingsItemCheckbox("Apply Parsed Position", "graph_view/layout_parse", true, "Graph View", "Use parsed verilog coordinates if available.");
+
+        mSettingLayoutBoxes = new SettingsItemCheckbox("Optimize Box Layout", "graph_view/layout_boxes", true, "Graph View", "If disabled faster randomized placement.");
     }
 
     GraphContext* GraphContextManager::createNewContext(const QString& name)
@@ -64,7 +50,7 @@ namespace hal
         GraphContext* context = new GraphContext(++mMaxContextId, name);
         context->setLayouter(getDefaultLayouter(context));
         context->setShader(getDefaultShader(context));
-        
+
         context->scene()->setDebugGridEnabled(mSettingDebugGrid->value().toBool());
         connect(mSettingDebugGrid, &SettingsItemCheckbox::boolChanged, context->scene(), &GraphicsScene::setDebugGridEnabled);
 
@@ -77,12 +63,15 @@ namespace hal
         return context;
     }
 
-    void GraphContextManager::setContextId(GraphContext *ctx, u32 ctxId)
+    void GraphContextManager::setContextId(GraphContext* ctx, u32 ctxId)
     {
-        if (!ctx || ctx->id() == ctxId) return; // nothing to do
-        if (getContextById(ctxId)) return; // id is in use
+        if (!ctx || ctx->id() == ctxId)
+            return;    // nothing to do
+        if (getContextById(ctxId))
+            return;    // id is in use
         ctx->mId = ctxId;
-        if (ctxId > mMaxContextId) mMaxContextId = ctxId;
+        if (ctxId > mMaxContextId)
+            mMaxContextId = ctxId;
     }
 
     void GraphContextManager::renameGraphContextAction(GraphContext* ctx, const QString& newName)
@@ -128,6 +117,16 @@ namespace hal
         return nullptr;
     }
 
+    GraphContext* GraphContextManager::getContextByExclusiveModuleId(u32 module_id) const
+    {
+        for (GraphContext* ctx : mContextTableModel->list())
+        {
+            if (ctx->getExclusiveModuleId() == module_id)
+                return ctx;
+        }
+        return nullptr;
+    }
+
     bool GraphContextManager::contextWithNameExists(const QString& name) const
     {
         for (GraphContext* ctx : mContextTableModel->list())
@@ -140,11 +139,29 @@ namespace hal
         return false;
     }
 
+    void GraphContextManager::handleModuleCreated(Module* m) const
+    {
+        for (GraphContext* context : mContextTableModel->list())
+            if (context->getSpecialUpdate())
+            {
+                context->add({m->get_id()}, {});
+                context->setSpecialUpdate(false);
+            }
+    }
+
     void GraphContextManager::handleModuleRemoved(Module* m)
     {
         for (GraphContext* context : mContextTableModel->list())
             if (context->modules().contains(m->get_id()))
+            {
+                if (context->getExclusiveModuleId() == m->get_id())
+                    context->setExclusiveModuleId(0, false);
+
                 context->remove({m->get_id()}, {});
+
+                if (context->empty())
+                    deleteGraphContext(context);
+            }
     }
 
     void GraphContextManager::handleModuleNameChanged(Module* m) const
@@ -177,53 +194,113 @@ namespace hal
 
     void GraphContextManager::handleModuleSubmoduleAdded(Module* m, const u32 added_module) const
     {
-//        dump("ModuleSubmoduleAdded", m->get_id(), added_module);
+        //        dump("ModuleSubmoduleAdded", m->get_id(), added_module);
+
+        QList<u32> module_ids  = {};
+        Module* current_module = m;
+
+        do
+        {
+            module_ids.append(current_module->get_id());
+            current_module = current_module->get_parent_module();
+        } while (current_module);
+
         for (GraphContext* context : mContextTableModel->list())
-            if (context->isShowingModule(m->get_id(), {added_module}, {}, {}, {}))
+        {
+            if (context->isShowingModule(m->get_id(), {added_module}, {}, {}, {}, false) && !context->isShowingModule(added_module, {}, {}, {}, {}, false))
                 context->add({added_module}, {});
             else
                 context->testIfAffected(m->get_id(), &added_module, nullptr);
+
+            // When the module is unfolded and was moved to another folded module visible in view,
+            // remove all gates and submodules of added_module from view
+            if (context->isShowingModule(added_module, {}, {}, {}, {}, false))
+            {
+                QSet<u32> modules = context->modules();
+                modules.remove(added_module);
+
+                // modules    : all modules visible in graph context view except recently added
+                // module_ids : all anchestors of recently added module
+                // algorithm  : remove 'recently added' module from view if it was moved to
+                //              (child or grandchild of) another module visible in view
+                for (u32 id : module_ids)
+                    if (modules.contains(id))
+                    {
+                        context->removeModuleContents(added_module);
+                        return;
+                    }
+            }
+        }
     }
 
     void GraphContextManager::handleModuleSubmoduleRemoved(Module* m, const u32 removed_module)
     {
         // FIXME this also triggers on module deletion (not only moving)
         // and collides with handleModuleRemoved
-//        dump("ModuleSubmoduleRemoved", m->get_id(), removed_module);
+        //        dump("ModuleSubmoduleRemoved", m->get_id(), removed_module);
+
         for (GraphContext* context : mContextTableModel->list())
-            if (context->isShowingModule(m->get_id(), {}, {}, {removed_module}, {}))
-            {
+        {
+            if (context->isShowingModule(m->get_id(), {}, {}, {removed_module}, {}, false))
                 context->remove({removed_module}, {});
-                if (context->empty())
-                {
-                    deleteGraphContext(context);
-                }
-            }
             else
                 context->testIfAffected(m->get_id(), &removed_module, nullptr);
+
+            if (context->empty())
+                deleteGraphContext(context);
+        }
     }
 
     void GraphContextManager::handleModuleGateAssigned(Module* m, const u32 inserted_gate) const
     {
-//        dump("ModuleGateAssigned", m->get_id(), inserted_gate);
+        //        dump("ModuleGateAssigned", m->get_id(), inserted_gate);
+
+        QList<u32> module_ids  = {};
+        Module* current_module = m;
+
+        do
+        {
+            module_ids.append(current_module->get_id());
+            current_module = current_module->get_parent_module();
+        } while (current_module);
+
         for (GraphContext* context : mContextTableModel->list())
-            if (context->isShowingModule(m->get_id(), {}, {inserted_gate}, {}, {}))
+        {
+            if (context->isShowingModule(m->get_id(), {}, {inserted_gate}, {}, {}, false))
                 context->add({}, {inserted_gate});
             else
                 context->testIfAffected(m->get_id(), nullptr, &inserted_gate);
+
+            if (context->gates().contains(inserted_gate))
+            {
+                QSet<u32> modules = context->modules();
+
+                for (u32 id : module_ids)
+                    if (modules.contains(id))
+                    {
+                        context->remove({}, {inserted_gate});
+                        break;
+                    }
+            }
+        }
     }
 
     void GraphContextManager::handleModuleGateRemoved(Module* m, const u32 removed_gate)
     {
-//        dump("ModuleGateRemoved", m->get_id(), removed_gate);
+        //        dump("ModuleGateRemoved", m->get_id(), removed_gate);
         for (GraphContext* context : mContextTableModel->list())
         {
-            if (context->isShowingModule(m->get_id(), {}, {}, {}, {removed_gate}))
+            if (context->isShowingModule(m->get_id(), {}, {}, {}, {removed_gate}, false))
             {
                 context->remove({}, {removed_gate});
                 if (context->empty())
                 {
                     deleteGraphContext(context);
+                }
+                // when the module is empty, add the empty folded module to the view
+                else if (m->get_gates().empty() && m->get_submodules().empty())
+                {
+                    context->add({m->get_id()}, {});
                 }
             }
             // if a module is unfolded, then the gate is not deleted from the view
@@ -238,7 +315,7 @@ namespace hal
         }
     }
 
-    void GraphContextManager::dump(const QString &title, u32 mid, u32 xid) const
+    void GraphContextManager::dump(const QString& title, u32 mid, u32 xid) const
     {
         QTextStream xout(stdout, QIODevice::WriteOnly);
         xout << "===" << title << "===" << mid << "===" << xid << "===\n";
@@ -253,7 +330,8 @@ namespace hal
             xout << "\n";
         }
         xout << "gats:";
-        for (Gate* g : gNetlist->get_gates()) xout << " " << g->get_id();
+        for (Gate* g : gNetlist->get_gates())
+            xout << " " << g->get_id();
         xout << "\n";
 
         for (GraphContext* ctx : mContextTableModel->list())
@@ -268,20 +346,18 @@ namespace hal
         xout << "-------\n";
     }
 
-    void GraphContextManager::handleModuleInputPortNameChanged(Module* m, const u32 net)
+    void GraphContextManager::handleModulePortsChanged(Module* m)
     {
-        Q_UNUSED(net);
         for (GraphContext* context : mContextTableModel->list())
             if (context->modules().contains(m->get_id()))
                 context->scheduleSceneUpdate();
     }
 
-    void GraphContextManager::handleModuleOutputPortNameChanged(Module* m, const u32 net)
+    void GraphContextManager::handleGateRemoved(Gate* g) const
     {
-        Q_UNUSED(net);
         for (GraphContext* context : mContextTableModel->list())
-            if (context->modules().contains(m->get_id()))
-                context->scheduleSceneUpdate();
+            if (context->gates().contains(g->get_id()))
+                context->remove({}, {g->get_id()});
     }
 
     void GraphContextManager::handleGateNameChanged(Gate* g) const
@@ -467,7 +543,6 @@ namespace hal
                 QString viewName = jsonView["name"].toString();
                 if (viewId > mMaxContextId)
                     mMaxContextId = viewId;
-                GraphContext* context = getContextById(viewId);
                 if (context)
                 {
                     // load view in existing context
@@ -486,6 +561,10 @@ namespace hal
                     context = new GraphContext(viewId, viewName);
                     context->setLayouter(getDefaultLayouter(context));
                     context->setShader(getDefaultShader(context));
+                context->setExclusiveModuleId(exclusiveModuleId);
+                context->scene()->setDebugGridEnabled(mSettingDebugGrid->value().toBool());
+                connect(mSettingDebugGrid, &SettingsItemCheckbox::boolChanged, context->scene(), &GraphicsScene::setDebugGridEnabled);
+
                     if (!context->readFromFile(jsonView))
                     {
                         log_warning("gui", "failed to read view file {}.", filename.toStdString());

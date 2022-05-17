@@ -25,6 +25,15 @@ namespace hal
             :rtype: bool
         )");
 
+        py_data_container.def("has_data", &DataContainer::has_data, py::arg("category"), py::arg("key"), R"(
+            Determine whether an entry of given category and key exists.
+
+            :param str category: The data key category.
+            :param str key: The data key.
+            :returns: True if the entry exists, False otherwise.
+            :rtype: bool
+        )");
+
         py_data_container.def("get_data", &DataContainer::get_data, py::arg("category"), py::arg("key"), R"(
             Get the data entry specified by the given category and key.
 

@@ -17,7 +17,9 @@ namespace hal {
         : QDialog(parent),
           mSearchbar(new Searchbar(this)),
           mGroupingTableView(new GroupingTableView(false, this)),
-          mTabWidget(new QTabWidget(this))
+          mLastUsed(nullptr),
+          mTabWidget(new QTabWidget(this)),
+          mNewGrouping(false)
     {
         setWindowTitle("Move to grouping …");
         QGridLayout* layout = new QGridLayout(this);
@@ -46,7 +48,10 @@ namespace hal {
                 mTabWidget->addTab(mLastUsed, "Recent selection");
             }
             else
+            {
                 delete mLastUsed;
+                mLastUsed = nullptr;
+            }
         }
 
         layout->addWidget(mTabWidget, 2, 0, 1, 3);
@@ -69,8 +74,8 @@ namespace hal {
 
     void GroupingDialog::handleNewGroupingClicked()
     {
-        ActionCreateObject* act = new ActionCreateObject(UserActionObjectType::Grouping);
-        act->exec();
+        mNewGrouping = true;
+        QDialog::accept();
     }
 
     void GroupingDialog::handleToggleSearchbar()
@@ -90,7 +95,7 @@ namespace hal {
     void GroupingDialog::filter(const QString& text)
     {
         static_cast<GroupingProxyModel*>(mGroupingTableView->model())->setFilterRegularExpression(text);
-        if (mTabWidget->widget(1))
+        if (mLastUsed)
             static_cast<GroupingProxyModel*>(mLastUsed->model())->setFilterRegularExpression(text);
         QString output = "navigation regular expression '" + text + "' entered.";
         log_info("user", output.toStdString());
@@ -100,8 +105,8 @@ namespace hal {
     {
         Q_UNUSED(index);
         mGroupingTableView->clearSelection();
-        if (!GroupingTableHistory::instance()->isEmpty())
-            mLastUsed->clearSelection();
+        mSearchbar->clear();
+        if (mLastUsed) mLastUsed->clearSelection();
     }
 
     void GroupingDialog::handleGroupingSelected(u32 groupId, bool doubleClick)

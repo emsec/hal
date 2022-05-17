@@ -7,11 +7,19 @@
 #include "hal_core/netlist/gate_library/gate_type_component/mac_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/ram_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/ram_port_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/state_component.h"
 
 namespace hal
 {
     template<>
-    std::vector<std::string> EnumStrings<GateTypeComponent::ComponentType>::data = {"lut", "ff", "latch", "ram", "mac", "init", "ram_port"};
+    std::map<GateTypeComponent::ComponentType, std::string> EnumStrings<GateTypeComponent::ComponentType>::data = {{GateTypeComponent::ComponentType::lut, "lut"},
+                                                                                                                   {GateTypeComponent::ComponentType::ff, "ff"},
+                                                                                                                   {GateTypeComponent::ComponentType::latch, "latch"},
+                                                                                                                   {GateTypeComponent::ComponentType::ram, "ram"},
+                                                                                                                   {GateTypeComponent::ComponentType::mac, "mac"},
+                                                                                                                   {GateTypeComponent::ComponentType::init, "init"},
+                                                                                                                   {GateTypeComponent::ComponentType::state, "state"},
+                                                                                                                   {GateTypeComponent::ComponentType::ram_port, "ram_port"}};
 
     std::unique_ptr<GateTypeComponent> GateTypeComponent::create_lut_component(std::unique_ptr<GateTypeComponent> component, bool init_ascending)
     {
@@ -25,12 +33,12 @@ namespace hal
 
     std::unique_ptr<GateTypeComponent> GateTypeComponent::create_ff_component(std::unique_ptr<GateTypeComponent> component, const BooleanFunction& next_state_bf, const BooleanFunction& clock_bf)
     {
-        return std::make_unique<FFComponent>(std::move(component), next_state_bf, clock_bf);
+        return std::make_unique<FFComponent>(std::move(component), next_state_bf.clone(), clock_bf.clone());
     }
 
-    std::unique_ptr<GateTypeComponent> GateTypeComponent::create_latch_component(const BooleanFunction& data_in_bf, const BooleanFunction& enable_bf)
+    std::unique_ptr<GateTypeComponent> GateTypeComponent::create_latch_component(std::unique_ptr<GateTypeComponent> component)
     {
-        return std::make_unique<LatchComponent>(data_in_bf, enable_bf);
+        return std::make_unique<LatchComponent>(std::move(component));
     }
 
     std::unique_ptr<GateTypeComponent> GateTypeComponent::create_ram_component(std::unique_ptr<GateTypeComponent> component, const u32 bit_size)
@@ -54,6 +62,12 @@ namespace hal
         return std::make_unique<InitComponent>(init_category, init_identifiers);
     }
 
+    std::unique_ptr<GateTypeComponent>
+        GateTypeComponent::create_state_component(std::unique_ptr<GateTypeComponent> component, const std::string& state_identifier, const std::string& neg_state_identifier)
+    {
+        return std::make_unique<StateComponent>(std::move(component), state_identifier, neg_state_identifier);
+    }
+
     std::unique_ptr<GateTypeComponent> GateTypeComponent::create_ram_port_component(std::unique_ptr<GateTypeComponent> component,
                                                                                     const std::string& data_group,
                                                                                     const std::string& addr_group,
@@ -61,7 +75,7 @@ namespace hal
                                                                                     const BooleanFunction& enable_bf,
                                                                                     bool is_write)
     {
-        return std::make_unique<RAMPortComponent>(std::move(component), data_group, addr_group, clock_bf, enable_bf, is_write);
+        return std::make_unique<RAMPortComponent>(std::move(component), data_group, addr_group, clock_bf.clone(), enable_bf.clone(), is_write);
     }
 
     GateTypeComponent* GateTypeComponent::get_component(const std::function<bool(const GateTypeComponent*)>& filter) const

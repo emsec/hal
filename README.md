@@ -1,6 +1,6 @@
 <a name="introduction"></a>
 # Welcome to HAL! 
-[![Ubuntu 20.04](https://github.com/emsec/hal/actions/workflows/ubuntu20.04.yml/badge.svg)](https://github.com/emsec/hal/actions/workflows/ubuntu20.04.yml)  [![macOS](https://github.com/emsec/hal/actions/workflows/macOS.yml/badge.svg)](https://github.com/emsec/hal/actions/workflows/macOS.yml) [![Doc: C++](https://img.shields.io/badge/doc-c%2B%2B-orange)](https://emsec.github.io/hal/doc/) [![Doc: Python](https://img.shields.io/badge/doc-python-red)](https://emsec.github.io/hal/pydoc/) [![deployment](https://gitlab.com/swallat/hal/badges/master/pipeline.svg)](https://gitlab.com/swallat/hal/commits/master) 
+[![Ubuntu 20.04](https://github.com/emsec/hal/actions/workflows/ubuntu20.04.yml/badge.svg)](https://github.com/emsec/hal/actions/workflows/ubuntu20.04.yml)  [![macOS](https://github.com/emsec/hal/actions/workflows/macOS.yml/badge.svg)](https://github.com/emsec/hal/actions/workflows/macOS.yml) [![Doc: C++](https://img.shields.io/badge/doc-c%2B%2B-orange)](https://emsec.github.io/hal/doc/) [![Doc: Python](https://img.shields.io/badge/doc-python-red)](https://emsec.github.io/hal/pydoc/)
 
 
 HAL \[/hel/\] is a comprehensive netlist reverse engineering and manipulation framework.
@@ -12,10 +12,9 @@ HAL \[/hel/\] is a comprehensive netlist reverse engineering and manipulation fr
 
 # Navigation
 1. [Introduction](#introduction)
-2. [Install Instructions](#install-instructions)
-3. [Build Instructions](#build-instructions)
-4. [Quickstart Guide](#quickstart)
-5. [Academic Context](#academic-context)
+2. [Build Instructions](#build-instructions)
+3. [Quickstart Guide](#quickstart)
+4. [Academic Context](#academic-context)
 
 ## What the hell is HAL?
 Virtually all available research on netlist analysis operates on a graph-based representation of the netlist under inspection.
@@ -56,21 +55,8 @@ A comprehensive documentation of HAL's features from a user perspective is avail
 ## Slack, Contact and Support
 For all kinds of inquiries, please contact us using our dedicated e-mail address: [hal@csp.mpg.de](mailto:hal@csp.mpg.de). To receive an invite to our dedicated hal-support Slack workspace, please write us an e-mail as well.
 
-
-<a name="install-instructions"></a>
-# Install Instructions 
-
-## Ubuntu 20.04
-
-HAL releases are available via it's own ppa, which can be found here: [ppa:sebastian-wallat/hal](https://launchpad.net/~sebastian-wallat/+archive/ubuntu/hal). If you wish to always work with the most recent version of HAL, we recommend building HAL yourself.
-
-
 <a name="build-instructions"></a>
 # Build Instructions 
-
-## Ubuntu 18.04
-
-We do currently not support building HAL on Ubuntu 18.04. We are working towards a solution and will update this guide as soon as possible.
 
 ## Ubuntu 20.04
 
@@ -81,20 +67,83 @@ If you want to build HAL on Ubuntu 20.04, run the following commands:
 3. `mkdir build && cd build` to create and move to the build folder
 4. `cmake .. [OPTIONS]` to run cmake
 5. `make` to compile HAL
-6. `make install` (optionally) to install HAL
 
+We do currently not support building on any other Linux distribution.
+
+## macOS
+
+**Warning:** Building on macOS is experimental and may not always work.
+
+Please make sure to use a compiler that supports OpenMP. You can install one using, e.g., Homebrew via: `brew install llvm`.
+
+To let cmake know of the custom compiler use following command.
+
+`cmake .. -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++`
+
+## Windows
+
+You can try using HAL directly on Windows using an Ubuntu 20.04 subsystem on WSL 2. After setting up WSL 2, follow the installation instructions for Ubuntu 20.04 provided above.
+
+To work with the HAL GUI, you will need to set up an XServer. Install [`VcXsrv`](https://sourceforge.net/projects/vcxsrv/) and run `Xlaunch` on your Windows machine. Now go to Ubuntu 20.04 and start HAL with GUI support using the command below. Note that the command assumes the `DISPLAY` to be at located at `localhost:0`. This will need adjustment on your machine. 
+
+`export LIBGL_ALWAYS_INDIRECT=1; export DISPLAY=:0; hal -g`
+
+In case you encounter an error, try restarting the XServer and select `One Large Window`.
 
 ## CMake Options
 Using the CMake build system, your HAL build can be configured quite easily (by adding `-D<OPTION>=1` to the cmake command).
 Here is a selection of the most important options:
 - `BUILD_TESTS`: builds all available tests which can be executed by running `ctest` in the build directory.
 This also builds all tests of plugins that are built.
-- `BUILD_DOCUMENTATION`: builds the C++ and Python documentation in the directory \<build directory\>/documentation/
+- `BUILD_DOCUMENTATION`: build the C++ and Python documentation
 - `PL_<plugin name>`: enable (or disable) building a specific plugin
 - `BUILD_ALL_PLUGINS`: all-in-one option to build all available plugins, overrides the options for individual plugins
 - `SANITIZE_ADDRESS`, `SANITIZE_MEMORY`, `SANITIZE_THREAD`, `SANITIZE_UNDEFINED `: builds with the respective sanitizers (recommended only for debug builds)
+- `ABC_PATH`: You have the option to provide your own path to the shared library of Berkeley ABC to avoid building it everytime. Look at the `Notes on ABC` section below.
 
 If you do not specify `CMAKE_BUILD_TYPE`, it defaults to `Release`.
+
+### Speed up the building process - Notes on ABC (Mandatory on M1 Macs)
+To speed up the building process of a clean build, you have the option to install ABC at a path of your choice and provide the path to CMake or put in a standard path like (`/usr/local/lib/`).
+**Important:** To ensure correct execution of ABC from within HAL, we had to modify some buffer size since Boolean functions generated in HAL can be quite large. Hence, make sure to adjust the buffer in `abc/src/base/ver/verStream.c` as shown below:
+
+
+```git
+-#define VER_BUFFER_SIZE          1048576
+-#define VER_OFFSET_SIZE            65536 
+-#define VER_WORD_SIZE              65536
++#define VER_BUFFER_SIZE        104857600 
++#define VER_OFFSET_SIZE          6553600
++#define VER_WORD_SIZE            6553600
+```
+
+Installation instructions:
+
+```bash
+cd deps/abc
+make ABC_USE_PIC=1 libabc.so
+sudo cp libabc.so /usr/local/lib/
+```
+(See [abc troubleshooting](https://github.com/berkeley-abc/abc#troubleshooting) on failure)
+
+## Troubleshooting
+
+### pybind11
+```
+CMake Error in src/python_bindings/CMakeLists.txt:
+  Imported target "pybind11::module" includes non-existent path
+    "/include"
+  in its INTERFACE_INCLUDE_DIRECTORIES.  Possible reasons include:
+  * The path was deleted, renamed, or moved to another location.
+  * An install or uninstall procedure did not complete successfully.
+  * The installation package was faulty and references files it does not
+  provide.
+```
+
+Try the following:
+-  Make sure you have the most recent `pybind11-dev` version installed.
+-  `-DCMAKE_PREFIX_PATH=<root_of_pybind>` can be provided as additional flag to `cmake`. For some reason this variable sometimes remains empty in the pybind11 CMakeLists and results in faulty paths.
+
 
 <a name="quickstart"></a>
 # Quickstart Guide 
@@ -111,7 +160,7 @@ Let's list all lookup tables and print their Boolean functions:
 for gate in netlist.get_gates():
     if "LUT" in gate.type.name:
         print("{} (id {}, type {})".format(gate.name, gate.id, gate.type.name))
-        print("  {}-to-{} LUT".format(len(gate.input_pins), len(gate.output_pins)))
+        print("  {}-to-{} LUT".format(len(gate.type.input_pins), len(gate.type.output_pins)))
         boolean_functions = gate.boolean_functions
         for name in boolean_functions:
             print("  {}: {}".format(name, boolean_functions[name]))

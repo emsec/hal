@@ -210,24 +210,22 @@ namespace hal
 
     QStringList GraphNavigationWidget::moduleEntry(Module* m, Endpoint* ep)
     {
-        Module* pm    = m->get_parent_module();
-        QString parentName = pm
-                ? QString::fromStdString(pm->get_name())
-                : QString("top level");
-        QString mtype = QString::fromStdString(m->get_type());
+        Module* pm         = m->get_parent_module();
+        QString parentName = pm ? QString::fromStdString(pm->get_name()) : QString("top level");
+        QString mtype      = QString::fromStdString(m->get_type());
         if (mtype.isEmpty())
             mtype = "module";
         else
             mtype += " (module)";
 
         QString pinName = QString::fromStdString(ep->get_pin());
-        Net* epNet = ep->get_net();
+        Net* epNet      = ep->get_net();
         if (epNet)
         {
-            if (ep->is_source_pin())
-                pinName = QString::fromStdString(m->get_output_port_name(epNet));
-            else
-                pinName = QString::fromStdString(m->get_input_port_name(epNet));
+            if (const auto res = m->get_pin_by_net(epNet); res.is_ok())
+            {
+                pinName = QString::fromStdString(res.get()->get_name());
+            }
         }
         return QStringList() << QString::fromStdString(m->get_name()) << QString::number(m->get_id()) << mtype << pinName << parentName;
     }
@@ -435,26 +433,25 @@ namespace hal
 
         QSet<Node> listedTargets;
 
-        for (Endpoint* ep : (mDirection == SelectionRelay::Subfocus::Left)
-             ? mViaNet->get_sources()
-             : mViaNet->get_destinations())
+        for (Endpoint* ep : (mDirection == SelectionRelay::Subfocus::Left) ? mViaNet->get_sources() : mViaNet->get_destinations())
         {
             Gate* g = ep->get_gate();
-            if (!g) continue; // gate not connected
+            if (!g)
+                continue;    // gate not connected
 
             const NodeBoxes& boxes = gContentManager->getContextManagerWidget()->getCurrentContext()->getLayouter()->boxes();
             const NodeBox* nbox    = boxes.boxForGate(g);
             if (nbox)
             {
                 Node targetNode = nbox->getNode();
-                if (targetNode==mOrigin) // net loops back to origin
+                if (targetNode == mOrigin)    // net loops back to origin
                     continue;
 
-                if (listedTargets.contains(targetNode)) // already listed
+                if (listedTargets.contains(targetNode))    // already listed
                     continue;
 
                 listedTargets.insert(targetNode);
-                addNavigateItem(ep,targetNode);
+                addNavigateItem(ep, targetNode);
                 mNavigateVisible = true;
             }
             else

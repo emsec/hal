@@ -2,7 +2,7 @@
 
 namespace hal
 {
-    LatchComponent::LatchComponent(const BooleanFunction& data_in_bf, const BooleanFunction& enable_bf) : m_data_in_bf(data_in_bf), m_enable_bf(enable_bf)
+    LatchComponent::LatchComponent(std::unique_ptr<GateTypeComponent> component) : m_component(std::move(component))
     {
     }
 
@@ -18,48 +18,65 @@ namespace hal
 
     std::vector<GateTypeComponent*> LatchComponent::get_components(const std::function<bool(const GateTypeComponent*)>& filter) const
     {
-        UNUSED(filter);
+        if (m_component != nullptr)
+        {
+            std::vector<GateTypeComponent*> res = m_component->get_components(filter);
+            if (filter)
+            {
+                if (filter(m_component.get()))
+                {
+                    res.push_back(m_component.get());
+                }
+            }
+            else
+            {
+                res.push_back(m_component.get());
+            }
+
+            return res;
+        }
+
         return {};
     }
 
     BooleanFunction LatchComponent::get_data_in_function() const
     {
-        return m_data_in_bf;
+        return m_data_in_bf.clone();
     }
 
     void LatchComponent::set_data_in_function(const BooleanFunction& data_in_bf)
     {
-        m_data_in_bf = data_in_bf;
+        m_data_in_bf = data_in_bf.clone();
     }
 
     BooleanFunction LatchComponent::get_enable_function() const
     {
-        return m_enable_bf;
+        return m_enable_bf.clone();
     }
 
     void LatchComponent::set_enable_function(const BooleanFunction& enable_bf)
     {
-        m_enable_bf = enable_bf;
+        m_enable_bf = enable_bf.clone();
     }
 
     BooleanFunction LatchComponent::get_async_reset_function() const
     {
-        return m_async_reset_bf;
+        return m_async_reset_bf.clone();
     }
 
     void LatchComponent::set_async_reset_function(const BooleanFunction& async_reset_bf)
     {
-        m_async_reset_bf = async_reset_bf;
+        m_async_reset_bf = async_reset_bf.clone();
     }
 
     BooleanFunction LatchComponent::get_async_set_function() const
     {
-        return m_async_set_bf;
+        return m_async_set_bf.clone();
     }
 
     void LatchComponent::set_async_set_function(const BooleanFunction& async_set_bf)
     {
-        m_async_set_bf = async_set_bf;
+        m_async_set_bf = async_set_bf.clone();
     }
 
     const std::pair<AsyncSetResetBehavior, AsyncSetResetBehavior>& LatchComponent::get_async_set_reset_behavior() const

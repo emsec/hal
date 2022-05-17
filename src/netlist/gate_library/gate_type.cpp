@@ -5,15 +5,20 @@
 namespace hal
 {
     template<>
-    std::vector<std::string> EnumStrings<GateTypeProperty>::data = {"combinational", "sequential", "power", "ground", "lut", "ff", "latch", "ram", "io", "dsp", "mux", "buffer", "carry"};
-
-    const std::unordered_map<PinDirection, std::unordered_set<PinType>> GateType::m_direction_to_types = {
-        {PinDirection::none, {}},
-        {PinDirection::input,
-         {PinType::none, PinType::power, PinType::ground, PinType::clock, PinType::enable, PinType::set, PinType::reset, PinType::data, PinType::address, PinType::io_pad, PinType::select}},
-        {PinDirection::output, {PinType::none, PinType::clock, PinType::lut, PinType::state, PinType::neg_state, PinType::data, PinType::address, PinType::io_pad}},
-        {PinDirection::inout, {PinType::none, PinType::io_pad}},
-        {PinDirection::internal, {PinType::none}}};
+    std::map<GateTypeProperty, std::string> EnumStrings<GateTypeProperty>::data = {{GateTypeProperty::combinational, "combinational"},
+                                                                                   {GateTypeProperty::sequential, "sequential"},
+                                                                                   {GateTypeProperty::power, "power"},
+                                                                                   {GateTypeProperty::ground, "ground"},
+                                                                                   {GateTypeProperty::lut, "lut"},
+                                                                                   {GateTypeProperty::ff, "ff"},
+                                                                                   {GateTypeProperty::latch, "latch"},
+                                                                                   {GateTypeProperty::ram, "ram"},
+                                                                                   {GateTypeProperty::io, "io"},
+                                                                                   {GateTypeProperty::dsp, "dsp"},
+                                                                                   {GateTypeProperty::mux, "mux"},
+                                                                                   {GateTypeProperty::buffer, "buffer"},
+                                                                                   {GateTypeProperty::carry, "carry"},
+                                                                                   {GateTypeProperty::pll, "pll"}};
 
     GateType::GateType(GateLibrary* gate_library, u32 id, const std::string& name, std::set<GateTypeProperty> properties, std::unique_ptr<GateTypeComponent> component)
         : m_gate_library(gate_library), m_id(id), m_name(name), m_properties(properties), m_component(std::move(component))
@@ -206,7 +211,7 @@ namespace hal
             return it->second;
         }
 
-        return PinDirection::internal;
+        return PinDirection::none;
     }
 
     const std::unordered_map<std::string, PinDirection>& GateType::get_pin_directions() const
@@ -228,17 +233,13 @@ namespace hal
     {
         if (m_pins_set.find(pin) != m_pins_set.end())
         {
-            std::unordered_set<PinType> types = m_direction_to_types.at(m_pin_to_direction.at(pin));
-            if (types.find(pin_type) != types.end())
+            if (const auto it = m_pin_to_type.find(pin); it != m_pin_to_type.end())
             {
-                if (const auto it = m_pin_to_type.find(pin); it != m_pin_to_type.end())
-                {
-                    m_type_to_pins.at(it->second).erase(pin);
-                }
-                m_pin_to_type[pin] = pin_type;
-                m_type_to_pins[pin_type].insert(pin);
-                return true;
+                m_type_to_pins.at(it->second).erase(pin);
             }
+            m_pin_to_type[pin] = pin_type;
+            m_type_to_pins[pin_type].insert(pin);
+            return true;
         }
 
         log_error("gate_library", "could not assign type '{}' to pin '{}' of gate type '{}'.", enum_to_string<PinType>(pin_type), pin, m_name);
@@ -274,7 +275,7 @@ namespace hal
     {
         if (m_pin_groups.find(group) != m_pin_groups.end())
         {
-            log_error("gate_library", "pin group '{}' could not be added to gate type '{}' since a pin group with the same name does already exist.", group, m_name);
+            log_error("gate_library", "pin group '{}' could not be added to gate type '{}' since a pin group with the same name already exists.", group, m_name);
             return false;
         }
 
@@ -310,7 +311,7 @@ namespace hal
         return "";
     }
 
-    std::unordered_map<std::string, std::vector<std::pair<u32, std::string>>> GateType::get_pin_groups() const
+    const std::unordered_map<std::string, std::vector<std::pair<u32, std::string>>>& GateType::get_pin_groups() const
     {
         return m_pin_groups;
     }
@@ -344,21 +345,43 @@ namespace hal
         return "";
     }
 
+    i32 GateType::get_index_in_group_of_pin(const std::string& group, const std::string& pin) const
+    {
+        if (const auto group_it = m_pin_groups.find(group); group_it != m_pin_groups.end())
+        {
+            const std::vector<std::pair<u32, std::string>>& pin_indices = group_it->second;
+            if (const auto index_it = std::find_if(pin_indices.begin(), pin_indices.end(), [pin](const std::pair<u32, std::string>& pin_index) { return pin == pin_index.second; });
+                index_it != pin_indices.end())
+            {
+                return index_it->first;
+            }
+
+            log_error("gate_library", "pin group with name '{}' does not have a pin with name {}.", group, pin);
+            return -1;
+        }
+
+        log_error("gate_library", "pin group with name '{}' does not exist.", group);
+        return -1;
+    }
+
     void GateType::add_boolean_function(const std::string& pin_name, const BooleanFunction& bf)
     {
-        m_functions.emplace(pin_name, bf);
+        m_functions.emplace(pin_name, bf.clone());
     }
 
     void GateType::add_boolean_functions(const std::unordered_map<std::string, BooleanFunction>& functions)
     {
-        m_functions.insert(functions.begin(), functions.end());
+        for (const auto& [name, function] : functions)
+        {
+            m_functions.insert({name, function.clone()});
+        }
     }
 
     const BooleanFunction GateType::get_boolean_function(const std::string& function_name) const
     {
         if (const auto it = m_functions.find(function_name); it != m_functions.end())
         {
-            return std::get<1>(*it);
+            return std::get<1>(*it).clone();
         }
 
         return BooleanFunction();

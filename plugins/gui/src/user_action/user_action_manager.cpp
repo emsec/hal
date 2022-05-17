@@ -96,6 +96,13 @@ namespace hal
                     if (act->compoundOrder() >= 0)
                         xmlOut.writeAttribute("compound",QString::number(act->compoundOrder()));
                     act->object().writeToXml(xmlOut);
+                    //perhaps put this in all actions that need a parentobject? could be redundant though
+//                    if(act->parentObject().type() != UserActionObjectType::None)
+//                    {
+//                        xmlOut.writeStartElement("parentObj");
+//                        act->parentObject().writeToXml(xmlOut);
+//                        xmlOut.writeEndElement();
+//                    }
                     act->writeToXml(xmlOut);
                     xmlOut.writeEndElement();
                 }

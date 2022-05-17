@@ -312,6 +312,11 @@ namespace hal
          */
         void handleGroupingColorChanged(Grouping* grp);
 
+        /**
+         * All items update
+         */
+        void updateAllItems();
+
     protected:
         /**
          * Handles the mouse event. Used to intercept and ignore right-clicks.
@@ -321,24 +326,6 @@ namespace hal
         void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
 
     private:
-        struct ModuleData
-        {
-            u32 mId;
-            GraphicsModule* mItem;
-        };
-
-        struct GateData
-        {
-            u32 mId;
-            GraphicsGate* mItem;
-        };
-
-        struct NetData
-        {
-            u32 mId;
-            GraphicsNet* mItem;
-        };
-
         static qreal sLod;
 
         static const qreal sGridFadeStart;
@@ -354,17 +341,17 @@ namespace hal
         static QColor sGridBaseDotColor;
         static QColor sGridClusterDotColor;
 
-        using QGraphicsScene::addItem;
-        using QGraphicsScene::removeItem;
+ //       using QGraphicsScene::addItem;
+ //       using QGraphicsScene::removeItem;
         using QGraphicsScene::clear;
 
         void drawBackground(QPainter* painter, const QRectF& rect) override;
 
         NodeDragShadow* mDragShadowGate;
 
-        QVector<ModuleData> mModuleItems;
-        QVector<GateData> mGateItems;
-        QVector<NetData> mNetItems;
+        QVector<GraphicsModule*> mModuleItems;
+        QVector<GraphicsGate*> mGateItems;
+        QVector<GraphicsNet*> mNetItems;
 
         #ifdef GUI_DEBUG_GRID
         void debugDrawLayouterGrid(QPainter* painter, const int x_from, const int x_to, const int y_from, const int y_to);

@@ -421,6 +421,11 @@ namespace hal
          */
         void handleActionExport();
 
+        /**
+         * Q_SLOT to export netlist to file. Exporter will be determined by file extension
+         */
+        void handleActionGatelibraryManager();
+
         void enableUndo(bool enable=true);
 
         void reloadStylsheet(int istyle);
@@ -479,6 +484,7 @@ namespace hal
         Action* mActionImport;
         Action* mActionSave;
         Action* mActionSaveAs;
+        Action* mActionGateLibraryManager;
         Action* mActionAbout;
         Action* mActionStartRecording;
         Action* mActionStopRecording;

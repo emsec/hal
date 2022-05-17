@@ -79,6 +79,13 @@
         <file alias="undo2">icons/0104-undo2.svg</file>
         <file alias="module_cursor">icons/module_cursor.png</file>
         <file alias="gate_cursor">icons/gate_cursor.png</file>
+        <file alias="kill_cursor">icons/kill_cursor.png</file>
+        <file alias="minus">icons/minus.svg</file>
+        <file alias="spinner">icons/spinner.svg</file>
+        <file alias="add_waveform_net">icons/add_waveform_net.svg</file>
+        <file alias="add_waveform">icons/add_waveform_net.png</file>
+	<file alias="zoom_waveform">icons/zoom_waveform.png</file>
+        <file alias="x_delete">icons/x_delete.png</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="spinner">images/oval.svg</file>

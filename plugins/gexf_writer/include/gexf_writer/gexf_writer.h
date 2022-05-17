@@ -26,11 +26,11 @@
 #include "hal_core/defines.h"
 #include "hal_core/netlist/netlist_writer/netlist_writer.h"
 
+#include <QString>
+#include <QXmlStreamWriter>
 #include <functional>
 #include <map>
 #include <sstream>
-#include <QString>
-#include <QXmlStreamWriter>
 
 namespace hal
 {
@@ -55,7 +55,7 @@ namespace hal
          * @param[in] file_path - The output path.
          * @returns True on success, false otherwise.
          */
-        bool write(Netlist* netlist, const std::filesystem::path& file_path) override;
+        Result<std::monostate> write(Netlist* netlist, const std::filesystem::path& file_path) override;
 
     private:
         Netlist* mNetlist;
@@ -70,6 +70,5 @@ namespace hal
         void writeAttribute(QXmlStreamWriter& xmlOut, int id, const QString& title, const QString& type) const;
         void writeNodeAttribute(QXmlStreamWriter& xmlOut, const Gate* g, int inx) const;
         void writeEdgeAttribute(QXmlStreamWriter& xmlOut, const Net* n, int inx, const std::string pin = std::string()) const;
-
     };
 }    // namespace hal

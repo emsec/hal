@@ -116,8 +116,8 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 #####################################################################
 #####   Find depending packages (See cmake/detect_dependencies.cmake)
 #####################################################################
-
 include(detect_dependencies)
+
 
 ################################
 #####   Manage Compiler Flags
@@ -164,6 +164,8 @@ if(UNIX)
     enable_cxx_compile_option_if_supported("-fno-inline-functions" "Perf" "PUBLIC")
     enable_cxx_compile_option_if_supported("-fno-inline-functions-called-once" "Perf" "PUBLIC")
     enable_cxx_compile_option_if_supported("-fno-optimize-sibling-calls" "Perf" "PUBLIC")
+    enable_cxx_compile_option_if_supported("-fno-omit-frame-pointer" "Perf" "PUBLIC")
+
 
     SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -pthread")
     SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -pthread")

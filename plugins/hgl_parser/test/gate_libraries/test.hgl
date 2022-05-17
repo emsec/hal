@@ -169,6 +169,8 @@
             "name": "gt_ff",
             "types": ["ff", "sequential"],
             "ff_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "D",
                 "clocked_on": "CLK & EN",
                 "clear_on": "R",
@@ -218,6 +220,8 @@
             "name": "gt_ff_init",
             "types": ["ff", "sequential"],
             "ff_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "D",
                 "clocked_on": "CLK & EN",
                 "clear_on": "R",
@@ -269,6 +273,8 @@
             "name": "gt_latch",
             "types": ["latch", "sequential"],
             "latch_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
                 "data_in": "D",
                 "enable_on": "EN",
                 "clear_on": "R",

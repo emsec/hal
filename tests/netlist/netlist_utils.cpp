@@ -40,14 +40,14 @@ namespace hal
         Gate* gate_3 = test_nl->get_gate_by_id(MIN_GATE_ID + 3);
         Gate* gate_0 = test_nl->get_gate_by_id(MIN_GATE_ID + 0);
         Gate* gate_7 = test_nl->get_gate_by_id(MIN_GATE_ID + 7);
-        gate_3->add_boolean_function("O", BooleanFunction::from_string("!I", std::vector<std::string>({"I"})));
-        gate_0->add_boolean_function("O", BooleanFunction::from_string("I0 & I1", std::vector<std::string>({"I0", "I1"})));
-        gate_7->add_boolean_function("O", BooleanFunction::from_string("!I", std::vector<std::string>({"I"})));
+        gate_3->add_boolean_function("O", BooleanFunction::from_string("!I").get());
+        gate_0->add_boolean_function("O", BooleanFunction::from_string("I0 & I1").get());
+        gate_7->add_boolean_function("O", BooleanFunction::from_string("!I").get());
         // -- Get the names of the connected nets
-        std::string net_13_name = std::to_string(MIN_NET_ID + 13);
-        std::string net_20_name = std::to_string(MIN_NET_ID + 20);
-        std::string net_78_name = std::to_string(MIN_NET_ID + 78);
-        std::string net_30_name = std::to_string(MIN_NET_ID + 30);
+        auto net_13_name = "net_" + std::to_string(MIN_NET_ID + 13);
+        auto net_20_name = "net_" + std::to_string(MIN_NET_ID + 20);
+        auto net_78_name = "net_" + std::to_string(MIN_NET_ID + 78);
+        auto net_30_name = "net_" + std::to_string(MIN_NET_ID + 30);
 
         {
             // Get the boolean function of a normal sub-graph
@@ -55,7 +55,7 @@ namespace hal
             const Net* output_net        = test_nl->get_net_by_id(MIN_NET_ID + 045);
             BooleanFunction sub_graph_bf = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
 
-            BooleanFunction expected_bf = BooleanFunction::from_string(("!" + net_13_name + " & " + net_20_name), std::vector<std::string>({net_13_name, net_20_name}));
+            BooleanFunction expected_bf = BooleanFunction::from_string(("!" + net_13_name + " & " + net_20_name)).get();
 
             EXPECT_EQ(sub_graph_bf, expected_bf);
         }
@@ -127,7 +127,7 @@ namespace hal
             const Net* output_net        = test_nl->get_net_by_id(MIN_NET_ID + 045);
             BooleanFunction sub_graph_bf = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
 
-            BooleanFunction expected_bf = BooleanFunction::from_string((net_30_name + " & " + net_20_name), std::vector<std::string>({net_30_name, net_20_name}));
+            BooleanFunction expected_bf = BooleanFunction::from_string((net_30_name + " & " + net_20_name)).get();
 
             EXPECT_EQ(sub_graph_bf, expected_bf);
         }
@@ -211,8 +211,8 @@ namespace hal
         test_nl->mark_global_output_net(test_nl->get_net_by_id(MIN_NET_ID + 78));
 
         // -- Add some boolean functions to the gates
-        test_nl->get_gate_by_id(MIN_GATE_ID + 0)->add_boolean_function("O", BooleanFunction::from_string("I0 & I1"));
-        test_nl->get_gate_by_id(MIN_GATE_ID + 4)->add_boolean_function("O", BooleanFunction::from_string("!I"));
+        test_nl->get_gate_by_id(MIN_GATE_ID + 0)->add_boolean_function("O", BooleanFunction::from_string("I0 & I1").get());
+        test_nl->get_gate_by_id(MIN_GATE_ID + 4)->add_boolean_function("O", BooleanFunction::from_string("!I").get());
 
         // Copy and compare the netlist
         std::unique_ptr<Netlist> test_nl_copy = netlist_utils::copy_netlist(test_nl.get());
@@ -406,7 +406,7 @@ namespace hal
 
             Gate* g0 = nl->create_gate(gl->get_gate_type_by_name("AND2"), "g0");
             Gate* g1 = nl->create_gate(gl->get_gate_type_by_name("LUT2"), "g1");
-            g1->add_boolean_function("O", BooleanFunction::from_string("I1"));
+            g1->add_boolean_function("O", BooleanFunction::Var("I1"));
             Gate* g2 = nl->create_gate(gl->get_gate_type_by_name("AND2"), "g2");
 
             Net* n0 = nl->create_net("n0");
@@ -505,8 +505,8 @@ namespace hal
             Gate* l3 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l3");
             Gate* l4 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l4");
             Gate* l5 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l5");
-            l4->add_boolean_function("O", BooleanFunction::from_string("I0 & I1 & I2 & I3"));
-            l5->add_boolean_function("O", BooleanFunction::from_string("I2"));
+            l4->add_boolean_function("O", BooleanFunction::from_string("I0 & I1 & I2 & I3").get());
+            l5->add_boolean_function("O", BooleanFunction::Var("I2"));
 
             test_utils::connect(nl.get(), l0, "O", l4, "I0");
             test_utils::connect(nl.get(), l1, "O", l4, "I1");

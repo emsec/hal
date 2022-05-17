@@ -1,4 +1,5 @@
 #include "gui/user_action/user_action_compound.h"
+#include "gui/graph_widget/layout_locker.h"
 
 namespace hal {
     UserActionCompoundFactory::UserActionCompoundFactory()
@@ -28,6 +29,7 @@ namespace hal {
 
     bool UserActionCompound::exec()
     {
+        LayoutLocker llock;
         bool first = true;
         for (UserAction* act : mActionList)
         {

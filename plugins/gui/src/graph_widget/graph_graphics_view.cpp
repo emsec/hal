@@ -19,6 +19,7 @@
 #include "gui/grouping_dialog/grouping_dialog.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/netlist.h"
+#include "gui/gui_utils/common_successor_predecessor.h"
 #include "gui/implementations/qpoint_extension.h"
 #include "gui/selection_details_widget/selection_details_widget.h"
 #include "gui/user_action/action_add_items_to_object.h"
@@ -118,21 +119,52 @@ namespace hal
 
     void GraphGraphicsView::handleIsolationViewAction()
     {
+        auto selected_modules = gSelectionRelay->selectedModules();
+        auto selected_gates = gSelectionRelay->selectedGates();
+
+        // When there is only one module selected, check if there is a context connected to that module
+        // If yes, select the context
+        // If no, create a new context and connect the module to the context
+        if (selected_modules.size() == 1 && selected_gates.empty())
+        {
+            u32 module_id = *selected_modules.begin();
+            auto module_context = gGraphContextManager->getContextByExclusiveModuleId(module_id);
+            if (module_context)
+            {
+                gContentManager->getContextManagerWidget()->selectViewContext(module_context);
+                gContentManager->getContextManagerWidget()->handleOpenContextClicked();
+            }
+            else
+            {
+                UserActionCompound* act = new UserActionCompound;
+                act->setUseCreatedObject();
+                QString name = QString::fromStdString(gNetlist->get_module_by_id(module_id)->get_name()) + " (ID: " + QString::number(module_id) + ")";
+                act->addAction(new ActionCreateObject(UserActionObjectType::Context, name));
+                act->addAction(new ActionAddItemsToObject(selected_modules, selected_gates));
+                act->exec();
+                GraphContext* context = gGraphContextManager->getContextById(act->object().id());
+                context->setDirty(false);
+                context->setExclusiveModuleId(module_id);
+            }
+            return;
+        }
+
         u32 cnt = 0;
         while (true)
         {
             ++cnt;
             QString name = "Isolated View " + QString::number(cnt);
+
             if (!gGraphContextManager->contextWithNameExists(name))
             {
                 UserActionCompound* act = new UserActionCompound;
                 act->setUseCreatedObject();
-                act->addAction(new ActionCreateObject(UserActionObjectType::Context,name));
-                act->addAction(new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
-                                                          gSelectionRelay->selectedGates()));
+                act->addAction(new ActionCreateObject(UserActionObjectType::Context, name));
+                act->addAction(new ActionAddItemsToObject(selected_modules, selected_gates));
                 act->exec();
                 GraphContext* context = gGraphContextManager->getContextById(act->object().id());
                 context->setDirty(false);
+
                 return;
             }
         }
@@ -189,6 +221,10 @@ namespace hal
                 compound->addAction(actMoveNode);
             }
         }
+
+        GraphContext* context = mGraphWidget->getContext();
+        context->setSpecialUpdate(true);
+
         compound->exec();
         gSelectionRelay->clear();
         gSelectionRelay->addModule(compound->object().id());
@@ -512,6 +548,8 @@ namespace hal
                     assert(!nodeFrom.isNull());    // assert that value was found
                     assert(!nodeTo.isNull());
                     layouter->swapNodePositions(nodeFrom, nodeTo);
+                    // re-layout the nets
+                    context->scheduleSceneUpdate();
                 }
                 else
                 {
@@ -519,8 +557,6 @@ namespace hal
                     act->setObject(UserActionObject(context->id(),UserActionObjectType::Context));
                     act->exec();
                 }
-                // re-layout the nets
-                context->scheduleSceneUpdate();
                 context->setDirty(true);
             }
         }
@@ -589,6 +625,9 @@ namespace hal
         bool isGate         = false;
         bool isModule       = false;
         bool isNet          = false;
+
+        bool isMultiGates = gSelectionRelay->selectedGates().size() > 1 &&
+                gSelectionRelay->selectedModules().isEmpty();
 
         if (item)
         {
@@ -663,6 +702,8 @@ namespace hal
 
                 QMenu* preSucMenu = context_menu.addMenu("  Successor/Predecessor …");
                 recursionLevelMenu(preSucMenu->addMenu("Add successors to view …"),           true, &GraphGraphicsView::handleAddSuccessorToView);
+                if (isMultiGates)
+                    recursionLevelMenu(preSucMenu->addMenu("Add common successors to view …"),true, &GraphGraphicsView::handleAddCommonSuccessorToView);
                 if (isGate)
                 {
                     action = preSucMenu->addAction("Add path to successor to view …");
@@ -680,6 +721,8 @@ namespace hal
 
                 preSucMenu->addSeparator();
                 recursionLevelMenu(preSucMenu->addMenu("Add predecessors to view …"),           false, &GraphGraphicsView::handleAddPredecessorToView);
+                if (isMultiGates)
+                    recursionLevelMenu(preSucMenu->addMenu("Add common predecessors to view …"),false, &GraphGraphicsView::handleAddCommonPredecessorToView);
                 if (isGate)
                 {
                     action = preSucMenu->addAction("Add path to predecessor to view …");
@@ -715,7 +758,7 @@ namespace hal
 
                 action = context_menu.addAction("  Remove from view");
                 connect(action, &QAction::triggered, this, &GraphGraphicsView::handleRemoveFromView);
-                Gate* g   = isGate ? gNetlist->get_gate_by_id(mItem->id()) : nullptr;
+                // Gate* g   = isGate ? gNetlist->get_gate_by_id(mItem->id()) : nullptr;
                 Module* m = isModule ? gNetlist->get_module_by_id(mItem->id()) : nullptr;
 
                 // only allow move actions on anything that is not the top module
@@ -861,6 +904,22 @@ namespace hal
         addSuccessorToView(level, false);
     }
 
+    void GraphGraphicsView::handleAddCommonSuccessorToView()
+    {
+        QAction* send = static_cast<QAction*>(sender());
+        Q_ASSERT(send);
+        int level = send->data().toInt();
+        addCommonSuccessorToView(level, true);
+    }
+
+    void GraphGraphicsView::handleAddCommonPredecessorToView()
+    {
+        QAction* send = static_cast<QAction*>(sender());
+        Q_ASSERT(send);
+        int level = send->data().toInt();
+        addCommonSuccessorToView(level, false);
+    }
+
     void GraphGraphicsView::addSuccessorToView(int maxLevel, bool succ)
     {
 
@@ -938,6 +997,22 @@ namespace hal
         act->exec();
     }
 
+
+    void GraphGraphicsView::addCommonSuccessorToView(int maxLevel, bool succ)
+    {
+        CommonSuccessorPredecessor csp(gSelectionRelay->selectedGatesList(),succ,maxLevel);
+        const NodeBoxes& boxes = mGraphWidget->getContext()->getLayouter()->boxes();
+
+        QSet<u32> gatsNew;
+        for (const Gate* g : csp.result())
+        {
+            if (boxes.boxForGate(g)) continue;
+            gatsNew.insert(g->get_id());
+        }
+        ActionAddItemsToObject* act = new ActionAddItemsToObject({}, gatsNew);
+        act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::Context));
+        act->exec();
+    }
 
     void GraphGraphicsView::handleHighlightSuccessor()
     {
@@ -1369,6 +1444,11 @@ namespace hal
     {
         GroupingDialog gd(this);
         if (gd.exec() != QDialog::Accepted) return;
+        if (gd.isNewGrouping())
+        {
+            gContentManager->getSelectionDetailsWidget()->selectionToGroupingAction();
+            return;
+        }
         QString groupName = QString::fromStdString(gNetlist->get_grouping_by_id(gd.groupId())->get_name());
         gContentManager->getSelectionDetailsWidget()->selectionToGroupingAction(groupName);
     }

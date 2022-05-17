@@ -279,8 +279,17 @@ namespace hal {
                     roadj = road1;
                 else
                 {
-                    qDebug() << "T-join not found";
-                    return;
+                    int* roadPtr = canJoinAny(jhoriz,itNet.key(),roadLink);
+                    if (roadPtr)
+                    {
+                        roadj = *roadPtr;
+                        delete roadPtr;
+                    }
+                    else
+                    {
+                        qDebug() << "T-join not found";
+                        return;
+                    }
                 }
 
                 NetLayoutJunctionRange rngT =
@@ -381,6 +390,20 @@ namespace hal {
         auto itJoin = mOccupied[ihoriz].find(iroad);
         if (itJoin == mOccupied[ihoriz].end()) return false;
         return itJoin.value().canJoin(netId,pos);
+    }
+
+    int* NetLayoutJunction::canJoinAny(int ihoriz, u32 netId, int pos) const
+    {
+        for (auto itTry = mOccupied[ihoriz].constBegin(); itTry != mOccupied[ihoriz].constEnd(); ++itTry)
+        {
+            if (itTry.value().canJoin(netId,pos))
+            {
+                int* retval = new int;
+                *retval = itTry.key();
+                return retval;
+            }
+        }
+        return nullptr;
     }
 
     void NetLayoutJunction::place(int ihoriz, int iroad, const NetLayoutJunctionRange &range)
@@ -815,9 +838,21 @@ namespace hal {
         QString filename("/tmp/junction");
         QDir().mkpath(filename);
         QString columnStr;
-        if (pnt.x() >= 26) columnStr += QString("%1").arg((char)('A'+ pnt.x()/26 - 1));
-        columnStr += QString("%1").arg((char)('A'+ pnt.x()%26));
-        filename += "/" + columnStr + QString("%1.jjj").arg(pnt.y());
+        int ix = pnt.x();
+        if (ix < 0)
+        {
+            columnStr += "_";
+            ix = -ix;
+        }
+        if (ix >= 26) columnStr += QString("%1").arg((char)('A'+ ix/26 - 1));
+        columnStr += QString("%1").arg((char)('A'+ ix%26));
+        int iy = pnt.y();
+        if (iy < 0)
+        {
+            columnStr += "_";
+            iy = -iy;
+        }
+        filename += "/" + columnStr + QString("%1.jjj").arg(iy);
         QFile ff(filename);
         if (!ff.open(QIODevice::WriteOnly)) return;
         for (NetLayoutDirection dir(0); !dir.isMax(); ++dir)

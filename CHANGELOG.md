@@ -1,10 +1,38 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+* **WARNING:** this release partially breaks the `BooleanFunction` and `Module` API, please make sure to adjust your code accordingly.
+* netlist simulation
+  * added interactive waveform viewer to the HAL GUI
+  * added new netlist simulation backend with out-of-the-box support for Verilator
+  * added easy integration of additional simulation engines by writing respective wrapper functionality
+  * added support for reading Saleae traces as simulation input to allow simulation on real-world inputs
+  * deprecated custom HAL simulator, which is now only available for debugging purposes
+* Boolean functions
+  * added entirely new Boolean function architecture based on reverse Polish notation
+  * added new SMT solver interface with out-of-the-box support for both z3 and Boolector
+  * added custom symbolic execution engine
+  * added improved Boolean function optimization based on ABC
+* modules
+  * added `ModulePin` class to keep properties of module pins
+  * added `PinGroup` class to collect related pins in a dedicated container
+  * removed cache system used to keep internal, input, and output nets and replaced it with on-the-fly computations
+* selection details widget
+  * added tabs to unclutter the presented information
+  * added more details on gate/module pins
+  * added more details on LUT functionality
+  * added options to edit properties such as names, types etc. whereever applicable
+* fixed gate locations not being properly loaded from a gate's data fields
+* fixed multiple memory leaks
+* fixed rare segfault when adding gates to a module
+* fixed segfault when removing the last item from a view
+* fixed parsing of Liberty gate library attribute `clock`
+* fixed description of flip-flops and latches in all FPGA gate libraries
+
+## [3.3.0] - 2021-10-13 16:20:00+02:00 (urgency: medium)
   * Layouts from all views are saved and restored
   * Grouping names and colors are saved and restored
   * Command line option -p to open project added
@@ -28,11 +56,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * shortest path between two gates can be highlighted or added to current view 
   * predecessors or successors can be highlighted or added to the current view up to a user-specified depth
   * different grouping colors can be assigned depending on the distance from the origin
+  * common predecessors or successors can be found and added to view
 * improved layouter
+  * omit repeated layouting during an ongoing activity
+  * show progress bar during layouting
+  * allow user to abort layouting
+  * preserve graph view location of gate when moving it to new module
   * fixed routing errors for complex cable swaps
   * fixed multiple connections of a single net to the same gate not being shown properly
   * fixed incorrect placement of new gates and modules in cone view when navigating starting from a net
-  * preserve location of gate when moving it to new module
 * added generic SMT solver interface.
   * added translation from `BooleanFunction` to SMT-LIB.
   * added `BooleanFunction::Node` data structure to extend functionality to generic ASTs.
@@ -60,6 +92,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * added function `get_gate_chain` and `get_complex_gate_chain` to find gates that are arranged in a chain
   * added function `get_shortest_path` to compute the shortest path between two gates
   * added function `get_next_gates` to get the predecessors or successors of a gate up to a user-specified depth
+  * added function `get_partial_netlist` to export parts of a netlist as a netlist instance
 * `dataflow_analysis` plugin
   * can now take groups of flip-flops as input that should not be touched during analysis
   * this is meant to aid the dataflow analysis by passing control registeres identified beforehand, which prevents them from being merged into the datapath

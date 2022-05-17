@@ -31,7 +31,7 @@ namespace hal
                     return it->second.second;
                 }
 
-                log_error("netlist_parser", "no hdl parser registered for file type '{}'", extension);
+                log_error("netlist_parser", "no netlist parser registered for file type '{}'", extension);
                 return ParserFactory();
             }
 
@@ -42,9 +42,9 @@ namespace hal
 
                 log_info("netlist_parser", "parsing '{}'...", file_name.string());
 
-                if (!parser->parse(file_name))
+                if (auto res = parser->parse(file_name); res.is_error())
                 {
-                    log_error("netlist_parser", "could not parse file '{}'.", file_name.string());
+                    log_error("netlist_parser", "error encountered during netlist parsing:\n{}", res.get_error().get());
                     return {};
                 }
 
@@ -60,21 +60,23 @@ namespace hal
 
                     log_info("netlist_parser", "instantiating '{}' with gate library '{}'...", file_name.string(), gate_library->get_name());
 
-                    std::unique_ptr<Netlist> netlist = parser->instantiate(gate_library);
-                    if (netlist == nullptr)
+                    if (auto res = parser->instantiate(gate_library); res.is_error())
                     {
-                        log_error("netlist_parser", "could not instantiate file '{}' using gate library '{}'.", file_name.string(), gate_library->get_name());
+                        log_error("netlist_parser", "error encountered during netlist instantiation:\n{}", res.get_error().get());
                         return {};
                     }
+                    else
+                    {
+                        auto netlist = res.get();
+                        netlist->set_input_filename(file_name.string());
 
-                    netlist->set_input_filename(file_name.string());
+                        log_info("netlist_parser",
+                                 "instantiated '{}' in {:2.2f} seconds.",
+                                 file_name.string(),
+                                 (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);
 
-                    log_info("netlist_parser",
-                             "instantiated '{}' in {:2.2f} seconds.",
-                             file_name.string(),
-                             (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);
-
-                    netlists.push_back(std::move(netlist));
+                        netlists.push_back(std::move(netlist));
+                    }
                 }
                 else
                 {
@@ -105,25 +107,29 @@ namespace hal
 
                         log_info("netlist_parser", "instantiating '{}' with gate library '{}'...", file_name.string(), glib->get_name());
 
-                        std::unique_ptr<Netlist> netlist = parser->instantiate(glib);
-                        if (netlist == nullptr)
+                        if (auto res = parser->instantiate(gate_library); res.is_error())
                         {
-                            log_error("netlist_parser", "could not instantiate file '{}' using gate library '{}'.", file_name.string(), glib->get_name());
+                            log_info("netlist_parser", "could not instantiate file '{}' using gate library '{}'.", file_name.string(), glib->get_name());
+                            log_debug("netlist_parser", "error encountered during netlist instantiation:\n{}", res.get_error().get());
                             continue;
                         }
-
-                        netlist->set_input_filename(file_name.string());
-
-                        log_info("netlist_parser",
-                                 "instantiated '{}' in {:2.2f} seconds.",
-                                 file_name.string(),
-                                 (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);
-
-                        netlists.push_back(std::move(netlist));
-
-                        if (break_on_match)
+                        else
                         {
-                            break;
+                            auto netlist = res.get();
+
+                            netlist->set_input_filename(file_name.string());
+
+                            log_info("netlist_parser",
+                                     "instantiated '{}' in {:2.2f} seconds.",
+                                     file_name.string(),
+                                     (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);
+
+                            netlists.push_back(std::move(netlist));
+
+                            if (break_on_match)
+                            {
+                                break;
+                            }
                         }
                     }
 

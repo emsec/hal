@@ -20,6 +20,26 @@ namespace hal
         return m_path;
     }
 
+    void GateLibrary::set_gate_location_data_category(const std::string& category)
+    {
+        m_gate_location_data_category = category;
+    }
+
+    const std::string& GateLibrary::get_gate_location_data_category() const
+    {
+        return m_gate_location_data_category;
+    }
+
+    void GateLibrary::set_gate_location_data_identifiers(const std::string& x_coordinate, const std::string& y_coordinate)
+    {
+        m_gate_location_data_identifiers = std::make_pair(x_coordinate, y_coordinate);
+    }
+
+    const std::pair<std::string, std::string>& GateLibrary::get_gate_location_data_identifiers() const
+    {
+        return m_gate_location_data_identifiers;
+    }
+
     GateType* GateLibrary::create_gate_type(const std::string& name, std::set<GateTypeProperty> properties, std::unique_ptr<GateTypeComponent> component)
     {
         if (m_gate_type_map.find(name) != m_gate_type_map.end())
@@ -102,7 +122,7 @@ namespace hal
             {
                 auto bf = it->second;
 
-                if (bf.is_constant_one())
+                if (bf.has_constant_value(1))
                 {
                     m_vcc_gate_types.emplace(gate_type->get_name(), gate_type);
                     return true;
@@ -130,7 +150,7 @@ namespace hal
             {
                 auto bf = it->second;
 
-                if (bf.is_constant_zero())
+                if (bf.has_constant_value(0))
                 {
                     m_gnd_gate_types.emplace(gate_type->get_name(), gate_type);
                     return true;

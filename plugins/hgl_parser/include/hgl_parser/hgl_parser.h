@@ -71,8 +71,8 @@ namespace hal
         bool parse_pin(PinCtx& pin_ctx, const rapidjson::Value& pin, const std::string& gt_name);
         bool parse_group(GateType* gt, const rapidjson::Value& group, const std::string& gt_name);
         std::unique_ptr<GateTypeComponent> parse_lut_config(const rapidjson::Value& lut_config, const std::string& gt_name);
-        std::unique_ptr<GateTypeComponent> parse_ff_config(const rapidjson::Value& ff_config, const std::string& gt_name, const std::vector<std::string>& input_pins);
-        std::unique_ptr<GateTypeComponent> parse_latch_config(const rapidjson::Value& latch_config, const std::string& gt_name, const std::vector<std::string>& input_pins);
-        std::unique_ptr<GateTypeComponent> parse_ram_config(const rapidjson::Value& ram_config, const std::string& gt_name, const std::vector<std::string>& input_pins);
+        std::unique_ptr<GateTypeComponent> parse_ff_config(const rapidjson::Value& ff_config, const std::string& gt_name, std::vector<std::string>& bf_vars);
+        std::unique_ptr<GateTypeComponent> parse_latch_config(const rapidjson::Value& latch_config, const std::string& gt_name, std::vector<std::string>& bf_vars);
+        std::unique_ptr<GateTypeComponent> parse_ram_config(const rapidjson::Value& ram_config, const std::string& gt_name, const std::vector<std::string>& bf_vars);
     };
 }    // namespace hal

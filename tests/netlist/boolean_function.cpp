@@ -6,625 +6,1100 @@
 
 #include <iostream>
 #include <type_traits>
+#include <variant>
 
 namespace hal {
+    TEST(BooleanFunction, EnumConstruction) {
+        EXPECT_EQ(static_cast<BooleanFunction::Value>(0), BooleanFunction::Value::ZERO);
+        EXPECT_EQ(static_cast<BooleanFunction::Value>(1), BooleanFunction::Value::ONE);
+    }
 
-    class BooleanFunctionTest : public ::testing::Test {
-    protected:
+    TEST(BooleanFunction, IsEmpty) {
+        EXPECT_TRUE(BooleanFunction().is_empty());
+        EXPECT_FALSE(BooleanFunction::Var("A").is_empty());
+        EXPECT_FALSE(BooleanFunction::Const(0, 1).is_empty());
+    }
 
-        const BooleanFunction::Value X = BooleanFunction::X;
-        const BooleanFunction::Value ZERO = BooleanFunction::ZERO;
-        const BooleanFunction::Value ONE = BooleanFunction::ONE;
+    TEST(BooleanFunction, GetVariableNames) {
+        auto a = BooleanFunction::Var("A"),
+             b = BooleanFunction::Var("B"),
+             c = BooleanFunction::Var("C"),
+            _0 = BooleanFunction::Const(0, 1),
+            _1 = BooleanFunction::Const(1, 1);
 
-        virtual void SetUp() {
-            test_utils::init_log_channels();
+        EXPECT_EQ((a.clone() & b.clone()).get_variable_names(), std::set<std::string>({"A", "B"}));
+        EXPECT_EQ(((a.clone() & b.clone()) | a.clone()).get_variable_names(), std::set<std::string>({"A", "B"}));
+        EXPECT_EQ(((a.clone() & b.clone()) & c.clone()).get_variable_names(), std::set<std::string>({"A", "B", "C"}));
+        EXPECT_EQ((_0.clone() & b.clone()).get_variable_names(), std::set<std::string>({"B"}));
+        EXPECT_EQ((_0.clone() & _1.clone()).get_variable_names(), std::set<std::string>({}));
+    }
+
+    TEST(BooleanFunction, CopyMoveSemantics) {
+        EXPECT_EQ( std::is_copy_constructible<BooleanFunction>::value, true);
+        EXPECT_EQ( std::is_copy_assignable<BooleanFunction>::value, true);
+        EXPECT_EQ( std::is_move_constructible<BooleanFunction>::value, true);
+        EXPECT_EQ( std::is_move_assignable<BooleanFunction>::value, true);
+    }
+
+    TEST(BooleanFunction, Operator) {
+        const auto a = BooleanFunction::Var("A"),
+                   b = BooleanFunction::Var("B"),
+                  _0 = BooleanFunction::Const(0, 1),
+                  _1 = BooleanFunction::Const(1, 1);
+
+        EXPECT_TRUE(a == a);
+        EXPECT_TRUE(a != b);
+        
+        EXPECT_TRUE(_0 == _0);
+        EXPECT_TRUE(_0 != _1);
+
+        EXPECT_TRUE(a != _0);
+    }
+
+    TEST(BooleanFunction, ToString) {
+        const auto a = BooleanFunction::Var("A"),
+                   b = BooleanFunction::Var("B"),
+                   c = BooleanFunction::Var("C"),
+                  _0 = BooleanFunction::Const(0, 1),
+                  _1 = BooleanFunction::Const(1, 1);
+
+        const auto data = std::vector<std::tuple<std::string, BooleanFunction>>{
+            {"<empty>", BooleanFunction()},
+            {"(A & B)", a.clone() & b.clone()},
+            {"(A & (B | C))", (a.clone() & (b.clone() | c.clone()))},
+            {"((A & B) ^ (B & C))", ((a.clone() & b.clone()) ^ (b.clone() & c.clone()))},
+            {"(A ^ 0b1)", a.clone() ^ _1.clone()}, 
+            {"(A ^ 0b0)", a.clone() ^ _0.clone()},
+            {"((A + B) - C)", (a.clone() + b.clone()) - c.clone()},
+            {"(! A)", ~a.clone()},
+        };
+
+        for (auto&& [expected, function]: data) {
+            EXPECT_EQ(expected, function.to_string());
+        }
+    }
+
+    TEST(BooleanFunction, ValueToBin) {
+        EXPECT_TRUE(BooleanFunction::to_string({}, 2).is_error());
+
+        const auto data = std::vector<std::pair<std::string, std::vector<BooleanFunction::Value>>>{
+            {"1", {BooleanFunction::Value::ONE}},
+            {"X", {BooleanFunction::Value::X}},
+            {"Z", {BooleanFunction::Value::Z}},
+            {"10101", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {"101X1", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::X, BooleanFunction::Value::ONE}},
+            {"101Z1", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::ONE}},
+            {"101ZX", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::X}},
+            {"101XZ", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::X, BooleanFunction::Value::Z}},
+            {std::string(10000, '1'), std::vector<BooleanFunction::Value>(10000, BooleanFunction::Value::ONE)},
+        };
+
+        for (auto&& [expected, value]: data) 
+        {
+            EXPECT_EQ(expected, BooleanFunction::to_string(value, 2).get());
+        }
+    }
+
+    TEST(BooleanFunction, ValueToOct) {
+        EXPECT_TRUE(BooleanFunction::to_string({}, 8).is_error());
+
+        const auto data = std::vector<std::pair<std::string, std::vector<BooleanFunction::Value>>>{
+            {"1", {BooleanFunction::Value::ONE}},
+            {"X", {BooleanFunction::Value::X}},
+            {"X", {BooleanFunction::Value::Z}},
+            {"25", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {"2X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::X, BooleanFunction::Value::ONE}},
+            {"2X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::ONE}},
+            {"2X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::X}},
+            {"2X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::X, BooleanFunction::Value::Z}},
+            {std::string(3334, '7'), std::vector<BooleanFunction::Value>(10002, BooleanFunction::Value::ONE)},
+        };
+
+        for (auto&& [expected, value]: data) 
+        {
+            EXPECT_EQ(expected, BooleanFunction::to_string(value, 8).get());
+        }
+    }
+
+    TEST(BooleanFunction, ValueToDec) {
+        EXPECT_TRUE(BooleanFunction::to_string({}, 10).is_error());
+        EXPECT_TRUE(BooleanFunction::to_string(std::vector<BooleanFunction::Value>(10000, BooleanFunction::Value::ONE), 10).is_error());
+
+        const auto data = std::vector<std::pair<std::string, std::vector<BooleanFunction::Value>>>{
+            {"1", {BooleanFunction::Value::ONE}},
+            {"X", {BooleanFunction::Value::X}},
+            {"X", {BooleanFunction::Value::Z}},
+            {"21", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {"117", {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {"X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::X, BooleanFunction::Value::ONE}},
+            {"X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::ONE}},
+            {"X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::X}},
+            {"X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::X, BooleanFunction::Value::Z}},
+        };
+
+        for (auto&& [expected, value]: data) 
+        {
+            EXPECT_EQ(expected, BooleanFunction::to_string(value, 10).get());
+        }
+    }
+
+    TEST(BooleanFunction, ValueToHex) {
+        EXPECT_TRUE(BooleanFunction::to_string({}, 10).is_error());
+
+        const auto data = std::vector<std::pair<std::string, std::vector<BooleanFunction::Value>>>{
+            {"1", {BooleanFunction::Value::ONE}},
+            {"X", {BooleanFunction::Value::X}},
+            {"X", {BooleanFunction::Value::Z}},
+            {"15", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {"1X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::X, BooleanFunction::Value::ONE}},
+            {"1X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::ONE}},
+            {"1X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::X}},
+            {"1X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::X, BooleanFunction::Value::Z}},
+            {std::string(2500, 'F'), std::vector<BooleanFunction::Value>(10000, BooleanFunction::Value::ONE)},
+        };
+
+        for (auto&& [expected, value]: data) 
+        {
+            EXPECT_EQ(expected, BooleanFunction::to_string(value, 16).get());
+        }
+    }
+
+    TEST(BooleanFunction, Parser) {
+        const std::vector<std::tuple<std::string, BooleanFunction>> data = {
+            ////////////////////////////////////////////////////////////////////
+            // GENERIC PARSER
+            ////////////////////////////////////////////////////////////////////
+            {"0", 
+                BooleanFunction::Const(0, 1)
+            },
+            {"1", 
+                BooleanFunction::Const(1, 1)
+            },
+            {"0b0", 
+                BooleanFunction::Const(0, 1)
+            },
+            {"0b1", 
+                BooleanFunction::Const(1, 1)
+            },
+            {"A & B", 
+                BooleanFunction::Var("A") & BooleanFunction::Var("B")
+            },
+            {"(a & bb) | (ccc & dddd)", 
+                (BooleanFunction::Var("a") & BooleanFunction::Var("bb")) | (BooleanFunction::Var("ccc") & BooleanFunction::Var("dddd"))
+            },
+            {"A(1) ^ B(1)", 
+                BooleanFunction::Var("A(1)") ^ BooleanFunction::Var("B(1)")
+            },
+            {"!(a ^ a) ^ !(!(b ^ b))", 
+                ~(BooleanFunction::Var("a") ^ BooleanFunction::Var("a")) ^ (~(~(BooleanFunction::Var("b") ^ BooleanFunction::Var("b"))))
+            },
+            {"(!I0 & I1 & I2) | (I0 & I1 & I2)", 
+                (~BooleanFunction::Var("I0") & (BooleanFunction::Var("I1") & BooleanFunction::Var("I2"))) | (BooleanFunction::Var("I0") & (BooleanFunction::Var("I1") & BooleanFunction::Var("I2")))
+            },
+            {"(((0b1 & O[0]) & c3) | (RDATA[0] & (! c3)))",
+                ((BooleanFunction::Const(1, 1) & BooleanFunction::Var("O[0]")) & BooleanFunction::Var("c3"))
+                | (BooleanFunction::Var("RDATA[0]") & (~ BooleanFunction::Var("c3")))
+            },
+            {"(((0b1 & \\O[0] ) & c3) | (\\RDATA[0]  & (! c3)))",
+                ((BooleanFunction::Const(1, 1) & BooleanFunction::Var("O[0]")) & BooleanFunction::Var("c3"))
+                | (BooleanFunction::Var("RDATA[0]") & (~ BooleanFunction::Var("c3")))
+            },
+            ////////////////////////////////////////////////////////////////////
+            // LIBERTY PARSER
+            ////////////////////////////////////////////////////////////////////
+            {"A B C D(1)",
+                BooleanFunction::Var("A") & (BooleanFunction::Var("B") & (BooleanFunction::Var("C") & BooleanFunction::Var("D(1)")))
+            },
+            {"A'", 
+                ~BooleanFunction::Var("A")
+            },
+            {"RSTB'",
+                ~BooleanFunction::Var("RSTB")
+            },
+            {"(INP)'",
+                ~BooleanFunction::Var("INP")
+            },
+            {"(IN2*IN1)'",
+                ~(BooleanFunction::Var("IN2") & BooleanFunction::Var("IN1"))
+            },
+            {"(D'*CLK*RSTB*SETB')",
+                ~BooleanFunction::Var("D") & (BooleanFunction::Var("CLK") & (BooleanFunction::Var("RSTB") & ~BooleanFunction::Var("SETB"))) 
+            },
+            {"(IN5*(IN2+IN1)*(IN3+IN4))'",
+                ~(BooleanFunction::Var("IN5") & ((BooleanFunction::Var("IN2") | BooleanFunction::Var("IN1")) & (BooleanFunction::Var("IN3") | BooleanFunction::Var("IN4"))))
+            }
+        };
+
+        for (const auto& [s, expected] : data) {
+            auto function = BooleanFunction::from_string(s);
+
+            if (function.is_error()) {
+                log_error("netlist", "{}", function.get_error().get());   
+            }
+
+            ASSERT_TRUE(function.is_ok());
+            ASSERT_EQ(function.get(), expected);
+        }
+    }
+
+    TEST(BooleanFunction, Parameters) {
+        const auto a = BooleanFunction::Var("A"),
+                   b = BooleanFunction::Var("B"),
+                   c = BooleanFunction::Var("C");
+
+        EXPECT_EQ((a.clone() & b.clone()).get_parameters(), std::vector<BooleanFunction>({a.clone(), b.clone()}));
+        EXPECT_EQ(((a.clone() & b.clone()) | c.clone()).get_parameters(), std::vector<BooleanFunction>({(a.clone() & b.clone()), c.clone()}));
+    }
+
+    TEST(BooleanFunction, ConstantSimplification) {
+        const auto _0 = BooleanFunction::Const(0, 1),
+                   _1 = BooleanFunction::Const(1, 1),
+                   _A = BooleanFunction::Const(0xA, 4),
+                    a = BooleanFunction::Var("A"),
+                   i1 = BooleanFunction::Index(1, 4),
+                   i2 = BooleanFunction::Index(2, 4),
+                   i4 = BooleanFunction::Index(4, 4);
+                   
+
+        EXPECT_TRUE(_0.has_constant_value(0));
+        EXPECT_TRUE(_1.has_constant_value(1));
+        EXPECT_FALSE(_0.has_constant_value(1));
+        EXPECT_FALSE(_1.has_constant_value(0));
+
+        EXPECT_FALSE(a.is_constant());
+
+        EXPECT_TRUE((~_1.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((~_0.clone()).simplify().has_constant_value(1));
+        EXPECT_TRUE((_0.clone() | _0.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((_0.clone() | _1.clone()).simplify().has_constant_value(1));
+        EXPECT_TRUE((_1.clone() | _1.clone()).simplify().has_constant_value(1));
+        EXPECT_TRUE((_0.clone() & _0.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((_0.clone() & _1.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((_1.clone() & _1.clone()).simplify().has_constant_value(1));    
+        EXPECT_TRUE((_0.clone() ^ _0.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((_0.clone() ^ _1.clone()).simplify().has_constant_value(1));
+        EXPECT_TRUE((_1.clone() ^ _1.clone()).simplify().has_constant_value(0));
+
+        EXPECT_TRUE((_0.clone() + _0.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((_0.clone() + _1.clone()).simplify().has_constant_value(1));
+        EXPECT_TRUE((_1.clone() + _0.clone()).simplify().has_constant_value(1));
+        EXPECT_TRUE((_1.clone() + _1.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((_0.clone() - _0.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((_0.clone() - _1.clone()).simplify().has_constant_value(1));
+        EXPECT_TRUE((_1.clone() - _0.clone()).simplify().has_constant_value(1));
+        EXPECT_TRUE((_1.clone() - _1.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((_0.clone() * _0.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((_0.clone() * _1.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((_1.clone() * _0.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((_1.clone() * _1.clone()).simplify().has_constant_value(1));
+        EXPECT_TRUE((BooleanFunction::Const(100, 8) + BooleanFunction::Const(50, 8)).simplify().has_constant_value(150));
+        EXPECT_TRUE((BooleanFunction::Const(200, 8) + BooleanFunction::Const(60, 8)).simplify().has_constant_value(4));
+        EXPECT_TRUE((BooleanFunction::Const(100, 8) - BooleanFunction::Const(50, 8)).simplify().has_constant_value(50));
+        EXPECT_TRUE((BooleanFunction::Const(50, 8) - BooleanFunction::Const(100, 8)).simplify().has_constant_value(206));
+        EXPECT_TRUE((BooleanFunction::Const(5, 8) * BooleanFunction::Const(5, 8)).simplify().has_constant_value(25));
+        EXPECT_TRUE((BooleanFunction::Const(50, 8) * BooleanFunction::Const(50, 8)).simplify().has_constant_value(196));
+
+        EXPECT_TRUE((a.clone() | _1.clone()).simplify().has_constant_value(1));
+        EXPECT_TRUE((a.clone() ^ a.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((a.clone() & _0.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((a.clone() - a.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((a.clone() * _0.clone()).simplify().has_constant_value(0));
+
+        {
+            {
+                auto res = BooleanFunction::Slice(_A.clone(), i1.clone(), i1.clone(), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+            {
+                auto res = BooleanFunction::Slice(_A.clone(), i2.clone(), i2.clone(), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+            {
+                auto res = BooleanFunction::Slice(_A.clone(), i1.clone(), i2.clone(), 2);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+            {
+                auto res = BooleanFunction::Concat(_1.clone(), _0.clone(), 2);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(2));
+            }
+            {
+                auto res = BooleanFunction::Concat(_A.clone(), _0.clone(), 5);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(20));
+            }
+            {
+                auto res = BooleanFunction::Zext(_1.clone(), i4.clone(), 4);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+            {
+                auto res = BooleanFunction::Sext(_0.clone(), i4.clone(), 4);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+            {
+                auto res = BooleanFunction::Sext(_1.clone(), i4.clone(), 4);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(15));
+            }
+        } 
+
+        {
+            {
+                auto res = BooleanFunction::Eq(_0.clone(), _0.clone(), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+            {
+                auto res = BooleanFunction::Eq(_0.clone(), _1.clone(), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+            {
+                auto res = BooleanFunction::Eq(_1.clone(), _0.clone(), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+            {
+                auto res = BooleanFunction::Eq(_1.clone(), _1.clone(), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+
+            {
+                auto res = BooleanFunction::Slt(BooleanFunction::Const(0x0, 4), BooleanFunction::Const(0xF, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+            {
+                auto res = BooleanFunction::Slt(BooleanFunction::Const(0xE, 4), BooleanFunction::Const(0xF, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+            {
+                auto res = BooleanFunction::Slt(BooleanFunction::Const(0xF, 4), BooleanFunction::Const(0xF, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+            {
+                auto res = BooleanFunction::Slt(BooleanFunction::Const(0xC, 4), BooleanFunction::Const(0x3, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+            {
+                auto res = BooleanFunction::Slt(BooleanFunction::Const(0xF, 4), BooleanFunction::Const(0xA, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+
+            {
+                auto res = BooleanFunction::Sle(BooleanFunction::Const(0x0, 4), BooleanFunction::Const(0xF, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+            {
+                auto res = BooleanFunction::Sle(BooleanFunction::Const(0xE, 4), BooleanFunction::Const(0xF, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+            {
+                auto res = BooleanFunction::Sle(BooleanFunction::Const(0xF, 4), BooleanFunction::Const(0xF, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+            {
+                auto res = BooleanFunction::Sle(BooleanFunction::Const(0xC, 4), BooleanFunction::Const(0x3, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+            {
+                auto res = BooleanFunction::Sle(BooleanFunction::Const(0xF, 4), BooleanFunction::Const(0xA, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+
+            {
+                auto res = BooleanFunction::Ule(BooleanFunction::Const(0x0, 4), BooleanFunction::Const(0xF, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+            {
+                auto res = BooleanFunction::Ule(BooleanFunction::Const(0xE, 4), BooleanFunction::Const(0xF, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+            {
+                auto res = BooleanFunction::Ule(BooleanFunction::Const(0xF, 4), BooleanFunction::Const(0xF, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+            {
+                auto res = BooleanFunction::Ule(BooleanFunction::Const(0xF, 4), BooleanFunction::Const(0xA, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+
+            {
+                auto res = BooleanFunction::Ult(BooleanFunction::Const(0x0, 4), BooleanFunction::Const(0xF, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+            {
+                auto res = BooleanFunction::Ult(BooleanFunction::Const(0xE, 4), BooleanFunction::Const(0xF, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
+            {
+                auto res = BooleanFunction::Ult(BooleanFunction::Const(0xF, 4), BooleanFunction::Const(0xF, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+            {
+                auto res = BooleanFunction::Ult(BooleanFunction::Const(0xF, 4), BooleanFunction::Const(0xA, 4), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+
+            {
+                auto res = BooleanFunction::Ite(_0.clone(), _1.clone(), _0.clone(), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+            }
+            {
+                auto res = BooleanFunction::Ite(_1.clone(), _1.clone(), _0.clone(), 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
+            }
         }
 
-        virtual void TearDown() {
+    }
+
+    TEST(BooleanFunction, SimplificationRules) {
+        const auto a = BooleanFunction::Var("A"),
+                   b = BooleanFunction::Var("B"),
+                   c = BooleanFunction::Var("C"),
+                   d = BooleanFunction::Var("D", 16),
+                   e = BooleanFunction::Var("E", 16),
+                   f = BooleanFunction::Var("F", 16),
+                  _0 = BooleanFunction::Const(0, 1),
+                  _1 = BooleanFunction::Const(1, 1),
+                  i0 = BooleanFunction::Index(0, 1);
+
+        ////////////////////////////////////////////////////////////////////////
+        // AND RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // (a & 0)   =>    0
+        EXPECT_EQ((a.clone() & _0.clone()).simplify(), _0.clone());
+        // (a & 1)   =>    a
+        EXPECT_EQ((a.clone() & _1.clone()).simplify(), a.clone());
+        // (a & a)   =>    a
+        EXPECT_EQ((a.clone() & a.clone()).simplify(), a.clone());
+        // (a & ~a)  =>    0
+        EXPECT_EQ((a.clone() & ~a.clone()).simplify(), _0.clone());
+
+        // (a & b) & a   =>   a & b
+        EXPECT_EQ(((a.clone() & b.clone()) & a.clone()).simplify(), a.clone() & b.clone());
+        // (a & b) & b   =>   a & b
+        EXPECT_EQ(((a.clone() & b.clone()) & b.clone()).simplify(), a.clone() & b.clone());
+        // a & (b & a)   =>   a & b
+        EXPECT_EQ((a.clone() & (b.clone() & a.clone())).simplify(), a.clone() & b.clone());
+        // b & (b & a)   =>   a & b
+        EXPECT_EQ((b.clone() & (b.clone() & a.clone())).simplify(), a.clone() & b.clone());
+
+        // a & (a | b)   =>    a
+        EXPECT_EQ((a.clone() & (a.clone() | b.clone())).simplify(), a.clone());
+        // b & (a | b)   =>    b
+        EXPECT_EQ((b.clone() & (a.clone() | b.clone())).simplify(), b.clone());
+        // (a | b) & a   =>    a
+        EXPECT_EQ(((a.clone() | b.clone()) & a.clone()).simplify(), a.clone());
+        // (a | b) & b   =>    b
+        EXPECT_EQ(((a.clone() | b.clone()) & b.clone()).simplify(), b.clone());
+
+        // (~a & b) & a   =>   0
+        EXPECT_EQ(((~a.clone() & b.clone()) & a.clone()).simplify(), _0.clone());
+        // (a & ~b) & b   =>   0
+        EXPECT_EQ(((a.clone() & ~b.clone()) & b.clone()).simplify(), _0.clone());
+        // a & (b & ~a)   =>   0
+        EXPECT_EQ((a.clone() & (b.clone() & ~a.clone())).simplify(), _0.clone());
+        // b & (~b & a)   =>   0
+        EXPECT_EQ((b.clone() & (~b.clone() & a.clone())).simplify(), _0.clone());
+
+        // a & (~a | b)   =>    a & b
+        EXPECT_EQ((a.clone() & (~a.clone() | b.clone())).simplify(), a.clone() & b.clone());
+        // b & (a | ~b)   =>    a & b
+        EXPECT_EQ((b.clone() & (a.clone() | ~b.clone())).simplify(), a.clone() & b.clone());
+        // (~a | b) & a   =>    a & b
+        EXPECT_EQ(((~a.clone() | b.clone()) & a.clone()).simplify(), a.clone() & b.clone());
+        // (a | ~b) & b   =>    a & b
+        EXPECT_EQ(((a.clone() | ~b.clone()) & b.clone()).simplify(), a.clone() & b.clone());
+
+        ////////////////////////////////////////////////////////////////////////
+        // OR RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // (a | 0)   =>    a
+        EXPECT_EQ((a.clone() | _0.clone()).simplify(), a.clone());
+        // (a | 1)   =>    1
+        EXPECT_EQ((a.clone() | _1.clone()).simplify(), _1.clone());
+        // (a | a)   =>    a
+        EXPECT_EQ((a.clone() | a.clone()).simplify(), a.clone());
+        // (a | ~a)  =>    1
+        EXPECT_EQ((a.clone() | ~a.clone()).simplify(), _1.clone());
+
+        // a | (a | b)   =>    a | b
+        EXPECT_EQ((a.clone() | (a.clone() | b.clone())).simplify(), a.clone() | b.clone());
+        // b | (a | b)   =>    a | b
+        EXPECT_EQ((b.clone() | (a.clone() | b.clone())).simplify(), a.clone() | b.clone());
+        // (a | b) | a   =>    a | b
+        EXPECT_EQ(((a.clone() | b.clone()) | a.clone()).simplify(), a.clone() | b.clone());
+        // (a | b) | b   =>    a | b
+        EXPECT_EQ(((a.clone() | b.clone()) | b.clone()).simplify(), a.clone() | b.clone());
+
+        // (a & b) | a   =>   a
+        EXPECT_EQ(((a.clone() & b.clone()) | a.clone()).simplify(), a.clone());
+        // (a & b) | b   =>   b
+        EXPECT_EQ(((a.clone() & b.clone()) | b.clone()).simplify(), b.clone());
+        // a | (b & a)   =>   a
+        EXPECT_EQ((a.clone() | (b.clone() & a.clone())).simplify(), a.clone());
+        // b | (b & a)   =>   b
+        EXPECT_EQ((b.clone() | (b.clone() & a.clone())).simplify(), b.clone());
+
+        // a | (~a | b)   =>   1
+        EXPECT_EQ((a.clone() | (~a.clone() | b.clone())).simplify(), _1.clone());
+        // b | (a | ~b)   =>   1
+        EXPECT_EQ((b.clone() | (a.clone() | ~b.clone())).simplify(), _1.clone());
+        // (~a | b) | a   =>   1
+        EXPECT_EQ(((~a.clone() | b.clone()) | a.clone()).simplify(), _1.clone());
+        // (a | ~b) | b   =>   1
+        EXPECT_EQ(((a.clone() | ~b.clone()) | b.clone()).simplify(), _1.clone());
+
+        // (~a & b) | a   =>   a | b
+        EXPECT_EQ(((~a.clone() & b.clone()) | a.clone()).simplify(), a.clone() | b.clone());
+        // (a & ~b) | b   =>   a | b
+        EXPECT_EQ(((a.clone() & ~b.clone()) | b.clone()).simplify(), a.clone() | b.clone());
+        // a | (b & ~a)   =>   a | b
+        EXPECT_EQ((a.clone() | (b.clone() & ~a.clone())).simplify(), a.clone() | b.clone());
+        // b | (~b & a)   =>   a | b
+        EXPECT_EQ((b.clone() | (~b.clone() & a.clone())).simplify(), a.clone() | b.clone());
+
+        ////////////////////////////////////////////////////////////////////////
+        // NOT RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // ~~a   =>   a
+        EXPECT_EQ((~(~a.clone())).simplify(), a.clone());
+        // ~(~a | ~b)   =>   a & b
+        EXPECT_EQ((~(~a.clone() | ~b.clone())).simplify(), a.clone() & b.clone());
+        // ~(~a & ~b)   =>   a | b
+        EXPECT_EQ((~(~a.clone() & ~b.clone())).simplify(), a.clone() | b.clone());
+
+        ////////////////////////////////////////////////////////////////////////
+        // XOR RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // (a ^ 0)   =>    a
+        EXPECT_EQ((a.clone() ^ _0.clone()).simplify(), a.clone());
+        // (a ^ 1)   =>    ~a
+        EXPECT_EQ((a.clone() ^ _1.clone()).simplify(), ~a.clone());
+        // (a ^ a)   =>    0
+        EXPECT_EQ((a.clone() ^ a.clone()).simplify(), _0.clone());
+        // (a ^ ~a)  =>    1
+        EXPECT_EQ((a.clone() ^ ~a.clone()).simplify(), _1.clone());
+
+        ////////////////////////////////////////////////////////////////////////
+        // ADD RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // (a + 0)   =>    a
+        EXPECT_EQ((a.clone() + _0.clone()).simplify(), a.clone());
+
+        ////////////////////////////////////////////////////////////////////////
+        // SUB RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // (a - 0)   =>    a
+        EXPECT_EQ((a.clone() - _0.clone()).simplify(), a.clone());
+        // (a - a)   =>    0
+        EXPECT_EQ((a.clone() - a.clone()).simplify(), _0.clone());
+
+        ////////////////////////////////////////////////////////////////////////
+        // MUL RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // (a * 0)   =>    0
+        EXPECT_EQ((a.clone() * _0.clone()).simplify(), _0.clone());
+        // (a * 1)   =>    a
+        EXPECT_EQ((a.clone() * _1.clone()).simplify(), a.clone());
+
+        ////////////////////////////////////////////////////////////////////////
+        // SDIV RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // (a /s 1)   =>    a
+        {
+            auto res = BooleanFunction::Sdiv(a.clone(), _1.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), a.clone());
+        }
+        // (a /s a)   =>    1
+        {
+            auto res = BooleanFunction::Sdiv(a.clone(), a.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), _1.clone());
         }
 
-        // Test Debug only
-        void print_bf(BooleanFunction bf) {
-            std::cout << "\n-------------\n" << bf << "\n-------------\n";
+        ////////////////////////////////////////////////////////////////////////
+        // UDIV RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // (a /s 1)   =>    a
+        {
+            auto res = BooleanFunction::Udiv(a.clone(), _1.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), a.clone());
+        }
+        // (a /s a)   =>    1
+        {
+            auto res = BooleanFunction::Udiv(a.clone(), a.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), _1.clone());
         }
 
-        void printTruthTable(BooleanFunction bf, std::vector<std::string> vars) {
-            std::cout << std::endl;
-            for (auto i : vars) {
-                std::cout << i;
-            }
-            std::cout << "|O" << std::endl;
-            std::vector<BooleanFunction::Value> t_table = bf.get_truth_table(vars);
-            for (unsigned int i = 0; i < vars.size() + 2; i++) std::cout << "-";
-            std::cout << std::endl;
-            for (unsigned int i = 0; i < t_table.size(); i++) {
-                for (unsigned int j = 0; j < vars.size(); j++) {
-                    std::cout << ((((i >> j) & 1) > 0) ? "1" : "0");
-                }
-                std::cout << "|";
-                switch (t_table[i]) {
-                    case BooleanFunction::ONE:std::cout << "1";
-                        break;
-                    case BooleanFunction::ZERO:std::cout << "0";
-                        break;
-                    default:std::cout << "X";
-                        break;
-                }
-                std::cout << std::endl;
-            }
+        ////////////////////////////////////////////////////////////////////////
+        // SREM RULES
+        ////////////////////////////////////////////////////////////////////////
 
+        // (a %s 1)   =>    0
+        {
+            auto res = BooleanFunction::Srem(a.clone(), _1.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), _0.clone());
+        }
+        // (a %s a)   =>    0
+        {
+            auto res = BooleanFunction::Srem(a.clone(), a.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), _0.clone());
         }
 
-        // Remove the spaces from a string
-        std::string no_space(std::string s) {
-            return utils::replace<std::string>(s, " ", "");
+        ////////////////////////////////////////////////////////////////////////
+        // UREM RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // (a % 1)   =>    0
+        {
+            auto res = BooleanFunction::Urem(a.clone(), _1.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), _0.clone());
+        }
+        // (a % a)   =>    0
+        {
+            auto res = BooleanFunction::Urem(a.clone(), a.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), _0.clone());
         }
 
-        /**
-         * Create a string to value map, that can be used by the evaluate function. Each variable MUST be one character long.
-         * I.e: ("ABC","10X") creates the map: ("A" -> ONE, "B" -> ZERO, "C" -> X).
-         *
-         * If the inputs are invalid, an empty map s returned.
-         *
-         * @param variables - the names of the variables next to each others
-         * @param values - the values the variables should be set to
-         * @returns a variables to values map, that can be interpreted by the boolean funcitons evaluate function.
-         */
-        std::unordered_map<std::string, BooleanFunction::Value> create_input_map(std::string variables, std::string values) {
-            std::unordered_map<std::string, BooleanFunction::Value> res;
-            // Booth strings must be equal in length
-            if (variables.size() != values.size()) {
-                return res;
-            }
-            for (int c = 0; c < variables.size(); c++) {
-                std::string var = std::string(1, variables.at(c));
-                std::string val = std::string(1, values.at(c));
-                // Can't set the same variable twice
-                if (res.find(var) != res.end()) {
-                    return {};
-                }
-                if (val == "0") {
-                    res.insert(std::pair<std::string, BooleanFunction::Value>(var, BooleanFunction::ZERO));
-                } else if (val == "1") {
-                    res.insert(std::pair<std::string, BooleanFunction::Value>(var, BooleanFunction::ONE));
-                } else if (val == "x" || val == "X") {
-                    res.insert(std::pair<std::string, BooleanFunction::Value>(var, BooleanFunction::X));
-                }
-                    // If the values string contains an illegal character, exit
-                else {
-                    return {};
-                }
-            }
-            return res;
+        ////////////////////////////////////////////////////////////////////////
+        // SLICE RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // SLICE(p, 0, 0)   =>   p (if p is 1-bit wide)
+        {
+            auto res = BooleanFunction::Slice(a.clone(), i0.clone(), i0.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), a.clone());
         }
 
-    };
+        ////////////////////////////////////////////////////////////////////////
+        // EQUALITY RULES
+        ////////////////////////////////////////////////////////////////////////
 
-    /**
-     * Testing move and copy constructors
-     */
-    TEST_F(BooleanFunctionTest, check_constructor_types) {
-        TEST_START
-            {
-                EXPECT_EQ( std::is_copy_constructible<BooleanFunction>::value, true);
-                EXPECT_EQ( std::is_copy_assignable<BooleanFunction>::value, true);
-                EXPECT_EQ( std::is_move_constructible<BooleanFunction>::value, true);
-                EXPECT_EQ( std::is_move_assignable<BooleanFunction>::value, true);
-            }
+        // X == X   =>   1
+        {
+            auto res = BooleanFunction::Eq(a.clone(), a.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), _1.clone());
+        }
 
-        TEST_END
+        ////////////////////////////////////////////////////////////////////////
+        // SIGNED LESS THAN RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // X <=s X   =>   1
+        {
+            auto res = BooleanFunction::Sle(a.clone(), a.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), _1.clone());
+        }
+
+        ////////////////////////////////////////////////////////////////////////
+        // SIGNED LESS THAN RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // X <s X   =>   0
+        {
+            auto res = BooleanFunction::Slt(a.clone(), a.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), _0.clone());
+        }
+
+        ////////////////////////////////////////////////////////////////////////
+        // UNSIGNED LESS THAN RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // X <= X   =>   1
+        {
+            auto res = BooleanFunction::Ule(a.clone(), a.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), _1.clone());
+        }
+
+        ////////////////////////////////////////////////////////////////////////
+        // UNSIGNED LESS THAN RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // X < 0   =>   0
+        {
+            auto res = BooleanFunction::Ult(a.clone(), _0.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), _0.clone());
+        }
+        // X < X   =>   0
+        {
+            auto res = BooleanFunction::Ult(a.clone(), a.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), _0.clone());
+        }
+
+        ////////////////////////////////////////////////////////////////////////
+        // IF-THEN-ELSE RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // ITE(0, a, b)  =>  b
+        {
+            auto res = BooleanFunction::Ite(_0.clone(), a.clone(), b.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), b.clone());
+        }
+        // ITE(1, a, b)  =>  a
+        {
+            auto res = BooleanFunction::Ite(_1.clone(), a.clone(), b.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), a.clone());
+        }
+        // ITE(a, b, b)  =>  b
+        {
+            auto res = BooleanFunction::Ite(a.clone(), b.clone(), b.clone(), 1);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().simplify(), b.clone());
+        }
+
+        ////////////////////////////////////////////////////////////////////////
+        // CONCAT RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // CONCAT(SLICE(X, j+1, k), SLICE(X, i, j)) => SLICE(X, i, k)
+        {
+            auto s1 = BooleanFunction::Slice(d.clone(), BooleanFunction::Index(0, d.size()), BooleanFunction::Index(7, d.size()), 8);
+            auto s2 = BooleanFunction::Slice(d.clone(), BooleanFunction::Index(8, d.size()), BooleanFunction::Index(15, d.size()), 8);
+            auto s3 = BooleanFunction::Slice(d.clone(), BooleanFunction::Index(0, d.size()), BooleanFunction::Index(15, d.size()), 16);
+
+            ASSERT_TRUE(s1.is_ok());
+            ASSERT_TRUE(s2.is_ok());
+            ASSERT_TRUE(s3.is_ok());
+
+            auto res = BooleanFunction::Concat(s2.get(), s1.get(), s1.get().size() + s2.get().size());
+
+            ASSERT_TRUE(res.is_ok());
+
+            EXPECT_EQ(res.get().simplify(), s3.get());
+        }
+
+        // CONCAT(SLICE(X, 0, 7), CONCAT(SLICE(X, 8, 15), Y)) => CONCAT(CONCAT(SLICE(X, 0, 7), SLICE(X, 8, 15)), Y))
+        {
+            auto s1 = BooleanFunction::Slice(d.clone(), BooleanFunction::Index(0, d.size()), BooleanFunction::Index(7, d.size()), 8);
+            auto s2 = BooleanFunction::Slice(d.clone(), BooleanFunction::Index(8, d.size()), BooleanFunction::Index(15, d.size()), 8);
+
+            ASSERT_TRUE(s1.is_ok());
+            ASSERT_TRUE(s2.is_ok());
+
+            auto c1 = BooleanFunction::Concat(s2.get().clone(), a.clone(), s2.get().size() + a.size());
+            auto c2 = BooleanFunction::Concat(s1.get().clone(), s2.get().clone(), s1.get().size() + s2.get().size());
+
+            ASSERT_TRUE(c1.is_ok());
+            ASSERT_TRUE(c2.is_ok());
+
+            auto c3 = BooleanFunction::Concat(c2.get().clone(), a.clone(), c2.get().size() + a.size());
+
+            auto res = BooleanFunction::Concat(s1.get().clone(), c1.get().clone(), s1.get().size() + c1.get().size());
+
+            ASSERT_TRUE(c3.is_ok());
+            ASSERT_TRUE(res.is_ok());
+
+            EXPECT_EQ(res.get().simplify(), c3.get());
+        }
+
+        // CONCAT(SLICE(X, 0, 7), CONCAT(SLICE(X, 8, 15), SLICE(Z, 8, 15))) => CONCAT(CONCAT(SLICE(X, 0, 7), SLICE(X, 8, 15)), SLICE(Z, 8, 15)))
+        {
+            auto s1 = BooleanFunction::Slice(d.clone(), BooleanFunction::Index(0, d.size()), BooleanFunction::Index(7, d.size()), 8);
+            auto s2 = BooleanFunction::Slice(d.clone(), BooleanFunction::Index(8, d.size()), BooleanFunction::Index(15, d.size()), 8);
+            auto s3 = BooleanFunction::Slice(e.clone(), BooleanFunction::Index(8, e.size()), BooleanFunction::Index(15, e.size()), 8);
+
+            ASSERT_TRUE(s1.is_ok());
+            ASSERT_TRUE(s2.is_ok());
+            ASSERT_TRUE(s3.is_ok());
+
+            auto c1 = BooleanFunction::Concat(s2.get().clone(), s3.get().clone(), s2.get().size() + s3.get().size());
+            auto c2 = BooleanFunction::Concat(s1.get().clone(), s2.get().clone(), s1.get().size() + s2.get().size());
+
+            ASSERT_TRUE(c1.is_ok());
+            ASSERT_TRUE(c2.is_ok());
+
+            auto c3 = BooleanFunction::Concat(c2.get().clone(), s3.get().clone(), c2.get().size() + s3.get().size());
+
+            auto res = BooleanFunction::Concat(s1.get().clone(), c1.get().clone(), s1.get().size() + c1.get().size());
+
+            ASSERT_TRUE(c3.is_ok());
+            ASSERT_TRUE(res.is_ok());
+
+            EXPECT_EQ(res.get().simplify(), c3.get());
+        }
+
+        // CONCAT(SLICE(X, 0, 7), CONCAT(SLICE(X, 8, 15), SLICE(X, 8, 15))) => CONCAT(SLICE(X, 0, 7), CONCAT(SLICE(X, 8, 15), SLICE(X, 8, 15)))
+        {
+            auto s1 = BooleanFunction::Slice(d.clone(), BooleanFunction::Index(0, d.size()), BooleanFunction::Index(7, d.size()), 8);
+            auto s2 = BooleanFunction::Slice(d.clone(), BooleanFunction::Index(8, d.size()), BooleanFunction::Index(15, d.size()), 8);
+            auto s3 = BooleanFunction::Slice(d.clone(), BooleanFunction::Index(8, d.size()), BooleanFunction::Index(15, d.size()), 8);
+
+            ASSERT_TRUE(s1.is_ok());
+            ASSERT_TRUE(s2.is_ok());
+            ASSERT_TRUE(s3.is_ok());
+
+            auto c1 = BooleanFunction::Concat(s2.get().clone(), s3.get().clone(), s2.get().size() + s3.get().size());
+
+            ASSERT_TRUE(c1.is_ok());
+
+            auto res = BooleanFunction::Concat(s1.get().clone(), c1.get().clone(), s1.get().size() + c1.get().size());
+
+            ASSERT_TRUE(res.is_ok());
+
+            EXPECT_EQ(res.get().simplify(), res.get());
+        }
+
+        // CONCAT(SLICE(X, 8, 15), CONCAT(SLICE(X, 0, 7), SLICE(Y, 0, 7))) => CONCAT(SLICE(X, 15, 0), SLICE(Y, 0, 7))
+        {
+            auto s1 = BooleanFunction::Slice(d.clone(), BooleanFunction::Index(0, d.size()), BooleanFunction::Index(7, d.size()), 8);
+            auto s2 = BooleanFunction::Slice(d.clone(), BooleanFunction::Index(8, d.size()), BooleanFunction::Index(15, d.size()), 8);
+            auto s3 = BooleanFunction::Slice(d.clone(), BooleanFunction::Index(0, d.size()), BooleanFunction::Index(15, d.size()), 16);
+            auto s4 = BooleanFunction::Slice(e.clone(), BooleanFunction::Index(0, e.size()), BooleanFunction::Index(7, e.size()), 8);
+
+            ASSERT_TRUE(s1.is_ok());
+            ASSERT_TRUE(s2.is_ok());
+            ASSERT_TRUE(s3.is_ok());
+            ASSERT_TRUE(s4.is_ok());
+
+            auto c1 = BooleanFunction::Concat(s1.get().clone(), s4.get().clone(), s1.get().size() + s4.get().size());
+            auto c2 = BooleanFunction::Concat(s3.get().clone(), s4.get().clone(), s3.get().size() + s4.get().size());
+
+            ASSERT_TRUE(c1.is_ok());
+            ASSERT_TRUE(c2.is_ok());
+
+            auto res = BooleanFunction::Concat(s2.get().clone(), c1.get().clone(), s2.get().size() + c1.get().size());
+
+            ASSERT_TRUE(res.is_ok());
+
+            EXPECT_EQ(res.get().simplify(), c2.get());
+        }
+
+        ////////////////////////////////////////////////////////////////////////
+        // GENERAL SIMPLIFICATION RULES
+        ////////////////////////////////////////////////////////////////////////
+
+        // (a & ~a) | (b & ~b)  =>   0
+        EXPECT_EQ(((a.clone() & ~a.clone()) | (b.clone() & ~b.clone())).simplify(), _0.clone());
+        // (a & b) | (~a & b)   =>   b
+        EXPECT_EQ(((a.clone() & b.clone()) | (~a.clone() & b.clone())).simplify(), b.clone());
+        // (a & ~b) | (~a & ~b)  =>  ~b
+        EXPECT_EQ(((a.clone() & ~b.clone()) | (~a.clone() & ~b.clone())).simplify(), ~b.clone());
+
+        // (a & b) | (~a & b) | (a & ~b) | (~a & ~b)   =>   1
+        EXPECT_EQ(((a.clone() & b.clone()) | (~a.clone() & b.clone()) | (a.clone() & ~b.clone()) | (~a.clone() & ~b.clone())).simplify(), _1.clone());
+        // (a | b) | (b & c)   => a | b
+        EXPECT_EQ(((a.clone() | b.clone()) | (b.clone() & c.clone())).simplify(), a.clone() | b.clone());    
+        // (a & c) | (b & ~c) | (a & b)   =>   (b | c) & (a | ~c)
+        EXPECT_EQ(((a.clone() & c.clone()) | (b.clone() & ~c.clone()) | (a.clone() & b.clone())).simplify(), (b.clone() | c.clone()) & (a.clone() | ~c.clone()));
     }
 
-    /**
-     * Testing the different constructors and the main functionality, by implement the following boolean function:
-     *
-     *  f(A,B,C) = ( (A AND B) OR C ) XOR 1
-     *
-     * Functions: constructor, evaluate, get_truth_table, AND, XOR, OR
-     */
-    TEST_F(BooleanFunctionTest, check_main_example) {
-        TEST_START
-            {
-                // Constuctor with variables
-                BooleanFunction a("A");
-                BooleanFunction b("B");
-                BooleanFunction c("C");
-                // Constructor with constant
-                BooleanFunction _1(ONE);
-
-                // Combining them
-                BooleanFunction r = ((a & b) | c) ^_1;
-
-                EXPECT_EQ(r(create_input_map("ABC", "000")), ONE);
-                EXPECT_EQ(r(create_input_map("ABC", "001")), ZERO);
-                EXPECT_EQ(r(create_input_map("ABC", "010")), ONE);
-                EXPECT_EQ(r(create_input_map("ABC", "011")), ZERO);
-
-                EXPECT_EQ(r(create_input_map("ABC", "100")), ONE);
-                EXPECT_EQ(r(create_input_map("ABC", "101")), ZERO);
-                EXPECT_EQ(r(create_input_map("ABC", "110")), ZERO);
-                EXPECT_EQ(r(create_input_map("ABC", "111")), ZERO);
-
-                std::vector<BooleanFunction::Value>
-                    truth_table = r.get_truth_table(std::vector<std::string>({"C", "B", "A"}));
-
-                EXPECT_EQ(truth_table,
-                          std::vector<BooleanFunction::Value>({ONE, ZERO, ONE, ZERO, ONE, ZERO, ZERO, ZERO}));
-            }
-
-        TEST_END
-    }
-
-    /**
-     * Testing the to_string function
-     *
-     * Functions: to_string
-     */
-    TEST_F(BooleanFunctionTest, check_to_string) {
-        TEST_START
-            BooleanFunction a("A");
-            BooleanFunction b("B");
-            BooleanFunction c("C");
-            BooleanFunction _0(ZERO);
-            BooleanFunction _1(ONE);
-
-            // Check some bf strings
-            std::vector<std::pair<BooleanFunction, std::string>> test_cases =
-                {
-                    {(a & b), "A & B"},
-                    {(a & (b | c)), "A & (B | C)"},
-                    {((a & b) ^ (b & c)), "(A & B) ^ (B & C)"},
-                    {(a ^ _1), "A ^ 1"},
-                    {(a ^ _0), "A ^ 0"},
-                    {(~a), "!A"}
-                };
-
-            for (auto tc : test_cases) {
-                EXPECT_EQ(no_space(tc.first.to_string()), no_space(tc.second));
-            }
-
-            // Check an empty boolean function
-            EXPECT_TRUE(test_utils::string_contains_substring(BooleanFunction().to_string(), "empty"));
-
-        TEST_END
-    }
-
-    /**
-     * Testing the integer values for enum BooleanFunction::Value.
-     */
-    TEST_F(BooleanFunctionTest, check_enum_values) {
-        TEST_START
-            EXPECT_EQ(static_cast<BooleanFunction::Value>(0), BooleanFunction::Value::ZERO);
-            EXPECT_EQ(static_cast<BooleanFunction::Value>(1), BooleanFunction::Value::ONE);
-        TEST_END
-    }
-
-    /**
-     * Testing the functions is_constant_one and is_constant_zero, by passing some sample inputs
-     *
-     * Functions: is_constant_one, is_constant_zero
-     */
-    TEST_F(BooleanFunctionTest, check_is_constant) {
-        TEST_START
-            BooleanFunction a("A");
-            BooleanFunction b("B");
-            BooleanFunction c("C");
-            BooleanFunction _0(ZERO);
-            BooleanFunction _1(ONE);
-            {
-                // Some samples that are constant zero
-                EXPECT_TRUE((_0).is_constant_zero());
-                EXPECT_TRUE((~_1).is_constant_zero());
-                EXPECT_TRUE((a ^ a).is_constant_zero());
-                EXPECT_TRUE((a & (~a)).is_constant_zero());
-                EXPECT_TRUE((_0 | _0).is_constant_zero());
-            }
-            {
-                // Some samples that are constant one
-                EXPECT_TRUE((_1).is_constant_one());
-                EXPECT_TRUE((~_0).is_constant_one());
-                EXPECT_TRUE((a ^ (~a)).is_constant_one());
-                EXPECT_TRUE((a | (~a)).is_constant_one());
-                EXPECT_TRUE((_1 & _1).is_constant_one());
-            }
-            {
-                // Some samples that are NOT constant zero
-                EXPECT_FALSE((_1).is_constant_zero());
-                EXPECT_FALSE((a).is_constant_zero());
-                EXPECT_FALSE((a ^ a ^ b).is_constant_zero());
-                EXPECT_FALSE((a & b).is_constant_zero());
-                EXPECT_FALSE((_0 | _1).is_constant_zero());
-            }
-            {
-                // Some samples that are NOT constant one
-                EXPECT_FALSE((_0).is_constant_one());
-                EXPECT_FALSE((a).is_constant_one());
-                EXPECT_FALSE((a ^ b ^ c).is_constant_one());
-                EXPECT_FALSE((a & b).is_constant_one());
-                EXPECT_FALSE((_0 & _1).is_constant_one());
-            }
-
-        TEST_END
-    }
-
-    /**
-     * Testing the is_empty function
-     *
-     * Functions: is_empty
-     */
-    TEST_F(BooleanFunctionTest, check_is_empty) {
-        TEST_START
-            {
-                // The boolean function is not empty
-                BooleanFunction not_empty("A");
-                EXPECT_FALSE(not_empty.is_empty());
-            }
-            {
-                // The boolean function is empty
-                BooleanFunction empty;
-                EXPECT_TRUE(empty.is_empty());
-            }
-        TEST_END
-    }
-
-    /**
-     * Testing the get_variables function
-     *
-     * Functions: get_variables
-     */
-    TEST_F(BooleanFunctionTest, check_get_variables) {
-        TEST_START
-            {
-                // Get variables
-                BooleanFunction a("A");
-                BooleanFunction b("B");
-                BooleanFunction c("C");
-                BooleanFunction a_2("A");
-                EXPECT_EQ((a | b | c | a_2).get_variables(), std::vector<std::string>({"A", "B", "C"}));
-            }
-        TEST_END
-    }
-
-    /**
-     * Testing comparation operator
-     *
-     * Functions: operator==, operator!=
-     */
-    TEST_F(BooleanFunctionTest, check_compare_operator) {
-        TEST_START
-            // Tests for ==
-            {
-                // Compare the same object
-                BooleanFunction a("A");
-                EXPECT_TRUE((a == a));
-            }
-            {
-                // The boolean functions are equivalent in syntax
-                BooleanFunction a("A");
-                BooleanFunction b("B");
-                EXPECT_TRUE(((a | b) == (a | b)));
-            }
-            {
-                // The boolean functions are equivalent in semantic (but not in syntax)
-                BooleanFunction a("A");
-                BooleanFunction b("B");
-                // EXPECT_TRUE(((a|b|b) == (a|b)));
-            }
-            {
-                // Compare two empty expressions
-                BooleanFunction a = BooleanFunction();
-                EXPECT_TRUE(a == BooleanFunction());
-            }
-            // Tests for !=
-            {
-                // The boolean function are equivalent in semantic, but do not share the same variable
-                BooleanFunction a("A");
-                BooleanFunction b("B");
-                EXPECT_TRUE((a != b));
-            }
-            {
-                // Compare boolean functions of different types (constant, variable, expression)
-                BooleanFunction a("A");
-                BooleanFunction b("B");
-                BooleanFunction _1(ONE);
-                EXPECT_TRUE((a != (a | (b & _1)))); // variable - expression
-                EXPECT_TRUE((a != _1)); // variable - constant
-                EXPECT_TRUE(((a | (b & _1)) != _1)); // expression - constant
-            }
-            {
-                // Compare semantically different expressions
-                BooleanFunction a("A");
-                BooleanFunction b("B");
-                EXPECT_TRUE(((a & b) != (a | b)));
-                EXPECT_TRUE(((a ^ b) != (a & b)));
-                EXPECT_TRUE(((a ^ b) != ((~a) & b)));
-            }
-        TEST_END
-    }
-
-    /**
-     * Testing the integrity of the optimize function
-     *
-     * Functions: optimize
-     */
-    TEST_F(BooleanFunctionTest, check_optimize_correctness)
+    TEST(BooleanFunction, SimplificationPerformance)
     {
-        TEST_START
-            BooleanFunction a("A");
-            BooleanFunction b("B");
-            BooleanFunction c("C");
-            BooleanFunction _0(ZERO);
-            BooleanFunction _1(ONE);
-            {
-                // Optimize some boolean functions and compare their truth_table
-                BooleanFunction bf = (~(a ^ b & c) | (b | c & _1)) ^((a & b) | (a | b | c));
-                EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"C", "B", "A"})),
-                          bf.optimize().get_truth_table(std::vector<std::string>({"C", "B", "A"})));
-            }
-            {
-                // Optimize some boolean functions and compare their truth_table
-                BooleanFunction bf = (a | b | c);
-                EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"C", "B", "A"})),
-                          bf.optimize().get_truth_table(std::vector<std::string>({"C", "B", "A"})));
-            }
-            {
-                // Optimize a boolean function that is constant one
-                BooleanFunction bf = (a & b) | (~a & b) | (a & ~b) | (~a & ~b);
-                EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"A", "B"})),
-                          bf.optimize().get_truth_table(std::vector<std::string>({"A", "B"})));
-            }
-            {
-                // Optimize a boolean function that is constant zero
-                BooleanFunction bf = (a & ~a) | (b & ~b);
-                EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"A", "B"})),
-                          bf.optimize().get_truth_table(std::vector<std::string>({"A", "B"})));
-            }
-        TEST_END
+        const auto start = std::chrono::system_clock::now();
+
+        const auto function = BooleanFunction::from_string("((((((((((((((((((((((((((((((((0b0 | (((((I0 & (! I1)) & (! I2)) & (! I3)) & (! I4)) & (! I5))) | ((((((! I0) & I1) & (! I2)) & (! I3)) & (! I4)) & (! I5))) | (((((I0 & I1) & (! I2)) & (! I3)) & (! I4)) & (! I5))) | ((((((! I0) & (! I1)) & I2) & (! I3)) & (! I4)) & (! I5))) | (((((I0 & I1) & I2) & (! I3)) & (! I4)) & (! I5))) | (((((I0 & (! I1)) & (! I2)) & I3) & (! I4)) & (! I5))) | (((((I0 & I1) & (! I2)) & I3) & (! I4)) & (! I5))) | ((((((! I0) & (! I1)) & I2) & I3) & (! I4)) & (! I5))) | (((((I0 & I1) & I2) & I3) & (! I4)) & (! I5))) | ((((((! I0) & (! I1)) & (! I2)) & (! I3)) & I4) & (! I5))) | (((((I0 & (! I1)) & (! I2)) & (! I3)) & I4) & (! I5))) | ((((((! I0) & (! I1)) & (! I2)) & I3) & I4) & (! I5))) | (((((I0 & (! I1)) & (! I2)) & I3) & I4) & (! I5))) | (((((I0 & I1) & (! I2)) & I3) & I4) & (! I5))) | ((((((! I0) & I1) & I2) & I3) & I4) & (! I5))) | ((((((! I0) & I1) & (! I2)) & (! I3)) & (! I4)) & I5)) | ((((((! I0) & (! I1)) & I2) & (! I3)) & (! I4)) & I5)) | ((((((! I0) & I1) & I2) & (! I3)) & (! I4)) & I5)) | ((((((! I0) & (! I1)) & (! I2)) & I3) & (! I4)) & I5)) | (((((I0 & (! I1)) & (! I2)) & I3) & (! I4)) & I5)) | (((((I0 & I1) & (! I2)) & I3) & (! I4)) & I5)) | ((((((! I0) & (! I1)) & I2) & I3) & (! I4)) & I5)) | ((((((! I0) & (! I1)) & (! I2)) & (! I3)) & I4) & I5)) | (((((I0 & (! I1)) & (! I2)) & (! I3)) & I4) & I5)) | ((((((! I0) & I1) & (! I2)) & (! I3)) & I4) & I5)) | ((((((! I0) & I1) & I2) & (! I3)) & I4) & I5)) | (((((I0 & I1) & I2) & (! I3)) & I4) & I5)) | (((((I0 & (! I1)) & (! I2)) & I3) & I4) & I5)) | ((((((! I0) & I1) & (! I2)) & I3) & I4) & I5)) | ((((((! I0) & (! I1)) & I2) & I3) & I4) & I5)) | (((((I0 & (! I1)) & I2) & I3) & I4) & I5)) | (((((I0 & I1) & I2) & I3) & I4) & I5))").get();
+        const auto simplified = function.simplify();
+
+        const auto duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
     }
 
-    /**
-     * Testing that the optimize function actually returns a minimized result
-     *
-     * Functions: optimize
-     */
-    TEST_F(BooleanFunctionTest, check_optimize_minimality)
-    {
-        TEST_START
-            BooleanFunction a("A");
-            BooleanFunction b("B");
-            BooleanFunction c("C");
-            BooleanFunction _0(ZERO);
-            BooleanFunction _1(ONE);
-            {
-                // Optimize MUX function
-                BooleanFunction bf = (a & c) | (b & ~c) | (a & b);
-                EXPECT_EQ(bf.optimize().to_string(), "(A & C) | (B & !C)");
-            }
-        TEST_END
+    TEST(BooleanFunction, Substitution) {
+        const auto  a = BooleanFunction::Var("A"),
+                    b = BooleanFunction::Var("B"),
+                    c = BooleanFunction::Var("C"),
+                    d = BooleanFunction::Var("D"),
+                   _0 = BooleanFunction::Const(0, 1);
+
+        EXPECT_EQ((a & b & c).substitute("C", "D"), a & b & d);
+
+        EXPECT_EQ((a & b).substitute("B", _0).get(), a & _0);
+        EXPECT_EQ((a & b).substitute("B", ~c).get(), a & ~c);
+        EXPECT_EQ((a & b).substitute("B", ~c).get(), a & ~c);
+        EXPECT_EQ((a & b).substitute("B", b | c | d).get(),  a & (b | c | d));
     }
 
+    TEST(BooleanFunction, EvaluateSingleBit) {
+        const auto a = BooleanFunction::Var("A"),
+                   b = BooleanFunction::Var("B"),
+                  _0 = BooleanFunction::Const(0, 1),
+                  _1 = BooleanFunction::Const(1, 1);
 
-    /**
-     * Testing the integrity of the from_string function
-     *
-     * Functions: from_string
-     */
-    TEST_F(BooleanFunctionTest, check_from_string) {
-        TEST_START
-            std::string f_str = "A B C D(1)";
-            {
-                // Check default case
-                auto bf = BooleanFunction::from_string(f_str);
-                EXPECT_EQ(bf.get_variables(), std::vector<std::string>({"A", "B", "C", "D"}));
-            }
-            {
-                // Declare existing variable
-                auto bf = BooleanFunction::from_string(f_str, {"A"});
-                EXPECT_EQ(bf.get_variables(), std::vector<std::string>({"A", "B", "C", "D"}));
-            }
-            {
-                // Declare custom variable
-                auto bf = BooleanFunction::from_string(f_str, {"A B"});
-                EXPECT_EQ(bf.get_variables(), std::vector<std::string>({"A B", "C", "D"}));
-            }
-            {
-                // Declare custom variable
-                auto bf = BooleanFunction::from_string(f_str, {"A B C D"});
-                EXPECT_EQ(bf.get_variables(), std::vector<std::string>({"A B C D"}));
-            }
-            {
-                // Declare custom variable
-                auto bf = BooleanFunction::from_string(f_str, {"D(1)"});
-                EXPECT_EQ(bf.get_variables(), std::vector<std::string>({"A", "B", "C", "D(1)"}));
-            }
-            {
-                // Declare non-existing custom variable
-                auto bf = BooleanFunction::from_string(f_str, {"X"});
-                EXPECT_EQ(bf.get_variables(), std::vector<std::string>({"A", "B", "C", "D"}));
-            }
-            {
-                auto bf = BooleanFunction::from_string("!(A1 | A2)", {"A", "B"});
-                EXPECT_EQ(bf.get_variables(), std::vector<std::string>({"2", "A"}));
-            }
+        using Value = BooleanFunction::Value;
 
-        TEST_END
+        const std::vector<std::tuple<BooleanFunction, std::unordered_map<std::string, Value>, Value>> data = {
+            {a, {{"A", Value::ZERO}}, Value::ZERO},
+            {a, {{"A", Value::ONE}}, Value::ONE},
+
+            {~a, {{"A", Value::ZERO}}, Value::ONE},
+            {~a, {{"A", Value::ONE}}, Value::ZERO},
+            
+            {a & b, {{"A", Value::ZERO}, {"B", Value::ZERO}}, Value::ZERO},
+            {a & b, {{"A", Value::ONE}, {"B", Value::ZERO}}, Value::ZERO},
+            {a & b, {{"A", Value::ONE}, {"B", Value::ONE}}, Value::ONE},
+
+            {a | b, {{"A", Value::ZERO}, {"B", Value::ZERO}}, Value::ZERO},
+            {a | b, {{"A", Value::ONE}, {"B", Value::ZERO}}, Value::ONE},
+            {a | b, {{"A", Value::ONE}, {"B", Value::ONE}}, Value::ONE},
+
+            {a ^ b, {{"A", Value::ZERO}, {"B", Value::ZERO}}, Value::ZERO},
+            {a ^ b, {{"A", Value::ONE}, {"B", Value::ZERO}}, Value::ONE},
+            {a ^ b, {{"A", Value::ONE}, {"B", Value::ONE}}, Value::ZERO},
+        };
+        
+        for (const auto& [function, input, expected]: data) {
+            auto value = function.evaluate(input);
+            if (value.is_error()) {
+                log_error("netlist", "{}", value.get_error().get());
+            }
+            EXPECT_EQ(expected, value.get());
+        }
     }
 
+    TEST(BooleanFunction, EvaluateMultiBit) {
+        const auto a = BooleanFunction::Var("A", 2),
+                   b = BooleanFunction::Var("B", 2),
+                  _0 = BooleanFunction::Const(0, 2),
+                  _1 = BooleanFunction::Const(1, 2);
 
-    /**
-     * Test string parsing, dnf, and optimization for a collection of functions
-     *
-     * Functions: from_string, to_dnf, optimize
-     */
-    TEST_F(BooleanFunctionTest, check_test_vectors) {
-        TEST_START
-            {
-                /* clang-format off */
-                std::vector<std::string> test_cases = {
-                    "0",
-                    "1",
-                    "a",
-                    "a ^ a",
-                    "a | a",
-                    "a & a",
-                    "a ^ b",
-                    "a | b",
-                    "a & b",
-                    "!(a ^ a) ^ !(!(b ^ b))",
-                    "(!I0 & I1 & I2) | (I0 & I1 & I2)",
-                    "!(((!8 & !(!(!19 | !20) & 26)) | (8 & !((!26 & !(!19 | !20)) | (26 & !(!19 | 20))))) & !(((((((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & !((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & !27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (!((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19))))) & !26 & !((8 & (!20 | 19)) | (!8 & !(!20 | 19)))) | (!((((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & !((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & !27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (!((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19))))) & 26 & !((8 & (!20 | 19)) | (!8 & !(!20 | 19)))) | (!((((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & !((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & !27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (!((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19))))) & !26 & ((8 & (!20 | 19)) | (!8 & !(!20 | 19)))) | (((((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & !((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & !27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (!((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19))))) & 26 & ((8 & (!20 | 19)) | (!8 & !(!20 | 19))))) & !19))",
-                };
-                /* clang-format on */
+        using Value = BooleanFunction::Value;
 
-                for (const auto &f_str : test_cases) {
-                    auto f = BooleanFunction::from_string(f_str);
-                    auto tmp_vars = f.get_variables();
-                    std::vector<std::string> ordered_variables(tmp_vars.begin(), tmp_vars.end());
-                    auto original_truth_table = f.get_truth_table(ordered_variables);
-                    auto dnf = f.to_dnf();
-                    auto dnf_truth_table = dnf.get_truth_table(ordered_variables);
-                    auto optimized = f.optimize();
-                    auto optimized_truth_table = optimized.get_truth_table(ordered_variables);
+        const std::vector<std::tuple<BooleanFunction, std::unordered_map<std::string, std::vector<Value>>, std::vector<Value>>> data = {
+            {a, {{"A", {Value::ZERO, Value::ZERO}}}, {Value::ZERO, Value::ZERO}},
+            {a, {{"A", {Value::ONE, Value::ZERO}}}, {Value::ONE, Value::ZERO}},
+            {a, {{"A", {Value::ONE, Value::ONE}}}, {Value::ONE, Value::ONE}},
 
-                    if (original_truth_table != dnf_truth_table) {
-                        EXPECT_TRUE(false) << "ERROR: DNF function does not match original function" << std::endl
-                                           << "  original function:  " << f << std::endl
-                                           << "  DNF of function:    " << dnf << std::endl
-                                           << "  --------------------" << std::endl
-                                           << "  TT original function:  " << utils::join("", original_truth_table, [](auto x){return x == BooleanFunction::X?"-":std::to_string(x);}) << std::endl
-                                           << "  TT DNF of function:    " << utils::join("", dnf_truth_table, [](auto x){return x == BooleanFunction::X?"-":std::to_string(x);}) << std::endl;
-                    }
+            {~a, {{"A", {Value::ZERO, Value::ZERO}}}, {Value::ONE, Value::ONE}},
+            {~a, {{"A", {Value::ONE, Value::ZERO}}}, {Value::ZERO, Value::ONE}},
+            {~a, {{"A", {Value::ONE, Value::ONE}}}, {Value::ZERO, Value::ZERO}},
+         
+            {a & b, {{"A", {Value::ZERO, Value::ZERO}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ZERO, Value::ZERO}},
+            {a & b, {{"A", {Value::ONE, Value::ZERO}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ONE, Value::ZERO}},
+            {a & b, {{"A", {Value::ZERO, Value::ONE}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ZERO, Value::ONE}},
+            {a & b, {{"A", {Value::ONE, Value::ONE}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ONE, Value::ONE}},
 
-                    if (original_truth_table != optimized_truth_table) {
-                        EXPECT_TRUE(false) << "ERROR: optimized function does not match original function" << std::endl
-                                           << "  original function:  " << f << std::endl
-                                           << "  optimized function: " << optimized << std::endl
-                                           << "  --------------------" << std::endl
-                                           << "  TT original function:  " << utils::join("", original_truth_table, [](auto x){return x == BooleanFunction::X?"-":std::to_string(x);}) << std::endl
-                                           << "  TT optimized function: " << utils::join("", optimized_truth_table, [](auto x){return x == BooleanFunction::X?"-":std::to_string(x);}) << std::endl;
-                    }
+            {a | b, {{"A", {Value::ZERO, Value::ZERO}}, {"B", {Value::ZERO, Value::ZERO}}}, {Value::ZERO, Value::ZERO}},
+            {a | b, {{"A", {Value::ONE, Value::ZERO}}, {"B", {Value::ONE, Value::ZERO}}}, {Value::ONE, Value::ZERO}},
+            {a | b, {{"A", {Value::ZERO, Value::ONE}}, {"B", {Value::ZERO, Value::ONE}}}, {Value::ZERO, Value::ONE}},
+            {a | b, {{"A", {Value::ZERO, Value::ONE}}, {"B", {Value::ONE, Value::ZERO}}}, {Value::ONE, Value::ONE}},
 
-                    EXPECT_TRUE(optimized.to_string() == optimized.optimize().to_string()) << "ERROR: re-optimizing changed the function" << std::endl
-                                           << "  optimized function: " << optimized << std::endl
-                                           << "  optimized again:    " << optimized.optimize() << std::endl;
+            {a ^ b, {{"A", {Value::ZERO, Value::ZERO}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ONE, Value::ONE}},
+            {a ^ b, {{"A", {Value::ONE, Value::ZERO}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ZERO, Value::ONE}},
+            {a ^ b, {{"A", {Value::ZERO, Value::ONE}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ONE, Value::ZERO}},
+            {a ^ b, {{"A", {Value::ONE, Value::ONE}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ZERO, Value::ZERO}},
 
-                    // std::cout << f << std::endl << optimized << std::endl << std::endl;
-                }
+            {a + b, {{"A", {Value::ZERO, Value::ZERO}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ONE, Value::ONE}},
+            {a + b, {{"A", {Value::ONE, Value::ZERO}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ZERO, Value::ZERO}},
+            {a + b, {{"A", {Value::ZERO, Value::ONE}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ONE, Value::ZERO}},
+            {a + b, {{"A", {Value::ONE, Value::ONE}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ZERO, Value::ONE}},
+
+            {a - b, {{"A", {Value::ZERO, Value::ZERO}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ONE, Value::ZERO}},
+            {a - b, {{"A", {Value::ONE, Value::ZERO}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ZERO, Value::ONE}},
+            {a - b, {{"A", {Value::ZERO, Value::ONE}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ONE, Value::ONE}},
+            {a - b, {{"A", {Value::ONE, Value::ONE}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ZERO, Value::ZERO}},
+
+            {a * b, {{"A", {Value::ZERO, Value::ZERO}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ZERO, Value::ZERO}},
+            {a * b, {{"A", {Value::ONE, Value::ZERO}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ONE, Value::ONE}},
+            {a * b, {{"A", {Value::ZERO, Value::ONE}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ZERO, Value::ONE}},
+            {a * b, {{"A", {Value::ONE, Value::ONE}}, {"B", {Value::ONE, Value::ONE}}}, {Value::ONE, Value::ZERO}},
+        };
+        
+        for (const auto& [function, input, expected]: data) {
+            auto value = function.evaluate(input);
+            if (value.is_error()) {
+                log_error("netlist", "{}", value.get_error().get());
             }
-
-        TEST_END
+            EXPECT_EQ(expected, value.get());
+        }
     }
 
-    /**
-     * Testing the substitution a variable within a boolean function with another boolean function
-     *
-     * Functions: substitute
-     */
-    TEST_F(BooleanFunctionTest, check_substitute) {
-        TEST_START
-            BooleanFunction a("A"), b("B"), c("C"), d("D");
-            {
-                // Substitute a variable with another one
-                BooleanFunction bf = a & b & c;
-                BooleanFunction sub_bf = bf.substitute("C", "D");
+    TEST(BooleanFunction, TruthTable) {
+        const auto a = BooleanFunction::Var("A"),
+                   b = BooleanFunction::Var("B"),
+                   c = BooleanFunction::Var("C");
 
-                EXPECT_EQ(sub_bf, a & b & d);
-            }
-            {
-                // Substitute a variable with a boolean function (negated variable)
-                BooleanFunction bf = a & b;
-                BooleanFunction sub_bf = bf.substitute("B", ~c);
+        using Value = BooleanFunction::Value;
 
-                EXPECT_EQ(sub_bf, a & ~c);
-            }
-            {
-                // Substitute a variable with a boolean function (term)
-                BooleanFunction bf = a & b;
-                BooleanFunction sub_bf = bf.substitute("B", b | c | d);
+        const std::vector<std::tuple<BooleanFunction, std::vector<std::vector<Value>>, std::vector<std::string>>> data = {
+            {a.clone() & b.clone(), std::vector<std::vector<Value>>({
+                {Value::ZERO, Value::ZERO, Value::ZERO, Value::ONE}
+            }), {}},
+            {a.clone() | b.clone(), std::vector<std::vector<Value>>({
+                {Value::ZERO, Value::ONE, Value::ONE, Value::ONE}
+            }), {}},
+            {a.clone() ^ b.clone(), std::vector<std::vector<Value>>({
+                {Value::ZERO, Value::ONE, Value::ONE, Value::ZERO}
+            }), {}},
+            {~((a & b) | c), std::vector<std::vector<Value>>({
+                {Value::ONE, Value::ONE, Value::ONE, Value::ZERO, Value::ZERO, Value::ZERO, Value::ZERO, Value::ZERO}
+            }), {}},
+            {~((a & b) | c), std::vector<std::vector<Value>>({
+                {Value::ONE, Value::ZERO, Value::ONE, Value::ZERO, Value::ONE, Value::ZERO, Value::ZERO, Value::ZERO}
+            }), {"C", "B", "A"}},
+        };
 
-                EXPECT_EQ(sub_bf, a & (b | c | d));
-            }
-            // NEAGATIVE
-            /*{
-                // Pass an empty boolean function (NOTE: requirement?)
-                BooleanFunction bf = a & b;
-                BooleanFunction sub_bf = bf.substitute("B", BooleanFunction());
-
-                EXPECT_EQ(sub_bf, a);
-            }*/
-
-        TEST_END
+        for (const auto& [function, expected, variable_order] : data) {
+            ASSERT_EQ(expected, function.compute_truth_table(variable_order).get());
+        }
     }
 
-    /**
-     * Testing the get_dnf_clauses function that accesses the clauses of the DNF in a 2D Vector.
-     *
-     * Functions: get_dnf_clauses
-     */
-    TEST_F(BooleanFunctionTest, check_get_dnf_clauses) {
-        TEST_START
-            BooleanFunction a("A"), b("B"), c("C"), d("D"), _0(ZERO), _1(ONE);
-            {
-                // Get the dnf clauses of a boolean function that is already in dnf
-                BooleanFunction bf = (a & b & ~c) | (a & ~b) | d;
-                auto dnf_clauses = bf.get_dnf_clauses();
+    TEST(BooleanFunction, SimplificationVsTruthTable) {
+        const auto  a = BooleanFunction::Var("A"),
+                    b = BooleanFunction::Var("B"),
+                    c = BooleanFunction::Var("C");
+        
+        const std::vector<BooleanFunction> data = {
+            (a & b & c),
+            (a | b | c),
+        };
 
-                std::vector<std::vector<std::pair<std::string, bool>>> exp_clauses;
-                exp_clauses.push_back(std::vector<std::pair<std::string, bool>>(
-                    {std::make_pair("A", true), std::make_pair("B", true), std::make_pair("C", false)}));
-                exp_clauses.push_back(std::vector<std::pair<std::string, bool>>(
-                    {std::make_pair("A", true), std::make_pair("B", false)}));
-                exp_clauses.push_back(std::vector<std::pair<std::string, bool>>(
-                    {std::make_pair("D", true)}));
-
-                EXPECT_EQ(dnf_clauses, exp_clauses);
-            }
-            {
-                // Get the dnf clauses of a variable
-                BooleanFunction bf = a;
-                auto dnf_clauses = bf.get_dnf_clauses();
-
-                std::vector<std::vector<std::pair<std::string, bool>>> exp_clauses;
-                exp_clauses.push_back(std::vector<std::pair<std::string, bool>>(
-                    {std::make_pair("A", true)}));
-
-                EXPECT_EQ(dnf_clauses, exp_clauses);
-            }
-            {
-                // Get the dnf clauses of a constant
-                BooleanFunction bf = _1;
-                auto dnf_clauses = bf.get_dnf_clauses();
-
-                std::vector<std::vector<std::pair<std::string, bool>>> exp_clauses;
-                exp_clauses.push_back(std::vector<std::pair<std::string, bool>>(
-                    {std::make_pair("1", true)}));
-
-                EXPECT_EQ(dnf_clauses, exp_clauses);
-            }
-            {
-                // Get the dnf clauses of a constant
-                BooleanFunction bf = a & ~b & c;
-                auto dnf_clauses = bf.get_dnf_clauses();
-
-                std::vector<std::vector<std::pair<std::string, bool>>> exp_clauses;
-                exp_clauses.push_back(std::vector<std::pair<std::string, bool>>(
-                    {std::make_pair("A", true), std::make_pair("B", false), std::make_pair("C", true)}));
-
-                EXPECT_EQ(dnf_clauses, exp_clauses);
-            }
-            // NEGATIVE
-            {
-                // Get the dnf clauses of an empty boolean function
-                BooleanFunction bf = BooleanFunction();
-
-                std::vector<std::vector<std::pair<std::string, bool>>> exp_clauses;
-
-                EXPECT_EQ(bf.get_dnf_clauses(), exp_clauses);
-            }
-        TEST_END
+        for (const auto& function: data) {
+            ASSERT_EQ(function.compute_truth_table().get(), function.simplify().compute_truth_table().get());
+        }
     }
 
-    TEST_F(BooleanFunctionTest, QueryConfig) {
+    TEST(BooleanFunction, QueryConfig) {
         {
             const auto config = SMT::QueryConfig()
                 .with_solver(SMT::SolverType::Z3)
@@ -638,49 +1113,90 @@ namespace hal {
             EXPECT_EQ(config.timeout_in_seconds, 42);
         }
         {
-        const auto config = SMT::QueryConfig()
-            .with_solver(SMT::SolverType::Boolector)
-            .with_remote_solver()
-            .without_model_generation();
+            const auto config = SMT::QueryConfig()
+                .with_solver(SMT::SolverType::Boolector)
+                .with_remote_solver()
+                .without_model_generation();
 
-        EXPECT_EQ(config.solver, SMT::SolverType::Boolector);
-        EXPECT_EQ(config.local, false);
-        EXPECT_EQ(config.generate_model, false);
+            EXPECT_EQ(config.solver, SMT::SolverType::Boolector);
+            EXPECT_EQ(config.local, false);
+            EXPECT_EQ(config.generate_model, false);
         }
     }
 
-    TEST_F(BooleanFunctionTest, SatisfiableConstraint) {
-        auto [a, b] = std::make_tuple(BooleanFunction("A"), BooleanFunction("B"));
+    TEST(BooleanFunction, SatisfiableConstraint) {
+        const auto  a = BooleanFunction::Var("A"),
+                    b = BooleanFunction::Var("B"),
+                    c = BooleanFunction::Var("C", 4),
+                    d = BooleanFunction::Var("D", 4),
+                   _0 = BooleanFunction::Const(0, 1),
+                   _1 = BooleanFunction::Const(1, 1);
 
         auto formulas = std::vector<std::vector<SMT::Constraint>>({
             {
-                SMT::Constraint(a & b, BooleanFunction::ONE)
+                SMT::Constraint(a.clone() & b.clone(), _1.clone())
             },
             {
-                SMT::Constraint(a | b, BooleanFunction::ONE),
-                SMT::Constraint(a, BooleanFunction::ONE),
-                SMT::Constraint(b, BooleanFunction::ZERO),
+                SMT::Constraint(a.clone() | b.clone(), _1.clone()),
+                SMT::Constraint(a.clone(), _1.clone()),
+                SMT::Constraint(b.clone(), _0.clone()),
             },
             {
-                SMT::Constraint(a & b, BooleanFunction::ONE),
-                SMT::Constraint(a, BooleanFunction::ONE),
-                SMT::Constraint(b, BooleanFunction::ONE),
+                SMT::Constraint(a.clone() & b.clone(), _1.clone()),
+                SMT::Constraint(a.clone(), _1.clone()),
+                SMT::Constraint(b.clone(), _1.clone()),
             },
             {
-                SMT::Constraint((a & ~b) | (~a & b), BooleanFunction::ONE),
-                SMT::Constraint(a, BooleanFunction::ONE),
-            }
+                SMT::Constraint((a.clone() & ~b.clone()) | (~a.clone() & b.clone()), _1.clone()),
+                SMT::Constraint(a.clone(), _1.clone()),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Add(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(5, 4)),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(0, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Sub(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(4, 4)),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(6, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Mul(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(4, 4)),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(2, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Sdiv(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(2, 4)),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(4, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Sdiv(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(14, 4)), // 14 = -2
+                SMT::Constraint(c.clone(), BooleanFunction::Const(4, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Udiv(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(4, 4)),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(8, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Srem(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(3, 4)),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(7, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Srem(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(13, 4)), // 13 = -3
+                SMT::Constraint(c.clone(), BooleanFunction::Const(9, 4)), // 9 = -7
+            },
+            {
+                SMT::Constraint(BooleanFunction::Urem(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(3, 4)),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(7, 4)),
+            },
         });
 
         for (auto&& constraints : formulas) {
             const auto solver = SMT::Solver(std::move(constraints));
 
-            for (auto&& solver_type : {SMT::SolverType::Z3, SMT::SolverType::Boolector}) {
+            for (auto&& solver_type : {SMT::SolverType::Z3}) {
                 if (!SMT::Solver::has_local_solver_for(solver_type)) {
                     continue;
                 }
 
-                auto [status, result] = solver.query(
+                auto result = solver.query(
                     SMT::QueryConfig()
                         .with_solver(solver_type)
                         .with_local_solver()
@@ -688,53 +1204,122 @@ namespace hal {
                         .with_timeout(1000)
                 );
 
-                EXPECT_TRUE(status);
-                EXPECT_EQ(result.type, SMT::ResultType::Sat);
-                EXPECT_TRUE(result.model.has_value());
+                ASSERT_TRUE(result.is_ok());
+                auto solver_result = result.get();
+                EXPECT_EQ(solver_result.type, SMT::SolverResultType::Sat);
+                EXPECT_TRUE(solver_result.model.has_value());
             }
         }
     }
 
-    TEST_F(BooleanFunctionTest, UnSatisfiableConstraint) {
-        auto [a, b] = std::make_tuple(BooleanFunction("A"), BooleanFunction("B"));
+    TEST(BooleanFunction, UnSatisfiableConstraint) {
+        const auto  a = BooleanFunction::Var("A"),
+                    b = BooleanFunction::Var("B"),
+                    c = BooleanFunction::Var("C", 4),
+                    d = BooleanFunction::Var("D", 4),
+                   _0 = BooleanFunction::Const(0, 1),
+                   _1 = BooleanFunction::Const(1, 1);
 
         auto formulas = std::vector<std::vector<SMT::Constraint>>({
             {
-                SMT::Constraint(a, b),
-                SMT::Constraint(a, BooleanFunction::ONE),
-                SMT::Constraint(b, BooleanFunction::ZERO),
+                SMT::Constraint(a.clone(), b.clone()),
+                SMT::Constraint(a.clone(), _1.clone()),
+                SMT::Constraint(b.clone(), _0.clone()),
             },
             {
-                SMT::Constraint(a | b, BooleanFunction::ONE),
-                SMT::Constraint(a, BooleanFunction::ZERO),
-                SMT::Constraint(b, BooleanFunction::ZERO),
+                SMT::Constraint(a.clone() | b.clone(), _1.clone()),
+                SMT::Constraint(a.clone(), _0.clone()),
+                SMT::Constraint(b.clone(), _0.clone()),
             },
             {
-                SMT::Constraint(a & b, BooleanFunction::ONE),
-                SMT::Constraint(a, BooleanFunction::ZERO),
-                SMT::Constraint(b, BooleanFunction::ONE),
+                SMT::Constraint(a.clone() & b.clone(), _1.clone()),
+                SMT::Constraint(a.clone(), _0.clone()),
+                SMT::Constraint(b.clone(), _1.clone()),
             },
             {
-                SMT::Constraint(a & b, BooleanFunction::ONE),
-                SMT::Constraint(a, BooleanFunction::ONE),
-                SMT::Constraint(b, BooleanFunction::ZERO),
+                SMT::Constraint(a.clone() & b.clone(), _1.clone()),
+                SMT::Constraint(a.clone(), _1.clone()),
+                SMT::Constraint(b.clone(), _0.clone()),
             },
             {
-                SMT::Constraint((a & ~b) | (~a & b), BooleanFunction::ONE),
-                SMT::Constraint(a, BooleanFunction::ONE),
-                SMT::Constraint(b, BooleanFunction::ONE),
+                SMT::Constraint((a.clone() & ~b.clone()) | (~a.clone() & b.clone()), _1.clone()),
+                SMT::Constraint(a.clone(), _1.clone()),
+                SMT::Constraint(b.clone(), _1.clone()),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Add(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(0, 4)),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(1, 4)),
+                SMT::Constraint(d.clone(), BooleanFunction::Const(0, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Sub(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(0, 4)),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(1, 4)),
+                SMT::Constraint(d.clone(), BooleanFunction::Const(0, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Mul(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(5, 4)),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(1, 4)),
+                SMT::Constraint(d.clone(), BooleanFunction::Const(0, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Sdiv(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(5, 4)),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(1, 4)),
+                SMT::Constraint(d.clone(), BooleanFunction::Const(0, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Udiv(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(5, 4)),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(1, 4)),
+                SMT::Constraint(d.clone(), BooleanFunction::Const(0, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Srem(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(5, 4)),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(1, 4)),
+                SMT::Constraint(d.clone(), BooleanFunction::Const(0, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Urem(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(5, 4)),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(1, 4)),
+                SMT::Constraint(d.clone(), BooleanFunction::Const(0, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Ult(c.clone(), d.clone(), 1).get()),
+                SMT::Constraint(d.clone(), BooleanFunction::Const(0, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Ult(c.clone(), d.clone(), 1).get()),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(1, 4)),
+                SMT::Constraint(d.clone(), BooleanFunction::Const(0, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Ule(c.clone(), d.clone(), 1).get()),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(1, 4)),
+                SMT::Constraint(d.clone(), BooleanFunction::Const(0, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Slt(c.clone(), d.clone(), 1).get()),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(1, 4)),
+                SMT::Constraint(d.clone(), BooleanFunction::Const(0, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Sle(c.clone(), d.clone(), 1).get()),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(1, 4)),
+                SMT::Constraint(d.clone(), BooleanFunction::Const(0, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Eq(c.clone(), d.clone(), 1).get()),
+                SMT::Constraint(c.clone(), BooleanFunction::Const(1, 4)),
+                SMT::Constraint(d.clone(), BooleanFunction::Const(0, 4)),
             }
         });
 
         for (auto&& constraints : formulas) {
             const auto solver = SMT::Solver(std::move(constraints));
-
-            for (auto&& solver_type : {SMT::SolverType::Z3, SMT::SolverType::Boolector}) {
+            for (auto&& solver_type : {SMT::SolverType::Z3}) {
                 if (!SMT::Solver::has_local_solver_for(solver_type)) {
                     continue;
                 }
 
-                auto [status, result] = solver.query(
+                auto result = solver.query(
                     SMT::QueryConfig()
                         .with_solver(solver_type)
                         .with_local_solver()
@@ -742,55 +1327,46 @@ namespace hal {
                         .with_timeout(1000)
                 );
 
-                EXPECT_TRUE(status);
-                EXPECT_EQ(result.type, SMT::ResultType::UnSat);
-                EXPECT_FALSE(result.model.has_value());
+                ASSERT_TRUE(result.is_ok());
+                auto solver_result = result.get();
+                EXPECT_EQ(solver_result.type, SMT::SolverResultType::UnSat);
+                EXPECT_FALSE(solver_result.model.has_value());
             }
         }
     }
 
-    TEST_F(BooleanFunctionTest, Model) {
-        auto [a, b] = std::make_tuple(BooleanFunction("A"), BooleanFunction("B"));
+    TEST(BooleanFunction, FunctionConstraint) {
+        const auto  a = BooleanFunction::Var("A"),
+                    b = BooleanFunction::Var("B"),
+                   _0 = BooleanFunction::Const(0, 1),
+                   _1 = BooleanFunction::Const(1, 1);
 
         auto formulas = std::vector<std::tuple<std::vector<SMT::Constraint>, SMT::Model>>({
             {
                 {
-                    SMT::Constraint(a & b, BooleanFunction::ONE)
+                    SMT::Constraint(BooleanFunction::Eq(a.clone(), b.clone(), 1).get()), 
+                    SMT::Constraint(a.clone(), _1.clone())
                 },
                 SMT::Model({{"A", {1, 1}}, {"B", {1, 1}}})
             },
             {
                 {
-                    SMT::Constraint(a | b, BooleanFunction::ONE),
-                    SMT::Constraint(b, BooleanFunction::ZERO),
+                    SMT::Constraint(BooleanFunction::Eq(a.clone(), b.clone(), 1).get()), 
+                    SMT::Constraint(a.clone(), _0.clone())
                 },
-                SMT::Model({{"A", {1, 1}}, {"B", {0, 1}}})
+                SMT::Model({{"A", {0, 1}}, {"B", {0, 1}}})
             },
-            {
-                {
-                    SMT::Constraint(a & b, BooleanFunction::ONE),
-                    SMT::Constraint(a, BooleanFunction::ONE),
-                },
-                SMT::Model({{"A", {1, 1}}, {"B", {1, 1}}})
-            },
-            {
-                {
-                    SMT::Constraint((~a & b) | (a & ~b), BooleanFunction::ONE),
-                    SMT::Constraint(a, BooleanFunction::ONE),
-                },
-                SMT::Model({{"A", {1, 1}}, {"B", {0, 1}}})
-            }
         });
 
         for (auto&& [constraints, model] : formulas) {
             const auto solver = SMT::Solver(std::move(constraints));
 
-            for (auto&& solver_type : {SMT::SolverType::Z3, SMT::SolverType::Boolector}) {
+            for (auto&& solver_type : {SMT::SolverType::Z3}) {
                 if (!SMT::Solver::has_local_solver_for(solver_type)) {
                     continue;
                 }
 
-                auto [status, result] = solver.query(
+                auto result = solver.query(
                     SMT::QueryConfig()
                         .with_solver(solver_type)
                         .with_local_solver()
@@ -798,9 +1374,135 @@ namespace hal {
                         .with_timeout(1000)
                 );
 
-                EXPECT_EQ(status, true);
-                EXPECT_EQ(result.type, SMT::ResultType::Sat);
-                EXPECT_EQ(*result.model, model);
+                ASSERT_TRUE(result.is_ok());
+                auto solver_result = result.get();
+                EXPECT_EQ(solver_result.type, SMT::SolverResultType::Sat);
+                EXPECT_EQ(*solver_result.model, model);
+            }
+        }
+    }
+
+    TEST(BooleanFunction, Model) {
+        const auto  a = BooleanFunction::Var("A"),
+                    b = BooleanFunction::Var("B"),
+                    c = BooleanFunction::Var("C", 4),
+                    d = BooleanFunction::Var("D", 4),
+                   _0 = BooleanFunction::Const(0, 1),
+                   _1 = BooleanFunction::Const(1, 1);
+
+        auto formulas = std::vector<std::tuple<std::vector<SMT::Constraint>, SMT::Model>>({
+            {
+                {
+                    SMT::Constraint(a.clone() & b.clone(), _1.clone())
+                },
+                SMT::Model({{"A", {1, 1}}, {"B", {1, 1}}})
+            },
+            {
+                {
+                    SMT::Constraint(a.clone() | b.clone(), _1.clone()),
+                    SMT::Constraint(b.clone(), _0.clone()),
+                },
+                SMT::Model({{"A", {1, 1}}, {"B", {0, 1}}})
+            },
+            {
+                {
+                    SMT::Constraint(a.clone() & b.clone(), _1.clone()),
+                    SMT::Constraint(a.clone(), _1.clone()),
+                },
+                SMT::Model({{"A", {1, 1}}, {"B", {1, 1}}})
+            },
+            {
+                {
+                    SMT::Constraint((~a.clone() & b.clone()) | (a.clone() & ~b.clone()), _1.clone()),
+                    SMT::Constraint(a.clone(), _1.clone()),
+                },
+                SMT::Model({{"A", {1, 1}}, {"B", {0, 1}}})
+            },
+            {
+                {
+                    SMT::Constraint(BooleanFunction::Add(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(5, 4)),
+                    SMT::Constraint(c.clone(), BooleanFunction::Const(0, 4)),
+                },
+                SMT::Model({{"C", {0, 4}}, {"D", {5, 4}}})
+            },
+            {
+                {
+                    SMT::Constraint(BooleanFunction::Sub(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(4, 4)),
+                    SMT::Constraint(c.clone(), BooleanFunction::Const(6, 4)),
+                },
+                SMT::Model({{"C", {6, 4}}, {"D", {2, 4}}})
+            },
+            {
+                {
+                    SMT::Constraint(BooleanFunction::Mul(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(4, 4)),
+                    SMT::Constraint(c.clone(), BooleanFunction::Const(2, 4)),
+                },
+                SMT::Model({{"C", {2, 4}}, {"D", {2, 4}}})
+            },
+            {
+                {
+                    SMT::Constraint(BooleanFunction::Sdiv(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(2, 4)),
+                    SMT::Constraint(c.clone(), BooleanFunction::Const(4, 4)),
+                },
+                SMT::Model({{"C", {4, 4}}, {"D", {2, 4}}})
+            },
+            {
+                {
+                    SMT::Constraint(BooleanFunction::Sdiv(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(14, 4)), // 14 = -2
+                    SMT::Constraint(c.clone(), BooleanFunction::Const(4, 4)),
+                },
+                SMT::Model({{"C", {4, 4}}, {"D", {14, 4}}}) // 14 = -2
+            },
+            {
+                {
+                    SMT::Constraint(BooleanFunction::Udiv(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(2, 4)),
+                    SMT::Constraint(c.clone(), BooleanFunction::Const(4, 4)),
+                },
+                SMT::Model({{"C", {4, 4}}, {"D", {2, 4}}})
+            },
+            {
+                {
+                    SMT::Constraint(BooleanFunction::Srem(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(3, 4)),
+                    SMT::Constraint(c.clone(), BooleanFunction::Const(7, 4)),
+                },
+                SMT::Model({{"C", {7, 4}}, {"D", {4, 4}}})
+            },
+            {
+                {
+                    SMT::Constraint(BooleanFunction::Srem(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(13, 4)), // 13 = -3
+                    SMT::Constraint(c.clone(), BooleanFunction::Const(9, 4)), // 9 = -7
+                },
+                SMT::Model({{"C", {9, 4}}, {"D", {4, 4}}}) // 9 = -7
+            },
+            {
+                {
+                    SMT::Constraint(BooleanFunction::Urem(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(3, 4)),
+                    SMT::Constraint(c.clone(), BooleanFunction::Const(7, 4)),
+                },
+                SMT::Model({{"C", {7, 4}}, {"D", {4, 4}}})
+            },
+        });
+
+        for (auto&& [constraints, model] : formulas) {
+            const auto solver = SMT::Solver(std::move(constraints));
+
+            for (auto&& solver_type : {SMT::SolverType::Z3}) {
+                if (!SMT::Solver::has_local_solver_for(solver_type)) {
+                    continue;
+                }
+
+                auto result = solver.query(
+                    SMT::QueryConfig()
+                        .with_solver(solver_type)
+                        .with_local_solver()
+                        .with_model_generation()
+                        .with_timeout(1000)
+                );
+
+                ASSERT_TRUE(result.is_ok());
+                auto solver_result = result.get();
+                EXPECT_EQ(solver_result.type, SMT::SolverResultType::Sat);
+                EXPECT_EQ(*solver_result.model, model);
             }
         }
     }

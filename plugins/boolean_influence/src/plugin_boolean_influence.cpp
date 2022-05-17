@@ -1,5 +1,6 @@
 #include "boolean_influence/plugin_boolean_influence.h"
 
+#include "hal_core/netlist/netlist_utils.h"
 #include "z3_utils/include/plugin_z3_utils.h"
 
 namespace hal
@@ -21,6 +22,83 @@ namespace hal
 
     void BooleanInfluencePlugin::initialize()
     {
+    }
+
+    std::pair<std::map<u32, Gate*>, std::vector<std::vector<double>>> BooleanInfluencePlugin::get_ff_dependency_matrix(const Netlist* nl, bool with_boolean_influence)
+    {
+        std::map<u32, Gate*> matrix_id_to_gate;
+        std::map<Gate*, u32> gate_to_matrix_id;
+        std::vector<std::vector<double>> matrix;
+
+        std::unordered_map<u32, std::vector<Gate*>> cache;
+
+        u32 matrix_gates = 0;
+        for (const auto& gate : nl->get_gates())
+        {
+            if (!gate->get_type()->has_property(GateTypeProperty::ff))
+            {
+                continue;
+            }
+            gate_to_matrix_id[gate]         = matrix_gates;
+            matrix_id_to_gate[matrix_gates] = gate;
+            matrix_gates++;
+        }
+
+        u32 status_counter = 0;
+        for (const auto& [id, gate] : matrix_id_to_gate)
+        {
+            if (status_counter % 100 == 0)
+            {
+                log_info("boolean_influence", "status {}/{} processed", status_counter, matrix_id_to_gate.size());
+            }
+            status_counter++;
+            std::vector<double> line_of_matrix;
+
+            std::set<u32> gates_to_add;
+            for (const auto& pred_gate : netlist_utils::get_next_sequential_gates(gate, false, cache))
+            {
+                gates_to_add.insert(gate_to_matrix_id[pred_gate]);
+            }
+            std::map<Net*, double> boolean_influence_for_gate;
+            if (with_boolean_influence)
+            {
+                boolean_influence_for_gate = get_boolean_influences_of_gate(gate);
+            }
+            
+            for (u32 i = 0; i < matrix_gates; i++)
+            {
+                if (gates_to_add.find(i) != gates_to_add.end())
+                {
+                    if (with_boolean_influence)
+                    {
+                        double influence = 0.0;
+
+                        Gate* pred_ff = matrix_id_to_gate[i];
+
+                        for (const auto& output_net : pred_ff->get_fan_out_nets())
+                        {
+                            if (boolean_influence_for_gate.find(output_net) != boolean_influence_for_gate.end())
+                            {
+                                influence += boolean_influence_for_gate[output_net];
+                            }
+                        }
+
+                        line_of_matrix.push_back(influence);
+                    }
+                    else
+                    {
+                        line_of_matrix.push_back(1.0);
+                    }
+                }
+                else
+                {
+                    line_of_matrix.push_back(0.0);
+                }
+            }
+            matrix.push_back(line_of_matrix);
+        }
+
+        return std::make_pair(matrix_id_to_gate, matrix);
     }
 
     std::map<Net*, double> BooleanInfluencePlugin::get_boolean_influences_of_gate(const Gate* gate)

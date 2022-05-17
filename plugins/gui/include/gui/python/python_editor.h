@@ -23,11 +23,12 @@
 
 #pragma once
 
+#include "gui/action/action.h"
 #include "gui/code_editor/code_editor.h"
 #include "gui/content_widget/content_widget.h"
 #include "gui/file_modified_bar/file_modified_bar.h"
-#include "gui/action/action.h"
 #include "gui/python/python_context_subscriber.h"
+#include "hal_core/utilities/hal_file_manager.h"
 
 #include "hal_core/netlist/project_serializer.h"
 #include "hal_core/utilities/json_write_document.h"
@@ -35,9 +36,9 @@
 #include <QEvent>
 #include <QFileSystemWatcher>
 #include <QMap>
+#include <QMessageBox>
 #include <QPushButton>
 #include <QtCore/QFileInfo>
-#include <QMessageBox>
 #include <filesystem>
 
 class QVBoxLayout;
@@ -55,7 +56,7 @@ namespace hal
     class SettingsItemCheckbox;
     class SettingsItemKeybind;
     class SettingsItemSpinbox;
- 
+
     class PythonSerializer : public ProjectSerializer
     {
         QString mSaveDir;
@@ -508,21 +509,21 @@ namespace hal
          *
          * @param path - the new path
          */
-        void setSearchIconPath(const QString &path);
+        void setSearchIconPath(const QString& path);
 
         /**
          * Q_PROPERTY WRITE function for the 'search'-icon style.
          *
          * @param style - the new style
          */
-        void setSearchIconStyle(const QString &style);
+        void setSearchIconStyle(const QString& style);
 
         /**
          * Q_PROPERTY WRITE function for the 'active search'-icon style.
          *
          * @param style - the new style
          */
-        void setSearchActiveIconStyle(const QString &style);
+        void setSearchActiveIconStyle(const QString& style);
         ///@}
 
         /**
@@ -534,7 +535,7 @@ namespace hal
          * @param document - The json document of the .hal file
          * @returns true on success
          */
-        bool handleSerializationToHalFile(const std::filesystem::path& path, Netlist* netlist, rapidjson::Document& document);
+        bool handleSerializationToHalFile(const std::filesystem::path& path, const Netlist* netlist, rapidjson::Document& document);
 
         /**
          * Deserialize the necessary information from the .hal file that is loaded.
@@ -695,7 +696,7 @@ namespace hal
          * @param content - The content to write
          * @returns true on success
          */
-        bool writeSnapshotFile(QFileInfo snapshot_file_path, QString original_file_path , QString content) const;
+        bool writeSnapshotFile(QFileInfo snapshot_file_path, QString original_file_path, QString content) const;
 
         /**
          * Get the path to the directory where the snapshots for this netlist are stored.
@@ -846,4 +847,4 @@ namespace hal
         SettingsItemKeybind* mSettingRunFile;
         SettingsItemKeybind* mSettingCreateFile;
     };
-}
+}    // namespace hal

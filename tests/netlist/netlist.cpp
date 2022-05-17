@@ -1639,10 +1639,8 @@ namespace hal {
             std::function<void(Netlist*)> trigger_unmarked_global_gnd = [=](Netlist* nl){nl->unmark_gnd_gate(gnd_gate);};
             std::function<void(Netlist*)> trigger_marked_global_input = [=](Netlist* nl){nl->mark_global_input_net(test_net);};
             std::function<void(Netlist*)> trigger_marked_global_output = [=](Netlist* nl){nl->mark_global_output_net(test_net);};
-            std::function<void(Netlist*)> trigger_marked_global_inout = [=](Netlist* nl){return;}; // ISSUE: legacy?
             std::function<void(Netlist*)> trigger_unmarked_global_input = [=](Netlist* nl){nl->unmark_global_input_net(test_net);};
             std::function<void(Netlist*)> trigger_unmarked_global_output = [=](Netlist* nl){nl->unmark_global_output_net(test_net);};
-            std::function<void(Netlist*)> trigger_unmarked_global_inout = [=](Netlist* nl){return;}; // ISSUE: legacy?
 
             // The events that are tested
             std::vector<NetlistEvent::event> event_type = {
@@ -1651,14 +1649,14 @@ namespace hal {
                 NetlistEvent::event::marked_global_vcc, NetlistEvent::event::marked_global_gnd,
                 NetlistEvent::event::unmarked_global_vcc, NetlistEvent::event::unmarked_global_gnd,
                 NetlistEvent::event::marked_global_input, NetlistEvent::event::marked_global_output,
-                /*NetlistEvent::event::marked_global_inout,*/ NetlistEvent::event::unmarked_global_input,
-                NetlistEvent::event::unmarked_global_output/*, NetlistEvent::event::unmarked_global_inout*/};
+                NetlistEvent::event::unmarked_global_input,
+                NetlistEvent::event::unmarked_global_output};
 
             // A list of the functions that will trigger its associated event exactly once
             std::vector<std::function<void(Netlist*)>> trigger_event = {trigger_id_changed, trigger_input_filename_changed,
                 trigger_design_name_changed, trigger_device_name_changed, trigger_marked_global_vcc, trigger_marked_global_gnd,
                 trigger_unmarked_global_vcc, trigger_unmarked_global_gnd, trigger_marked_global_input, trigger_marked_global_output,
-                /*trigger_marked_global_inout,*/trigger_unmarked_global_input, trigger_unmarked_global_output/*, trigger_unmarked_global_inout*/ };
+                trigger_unmarked_global_input, trigger_unmarked_global_output};
 
             // The parameters of the events that are expected
             std::vector<std::tuple<NetlistEvent::event, Netlist*, u32>> expected_parameter = {
@@ -1672,10 +1670,8 @@ namespace hal {
                 std::make_tuple(NetlistEvent::event::unmarked_global_gnd, test_nl.get(), gnd_gate->get_id()),
                 std::make_tuple(NetlistEvent::event::marked_global_input, test_nl.get(), test_net->get_id()),
                 std::make_tuple(NetlistEvent::event::marked_global_output, test_nl.get(), test_net->get_id()),
-                //std::make_tuple(NetlistEvent::event::marked_global_inout, test_nl.get(), test_net->get_id()),
                 std::make_tuple(NetlistEvent::event::unmarked_global_input, test_nl.get(), test_net->get_id()),
-                std::make_tuple(NetlistEvent::event::unmarked_global_output, test_nl.get(), test_net->get_id()),
-                //std::make_tuple(NetlistEvent::event::unmarked_global_inout, test_nl.get(), test_net->get_id())
+                std::make_tuple(NetlistEvent::event::unmarked_global_output, test_nl.get(), test_net->get_id())
             };
 
             // Check all events in a for-loop

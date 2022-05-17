@@ -67,7 +67,9 @@ namespace hal {
                                     "endmodule");
             std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
             VerilogParser verilog_parser;
-            std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+            ASSERT_TRUE(nl_res.is_ok());
+            std::unique_ptr<Netlist> nl = nl_res.get();
             ASSERT_NE(nl, nullptr);
 
             // Check if the gates are parsed correctly
@@ -161,7 +163,9 @@ namespace hal {
                                     "gate_3_to_1 gate_2 (.I0 (net_0 ),.I1 (net_1 ),.O (net_global_out ));endmodule");
             std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
             VerilogParser verilog_parser;
-            std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+            ASSERT_TRUE(nl_res.is_ok());
+            std::unique_ptr<Netlist> nl = nl_res.get();
             ASSERT_NE(nl, nullptr);
 
             // Check if the gates are parsed correctly
@@ -255,7 +259,9 @@ namespace hal {
                                     "endmodule");
             std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
             VerilogParser verilog_parser;
-            std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+            ASSERT_TRUE(nl_res.is_ok());
+            std::unique_ptr<Netlist> nl = nl_res.get();
             ASSERT_NE(nl, nullptr);
 
             ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).size(), 1);
@@ -332,7 +338,9 @@ namespace hal {
                                         "endmodule");
                 std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
 
                 // Check that all nets are created and connected correctly
@@ -380,7 +388,9 @@ namespace hal {
                                         "endmodule");
                 std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
 
                 // Check that all nets are created and connected correctly
@@ -429,7 +439,9 @@ namespace hal {
                                         "endmodule");
                 std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
 
                 // Check that all nets are created and connected correctly
@@ -437,10 +449,10 @@ namespace hal {
                 std::vector<std::string> net_idx
                     ({"(0)(0)(0)", "(0)(0)(1)", "(0)(1)(0)", "(0)(1)(1)", "(1)(0)(0)", "(1)(0)(1)", "(1)(1)(0)",
                       "(1)(1)(1)"});
-                for (size_t idx = 0; idx < 8; idx++) {
+                for (size_t idx = 0; idx < 8; idx++) 
+                {
                     ASSERT_FALSE(nl->get_nets(test_utils::net_name_filter("n_vec" + net_idx[idx])).empty());
-                    Net*
-                        n_vec_i_j = *nl->get_nets(test_utils::net_name_filter("n_vec" + net_idx[idx])).begin();
+                    Net* n_vec_i_j = *nl->get_nets(test_utils::net_name_filter("n_vec" + net_idx[idx])).begin();
                     ASSERT_EQ(n_vec_i_j->get_sources().size(), 1);
                     EXPECT_EQ(n_vec_i_j->get_sources()[0]->get_pin(), "O" + std::to_string(idx));
                     EXPECT_EQ((*n_vec_i_j->get_destinations().begin())->get_pin(), "I" + std::to_string(idx));
@@ -475,7 +487,9 @@ namespace hal {
                 
                 std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
 
                 EXPECT_EQ(nl->get_gnd_gates().front()->get_successors().size(), 8);
@@ -529,7 +543,9 @@ namespace hal {
                                         "endmodule");
                 std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
 
                 Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
@@ -628,7 +644,9 @@ namespace hal {
                                     "endmodule");
             std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
             VerilogParser verilog_parser;
-            std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+            ASSERT_TRUE(nl_res.is_ok());
+            std::unique_ptr<Netlist> nl = nl_res.get();
             ASSERT_NE(nl, nullptr);
 
             // check gates
@@ -759,7 +777,9 @@ namespace hal {
                                     "endmodule");
             auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
             VerilogParser verilog_parser;
-            std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+            ASSERT_TRUE(nl_res.is_ok());
+            std::unique_ptr<Netlist> nl = nl_res.get();
 
             // Test if all modules are created and assigned correctly
             ASSERT_NE(nl, nullptr);
@@ -868,7 +888,9 @@ namespace hal {
             // ISSUE: mod_out/mod_inner is not connected to gate_top (assign statement is not applied)
             auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
             VerilogParser verilog_parser;
-            std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+            ASSERT_TRUE(nl_res.is_ok());
+            std::unique_ptr<Netlist> nl = nl_res.get();
 
             // Test if all modules are created and assigned correctly
             ASSERT_NE(nl, nullptr);
@@ -993,7 +1015,9 @@ namespace hal {
                                     "endmodule");
             auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
             VerilogParser verilog_parser;
-            std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+            ASSERT_TRUE(nl_res.is_ok());
+            std::unique_ptr<Netlist> nl = nl_res.get();
 
             // Test if all modules are created and assigned correctly
             ASSERT_NE(nl, nullptr);
@@ -1096,7 +1120,9 @@ namespace hal {
 
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
                 EXPECT_EQ(nl->get_nets().size(), 3);    // global_in + global_out + net_master
@@ -1178,15 +1204,11 @@ namespace hal {
                           << "  assign net_slave_vector = net_master_vector;"    // <- !!!
                           << gate_list.str() << "endmodule";
 
-                    test_def::capture_stdout();
                     auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input.str());
                     VerilogParser verilog_parser;
-                    std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-                    if (nl == nullptr) {
-                        std::cout << test_def::get_captured_stdout();
-                    } else {
-                        test_def::get_captured_stdout();
-                    }
+                    auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                    ASSERT_TRUE(nl_res.is_ok());
+                    std::unique_ptr<Netlist> nl = nl_res.get();
 
                     for (u64 i = 0; i < (1 << dim); i++) {
                         ASSERT_NE(nl, nullptr);
@@ -1228,15 +1250,11 @@ namespace hal {
                                         "  .O (global_out )"
                                         " ) ;"
                                         "endmodule");
-                //test_def::capture_stdout();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
 
@@ -1284,15 +1302,11 @@ namespace hal {
                                         "  .O (global_out_2 )"
                                         " ) ;"
                                         "endmodule");
-                test_def::capture_stdout();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
                 std::vector<Net *> net_master_vector(12);
@@ -1328,15 +1342,11 @@ namespace hal {
                                         "    ) ;"
                                         "endmodule");
 
-                test_def::capture_stdout();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
 
@@ -1370,15 +1380,11 @@ namespace hal {
                                         "    ) ;"
                                         "endmodule");
 
-                test_def::capture_stdout();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
             }
@@ -1403,15 +1409,11 @@ namespace hal {
                                         "  .I ('b0101)\n"
                                         " ) ;\n"
                                         "endmodule");
-                test_def::capture_stdout();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
@@ -1446,7 +1448,9 @@ namespace hal {
                                         "endmodule");
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
@@ -1482,7 +1486,9 @@ namespace hal {
                                         "endmodule");
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
@@ -1518,8 +1524,9 @@ namespace hal {
                                         "endmodule");
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
@@ -1553,7 +1560,9 @@ namespace hal {
                                         "endmodule");
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 Net* net;
                 Gate* gate;
@@ -1581,6 +1590,42 @@ namespace hal {
                 ASSERT_NE(net, nullptr);
                 EXPECT_EQ(net->get_name(), "out(2)");
             }
+            {
+                // test using only parts of global in- and outputs (unused nets should be removed)
+                std::string netlist_input("module top (in, out) ;\n"
+                                        "  input [1:0] in;\n"
+                                        "  output [1:0] out;\n"
+                                        "gate_1_to_1 gate_0 (\n"
+                                        "  .I (in[1]),\n"
+                                        "  .O (out[0])\n"
+                                        " ) ;\n"
+                                        "endmodule");
+                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VerilogParser verilog_parser;
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
+
+                Net* net;
+                Gate* gate;
+
+                ASSERT_NE(nl, nullptr);
+                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).empty());
+                gate = *(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin());
+
+                EXPECT_EQ(nl->get_nets().size(), 2);
+                EXPECT_EQ(nl->get_top_module()->get_pins().size(), 2);
+
+                EXPECT_EQ(gate->get_fan_in_nets().size(), 1);
+                net = gate->get_fan_in_net("I");
+                ASSERT_NE(net, nullptr);
+                EXPECT_EQ(net->get_name(), "in(1)");
+
+                EXPECT_EQ(gate->get_fan_out_nets().size(), 1);
+                net = gate->get_fan_out_net("O");
+                ASSERT_NE(net, nullptr);
+                EXPECT_EQ(net->get_name(), "out(0)");
+            }
         TEST_END
     }
 
@@ -1600,10 +1645,10 @@ namespace hal {
                 // Testing all comment types with attributes
                 std::string netlist_input("/*here comes a module*/ module top (\n"
                                         "  global_in,\n"
-                                        "  global_out\n"
+                                        "  \\global_out_with//comment \n"
                                         " ) ;\n"
-                                        "  input global_in ;\n"
-                                        "  output global_out ;\n"
+                                        "  input global_in;\n"
+                                        "  output \\global_out_with//comment ;\n"
                                         "\n"
                                         "gate_1_to_1 #(\n"
                                         "  .no_comment_0(123), //.comment_0(123),\n"
@@ -1621,18 +1666,14 @@ namespace hal {
                                         ") \n"
                                         "test_gate (\n"
                                         "  .I (global_in ),\n"
-                                        "  .O (global_out )\n"
+                                        "  .O (\\global_out_with//comment )\n"
                                         " ) ;\n"
                                         "endmodule");
-                test_def::capture_stdout();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "test_gate")).size(), 1);
@@ -1658,6 +1699,9 @@ namespace hal {
                         std::cout << "comment failed for: " << key << std::endl;
                     }
                 }
+
+                // comment within escaped identifier
+                EXPECT_EQ(test_gate->get_fan_out_net("O")->get_name(), "global_out_with//comment");
             }
         TEST_END
     }
@@ -1687,7 +1731,9 @@ namespace hal {
                                         "endmodule");
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
 
@@ -1730,7 +1776,9 @@ namespace hal {
                                         "endmodule");
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
@@ -1784,15 +1832,11 @@ namespace hal {
                                         "  .O (net_vec_1[1] )"
                                         ") ;"
                                         "endmodule");
-                test_def::capture_stdout();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
                 EXPECT_EQ(nl->get_nets().size(), 6);    // 3 of the net_vector + global_in + global_out
@@ -1832,7 +1876,9 @@ namespace hal {
                                         "endmodule \n");
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
 
@@ -1869,7 +1915,9 @@ namespace hal {
                                         "endmodule \n");
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
 
@@ -1904,7 +1952,9 @@ namespace hal {
                                         "endmodule \n");
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
 
@@ -1943,8 +1993,8 @@ namespace hal {
                                         "endmodule");
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-                EXPECT_EQ(nl, nullptr);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_error());
             }
             {
                 // The passed Gate library name is unknown
@@ -1962,8 +2012,8 @@ namespace hal {
                                         "endmodule");
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-                EXPECT_EQ(nl, nullptr);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_error());
             }
             {
                 // The input does not contain any Module (is empty)
@@ -1971,9 +2021,8 @@ namespace hal {
                 std::string netlist_input("");
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-
-                EXPECT_EQ(nl, nullptr);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_error());
             }
             {
                 // Create a non-used entity (should not create any problems...)
@@ -2003,7 +2052,9 @@ namespace hal {
                                         "endmodule");
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
                 EXPECT_NE(nl, nullptr);
             }
             {
@@ -2030,8 +2081,8 @@ namespace hal {
                                         "endmodule");
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-                EXPECT_EQ(nl, nullptr);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_error());
             }
             if(test_utils::known_issue_tests_active())
             {
@@ -2053,8 +2104,8 @@ namespace hal {
                              "endmodule");
                     auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-                    EXPECT_EQ(nl, nullptr);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_error());
             }
             // ------ Verilog specific tests ------
             {
@@ -2073,8 +2124,8 @@ namespace hal {
                                         "endmodule");
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-                EXPECT_EQ(nl, nullptr);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_error());
             }
             if(test_utils::known_issue_tests_active())
             {
@@ -2091,8 +2142,8 @@ namespace hal {
                          "endmodule");
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-                EXPECT_EQ(nl, nullptr);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_error());
             }
             {
                 // Having a cyclic Module hierarchy
@@ -2121,11 +2172,11 @@ namespace hal {
                                         "endmodule");
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-                EXPECT_EQ(nl, nullptr);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_error());
             }
             {
-                // Port map gets multiple nets
+                // Port map gets multiple nets (should only assign right-most one)
                 NO_COUT_TEST_BLOCK;
                 std::string netlist_input("module top ("
                                         "  global_in,"
@@ -2135,7 +2186,7 @@ namespace hal {
                                         "  output global_out ;"
                                         "  wire net_0;"
                                         "gate_1_to_1 gate_0 ("
-                                        "  .I ({global_in, net_0} )"
+                                        "  .I ({net_0, global_in} )"
                                         " ) ;"
                                         "gate_1_to_1 gate_1 ("
                                         "  .I (net_0 ),"
@@ -2144,11 +2195,18 @@ namespace hal {
                                         "endmodule");
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
+
+                Gate* gate;
+
                 ASSERT_NE(nl, nullptr);
-                Gate* gate_0 = *nl->get_gates(test_utils::gate_name_filter("gate_0")).begin();
-                ASSERT_NE(gate_0, nullptr);
-                EXPECT_EQ(gate_0->get_fan_in_net("I")->get_name(), "net_0");
+                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).empty());
+                gate = *(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin());
+
+                ASSERT_NE(gate->get_fan_in_net("I"), nullptr);
+                EXPECT_EQ(gate->get_fan_in_net("I")->get_name(), "global_in");
             }
             {
                 // Connect a vector of output pins with a list of nets using '{ net_0, net_1, ... }' that is wider than
@@ -2164,7 +2222,9 @@ namespace hal {
                                         "endmodule");
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
                 ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
                 Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
@@ -2181,7 +2241,6 @@ namespace hal {
                 Net* net_3 = gate_0->get_fan_out_net("O(3)");
                 ASSERT_NE(net_3, nullptr);
                 EXPECT_EQ(net_3->get_name(), "l_vec(3)");
-
             }
             {
                 // Store an unknown data type
@@ -2201,43 +2260,11 @@ namespace hal {
                                         "endmodule");
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-                EXPECT_NE(nl, nullptr);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_error());
             }
             {
-                // Assign one Net to another, but booth are connected to different source gates
-                NO_COUT_TEST_BLOCK;
-                std::string netlist_input("module top ("
-                                        "  global_in,"
-                                        "  global_out"
-                                        " ) ;"
-                                        "  input global_in ;"
-                                        "  output global_out ;"
-                                        "  wire net_0 ;"
-                                        "  wire net_1 ;"
-                                        "  assign net_0 = net_1 ;"
-                                        "gate_1_to_1 gate_0 ("
-                                        "  .I (global_in ),"
-                                        "  .O (net_0 )"
-                                        " ) ;"
-                                        "gate_1_to_1 gate_1 ("
-                                        "  .I (global_in ),"
-                                        "  .O (net_1 )"
-                                        " ) ;"
-                                        "gate_2_to_1 gate_1 ("
-                                        "  .I0 (net_0 ),"
-                                        "  .I1 (net_1 ),"
-                                        "  .O (global_out )"
-                                        " ) ;"
-                                        "endmodule");
-                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-
-                EXPECT_EQ(nl, nullptr);
-            }
-            {
-                // Use an undeclared signal (should only throw a warning or return a nullptr)
+                // Use an undeclared signal
                 NO_COUT_TEST_BLOCK;
                 std::string netlist_input("module top ("
                                         "  global_in,"
@@ -2256,9 +2283,8 @@ namespace hal {
                                         "endmodule");
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-
-                EXPECT_TRUE(nl == nullptr || nl->get_nets(test_utils::net_name_filter("net_0")).size() == 1);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_error());
             }
             {
                 // Assign unknown signals
@@ -2278,8 +2304,8 @@ namespace hal {
                          "endmodule");
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-                EXPECT_EQ(nl, nullptr);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_error());
             }
         TEST_END
     }

@@ -59,34 +59,69 @@ namespace hal
                 return std::vector<Gate*>();
             }
 
-            static BooleanFunction get_function_of_gate(const Gate* const gate, std::unordered_map<u32, BooleanFunction>& cache)
+            static BooleanFunction get_function_of_gate(const Gate* const gate, const std::string& output_pin, std::map<std::pair<u32, std::string>, BooleanFunction>& cache)
             {
-                if (auto it = cache.find(gate->get_id()); it != cache.end())
+                if (auto it = cache.find({gate->get_id(), output_pin}); it != cache.end())
                 {
                     return it->second;
                 }
                 else
                 {
-                    BooleanFunction bf = gate->get_boolean_function();
+                    BooleanFunction bf = gate->get_boolean_function(output_pin);
 
-                    for (const std::string& input_pin : bf.get_variables())
+                    std::vector<std::string> input_vars = utils::to_vector(bf.get_variable_names());
+                    while (!input_vars.empty())
                     {
-                        const Net* const input_net = gate->get_fan_in_net(input_pin);
-                        if (input_net == nullptr)
-                        {
-                            // if no net is connected, the input pin name cannot be replaced
-                            log_warning("netlist_utils", "not net is connected to input pin '{}' of gate with ID {}, cannot replace pin name with net ID.", input_pin, gate->get_id());
-                            return bf;
-                        }
+                        const std::string var = input_vars.back();
+                        input_vars.pop_back();
 
-                        bf = bf.substitute(input_pin, std::to_string(input_net->get_id()));
+                        const PinDirection pin_dir = gate->get_type()->get_pin_direction(var);
+
+                        if (pin_dir == PinDirection::input)
+                        {
+                            const Net* const input_net = gate->get_fan_in_net(var);
+                            if (input_net == nullptr)
+                            {
+                                // if no net is connected, the input pin name cannot be replaced
+                                log_warning("netlist_utils", "no net is connected to input pin '{}' of gate with ID {}, cannot replace pin name with net ID.", var, gate->get_id());
+                                return bf;
+                            }
+
+                            bf = bf.substitute(var, "net_" + std::to_string(input_net->get_id()));
+                        }
+                        else if ((pin_dir == PinDirection::internal) || (pin_dir == PinDirection::output))
+                        {
+                            BooleanFunction bf_interal = gate->get_boolean_function(var);
+                            if (bf_interal.is_empty())
+                            {
+                                log_warning(
+                                    "netlist_utils", "trying to replace {} in function {} for gate {} and pin {} but cannot find boolean fucntion.", var, bf.to_string(), gate->get_id(), output_pin);
+                                return bf;
+                            }
+
+                            const std::vector<std::string> internal_input_vars = utils::to_vector(bf_interal.get_variable_names());
+                            input_vars.insert(input_vars.end(), internal_input_vars.begin(), internal_input_vars.end());
+
+                            auto substituted = bf.substitute(var, bf_interal);
+                            if (substituted.is_error())
+                            {
+                                log_error("netlist", "{}", substituted.get_error().get());
+                                return BooleanFunction();
+                            }
+                            bf = substituted.get();
+                        }
                     }
-                    cache.emplace(gate->get_id(), bf);
+
+                    cache.insert({{gate->get_id(), output_pin}, bf});
                     return bf;
                 }
             }
 
-            void subgraph_function_bfs(Net* n, BooleanFunction& result, std::vector<Net*> stack, const std::vector<const Gate*>& subgraph_gates, std::unordered_map<u32, BooleanFunction>& cache)
+            void subgraph_function_bfs(Net* n,
+                                       BooleanFunction& result,
+                                       std::vector<Net*> stack,
+                                       const std::vector<const Gate*>& subgraph_gates,
+                                       std::map<std::pair<u32, std::string>, BooleanFunction>& cache)
             {
                 if (n->get_num_of_sources() > 1)
                 {
@@ -107,11 +142,15 @@ namespace hal
 
                 stack.push_back(n);
 
-                Gate* src_gate = n->get_sources()[0]->get_gate();
+                Gate* src_gate            = n->get_sources()[0]->get_gate();
+                const std::string src_pin = n->get_sources()[0]->get_pin();
 
                 if (std::find(subgraph_gates.begin(), subgraph_gates.end(), src_gate) != subgraph_gates.end())
                 {
-                    result = result.substitute(std::to_string(n->get_id()), get_function_of_gate(src_gate, cache));
+                    if (auto substitution = result.substitute("net_" + std::to_string(n->get_id()), get_function_of_gate(src_gate, src_pin, cache)); substitution.is_ok())
+                    {
+                        result = substitution.get();
+                    }
 
                     for (Net* sn : src_gate->get_fan_in_nets())
                     {
@@ -121,7 +160,7 @@ namespace hal
             }
         }    // namespace
 
-        BooleanFunction get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates, std::unordered_map<u32, BooleanFunction>& cache)
+        BooleanFunction get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates, std::map<std::pair<u32, std::string>, BooleanFunction>& cache)
         {
             /* check validity of subgraph_gates */
             if (subgraph_gates.empty())
@@ -150,8 +189,9 @@ namespace hal
                 return BooleanFunction();
             }
 
-            const Gate* start_gate = net->get_sources()[0]->get_gate();
-            BooleanFunction result = get_function_of_gate(start_gate, cache);
+            const Gate* start_gate    = net->get_sources()[0]->get_gate();
+            const std::string src_pin = net->get_sources()[0]->get_pin();
+            BooleanFunction result    = get_function_of_gate(start_gate, src_pin, cache);
 
             for (Net* n : start_gate->get_fan_in_nets())
             {
@@ -163,25 +203,90 @@ namespace hal
 
         BooleanFunction get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates)
         {
-            std::unordered_map<u32, BooleanFunction> cache;
+            std::map<std::pair<u32, std::string>, BooleanFunction> cache;
             return get_subgraph_function(net, subgraph_gates, cache);
         }
 
         std::unique_ptr<Netlist> copy_netlist(const Netlist* nl)
         {
+            return nl->copy();
+        }
+
+        std::pair<std::map<u32, Gate*>, std::vector<std::vector<int>>> get_ff_dependency_matrix(const Netlist* nl)
+        {
+            std::map<u32, Gate*> matrix_id_to_gate;
+            std::map<Gate*, u32> gate_to_matrix_id;
+            std::vector<std::vector<int>> matrix;
+
+            u32 matrix_gates = 0;
+            for (const auto& gate : nl->get_gates())
+            {
+                if (!gate->get_type()->has_property(GateTypeProperty::ff))
+                {
+                    continue;
+                }
+                gate_to_matrix_id[gate]         = matrix_gates;
+                matrix_id_to_gate[matrix_gates] = gate;
+                matrix_gates++;
+            }
+
+            for (const auto& [id, gate] : matrix_id_to_gate)
+            {
+                std::vector<int> line_of_matrix;
+
+                std::set<u32> gates_to_add;
+                for (const auto& pred_gate : netlist_utils::get_next_sequential_gates(gate, false))
+                {
+                    gates_to_add.insert(gate_to_matrix_id[pred_gate]);
+                }
+
+                for (u32 i = 0; i < matrix_gates; i++)
+                {
+                    if (gates_to_add.find(i) != gates_to_add.end())
+                    {
+                        line_of_matrix.push_back(1);
+                    }
+                    else
+                    {
+                        line_of_matrix.push_back(0);
+                    }
+                }
+                matrix.push_back(line_of_matrix);
+            }
+
+            return std::make_pair(matrix_id_to_gate, matrix);
+        }
+
+        std::unique_ptr<Netlist> get_partial_netlist(const Netlist* nl, const std::vector<const Gate*>& subgraph_gates)
+        {
             std::unique_ptr<Netlist> c_netlist = netlist_factory::create_netlist(nl->get_gate_library());
+            c_netlist->enable_automatic_net_checks(false);
 
             // manager, netlist_id, and top_module are set in the constructor
 
+            // get all relevant nets
+            std::set<Net*> all_nets_to_copy;
+            for (const Gate* gate : nl->get_gates())
+            {
+                for (const auto& input_net_of_gate : gate->get_fan_in_nets())
+                {
+                    all_nets_to_copy.insert(input_net_of_gate);
+                }
+                for (const auto& output_net_gate : gate->get_fan_out_nets())
+                {
+                    all_nets_to_copy.insert(output_net_gate);
+                }
+            }
+
             // copy nets
-            for (const Net* net : nl->get_nets())
+            for (const Net* net : all_nets_to_copy)
             {
                 Net* new_net = c_netlist->create_net(net->get_id(), net->get_name());
                 new_net->set_data_map(net->get_data_map());
             }
 
             // copy gates
-            for (const Gate* gate : nl->get_gates())
+            for (const Gate* gate : subgraph_gates)
             {
                 Gate* new_gate = c_netlist->create_gate(gate->get_id(), gate->get_type(), gate->get_name(), gate->get_location_x(), gate->get_location_y());
 
@@ -207,98 +312,80 @@ namespace hal
                 }
 
                 new_gate->set_data_map(gate->get_data_map());
-            }
 
-            // copy modules
-            for (const Module* module : nl->get_modules())
-            {
-                // ignore top module, since this is already created by the constructor
-                if (module->get_id() == 1)
+                // mark gnd and vcc gates
+                if (gate->is_gnd_gate())
                 {
-                    c_netlist->get_top_module()->set_data_map(module->get_data_map());
-                    c_netlist->get_top_module()->set_type(module->get_type());
-                    continue;
+                    c_netlist->mark_gnd_gate(new_gate);
                 }
-
-                std::vector<Gate*> c_gates;
-                for (const Gate* gate : module->get_gates())
+                if (gate->is_vcc_gate())
                 {
-                    // find gates of module in the copied netlist by id
-                    Gate* c_gate = c_netlist->get_gate_by_id(gate->get_id());
-                    c_gates.push_back(c_gate);
-                }
-
-                // create all modules with the top module as parent module and update later
-                Module* new_module = c_netlist->create_module(module->get_id(), module->get_name(), c_netlist->get_top_module(), c_gates);
-
-                new_module->set_data_map(module->get_data_map());
-                new_module->set_type(module->get_type());
-            }
-
-            // update parent_module in modules
-            for (const Module* module : nl->get_modules())
-            {
-                // ignore top_module
-                if (module->get_parent_module() == nullptr)
-                {
-                    continue;
-                }
-
-                // find parent and child module in the copied netlist by id
-                const u32 module_id = module->get_id();
-                const u32 parent_id = module->get_parent_module()->get_id();
-                Module* c_module    = c_netlist->get_module_by_id(module_id);
-                Module* c_parent    = c_netlist->get_module_by_id(parent_id);
-
-                c_module->set_parent_module(c_parent);
-            }
-
-            // copy grougpings
-            for (const Grouping* grouping : nl->get_groupings())
-            {
-                Grouping* c_grouping = c_netlist->create_grouping(grouping->get_id(), grouping->get_name());
-
-                for (const Module* module : grouping->get_modules())
-                {
-                    const u32 module_id = module->get_id();
-                    c_grouping->assign_module_by_id(module_id);
-                }
-
-                for (const Net* net : grouping->get_nets())
-                {
-                    const u32 net_id = net->get_id();
-                    c_grouping->assign_net_by_id(net_id);
-                }
-
-                for (const Gate* gate : grouping->get_gates())
-                {
-                    const u32 gate_id = gate->get_id();
-                    c_grouping->assign_gate_by_id(gate_id);
+                    c_netlist->mark_vcc_gate(new_gate);
                 }
             }
 
-            // mark globals
-            for (const Net* global_input_net : nl->get_global_input_nets())
+            Module* top_module   = nl->get_top_module();
+            Module* c_top_module = c_netlist->get_top_module();
+
+            for (Net* c_net : c_netlist->get_nets())
             {
-                Net* c_global_input_net = c_netlist->get_net_by_id(global_input_net->get_id());
-                c_netlist->mark_global_input_net(c_global_input_net);
-            }
-            for (const Net* global_output_net : nl->get_global_output_nets())
-            {
-                Net* c_global_output_net = c_netlist->get_net_by_id(global_output_net->get_id());
-                c_netlist->mark_global_output_net(c_global_output_net);
-            }
-            for (const Gate* gnd_gate : nl->get_gnd_gates())
-            {
-                Gate* c_gnd_gate = c_netlist->get_gate_by_id(gnd_gate->get_id());
-                c_netlist->mark_gnd_gate(c_gnd_gate);
-            }
-            for (const Gate* vcc_gate : nl->get_vcc_gates())
-            {
-                Gate* c_vcc_gate = c_netlist->get_gate_by_id(vcc_gate->get_id());
-                c_netlist->mark_vcc_gate(c_vcc_gate);
+                Net* net = nl->get_net_by_id(c_net->get_id());
+
+                // mark new global inputs
+                if (c_net->get_num_of_sources() == 0)
+                {
+                    if (net->get_num_of_sources() != 0 || net->is_global_input_net())
+                    {
+                        c_netlist->mark_global_input_net(c_net);
+                    }
+                }
+
+                // mark nets that had a destination previously but now dont as global outputs
+                if (c_net->get_num_of_destinations() == 0)
+                {
+                    if (net->get_num_of_destinations() != 0 || net->is_global_output_net())
+                    {
+                        c_netlist->mark_global_output_net(c_net);
+                    }
+                }
             }
 
+            // update input and output nets
+            c_top_module->update_nets();
+
+            // create module pins for top module
+            for (Net* c_input_net : c_top_module->get_input_nets())
+            {
+                ModulePin* pin;
+
+                // either use existing name of pin or generate new one
+                if (auto res = top_module->get_pin_by_net(nl->get_net_by_id(c_input_net->get_id())); res.is_ok())
+                {
+                    pin = res.get();
+                    c_top_module->create_pin(pin->get_name(), c_input_net, pin->get_type());
+                }
+                else
+                {
+                    c_top_module->create_pin(c_input_net->get_name(), c_input_net);
+                }
+            }
+            for (Net* c_output_net : c_top_module->get_output_nets())
+            {
+                ModulePin* pin;
+
+                // either use existing name of pin or generate new one
+                if (auto res = top_module->get_pin_by_net(nl->get_net_by_id(c_output_net->get_id())); res.is_ok())
+                {
+                    pin = res.get();
+                    c_top_module->create_pin(pin->get_name(), c_output_net, pin->get_type());
+                }
+                else
+                {
+                    c_top_module->create_pin(c_output_net->get_name(), c_output_net);
+                }
+            }
+
+            // copy some meta data
             c_netlist->set_design_name(nl->get_design_name());
             c_netlist->set_device_name(nl->get_device_name());
             c_netlist->set_input_filename(nl->get_input_filename());
@@ -320,27 +407,7 @@ namespace hal
             c_netlist->set_used_grouping_ids(nl->get_used_grouping_ids());
             c_netlist->set_free_grouping_ids(nl->get_free_grouping_ids());
 
-            // copy module port names
-            for (const Module* module : nl->get_modules())
-            {
-                const u32 module_id = module->get_id();
-                Module* c_module    = c_netlist->get_module_by_id(module_id);
-
-                for (const auto& [net, port_name] : module->get_input_port_names())
-                {
-                    u32 net_id = net->get_id();
-                    c_module->set_input_port_name(c_netlist->get_net_by_id(net_id), port_name);
-                }
-
-                for (const auto& [net, port_name] : module->get_output_port_names())
-                {
-                    u32 net_id = net->get_id();
-                    c_module->set_output_port_name(c_netlist->get_net_by_id(net_id), port_name);
-                }
-
-                c_module->set_next_input_port_id(module->get_next_input_port_id());
-                c_module->set_next_output_port_id(module->get_next_output_port_id());
-            }
+            c_netlist->enable_automatic_net_checks(true);
 
             return c_netlist;
         }
@@ -363,23 +430,88 @@ namespace hal
                     for (const Net* n : get_successors ? g0->get_fan_out_nets() : g0->get_fan_in_nets())
                     {
                         if (nets_handled.find(n) != nets_handled.end())
+                        {
                             continue;
+                        }
                         nets_handled.insert(n);
 
                         for (const Endpoint* ep : get_successors ? n->get_destinations() : n->get_sources())
                         {
                             Gate* g1 = ep->get_gate();
                             if (gats_handled.find(g1) != gats_handled.end())
+                            {
                                 continue;    // already handled
+                            }
                             gats_handled.insert(g1);
-                            v1.push_back(g1);
                             if (!filter || filter(g1))
+                            {
+                                v1.push_back(g1);
                                 retval.push_back(g1);
+                            }
                         }
                     }
                 }
                 if (v1.empty())
+                {
                     break;
+                }
+                v0 = v1;
+            }
+            return retval;
+        }
+
+        std::vector<Gate*> get_next_gates(const Net* net, bool get_successors, int depth, const std::function<bool(const Gate*)>& filter)
+        {
+            std::vector<Gate*> retval;
+            std::unordered_map<u32, std::vector<Gate*>> cache;
+            std::vector<const Gate*> v0;
+            std::unordered_set<const Gate*> gates_handled;
+            std::unordered_set<const Net*> nets_handled;
+            for (const Endpoint* ep : (get_successors ? net->get_destinations() : net->get_sources()))
+            {
+                Gate* g = ep->get_gate();
+                if (!filter || filter(g))
+                {
+                    v0.push_back(g);
+                    gates_handled.insert(g);
+                    nets_handled.insert(net);
+                    retval.push_back(g);
+                }
+            }
+
+            for (int round = 1; depth == 0 || round < depth; round++)
+            {
+                std::vector<const Gate*> v1;
+                for (const Gate* g0 : v0)
+                {
+                    for (const Net* n : get_successors ? g0->get_fan_out_nets() : g0->get_fan_in_nets())
+                    {
+                        if (nets_handled.find(n) != nets_handled.end())
+                        {
+                            continue;
+                        }
+                        nets_handled.insert(n);
+
+                        for (const Endpoint* ep : get_successors ? n->get_destinations() : n->get_sources())
+                        {
+                            Gate* g1 = ep->get_gate();
+                            if (gates_handled.find(g1) != gates_handled.end())
+                            {
+                                continue;    // already handled
+                            }
+                            gates_handled.insert(g1);
+                            if (!filter || filter(g1))
+                            {
+                                v1.push_back(g1);
+                                retval.push_back(g1);
+                            }
+                        }
+                    }
+                }
+                if (v1.empty())
+                {
+                    break;
+                }
                 v0 = v1;
             }
             return retval;
@@ -641,15 +773,21 @@ namespace hal
 
                         if (sources.front()->get_gate()->is_gnd_gate())
                         {
-                            func = func.substitute(ep->get_pin(), BooleanFunction::Value::ZERO);
+                            if (auto substitution = func.substitute(ep->get_pin(), BooleanFunction::Const(0, 1)); substitution.is_ok())
+                            {
+                                func = substitution.get();
+                            }
                         }
                         else if (sources.front()->get_gate()->is_vcc_gate())
                         {
-                            func = func.substitute(ep->get_pin(), BooleanFunction::Value::ONE);
+                            if (auto substitution = func.substitute(ep->get_pin(), BooleanFunction::Const(1, 1)); substitution.is_ok())
+                            {
+                                func = substitution.get();
+                            }
                         }
                     }
 
-                    func = func.optimize_constants();
+                    func = func.simplify();
                 }
 
                 std::string func_str                    = func.to_string();
@@ -760,7 +898,7 @@ namespace hal
                     continue;
                 }
 
-                std::vector<std::string> active_pins = functions.begin()->second.get_variables();
+                auto active_pins = functions.begin()->second.get_variable_names();
 
                 // if there are more fan-in nets than there are active pins, we need to get rid of some nets
                 if (fan_in.size() > active_pins.size())
@@ -779,76 +917,6 @@ namespace hal
             }
 
             log_info("netlist_utils", "removed {} unused LUT fan-in endpoints from the netlist.", num_eps);
-        }
-
-        void rename_luts_according_to_function(Netlist* netlist)
-        {
-            u32 num_luts = 0;
-
-            std::unordered_map<std::string, std::string> truth_table_to_function = {
-                {"01", "BUF"},
-                {"10", "INV"},
-                {"0001", "AND2"},
-                {"1110", "NAND2"},
-                {"0111", "OR2"},
-                {"1000", "NOR2"},
-                {"0110", "XOR2"},
-                {"1001", "XNOR2"},
-                {"00000001", "AND3"},
-                {"11111110", "NAND3"},
-                {"01111111", "OR3"},
-                {"10000000", "NOR3"},
-                {"01101001", "XOR3"},
-                {"10010110", "XNOR3"},
-                {"00011011", "MUX"},      // A B S_B (meaning S selects B when S=1)
-                {"00100111", "MUX"},      // A B S_A
-                {"00011101", "MUX"},      // A S_B B
-                {"01000111", "MUX"},      // A S_A B
-                {"00110101", "MUX"},      // S_B A B
-                {"01010011", "MUX"},      // S_A A B
-                {"11100000", "AOI21"},    // !(A | (B & C))
-                {"11001000", "AOI21"},    // !(B | (A & C))
-                {"10101000", "AOI21"},    // !(C | (A & B))
-                {"11111000", "OAI21"},    // !(A | (B & C))
-                {"11101100", "OAI21"},    // !(B | (A & C))
-                {"11101010", "OAI21"},    // !(C | (A & B))
-                {"0000000000000001", "AND4"},
-                {"1111111111111110", "NAND4"},
-                {"0111111111111111", "OR4"},
-                {"1000000000000000", "NOR4"},
-                {"0110100110010110", "XOR4"},
-                {"1001011001101001", "XNOR4"},
-                {"1110111011100000", "AOI22"},    // !((A & B) | (C & D))
-                {"1111101011001000", "AOI22"},    // !((A & C) | (B & D))
-                {"1111110010101000", "AOI22"},    // !((A & D) | (B & C))
-                {"1111100010001000", "OAI22"},    // !((A | B) & (C | D))
-                {"1110110010100000", "OAI22"},    // !((A | C) & (B | D))
-                {"1110101011000000", "OAI22"}     // !((A | D) & (B | C))
-            };
-
-            for (Gate* gate : netlist->get_gates([](Gate* g) { return g->get_type()->has_property(GateTypeProperty::lut); }))
-            {
-                std::unordered_map<std::string, BooleanFunction> functions = gate->get_boolean_functions();
-
-                if (functions.size() != 1)
-                {
-                    continue;
-                }
-
-                std::string truth_table = "";
-                for (BooleanFunction::Value val : functions.begin()->second.get_truth_table())
-                {
-                    truth_table += BooleanFunction::to_string(val);
-                }
-
-                if (auto it = truth_table_to_function.find(truth_table); it != truth_table_to_function.end())
-                {
-                    gate->set_name(it->second + "_" + std::to_string(gate->get_id()));
-                    num_luts++;
-                }
-            }
-
-            log_info("netlist_utils", "renamed {} LUTs according to the function they implement.", num_luts);
         }
 
         std::vector<Net*> get_common_inputs(const std::vector<Gate*>& gates, u32 threshold)

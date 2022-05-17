@@ -17,6 +17,9 @@ namespace hal
         m_parent           = parent;
         m_name             = name;
 
+        m_next_pin_id       = 1;
+        m_next_pin_group_id = 1;
+
         m_event_handler = event_handler;
     }
 
@@ -25,12 +28,6 @@ namespace hal
         if (m_id != other.get_id() || m_name != other.get_name() || m_type != other.get_type())
         {
             log_info("module", "the modules with IDs {} and {} are not equal due to an unequal ID, name, or type.", m_id, other.get_id());
-            return false;
-        }
-
-        if (other.get_input_port_names().size() != get_input_port_names().size() || other.get_output_port_names().size() != get_output_port_names().size())
-        {
-            log_info("module", "the modules with IDs {} and {} are not equal due to unequal number of port names.", m_id, other.get_id());
             return false;
         }
 
@@ -54,20 +51,11 @@ namespace hal
             }
         }
 
-        for (const auto& [net, port_name] : get_input_port_names())
+        for (const PinGroup<ModulePin>* pin_group : get_pin_groups())
         {
-            if (const Net* other_net = other.get_input_port_net(port_name); other_net == nullptr || *other_net != *net)
+            if (const auto other_pin_group_res = other.get_pin_group_by_id(pin_group->get_id()); other_pin_group_res.is_error() || *(other_pin_group_res.get()) != *pin_group)
             {
-                log_info("module", "the modules with IDs {} and {} are not equal due to an unequal input ports.", m_id, other.get_id());
-                return false;
-            }
-        }
-
-        for (const auto& [net, port_name] : get_output_port_names())
-        {
-            if (const Net* other_net = other.get_output_port_net(port_name); other_net == nullptr || *other_net != *net)
-            {
-                log_info("module", "the modules with IDs {} and {} are not equal due to an unequal output ports.", m_id, other.get_id());
+                log_info("module", "the modules with IDs {} and {} are not equal due to an unequal pin group.", m_id, other.get_id());
                 return false;
             }
         }
@@ -84,6 +72,11 @@ namespace hal
     bool Module::operator!=(const Module& other) const
     {
         return !operator==(other);
+    }
+
+    ssize_t Module::get_hash() const
+    {
+        return (uintptr_t)this;
     }
 
     u32 Module::get_id() const
@@ -136,6 +129,35 @@ namespace hal
         return m_parent;
     }
 
+    std::vector<Module*> Module::get_parent_modules(const std::function<bool(Module*)>& filter, bool recursive) const
+    {
+        std::vector<Module*> res;
+        if (m_parent == nullptr)
+        {
+            return {};
+        }
+
+        if (!filter)
+        {
+            res.push_back(m_parent);
+        }
+        else
+        {
+            if (filter(m_parent))
+            {
+                res.push_back(m_parent);
+            }
+        }
+
+        if (recursive)
+        {
+            std::vector<Module*> more = m_parent->get_parent_modules(filter, true);
+            res.reserve(res.size() + more.size());
+            res.insert(res.end(), more.begin(), more.end());
+        }
+        return res;
+    }
+
     int Module::get_submodule_depth() const
     {
         int retval      = 0;
@@ -180,7 +202,16 @@ namespace hal
         m_parent->m_submodules_map.erase(m_id);
         m_parent->m_submodules.erase(std::find(m_parent->m_submodules.begin(), m_parent->m_submodules.end(), this));
 
-        m_parent->set_cache_dirty();
+        if (m_internal_manager->m_net_checks_enabled)
+        {
+            for (Net* net : get_nets(nullptr, true))
+            {
+                if (auto res = m_parent->check_net(net, true); res.is_error())
+                {
+                    log_error("module", "{}", res.get_error().get());
+                }
+            }
+        }
 
         m_event_handler->notify(ModuleEvent::event::submodule_removed, m_parent, m_id);
 
@@ -189,12 +220,42 @@ namespace hal
         m_parent->m_submodules_map[m_id] = this;
         m_parent->m_submodules.push_back(this);
 
-        m_parent->set_cache_dirty();
+        if (m_internal_manager->m_net_checks_enabled)
+        {
+            for (Net* net : get_nets(nullptr, true))
+            {
+                if (auto res = m_parent->check_net(net, true); res.is_error())
+                {
+                    log_error("module", "{}", res.get_error().get());
+                }
+            }
+        }
 
         m_event_handler->notify(ModuleEvent::event::parent_changed, this);
         m_event_handler->notify(ModuleEvent::event::submodule_added, m_parent, m_id);
 
         return true;
+    }
+
+    bool Module::is_parent_module_of(const Module* module, bool recursive) const
+    {
+        if (module == nullptr)
+        {
+            return false;
+        }
+        for (auto sm : m_submodules)
+        {
+            if (sm == module)
+            {
+                return true;
+            }
+            else if (recursive && sm->is_parent_module_of(module, true))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     std::vector<Module*> Module::get_submodules(const std::function<bool(Module*)>& filter, bool recursive) const
@@ -227,25 +288,27 @@ namespace hal
         return res;
     }
 
-    bool Module::contains_module(Module* other, bool recursive) const
+    bool Module::is_submodule_of(const Module* module, bool recursive) const
     {
-        if (other == nullptr)
+        if (module == nullptr)
         {
             return false;
         }
-        for (auto sm : m_submodules)
+        if (m_parent == module)
         {
-            if (sm == other)
-            {
-                return true;
-            }
-            else if (recursive && sm->contains_module(other, true))
-            {
-                return true;
-            }
+            return true;
+        }
+        else if (recursive && m_parent->is_submodule_of(module, true))
+        {
+            return true;
         }
 
         return false;
+    }
+
+    bool Module::contains_module(const Module* other, bool recursive) const
+    {
+        return is_parent_module_of(other, recursive);
     }
 
     bool Module::is_top_module() const
@@ -258,35 +321,32 @@ namespace hal
         return m_internal_manager->m_netlist;
     }
 
-    void Module::set_cache_dirty(bool is_dirty)
-    {
-        m_nets_dirty          = is_dirty;
-        m_input_nets_dirty    = is_dirty;
-        m_output_nets_dirty   = is_dirty;
-        m_internal_nets_dirty = is_dirty;
-    }
-
     bool Module::assign_gate(Gate* gate)
     {
-        return m_internal_manager->module_assign_gate(this, gate);
+        return m_internal_manager->module_assign_gates(this, {gate});
+    }
+
+    bool Module::assign_gates(const std::vector<Gate*>& gates)
+    {
+        return m_internal_manager->module_assign_gates(this, gates);
     }
 
     bool Module::remove_gate(Gate* gate)
     {
-        if (contains_gate(gate))
+        return remove_gates({gate});
+    }
+
+    bool Module::remove_gates(const std::vector<Gate*>& gates)
+    {
+        for (Gate* gate : gates)
         {
-            return m_internal_manager->module_assign_gate(m_internal_manager->m_netlist->get_top_module(), gate);
+            if (gate == nullptr || !contains_gate(gate))
+            {
+                return false;
+            }
         }
 
-        if (gate == nullptr)
-        {
-            log_error("module", "gate cannot be a nullptr.");
-            return false;
-        }
-
-        log_error(
-            "module", "gate '{}' with ID {} does not belong to module '{}' with ID {} in netlist with ID {}.", gate->get_name(), gate->get_id(), m_name, m_id, m_internal_manager->m_netlist->get_id());
-        return false;
+        return m_internal_manager->module_assign_gates(m_internal_manager->m_netlist->get_top_module(), gates);
     }
 
     bool Module::contains_gate(Gate* gate, bool recursive) const
@@ -362,443 +422,1049 @@ namespace hal
         return res;
     }
 
-    const std::vector<Net*>& Module::get_nets() const
+    /*
+     * ################################################################
+     *      net functions
+     * ################################################################
+     */
+
+    void Module::update_nets()
     {
-        if (m_nets_dirty)
+        m_nets.clear();
+        m_input_nets.clear();
+        m_output_nets.clear();
+        m_internal_nets.clear();
+
+        std::unordered_set<Net*> net_cache;
+        for (const Gate* gate : get_gates(nullptr, true))
         {
-            std::unordered_set<const Net*> seen;
-            m_nets.clear();
-
-            for (const Gate* gate : get_gates())
+            for (Net* net : gate->get_fan_in_nets())
             {
-                for (Net* net : gate->get_fan_in_nets())
-                {
-                    if (seen.find(net) == seen.end())
-                    {
-                        m_nets.push_back(net);
-                    }
-                }
-
-                for (Net* net : gate->get_fan_out_nets())
-                {
-                    if (seen.find(net) == seen.end())
-                    {
-                        m_nets.push_back(net);
-                    }
-                }
+                net_cache.insert(net);
             }
-
-            for (const Module* module : get_submodules())
+            for (Net* net : gate->get_fan_out_nets())
             {
-                for (Net* net : module->get_input_nets())
-                {
-                    if (seen.find(net) == seen.end())
-                    {
-                        seen.insert(net);
-                        m_nets.push_back(net);
-                    }
-                }
-
-                for (Net* net : module->get_output_nets())
-                {
-                    if (seen.find(net) == seen.end())
-                    {
-                        seen.insert(net);
-                        m_nets.push_back(net);
-                    }
-                }
+                net_cache.insert(net);
             }
-
-            std::sort(m_nets.begin(), m_nets.end());
-            m_nets_dirty = false;
         }
 
-        return m_nets;
+        for (Net* net : net_cache)
+        {
+            NetConnectivity con = check_net_endpoints(net);
+            if (con.has_internal_source || con.has_internal_destination)
+            {
+                m_nets.insert(net);
+
+                if (con.has_internal_source && con.has_internal_destination)
+                {
+                    m_internal_nets.insert(net);
+                }
+
+                if (con.has_internal_source && con.has_internal_destination && con.has_external_source && con.has_external_destination)
+                {
+                    m_input_nets.insert(net);
+                    m_output_nets.insert(net);
+                }
+                else if (con.has_external_source && con.has_internal_destination)
+                {
+                    m_input_nets.insert(net);
+                }
+                else if (con.has_internal_source && con.has_external_destination)
+                {
+                    m_output_nets.insert(net);
+                }
+            }
+        }
     }
 
-    const std::vector<Net*>& Module::get_input_nets() const
+    bool Module::contains_net(Net* net, bool recursive) const
     {
-        if (m_input_nets_dirty)
+        if (net == nullptr)
         {
-            std::unordered_set<Net*> seen;
-            m_input_nets.clear();
-            auto gates = get_gates(nullptr, true);
-            std::sort(gates.begin(), gates.end());
-            for (auto gate : gates)
+            return false;
+        }
+        bool success = m_nets.find(net) != m_nets.end();
+        if (!success && recursive)
+        {
+            for (auto sm : m_submodules)
             {
-                for (auto net : gate->get_fan_in_nets())
+                if (sm->contains_net(net, true))
                 {
-                    if (seen.find(net) != seen.end())
-                    {
-                        continue;
-                    }
-                    seen.insert(net);
-                    if (m_internal_manager->m_netlist->is_global_input_net(net))
-                    {
-                        m_input_nets.push_back(net);
-                        continue;
-                    }
-                    auto sources = net->get_sources();
-                    if (std::any_of(sources.begin(), sources.end(), [&gates](auto src) { return !std::binary_search(gates.begin(), gates.end(), src->get_gate()); }))
-                    {
-                        m_input_nets.push_back(net);
-                    }
+                    return true;
                 }
             }
-            std::sort(m_input_nets.begin(), m_input_nets.end());
-            m_input_nets_dirty = false;
         }
+        return success;
+    }
+
+    std::unordered_set<Net*> Module::get_nets(const std::function<bool(Net*)>& filter, bool recursive) const
+    {
+        std::unordered_set<Net*> res;
+        if (!filter)
+        {
+            return m_nets;
+        }
+        else
+        {
+            for (Net* n : m_nets)
+            {
+                if (!filter(n))
+                {
+                    continue;
+                }
+                res.insert(n);
+            }
+        }
+
+        if (recursive)
+        {
+            for (auto sm : m_submodules)
+            {
+                auto more = sm->get_nets(filter, true);
+                res.reserve(res.size() + more.size());
+                res.insert(more.begin(), more.end());
+            }
+        }
+
+        return res;
+    }
+
+    const std::unordered_set<Net*>& Module::get_input_nets() const
+    {
         return m_input_nets;
     }
 
-    const std::vector<Net*>& Module::get_output_nets() const
+    const std::unordered_set<Net*>& Module::get_output_nets() const
     {
-        if (m_output_nets_dirty)
-        {
-            std::unordered_set<Net*> seen;
-            m_output_nets.clear();
-            auto gates = get_gates(nullptr, true);
-            std::sort(gates.begin(), gates.end());
-            for (auto gate : gates)
-            {
-                for (auto net : gate->get_fan_out_nets())
-                {
-                    if (seen.find(net) != seen.end())
-                    {
-                        continue;
-                    }
-                    seen.insert(net);
-                    if (m_internal_manager->m_netlist->is_global_output_net(net))
-                    {
-                        m_output_nets.push_back(net);
-                        continue;
-                    }
-                    auto destinations = net->get_destinations();
-                    if (std::any_of(destinations.begin(), destinations.end(), [&gates](auto dst) { return !std::binary_search(gates.begin(), gates.end(), dst->get_gate()); }))
-                    {
-                        m_output_nets.push_back(net);
-                    }
-                }
-            }
-            std::sort(m_output_nets.begin(), m_output_nets.end());
-            m_output_nets_dirty = false;
-        }
         return m_output_nets;
     }
 
-    const std::vector<Net*>& Module::get_internal_nets() const
+    const std::unordered_set<Net*>& Module::get_internal_nets() const
     {
-        if (m_internal_nets_dirty)
-        {
-            std::unordered_set<Net*> seen;
-            m_internal_nets.clear();
-            auto gates = get_gates(nullptr, true);
-            std::sort(gates.begin(), gates.end());
-            for (auto gate : gates)
-            {
-                for (auto net : gate->get_fan_out_nets())
-                {
-                    if (seen.find(net) != seen.end())
-                    {
-                        continue;
-                    }
-                    seen.insert(net);
-                    auto destinations = net->get_destinations();
-                    if (std::any_of(destinations.begin(), destinations.end(), [&gates](auto dst) { return std::binary_search(gates.begin(), gates.end(), dst->get_gate()); }))
-                    {
-                        m_internal_nets.push_back(net);
-                    }
-                }
-            }
-            std::sort(m_internal_nets.begin(), m_internal_nets.end());
-            m_internal_nets_dirty = false;
-        }
         return m_internal_nets;
     }
 
-    void Module::set_input_port_name(Net* input_net, const std::string& port_name)
-    {
-        if (input_net == nullptr)
-        {
-            log_error("module", "nullptr given as input net for module '{}' with ID {} in netlist with ID {}.", m_name, m_id, m_internal_manager->m_netlist->get_id());
-            return;
-        }
-
-        if (m_input_port_names.find(port_name) != m_input_port_names.end())
-        {
-            log_error("module",
-                      "input port name '{}' already exists within module '{}' with ID {} in netlist with ID {}, ignoring port assignment.",
-                      port_name,
-                      m_name,
-                      m_id,
-                      m_internal_manager->m_netlist->get_id());
-            return;
-        }
-
-        const std::vector<Net*>& input_nets = get_input_nets();
-        if (auto it = std::find(input_nets.begin(), input_nets.end(), input_net); it == input_nets.end())
-        {
-            log_error("module",
-                      "net '{}' with ID {} is not an input net of module '{}' with ID {} in netlist with ID {}, ignoring port assignment.",
-                      input_net->get_name(),
-                      input_net->get_id(),
-                      m_name,
-                      m_id,
-                      m_internal_manager->m_netlist->get_id());
-            return;
-        }
-
-        m_named_input_nets.insert(input_net);
-        m_input_port_names.insert(port_name);
-
-        if (auto prev_name = m_input_net_to_port_name.find(input_net); prev_name != m_input_net_to_port_name.end())
-        {
-            m_input_port_names.erase(prev_name->second);
-        }
-        m_input_net_to_port_name[input_net] = port_name;
-
-        m_event_handler->notify(ModuleEvent::event::input_port_name_changed, this, input_net->get_id());
-    }
-
-    void Module::set_output_port_name(Net* output_net, const std::string& port_name)
-    {
-        if (output_net == nullptr)
-        {
-            log_error("module", "nullptr given as output net for module '{}' with ID {} in netlist with ID {}.", m_name, m_id, m_internal_manager->m_netlist->get_id());
-            return;
-        }
-
-        if (m_output_port_names.find(port_name) != m_output_port_names.end())
-        {
-            log_error("module",
-                      "output port name '{}' already exists within module '{}' with ID {} in netlist with ID {}, ignoring port assignment.",
-                      port_name,
-                      m_name,
-                      m_id,
-                      m_internal_manager->m_netlist->get_id());
-            return;
-        }
-
-        const std::vector<Net*>& output_nets = get_output_nets();
-        if (auto it = std::find(output_nets.begin(), output_nets.end(), output_net); it == output_nets.end())
-        {
-            log_error("module",
-                      "net '{}' with ID {} is not an output net of module '{}' with ID {} in netlist with ID {}, ignoring port assignment.",
-                      output_net->get_name(),
-                      output_net->get_id(),
-                      m_name,
-                      m_id,
-                      m_internal_manager->m_netlist->get_id());
-            return;
-        }
-
-        m_named_output_nets.insert(output_net);
-        m_output_port_names.insert(port_name);
-        if (auto prev_name = m_output_net_to_port_name.find(output_net); prev_name != m_output_net_to_port_name.end())
-        {
-            m_output_port_names.erase(prev_name->second);
-        }
-        m_output_net_to_port_name[output_net] = port_name;
-
-        m_event_handler->notify(ModuleEvent::event::output_port_name_changed, this, output_net->get_id());
-    }
-
-    std::string Module::get_input_port_name(Net* net) const
+    bool Module::is_input_net(Net* net) const
     {
         if (net == nullptr)
         {
-            log_error("module", "nullptr given as input net for module '{}' with ID {} in netlist with ID {}.", m_name, m_id, m_internal_manager->m_netlist->get_id());
-            return "";
+            return false;
         }
 
-        const std::vector<Net*>& input_nets = get_input_nets();
-        if (auto it = std::find(input_nets.begin(), input_nets.end(), net); it == input_nets.end())
-        {
-            log_error("module",
-                      "net '{}' with ID {} is not an input net of module '{}' with ID {} in netlist with ID {}.",
-                      net->get_name(),
-                      net->get_id(),
-                      m_name,
-                      m_id,
-                      m_internal_manager->m_netlist->get_id());
-            return "";
-        }
-
-        std::string port_name;
-        if (auto it = m_input_net_to_port_name.find(net); it != m_input_net_to_port_name.end())
-        {
-            port_name = it->second;
-        }
-        else
-        {
-            do
-            {
-                port_name = "I(" + std::to_string(m_next_input_port_id++) + ")";
-            } while (m_input_port_names.find(port_name) != m_input_port_names.end());
-
-            m_named_input_nets.insert(net);
-            m_input_port_names.insert(port_name);
-            m_input_net_to_port_name.emplace(net, port_name);
-        }
-
-        return port_name;
+        return m_input_nets.find(net) != m_input_nets.end();
     }
 
-    std::string Module::get_output_port_name(Net* net) const
+    bool Module::is_output_net(Net* net) const
     {
         if (net == nullptr)
         {
-            log_error("module", "nullptr given as output net for module '{}' with ID {} in netlist with ID {}.", m_name, m_id, m_internal_manager->m_netlist->get_id());
-            return "";
+            return false;
         }
 
-        const std::vector<Net*>& output_nets = get_output_nets();
-        if (auto it = std::find(output_nets.begin(), output_nets.end(), net); it == output_nets.end())
+        return m_output_nets.find(net) != m_output_nets.end();
+    }
+
+    bool Module::is_internal_net(Net* net) const
+    {
+        if (net == nullptr)
         {
-            log_error("module",
-                      "net '{}' with ID {} is not an output net of module '{}' with ID {} in netlist with ID {}.",
-                      net->get_name(),
-                      net->get_id(),
-                      m_name,
-                      m_id,
-                      m_internal_manager->m_netlist->get_id());
-            return "";
+            return false;
         }
 
-        std::string port_name;
-        if (auto it = m_output_net_to_port_name.find(net); it != m_output_net_to_port_name.end())
+        return m_internal_nets.find(net) != m_internal_nets.end();
+    }
+
+    Module::NetConnectivity Module::check_net_endpoints(const Net* net) const
+    {
+        std::vector<Endpoint*> sources      = net->get_sources();
+        std::vector<Endpoint*> destinations = net->get_destinations();
+
+        NetConnectivity res;
+        res.has_external_source      = net->is_global_input_net();
+        res.has_internal_source      = false;
+        res.has_external_destination = net->is_global_output_net();
+        res.has_internal_destination = false;
+
+        for (Endpoint* ep : sources)
         {
-            port_name = it->second;
+            if (Module* mod = ep->get_gate()->get_module(); this != mod && !is_parent_module_of(mod, true))
+            {
+                res.has_external_source = true;
+            }
+            else
+            {
+                res.has_internal_source = true;
+            }
+
+            if (res.has_external_source && res.has_internal_source)
+            {
+                break;
+            }
+        }
+
+        for (Endpoint* ep : destinations)
+        {
+            if (Module* mod = ep->get_gate()->get_module(); this != mod && !is_parent_module_of(mod, true))
+            {
+                res.has_external_destination = true;
+            }
+            else
+            {
+                res.has_internal_destination = true;
+            }
+
+            if (res.has_external_destination && res.has_internal_destination)
+            {
+                break;
+            }
+        }
+
+        return res;
+    }
+
+    Result<std::monostate> Module::check_net(Net* net, bool recursive)
+    {
+        NetConnectivity con = check_net_endpoints(net);
+        if (con.has_internal_source && con.has_internal_destination)
+        {
+            m_internal_nets.insert(net);
         }
         else
         {
-            do
-            {
-                port_name = "O(" + std::to_string(m_next_output_port_id++) + ")";
-            } while (m_output_port_names.find(port_name) != m_output_port_names.end());
-
-            m_named_output_nets.insert(net);
-            m_output_port_names.insert(port_name);
-            m_output_net_to_port_name.emplace(net, port_name);
+            m_internal_nets.erase(net);
         }
 
-        return port_name;
-    }
-
-    Net* Module::get_input_port_net(const std::string& port_name) const
-    {
-        for (const auto& [net, name] : m_input_net_to_port_name)
+        if (con.has_internal_source || con.has_internal_destination)
         {
-            if (name == port_name)
+            m_nets.insert(net);
+        }
+        else
+        {
+            m_nets.erase(net);
+        }
+
+        if (con.has_internal_source && con.has_internal_destination && con.has_external_source && con.has_external_destination)
+        {
+            if (auto pin_res = get_pin_by_net(net); pin_res.is_ok())
             {
-                return net;
+                ModulePin* pin = pin_res.get();
+                if (auto direction = pin->get_direction(); direction == PinDirection::input)
+                {
+                    m_output_nets.insert(net);
+                    pin->set_direction(PinDirection::inout);
+                    m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+                }
+                else if (auto direction = pin->get_direction(); direction == PinDirection::output)
+                {
+                    m_input_nets.insert(net);
+                    pin->set_direction(PinDirection::inout);
+                    m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+                }
+            }
+            else
+            {
+                if (auto res = assign_pin_net(get_unique_pin_id(), net, PinDirection::inout); res.is_error())
+                {
+                    return ERR(res.get_error());
+                }
+            }
+        }
+        else if (con.has_external_source && con.has_internal_destination)
+        {
+            if (auto pin_res = get_pin_by_net(net); pin_res.is_ok())
+            {
+                ModulePin* pin = pin_res.get();
+                if (const auto direction = pin->get_direction(); direction == PinDirection::output || direction == PinDirection::inout)
+                {
+                    m_input_nets.insert(net);
+                    m_output_nets.erase(net);
+                    pin->set_direction(PinDirection::input);
+                    m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+                }
+            }
+            else
+            {
+                m_input_nets.insert(net);
+                if (auto res = assign_pin_net(get_unique_pin_id(), net, PinDirection::input); res.is_error())
+                {
+                    return ERR(res.get_error());
+                }
+            }
+        }
+        else if (con.has_internal_source && con.has_external_destination)
+        {
+            if (auto pin_res = get_pin_by_net(net); pin_res.is_ok())
+            {
+                ModulePin* pin = pin_res.get();
+                if (const auto direction = pin->get_direction(); direction == PinDirection::input || direction == PinDirection::inout)
+                {
+                    m_output_nets.insert(net);
+                    m_input_nets.erase(net);
+                    pin->set_direction(PinDirection::output);
+                    m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+                }
+            }
+            else
+            {
+                m_output_nets.insert(net);
+                if (auto res = assign_pin_net(get_unique_pin_id(), net, PinDirection::output); res.is_error())
+                {
+                    return ERR(res.get_error());
+                }
+            }
+        }
+        else
+        {
+            if (auto pin_res = get_pin_by_net(net); pin_res.is_ok())
+            {
+                ModulePin* pin = pin_res.get();
+                auto direction = pin->get_direction();
+                if (direction == PinDirection::input || direction == PinDirection::inout)
+                {
+                    m_input_nets.erase(net);
+                }
+                if (direction == PinDirection::output || direction == PinDirection::inout)
+                {
+                    m_output_nets.erase(net);
+                }
+                if (auto res = remove_pin_net(net); res.is_error())
+                {
+                    return res;
+                }
             }
         }
 
-        log_error("module", "port '{}' is not an input port of module '{}' with ID {} in netlist with ID {}.", port_name, this->get_name(), this->get_id(), m_internal_manager->m_netlist->get_id());
-        return nullptr;
-    }
-
-    Net* Module::get_output_port_net(const std::string& port_name) const
-    {
-        for (const auto& [net, name] : m_output_net_to_port_name)
+        if (m_internal_manager->m_net_checks_enabled && recursive && m_parent != nullptr)
         {
-            if (name == port_name)
+            if (auto res = m_parent->check_net(net, true); res.is_error())
             {
-                return net;
+                return res;
             }
         }
 
-        log_error("module", "port '{}' is not an output port of module '{}' with ID {} in netlist with ID {}.", port_name, this->get_name(), this->get_id(), m_internal_manager->m_netlist->get_id());
-        return nullptr;
+        return OK({});
     }
 
-    const std::map<Net*, std::string>& Module::get_input_port_names() const
+    /*
+     * ################################################################
+     *      pin functions
+     * ################################################################
+     */
+
+    u32 Module::get_unique_pin_id()
     {
-        const std::vector<Net*>& input_nets = get_input_nets();
-
-        std::vector<Net*> diff;
-
-        // find nets that are still in the port map but no longer an input net
-        std::set_difference(m_named_input_nets.begin(), m_named_input_nets.end(), input_nets.begin(), input_nets.end(), std::back_inserter(diff));
-        for (auto net : diff)
+        if (!m_free_pin_ids.empty())
         {
-            m_named_input_nets.erase(net);
-            m_input_port_names.erase(m_input_net_to_port_name.at(net));
-            m_input_net_to_port_name.erase(net);
+            return *(m_free_pin_ids.begin());
+        }
+        while (m_used_pin_ids.find(m_next_pin_id) != m_used_pin_ids.end())
+        {
+            m_next_pin_id++;
+        }
+        return m_next_pin_id;
+    }
+
+    u32 Module::get_unique_pin_group_id()
+    {
+        if (!m_free_pin_group_ids.empty())
+        {
+            return *(m_free_pin_group_ids.begin());
+        }
+        while (m_used_pin_group_ids.find(m_next_pin_group_id) != m_used_pin_group_ids.end())
+        {
+            m_next_pin_group_id++;
+        }
+        return m_next_pin_group_id;
+    }
+
+    Result<ModulePin*> Module::create_pin(const u32 id, const std::string& name, Net* net, PinType type, bool create_group)
+    {
+        if (m_internal_manager->m_net_checks_enabled)
+        {
+            return ERR(
+                "cannot manually assign pin as automatic net checks are enabled. Disable these checks using 'Netlist::enable_automatic_net_checks(false)' in case you want to manage pins manually.");
         }
 
-        diff.clear();
-
-        // find nets that are input nets but have not yet been assigned a port name
-        std::set_difference(input_nets.begin(), input_nets.end(), m_named_input_nets.begin(), m_named_input_nets.end(), std::back_inserter(diff));
-        for (auto net : diff)
+        if (net == nullptr)
         {
-            std::string port_name;
-            do
+            return ERR("'nullptr' given instead of a net when trying to assign pin '" + name + "' to a net of module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        PinDirection direction;
+        bool is_input  = is_input_net(net);
+        bool is_output = is_output_net(net);
+
+        if (is_input && is_output)
+        {
+            direction = PinDirection::inout;
+        }
+        else if (is_input)
+        {
+            direction = PinDirection::input;
+        }
+        else if (is_output)
+        {
+            direction = PinDirection::output;
+        }
+        else
+        {
+            return ERR("net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + " is neither an input nor an output of module '" + m_name + "' with ID " + std::to_string(m_id)
+                       + ", could not assign pin with name '" + name + "'");
+        }
+
+        if (auto pin_res = create_pin_internal(id, name, net, direction, type); pin_res.is_error())
+        {
+            return pin_res;
+        }
+        else
+        {
+            if (create_group)
             {
-                port_name = "I(" + std::to_string(m_next_input_port_id++) + ")";
-            } while (m_input_port_names.find(port_name) != m_input_port_names.end());
-
-            m_named_input_nets.insert(net);
-            m_input_port_names.insert(port_name);
-            m_input_net_to_port_name.emplace(net, port_name);
+                if (const auto group_res = create_pin_group_internal(get_unique_pin_group_id(), name, direction, type, false, 0); group_res.is_error())
+                {
+                    assert(delete_pin_internal(pin_res.get()).is_ok());
+                    return ERR(group_res.get_error());
+                }
+                else
+                {
+                    if (const auto assign_res = group_res.get()->assign_pin(pin_res.get()); assign_res.is_error())
+                    {
+                        assert(delete_pin_internal(pin_res.get()).is_ok());
+                        assert(delete_pin_group_internal(group_res.get()).is_ok());
+                        return ERR(assign_res.get_error());
+                    }
+                }
+            }
+            m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+            return pin_res;
         }
-
-        return m_input_net_to_port_name;
     }
 
-    const std::map<Net*, std::string>& Module::get_output_port_names() const
+    Result<ModulePin*> Module::create_pin(const std::string& name, Net* net, PinType type, bool create_group)
     {
-        const std::vector<Net*>& output_nets = get_output_nets();
-        std::set<Net*> diff;
+        return create_pin(get_unique_pin_id(), name, net, type, create_group);
+    }
 
-        // find nets that are still in the port map but no longer an output net
-        std::set_difference(m_named_output_nets.begin(), m_named_output_nets.end(), output_nets.begin(), output_nets.end(), std::inserter(diff, diff.begin()));
-        for (auto net : diff)
+    std::vector<ModulePin*> Module::get_pins(const std::function<bool(ModulePin*)>& filter) const
+    {
+        std::vector<ModulePin*> res;
+        if (!filter)
         {
-            m_named_output_nets.erase(net);
-            m_output_port_names.erase(m_output_net_to_port_name.at(net));
-            m_output_net_to_port_name.erase(net);
-        }
-
-        diff.clear();
-
-        // find nets that are output nets but have not yet been assigned a port name
-        std::set_difference(output_nets.begin(), output_nets.end(), m_named_output_nets.begin(), m_named_output_nets.end(), std::inserter(diff, diff.begin()));
-        for (auto net : diff)
-        {
-            std::string port_name;
-            do
+            res.reserve(m_pins.size());
+            for (const auto& group : m_pin_groups)
             {
-                port_name = "O(" + std::to_string(m_next_output_port_id++) + ")";
-            } while (m_output_port_names.find(port_name) != m_output_port_names.end());
+                std::vector<ModulePin*> pins = group->get_pins();
+                res.insert(res.end(), pins.begin(), pins.end());
+            }
+        }
+        else
+        {
+            for (PinGroup<ModulePin>* group : m_pin_groups_ordered)
+            {
+                for (ModulePin* pin : group->get_pins())
+                {
+                    if (filter(pin))
+                    {
+                        res.push_back(pin);
+                    }
+                }
+            }
+        }
+        return res;
+    }
 
-            m_named_output_nets.insert(net);
-            m_output_port_names.insert(port_name);
-            m_output_net_to_port_name.emplace(net, port_name);
+    std::vector<PinGroup<ModulePin>*> Module::get_pin_groups(const std::function<bool(PinGroup<ModulePin>*)>& filter) const
+    {
+        std::vector<PinGroup<ModulePin>*> res;
+        if (!filter)
+        {
+            res.reserve(m_pin_groups_ordered.size());
+            res.insert(res.end(), m_pin_groups_ordered.begin(), m_pin_groups_ordered.end());
+        }
+        else
+        {
+            for (PinGroup<ModulePin>* group : m_pin_groups_ordered)
+            {
+                if (filter(group))
+                {
+                    res.push_back(group);
+                }
+            }
+        }
+        return res;
+    }
+
+    Result<ModulePin*> Module::get_pin_by_id(const u32 id) const
+    {
+        if (id == 0)
+        {
+            return ERR("pin ID 0 is invalid");
         }
 
-        return m_output_net_to_port_name;
+        if (const auto it = m_pins_map.find(id); it != m_pins_map.end())
+        {
+            return OK(it->second);
+        }
+
+        return ERR("module '" + m_name + "' with ID " + std::to_string(m_id) + " contains no pin with ID " + std::to_string(id));
     }
 
-    void Module::set_next_input_port_id(u32 id)
+    Result<ModulePin*> Module::get_pin_by_net(Net* net) const
     {
-        m_next_input_port_id = id;
+        if (net == nullptr)
+        {
+            return ERR("'nullptr' given instead of a net when trying to get a pin by net from module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        if (const auto it = std::find_if(m_pins.begin(), m_pins.end(), [net](const std::unique_ptr<ModulePin>& pin) { return pin->get_net() == net; }); it != m_pins.end())
+        {
+            return OK(it->get());
+        }
+
+        return ERR("net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + " does not pass through a pin of module '" + m_name + "' with ID " + std::to_string(m_id));
     }
 
-    u32 Module::get_next_input_port_id() const
+    Result<PinGroup<ModulePin>*> Module::get_pin_group_by_id(const u32 id) const
     {
-        return m_next_input_port_id;
+        if (id == 0)
+        {
+            return ERR("provided invalid pin group ID of 0 when trying to get a pin by ID from module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        if (const auto it = m_pin_groups_map.find(id); it != m_pin_groups_map.end())
+        {
+            return OK(it->second);
+        }
+
+        return ERR("module '" + m_name + "' with ID " + std::to_string(m_id) + " contains no pin group with ID " + std::to_string(id));
     }
 
-    void Module::set_next_output_port_id(u32 id)
+    Result<std::monostate> Module::set_pin_name(ModulePin* pin, const std::string& new_name)
     {
-        m_next_output_port_id = id;
+        if (pin == nullptr)
+        {
+            return ERR("'nullptr' given instead of a pin when trying to set the name of a pin for module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        if (new_name.empty())
+        {
+            return ERR("empty string passed as new name for pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " of module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        if (const auto it = m_pins_map.find(pin->get_id()); it == m_pins_map.end() || it->second != pin)
+        {
+            return ERR("pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " does not belong to module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        if (pin->get_name() != new_name)
+        {
+            pin->set_name(new_name);
+            m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+        }
+
+        return OK({});
     }
 
-    u32 Module::get_next_output_port_id() const
+    Result<std::monostate> Module::set_pin_group_name(PinGroup<ModulePin>* pin_group, const std::string& new_name)
     {
-        return m_next_output_port_id;
+        if (pin_group == nullptr)
+        {
+            return ERR("'nullptr' given instead of a pin group when trying to set the name of a pin group for module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        if (new_name.empty())
+        {
+            return ERR("empty string passed as new name for pin group '" + pin_group->get_name() + "' with ID " + std::to_string(pin_group->get_id()) + " of module '" + m_name + "' with ID "
+                       + std::to_string(m_id));
+        }
+
+        if (const auto it = m_pin_groups_map.find(pin_group->get_id()); it == m_pin_groups_map.end() || it->second != pin_group)
+        {
+            return ERR("pin group '" + pin_group->get_name() + "' with ID " + std::to_string(pin_group->get_id()) + " does not belong to module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        if (pin_group->get_name() != new_name)
+        {
+            pin_group->set_name(new_name);
+            m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+        }
+
+        return OK({});
+    }
+
+    Result<std::monostate> Module::set_pin_type(ModulePin* pin, PinType new_type)
+    {
+        if (pin == nullptr)
+        {
+            return ERR("'nullptr' given instead of a pin when trying to set the type of a pin for module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        if (const auto it = m_pins_map.find(pin->get_id()); it == m_pins_map.end() || it->second != pin)
+        {
+            return ERR("pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " does not belong to module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        if (pin->get_type() != new_type)
+        {
+            pin->set_type(new_type);
+            m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+        }
+
+        return OK({});
+    }
+
+    Result<std::monostate> Module::set_pin_group_type(PinGroup<ModulePin>* pin_group, PinType new_type)
+    {
+        if (pin_group == nullptr)
+        {
+            return ERR("'nullptr' given instead of a pin group when trying to set the type of a pin group for module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        if (const auto it = m_pin_groups_map.find(pin_group->get_id()); it == m_pin_groups_map.end() || it->second != pin_group)
+        {
+            return ERR("pin group '" + pin_group->get_name() + "' with ID " + std::to_string(pin_group->get_id()) + " does not belong to module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        if (pin_group->get_type() != new_type)
+        {
+            pin_group->set_type(new_type);
+            m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+        }
+        return OK({});
+    }
+
+    Result<std::monostate> Module::set_pin_group_direction(PinGroup<ModulePin>* pin_group, PinDirection new_direction)
+    {
+        if (pin_group == nullptr)
+        {
+            return ERR("'nullptr' given instead of a pin group when trying to set the direction of a pin group for module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        if (const auto it = m_pin_groups_map.find(pin_group->get_id()); it == m_pin_groups_map.end() || it->second != pin_group)
+        {
+            return ERR("pin group '" + pin_group->get_name() + "' with ID " + std::to_string(pin_group->get_id()) + " does not belong to module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        if (pin_group->get_direction() != new_direction)
+        {
+            pin_group->set_direction(new_direction);
+            m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+        }
+        return OK({});
+    }
+
+    Result<PinGroup<ModulePin>*> Module::create_pin_group(const u32 id,
+                                                          const std::string& name,
+                                                          const std::vector<ModulePin*> pins,
+                                                          PinDirection direction,
+                                                          PinType type,
+                                                          bool ascending,
+                                                          u32 start_index,
+                                                          bool delete_empty_groups)
+    {
+        PinGroup<ModulePin>* pin_group;
+        if (auto res = create_pin_group_internal(id, name, direction, type, ascending, start_index); res.is_error())
+        {
+            return res;
+        }
+        else
+        {
+            pin_group = res.get();
+        }
+
+        for (ModulePin* pin : pins)
+        {
+            if (pin == nullptr)
+            {
+                return ERR("cannot assign 'nullptr' as pin to pin group in module '" + m_name + "' with ID " + std::to_string(m_id));
+            }
+
+            if (const auto it = m_pins_map.find(pin->get_id()); it == m_pins_map.end() || it->second != pin)
+            {
+                return ERR("pin '" + pin->get_name() + "' does not belong to module '" + m_name + "' with ID " + std::to_string(m_id));
+            }
+
+            if (auto res = assign_pin_to_group(pin_group, pin, delete_empty_groups); res.is_error())
+            {
+                assert(delete_pin_group(pin_group).is_ok());
+                return ERR(res.get_error());
+            }
+        }
+
+        m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+        return OK(pin_group);
+    }
+
+    Result<PinGroup<ModulePin>*>
+        Module::create_pin_group(const std::string& name, const std::vector<ModulePin*> pins, PinDirection direction, PinType type, bool ascending, u32 start_index, bool delete_empty_groups)
+    {
+        return create_pin_group(get_unique_pin_group_id(), name, pins, direction, type, ascending, start_index, delete_empty_groups);
+    }
+
+    Result<std::monostate> Module::delete_pin_group(PinGroup<ModulePin>* pin_group)
+    {
+        if (pin_group == nullptr)
+        {
+            return ERR("'nullptr' given instead of a pin group when trying to delete a pin group of module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        if (const auto it = m_pin_groups_map.find(pin_group->get_id()); it == m_pin_groups_map.end() || it->second != pin_group)
+        {
+            return ERR("pin group '" + pin_group->get_name() + "' with ID " + std::to_string(pin_group->get_id()) + " does not belong to module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        bool removed_pins = false;
+
+        std::vector<ModulePin*> pins_copy = pin_group->get_pins();
+        for (ModulePin* pin : pins_copy)
+        {
+            removed_pins = true;
+            if (auto res = create_pin_group(pin->get_name(), {pin}, pin->get_direction(), pin->get_type(), false, 0, false); res.is_error())
+            {
+                return ERR(res.get_error());
+            }
+        }
+
+        if (auto res = delete_pin_group_internal(pin_group); res.is_error())
+        {
+            return ERR(res.get_error());
+        }
+
+        if (removed_pins)
+        {
+            m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+        }
+        return OK({});
+    }
+
+    Result<std::monostate> Module::assign_pin_to_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, bool delete_empty_groups)
+    {
+        if (pin_group == nullptr)
+        {
+            return ERR("'nullptr' given instead of a pin group when trying to assign a pin to a pin group of module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        if (pin == nullptr)
+        {
+            return ERR("'nullptr' given instead of a pin when trying to assign a pin to pin group '" + pin_group->get_name() + "' of module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        if (const auto it = m_pin_groups_map.find(pin_group->get_id()); it == m_pin_groups_map.end() || it->second != pin_group)
+        {
+            return ERR("pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " does not belong to module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        if (const auto it = m_pins_map.find(pin->get_id()); it == m_pins_map.end() || it->second != pin)
+        {
+            return ERR("pin group '" + pin_group->get_name() + "' with ID " + std::to_string(pin_group->get_id()) + " does not belong to module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        if (PinGroup<ModulePin>* pg = pin->get_group().first; pg != nullptr)
+        {
+            // remove from old group and potentially delete old group if empty
+            if (auto res = pg->remove_pin(pin); res.is_error())
+            {
+                return res;
+            }
+
+            if (delete_empty_groups && pg->empty())
+            {
+                if (auto res = delete_pin_group_internal(pg); res.is_error())
+                {
+                    return res;
+                }
+            }
+        }
+
+        if (auto res = pin_group->assign_pin(pin); res.is_error())
+        {
+            return res;
+        }
+
+        m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+        return OK({});
+    }
+
+    Result<std::monostate> Module::move_pin_within_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, u32 new_index)
+    {
+        if (pin_group == nullptr)
+        {
+            return ERR("'nullptr' given instead of a pin group when trying to move a pin within a pin group of module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        if (pin == nullptr)
+        {
+            return ERR("'nullptr' given instead of a pin when trying to move a pin within pin group '" + pin_group->get_name() + "' of module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        if (const auto it = m_pin_groups_map.find(pin_group->get_id()); it == m_pin_groups_map.end() || it->second != pin_group)
+        {
+            return ERR("pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " does not belong to module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        if (const auto it = m_pins_map.find(pin->get_id()); it == m_pins_map.end() || it->second != pin)
+        {
+            return ERR("pin group '" + pin_group->get_name() + "' with ID " + std::to_string(pin_group->get_id()) + " does not belong to module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        if (auto res = pin_group->move_pin(pin, new_index); res.is_error())
+        {
+            return res;
+        }
+
+        m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+        return OK({});
+    }
+
+    Result<std::monostate> Module::remove_pin_from_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, bool delete_empty_groups)
+    {
+        if (pin_group == nullptr)
+        {
+            return ERR("'nullptr' given instead of a pin group when trying to remove a pin from a pin group of module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        if (pin == nullptr)
+        {
+            return ERR("'nullptr' given instead of a pin when trying to remove a pin from pin group '" + pin_group->get_name() + "' of module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        if (const auto it = m_pin_groups_map.find(pin_group->get_id()); it == m_pin_groups_map.end() || it->second != pin_group)
+        {
+            return ERR("pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " does not belong to module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        if (const auto it = m_pins_map.find(pin->get_id()); it == m_pins_map.end() || it->second != pin)
+        {
+            return ERR("pin group '" + pin_group->get_name() + "' with ID " + std::to_string(pin_group->get_id()) + " does not belong to module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        if (auto res = create_pin_group(get_unique_pin_group_id(), pin->get_name(), {pin}, pin->get_direction(), pin->get_type(), false, 0, delete_empty_groups); res.is_error())
+        {
+            return ERR(res.get_error());
+        }
+
+        return OK({});
+    }
+
+    Result<ModulePin*> Module::assign_pin_net(const u32 pin_id, Net* net, PinDirection direction, const std::string& name, PinType type)
+    {
+        std::string name_internal;
+
+        if (!name.empty())
+        {
+            name_internal = name;
+        }
+        else
+        {
+            std::string port_prefix;
+            u32* index_counter;
+            switch (direction)
+            {
+                case PinDirection::input:
+                    port_prefix   = "I";
+                    index_counter = &m_next_input_index;
+                    break;
+                case PinDirection::inout:
+                    port_prefix   = "IO";
+                    index_counter = &m_next_inout_index;
+                    break;
+                case PinDirection::output:
+                    port_prefix   = "O";
+                    index_counter = &m_next_output_index;
+                    break;
+                default:
+                    break;
+            }
+            name_internal = port_prefix + "(" + std::to_string((*index_counter)++) + ")";
+        }
+
+        // create pin
+        ModulePin* pin;
+        if (auto res = create_pin_internal(pin_id, name_internal, net, direction, type); res.is_error())
+        {
+            return res;
+        }
+        else
+        {
+            pin = res.get();
+        }
+
+        if (const auto group_res = create_pin_group_internal(get_unique_pin_group_id(), name_internal, pin->get_direction(), pin->get_type(), false, 0); group_res.is_error())
+        {
+            return ERR(group_res.get_error());
+        }
+        else
+        {
+            if (const auto assign_res = group_res.get()->assign_pin(pin); assign_res.is_error())
+            {
+                return ERR(assign_res.get_error());
+            }
+        }
+
+        m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+        return OK(pin);
+    }
+
+    Result<std::monostate> Module::remove_pin_net(Net* net)
+    {
+        ModulePin* pin;
+        if (auto res = get_pin_by_net(net); res.is_error())
+        {
+            return ERR(res.get_error());
+        }
+        else
+        {
+            pin = res.get();
+        }
+
+        PinGroup<ModulePin>* pin_group = pin->get_group().first;
+        assert(pin_group != nullptr);
+
+        if (auto res = pin_group->remove_pin(pin); res.is_error())
+        {
+            return res;
+        }
+
+        if (pin_group->empty())
+        {
+            if (auto res = delete_pin_group_internal(pin_group); res.is_error())
+            {
+                return res;
+            }
+        }
+
+        if (const auto res = delete_pin_internal(pin); res.is_error())
+        {
+            return res;
+        }
+
+        m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+        return OK({});
+    }
+
+    Result<ModulePin*> Module::create_pin_internal(const u32 id, const std::string& name, Net* net, PinDirection direction, PinType type)
+    {
+        // some sanity checks
+        if (id == 0)
+        {
+            return ERR("cannot assign pin '" + name + "' to net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + " within module '" + m_name + "' with ID " + std::to_string(m_id)
+                       + " as pin ID 0 is invalid");
+        }
+        if (m_used_pin_ids.find(id) != m_used_pin_ids.end())
+        {
+            return ERR("cannot assign pin '" + name + "' to net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + " as a pin with ID " + std::to_string(id)
+                       + " already exists within module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+        if (net == nullptr)
+        {
+            return ERR("'nullptr' given instead of a net when trying to assign pin '" + name + "' to a net of module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+        if (name.empty())
+        {
+            return ERR("empty string passed as name for pin at net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + " of module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+        if (direction == PinDirection::internal || direction == PinDirection::none)
+        {
+            return ERR("pin direction '" + enum_to_string(direction) + "' is invalid, cannot assign pin '" + name + "' to net '" + net->get_name() + "' with ID " + std::to_string(net->get_id())
+                       + " within module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        // create pin
+        std::unique_ptr<ModulePin> pin_owner(new ModulePin(id, name, net, direction, type));
+        ModulePin* pin = pin_owner.get();
+        m_pins.push_back(std::move(pin_owner));
+        m_pins_map[id] = pin;
+
+        // mark pin ID as used
+        if (auto free_id_it = m_free_pin_ids.find(id); free_id_it != m_free_pin_ids.end())
+        {
+            m_free_pin_ids.erase(free_id_it);
+        }
+        m_used_pin_ids.insert(id);
+
+        return OK(pin);
+    }
+
+    Result<std::monostate> Module::delete_pin_internal(ModulePin* pin)
+    {
+        // some sanity checks
+        if (pin == nullptr)
+        {
+            return ERR("'nullptr' given instead of a pin when trying to delete a pin of module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+        if (const auto it = m_pins_map.find(pin->get_id()); it == m_pins_map.end() || it->second != pin)
+        {
+            return ERR("cannot delete pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " as it does not belong to module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        // erase pin
+        u32 id = pin->get_id();
+        m_pins_map.erase(id);
+        m_pins.erase(std::find_if(m_pins.begin(), m_pins.end(), [pin](const auto& p) { return p.get() == pin; }));
+
+        // free pin ID
+        m_free_pin_ids.insert(id);
+        m_used_pin_ids.erase(id);
+
+        return OK({});
+    }
+
+    Result<PinGroup<ModulePin>*> Module::create_pin_group_internal(const u32 id, const std::string& name, PinDirection direction, PinType type, bool ascending, u32 start_index)
+    {
+        // some sanity checks
+        if (id == 0)
+        {
+            return ERR("cannot create pin group '" + name + " within module '" + m_name + "' with ID " + std::to_string(m_id) + " as pin ID 0 is invalid");
+        }
+        if (m_used_pin_group_ids.find(id) != m_used_pin_group_ids.end())
+        {
+            return ERR("cannot create pin group '" + name + " as a pin with ID " + std::to_string(id) + " already exists within module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+        if (name.empty())
+        {
+            return ERR("empty string provided when trying to create new pin group for module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+
+        // create pin group
+        std::unique_ptr<PinGroup<ModulePin>> pin_group_owner(new PinGroup<ModulePin>(id, name, direction, type, ascending, start_index));
+        PinGroup<ModulePin>* pin_group = pin_group_owner.get();
+        m_pin_groups.push_back(std::move(pin_group_owner));
+        m_pin_groups_ordered.push_back(pin_group);
+        m_pin_groups_map[id] = pin_group;
+
+        // mark pin group ID as used
+        if (auto free_id_it = m_free_pin_group_ids.find(id); free_id_it != m_free_pin_group_ids.end())
+        {
+            m_free_pin_group_ids.erase(free_id_it);
+        }
+        m_used_pin_group_ids.insert(id);
+
+        return OK(pin_group);
+    }
+
+    Result<std::monostate> Module::delete_pin_group_internal(PinGroup<ModulePin>* pin_group)
+    {
+        // some sanity checks
+        if (pin_group == nullptr)
+        {
+            return ERR("'nullptr' given instead of a pin group when trying to delete a pin group of module '" + m_name + "' with ID " + std::to_string(m_id));
+        }
+        if (const auto it = m_pin_groups_map.find(pin_group->get_id()); it == m_pin_groups_map.end() || it->second != pin_group)
+        {
+            return ERR("cannot delete pin group '" + pin_group->get_name() + "' with ID " + std::to_string(pin_group->get_id()) + " as it does not belong to module '" + m_name + "' with ID "
+                       + std::to_string(m_id));
+        }
+
+        // erase pin group
+        u32 id = pin_group->get_id();
+        m_pin_groups_map.erase(id);
+        m_pin_groups_ordered.erase(std::find(m_pin_groups_ordered.begin(), m_pin_groups_ordered.end(), pin_group));
+        m_pin_groups.erase(std::find_if(m_pin_groups.begin(), m_pin_groups.end(), [pin_group](const auto& pg) { return pg.get() == pin_group; }));
+
+        // free pin group ID
+        m_free_pin_group_ids.insert(id);
+        m_used_pin_group_ids.erase(id);
+
+        return OK({});
     }
 }    // namespace hal

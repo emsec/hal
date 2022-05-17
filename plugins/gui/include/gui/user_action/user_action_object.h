@@ -22,15 +22,16 @@
 //  SOFTWARE.
 
 #pragma once
-#include <QObject>
-#include <QXmlStreamWriter>
-#include <QXmlStreamReader>
-#include "hal_core/defines.h"
-#include "gui/selection_relay/selection_relay.h"
 #include "gui/gui_def.h"
+#include "gui/selection_relay/selection_relay.h"
+#include "hal_core/defines.h"
 
-namespace hal {
+#include <QObject>
+#include <QXmlStreamReader>
+#include <QXmlStreamWriter>
 
+namespace hal
+{
     /**
      * @ingroup user_action
      * @brief The UserActionObjectType class provides the type for UserActionObject
@@ -42,7 +43,19 @@ namespace hal {
     {
         Q_OBJECT
     public:
-        enum ObjectType{ None, Module, Gate, Net, Grouping, Netlist, Context, Port, MaxObjectType };
+        enum ObjectType
+        {
+            None,
+            Module,
+            Gate,
+            Net,
+            Grouping,
+            Netlist,
+            Context,
+            Pin,
+            PinGroup,
+            MaxObjectType
+        };
         Q_ENUM(ObjectType)
 
         static ObjectType fromString(const QString& s);
@@ -55,7 +68,6 @@ namespace hal {
         static Node::NodeType toNodeType(ObjectType t);
     };
 
-
     /**
      * @ingroup user_action
      * @brief The UserActionObject class represents a single object used in UserAction
@@ -65,29 +77,36 @@ namespace hal {
     class UserActionObject
     {
     public:
-
         /**
          * Object constructor, without arguments object of type None gets constructed.
          *
          * @param i - The id.
          * @param t - The type.
          */
-        UserActionObject(u32 i=0, UserActionObjectType::ObjectType t=UserActionObjectType::None)
-            : mId(i), mType(t) {;}
+        UserActionObject(u32 i = 0, UserActionObjectType::ObjectType t = UserActionObjectType::None) : mId(i), mType(t)
+        {
+            ;
+        }
 
         /**
          * Get the object's id.
          *
          * @return The id.
          */
-        u32 id() const { return mId; }
+        u32 id() const
+        {
+            return mId;
+        }
 
         /**
          * Get the object's type.
          *
          * @return The type.
          */
-        UserActionObjectType::ObjectType type() const { return mType; }
+        UserActionObjectType::ObjectType type() const
+        {
+            return mType;
+        }
 
         /**
          * Persist object to xml attributes "id" and "type".
@@ -115,4 +134,4 @@ namespace hal {
         UserActionObjectType::ObjectType mType;
     };
 
-}
+}    // namespace hal

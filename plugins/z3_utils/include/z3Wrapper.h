@@ -24,6 +24,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/netlist/boolean_function.h"
 #include "z3++.h"
 
 #include <atomic>
@@ -152,6 +153,13 @@ namespace hal
              * @param[in] nl - Pointer to the netlist that includedes the GND and VCC gates to replace.
              */
             void remove_static_inputs(const Netlist* nl);
+
+            /**
+             * Generates an equivalent truthtable to the regular BooleanFunction truthtable generation.
+             * 
+             * @returns a vector of boolean output values of the expression corresponding to the input mapping at that index. 
+             */
+            std::vector<BooleanFunction::Value> generate_truth_table() const;
 
         private:
             u32 m_z3_wrapper_id;

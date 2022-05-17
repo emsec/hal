@@ -7,7 +7,7 @@ target_include_directories(py
                            PUBLIC
                            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
                            $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
-                           $<BUILD_INTERFACE:${PYTHON_INCLUDE_DIRS}>
+                           $<BUILD_INTERFACE:${Python3_INCLUDE_DIRS}>
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
                            PRIVATE
                            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/python_bindings/bindings>
@@ -21,7 +21,7 @@ set_target_properties(py PROPERTIES PREFIX "")
 if(APPLE AND CMAKE_HOST_APPLE)
     set_target_properties(py PROPERTIES SUFFIX ".so")
 endif(APPLE AND CMAKE_HOST_APPLE)
-target_link_libraries(py PUBLIC PRIVATE ${PYTHON_LIBRARIES} pybind11::module hal::netlist hal::utilities hal::plugin_system)
+target_link_libraries(py PUBLIC PRIVATE ${Python3_LIBRARIES} pybind11::module hal::netlist hal::utilities hal::plugin_system)
 install(TARGETS py
         EXPORT hal
         LIBRARY DESTINATION ${LIBRARY_INSTALL_DIRECTORY}
@@ -45,7 +45,7 @@ endif()
 #                            PUBLIC
 #                            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
 #                            $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
-#                            $<BUILD_INTERFACE:${PYTHON_INCLUDE_DIRS}>
+#                            $<BUILD_INTERFACE:${Python3_INCLUDE_DIRS}>
 #                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 #                            )
 # target_compile_options(hal_python
@@ -53,7 +53,7 @@ endif()
 #                        PRIVATE ${COMPILE_OPTIONS_PRIVATE}
 #                        INTERFACE ${COMPILE_OPTIONS_INTERFACE})
 # set_target_properties(hal_python PROPERTIES DEFINE_SYMBOL API_PYTHON_PLUGIN)
-# target_link_libraries(hal_python PUBLIC hal::core hal::netlist PRIVATE ${PYTHON_LIBRARIES})
+# target_link_libraries(hal_python PUBLIC hal::core hal::netlist PRIVATE ${Python3_LIBRARIES})
 # install(TARGETS hal_python
 #         LIBRARY DESTINATION ${LIBRARY_INSTALL_DIRECTORY}
 #         PERMISSIONS

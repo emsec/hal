@@ -41,6 +41,12 @@ namespace hal
     }
 
 //------- QVector<NodeBox*> -----------------------
+    NodeBoxes::~NodeBoxes()
+    {
+        for (NodeBox* nb : *this)
+            delete nb;
+    }
+
     void NodeBoxes::clearBoxes()
     {
         for (NodeBox* nb : *this)

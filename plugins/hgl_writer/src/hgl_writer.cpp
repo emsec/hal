@@ -7,6 +7,7 @@
 #include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/ram_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/ram_port_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/state_component.h"
 #include "hal_core/utilities/log.h"
 #include "rapidjson/filewritestream.h"
 #include "rapidjson/prettywriter.h"
@@ -58,6 +59,14 @@ namespace hal
         // library name
         document.AddMember("library", gate_lib->get_name(), allocator);
 
+        // gate location data specification
+        rapidjson::Value gate_locs(rapidjson::kObjectType);
+        gate_locs.AddMember("data_category", gate_lib->get_gate_location_data_category(), allocator);
+        const std::pair<std::string, std::string>& location_identifiers = gate_lib->get_gate_location_data_identifiers();
+        gate_locs.AddMember("data_x_identifier", location_identifiers.first, allocator);
+        gate_locs.AddMember("data_y_identifier", location_identifiers.second, allocator);
+        document.AddMember("gate_locations", gate_locs, allocator);
+
         // gate types
         std::vector<GateType*> gate_types;
 
@@ -102,6 +111,7 @@ namespace hal
                 InitComponent* init_component = lut_component->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
                 if (init_component == nullptr)
                 {
+                    log_error("hgl_writer", "missing InitComponent for LUT initialization data of gate type '{}'.", gt->get_name());
                     return false;
                 }
 
@@ -125,7 +135,17 @@ namespace hal
             {
                 rapidjson::Value ff_config(rapidjson::kObjectType);
 
-                InitComponent* init_component = ff_component->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
+                StateComponent* state_component = ff_component->get_component_as<StateComponent>([](const GateTypeComponent* c) { return StateComponent::is_class_of(c); });
+                if (state_component == nullptr)
+                {
+                    log_error("hgl_writer", "missing StateComponent for FF state identifiers of gate type '{}'.", gt->get_name());
+                    return false;
+                }
+
+                ff_config.AddMember("state", state_component->get_state_identifier(), allocator);
+                ff_config.AddMember("neg_state", state_component->get_neg_state_identifier(), allocator);
+
+                InitComponent* init_component = state_component->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
                 if (init_component != nullptr)
                 {
                     // data_category, data_identifier
@@ -161,9 +181,25 @@ namespace hal
             {
                 rapidjson::Value latch_config(rapidjson::kObjectType);
 
+                StateComponent* state_component = latch_component->get_component_as<StateComponent>([](const GateTypeComponent* c) { return StateComponent::is_class_of(c); });
+                if (state_component == nullptr)
+                {
+                    log_error("hgl_writer", "missing StateComponent for latch state identifiers of gate type '{}'.", gt->get_name());
+                    return false;
+                }
+
+                latch_config.AddMember("state", state_component->get_state_identifier(), allocator);
+                latch_config.AddMember("neg_state", state_component->get_neg_state_identifier(), allocator);
+
                 // next_state, clocked_on, clear_on, preset_on
-                latch_config.AddMember("data_in", latch_component->get_data_in_function().to_string(), allocator);
-                latch_config.AddMember("enable_on", latch_component->get_enable_function().to_string(), allocator);
+                if (BooleanFunction bf = latch_component->get_data_in_function(); !bf.is_empty())
+                {
+                    latch_config.AddMember("data_in", bf.to_string(), allocator);
+                }
+                if (BooleanFunction bf = latch_component->get_enable_function(); !bf.is_empty())
+                {
+                    latch_config.AddMember("enable_on", bf.to_string(), allocator);
+                }
                 if (BooleanFunction bf = latch_component->get_async_reset_function(); !bf.is_empty())
                 {
                     latch_config.AddMember("clear_on", bf.to_string(), allocator);
