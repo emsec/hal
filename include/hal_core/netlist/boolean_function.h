@@ -231,6 +231,66 @@ namespace hal
         static Result<BooleanFunction> Sub(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
+         * Joins two Boolean functions by applying an 'MUL' operation. 
+         * Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.
+         * 
+         * 
+         * @param[in] p0 - First Boolean function.
+         * @param[in] p1 - Second Boolean function.
+         * @param[in] size - Bit-size of the operation.
+         * @returns Ok() and the joined Boolean function on success, an error otherwise.
+         */
+        static Result<BooleanFunction> Mul(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+
+        /**
+         * Joins two Boolean functions by applying an 'SDIV' operation. 
+         * Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.
+         * 
+         * 
+         * @param[in] p0 - First Boolean function.
+         * @param[in] p1 - Second Boolean function.
+         * @param[in] size - Bit-size of the operation.
+         * @returns Ok() and the joined Boolean function on success, an error otherwise.
+         */
+        static Result<BooleanFunction> Sdiv(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+
+        /**
+         * Joins two Boolean functions by applying an 'UDIV' operation. 
+         * Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.
+         * 
+         * 
+         * @param[in] p0 - First Boolean function.
+         * @param[in] p1 - Second Boolean function.
+         * @param[in] size - Bit-size of the operation.
+         * @returns Ok() and the joined Boolean function on success, an error otherwise.
+         */
+        static Result<BooleanFunction> Udiv(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+
+        /**
+         * Joins two Boolean functions by applying an 'SREM' operation. 
+         * Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.
+         * 
+         * 
+         * @param[in] p0 - First Boolean function.
+         * @param[in] p1 - Second Boolean function.
+         * @param[in] size - Bit-size of the operation.
+         * @returns Ok() and the joined Boolean function on success, an error otherwise.
+         */
+        static Result<BooleanFunction> Srem(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+
+        /**
+         * Joins two Boolean functions by applying an 'UREM' operation. 
+         * Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.
+         * 
+         * 
+         * @param[in] p0 - First Boolean function.
+         * @param[in] p1 - Second Boolean function.
+         * @param[in] size - Bit-size of the operation.
+         * @returns Ok() and the joined Boolean function on success, an error otherwise.
+         */
+        static Result<BooleanFunction> Urem(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+
+        /**
          * Returns the slice `[i:j]` of a Boolean function specified by a start index `i` and an end index `j` beginning at 0.
          * Note that slice `[i:j]` includes positions `i` and `j` as well. 
          * 
@@ -449,6 +509,26 @@ namespace hal
          * @returns The joined Boolean function.
          */
         BooleanFunction& operator-=(const BooleanFunction& other);
+
+        /**
+         * Joins two Boolean functions by an 'MUL' operation. 
+         * Requires both Boolean functions to be of the same bit-size.
+         * \warning Fails if the Boolean functions have different bit-sizes.
+         * 
+         * @param[in] other - The other Boolean function.
+         * @returns The joined Boolean function.
+         */
+        BooleanFunction operator*(const BooleanFunction& other) const;
+
+        /**
+         * Joins two Boolean functions by an 'MUL' operation in-place. 
+         * Requires both Boolean functions to be of the same bit-size.
+         * \warning Fails if the Boolean functions have different bit-sizes.
+         * 
+         * @param[in] other - The other Boolean function.
+         * @returns The joined Boolean function.
+         */
+        BooleanFunction& operator*=(const BooleanFunction& other);
 
         /**
          * Checks whether two Boolean functions are equal.
@@ -986,8 +1066,13 @@ namespace hal
         static constexpr u16 Not = 0x0002;
         static constexpr u16 Xor = 0x0003;
 
-        static constexpr u16 Add = 0x0010;
-        static constexpr u16 Sub = 0x0011;
+        static constexpr u16 Add  = 0x0010;
+        static constexpr u16 Sub  = 0x0011;
+        static constexpr u16 Mul  = 0x0012;
+        static constexpr u16 Sdiv = 0x0013;
+        static constexpr u16 Udiv = 0x0014;
+        static constexpr u16 Srem = 0x0015;
+        static constexpr u16 Urem = 0x0016;
 
         static constexpr u16 Concat = 0x0100;
         static constexpr u16 Slice  = 0x0101;

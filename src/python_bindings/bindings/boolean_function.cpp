@@ -266,6 +266,146 @@ namespace hal
         )");
 
         py_boolean_function.def_static(
+            "Mul",
+            [](BooleanFunction p0, BooleanFunction p1, u16 size) -> std::optional<BooleanFunction> {
+                auto res = BooleanFunction::Mul(std::move(p0), std::move(p1), size);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("p0"),
+            py::arg("p1"),
+            py::arg("size"),
+            R"(
+            Joins two Boolean functions by applying an 'MUL' operation. 
+            Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.
+
+            :param hal_py.BooleanFunction p0: First Boolean function.
+            :param hal_py.BooleanFunction p1: Second Boolean function.
+            :param int size: Bit-size of the operation.
+            :returns: The joined Boolean function on success, None otherwise.
+            :rtype: hal_py.BooleanFunction or None
+        )");
+
+        py_boolean_function.def_static(
+            "Sdiv",
+            [](BooleanFunction p0, BooleanFunction p1, u16 size) -> std::optional<BooleanFunction> {
+                auto res = BooleanFunction::Sdiv(std::move(p0), std::move(p1), size);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("p0"),
+            py::arg("p1"),
+            py::arg("size"),
+            R"(
+            Joins two Boolean functions by applying an 'SDIV' operation. 
+            Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.
+
+            :param hal_py.BooleanFunction p0: First Boolean function.
+            :param hal_py.BooleanFunction p1: Second Boolean function.
+            :param int size: Bit-size of the operation.
+            :returns: The joined Boolean function on success, None otherwise.
+            :rtype: hal_py.BooleanFunction or None
+        )");
+
+        py_boolean_function.def_static(
+            "Udiv",
+            [](BooleanFunction p0, BooleanFunction p1, u16 size) -> std::optional<BooleanFunction> {
+                auto res = BooleanFunction::Udiv(std::move(p0), std::move(p1), size);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("p0"),
+            py::arg("p1"),
+            py::arg("size"),
+            R"(
+            Joins two Boolean functions by applying an 'UDIV' operation. 
+            Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.
+
+            :param hal_py.BooleanFunction p0: First Boolean function.
+            :param hal_py.BooleanFunction p1: Second Boolean function.
+            :param int size: Bit-size of the operation.
+            :returns: The joined Boolean function on success, None otherwise.
+            :rtype: hal_py.BooleanFunction or None
+        )");
+
+        py_boolean_function.def_static(
+            "Srem",
+            [](BooleanFunction p0, BooleanFunction p1, u16 size) -> std::optional<BooleanFunction> {
+                auto res = BooleanFunction::Srem(std::move(p0), std::move(p1), size);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("p0"),
+            py::arg("p1"),
+            py::arg("size"),
+            R"(
+            Joins two Boolean functions by applying an 'SREM' operation. 
+            Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.
+
+            :param hal_py.BooleanFunction p0: First Boolean function.
+            :param hal_py.BooleanFunction p1: Second Boolean function.
+            :param int size: Bit-size of the operation.
+            :returns: The joined Boolean function on success, None otherwise.
+            :rtype: hal_py.BooleanFunction or None
+        )");
+
+        py_boolean_function.def_static(
+            "Urem",
+            [](BooleanFunction p0, BooleanFunction p1, u16 size) -> std::optional<BooleanFunction> {
+                auto res = BooleanFunction::Urem(std::move(p0), std::move(p1), size);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("p0"),
+            py::arg("p1"),
+            py::arg("size"),
+            R"(
+            Joins two Boolean functions by applying an 'UREM' operation. 
+            Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.
+
+            :param hal_py.BooleanFunction p0: First Boolean function.
+            :param hal_py.BooleanFunction p1: Second Boolean function.
+            :param int size: Bit-size of the operation.
+            :returns: The joined Boolean function on success, None otherwise.
+            :rtype: hal_py.BooleanFunction or None
+        )");
+
+        py_boolean_function.def_static(
             "Slice",
             [](BooleanFunction p0, BooleanFunction p1, BooleanFunction p2, u16 size) -> std::optional<BooleanFunction> {
                 auto res = BooleanFunction::Slice(std::move(p0), std::move(p1), std::move(p2), size);
@@ -1199,6 +1339,11 @@ namespace hal
 
         py_boolean_function_node_type.def_readonly_static("Add", &BooleanFunction::NodeType::Add);
         py_boolean_function_node_type.def_readonly_static("Sub", &BooleanFunction::NodeType::Sub);
+        py_boolean_function_node_type.def_readonly_static("Mul", &BooleanFunction::NodeType::Mul);
+        py_boolean_function_node_type.def_readonly_static("Sdiv", &BooleanFunction::NodeType::Sdiv);
+        py_boolean_function_node_type.def_readonly_static("Udiv", &BooleanFunction::NodeType::Udiv);
+        py_boolean_function_node_type.def_readonly_static("Srem", &BooleanFunction::NodeType::Srem);
+        py_boolean_function_node_type.def_readonly_static("Urem", &BooleanFunction::NodeType::Urem);
 
         py_boolean_function_node_type.def_readonly_static("Concat", &BooleanFunction::NodeType::Concat);
         py_boolean_function_node_type.def_readonly_static("Slice", &BooleanFunction::NodeType::Slice);

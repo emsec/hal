@@ -17,17 +17,20 @@ namespace hal
              * 
              * @param[in] number - Boolean function constant node values.
              * @returns OK() and constant on success, Err() otherwise.
-             */  
+             */
             Result<std::string> const2str(const std::vector<BooleanFunction::Value>& number)
             {
                 boost::multiprecision::cpp_int value = 0;
 
-                for (auto i = 0u; i < number.size(); i++) {
-                    if ((number[i] == BooleanFunction::Value::X) || (number[i] == BooleanFunction::Value::Z)) {
+                for (auto i = 0u; i < number.size(); i++)
+                {
+                    if ((number[i] == BooleanFunction::Value::X) || (number[i] == BooleanFunction::Value::Z))
+                    {
                         return ERR("Cannot translate the number to a constant value as it is undefined.");
                     }
 
-                    if (number[i] == BooleanFunction::Value::ONE) {
+                    if (number[i] == BooleanFunction::Value::ONE)
+                    {
                         boost::multiprecision::bit_set(value, i);
                     }
                 }
@@ -82,6 +85,16 @@ namespace hal
                         return OK("(bvadd " + p[0] + " " + p[1] + ")");
                     case BooleanFunction::NodeType::Sub:
                         return OK("(bvsub " + p[0] + " " + p[1] + ")");
+                    case BooleanFunction::NodeType::Mul:
+                        return OK("(bvmul " + p[0] + " " + p[1] + ")");
+                    case BooleanFunction::NodeType::Sdiv:
+                        return OK("(bvsdiv " + p[0] + " " + p[1] + ")");
+                    case BooleanFunction::NodeType::Udiv:
+                        return OK("(bvudiv " + p[0] + " " + p[1] + ")");
+                    case BooleanFunction::NodeType::Srem:
+                        return OK("(bvsrem " + p[0] + " " + p[1] + ")");
+                    case BooleanFunction::NodeType::Urem:
+                        return OK("(bvurem " + p[0] + " " + p[1] + ")");
 
                     case BooleanFunction::NodeType::Concat:
                         return OK("(concat " + p[0] + " " + p[1] + ")");

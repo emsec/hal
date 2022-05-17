@@ -320,6 +320,61 @@ namespace hal
         return OK(BooleanFunction(Node::Operation(NodeType::Sub, size), std::move(p0), std::move(p1)));
     }
 
+    Result<BooleanFunction> BooleanFunction::Mul(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if ((p0.size() != p1.size()) || (p0.size() != size))
+        {
+            return ERR("could not join Boolean functions using MUL operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size())
+                       + ", size = " + std::to_string(size) + ").");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Mul, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Sdiv(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if ((p0.size() != p1.size()) || (p0.size() != size))
+        {
+            return ERR("could not join Boolean functions using SDIV operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size())
+                       + ", size = " + std::to_string(size) + ").");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Sdiv, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Udiv(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if ((p0.size() != p1.size()) || (p0.size() != size))
+        {
+            return ERR("could not join Boolean functions using UDIV operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size())
+                       + ", size = " + std::to_string(size) + ").");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Udiv, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Srem(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if ((p0.size() != p1.size()) || (p0.size() != size))
+        {
+            return ERR("could not join Boolean functions using SREM operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size())
+                       + ", size = " + std::to_string(size) + ").");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Srem, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Urem(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if ((p0.size() != p1.size()) || (p0.size() != size))
+        {
+            return ERR("could not join Boolean functions using UREM operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size())
+                       + ", size = " + std::to_string(size) + ").");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Urem, size), std::move(p0), std::move(p1)));
+    }
+
     Result<BooleanFunction> BooleanFunction::Slice(BooleanFunction&& p0, BooleanFunction&& p1, BooleanFunction&& p2, u16 size)
     {
         if (!p1.is_index() || !p2.is_index())
@@ -513,6 +568,17 @@ namespace hal
     BooleanFunction& BooleanFunction::operator-=(const BooleanFunction& other)
     {
         *this = BooleanFunction::Sub(this->clone(), other.clone(), this->size()).get();
+        return *this;
+    }
+
+    BooleanFunction BooleanFunction::operator*(const BooleanFunction& other) const
+    {
+        return BooleanFunction::Mul(this->clone(), other.clone(), this->size()).get();
+    }
+
+    BooleanFunction& BooleanFunction::operator*=(const BooleanFunction& other)
+    {
+        *this = BooleanFunction::Mul(this->clone(), other.clone(), this->size()).get();
         return *this;
     }
 
@@ -744,6 +810,16 @@ namespace hal
                 return OK("(" + operands[0] + " + " + operands[1] + ")");
             case BooleanFunction::NodeType::Sub:
                 return OK("(" + operands[0] + " - " + operands[1] + ")");
+            case BooleanFunction::NodeType::Mul:
+                return OK("(" + operands[0] + " * " + operands[1] + ")");
+            case BooleanFunction::NodeType::Sdiv:
+                return OK("(" + operands[0] + " /s " + operands[1] + ")");
+            case BooleanFunction::NodeType::Udiv:
+                return OK("(" + operands[0] + " / " + operands[1] + ")");
+            case BooleanFunction::NodeType::Srem:
+                return OK("(" + operands[0] + " \%s " + operands[1] + ")");
+            case BooleanFunction::NodeType::Urem:
+                return OK("(" + operands[0] + " \% " + operands[1] + ")");
 
             case BooleanFunction::NodeType::Concat:
                 return OK("(" + operands[0] + " ++ " + operands[1] + ")");
@@ -1300,6 +1376,16 @@ namespace hal
                 return "+";
             case NodeType::Sub:
                 return "-";
+            case NodeType::Mul:
+                return "*";
+            case NodeType::Sdiv:
+                return "/s";
+            case NodeType::Udiv:
+                return "/";
+            case NodeType::Srem:
+                return "\%s";
+            case NodeType::Urem:
+                return "\%";
 
             case NodeType::Concat:
                 return "++";
@@ -1336,16 +1422,12 @@ namespace hal
     u16 BooleanFunction::Node::get_arity_of_type(u16 type)
     {
         static const std::map<u16, u16> type2arity = {
-            {BooleanFunction::NodeType::And, 2},      {BooleanFunction::NodeType::Or, 2},    {BooleanFunction::NodeType::Not, 1},      {BooleanFunction::NodeType::Xor, 2},
-
-            {BooleanFunction::NodeType::Add, 2},      {BooleanFunction::NodeType::Sub, 2},
-
-            {BooleanFunction::NodeType::Concat, 2},   {BooleanFunction::NodeType::Slice, 3}, {BooleanFunction::NodeType::Zext, 2},     {BooleanFunction::NodeType::Sext, 2},
-
-            {BooleanFunction::NodeType::Eq, 2},       {BooleanFunction::NodeType::Sle, 2},   {BooleanFunction::NodeType::Slt, 2},      {BooleanFunction::NodeType::Ule, 2},
-            {BooleanFunction::NodeType::Ult, 2},      {BooleanFunction::NodeType::Ite, 3},
-
-            {BooleanFunction::NodeType::Constant, 0}, {BooleanFunction::NodeType::Index, 0}, {BooleanFunction::NodeType::Variable, 0},
+            {BooleanFunction::NodeType::And, 2},   {BooleanFunction::NodeType::Or, 2},       {BooleanFunction::NodeType::Not, 1},   {BooleanFunction::NodeType::Xor, 2},
+            {BooleanFunction::NodeType::Add, 2},   {BooleanFunction::NodeType::Sub, 2},      {BooleanFunction::NodeType::Mul, 2},   {BooleanFunction::NodeType::Sdiv, 2},
+            {BooleanFunction::NodeType::Udiv, 2},  {BooleanFunction::NodeType::Srem, 2},     {BooleanFunction::NodeType::Urem, 2},  {BooleanFunction::NodeType::Concat, 2},
+            {BooleanFunction::NodeType::Slice, 3}, {BooleanFunction::NodeType::Zext, 2},     {BooleanFunction::NodeType::Sext, 2},  {BooleanFunction::NodeType::Eq, 2},
+            {BooleanFunction::NodeType::Sle, 2},   {BooleanFunction::NodeType::Slt, 2},      {BooleanFunction::NodeType::Ule, 2},   {BooleanFunction::NodeType::Ult, 2},
+            {BooleanFunction::NodeType::Ite, 3},   {BooleanFunction::NodeType::Constant, 0}, {BooleanFunction::NodeType::Index, 0}, {BooleanFunction::NodeType::Variable, 0},
         };
 
         return type2arity.at(type);
@@ -1409,7 +1491,8 @@ namespace hal
 
     bool BooleanFunction::Node::is_commutative() const
     {
-        return (this->type == NodeType::And) || (this->type == NodeType::Or) || (this->type == NodeType::Xor) || (this->type == NodeType::Add) || (this->type == NodeType::Eq);
+        return (this->type == NodeType::And) || (this->type == NodeType::Or) || (this->type == NodeType::Xor) || (this->type == NodeType::Add) || (this->type == NodeType::Mul)
+               || (this->type == NodeType::Eq);
     }
 
     BooleanFunction::Node::Node(u16 _type, u16 _size, std::vector<BooleanFunction::Value> _constant, u16 _index, std::string _variable)

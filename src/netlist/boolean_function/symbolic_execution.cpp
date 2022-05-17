@@ -178,6 +178,36 @@ namespace hal
             }
 
             /**
+             * Helper function to simplify a constant MUL operation.
+             * 
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
+            BooleanFunction Mul(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+            {
+                if (std::any_of(p0.begin(), p0.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; })
+                    || std::any_of(p1.begin(), p1.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; }))
+                {
+                    return BooleanFunction::Const(std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::X));
+                }
+
+                auto bitsize = p0.size();
+                std::vector<BooleanFunction::Value> simplified(bitsize, BooleanFunction::Value::ZERO);
+                for (auto i = 0u; i < bitsize; i++)
+                {
+                    auto carry = BooleanFunction::Value::ZERO;
+                    for (auto j = 0u; j < bitsize - i; j++)
+                    {
+                        auto res          = simplified[i + j] + (p0[i] & p1[j]) + carry;
+                        simplified[i + j] = static_cast<BooleanFunction::Value>(res & 0x1);
+                        carry             = static_cast<BooleanFunction::Value>(res >> 1);
+                    }
+                }
+                return BooleanFunction::Const(simplified);
+            }
+
+            /**
              * Helper function to simplify a constant SLE operation.
              * 
              * @param[in] p0 - Boolean function parameter 0.
@@ -569,12 +599,12 @@ namespace hal
                         // X & (~X | Y)   =>  X & Y
                         if ((~p1_parameter[0] == p[0]) || (p1_parameter[0] == ~p[0]))
                         {
-                            return OK(p[0] & p1_parameter[1]);
+                            return BooleanFunction::And(p[0].clone(), p1_parameter[1].clone(), node.size);
                         }
                         // X & (Y | ~X)   =>  X & Y
                         if ((~p1_parameter[1] == p[0]) || (p1_parameter[1] == ~p[0]))
                         {
-                            return OK(p[0] & p1_parameter[0]);
+                            return BooleanFunction::And(p[0].clone(), p1_parameter[0].clone(), node.size);
                         }
                     }
 
@@ -622,12 +652,12 @@ namespace hal
                         // (~X | Y) & X   =>   X & Y
                         if ((~p0_parameter[0] == p[1]) || (p0_parameter[0] == ~p[1]))
                         {
-                            return OK(p[1] & p0_parameter[1]);
+                            return BooleanFunction::And(p[1].clone(), p0_parameter[1].clone(), node.size);
                         }
                         // (Y | ~X) & X   =>   X & Y
                         if ((~p0_parameter[1] == p[1]) || (p0_parameter[1] == ~p[1]))
                         {
-                            return OK(p[1] & p0_parameter[0]);
+                            return BooleanFunction::And(p[1].clone(), p0_parameter[0].clone(), node.size);
                         }
                     }
 
@@ -646,7 +676,7 @@ namespace hal
                         auto p0_parameter = p[0].get_parameters();
                         if (p0_parameter[0].is(BooleanFunction::NodeType::Not) && p0_parameter[1].is(BooleanFunction::NodeType::Not))
                         {
-                            return OK(p0_parameter[0].get_parameters()[0] | p0_parameter[1].get_parameters()[0]);
+                            return BooleanFunction::Or(p0_parameter[0].get_parameters()[0].clone(), p0_parameter[1].get_parameters()[0].clone(), node.size);
                         }
                     }
 
@@ -656,7 +686,7 @@ namespace hal
                         auto p0_parameter = p[0].get_parameters();
                         if (p0_parameter[0].is(BooleanFunction::NodeType::Not) && p0_parameter[1].is(BooleanFunction::NodeType::Not))
                         {
-                            return OK(p0_parameter[0].get_parameters()[0] & p0_parameter[1].get_parameters()[0]);
+                            return BooleanFunction::And(p0_parameter[0].get_parameters()[0].clone(), p0_parameter[1].get_parameters()[0].clone(), node.size);
                         }
                     }
 
@@ -674,7 +704,7 @@ namespace hal
                         return OK((~p0_parameter[0]) | (~p0_parameter[1]));
                     }
 
-                    return OK(~p[0]);
+                    return BooleanFunction::Not(p[0].clone(), node.size);
                 }
 
                 case BooleanFunction::NodeType::Or: {
@@ -696,10 +726,10 @@ namespace hal
                         return OK(p[0]);
                     }
 
-                    // X | ~X   =>   1
+                    // X | ~X   =>   111...1
                     if ((~p[0] == p[1]) || (p[0] == ~p[1]))
                     {
-                        return OK(~BooleanFunction::Const(0, node.size).simplify());
+                        return OK(One(node.size));
                     }
 
                     if (p[0].is(BooleanFunction::NodeType::And) && p[1].is(BooleanFunction::NodeType::And))
@@ -735,7 +765,7 @@ namespace hal
                         // X | (Y & !X)   =>   X | Y
                         if ((~p1_parameter[1]) == p[0])
                         {
-                            return OK(p[0] | p1_parameter[0]);
+                            return BooleanFunction::Or(p[0].clone(), p1_parameter[0].clone(), node.size);
                         }
 
                         // X | (X & Y)    =>   X
@@ -747,12 +777,12 @@ namespace hal
                         // X | (~X & Y)   =>   X | Y
                         if ((~p1_parameter[0] == p[0]) || (p1_parameter[0] == ~p[0]))
                         {
-                            return OK(p[0] | p1_parameter[1]);
+                            return BooleanFunction::Or(p[0].clone(), p1_parameter[1].clone(), node.size);
                         }
                         // X | (Y & ~X)   =>   X | Y
                         if ((~p1_parameter[1] == p[0]) || (p1_parameter[1] == ~p[0]))
                         {
-                            return OK(p[0] | p1_parameter[0]);
+                            return BooleanFunction::Or(p[0].clone(), p1_parameter[0].clone(), node.size);
                         }
                     }
 
@@ -830,17 +860,17 @@ namespace hal
                         // (~X & Y) | X   =>   X | Y
                         if ((~p0_parameter[0] == p[1]) || (p0_parameter[0] == ~p[1]))
                         {
-                            return OK(p0_parameter[1] | p[1]);
+                            return BooleanFunction::Or(p0_parameter[1].clone(), p[1].clone(), node.size);
                         }
 
                         // (X & ~Y) | Y   =>   X | Y
                         if ((~p0_parameter[1] == p[1]) || (p0_parameter[1] == ~p[1]))
                         {
-                            return OK(p0_parameter[0] | p[1]);
+                            return BooleanFunction::Or(p0_parameter[0].clone(), p[1].clone(), node.size);
                         }
                     }
 
-                    return OK(p[0] | p[1]);
+                    return BooleanFunction::Or(p[0].clone(), p[1].clone(), node.size);
                 }
                 case BooleanFunction::NodeType::Xor: {
                     // X ^ 0   =>   X
@@ -851,7 +881,7 @@ namespace hal
                     // X ^ 1  =>   ~X
                     if (p[1] == One(node.size))
                     {
-                        return OK(~p[0]);
+                        return BooleanFunction::Not(p[0].clone(), node.size);
                     }
                     // X ^ X   =>   0
                     if (p[0] == p[1])
@@ -864,7 +894,7 @@ namespace hal
                         return OK(One(node.size));
                     }
 
-                    return OK(p[0] ^ p[1]);
+                    return BooleanFunction::Xor(p[0].clone(), p[1].clone(), node.size);
                 }
                 case BooleanFunction::NodeType::Add: {
                     // X + 0    =>   X
@@ -873,7 +903,7 @@ namespace hal
                         return OK(p[0]);
                     }
 
-                    return OK(p[0] + p[1]);
+                    return BooleanFunction::Add(p[0].clone(), p[1].clone(), node.size);
                 }
                 case BooleanFunction::NodeType::Sub: {
                     // X - 0    =>   X
@@ -887,7 +917,77 @@ namespace hal
                         return OK(BooleanFunction::Const(0, node.size));
                     }
 
-                    return OK(p[0] - p[1]);
+                    return BooleanFunction::Sub(p[0].clone(), p[1].clone(), node.size);
+                }
+                case BooleanFunction::NodeType::Mul: {
+                    // X * 0    =>   0
+                    if (p[1].has_constant_value(0))
+                    {
+                        return OK(BooleanFunction::Const(0, node.size));
+                    }
+                    // X * 1    =>   X
+                    if (p[1].has_constant_value(1))
+                    {
+                        return OK(p[0]);
+                    }
+
+                    return BooleanFunction::Mul(p[0].clone(), p[1].clone(), node.size);
+                }
+                case BooleanFunction::NodeType::Sdiv: {
+                    // X /s 1    =>   X
+                    if (p[1].has_constant_value(1))
+                    {
+                        return OK(p[0]);
+                    }
+                    // X /s X    =>   1
+                    if (p[0] == p[1])
+                    {
+                        return OK(BooleanFunction::Const(1, node.size));
+                    }
+
+                    return BooleanFunction::Sdiv(p[0].clone(), p[1].clone(), node.size);
+                }
+                case BooleanFunction::NodeType::Udiv: {
+                    // X / 1    =>   X
+                    if (p[1].has_constant_value(1))
+                    {
+                        return OK(p[0]);
+                    }
+                    // X / X    =>   1
+                    if (p[0] == p[1])
+                    {
+                        return OK(BooleanFunction::Const(1, node.size));
+                    }
+
+                    return BooleanFunction::Udiv(p[0].clone(), p[1].clone(), node.size);
+                }
+                case BooleanFunction::NodeType::Srem: {
+                    // X %s 1    =>   0
+                    if (p[1].has_constant_value(1))
+                    {
+                        return OK(BooleanFunction::Const(0, node.size));
+                    }
+                    // X %s X    =>   0
+                    if (p[0] == p[1])
+                    {
+                        return OK(BooleanFunction::Const(0, node.size));
+                    }
+
+                    return BooleanFunction::Srem(p[0].clone(), p[1].clone(), node.size);
+                }
+                case BooleanFunction::NodeType::Urem: {
+                    // X %s 1    =>   0
+                    if (p[1].has_constant_value(1))
+                    {
+                        return OK(BooleanFunction::Const(0, node.size));
+                    }
+                    // X %s X    =>   0
+                    if (p[0] == p[1])
+                    {
+                        return OK(BooleanFunction::Const(0, node.size));
+                    }
+
+                    return BooleanFunction::Urem(p[0].clone(), p[1].clone(), node.size);
                 }
                 case BooleanFunction::NodeType::Slice: {
                     // SLICE(p, 0, 0)   =>   p (if p is 1-bit wide)
@@ -1008,6 +1108,8 @@ namespace hal
                     return OK(ConstantPropagation::Add(values[0], values[1]));
                 case BooleanFunction::NodeType::Sub:
                     return OK(ConstantPropagation::Sub(values[0], values[1]));
+                case BooleanFunction::NodeType::Mul:
+                    return OK(ConstantPropagation::Mul(values[0], values[1]));
 
                 case BooleanFunction::NodeType::Slice: {
                     auto start = p[1].get_index_value().get();
@@ -1040,6 +1142,14 @@ namespace hal
                 case BooleanFunction::NodeType::Ite:
                     return OK(ConstantPropagation::Ite(values[0], values[1], values[2]));
 
+                case BooleanFunction::NodeType::Sdiv:
+                    // TODO implement
+                case BooleanFunction::NodeType::Udiv:
+                    // TODO implement
+                case BooleanFunction::NodeType::Srem:
+                    // TODO implement
+                case BooleanFunction::NodeType::Urem:
+                    // TODO implement
                 default:
                     return ERR("could not propagate constants: not implemented for given node type");
             }
