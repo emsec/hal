@@ -831,6 +831,17 @@ WARN_LOGFILE           =
 
 INPUT                  = @PROJECT_SOURCE_DIR@/src \
                          @PROJECT_SOURCE_DIR@/plugins/gui \
+                         @PROJECT_SOURCE_DIR@/plugins/boolean_influence \
+                         @PROJECT_SOURCE_DIR@/plugins/dataflow_analysis \
+                         @PROJECT_SOURCE_DIR@/plugins/solve_fsm \
+                         @PROJECT_SOURCE_DIR@/plugins/hgl_parser \
+                         @PROJECT_SOURCE_DIR@/plugins/hgl_writer \
+                         @PROJECT_SOURCE_DIR@/plugins/graph_algorithm \
+                         @PROJECT_SOURCE_DIR@/plugins/verilog_parser \
+                         @PROJECT_SOURCE_DIR@/plugins/verilog_writer \
+                         @PROJECT_SOURCE_DIR@/plugins/vhdl_parser \
+                         @PROJECT_SOURCE_DIR@/plugins/liberty_parser \
+                         @PROJECT_SOURCE_DIR@/plugins/netlist_simulator \
                          @PROJECT_SOURCE_DIR@/include \
                          @PROJECT_SOURCE_DIR@/README.md
 
