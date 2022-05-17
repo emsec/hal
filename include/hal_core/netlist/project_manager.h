@@ -57,7 +57,6 @@ namespace hal
         std::unordered_map<std::string,ProjectSerializer*> m_serializer;
         std::unordered_map<std::string,std::string> m_filename;
 
-        bool serialize_to_projectfile(bool shadow) const;
         bool serialize_external(bool shadow);
 
         /**
@@ -66,6 +65,14 @@ namespace hal
          * @return true if OK, false if any error
          */
         bool deserialize();
+
+        /**
+         * Serialize project file summary to .project.json
+         * @param[in] shadow true if called from autosave procedure
+         * @return true if project file was written successfully, false otherwise
+         */
+        bool serialize_to_projectfile(bool shadow) const;
+
     public:
         /**
          * Returns the singleton instance which gets constructed upon first call
@@ -159,6 +166,11 @@ namespace hal
          * @param[in] path to project directory
          */
         void set_project_directory(const std::string& path);
+
+        /**
+         * When copying files from autosave in project directory netlist filename needs to be adjusted.
+         */
+        void restore_project_file_from_autosave();
 
         /**
          * Create project directory. Project directory must not exist

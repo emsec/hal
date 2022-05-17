@@ -39,9 +39,10 @@ namespace hal {
          * Serialize elements of class Grouping to separate file
          * @param[in] netlist Netlist that might contain groupings
          * @param[in] savedir Project directory to save to
+         * @param[in] isAutosave True if serialize call was issued from autosave, false otherwise
          * @return
          */
-        std::string serialize(Netlist* netlist, const std::filesystem::path& savedir) override;
+        std::string serialize(Netlist* netlist, const std::filesystem::path& savedir, bool isAutosave) override;
 
         /**
          * Deserialize elements of class Grouping from file. File will be queried

@@ -22,9 +22,10 @@ namespace hal
         return gGraphContextManager->restoreFromFile(QString::fromStdString(filename.string()));
     }
 
-    std::string GraphContextSerializer::serialize(Netlist* netlist, const std::filesystem::path& savedir)
+    std::string GraphContextSerializer::serialize(Netlist* netlist, const std::filesystem::path& savedir, bool isAutoSave)
     {
         Q_UNUSED(netlist);
+        Q_UNUSED(isAutoSave);
         std::string ctxFile("views.json");
         std::filesystem::path ctxPath(savedir);
         ctxPath.append(ctxFile);

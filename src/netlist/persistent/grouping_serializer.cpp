@@ -20,7 +20,7 @@ namespace hal {
         : ProjectSerializer("groupings")
     {;}
 
-    std::string GroupingSerializer::serialize(Netlist* netlist, const std::filesystem::path& savedir)
+    std::string GroupingSerializer::serialize(Netlist* netlist, const std::filesystem::path& savedir, bool isAutosave)
     {
         std::filesystem::path groupingFilePath(savedir);
         groupingFilePath.append("groupings.json");

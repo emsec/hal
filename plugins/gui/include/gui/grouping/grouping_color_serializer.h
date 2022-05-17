@@ -34,7 +34,7 @@ namespace hal {
     public:
         GroupingColorSerializer();
 
-        std::string serialize(Netlist* netlist, const std::filesystem::path& savedir) override;
+        std::string serialize(Netlist* netlist, const std::filesystem::path& savedir, bool isAutosave) override;
 
         void deserialize(Netlist* netlist, const std::filesystem::path& loaddir) override;
 

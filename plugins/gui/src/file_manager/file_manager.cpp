@@ -259,6 +259,9 @@ namespace hal
         deprecatedOpenFile(netlistFilename, gatelib);
 
         gFileStatusManager->netlistChanged();
+        if (gNetlist)
+            if (pm->serialize_project(gNetlist))
+                gFileStatusManager->netlistSaved();
     }
 
     void FileManager::moveShadowToProject(const QDir& shDir) const
@@ -302,6 +305,7 @@ namespace hal
             if (QMessageBox::question(nullptr, "HAL did not exit cleanly", message, QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
             {
                 moveShadowToProject(shDir);
+                pm->restore_project_file_from_autosave();
             }
         }
 

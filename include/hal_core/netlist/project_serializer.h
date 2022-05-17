@@ -54,9 +54,10 @@ namespace hal {
          * be returned.
          * @param[in] netlist The netlist to be serialized
          * @param[in] savedir Target project directory
+         * @param[in] isAutosave True if serialize call was issued from autosave, false otherwise
          * @return relative name of file name that was used for serialization
          */
-        virtual std::string serialize(Netlist* netlist, const std::filesystem::path& savedir) = 0;
+        virtual std::string serialize(Netlist* netlist, const std::filesystem::path& savedir, bool isAutosave) = 0;
 
         /**
          * Abstract deserialize method to be implemented by derived class. Note that

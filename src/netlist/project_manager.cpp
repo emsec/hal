@@ -2,6 +2,7 @@
 
 #include <filesystem>
 #include <rapidjson/filereadstream.h>
+#include <rapidjson/stringbuffer.h>
 #include <iostream>
 #include <fstream>
 
@@ -11,6 +12,13 @@
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/netlist.h"
+
+#define PRETTY_JSON_OUTPUT 0
+#if PRETTY_JSON_OUTPUT == 1
+#include "rapidjson/prettywriter.h"
+#else
+#include "rapidjson/writer.h"
+#endif
 
 const int SERIALIZATION_FORMAT_VERSION = 10;
 
@@ -133,6 +141,46 @@ namespace hal {
         return m_netlist_load;
     }
 
+    void ProjectManager::restore_project_file_from_autosave()
+    {
+        std::filesystem::path projFilePath(m_proj_dir);
+        projFilePath.append(s_project_file);
+
+        FILE* fp = fopen(projFilePath.string().c_str(), "r");
+        if (fp == NULL) return;
+
+        char buffer[65536];
+        rapidjson::FileReadStream frs(fp, buffer, sizeof(buffer));
+        rapidjson::Document doc;
+        doc.ParseStream<0, rapidjson::UTF8<>, rapidjson::FileReadStream>(frs);
+        fclose(fp);
+
+        if (doc.HasMember("netlist"))
+        {
+            rapidjson::Value::MemberIterator netlistMember = doc.FindMember("netlist");
+            std::string netlistFilename = netlistMember->value.GetString();
+            int n = ProjectDirectory::s_shadow_dir.size() + 1;
+            if (netlistFilename.substr(0,n) == ProjectDirectory::s_shadow_dir + '/')
+            {
+                netlistFilename.erase(0,n);
+                netlistMember->value.SetString(netlistFilename.c_str(), doc.GetAllocator());
+
+                std::ofstream of(projFilePath);
+                if (!of.good()) return;
+
+                rapidjson::StringBuffer strbuf;
+#if PRETTY_JSON_OUTPUT == 1
+                rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(strbuf);
+#else
+                rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
+#endif
+                doc.Accept(writer);
+                of << strbuf.GetString();
+                of.close();
+            }
+        }
+    }
+
     bool ProjectManager::deserialize()
     {
         std::filesystem::path projFilePath(m_proj_dir);
@@ -194,7 +242,7 @@ namespace hal {
         {
             std::string relfile = it->second->serialize(m_netlist_save, shadow
                                                          ? m_proj_dir.get_filename(ProjectDirectory::s_shadow_dir)
-                                                         : m_proj_dir);
+                                                         : m_proj_dir, shadow);
             if (relfile.empty()) continue;
             m_filename[it->first] = relfile;
         }

@@ -548,6 +548,11 @@ namespace hal
 
             auto begin_time = std::chrono::high_resolution_clock::now();
 
+            // create directory if it got erased in the meantime
+            std::filesystem::path serialize_to_dir = hal_file.parent_path();
+            if (!std::filesystem::exists(serialize_to_dir))
+                std::filesystem::create_directory(serialize_to_dir);
+
             std::ofstream hal_file_stream;
             hal_file_stream.open(hal_file.string());
             if (hal_file_stream.fail())

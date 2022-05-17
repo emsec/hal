@@ -26,9 +26,10 @@ namespace hal {
             restoreGroupingColor(pm->get_project_directory(), relname, gtm);
     }
 
-    std::string GroupingColorSerializer::serialize(Netlist* netlist, const std::filesystem::path& savedir)
+    std::string GroupingColorSerializer::serialize(Netlist* netlist, const std::filesystem::path& savedir, bool isAutosave)
     {
         Q_UNUSED(netlist);
+        Q_UNUSED(isAutosave);
         QString gcFilename("groupingcolor.json");
         QFile gcFile(QDir(QString::fromStdString(savedir.string())).absoluteFilePath(gcFilename));
         if (!gcFile.open(QIODevice::WriteOnly)) return std::string();

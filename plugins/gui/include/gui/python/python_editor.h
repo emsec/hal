@@ -60,15 +60,19 @@ namespace hal
     {
         QString mSaveDir;
 
+        static QString sPythonRelDir;
+
         void restoreTabs(const std::filesystem::path& loaddir, const std::string& jsonfile);
     public:
         PythonSerializer();
 
-        std::string serialize(Netlist* netlist, const std::filesystem::path& savedir);
+        std::string serialize(Netlist* netlist, const std::filesystem::path& savedir, bool isAutosave);
 
         void deserialize(Netlist* netlist, const std::filesystem::path& loaddir);
 
         QString getDirectory() const;
+
+        std::string serialize_control(const std::filesystem::path& savedir = std::filesystem::path(), bool isAutosave = false);
     };
 
     /**
@@ -228,17 +232,36 @@ namespace hal
          * QueryIfEmpty no name was given before
          *
          * @param queryPolicy one of  GenericName, QueryIfEmpty, QueryAlways
+         * @param isAutosave True if save request was issued from autosave, false otherwise
          * @param index - The tab index
-         * @returns the filename if the tab was saved, empty otherwise
+         * @returns true if the tab was saved, false otherwise
          */
-        QString saveFile(QueryFilenamePolicy queryPolicy, int index = -1);
+        bool saveFile(bool isAutosave, QueryFilenamePolicy queryPolicy, int index = -1);
 
         /**
          * Saves all open tabs. Will use generic filenames if no name was given so far.
-         *
-         * @returns list of all files saved
+         * @param isAutosave True if save request was issued from autosave, false otherwise
          */
-        QStringList saveAllTabs(const QString& genericPath);
+        void saveAllTabs(const QString& genericPath, bool isAutosave);
+
+        /**
+         * Saves state of tabs to pythoneditor.json
+         */
+        void saveControl();
+
+        /**
+         * Generate a generic filename for tabs that have not been saved to file yet
+         * @param index - The tab index
+         * @return Generated file name
+         */
+        QString unnamedFilename(int index) const;
+
+        /**
+         * Generate a generic filename when called by autosave (given filename might be located in external directory)
+         * @param index - The tab index
+         * @return Generated file name
+         */
+        QString autosaveFilename(int index);
 
         /**
          * Close the tab given by its index. It will discard all unsaved changes of this tab without asking.
@@ -549,13 +572,6 @@ namespace hal
         void handleActionToggleMinimap();
 
         /**
-         *  Unused Q_SLOT?
-         *
-         * @param changed
-         */
-        void handleModificationChanged(bool changed);
-
-        /**
          * Q_SLOT to handle key presses within any PythonCodeEditor
          */
         void handleKeyPressed();
@@ -576,6 +592,13 @@ namespace hal
          * @param index - The index of the newly selected tab
          */
         void handleCurrentTabChanged(int index);
+
+        /**
+         * Get python editor from tab no
+         * @param tabIndex The tab index of requested python editor
+         * @return The python code editor
+         */
+        PythonCodeEditor* getPythonEditor(int tabIndex);
 
         /**
          * Q_SLOT to handle that the original file of an opened tab was modified (outside from hal). <br>
