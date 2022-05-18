@@ -5,6 +5,7 @@
 #include "gui/docking_system/dock_bar.h"
 #include "gui/export/export_registered_format.h"
 #include "gui/file_manager/file_manager.h"
+#include "gui/file_manager/project_dir_dialog.h"
 #include "gui/gatelibrary_management/gatelibrary_management_dialog.h"
 #include "gui/gui_def.h"
 #include "gui/gui_globals.h"

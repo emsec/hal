@@ -543,6 +543,7 @@ namespace hal
                 QString viewName = jsonView["name"].toString();
                 if (viewId > mMaxContextId)
                     mMaxContextId = viewId;
+                GraphContext* context = gGraphContextManager->getContextById(viewId);
                 if (context)
                 {
                     // load view in existing context
@@ -561,9 +562,9 @@ namespace hal
                     context = new GraphContext(viewId, viewName);
                     context->setLayouter(getDefaultLayouter(context));
                     context->setShader(getDefaultShader(context));
-                context->setExclusiveModuleId(exclusiveModuleId);
-                context->scene()->setDebugGridEnabled(mSettingDebugGrid->value().toBool());
-                connect(mSettingDebugGrid, &SettingsItemCheckbox::boolChanged, context->scene(), &GraphicsScene::setDebugGridEnabled);
+                    // context->setExclusiveModuleId(exclusiveModuleId); TODO exclusive module ID
+                    context->scene()->setDebugGridEnabled(mSettingDebugGrid->value().toBool());
+                    connect(mSettingDebugGrid, &SettingsItemCheckbox::boolChanged, context->scene(), &GraphicsScene::setDebugGridEnabled);
 
                     if (!context->readFromFile(jsonView))
                     {

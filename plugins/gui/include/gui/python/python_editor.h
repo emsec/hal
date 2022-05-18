@@ -28,7 +28,6 @@
 #include "gui/content_widget/content_widget.h"
 #include "gui/file_modified_bar/file_modified_bar.h"
 #include "gui/python/python_context_subscriber.h"
-#include "hal_core/utilities/hal_file_manager.h"
 
 #include "hal_core/netlist/project_serializer.h"
 #include "hal_core/utilities/json_write_document.h"
