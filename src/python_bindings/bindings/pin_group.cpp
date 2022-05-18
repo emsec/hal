@@ -97,9 +97,9 @@ namespace hal
         )");
 
         py_module_pin_group.def(
-            "get_pin",
+            "get_pin_at_index",
             [](const PinGroup<ModulePin>& self, u32 index) -> ModulePin* {
-                auto res = self.get_pin(index);
+                auto res = self.get_pin_at_index(index);
                 if (res.is_ok())
                 {
                     return res.get();

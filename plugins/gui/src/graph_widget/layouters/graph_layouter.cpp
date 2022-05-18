@@ -1525,7 +1525,7 @@ namespace hal
                         const NodeBox* nb = mBoxes.boxForNode(node);
                         if (nb && !outputAssigned.contains(nb))
                         {
-                            net_item->addOutput(nb->item()->getOutputScenePosition(n->get_id(), QString::fromStdString(src->get_pin())));
+                            net_item->addOutput(nb->item()->getOutputScenePosition(n->get_id(), QString::fromStdString(src->get_pin()->get_name())));
                             outputAssigned.insert(nb);
                         }
                     }
@@ -1545,7 +1545,7 @@ namespace hal
                         const NodeBox* nb = mBoxes.boxForNode(node);
                         if (nb && !inputAssigned.contains(nb))
                         {
-                            net_item->addInput(nb->item()->getInputScenePosition(n->get_id(), QString::fromStdString(dst->get_pin())));
+                            net_item->addInput(nb->item()->getInputScenePosition(n->get_id(), QString::fromStdString(dst->get_pin()->get_name())));
                             inputAssigned.insert(nb);
                         }
                     }
@@ -1570,7 +1570,7 @@ namespace hal
                     {
                         const NodeBox* nb = mBoxes.boxForNode(node);
                         if (nb)
-                            net_item->addOutput(nb->item()->getOutputScenePosition(n->get_id(), QString::fromStdString(src->get_pin())));
+                            net_item->addOutput(nb->item()->getOutputScenePosition(n->get_id(), QString::fromStdString(src->get_pin()->get_name())));
                     }
                 }
 
@@ -1583,7 +1583,7 @@ namespace hal
 
                     const NodeBox* nb = mBoxes.boxForNode(node);
                     if (nb)
-                        net_item->addInput(nb->item()->getInputScenePosition(n->get_id(), QString::fromStdString(dst->get_pin())));
+                        net_item->addInput(nb->item()->getInputScenePosition(n->get_id(), QString::fromStdString(dst->get_pin()->get_name())));
                 }
 
                 net_item->finalize();
@@ -1629,7 +1629,7 @@ namespace hal
 
                     const NodeBox* nb = mBoxes.boxForNode(node);
                     if (nb)
-                        net_item->addOutput(nb->item()->getOutputScenePosition(n->get_id(), QString::fromStdString(src->get_pin())));
+                        net_item->addOutput(nb->item()->getOutputScenePosition(n->get_id(), QString::fromStdString(src->get_pin()->get_name())));
                 }
 
                 net_item->finalize();
@@ -1651,7 +1651,7 @@ namespace hal
 
                     const NodeBox* nb = mBoxes.boxForNode(node);
                     if (nb)
-                        net_item->addInput(nb->item()->getInputScenePosition(n->get_id(), QString::fromStdString(dst->get_pin())));
+                        net_item->addInput(nb->item()->getInputScenePosition(n->get_id(), QString::fromStdString(dst->get_pin()->get_name())));
                 }
 
                 net_item->finalize();
@@ -1681,7 +1681,7 @@ namespace hal
                 }
                 assert(src_box);
 
-                const QPointF src_pin_position = src_box->item()->getOutputScenePosition(n->get_id(), QString::fromStdString(src->get_pin()));
+                const QPointF src_pin_position = src_box->item()->getOutputScenePosition(n->get_id(), QString::fromStdString(src->get_pin()->get_name()));
 
                 // FOR EVERY DST
                 for (Endpoint* dst : n->get_destinations())
@@ -1706,7 +1706,7 @@ namespace hal
                     if (src_box == dst_box && src_box->type() == Node::Module)
                         continue;
 
-                    QPointF dst_pin_position = dst_box->item()->getInputScenePosition(n->get_id(), QString::fromStdString(dst->get_pin()));
+                    QPointF dst_pin_position = dst_box->item()->getInputScenePosition(n->get_id(), QString::fromStdString(dst->get_pin()->get_name()));
 
                     // ROAD BASED DISTANCE (x_distance - 1)
                     const int x_distance = dst_box->x() - src_box->x() - 1;

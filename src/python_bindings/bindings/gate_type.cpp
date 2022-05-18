@@ -467,7 +467,7 @@ namespace hal
             :rtype: dict[str,hal_py.BooleanFunction]
         )");
 
-        py_gate_type.def("get_boolean_function", py::overload_cast<const std::string&>(&GateType::get_boolean_function, const_), py::arg("name"), R"(
+        py_gate_type.def("get_boolean_function", py::overload_cast<const std::string&>(&GateType::get_boolean_function, py::const_), py::arg("name"), R"(
             Get the Boolean function specified by the given name.
             This name can for example be an output pin of the gate or any other user-defined function name.
 
@@ -476,7 +476,7 @@ namespace hal
             :rtype: hal_py.BooleanFunction
         )");
 
-        py_gate_type.def("get_boolean_function", py::overload_cast<const GatePin*>(&GateType::get_boolean_function, const_), py::arg("pin") = nullptr, R"(
+        py_gate_type.def("get_boolean_function", py::overload_cast<const GatePin*>(&GateType::get_boolean_function, py::const_), py::arg("pin") = nullptr, R"(
             Get the Boolean function corresponding to the given output pin.
             If pin is a None, the Boolean function of the first output pin is returned.
 
