@@ -95,7 +95,7 @@ namespace hal {
           ====================================*/ 
         QString toClipboardText = e.name();
         menu.addAction(
-            "Copy grouping name to clipboard",
+            "Grouping name to clipboard",
             [toClipboardText]()
             {
                 QApplication::clipboard()->setText( toClipboardText );
@@ -104,7 +104,7 @@ namespace hal {
 
         toClipboardText = QString::number(e.id());
         menu.addAction(
-            "Copy grouping ID to clipboard",
+            "Grouping ID to clipboard",
             [toClipboardText]()
             {
                 QApplication::clipboard()->setText( toClipboardText );
@@ -155,28 +155,7 @@ namespace hal {
         QString pythonCode = PyCodeProvider::pyCodeGrouping(e.id());
         menu.addAction(
             QIcon(":/icons/python"),
-            "Extract grouping as python code (copy to clipboard)",
-            [pythonCode]()
-            {
-                QApplication::clipboard()->setText( pythonCode );
-            }
-        );
-
-        // Add python providers that are dependent from the color
-        pythonCode = PyCodeProvider::pyCodeGroupingName(e.id());
-        menu.addAction(
-            QIcon(":/icons/python"),
-            "Extract grouping name as python code (copy to clipboard)",
-            [pythonCode]()
-            {
-                QApplication::clipboard()->setText( pythonCode );
-            }
-        );
-
-        pythonCode = PyCodeProvider::pyCodeGroupingId(e.id());
-        menu.addAction(
-            QIcon(":/icons/python"),
-            "Extract grouping ID as python code (copy to clipboard)",
+            "Get grouping",
             [pythonCode]()
             {
                 QApplication::clipboard()->setText( pythonCode );

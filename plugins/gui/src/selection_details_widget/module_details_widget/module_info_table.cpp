@@ -49,6 +49,9 @@ namespace hal
 
         mModuleEntryContextMenu = new QMenu();
         mModuleEntryContextMenu->addAction("Parent name to clipboard", std::bind(&ModuleInfoTable::copyModule, this));
+        mModuleEntryContextMenu->addAction("Parent ID to clipboard", std::bind(&ModuleInfoTable::copyParentID, this));
+        mModuleEntryContextMenu->addAction("Set as current Selection", std::bind(&ModuleInfoTable::setParentAsSelection, this));
+        mModuleEntryContextMenu->addAction("Add to current Selection", std::bind(&ModuleInfoTable::addParentToSelection, this));
         mModuleEntryContextMenu->addSection("Python");
         mModuleEntryContextMenu->addAction(mPyIcon, "Get parent", std::bind(&ModuleInfoTable::pyCopyModule, this));
 
@@ -277,7 +280,10 @@ namespace hal
 
     void ModuleInfoTable::copyModule() const
     {
-        copyToClipboard(parentModule());
+        auto parentMod = mModule->get_parent_module();
+        if(!parentMod) return;
+
+        copyToClipboard(QString::fromStdString(parentMod->get_name()));
     }
 
     void ModuleInfoTable::pyCopyModule() const
@@ -358,6 +364,33 @@ namespace hal
     void ModuleInfoTable::pyCopyIsTopModule() const
     {
         copyToClipboard(PyCodeProvider::pyCodeModuleIsTopModule(mModule->get_id()));
+    }
+
+    void ModuleInfoTable::copyParentID() const
+    {
+        auto parentMod = mModule->get_parent_module();
+        if(!parentMod) return;
+
+        copyToClipboard(QString::number(parentMod->get_id()));
+    }
+
+    void ModuleInfoTable::setParentAsSelection()
+    {
+        auto parentMod = mModule->get_parent_module();
+        if(!parentMod) return;
+
+        gSelectionRelay->clear();
+        gSelectionRelay->addModule(parentMod->get_id());
+        gSelectionRelay->relaySelectionChanged(this);//function cant be const because of this
+    }
+
+    void ModuleInfoTable::addParentToSelection()
+    {
+        auto parentMod = mModule->get_parent_module();
+        if(!parentMod) return;
+
+        gSelectionRelay->addModule(parentMod->get_id());
+        gSelectionRelay->relaySelectionChanged(this);//function cant be const because of this
     }
 
     void ModuleInfoTable::pyCopyGetPins() const

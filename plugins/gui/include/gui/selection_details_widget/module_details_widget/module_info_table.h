@@ -256,6 +256,21 @@ namespace hal
         void pyCopyIsTopModule() const;
 
         /**
+         * Copies the ID of the parent module to the clipboard.
+         */
+        void copyParentID() const;
+
+        /**
+         * Sets the parent module as the current selection.
+         */
+        void setParentAsSelection();
+
+        /**
+         * Adds the parent module to the current selection.
+         */
+        void addParentToSelection();
+
+        /**
          * Changes the selection to the modules's parent module.
          */
         void navModule();
