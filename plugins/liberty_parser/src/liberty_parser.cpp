@@ -550,7 +550,7 @@ namespace hal
                     bus.ascending   = type.ascending;
                     bus.start_index = type.start_index;
                     i32 dir         = (type.ascending ? 1 : -1);
-                    for (i32 i = type.start_index; i != (i32)type.start_index + dir * type.width; i += dir)
+                    for (i32 i = type.start_index; i != (i32)(type.start_index + dir * type.width); i += dir)
                     {
                         range.push_back(i);
                     }

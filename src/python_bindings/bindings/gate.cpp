@@ -182,7 +182,7 @@ namespace hal
             :rtype: hal_py.Grouping
         )");
 
-        py_gate.def("get_boolean_function", &py::overload_cast<const std::string&>(Gate::get_boolean_function), py::arg("name"), R"(
+        py_gate.def("get_boolean_function", py::overload_cast<const std::string&>(&Gate::get_boolean_function, py::const_), py::arg("name"), R"(
             Get the Boolean function specified by the given name.
             This name can for example be an output pin of the gate or any other user-defined function name.
 
@@ -191,7 +191,7 @@ namespace hal
             :rtype: hal_py.BooleanFunction
         )");
 
-        py_gate.def("get_boolean_function", &py::overload_cast<const GatePin*>(Gate::get_boolean_function), py::arg("pin") = nullptr, R"(
+        py_gate.def("get_boolean_function", py::overload_cast<const GatePin*>(&Gate::get_boolean_function, py::const_), py::arg("pin") = nullptr, R"(
             Get the Boolean function corresponding to the given output pin.
             If pin is None, the Boolean function of the first output pin is returned.
 
@@ -290,7 +290,7 @@ namespace hal
             :rtype: list[hal_py.Endpoint]
         )");
 
-        py_gate.def("get_fan_in_net", py::overload_cast<const std::string&>(&Gate::get_fan_in_net), py::arg("pin_name"), R"(
+        py_gate.def("get_fan_in_net", py::overload_cast<const std::string&>(&Gate::get_fan_in_net, py::const_), py::arg("pin_name"), R"(
             Get the fan-in endpoint corresponding to the input pin specified by name.
 
             :param str pin_name: The input pin name.
@@ -298,7 +298,7 @@ namespace hal
             :rtype: hal_py.Net or None
         )");
 
-        py_gate.def("get_fan_in_net", py::overload_cast<const GatePin*>(&Gate::get_fan_in_net), py::arg("pin"), R"(
+        py_gate.def("get_fan_in_net", py::overload_cast<const GatePin*>(&Gate::get_fan_in_net, py::const_), py::arg("pin"), R"(
             Get the fan-in endpoint corresponding to the specified input pin.
 
             :param hal_py.GatePin pin: The input pin.
@@ -306,7 +306,7 @@ namespace hal
             :rtype: hal_py.Net or None
         )");
 
-        py_gate.def("get_fan_in_endpoint", &py::overload_cast<const std::string&>(Gate::get_fan_in_endpoint), py::arg("pin_name"), R"(
+        py_gate.def("get_fan_in_endpoint", py::overload_cast<const std::string&>(&Gate::get_fan_in_endpoint, py::const_), py::arg("pin_name"), R"(
             Get the fan-in endpoint corresponding to the input pin specified by name.
 
             :param str pin_name: The input pin name.
@@ -314,7 +314,7 @@ namespace hal
             :rtype: hal_py.Endpoint or None
         )");
 
-        py_gate.def("get_fan_in_endpoint", &py::overload_cast<const GatePin*>(Gate::get_fan_in_endpoint), py::arg("pin"), R"(
+        py_gate.def("get_fan_in_endpoint", py::overload_cast<const GatePin*>(&Gate::get_fan_in_endpoint, py::const_), py::arg("pin"), R"(
             Get the fan-in endpoint corresponding to the specified input pin.
 
             :param str pin_name: The input pin.
@@ -348,7 +348,7 @@ namespace hal
             :rtype: list[hal_py.Endpoint]
         )");
 
-        py_gate.def("get_fan_out_net", py::overload_cast<const std::string&>(&Gate::get_fan_out_net), py::arg("pin_name"), R"(
+        py_gate.def("get_fan_out_net", py::overload_cast<const std::string&>(&Gate::get_fan_out_net, py::const_), py::arg("pin_name"), R"(
             Get the fan-out endpoint corresponding to the output pin specified by name.
 
             :param str pin_name: The output pin name.
@@ -356,7 +356,7 @@ namespace hal
             :rtype: hal_py.Net or None
         )");
 
-        py_gate.def("get_fan_out_net", py::overload_cast<const GatePin*>(&Gate::get_fan_out_net), py::arg("pin"), R"(
+        py_gate.def("get_fan_out_net", py::overload_cast<const GatePin*>(&Gate::get_fan_out_net, py::const_), py::arg("pin"), R"(
             Get the fan-out endpoint corresponding to the specified output pin.
 
             :param hal_py.GatePin pin: The output pin.
@@ -364,7 +364,7 @@ namespace hal
             :rtype: hal_py.Net or None
         )");
 
-        py_gate.def("get_fan_out_endpoint", &py::overload_cast<const std::string&>(Gate::get_fan_out_endpoint), py::arg("pin_name"), R"(
+        py_gate.def("get_fan_out_endpoint", py::overload_cast<const std::string&>(&Gate::get_fan_out_endpoint, py::const_), py::arg("pin_name"), R"(
             Get the fan-out endpoint corresponding to the output pin specified by name.
 
             :param str pin_name: The output pin name.
@@ -372,7 +372,7 @@ namespace hal
             :rtype: hal_py.Endpoint or None
         )");
 
-        py_gate.def("get_fan_out_endpoint", &py::overload_cast<const GatePin*>(Gate::get_fan_out_endpoint), py::arg("pin"), R"(
+        py_gate.def("get_fan_out_endpoint", py::overload_cast<const GatePin*>(&Gate::get_fan_out_endpoint, py::const_), py::arg("pin"), R"(
             Get the fan-out endpoint corresponding to the specified output pin.
 
             :param str pin_name: The output pin.
@@ -412,7 +412,7 @@ namespace hal
             :rtype: list[hal_py.Endpoint]
         )");
 
-        py_gate.def("get_predecessor", py::overload_cast<const std::string&>(&Gate::get_predecessor), py::arg("pin_name"), R"(
+        py_gate.def("get_predecessor", py::overload_cast<const std::string&>(&Gate::get_predecessor, py::const_), py::arg("pin_name"), R"(
             Get a single direct predecessor endpoint that is connected to the input pin specified by name.
             Fails if there are no or more than one predecessors.
 
@@ -421,7 +421,7 @@ namespace hal
             :rtype: hal_py.Endpoint or None
         )");
 
-        py_gate.def("get_predecessor", py::overload_cast<const GatePin*>(&Gate::get_predecessor), py::arg("pin"), R"(
+        py_gate.def("get_predecessor", py::overload_cast<const GatePin*>(&Gate::get_predecessor, py::const_), py::arg("pin"), R"(
             Get a single direct predecessor endpoint that is connected to the specified input pin.
             Fails if there are no or more than one predecessors.
 
@@ -462,7 +462,7 @@ namespace hal
             :rtype: list[hal_py.Endpoint]
         )");
 
-        py_gate.def("get_successor", py::overload_cast<const std::string&>(&Gate::get_successor), py::arg("pin_name"), R"(
+        py_gate.def("get_successor", py::overload_cast<const std::string&>(&Gate::get_successor, py::const_), py::arg("pin_name"), R"(
             Get a single direct successor endpoint that is connected to the output pin specified by name.
             Fails if there are no or more than one successors.
 
@@ -471,7 +471,7 @@ namespace hal
             :rtype: hal_py.Endpoint or None
         )");
 
-        py_gate.def("get_successor", py::overload_cast<const GatePin*>(&Gate::get_successor), py::arg("pin"), R"(
+        py_gate.def("get_successor", py::overload_cast<const GatePin*>(&Gate::get_successor, py::const_), py::arg("pin"), R"(
             Get a single direct successor endpoint that is connected to the output pin specified by name.
             Fails if there are no or more than one successors.
 

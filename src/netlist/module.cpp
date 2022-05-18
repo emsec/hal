@@ -671,7 +671,7 @@ namespace hal
         }
         else if (con.has_external_source && con.has_internal_destination)
         {
-            if (auto pin = get_pin_by_net(net); pin_res != nullptr)
+            if (auto pin = get_pin_by_net(net); pin != nullptr)
             {
                 const auto direction = pin->get_direction();
                 if (direction == PinDirection::output || direction == PinDirection::inout)
@@ -955,7 +955,8 @@ namespace hal
     {
         if (id == 0)
         {
-            return log_warning("module", "could not get pin group by ID for module '{}' with ID {}: ID 0 is invalid", m_name, m_id);
+            log_warning("module", "could not get pin group by ID for module '{}' with ID {}: ID 0 is invalid", m_name, m_id);
+            return nullptr;
         }
 
         if (const auto it = m_pin_groups_map.find(id); it != m_pin_groups_map.end())
@@ -1037,7 +1038,8 @@ namespace hal
 
         if (new_name.empty())
         {
-            log_warning("module", "could not set name for pin group '{}' with ID {} of module '{}' with ID {}: empty string passed as new name", pin_group->get_name(), pin->get_id(), m_name, m_id);
+            log_warning(
+                "module", "could not set name for pin group '{}' with ID {} of module '{}' with ID {}: empty string passed as new name", pin_group->get_name(), pin_group->get_id(), m_name, m_id);
             return false;
         }
 
@@ -1426,14 +1428,10 @@ namespace hal
 
     Result<std::monostate> Module::remove_pin_net(Net* net)
     {
-        ModulePin* pin;
-        if (auto res = get_pin_by_net(net); res.is_error())
+        auto pin = get_pin_by_net(net);
+        if (pin == nullptr)
         {
-            return ERR_APPEND(res.get_error(), "could not remove pin from net: failed to get pin corresponding to net");
-        }
-        else
-        {
-            pin = res.get();
+            return ERR("could not remove pin from net: failed to get pin corresponding to net");
         }
 
         PinGroup<ModulePin>* pin_group = pin->get_group().first;

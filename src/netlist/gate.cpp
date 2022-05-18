@@ -184,37 +184,38 @@ namespace hal
 
     BooleanFunction Gate::get_boolean_function(const std::string& name) const
     {
-        if (name.empty())
+        std::string internal_name = name;
+        if (internal_name.empty())
         {
             auto output_pins = m_type->get_output_pins();
             if (output_pins.empty())
             {
                 return BooleanFunction();
             }
-            name = output_pins.front()->get_name();
+            internal_name = output_pins.front()->get_name();
         }
 
         if (m_type->has_component_of_type(GateTypeComponent::ComponentType::lut))
         {
-            auto lut_pins = m_type->get_pins([name](const GatePin* pin) { return pin->get_type() == PinType::lut && pin->get_name() == name; });
+            auto lut_pins = m_type->get_pins([internal_name](const GatePin* pin) { return pin->get_type() == PinType::lut && pin->get_name() == internal_name; });
             if (!lut_pins.empty())
             {
                 return get_lut_function(lut_pins.front());
             }
         }
 
-        if (auto it = m_functions.find(name); it != m_functions.end())
+        if (auto it = m_functions.find(internal_name); it != m_functions.end())
         {
             return it->second;
         }
 
         auto map = m_type->get_boolean_functions();
-        if (auto it = map.find(name); it != map.end())
+        if (auto it = map.find(internal_name); it != map.end())
         {
             return it->second;
         }
 
-        log_warning("gate", "could not get Boolean function '{}' of gate '{}' with ID {}: no function with that name exists", name, m_name, std::to_string(m_id));
+        log_warning("gate", "could not get Boolean function '{}' of gate '{}' with ID {}: no function with that name exists", internal_name, m_name, std::to_string(m_id));
         return BooleanFunction();
     }
 
@@ -225,7 +226,7 @@ namespace hal
             auto output_pins = m_type->get_output_pins();
             if (output_pins.empty())
             {
-                log_warning("could not get Boolean function of gate '{}' with ID {}: gate type '{}' with ID {} has no output pins", m_name, m_id, m_type->get_name(), m_type->get_id());
+                log_warning("gate", "could not get Boolean function of gate '{}' with ID {}: gate type '{}' with ID {} has no output pins", m_name, m_id, m_type->get_name(), m_type->get_id());
                 return BooleanFunction();
             }
             pin = output_pins.front();
@@ -252,7 +253,7 @@ namespace hal
         {
             for (auto pin : m_type->get_pins([](const GatePin* pin) { return pin->get_type() == PinType::lut; }))
             {
-                res.emplace(pin, get_lut_function(pin));
+                res.emplace(pin->get_name(), get_lut_function(pin));
             }
         }
 
@@ -387,8 +388,8 @@ namespace hal
                 lut_component->get_component_as<InitComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::init; });
             if (init_component != nullptr)
             {
-                std::vector<GatePins*> output_pins = m_type->get_output_pins();
-                if (!output_pins.empty() && name == output_pins[0])
+                auto output_pins = m_type->get_output_pins();
+                if (!output_pins.empty() && name == output_pins.front()->get_name())
                 {
                     auto tt = func.compute_truth_table(m_type->get_input_pin_names());
                     if (tt.is_error())

@@ -177,7 +177,7 @@ namespace hal
          * @param[in] pin_name - The name of an output pin of the gate.
          * @returns `true` if the endpoint is a source of the net, `false` otherwise.
          */
-        bool is_a_source(Gate* gate, const std::string& pin_name) const;
+        bool is_a_source(const Gate* gate, const std::string& pin_name) const;
 
         /**
          * TODO test
@@ -188,7 +188,7 @@ namespace hal
          * @param[in] pin - The output pin of the gate.
          * @returns `true` if the endpoint is a source of the net, `false` otherwise.
          */
-        bool is_a_source(Gate* gate, const GatePin* pin_name) const;
+        bool is_a_source(const Gate* gate, const GatePin* pin_name) const;
 
         /**
          * Check whether an endpoint is a source of the net.
@@ -196,7 +196,7 @@ namespace hal
          * @param[in] ep - The endpoint.
          * @returns `true` if the endpoint is a source of the net, `false` otherwise.
          */
-        bool is_a_source(Endpoint* ep) const;
+        bool is_a_source(const Endpoint* ep) const;
 
         /**
          * Get the number of sources of the net.
@@ -207,7 +207,7 @@ namespace hal
 
         /**
          * Get a vector of sources of the net.
-        * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
          * @param[in] filter - An optional filter.
          * @returns A vector of source endpoints.
@@ -277,7 +277,7 @@ namespace hal
          * @param[in] pin_name - The name of an input pin of the gate.
          * @returns `true` if the endpoint is a destination of the net, `false` otherwise.
          */
-        bool is_a_destination(Gate* gate, const std::string& pin_name) const;
+        bool is_a_destination(const Gate* gate, const std::string& pin_name) const;
 
         /**
          * TODO test
@@ -288,7 +288,7 @@ namespace hal
          * @param[in] pin - The input pin of the gate.
          * @returns `true` if the endpoint is a destination of the net, `false` otherwise.
          */
-        bool is_a_destination(Gate* gate, const GatePin* pin_name) const;
+        bool is_a_destination(const Gate* gate, const GatePin* pin_name) const;
 
         /**
          * Check whether an endpoint is a destination of the net.
@@ -296,7 +296,7 @@ namespace hal
          * @param[in] ep - The endpoint.
          * @returns `true` if the endpoint is a destination of the net, `false` otherwise.
          */
-        bool is_a_destination(Endpoint* ep) const;
+        bool is_a_destination(const Endpoint* ep) const;
 
         /**
          * Get the number of destinations of the net.
@@ -307,7 +307,7 @@ namespace hal
 
         /**
          * Get a vector of destinations of the net.
-        * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
          * @param[in] filter - An optional filter.
          * @returns A vector of destination endpoints.
@@ -317,63 +317,63 @@ namespace hal
         /**
          * Check whether the net is unrouted, i.e., it has no source or no destination.
          *
-         * @returns True if the net is unrouted, false otherwise.
+         * @returns `true` if the net is unrouted, `false` otherwise.
          */
         bool is_unrouted() const;
 
         /**
          * Check whether the net is connected to GND.
          *
-         * @returns True if the net is connected to GND, false otherwise.
+         * @returns `true` if the net is connected to GND, `false` otherwise.
          */
         bool is_gnd_net() const;
 
         /**
          * Check whether the net is connected to VCC.
          *
-         * @returns True if the net is connected to VCC, false otherwise.
+         * @returns `true` if the net is connected to VCC, `false` otherwise.
          */
         bool is_vcc_net() const;
 
         /**
          * Mark this net as a global input net.
          *
-         * @returns True on success.
+         * @returns `true` on success, `false` otherwise.
          */
         bool mark_global_input_net();
 
         /**
          * Mark this net as a global output net.
          *
-         * @returns True on success.
+         * @returns `true` on success, `false` otherwise.
          */
         bool mark_global_output_net();
 
         /**
          * Unmark this net as a global input net.
          *
-         * @returns True on success.
+         * @returns `true` on success, `false` otherwise.
          */
         bool unmark_global_input_net();
 
         /**
          * Unmark this net as a global output net.
          *
-         * @returns True on success.
+         * @returns `true` on success, `false` otherwise.
          */
         bool unmark_global_output_net();
 
         /**
          * Checks whether this net is a global input net.
          *
-         * @returns True if the net is a global input net.
+         * @returns `true` if the net is a global input net, `false` otherwise.
          */
         bool is_global_input_net() const;
 
         /**
          * Checks whether this net is a global output net.
          *
-         * @returns True if the net is a global output net.
+         * @returns `true` if the net is a global output net, `false` otherwise.
          */
         bool is_global_output_net() const;
 

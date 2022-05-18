@@ -85,7 +85,6 @@ namespace hal
             If depth is set to 0 there is no limitation and the loop  continues until no more predecessors/succesors are found.
             If a filter function is given, the recursion stops whenever the filter function evaluates to False. 
             Only gates matching the filter will be added to the result vector.
-            The result will not include the provided gate itself.
 
             :param hal_py.Net net: The initial net.
             :param bool get_successors: True to return successors, False for Predecessors.

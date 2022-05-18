@@ -480,7 +480,7 @@ namespace hal
         return true;
     }
 
-    Endpoint* NetlistInternalManager::net_add_source(Net* net, Gate* gate, const GatePin* pin)
+    Endpoint* NetlistInternalManager::net_add_source(Net* net, Gate* gate, GatePin* pin)
     {
         if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(gate) || pin == nullptr)
         {
@@ -505,19 +505,19 @@ namespace hal
 
         if ((std::find(output_pins.begin(), output_pins.end(), pin) == output_pins.end()))
         {
-            log_error("net", "gate '{}' with ID {} has no output pin called '{}' in netlist with ID {}.", gate->get_name(), gate->get_id(), pin, m_netlist->m_netlist_id);
+            log_error("net", "gate '{}' with ID {} has no output pin called '{}' in netlist with ID {}.", gate->get_name(), gate->get_id(), pin->get_name(), m_netlist->m_netlist_id);
             return nullptr;
         }
 
         // check whether src has already an assigned net
-        if (gate->get_fan_out_net(pin) != nullptr)
+        if (auto fan_out_net = gate->get_fan_out_net(pin); fan_out_net != nullptr)
         {
             log_error("net",
                       "gate '{}' with ID {} is already connected to net '{}' with ID {} at output pin '{}', cannot assign new net '{}' with ID {} in netlist with ID {}.",
                       gate->get_name(),
                       gate->get_id(),
-                      gate->get_fan_out_net(pin)->get_name(),
-                      gate->get_fan_out_net(pin)->get_id(),
+                      fan_out_net->get_name(),
+                      fan_out_net->get_id(),
                       pin->get_name(),
                       net->get_name(),
                       net->get_id(),
@@ -618,7 +618,7 @@ namespace hal
         return true;
     }
 
-    Endpoint* NetlistInternalManager::net_add_destination(Net* net, Gate* gate, const GatePin* pin)
+    Endpoint* NetlistInternalManager::net_add_destination(Net* net, Gate* gate, GatePin* pin)
     {
         if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(gate) || pin == nullptr)
         {
@@ -643,19 +643,19 @@ namespace hal
 
         if ((std::find(input_pins.begin(), input_pins.end(), pin) == input_pins.end()))
         {
-            log_error("net", "gate '{}' with ID {} has no input pin called '{}' in netlist with ID {}.", gate->get_name(), gate->get_id(), pin, m_netlist->m_netlist_id);
+            log_error("net", "gate '{}' with ID {} has no input pin called '{}' in netlist with ID {}.", gate->get_name(), gate->get_id(), pin->get_name(), m_netlist->m_netlist_id);
             return nullptr;
         }
 
         // check whether dst has already an assigned net
-        if (gate->get_fan_in_net(pin) != nullptr)
+        if (auto fan_in_net = gate->get_fan_in_net(pin); fan_in_net != nullptr)
         {
             log_error("net",
                       "gate '{}' with ID {} is already connected to net '{}' with ID {} at input pin '{}', cannot assign new net '{}' with ID {} in netlist with ID {}.",
                       gate->get_name(),
                       gate->get_id(),
-                      gate->get_fan_in_net(pin)->get_name(),
-                      gate->get_fan_in_net(pin)->get_id(),
+                      fan_in_net->get_name(),
+                      fan_in_net->get_id(),
                       pin->get_name(),
                       net->get_name(),
                       net->get_id(),

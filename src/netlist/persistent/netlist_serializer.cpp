@@ -167,7 +167,7 @@ namespace hal
                         return false;
                     }
                 }
-                if (auto res = net->add_source(gate, pin); res.is_error())
+                if (net->add_source(gate, pin) == nullptr)
                 {
                     log_error("netlist_persistent",
                               "could not deserialize source of net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": failed to add pin '" + pin->get_name()
@@ -191,7 +191,7 @@ namespace hal
                 }
                 {
                     rapidjson::Value functions(rapidjson::kObjectType);
-                    for (const auto& [name, function] : g->get_boolean_functions(true))
+                    for (const auto& [name, function] : gate->get_boolean_functions(true))
                     {
                         const std::string function_str = function.to_string();
                         functions.AddMember(JSON_STR_HELPER(name), JSON_STR_HELPER(function_str), allocator);
@@ -220,7 +220,7 @@ namespace hal
 
                     if (val.HasMember("data"))
                     {
-                        deserialize_data(g, val["data"]);
+                        deserialize_data(gate, val["data"]);
                     }
 
                     if (val.HasMember("custom_functions"))
@@ -319,7 +319,7 @@ namespace hal
                 {
                     for (const auto& dst_node : val["dsts"].GetArray())
                     {
-                        if (!deserialize_destination(nl, n, dst_node))
+                        if (!deserialize_destination(nl, net, dst_node))
                         {
                             log_error("netlist_persistent", "could not deserialize net '" + net_name + "' with ID " + std::to_string(net_id) + ": failed to deserialize destination");
                             return false;
@@ -329,7 +329,7 @@ namespace hal
 
                 if (val.HasMember("data"))
                 {
-                    deserialize_data(n, val["data"]);
+                    deserialize_data(net, val["data"]);
                 }
 
                 return true;

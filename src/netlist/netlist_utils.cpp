@@ -75,7 +75,8 @@ namespace hal
                         const std::string var = input_vars.back();
                         input_vars.pop_back();
 
-                        if (const GatePin* pin = gate->get_type()->get_pin_by_name(var); pin == nullptr)
+                        const GatePin* pin = gate->get_type()->get_pin_by_name(var);
+                        if (pin == nullptr)
                         {
                             return ERR("could not get Boolean function of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": failed to get input pin '" + var
                                        + "' by name");
@@ -181,6 +182,8 @@ namespace hal
                         }
                     }
                 }
+
+                return OK({});
             }
         }    // namespace
 
@@ -224,7 +227,12 @@ namespace hal
 
             for (Net* n : start_gate->get_fan_in_nets())
             {
-                subgraph_function_bfs(n, result, {}, subgraph_gates, cache);
+                if (auto res = subgraph_function_bfs(n, result, {}, subgraph_gates, cache); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(),
+                                      "could not get subgraph function of net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": failed to get function at net '" + n->get_name()
+                                          + "' with ID " + std::to_string(n->get_id()));
+                }
             }
 
             return OK(result);
@@ -400,32 +408,42 @@ namespace hal
             // create module pins for top module
             for (Net* c_input_net : c_top_module->get_input_nets())
             {
-                ModulePin* pin;
-
                 // either use existing name of pin or generate new one
-                if (auto res = top_module->get_pin_by_net(nl->get_net_by_id(c_input_net->get_id())); res.is_ok())
+                if (auto pin = top_module->get_pin_by_net(nl->get_net_by_id(c_input_net->get_id())); pin != nullptr)
                 {
-                    pin = res.get();
-                    c_top_module->create_pin(pin->get_name(), c_input_net, pin->get_type());
+                    if (auto res = c_top_module->create_pin(pin->get_name(), c_input_net, pin->get_type()); res.is_error())
+                    {
+                        log_error("netlist_utils", "error encountered while copying partial netlist:\n{}", res.get_error().get());
+                        return nullptr;
+                    }
                 }
                 else
                 {
-                    c_top_module->create_pin(c_input_net->get_name(), c_input_net);
+                    if (auto res = c_top_module->create_pin(c_input_net->get_name(), c_input_net); res.is_error())
+                    {
+                        log_error("netlist_utils", "error encountered while copying partial netlist:\n{}", res.get_error().get());
+                        return nullptr;
+                    }
                 }
             }
             for (Net* c_output_net : c_top_module->get_output_nets())
             {
-                ModulePin* pin;
-
                 // either use existing name of pin or generate new one
-                if (auto res = top_module->get_pin_by_net(nl->get_net_by_id(c_output_net->get_id())); res.is_ok())
+                if (auto pin = top_module->get_pin_by_net(nl->get_net_by_id(c_output_net->get_id())); pin != nullptr)
                 {
-                    pin = res.get();
-                    c_top_module->create_pin(pin->get_name(), c_output_net, pin->get_type());
+                    if (auto res = c_top_module->create_pin(pin->get_name(), c_output_net, pin->get_type()); res.is_error())
+                    {
+                        log_error("netlist_utils", "error encountered while copying partial netlist:\n{}", res.get_error().get());
+                        return nullptr;
+                    }
                 }
                 else
                 {
-                    c_top_module->create_pin(c_output_net->get_name(), c_output_net);
+                    if (auto res = c_top_module->create_pin(c_output_net->get_name(), c_output_net); res.is_error())
+                    {
+                        log_error("netlist_utils", "error encountered while copying partial netlist:\n{}", res.get_error().get());
+                        return nullptr;
+                    }
                 }
             }
 
@@ -747,7 +765,7 @@ namespace hal
                     }
                     else
                     {
-                        log_error("netlist_utils", "could not retrieve fan-in net for pin '{}' of gate '{}' with ID {}.", pin, gate->get_name(), gate->get_id());
+                        log_warning("netlist_utils", "could not retrieve fan-in net for pin '{}' of gate '{}' with ID {}.", pin->get_name(), gate->get_name(), gate->get_id());
                     }
                 }
                 else if (direction == PinDirection::output)
@@ -758,7 +776,7 @@ namespace hal
                     }
                     else
                     {
-                        log_error("netlist_utils", "could not retrieve fan-out net for pin '{}' of gate '{}' with ID {}.", pin, gate->get_name(), gate->get_id());
+                        log_warning("netlist_utils", "could not retrieve fan-out net for pin '{}' of gate '{}' with ID {}.", pin->get_name(), gate->get_name(), gate->get_id());
                     }
                 }
             }
@@ -857,7 +875,7 @@ namespace hal
                                                + out_net->get_name() + "' with ID " + std::to_string(out_net->get_id()) + " of buffer gate '" + gate->get_name() + "' with ID "
                                                + std::to_string(gate->get_id()));
                                 }
-                                if (!in_net->add_destination(dst_gate, dst_pin); res.is_error())
+                                if (!in_net->add_destination(dst_gate, dst_pin))
                                 {
                                     return ERR("could not completely remove buffers from netlist with ID " + std::to_string(netlist->get_id()) + ": failed to add destination to input net '"
                                                + in_net->get_name() + "' with ID " + std::to_string(in_net->get_id()) + " of buffer gate '" + gate->get_name() + "' with ID "

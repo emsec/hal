@@ -131,7 +131,7 @@ namespace hal
     {
         if (gate == nullptr)
         {
-            log_warning("could not add source to gate: nullptr given for gate");
+            log_warning("net", "could not add source to gate: nullptr given for gate");
             return nullptr;
         }
         if (pin_name.empty())
@@ -161,7 +161,7 @@ namespace hal
     {
         if (gate == nullptr)
         {
-            log_warning("could not remove source from gate: nullptr given for gate");
+            log_warning("net", "could not remove source from gate: nullptr given for gate");
             return false;
         }
         if (pin_name.empty())
@@ -187,16 +187,16 @@ namespace hal
         return m_internal_manager->net_remove_source(this, ep);
     }
 
-    bool Net::is_a_source(Gate* gate, const GatePin* pin) const
+    bool Net::is_a_source(const Gate* gate, const GatePin* pin) const
     {
         return std::find_if(m_sources_raw.begin(), m_sources_raw.end(), [gate, &pin](auto ep) { return ep->get_gate() == gate && *ep->get_pin() == *pin; }) != m_sources_raw.end();
     }
 
-    bool Net::is_a_source(Gate* gate, const std::string& pin_name) const
+    bool Net::is_a_source(const Gate* gate, const std::string& pin_name) const
     {
         if (gate == nullptr)
         {
-            log_warning("could not check if gate is a source: nullptr given for gate");
+            log_warning("net", "could not check if gate is a source: nullptr given for gate");
             return false;
         }
         if (pin_name.empty())
@@ -204,7 +204,7 @@ namespace hal
             log_warning("net", "could not check if gate '{}' with ID {} is a source: empty string provided as pin name", gate->get_name(), gate->get_id());
             return false;
         }
-        GatePin* pin = gate->get_type()->get_pin_by_name(pin_name);
+        const GatePin* pin = gate->get_type()->get_pin_by_name(pin_name);
         if (pin == nullptr)
         {
             log_warning("net", "could not check if gate '{}' with ID {} is a source: no pin with name '{}' exists", gate->get_name(), gate->get_id(), pin_name);
@@ -213,7 +213,7 @@ namespace hal
         return is_a_source(gate, pin);
     }
 
-    bool Net::is_a_source(Endpoint* ep) const
+    bool Net::is_a_source(const Endpoint* ep) const
     {
         if (ep == nullptr)
         {
@@ -260,7 +260,7 @@ namespace hal
     {
         if (gate == nullptr)
         {
-            log_warning("could not add destination to gate: nullptr given for gate");
+            log_warning("net", "could not add destination to gate: nullptr given for gate");
             return nullptr;
         }
         if (pin_name.empty())
@@ -291,7 +291,7 @@ namespace hal
     {
         if (gate == nullptr)
         {
-            log_warning("could not remove destination from gate: nullptr given for gate");
+            log_warning("net", "could not remove destination from gate: nullptr given for gate");
             return false;
         }
         if (pin_name.empty())
@@ -317,16 +317,16 @@ namespace hal
         return m_internal_manager->net_remove_destination(this, ep);
     }
 
-    bool Net::is_a_destination(Gate* gate, const GatePin* pin) const
+    bool Net::is_a_destination(const Gate* gate, const GatePin* pin) const
     {
         return std::find_if(m_destinations_raw.begin(), m_destinations_raw.end(), [gate, &pin](auto ep) { return ep->get_gate() == gate && *ep->get_pin() == *pin; }) != m_destinations_raw.end();
     }
 
-    bool Net::is_a_destination(Gate* gate, const std::string& pin_name) const
+    bool Net::is_a_destination(const Gate* gate, const std::string& pin_name) const
     {
         if (gate == nullptr)
         {
-            log_warning("could not check if gate is a destination: nullptr given for gate");
+            log_warning("net", "could not check if gate is a destination: nullptr given for gate");
             return false;
         }
         if (pin_name.empty())
@@ -334,7 +334,7 @@ namespace hal
             log_warning("net", "could not check if gate '{}' with ID {} is a destination: empty string provided as pin name", gate->get_name(), gate->get_id());
             return false;
         }
-        GatePin* pin = gate->get_type()->get_pin_by_name(pin_name);
+        const GatePin* pin = gate->get_type()->get_pin_by_name(pin_name);
         if (pin == nullptr)
         {
             log_warning("net", "could not check if gate '{}' with ID {} is a destination: no pin with name '{}' exists", gate->get_name(), gate->get_id(), pin_name);
@@ -343,7 +343,7 @@ namespace hal
         return is_a_destination(gate, pin);
     }
 
-    bool Net::is_a_destination(Endpoint* ep) const
+    bool Net::is_a_destination(const Endpoint* ep) const
     {
         if (ep == nullptr)
         {

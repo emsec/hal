@@ -740,10 +740,10 @@ namespace hal
         // delete unused nets
         for (auto net : m_netlist->get_nets())
         {
-            const u32 num_of_sources = net->get_num_of_sources();
+            const u32 num_of_sources      = net->get_num_of_sources();
             const u32 num_of_destinations = net->get_num_of_destinations();
-            const bool no_source      = num_of_sources == 0 && !(net->is_global_input_net() && num_of_destinations != 0);
-            const bool no_destination = num_of_destinations == 0 && !(net->is_global_output_net() && num_of_sources != 0);
+            const bool no_source          = num_of_sources == 0 && !(net->is_global_input_net() && num_of_destinations != 0);
+            const bool no_destination     = num_of_destinations == 0 && !(net->is_global_output_net() && num_of_sources != 0);
             if (no_source && no_destination)
             {
                 m_netlist->delete_net(net);
@@ -1707,7 +1707,7 @@ namespace hal
             std::unordered_set<Net*> input_nets  = module->get_input_nets();
             std::unordered_set<Net*> output_nets = module->get_input_nets();
 
-            if (module->get_pin_by_net(m_one_net).is_error() && (input_nets.find(m_one_net) != input_nets.end() || output_nets.find(m_one_net) != input_nets.end()))
+            if (!module->get_pin_by_net(m_one_net) && (input_nets.find(m_one_net) != input_nets.end() || output_nets.find(m_one_net) != input_nets.end()))
             {
                 if (auto res = module->create_pin("'1'", m_one_net); res.is_error())
                 {
@@ -1717,7 +1717,7 @@ namespace hal
                 }
             }
 
-            if (module->get_pin_by_net(m_zero_net).is_error() && (input_nets.find(m_zero_net) != input_nets.end() || output_nets.find(m_zero_net) != input_nets.end()))
+            if (!module->get_pin_by_net(m_zero_net) && (input_nets.find(m_zero_net) != input_nets.end() || output_nets.find(m_zero_net) != input_nets.end()))
             {
                 if (auto res = module->create_pin("'0'", m_zero_net); res.is_error())
                 {
@@ -2079,7 +2079,7 @@ namespace hal
     // ###########################################################################
     // ###################          Helper Functions          ####################
     // ###########################################################################
-    
+
     std::string VerilogParser::get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const
     {
         // if the name only appears once, we don't have to suffix it
