@@ -37,6 +37,13 @@ namespace hal {
         void paint(int y0, QPainter& painter);
     };
 
+    class WaveFormPrimitiveTrigger : public WaveFormPrimitive
+    {
+    public:
+        WaveFormPrimitiveTrigger(float x) : WaveFormPrimitive(x,x) {;}
+        void paint(int y0, QPainter& painter);
+    };
+
     class WaveFormPrimitiveUndefined : public WaveFormPrimitive
     {
     public:

@@ -39,11 +39,12 @@ namespace hal {
     };
 
     class WaveDataList;
+    class WaveDataTrigger;
 
     class WaveData
     {
     public:
-        enum NetType { RegularNet, InputNet, OutputNet, ClockNet, BooleanNet, NetGroup };
+        enum NetType { RegularNet, InputNet, OutputNet, ClockNet, BooleanNet, TriggerTime, NetGroup };
         enum LoadPolicy { TooBigToLoad, LoadTimeframe, LoadAllData };
     private:
         u32 mId;
@@ -77,6 +78,7 @@ namespace hal {
         u64     fileSize()                  const { return mFileSize; }
         int     valueBase()                 const { return mValueBase; }
         std::string fileName()              const;
+        SaleaeDirectoryNetEntry::Type composedType() const;
         void setId(u32 id_);
         bool rename(const QString& nam);
         void setBits(int bts);
@@ -88,15 +90,16 @@ namespace hal {
         virtual LoadPolicy loadPolicy() const;
         int dataIndex() const;
 
-        u64 neighborTransition(double t, bool next) const;
+        virtual u64 neighborTransition(double t, bool next) const;
         void loadDataUnlessAlreadyLoaded();
         bool loadSaleae(const WaveDataTimeframe& tframe = WaveDataTimeframe());
         void saveSaleae();
         void setData(const QMap<u64,int>& dat);
-        int  intValue(double t) const;
+        virtual int  intValue(double t) const;
         int get_value_at(u64 t) const;
         std::string get_name() const { return mName.toStdString(); }
         std::vector<std::pair<u64,int>> get_events(u64 t0 = 0) const;
+        std::vector<std::pair<u64,int>> get_triggered_events(const WaveDataTrigger* wdTrig, u64 t0 = 0);
         u64  maxTime() const;
         void clear() { mData.clear(); }
         void insert(u64 t, int val) { mData.insert(t,val); }
@@ -128,6 +131,7 @@ namespace hal {
     {
         friend class WaveDataGroup;
         friend class WaveDataBoolean;
+        friend class WaveDataTrigger;
         Q_OBJECT
 
         QMap<u32,int>     mIds;
@@ -135,6 +139,7 @@ namespace hal {
         SaleaeDirectory   mSaleaeDirectory;
         u32               mMaxGroupId;
         u32               mMaxBooleanId;
+        u32               mMaxTriggerid;
         void testDoubleCount();
         void restoreIndex();
         void updateMaxTime();
@@ -146,6 +151,7 @@ namespace hal {
         void replaceWaveData(int inx, WaveData *wdNew);
         void registerGroup(WaveDataGroup* grp);
         void registerBoolean(WaveDataBoolean* wdBool);
+        void registerTrigger(WaveDataTrigger* wdTrig);
     public:
         /**
          * Map of groups indexed by non-zero group id
@@ -153,13 +159,14 @@ namespace hal {
 
         QMap<u32,WaveDataGroup*> mDataGroups;
         QMap<u32,WaveDataBoolean*> mDataBooleans;
+        QMap<u32,WaveDataTrigger*> mDataTrigger;
         WaveDataList(const QString& sdFilename, QObject* parent = nullptr);
         ~WaveDataList();
 
-        u32  createGroup(QString grpName);
         u32  nextGroupId() { return ++mMaxGroupId; }
         u32  maxGroupId() const { return mMaxGroupId; }
         u32  nextBooleanId() { return ++ mMaxBooleanId; }
+        u32  nextTriggerId() { return ++ mMaxTriggerid; }
         void addWavesToGroup(u32 grpId, const QVector<WaveData*>& wds);
         void removeGroup(u32 grpId);
 
@@ -187,6 +194,7 @@ namespace hal {
         void emitWaveUpdated(int inx);
         void emitGroupUpdated(int grpId);
         void emitWaveRemovedFromGroup(int iwave, int grpId);
+        void emitTimeframeChanged();
         void updateFromSaleae();
         SaleaeDirectory& saleaeDirectory() { return mSaleaeDirectory; }
         void insertBooleanValue(WaveData* wd, u64 t, BooleanFunction::Value bval);
@@ -195,6 +203,7 @@ namespace hal {
         void waveAdded(int inx) const;
         void groupAdded(int grpId);
         void booleanAdded(int boolId);
+        void triggerAdded(int trigId);
         void groupAboutToBeRemoved(WaveDataGroup* grp);
         void waveDataAboutToBeChanged(int inx);
         void waveUpdated(int inx, int grpId);
@@ -225,16 +234,37 @@ namespace hal {
     {
         int mInputCount;
         WaveData** mInputWaves;
-        WaveData* mTriggerWave;
         QHash<WaveDataGroupIndex,int> mIndex;
         char* mTruthTable;
     public:
         WaveDataBoolean(WaveDataList* wdList, QString boolFunc);
+        WaveDataBoolean(WaveDataList* wdList, const QList<WaveData*>& boolInput, const QList<int>& acceptMask);
         ~WaveDataBoolean();
         void recalcData();
         virtual LoadPolicy loadPolicy() const override;
         QList<WaveData*> children() const;
         const char* truthTable() const { return mTruthTable; }
+        virtual int intValue(double t) const override;
+    };
+
+    class WaveDataTrigger : public WaveData
+    {
+        int mTriggerCount;
+        WaveData** mTriggerWaves;
+        WaveData* mFilterWave;
+        QHash<WaveDataGroupIndex,int> mIndex;
+        int* mToValue;
+    public:
+        WaveDataTrigger(WaveDataList* wdList, const QList<WaveData*>& wdTrigger, const QList<int>& toVal = QList<int>());
+        ~WaveDataTrigger();
+        void recalcData();
+        virtual LoadPolicy loadPolicy() const override;
+        QList<WaveData*> children() const;
+        virtual u64 neighborTransition(double t, bool next) const override;
+        virtual int intValue(double t) const override;
+        void set_filter_wave(WaveData* wd);
+        QList<int> toValueList() const;
+        WaveData* get_filter_wave() const { return mFilterWave; }
     };
 
     class WaveDataGroup : public WaveData
@@ -270,5 +300,6 @@ namespace hal {
         void add_waveform(WaveData* wd);
         void remove_waveform(WaveData* wd);
         std::vector<WaveData*> get_waveforms() const;
+        virtual int intValue(double t) const override;
     };
 }

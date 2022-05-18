@@ -35,10 +35,11 @@ namespace hal {
         : QSplitter(parent), mController(ctrl), mControllerOwner(nullptr),
           mOngoingYscroll(false), mVisualizeNetState(false), mAutoAddWaves(true)
     {
-        mWaveItemHash = new WaveItemHash;
-        mWaveDataList = ctrl->get_waves();
-        mTreeView     = new WaveTreeView(mWaveDataList,  mWaveItemHash, this);
-        mTreeModel    = new WaveTreeModel(mWaveDataList, mWaveItemHash, this);
+        mWaveItemHash   = new WaveItemHash;
+        mWaveDataList   = ctrl->get_waves();
+        mTreeView       = new WaveTreeView(mWaveDataList,  mWaveItemHash, this);
+        mGraphicsCanvas = new WaveGraphicsCanvas(mWaveDataList,  mWaveItemHash, this);
+        mTreeModel      = new WaveTreeModel(mWaveDataList, mWaveItemHash, mGraphicsCanvas, this);
         mTreeView->setModel(mTreeModel);
         mTreeView->expandAll();
         mTreeView->setColumnWidth(0,200);
@@ -47,12 +48,12 @@ namespace hal {
         mTreeView->header()->setStretchLastSection(true);
         addWidget(mTreeView);
 
-        mGraphicsCanvas = new WaveGraphicsCanvas(mWaveDataList,  mWaveItemHash, this);
         addWidget(mGraphicsCanvas);
 
         connect(mWaveDataList,&WaveDataList::waveAdded,mTreeModel,&WaveTreeModel::handleWaveAdded);
         connect(mWaveDataList,&WaveDataList::groupAdded,mTreeModel,&WaveTreeModel::handleGroupAdded);
         connect(mWaveDataList,&WaveDataList::booleanAdded,mTreeModel,&WaveTreeModel::handleBooleanAdded);
+        connect(mWaveDataList,&WaveDataList::triggerAdded,mTreeModel,&WaveTreeModel::handleTriggerAdded);
         connect(mWaveDataList,&WaveDataList::waveAddedToGroup,mTreeModel,&WaveTreeModel::handleWaveAddedToGroup);
         connect(mWaveDataList,&WaveDataList::waveRemovedFromGroup,mTreeModel,&WaveTreeModel::handleWaveRemovedFromGroup);
         connect(mWaveDataList,&WaveDataList::groupAboutToBeRemoved,mTreeModel,&WaveTreeModel::handleGroupAboutToBeRemoved);
@@ -90,6 +91,7 @@ namespace hal {
         connect(mController, &NetlistSimulatorController::stateChanged, this, &WaveWidget::handleStateChanged);
         mTreeView->verticalScrollBar()->setValue(0);
         setSizes({320,880});
+        mTreeModel->restore();
     }
 
     WaveWidget::~WaveWidget()

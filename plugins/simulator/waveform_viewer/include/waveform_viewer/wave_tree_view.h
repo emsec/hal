@@ -55,6 +55,7 @@ namespace hal {
         void handleRemoveGroup();
         void handleInsertGroup();
         void handleInsertBoolean();
+        void handleInsertTrigger();
         void handleSetValueFormat();
         void handleRemoveMulti();
 

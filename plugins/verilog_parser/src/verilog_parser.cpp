@@ -740,8 +740,10 @@ namespace hal
         // delete unused nets
         for (auto net : m_netlist->get_nets())
         {
-            const bool no_source      = net->get_num_of_sources() == 0 && !net->is_global_input_net();
-            const bool no_destination = net->get_num_of_destinations() == 0 && !net->is_global_output_net();
+            const u32 num_of_sources = net->get_num_of_sources();
+            const u32 num_of_destinations = net->get_num_of_destinations();
+            const bool no_source      = num_of_sources == 0 && !(net->is_global_input_net() && num_of_destinations != 0);
+            const bool no_destination = num_of_destinations == 0 && !(net->is_global_output_net() && num_of_sources != 0);
             if (no_source && no_destination)
             {
                 m_netlist->delete_net(net);
@@ -759,24 +761,38 @@ namespace hal
 
     void VerilogParser::tokenize()
     {
-        const std::string delimiters = "`,()[]{}\\#*: ;=.";
+        const std::string delimiters = "`,()[]{}\\#*: ;=./";
         std::string current_token;
         u32 line_number = 0;
 
         std::string line;
-        bool in_string          = false;
-        bool escaped            = false;
-        bool multi_line_comment = false;
+        char prev_char  = 0;
+        bool in_string  = false;
+        bool escaped    = false;
+        bool in_comment = false;
 
         std::vector<Token<std::string>> parsed_tokens;
         while (std::getline(m_fs, line))
         {
             line_number++;
-            this->remove_comments(line, multi_line_comment);
+            // this->remove_comments(line, multi_line_comment);
 
             for (char c : line)
             {
-                if (in_string == false && c == '\\')
+                // deal with comments
+                if (in_comment)
+                {
+                    if (c == '/' && prev_char == '*')
+                    {
+                        in_comment = false;
+                    }
+
+                    prev_char = c;
+                    continue;
+                }
+
+                // deal with escaping and strings
+                if (!in_string && c == '\\')
                 {
                     escaped = true;
                     continue;
@@ -791,12 +807,13 @@ namespace hal
                     in_string = !in_string;
                 }
 
-                if ((!std::isspace(c) && delimiters.find(c) == std::string::npos) || escaped || in_string)
+                if (!in_comment && ((!std::isspace(c) && delimiters.find(c) == std::string::npos) || escaped || in_string))
                 {
                     current_token += c;
                 }
                 else
                 {
+                    // deal with floats
                     if (!current_token.empty())
                     {
                         if (parsed_tokens.size() > 1 && utils::is_digits(parsed_tokens.at(parsed_tokens.size() - 2).string) && parsed_tokens.at(parsed_tokens.size() - 1) == "."
@@ -814,6 +831,7 @@ namespace hal
 
                     if (!parsed_tokens.empty())
                     {
+                        // deal with multi-character tokens
                         if (c == '(' && parsed_tokens.back() == "#")
                         {
                             parsed_tokens.back() = "#(";
@@ -827,6 +845,18 @@ namespace hal
                         else if (c == ')' && parsed_tokens.back() == "*")
                         {
                             parsed_tokens.back() = "*)";
+                            continue;
+                        }
+                        // start a comment
+                        else if (c == '/' && parsed_tokens.back() == "/")
+                        {
+                            parsed_tokens.pop_back();
+                            break;
+                        }
+                        else if (c == '*' && parsed_tokens.back() == "/")
+                        {
+                            in_comment = true;
+                            parsed_tokens.pop_back();
                             continue;
                         }
                     }
@@ -1451,7 +1481,7 @@ namespace hal
                         }
                     }
 
-                    for (const auto port_assignment : instance->m_port_assignments)
+                    for (const auto& port_assignment : instance->m_port_assignments)
                     {
                         std::vector<std::string> left_port;
                         if (!port_assignment.m_port_name.has_value())
@@ -1658,12 +1688,17 @@ namespace hal
         // assign module pins
         for (const auto& [net, port_info] : m_module_ports)
         {
+            if (net->get_num_of_sources() == 0 && net->get_num_of_destinations() == 0)
+            {
+                continue;
+            }
+
             Module* mod = std::get<2>(port_info);
             if (auto res = mod->create_pin(std::get<1>(port_info), net); res.is_error())
             {
                 return ERR_APPEND(res.get_error(),
                                   "could not construct netlist: failed to create pin '" + std::get<1>(port_info) + "' at net '" + net->get_name() + "' with ID " + std::to_string(net->get_id())
-                                      + "within module '" + mod->get_name() + "' with ID " + std::to_string(mod->get_id()));
+                                      + " within module '" + mod->get_name() + "' with ID " + std::to_string(mod->get_id()));
             }
         }
 
@@ -2044,74 +2079,7 @@ namespace hal
     // ###########################################################################
     // ###################          Helper Functions          ####################
     // ###########################################################################
-
-    void VerilogParser::remove_comments(std::string& line, bool& multi_line_comment) const
-    {
-        bool repeat = true;
-
-        while (repeat)
-        {
-            repeat = false;
-
-            // skip empty lines
-            if (line.empty())
-            {
-                break;
-            }
-
-            const size_t single_line_comment_begin = line.find("//");
-            const size_t multi_line_comment_begin  = line.find("/*");
-            const size_t multi_line_comment_end    = line.find("*/");
-
-            std::string begin = "";
-            std::string end   = "";
-
-            if (multi_line_comment == true)
-            {
-                if (multi_line_comment_end != std::string::npos)
-                {
-                    // multi-line comment ends in current line
-                    multi_line_comment = false;
-                    line               = line.substr(multi_line_comment_end + 2);
-                    repeat             = true;
-                }
-                else
-                {
-                    // current line entirely within multi-line comment
-                    line = "";
-                    break;
-                }
-            }
-            else
-            {
-                if (single_line_comment_begin != std::string::npos)
-                {
-                    if (multi_line_comment_begin == std::string::npos || (multi_line_comment_begin != std::string::npos && multi_line_comment_begin > single_line_comment_begin))
-                    {
-                        // single-line comment
-                        line   = line.substr(0, single_line_comment_begin);
-                        repeat = true;
-                    }
-                }
-                else if (multi_line_comment_begin != std::string::npos)
-                {
-                    if (multi_line_comment_end != std::string::npos)
-                    {
-                        // multi-line comment entirely in current line
-                        line   = line.substr(0, multi_line_comment_begin) + line.substr(multi_line_comment_end + 2);
-                        repeat = true;
-                    }
-                    else
-                    {
-                        // multi-line comment starts in current line
-                        multi_line_comment = true;
-                        line               = line.substr(0, multi_line_comment_begin);
-                    }
-                }
-            }
-        }
-    }
-
+    
     std::string VerilogParser::get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const
     {
         // if the name only appears once, we don't have to suffix it

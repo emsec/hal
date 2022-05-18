@@ -103,7 +103,7 @@ namespace hal {
                 if (!mData->data().isEmpty())
                 {
                     WaveDataProviderMap wdp(mData->data());
-                    wdp.setGroup(isGroup(),mData->bits(),mData->valueBase());
+                    wdp.setWaveType(mData->netType(),mData->bits(),mData->valueBase());
                     mPainted.generate(&wdp,trans,sbar,&mLoop);
                     setState(WaveItem::Painted);
                     if (mVisibleRange) Q_EMIT doneLoading();
@@ -193,6 +193,11 @@ namespace hal {
                     WaveDataBoolean* wdBool = static_cast<WaveDataBoolean*>(mData);
                     wdBool->recalcData();
                 }
+                else if (isTrigger())
+                {
+                    WaveDataTrigger* wdTrig = static_cast<WaveDataTrigger*>(mData);
+                    wdTrig->recalcData();
+                }
             }
             if (!mData->data().isEmpty())
             {
@@ -204,7 +209,10 @@ namespace hal {
         }
 
         // try get from painted primitives, will store time
-        retval = mPainted.cursorValuePainted(tCursor,xpos);
+        if (isTrigger())
+            retval = mPainted.cursorValueTrigger(tCursor,xpos);
+        else
+            retval = mPainted.cursorValuePainted(tCursor,xpos);
         return retval;
     }
 
@@ -273,7 +281,7 @@ namespace hal {
     uint qHash(const WaveItemIndex& wii)
     {
         if (!wii.isValid()) return 0;
-        return (wii.parentId() << 20) | ((wii.index()+1) << 2) | wii.intType();
+        return (wii.parentId() << 20) | ((wii.index()+1) << 3) | wii.intType();
     }
 
     int WaveItemHash::importedWires() const

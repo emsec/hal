@@ -5,17 +5,11 @@
 #include <QDebug>
 
 namespace hal {
-    void WaveDataProvider::setGroup(bool grp, int bts, int base)
+    void WaveDataProvider::setWaveType(WaveData::NetType type, int bts, int base)
     {
-        mGroup = grp;
+        mWaveType = type;
         mBits = bts;
         mValueBase = base;
-    }
-
-    void WaveDataProvider::setBoolean(bool bl, int bts)
-    {
-        mBoolean = bl;
-        mBits = bts;
     }
 
     SaleaeDataTuple WaveDataProviderMap::startValue(u64 t)
@@ -281,6 +275,7 @@ namespace hal {
         int n = (mInputCount + 7) / 8;
         mTruthTable = new char[n];
         memcpy(mTruthTable, ttable, n);
+        setWaveType(WaveData::BooleanNet);
     }
 
     WaveDataProviderBoolean::~WaveDataProviderBoolean()
@@ -307,5 +302,74 @@ namespace hal {
     SaleaeDataTuple WaveDataProviderBoolean::nextPoint()
     {
         return convertToBoolean(WaveDataProviderGroup::nextPoint());
+    }
+
+    //-----------------------------------------------------
+    WaveDataProviderTrigger::WaveDataProviderTrigger(const std::string& saleaeDirectoryPath, const QList<WaveData*>& wdList, const QList<int>& toValue, WaveData* filter)
+        : mParser(saleaeDirectoryPath), mFilter(filter), mTransitionToValue(nullptr), mCurrentTime(0), mCurrentTrigger(false), mReportedTime(-1)
+    {
+        int n = wdList.size();
+
+        mTransitionToValue = new int[n];
+        for (int i=0; i<n; i++)
+        {
+            if (i < toValue.size())
+                mTransitionToValue[i] = toValue.at(i);
+            else
+                mTransitionToValue[i] = -1;
+        }
+
+        for (int i=0; i<wdList.size(); i++)
+        {
+            WaveData* wd = wdList.at(i);
+            mParser.register_callback(wd->name().toStdString(), wd->id(), [this](const void* obj, uint64_t t, int val) {
+                if (t != mCurrentTime)
+                {
+                    mCurrentTime = t;
+                    mCurrentTrigger = false;
+                }
+                int transTo = *((int*) obj);
+                if (transTo<0 || val==transTo)
+                    mCurrentTrigger = true;
+            }, mTransitionToValue+i);
+        }
+        setWaveType(WaveData::TriggerTime);
+        if (mFilter) mFilter->loadDataUnlessAlreadyLoaded();
+    }
+
+    WaveDataProviderTrigger::~WaveDataProviderTrigger()
+    {
+        if (mTransitionToValue) delete [] mTransitionToValue;
+    }
+
+    //TODO: recording?
+    SaleaeDataTuple WaveDataProviderTrigger::startValue(u64 t)
+    {
+        while (mParser.next_event())
+            if (mCurrentTime >= t && (qint64)mCurrentTime > mReportedTime && mCurrentTrigger)
+            {
+                if (mFilter)
+                {
+                    if (!mFilter->intValue(mCurrentTime)) continue;
+                }
+                mReportedTime = mCurrentTime;
+                return SaleaeDataTuple(mCurrentTime,1);
+            }
+        return SaleaeDataTuple();
+    }
+
+    SaleaeDataTuple WaveDataProviderTrigger::nextPoint()
+    {
+        while (mParser.next_event())
+            if ((qint64)mCurrentTime > mReportedTime && mCurrentTrigger)
+            {
+                if (mFilter)
+                {
+                    if (!mFilter->intValue(mCurrentTime)) continue;
+                }
+                mReportedTime = mCurrentTime;
+                return SaleaeDataTuple(mCurrentTime,1);
+            }
+        return SaleaeDataTuple();
     }
 }

@@ -13,6 +13,7 @@ namespace hal {
     class WaveData;
     class WaveDataList;
     class WaveDataGroup;
+    class WaveGraphicsCanvas;
 
     class WaveDataRoot : public WaveDataGroup
     {
@@ -21,6 +22,8 @@ namespace hal {
             : WaveDataGroup(wdList,0,"root") {;}
         void recalcData() override {;}
         bool moveGroupPosition(int sourceRow, int targetRow);
+        void clearAll() { mGroupList.clear(); }
+        void dump() const;
     };
 
     class WaveValueThread : public QThread
@@ -63,6 +66,7 @@ namespace hal {
     private:
         WaveDataList* mWaveDataList;
         WaveItemHash* mWaveItemHash;
+        WaveGraphicsCanvas* mGraphicsCanvas;
         WaveDataRoot* mRoot;
         QModelIndexList mDragIndexList;
         DragCommand mDragCommand;
@@ -94,6 +98,7 @@ namespace hal {
         void handleWaveAddedToGroup(const QVector<u32>& netIds, int grpId);
         void handleWaveRemovedFromGroup(int iwave, int grpId);
         void handleBooleanAdded(int boolId);
+        void handleTriggerAdded(int trigId);
         void handleGroupAdded(int grpId);
         void handleGroupAboutToBeRemoved(WaveDataGroup* grp);
         void handleGroupUpdated(int grpId);
@@ -105,7 +110,7 @@ namespace hal {
         void handleEndValueThread(WaveItem* item);
 
     public:
-        WaveTreeModel(WaveDataList* wdlist, WaveItemHash* wHash, QObject* obj=nullptr);
+        WaveTreeModel(WaveDataList* wdlist, WaveItemHash* wHash, WaveGraphicsCanvas* wgc, QObject* obj=nullptr);
         bool isLeaveItem(const QModelIndex &index) const;
         QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
         QModelIndexList indexes(const WaveData* wd) const;
@@ -127,15 +132,20 @@ namespace hal {
         WaveItem* removeItemFromHash(int row, const QModelIndex &parent);
         void removeGroup(const QModelIndex& groupIndex);
         void insertBoolean(const QModelIndex& boolIndex, const QString& boolExpression, WaveDataBoolean* wdBool=nullptr);
+        void insertBoolean(const QModelIndex& boolIndex, const QList<WaveData*>& boolWaves, const QList<int>& acceptMask);
+        void insertTrigger(const QModelIndex& trigIndex, const QList<WaveData*>& trigWaves, const QList<int>& toVal,
+                           WaveData* wdFilter=nullptr, WaveDataTrigger *wdTrig=nullptr);
         void insertGroup(const QModelIndex& groupIndex, WaveDataGroup *grp=nullptr);
         int waveIndex(const QModelIndex& index) const;
         int groupId(const QModelIndex& grpIndex) const;
         int booleanId(const QModelIndex& boolIndex) const;
+        int triggerId(const QModelIndex& trigIndex) const;
         WaveData* item(const QModelIndex& index) const;
         WaveItemIndex hashIndex(const QModelIndex& index) const;
 
         void setGroupPosition(int ypos, const QModelIndex& index);
         void addWaves(const QVector<WaveData*>& wds);
+        bool onlyRootItemsSelected(const QModelIndexList& selectList) const;
 
         double cursorTime() const { return mCursorTime; }
         int cursorXpos() const { return mCursorXpos; }
@@ -143,5 +153,7 @@ namespace hal {
         QSet<int> waveDataIndexSet() const;
 
         static const char* sStateColor[3];
+        bool persist() const;
+        void restore();
     };
 }

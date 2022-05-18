@@ -2,6 +2,8 @@
 #include "waveform_viewer/wave_tree_model.h"
 #include "waveform_viewer/wave_widget.h"
 #include "waveform_viewer/wave_edit_dialog.h"
+#include "waveform_viewer/boolean_dialog.h"
+#include "waveform_viewer/trigger_dialog.h"
 #include "netlist_simulator_controller/wave_data.h"
 #include <QScrollBar>
 #include <QDragMoveEvent>
@@ -116,6 +118,7 @@ namespace hal {
         bool singleSelection = mContextIndexList.size() == 1;
 
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
+        bool onlyRootSel = wtm->onlyRootItemsSelected(mContextIndexList);
         QMenu* menu = new QMenu(this);
         QAction* act;
 
@@ -128,6 +131,9 @@ namespace hal {
 
             act = menu->addAction("Insert new boolean expression");
             connect(act,&QAction::triggered,this,&WaveTreeView::handleInsertBoolean);
+
+            act = menu->addAction("Insert new trigger based on selection");
+            connect(act,&QAction::triggered,this,&WaveTreeView::handleInsertTrigger);
 
             act = menu->addAction("Rename '" + selName + "'");
             connect(act,&QAction::triggered,this,&WaveTreeView::handleRenameItem);
@@ -165,6 +171,13 @@ namespace hal {
         }
         else
         {
+            if (onlyRootSel)
+            {
+                act = menu->addAction(QString("Boolean expression based on %1 selected items").arg(mContextIndexList.size()));
+                connect(act,&QAction::triggered,this,&WaveTreeView::handleInsertBoolean);
+                act = menu->addAction(QString("Trigger time set based on %1 selected items").arg(mContextIndexList.size()));
+                connect(act,&QAction::triggered,this,&WaveTreeView::handleInsertTrigger);
+            }
             act = menu->addAction(QString("Remove %1 selected items").arg(mContextIndexList.size()));
             connect(act,&QAction::triggered,this,&WaveTreeView::handleRemoveMulti);
         }
@@ -216,11 +229,12 @@ namespace hal {
             if (wd->rename(newName))
             {
                 SaleaeDirectoryStoreRequest save(&mWaveDataList->saleaeDirectory());
-                WaveDataGroup* wdg = dynamic_cast<WaveDataGroup*>(wd);
-                if (wdg)
+                SaleaeDirectoryNetEntry::Type tp = wd->composedType();
+
+                if (tp != SaleaeDirectoryNetEntry::None)
                 {
-                    SaleaeDirectoryGroupEntry* sdge = mWaveDataList->saleaeDirectory().get_group(wdg->id());
-                    if (sdge) sdge->rename(newName.toStdString());
+                    SaleaeDirectoryComposedEntry* sdce = mWaveDataList->saleaeDirectory().get_composed(wd->id(),tp);
+                    if (sdce) sdce->rename(newName.toStdString());
                 }
                 else
                     mWaveDataList->saleaeDirectory().rename_net(wd->id(),newName.toStdString());
@@ -286,11 +300,62 @@ namespace hal {
 
     void WaveTreeView::handleInsertBoolean()
     {
-        if (mContextIndexList.size() != 1) return;
+        if (mContextIndexList.empty()) return;
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
-        QString boolExpr = QInputDialog::getText(this,"Enter boolean expression", "Enter expression:");
-        if (boolExpr.isEmpty()) return;
-        wtm->insertBoolean(mContextIndexList.at(0),boolExpr);
+        QList<WaveData*> selectedWaves;
+        for (const QModelIndex& inx : mContextIndexList)
+        {
+            WaveData* wd = wtm->item(inx);
+            if (wd) selectedWaves.append(wd);
+        }
+        BooleanDialog bd(selectedWaves,this);
+        if (bd.exec() == QDialog::Accepted)
+        {
+            if (bd.hasExpression())
+            {
+                QString boolExpr = bd.expression();
+                if (!boolExpr.isEmpty())
+                {
+                    wtm->insertBoolean(mContextIndexList.last(),boolExpr);
+                    selectionModel()->select(mContextIndexList.last(),QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+                }
+            }
+            else
+            {
+                wtm->insertBoolean(mContextIndexList.last(),selectedWaves,bd.tableValues());
+                selectionModel()->select(mContextIndexList.last(),QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+            }
+        }
+    }
+
+    void WaveTreeView::handleInsertTrigger()
+    {
+        if (mContextIndexList.empty()) return;
+        WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
+        QList<WaveData*> trigList;
+        for (const QModelIndex& inx : mContextIndexList)
+        {
+            WaveData* wd = wtm->item(inx);
+            if (wd) trigList.append(wd);
+        }
+        QModelIndex insertInx = wtm->index(mContextIndexList.first().row()+1,0);
+        QList<WaveData*> filterList;
+        for (WaveDataBoolean* wdb : mWaveDataList->mDataBooleans.values())
+            filterList.append(wdb);
+        QSet<int> iwaveAdded;
+        for (auto it = mWaveItemHash->constBegin(); it != mWaveItemHash->constEnd(); ++it)
+        {
+            if (it.key().intType()!=WaveItemIndex::Wire) continue;
+            int iwave = it.key().index();
+            if (iwave < 0 || iwaveAdded.contains(iwave)) continue;
+            filterList.append(mWaveDataList->at(iwave));
+            iwaveAdded.insert(iwave);
+        }
+        TriggerDialog td(trigList,filterList,this);
+        if (td.exec() == QDialog::Accepted)
+        {
+            wtm->insertTrigger(insertInx,trigList,td.transitionToValue(),td.filterWave());
+        }
     }
 
     QModelIndexList WaveTreeView::sortedSelection() const
@@ -369,6 +434,11 @@ namespace hal {
                     id = wtm->booleanId(currentIndex);
                     tp = WaveItemIndex::Bool;
                 }
+                else if (iwave == -3)
+                {
+                    id = wtm->triggerId(currentIndex);
+                    tp = WaveItemIndex::Trig;
+                }
                 if (id > 0 && tp != WaveItemIndex::Invalid)
                 {
                     WaveItemIndex wii(id, tp, 0);
@@ -407,6 +477,7 @@ namespace hal {
         for (WaveItem* wi : notPlaced.values())
             wi->setWaveVisible(false);
 
+        wtm->persist();
         Q_EMIT triggerUpdateWaveItems();
     }
 

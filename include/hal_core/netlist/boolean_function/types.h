@@ -56,11 +56,11 @@ namespace hal
 
             /// The SMT solver identifier.
             SolverType solver = SolverType::Z3;
-            /// refers to whether SMT query is performed on a local/remote machine.
+            /// Controls whether the SMT query is performed on a local or a remote machine.
             bool local = true;
-            /// refers to whether the SMT solver should generate a model (in case formula is satisfiable)
+            /// Controls whether the SMT solver should generate a model in case formula is satisfiable.
             bool generate_model = true;
-            /// refers to the timeout after which the SMT solver is killed (seconds)
+            /// The timeout after which the SMT solver is killed in seconds.
             u64 timeout_in_seconds = 10;
 
             ////////////////////////////////////////////////////////////////////////
@@ -122,7 +122,8 @@ namespace hal
         };
 
         /**
-		 * Represents a constraint to the SMT query, i.e., an assignment of two Boolean function that is true.
+		 * Represents a constraint to the SMT query.
+         * A constraint is either an assignment of two Boolean functions or a single Boolean function, e.g., an equality check or similar.
 		 */
         struct Constraint final
         {
@@ -130,22 +131,27 @@ namespace hal
             // Member
             ////////////////////////////////////////////////////////////////////////
 
-            /// Left-hand side of equality constraint.
-            BooleanFunction lhs;
-            /// Right-hand side of equality constraint.
-            BooleanFunction rhs;
+            /// A constraint that is either an assignment of two Boolean functions or a single Boolean function, e.g., an equality check or similar.
+            std::variant<BooleanFunction, std::pair<BooleanFunction, BooleanFunction>> constraint;
 
             ////////////////////////////////////////////////////////////////////////
             // Constructors, Destructors, Operators
             ////////////////////////////////////////////////////////////////////////
 
             /**
-             * Constructs a new constraint from two Boolean functions.
+             * Constructs a new constraint from one Boolean function that evaluates to a single bit.
+             * 
+             * @param[in] constraint - The constraint function.
+             */
+            explicit Constraint(BooleanFunction&& constraint);
+
+            /**
+             * Constructs a new equality constraint from two Boolean functions.
              * 
              * @param[in] lhs - The left-hand side of the equality constraint
              * @param[in] rhs - The right-hand side of the equality constraint
              */
-            Constraint(const BooleanFunction& lhs, const BooleanFunction& rhs);
+            explicit Constraint(BooleanFunction&& lhs, BooleanFunction&& rhs);
 
             /**
              * Passes a human-readable description of the SMT constraint to the output stream.
@@ -162,6 +168,27 @@ namespace hal
              * @returns A string representing the SMT constraint.
              */
             std::string to_string() const;
+
+            /**
+             * Checks whether the constraint is an assignment constraint.
+             * 
+             * @returns `true` if the constraint is an assignment, `false` otherwise.
+             */
+            bool is_assignment() const;
+
+            /**
+             * Returns the assignment constraint as a pair of Boolean functions.
+             * 
+             * @returns The assignment constraint on success, an error otherwise.
+             */
+            Result<const std::pair<BooleanFunction, BooleanFunction>*> get_assignment() const;
+
+            /**
+             * Returns the function constraint.
+             * 
+             * @returns The function constraint on success, an error otherwise.
+             */
+            Result<const BooleanFunction*> get_function() const;
         };
 
         /**

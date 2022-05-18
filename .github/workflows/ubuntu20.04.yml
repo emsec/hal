@@ -132,7 +132,7 @@ jobs:
           cd build
           export BUILD_TYPE=Debug
           mkdir -p doc/doc
-          cmake --build . --target doc --clean-first --config $BUILD_TYPE
+          cmake --build . --target doc --config $BUILD_TYPE
           cp -R documentation/cpp-doc/html/* doc/doc/
         env:
           CCACHE_DIR: ${{runner.workspace}}/.ccache
@@ -149,7 +149,7 @@ jobs:
           cd build
           export BUILD_TYPE=Debug
           mkdir -p doc/pydoc
-          cmake --build . --target pydoc --clean-first --config $BUILD_TYPE
+          cmake --build . --target pydoc --config $BUILD_TYPE
           cp -R documentation/python-doc/html/* doc/pydoc/
         env:
           CCACHE_DIR: ${{runner.workspace}}/.ccache

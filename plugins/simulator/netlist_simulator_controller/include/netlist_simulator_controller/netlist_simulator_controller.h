@@ -32,6 +32,7 @@
 #include <QObject>
 #include <QString>
 #include <QTemporaryDir>
+#include <QDir>
 #include <functional>
 #include <map>
 #include <memory>
@@ -71,6 +72,9 @@ public:
     };
 
     NetlistSimulatorController(u32 id, const std::string nam, QObject* parent = nullptr);
+
+    NetlistSimulatorController(u32 id, Netlist* nl, const std::string& filename, QObject* parent = nullptr);
+
     ~NetlistSimulatorController();
 
     /**
@@ -126,7 +130,23 @@ public:
      * @param expression The boolean expression based on names of existing waveforms.
      * @return ID of new boolean waveform
      */
-    u32 add_boolean_waveform(const std::string& expression);
+    u32 add_boolean_expression_waveform(const std::string& expression);
+
+    /**
+     * Add boolean waveform based on list of accepted combinations
+     * @param input_waves List of input waveforms
+     * @param accept_combination List of accepted combinations. Each combination is coded as binary integer value which is matched bitwise with value of input waveform.
+     * @return ID of new boolean waveform
+     */
+    u32 add_boolean_accept_list_waveform(const std::vector<WaveData*>& input_waves, const std::vector<int>& accepted_combination);
+
+    /**
+     * Add trigger time vector based on wave transitions.
+     * @param trigger_waves List of source waveform to generate trigger time
+     * @param trigger_on_values Optional list of values. Order of values must match order of waveform. Trigger will only be generated upon transition to value.
+     * @return ID of new trigger time
+     */
+    u32 add_trigger_time(const std::vector<WaveData*>& trigger_waves, const std::vector<int>& trigger_on_values = std::vector<int>());
 
     /**
      * Remove waveform group identified by group ID. Waveform for nets will still be shown but they are not bundled.
@@ -324,9 +344,23 @@ public:
     /**
      * Getter for waveform group
      * @param id[in] Waveform group id
-     * @return The waveform group
+     * @return The waveform group object
      */
     WaveDataGroup* get_waveform_group_by_id(u32 id) const;
+
+    /**
+     * Getter for boolean waveform (which is a combination of several other waveform by boolean operation).
+     * @param id[in] Boolean waveform id
+     * @return The boolean waveform object
+     */
+    WaveDataBoolean* get_waveform_boolean_by_id(u32 id) const;
+
+    /**
+     * Getter for trigger time set.
+     * @param id[in] Trigger time id
+     * @return The trigger time object which derives from WaveData.
+     */
+    WaveDataTrigger* get_trigger_time_by_id(u32 id) const;
 
     /**
      * Set timeframe for viewer
@@ -355,6 +389,20 @@ public:
      */
     void emitLoadProgress(int percent);
 
+    /**
+     * Controller is in a state that allows import from VCD, CSV, or SALEAE waveform data
+     * @return True if import is allowed, false otherwise.
+     */
+    bool can_import_data() const;
+
+    /**
+     * Store significant information into working directory
+     * @return True if JSON file created successfully, false otherwise.
+     */
+    bool persist() const;
+
+    static const char* sPersistFile;
+
 public Q_SLOTS:
     void handleOpenInputFile(const QString& filename);
     void handleSelectGates();
@@ -375,6 +423,8 @@ private:
     bool isClockSet() const;
     bool isInputSet() const;
     void checkReadyState();
+    void restoreComposed(const SaleaeDirectory& sd);
+    void loadStoredController(const QDir& workDir);
 
     u32 mId;
     QString mName;
@@ -383,6 +433,7 @@ private:
     SimulationEngine* mSimulationEngine;
 
     QTemporaryDir* mTempDir;
+    QString mWorkDir;
     WaveDataList* mWaveDataList;
 
     SimulationInput* mSimulationInput;

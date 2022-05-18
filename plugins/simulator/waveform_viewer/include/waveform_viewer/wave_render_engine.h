@@ -84,6 +84,7 @@ namespace hal {
         int y0Entry(int irow) const;
 
         QList<WaveZoomShift>& zoomHistory() { return mZoomHistory; }
+        void setZoomHistory(const QList<WaveZoomShift>& hist) { mZoomHistory = hist; }
         void omitHistory() { mOmitHistory = true; }
     };
 }

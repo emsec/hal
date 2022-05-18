@@ -132,5 +132,6 @@ namespace hal
         QProgressBar* mProgress;
         WaveWidget* mCurrentWaveWidget;
 
+        void takeControllerOwnership(std::unique_ptr<NetlistSimulatorController>& ctrlRef);
     };
 }    // namespace hal

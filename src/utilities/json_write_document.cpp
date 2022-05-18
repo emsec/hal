@@ -60,6 +60,14 @@ namespace hal
         return *this;
     }
 
+    JsonWriteData& JsonWriteData::operator=(double value)
+    {
+        JsonWriteObject* p = dynamic_cast<JsonWriteObject*>(mParent);
+        assert(p);
+        p->add_member(rapidjson::Value(mTagname, allocator()), rapidjson::Value(value), allocator());
+        return *this;
+    }
+
     //--- Complex ----
     JsonWriteComplex::JsonWriteComplex(const std::string& tag, JsonWriteComplex* parent) : JsonWriteData(tag, parent)
     {
