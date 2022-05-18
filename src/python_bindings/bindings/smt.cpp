@@ -122,11 +122,11 @@ namespace hal
 
         py_smt_constraint.def(
             "get_assignment",
-            [](const SMT::Constraint& self) -> std::optional<const std::pair<BooleanFunction, BooleanFunction>*> {
+            [](const SMT::Constraint& self) -> std::optional<std::pair<BooleanFunction, BooleanFunction>> {
                 auto res = self.get_assignment();
                 if (res.is_ok())
                 {
-                    return res.get();
+                    return *res.get();
                 }
                 else
                 {
