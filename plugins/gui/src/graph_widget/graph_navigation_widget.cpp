@@ -218,13 +218,13 @@ namespace hal
         else
             mtype += " (module)";
 
-        QString pinName = QString::fromStdString(ep->get_pin());
+        QString pinName = QString::fromStdString(ep->get_pin()->get_name());
         Net* epNet      = ep->get_net();
         if (epNet)
         {
-            if (const auto res = m->get_pin_by_net(epNet); res.is_ok())
+            if (const auto pin = m->get_pin_by_net(epNet); pin != nullptr)
             {
-                pinName = QString::fromStdString(res.get()->get_name());
+                pinName = QString::fromStdString(pin->get_name());
             }
         }
         return QStringList() << QString::fromStdString(m->get_name()) << QString::number(m->get_id()) << mtype << pinName << parentName;
@@ -232,8 +232,8 @@ namespace hal
 
     QStringList GraphNavigationWidget::gateEntry(Gate* g, Endpoint* ep)
     {
-        return QStringList() << QString::fromStdString(g->get_name()) << QString::number(g->get_id()) << QString::fromStdString(g->get_type()->get_name()) << QString::fromStdString(ep->get_pin())
-                             << QString::fromStdString(g->get_module()->get_name());
+        return QStringList() << QString::fromStdString(g->get_name()) << QString::number(g->get_id()) << QString::fromStdString(g->get_type()->get_name())
+                             << QString::fromStdString(ep->get_pin()->get_name()) << QString::fromStdString(g->get_module()->get_name());
     }
 
     QTreeWidgetItem* GraphNavigationWidget::itemFactory(const QStringList& fields, const Node& nd)

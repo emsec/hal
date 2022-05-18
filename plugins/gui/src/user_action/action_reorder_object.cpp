@@ -1,4 +1,5 @@
 #include "gui/user_action/action_reorder_object.h"
+
 #include "gui/gui_globals.h"
 
 namespace hal
@@ -10,7 +11,7 @@ namespace hal
     {
     }
 
-    UserAction *ActionReorderObjectFactory::newAction() const
+    UserAction* ActionReorderObjectFactory::newAction() const
     {
         return new ActionReorderObject;
     }
@@ -24,19 +25,26 @@ namespace hal
     {
         switch (mObject.type())
         {
-            case UserActionObjectType::Pin:
-            {
+            case UserActionObjectType::Pin: {
                 auto mod = gNetlist->get_module_by_id(mParentObject.id());
-                if(!mod) return false;
-                auto pinResult = mod->get_pin_by_id(mObject.id());
-                if(pinResult.is_error()) return false;
-                auto pinGroup = pinResult.get()->get_group().first;
-                if(pinGroup && pinGroup->size() > 1)
+                if (!mod)
                 {
-                    auto oldIndex = pinResult.get()->get_group().second;
-                    auto result = mod->move_pin_within_group(pinGroup, pinResult.get(), mNewIndex);
-                    if(result.is_error())
+                    return false;
+                }
+                auto pin = mod->get_pin_by_id(mObject.id());
+                if (pin == nullptr)
+                {
+                    return false;
+                }
+                auto pinGroup = pin->get_group().first;
+                if (pinGroup && pinGroup->size() > 1)
+                {
+                    auto oldIndex = pin->get_group().second;
+                    auto result   = mod->move_pin_within_group(pinGroup, pin, mNewIndex);
+                    if (result.is_error())
+                    {
                         return false;
+                    }
 
                     ActionReorderObject* undo = new ActionReorderObject(oldIndex);
                     undo->setObject(mObject);
@@ -45,8 +53,11 @@ namespace hal
                     mUndoAction = undo;
                 }
                 else
+                {
                     return false;
-            } break;
+                }
+            }
+            break;
             default:
                 return false;
         }
@@ -59,4 +70,4 @@ namespace hal
         return ActionReorderObjectFactory::sFactory->tagname();
     }
 
-}
+}    // namespace hal
