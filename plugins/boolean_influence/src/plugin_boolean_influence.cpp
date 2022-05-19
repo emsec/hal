@@ -117,12 +117,12 @@ namespace hal
             return {};
         }
         std::string data_pin = *d_ports.begin();
-        log_info("boolean_influence", "Data pin: {}", data_pin);
+        log_debug("boolean_influence", "Data pin: {}", data_pin);
 
         // Extract all gates in front of the data port and iterate backwards until another flip flop is found.
         std::vector<Gate*> function_gates = extract_function_gates(gate, data_pin);
 
-        log_info("boolean_influence", "Extracted {} gates infront of the gate.", function_gates.size());
+        log_debug("boolean_influence", "Extracted {} gates infront of the gate.", function_gates.size());
 
         // Generate function for the data port
 
@@ -132,7 +132,7 @@ namespace hal
 
         z3_utils::RecursiveSubgraphFunctionGenerator g = {*ctx, function_gates};
 
-        log_info("boolean_influence", "Created context, function and generator. Trying to generator function now: ");
+        log_debug("boolean_influence", "Created context, function and generator. Trying to generator function now: ");
 
         if (!function_gates.empty())
         {
@@ -149,7 +149,7 @@ namespace hal
 
         z3_utils::z3Wrapper func_wrapper = z3_utils::z3Wrapper(std::move(ctx), std::move(func));
 
-        log_info("boolean_influence", "Built subgraph function, now trying to extract boolean influence.");
+        log_debug("boolean_influence", "Built subgraph function, now trying to extract boolean influence.");
 
         // Generate boolean influence
         std::unordered_map<u32, double> net_ids_to_inf = func_wrapper.get_boolean_influence();

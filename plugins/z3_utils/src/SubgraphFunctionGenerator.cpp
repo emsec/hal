@@ -320,7 +320,7 @@ namespace hal
 
         z3::expr RecursiveSubgraphFunctionGenerator::get_function_of_net(const Net* net, z3::context& ctx, const std::vector<Gate*>& subgraph_gates)
         {
-            log_info("z3_utils", "Trying to get function of net {}.", net->get_id());
+            log_debug("z3_utils", "Trying to get function of net {}.", net->get_id());
 
             if (m_expr_cache.find(net) != m_expr_cache.end())
             {
@@ -361,7 +361,7 @@ namespace hal
                 return ret;
             }
 
-            log_info("z3_utils", "Trying to get function of gate {}.", src->get_id());
+            log_debug("z3_utils", "Trying to get function of gate {}.", src->get_id());
 
             const BooleanFunction bf = get_function_of_gate(src, src_ep->get_pin()).optimize();
 
@@ -390,12 +390,12 @@ namespace hal
                 pin_to_expr.insert({pin, get_function_of_net(in_net, ctx, subgraph_gates)});
             }
 
-            log_info("z3_utils", "Got function of gate {}, converting to z3.", src->get_id());
+            log_debug("z3_utils", "Got function of gate {}, converting to z3.", src->get_id());
 
             z3::expr ret = bf.to_z3(ctx, pin_to_expr);
             m_expr_cache.insert({net, ret});
 
-            log_info("z3_utils", "Returning function of net {}.", net->get_id());
+            log_debug("z3_utils", "Returning function of net {}.", net->get_id());
 
             return ret;
         }
