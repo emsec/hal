@@ -130,8 +130,10 @@ namespace hal {
         mDirty = true;
     }
 
-    int WaveData::get_value_at(u64 t) const
+    int WaveData::get_value_at(u64 t)
     {
+        if (loadPolicy()==LoadAllData)
+            loadDataUnlessAlreadyLoaded();
         return intValue(t);
     }
 

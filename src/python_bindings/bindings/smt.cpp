@@ -21,6 +21,30 @@ namespace hal
             Represents the data structure to configure an SMT query.
         )");
 
+        py_smt_query_config.def_readwrite("solver", &SMT::QueryConfig::solver, R"(
+            The SMT solver identifier.
+
+            :type: hal_py.SMT.SolverType
+        )");
+
+        py_smt_query_config.def_readwrite("local", &SMT::QueryConfig::local, R"(
+            Controls whether the SMT query is performed on a local or a remote machine.
+
+            :type: bool
+        )");
+
+        py_smt_query_config.def_readwrite("generate_model", &SMT::QueryConfig::generate_model, R"(
+            Controls whether the SMT solver should generate a model in case formula is satisfiable.
+
+            :type: bool
+        )");
+
+        py_smt_query_config.def_readwrite("timeout_in_seconds", &SMT::QueryConfig::timeout_in_seconds, R"(
+            The timeout after which the SMT solver is killed in seconds.
+
+            :type: int
+        )");
+
         py_smt_query_config.def("with_solver", &SMT::QueryConfig::with_solver, py::arg("solver"), R"(
             Sets the solver type to the desired SMT solver.
 
@@ -66,26 +90,76 @@ namespace hal
         )");
 
         py::class_<SMT::Constraint> py_smt_constraint(py_smt, "Constraint", R"(
-            Represents a constraint to the SMT query, i.e., an assignment of two Boolean function that is true.
+            Represents a constraint to the SMT query.
+            A constraint is either an assignment of two Boolean functions or a single Boolean function, e.g., an equality check or similar.
         )");
 
-        py_smt_constraint.def_readwrite("lhs", &SMT::Constraint::lhs, R"(
-            The left-hand side of the equality constraint.
+        py_smt_constraint.def_readwrite("constraint", &SMT::Constraint::constraint, R"(
+            A constraint that is either an assignment of two Boolean functions or a single Boolean function, e.g., an equality check or similar.
 
-            :type: hal_py.BooleanFunction    
+            :type: hal_py.BooleanFunction or tuple(hal_py.BooleanFunction, hal_py.BooleanFunction)  
         )");
 
-        py_smt_constraint.def_readwrite("rhs", &SMT::Constraint::rhs, R"(
-            The right-hand side of the equality constraint.
+        py_smt_constraint.def(py::init([](BooleanFunction constraint) { return new SMT::Constraint(std::move(constraint)); }), py::arg("constraint"), R"(
+            Constructs a new constraint from one Boolean function that evaluates to a single bit.
 
-            :type: hal_py.BooleanFunction    
+            :param hal_py.BooleanFunction constraint: The constraint function.
         )");
 
-        py_smt_constraint.def(py::init<const BooleanFunction&, const BooleanFunction&>(), py::arg("lhs"), py::arg("rhs"), R"(
+        py_smt_constraint.def(py::init([](BooleanFunction lhs, BooleanFunction rhs) { return new SMT::Constraint(std::move(lhs), std::move(rhs)); }), py::arg("lhs"), py::arg("rhs"), R"(
             Constructs a new equality constraint from two Boolean functions.
 
             :param hal_py.BooleanFunction lhs: The left-hand side of the equality constraint.
             :param hal_py.BooleanFunction rhs: The right-hand side of the equality constraint.
+        )");
+
+        py_smt_constraint.def("is_assignment", &SMT::Constraint::is_assignment, R"(
+            Checks whether the constraint is an assignment constraint.
+        
+            :returns: True of the constraint is an assignment, False otherwise.
+            :rtype: bool
+        )");
+
+        py_smt_constraint.def(
+            "get_assignment",
+            [](const SMT::Constraint& self) -> std::optional<std::pair<BooleanFunction, BooleanFunction>> {
+                auto res = self.get_assignment();
+                if (res.is_ok())
+                {
+                    return *res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            R"(
+            Returns the assignment constraint as a pair of Boolean functions.
+
+            :returns: The assignment constraint on success, None otherwise.
+            :rtype: tuple(hal_py.BooleanFunction,hal_py.BooleanFunction) or None
+        )");
+
+        py_smt_constraint.def(
+            "get_function",
+            [](const SMT::Constraint& self) -> std::optional<const BooleanFunction*> {
+                auto res = self.get_function();
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            R"(
+            Returns the function constraint as a Boolean function.
+
+            :returns: The function constraint on success, None otherwise.
+            :rtype: hal_py.BooleanFunction or None
         )");
 
         py::enum_<SMT::SolverResultType> py_smt_result_type(py_smt, "SolverResultType", R"(

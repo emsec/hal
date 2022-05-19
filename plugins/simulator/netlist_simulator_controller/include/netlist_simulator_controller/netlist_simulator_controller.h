@@ -370,20 +370,6 @@ public:
     void set_timeframe(u64 tmin=0, u64 tmax=0);
 
     /**
-     * Record a trace of the value of the group specified by the given ID.
-     * A value is recorded everytime the trigger net toggles and the enable condition evaluates to 'BooleanFunction::Value::ONE'.
-     * 
-     * @param[in] group_id - The ID of the target waveform group.
-     * @param[in] trigger_net - The net that triggers recording a value.
-     * @param[in] enable_nets - All nets that influence the enable condition.
-     * @param[in] enable_condition - A Boolean function that enables the recording of a value.
-     * @param[in] start_time - The time at which to start the recording.
-     * @param[in] end_time - The time at which to end the recording.
-     * @returns A vector of recorded values on success, an error otherwise.
-     */
-    Result<std::vector<u32>> trace_value_if(const u32 group_id, const Net* trigger_net, const std::vector<Net*>& enable_nets, const BooleanFunction& enable_condition, u64 start_time, u64 end_time) const;
-
-    /**
      * Emit load progress when importing VCD, CSV, or SALEAE waveform
      * @param[in] percent load progress, negative values to hide progess bar
      */
