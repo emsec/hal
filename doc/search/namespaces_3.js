@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['qcolorconstants_20189',['QColorConstants',['https://doc.qt.io/qt-5/qcolorconstants.html',1,'']]],
-  ['qt_20190',['Qt',['https://doc.qt.io/qt-5/qt.html',1,'']]]
+  ['qcolorconstants_20193',['QColorConstants',['https://doc.qt.io/qt-5/qcolorconstants.html',1,'']]],
+  ['qt_20194',['Qt',['https://doc.qt.io/qt-5/qt.html',1,'']]]
 ];

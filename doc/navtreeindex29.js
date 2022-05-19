@@ -1,5 +1,6 @@
 var NAVTREEINDEX29 =
 {
+"plugins_2solve__fsm_2python_2python__bindings_8cpp.html":[15,0,1,8,1,0],
 "plugins_2solve__fsm_2python_2python__bindings_8cpp.html#aa0beecf81a444ab07294784926724675":[15,0,1,8,1,0,0],
 "plugins_2solve__fsm_2python_2python__bindings_8cpp_source.html":[15,0,1,8,1,0],
 "position__generator_8cpp.html":[15,0,1,3,2,17,2,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX29 =
 "separated__graphics__net_8cpp.html":[15,0,1,3,2,17,1,0,4],
 "separated__graphics__net_8cpp_source.html":[15,0,1,3,2,17,1,0,4],
 "separated__graphics__net_8h.html":[15,0,1,3,0,0,18,1,0,4],
-"separated__graphics__net_8h_source.html":[15,0,1,3,0,0,18,1,0,4],
-"settings__display_8cpp.html":[15,0,1,3,2,38,4]
+"separated__graphics__net_8h_source.html":[15,0,1,3,0,0,18,1,0,4]
 };

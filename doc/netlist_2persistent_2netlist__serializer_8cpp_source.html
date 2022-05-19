@@ -806,11 +806,11 @@ $(document).ready(function(){initNavTree('netlist_2persistent_2netlist__serializ
 <div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160;                <a class="code" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>(<span class="stringliteral">&quot;netlist_persistent&quot;</span>, <span class="stringliteral">&quot;the netlist was serialized with an older version of the serializer, deserialization may contain errors.&quot;</span>);</div>
 <div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;            }</div>
 <div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160; </div>
-<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;            <span class="keyword">auto</span> <a class="code" href="namespacetest__plugin.html#ad09c016caf9f059f6d8c9eb9f3c0f3d9">netlist</a> = <a class="code" href="namespacehal_1_1hal__file__manager.html#a3e315518469b1dc3a7a28df27fcb03f6">deserialize</a>(document);</div>
+<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;            <span class="keyword">auto</span> <a class="code" href="namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1">netlist</a> = <a class="code" href="namespacehal_1_1hal__file__manager.html#a3e315518469b1dc3a7a28df27fcb03f6">deserialize</a>(document);</div>
 <div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160; </div>
-<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="namespacetest__plugin.html#ad09c016caf9f059f6d8c9eb9f3c0f3d9">netlist</a>)</div>
+<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1">netlist</a>)</div>
 <div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;            {</div>
-<div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;                <span class="keywordflow">if</span> (!<a class="code" href="namespacehal_1_1hal__file__manager.html#a3e315518469b1dc3a7a28df27fcb03f6">hal_file_manager::deserialize</a>(hal_file, <a class="code" href="namespacetest__plugin.html#ad09c016caf9f059f6d8c9eb9f3c0f3d9">netlist</a>.get(), document))</div>
+<div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;                <span class="keywordflow">if</span> (!<a class="code" href="namespacehal_1_1hal__file__manager.html#a3e315518469b1dc3a7a28df27fcb03f6">hal_file_manager::deserialize</a>(hal_file, <a class="code" href="namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1">netlist</a>.get(), document))</div>
 <div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;                {</div>
 <div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160;                    <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;netlist_persistent&quot;</span>, <span class="stringliteral">&quot;deserialization failed&quot;</span>);</div>
 <div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;                    <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
@@ -819,7 +819,7 @@ $(document).ready(function(){initNavTree('netlist_2persistent_2netlist__serializ
 <div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160;            }</div>
 <div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160; </div>
 <div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;            <span class="comment">// event_controls::enable_all(true);</span></div>
-<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="namespacetest__plugin.html#ad09c016caf9f059f6d8c9eb9f3c0f3d9">netlist</a>;</div>
+<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1">netlist</a>;</div>
 <div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;        }</div>
 <div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;    }    <span class="comment">// namespace netlist_serializer</span></div>
 <div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160;}    <span class="comment">// namespace hal</span></div>
@@ -840,8 +840,8 @@ $(document).ready(function(){initNavTree('netlist_2persistent_2netlist__serializ
 <div class="ttc" id="anamespacenetlist__serializer_html"><div class="ttname"><a href="namespacenetlist__serializer.html">netlist_serializer</a></div></div>
 <div class="ttc" id="agroup__utilities_html_ga522d6d0c8a408128993be37c86656280"><div class="ttname"><a href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a></div><div class="ttdeci">#define log_error(channel,...)</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00075">log.h:75</a></div></div>
 <div class="ttc" id="ainclude_2hal__core_2netlist_2netlist_8h_html"><div class="ttname"><a href="include_2hal__core_2netlist_2netlist_8h.html">netlist.h</a></div></div>
-<div class="ttc" id="anamespacetest__plugin_html_ad09c016caf9f059f6d8c9eb9f3c0f3d9"><div class="ttname"><a href="namespacetest__plugin.html#ad09c016caf9f059f6d8c9eb9f3c0f3d9">test_plugin.netlist</a></div><div class="ttdeci">netlist</div><div class="ttdef"><b>Definition:</b> <a href="test__plugin_8py_source.html#l00016">test_plugin.py:16</a></div></div>
 <div class="ttc" id="anamespacehal_1_1hal__file__manager_html_a9b47eacaed4789f9b59edfff7653b78c"><div class="ttname"><a href="namespacehal_1_1hal__file__manager.html#a9b47eacaed4789f9b59edfff7653b78c">hal::hal_file_manager::serialize</a></div><div class="ttdeci">bool serialize(const std::filesystem::path &amp;file, Netlist *netlist, rapidjson::Document &amp;document)</div><div class="ttdef"><b>Definition:</b> <a href="hal__file__manager_8cpp_source.html#l00027">hal_file_manager.cpp:27</a></div></div>
+<div class="ttc" id="anamespacetest__multiple_html_aca3deff7ab8749c592308be75680f1e1"><div class="ttname"><a href="namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1">test_multiple.netlist</a></div><div class="ttdeci">netlist</div><div class="ttdef"><b>Definition:</b> <a href="test__multiple_8py_source.html#l00029">test_multiple.py:29</a></div></div>
 <div class="ttc" id="agate__library__manager_8h_html"><div class="ttname"><a href="gate__library__manager_8h.html">gate_library_manager.h</a></div></div>
 <div class="ttc" id="anamespacehal_1_1_shortest_path_html_ac79d7240087e23efb58eecfe4c0a38fd"><div class="ttname"><a href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">hal::ShortestPath::net</a></div><div class="ttdeci">const Net * net(const Gate *g0, const Gate *g1)</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l00868">graph_graphics_view.cpp:868</a></div></div>
 <div class="ttc" id="anetlist__serializer_8h_html"><div class="ttname"><a href="netlist__serializer_8h.html">netlist_serializer.h</a></div></div>
@@ -868,7 +868,7 @@ $(document).ready(function(){initNavTree('netlist_2persistent_2netlist__serializ
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="dir_f6f96dce44487d3d8542a38135ce2374.html">persistent</a></li><li class="navelem"><a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html">netlist_serializer.cpp</a></li>
-    <li class="footer">Generated on Fri May 13 2022 20:24:44 for HAL by
+    <li class="footer">Generated on Thu May 19 2022 17:55:46 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

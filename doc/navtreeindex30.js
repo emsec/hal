@@ -1,5 +1,6 @@
 var NAVTREEINDEX30 =
 {
+"settings__display_8cpp.html":[15,0,1,3,2,38,4],
 "settings__display_8cpp_source.html":[15,0,1,3,2,38,4],
 "settings__display_8h.html":[15,0,1,3,0,0,40,5],
 "settings__display_8h_source.html":[15,0,1,3,0,0,40,5],
@@ -248,6 +249,5 @@ var NAVTREEINDEX30 =
 "structhal_1_1_boolean_function_1_1_operand_node.html#a4a6f11ecf459b46ffb1d38e9c55eca92":[12,1,0,13,7],
 "structhal_1_1_boolean_function_1_1_operand_node.html#a695cd350ce87ecb0126c15c3c4dda66c":[12,1,0,13,4],
 "structhal_1_1_boolean_function_1_1_operand_node.html#a935bad726583ec15cff7c55e20d450ba":[12,1,0,13,2],
-"structhal_1_1_boolean_function_1_1_operand_node.html#a9f3584ad3d9063a5063f432e547782d2":[12,1,0,13,0],
-"structhal_1_1_boolean_function_1_1_operand_node.html#a9fa345fd01babeefb7aeaec9be54a1a1":[12,1,0,13,3]
+"structhal_1_1_boolean_function_1_1_operand_node.html#a9f3584ad3d9063a5063f432e547782d2":[12,1,0,13,0]
 };
