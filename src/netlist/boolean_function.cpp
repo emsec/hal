@@ -1091,8 +1091,15 @@ namespace hal
                     return {true, ~p[0]};
                 case BooleanFunction::NodeType::Xor:
                     return {true, p[0] ^ p[1]};
+                case BooleanFunction::NodeType::Slice:
+                    return {true, p[0].extract( p[2].get_numeral_uint(), p[1].get_numeral_uint())};
+                case BooleanFunction::NodeType::Concat:
+                    return {true, z3::concat(p[0], p[1])};
+                case BooleanFunction::NodeType::Sext:
+                    return {true, z3::sext(p[0], p[1].get_numeral_uint())};
 
                 default:
+                    log_error("netlist", "Not implemented reached for nodetype {} in z3 conversion", node.type);
                     return {false, z3::expr(context)};
             }
         };
