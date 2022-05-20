@@ -151,16 +151,21 @@ namespace hal
 
                 mIgnoreEventsFlag = true;
                 UserActionCompound* comp = new UserActionCompound;
-                ActionReorderObject* reordActHack = new ActionReorderObject(droppedPin->get_group().second);//for undo action
-                reordActHack->setObject(UserActionObject(droppedPin->get_id(), UserActionObjectType::Pin));
-                reordActHack->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+
+                if(droppedParentItem != mRootItem && onDroppedParentItem != mRootItem)
+                {
+                    //for undo action, reordering can only be performed when not dragging from the top level
+                    ActionReorderObject* reordActHack = new ActionReorderObject(droppedPin->get_group().second);
+                    reordActHack->setObject(UserActionObject(droppedPin->get_id(), UserActionObjectType::Pin));
+                    reordActHack->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+                    comp->addAction(reordActHack);
+                }
                 ActionAddItemsToObject* addAct = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), QSet<u32>() << droppedPin->get_id());
                 addAct->setObject(UserActionObject(pinGroup->get_id(), UserActionObjectType::PinGroup));
                 addAct->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
                 ActionReorderObject* reordAct = new ActionReorderObject(bottomEdge ? desiredIndex+1 : desiredIndex);
                 reordAct->setObject(UserActionObject(droppedPin->get_id(), UserActionObjectType::Pin));
                 reordAct->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
-                comp->addAction(reordActHack);
                 comp->addAction(addAct);
                 comp->addAction(reordAct);
                 bool ret = comp->exec();
