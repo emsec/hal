@@ -662,7 +662,7 @@ namespace hal {
         Q_EMIT inserted(index(targetRow,0,targetIndexParent));
     }
 
-    void WaveTreeModel::handleCursorMoved(double tCursor, int xpos)
+    void WaveTreeModel::handleCursorMoved(u64 tCursor, int xpos)
     {
         if (tCursor == mCursorTime && xpos == mCursorXpos) return;
         if (!mValueThreads.isEmpty())
@@ -1144,7 +1144,7 @@ namespace hal {
     */
 
 
-        WaveValueThread::WaveValueThread(WaveItem* item, const QString& workdir, float tpos, int xpos, QObject *parent)
+        WaveValueThread::WaveValueThread(WaveItem* item, const QString& workdir, u64 tpos, int xpos, QObject *parent)
             : QThread(parent), mItem(item), mWorkDir(workdir), mTpos(tpos), mXpos(xpos), mAbort(false)
         {
             connect(this,&QThread::finished,this,&WaveValueThread::handleValueThreadFinished);
@@ -1157,8 +1157,7 @@ namespace hal {
             if (sif.good())
             {
                 int val = sif.get_int_value(mTpos);
-                if (!mAbort)
-                    mItem->mPainted.setCursorValue(mTpos,mXpos,val);
+                if (!mAbort) mItem->mPainted.setCursorValue(mTpos,mXpos,val);
             }
         }
 

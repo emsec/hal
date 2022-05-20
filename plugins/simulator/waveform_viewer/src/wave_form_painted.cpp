@@ -6,8 +6,8 @@
 #include "waveform_viewer/wave_form_primitive.h"
 #include "waveform_viewer/wave_transform.h"
 #include "waveform_viewer/wave_scrollbar.h"
-#include <QDebug>
 #include <math.h>
+#include <QDebug>
 
 namespace hal {
 
@@ -19,11 +19,49 @@ namespace hal {
     }
 
     WaveFormPainted::WaveFormPainted()
-        : mCursorTime(-1), mCursorValue(SaleaeDataTuple::sReadError) {;}
+        : mCursorTime(0), mCursorValue(SaleaeDataTuple::sReadError)
+    {;}
+
+    WaveFormPainted::WaveFormPainted(const WaveFormPainted& other)
+    {
+        clonePrimitives(other);
+    }
+
+    void WaveFormPainted::clonePrimitives(const WaveFormPainted &other)
+    {
+        for (const WaveFormPrimitive* wfp : other.mPrimitives)
+        {
+            if (const WaveFormPrimitiveHline* wfph = dynamic_cast<const WaveFormPrimitiveHline*>(wfp); wfph)
+                mPrimitives.append(new WaveFormPrimitiveHline(*wfph));
+            else if (const WaveFormPrimitiveTransition* wfpt = dynamic_cast<const WaveFormPrimitiveTransition*>(wfp); wfpt)
+                mPrimitives.append(new WaveFormPrimitiveTransition(*wfpt));
+            else if (const WaveFormPrimitiveTrigger* wfpg = dynamic_cast<const WaveFormPrimitiveTrigger*>(wfp); wfpg)
+                mPrimitives.append(new WaveFormPrimitiveTrigger(*wfpg));
+            else if (const WaveFormPrimitiveUndefined* wfpu = dynamic_cast<const WaveFormPrimitiveUndefined*>(wfp); wfpu)
+                mPrimitives.append(new WaveFormPrimitiveUndefined(*wfpu));
+            else if (const WaveFormPrimitiveFilled* wfpf = dynamic_cast<const WaveFormPrimitiveFilled*>(wfp); wfpf)
+                mPrimitives.append(new WaveFormPrimitiveFilled(*wfpf));
+            else if (const WaveFormPrimitiveValue* wfpv = dynamic_cast<const WaveFormPrimitiveValue*>(wfp); wfpv)
+                mPrimitives.append(new WaveFormPrimitiveValue(*wfpv));
+            else
+                qDebug() << "Programming error, copy constructor failed due to unknown primitive type";
+        }
+    }
 
     WaveFormPainted::~WaveFormPainted()
     {
         clearPrimitives();
+    }
+
+    WaveFormPainted& WaveFormPainted::operator=(const WaveFormPainted& other)
+    {
+        clonePrimitives(other);
+        mValidity       = other.mValidity;
+        mShortestToggle = other.shortestToggle();
+        mCursorTime     = other.mCursorTime;
+        mCursorXpos     = other.mCursorXpos;
+        mCursorValue    = other.mCursorValue;
+        return *this;
     }
 
     void  WaveFormPainted::clearPrimitives()
@@ -132,7 +170,7 @@ namespace hal {
                 else
                     updateX = false; // same value, will be painted at next transition
 
-                if (refreshCursor && nextX > mCursorTime)
+                if (refreshCursor && nextX > 0 && (u64) nextX > mCursorTime)
                 {
                     if (val != WaveGroupValue::sTooManyTransitions)
                         mCursorValue = val;
@@ -225,7 +263,7 @@ namespace hal {
                 else
                     updateX = false; // same value, will be painted at next transition
 
-                if (refreshCursor && nextX > mCursorTime)
+                if (refreshCursor && nextX > 0 && (u64) nextX > mCursorTime)
                 {
                     if (val != WaveGroupValue::sTooManyTransitions)
                         mCursorValue = val;
@@ -389,14 +427,14 @@ namespace hal {
         return retval;
     }
 
-    void WaveFormPainted::setCursorValue(double tCursor, int xpos, int val)
+    void WaveFormPainted::setCursorValue(u64 tCursor, int xpos, int val)
     {
         mCursorTime = tCursor;
         mCursorXpos = xpos;
         mCursorValue = val;
     }
 
-    int WaveFormPainted::cursorValueStored(double tCursor, int xpos) const
+    int WaveFormPainted::cursorValueStored(u64 tCursor, int xpos) const
     {
         // stored value not valid
         if (tCursor != mCursorTime || xpos != mCursorXpos)
@@ -406,7 +444,7 @@ namespace hal {
         return mCursorValue;
     }
 
-    int WaveFormPainted::cursorValueTrigger(double tCursor, int xpos)
+    int WaveFormPainted::cursorValueTrigger(u64 tCursor, int xpos)
     {
         QMutexLocker lock(&mMutex);
         mCursorValue = 0;
@@ -420,14 +458,19 @@ namespace hal {
         return mCursorValue;
     }
 
-    int WaveFormPainted::cursorValuePainted(double tCursor, int xpos)
+    int WaveFormPainted::cursorValuePainted(u64 tCursor, int xpos)
     {
         // try get from painted primitives
-        mCursorValue = valueXpos(xpos);
-        if (mCursorValue == WaveGroupValue::sTooManyTransitions)
-            mCursorValue = SaleaeDataTuple::sReadError;
-        mCursorTime = tCursor;
-        mCursorXpos = xpos;
-        return mCursorValue;
+        int tmpValue = valueXpos(xpos);
+        if (tmpValue == WaveGroupValue::sTooManyTransitions)
+            tmpValue = SaleaeDataTuple::sReadError;
+
+        if (tmpValue >= BooleanFunction::Z)
+        {
+            mCursorTime = tCursor;
+            mCursorXpos = xpos;
+            mCursorValue = tmpValue;
+        }
+        return tmpValue;
     }
 }
