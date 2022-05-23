@@ -66,12 +66,13 @@ namespace hal
          *
          * @returns The simulator instance.
          */
-        std::unique_ptr<NetlistSimulatorController> create_simulator_controller(const std::string& nam=std::string()) const;
+        std::unique_ptr<NetlistSimulatorController> create_simulator_controller(const std::string& nam=std::string(), const std::string& workdir=std::string()) const;
 
         /**
          * Restore controller with waveform data from previous simulation.
          * @param[in] nl The netlist the simulation was performed with.
          * @param[in] filename Full path and filename of 'netlist_simulator_controller.json'.
+         * @param[in] workdir Working directory will be created at given location.
          *
          * @returns The simulator instance.
          */

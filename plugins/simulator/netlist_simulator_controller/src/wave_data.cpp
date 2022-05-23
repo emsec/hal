@@ -1307,47 +1307,6 @@ namespace hal {
             setMaxTime(mTimeframe.mSimulateMaxTime);
     }
 
-    QList<const WaveData*> WaveDataList::partialList(u64 start_time, u64 end_time, const std::set<const Net*> &nets) const
-    {
-        QSet<u32> netIds;
-        for (const Net* n : nets)
-            netIds.insert(n->get_id());
-
-        QList<const WaveData*> retval;
-
-        for (const WaveData* wd : *this)
-        {
-            if (!netIds.isEmpty() && !netIds.contains(wd->id())) continue;
-            QMap<u64,int> xdata = wd->data();
-            auto it = xdata.begin();
-            int rememberValue = -99;
-            while (it != xdata.end())
-            {
-                if (it.key() < start_time)
-                {
-                    rememberValue = it.value();
-                    it = xdata.erase(it);
-                }
-                else if (it.key() == start_time)
-                {
-                    rememberValue = -99;
-                    ++it;
-                }
-                else if (end_time && it.key() > end_time)
-                    it = xdata.erase(it);
-                else
-                {
-                    ++it;
-                }
-            }
-            if (rememberValue > -99)
-                xdata.insert(start_time,rememberValue);
-            WaveData* wdCopy = new WaveData(wd->id(),wd->name(),wd->netType(),xdata);
-            retval.append(wdCopy);
-        }
-        return retval;
-    }
-
     void WaveDataList::setUserTimeframe(u64 t0, u64 t1)
     {
         if (t0 == mTimeframe.mUserdefMinTime && t1 == mTimeframe.mUserdefMaxTime) return;

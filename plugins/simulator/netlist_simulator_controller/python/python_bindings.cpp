@@ -56,10 +56,11 @@ namespace hal
                 :rtype: str
             )")
 
-            .def("create_simulator_controller", &NetlistSimulatorControllerPlugin::create_simulator_controller, py::arg("name") = std::string(), R"(
+            .def("create_simulator_controller", &NetlistSimulatorControllerPlugin::create_simulator_controller, py::arg("name") = std::string(), py::arg("workdir") = std::string(), R"(
                 Create a netlist simulation controller instance.
 
                 :param str name: Optional name for new controller.
+                :param str workdir: Working directory will be created at given location.
                 :returns: The simulator controller instance.
                 :rtype: netlist_simulator_controller.NetlistSimulatorController
             )")
