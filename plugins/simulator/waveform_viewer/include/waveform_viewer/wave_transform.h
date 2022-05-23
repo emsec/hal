@@ -40,5 +40,6 @@ namespace hal {
         int width() const { return mWidth; }
         double scale() const { return mScale; }
         quint64 leftTime() const { return mTleft; }
+        QString dumpString() const;
     };
 }

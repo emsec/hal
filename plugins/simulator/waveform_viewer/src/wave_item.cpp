@@ -198,6 +198,8 @@ namespace hal {
                     WaveDataTrigger* wdTrig = static_cast<WaveDataTrigger*>(mData);
                     wdTrig->recalcData();
                 }
+                else
+                    mData->loadDataUnlessAlreadyLoaded();
             }
             if (!mData->data().isEmpty())
             {
@@ -225,6 +227,7 @@ namespace hal {
     void WaveItem::handleWaveLoaderFinished()
     {
         mMutex.lock();
+
         if (isAborted())
         {
             setState(Null);
@@ -240,7 +243,10 @@ namespace hal {
         mLoader = nullptr;
         mMutex.unlock();
         if (mState == Painted && mVisibleRange)
+        {
             Q_EMIT doneLoading();
+            Q_EMIT gotCursorValue();
+        }
     }
 
     void WaveItem::loadSaleae()

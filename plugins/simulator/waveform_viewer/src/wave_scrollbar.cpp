@@ -111,9 +111,14 @@ namespace hal {
        return toUInt(v - mVleft);
     }
 
-    double WaveScrollbar::tPos(int x) const
+    double WaveScrollbar::tPosF(int x) const
     {
         return mTransform->tPos(vLeft() + x);
+    }
+
+    quint64 WaveScrollbar::tPosI(int x) const
+    {
+        return floor(tPosF(x)+0.5);
     }
 
     double WaveScrollbar::tLeftF() const

@@ -169,8 +169,11 @@ namespace hal {
                 {
                     try {
                         WaveDataProviderFile wdpFile(sif, mTimeframe);
+                        WaveFormPainted shadowPaint(mItem->mPainted);
+                        shadowPaint.generate(&wdpFile,mTransform,mScrollbar,&mItem->mLoop);
+
                         mItem->mMutex.lock();
-                        mItem->mPainted.generate(&wdpFile,mTransform,mScrollbar,&mItem->mLoop);
+                        mItem->mPainted = shadowPaint;
                         mItem->mMutex.unlock();
                         mItem->setState(WaveItem::Finished);
                         if (wdpFile.storeDataState() == WaveDataProviderFile::Complete)
@@ -410,9 +413,12 @@ namespace hal {
             }
 
             wree->mVisibleRange = true;
-            if (!wree->mMutex.tryLock()) continue;
+            if (!wree->mMutex.tryLock())
+            {
+                continue;
+            }
             else
-                {
+            {
                 if (wree->isNull())
                 {
                     if (wree->isGroup() && wree->wavedata()->loadPolicy()!=WaveData::LoadAllData)
