@@ -29,9 +29,9 @@ namespace hal
         return std::string("0.7");
     }
 
-    std::unique_ptr<NetlistSimulatorController> NetlistSimulatorControllerPlugin::create_simulator_controller(const std::string &nam) const
+    std::unique_ptr<NetlistSimulatorController> NetlistSimulatorControllerPlugin::create_simulator_controller(const std::string &nam, const std::string &workdir) const
     {
-        return std::unique_ptr<NetlistSimulatorController>(new NetlistSimulatorController(++sMaxControllerId, nam));
+        return std::unique_ptr<NetlistSimulatorController>(new NetlistSimulatorController(++sMaxControllerId, nam, workdir));
     }
 
     std::unique_ptr<NetlistSimulatorController> NetlistSimulatorControllerPlugin::restore_simulator_controller(Netlist* nl, const std::string &filename) const

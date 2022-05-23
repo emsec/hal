@@ -56,10 +56,11 @@ namespace hal
                 :rtype: str
             )")
 
-            .def("create_simulator_controller", &NetlistSimulatorControllerPlugin::create_simulator_controller, py::arg("name") = std::string(), R"(
+            .def("create_simulator_controller", &NetlistSimulatorControllerPlugin::create_simulator_controller, py::arg("name") = std::string(), py::arg("workdir") = std::string(), R"(
                 Create a netlist simulation controller instance.
 
                 :param str name: Optional name for new controller.
+                :param str workdir: Working directory will be created at given location.
                 :returns: The simulator controller instance.
                 :rtype: netlist_simulator_controller.NetlistSimulatorController
             )")
@@ -191,47 +192,6 @@ namespace hal
 
                 :param int tmin: Lower limit for time scale in wave viewer.
                 :param int tmax: Upper limit for time scale in wave viewer.
-            )")
-
-            .def(
-                "trace_value_if",
-                [](NetlistSimulatorController& self,
-                   const u32 group_id,
-                   const Net* trigger_net,
-                   const std::vector<Net*>& enable_nets,
-                   const BooleanFunction& enable_condition,
-                   u64 start_time,
-                   u64 end_time
-                   ) -> std::vector<u32> {
-                    auto res = self.trace_value_if(group_id, trigger_net, enable_nets, enable_condition, start_time, end_time);
-                    if (res.is_ok())
-                    {
-                        return res.get();
-                    }
-                    else
-                    {
-                        log_error("python_context", "{}", res.get_error().get());
-                        return {};
-                    }
-                },
-                py::arg("group_id"),
-                py::arg("trigger_net"),
-                py::arg("enable_nets"),
-                py::arg("enable_condition"),
-                py::arg("start_time"),
-                py::arg("end_time"),
-                R"(
-                Record a trace of the value of the group specified by the given ID.
-                A value is recorded everytime the trigger net toggles and the enable condition evaluates to 'BooleanFunction::Value::ONE'.
-
-                :param int group_id: The ID of the target waveform group.
-                :param hal_py.Net trigger_net: The net that triggers recording a value.
-                :param list[hal_py.Net] enable_nets: All nets that influence the enable condition.
-                :param hal_py.BooleanFunction enable_condition: A Boolean function that enables the recording of a value.
-                :param int start_time: The time at which to start the recording.
-                :param int end_time: The time at which to end the recording.
-                :returns: A vector of recorded values.
-                :rtype: list[int]
             )")
 
             .def("get_engine_names", &NetlistSimulatorController::get_engine_names, R"(

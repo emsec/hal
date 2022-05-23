@@ -44,7 +44,7 @@ namespace hal
 
                 if (auto res = parser->parse(file_name); res.is_error())
                 {
-                    log_error("netlist_parser", "error encountered during netlist parsing:\n{}", res.get_error().get());
+                    log_error("netlist_parser", "failed to parse '{}':\n{}", file_name.string(), res.get_error().get());
                     return {};
                 }
 
@@ -62,7 +62,7 @@ namespace hal
 
                     if (auto res = parser->instantiate(gate_library); res.is_error())
                     {
-                        log_error("netlist_parser", "error encountered during netlist instantiation:\n{}", res.get_error().get());
+                        log_info("netlist_parser", "failed to instantiate '{}' with gate library '{}':\n{}", file_name.string(), gate_library->get_name(), res.get_error().get());
                         return {};
                     }
                     else
@@ -83,34 +83,16 @@ namespace hal
                     log_warning("netlist_parser", "no (valid) gate library specified, trying to auto-detect gate library...");
                     gate_library_manager::load_all();
 
-                    std::unordered_map<std::string,GateLibrary*> glib_map;
-
-                    for (GateLibrary* glib : gate_library_manager::get_gate_libraries())
+                    for (GateLibrary* lib_it : gate_library_manager::get_gate_libraries())
                     {
-                        if (glib_map.find(glib->get_name()) != glib_map.end())
-                        {
-                            // found already library with name
-                            std::string extension = utils::to_lower(glib->get_path().extension().string());
-                            if (!extension.empty() && extension[0] != '.')
-                            {
-                                extension = "." + extension;
-                            }
-                            if (extension != ".hgl") continue; // .hgl preferred, override
-                        }
-                        glib_map[glib->get_name()] = glib;
-                    }
-
-                    for (auto it = glib_map.begin(); it != glib_map.end(); ++it)
-                    {
-                        GateLibrary* glib = it->second;
                         begin_time = std::chrono::high_resolution_clock::now();
 
-                        log_info("netlist_parser", "instantiating '{}' with gate library '{}'...", file_name.string(), glib->get_name());
+                        log_info("netlist_parser", "instantiating '{}' with gate library '{}'...", file_name.string(), lib_it->get_name());
 
-                        if (auto res = parser->instantiate(gate_library); res.is_error())
+                        if (auto res = parser->instantiate(lib_it); res.is_error())
                         {
-                            log_info("netlist_parser", "could not instantiate file '{}' using gate library '{}'.", file_name.string(), glib->get_name());
-                            log_debug("netlist_parser", "error encountered during netlist instantiation:\n{}", res.get_error().get());
+                            log_info("netlist_parser", "failed to instantiate '{}' with gate library '{}':\n{}", file_name.string(), lib_it->get_name(), res.get_error().get());
+                            // log_debug("netlist_parser", "error encountered during netlist instantiation:\n{}", res.get_error().get());
                             continue;
                         }
                         else

@@ -96,7 +96,7 @@ namespace hal {
         void saveSaleae();
         void setData(const QMap<u64,int>& dat);
         virtual int  intValue(double t) const;
-        int get_value_at(u64 t) const;
+        int get_value_at(u64 t);
         std::string get_name() const { return mName.toStdString(); }
         std::vector<std::pair<u64,int>> get_events(u64 t0 = 0) const;
         std::vector<std::pair<u64,int>> get_triggered_events(const WaveDataTrigger* wdTrig, u64 t0 = 0);
@@ -189,7 +189,6 @@ namespace hal {
         const WaveDataTimeframe& timeFrame() const { return mTimeframe; }
         void setValueForEmpty(int val);
         void dump() const;
-        QList<const WaveData*> partialList(u64 start_time, u64 end_time, const std::set<const Net*>& nets) const;
         void emitWaveAdded(int inx);
         void emitWaveUpdated(int inx);
         void emitGroupUpdated(int grpId);
