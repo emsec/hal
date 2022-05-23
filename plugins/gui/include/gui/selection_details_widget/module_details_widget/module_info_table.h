@@ -81,9 +81,19 @@ namespace hal
         QString parentModule() const;
 
         /**
-         * Returns the number of gates contained in the module in a suitable mannfer for table and the clipboard.
+         * Returns the total number of gates contained in the module.
          */
-        QString numberOfGates() const;
+        QString numberOfAllGates() const;
+
+        /**
+         * Returns the number of gates directly contained in the module.
+         */
+        QString numberOfDirectGateMembers() const;
+
+        /**
+         * Returns the number of gates contained in all submodules.
+         */
+        QString numberOfGatesInSubmodules() const;
 
         /**
          * Returns the number of submodules contained in the module in a suitable mannfer for table and the clipboard.
@@ -178,7 +188,32 @@ namespace hal
         /**
          * Copies the number of gates contained in the module to the clipboard.
          */
-        void copyNumberOfGates() const;
+        void copyNumberOfAllGates() const;
+
+        /**
+         * Copies the python code to retrieve all gates in the module and its submodules.
+         */
+        void pyCopyAllGates() const;
+
+        /**
+         * Copies the number of gates directly contained in the module.
+         */
+        void copyNumberOfDirectGates() const;
+
+        /**
+         * Copies the python code to retrieve all direct gates of the module
+         */
+        void pyCopyDirectMemberGates() const;
+
+        /**
+         * Copies the number of gates contained in all submodules.
+         */
+        void copyNumberOfGatesInSubmodules() const;
+
+        /**
+         * Copies the python code to retrieve only gates in the submodules.
+         */
+        void pyCopyGatesInSubmodules() const;
 
         /**
          * Copies the number of submodules contained in the module to the clipboard.
@@ -324,7 +359,9 @@ namespace hal
         QMenu* mIdEntryContextMenu;
         QMenu* mTypeEntryContextMenu;
         QMenu* mModuleEntryContextMenu;
-        QMenu* mNumOfGatesContextMenu;
+        QMenu* mNumOfAllGatesContextMenu;
+        QMenu* mNumOfDirectGatesContextMenu;
+        QMenu* mNumOfGatesInSubmodulesContextMenu;
         QMenu* mNumOfSubmodulesContextMenu;
         QMenu* mNumOfNetsContextMenu;
         QMenu* mNumOfPinsContextMenu;
@@ -341,7 +378,9 @@ namespace hal
         static const QString idRowKey;
         static const QString typeRowKey;
         static const QString moduleRowKey;
-        static const QString noOfGatesRowKey;
+        static const QString noOfAllGatesRowKey;
+        static const QString noOfDirectGatesRowKey;
+        static const QString noOfGatesInSubmodulesRowKey;
         static const QString noOfModulesRowKey;
         static const QString noOfNetsRowKey;
         static const QString noOfPinsKey;

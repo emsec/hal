@@ -80,6 +80,7 @@ namespace hal
         static QString pyCodeModuleType(u32 moduleId);
         static QString pyCodeModuleModule(u32 moduleId);
         static QString pyCodeModuleSubmodules(u32 moduleId);
+        static QString pyCodeModuleGates(u32 moduleId, bool recursively = false);
         static QString pyCodeModuleNets(u32 moduleId);
         static QString pyCodeModuleInputNets(u32 moduleId);
         static QString pyCodeModuleOutputNets(u32 moduleId);

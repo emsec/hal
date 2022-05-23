@@ -16,7 +16,9 @@ namespace hal
     const QString ModuleInfoTable::idRowKey = "ID";
     const QString ModuleInfoTable::typeRowKey = "Type";
     const QString ModuleInfoTable::moduleRowKey = "Parent";
-    const QString ModuleInfoTable::noOfGatesRowKey = "No. of Gates";
+    const QString ModuleInfoTable::noOfAllGatesRowKey = "Total number of gates";
+    const QString ModuleInfoTable::noOfDirectGatesRowKey = "Number of direct member gates";
+    const QString ModuleInfoTable::noOfGatesInSubmodulesRowKey = "Number of gates in submodules";
     const QString ModuleInfoTable::noOfModulesRowKey = "Number of submodules";
     const QString ModuleInfoTable::noOfNetsRowKey = "Number of nets";
     const QString ModuleInfoTable::noOfPinsKey = "Number of pins";
@@ -55,8 +57,16 @@ namespace hal
         mModuleEntryContextMenu->addSection("Python");
         mModuleEntryContextMenu->addAction(mPyIcon, "Get parent", std::bind(&ModuleInfoTable::pyCopyModule, this));
 
-        mNumOfGatesContextMenu = new QMenu();
-        mNumOfGatesContextMenu->addAction("Number of gates to clipboard", std::bind(&ModuleInfoTable::copyNumberOfGates, this));
+        mNumOfAllGatesContextMenu = new QMenu();
+        mNumOfAllGatesContextMenu->addAction("Number of gates to clipboard", std::bind(&ModuleInfoTable::copyNumberOfAllGates, this));
+        mNumOfAllGatesContextMenu->addAction(mPyIcon, "Get all gates recursively", std::bind(&ModuleInfoTable::pyCopyAllGates, this));
+
+        mNumOfDirectGatesContextMenu = new QMenu();
+        mNumOfDirectGatesContextMenu->addAction("Number of direct member gates", std::bind(&ModuleInfoTable::copyNumberOfDirectGates,this));
+        mNumOfDirectGatesContextMenu->addAction(mPyIcon, "Get direct member gates", std::bind(&ModuleInfoTable::pyCopyDirectMemberGates, this));
+
+        mNumOfGatesInSubmodulesContextMenu = new QMenu();
+        mNumOfGatesInSubmodulesContextMenu->addAction("Number of gates in submodules", std::bind(&ModuleInfoTable::copyNumberOfGatesInSubmodules, this));
 
         mNumOfSubmodulesContextMenu = new QMenu();
         mNumOfSubmodulesContextMenu->addAction("Number of submodules to clipboard", std::bind(&ModuleInfoTable::copyNumberOfSubmodules, this));
@@ -115,7 +125,9 @@ namespace hal
             setRow(idRowKey, id(), mIdEntryContextMenu);
             setRow(typeRowKey, type(), mTypeEntryContextMenu);
             setRow(moduleRowKey, parentModule(), mModuleEntryContextMenu, mModuleDoubleClickedAction);
-            setRow(noOfGatesRowKey, numberOfGates(), mNumOfGatesContextMenu);
+            setRow(noOfAllGatesRowKey, numberOfAllGates(), mNumOfAllGatesContextMenu);
+            setRow(noOfDirectGatesRowKey, numberOfDirectGateMembers(), mNumOfDirectGatesContextMenu);
+            setRow(noOfGatesInSubmodulesRowKey, numberOfGatesInSubmodules(), mNumOfGatesInSubmodulesContextMenu);
             setRow(noOfModulesRowKey, numberOfSubModules(), mNumOfSubmodulesContextMenu);
             setRow(noOfNetsRowKey, numberOfNets(), mNumOfNetsContextMenu);
             setRow(noOfPinsKey, numberOfPins(), mNumOfPinsContextMenu);
@@ -161,20 +173,31 @@ namespace hal
         return parentModule;
     }
 
-    QString ModuleInfoTable::numberOfGates() const
+    QString ModuleInfoTable::numberOfAllGates() const
     {
-        QString numOfGates = "";
+        return QString::number(mModule->get_gates(nullptr, true).size());
+//        QString numOfGates = "";
 
-        int numOfAllChilds = mModule->get_gates(nullptr, true).size();
-        int numOfDirectChilds = mModule->get_gates(nullptr, false).size();
-        int numOfChildsInModules = numOfAllChilds - numOfDirectChilds;
+//        int numOfAllChilds = mModule->get_gates(nullptr, true).size();
+//        int numOfDirectChilds = mModule->get_gates(nullptr, false).size();
+//        int numOfChildsInModules = numOfAllChilds - numOfDirectChilds;
 
-        numOfGates.append(QString::number(numOfAllChilds));
+//        numOfGates.append(QString::number(numOfAllChilds));
 
-        if(numOfChildsInModules > 0)
-            numOfGates.append(" (" + QString::number(numOfDirectChilds) + " direct members and " + QString::number(numOfChildsInModules) +" in submodules)");
+//        if(numOfChildsInModules > 0)
+//            numOfGates.append(" (" + QString::number(numOfDirectChilds) + " direct members and " + QString::number(numOfChildsInModules) +" in submodules)");
 
-        return numOfGates;
+//        return numOfGates;
+    }
+
+    QString ModuleInfoTable::numberOfDirectGateMembers() const
+    {
+        return QString::number(mModule->get_gates().size());
+    }
+
+    QString ModuleInfoTable::numberOfGatesInSubmodules() const
+    {
+        return QString::number(mModule->get_gates(nullptr, true).size() - mModule->get_gates().size());
     }
 
     QString ModuleInfoTable::numberOfSubModules() const
@@ -291,9 +314,34 @@ namespace hal
         copyToClipboard(PyCodeProvider::pyCodeModuleModule(mModule->get_id()));
     }
 
-    void ModuleInfoTable::copyNumberOfGates() const
+    void ModuleInfoTable::pyCopyAllGates() const
     {
-        copyToClipboard(numberOfGates());
+        copyToClipboard(PyCodeProvider::pyCodeModuleGates(mModule->get_id(), true));
+    }
+
+    void ModuleInfoTable::copyNumberOfAllGates() const
+    {
+        copyToClipboard(numberOfAllGates());
+    }
+
+    void ModuleInfoTable::copyNumberOfDirectGates() const
+    {
+        copyToClipboard(numberOfDirectGateMembers());
+    }
+
+    void ModuleInfoTable::pyCopyDirectMemberGates() const
+    {
+        copyToClipboard(PyCodeProvider::pyCodeModuleGates(mModule->get_id()));
+    }
+
+    void ModuleInfoTable::copyNumberOfGatesInSubmodules() const
+    {
+        copyToClipboard(numberOfGatesInSubmodules());
+    }
+
+    void ModuleInfoTable::pyCopyGatesInSubmodules() const
+    {
+
     }
 
     void ModuleInfoTable::copyNumberOfSubmodules() const
@@ -429,7 +477,7 @@ namespace hal
             setRow(idRowKey, notification, nullptr);
             setRow(typeRowKey, notification, nullptr);
             setRow(moduleRowKey, notification, nullptr, nullptr);
-            setRow(noOfGatesRowKey, notification, nullptr);
+            setRow(noOfAllGatesRowKey, notification, nullptr);
             setRow(noOfModulesRowKey, notification, nullptr);
             setRow(noOfNetsRowKey, notification, nullptr);
 

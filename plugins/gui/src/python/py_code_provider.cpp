@@ -281,6 +281,13 @@ namespace hal
         return buildPyCode(moduleCodePrefix, suffix, moduleId);
     }
 
+    QString PyCodeProvider::pyCodeModuleGates(u32 moduleId, bool recursively)
+    {
+        QString rec = recursively ? QString("None, True") : QString("");
+        const QString suffix = "get_gates(%2)";
+        return QString(moduleCodePrefix + "." + suffix).arg(QString::number(moduleId), rec);
+    }
+
     QString PyCodeProvider::pyCodeModuleNets(u32 moduleId)
     {
         const QString suffix = "get_nets()";
