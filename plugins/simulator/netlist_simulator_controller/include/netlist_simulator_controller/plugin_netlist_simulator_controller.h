@@ -25,6 +25,8 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
+#include "hal_core/netlist/project_serializer.h"
+#include <QDir>
 
 namespace hal
 {
@@ -32,6 +34,22 @@ namespace hal
     class NetlistSimulatorController;
     class NetlistSimulator;
     class SimulationSettings;
+    class Netlist;
+
+    class SimulatorSerializer : public ProjectSerializer
+    {
+        Netlist* mNetlist;
+        QDir mProjDir;
+     //   void restoreSimulator(const std::filesystem::path& loaddir, const std::string& jsonfile);
+    public:
+        SimulatorSerializer();
+
+        std::string serialize(Netlist* netlist, const std::filesystem::path& savedir, bool isAutosave) override;
+
+        void deserialize(Netlist* netlist, const std::filesystem::path& loaddir) override;
+
+        void restore();
+    };
 
     class PLUGIN_API NetlistSimulatorControllerPlugin : public BasePluginInterface
     {
@@ -89,5 +107,6 @@ namespace hal
          * Pointer to simulation controller settings. Use sync() to persist settings.
          */
         static SimulationSettings* sSimulationSettings;
+        static SimulatorSerializer* sSimulatorSerializer;
     };
 }    // namespace hal

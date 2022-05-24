@@ -2,7 +2,7 @@
 #include "gui/graph_widget/layout_locker.h"
 
 #include "hal_core/netlist/module.h"
-
+#include "hal_core/utilities/log.h"
 #include "gui/graph_widget/layout_locker.h"
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/graph_widget.h"
@@ -15,6 +15,7 @@
 #include <QJsonArray>
 #include "gui/main_window/main_window.h"
 #include "gui/settings/settings_items/settings_item_dropdown.h"
+#include <QDebug>
 
 namespace hal
 {
@@ -87,6 +88,7 @@ namespace hal
 
     void GraphContext::add(const QSet<u32>& modules, const QSet<u32>& gates, PlacementHint placement)
     {
+        qDebug() << "GraphContext::add (mod gat)" << modules << gates << mId << hex << (qintptr) this;
         QSet<u32> new_modules = modules - mModules;
         QSet<u32> new_gates   = gates - mGates;
 
@@ -640,6 +642,7 @@ namespace hal
 
     void GraphContext::requireSceneUpdate()
     {
+        qDebug() << "GraphContext::requireSceneUpdate()";
         if (LayoutLockerManager::instance()->canUpdate(this))
             startSceneUpdate();
     }
@@ -658,6 +661,7 @@ namespace hal
 
         exclusiveModuleCheck();
 
+        qDebug() << "GraphContext::startSceneUpdate()...mLayouter->layout()";
         mLayouter->layout();
         handleLayouterFinished();
     }
@@ -677,6 +681,7 @@ namespace hal
             default: break;
             }
         }
+        qDebug() << "GraphContext::abortLayout()...mLayouter->layout()";
         mLayouter->layout();
         handleLayouterFinished();
     }
@@ -715,6 +720,8 @@ namespace hal
         if (json.contains("timestamp") && json["timestamp"].isString())
             mTimestamp = QDateTime::fromString(json["timestamp"].toString());
 
+        QList<QPair<Node,QPoint>> nodesToPlace;
+
         if (json.contains("modules") && json["modules"].isArray())
         {
             QJsonArray jsonMods = json["modules"].toArray();
@@ -724,14 +731,17 @@ namespace hal
                 QJsonObject jsonMod = jsonMods.at(imod).toObject();
                 if (!jsonMod.contains("id") || !jsonMod["id"].isDouble()) continue;
                 u32 id = jsonMod["id"].toInt();
-                if (!gNetlist->get_module_by_id(id)) return false;
-                mModules.insert(id);
+                if (!gNetlist->get_module_by_id(id))
+                {
+                    log_warning("gui", "Module id={} not found in netlist, view id={} not restored.", id, mId);
+                    return false;
+                }
                 if (!jsonMod.contains("x") || !jsonMod["x"].isDouble()) continue;
                 int x = jsonMod["x"].toInt();
                 if (!jsonMod.contains("y") || !jsonMod["y"].isDouble()) continue;
                 int y = jsonMod["y"].toInt();
                 Node nd(id,Node::Module);
-                mLayouter->setNodePosition(nd,QPoint(x,y));
+                nodesToPlace.append(QPair<Node,QPoint>(nd,QPoint(x,y)));
             }
         }
 
@@ -744,16 +754,32 @@ namespace hal
                 QJsonObject jsonGat = jsonGats.at(igat).toObject();
                 if (!jsonGat.contains("id") || !jsonGat["id"].isDouble()) continue;
                 u32 id = jsonGat["id"].toInt();
-                if (!gNetlist->get_gate_by_id(id)) return false;
-                mGates.insert(id);
+                if (!gNetlist->get_gate_by_id(id))
+                {
+                    log_warning("gui", "Gate id={} not found in netlist, view id={} not restored.", id, mId);
+                    return false;
+                }
                 if (!jsonGat.contains("x") || !jsonGat["x"].isDouble()) continue;
                 int x = jsonGat["x"].toInt();
                 if (!jsonGat.contains("y") || !jsonGat["y"].isDouble()) continue;
                 int y = jsonGat["y"].toInt();
                 Node nd(id,Node::Gate);
-                mLayouter->setNodePosition(nd,QPoint(x,y));
+                nodesToPlace.append(QPair<Node,QPoint>(nd,QPoint(x,y)));
             }
         }
+
+        mModules.clear();
+        mGates.clear();
+        for (const QPair<Node,QPoint>& box : nodesToPlace)
+        {
+            if (box.first.type() == Node::Module)
+                mModules.insert(box.first.id());
+            else
+                mGates.insert(box.first.id());
+            mLayouter->setNodePosition(box.first,box.second);
+        }
+        if (mModules.size()==1 && mGates.isEmpty())
+            setExclusiveModuleId(*(mModules.begin()),false);
 
         if (json.contains("nets") && json["nets"].isArray())
         {
@@ -771,6 +797,7 @@ namespace hal
 
         //scheduleSceneUpdate();
         setDirty(false);
+        qDebug() << "GraphContext::readFromFile" << mModules << mGates << mId << hex << (qintptr) this;
         return true;
     }
 
@@ -786,6 +813,7 @@ namespace hal
         for (u32 id : mModules)
         {
             Node searchMod(id, Node::Module);
+            qDebug() << "access box" << getLayouter()->boxes().size() << mId << hex << (qintptr) this;
             const NodeBox* box = getLayouter()->boxes().boxForNode(searchMod);
             Q_ASSERT(box);
             QJsonObject jsonMod;

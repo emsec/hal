@@ -2,6 +2,7 @@
 #include "gui/graph_widget/graphics_factory.h"
 #include "hal_core/netlist/netlist.h"
 #include "gui/gui_globals.h"
+#include <QDebug>
 
 uint qHash(const QPoint& p)
 {
@@ -43,12 +44,14 @@ namespace hal
 //------- QVector<NodeBox*> -----------------------
     NodeBoxes::~NodeBoxes()
     {
+        qDebug() << "~NodeBoxes()";
         for (NodeBox* nb : *this)
             delete nb;
     }
 
     void NodeBoxes::clearBoxes()
     {
+        qDebug() << "clearBoxes()";
         for (NodeBox* nb : *this)
             delete nb;
         clear();

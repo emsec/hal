@@ -578,6 +578,8 @@ namespace hal
                     Q_EMIT contextCreated(context);
                 }
 
+                if (jsonView.contains("exclusiveModuleId"))
+                    context->setExclusiveModuleId(jsonView["exclusiveModuleId"].toInt(),false);
                 context->setDirty(false);
             }
         }

@@ -57,7 +57,14 @@ namespace hal
             mWorkDir = QString::fromStdString(workdir);
         QDir saleaeDir(QDir(mWorkDir).absoluteFilePath("saleae"));
         saleaeDir.mkpath(saleaeDir.absolutePath());
-        mWaveDataList = new WaveDataList(saleaeDir.absoluteFilePath("saleae.json"));
+        QString saleaeDirectoryFilename = saleaeDir.absoluteFilePath("saleae.json");
+        if (!QFileInfo(saleaeDirectoryFilename).exists())
+        {
+            QFile of(saleaeDirectoryFilename);
+            if (of.open(QIODevice::WriteOnly))
+                of.write(QByteArray("{\"saleae\":{}}"));
+        }
+        mWaveDataList = new WaveDataList(saleaeDirectoryFilename);
 
         NetlistSimulatorControllerMap::instance()->addController(this);
     }

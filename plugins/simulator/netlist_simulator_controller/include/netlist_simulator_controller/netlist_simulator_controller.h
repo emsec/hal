@@ -437,6 +437,7 @@ public:
     void addController(NetlistSimulatorController* ctrl);
     void removeController(u32 id);
     void shutdown() { mMap.clear(); }
+    QList<NetlistSimulatorController*> toList() const { return mMap.values(); }
     NetlistSimulatorController* controller(u32 id) const { return mMap.value(id); }
 };
 } // namespace hal

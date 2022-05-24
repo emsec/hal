@@ -218,8 +218,12 @@ namespace hal
         sSettingSearch->keySequenceChanged(sSettingSearch->value().toString());
 
         GraphContext* new_context = nullptr;
-        new_context               = gGraphContextManager->createNewContext(QString::fromStdString(gNetlist->get_top_module()->get_name()));
-        new_context->add({gNetlist->get_top_module()->get_id()}, {});
+        Module* top_module        = gNetlist->get_top_module();
+        QString context_name      = QString::fromStdString(top_module->get_name()) + " (ID: " + QString::number(top_module->get_id()) + ")";
+        new_context               = gGraphContextManager->createNewContext(context_name);
+        new_context->add({top_module->get_id()}, {});
+        new_context->setExclusiveModuleId(top_module->get_id());
+        new_context->setDirty(false);
 
         mContextManagerWidget->selectViewContext(new_context);
 
@@ -234,12 +238,10 @@ namespace hal
             mMainWindow->addContent(cw, count++, content_anchor::right);
             cw->open();
         }
-        Module* top_module               = gNetlist->get_top_module();
         GraphContext* top_module_context = gGraphContextManager->getContextByExclusiveModuleId(top_module->get_id());
 
         if (!top_module_context)
         {
-            QString context_name = QString::fromStdString(top_module->get_name()) + " (ID: " + QString::number(top_module->get_id()) + ")";
             top_module_context   = gGraphContextManager->createNewContext(context_name);
             top_module_context->add({top_module->get_id()}, {});
             top_module_context->setExclusiveModuleId(top_module->get_id());
