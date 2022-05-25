@@ -98,9 +98,9 @@ namespace hal
         QMenu menu;
 
         //shared plaintext entries: NAME, DIRECTION, TYPE (shared with pins and groups
-        menu.addAction("Extract name as plain text", [clickedItem]() { QApplication::clipboard()->setText(clickedItem->getData(ModulePinsTreeModel::sNameColumn).toString()); });
-        menu.addAction("Extract direction as plain text", [clickedItem]() { QApplication::clipboard()->setText(clickedItem->getData(ModulePinsTreeModel::sDirectionColumn).toString()); });
-        menu.addAction("Extract type as plain text", [clickedItem]() { QApplication::clipboard()->setText(clickedItem->getData(ModulePinsTreeModel::sTypeColumn).toString()); });
+        menu.addAction("Name to clipboard", [clickedItem]() { QApplication::clipboard()->setText(clickedItem->getData(ModulePinsTreeModel::sNameColumn).toString()); });
+        menu.addAction("Direction to clipboard", [clickedItem]() { QApplication::clipboard()->setText(clickedItem->getData(ModulePinsTreeModel::sDirectionColumn).toString()); });
+        menu.addAction("Type to clipboard", [clickedItem]() { QApplication::clipboard()->setText(clickedItem->getData(ModulePinsTreeModel::sTypeColumn).toString()); });
 
         menu.addSection("Misc");
 
@@ -139,7 +139,7 @@ namespace hal
 
         if(type == ModulePinsTreeModel::itemType::portMultiBit)//group specific context, own helper function?
         {
-            menu.addAction("Rename pin group", [name, modId, itemId](){
+            menu.addAction("Change name", [name, modId, itemId](){
                 InputDialog ipd("Change pin group name", "New group name", name);
                 if(ipd.exec() == QDialog::Accepted)
                 {
@@ -170,8 +170,7 @@ namespace hal
                 appendMultiSelectionEntries(menu, modId);
 
             menu.addSection("Python");
-            menu.addAction(QIcon(":/icons/python"), "Extract pin group", [name, modId](){QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinGroup(modId, name));});
-            menu.addAction(QIcon(":/icons/python"), "Extract pin group name", [name, modId](){QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinGroupName(modId, name));});
+            menu.addAction(QIcon(":/icons/python"), "Get pin group", [modId, itemId](){QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinGroup(modId, itemId));});
             menu.move(mapToGlobal(pos));
             menu.exec();
             return;
@@ -180,7 +179,7 @@ namespace hal
         //menu.addSection("Misc");
         if(n)//should never be nullptr, but you never know
         {
-            menu.addAction("Rename pin", [mod, name, itemId](){
+            menu.addAction("Change name", [mod, name, itemId](){
                 InputDialog ipd("Change pin name", "New pin name", name);
                 if(ipd.exec() == QDialog::Accepted)
                 {
@@ -197,6 +196,11 @@ namespace hal
                 }
             });
             menu.addAction("Add net to current selection", [this, n](){
+                gSelectionRelay->addNet(n->get_id());
+                gSelectionRelay->relaySelectionChanged(this);
+            });
+            menu.addAction("Set net as current selection", [this, n](){
+                gSelectionRelay->clear();
                 gSelectionRelay->addNet(n->get_id());
                 gSelectionRelay->relaySelectionChanged(this);
             });
@@ -222,10 +226,7 @@ namespace hal
             appendMultiSelectionEntries(menu, modId);
 
         menu.addSection("Python");
-        menu.addAction(QIcon(":/icons/python"), "Extract pin object", [modId, name](){QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinByName(modId, name));});
-        menu.addAction(QIcon(":/icons/python"), "Extract pin name", [modId, name](){QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinName(modId, name));});
-        menu.addAction(QIcon(":/icons/python"), "Extract pin direction", [modId, name](){QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinDirection(modId, name));});
-        menu.addAction(QIcon(":/icons/python"), "Extract pin type", [modId, name](){QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinType(modId, name));});
+        menu.addAction(QIcon(":/icons/python"), "Get pin", [modId, itemId](){QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinById(modId, itemId));});
 
         menu.move(mapToGlobal(pos));
         menu.exec();

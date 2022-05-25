@@ -336,9 +336,9 @@ namespace hal
         return buildPyCode(moduleCodePrefix, suffix, moduleId);
     }
 
-    QString PyCodeProvider::pyCodeModulePinGroup(u32 moduleId, QString groupName)
+    QString PyCodeProvider::pyCodeModulePinGroup(u32 moduleId, u32 groupId)
     {
-        const QString suffix = QString("get_pin_group(\"%1\")").arg(groupName);
+        const QString suffix = QString("get_pin_group_by_id(%1)").arg(groupId);
 
         return buildPyCode(moduleCodePrefix, suffix, moduleId);
     }
@@ -350,31 +350,31 @@ namespace hal
         return buildPyCode(moduleCodePrefix, suffix, moduleId);
     }
 
-    QString PyCodeProvider::pyCodeModulePinGroupName(u32 moduleId, QString groupName)
+    QString PyCodeProvider::pyCodeModulePinGroupName(u32 moduleId, u32 groupId)
     {
-        return pyCodeModulePinGroup(moduleId, groupName) + ".get_name()";
+        return pyCodeModulePinGroup(moduleId, groupId) + ".get_name()";
     }
 
-    QString PyCodeProvider::pyCodeModulePinByName(u32 moduleId, QString pinName)
+    QString PyCodeProvider::pyCodeModulePinById(u32 moduleId, u32 pinId)
     {
-        const QString suffix = QString("get_pin(\"%1\")").arg(pinName);
+        const QString suffix = QString("get_pin_by_id(%1)").arg(pinId);
 
         return buildPyCode(moduleCodePrefix, suffix, moduleId);
     }
 
-    QString PyCodeProvider::pyCodeModulePinName(u32 moduleId, QString pinName)
+    QString PyCodeProvider::pyCodeModulePinName(u32 moduleId, u32 pinId)
     {
-        return pyCodeModulePinByName(moduleId, pinName) + ".get_name()";
+        return pyCodeModulePinById(moduleId, pinId) + ".get_name()";
     }
 
-    QString PyCodeProvider::pyCodeModulePinDirection(u32 moduleId, QString pinName)
+    QString PyCodeProvider::pyCodeModulePinDirection(u32 moduleId, u32 pinId)
     {
-        return pyCodeModulePinByName(moduleId, pinName) + ".get_direction()";
+        return pyCodeModulePinById(moduleId, pinId) + ".get_direction()";
     }
 
-    QString PyCodeProvider::pyCodeModulePinType(u32 moduleId, QString pinName)
+    QString PyCodeProvider::pyCodeModulePinType(u32 moduleId, u32 pinId)
     {
-        return pyCodeModulePinByName(moduleId, pinName) + ".get_type()";
+        return pyCodeModulePinById(moduleId, pinId) + ".get_type()";
     }
 
     QString PyCodeProvider::pyCodeModulePins(u32 moduleId)
