@@ -1083,6 +1083,10 @@ namespace hal {
         EXPECT_EQ((a & b).substitute("B", ~c).get(), a & ~c);
         EXPECT_EQ((a & b).substitute("B", ~c).get(), a & ~c);
         EXPECT_EQ((a & b).substitute("B", b | c | d).get(),  a & (b | c | d));
+
+
+
+        EXPECT_EQ((a & b).substitute({{"A", c}, {"B", d}}).get(), c & d);
     }
 
     TEST(BooleanFunction, EvaluateSingleBit) {

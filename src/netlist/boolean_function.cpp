@@ -996,6 +996,43 @@ namespace hal
         }
     }
 
+    Result<BooleanFunction> BooleanFunction::substitute(const std::map<std::string, BooleanFunction>& substitutions) const
+    {
+        /// Helper function to find the replacement for a variable and substitute it with a Boolean function.
+        ///
+        /// @param[in] node - Node.
+        /// @param[in] operands - Operands of node.
+        /// @returns AST replacement.
+        auto substitute_variable = [substitutions](const auto& node, auto&& operands) -> BooleanFunction {
+            if (node.is_variable())
+            {
+                if (auto repl_it = substitutions.find(node.variable); repl_it != substitutions.end())
+                {
+                    return repl_it->second.clone();
+                }
+            }
+            return BooleanFunction(node.clone(), std::move(operands));
+        };
+
+        std::vector<BooleanFunction> stack;
+        for (const auto& node : this->m_nodes)
+        {
+            std::vector<BooleanFunction> operands;
+            std::move(stack.end() - static_cast<i64>(node.get_arity()), stack.end(), std::back_inserter(operands));
+            stack.erase(stack.end() - static_cast<i64>(node.get_arity()), stack.end());
+
+            stack.emplace_back(substitute_variable(node, std::move(operands)));
+        }
+
+        switch (stack.size())
+        {
+            case 1:
+                return OK(stack.back());
+            default:
+                return ERR("could not carry out multiple substitutions: validation failed, the operations may be imbalanced");
+        }
+    }
+
     Result<BooleanFunction::Value> BooleanFunction::evaluate(const std::unordered_map<std::string, Value>& inputs) const
     {
         // (0) workaround to preserve the API functionality
