@@ -108,6 +108,7 @@ namespace hal
         {
             for (auto& jcmpsd : jsaleae["composed"].GetArray())
             {
+                bool ok = true;
                 uint32_t id = 0;
                 std::string  name;
                 SaleaeDirectoryNetEntry::Type tp = SaleaeDirectoryNetEntry::None;
@@ -133,6 +134,11 @@ namespace hal
                             vdata.push_back(jdata.GetInt());
                         sdce.set_data(vdata);
                     }
+                    else
+                    {
+                        if (tp == SaleaeDirectoryNetEntry::Trigger || tp == SaleaeDirectoryNetEntry::Boolean)
+                            ok = false;
+                    }
                     if (jcmpsd.HasMember("filter"))
                     {
                         auto jfilter = jcmpsd["filter"].GetObject();
@@ -141,7 +147,7 @@ namespace hal
                         if (jfilter.HasMember("name")) name = jfilter["name"].GetString();
                         if (id) sdce.set_filter_entry(SaleaeDirectoryNetEntry(name,id));
                     }
-                    mComposedEntries.push_back(sdce);
+                    if (ok && !get_composed(id,tp)) mComposedEntries.push_back(sdce);
                 }
             }
         }
@@ -404,6 +410,22 @@ namespace hal
         }
     }
 
+    void SaleaeDirectoryComposedEntry::dump() const
+    {
+        const char* ctype[] = {"None", "Group", "Boolean", "Trigger" };
+        std::cout << ctype[mType] << ": " << mId << " <" << mName << ">\n";
+        for (const SaleaeDirectoryNetEntry& sdne : mNetEntries)
+            std::cout << "     " << sdne.id() << " <" << sdne.name() << ">\n";
+        std::cout << "data:";
+        for (int x : mData) std::cout << " " << x;
+        std::cout << "\nfilter:";
+        if (mFilterEntry)
+            std::cout << " " << mFilterEntry->id() << " <" << mFilterEntry->name() << ">\n";
+        else
+            std::cout << "---\n";
+        std::cout << "=============" << std::endl;
+    }
+
     void SaleaeDirectory::add_composed(SaleaeDirectoryComposedEntry sdce)
     {
 #ifndef STANDALONE_PARSER
@@ -411,7 +433,6 @@ namespace hal
 #endif
         mComposedEntries.push_back(sdce);
     }
-
 
     void SaleaeDirectory::remove_composed(uint32_t id, SaleaeDirectoryNetEntry::Type tp)
     {

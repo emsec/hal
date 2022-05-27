@@ -27,15 +27,19 @@
 
 namespace hal
 {
+    class GraphContext;
     class GraphContextSerializer : public ProjectSerializer
     {
+        GraphContext* mSelectedContext;
     public:
-        GraphContextSerializer() : ProjectSerializer("views") {;}
+        GraphContextSerializer() : ProjectSerializer("views"), mSelectedContext(nullptr) {;}
 
         std::string serialize(Netlist* netlist, const std::filesystem::path& savedir, bool isAutoSave);
 
         void deserialize(Netlist* netlist, const std::filesystem::path& loaddir);
 
-        bool restore(const std::filesystem::path& loaddir = std::filesystem::path()) const;
+        bool restore(const std::filesystem::path& loaddir = std::filesystem::path());
+
+        GraphContext* selectedContext() const { return mSelectedContext; }
     };
 }

@@ -37,6 +37,7 @@ namespace hal
     class PythonConsoleWidget;
     class PythonEditor;
     class GraphTabWidget;
+    class GraphContext;
     class GroupingManagerWidget;
     class ContextManagerWidget;
     class SelectionDetailsWidget;
@@ -168,9 +169,10 @@ namespace hal
         LoggerWidget* mLoggerWidget;
         GraphContextSerializer *mContextSerializer;
 
+        GraphContext* topModuleContextFactory();
         static SettingsItemDropdown* sSettingSortMechanism;
         static bool sSettingsInitialized;
-        static bool initializeSettins();
+        static bool initializeSettings();
 
 #ifdef HAL_STUDY
         SpecialLogContentManager* mSpecialLogContentManager;

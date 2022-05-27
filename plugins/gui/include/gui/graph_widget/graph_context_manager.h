@@ -341,7 +341,13 @@ namespace hal
         void clear();
 
         bool handleSaveTriggered(const QString& filename);
-        bool restoreFromFile(const QString &filename);
+
+        /**
+         * Restores all persisted context from .json file and returns selected one.
+         * @param filename The .json file with persisted context data.
+         * @return Selected restored context or nullptr if restore failed.
+         */
+        GraphContext* restoreFromFile(const QString &filename);
 
         QString nextDefaultName() const
         {

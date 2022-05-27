@@ -58,21 +58,22 @@ namespace hal
             mProjDir = QDir(QString::fromStdString(loaddir.string()));
     }
 
-    void SimulatorSerializer::restore()
+    std::vector<std::unique_ptr<NetlistSimulatorController>> SimulatorSerializer::restore()
     {
+        std::vector<std::unique_ptr<NetlistSimulatorController>> retval;
         ProjectManager* pm = ProjectManager::instance();
         std::string relname = pm->get_filename(m_name);
-        if (relname.empty()) return;
+        if (relname.empty()) return retval;
 
         NetlistSimulatorControllerPlugin* ctrlPlug = static_cast<NetlistSimulatorControllerPlugin*>(plugin_manager::get_plugin_instance("netlist_simulator_controller"));
-        if (!ctrlPlug) return;
+        if (!ctrlPlug) return retval;
         if (mProjDir.isEmpty())
             mProjDir = QDir(QString::fromStdString(pm->get_project_directory()));
 
 
         QFile simFile(mProjDir.absoluteFilePath(QString::fromStdString(relname)));
         if (!simFile.open(QIODevice::ReadOnly))
-            return;
+            return retval;
         QJsonDocument simDoc   = QJsonDocument::fromJson(simFile.readAll());
         const QJsonObject& simObj = simDoc.object();
 
@@ -86,11 +87,11 @@ namespace hal
                 QString workdir = simEntry["workdir"].toString();
                 if (workdir.isEmpty()) continue;
                 QString contrFile = QDir(workdir).absoluteFilePath("netlist_simulator_controller.json");
-                ctrlPlug->restore_simulator_controller(mNetlist,contrFile.toStdString());
+                retval.push_back(ctrlPlug->restore_simulator_controller(mNetlist,contrFile.toStdString()));
             }
         }
 
-
+        return retval;
     }
 
     extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
@@ -136,6 +137,7 @@ namespace hal
         NetlistSimulatorControllerMap::instance()->shutdown();
         QResource::unregisterResource("simulator_resources.rcc");
         if (sSimulationSettings) sSimulationSettings->sync();
+        if (sSimulatorSerializer) delete sSimulatorSerializer;
     }
 
     void NetlistSimulatorControllerPlugin::on_load()
@@ -146,6 +148,5 @@ namespace hal
         QDir userConfigDir(QString::fromStdString(utils::get_user_config_directory()));
         sSimulationSettings = new SimulationSettings(userConfigDir.absoluteFilePath("simulationsettings.ini"));
         sSimulatorSerializer = new SimulatorSerializer;
-        sSimulatorSerializer->restore();
     }
 }    // namespace hal

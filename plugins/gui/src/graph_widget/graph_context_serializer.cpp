@@ -12,14 +12,15 @@ namespace hal
         restore(loaddir);
     }
 
-    bool GraphContextSerializer::restore(const std::filesystem::path& loaddir) const
+    bool GraphContextSerializer::restore(const std::filesystem::path& loaddir)
     {
         ProjectManager* pm = ProjectManager::instance();
         std::string relname = pm->get_filename(m_name);
         if (relname.empty()) return false;
         std::filesystem::path filename = loaddir.empty() ? pm->get_project_directory() : loaddir;
         filename.append(relname);
-        return gGraphContextManager->restoreFromFile(QString::fromStdString(filename.string()));
+        mSelectedContext = gGraphContextManager->restoreFromFile(QString::fromStdString(filename.string()));
+        return (mSelectedContext != nullptr);
     }
 
     std::string GraphContextSerializer::serialize(Netlist* netlist, const std::filesystem::path& savedir, bool isAutoSave)

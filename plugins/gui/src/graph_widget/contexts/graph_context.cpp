@@ -6,6 +6,7 @@
 #include "gui/graph_widget/layout_locker.h"
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/graph_widget.h"
+#include "gui/context_manager_widget/context_manager_widget.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_def.h"
 #include "gui/implementations/qpoint_extension.h"
@@ -15,7 +16,6 @@
 #include <QJsonArray>
 #include "gui/main_window/main_window.h"
 #include "gui/settings/settings_items/settings_item_dropdown.h"
-#include <QDebug>
 
 namespace hal
 {
@@ -88,7 +88,6 @@ namespace hal
 
     void GraphContext::add(const QSet<u32>& modules, const QSet<u32>& gates, PlacementHint placement)
     {
-        qDebug() << "GraphContext::add (mod gat)" << modules << gates << mId << hex << (qintptr) this;
         QSet<u32> new_modules = modules - mModules;
         QSet<u32> new_gates   = gates - mGates;
 
@@ -642,7 +641,6 @@ namespace hal
 
     void GraphContext::requireSceneUpdate()
     {
-        qDebug() << "GraphContext::requireSceneUpdate()";
         if (LayoutLockerManager::instance()->canUpdate(this))
             startSceneUpdate();
     }
@@ -661,7 +659,6 @@ namespace hal
 
         exclusiveModuleCheck();
 
-        qDebug() << "GraphContext::startSceneUpdate()...mLayouter->layout()";
         mLayouter->layout();
         handleLayouterFinished();
     }
@@ -681,7 +678,6 @@ namespace hal
             default: break;
             }
         }
-        qDebug() << "GraphContext::abortLayout()...mLayouter->layout()";
         mLayouter->layout();
         handleLayouterFinished();
     }
@@ -797,7 +793,6 @@ namespace hal
 
         //scheduleSceneUpdate();
         setDirty(false);
-        qDebug() << "GraphContext::readFromFile" << mModules << mGates << mId << hex << (qintptr) this;
         return true;
     }
 
@@ -807,13 +802,14 @@ namespace hal
         json["name"] = mName;
         json["timestamp"] = mTimestamp.toString();
         json["exclusiveModuleId"] = (int) mExclusiveModuleId;
+        if (gContentManager->getContextManagerWidget()->getCurrentContext()==this)
+            json["selected"] = true;
 
         /// modules
         QJsonArray jsonMods;
         for (u32 id : mModules)
         {
             Node searchMod(id, Node::Module);
-            qDebug() << "access box" << getLayouter()->boxes().size() << mId << hex << (qintptr) this;
             const NodeBox* box = getLayouter()->boxes().boxForNode(searchMod);
             Q_ASSERT(box);
             QJsonObject jsonMod;

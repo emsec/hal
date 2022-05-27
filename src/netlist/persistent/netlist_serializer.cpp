@@ -323,7 +323,14 @@ namespace hal
             {
                 u32 parent_id = val["parent"].GetUint();
                 Module* sm    = nl->get_top_module();
-                if (parent_id != 0)
+                if (parent_id == 0)
+                {
+                    // top_module must not be created but might be renamed
+                    std::string top_module_name = val["name"].GetString();
+                    if (top_module_name != sm->get_name())
+                        sm->set_name(top_module_name);
+                }
+                else
                 {
                     sm = nl->create_module(val["id"].GetUint(), val["name"].GetString(), nl->get_module_by_id(parent_id));
                     if (sm == nullptr)

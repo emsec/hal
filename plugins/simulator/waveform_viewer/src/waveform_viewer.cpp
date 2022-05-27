@@ -51,6 +51,14 @@ namespace hal
         return new WaveformViewer;
     }
 
+    void WaveformViewer::restoreFromProject()
+    {
+        NetlistSimulatorControllerPlugin* ctrlPlug = static_cast<NetlistSimulatorControllerPlugin*>(plugin_manager::get_plugin_instance("netlist_simulator_controller"));
+        if (!ctrlPlug || !ctrlPlug->sSimulatorSerializer) return;
+        for (std::unique_ptr<NetlistSimulatorController>& ctrlRef : ctrlPlug->sSimulatorSerializer->restore())
+            takeControllerOwnership(ctrlRef);
+    }
+
     WaveformViewer::WaveformViewer(QWidget *parent)
         : ContentWidget("VcdViewer",parent),
           mVisualizeNetState(false), mCurrentWaveWidget(nullptr)

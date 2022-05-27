@@ -48,7 +48,7 @@ namespace hal
 
         void deserialize(Netlist* netlist, const std::filesystem::path& loaddir) override;
 
-        void restore();
+        std::vector<std::unique_ptr<NetlistSimulatorController>> restore();
     };
 
     class PLUGIN_API NetlistSimulatorControllerPlugin : public BasePluginInterface

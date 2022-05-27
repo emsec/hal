@@ -521,13 +521,16 @@ namespace hal
         mContextTableModel->clear();
     }
 
-    bool GraphContextManager::restoreFromFile(const QString& filename)
+    GraphContext* GraphContextManager::restoreFromFile(const QString& filename)
     {
         QFile jsFile(filename);
         if (!jsFile.open(QIODevice::ReadOnly))
-            return false;
+            return nullptr;
         QJsonDocument jsonDoc   = QJsonDocument::fromJson(jsFile.readAll());
         const QJsonObject& json = jsonDoc.object();
+        GraphContext* firstContext = nullptr;
+        GraphContext* selectedContext = nullptr;
+
         if (json.contains("views") && json["views"].isArray())
         {
             QJsonArray jsonViews = json["views"].toArray();
@@ -552,8 +555,8 @@ namespace hal
                         renameGraphContextAction(context,viewName);
                     if (!context->readFromFile(jsonView))
                     {
-                        log_warning("gui", "failed to read view file {}.", filename.toStdString());
-                        return false;
+                        log_warning("gui", "failed to set up existing context ID={} from view file {}.", context->id(), filename.toStdString());
+                        continue;
                     }
                 }
                 else
@@ -568,8 +571,9 @@ namespace hal
 
                     if (!context->readFromFile(jsonView))
                     {
-                        log_warning("gui", "failed to read view file {}.", filename.toStdString());
-                        return false;
+                        log_warning("gui", "failed to create context context ID={} view file {}.", context->id(), filename.toStdString());
+                        deleteGraphContext(context);
+                        continue;
                     }
 
                     mContextTableModel->beginInsertContext(context);
@@ -580,10 +584,15 @@ namespace hal
 
                 if (jsonView.contains("exclusiveModuleId"))
                     context->setExclusiveModuleId(jsonView["exclusiveModuleId"].toInt(),false);
+                if (jsonView.contains("selected"))
+                    selectedContext = context;
+                if (!firstContext)
+                    firstContext = context;
                 context->setDirty(false);
             }
         }
-        return true;
+        if (selectedContext) return selectedContext;
+        return firstContext;
     }
 
     bool GraphContextManager::handleSaveTriggered(const QString& filename)

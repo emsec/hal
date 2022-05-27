@@ -92,10 +92,12 @@ namespace hal {
         mTreeView->verticalScrollBar()->setValue(0);
         setSizes({320,880});
         mTreeModel->restore();
+        qDebug() << "+++ WaveWidget" << mController->get_id() <<  hex << (qintptr) this;
     }
 
     WaveWidget::~WaveWidget()
     {
+        qDebug() << "--- WaveWidget" << mController->get_id() <<  hex << (qintptr) this;
     }
 
     void WaveWidget::refreshNetNames()

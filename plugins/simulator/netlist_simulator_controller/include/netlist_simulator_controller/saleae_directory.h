@@ -161,6 +161,9 @@ namespace hal
 
         /// Setter for filter pointer described above.
         void set_filter_entry(const SaleaeDirectoryNetEntry& sdne);
+
+        /// Dump to stdout
+        void dump() const;
     };
 
     /**

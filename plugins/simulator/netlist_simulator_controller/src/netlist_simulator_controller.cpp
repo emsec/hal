@@ -589,6 +589,7 @@ namespace hal
     {
         for (const SaleaeDirectoryComposedEntry& sdce : sd.get_composed())
         {
+            sdce.dump();
             QVector<WaveData*> wds;
             for (const SaleaeDirectoryNetEntry& sdne : sdce.get_nets())
             {
