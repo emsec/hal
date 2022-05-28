@@ -17,27 +17,57 @@ template<typename T> void print_element(T t, const int& width, bool align)
     }
 }
 
-void saleae_ls(string path, int size) {
-    if (path == "") {
-        path = "./saleae.json";
+bool check_size(bool necessary, char op, int size_val, int compare_val) {
+    bool ret = true;
+    if (necessary) {
+        ret = false;
+        switch (op) {
+            case '+':
+                if (compare_val > size_val) ret = true;
+                break;
+            case '-':
+                if (compare_val < size_val) ret = true;
+                break;
+            default:
+                if (compare_val == size_val) ret = true;
+                break;
+        }
     }
-    else {
-        path += "/saleae.json";
+    return ret;
+}
+
+void saleae_ls(string path, string size) {
+    path = (path == "") ? "./saleae.json" : path + "/saleae.json";
+
+    bool size_necessary = false;
+    char size_op = '=';
+    int size_val = 0;
+    if (size != "") {
+        if (size[0] == '+' || size[0] == '-') {
+            size_op = size[0];
+            size_val = stoi(size.substr(1));
+        }
+        else {
+            size_val = stoi(size);
+        }
+        size_necessary = true;
     }
+
+
 
     SaleaeDirectory *sd = new SaleaeDirectory(path, false);
-
-
     vector<SaleaeDirectoryNetEntry> NetEntries = sd->dump();
     int format_length [6] = {7,8,19,11,10,15};
     for (const SaleaeDirectoryNetEntry& sdne : sd->dump()) {
-        format_length[0] = (format_length[0] < to_string(sdne.id()).length()) ? to_string(sdne.id()).length() : format_length[0];
-        format_length[1] = (format_length[1] < sdne.name().length()) ? sdne.name().length() : format_length[1];
         for (const SaleaeDirectoryFileIndex& sdfi : sdne.indexes()) {
-            format_length[2] = (format_length[2] < to_string(sdfi.numberValues()).length()) ? to_string(sdfi.numberValues()).length() : format_length[2];
-            format_length[3] = (format_length[3] < to_string(sdfi.beginTime()).length()) ? to_string(sdfi.beginTime()).length() : format_length[3];
-            format_length[4] = (format_length[4] < to_string(sdfi.endTime()).length()) ? to_string(sdfi.endTime()).length() : format_length[4];
-            format_length[5] = (format_length[5] < to_string(sdfi.index()).length() + 12) ? to_string(sdfi.index()).length() + 12: format_length[5];
+            if (check_size(size_necessary, size_op, size_val, sdfi.numberValues())) {
+                format_length[0] = (format_length[0] < to_string(sdne.id()).length()) ? to_string(sdne.id()).length() : format_length[0];
+                format_length[1] = (format_length[1] < sdne.name().length()) ? sdne.name().length() : format_length[1];
+                format_length[2] = (format_length[2] < to_string(sdfi.numberValues()).length()) ? to_string(sdfi.numberValues()).length() : format_length[2];
+                format_length[3] = (format_length[3] < to_string(sdfi.beginTime()).length()) ? to_string(sdfi.beginTime()).length() : format_length[3];
+                format_length[4] = (format_length[4] < to_string(sdfi.endTime()).length()) ? to_string(sdfi.endTime()).length() : format_length[4];
+                format_length[5] = (format_length[5] < to_string(sdfi.index()).length() + 12) ? to_string(sdfi.index()).length() + 12: format_length[5];
+            }
         }
     }
     int abs_length = format_length[0] + format_length[1] + format_length[2] + format_length[3] + format_length[4] + format_length[5] + 16;
@@ -52,16 +82,18 @@ void saleae_ls(string path, int size) {
     cout << endl;
     cout << '|' << string(abs_length, '-') << '|' << endl;
     for (const SaleaeDirectoryNetEntry& sdne : sd->dump()) {
-        cout << '|';
-        print_element(sdne.id(), format_length[0], false);
-        print_element(sdne.name(), format_length[1], true);
         for (const SaleaeDirectoryFileIndex& sdfi : sdne.indexes()) {
-            print_element(sdfi.numberValues(), format_length[2], false);
-            print_element(sdfi.beginTime(), format_length[3], false);
-            print_element(sdfi.endTime(), format_length[4], false);
-            print_element("digital_" + to_string(sdfi.index()) + ".bin", format_length[5], true);
+            if (check_size(size_necessary, size_op, size_val, sdfi.numberValues())) {
+                cout << '|';
+                print_element(sdne.id(), format_length[0], false);
+                print_element(sdne.name(), format_length[1], true);
+                print_element(sdfi.numberValues(), format_length[2], false);
+                print_element(sdfi.beginTime(), format_length[3], false);
+                print_element(sdfi.endTime(), format_length[4], false);
+                print_element("digital_" + to_string(sdfi.index()) + ".bin", format_length[5], true);
+                cout << endl;
+            }
         }
-        cout << endl;
     }
 }
 
@@ -86,7 +118,7 @@ int main(int argc, const char* argv[]) {
         cli_options.add({"-i", "--id"}, "list only entries where ID matches entry in list. Entries are separated by comma. A single entry can be either an ID or a range sepearated by hyphen.", {ProgramOptions::A_REQUIRED_PARAMETER});
 
         ProgramArguments args = cli_options.parse(argc, argv);
-        saleae_ls(args.get_parameter("--dir"), 0);
+        saleae_ls(args.get_parameter("--dir"), args.get_parameter("--size"));
     }
     else if (args.is_option_set("cat")) {
         cli_options.remove("ls");
