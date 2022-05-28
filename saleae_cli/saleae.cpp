@@ -8,6 +8,7 @@
 using namespace std;
 using namespace hal;
 
+// template for space saving printing
 template<typename T> void print_element(T t, const int& width, bool align) {
     if (align) {
         cout << left << setw(width) << setfill(' ') << t << " | ";
@@ -17,6 +18,7 @@ template<typename T> void print_element(T t, const int& width, bool align) {
     }
 }
 
+// check, given the size, whether an entry may be printed
 bool check_size(bool necessary, char op, int size_val, int compare_val) {
     bool ret = true;
     if (necessary) {
@@ -36,6 +38,7 @@ bool check_size(bool necessary, char op, int size_val, int compare_val) {
     return ret;
 }
 
+// check, given an id list, whether an entry may be printed
 bool check_ids(bool necessary, vector<int> ids, int id_to_check) {
     bool ret = true;
     if (necessary) {
@@ -47,13 +50,17 @@ bool check_ids(bool necessary, vector<int> ids, int id_to_check) {
     return ret;
 }
 
+// saleae ls-tool
 void saleae_ls(string path, string size, string ids) {
+    // handle --dir option
     path = (path == "") ? "./saleae.json" : path + "/saleae.json";
 
+    // handle --size option
     bool size_necessary = false;
     char size_op = '=';
     int size_val = 0;
     if (size != "") {
+        size_necessary = true;
         if (size[0] == '+' || size[0] == '-') {
             size_op = size[0];
             size_val = stoi(size.substr(1));
@@ -61,9 +68,9 @@ void saleae_ls(string path, string size, string ids) {
         else {
             size_val = stoi(size);
         }
-        size_necessary = true;
     }
 
+    // handle --id option
     bool ids_necessary = false;
     vector<int> id_vector;
     if (ids != "") {
@@ -97,8 +104,7 @@ void saleae_ls(string path, string size, string ids) {
         }
     }
 
-
-
+    // collect length for better formatting
     SaleaeDirectory *sd = new SaleaeDirectory(path, false);
     vector<SaleaeDirectoryNetEntry> NetEntries = sd->dump();
     int format_length [6] = {7,8,19,11,10,15};
@@ -116,6 +122,7 @@ void saleae_ls(string path, string size, string ids) {
     }
     int abs_length = format_length[0] + format_length[1] + format_length[2] + format_length[3] + format_length[4] + format_length[5] + 16;
 
+    // print saleae dir content
     cout << string(abs_length + 2, '-') << endl;
     print_element("| Net ID", format_length[0], true);
     print_element("Net Name", format_length[1], true);
@@ -142,16 +149,12 @@ void saleae_ls(string path, string size, string ids) {
 }
 
 
-
-
-
 int main(int argc, const char* argv[]) {
     /* initialize and parse cli options */
     ProgramOptions cli_options("cli options");
     cli_options.add("--help", "print help messages");
     cli_options.add("ls", "Lists content of saleae directory file saleae.json");
     cli_options.add("cat", "Dump content of binary file into console", {""});
-
     ProgramArguments args = cli_options.parse(argc, argv);
 
     if (args.is_option_set("ls")) {
@@ -172,12 +175,9 @@ int main(int argc, const char* argv[]) {
         cli_options.add({"-b", "--only-data"}, "dump only data including start value");
     }
 
-
     bool unknown_option_exists = false;
     /* process help output */
     if (args.is_option_set("--help") || args.get_set_options().size() == 0 || unknown_option_exists) {
         std::cout << cli_options.get_options_string() << std::endl;
     }
-
-    
 }
