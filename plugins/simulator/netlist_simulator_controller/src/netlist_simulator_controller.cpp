@@ -580,20 +580,37 @@ namespace hal
 
     void NetlistSimulatorController::restoreComposed(const SaleaeDirectory& sd)
     {
-        for (const SaleaeDirectoryComposedEntry& sdce : sd.get_composed())
+        for (const SaleaeDirectoryComposedEntry& sdce : sd.get_composed_list())
         {
             QVector<WaveData*> wds;
-            for (const SaleaeDirectoryNetEntry& sdne : sdce.get_nets())
+            for (int childKey : sdce.get_children())
             {
-                int iwave = mWaveDataList->waveIndexByNetId(sdne.id());
-                if (iwave >= 0) wds.append(mWaveDataList->at(iwave));
+                WaveData* wd = nullptr;
+                int mType = childKey / SaleaeDirectoryNetEntry::sComposedBaseKey;
+                int index = childKey % SaleaeDirectoryNetEntry::sComposedBaseKey;
+                switch (mType)
+                {
+                case SaleaeDirectoryNetEntry::Group:
+                    wd = mWaveDataList->mDataGroups.value(index);
+                    break;
+                case SaleaeDirectoryNetEntry::Boolean:
+                    wd = mWaveDataList->mDataBooleans.value(index);
+                    break;
+                case SaleaeDirectoryNetEntry::Trigger:
+                    wd = mWaveDataList->mDataTrigger.value(index);
+                    break;
+                default:
+                    int iwave = mWaveDataList->waveIndexByNetId(childKey);
+                    if (iwave >= 0) wd = mWaveDataList->at(iwave);
+                }
+                if (wd) wds.append(wd);
             }
             QList<int> data;
             for (int dat: sdce.get_data())
             {
                 data.append(dat);
             }
-            if (!wds.isEmpty() && wds.size() == (int) sdce.get_nets().size())
+            if (!wds.isEmpty() && wds.size() == (int) sdce.get_children().size())
             {
                 switch (sdce.type())
                 {
@@ -613,10 +630,29 @@ namespace hal
                     WaveDataTrigger* wdTrig = new WaveDataTrigger(mWaveDataList,wds.toList(),data);
                     if (sdce.get_filter_entry())
                     {
-                        int iwave = mWaveDataList->waveIndexByNetId(sdce.get_filter_entry()->id());
-                        WaveData* wd = iwave >= 0 ? mWaveDataList->at(iwave) : nullptr;
-                        if (!wd) wd = mWaveDataList->waveDataByName(sdce.get_filter_entry()->name());
-                        if (wd) wdTrig->set_filter_wave(wd);
+                        int filterKey = sdce.get_filter_entry();
+                        if (filterKey > 0)
+                        {
+                            WaveData* wd = nullptr;
+                            int mType = filterKey / SaleaeDirectoryNetEntry::sComposedBaseKey;
+                            int index = filterKey % SaleaeDirectoryNetEntry::sComposedBaseKey;
+                            switch (mType)
+                            {
+                            case SaleaeDirectoryNetEntry::Group:
+                                wd = mWaveDataList->mDataGroups.value(index);
+                                break;
+                            case SaleaeDirectoryNetEntry::Boolean:
+                                wd = mWaveDataList->mDataBooleans.value(index);
+                                break;
+                            case SaleaeDirectoryNetEntry::Trigger:
+                                wd = mWaveDataList->mDataTrigger.value(index);
+                                break;
+                            default:
+                                int iwave = mWaveDataList->waveIndexByNetId(filterKey);
+                                if (iwave >= 0) wd = mWaveDataList->at(iwave);
+                            }
+                            if (wd) wdTrig->set_filter_wave(wd);
+                        }
                     }
                     break;
                 }
