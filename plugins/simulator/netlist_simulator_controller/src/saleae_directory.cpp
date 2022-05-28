@@ -82,6 +82,7 @@ namespace hal
             }
         }
 
+        // be backward compatible and read groups tag
         if (jsaleae.HasMember("groups"))
         {
             for (auto& jgrp : jsaleae["groups"].GetArray())
@@ -96,11 +97,10 @@ namespace hal
                     for (auto& jgnet : jgrp["nets"].GetArray())
                     {
                         uint32_t nid  = jgnet["id"].GetInt();
-                        std::string nname = jgnet["name"].GetString();
-                        sdce.add_net(SaleaeDirectoryNetEntry(nname,nid));
+                        sdce.add_child(nid);
                     }
                 }
-                mComposedEntries.push_back(sdce);
+                mComposedEntryMap[sdce.uniqueKey()] = sdce;
             }
         }
 
@@ -123,8 +123,14 @@ namespace hal
                         for (auto& jgnet : jcmpsd["nets"].GetArray())
                         {
                             uint32_t nid  = jgnet["id"].GetInt();
-                            std::string nname = jgnet["name"].GetString();
-                            sdce.add_net(SaleaeDirectoryNetEntry(nname,nid));
+                            sdce.add_child(nid);
+                        }
+                    }
+                    if (jcmpsd.HasMember("children"))
+                    {
+                        for (auto& jchld : jcmpsd["children"].GetArray())
+                        {
+                            sdce.add_child(jchld.GetInt());
                         }
                     }
                     if (jcmpsd.HasMember("data"))
@@ -141,13 +147,9 @@ namespace hal
                     }
                     if (jcmpsd.HasMember("filter"))
                     {
-                        auto jfilter = jcmpsd["filter"].GetObject();
-                        uint32_t id = jfilter.HasMember("id") ? jfilter["id"].GetUint() : 0;
-                        std::string name;
-                        if (jfilter.HasMember("name")) name = jfilter["name"].GetString();
-                        if (id) sdce.set_filter_entry(SaleaeDirectoryNetEntry(name,id));
+                        sdce.set_filter_entry(jcmpsd["filter"].GetInt());
                     }
-                    if (ok && !get_composed(id,tp)) mComposedEntries.push_back(sdce);
+                    mComposedEntries.push_back(sdce);
                 }
             }
         }
@@ -179,22 +181,20 @@ namespace hal
             jnet.close();
         }
         jnets.close();
-        if (!mComposedEntries.empty())
+        if (!mComposedEntryMap.empty())
         {
             JsonWriteArray& jcmpsds = jsaleae.add_array(("composed"));
-            for (const SaleaeDirectoryComposedEntry& cmpsd : mComposedEntries)
+            for (auto it=mComposedEntryMap.begin(); it!=mComposedEntryMap.end(); ++it)
             {
+                const SaleaeDirectoryComposedEntry& cmpsd = it->second;
                 JsonWriteObject& jcmpsd = jcmpsds.add_object();
                 jcmpsd["id"] = (int) cmpsd.id();
                 jcmpsd["name"] = cmpsd.name();
                 jcmpsd["type"] = (int) cmpsd.type();
-                JsonWriteArray& jgnets = jcmpsd.add_array("nets");
-                for (const SaleaeDirectoryNetEntry& net : cmpsd.get_nets())
+                JsonWriteArray& jgnets = jcmpsd.add_array("children");
+                for (int childKey : cmpsd.get_children())
                 {
-                    JsonWriteObject& jgnet = jgnets.add_object();
-                    jgnet["id"] = (int) net.id();
-                    jgnet["name"] = net.name();
-                    jgnet.close();
+                    jgnets << childKey;
                 }
                 jgnets.close();
                 if (!cmpsd.get_data().empty())
@@ -206,10 +206,7 @@ namespace hal
                 }
                 if (cmpsd.get_filter_entry())
                 {
-                    JsonWriteObject& jfilter = jcmpsd.add_object("filter");
-                    jfilter["id"] = (int) cmpsd.get_filter_entry()->id();
-                    jfilter["name"] = cmpsd.get_filter_entry()->name();
-                    jfilter.close();
+                    jcmpsd["filter"] = cmpsd.get_filter_entry();
                 }
                 jcmpsd.close();
             }
@@ -377,34 +374,24 @@ namespace hal
     }
 
     SaleaeDirectoryComposedEntry::SaleaeDirectoryComposedEntry(const SaleaeDirectoryComposedEntry& other)
-        : SaleaeDirectoryNetEntry(other), mNetEntries(other.mNetEntries), mData(other.mData), mFilterEntry(nullptr)
-    {
-        if (other.mFilterEntry) mFilterEntry = new SaleaeDirectoryNetEntry(*other.mFilterEntry);
-    }
+        : SaleaeDirectoryNetEntry(other), mChildKeys(other.mChildKeys), mData(other.mData), mFilterEntry(other.mFilterEntry)
+    {;}
 
     SaleaeDirectoryComposedEntry::~SaleaeDirectoryComposedEntry()
-    {
-        if (mFilterEntry) delete mFilterEntry;
-    }
+    {;}
 
     void SaleaeDirectoryComposedEntry::set_data(const std::vector<int>& dat)
     {
         mData = dat;
     }
 
-    void SaleaeDirectoryComposedEntry::set_filter_entry(const SaleaeDirectoryNetEntry& sdne)
+    void SaleaeDirectoryComposedEntry::remove_child(int key)
     {
-        mFilterEntry = new SaleaeDirectoryNetEntry(sdne);
-    }
-
-
-    void SaleaeDirectoryComposedEntry::remove_net(const SaleaeDirectoryNetEntry& sdne)
-    {
-        auto it = mNetEntries.begin();
-        while (it != mNetEntries.end())
+        auto it = mChildKeys.begin();
+        while (it != mChildKeys.end())
         {
-            if ((sdne.id() && sdne.id() == it->id()) || sdne.name() == it->name())
-                it = mNetEntries.erase(it);
+            if (*it == key)
+                it = mChildKeys.erase(it);
             else
                 ++it;
         }
@@ -426,12 +413,18 @@ namespace hal
         std::cout << "=============" << std::endl;
     }
 
-    void SaleaeDirectory::add_composed(SaleaeDirectoryComposedEntry sdce)
+    int SaleaeDirectoryNetEntry::uniqueKey() const
+    {
+        if (!mId) return 0;
+        return mType * sComposedBaseKey + mId;
+    }
+
+    void SaleaeDirectory::add_or_replace_composed(SaleaeDirectoryComposedEntry sdce)
     {
 #ifndef STANDALONE_PARSER
         SaleaeDirectoryStoreRequest save(this);
 #endif
-        mComposedEntries.push_back(sdce);
+        mComposedEntryMap[sdce.uniqueKey()] = sdce;
     }
 
     void SaleaeDirectory::remove_composed(uint32_t id, SaleaeDirectoryNetEntry::Type tp)
@@ -439,29 +432,28 @@ namespace hal
 #ifndef STANDALONE_PARSER
         SaleaeDirectoryStoreRequest save(this);
 #endif
-        auto it = mComposedEntries.begin();
-        while (it != mComposedEntries.end())
-        {
-            if (id == it->id() && tp == it->type())
-            {
-                mComposedEntries.erase(it);
-                return;
-            }
-            ++it;
-        }
+        SaleaeDirectoryComposedEntry needle("search",id,tp);
+        auto it = mComposedEntryMap.find(needle.uniqueKey());
+        if (it != mComposedEntryMap.end())
+            mComposedEntryMap.erase(it);
     }
 
-    SaleaeDirectoryComposedEntry* SaleaeDirectory::get_composed(uint32_t id, SaleaeDirectoryNetEntry::Type tp)
+    SaleaeDirectoryComposedEntry SaleaeDirectory::get_composed(uint32_t id, SaleaeDirectoryNetEntry::Type tp) const
     {
-        auto it = mComposedEntries.begin();
-        while (it != mComposedEntries.end())
-        {
-            if (id == it->id() && tp == it->type())
-                return &(*it);
-            ++it;
-        }
-        return nullptr;
+        SaleaeDirectoryComposedEntry needle("search",id,tp);
+        auto it = mComposedEntryMap.find(needle.uniqueKey());
+        if (it == mComposedEntryMap.end()) return SaleaeDirectoryComposedEntry();
+        return it->second;
     }
+
+    std::vector<SaleaeDirectoryComposedEntry> SaleaeDirectory::get_composed_list() const
+    {
+        std::vector<SaleaeDirectoryComposedEntry> retval;
+        for (auto it=mComposedEntryMap.begin(); it!=mComposedEntryMap.end(); ++it)
+            retval.push_back(it->second);
+        return retval;
+    }
+
 
 #ifndef STANDALONE_PARSER
     bool SaleaeDirectoryStoreRequest::sWriteDisabled = false;

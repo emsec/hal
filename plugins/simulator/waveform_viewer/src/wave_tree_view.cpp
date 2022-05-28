@@ -233,8 +233,12 @@ namespace hal {
 
                 if (tp != SaleaeDirectoryNetEntry::None)
                 {
-                    SaleaeDirectoryComposedEntry* sdce = mWaveDataList->saleaeDirectory().get_composed(wd->id(),tp);
-                    if (sdce) sdce->rename(newName.toStdString());
+                    SaleaeDirectoryComposedEntry sdce = mWaveDataList->saleaeDirectory().get_composed(wd->id(),tp);
+                    if (!sdce.isNull())
+                    {
+                        sdce.rename(newName.toStdString());
+                        mWaveDataList->saleaeDirectory().add_or_replace_composed(sdce);
+                    }
                 }
                 else
                     mWaveDataList->saleaeDirectory().rename_net(wd->id(),newName.toStdString());

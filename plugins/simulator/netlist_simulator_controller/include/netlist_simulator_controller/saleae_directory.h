@@ -117,6 +117,11 @@ namespace hal
 
         /// Return last data file index (currently there should be no more than one)
         int dataFileIndex() const; // TODO : time as argument
+
+        /// Unique key as reference (used e.g. in mComposedEntryMap)
+        int uniqueKey() const;
+
+        static const int sComposedBaseKey = 1 << 16;
     };
 
     /**
@@ -129,26 +134,23 @@ namespace hal
     {
         friend class SaleaeDirectory;
     private:
-        std::vector<SaleaeDirectoryNetEntry> mNetEntries;
+        std::vector<int> mChildKeys;
         std::vector<int> mData;
-        SaleaeDirectoryNetEntry* mFilterEntry;
+        int mFilterEntry;
     public:
-        SaleaeDirectoryComposedEntry(const std::string nam, uint32_t id_=0, Type tp=None)
-            : SaleaeDirectoryNetEntry(nam,id_,tp), mFilterEntry(nullptr) {;}
+        SaleaeDirectoryComposedEntry(const std::string nam=std::string(), uint32_t id_=0, Type tp=None)
+            : SaleaeDirectoryNetEntry(nam,id_,tp), mFilterEntry(0) {;}
         SaleaeDirectoryComposedEntry(const SaleaeDirectoryComposedEntry& other);
         ~SaleaeDirectoryComposedEntry();
 
-        /// Add an additional child net to net group
-        void add_net(SaleaeDirectoryNetEntry sdne) { mNetEntries.push_back(sdne); }
+        /// Add an additional child key to composed
+        void add_child(int key) { mChildKeys.push_back(key); }
 
-        /// Remove child entry from net group
-        void remove_net(const SaleaeDirectoryNetEntry& sdne);
+        /// Remove child key from composed
+        void remove_child(int key);
 
-        /// Returns reference to child entries allowing modifications
-        std::vector<SaleaeDirectoryNetEntry>& get_nets() { return mNetEntries; }
-
-        /// Access to child entries without allowing modifications
-        const std::vector<SaleaeDirectoryNetEntry>& get_nets() const { return mNetEntries; }
+        /// Access to child keys
+        const std::vector<int>& get_children() const {return mChildKeys; }
 
         /// Getter for data list which is used  a) Boolean: list of accepted(=true) net combinations b) Trigger: target value when to trigger
         const std::vector<int>& get_data() const { return mData; }
@@ -157,10 +159,13 @@ namespace hal
         void set_data(const std::vector<int>& dat);
 
         /// Only used for trigger: Pointer to filter (suppress trigger unless value 1), null if no filter used
-        const SaleaeDirectoryNetEntry* get_filter_entry() const { return mFilterEntry; }
+        int get_filter_entry() const { return mFilterEntry; }
 
         /// Setter for filter pointer described above.
-        void set_filter_entry(const SaleaeDirectoryNetEntry& sdne);
+        void set_filter_entry(int filt) { mFilterEntry = filt; }
+
+        /// Test for null
+        bool isNull() const { return !mId || !mType; }
 
         /// Dump to stdout
         void dump() const;
@@ -187,7 +192,7 @@ namespace hal
     private:
         std::string mDirectoryFile;
         std::vector<SaleaeDirectoryNetEntry> mNetEntries;
-        std::vector<SaleaeDirectoryComposedEntry> mComposedEntries;
+        std::unordered_map<int,SaleaeDirectoryComposedEntry> mComposedEntryMap;
 
         std::unordered_map<uint32_t,int> mById;
         std::unordered_map<std::string, int> mByName;
@@ -245,15 +250,15 @@ namespace hal
         std::vector<ListEntry> get_net_list() const;
 
         /// Add composed waveform entry (Group, Boolean, Trigger)
-        void add_composed(SaleaeDirectoryComposedEntry sdce);
+        void add_or_replace_composed(SaleaeDirectoryComposedEntry sdce);
 
         /// Remove composed waveform entry identified by id an type
         void remove_composed(uint32_t id, SaleaeDirectoryNetEntry::Type tp);
 
         /// Getter for pointer to composed waveform entry allowing modifications
-        SaleaeDirectoryComposedEntry* get_composed(uint32_t id, SaleaeDirectoryNetEntry::Type tp);
+        SaleaeDirectoryComposedEntry get_composed(uint32_t id, SaleaeDirectoryNetEntry::Type tp) const;
 
-        /// Getter for readonly list of all composed waveform entries
-        const std::vector<SaleaeDirectoryComposedEntry>& get_composed() const { return mComposedEntries; };
+        /// Getter to list of all composed waveform entries
+        std::vector<SaleaeDirectoryComposedEntry> get_composed_list() const;
     };
 }

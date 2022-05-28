@@ -740,6 +740,16 @@ namespace hal
          */
         Result<BooleanFunction> substitute(const std::string& variable_name, const BooleanFunction& function) const;
 
+
+        /**
+         * Substitute multiple variables with other Boolean functions at once.
+         * The operation is applied to all instances of the variable in the function.
+         *
+         * @param[in] substitutions - A map from the variable name to the function to replace the variable with.
+         * @returns Ok() and the resulting Boolean function on success, an error otherwise.
+         */
+        Result<BooleanFunction> substitute(const std::map<std::string, BooleanFunction>& substitutions) const;
+
         /**
          * Evaluates a Boolean function comprising only single-bit variables using the given input values.
          * 
