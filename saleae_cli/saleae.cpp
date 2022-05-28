@@ -8,6 +8,22 @@ using namespace hal;
 
 
 
+void saleae_ls(string path, int size) {
+    if (path == "") {
+        path = "./saleae.json";
+    }
+    else {
+        path += "/saleae.json";
+    }
+
+    cout << path << endl;
+    SaleaeDirectory *sd = new SaleaeDirectory(path, false);
+    sd->dump();
+}
+
+
+
+
 
 int main(int argc, const char* argv[]) {
     /* initialize and parse cli options */
@@ -24,6 +40,9 @@ int main(int argc, const char* argv[]) {
         cli_options.add({"-d", "--dir"}, "lists saleae directory from directory given by absolute or relative path name", {ProgramOptions::A_REQUIRED_PARAMETER});
         cli_options.add({"-s", "--size"}, "lists only entries with given number of waveform events", {ProgramOptions::A_REQUIRED_PARAMETER});
         cli_options.add({"-i", "--id"}, "list only entries where ID matches entry in list. Entries are separated by comma. A single entry can be either an ID or a range sepearated by hyphen.", {ProgramOptions::A_REQUIRED_PARAMETER});
+
+        ProgramArguments args = cli_options.parse(argc, argv);
+        saleae_ls(args.get_parameter("--dir"), 0);
     }
     else if (args.is_option_set("cat")) {
         cli_options.remove("ls");
@@ -40,6 +59,5 @@ int main(int argc, const char* argv[]) {
         std::cout << cli_options.get_options_string() << std::endl;
     }
 
-    SaleaeDirectory *sd = new SaleaeDirectory("/home/parallels/Desktop/saleae/saleae.json", false);
-    //sd->dump();
+    
 }
