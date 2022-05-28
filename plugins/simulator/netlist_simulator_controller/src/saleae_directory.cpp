@@ -150,17 +150,18 @@ namespace hal
     }
 #endif
   
-    void SaleaeDirectory::dump() const
+    std::vector<SaleaeDirectoryNetEntry> SaleaeDirectory::dump() const
     {
-        std::cout << "<" << mDirectoryFile << ">" << std::endl;
-        for (const SaleaeDirectoryNetEntry& sdne : mNetEntries)
-        {
-            std::cout << sdne.name() << "[" << sdne.id() << "] :";
-            for (const SaleaeDirectoryFileIndex& sdfi : sdne.indexes())
-                std::cout << " <" << sdfi.index() << "," << sdfi.beginTime() << "," << sdfi.endTime() << "," << sdfi.numberValues() << ">";
-            std::cout << std::endl;
-        }
-        std::cout << "---------------------" << std::endl;
+        // std::cout << "<" << mDirectoryFile << ">" << std::endl;
+        // for (const SaleaeDirectoryNetEntry& sdne : mNetEntries)
+        // {
+        //     std::cout << sdne.name() << "[" << sdne.id() << "] :";
+        //     for (const SaleaeDirectoryFileIndex& sdfi : sdne.indexes())
+        //         std::cout << " <" << sdfi.index() << "," << sdfi.beginTime() << "," << sdfi.endTime() << "," << sdfi.numberValues() << ">";
+        //     std::cout << std::endl;
+        // }
+        // std::cout << "---------------------" << std::endl;
+        return mNetEntries;
     }
 
     void SaleaeDirectory::update_file_indexes(std::unordered_map<int,SaleaeDirectoryFileIndex>& fileIndexes)

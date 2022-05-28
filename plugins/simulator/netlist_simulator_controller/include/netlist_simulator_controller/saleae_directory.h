@@ -106,7 +106,7 @@ namespace hal
         SaleaeDirectory(const std::string& path, bool create=false);
         bool parse_json();
         void add_or_replace_net(SaleaeDirectoryNetEntry& sdne);
-        void dump() const;
+        std::vector<SaleaeDirectoryNetEntry> dump() const;
         void update_file_indexes(std::unordered_map<int, SaleaeDirectoryFileIndex>& fileIndexes);
         void rename_net(uint32_t id, const std::string& nam);
 

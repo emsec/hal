@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <netlist_simulator_controller/saleae_directory.h>
 #include <hal_core/utilities/program_options.h>
 #include <hal_core/utilities/program_arguments.h>
@@ -6,7 +7,15 @@
 using namespace std;
 using namespace hal;
 
-
+template<typename T> void print_element(T t, const int& width, bool align)
+{
+    if (align) {
+        cout << left << setw(width) << setfill(' ') << t << " | ";
+    }
+    else {
+        cout << right << setw(width) << setfill(' ') << t << " | ";
+    }
+}
 
 void saleae_ls(string path, int size) {
     if (path == "") {
@@ -16,9 +25,44 @@ void saleae_ls(string path, int size) {
         path += "/saleae.json";
     }
 
-    cout << path << endl;
     SaleaeDirectory *sd = new SaleaeDirectory(path, false);
-    sd->dump();
+
+
+    vector<SaleaeDirectoryNetEntry> NetEntries = sd->dump();
+    int format_length [6] = {7,8,19,11,10,15};
+    for (const SaleaeDirectoryNetEntry& sdne : sd->dump()) {
+        format_length[0] = (format_length[0] < to_string(sdne.id()).length()) ? to_string(sdne.id()).length() : format_length[0];
+        format_length[1] = (format_length[1] < sdne.name().length()) ? sdne.name().length() : format_length[1];
+        for (const SaleaeDirectoryFileIndex& sdfi : sdne.indexes()) {
+            format_length[2] = (format_length[2] < to_string(sdfi.numberValues()).length()) ? to_string(sdfi.numberValues()).length() : format_length[2];
+            format_length[3] = (format_length[3] < to_string(sdfi.beginTime()).length()) ? to_string(sdfi.beginTime()).length() : format_length[3];
+            format_length[4] = (format_length[4] < to_string(sdfi.endTime()).length()) ? to_string(sdfi.endTime()).length() : format_length[4];
+            format_length[5] = (format_length[5] < to_string(sdfi.index()).length() + 12) ? to_string(sdfi.index()).length() + 12: format_length[5];
+        }
+    }
+    int abs_length = format_length[0] + format_length[1] + format_length[2] + format_length[3] + format_length[4] + format_length[5] + 16;
+
+    cout << string(abs_length + 2, '-') << endl;
+    print_element("| Net ID", format_length[0], true);
+    print_element("Net Name", format_length[1], true);
+    print_element("Total Number Values", format_length[2], true);
+    print_element("First Event", format_length[3], true);
+    print_element("Last Event", format_length[4], true);
+    print_element("Binary filename", format_length[5], true);
+    cout << endl;
+    cout << '|' << string(abs_length, '-') << '|' << endl;
+    for (const SaleaeDirectoryNetEntry& sdne : sd->dump()) {
+        cout << '|';
+        print_element(sdne.id(), format_length[0], false);
+        print_element(sdne.name(), format_length[1], true);
+        for (const SaleaeDirectoryFileIndex& sdfi : sdne.indexes()) {
+            print_element(sdfi.numberValues(), format_length[2], false);
+            print_element(sdfi.beginTime(), format_length[3], false);
+            print_element(sdfi.endTime(), format_length[4], false);
+            print_element("digital_" + to_string(sdfi.index()) + ".bin", format_length[5], true);
+        }
+        cout << endl;
+    }
 }
 
 
