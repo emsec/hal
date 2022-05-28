@@ -998,22 +998,16 @@ namespace hal
                     return BooleanFunction::Slice(p[0].clone(), p[1].clone(), p[2].clone(), node.size);
                 }
                 case BooleanFunction::NodeType::Concat: {
-                    // CONCAT(SLICE(X, j+1, k), SLICE(X, i, j)) => SLICE(X, i, k)
-                    if (p[0].is(BooleanFunction::NodeType::Slice) && p[1].is(BooleanFunction::NodeType::Slice))
+                    // CONCAT(X, Y) => CONST(X || Y)
+                    if (p[0].is_constant() && p[1].is_constant())
                     {
-                        auto p0_parameter = p[0].get_parameters();
-                        auto p1_parameter = p[1].get_parameters();
-
-                        if (p0_parameter[0] == p1_parameter[0])
+                        if ((p[0].size() + p[1].size()) <= 64)
                         {
-                            if ((p1_parameter[2].get_index_value().get() == (p0_parameter[1].get_index_value().get() - 1)))
-                            {
-                                return BooleanFunction::Slice(p0_parameter[0].clone(), p1_parameter[1].clone(), p0_parameter[2].clone(), p[0].size() + p[1].size());
-                            }
+                            return OK(BooleanFunction::Const((p[0].get_constant_value().get() << p[1].size()) + p[1].get_constant_value().get(), p[0].size() + p[1].size()));
                         }
                     }
 
-                    
+                    // We intend to group slices into the same concatination, so that they maybe can be merged into one slice. We try to do this from right to left to make succeeding simplifications easier.
                     if (p[0].is(BooleanFunction::NodeType::Slice) && p[1].is(BooleanFunction::NodeType::Concat))
                     {
                         auto p1_parameter = p[1].get_parameters();
@@ -1025,15 +1019,8 @@ namespace hal
 
                             if (p0_parameter[0] == p10_parameter[0])
                             {
-                                // CONCAT(SLICE(X, i, j), CONCAT(SLICE(X, k, l), Y)) => CONCAT(CONCAT(SLICE(X, i, j), SLICE(X, k, l)), Y))
-                                if (!p1_parameter[1].is(BooleanFunction::NodeType::Slice))
-                                {
-                                    if (auto concatination = BooleanFunction::Concat(p[0].clone(), p1_parameter[0].clone(), p[0].size() + p1_parameter[0].size()); concatination.is_ok())
-                                    {
-                                        return BooleanFunction::Concat(concatination.get(), p1_parameter[1].clone(), concatination.get().size() + p1_parameter[1].size());
-                                    }
-                                }
-                                else
+                                
+                                if (p1_parameter[1].is(BooleanFunction::NodeType::Slice))
                                 {
                                     auto p11_parameter = p1_parameter[1].get_parameters();
 
@@ -1046,9 +1033,98 @@ namespace hal
                                         }
                                     }
                                 }
+                                else if (p1_parameter[1].is(BooleanFunction::NodeType::Concat))
+                                {
+                                    auto p11_parameter = p1_parameter[1].get_parameters();
+
+                                    if (p11_parameter[0].is(BooleanFunction::NodeType::Slice))
+                                    {
+                                        auto p110_parameter = p11_parameter[0].get_parameters();
+
+                                        // CONCAT(SLICE(X, i, j), CONCAT(SLICE(X, k, l), CONCAT(SLICE(Y, m, n), Z))) => CONCAT(CONCAT(SLICE(X, i, j), SLICE(X, k, l)), CONCAT(SLICE(Y, m, n), Z)))
+                                        if (p110_parameter[0] != p10_parameter[0])
+                                        {
+                                            auto c1 = BooleanFunction::Concat(p[0].clone(), p1_parameter[0].clone(), p[0].size() + p1_parameter[0].size());
+
+                                            return BooleanFunction::Concat(c1.get().clone(), p1_parameter[1].clone(), c1.get().size() + p1_parameter[1].size());
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    // CONCAT(SLICE(X, i, j), CONCAT(SLICE(X, k, l), Y)) => CONCAT(CONCAT(SLICE(X, i, j), SLICE(X, k, l)), Y))
+                                    if (auto concatination = BooleanFunction::Concat(p[0].clone(), p1_parameter[0].clone(), p[0].size() + p1_parameter[0].size()); concatination.is_ok())
+                                    {
+                                        return BooleanFunction::Concat(concatination.get(), p1_parameter[1].clone(), concatination.get().size() + p1_parameter[1].size());
+                                    }
+                                }
                             }
                         }
                     }
+
+                    if (p[0].is(BooleanFunction::NodeType::Slice) && p[1].is(BooleanFunction::NodeType::Slice))
+                    {
+                        auto p0_parameter = p[0].get_parameters();
+                        auto p1_parameter = p[1].get_parameters();
+
+                        if (p0_parameter[0] == p1_parameter[0])
+                        {
+                            // CONCAT(SLICE(X, j+1, k), SLICE(X, i, j)) => SLICE(X, i, k)
+                            if ((p1_parameter[2].get_index_value().get() == (p0_parameter[1].get_index_value().get() - 1)))
+                            {
+                                return BooleanFunction::Slice(p0_parameter[0].clone(), p1_parameter[1].clone(), p0_parameter[2].clone(), p[0].size() + p[1].size());
+                            }
+
+                            // CONCAT(SLICE(X, j, j), SLICE(X, i, j)) => SEXT(SLICE(X, i, j), j-i+1)
+                            if ((p1_parameter[2].get_index_value().get() == p0_parameter[1].get_index_value().get()) && (p1_parameter[2].get_index_value().get() == p0_parameter[2].get_index_value().get()))
+                            {
+                                return BooleanFunction::Sext(p[1].clone(), BooleanFunction::Index(p[1].size() + 1, p[1].size() + 1), p[1].size() + 1);
+                            }
+                        }
+                    }
+
+                    // CONCAT(SLICE(X, j, j), SEXT(SLICE(X, i, j), j-i+n)) => SEXT(SLICE(X, i, j), j-i+n+1)
+                    if (p[0].is(BooleanFunction::NodeType::Slice) && p[1].is(BooleanFunction::NodeType::Sext))
+                    {
+                        auto p1_parameter = p[1].get_parameters();
+
+                        if (p1_parameter[0].is(BooleanFunction::NodeType::Slice))
+                        {
+                            auto p0_parameter = p[0].get_parameters();
+                            auto p10_parameter = p1_parameter[0].get_parameters();
+
+                            if ((p0_parameter[0] == p10_parameter[0]) && (p0_parameter[1] == p0_parameter[2]) && (p0_parameter[1].get_index_value().get() == p10_parameter[2].get_index_value().get()))
+                            {
+                                return BooleanFunction::Sext(p1_parameter[0].clone(), BooleanFunction::Index(p[1].size() + 1, p[1].size() + 1), p[1].size() + 1);
+                            }
+                        }
+                    }
+
+                    // CONCAT(SLICE(X, j, j), CONCAT(SEXT(SLICE(X, i, j), j-i+n), Y)) => CONCAT(SEXT(SLICE(X, i, j), j-i+n+1), Y)
+                    if (p[0].is(BooleanFunction::NodeType::Slice) && p[1].is(BooleanFunction::NodeType::Concat))
+                    {
+                        auto p1_parameter = p[1].get_parameters();
+
+                        if (p1_parameter[0].is(BooleanFunction::NodeType::Sext))
+                        {
+                            auto p10_parameter = p1_parameter[0].get_parameters();
+
+                            if (p10_parameter[0].is(BooleanFunction::NodeType::Slice))
+                            {
+                                auto p0_parameter = p[0].get_parameters();
+                                auto p100_parameter = p10_parameter[0].get_parameters();
+
+                                if ((p0_parameter[0] == p100_parameter[0]) && (p0_parameter[1] == p0_parameter[2]) && (p0_parameter[1].get_index_value().get() == p100_parameter[2].get_index_value().get()))
+                                {
+                                    if (auto extension = BooleanFunction::Sext(p10_parameter[0].clone(), BooleanFunction::Index(p1_parameter[0].size() + 1, p1_parameter[0].size() + 1), p1_parameter[0].size() + 1); extension.is_ok())
+                                    {
+                                        return BooleanFunction::Concat(extension.get(), p1_parameter[1].clone(), extension.get().size() + p1_parameter[1].size());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                   
 
                     return BooleanFunction::Concat(p[0].clone(), p[1].clone(), node.size);
                 }
