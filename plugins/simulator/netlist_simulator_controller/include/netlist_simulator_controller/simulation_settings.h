@@ -26,5 +26,8 @@ namespace hal {
 
         int maxSizeEditor() const;
         void setMaxSizeEditor(int mse);
+
+        QString baseDirectory() const;
+        void setBaseDirectory(const QString& dir);
     };
 }

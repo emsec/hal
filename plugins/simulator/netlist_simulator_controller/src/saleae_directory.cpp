@@ -149,7 +149,7 @@ namespace hal
                     {
                         sdce.set_filter_entry(jcmpsd["filter"].GetInt());
                     }
-                    mComposedEntries.push_back(sdce);
+                    mComposedEntryMap[sdce.uniqueKey()]=sdce;
                 }
             }
         }
@@ -401,15 +401,15 @@ namespace hal
     {
         const char* ctype[] = {"None", "Group", "Boolean", "Trigger" };
         std::cout << ctype[mType] << ": " << mId << " <" << mName << ">\n";
-        for (const SaleaeDirectoryNetEntry& sdne : mNetEntries)
-            std::cout << "     " << sdne.id() << " <" << sdne.name() << ">\n";
+        for (int childKey : mChildKeys)
+            std::cout << " <" << childKey << ">\n";
         std::cout << "data:";
         for (int x : mData) std::cout << " " << x;
         std::cout << "\nfilter:";
         if (mFilterEntry)
-            std::cout << " " << mFilterEntry->id() << " <" << mFilterEntry->name() << ">\n";
+            std::cout << " <" << mFilterEntry << ">\n";
         else
-            std::cout << "---\n";
+            std::cout << " ---\n";
         std::cout << "=============" << std::endl;
     }
 

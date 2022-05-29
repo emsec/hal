@@ -7,6 +7,8 @@
 #include <QPushButton>
 #include <QTableWidget>
 #include <QSpinBox>
+#include <QLineEdit>
+#include <QCheckBox>
 #include "netlist_simulator_controller/simulation_settings.h"
 
 namespace hal {
@@ -50,10 +52,16 @@ namespace hal {
         Q_OBJECT
         QSpinBox* mMaxSizeLoadable;
         QSpinBox* mMaxSizeEditor;
+        QCheckBox* mCustomBaseDicectory;
+        QLineEdit* mEditBaseDirectory;
+    private Q_SLOTS:
+        void customBaseDirectoryToggled(bool on);
     public:
         SimulationSettingGlobalTab(SimulationSettings* settings, QWidget* parent = nullptr);
         int maxSizeLoadable() const { return mMaxSizeLoadable->value(); }
         int maxSizeEditor() const { return mMaxSizeEditor->value(); }
+        QString baseDirectory() const { return mEditBaseDirectory->text(); }
+        bool isCustomBaseDirectory() const { return mCustomBaseDicectory->isChecked(); }
     };
 
     class SimulationSettingDialog : public QDialog

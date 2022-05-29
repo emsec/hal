@@ -9,6 +9,8 @@
 #include "netlist_simulator_controller/wave_data.h"
 #include "netlist_simulator_controller/vcd_serializer.h"
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
+#include "netlist_simulator_controller/simulation_settings.h"
+#include "hal_core/netlist/project_manager.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
@@ -46,7 +48,9 @@ namespace hal
 
         if (workdir.empty())
         {
-            QString templatePath = QDir::tempPath();
+            QString templatePath = NetlistSimulatorControllerPlugin::sSimulationSettings->baseDirectory().isEmpty()
+                    ? QString::fromStdString(ProjectManager::instance()->get_project_directory())
+                    : NetlistSimulatorControllerPlugin::sSimulationSettings->baseDirectory();
             if (!templatePath.isEmpty())
                 templatePath += '/';
             templatePath += "hal_simulation_" + mName + "_XXXXXX";
