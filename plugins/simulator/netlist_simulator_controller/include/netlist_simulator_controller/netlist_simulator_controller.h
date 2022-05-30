@@ -326,7 +326,7 @@ public:
      * @param[in] Pointer to net waveform is associated with
      * @return The waveform data
      */
-    WaveData* get_waveform_by_net(Net* n) const;
+    WaveData* get_waveform_by_net(const Net* n) const;
 
     /**
      * Rename waveform and emit 'renamed' signal

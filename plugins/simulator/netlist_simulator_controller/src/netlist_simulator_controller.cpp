@@ -427,7 +427,7 @@ namespace hal
         return true;
     }
 
-    WaveData* NetlistSimulatorController::get_waveform_by_net(Net* n) const
+    WaveData* NetlistSimulatorController::get_waveform_by_net(const Net *n) const
     {
         mWaveDataList->triggerAddToView(n->get_id());
         return mWaveDataList->waveDataByNet(n);

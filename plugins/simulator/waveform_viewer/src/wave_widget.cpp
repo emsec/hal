@@ -278,6 +278,8 @@ namespace hal {
         if (!mController) return;
         mController->reset();
         mController->add_gates(gats);
+        for (const Net* inpNet : mController->get_input_nets())
+            mController->get_waveform_by_net(inpNet);
     }
 
     void WaveWidget::handleNumberWaveformChanged(int count)

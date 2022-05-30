@@ -21,7 +21,7 @@ namespace hal
     ActionOpenNetlistFile::ActionOpenNetlistFile(const QString &filename_, bool isProj)
         : mFilename(filename_), mProject(isProj)
     {
-        // mWaitForReady = true;
+        mProjectModified = false;
     }
 
     bool ActionOpenNetlistFile::exec()
