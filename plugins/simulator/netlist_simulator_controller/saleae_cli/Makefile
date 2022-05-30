@@ -2,17 +2,17 @@ BUILD_DIR = build
 
 CXX_SOURCES = \
   saleae.cpp \
-  ../plugins/simulator/netlist_simulator_controller/src/saleae_directory.cpp \
-  ../src/utilities/json_write_document.cpp \
-  ../src/utilities/program_options.cpp \
-  ../src/utilities/program_arguments.cpp \
-  ../src/utilities/log.cpp \
-  ../src/utilities/utils.cpp
+  ../src/saleae_directory.cpp \
+  ../../../../src/utilities/json_write_document.cpp \
+  ../../../../src/utilities/program_options.cpp \
+  ../../../../src/utilities/program_arguments.cpp \
+  ../../../../src/utilities/log.cpp \
+  ../../../../src/utilities/utils.cpp
 
 
 CC = gcc
 CXX = g++
-CXXFLAGS = -std=c++17 -I ../plugins/simulator/netlist_simulator_controller/include -I ../include
+CXXFLAGS = -std=c++17 -I ../include -I ../../../../include
 LDFLAGS =
 TARGET = saleae
 
