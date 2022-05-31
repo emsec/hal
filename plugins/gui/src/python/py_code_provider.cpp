@@ -227,6 +227,20 @@ namespace hal
         return pyCode;
     }
 
+    QString PyCodeProvider::pyCodeNetSources(u32 netId)
+    {
+        const QString suffix = "get_sources()";
+
+        return buildPyCode(netCodePrefix, suffix, netId);
+    }
+
+    QString PyCodeProvider::pyCodeNetDestinations(u32 netId)
+    {
+        const QString suffix = "get_destinations()";
+
+        return buildPyCode(netCodePrefix, suffix, netId);
+    }
+
     QString PyCodeProvider::pyCodeNetData(u32 netId, QString category, QString key)
     {
         const QString suffix = QString("data[(\"%1\", \"%2\")]").arg(category, key);

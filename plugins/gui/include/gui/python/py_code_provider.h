@@ -71,6 +71,8 @@ namespace hal
         static QString pyCodeNetId(u32 netId);
         static QString pyCodeNetName(u32 netId);
         static QString pyCodeNetType(u32 netId);
+        static QString pyCodeNetSources(u32 netId);
+        static QString pyCodeNetDestinations(u32 netId);
         static QString pyCodeNetData(u32 netId, QString category, QString key);
         static QString pyCodeNetDataMap(u32 netId);
 
