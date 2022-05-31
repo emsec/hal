@@ -4,6 +4,8 @@
 #include "gui/gui_globals.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
+#include "gui/module_model/module_model.h"
+#include "gui/module_model/module_item.h"
 
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -103,4 +105,91 @@ namespace hal {
         }
     }
 
+    //---------------------------------------
+    ModuleColorSerializer::ModuleColorSerializer()
+        : ProjectSerializer("modulecolor")
+    {;}
+
+    void ModuleColorSerializer::restore(ModuleModel* mm)
+    {
+        ProjectManager* pm = ProjectManager::instance();
+        std::string relname = pm->get_filename(m_name);
+        if (!relname.empty())
+            restoreModuleColor(pm->get_project_directory(), relname, mm);
+    }
+
+    void ModuleColorSerializer::serializeColorRecursion(QJsonArray& mcArr, const ModuleModel* mm, QModelIndex parent)
+    {
+        int nrows = mm->rowCount(parent);
+        for (int irow=0; irow<nrows; irow++)
+        {
+            QModelIndex inx = mm->index(irow,0,parent);
+            const ModuleItem* mItem = mm->getItem(inx);
+            if (!mItem) continue;
+            QJsonObject mcEntry;
+            mcEntry["id"] = (int) mItem->id();
+            mcEntry["color"] = mItem->color().name(QColor::HexArgb);
+            mcArr.append(mcEntry);
+            serializeColorRecursion(mcArr,mm,inx);
+        }
+    }
+
+    std::string ModuleColorSerializer::serialize(Netlist* netlist, const std::filesystem::path& savedir, bool isAutosave)
+    {
+        Q_UNUSED(netlist);
+        Q_UNUSED(isAutosave);
+        QString mcFilename("modulecolor.json");
+        QFile mcFile(QDir(QString::fromStdString(savedir.string())).absoluteFilePath(mcFilename));
+        if (!mcFile.open(QIODevice::WriteOnly)) return std::string();
+
+        QJsonObject mcObj;
+        QJsonArray  mcArr;
+
+        const ModuleModel* mm = gNetlistRelay->getModuleModel();
+        if (!mm) std::string();
+
+        serializeColorRecursion(mcArr,mm);
+
+        mcObj["modcolors"] = mcArr;
+
+        mcFile.write(QJsonDocument(mcObj).toJson(QJsonDocument::Compact));
+
+        return mcFilename.toStdString();
+    }
+
+
+    void ModuleColorSerializer::deserialize(Netlist* netlist, const std::filesystem::path& loaddir)
+    {
+        Q_UNUSED(netlist);
+        std::string relname = ProjectManager::instance()->get_filename(m_name);
+        if (!relname.empty())
+            restoreModuleColor(loaddir, relname);
+    }
+
+    void ModuleColorSerializer::restoreModuleColor(const std::filesystem::path& loaddir, const std::string& jsonfile, ModuleModel* mm)
+    {
+        if (!mm)
+        {
+            mm = gNetlistRelay->getModuleModel();
+            if (!mm) return;
+        }
+
+        QFile mcFile(QDir(QString::fromStdString(loaddir.string())).absoluteFilePath(QString::fromStdString(jsonfile)));
+        if (!mcFile.open(QIODevice::ReadOnly))
+            return;
+        QJsonDocument jsonDoc   = QJsonDocument::fromJson(mcFile.readAll());
+        const QJsonObject& json = jsonDoc.object();
+
+        if (json.contains("modcolors") && json["modcolors"].isArray())
+        {
+            QJsonArray mcArr = json["modcolors"].toArray();
+            int nmc          = mcArr.size();
+            for (int imc = 0; imc < nmc; imc++)
+            {
+                QJsonObject mcEntry = mcArr.at(imc).toObject();
+                u32 moduleId = mcEntry["id"].toInt();
+                mm->setModuleColor(moduleId,QColor(mcEntry["color"].toString()));
+            }
+        }
+    }
 }

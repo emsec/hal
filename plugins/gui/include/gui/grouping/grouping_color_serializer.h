@@ -24,9 +24,11 @@
 #pragma once
 
 #include "hal_core/netlist/project_serializer.h"
+#include <QModelIndex>
 
 namespace hal {
     class GroupingTableModel;
+    class ModuleModel;
 
     class GroupingColorSerializer : public ProjectSerializer
     {
@@ -39,5 +41,19 @@ namespace hal {
         void deserialize(Netlist* netlist, const std::filesystem::path& loaddir) override;
 
         void restore(GroupingTableModel *gtm);
+    };
+
+    class ModuleColorSerializer : public ProjectSerializer
+    {
+        void restoreModuleColor(const std::filesystem::path& loaddir, const std::string& jsonfile, ModuleModel *mm = nullptr);
+        void serializeColorRecursion(QJsonArray& mcArr, const ModuleModel* mm, QModelIndex parent=QModelIndex());
+    public:
+        ModuleColorSerializer();
+
+        std::string serialize(Netlist* netlist, const std::filesystem::path& savedir, bool isAutosave) override;
+
+        void deserialize(Netlist* netlist, const std::filesystem::path& loaddir) override;
+
+        void restore(ModuleModel *mm);
     };
 }
