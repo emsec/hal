@@ -262,6 +262,7 @@ namespace hal
         if (gNetlist)
             if (pm->serialize_project(gNetlist))
                 gFileStatusManager->netlistSaved();
+        Q_EMIT projectOpened(projectDir.absolutePath(),QString::fromStdString(pm->get_netlist_filename()));
     }
 
     void FileManager::moveShadowToProject(const QDir& shDir) const
