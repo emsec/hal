@@ -85,6 +85,7 @@ namespace hal
             QApplication::clipboard()->setText(pinName);
         });
 
+        menu.addSection("Misc");
         menu.addAction("Set module as current selection", [this, moduleID](){
             gSelectionRelay->clear();
             gSelectionRelay->addModule(moduleID);
@@ -96,6 +97,7 @@ namespace hal
             gSelectionRelay->relaySelectionChanged(this);
         });
 
+        menu.addSection("Python");
         menu.addAction(QIcon(":/icons/python"), "Get module", [moduleID](){
             QApplication::clipboard()->setText(PyCodeProvider::pyCodeModule(moduleID));
         });
