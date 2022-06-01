@@ -67,24 +67,42 @@ namespace hal
             return;
 
         u32 moduleID = mModuleTableModel->getModuleIDFromIndex(idx);
+        u32 pinID = mModuleTableModel->getPinIDFromIndex(idx);
+        QString pinName = mModuleTableModel->getPortNameFromIndex(idx);
+        QString moduleName = mModuleTableModel->getModuleNameFromIndex(idx);
 
         QMenu menu;
 
-        QString portname = mModuleTableModel->getPortNameFromIndex(idx);
-        menu.addAction(QIcon(), "Extract port name as plain text",
-            [portname]()
-            {
-                QApplication::clipboard()->setText(portname);
-            });
+        menu.addAction("Module name to clipboard", [moduleName](){
+            QApplication::clipboard()->setText(moduleName);
+        });
 
-        //menu.addSection("Python");
+        menu.addAction("Module ID to clipboard", [moduleID](){
+            QApplication::clipboard()->setText(QString::number(moduleID));
+        });
 
-        QString pythonCommandModule = PyCodeProvider::pyCodeModule(moduleID);
-        menu.addAction(QIcon(":/icons/python"), "Extract module as python code",
-            [pythonCommandModule]()
-            {
-                QApplication::clipboard()->setText(pythonCommandModule);
-            });
+        menu.addAction("Pin name to clipboard", [pinName](){
+            QApplication::clipboard()->setText(pinName);
+        });
+
+        menu.addAction("Set module as current selection", [this, moduleID](){
+            gSelectionRelay->clear();
+            gSelectionRelay->addModule(moduleID);
+            gSelectionRelay->relaySelectionChanged(this);
+        });
+
+        menu.addAction("Add module to current selection", [this, moduleID](){
+            gSelectionRelay->addModule(moduleID);
+            gSelectionRelay->relaySelectionChanged(this);
+        });
+
+        menu.addAction(QIcon(":/icons/python"), "Get module", [moduleID](){
+            QApplication::clipboard()->setText(PyCodeProvider::pyCodeModule(moduleID));
+        });
+
+        menu.addAction(QIcon(":/icons/python"), "Get pin", [moduleID, pinID](){
+            QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinById(moduleID, pinID));
+        });
 
         menu.move(mapToGlobal(pos));
         menu.exec();
