@@ -5,17 +5,27 @@
 #include <netlist_simulator_controller/saleae_file.h>
 #include <hal_core/utilities/program_options.h>
 #include <hal_core/utilities/program_arguments.h>
+#include <hal_core/utilities/log.h>
 
-using namespace std;
 using namespace hal;
+
+// checks if a file exists 
+bool file_exists (const std::string& path) {
+    if (FILE *ff = fopen(path.c_str(), "rb")) {
+        fclose(ff);
+        return true;
+    } else {
+        return false;
+    }   
+}
 
 // template for space saving printing
 template<typename T> void print_element(T t, const int& width, bool align) {
     if (align) {
-        cout << left << setw(width) << setfill(' ') << t << " | ";
+        std::cout << std::left << std::setw(width) << std::setfill(' ') << t << " | ";
     }
     else {
-        cout << right << setw(width) << setfill(' ') << t << " | ";
+        std::cout << std::right << std::setw(width) << std::setfill(' ') << t << " | ";
     }
 }
 
@@ -40,21 +50,19 @@ bool check_size(bool necessary, char op, int size_val, int compare_val) {
 }
 
 // check, given an id list, whether an entry may be printed
-bool check_ids(bool necessary, vector<int> ids, int id_to_check) {
-    bool ret = true;
-    if (necessary) {
-        ret = false;
-        if (find(ids.begin(), ids.end(), id_to_check) != ids.end()) {
-            ret = true;
-        }
-    }
-    return ret;
+bool check_ids(bool necessary, std::vector<int> ids, int id_to_check) {
+    return ((std::find(ids.begin(), ids.end(), id_to_check) != ids.end()) || (!necessary));
 }
 
 // saleae ls-tool
-void saleae_ls(string path, string size, string ids) {
+void saleae_ls(std::string path, std::string size, std::string ids) {
     // handle --dir option
     path = (path == "") ? "./saleae.json" : path + "/saleae.json";
+
+    if (!file_exists(path)) {
+        std::cout << "Cannot open file: " << path << std::endl;
+        return;
+    }
 
     // handle --size option
     bool size_necessary = false;
@@ -64,89 +72,90 @@ void saleae_ls(string path, string size, string ids) {
         size_necessary = true;
         if (size[0] == '+' || size[0] == '-') {
             size_op = size[0];
-            size_val = stoi(size.substr(1));
+            size_val = std::stoi(size.substr(1));
         }
         else {
-            size_val = stoi(size);
+            size_val = std::stoi(size);
         }
     }
 
     // handle --id option
     bool ids_necessary = false;
-    vector<int> id_vector;
+    std::vector<int> id_vector;
     if (ids != "") {
         ids_necessary = true;
-        stringstream ss(ids);
-        vector<string> splited_ids;
+        std::stringstream ss(ids);
+        std::vector<std::string> splited_ids;
         while (ss.good()) {
-            string substr;
+            std::string substr;
             getline(ss, substr, ',');
             splited_ids.push_back(substr);
         }
 
-        for (string id_entry : splited_ids) {
-            if (id_entry.find('-') != string::npos) {
-                stringstream range_stream(id_entry);
-                vector<string> range;
+        for (std::string id_entry : splited_ids) {
+            if (id_entry.find('-') != std::string::npos) {
+                std::stringstream range_stream(id_entry);
+                std::vector<std::string> range;
                 while (range_stream.good()) {
-                    string substr;
+                    std::string substr;
                     getline(range_stream, substr, '-');
                     range.push_back(substr);
                 }
-                int tmp_id = stoi(range.front());
-                while (tmp_id <= stoi(range.back())) {
+                int tmp_id = std::stoi(range.front());
+                while (tmp_id <= std::stoi(range.back())) {
                     id_vector.push_back(tmp_id);
                     tmp_id ++;
                 }
             }
             else {
-               id_vector.push_back(stoi(id_entry)); 
+               id_vector.push_back(std::stoi(id_entry)); 
             }
         }
     }
 
     // collect length for better formatting
     SaleaeDirectory *sd = new SaleaeDirectory(path, false);
-    vector<SaleaeDirectoryNetEntry> NetEntries = sd->dump();
+    std::vector<SaleaeDirectoryNetEntry> NetEntries = sd->dump();
     int format_length [6] = {7, 8, 19, 11, 10, 15}; // length of the column titles
     for (const SaleaeDirectoryNetEntry& sdne : sd->dump()) {
         for (const SaleaeDirectoryFileIndex& sdfi : sdne.indexes()) {
             if (check_size(size_necessary, size_op, size_val, sdfi.numberValues()) && check_ids(ids_necessary, id_vector, sdne.id())) {
-                format_length[0] = (format_length[0] < to_string(sdne.id()).length()) ? to_string(sdne.id()).length() : format_length[0];
+                format_length[0] = (format_length[0] < std::to_string(sdne.id()).length()) ? std::to_string(sdne.id()).length() : format_length[0];
                 format_length[1] = (format_length[1] < sdne.name().length()) ? sdne.name().length() : format_length[1];
-                format_length[2] = (format_length[2] < to_string(sdfi.numberValues()).length()) ? to_string(sdfi.numberValues()).length() : format_length[2];
-                format_length[3] = (format_length[3] < to_string(sdfi.beginTime()).length()) ? to_string(sdfi.beginTime()).length() : format_length[3];
-                format_length[4] = (format_length[4] < to_string(sdfi.endTime()).length()) ? to_string(sdfi.endTime()).length() : format_length[4];
-                format_length[5] = (format_length[5] < to_string(sdfi.index()).length() + 12) ? to_string(sdfi.index()).length() + 12: format_length[5];
+                format_length[2] = (format_length[2] < std::to_string(sdfi.numberValues()).length()) ? std::to_string(sdfi.numberValues()).length() : format_length[2];
+                format_length[3] = (format_length[3] < std::to_string(sdfi.beginTime()).length()) ? std::to_string(sdfi.beginTime()).length() : format_length[3];
+                format_length[4] = (format_length[4] < std::to_string(sdfi.endTime()).length()) ? std::to_string(sdfi.endTime()).length() : format_length[4];
+                format_length[5] = (format_length[5] < std::to_string(sdfi.index()).length() + 12) ? std::to_string(sdfi.index()).length() + 12: format_length[5];
             }
         }
     }
     int abs_length = format_length[0] + format_length[1] + format_length[2] + format_length[3] + format_length[4] + format_length[5] + 16;
 
     // print saleae dir content
-    cout << string(abs_length + 2, '-') << endl;
+    std::cout << std::string(abs_length + 2, '-') << std::endl;
     print_element("| Net ID", format_length[0], true);
     print_element("Net Name", format_length[1], true);
     print_element("Total Number Values", format_length[2], true);
     print_element("First Event", format_length[3], true);
     print_element("Last Event", format_length[4], true);
     print_element("Binary filename", format_length[5], true);
-    cout << endl;
-    cout << '|' << string(abs_length, '-') << '|' << endl;
+    std::cout << std::endl;
+    std::cout << '|' << std::string(abs_length, '-') << '|' << std::endl;
     for (const SaleaeDirectoryNetEntry& sdne : sd->dump()) {
         for (const SaleaeDirectoryFileIndex& sdfi : sdne.indexes()) {
             if (check_size(size_necessary, size_op, size_val, sdfi.numberValues()) && check_ids(ids_necessary, id_vector, sdne.id())) {
-                cout << '|';
+                std::cout << '|';
                 print_element(sdne.id(), format_length[0], false);
                 print_element(sdne.name(), format_length[1], true);
                 print_element(sdfi.numberValues(), format_length[2], false);
                 print_element(sdfi.beginTime(), format_length[3], false);
                 print_element(sdfi.endTime(), format_length[4], false);
-                print_element("digital_" + to_string(sdfi.index()) + ".bin", format_length[5], true);
-                cout << endl;
+                print_element("digital_" + std::to_string(sdfi.index()) + ".bin", format_length[5], true);
+                std::cout << std::endl;
             }
         }
     }
+    std::cout << std::string(abs_length + 2, '-') << std::endl;
 }
 
 
@@ -165,6 +174,17 @@ int main(int argc, const char* argv[]) {
     cli_options.add("ls", "Lists content of saleae directory file saleae.json");
     cli_options.add("cat", "Dump content of binary file into console", {""});
     ProgramArguments args = cli_options.parse(argc, argv);
+
+
+    /* initialize logging */
+    LogManager& lm = LogManager::get_instance();
+    lm.add_channel("core", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+
+    // suppress output
+    if (args.is_option_set("--help") || args.is_option_set("ls") || args.is_option_set("cat") || argc == 1) {
+        lm.deactivate_all_channels();
+    }
+
 
     if (args.is_option_set("ls")) {
         cli_options.remove("ls");
