@@ -1,6 +1,5 @@
 #include <iostream>
 #include <iomanip>
-#include <algorithm>
 #include <netlist_simulator_controller/saleae_directory.h>
 #include <netlist_simulator_controller/saleae_file.h>
 #include <hal_core/utilities/program_options.h>
@@ -123,7 +122,7 @@ void saleae_ls(std::string path, std::string size, std::string ids) {
     }
     int abs_length = format_length[0] + format_length[1] + format_length[2] + format_length[3] + format_length[4] + format_length[5] + 16;
 
-    // print saleae dir content
+    // print saleae-dir content
     std::cout << std::string(abs_length + 2, '-') << std::endl;
     print_element("| Net ID", format_length[0], true);
     print_element("Net Name", format_length[1], true);
@@ -166,7 +165,7 @@ int main(int argc, const char* argv[]) {
     lm.add_channel("core", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     lm.deactivate_all_channels();
 
-    // initialize and parse cli options
+    // initialize and parse options
     ProgramOptions generic_options("generic options");
     generic_options.add("--help", "print help messages");
 
@@ -184,22 +183,9 @@ int main(int argc, const char* argv[]) {
     cat_options.add({"-h", "--only-header"}, "dump only header");
     cat_options.add({"-b", "--only-data"}, "dump only data including start value");
 
-    // ProgramOptions all_options("all options");
-    // all_options.add(generic_options);
-    // all_options.add(tool_options);
-    // all_options.add(ls_options);
-    // all_options.add(cat_options);
-
-    
-
     ProgramArguments args = tool_options.parse(argc, argv);
 
     if (args.is_option_set("ls")) {
-        //cli_options.remove("ls");
-        //cli_options.remove("cat");
-        //cli_options.add({"-d", "--dir"}, "lists saleae directory from directory given by absolute or relative path name", {ProgramOptions::A_REQUIRED_PARAMETER});
-        //cli_options.add({"-s", "--size"}, "lists only entries with given number of waveform events", {ProgramOptions::A_REQUIRED_PARAMETER});
-        //cli_options.add({"-i", "--id"}, "list only entries where ID matches entry in list. Entries are separated by comma. A single entry can be either an ID or a range sepearated by hyphen.", {ProgramOptions::A_REQUIRED_PARAMETER});
         ls_options.add(generic_options);
         ProgramArguments args = ls_options.parse(argc, argv);
 
@@ -213,17 +199,7 @@ int main(int argc, const char* argv[]) {
         } else {
             saleae_ls(args.get_parameter("--dir"), args.get_parameter("--size"), args.get_parameter("--id"));
         }
-        //return 0;
     } else if (args.is_option_set("cat")) {
-        //cli_options.remove("ls");
-        //cli_options.remove("cat");
-        //cli_options.add({"-d", "--dir"}, "binary file is not in current directory but in directory given by path name", {ProgramOptions::A_REQUIRED_PARAMETER});
-        //cli_options.add({"-h", "--only-header"}, "dump only header");
-        //cli_options.add({"-b", "--only-data"}, "dump only data including start value");
-
-        //ProgramArguments args = cli_options.parse(argc, argv);
-        //saleae_cat("/home/parallels/Desktop/saleae/digital_0.bin");
-
         cat_options.add(generic_options);
         ProgramArguments args = cat_options.parse(argc, argv);
 
@@ -237,7 +213,6 @@ int main(int argc, const char* argv[]) {
         } else {
             //saleae_cat("/home/parallels/Desktop/saleae/digital_0.bin");
         }
-        //return 0;
     } else {
         tool_options.add(generic_options);
 
@@ -245,16 +220,4 @@ int main(int argc, const char* argv[]) {
         std::cout << ls_options.get_options_string();
         std::cout << cat_options.get_options_string() << std::endl;
     }
-
-    // bool unknown_option_exists = false;
-    // for (const auto& opt : cli_options.get_unknown_arguments())
-    // {
-    //     //f (opt != "ls" || opt )
-    //     std::cout << opt << std::endl;
-    //     unknown_option_exists = true;
-    // }
-    // // process help output 
-    // if (args.is_option_set("--help") || args.get_set_options().size() == 0 || unknown_option_exists) {
-    //     std::cout << cli_options.get_options_string() << std::endl;
-    // }
 }
