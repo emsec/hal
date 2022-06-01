@@ -14,9 +14,8 @@ bool file_exists (const std::string& path) {
     if (FILE *ff = fopen(path.c_str(), "rb")) {
         fclose(ff);
         return true;
-    } else {
-        return false;
-    }   
+    }
+    return false;   
 }
 
 // template for space saving printing
@@ -31,27 +30,19 @@ template<typename T> void print_element(T t, const int& width, bool align) {
 
 // check, given the size, whether an entry may be printed
 bool check_size(bool necessary, char op, int size_val, int compare_val) {
-    bool ret = true;
-    if (necessary) {
-        ret = false;
-        switch (op) {
-            case '+':
-                if (compare_val > size_val) ret = true;
-                break;
-            case '-':
-                if (compare_val < size_val) ret = true;
-                break;
-            default:
-                if (compare_val == size_val) ret = true;
-                break;
-        }
+    if (!necessary) return true;
+    switch (op) {
+        case '+':
+            return (compare_val > size_val);
+        case '-':
+            return (compare_val < size_val);
+        default:
+            return (compare_val == size_val);
     }
-    return ret;
 }
 
 // check, given an id list, whether an entry may be printed
 bool check_ids(bool necessary, std::unordered_set<int> id_set, int id_to_check) {
-    //return ((std::find(ids.begin(), ids.end(), id_to_check) != ids.end()) || (!necessary));
     return ((id_set.count(id_to_check)) || (!necessary));
 }
 
@@ -59,7 +50,6 @@ bool check_ids(bool necessary, std::unordered_set<int> id_set, int id_to_check) 
 void saleae_ls(std::string path, std::string size, std::string ids) {
     // handle --dir option
     path = (path == "") ? "./saleae.json" : path + "/saleae.json";
-
     if (!file_exists(path)) {
         std::cout << "Cannot open file: " << path << std::endl;
         return;
@@ -82,7 +72,6 @@ void saleae_ls(std::string path, std::string size, std::string ids) {
 
     // handle --id option
     bool ids_necessary = false;
-    //std::vector<int> id_vector;
     std::unordered_set<int> id_set;
     if (ids != "") {
         ids_necessary = true;
@@ -105,23 +94,22 @@ void saleae_ls(std::string path, std::string size, std::string ids) {
                 }
                 int tmp_id = std::stoi(range.front());
                 while (tmp_id <= std::stoi(range.back())) {
-                    //id_vector.push_back(tmp_id);
                     id_set.insert(tmp_id);
                     tmp_id ++;
                 }
             }
             else {
-               //id_vector.push_back(std::stoi(id_entry)); 
                id_set.insert(std::stoi(id_entry));
             }
         }
     }
 
-    // collect length for better formatting
     SaleaeDirectory *sd = new SaleaeDirectory(path, false);
-    std::vector<SaleaeDirectoryNetEntry> NetEntries = sd->dump();
+    std::vector<SaleaeDirectoryNetEntry> net_entries = sd->dump();
+
+    // collect length for better formatting
     int format_length [6] = {7, 8, 19, 11, 10, 15}; // length of the column titles
-    for (const SaleaeDirectoryNetEntry& sdne : sd->dump()) {
+    for (const SaleaeDirectoryNetEntry& sdne : net_entries) {
         for (const SaleaeDirectoryFileIndex& sdfi : sdne.indexes()) {
             if (check_size(size_necessary, size_op, size_val, sdfi.numberValues()) && check_ids(ids_necessary, id_set, sdne.id())) {
                 format_length[0] = (format_length[0] < std::to_string(sdne.id()).length()) ? std::to_string(sdne.id()).length() : format_length[0];
@@ -145,7 +133,7 @@ void saleae_ls(std::string path, std::string size, std::string ids) {
     print_element("Binary filename", format_length[5], true);
     std::cout << std::endl;
     std::cout << '|' << std::string(abs_length, '-') << '|' << std::endl;
-    for (const SaleaeDirectoryNetEntry& sdne : sd->dump()) {
+    for (const SaleaeDirectoryNetEntry& sdne : net_entries) {
         for (const SaleaeDirectoryFileIndex& sdfi : sdne.indexes()) {
             if (check_size(size_necessary, size_op, size_val, sdfi.numberValues()) && check_ids(ids_necessary, id_set, sdne.id())) {
                 std::cout << '|';
@@ -172,48 +160,101 @@ void saleae_ls(std::string path, std::string size, std::string ids) {
 
 
 int main(int argc, const char* argv[]) {
-    /* initialize and parse cli options */
-    ProgramOptions cli_options("cli options");
-    cli_options.add("--help", "print help messages");
-    cli_options.add("ls", "Lists content of saleae directory file saleae.json");
-    cli_options.add("cat", "Dump content of binary file into console", {""});
-    ProgramArguments args = cli_options.parse(argc, argv);
 
-
-    /* initialize logging */
+    // initialize logging
     LogManager& lm = LogManager::get_instance();
     lm.add_channel("core", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+    lm.deactivate_all_channels();
 
-    // suppress output
-    if (args.is_option_set("--help") || args.is_option_set("ls") || args.is_option_set("cat") || argc == 1) {
-        lm.deactivate_all_channels();
-    }
+    // initialize and parse cli options
+    ProgramOptions generic_options("generic options");
+    generic_options.add("--help", "print help messages");
 
+    ProgramOptions tool_options("tool options");
+    tool_options.add("ls", "Lists content of saleae directory file saleae.json");
+    tool_options.add("cat", "Dump content of binary file into console", {ProgramOptions::A_REQUIRED_PARAMETER});
+
+    ProgramOptions ls_options("ls options");
+    ls_options.add({"-d", "--dir"}, "lists saleae directory from directory given by absolute or relative path name", {ProgramOptions::A_REQUIRED_PARAMETER});
+    ls_options.add({"-s", "--size"}, "lists only entries with given number of waveform events", {ProgramOptions::A_REQUIRED_PARAMETER});
+    ls_options.add({"-i", "--id"}, "list only entries where ID matches entry in list. Entries are separated by comma. A single entry can be either an ID or a range sepearated by hyphen", {ProgramOptions::A_REQUIRED_PARAMETER});
+
+    ProgramOptions cat_options("cat options");
+    cat_options.add({"-d", "--dir"}, "binary file is not in current directory but in directory given by path name", {ProgramOptions::A_REQUIRED_PARAMETER});
+    cat_options.add({"-h", "--only-header"}, "dump only header");
+    cat_options.add({"-b", "--only-data"}, "dump only data including start value");
+
+    // ProgramOptions all_options("all options");
+    // all_options.add(generic_options);
+    // all_options.add(tool_options);
+    // all_options.add(ls_options);
+    // all_options.add(cat_options);
+
+    
+
+    ProgramArguments args = tool_options.parse(argc, argv);
 
     if (args.is_option_set("ls")) {
-        cli_options.remove("ls");
-        cli_options.remove("cat");
-        cli_options.add({"-d", "--dir"}, "lists saleae directory from directory given by absolute or relative path name", {ProgramOptions::A_REQUIRED_PARAMETER});
-        cli_options.add({"-s", "--size"}, "lists only entries with given number of waveform events", {ProgramOptions::A_REQUIRED_PARAMETER});
-        cli_options.add({"-i", "--id"}, "list only entries where ID matches entry in list. Entries are separated by comma. A single entry can be either an ID or a range sepearated by hyphen.", {ProgramOptions::A_REQUIRED_PARAMETER});
+        //cli_options.remove("ls");
+        //cli_options.remove("cat");
+        //cli_options.add({"-d", "--dir"}, "lists saleae directory from directory given by absolute or relative path name", {ProgramOptions::A_REQUIRED_PARAMETER});
+        //cli_options.add({"-s", "--size"}, "lists only entries with given number of waveform events", {ProgramOptions::A_REQUIRED_PARAMETER});
+        //cli_options.add({"-i", "--id"}, "list only entries where ID matches entry in list. Entries are separated by comma. A single entry can be either an ID or a range sepearated by hyphen.", {ProgramOptions::A_REQUIRED_PARAMETER});
+        ls_options.add(generic_options);
+        ProgramArguments args = ls_options.parse(argc, argv);
 
-        ProgramArguments args = cli_options.parse(argc, argv);
-        saleae_ls(args.get_parameter("--dir"), args.get_parameter("--size"), args.get_parameter("--id"));
-    }
-    else if (args.is_option_set("cat")) {
-        cli_options.remove("ls");
-        cli_options.remove("cat");
-        cli_options.add({"-d", "--dir"}, "binary file is not in current directory but in directory given by path name", {ProgramOptions::A_REQUIRED_PARAMETER});
-        cli_options.add({"-h", "--only-header"}, "dump only header");
-        cli_options.add({"-b", "--only-data"}, "dump only data including start value");
+        bool unknown_option_exists = false;
+        for (std::string opt : ls_options.get_unknown_arguments()) {
+            unknown_option_exists = (opt != "ls") ? true : unknown_option_exists;     
+        }
 
-        ProgramArguments args = cli_options.parse(argc, argv);
+        if (args.is_option_set("--help") || unknown_option_exists) {
+            std::cout << ls_options.get_options_string() << std::endl;
+        } else {
+            saleae_ls(args.get_parameter("--dir"), args.get_parameter("--size"), args.get_parameter("--id"));
+        }
+        //return 0;
+    } else if (args.is_option_set("cat")) {
+        //cli_options.remove("ls");
+        //cli_options.remove("cat");
+        //cli_options.add({"-d", "--dir"}, "binary file is not in current directory but in directory given by path name", {ProgramOptions::A_REQUIRED_PARAMETER});
+        //cli_options.add({"-h", "--only-header"}, "dump only header");
+        //cli_options.add({"-b", "--only-data"}, "dump only data including start value");
+
+        //ProgramArguments args = cli_options.parse(argc, argv);
         //saleae_cat("/home/parallels/Desktop/saleae/digital_0.bin");
+
+        cat_options.add(generic_options);
+        ProgramArguments args = cat_options.parse(argc, argv);
+
+        bool unknown_option_exists = false;
+        for (std::string opt : cat_options.get_unknown_arguments()) {
+            unknown_option_exists = (opt != "cat") ? true : unknown_option_exists;     
+        }
+        
+        if (args.is_option_set("--help") || unknown_option_exists) {
+            std::cout << cat_options.get_options_string() << std::endl;
+        } else {
+            //saleae_cat("/home/parallels/Desktop/saleae/digital_0.bin");
+        }
+        //return 0;
+    } else {
+        tool_options.add(generic_options);
+
+        std::cout << tool_options.get_options_string();
+        std::cout << ls_options.get_options_string();
+        std::cout << cat_options.get_options_string() << std::endl;
     }
 
-    bool unknown_option_exists = false;
-    /* process help output */
-    if (args.is_option_set("--help") || args.get_set_options().size() == 0 || unknown_option_exists) {
-        std::cout << cli_options.get_options_string() << std::endl;
-    }
+    // bool unknown_option_exists = false;
+    // for (const auto& opt : cli_options.get_unknown_arguments())
+    // {
+    //     //f (opt != "ls" || opt )
+    //     std::cout << opt << std::endl;
+    //     unknown_option_exists = true;
+    // }
+    // // process help output 
+    // if (args.is_option_set("--help") || args.get_set_options().size() == 0 || unknown_option_exists) {
+    //     std::cout << cli_options.get_options_string() << std::endl;
+    // }
 }
