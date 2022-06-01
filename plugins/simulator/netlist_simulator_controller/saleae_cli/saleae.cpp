@@ -50,8 +50,9 @@ bool check_size(bool necessary, char op, int size_val, int compare_val) {
 }
 
 // check, given an id list, whether an entry may be printed
-bool check_ids(bool necessary, std::vector<int> ids, int id_to_check) {
-    return ((std::find(ids.begin(), ids.end(), id_to_check) != ids.end()) || (!necessary));
+bool check_ids(bool necessary, std::unordered_set<int> id_set, int id_to_check) {
+    //return ((std::find(ids.begin(), ids.end(), id_to_check) != ids.end()) || (!necessary));
+    return ((id_set.count(id_to_check)) || (!necessary));
 }
 
 // saleae ls-tool
@@ -81,7 +82,8 @@ void saleae_ls(std::string path, std::string size, std::string ids) {
 
     // handle --id option
     bool ids_necessary = false;
-    std::vector<int> id_vector;
+    //std::vector<int> id_vector;
+    std::unordered_set<int> id_set;
     if (ids != "") {
         ids_necessary = true;
         std::stringstream ss(ids);
@@ -103,12 +105,14 @@ void saleae_ls(std::string path, std::string size, std::string ids) {
                 }
                 int tmp_id = std::stoi(range.front());
                 while (tmp_id <= std::stoi(range.back())) {
-                    id_vector.push_back(tmp_id);
+                    //id_vector.push_back(tmp_id);
+                    id_set.insert(tmp_id);
                     tmp_id ++;
                 }
             }
             else {
-               id_vector.push_back(std::stoi(id_entry)); 
+               //id_vector.push_back(std::stoi(id_entry)); 
+               id_set.insert(std::stoi(id_entry));
             }
         }
     }
@@ -119,7 +123,7 @@ void saleae_ls(std::string path, std::string size, std::string ids) {
     int format_length [6] = {7, 8, 19, 11, 10, 15}; // length of the column titles
     for (const SaleaeDirectoryNetEntry& sdne : sd->dump()) {
         for (const SaleaeDirectoryFileIndex& sdfi : sdne.indexes()) {
-            if (check_size(size_necessary, size_op, size_val, sdfi.numberValues()) && check_ids(ids_necessary, id_vector, sdne.id())) {
+            if (check_size(size_necessary, size_op, size_val, sdfi.numberValues()) && check_ids(ids_necessary, id_set, sdne.id())) {
                 format_length[0] = (format_length[0] < std::to_string(sdne.id()).length()) ? std::to_string(sdne.id()).length() : format_length[0];
                 format_length[1] = (format_length[1] < sdne.name().length()) ? sdne.name().length() : format_length[1];
                 format_length[2] = (format_length[2] < std::to_string(sdfi.numberValues()).length()) ? std::to_string(sdfi.numberValues()).length() : format_length[2];
@@ -143,7 +147,7 @@ void saleae_ls(std::string path, std::string size, std::string ids) {
     std::cout << '|' << std::string(abs_length, '-') << '|' << std::endl;
     for (const SaleaeDirectoryNetEntry& sdne : sd->dump()) {
         for (const SaleaeDirectoryFileIndex& sdfi : sdne.indexes()) {
-            if (check_size(size_necessary, size_op, size_val, sdfi.numberValues()) && check_ids(ids_necessary, id_vector, sdne.id())) {
+            if (check_size(size_necessary, size_op, size_val, sdfi.numberValues()) && check_ids(ids_necessary, id_set, sdne.id())) {
                 std::cout << '|';
                 print_element(sdne.id(), format_length[0], false);
                 print_element(sdne.name(), format_length[1], true);
