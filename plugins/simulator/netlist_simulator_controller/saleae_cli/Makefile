@@ -3,11 +3,21 @@ BUILD_DIR = build
 CXX_SOURCES = \
   saleae.cpp \
   ../src/saleae_directory.cpp \
+  ../src/saleae_file.cpp \
+  ../src/saleae_parser.cpp \
   ../../../../src/utilities/json_write_document.cpp \
   ../../../../src/utilities/program_options.cpp \
   ../../../../src/utilities/program_arguments.cpp \
   ../../../../src/utilities/log.cpp \
-  ../../../../src/utilities/utils.cpp
+  ../../../../src/utilities/utils.cpp \
+  ../../../../src/netlist/net.cpp \
+  ../../../../src/netlist/endpoint.cpp \
+  ../../../../src/netlist/gate.cpp \
+  ../../../../src/netlist/boolean_function.cpp \
+  ../../../../src/netlist/netlist.cpp \
+  ../../../../src/netlist/netlist_internal_manager \
+  ../../../../src/netlist/event_handler.cpp \
+  ../../../../src/netlist/data_container.cpp
 
 
 CC = gcc

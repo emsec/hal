@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <netlist_simulator_controller/saleae_directory.h>
+#include <netlist_simulator_controller/saleae_file.h>
 #include <hal_core/utilities/program_options.h>
 #include <hal_core/utilities/program_arguments.h>
 
@@ -107,7 +108,7 @@ void saleae_ls(string path, string size, string ids) {
     // collect length for better formatting
     SaleaeDirectory *sd = new SaleaeDirectory(path, false);
     vector<SaleaeDirectoryNetEntry> NetEntries = sd->dump();
-    int format_length [6] = {7,8,19,11,10,15};
+    int format_length [6] = {7, 8, 19, 11, 10, 15}; // length of the column titles
     for (const SaleaeDirectoryNetEntry& sdne : sd->dump()) {
         for (const SaleaeDirectoryFileIndex& sdfi : sdne.indexes()) {
             if (check_size(size_necessary, size_op, size_val, sdfi.numberValues()) && check_ids(ids_necessary, id_vector, sdne.id())) {
@@ -149,6 +150,14 @@ void saleae_ls(string path, string size, string ids) {
 }
 
 
+// void saleae_cat(string path) {
+//     SaleaeInputFile *sf = new SaleaeInputFile("/home/parallels/Desktop/saleae/digital_0.bin");
+//     SaleaeDataBuffer *db = new SaleaeDataBuffer();
+//     db = sf->get_buffered_data(1);
+//     db->dump();
+// }
+
+
 int main(int argc, const char* argv[]) {
     /* initialize and parse cli options */
     ProgramOptions cli_options("cli options");
@@ -173,6 +182,9 @@ int main(int argc, const char* argv[]) {
         cli_options.add({"-d", "--dir"}, "binary file is not in current directory but in directory given by path name", {ProgramOptions::A_REQUIRED_PARAMETER});
         cli_options.add({"-h", "--only-header"}, "dump only header");
         cli_options.add({"-b", "--only-data"}, "dump only data including start value");
+
+        ProgramArguments args = cli_options.parse(argc, argv);
+        //saleae_cat("/home/parallels/Desktop/saleae/digital_0.bin");
     }
 
     bool unknown_option_exists = false;
