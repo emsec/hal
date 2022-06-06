@@ -141,6 +141,5 @@ namespace hal {
         // Map: [category, key] -> row style of the respective entry
         QMap<QPair<QString, QString>, RowStyle> mEntryToRowStyle;
         QList<DataEntry> mDataEntries;
-
     };
 }
