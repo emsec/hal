@@ -321,6 +321,11 @@ int main(int argc, const char* argv[])
         log_warning("core", "your modifications will not be written to a .hal file (--volatile-mode).");
     }
 
+    if (!import_nl.empty() && !volatile_mode)
+    {
+        pm->serialize_project(netlist.get());
+    }
+
     /* cli plugins */
     std::vector<std::string> plugins_to_execute;
     auto option_to_plugin_name = plugin_manager::get_cli_plugin_flags();
