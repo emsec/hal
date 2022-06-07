@@ -3,10 +3,16 @@
 #include "gui/gui_globals.h"
 #include "gui/python/py_code_provider.h"
 #include "gui/user_action/action_remove_items_from_object.h"
+#include "gui/user_action/action_rename_object.h"
+#include "gui/user_action/action_set_object_color.h"
 #include <QHeaderView>
 #include <QtWidgets/QMenu>
 #include <QApplication>
 #include <QClipboard>
+#include "gui/input_dialog/input_dialog.h"
+#include "gui/grouping/grouping_manager_widget.h"
+#include "gui/grouping/grouping_table_model.h"
+#include <QColorDialog>
 
 namespace hal {
     GroupingsOfItemWidget::GroupingsOfItemWidget(QWidget *parent) : QTableView(parent),
@@ -111,10 +117,15 @@ namespace hal {
             }
         );
 
+
+        menu.addSection("Misc");
+
+        menu.addAction("Change grouping name", [this, e](){changeNameTriggered(e);});
+        menu.addAction("Change grouping color", [this, e](){changeColorTriggered(e);});
+
         /*====================================
                Remove item from grouping
           ====================================*/
-        menu.addSection("Misc");
         if (mCurrentObjectType != ItemType::None && mCurrentObjectId > 0){
             QSet<u32> rmMods;
             QSet<u32> rmGates;
@@ -213,6 +224,42 @@ namespace hal {
         }
         else { // elementCount > 1
             Q_EMIT updateText(mFrameTitleMultipleItems.arg(elementCount));
+        }
+    }
+
+    void GroupingsOfItemWidget::changeNameTriggered(GroupingTableEntry entry)
+    {
+        auto grpModel = gContentManager->getGroupingManagerWidget()->getModel();
+        InputDialog ipd;
+        ipd.setWindowTitle("Rename Grouping");
+        ipd.setInfoText("Please select a new unique name for the grouping.");
+        QString oldName = entry.name();
+        grpModel->setAboutToRename(oldName);
+        ipd.setInputText(oldName);
+        ipd.addValidator(grpModel);
+
+        if (ipd.exec() == QDialog::Accepted)
+        {
+            QString newName = ipd.textValue();
+            if (newName != oldName)
+            {
+                ActionRenameObject* act = new ActionRenameObject(newName);
+                act->setObject(UserActionObject(entry.id(), UserActionObjectType::Grouping));
+                act->exec();
+            }
+        }
+        grpModel->setAboutToRename(QString());
+    }
+
+    void GroupingsOfItemWidget::changeColorTriggered(GroupingTableEntry entry)
+    {
+        QColor color = entry.color();
+        color = QColorDialog::getColor(color, this, "Select color for grouping " + entry.name());
+        if(color.isValid())
+        {
+            ActionSetObjectColor* act = new ActionSetObjectColor(color);
+            act->setObject(UserActionObject(entry.id(), UserActionObjectType::Grouping));
+            act->exec();
         }
     }
 
