@@ -44,7 +44,15 @@ namespace hal
                 )")
             // .def("get_cli_options", &plugin_dataflow::get_cli_options)
             // .def("handle_cli_call", &plugin_dataflow::handle_cli_call)
-            .def("execute", &plugin_dataflow::execute, py::arg("netlist"), py::arg("output_path"), py::arg("sizes"), py::arg("draw_graph"), py::arg("known_groups"), py::arg("bad_group_sizes"), R"(
+            .def("execute",
+                 &plugin_dataflow::execute,
+                 py::arg("netlist"),
+                 py::arg("output_path"),
+                 py::arg("sizes"),
+                 py::arg("draw_graph"),
+                 py::arg("known_groups")    = std::vector<std::vector<u32>>(),
+                 py::arg("bad_group_sizes") = 7,
+                 R"(
                 Executes the dataflow analysis plugin (DANA). Starting from the netlist DANA tries to identify high-level registers.
 
                 :param hal_py.Netlist netlist: The netlist to operate on.
