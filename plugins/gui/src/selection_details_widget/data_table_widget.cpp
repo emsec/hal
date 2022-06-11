@@ -1,16 +1,20 @@
 #include "gui/selection_details_widget/data_table_widget.h"
 #include "gui/gui_globals.h"
 #include "gui/python/py_code_provider.h"
+#include "gui/input_dialog/input_dialog.h"
 #include <QHeaderView>
 #include <QtWidgets/QMenu>
 #include <QApplication>
 #include <QClipboard>
 
-namespace hal {
+namespace hal
+{
+
     DataTableWidget::DataTableWidget(QWidget *parent) : QTableView(parent),
     mDataTableModel(new DataTableModel(this))
     {
         mCurrentObjectType=DataContainerType::DATA_CONTAINER;
+        mCurrentContainer = nullptr;
 
         this->setModel(mDataTableModel);
         this->setSelectionMode(QAbstractItemView::NoSelection);
@@ -36,6 +40,7 @@ namespace hal {
         }
         mCurrentObjectType = DataContainerType::GATE;
         mCurrentObjectId = gate->get_id();
+        mCurrentContainer = dynamic_cast<DataContainer*>(gate);
         mDataTableModel->updateData(gate->get_data_map());
         clearSelection();
         adjustTableSizes();
@@ -48,6 +53,7 @@ namespace hal {
         }
         mCurrentObjectType = DataContainerType::NET;
         mCurrentObjectId = net->get_id();
+        mCurrentContainer = dynamic_cast<DataContainer*>(net);
         mDataTableModel->updateData(net->get_data_map());
         clearSelection();
         adjustTableSizes();
@@ -61,6 +67,7 @@ namespace hal {
         mCurrentObjectType = DataContainerType::MODULE;
         mCurrentObjectId = module->get_id();
         mDataTableModel->updateData(module->get_data_map());
+        mCurrentContainer = dynamic_cast<DataContainer*>(module);
         clearSelection();
         adjustTableSizes();
     }
@@ -87,6 +94,12 @@ namespace hal {
         menu.addAction("Type to clipboard", [entry](){QApplication::clipboard()->setText(entry.dataType);});
         menu.addAction("Value to clipboard", [entry](){QApplication::clipboard()->setText(entry.value);});
 
+        menu.addSection("ChangeSection");
+        menu.addAction("Change category", [this](){changePropertyRequested(DataTableModel::propertyType::category);});
+        menu.addAction("Change key", [this](){changePropertyRequested(DataTableModel::propertyType::key);});
+        menu.addAction("Change type", [this](){changePropertyRequested(DataTableModel::propertyType::type);});
+        menu.addAction("Change value", [this](){changePropertyRequested(DataTableModel::propertyType::value);});
+
         QString pyCode = "";
         switch(mCurrentObjectType)
         {
@@ -97,63 +110,6 @@ namespace hal {
         }
         menu.addSection("Python");
         menu.addAction(QIcon(":/icons/python"), "Get data entry", [pyCode](){QApplication::clipboard()->setText(pyCode);});
-
-
-//        QString clipboardText = QString("%1: %2").arg(entry.key, entry.value);
-
-//        menu.addAction("Copy data entry to clipboard",
-//           [clipboardText]()
-//           {
-//               QApplication::clipboard()->setText( clipboardText );
-//           }
-//        );
-
-//        clipboardText = QString("(%1, %2): (%3, %4)").arg(entry.category, entry.key, entry.dataType, entry.value);
-
-//        menu.addAction("Copy data entry to clipboard (with category and data type)",
-//           [clipboardText]()
-//           {
-//               QApplication::clipboard()->setText( clipboardText );
-//           }
-//        );
-        
-
-//        /*====================================
-//                  Data from Python
-//          ====================================*/
-//        menu.addSection("Python");
-//        QString pythonCode;
-
-//        if(mCurrentObjectType == DataContainerType::GATE)
-//            pythonCode = PyCodeProvider::pyCodeGateData(mCurrentObjectId, entry.category, entry.key);
-//        else if(mCurrentObjectType == DataContainerType::NET)
-//            pythonCode = PyCodeProvider::pyCodeNetData(mCurrentObjectId, entry.category, entry.key);
-//        else if(mCurrentObjectType == DataContainerType::MODULE)
-//            pythonCode = PyCodeProvider::pyCodeModuleData(mCurrentObjectId, entry.category, entry.key);
-
-//        menu.addAction(QIcon(":/icons/python"), "Exctract data as python code (copy to clipboard)",
-//           [pythonCode]()
-//           {
-//               QApplication::clipboard()->setText( pythonCode );
-//           }
-//        );
-
-//        /*====================================
-//                Data Map from Python
-//          ====================================*/
-//        if(mCurrentObjectType == DataContainerType::GATE)
-//            pythonCode = PyCodeProvider::pyCodeGateDataMap(mCurrentObjectId);
-//        else if(mCurrentObjectType == DataContainerType::NET)
-//            pythonCode = PyCodeProvider::pyCodeNetDataMap(mCurrentObjectId);
-//        else if(mCurrentObjectType == DataContainerType::MODULE)
-//            pythonCode = PyCodeProvider::pyCodeModuleDataMap(mCurrentObjectId);
-
-//        menu.addAction(QIcon(":/icons/python"), "Exctract data map as python code (copy to clipboard)",
-//           [pythonCode]()
-//           {
-//               QApplication::clipboard()->setText( pythonCode );
-//           }
-//        );
 
         menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
         menu.exec();
@@ -174,6 +130,28 @@ namespace hal {
 
         setMaximumHeight(h);
         setMinimumHeight(h);
+    }
+
+    void DataTableWidget::changePropertyRequested(DataTableModel::propertyType prop)
+    {
+        if(!mCurrentContainer)
+            return;
+        const QString propertyString[] = {"category", "key", "type", "value"};
+        QModelIndex idx = currentIndex(); //could also be a parameter to be extra cautious (or the dataentry)
+        DataTableModel::DataEntry entry = mDataTableModel->getEntryAtRow(idx.row());
+        InputDialog ipd("Change " + propertyString[(int)prop], "Choose new value for the " + propertyString[(int)prop] + " field.", entry.getPropertyValueByPropType(prop));
+        if(ipd.exec() == QDialog::Accepted)
+        {
+            QString values[] = {entry.category, entry.key, entry.dataType, entry.value};
+            if(prop == DataTableModel::propertyType::category || prop == DataTableModel::propertyType::key)
+                mCurrentContainer->delete_data(values[0].toStdString(), values[1].toStdString());
+
+            values[(int)prop] = ipd.textValue();
+            mCurrentContainer->set_data(values[0].toStdString(), values[1].toStdString(), values[2].toStdString(), values[3].toStdString());
+            mDataTableModel->updateData(mCurrentContainer->get_data_map());
+            clearSelection();
+            adjustTableSizes();
+        }
     }
 
 

@@ -46,6 +46,11 @@ namespace hal {
     {
         Q_OBJECT
     public:
+
+        /**
+         * Helper enum that can be used to access the value of a data entry.
+         */
+        enum propertyType{category = 0, key = 1, type = 2, value = 3};
         /**
          * Used to store one data entry (i.e. the data in one data field).
          */
@@ -55,6 +60,11 @@ namespace hal {
             QString key; /// The data's key
             QString dataType; // The data type
             QString value; // The value of the data 
+            QString getPropertyValueByPropType(propertyType prop)//helper function to generically acces a propertys value
+            {
+                QString val =  (prop == 0) ? category : ( (prop == 1) ? key : ( (prop == 2) ? dataType : value ) );
+                return val;
+            }
         };
 
         /**
