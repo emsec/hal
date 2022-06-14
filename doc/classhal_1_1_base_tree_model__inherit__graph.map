@@ -1,0 +1,9 @@
+<map id="hal::BaseTreeModel" name="hal::BaseTreeModel">
+<area shape="rect" id="node1" title="The BaseTreeModel implements generic standard functions of a tree model." alt="" coords="359,755,526,1125"/>
+<area shape="rect" id="node4" href="$classhal_1_1_gate_pins_tree_model.html" title="A model to display the pins of a gate." alt="" coords="5,1283,192,1507"/>
+<area shape="rect" id="node5" href="$classhal_1_1_module_pins_tree_model.html" title="A model to represent the ports of a module." alt="" coords="216,1269,445,1522"/>
+<area shape="rect" id="node6" href="$classhal_1_1_module_tree_model.html" title=" " alt="" coords="469,1283,643,1507"/>
+<area shape="rect" id="node7" href="$classhal_1_1_netlist_elements_tree_model.html" title="A model to display arbitrary elements of the netlist." alt="" coords="667,1173,896,1617"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstractitemmodel.html" title=" " alt="" coords="347,395,539,707"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="359,5,526,347"/>
+</map>

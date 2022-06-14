@@ -1,4 +1,4 @@
 <map id="hal::ActionOpenNetlistFile" name="hal::ActionOpenNetlistFile">
-<area shape="rect" id="node1" title="Loads a netlist." alt="" coords="5,321,196,472"/>
-<area shape="rect" id="node2" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="23,5,179,273"/>
+<area shape="rect" id="node1" title="Loads a netlist." alt="" coords="19,351,210,501"/>
+<area shape="rect" id="node2" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="5,5,224,303"/>
 </map>

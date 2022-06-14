@@ -86,19 +86,26 @@ $(document).ready(function(){initNavTree('functions_func_d.html',''); initResiza
 
 <h3><a id="index_d"></a>- d -</h3><ul>
 <li>data()
-: <a class="el" href="classhal_1_1_channel_model.html#a66b5bc857f732ddb6e2a149876a4eaf2">hal::ChannelModel</a>
+: <a class="el" href="classhal_1_1_base_tree_model.html#aac6235e965fcc2fb3af1efb842edeaf6">hal::BaseTreeModel</a>
+, <a class="el" href="classhal_1_1_boolean_function_table_model.html#a8a00e84d32798c20076aaaa7682b0148">hal::BooleanFunctionTableModel</a>
+, <a class="el" href="classhal_1_1_channel_model.html#a66b5bc857f732ddb6e2a149876a4eaf2">hal::ChannelModel</a>
 , <a class="el" href="classhal_1_1_context_table_model.html#aa7aec17db40ae5cc51ff66ebd1664123">hal::ContextTableModel</a>
-, <a class="el" href="classhal_1_1_details_general_model.html#ab1d3be344c110d411b9647ee0181c72c">hal::DetailsGeneralModel</a>
-, <a class="el" href="classhal_1_1_details_general_model_entry.html#afa0216674cf8ac01071f72e60769c2fe">hal::DetailsGeneralModelEntry</a>
-, <a class="el" href="structhal_1_1_enum_strings.html#a78a5141f75e12949c1759e2960a08203">hal::EnumStrings&lt; T, typename &gt;</a>
+, <a class="el" href="classhal_1_1_data_table_model.html#aa40b1c400d113367caf7b5e613dd694f">hal::DataTableModel</a>
+, <a class="el" href="classhal_1_1_endpoint_table_model.html#a2651b1d0da7b903d055b0403b174ffff">hal::EndpointTableModel</a>
+, <a class="el" href="structhal_1_1_enum_strings.html#a28901a293a7c1966a2e8d53f7af02f5e">hal::EnumStrings&lt; T, typename &gt;</a>
 , <a class="el" href="classhal_1_1_gatelibrary_table_model.html#ab5fc5eebafca02480d424935bb868fee">hal::GatelibraryTableModel</a>
 , <a class="el" href="classhal_1_1_gate_select_entry.html#a57ad1d38e089d0c4e62b76c9c31e83d0">hal::GateSelectEntry</a>
 , <a class="el" href="classhal_1_1_gate_select_model.html#a029579355df44c837eb75a2a9632add6">hal::GateSelectModel</a>
+, <a class="el" href="classhal_1_1_groupings_of_item_model.html#a9e5ee7820412b4141aa7f4d1f72fb373">hal::GroupingsOfItemModel</a>
 , <a class="el" href="classhal_1_1_grouping_table_model.html#a821ca8f75c125f04d30b8e46e6b0bb07">hal::GroupingTableModel</a>
+, <a class="el" href="classhal_1_1_l_u_t_table_model.html#a576451c400569bff88beba95520eb321">hal::LUTTableModel</a>
 , <a class="el" href="classhal_1_1_module_item.html#a788ab1a6697bfb4686a4b12f163e95c0">hal::ModuleItem</a>
 , <a class="el" href="classhal_1_1_module_model.html#a99479fd9bf082b812515289f4a2e3e59">hal::ModuleModel</a>
 , <a class="el" href="classhal_1_1_module_select_entry.html#a48b6fbeea6eea03d4319cc7a8682384c">hal::ModuleSelectEntry</a>
 , <a class="el" href="classhal_1_1_module_select_model.html#aabb33c42e8577fc8e745dcdbdc0d073f">hal::ModuleSelectModel</a>
+, <a class="el" href="classhal_1_1_module_table_model.html#a6f44d9e5eb5453e54b70285e09c9e20a">hal::ModuleTableModel</a>
+, <a class="el" href="classhal_1_1_module_tree_model.html#a2756ca888a927d1d48731ec3dad17c98">hal::ModuleTreeModel</a>
+, <a class="el" href="classhal_1_1_netlist_elements_tree_model.html#a79eaea2551e98929a1b1f9edba174a36">hal::NetlistElementsTreeModel</a>
 , <a class="el" href="classhal_1_1_selection_tree_item.html#a07461aec8fff230c57fc86066ab04678">hal::SelectionTreeItem</a>
 , <a class="el" href="classhal_1_1_selection_tree_model.html#a1dd9a9eda59a5dfa3b0986df57447f35">hal::SelectionTreeModel</a>
 </li>
@@ -108,8 +115,11 @@ $(document).ready(function(){initNavTree('functions_func_d.html',''); initResiza
 <li>DataContainer()
 : <a class="el" href="classhal_1_1_data_container.html#a268c27a803da43b036ac0d324dfd31c9">hal::DataContainer</a>
 </li>
-<li>DataFieldsTable()
-: <a class="el" href="classhal_1_1_data_fields_table.html#a2bb5a9072db687e3aebc9bf8aa670847">hal::DataFieldsTable</a>
+<li>DataTableModel()
+: <a class="el" href="classhal_1_1_data_table_model.html#a08b70f2dcd41cf19c8a0d533568fb9b9">hal::DataTableModel</a>
+</li>
+<li>DataTableWidget()
+: <a class="el" href="classhal_1_1_data_table_widget.html#a15f717119c28ca7e9f1769478006d327">hal::DataTableWidget</a>
 </li>
 <li>deactivate_all_channels()
 : <a class="el" href="classhal_1_1_log_manager.html#a2defb30df0b5f5b3a572b002a551a9c0">hal::LogManager</a>
@@ -179,6 +189,9 @@ $(document).ready(function(){initNavTree('functions_func_d.html',''); initResiza
 <li>delete_net()
 : <a class="el" href="classhal_1_1_netlist.html#a3c2fbba09aa1857d44790bbd16c9df4e">hal::Netlist</a>
 </li>
+<li>delete_pin_group()
+: <a class="el" href="classhal_1_1_module.html#aeb0e98c2056854a17ac7a1ab1158b4bc">hal::Module</a>
+</li>
 <li>deleteAllItems()
 : <a class="el" href="classhal_1_1_graphics_scene.html#a0a15f1459122eb8fc2936f5a60a1af13">hal::GraphicsScene</a>
 </li>
@@ -205,6 +218,9 @@ $(document).ready(function(){initNavTree('functions_func_d.html',''); initResiza
 <li>deletingContext()
 : <a class="el" href="classhal_1_1_graph_context_manager.html#aeb4defe0bb3118a4420dee21608231f5">hal::GraphContextManager</a>
 </li>
+<li>deprecatedOpenFile()
+: <a class="el" href="classhal_1_1_file_manager.html#affe57a412021b59fbfda28c59c3036a9">hal::FileManager</a>
+</li>
 <li>description()
 : <a class="el" href="classhal_1_1_settings_item.html#acf784ad49fbab1403082b7e14cf4751f">hal::SettingsItem</a>
 </li>
@@ -215,13 +231,21 @@ $(document).ready(function(){initNavTree('functions_func_d.html',''); initResiza
 : <a class="el" href="classhal_1_1_gui_api.html#a244fb080ad7dc733cfb0d245f53964d2">hal::GuiApi</a>
 </li>
 <li>deselectGate()
-: <a class="el" href="classhal_1_1_gui_api.html#a2f4b8531cb657d637415d433234020b2">hal::GuiApi</a>
+: <a class="el" href="classhal_1_1_gui_api.html#a8385c0951e46aee2d615b917788c2ed9">hal::GuiApi</a>
 </li>
 <li>deselectModule()
-: <a class="el" href="classhal_1_1_gui_api.html#a07beac51748c42e249beb70a911a53a3">hal::GuiApi</a>
+: <a class="el" href="classhal_1_1_gui_api.html#abab2f1908a7c6075cd09dc05c4b78cc6">hal::GuiApi</a>
 </li>
 <li>deselectNet()
-: <a class="el" href="classhal_1_1_gui_api.html#aa9319619c8075f82b3791c066778b85a">hal::GuiApi</a>
+: <a class="el" href="classhal_1_1_gui_api.html#a48b7347224a3c22bfc7890603aec9490">hal::GuiApi</a>
+</li>
+<li>deserialize()
+: <a class="el" href="classhal_1_1_graph_context_serializer.html#aa3282d2b19cde8312d7aca7d3a4b52a5">hal::GraphContextSerializer</a>
+, <a class="el" href="classhal_1_1_grouping_color_serializer.html#a6e753feb0ed10a2ec655bc71e6099709">hal::GroupingColorSerializer</a>
+, <a class="el" href="classhal_1_1_grouping_serializer.html#a3b286be87b2b0f78c988b74a71c71b7d">hal::GroupingSerializer</a>
+, <a class="el" href="classhal_1_1_module_color_serializer.html#a769c749c1208ab2a0e3f584091b208ee">hal::ModuleColorSerializer</a>
+, <a class="el" href="classhal_1_1_project_serializer.html#aa4d120f4d6bf0e5576faba87632dc174">hal::ProjectSerializer</a>
+, <a class="el" href="classhal_1_1_python_serializer.html#a59bf37a5308319365211062203ee7e2e">hal::PythonSerializer</a>
 </li>
 <li>detach()
 : <a class="el" href="classhal_1_1_content_anchor.html#ac4af161894ff9b1834dcb6d95f4c2d1d">hal::ContentAnchor</a>
@@ -241,23 +265,11 @@ $(document).ready(function(){initNavTree('functions_func_d.html',''); initResiza
 <li>detachWidget()
 : <a class="el" href="classhal_1_1_content_frame.html#aad727c38a42c485a5c704860306a7100">hal::ContentFrame</a>
 </li>
-<li>DetailsGeneralCommonInfo()
-: <a class="el" href="classhal_1_1_details_general_common_info.html#a91b6d2a23aac6b79f0beae715657e224">hal::DetailsGeneralCommonInfo&lt; T &gt;</a>
+<li>DetailsFrameWidget()
+: <a class="el" href="classhal_1_1_details_frame_widget.html#a8eb5f2869e16638e5d71dbb7166c13fe">hal::DetailsFrameWidget</a>
 </li>
-<li>DetailsGeneralModel()
-: <a class="el" href="classhal_1_1_details_general_model.html#a521da7acbc2601797cae37d05804b261">hal::DetailsGeneralModel</a>
-</li>
-<li>DetailsGeneralModelEntry()
-: <a class="el" href="classhal_1_1_details_general_model_entry.html#acf7ff265f395fea3f0caf2da138ae3a0">hal::DetailsGeneralModelEntry</a>
-</li>
-<li>DetailsSectionWidget()
-: <a class="el" href="classhal_1_1_details_section_widget.html#a1b77ee6156b17cffd3452d5481669ffd">hal::DetailsSectionWidget</a>
-</li>
-<li>detailsTypeName()
-: <a class="el" href="classhal_1_1_details_widget.html#a4fd84fb4d2579cf82d11e24968c2431c">hal::DetailsWidget</a>
-</li>
-<li>DetailsWidget()
-: <a class="el" href="classhal_1_1_details_widget.html#a4dd3e74b7492e1acef74773931100a72">hal::DetailsWidget</a>
+<li>DetailsTabWidget()
+: <a class="el" href="classhal_1_1_details_tab_widget.html#ac6ead1e8f48fc88dd5849e0bd41bbc82">hal::DetailsTabWidget</a>
 </li>
 <li>diff()
 : <a class="el" href="classnlohmann_1_1basic__json.html#a543bd5f7490de54c875b2c0912dc9a49">nlohmann::basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt;</a>
@@ -269,11 +281,11 @@ $(document).ready(function(){initNavTree('functions_func_d.html',''); initResiza
 <li>DirectoryRange()
 : <a class="el" href="classhal_1_1utils_1_1_directory_range.html#ab98604808d3da3e5492578bfc9f2cb3e">hal::utils::DirectoryRange</a>
 </li>
+<li>directoryStatus()
+: <a class="el" href="classhal_1_1_file_manager.html#a408006dc497476d24c0114c5c1e37de3">hal::FileManager</a>
+</li>
 <li>dirty()
 : <a class="el" href="classhal_1_1_settings_widget.html#a36a748182fbada1567c30a9caa083b5a">hal::SettingsWidget</a>
-</li>
-<li>disabled()
-: <a class="el" href="classhal_1_1_recent_file_item.html#aa26ac018dcb5212f476e1cde89f32a78">hal::RecentFileItem</a>
 </li>
 <li>disabledIconStyle()
 : <a class="el" href="classhal_1_1_context_manager_widget.html#a48d9feeb7a102e8f6bd6ae30946915e3">hal::ContextManagerWidget</a>
@@ -287,6 +299,9 @@ $(document).ready(function(){initNavTree('functions_func_d.html',''); initResiza
 </li>
 <li>disconnectAll()
 : <a class="el" href="classhal_1_1_graphics_scene.html#abe36d4d9883465a8a38e210724709b12">hal::GraphicsScene</a>
+</li>
+<li>disconnectEvents()
+: <a class="el" href="classhal_1_1_module_tree_model.html#a58059a6dc5b5ad9c11fc26a8c3f14a61">hal::ModuleTreeModel</a>
 </li>
 <li>displayPrompt()
 : <a class="el" href="classhal_1_1_python_console.html#a3b1a404856192fa11b09c9b6ca602e6d">hal::PythonConsole</a>
@@ -361,13 +376,18 @@ $(document).ready(function(){initNavTree('functions_func_d.html',''); initResiza
 : <a class="el" href="classhal_1_1_dock_bar.html#a035f262da88bc408cc76fe37ed4f8105">hal::DockBar</a>
 , <a class="el" href="classhal_1_1_open_file_widget.html#ae2a4d60b89d2db141cf4afcaea878296">hal::OpenFileWidget</a>
 </li>
+<li>dropMimeData()
+: <a class="el" href="classhal_1_1_module_pins_tree_model.html#af9aae3a42ec1f6efa1c4ab0ce2f62419">hal::ModulePinsTreeModel</a>
+</li>
 <li>dropTarget()
 : <a class="el" href="classhal_1_1_graphics_scene.html#ac9e79075b461b21661de16918b2754e9">hal::GraphicsScene</a>
 </li>
 <li>dump()
-: <a class="el" href="classhal_1_1_net_layout_connection_factory.html#a3d24a41876ae685e433d96f4eda72e80">hal::NetLayoutConnectionFactory</a>
+: <a class="el" href="classhal_1_1_json_write_document.html#a4460e3696210bf0b265e4c4b7b68c293">hal::JsonWriteDocument</a>
+, <a class="el" href="classhal_1_1_net_layout_connection_factory.html#a3d24a41876ae685e433d96f4eda72e80">hal::NetLayoutConnectionFactory</a>
 , <a class="el" href="classhal_1_1_net_layout_junction.html#a250da2467d1ad3f9c57eca9dcb04fbcb">hal::NetLayoutJunction</a>
 , <a class="el" href="classhal_1_1_net_layout_junction_entries.html#adc36b8cf96e0d7085f79036da15a9268">hal::NetLayoutJunctionEntries</a>
+, <a class="el" href="classhal_1_1_project_manager.html#a79696b949797d3db507ceaeb9b153647">hal::ProjectManager</a>
 , <a class="el" href="classhal_1_1_wait_to_be_seated_list.html#a13ed2e8ca2e3abd34d8727a9b5b65186">hal::WaitToBeSeatedList</a>
 , <a class="el" href="classnlohmann_1_1basic__json.html#a50ec80b02d0f3f51130d4abb5d1cfdc5">nlohmann::basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt;</a>
 , <a class="el" href="classnlohmann_1_1detail_1_1serializer.html#a95460ebd1a535a543e5a0ec52e00f48b">nlohmann::detail::serializer&lt; BasicJsonType &gt;</a>
@@ -390,7 +410,7 @@ $(document).ready(function(){initNavTree('functions_func_d.html',''); initResiza
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu May 19 2022 17:55:50 for HAL by
+    <li class="footer">Generated on Tue Jun 14 2022 14:52:19 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

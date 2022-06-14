@@ -90,33 +90,41 @@ $(document).ready(function(){initNavTree('netlist_2boolean__function_8cpp.html',
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="boolean__function_8h_source.html">hal_core/netlist/boolean_function.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="parser_8h_source.html">hal_core/netlist/boolean_function/parser.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="simplification_8h_source.html">hal_core/netlist/boolean_function/simplification.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="symbolic__execution_8h_source.html">hal_core/netlist/boolean_function/symbolic_execution.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="log_8h_source.html">hal_core/utilities/log.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="utils_8h_source.html">hal_core/utilities/utils.h</a>&quot;</code><br />
 <code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;bitset&gt;</code><br />
+<code>#include &lt;boost/spirit/home/x3.hpp&gt;</code><br />
+<code>#include &lt;chrono&gt;</code><br />
 <code>#include &lt;map&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for boolean_function.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="netlist_2boolean__function_8cpp__incl.png" border="0" usemap="#_2home_2runner_2work_2hal_2hal_2src_2netlist_2boolean__function_8cpp" alt=""/></div>
 <map name="_2home_2runner_2work_2hal_2hal_2src_2netlist_2boolean__function_8cpp" id="_2home_2runner_2work_2hal_2hal_2src_2netlist_2boolean__function_8cpp">
-<area shape="rect" title=" " alt="" coords="1153,5,1324,61"/>
-<area shape="rect" href="boolean__function_8h.html" title=" " alt="" coords="919,109,1097,151"/>
-<area shape="rect" title=" " alt="" coords="1300,206,1385,233"/>
-<area shape="rect" title=" " alt="" coords="1409,206,1460,233"/>
-<area shape="rect" href="utils_8h.html" title=" " alt="" coords="248,109,379,151"/>
-<area shape="rect" title=" " alt="" coords="1327,117,1385,143"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="1090,288,1230,315"/>
-<area shape="rect" href="enums_8h.html" title=" " alt="" coords="1095,199,1225,240"/>
-<area shape="rect" title=" " alt="" coords="587,288,650,315"/>
-<area shape="rect" title=" " alt="" coords="657,206,727,233"/>
-<area shape="rect" title=" " alt="" coords="752,206,821,233"/>
-<area shape="rect" title=" " alt="" coords="846,206,922,233"/>
-<area shape="rect" title=" " alt="" coords="946,206,1070,233"/>
-<area shape="rect" title=" " alt="" coords="467,206,581,233"/>
-<area shape="rect" title=" " alt="" coords="89,206,175,233"/>
-<area shape="rect" title=" " alt="" coords="251,206,293,233"/>
-<area shape="rect" title=" " alt="" coords="317,206,392,233"/>
-<area shape="rect" title=" " alt="" coords="5,206,64,233"/>
+<area shape="rect" title=" " alt="" coords="1089,5,1260,61"/>
+<area shape="rect" href="boolean__function_8h.html" title=" " alt="" coords="737,199,916,240"/>
+<area shape="rect" title=" " alt="" coords="843,377,893,404"/>
+<area shape="rect" title=" " alt="" coords="1176,295,1261,322"/>
+<area shape="rect" href="parser_8h.html" title=" " alt="" coords="708,109,887,151"/>
+<area shape="rect" href="simplification_8h.html" title=" " alt="" coords="497,109,684,151"/>
+<area shape="rect" href="symbolic__execution_8h.html" title=" " alt="" coords="911,109,1137,151"/>
+<area shape="rect" href="log_8h.html" title=" " alt="" coords="159,109,289,151"/>
+<area shape="rect" href="utils_8h.html" title=" " alt="" coords="5,199,136,240"/>
+<area shape="rect" title=" " alt="" coords="1321,117,1380,143"/>
+<area shape="rect" title=" " alt="" coords="1404,117,1588,143"/>
+<area shape="rect" title=" " alt="" coords="1612,117,1679,143"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="323,377,463,404"/>
+<area shape="rect" href="enums_8h.html" title=" " alt="" coords="533,288,664,329"/>
+<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="328,288,459,329"/>
+<area shape="rect" title=" " alt="" coords="937,295,1007,322"/>
+<area shape="rect" title=" " alt="" coords="1032,295,1101,322"/>
+<area shape="rect" title=" " alt="" coords="689,295,765,322"/>
+<area shape="rect" title=" " alt="" coords="261,295,304,322"/>
+<area shape="rect" title=" " alt="" coords="789,295,913,322"/>
 </map>
 </div>
 </div>
@@ -129,12 +137,10 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:aef8d4a8f510965ea04184d31d5714c79"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal.html#aef8d4a8f510965ea04184d31d5714c79">hal::operator&lt;&lt;</a> (std::ostream &amp;os, const BooleanFunction::operation &amp;op)</td></tr>
-<tr class="separator:aef8d4a8f510965ea04184d31d5714c79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90756e09e3a11b7dd4e7362ae3101ce9"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal.html#a90756e09e3a11b7dd4e7362ae3101ce9">hal::operator&lt;&lt;</a> (std::ostream &amp;os, BooleanFunction::Value v)</td></tr>
 <tr class="separator:a90756e09e3a11b7dd4e7362ae3101ce9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a269baf7c77d18645a4d0a9f759725f8f"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal.html#a269baf7c77d18645a4d0a9f759725f8f">hal::operator&lt;&lt;</a> (std::ostream &amp;os, const BooleanFunction &amp;f)</td></tr>
-<tr class="separator:a269baf7c77d18645a4d0a9f759725f8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8eead5158d06c7710072254faecce635"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal.html#a8eead5158d06c7710072254faecce635">hal::operator&lt;&lt;</a> (std::ostream &amp;os, const BooleanFunction &amp;function)</td></tr>
+<tr class="separator:a8eead5158d06c7710072254faecce635"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -142,7 +148,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="netlist_2boolean__function_8cpp.html">boolean_function.cpp</a></li>
-    <li class="footer">Generated on Thu May 19 2022 17:55:46 for HAL by
+    <li class="footer">Generated on Tue Jun 14 2022 14:52:15 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

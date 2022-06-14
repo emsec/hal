@@ -95,6 +95,8 @@ Functions</h2></td></tr>
 <tr class="separator:ae28797d933056e47740a71c2cac7aa25"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8cf7a43e181631154fe3e77548f5e4c8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1gate__library__manager.html#a8cf7a43e181631154fe3e77548f5e4c8">load_all</a> (bool reload)</td></tr>
 <tr class="separator:a8cf7a43e181631154fe3e77548f5e4c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a661cfae97344483fc6e57309e38a1f64"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::filesystem::path &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1gate__library__manager.html#a661cfae97344483fc6e57309e38a1f64">get_all_path</a> ()</td></tr>
+<tr class="separator:a661cfae97344483fc6e57309e38a1f64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af49606fc605379b7c43be875d0aee276"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1gate__library__manager.html#af49606fc605379b7c43be875d0aee276">save</a> (std::filesystem::path file_path, <a class="el" href="classhal_1_1_gate_library.html">GateLibrary</a> *gate_lib, bool overwrite)</td></tr>
 <tr class="separator:af49606fc605379b7c43be875d0aee276"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4fa2e4277540de2a0dcd6e9db517ed9b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1gate__library__manager.html#a4fa2e4277540de2a0dcd6e9db517ed9b">remove</a> (std::filesystem::path file_path)</td></tr>
@@ -109,6 +111,30 @@ Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The gate library manager keeps track of all gate libraries that are used within HAL. Further, it takes care of loading and saving gate libraries on demnand. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
+<a id="a661cfae97344483fc6e57309e38a1f64"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a661cfae97344483fc6e57309e38a1f64">&#9670;&nbsp;</a></span>get_all_path()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="arch__win_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> std::vector&lt; std::filesystem::path &gt; hal::gate_library_manager::get_all_path </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Lists all pathnames to gate libraries </p><dl class="section return"><dt>Returns</dt><dd>Vector of path </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00129">129</a> of file <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html">gate_library_manager.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="utils_8cpp_source.html#l00175">hal::utils::get_gate_library_directories()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="import__netlist__dialog_8cpp_source.html#l00027">hal::ImportNetlistDialog::ImportNetlistDialog()</a>.</p>
+
+</div>
+</div>
 <a id="a4a793d0da41af3151919e45a29f6375a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4a793d0da41af3151919e45a29f6375a">&#9670;&nbsp;</a></span>get_gate_libraries()</h2>
 
@@ -126,9 +152,9 @@ Functions</h2></td></tr>
 <p>Get all loaded gate libraries.</p>
 <dl class="section return"><dt>Returns</dt><dd>A vector of gate libraries. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00203">203</a> of file <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html">gate_library_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00215">215</a> of file <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html">gate_library_manager.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__library__manager_8cpp_source.html#l00005">hal::gate_library_manager_init()</a>, <a class="el" href="main__window_8cpp_source.html#l00534">hal::MainWindow::handleActionNew()</a>, and <a class="el" href="gatelibrary__table__model_8cpp_source.html#l00092">hal::GatelibraryTableModel::setup()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__library__manager_8cpp_source.html#l00005">hal::gate_library_manager_init()</a>, <a class="el" href="main__window_8cpp_source.html#l00540">hal::MainWindow::handleActionNew()</a>, and <a class="el" href="gatelibrary__table__model_8cpp_source.html#l00092">hal::GatelibraryTableModel::setup()</a>.</p>
 
 </div>
 </div>
@@ -156,11 +182,11 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The gate library on success, nullptr otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00157">157</a> of file <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html">gate_library_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00169">169</a> of file <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html">gate_library_manager.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="utils_8cpp_source.html#l00209">hal::utils::get_file()</a>, <a class="el" href="utils_8cpp_source.html#l00175">hal::utils::get_gate_library_directories()</a>, <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00071">load()</a>, and <a class="el" href="log_8h_source.html#l00067">log_info</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__library__manager_8cpp_source.html#l00005">hal::gate_library_manager_init()</a>, <a class="el" href="netlist__parser__manager_8cpp_source.html#l00165">hal::netlist_parser_manager::parse()</a>, <a class="el" href="simulator__test_8cpp_source.html#l00044">hal::SimulatorTest::SetUp()</a>, and <a class="el" href="test_2verilog__parser_8cpp_source.html#l00457">hal::TEST_F()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__library__manager_8cpp_source.html#l00005">hal::gate_library_manager_init()</a>, <a class="el" href="netlist__parser__manager_8cpp_source.html#l00184">hal::netlist_parser_manager::parse()</a>, and <a class="el" href="test_2verilog__parser_8cpp_source.html#l00469">hal::TEST_F()</a>.</p>
 
 </div>
 </div>
@@ -188,9 +214,9 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The gate library on success, nullptr otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00191">191</a> of file <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html">gate_library_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00203">203</a> of file <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html">gate_library_manager.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__library__manager_8cpp_source.html#l00005">hal::gate_library_manager_init()</a>, and <a class="el" href="simulator__test_8cpp_source.html#l00353">hal::TEST_F()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__library__manager_8cpp_source.html#l00005">hal::gate_library_manager_init()</a>.</p>
 
 </div>
 </div>
@@ -233,7 +259,7 @@ Functions</h2></td></tr>
 
 <p class="reference">References <a class="el" href="log_8h_source.html#l00075">log_error</a>, <a class="el" href="log_8h_source.html#l00067">log_info</a>, and <a class="el" href="gate__library__parser__manager_8cpp_source.html#l00076">hal::gate_library_parser_manager::parse()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__library__manager_8cpp_source.html#l00005">hal::gate_library_manager_init()</a>, <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00157">get_gate_library()</a>, <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00109">load_all()</a>, <a class="el" href="netlist_2netlist__factory_8cpp_source.html#l00028">hal::netlist_factory::load_netlist()</a>, <a class="el" href="gatelibrary__table__model_8cpp_source.html#l00124">hal::GatelibraryTableModel::loadFile()</a>, <a class="el" href="gatelibrary__table__model_8cpp_source.html#l00147">hal::GatelibraryTableModel::reloadIndex()</a>, and <a class="el" href="test_2verilog__writer_8cpp_source.html#l00015">hal::VerilogWriterTest::SetUp()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__library__manager_8cpp_source.html#l00005">hal::gate_library_manager_init()</a>, <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00169">get_gate_library()</a>, <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00109">load_all()</a>, <a class="el" href="netlist_2netlist__factory_8cpp_source.html#l00030">hal::netlist_factory::load_netlist()</a>, <a class="el" href="gatelibrary__table__model_8cpp_source.html#l00124">hal::GatelibraryTableModel::loadFile()</a>, <a class="el" href="gatelibrary__table__model_8cpp_source.html#l00147">hal::GatelibraryTableModel::reloadIndex()</a>, and <a class="el" href="test_2verilog__writer_8cpp_source.html#l00015">hal::VerilogWriterTest::SetUp()</a>.</p>
 
 </div>
 </div>
@@ -264,7 +290,7 @@ Functions</h2></td></tr>
 
 <p class="reference">References <a class="el" href="utils_8cpp_source.html#l00175">hal::utils::get_gate_library_directories()</a>, <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00071">load()</a>, and <a class="el" href="log_8h_source.html#l00067">log_info</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugin__gui_8cpp_source.html#l00095">hal::PluginGui::exec()</a>, and <a class="el" href="python__bindings_2bindings_2gate__library__manager_8cpp_source.html#l00005">hal::gate_library_manager_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__library__manager_8cpp_source.html#l00005">hal::gate_library_manager_init()</a>.</p>
 
 </div>
 </div>
@@ -291,7 +317,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00152">152</a> of file <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html">gate_library_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00164">164</a> of file <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html">gate_library_manager.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="json_8hpp_source.html#l22110">nlohmann::basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt;::patch()</a>, and <a class="el" href="gatelibrary__table__model_8cpp_source.html#l00162">hal::GatelibraryTableModel::removeIndex()</a>.</p>
 
@@ -339,7 +365,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00129">129</a> of file <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html">gate_library_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00141">141</a> of file <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html">gate_library_manager.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="log_8h_source.html#l00075">log_error</a>, <a class="el" href="log_8h_source.html#l00067">log_info</a>, and <a class="el" href="gate__library__writer__manager_8cpp_source.html#l00076">hal::gate_library_writer_manager::write()</a>.</p>
 
@@ -353,7 +379,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1gate__library__manager.html">gate_library_manager</a></li>
-    <li class="footer">Generated on Thu May 19 2022 17:55:49 for HAL by
+    <li class="footer">Generated on Tue Jun 14 2022 14:52:18 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

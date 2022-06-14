@@ -1,5 +1,6 @@
 var dir_609dd161604b7aa86c7b630207f12412 =
 [
+    [ "py_code_provider.cpp", "py__code__provider_8cpp.html", null ],
     [ "python_code_editor.cpp", "python__code__editor_8cpp.html", null ],
     [ "python_console.cpp", "python__console_8cpp.html", null ],
     [ "python_console_history.cpp", "python__console__history_8cpp.html", null ],

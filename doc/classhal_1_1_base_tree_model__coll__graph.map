@@ -1,0 +1,6 @@
+<map id="hal::BaseTreeModel" name="hal::BaseTreeModel">
+<area shape="rect" id="node1" title="The BaseTreeModel implements generic standard functions of a tree model." alt="" coords="107,771,274,1141"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstractitemmodel.html" title=" " alt="" coords="5,396,197,708"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="18,5,185,347"/>
+<area shape="rect" id="node4" href="$classhal_1_1_tree_item.html" title="(Future) Base class for all tree models related to the details widget." alt="" coords="222,477,338,627"/>
+</map>

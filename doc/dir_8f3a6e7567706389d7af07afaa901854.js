@@ -1,6 +1,7 @@
 var dir_8f3a6e7567706389d7af07afaa901854 =
 [
     [ "action", "dir_d705d28a920178c6eb392b5d5cea17ed.html", "dir_d705d28a920178c6eb392b5d5cea17ed" ],
+    [ "basic_tree_model", "dir_8b51047a26b3c61d3de57fe14342149a.html", "dir_8b51047a26b3c61d3de57fe14342149a" ],
     [ "channel_manager", "dir_473c6ace55deaa3175b28cb9bb76a481.html", "dir_473c6ace55deaa3175b28cb9bb76a481" ],
     [ "code_editor", "dir_d682b865f6e24072e0afcf2c833a6af5.html", "dir_d682b865f6e24072e0afcf2c833a6af5" ],
     [ "content_frame", "dir_3b30566547d4a2b2a3a8078fb6e47c77.html", "dir_3b30566547d4a2b2a3a8078fb6e47c77" ],
@@ -39,6 +40,7 @@ var dir_8f3a6e7567706389d7af07afaa901854 =
     [ "selection_details_widget", "dir_78f3dec0c5ef157ac74258fc012bc3cd.html", "dir_78f3dec0c5ef157ac74258fc012bc3cd" ],
     [ "selection_relay", "dir_065624142a172e6b137c5c3355653862.html", "dir_065624142a172e6b137c5c3355653862" ],
     [ "settings", "dir_203e78a72855f1f3788475126339bf32.html", "dir_203e78a72855f1f3788475126339bf32" ],
+    [ "size_adjustable_tree_view", "dir_ce89fb2499c8e8ba0111a1c80618b723.html", "dir_ce89fb2499c8e8ba0111a1c80618b723" ],
     [ "spinner_widget", "dir_2b1b629e4138ad49d82b98f70a9645c8.html", "dir_2b1b629e4138ad49d82b98f70a9645c8" ],
     [ "splitter", "dir_1aa62386e25b3dbaec35930360b7d032.html", "dir_1aa62386e25b3dbaec35930360b7d032" ],
     [ "style", "dir_08851f402e016d91c18633a9027c07fd.html", "dir_08851f402e016d91c18633a9027c07fd" ],

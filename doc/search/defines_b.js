@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['rapidjson_5fhas_5fstdstring_39800',['RAPIDJSON_HAS_STDSTRING',['../hgl__writer_8h.html#a2f2eef0ee4477f3fe5874703a66e997f',1,'RAPIDJSON_HAS_STDSTRING():&#160;hgl_writer.h'],['../hal__file__manager_8h.html#a2f2eef0ee4477f3fe5874703a66e997f',1,'RAPIDJSON_HAS_STDSTRING():&#160;hal_file_manager.h']]]
+  ['plugin_5fapi_39428',['PLUGIN_API',['../arch__linux_8h.html#afcb1b0bf7320fa3ebfc13fd896ebca4d',1,'PLUGIN_API():&#160;arch_linux.h'],['../arch__mac_8h.html#afcb1b0bf7320fa3ebfc13fd896ebca4d',1,'PLUGIN_API():&#160;arch_mac.h'],['../arch__win_8h.html#afcb1b0bf7320fa3ebfc13fd896ebca4d',1,'PLUGIN_API():&#160;arch_win.h']]],
+  ['pretty_5fjson_5foutput_39429',['PRETTY_JSON_OUTPUT',['../netlist_2persistent_2netlist__serializer_8cpp.html#a442c4f02c70cb01b96e1d3068b619d20',1,'PRETTY_JSON_OUTPUT():&#160;netlist_serializer.cpp'],['../project__manager_8cpp.html#a442c4f02c70cb01b96e1d3068b619d20',1,'PRETTY_JSON_OUTPUT():&#160;project_manager.cpp'],['../json__write__document_8cpp.html#a442c4f02c70cb01b96e1d3068b619d20',1,'PRETTY_JSON_OUTPUT():&#160;json_write_document.cpp']]],
+  ['protected_39430',['PROTECTED',['../defines_8h.html#af0cbb16b703892a6f3be7149dbe7d1a3',1,'defines.h']]]
 ];

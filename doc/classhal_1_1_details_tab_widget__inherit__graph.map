@@ -1,0 +1,8 @@
+<map id="hal::DetailsTabWidget" name="hal::DetailsTabWidget">
+<area shape="rect" id="node1" title=" " alt="" coords="249,945,413,1052"/>
+<area shape="rect" id="node4" href="$classhal_1_1_gate_details_tab_widget.html" title="The DetailsTabWidget that is responsible for showing Gate details." alt="" coords="5,1107,200,1199"/>
+<area shape="rect" id="node5" href="$classhal_1_1_module_details_tab_widget.html" title="The DetailsTabWidget that is responsible for showing Module details." alt="" coords="225,1100,437,1207"/>
+<area shape="rect" id="node6" href="$classhal_1_1_net_details_tab_widget.html" title="The DetailsTabWidget that is responsible for showing Module details." alt="" coords="461,1107,648,1199"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qtabwidget.html" title=" " alt="" coords="259,497,402,897"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qwidget.html" title=" " alt="" coords="227,5,434,449"/>
+</map>

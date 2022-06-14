@@ -2,6 +2,7 @@ var classhal_1_1_grouping_table_model =
 [
     [ "GroupingTableModel", "classhal_1_1_grouping_table_model.html#a361bc539eceb5a6712460cf0522b7897", null ],
     [ "addDefaultEntry", "classhal_1_1_grouping_table_model.html#ac2fb5fccdbbb8ebf826fa1363baf3eb3", null ],
+    [ "colorForGrouping", "classhal_1_1_grouping_table_model.html#a1bc5c10a9890ea481ec1886d428abac9", null ],
     [ "colorForItem", "classhal_1_1_grouping_table_model.html#acd28f9dfab1c578f0402a991ca994117", null ],
     [ "columnCount", "classhal_1_1_grouping_table_model.html#a1f49d3dade379d7e1c9cd8626431a468", null ],
     [ "createGroupingEvent", "classhal_1_1_grouping_table_model.html#a6ae8b429317f94b4192e9b90861fbcd2", null ],

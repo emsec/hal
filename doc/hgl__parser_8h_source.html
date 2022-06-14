@@ -134,7 +134,7 @@ $(document).ready(function(){initNavTree('hgl__parser_8h_source.html',''); initR
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keyword">private</span>:</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keyword">struct </span>PinCtx</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        {</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            std::vector&lt;std::string&gt; pins;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            std::vector&lt;std::string&gt; <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a1e273622affc5aefcd63c0036e5ce1b9">pins</a>;</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            std::unordered_map&lt;std::string, PinType&gt; pin_to_type;</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            std::unordered_map&lt;std::string, PinDirection&gt; pin_to_direction;</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            std::unordered_map&lt;std::string, std::string&gt; boolean_functions;</div>
@@ -157,20 +157,21 @@ $(document).ready(function(){initNavTree('hgl__parser_8h_source.html',''); initR
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aclasshal_1_1_gate_type_html"><div class="ttname"><a href="classhal_1_1_gate_type.html">hal::GateType</a></div><div class="ttdef"><b>Definition:</b> <a href="gate__type_8h_source.html#l00070">gate_type.h:70</a></div></div>
+<div class="ttc" id="aclasshal_1_1_gate_type_html"><div class="ttname"><a href="classhal_1_1_gate_type.html">hal::GateType</a></div><div class="ttdef"><b>Definition:</b> <a href="gate__type_8h_source.html#l00071">gate_type.h:71</a></div></div>
 <div class="ttc" id="anamespacehal_1_1gate__library__parser__manager_html_a37de54423126f56b765696a03bd78c48"><div class="ttname"><a href="namespacehal_1_1gate__library__parser__manager.html#a37de54423126f56b765696a03bd78c48">hal::gate_library_parser_manager::parse</a></div><div class="ttdeci">std::unique_ptr&lt; GateLibrary &gt; parse(std::filesystem::path file_path)</div><div class="ttdef"><b>Definition:</b> <a href="gate__library__parser__manager_8cpp_source.html#l00076">gate_library_parser_manager.cpp:76</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00009">solver.cpp:9</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
 <div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="defines_8h.html">defines.h</a></div></div>
 <div class="ttc" id="agate__type_8h_html"><div class="ttname"><a href="gate__type_8h.html">gate_type.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_library_parser_html"><div class="ttname"><a href="classhal_1_1_gate_library_parser.html">hal::GateLibraryParser</a></div><div class="ttdef"><b>Definition:</b> <a href="gate__library__parser_8h_source.html#l00039">gate_library_parser.h:39</a></div></div>
 <div class="ttc" id="aclasshal_1_1_h_g_l_parser_html"><div class="ttname"><a href="classhal_1_1_h_g_l_parser.html">hal::HGLParser</a></div><div class="ttdef"><b>Definition:</b> <a href="hgl__parser_8h_source.html#l00041">hgl_parser.h:41</a></div></div>
 <div class="ttc" id="agate__library__parser_8h_html"><div class="ttname"><a href="gate__library__parser_8h.html">gate_library_parser.h</a></div></div>
 <div class="ttc" id="aarch__linux_8h_html_a3541b40303f35100314d8bb7efd18371"><div class="ttname"><a href="arch__linux_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a></div><div class="ttdeci">#define NETLIST_API</div><div class="ttdef"><b>Definition:</b> <a href="arch__linux_8h_source.html#l00028">arch_linux.h:28</a></div></div>
+<div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_a1e273622affc5aefcd63c0036e5ce1b9"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#a1e273622affc5aefcd63c0036e5ce1b9">pins</a></div><div class="ttdeci">std::vector&lt; PinInformation &gt; pins</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00064">netlist_serializer.cpp:64</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6f8117b8383d882a363db20b300886ad.html">hgl_parser</a></li><li class="navelem"><a class="el" href="dir_8799f78bd7fed6d3c65cac53e3339b5f.html">include</a></li><li class="navelem"><a class="el" href="dir_26b1ccfc6012eb9af93dedb390bd1966.html">hgl_parser</a></li><li class="navelem"><a class="el" href="hgl__parser_8h.html">hgl_parser.h</a></li>
-    <li class="footer">Generated on Thu May 19 2022 17:55:42 for HAL by
+    <li class="footer">Generated on Tue Jun 14 2022 14:52:13 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

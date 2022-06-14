@@ -1,5 +1,8 @@
 var hierarchy =
 [
+    [ "Abc_Frame_t_", "struct_abc___frame__t__.html", null ],
+    [ "Abc_Ntk_t_", "struct_abc___ntk__t__.html", null ],
+    [ "Abc_Obj_t_", "struct_abc___obj__t__.html", null ],
     [ "nlohmann::adl_serializer< typename, typename >", "structnlohmann_1_1adl__serializer.html", null ],
     [ "subprocess::detail::ArgumentDeducer", "structsubprocess_1_1detail_1_1_argument_deducer.html", null ],
     [ "hal::AssignedKeybindMap", "classhal_1_1_assigned_keybind_map.html", null ],
@@ -8,6 +11,13 @@ var hierarchy =
     ] ],
     [ "base_sink", null, [
       [ "hal::log_gui_sink", "classhal_1_1log__gui__sink.html", null ]
+    ] ],
+    [ "hal::BasePin< T >", "classhal_1_1_base_pin.html", null ],
+    [ "hal::BasePin< GatePin >", "classhal_1_1_base_pin.html", [
+      [ "hal::GatePin", "classhal_1_1_gate_pin.html", null ]
+    ] ],
+    [ "hal::BasePin< ModulePin >", "classhal_1_1_base_pin.html", [
+      [ "hal::ModulePin", "classhal_1_1_module_pin.html", null ]
     ] ],
     [ "hal::BasePluginInterface", "classhal_1_1_base_plugin_interface.html", [
       [ "hal::BooleanInfluencePlugin", "classhal_1_1_boolean_influence_plugin.html", null ],
@@ -21,7 +31,6 @@ var hierarchy =
       [ "hal::HGLParserPlugin", "classhal_1_1_h_g_l_parser_plugin.html", null ],
       [ "hal::HGLWriterPlugin", "classhal_1_1_h_g_l_writer_plugin.html", null ],
       [ "hal::LibertyParserPlugin", "classhal_1_1_liberty_parser_plugin.html", null ],
-      [ "hal::NetlistSimulatorPlugin", "classhal_1_1_netlist_simulator_plugin.html", null ],
       [ "hal::Pyi_base", "classhal_1_1_pyi__base.html", null ],
       [ "hal::SolveFsmPlugin", "classhal_1_1_solve_fsm_plugin.html", null ],
       [ "hal::UIPluginInterface", "classhal_1_1_u_i_plugin_interface.html", [
@@ -35,6 +44,13 @@ var hierarchy =
     [ "nlohmann::detail::binary_reader< BasicJsonType, SAX >", "classnlohmann_1_1detail_1_1binary__reader.html", null ],
     [ "nlohmann::detail::binary_writer< BasicJsonType, CharType >", "classnlohmann_1_1detail_1_1binary__writer.html", null ],
     [ "hal::BooleanFunction", "classhal_1_1_boolean_function.html", null ],
+    [ "hal::BooleanFunctionTableEntry", "classhal_1_1_boolean_function_table_entry.html", [
+      [ "hal::BooleanFunctionEntry", "classhal_1_1_boolean_function_entry.html", null ],
+      [ "hal::CPBehaviorEntry", "classhal_1_1_c_p_behavior_entry.html", null ],
+      [ "hal::FFComponentEntry", "classhal_1_1_f_f_component_entry.html", null ],
+      [ "hal::LatchComponentEntry", "classhal_1_1_latch_component_entry.html", null ],
+      [ "hal::StateComponentEntry", "classhal_1_1_state_component_entry.html", null ]
+    ] ],
     [ "nlohmann::detail::dtoa_impl::boundaries", "structnlohmann_1_1detail_1_1dtoa__impl_1_1boundaries.html", null ],
     [ "subprocess::Buffer", "classsubprocess_1_1_buffer.html", null ],
     [ "subprocess::bufsize", "structsubprocess_1_1bufsize.html", null ],
@@ -65,6 +81,7 @@ var hierarchy =
       [ "hal::SplitterAnchor", "classhal_1_1_splitter_anchor.html", null ],
       [ "hal::TabWidget", "classhal_1_1_tab_widget.html", null ]
     ] ],
+    [ "hal::ContentFactory", "classhal_1_1_content_factory.html", null ],
     [ "hal::dataflow::evaluation::Context", "structhal_1_1dataflow_1_1evaluation_1_1_context.html", null ],
     [ "hal::dataflow::processing::Context", "structhal_1_1dataflow_1_1processing_1_1_context.html", null ],
     [ "hal::DataContainer", "classhal_1_1_data_container.html", [
@@ -72,9 +89,8 @@ var hierarchy =
       [ "hal::Module", "classhal_1_1_module.html", null ],
       [ "hal::Net", "classhal_1_1_net.html", null ]
     ] ],
+    [ "hal::DataTableModel::DataEntry", "structhal_1_1_data_table_model_1_1_data_entry.html", null ],
     [ "subprocess::defer_spawn", "structsubprocess_1_1defer__spawn.html", null ],
-    [ "hal::DetailsGeneralCommonInfo< T >", "classhal_1_1_details_general_common_info.html", null ],
-    [ "hal::DetailsGeneralModelEntry", "classhal_1_1_details_general_model_entry.html", null ],
     [ "hal::DetailsTableUtilities", "classhal_1_1_details_table_utilities.html", null ],
     [ "nlohmann::detail::detector< Default, AlwaysVoid, Op, Args >", "structnlohmann_1_1detail_1_1detector.html", null ],
     [ "nlohmann::detail::detector< Default, void_t< Op< Args... > >, Op, Args... >", "structnlohmann_1_1detail_1_1detector_3_01_default_00_01void__t_3_01_op_3_01_args_8_8_8_01_4_01_4_00_01_op_00_01_args_8_8_8_01_4.html", null ],
@@ -83,8 +99,9 @@ var hierarchy =
     [ "hal::Endpoint", "classhal_1_1_endpoint.html", null ],
     [ "hal::EnumStrings< T, typename >", "structhal_1_1_enum_strings.html", null ],
     [ "subprocess::environment", "structsubprocess_1_1environment.html", null ],
+    [ "hal::result_constructor_type::ER", "classhal_1_1result__constructor__type_1_1_e_r.html", null ],
+    [ "hal::Error", "classhal_1_1_error.html", null ],
     [ "subprocess::error", "structsubprocess_1_1error.html", null ],
-    [ "hal::Event", "structhal_1_1_event.html", null ],
     [ "hal::EventHandler", "classhal_1_1_event_handler.html", null ],
     [ "exception", null, [
       [ "nlohmann::detail::exception", "classnlohmann_1_1detail_1_1exception.html", [
@@ -185,6 +202,8 @@ var hierarchy =
     [ "std::hash< hal::core_strings::CaseInsensitiveString >", "structstd_1_1hash_3_01hal_1_1core__strings_1_1_case_insensitive_string_01_4.html", null ],
     [ "std::hash< nlohmann::json >", "structstd_1_1hash_3_01nlohmann_1_1json_01_4.html", null ],
     [ "hal::StandardGraphicsNet::HLine", "structhal_1_1_standard_graphics_net_1_1_h_line.html", null ],
+    [ "Hop_Man_t_", "struct_hop___man__t__.html", null ],
+    [ "Hop_Obj_t_", "struct_hop___obj__t__.html", null ],
     [ "nlohmann::detail::index_sequence< Ints >", "structnlohmann_1_1detail_1_1index__sequence.html", null ],
     [ "nlohmann::detail::index_sequence< 0 >", "structnlohmann_1_1detail_1_1index__sequence.html", [
       [ "nlohmann::detail::make_index_sequence< 1 >", "structnlohmann_1_1detail_1_1make__index__sequence_3_011_01_4.html", null ]
@@ -235,6 +254,14 @@ var hierarchy =
     [ "nlohmann::detail::json_sax_acceptor< BasicJsonType >", "classnlohmann_1_1detail_1_1json__sax__acceptor.html", null ],
     [ "nlohmann::detail::json_sax_dom_callback_parser< BasicJsonType >", "classnlohmann_1_1detail_1_1json__sax__dom__callback__parser.html", null ],
     [ "nlohmann::detail::json_sax_dom_parser< BasicJsonType >", "classnlohmann_1_1detail_1_1json__sax__dom__parser.html", null ],
+    [ "hal::JsonWriteData", "classhal_1_1_json_write_data.html", [
+      [ "hal::JsonWriteComplex", "classhal_1_1_json_write_complex.html", [
+        [ "hal::JsonWriteArray", "classhal_1_1_json_write_array.html", null ],
+        [ "hal::JsonWriteObject", "classhal_1_1_json_write_object.html", [
+          [ "hal::JsonWriteDocument", "classhal_1_1_json_write_document.html", null ]
+        ] ]
+      ] ]
+    ] ],
     [ "hal::LayoutLocker", "classhal_1_1_layout_locker.html", null ],
     [ "hal::LayoutLockerManager", "classhal_1_1_layout_locker_manager.html", null ],
     [ "std::less<::nlohmann::detail::value_t >", "structstd_1_1less_3_1_1nlohmann_1_1detail_1_1value__t_01_4.html", null ],
@@ -245,7 +272,6 @@ var hierarchy =
     [ "hal::LogManager", "classhal_1_1_log_manager.html", null ],
     [ "nlohmann::detail::make_void< Ts >", "structnlohmann_1_1detail_1_1make__void.html", null ],
     [ "hal::dataflow::measure_block_time_t", "classhal_1_1dataflow_1_1measure__block__time__t.html", null ],
-    [ "hal::measure_block_time_t", "classhal_1_1measure__block__time__t.html", null ],
     [ "nlohmann::detail::merge_and_renumber< Sequence1, Sequence2 >", "structnlohmann_1_1detail_1_1merge__and__renumber.html", null ],
     [ "nlohmann::detail::merge_and_renumber< make_index_sequence< N/2 >::type, make_index_sequence< N - N/2 >::type >", "structnlohmann_1_1detail_1_1merge__and__renumber.html", [
       [ "nlohmann::detail::make_index_sequence< N >", "structnlohmann_1_1detail_1_1make__index__sequence.html", null ]
@@ -275,18 +301,15 @@ var hierarchy =
       [ "hal::VerilogParser", "classhal_1_1_verilog_parser.html", null ],
       [ "hal::VHDLParser", "classhal_1_1_v_h_d_l_parser.html", null ]
     ] ],
-    [ "hal::NetlistSimulator", "classhal_1_1_netlist_simulator.html", null ],
     [ "hal::NetlistWriter", "classhal_1_1_netlist_writer.html", [
       [ "hal::VerilogWriter", "classhal_1_1_verilog_writer.html", null ]
     ] ],
-    [ "hal::BooleanFunction::Node", "structhal_1_1_boolean_function_1_1_node.html", [
-      [ "hal::BooleanFunction::OperandNode", "structhal_1_1_boolean_function_1_1_operand_node.html", null ],
-      [ "hal::BooleanFunction::OperationNode", "structhal_1_1_boolean_function_1_1_operation_node.html", null ]
-    ] ],
+    [ "hal::BooleanFunction::Node", "structhal_1_1_boolean_function_1_1_node.html", null ],
     [ "hal::Node", "classhal_1_1_node.html", null ],
     [ "hal::NodeBox", "classhal_1_1_node_box.html", null ],
     [ "hal::BooleanFunction::NodeType", "structhal_1_1_boolean_function_1_1_node_type.html", null ],
     [ "nlohmann::detail::nonesuch", "structnlohmann_1_1detail_1_1nonesuch.html", null ],
+    [ "hal::result_constructor_type::OK", "classhal_1_1result__constructor__type_1_1_o_k.html", null ],
     [ "subprocess::output", "structsubprocess_1_1output.html", null ],
     [ "nlohmann::detail::output_adapter< CharType, StringType >", "classnlohmann_1_1detail_1_1output__adapter.html", null ],
     [ "nlohmann::detail::output_adapter_protocol< CharType >", "structnlohmann_1_1detail_1_1output__adapter__protocol.html", [
@@ -298,10 +321,13 @@ var hierarchy =
     [ "nlohmann::detail::parser< BasicJsonType >", "classnlohmann_1_1detail_1_1parser.html", null ],
     [ "hal::SMT::ModelParser::ParserContext", "structhal_1_1_s_m_t_1_1_model_parser_1_1_parser_context.html", null ],
     [ "hal::dataflow::processing::PassConfiguration", "structhal_1_1dataflow_1_1processing_1_1_pass_configuration.html", null ],
+    [ "path", null, [
+      [ "hal::ProjectDirectory", "classhal_1_1_project_directory.html", null ]
+    ] ],
+    [ "hal::PinGroup< T >", "classhal_1_1_pin_group.html", null ],
     [ "hal::PlacementEntry", "classhal_1_1_placement_entry.html", null ],
     [ "hal::PlacementHint", "classhal_1_1_placement_hint.html", null ],
     [ "subprocess::Popen", "classsubprocess_1_1_popen.html", null ],
-    [ "hal::NetlistSimulator::SimulationGateRAM::Port", "structhal_1_1_netlist_simulator_1_1_simulation_gate_r_a_m_1_1_port.html", null ],
     [ "nlohmann::detail::position_t", "structnlohmann_1_1detail_1_1position__t.html", null ],
     [ "hal::PositionGenerator", "classhal_1_1_position_generator.html", null ],
     [ "subprocess::preexec_func", "classsubprocess_1_1preexec__func.html", null ],
@@ -311,6 +337,15 @@ var hierarchy =
     [ "hal::ProgramArguments", "classhal_1_1_program_arguments.html", null ],
     [ "hal::ProgramOptions", "classhal_1_1_program_options.html", null ],
     [ "hal::dataflow::progress_printer", "classhal_1_1dataflow_1_1progress__printer.html", null ],
+    [ "hal::ProjectManager", "classhal_1_1_project_manager.html", null ],
+    [ "hal::ProjectSerializer", "classhal_1_1_project_serializer.html", [
+      [ "hal::GraphContextSerializer", "classhal_1_1_graph_context_serializer.html", null ],
+      [ "hal::GroupingColorSerializer", "classhal_1_1_grouping_color_serializer.html", null ],
+      [ "hal::GroupingSerializer", "classhal_1_1_grouping_serializer.html", null ],
+      [ "hal::ModuleColorSerializer", "classhal_1_1_module_color_serializer.html", null ],
+      [ "hal::PythonSerializer", "classhal_1_1_python_serializer.html", null ]
+    ] ],
+    [ "hal::PyCodeProvider", "classhal_1_1_py_code_provider.html", null ],
     [ "hal::PythonConsoleHistory", "classhal_1_1_python_console_history.html", null ],
     [ "hal::PythonContextSubscriber", "classhal_1_1_python_context_subscriber.html", [
       [ "hal::PythonConsole", "classhal_1_1_python_console.html", null ],
@@ -349,6 +384,9 @@ var hierarchy =
     ] ],
     [ "QIconEngine", "https://doc.qt.io/qt-5/qiconengine.html", [
       [ "hal::SvgIconEngine", "classhal_1_1_svg_icon_engine.html", null ]
+    ] ],
+    [ "QList< ContentFactory * >", "https://doc.qt.io/qt-5/qlist.html", [
+      [ "hal::ExternalContent", "classhal_1_1_external_content.html", null ]
     ] ],
     [ "QList< ExpandingListItem * >", "https://doc.qt.io/qt-5/qlist.html", [
       [ "hal::ExpandingListGroup", "classhal_1_1_expanding_list_group.html", null ]
@@ -411,6 +449,12 @@ var hierarchy =
         ] ]
       ] ],
       [ "QAbstractItemModel", "https://doc.qt.io/qt-5/qabstractitemmodel.html", [
+        [ "hal::BaseTreeModel", "classhal_1_1_base_tree_model.html", [
+          [ "hal::GatePinsTreeModel", "classhal_1_1_gate_pins_tree_model.html", null ],
+          [ "hal::ModulePinsTreeModel", "classhal_1_1_module_pins_tree_model.html", null ],
+          [ "hal::ModuleTreeModel", "classhal_1_1_module_tree_model.html", null ],
+          [ "hal::NetlistElementsTreeModel", "classhal_1_1_netlist_elements_tree_model.html", null ]
+        ] ],
         [ "hal::ModuleModel", "classhal_1_1_module_model.html", null ],
         [ "hal::SelectionTreeModel", "classhal_1_1_selection_tree_model.html", null ],
         [ "QAbstractProxyModel", "https://doc.qt.io/qt-5/qabstractproxymodel.html", [
@@ -425,13 +469,18 @@ var hierarchy =
           ] ]
         ] ],
         [ "QAbstractTableModel", "https://doc.qt.io/qt-5/qabstracttablemodel.html", [
+          [ "hal::BooleanFunctionTableModel", "classhal_1_1_boolean_function_table_model.html", null ],
           [ "hal::ChannelModel", "classhal_1_1_channel_model.html", null ],
           [ "hal::ContextTableModel", "classhal_1_1_context_table_model.html", null ],
-          [ "hal::DetailsGeneralModel", "classhal_1_1_details_general_model.html", null ],
+          [ "hal::DataTableModel", "classhal_1_1_data_table_model.html", null ],
+          [ "hal::EndpointTableModel", "classhal_1_1_endpoint_table_model.html", null ],
           [ "hal::GatelibraryTableModel", "classhal_1_1_gatelibrary_table_model.html", null ],
           [ "hal::GateSelectModel", "classhal_1_1_gate_select_model.html", null ],
+          [ "hal::GroupingsOfItemModel", "classhal_1_1_groupings_of_item_model.html", null ],
           [ "hal::GroupingTableModel", "classhal_1_1_grouping_table_model.html", null ],
-          [ "hal::ModuleSelectModel", "classhal_1_1_module_select_model.html", null ]
+          [ "hal::LUTTableModel", "classhal_1_1_l_u_t_table_model.html", null ],
+          [ "hal::ModuleSelectModel", "classhal_1_1_module_select_model.html", null ],
+          [ "hal::ModuleTableModel", "classhal_1_1_module_table_model.html", null ]
         ] ]
       ] ],
       [ "QAction", "https://doc.qt.io/qt-5/qaction.html", [
@@ -454,12 +503,7 @@ var hierarchy =
         [ "hal::CodeEditorMinimap", "classhal_1_1_code_editor_minimap.html", null ],
         [ "hal::ContentFrame", "classhal_1_1_content_frame.html", null ],
         [ "hal::ContentLayoutArea", "classhal_1_1_content_layout_area.html", null ],
-        [ "hal::DetailsSectionWidget", "classhal_1_1_details_section_widget.html", null ],
-        [ "hal::DetailsWidget", "classhal_1_1_details_widget.html", [
-          [ "hal::GateDetailsWidget", "classhal_1_1_gate_details_widget.html", null ],
-          [ "hal::ModuleDetailsWidget", "classhal_1_1_module_details_widget.html", null ],
-          [ "hal::NetDetailsWidget", "classhal_1_1_net_details_widget.html", null ]
-        ] ],
+        [ "hal::DetailsFrameWidget", "classhal_1_1_details_frame_widget.html", null ],
         [ "hal::GraphicsQssAdapter", "classhal_1_1_graphics_qss_adapter.html", null ],
         [ "hal::GraphNavigationWidget", "classhal_1_1_graph_navigation_widget.html", null ],
         [ "hal::LineNumberArea", "classhal_1_1_line_number_area.html", null ],
@@ -502,12 +546,19 @@ var hierarchy =
         ] ],
         [ "QDialog", "https://doc.qt.io/qt-5/qdialog.html", [
           [ "hal::AboutDialog", "classhal_1_1_about_dialog.html", null ],
+          [ "hal::ComboboxDialog", "classhal_1_1_combobox_dialog.html", [
+            [ "hal::PingroupSelectorDialog", "classhal_1_1_pingroup_selector_dialog.html", null ]
+          ] ],
           [ "hal::GateDialog", "classhal_1_1_gate_dialog.html", null ],
           [ "hal::GatelibraryManagementDialog", "classhal_1_1_gatelibrary_management_dialog.html", null ],
           [ "hal::GroupingDialog", "classhal_1_1_grouping_dialog.html", null ],
+          [ "hal::ImportNetlistDialog", "classhal_1_1_import_netlist_dialog.html", null ],
           [ "hal::InputDialog", "classhal_1_1_input_dialog.html", null ],
           [ "hal::ModuleDialog", "classhal_1_1_module_dialog.html", null ],
-          [ "hal::PythonEditorCodeCompletionDialog", "classhal_1_1_python_editor_code_completion_dialog.html", null ]
+          [ "hal::PythonEditorCodeCompletionDialog", "classhal_1_1_python_editor_code_completion_dialog.html", null ],
+          [ "QFileDialog", "https://doc.qt.io/qt-5/qfiledialog.html", [
+            [ "hal::ProjectDirDialog", "classhal_1_1_project_dir_dialog.html", null ]
+          ] ]
         ] ],
         [ "QFrame", "https://doc.qt.io/qt-5/qframe.html", [
           [ "hal::DockBar", "classhal_1_1_dock_bar.html", null ],
@@ -538,18 +589,33 @@ var hierarchy =
           [ "QAbstractScrollArea", "https://doc.qt.io/qt-5/qabstractscrollarea.html", [
             [ "QAbstractItemView", "https://doc.qt.io/qt-5/qabstractitemview.html", [
               [ "QTableView", "https://doc.qt.io/qt-5/qtableview.html", [
+                [ "hal::BooleanFunctionTable", "classhal_1_1_boolean_function_table.html", null ],
+                [ "hal::DataTableWidget", "classhal_1_1_data_table_widget.html", null ],
                 [ "hal::GatelibraryTableView", "classhal_1_1_gatelibrary_table_view.html", null ],
                 [ "hal::GateSelectView", "classhal_1_1_gate_select_view.html", null ],
+                [ "hal::GroupingsOfItemWidget", "classhal_1_1_groupings_of_item_widget.html", null ],
                 [ "hal::GroupingTableView", "classhal_1_1_grouping_table_view.html", null ],
+                [ "hal::LUTTableWidget", "classhal_1_1_l_u_t_table_widget.html", null ],
                 [ "hal::ModuleSelectView", "classhal_1_1_module_select_view.html", null ],
+                [ "hal::NetEndpointTable", "classhal_1_1_net_endpoint_table.html", null ],
+                [ "hal::NetModuleTable", "classhal_1_1_net_module_table.html", null ],
                 [ "QTableWidget", "https://doc.qt.io/qt-5/qtablewidget.html", [
-                  [ "hal::DataFieldsTable", "classhal_1_1_data_fields_table.html", null ],
+                  [ "hal::GeneralTableWidget", "classhal_1_1_general_table_widget.html", [
+                    [ "hal::GateInfoTable", "classhal_1_1_gate_info_table.html", null ],
+                    [ "hal::ModuleInfoTable", "classhal_1_1_module_info_table.html", null ],
+                    [ "hal::NetInfoTable", "classhal_1_1_net_info_table.html", null ]
+                  ] ],
                   [ "hal::GraphNavigationTableWidget", "classhal_1_1_graph_navigation_table_widget.html", null ]
                 ] ]
               ] ],
               [ "QTreeView", "https://doc.qt.io/qt-5/qtreeview.html", [
                 [ "hal::ModuleTreeView", "classhal_1_1_module_tree_view.html", null ],
                 [ "hal::SelectionTreeView", "classhal_1_1_selection_tree_view.html", null ],
+                [ "hal::SizeAdjustableTreeView", "classhal_1_1_size_adjustable_tree_view.html", [
+                  [ "hal::GatePinTree", "classhal_1_1_gate_pin_tree.html", null ],
+                  [ "hal::ModuleElementsTree", "classhal_1_1_module_elements_tree.html", null ],
+                  [ "hal::ModulePinsTree", "classhal_1_1_module_pins_tree.html", null ]
+                ] ],
                 [ "QTreeWidget", "https://doc.qt.io/qt-5/qtreewidget.html", [
                   [ "hal::GraphNavigationTreeWidget", "classhal_1_1_graph_navigation_tree_widget.html", null ]
                 ] ]
@@ -582,6 +648,13 @@ var hierarchy =
         [ "QKeySequenceEdit", "https://doc.qt.io/qt-5/qkeysequenceedit.html", [
           [ "hal::KeybindEdit", "classhal_1_1_keybind_edit.html", null ]
         ] ],
+        [ "QTabWidget", "https://doc.qt.io/qt-5/qtabwidget.html", [
+          [ "hal::DetailsTabWidget", "classhal_1_1_details_tab_widget.html", [
+            [ "hal::GateDetailsTabWidget", "classhal_1_1_gate_details_tab_widget.html", null ],
+            [ "hal::ModuleDetailsTabWidget", "classhal_1_1_module_details_tab_widget.html", null ],
+            [ "hal::NetDetailsTabWidget", "classhal_1_1_net_details_tab_widget.html", null ]
+          ] ]
+        ] ],
         [ "QToolBar", "https://doc.qt.io/qt-5/qtoolbar.html", [
           [ "hal::Toolbar", "classhal_1_1_toolbar.html", null ]
         ] ]
@@ -605,7 +678,7 @@ var hierarchy =
     [ "hal::utils::RecursiveDirectoryRange", "classhal_1_1utils_1_1_recursive_directory_range.html", null ],
     [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
     [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
-    [ "hal::SMT::Result", "structhal_1_1_s_m_t_1_1_result.html", null ],
+    [ "hal::Result< T >", "classhal_1_1_result.html", null ],
     [ "reverse_iterator", null, [
       [ "nlohmann::detail::json_reverse_iterator< Base >", "classnlohmann_1_1detail_1_1json__reverse__iterator.html", null ]
     ] ],
@@ -625,30 +698,32 @@ var hierarchy =
     [ "subprocess::session_leader", "structsubprocess_1_1session__leader.html", null ],
     [ "hal::GraphShader::Shading", "structhal_1_1_graph_shader_1_1_shading.html", null ],
     [ "subprocess::shell", "structsubprocess_1_1shell.html", null ],
-    [ "hal::Simulation", "classhal_1_1_simulation.html", null ],
     [ "hal::SMT::Solver", "classhal_1_1_s_m_t_1_1_solver.html", null ],
+    [ "hal::SMT::SolverResult", "structhal_1_1_s_m_t_1_1_solver_result.html", null ],
     [ "nlohmann::detail::static_const< T >", "structnlohmann_1_1detail_1_1static__const.html", null ],
     [ "subprocess::detail::Streams", "classsubprocess_1_1detail_1_1_streams.html", null ],
     [ "subprocess::string_arg", "structsubprocess_1_1string__arg.html", [
       [ "subprocess::cwd", "structsubprocess_1_1cwd.html", null ],
       [ "subprocess::executable", "structsubprocess_1_1executable.html", null ]
     ] ],
+    [ "hal::SMT::SymbolicExecution", "classhal_1_1_s_m_t_1_1_symbolic_execution.html", null ],
+    [ "hal::SMT::SymbolicState", "classhal_1_1_s_m_t_1_1_symbolic_state.html", null ],
     [ "Test", null, [
       [ "hal::HGLParserTest", "classhal_1_1_h_g_l_parser_test.html", null ],
       [ "hal::HGLWriterTest", "classhal_1_1_h_g_l_writer_test.html", null ],
       [ "hal::LibertyParserTest", "classhal_1_1_liberty_parser_test.html", null ],
-      [ "hal::SimulatorTest", "classhal_1_1_simulator_test.html", null ],
       [ "hal::VerilogParserTest", "classhal_1_1_verilog_parser_test.html", null ],
       [ "hal::VerilogWriterTest", "classhal_1_1_verilog_writer_test.html", null ],
       [ "hal::VHDLParserTest", "classhal_1_1_v_h_d_l_parser_test.html", null ]
     ] ],
-    [ "TESTB< VA >", "class_t_e_s_t_b.html", null ],
     [ "nlohmann::detail::to_json_fn", "structnlohmann_1_1detail_1_1to__json__fn.html", null ],
     [ "hal::Token< T >", "structhal_1_1_token.html", null ],
+    [ "hal::BooleanFunctionParser::Token", "structhal_1_1_boolean_function_parser_1_1_token.html", null ],
     [ "hal::TokenStream< T >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< ci_string >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< std::string >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< T >::TokenStreamException", "structhal_1_1_token_stream_1_1_token_stream_exception.html", null ],
+    [ "hal::TreeItem", "classhal_1_1_tree_item.html", null ],
     [ "true_type", null, [
       [ "nlohmann::detail::conjunction< std::is_constructible< T1, Args >... >", "structnlohmann_1_1detail_1_1conjunction.html", [
         [ "nlohmann::detail::is_constructible_tuple< T1, std::tuple< Args... > >", "structnlohmann_1_1detail_1_1is__constructible__tuple_3_01_t1_00_01std_1_1tuple_3_01_args_8_8_8_01_4_01_4.html", null ]
@@ -671,6 +746,7 @@ var hierarchy =
       [ "hal::ActionOpenNetlistFile", "classhal_1_1_action_open_netlist_file.html", null ],
       [ "hal::ActionRemoveItemsFromObject", "classhal_1_1_action_remove_items_from_object.html", null ],
       [ "hal::ActionRenameObject", "classhal_1_1_action_rename_object.html", null ],
+      [ "hal::ActionReorderObject", "classhal_1_1_action_reorder_object.html", null ],
       [ "hal::ActionSetObjectColor", "classhal_1_1_action_set_object_color.html", null ],
       [ "hal::ActionSetObjectType", "classhal_1_1_action_set_object_type.html", null ],
       [ "hal::ActionSetSelectionFocus", "classhal_1_1_action_set_selection_focus.html", null ],
@@ -686,6 +762,7 @@ var hierarchy =
       [ "hal::ActionOpenNetlistFileFactory", "classhal_1_1_action_open_netlist_file_factory.html", null ],
       [ "hal::ActionRemoveItemsFromObjectFactory", "classhal_1_1_action_remove_items_from_object_factory.html", null ],
       [ "hal::ActionRenameObjectFactory", "classhal_1_1_action_rename_object_factory.html", null ],
+      [ "hal::ActionReorderObjectFactory", "classhal_1_1_action_reorder_object_factory.html", null ],
       [ "hal::ActionSetObjectColorFactory", "classhal_1_1_action_set_object_color_factory.html", null ],
       [ "hal::ActionSetObjectTypeFactory", "classhal_1_1_action_set_object_type_factory.html", null ],
       [ "hal::ActionSetSelectionFocusFactory", "classhal_1_1_action_set_selection_focus_factory.html", null ],
@@ -699,10 +776,19 @@ var hierarchy =
       [ "hal::StackedValidator", "classhal_1_1_stacked_validator.html", null ],
       [ "hal::UniqueStringValidator", "classhal_1_1_unique_string_validator.html", null ]
     ] ],
+    [ "Vec_Int_t_", "struct_vec___int__t__.html", null ],
+    [ "Vec_Ptr_t_", "struct_vec___ptr__t__.html", null ],
+    [ "Vec_Vec_t_", "struct_vec___vec__t__.html", null ],
+    [ "hal::VerilogAssignment", "structhal_1_1_verilog_assignment.html", null ],
+    [ "hal::VerilogDataEntry", "structhal_1_1_verilog_data_entry.html", null ],
+    [ "hal::VerilogInstance", "structhal_1_1_verilog_instance.html", null ],
     [ "hal::VerilogModule", "structhal_1_1_verilog_module.html", null ],
+    [ "hal::VerilogPort", "structhal_1_1_verilog_port.html", null ],
+    [ "hal::VerilogPortAssignment", "structhal_1_1_verilog_port_assignment.html", null ],
+    [ "hal::VerilogSignal", "structhal_1_1_verilog_signal.html", null ],
     [ "hal::VHDLEntity", "structhal_1_1_v_h_d_l_entity.html", null ],
-    [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
     [ "hal::GraphicsNode::Visuals", "structhal_1_1_graphics_node_1_1_visuals.html", null ],
+    [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
     [ "hal::StandardGraphicsNet::VLine", "structhal_1_1_standard_graphics_net_1_1_v_line.html", null ],
     [ "hal::WaitToBeSeatedEntry", "classhal_1_1_wait_to_be_seated_entry.html", null ],
     [ "nlohmann::detail::wide_string_input_helper< WideStringType, T >", "structnlohmann_1_1detail_1_1wide__string__input__helper.html", null ],

@@ -1,4 +1,4 @@
 <map id="hal::ActionSetObjectColor" name="hal::ActionSetObjectColor">
-<area shape="rect" id="node1" title="Recolors the object." alt="" coords="5,321,193,472"/>
-<area shape="rect" id="node2" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="21,5,177,273"/>
+<area shape="rect" id="node1" title="Recolors the object." alt="" coords="21,351,209,501"/>
+<area shape="rect" id="node2" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="5,5,224,303"/>
 </map>

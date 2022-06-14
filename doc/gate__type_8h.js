@@ -13,6 +13,7 @@ var gate__type_8h =
       [ "dsp", "gate__type_8h.html#adb8da04d2161f277bd489e806a2721caaa9bfcbd77aed59d33d77710050ce42d6", null ],
       [ "mux", "gate__type_8h.html#adb8da04d2161f277bd489e806a2721caaf1e492ffa7562aa744240b8b3eb403c5", null ],
       [ "buffer", "gate__type_8h.html#adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87", null ],
-      [ "carry", "gate__type_8h.html#adb8da04d2161f277bd489e806a2721caaf9c05403344bba5b3993d54797b56820", null ]
+      [ "carry", "gate__type_8h.html#adb8da04d2161f277bd489e806a2721caaf9c05403344bba5b3993d54797b56820", null ],
+      [ "pll", "gate__type_8h.html#adb8da04d2161f277bd489e806a2721caab23e9e4405d0c242f0d6b1c946683384", null ]
     ] ]
 ];

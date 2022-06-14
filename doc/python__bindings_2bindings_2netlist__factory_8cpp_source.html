@@ -130,42 +130,53 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2netlist__f
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="stringliteral">                :rtype: hal_py.Netlist</span></div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="stringliteral">            )&quot;)</span></div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="stringliteral">            .def(</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="stringliteral">                </span><span class="stringliteral">&quot;load_netlists&quot;</span>,</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                [](<span class="keyword">const</span> std::filesystem::path&amp; hal_file) {</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                    std::vector&lt;std::shared_ptr&lt;Netlist&gt;&gt; result;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; ptr : <a class="code" href="namespacehal_1_1netlist__factory.html#adde865496a1d7f325a4801e3cbfd8533">netlist_factory::load_netlists</a>(hal_file))</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;                    {</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                        result.emplace_back(std::move(ptr));</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                    }</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                    <span class="keywordflow">return</span> result;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                },</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                py::arg(<span class="stringliteral">&quot;hdl_file&quot;</span>),</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="stringliteral">                Create a netlist from a given file for each matching pre-loaded gate library.</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="stringliteral">                :param hdl_file: Path to the file.</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="stringliteral">                :type hdl_file: hal_py.hal_path</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="stringliteral">                :returns: A list of netlists.</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="stringliteral">                :rtype: list[hal_py.Netlist]</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="stringliteral">    }</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="stringliteral">}    </span><span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="stringliteral">           .def(</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="stringliteral">               </span><span class="stringliteral">&quot;load_hal_project&quot;</span>, [](<span class="keyword">const</span> std::filesystem::path&amp; project_dir) { <span class="keywordflow">return</span> std::shared_ptr&lt;Netlist&gt;(<a class="code" href="namespacehal_1_1netlist__factory.html#a29f519d89089b47622ae2eeaf1e76a13">netlist_factory::load_hal_project</a>(project_dir)); }, py::arg(<span class="stringliteral">&quot;project_dir&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="stringliteral">                Create a netlist from the given .hal file.</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="stringliteral">                :param project_dir: Path to the hal project directory.</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="stringliteral">                :type project_dir: hal_py.hal_path</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="stringliteral">                :returns: The netlist on success, None otherwise.</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="stringliteral">                :rtype: hal_py.Netlist</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="stringliteral">            )&quot;)</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="stringliteral">            .def(</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="stringliteral">                </span><span class="stringliteral">&quot;load_netlists&quot;</span>,</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                [](<span class="keyword">const</span> std::filesystem::path&amp; hal_file) {</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                    std::vector&lt;std::shared_ptr&lt;Netlist&gt;&gt; result;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; ptr : <a class="code" href="namespacehal_1_1netlist__factory.html#adde865496a1d7f325a4801e3cbfd8533">netlist_factory::load_netlists</a>(hal_file))</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                    {</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                        result.emplace_back(std::move(ptr));</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                    }</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                    <span class="keywordflow">return</span> result;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                },</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                py::arg(<span class="stringliteral">&quot;hdl_file&quot;</span>),</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="stringliteral">                Create a netlist from a given file for each matching pre-loaded gate library.</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="stringliteral">                :param hdl_file: Path to the file.</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="stringliteral">                :type hdl_file: hal_py.hal_path</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="stringliteral">                :returns: A list of netlists.</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="stringliteral">                :rtype: list[hal_py.Netlist]</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="stringliteral">    }</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="stringliteral">}    </span><span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00009">solver.cpp:9</a></div></div>
-<div class="ttc" id="anamespacehal_1_1netlist__factory_html_adde865496a1d7f325a4801e3cbfd8533"><div class="ttname"><a href="namespacehal_1_1netlist__factory.html#adde865496a1d7f325a4801e3cbfd8533">hal::netlist_factory::load_netlists</a></div><div class="ttdeci">std::vector&lt; std::unique_ptr&lt; Netlist &gt; &gt; load_netlists(const std::filesystem::path &amp;netlist_file)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2netlist__factory_8cpp_source.html#l00083">netlist_factory.cpp:83</a></div></div>
-<div class="ttc" id="anamespacehal_1_1netlist__factory_html_a74a2d2b0a04f6ead59258aa0875c654d"><div class="ttname"><a href="namespacehal_1_1netlist__factory.html#a74a2d2b0a04f6ead59258aa0875c654d">hal::netlist_factory::load_netlist</a></div><div class="ttdeci">std::unique_ptr&lt; Netlist &gt; load_netlist(const std::filesystem::path &amp;netlist_file, const std::filesystem::path &amp;gate_library_file)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2netlist__factory_8cpp_source.html#l00028">netlist_factory.cpp:28</a></div></div>
+<div class="ttc" id="anamespacehal_1_1netlist__factory_html_a29f519d89089b47622ae2eeaf1e76a13"><div class="ttname"><a href="namespacehal_1_1netlist__factory.html#a29f519d89089b47622ae2eeaf1e76a13">hal::netlist_factory::load_hal_project</a></div><div class="ttdeci">std::unique_ptr&lt; Netlist &gt; load_hal_project(const std::filesystem::path &amp;project_dir)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2netlist__factory_8cpp_source.html#l00059">netlist_factory.cpp:59</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
+<div class="ttc" id="anamespacehal_1_1netlist__factory_html_adde865496a1d7f325a4801e3cbfd8533"><div class="ttname"><a href="namespacehal_1_1netlist__factory.html#adde865496a1d7f325a4801e3cbfd8533">hal::netlist_factory::load_netlists</a></div><div class="ttdeci">std::vector&lt; std::unique_ptr&lt; Netlist &gt; &gt; load_netlists(const std::filesystem::path &amp;netlist_file)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2netlist__factory_8cpp_source.html#l00100">netlist_factory.cpp:100</a></div></div>
+<div class="ttc" id="anamespacehal_1_1netlist__factory_html_a74a2d2b0a04f6ead59258aa0875c654d"><div class="ttname"><a href="namespacehal_1_1netlist__factory.html#a74a2d2b0a04f6ead59258aa0875c654d">hal::netlist_factory::load_netlist</a></div><div class="ttdeci">std::unique_ptr&lt; Netlist &gt; load_netlist(const std::filesystem::path &amp;netlist_file, const std::filesystem::path &amp;gate_library_file)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2netlist__factory_8cpp_source.html#l00030">netlist_factory.cpp:30</a></div></div>
 <div class="ttc" id="anamespacehal_1_1_shortest_path_html_a6f60f4bfa62d51227fa5fcc3e7d838a9"><div class="ttname"><a href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">hal::ShortestPath::module</a></div><div class="ttdeci">const Module * module(const Gate *g, const NodeBoxes &amp;boxes)</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l00877">graph_graphics_view.cpp:877</a></div></div>
 <div class="ttc" id="apython__bindings_8h_html"><div class="ttname"><a href="python__bindings_8h.html">python_bindings.h</a></div></div>
 <div class="ttc" id="agroup__pybind_html_gaf8d3775de7aff4ada2993c698332de33"><div class="ttname"><a href="group__pybind.html#gaf8d3775de7aff4ada2993c698332de33">hal::netlist_factory_init</a></div><div class="ttdeci">void netlist_factory_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> <a href="python__bindings_2bindings_2netlist__factory_8cpp_source.html#l00005">netlist_factory.cpp:5</a></div></div>
-<div class="ttc" id="anamespacehal_1_1netlist__factory_html_a02885346f0ee983f70af158fdb0f3968"><div class="ttname"><a href="namespacehal_1_1netlist__factory.html#a02885346f0ee983f70af158fdb0f3968">hal::netlist_factory::create_netlist</a></div><div class="ttdeci">std::unique_ptr&lt; Netlist &gt; create_netlist(const GateLibrary *gate_library)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2netlist__factory_8cpp_source.html#l00017">netlist_factory.cpp:17</a></div></div>
+<div class="ttc" id="anamespacehal_1_1netlist__factory_html_a02885346f0ee983f70af158fdb0f3968"><div class="ttname"><a href="namespacehal_1_1netlist__factory.html#a02885346f0ee983f70af158fdb0f3968">hal::netlist_factory::create_netlist</a></div><div class="ttdeci">std::unique_ptr&lt; Netlist &gt; create_netlist(const GateLibrary *gate_library)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2netlist__factory_8cpp_source.html#l00019">netlist_factory.cpp:19</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_library_html"><div class="ttname"><a href="classhal_1_1_gate_library.html">hal::GateLibrary</a></div><div class="ttdef"><b>Definition:</b> <a href="gate__library_8h_source.html#l00041">gate_library.h:41</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2089f1c86a5c695e25bdd8ee7b7d2080.html">python_bindings</a></li><li class="navelem"><a class="el" href="dir_ded422ec9f163017e5e46b66204ec4a3.html">bindings</a></li><li class="navelem"><a class="el" href="python__bindings_2bindings_2netlist__factory_8cpp.html">netlist_factory.cpp</a></li>
-    <li class="footer">Generated on Thu May 19 2022 17:55:45 for HAL by
+    <li class="footer">Generated on Tue Jun 14 2022 14:52:14 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

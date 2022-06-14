@@ -87,12 +87,12 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="introduction"></a> </p>
-<h1><a class="anchor" id="autotoc_md44"></a>
+<h1><a class="anchor" id="autotoc_md51"></a>
 Welcome to HAL!</h1>
 <p><a href="https://github.com/emsec/hal/actions/workflows/ubuntu20.04.yml"><object type="image/svg+xml" data="https://github.com/emsec/hal/actions/workflows/ubuntu20.04.yml/badge.svg" style="pointer-events: none;">Ubuntu 20.04</object></a> <a href="https://github.com/emsec/hal/actions/workflows/macOS.yml"><object type="image/svg+xml" data="https://github.com/emsec/hal/actions/workflows/macOS.yml/badge.svg" style="pointer-events: none;">macOS</object></a> <a href="https://emsec.github.io/hal/doc/"><img src="https://img.shields.io/badge/doc-c%2B%2B-orange" alt="Doc: C++" class="inline"/></a> <a href="https://emsec.github.io/hal/pydoc/"><img src="https://img.shields.io/badge/doc-python-red" alt="Doc: Python" class="inline"/></a></p>
 <p>HAL [/hel/] is a comprehensive netlist reverse engineering and manipulation framework.</p>
 <p><img src="https://raw.githubusercontent.com/emsec/hal/master/hal_screenshot.png" alt="HAL Screenshot" title="HAL Screenshot" class="inline"/></p>
-<h1><a class="anchor" id="autotoc_md45"></a>
+<h1><a class="anchor" id="autotoc_md52"></a>
 Navigation</h1>
 <ol type="1">
 <li><a href="#introduction">Introduction</a></li>
@@ -100,7 +100,7 @@ Navigation</h1>
 <li><a href="#quickstart">Quickstart Guide</a></li>
 <li><a href="#academic-context">Academic Context</a></li>
 </ol>
-<h2><a class="anchor" id="autotoc_md46"></a>
+<h2><a class="anchor" id="autotoc_md53"></a>
 What the hell is HAL?</h2>
 <p>Virtually all available research on netlist analysis operates on a graph-based representation of the netlist under inspection. At its core, HAL provides exactly that: A framework to parse netlists of arbitrary sources, e.g., FPGAs or ASICs, into a graph-based netlist representation and to provide the necessary built-in tools for traversal and analysis of the included gates and nets.</p>
 <p>Our vision is that HAL becomes the hardware-reverse-engineering-equivalent of tools like IDA or Ghidra. We want HAL to enable a common baseline for researchers and analysts to improve reproducibility of research results and abstract away recurring basic tasks such as netlist parsing etc.</p><ul>
@@ -111,7 +111,7 @@ What the hell is HAL?</h2>
 </ul>
 <p>HAL is actively developed by the Embedded Security group of the <a href="https://www.mpi-sp.org">Max Planck Institute for Security and Privacy</a>. Apart from multiple research projects, it is also used in our university lecture <a href="https://www.ei.ruhr-uni-bochum.de/studium/lehrveranstaltungen/832/">Introduction to Hardware Reverse Engineering</a>.</p>
 <p>Note that we also have a set of <b>modern</b> state-of-the-art benchmark circuits for the evaluation of netlist reverse engineering techniques available in a seperate <a href="https://github.com/emsec/hal-benchmarks">repository</a>.</p>
-<h2><a class="anchor" id="autotoc_md47"></a>
+<h2><a class="anchor" id="autotoc_md54"></a>
 Shipped Plugins</h2>
 <p>This repository contains a selection of curated plugins:</p><ul>
 <li><b>GUI:</b> A feature-rich GUI allowing for visual netlist inspection and interactive analysis<ul>
@@ -130,16 +130,16 @@ Shipped Plugins</h2>
 <li><b>VHDL &amp; Verilog Writers:</b> Adds support for serializing a (modified) netlist to synthesizable VHDL or Verilog files</li>
 <li><b>Gate Libraries:</b> Adds support for the XILINX Unisim and Simprim gate libraries</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md48"></a>
+<h2><a class="anchor" id="autotoc_md55"></a>
 Documentation</h2>
 <p>A comprehensive documentation of HAL's features from a user perspective is available in our <a href="https://github.com/emsec/hal/wiki">Wiki</a>. In addition, we provide a full <a href="https://emsec.github.io/hal/doc/">C++ API</a> and <a href="https://emsec.github.io/hal/pydoc/">Python API</a> documentation.</p>
-<h2><a class="anchor" id="autotoc_md49"></a>
+<h2><a class="anchor" id="autotoc_md56"></a>
 Slack, Contact and Support</h2>
 <p>For all kinds of inquiries, please contact us using our dedicated e-mail address: <a href="#" onclick="location.href='mai'+'lto:'+'hal'+'@c'+'sp.'+'mp'+'g.d'+'e'; return false;">hal@csp.mpg.de</a>. To receive an invite to our dedicated hal-support Slack workspace, please write us an e-mail as well.</p>
 <p><a class="anchor" id="build-instructions"></a> </p>
-<h1><a class="anchor" id="autotoc_md50"></a>
+<h1><a class="anchor" id="autotoc_md57"></a>
 Build Instructions</h1>
-<h2><a class="anchor" id="autotoc_md51"></a>
+<h2><a class="anchor" id="autotoc_md58"></a>
 Ubuntu 20.04</h2>
 <p>If you want to build HAL on Ubuntu 20.04, run the following commands:</p>
 <ol type="1">
@@ -150,19 +150,19 @@ Ubuntu 20.04</h2>
 <li><code>make</code> to compile HAL</li>
 </ol>
 <p>We do currently not support building on any other Linux distribution.</p>
-<h2><a class="anchor" id="autotoc_md52"></a>
+<h2><a class="anchor" id="autotoc_md59"></a>
 macOS</h2>
 <p><b>Warning:</b> Building on macOS is experimental and may not always work.</p>
 <p>Please make sure to use a compiler that supports OpenMP. You can install one using, e.g., Homebrew via: <code>brew install llvm</code>.</p>
 <p>To let cmake know of the custom compiler use following command.</p>
 <p><code>cmake .. -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++</code></p>
-<h2><a class="anchor" id="autotoc_md53"></a>
+<h2><a class="anchor" id="autotoc_md60"></a>
 Windows</h2>
 <p>You can try using HAL directly on Windows using an Ubuntu 20.04 subsystem on WSL 2. After setting up WSL 2, follow the installation instructions for Ubuntu 20.04 provided above.</p>
 <p>To work with the HAL GUI, you will need to set up an XServer. Install <a href="https://sourceforge.net/projects/vcxsrv/"><code>VcXsrv</code></a> and run <code>Xlaunch</code> on your Windows machine. Now go to Ubuntu 20.04 and start HAL with GUI support using the command below. Note that the command assumes the <code>DISPLAY</code> to be at located at <code>localhost:0</code>. This will need adjustment on your machine.</p>
 <p><code>export LIBGL_ALWAYS_INDIRECT=1; export DISPLAY=:0; hal -g</code></p>
 <p>In case you encounter an error, try restarting the XServer and select <code>One Large Window</code>.</p>
-<h2><a class="anchor" id="autotoc_md54"></a>
+<h2><a class="anchor" id="autotoc_md61"></a>
 CMake Options</h2>
 <p>Using the CMake build system, your HAL build can be configured quite easily (by adding <code>-D&lt;OPTION&gt;=1</code> to the cmake command). Here is a selection of the most important options:</p><ul>
 <li><code>BUILD_TESTS</code>: builds all available tests which can be executed by running <code>ctest</code> in the build directory. This also builds all tests of plugins that are built.</li>
@@ -170,12 +170,27 @@ CMake Options</h2>
 <li><code>PL_&lt;plugin name&gt;</code>: enable (or disable) building a specific plugin</li>
 <li><code>BUILD_ALL_PLUGINS</code>: all-in-one option to build all available plugins, overrides the options for individual plugins</li>
 <li><code>SANITIZE_ADDRESS</code>, <code>SANITIZE_MEMORY</code>, <code>SANITIZE_THREAD</code>, <code>SANITIZE_UNDEFINED</code>: builds with the respective sanitizers (recommended only for debug builds)</li>
+<li><code>ABC_PATH</code>: You have the option to provide your own path to the shared library of Berkeley ABC to avoid building it everytime. Look at the <code>Notes on ABC</code> section below.</li>
 </ul>
 <p>If you do not specify <code>CMAKE_BUILD_TYPE</code>, it defaults to <code>Release</code>.</p>
-<h3><a class="anchor" id="autotoc_md55"></a>
-Troubleshooting</h3>
-<h4><a class="anchor" id="autotoc_md56"></a>
-pybind11 Trouble</h4>
+<h3><a class="anchor" id="autotoc_md62"></a>
+Speed up the building process - Notes on ABC (Mandatory on M1 Macs)</h3>
+<p>To speed up the building process of a clean build, you have the option to install ABC at a path of your choice and provide the path to CMake or put in a standard path like (<code>/usr/local/lib/</code>). <b>Important:</b> To ensure correct execution of ABC from within HAL, we had to modify some buffer size since Boolean functions generated in HAL can be quite large. Hence, make sure to adjust the buffer in <code>abc/src/base/ver/verStream.c</code> as shown below:</p>
+<div class="fragment"><div class="line">-#define VER_BUFFER_SIZE          1048576</div>
+<div class="line">-#define VER_OFFSET_SIZE            65536 </div>
+<div class="line">-#define VER_WORD_SIZE              65536</div>
+<div class="line">+#define VER_BUFFER_SIZE        104857600 </div>
+<div class="line">+#define VER_OFFSET_SIZE          6553600</div>
+<div class="line">+#define VER_WORD_SIZE            6553600</div>
+</div><!-- fragment --><p>Installation instructions:</p>
+<div class="fragment"><div class="line">cd deps/abc</div>
+<div class="line">make ABC_USE_PIC=1 libabc.so</div>
+<div class="line">sudo cp libabc.so /usr/local/lib/</div>
+</div><!-- fragment --><p>(See <a href="https://github.com/berkeley-abc/abc#troubleshooting">abc troubleshooting</a> on failure)</p>
+<h2><a class="anchor" id="autotoc_md63"></a>
+Troubleshooting</h2>
+<h3><a class="anchor" id="autotoc_md64"></a>
+pybind11</h3>
 <div class="fragment"><div class="line">CMake Error in src/python_bindings/CMakeLists.txt:</div>
 <div class="line">  Imported target &quot;pybind11::module&quot; includes non-existent path</div>
 <div class="line">    &quot;/include&quot;</div>
@@ -184,12 +199,12 @@ pybind11 Trouble</h4>
 <div class="line">  * An install or uninstall procedure did not complete successfully.</div>
 <div class="line">  * The installation package was faulty and references files it does not</div>
 <div class="line">  provide.</div>
-</div><!-- fragment --><ul>
-<li>Tip 1: Make sure you have the most recent <code>pybind11-dev</code> version installed.</li>
-<li>Tip 2: <code>-DCMAKE_PREFIX_PATH=&lt;root_of_pybind&gt;</code> can be provided as additional flag to <code>cmake</code>. For some reason this variable sometimes remains empty in the pybind11 CMakeLists and results in faulty paths.</li>
+</div><!-- fragment --><p>Try the following:</p><ul>
+<li>Make sure you have the most recent <code>pybind11-dev</code> version installed.</li>
+<li><code>-DCMAKE_PREFIX_PATH=&lt;root_of_pybind&gt;</code> can be provided as additional flag to <code>cmake</code>. For some reason this variable sometimes remains empty in the pybind11 CMakeLists and results in faulty paths.</li>
 </ul>
 <p><a class="anchor" id="quickstart"></a> </p>
-<h1><a class="anchor" id="autotoc_md57"></a>
+<h1><a class="anchor" id="autotoc_md65"></a>
 Quickstart Guide</h1>
 <p>Install HAL or build HAL and start the GUI via <code>hal -g</code>. You can list all available options via <code>hal [--help|-h]</code>. We included some example netlists in <code>examples</code> together with the implementation of the respective example gate library in <code>plugins/example_gate_library</code>. For instructions to create your own gate library and other useful tutorials, take a look at the <a href="https://github.com/emsec/hal/wiki">wiki</a>.</p>
 <p>Load a library from the <code>examples</code> directory and start exploring the graphical representation. Use the integrated Python shell or the Python script window to interact. Both feature (limited) autocomplete functionality.</p>
@@ -224,19 +239,19 @@ Quickstart Guide</h1>
 <div class="line">OUTPUT_BUF_1_inst_i_1_inst (id 20, type LUT2)</div>
 <div class="line">  2-to-1 LUT</div>
 <div class="line">  O: (I0 &amp; !I1) | (!I0 &amp; I1)</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md58"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md66"></a>
 Contributing</h1>
 <p>You are welcome to contribute to the development of HAL. Feel free to submit a new pull request via github. Please consider running the static checks + <code>clang format</code> before that. You can also install these checks as git hooks before any commit.</p>
-<h2><a class="anchor" id="autotoc_md59"></a>
+<h2><a class="anchor" id="autotoc_md67"></a>
 Run static checks and clang format locally</h2>
 <p>To install clang-format hook install <a href="https://github.com/icefox/git-hooks">git-hooks</a> and run:</p>
 <p><code>git hooks --install</code></p>
 <p>Start Docker build via: <code>docker-compose run --rm hal-build</code></p>
-<h2><a class="anchor" id="autotoc_md60"></a>
+<h2><a class="anchor" id="autotoc_md68"></a>
 Generate Changelog</h2>
 <p><code>git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"%s" --no-merges</code></p>
 <p><a class="anchor" id="academic-context"></a> </p>
-<h1><a class="anchor" id="autotoc_md61"></a>
+<h1><a class="anchor" id="autotoc_md69"></a>
 Academic Context</h1>
 <p>If you use HAL in an academic context, please cite the framework using the reference below: </p><div class="fragment"><div class="line">@misc{hal,</div>
 <div class="line">    author = {{Embedded Security Group}},</div>
@@ -254,10 +269,10 @@ Academic Context</h1>
 <div class="line">    howpublished = {\url{https://github.com/emsec/hal}}</div>
 <div class="line">}</div>
 </div><!-- fragment --><p>To get an overview on the challenges we set out to solve with HAL, feel free to watch our <a href="https://media.ccc.de/v/36c3-10879-hal_-_the_open-source_hardware_analyzer">talk</a> at 36C3.</p>
-<h1><a class="anchor" id="autotoc_md62"></a>
+<h1><a class="anchor" id="autotoc_md70"></a>
 Licensing</h1>
 <p>HAL is licensed under MIT License to encourage collaboration with other research groups and contributions from the industry. Please refer to the license file for further information.</p>
-<h1><a class="anchor" id="autotoc_md63"></a>
+<h1><a class="anchor" id="autotoc_md71"></a>
 Disclaimer</h1>
 <p>HAL is at most alpha-quality software. Use at your own risk. We do not encourage any malicious use of our toolkit. </p>
 </div></div><!-- PageDoc -->
@@ -266,7 +281,7 @@ Disclaimer</h1>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu May 19 2022 17:55:50 for HAL by
+    <li class="footer">Generated on Tue Jun 14 2022 14:52:19 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

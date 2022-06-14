@@ -1,5 +1,6 @@
 var translator_8cpp =
 [
-    [ "reduce_to_smt2", "translator_8cpp.html#a6290ad3cfbb81a9fc7e01697a190c8d1", null ],
-    [ "translate_to_smt2", "translator_8cpp.html#a066d1c8a4e50bb0ebe58158169b479e0", null ]
+    [ "const2str", "translator_8cpp.html#a6222c3f2e18e693a1f5681505e2edd4e", null ],
+    [ "reduce_to_smt2", "translator_8cpp.html#a50d1fbb237c473754b22a8c481e3b05f", null ],
+    [ "translate_to_smt2", "translator_8cpp.html#a1f5025c43fbfe4675f2b8b8be739f2fa", null ]
 ];

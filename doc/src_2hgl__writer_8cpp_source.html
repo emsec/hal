@@ -353,7 +353,7 @@ $(document).ready(function(){initNavTree('src_2hgl__writer_8cpp_source.html','')
 <div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160; </div>
 <div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;            <span class="comment">// pins</span></div>
 <div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;            std::vector&lt;PinCtx&gt; pin_data = get_pins(gt, functions);</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;            rapidjson::Value pins(rapidjson::kArrayType);</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;            rapidjson::Value <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a1e273622affc5aefcd63c0036e5ce1b9">pins</a>(rapidjson::kArrayType);</div>
 <div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160; </div>
 <div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; pin_ctx : pin_data)</div>
 <div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;            {</div>
@@ -378,10 +378,10 @@ $(document).ready(function(){initNavTree('src_2hgl__writer_8cpp_source.html','')
 <div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;                    pin.AddMember(<span class="stringliteral">&quot;z_function&quot;</span>, pin_ctx.z_function, allocator);</div>
 <div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;                }</div>
 <div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160; </div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;                pins.PushBack(pin, allocator);</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;                <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a1e273622affc5aefcd63c0036e5ce1b9">pins</a>.PushBack(pin, allocator);</div>
 <div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;            }</div>
 <div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160; </div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;            cell.AddMember(<span class="stringliteral">&quot;pins&quot;</span>, pins, allocator);</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;            cell.AddMember(<span class="stringliteral">&quot;pins&quot;</span>, <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a1e273622affc5aefcd63c0036e5ce1b9">pins</a>, allocator);</div>
 <div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160; </div>
 <div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;            <span class="comment">// groups</span></div>
 <div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;            std::unordered_map&lt;std::string, std::vector&lt;std::pair&lt;u32, std::string&gt;&gt;&gt; pin_groups = gt-&gt;get_pin_groups();</div>
@@ -389,11 +389,11 @@ $(document).ready(function(){initNavTree('src_2hgl__writer_8cpp_source.html','')
 <div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;            {</div>
 <div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;                rapidjson::Value groups(rapidjson::kArrayType);</div>
 <div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160; </div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [name, group_pins] : pin_groups)</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, group_pins] : pin_groups)</div>
 <div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;                {</div>
 <div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;                    rapidjson::Value group(rapidjson::kObjectType);</div>
 <div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160; </div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;                    group.AddMember(<span class="stringliteral">&quot;name&quot;</span>, name, allocator);</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;                    group.AddMember(<span class="stringliteral">&quot;name&quot;</span>, <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, allocator);</div>
 <div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160; </div>
 <div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;                    rapidjson::Value group_pin_array(rapidjson::kArrayType);</div>
 <div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;                    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [index, pin] : group_pins)</div>
@@ -424,11 +424,11 @@ $(document).ready(function(){initNavTree('src_2hgl__writer_8cpp_source.html','')
 <div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;    std::vector&lt;HGLWriter::PinCtx&gt; HGLWriter::get_pins(GateType* gt, <span class="keyword">const</span> std::unordered_map&lt;std::string, BooleanFunction&gt;&amp; functions)</div>
 <div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;    {</div>
 <div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;        std::vector&lt;PinCtx&gt; res;</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;        <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; pins                                  = gt-&gt;get_pins();</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;        <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a1e273622affc5aefcd63c0036e5ce1b9">pins</a>                                  = gt-&gt;get_pins();</div>
 <div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;        <span class="keyword">const</span> std::unordered_map&lt;std::string, PinDirection&gt;&amp; pin_to_direction = gt-&gt;get_pin_directions();</div>
 <div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;        <span class="keyword">const</span> std::unordered_map&lt;std::string, PinType&gt;&amp; pin_to_type           = gt-&gt;get_pin_types();</div>
 <div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160; </div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; pin : pins)</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; pin : <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a1e273622affc5aefcd63c0036e5ce1b9">pins</a>)</div>
 <div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;        {</div>
 <div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;            PinCtx res_pin;</div>
 <div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;            res_pin.name = pin;</div>
@@ -473,11 +473,12 @@ $(document).ready(function(){initNavTree('src_2hgl__writer_8cpp_source.html','')
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aram__component_8h_html"><div class="ttname"><a href="ram__component_8h.html">ram_component.h</a></div></div>
+<div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_a9b45b3e13bd9167aab02e17e08916231"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a></div><div class="ttdeci">std::string name</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">netlist_serializer.cpp:56</a></div></div>
 <div class="ttc" id="anamespacehal_html_ae062cd9848a7ac51bd0bb4d76f1fb94ba334c4a4c42fdb79d7ebc3e73b517e6f8"><div class="ttname"><a href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba334c4a4c42fdb79d7ebc3e73b517e6f8">hal::PinType::none</a></div><div class="ttdeci">@ none</div></div>
 <div class="ttc" id="aclasshal_1_1_gate_library_html_aef64b8371779e27c778227552deb3a6d"><div class="ttname"><a href="classhal_1_1_gate_library.html#aef64b8371779e27c778227552deb3a6d">hal::GateLibrary::get_name</a></div><div class="ttdeci">std::string get_name() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2gate__library_2gate__library_8cpp_source.html#l00013">gate_library.cpp:13</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_library_html_a31ea99ad04afe238972f0890fba6771b"><div class="ttname"><a href="classhal_1_1_gate_library.html#a31ea99ad04afe238972f0890fba6771b">hal::GateLibrary::get_gate_location_data_identifiers</a></div><div class="ttdeci">const std::pair&lt; std::string, std::string &gt; &amp; get_gate_location_data_identifiers() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2gate__library_2gate__library_8cpp_source.html#l00038">gate_library.cpp:38</a></div></div>
 <div class="ttc" id="aclasshal_1_1_state_component_html_a627aeef2d413a1014d1007a5f731f54c"><div class="ttname"><a href="classhal_1_1_state_component.html#a627aeef2d413a1014d1007a5f731f54c">hal::StateComponent::is_class_of</a></div><div class="ttdeci">static bool is_class_of(const GateTypeComponent *component)</div><div class="ttdef"><b>Definition:</b> <a href="state__component_8cpp_source.html#l00015">state_component.cpp:15</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00009">solver.cpp:9</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
 <div class="ttc" id="aclasshal_1_1_init_component_html_a3e5574c9566f0ed71f21abb316db8e59"><div class="ttname"><a href="classhal_1_1_init_component.html#a3e5574c9566f0ed71f21abb316db8e59">hal::InitComponent::is_class_of</a></div><div class="ttdeci">static bool is_class_of(const GateTypeComponent *component)</div><div class="ttdef"><b>Definition:</b> <a href="init__component_8cpp_source.html#l00014">init_component.cpp:14</a></div></div>
 <div class="ttc" id="agroup__utilities_html_ga522d6d0c8a408128993be37c86656280"><div class="ttname"><a href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a></div><div class="ttdeci">#define log_error(channel,...)</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00075">log.h:75</a></div></div>
 <div class="ttc" id="anamespacenlohmann_html_ad675d1c22f5240b2b3065c241b204477"><div class="ttname"><a href="namespacenlohmann.html#ad675d1c22f5240b2b3065c241b204477">nlohmann::to_string</a></div><div class="ttdeci">std::string to_string(const basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt; &amp;j)</div><div class="ttdoc">user-defined to_string function for JSON values</div><div class="ttdef"><b>Definition:</b> <a href="json_8hpp_source.html#l22620">json.hpp:22620</a></div></div>
@@ -496,13 +497,14 @@ $(document).ready(function(){initNavTree('src_2hgl__writer_8cpp_source.html','')
 <div class="ttc" id="agate__library_8h_html"><div class="ttname"><a href="gate__library_8h.html">gate_library.h</a></div></div>
 <div class="ttc" id="aff__component_8h_html"><div class="ttname"><a href="ff__component_8h.html">ff_component.h</a></div></div>
 <div class="ttc" id="astate__component_8h_html"><div class="ttname"><a href="state__component_8h.html">state_component.h</a></div></div>
+<div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_a1e273622affc5aefcd63c0036e5ce1b9"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#a1e273622affc5aefcd63c0036e5ce1b9">pins</a></div><div class="ttdeci">std::vector&lt; PinInformation &gt; pins</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00064">netlist_serializer.cpp:64</a></div></div>
 <div class="ttc" id="anamespacehal_html_a119eb4e25d047caa41d83e762cbed8eca54c9ccb45f5ee60133cca31fca024432"><div class="ttname"><a href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca54c9ccb45f5ee60133cca31fca024432">hal::PinDirection::inout</a></div><div class="ttdeci">@ inout</div></div>
 <div class="ttc" id="aclasshal_1_1_gate_library_html"><div class="ttname"><a href="classhal_1_1_gate_library.html">hal::GateLibrary</a></div><div class="ttdef"><b>Definition:</b> <a href="gate__library_8h_source.html#l00041">gate_library.h:41</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_e9911a0b44cff824f6f3de584be6e205.html">hgl_writer</a></li><li class="navelem"><a class="el" href="dir_c7f946f84d3aa9d21c98e837fde7f0ce.html">src</a></li><li class="navelem"><a class="el" href="src_2hgl__writer_8cpp.html">hgl_writer.cpp</a></li>
-    <li class="footer">Generated on Thu May 19 2022 17:55:42 for HAL by
+    <li class="footer">Generated on Tue Jun 14 2022 14:52:13 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -1,0 +1,5 @@
+<map id="hal::GatePinTree" name="hal::GatePinTree">
+<area shape="rect" id="node1" title="A widget to display the pins of a given gate." alt="" coords="5,520,252,685"/>
+<area shape="rect" id="node2" href="$classhal_1_1_size_adjustable_tree_view.html" title=" " alt="" coords="26,365,231,472"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qtreeview.html" title=" " alt="" coords="33,5,224,317"/>
+</map>
