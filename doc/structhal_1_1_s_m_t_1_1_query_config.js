@@ -3,7 +3,7 @@ var structhal_1_1_s_m_t_1_1_query_config =
     [ "with_local_solver", "structhal_1_1_s_m_t_1_1_query_config.html#a930cd1ebf9c0f063b45f9a7f4ef193dc", null ],
     [ "with_model_generation", "structhal_1_1_s_m_t_1_1_query_config.html#a7f420d04d51457aa9a63dbab353823b9", null ],
     [ "with_remote_solver", "structhal_1_1_s_m_t_1_1_query_config.html#a0ed739cb7573fbc9a8bf53afbea1429a", null ],
-    [ "with_solver", "structhal_1_1_s_m_t_1_1_query_config.html#a9bfb136fd48d8703e9034fb62e379674", null ],
+    [ "with_solver", "structhal_1_1_s_m_t_1_1_query_config.html#ade2e16756e57d17cd8ea65c278b4b0d1", null ],
     [ "with_timeout", "structhal_1_1_s_m_t_1_1_query_config.html#a95eff43ad1efa4dfb0405caa8cbc19eb", null ],
     [ "without_model_generation", "structhal_1_1_s_m_t_1_1_query_config.html#a6652626d4faca795c72281b00e658d0a", null ],
     [ "operator<<", "structhal_1_1_s_m_t_1_1_query_config.html#ab348afc941667889e874646fa8388132", null ],

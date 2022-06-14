@@ -100,7 +100,7 @@ Inheritance diagram for hal::UserActionFactory:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_user_action_factory__inherit__graph.png" border="0" usemap="#hal_1_1_user_action_factory_inherit__map" alt="Inheritance graph"/></div>
 <map name="hal_1_1_user_action_factory_inherit__map" id="hal_1_1_user_action_factory_inherit__map">
-<area shape="rect" title="The UserActionFactory is the abstract base class for registration." alt="" coords="1676,5,1844,112"/>
+<area shape="rect" title="The UserActionFactory is the abstract base class for registration." alt="" coords="1544,5,1712,112"/>
 <area shape="rect" href="classhal_1_1_action_add_items_to_object_factory.html" title="UserActionFactory for ActionAddItemsToObject." alt="" coords="5,167,259,274"/>
 <area shape="rect" href="classhal_1_1_action_create_object_factory.html" title="UserActionFactory for ActionCreateObject." alt="" coords="283,175,506,267"/>
 <area shape="rect" href="classhal_1_1_action_delete_object_factory.html" title="UserActionFactory for ActionDeleteObject." alt="" coords="530,175,753,267"/>
@@ -109,12 +109,11 @@ Inheritance diagram for hal::UserActionFactory:</div>
 <area shape="rect" href="classhal_1_1_action_open_netlist_file_factory.html" title="UserActionFactory for ActionOpenNetlistFile." alt="" coords="1247,167,1481,274"/>
 <area shape="rect" href="classhal_1_1_action_remove_items_from_object_factory.html" title="UserActionFactory for ActionRemoveItemsFromObject." alt="" coords="1506,160,1750,281"/>
 <area shape="rect" href="classhal_1_1_action_rename_object_factory.html" title="UserActionFactory for ActionRenameObject." alt="" coords="1775,175,2009,267"/>
-<area shape="rect" href="classhal_1_1_action_reorder_object_factory.html" title="UserActionFactory for ActionReorderObject." alt="" coords="2034,167,2262,274"/>
-<area shape="rect" href="classhal_1_1_action_set_object_color_factory.html" title="UserActionFactory for ActionSetObjectColor." alt="" coords="2287,167,2519,274"/>
-<area shape="rect" href="classhal_1_1_action_set_object_type_factory.html" title="UserActionFactory for ActionSetObjectType." alt="" coords="2543,167,2771,274"/>
-<area shape="rect" href="classhal_1_1_action_set_selection_focus_factory.html" title="UserActionFactory for ActionSetSelectionFocus." alt="" coords="2796,167,3049,274"/>
-<area shape="rect" href="classhal_1_1_action_unfold_module_factory.html" title="UserActionFactory for ActionUnfoldModule." alt="" coords="3073,175,3303,267"/>
-<area shape="rect" href="classhal_1_1_user_action_compound_factory.html" title=" " alt="" coords="3327,175,3566,267"/>
+<area shape="rect" href="classhal_1_1_action_set_object_color_factory.html" title="UserActionFactory for ActionSetObjectColor." alt="" coords="2033,167,2265,274"/>
+<area shape="rect" href="classhal_1_1_action_set_object_type_factory.html" title="UserActionFactory for ActionSetObjectType." alt="" coords="2290,167,2518,274"/>
+<area shape="rect" href="classhal_1_1_action_set_selection_focus_factory.html" title="UserActionFactory for ActionSetSelectionFocus." alt="" coords="2543,167,2796,274"/>
+<area shape="rect" href="classhal_1_1_action_unfold_module_factory.html" title="UserActionFactory for ActionUnfoldModule." alt="" coords="2820,175,3049,267"/>
+<area shape="rect" href="classhal_1_1_user_action_compound_factory.html" title=" " alt="" coords="3074,175,3313,267"/>
 </map>
 </div>
 <div class="dynheader">
@@ -145,7 +144,7 @@ Protected Attributes</h2></td></tr>
 <div class="textblock"><p>The <a class="el" href="classhal_1_1_user_action_factory.html" title="The UserActionFactory is the abstract base class for registration.">UserActionFactory</a> is the abstract base class for registration. </p>
 <p>Each class derived from <a class="el" href="classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions.">UserAction</a> is supposed to come with a derived factory as well. The factory is used to register the user action constructor with the user action manager. Doing so new interactions can be implemented without tempering with the manager class. </p>
 
-<p class="definition">Definition at line <a class="el" href="user__action_8h_source.html#l00247">247</a> of file <a class="el" href="user__action_8h_source.html">user_action.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="user__action_8h_source.html#l00197">197</a> of file <a class="el" href="user__action_8h_source.html">user_action.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a63c5d84670cea8fdee878557f1dd446c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a63c5d84670cea8fdee878557f1dd446c">&#9670;&nbsp;</a></span>UserActionFactory()</h2>
@@ -170,9 +169,9 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="user__action_8cpp_source.html#l00006">6</a> of file <a class="el" href="user__action_8cpp_source.html">user_action.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="user__action_8cpp_source.html#l00005">5</a> of file <a class="el" href="user__action_8cpp_source.html">user_action.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="user__action__manager_8cpp_source.html#l00211">hal::UserActionManager::instance()</a>, and <a class="el" href="user__action__manager_8cpp_source.html#l00206">hal::UserActionManager::registerFactory()</a>.</p>
+<p class="reference">References <a class="el" href="user__action__manager_8cpp_source.html#l00204">hal::UserActionManager::instance()</a>, and <a class="el" href="user__action__manager_8cpp_source.html#l00199">hal::UserActionManager::registerFactory()</a>.</p>
 
 </div>
 </div>
@@ -202,9 +201,9 @@ Protected Attributes</h2></td></tr>
 <p>Call the user action constructor.</p>
 <dl class="section return"><dt>Returns</dt><dd>The user action. </dd></dl>
 
-<p>Implemented in <a class="el" href="classhal_1_1_action_reorder_object_factory.html#af2448ab4b5cf4c119fece71d6be4a2b3">hal::ActionReorderObjectFactory</a>, <a class="el" href="classhal_1_1_action_move_node_factory.html#a621a6ada067ea79c337b9966249ec85f">hal::ActionMoveNodeFactory</a>, <a class="el" href="classhal_1_1_action_add_items_to_object_factory.html#a811e635fc86dc19632d0f56b490d62db">hal::ActionAddItemsToObjectFactory</a>, <a class="el" href="classhal_1_1_action_unfold_module_factory.html#a05fb3ca9167b5e8b15988330959c40e3">hal::ActionUnfoldModuleFactory</a>, <a class="el" href="classhal_1_1_action_fold_module_factory.html#ac79f4fed6f9734e54d1f19a26da0d6b2">hal::ActionFoldModuleFactory</a>, <a class="el" href="classhal_1_1_action_set_selection_focus_factory.html#a18baa497ca4c7051b7cac5c595fac1f6">hal::ActionSetSelectionFocusFactory</a>, <a class="el" href="classhal_1_1_action_remove_items_from_object_factory.html#adbbb0fe77a9694f2f084821709d56608">hal::ActionRemoveItemsFromObjectFactory</a>, <a class="el" href="classhal_1_1_action_rename_object_factory.html#a06431ac1114a648740038e881426de9e">hal::ActionRenameObjectFactory</a>, <a class="el" href="classhal_1_1_action_create_object_factory.html#a69f3b36c44586f3c3ebaffb6d8596669">hal::ActionCreateObjectFactory</a>, <a class="el" href="classhal_1_1_action_set_object_color_factory.html#ae1ec3ac1a849211e82bc56673ef5038f">hal::ActionSetObjectColorFactory</a>, <a class="el" href="classhal_1_1_action_set_object_type_factory.html#a0396c7c56af2f0c0c92f7a57c286b6e5">hal::ActionSetObjectTypeFactory</a>, <a class="el" href="classhal_1_1_action_open_netlist_file_factory.html#a25530402d4cf04518a65ef1081bc913f">hal::ActionOpenNetlistFileFactory</a>, <a class="el" href="classhal_1_1_action_delete_object_factory.html#ae711a60ceacbe8f731344bc89d024be9">hal::ActionDeleteObjectFactory</a>, and <a class="el" href="classhal_1_1_user_action_compound_factory.html#a5083008180156775c2f27886849f0ca6">hal::UserActionCompoundFactory</a>.</p>
+<p>Implemented in <a class="el" href="classhal_1_1_action_move_node_factory.html#a621a6ada067ea79c337b9966249ec85f">hal::ActionMoveNodeFactory</a>, <a class="el" href="classhal_1_1_action_add_items_to_object_factory.html#a811e635fc86dc19632d0f56b490d62db">hal::ActionAddItemsToObjectFactory</a>, <a class="el" href="classhal_1_1_action_rename_object_factory.html#a06431ac1114a648740038e881426de9e">hal::ActionRenameObjectFactory</a>, <a class="el" href="classhal_1_1_action_unfold_module_factory.html#a05fb3ca9167b5e8b15988330959c40e3">hal::ActionUnfoldModuleFactory</a>, <a class="el" href="classhal_1_1_action_fold_module_factory.html#ac79f4fed6f9734e54d1f19a26da0d6b2">hal::ActionFoldModuleFactory</a>, <a class="el" href="classhal_1_1_action_set_selection_focus_factory.html#a18baa497ca4c7051b7cac5c595fac1f6">hal::ActionSetSelectionFocusFactory</a>, <a class="el" href="classhal_1_1_action_remove_items_from_object_factory.html#adbbb0fe77a9694f2f084821709d56608">hal::ActionRemoveItemsFromObjectFactory</a>, <a class="el" href="classhal_1_1_action_create_object_factory.html#a69f3b36c44586f3c3ebaffb6d8596669">hal::ActionCreateObjectFactory</a>, <a class="el" href="classhal_1_1_action_set_object_color_factory.html#ae1ec3ac1a849211e82bc56673ef5038f">hal::ActionSetObjectColorFactory</a>, <a class="el" href="classhal_1_1_action_set_object_type_factory.html#a0396c7c56af2f0c0c92f7a57c286b6e5">hal::ActionSetObjectTypeFactory</a>, <a class="el" href="classhal_1_1_action_open_netlist_file_factory.html#a25530402d4cf04518a65ef1081bc913f">hal::ActionOpenNetlistFileFactory</a>, <a class="el" href="classhal_1_1_action_delete_object_factory.html#ae711a60ceacbe8f731344bc89d024be9">hal::ActionDeleteObjectFactory</a>, and <a class="el" href="classhal_1_1_user_action_compound_factory.html#a5083008180156775c2f27886849f0ca6">hal::UserActionCompoundFactory</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="user__action__manager_8cpp_source.html#l00171">hal::UserActionManager::getParsedAction()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="user__action__manager_8cpp_source.html#l00164">hal::UserActionManager::getParsedAction()</a>.</p>
 
 </div>
 </div>
@@ -233,11 +232,11 @@ Protected Attributes</h2></td></tr>
 <p>Get the tag name of derived class.</p>
 <dl class="section return"><dt>Returns</dt><dd>The tag name. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="user__action_8h_source.html#l00265">265</a> of file <a class="el" href="user__action_8h_source.html">user_action.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="user__action_8h_source.html#l00215">215</a> of file <a class="el" href="user__action_8h_source.html">user_action.h</a>.</p>
 
-<p class="reference">References <a class="el" href="user__action_8h_source.html#l00250">mTagname</a>.</p>
+<p class="reference">References <a class="el" href="user__action_8h_source.html#l00200">mTagname</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="user__action__manager_8cpp_source.html#l00206">hal::UserActionManager::registerFactory()</a>, <a class="el" href="user__action__compound_8cpp_source.html#l00015">hal::UserActionCompound::tagname()</a>, <a class="el" href="action__delete__object_8cpp_source.html#l00025">hal::ActionDeleteObject::tagname()</a>, <a class="el" href="action__open__netlist__file_8cpp_source.html#l00016">hal::ActionOpenNetlistFile::tagname()</a>, <a class="el" href="action__set__object__type_8cpp_source.html#l00017">hal::ActionSetObjectType::tagname()</a>, <a class="el" href="action__set__object__color_8cpp_source.html#l00019">hal::ActionSetObjectColor::tagname()</a>, <a class="el" href="action__fold__module_8cpp_source.html#l00028">hal::ActionFoldModule::tagname()</a>, <a class="el" href="action__unfold__module_8cpp_source.html#l00022">hal::ActionUnfoldModule::tagname()</a>, <a class="el" href="action__create__object_8cpp_source.html#l00020">hal::ActionCreateObject::tagname()</a>, <a class="el" href="action__rename__object_8cpp_source.html#l00022">hal::ActionRenameObject::tagname()</a>, <a class="el" href="action__set__selection__focus_8cpp_source.html#l00016">hal::ActionSetSelectionFocus::tagname()</a>, <a class="el" href="action__remove__items__from__object_8cpp_source.html#l00019">hal::ActionRemoveItemsFromObject::tagname()</a>, <a class="el" href="action__reorder__object_8cpp_source.html#l00057">hal::ActionReorderObject::tagname()</a>, <a class="el" href="action__add__items__to__object_8cpp_source.html#l00026">hal::ActionAddItemsToObject::tagname()</a>, and <a class="el" href="action__move__node_8cpp_source.html#l00018">hal::ActionMoveNode::tagname()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="user__action__manager_8cpp_source.html#l00199">hal::UserActionManager::registerFactory()</a>, <a class="el" href="user__action__compound_8cpp_source.html#l00015">hal::UserActionCompound::tagname()</a>, <a class="el" href="action__open__netlist__file_8cpp_source.html#l00016">hal::ActionOpenNetlistFile::tagname()</a>, <a class="el" href="action__delete__object_8cpp_source.html#l00025">hal::ActionDeleteObject::tagname()</a>, <a class="el" href="action__set__object__type_8cpp_source.html#l00017">hal::ActionSetObjectType::tagname()</a>, <a class="el" href="action__set__object__color_8cpp_source.html#l00019">hal::ActionSetObjectColor::tagname()</a>, <a class="el" href="action__fold__module_8cpp_source.html#l00028">hal::ActionFoldModule::tagname()</a>, <a class="el" href="action__unfold__module_8cpp_source.html#l00022">hal::ActionUnfoldModule::tagname()</a>, <a class="el" href="action__create__object_8cpp_source.html#l00020">hal::ActionCreateObject::tagname()</a>, <a class="el" href="action__rename__object_8cpp_source.html#l00019">hal::ActionRenameObject::tagname()</a>, <a class="el" href="action__set__selection__focus_8cpp_source.html#l00016">hal::ActionSetSelectionFocus::tagname()</a>, <a class="el" href="action__remove__items__from__object_8cpp_source.html#l00019">hal::ActionRemoveItemsFromObject::tagname()</a>, <a class="el" href="action__add__items__to__object_8cpp_source.html#l00022">hal::ActionAddItemsToObject::tagname()</a>, and <a class="el" href="action__move__node_8cpp_source.html#l00018">hal::ActionMoveNode::tagname()</a>.</p>
 
 </div>
 </div>
@@ -262,9 +261,9 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="user__action_8h_source.html#l00250">250</a> of file <a class="el" href="user__action_8h_source.html">user_action.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="user__action_8h_source.html#l00200">200</a> of file <a class="el" href="user__action_8h_source.html">user_action.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="user__action_8h_source.html#l00265">tagname()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="user__action_8h_source.html#l00215">tagname()</a>.</p>
 
 </div>
 </div>
@@ -278,7 +277,7 @@ Protected Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_user_action_factory.html">UserActionFactory</a></li>
-    <li class="footer">Generated on Tue Jun 14 2022 15:24:46 for HAL by
+    <li class="footer">Generated on Tue Jun 14 2022 16:11:29 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

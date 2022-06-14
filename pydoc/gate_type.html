@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Gate Type &mdash; hal_py v3.3.0-642-g068b71780 documentation</title>
+  <title>Gate Type &mdash; hal_py v3.3.0-105-g8ed2def88 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.3.0-642-g068b71780
+                v3.3.0-105-g8ed2def88
               </div>
             
           
@@ -100,8 +100,6 @@
 <li class="toctree-l2"><a class="reference internal" href="grouping.html">Grouping</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gui_plugin_interface.html">GUI Plugin Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module.html">Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_pin.html">Module Pin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_pin_group.html">Module Pin Group</a></li>
 <li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist.html">Netlist</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_factory.html">Netlist Factory</a></li>
@@ -112,7 +110,6 @@
 <li class="toctree-l2"><a class="reference internal" href="pin_direction.html">Pin Direction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_type.html">Pin Type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smt.html">SMT</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="plugins.html">HAL Plugins Documentation</a></li>
@@ -284,7 +281,7 @@
 
 <dl class="method">
 <dt id="hal_py.GateType.add_pin">
-<code class="descname">add_pin</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>pin: str</em>, <em>direction: hal_py.PinDirection</em>, <em>type: hal_py.PinType</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GateType.add_pin" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_pin</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>pin: str</em>, <em>direction: hal_py.PinDirection</em>, <em>pin_type: hal_py.PinType</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GateType.add_pin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a pin of the specified direction and type to the gate type.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -293,7 +290,7 @@
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The pin.</li>
 <li><strong>direction</strong> (<a class="reference internal" href="pin_direction.html#hal_py.PinDirection" title="hal_py.PinDirection"><em>hal_py.PinDirection</em></a>) – The pin direction to be assigned.</li>
-<li><strong>type</strong> (<a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><em>hal_py.PinType</em></a>) – The pin type to be assigned.</li>
+<li><strong>pin_type</strong> (<a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><em>hal_py.PinType</em></a>) – The pin type to be assigned.</li>
 </ul>
 </td>
 </tr>
@@ -309,7 +306,7 @@
 
 <dl class="method">
 <dt id="hal_py.GateType.add_pins">
-<code class="descname">add_pins</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>pins: str</em>, <em>direction: hal_py.PinDirection</em>, <em>type: hal_py.PinType</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GateType.add_pins" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_pins</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>pins: str</em>, <em>direction: hal_py.PinDirection</em>, <em>pin_type: hal_py.PinType</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GateType.add_pins" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a list of pin of the specified direction and type to the gate type.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -318,7 +315,7 @@
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) – The pins.</li>
 <li><strong>direction</strong> (<a class="reference internal" href="pin_direction.html#hal_py.PinDirection" title="hal_py.PinDirection"><em>hal_py.PinDirection</em></a>) – The pin direction to be assigned.</li>
-<li><strong>type</strong> (<a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><em>hal_py.PinType</em></a>) – The pin type to be assigned.</li>
+<li><strong>pin_type</strong> (<a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><em>hal_py.PinType</em></a>) – The pin type to be assigned.</li>
 </ul>
 </td>
 </tr>
@@ -352,7 +349,7 @@
 
 <dl class="method">
 <dt id="hal_py.GateType.assign_pin_type">
-<code class="descname">assign_pin_type</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>pin: str</em>, <em>type: hal_py.PinType</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GateType.assign_pin_type" title="Permalink to this definition">¶</a></dt>
+<code class="descname">assign_pin_type</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>pin: str</em>, <em>pin_type: hal_py.PinType</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GateType.assign_pin_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Assign a pin type to the given pin. The pin must have been added to the gate type beforehand.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -360,7 +357,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The pin.</li>
-<li><strong>type</strong> (<a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><em>hal_py.PinType</em></a>) – The pin type to be assigned.</li>
+<li><strong>pin_type</strong> (<a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><em>hal_py.PinType</em></a>) – The pin type to be assigned.</li>
 </ul>
 </td>
 </tr>
@@ -763,13 +760,13 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 
 <dl class="method">
 <dt id="hal_py.GateType.get_pins_of_type">
-<code class="descname">get_pins_of_type</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>type: hal_py.PinType</em><span class="sig-paren">)</span> &#x2192; Set[str]<a class="headerlink" href="#hal_py.GateType.get_pins_of_type" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_pins_of_type</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>pin_type: hal_py.PinType</em><span class="sig-paren">)</span> &#x2192; Set[str]<a class="headerlink" href="#hal_py.GateType.get_pins_of_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all pins of the specified pin type.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>type</strong> (<a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><em>hal_py.PinType</em></a>) – The pin type.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin_type</strong> (<a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><em>hal_py.PinType</em></a>) – The pin type.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A set of pins.</td>
 </tr>

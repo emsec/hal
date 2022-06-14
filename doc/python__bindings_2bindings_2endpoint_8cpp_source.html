@@ -105,14 +105,14 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2endpoint_8
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="stringliteral">        py_endpoint.def(py::self == py::self, R</span><span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="stringliteral">            Check whether two endpoints are equal.</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="stringliteral">            :returns: True if both endpoints are equal, False otherwise.</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="stringliteral">            :returns: True if both endpoints are equal, false otherwise.</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="stringliteral">        py_endpoint.def(py::self != py::self, R</span><span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="stringliteral">            Check whether two endpoints are unequal.</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="stringliteral">            :returns: True if both endpoints are unequal, False otherwise.</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="stringliteral">            :returns: True if both endpoints are unequal, false otherwise.</span></div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="stringliteral"></span> </div>
@@ -149,8 +149,8 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2endpoint_8
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="stringliteral">            :rtype: hal_py.Net</span></div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="stringliteral">        py_endpoint.def_property_readonly(</span><span class="stringliteral">&quot;source_pin&quot;</span>, &amp;<a class="code" href="classhal_1_1_endpoint.html#a93c74ed50f0ce4d8db33bc156edf7c35">Endpoint::is_source_pin</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="stringliteral">            True if the pin of the endpoint is a source (output) pin, False otherwise.</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="stringliteral">        py_endpoint.def_property_readonly(</span><span class="stringliteral">&quot;is_source&quot;</span>, &amp;<a class="code" href="classhal_1_1_endpoint.html#a93c74ed50f0ce4d8db33bc156edf7c35">Endpoint::is_source_pin</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="stringliteral">            True if the pin of the endpoint is a source (output) pin, false otherwise.</span></div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="stringliteral">            :type: bool</span></div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
@@ -158,12 +158,12 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2endpoint_8
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="stringliteral">        py_endpoint.def(</span><span class="stringliteral">&quot;is_source_pin&quot;</span>, &amp;<a class="code" href="classhal_1_1_endpoint.html#a93c74ed50f0ce4d8db33bc156edf7c35">Endpoint::is_source_pin</a>, R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="stringliteral">            Checks whether the pin of the endpoint is a source (output) pin.</span></div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="stringliteral">            :returns: True if the endpoint is an source (output) pin, False otherwise.</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="stringliteral">            :returns: True if the endpoint is an source (output) pin, false otherwise.</span></div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="stringliteral">        py_endpoint.def_property_readonly(</span><span class="stringliteral">&quot;destination_pin&quot;</span>, &amp;<a class="code" href="classhal_1_1_endpoint.html#ade1baf1f38d7cf9e518b8564767fcdde">Endpoint::is_destination_pin</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="stringliteral">            True if the pin of the endpoint is a destination (input) pin, False otherwise.</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="stringliteral">        py_endpoint.def_property_readonly(</span><span class="stringliteral">&quot;is_destination&quot;</span>, &amp;<a class="code" href="classhal_1_1_endpoint.html#ade1baf1f38d7cf9e518b8564767fcdde">Endpoint::is_destination_pin</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="stringliteral">            True if the pin of the endpoint is a destination (input) pin, false otherwise.</span></div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="stringliteral">            :type: bool</span></div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
@@ -171,7 +171,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2endpoint_8
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="stringliteral">        py_endpoint.def(</span><span class="stringliteral">&quot;is_destination_pin&quot;</span>, &amp;<a class="code" href="classhal_1_1_endpoint.html#ade1baf1f38d7cf9e518b8564767fcdde">Endpoint::is_destination_pin</a>, R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="stringliteral">            Checks whether the pin of the endpoint is a destination (input) pin.</span></div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="stringliteral">            :returns: True if the endpoint is an destination (input) pin, False otherwise.</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="stringliteral">            :returns: True if the endpoint is an destination (input) pin, false otherwise.</span></div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="stringliteral">    }</span></div>
@@ -180,7 +180,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2endpoint_8
 </div><!-- doc-content -->
 <div class="ttc" id="aclasshal_1_1_endpoint_html_aa5d98029f04ec9dc36da48b3fece7bd6"><div class="ttname"><a href="classhal_1_1_endpoint.html#aa5d98029f04ec9dc36da48b3fece7bd6">hal::Endpoint::get_gate</a></div><div class="ttdeci">Gate * get_gate() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2endpoint_8cpp_source.html#l00022">endpoint.cpp:22</a></div></div>
 <div class="ttc" id="aclasshal_1_1_endpoint_html_a93c74ed50f0ce4d8db33bc156edf7c35"><div class="ttname"><a href="classhal_1_1_endpoint.html#a93c74ed50f0ce4d8db33bc156edf7c35">hal::Endpoint::is_source_pin</a></div><div class="ttdeci">bool is_source_pin() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2endpoint_8cpp_source.html#l00042">endpoint.cpp:42</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00009">solver.cpp:9</a></div></div>
 <div class="ttc" id="aclasshal_1_1_endpoint_html_a4eb6a0c6fc8133fb74feebfdf0cd1589"><div class="ttname"><a href="classhal_1_1_endpoint.html#a4eb6a0c6fc8133fb74feebfdf0cd1589">hal::Endpoint::get_net</a></div><div class="ttdeci">Net * get_net() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2endpoint_8cpp_source.html#l00032">endpoint.cpp:32</a></div></div>
 <div class="ttc" id="anamespacehal_1_1_shortest_path_html_a6f60f4bfa62d51227fa5fcc3e7d838a9"><div class="ttname"><a href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">hal::ShortestPath::module</a></div><div class="ttdeci">const Module * module(const Gate *g, const NodeBoxes &amp;boxes)</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l00877">graph_graphics_view.cpp:877</a></div></div>
 <div class="ttc" id="apython__bindings_8h_html"><div class="ttname"><a href="python__bindings_8h.html">python_bindings.h</a></div></div>
@@ -191,7 +191,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2endpoint_8
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2089f1c86a5c695e25bdd8ee7b7d2080.html">python_bindings</a></li><li class="navelem"><a class="el" href="dir_ded422ec9f163017e5e46b66204ec4a3.html">bindings</a></li><li class="navelem"><a class="el" href="python__bindings_2bindings_2endpoint_8cpp.html">endpoint.cpp</a></li>
-    <li class="footer">Generated on Tue Jun 14 2022 15:24:41 for HAL by
+    <li class="footer">Generated on Tue Jun 14 2022 16:11:25 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

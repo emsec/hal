@@ -137,9 +137,6 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a99d0bad47b8889780fe90db4c3308b77"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a99d0bad47b8889780fe90db4c3308b77"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a99d0bad47b8889780fe90db4c3308b77">hal::utils::unordered_vector_erase</a> (std::vector&lt; T &gt; &amp;vec, T element)</td></tr>
-<tr class="separator:a99d0bad47b8889780fe90db4c3308b77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5bb3205d9597f2279b18a99fdd7affa6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a5bb3205d9597f2279b18a99fdd7affa6">hal::utils::get_bit</a> (const <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> value, const <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> index)</td></tr>
 <tr class="separator:a5bb3205d9597f2279b18a99fdd7affa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a34ef9fc77538514e7bb5a9fe55275550"><td class="memItemLeft" align="right" valign="top"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a34ef9fc77538514e7bb5a9fe55275550">hal::utils::set_bit</a> (const <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> value, const <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> index)</td></tr>
@@ -203,7 +200,7 @@ Functions</h2></td></tr>
 <tr class="separator:ae94b0047d0de8da3d4e54a9d55ccd327"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad382fe6e6a03a05ea538803c92cae5f6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#ad382fe6e6a03a05ea538803c92cae5f6">hal::utils::folder_exists_and_is_accessible</a> (const std::filesystem::path &amp;folder)</td></tr>
 <tr class="separator:ad382fe6e6a03a05ea538803c92cae5f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe865cd13e526c5228f269a9c7b2629b"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#abe865cd13e526c5228f269a9c7b2629b">hal::utils::which</a> (const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, const std::string &amp;path)</td></tr>
+<tr class="memitem:abe865cd13e526c5228f269a9c7b2629b"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#abe865cd13e526c5228f269a9c7b2629b">hal::utils::which</a> (const std::string &amp;name, const std::string &amp;path)</td></tr>
 <tr class="separator:abe865cd13e526c5228f269a9c7b2629b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb615f0cc47727167aa44158da41fe14"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#afb615f0cc47727167aa44158da41fe14">hal::utils::get_binary_directory</a> ()</td></tr>
 <tr class="separator:afb615f0cc47727167aa44158da41fe14"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -238,7 +235,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_8cff0e4740b4a22580dd05764b73d449.html">utilities</a></li><li class="navelem"><a class="el" href="utils_8h.html">utils.h</a></li>
-    <li class="footer">Generated on Tue Jun 14 2022 15:24:42 for HAL by
+    <li class="footer">Generated on Tue Jun 14 2022 16:11:25 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

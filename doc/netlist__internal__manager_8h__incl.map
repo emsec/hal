@@ -1,14 +1,14 @@
 <map id="/home/runner/work/hal/hal/include/hal_core/netlist/netlist_internal_manager.h" name="/home/runner/work/hal/hal/include/hal_core/netlist/netlist_internal_manager.h">
-<area shape="rect" id="node1" title=" " alt="" coords="277,5,446,76"/>
-<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="149,303,289,329"/>
-<area shape="rect" id="node7" href="$event__handler_8h.html" title=" " alt="" coords="203,124,389,165"/>
-<area shape="rect" id="node9" title=" " alt="" coords="348,303,399,329"/>
-<area shape="rect" id="node12" title=" " alt="" coords="514,131,577,158"/>
+<area shape="rect" id="node1" title=" " alt="" coords="161,5,330,76"/>
+<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="150,303,290,329"/>
+<area shape="rect" id="node7" href="$event__handler_8h.html" title=" " alt="" coords="219,124,405,165"/>
+<area shape="rect" id="node9" title=" " alt="" coords="59,303,109,329"/>
+<area shape="rect" id="node12" title=" " alt="" coords="482,303,545,329"/>
 <area shape="rect" id="node3" title=" " alt="" coords="5,377,96,404"/>
 <area shape="rect" id="node4" title=" " alt="" coords="121,377,207,404"/>
 <area shape="rect" id="node5" title=" " alt="" coords="231,377,318,404"/>
 <area shape="rect" id="node6" title=" " alt="" coords="342,377,413,404"/>
-<area shape="rect" id="node8" href="$callback__hook_8h.html" title=" " alt="" coords="308,213,439,255"/>
-<area shape="rect" id="node10" href="$enums_8h.html" title=" " alt="" coords="153,213,284,255"/>
-<area shape="rect" id="node11" title=" " alt="" coords="35,303,115,329"/>
+<area shape="rect" id="node8" href="$callback__hook_8h.html" title=" " alt="" coords="155,213,285,255"/>
+<area shape="rect" id="node10" href="$enums_8h.html" title=" " alt="" coords="309,213,440,255"/>
+<area shape="rect" id="node11" title=" " alt="" coords="349,303,429,329"/>
 </map>

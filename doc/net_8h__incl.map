@@ -1,20 +1,20 @@
 <map id="/home/runner/work/hal/hal/include/hal_core/netlist/net.h" name="/home/runner/work/hal/hal/include/hal_core/netlist/net.h">
-<area shape="rect" id="node1" title=" " alt="" coords="423,5,593,61"/>
-<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="149,288,289,315"/>
-<area shape="rect" id="node7" href="$data__container_8h.html" title=" " alt="" coords="119,109,273,151"/>
-<area shape="rect" id="node8" title=" " alt="" coords="387,288,437,315"/>
-<area shape="rect" id="node9" title=" " alt="" coords="226,206,281,233"/>
-<area shape="rect" id="node10" title=" " alt="" coords="305,206,367,233"/>
-<area shape="rect" id="node11" href="$event__handler_8h.html" title=" " alt="" coords="487,109,673,151"/>
-<area shape="rect" id="node13" title=" " alt="" coords="675,288,762,315"/>
-<area shape="rect" id="node14" title=" " alt="" coords="807,288,849,315"/>
-<area shape="rect" id="node15" title=" " alt="" coords="883,288,941,315"/>
-<area shape="rect" id="node18" title=" " alt="" coords="955,117,1032,143"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,363,96,389"/>
-<area shape="rect" id="node4" title=" " alt="" coords="121,363,207,389"/>
-<area shape="rect" id="node5" title=" " alt="" coords="231,363,318,389"/>
-<area shape="rect" id="node6" title=" " alt="" coords="342,363,413,389"/>
-<area shape="rect" id="node12" href="$callback__hook_8h.html" title=" " alt="" coords="648,199,779,240"/>
-<area shape="rect" id="node16" href="$enums_8h.html" title=" " alt="" coords="443,199,573,240"/>
-<area shape="rect" id="node17" title=" " alt="" coords="519,288,599,315"/>
+<area shape="rect" id="node1" title=" " alt="" coords="420,5,590,61"/>
+<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="218,288,358,315"/>
+<area shape="rect" id="node7" href="$data__container_8h.html" title=" " alt="" coords="288,199,442,240"/>
+<area shape="rect" id="node8" title=" " alt="" coords="505,288,556,315"/>
+<area shape="rect" id="node9" title=" " alt="" coords="411,288,466,315"/>
+<area shape="rect" id="node10" title=" " alt="" coords="116,288,179,315"/>
+<area shape="rect" id="node11" href="$event__handler_8h.html" title=" " alt="" coords="32,109,218,151"/>
+<area shape="rect" id="node13" title=" " alt="" coords="595,288,682,315"/>
+<area shape="rect" id="node14" title=" " alt="" coords="726,288,769,315"/>
+<area shape="rect" id="node15" title=" " alt="" coords="802,288,861,315"/>
+<area shape="rect" id="node18" title=" " alt="" coords="874,117,952,143"/>
+<area shape="rect" id="node3" title=" " alt="" coords="73,363,164,389"/>
+<area shape="rect" id="node4" title=" " alt="" coords="188,363,275,389"/>
+<area shape="rect" id="node5" title=" " alt="" coords="299,363,386,389"/>
+<area shape="rect" id="node6" title=" " alt="" coords="410,363,480,389"/>
+<area shape="rect" id="node12" href="$callback__hook_8h.html" title=" " alt="" coords="568,199,698,240"/>
+<area shape="rect" id="node16" href="$enums_8h.html" title=" " alt="" coords="82,199,213,240"/>
+<area shape="rect" id="node17" title=" " alt="" coords="9,288,89,315"/>
 </map>

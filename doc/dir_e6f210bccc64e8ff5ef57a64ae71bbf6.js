@@ -5,9 +5,6 @@ var dir_e6f210bccc64e8ff5ef57a64ae71bbf6 =
     [ "layouters", "dir_8dd403e43350d61a0fd40937d329e7c2.html", "dir_8dd403e43350d61a0fd40937d329e7c2" ],
     [ "shaders", "dir_68233a8766401aed057e9386da449d7b.html", "dir_68233a8766401aed057e9386da449d7b" ],
     [ "graph_context_manager.h", "graph__context__manager_8h.html", null ],
-    [ "graph_context_serializer.h", "graph__context__serializer_8h.html", [
-      [ "GraphContextSerializer", "classhal_1_1_graph_context_serializer.html", "classhal_1_1_graph_context_serializer" ]
-    ] ],
     [ "graph_graphics_view.h", "graph__graphics__view_8h.html", null ],
     [ "graph_navigation_widget.h", "graph__navigation__widget_8h.html", [
       [ "GraphNavigationTreeWidget", "classhal_1_1_graph_navigation_tree_widget.html", "classhal_1_1_graph_navigation_tree_widget" ],

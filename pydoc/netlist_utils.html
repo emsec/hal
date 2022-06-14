@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist Utils &mdash; hal_py v3.3.0-642-g068b71780 documentation</title>
+  <title>Netlist Utils &mdash; hal_py v3.3.0-105-g8ed2def88 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.3.0-642-g068b71780
+                v3.3.0-105-g8ed2def88
               </div>
             
           
@@ -100,8 +100,6 @@
 <li class="toctree-l2"><a class="reference internal" href="grouping.html">Grouping</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gui_plugin_interface.html">GUI Plugin Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module.html">Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_pin.html">Module Pin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_pin_group.html">Module Pin Group</a></li>
 <li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist.html">Netlist</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_factory.html">Netlist Factory</a></li>
@@ -112,7 +110,6 @@
 <li class="toctree-l2"><a class="reference internal" href="pin_direction.html">Pin Direction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_type.html">Pin Type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smt.html">SMT</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="plugins.html">HAL Plugins Documentation</a></li>
@@ -337,74 +334,32 @@ Before adding a gate to the chain, an optional user-defined filter is evaluated 
 
 <dl class="function">
 <dt id="hal_py.NetlistUtils.get_next_gates">
-<code class="descclassname">hal_py.NetlistUtils.</code><code class="descname">get_next_gates</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.NetlistUtils.get_next_gates" title="Permalink to this definition">¶</a></dt>
-<dd><p>Overloaded function.</p>
-<ol class="arabic">
-<li><p class="first">get_next_gates(gate: hal::Gate, get_successors: bool, depth: int = 0, filter: Callable[[hal::Gate], bool] = None) -&gt; List[hal::Gate]</p>
-<blockquote>
-<div><p>Find predecessors or successors of a gate. If depth is set to 1 only direct predecessors/successors will be returned. 
+<code class="descclassname">hal_py.NetlistUtils.</code><code class="descname">get_next_gates</code><span class="sig-paren">(</span><em>gate: hal::Gate, get_successors: bool, depth: int = 0, filter: Callable[[hal::Gate], bool] = None</em><span class="sig-paren">)</span> &#x2192; List[hal::Gate]<a class="headerlink" href="#hal_py.NetlistUtils.get_next_gates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find predecessors or successors of a gate. If depth is set to 1 only direct predecessors/successors will be returned. 
 Higher number of depth causes as many steps of recursive calls. 
 If depth is set to 0 there is no limitation and the loop  continues until no more predecessors/succesors are found.
-If a filter function is given, the recursion stops whenever the filter function evaluates to False. 
-Only gates matching the filter will be added to the result vector.
+If a filter function is given only gates matching the filter will be added to the result vector.
 The result will not include the provided gate itself.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Gate gate:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">The initial gate.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The initial gate.</li>
+<li><strong>get_successors</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – True to return successors, False for Predecessors.</li>
+<li><strong>depth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Depth of recursion.</li>
+<li><strong>filter</strong> (<em>lambda</em>) – User-defined filter function.</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param bool get_successors:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">True to return successors, False for Predecessors.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">List of predecessor/successor gates.</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param int depth:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Depth of recursion.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param lambda filter:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">User-defined filter function.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">List of predecessor/successor gates.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">list[hal_py.Gate]</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</p>
+</td>
 </tr>
 </tbody>
 </table>
-</div></blockquote>
-</li>
-<li><p class="first">get_next_gates(net: hal::Net, get_successors: bool, depth: int = 0, filter: Callable[[hal::Gate], bool] = None) -&gt; List[hal::Gate]</p>
-<blockquote>
-<div><p>Find predecessors or successors of a net. If depth is set to 1 only direct predecessors/successors will be returned. 
-Higher number of depth causes as many steps of recursive calls. 
-If depth is set to 0 there is no limitation and the loop  continues until no more predecessors/succesors are found.
-If a filter function is given, the recursion stops whenever the filter function evaluates to False. 
-Only gates matching the filter will be added to the result vector.
-The result will not include the provided gate itself.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Net net:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">The initial net.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param bool get_successors:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">True to return successors, False for Predecessors.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param int depth:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Depth of recursion.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param lambda filter:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">User-defined filter function.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">List of predecessor/successor gates.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">list[hal_py.Gate]</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-</li>
-</ol>
 </dd></dl>
 
 <dl class="function">
@@ -716,6 +671,20 @@ If enabled, analyzes every gate’s inputs and removes fixed ‘0’ or ‘1’ 
 <dt id="hal_py.NetlistUtils.remove_unused_lut_endpoints">
 <code class="descclassname">hal_py.NetlistUtils.</code><code class="descname">remove_unused_lut_endpoints</code><span class="sig-paren">(</span><em>netlist: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.NetlistUtils.remove_unused_lut_endpoints" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove all LUT fan-in endpoints that are not present within the Boolean function of the output of a gate.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>netlist</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The target netlist.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="hal_py.NetlistUtils.rename_luts_according_to_function">
+<code class="descclassname">hal_py.NetlistUtils.</code><code class="descname">rename_luts_according_to_function</code><span class="sig-paren">(</span><em>netlist: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.NetlistUtils.rename_luts_according_to_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rename LUTs that implement simple functions to better reflect their functionality.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

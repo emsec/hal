@@ -3,8 +3,8 @@
 <area shape="rect" id="node2" href="$netlist__abstraction_8h.html" title=" " alt="" coords="155,392,355,433"/>
 <area shape="rect" id="node8" href="$evaluation_2configuration_8h.html" title=" " alt="" coords="797,303,1009,344"/>
 <area shape="rect" id="node9" href="$evaluation_2context_8h.html" title=" " alt="" coords="695,213,907,255"/>
-<area shape="rect" id="node12" href="$plugins_2dataflow__analysis_2include_2dataflow__analysis_2evaluation_2result_8h.html" title=" " alt="" coords="13,213,225,255"/>
-<area shape="rect" id="node13" href="$plugins_2dataflow__analysis_2include_2dataflow__analysis_2processing_2result_8h.html" title=" " alt="" coords="405,124,618,165"/>
+<area shape="rect" id="node12" href="$evaluation_2result_8h.html" title=" " alt="" coords="13,213,225,255"/>
+<area shape="rect" id="node13" href="$processing_2result_8h.html" title=" " alt="" coords="405,124,618,165"/>
 <area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="488,481,628,508"/>
 <area shape="rect" id="node4" title=" " alt="" coords="5,481,129,508"/>
 <area shape="rect" id="node5" title=" " alt="" coords="251,481,366,508"/>

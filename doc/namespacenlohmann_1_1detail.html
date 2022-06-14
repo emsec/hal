@@ -344,28 +344,28 @@ Classes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:a02bcbc878bee413f25b985ada771aa9c"><td class="memTemplParams" colspan="2">template&lt;bool B, typename T  = void&gt; </td></tr>
-<tr class="memitem:a02bcbc878bee413f25b985ada771aa9c"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenlohmann_1_1detail.html#a02bcbc878bee413f25b985ada771aa9c">enable_if_t</a> = typename std::enable_if&lt; B, T &gt;::<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a></td></tr>
+<tr class="memitem:a02bcbc878bee413f25b985ada771aa9c"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenlohmann_1_1detail.html#a02bcbc878bee413f25b985ada771aa9c">enable_if_t</a> = typename std::enable_if&lt; B, T &gt;::type</td></tr>
 <tr class="separator:a02bcbc878bee413f25b985ada771aa9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53a082eedad9f4729fcd8fed552a21f7"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a53a082eedad9f4729fcd8fed552a21f7"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenlohmann_1_1detail.html#a53a082eedad9f4729fcd8fed552a21f7">uncvref_t</a> = typename std::remove_cv&lt; typename std::remove_reference&lt; T &gt;::<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a> &gt;::<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a></td></tr>
+<tr class="memitem:a53a082eedad9f4729fcd8fed552a21f7"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenlohmann_1_1detail.html#a53a082eedad9f4729fcd8fed552a21f7">uncvref_t</a> = typename std::remove_cv&lt; typename std::remove_reference&lt; T &gt;::type &gt;::type</td></tr>
 <tr class="separator:a53a082eedad9f4729fcd8fed552a21f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24800493c6ec02ce033dcbb47b7fd28e"><td class="memTemplParams" colspan="2">template&lt;typename... Ts&gt; </td></tr>
 <tr class="memitem:a24800493c6ec02ce033dcbb47b7fd28e"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenlohmann_1_1detail.html#a24800493c6ec02ce033dcbb47b7fd28e">index_sequence_for</a> = <a class="el" href="structnlohmann_1_1detail_1_1make__index__sequence.html">make_index_sequence</a>&lt; sizeof...(Ts)&gt;</td></tr>
 <tr class="separator:a24800493c6ec02ce033dcbb47b7fd28e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92a167c49c6697b6ffe4f79492c705e5"><td class="memTemplParams" colspan="2">template&lt;typename ... Ts&gt; </td></tr>
-<tr class="memitem:a92a167c49c6697b6ffe4f79492c705e5"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenlohmann_1_1detail.html#a92a167c49c6697b6ffe4f79492c705e5">void_t</a> = typename <a class="el" href="structnlohmann_1_1detail_1_1make__void.html">make_void</a>&lt; Ts... &gt;::<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a></td></tr>
+<tr class="memitem:a92a167c49c6697b6ffe4f79492c705e5"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenlohmann_1_1detail.html#a92a167c49c6697b6ffe4f79492c705e5">void_t</a> = typename <a class="el" href="structnlohmann_1_1detail_1_1make__void.html">make_void</a>&lt; Ts... &gt;::type</td></tr>
 <tr class="separator:a92a167c49c6697b6ffe4f79492c705e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9135fcf616d6ac6e231a86e0a055ac44"><td class="memTemplParams" colspan="2">template&lt;template&lt; class... &gt; class Op, class... Args&gt; </td></tr>
 <tr class="memitem:a9135fcf616d6ac6e231a86e0a055ac44"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenlohmann_1_1detail.html#a9135fcf616d6ac6e231a86e0a055ac44">is_detected</a> = typename <a class="el" href="structnlohmann_1_1detail_1_1detector.html">detector</a>&lt; <a class="el" href="structnlohmann_1_1detail_1_1nonesuch.html">nonesuch</a>, <a class="el" href="namespacenlohmann_1_1detail.html#a59fca69799f6b9e366710cb9043aa77d">void</a>, Op, Args... &gt;::<a class="el" href="namespacenlohmann_1_1detail.html#a1ed8fc6239da25abcaf681d30ace4985">value_t</a></td></tr>
 <tr class="separator:a9135fcf616d6ac6e231a86e0a055ac44"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37e97a32d0b94ce5f745427e4e40204d"><td class="memTemplParams" colspan="2">template&lt;template&lt; class... &gt; class Op, class... Args&gt; </td></tr>
-<tr class="memitem:a37e97a32d0b94ce5f745427e4e40204d"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenlohmann_1_1detail.html#a37e97a32d0b94ce5f745427e4e40204d">detected_t</a> = typename <a class="el" href="structnlohmann_1_1detail_1_1detector.html">detector</a>&lt; <a class="el" href="structnlohmann_1_1detail_1_1nonesuch.html">nonesuch</a>, <a class="el" href="namespacenlohmann_1_1detail.html#a59fca69799f6b9e366710cb9043aa77d">void</a>, Op, Args... &gt;::<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a></td></tr>
+<tr class="memitem:a37e97a32d0b94ce5f745427e4e40204d"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenlohmann_1_1detail.html#a37e97a32d0b94ce5f745427e4e40204d">detected_t</a> = typename <a class="el" href="structnlohmann_1_1detail_1_1detector.html">detector</a>&lt; <a class="el" href="structnlohmann_1_1detail_1_1nonesuch.html">nonesuch</a>, <a class="el" href="namespacenlohmann_1_1detail.html#a59fca69799f6b9e366710cb9043aa77d">void</a>, Op, Args... &gt;::type</td></tr>
 <tr class="separator:a37e97a32d0b94ce5f745427e4e40204d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a240ce21919ab08e8a6cb3a5cfa412bce"><td class="memTemplParams" colspan="2">template&lt;class Default , template&lt; class... &gt; class Op, class... Args&gt; </td></tr>
 <tr class="memitem:a240ce21919ab08e8a6cb3a5cfa412bce"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenlohmann_1_1detail.html#a240ce21919ab08e8a6cb3a5cfa412bce">detected_or</a> = <a class="el" href="structnlohmann_1_1detail_1_1detector.html">detector</a>&lt; Default, <a class="el" href="namespacenlohmann_1_1detail.html#a59fca69799f6b9e366710cb9043aa77d">void</a>, Op, Args... &gt;</td></tr>
 <tr class="separator:a240ce21919ab08e8a6cb3a5cfa412bce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ac5b8ef0363101275a2827b3b117dcf"><td class="memTemplParams" colspan="2">template&lt;class Default , template&lt; class... &gt; class Op, class... Args&gt; </td></tr>
-<tr class="memitem:a7ac5b8ef0363101275a2827b3b117dcf"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenlohmann_1_1detail.html#a7ac5b8ef0363101275a2827b3b117dcf">detected_or_t</a> = typename <a class="el" href="namespacenlohmann_1_1detail.html#a240ce21919ab08e8a6cb3a5cfa412bce">detected_or</a>&lt; Default, Op, Args... &gt;::<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a></td></tr>
+<tr class="memitem:a7ac5b8ef0363101275a2827b3b117dcf"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenlohmann_1_1detail.html#a7ac5b8ef0363101275a2827b3b117dcf">detected_or_t</a> = typename <a class="el" href="namespacenlohmann_1_1detail.html#a240ce21919ab08e8a6cb3a5cfa412bce">detected_or</a>&lt; Default, Op, Args... &gt;::type</td></tr>
 <tr class="separator:a7ac5b8ef0363101275a2827b3b117dcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7542b4dbac07817fd4849ecfa4619def"><td class="memTemplParams" colspan="2">template&lt;class Expected , template&lt; class... &gt; class Op, class... Args&gt; </td></tr>
 <tr class="memitem:a7542b4dbac07817fd4849ecfa4619def"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenlohmann_1_1detail.html#a7542b4dbac07817fd4849ecfa4619def">is_detected_exact</a> = std::is_same&lt; Expected, <a class="el" href="namespacenlohmann_1_1detail.html#a37e97a32d0b94ce5f745427e4e40204d">detected_t</a>&lt; Op, Args... &gt; &gt;</td></tr>
@@ -679,7 +679,7 @@ template&lt;class Default , template&lt; class... &gt; class Op, class... Args&g
 template&lt;class Default , template&lt; class... &gt; class Op, class... Args&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespacenlohmann_1_1detail.html#a7ac5b8ef0363101275a2827b3b117dcf">nlohmann::detail::detected_or_t</a> = typedef typename <a class="el" href="namespacenlohmann_1_1detail.html#a240ce21919ab08e8a6cb3a5cfa412bce">detected_or</a>&lt;Default, Op, Args...&gt;::<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a></td>
+          <td class="memname">using <a class="el" href="namespacenlohmann_1_1detail.html#a7ac5b8ef0363101275a2827b3b117dcf">nlohmann::detail::detected_or_t</a> = typedef typename <a class="el" href="namespacenlohmann_1_1detail.html#a240ce21919ab08e8a6cb3a5cfa412bce">detected_or</a>&lt;Default, Op, Args...&gt;::type</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -697,7 +697,7 @@ template&lt;class Default , template&lt; class... &gt; class Op, class... Args&g
 template&lt;template&lt; class... &gt; class Op, class... Args&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespacenlohmann_1_1detail.html#a37e97a32d0b94ce5f745427e4e40204d">nlohmann::detail::detected_t</a> = typedef typename <a class="el" href="structnlohmann_1_1detail_1_1detector.html">detector</a>&lt;<a class="el" href="structnlohmann_1_1detail_1_1nonesuch.html">nonesuch</a>, <a class="el" href="namespacenlohmann_1_1detail.html#a59fca69799f6b9e366710cb9043aa77d">void</a>, Op, Args...&gt;::<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a></td>
+          <td class="memname">using <a class="el" href="namespacenlohmann_1_1detail.html#a37e97a32d0b94ce5f745427e4e40204d">nlohmann::detail::detected_t</a> = typedef typename <a class="el" href="structnlohmann_1_1detail_1_1detector.html">detector</a>&lt;<a class="el" href="structnlohmann_1_1detail_1_1nonesuch.html">nonesuch</a>, <a class="el" href="namespacenlohmann_1_1detail.html#a59fca69799f6b9e366710cb9043aa77d">void</a>, Op, Args...&gt;::type</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -733,7 +733,7 @@ template&lt;typename T &gt; </div>
 template&lt;bool B, typename T  = void&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespacenlohmann_1_1detail.html#a02bcbc878bee413f25b985ada771aa9c">nlohmann::detail::enable_if_t</a> = typedef typename std::enable_if&lt;B, T&gt;::<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a></td>
+          <td class="memname">using <a class="el" href="namespacenlohmann_1_1detail.html#a02bcbc878bee413f25b985ada771aa9c">nlohmann::detail::enable_if_t</a> = typedef typename std::enable_if&lt;B, T&gt;::type</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1221,7 +1221,7 @@ template&lt;typename T , typename... Args&gt; </div>
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespacenlohmann_1_1detail.html#a53a082eedad9f4729fcd8fed552a21f7">nlohmann::detail::uncvref_t</a> = typedef typename std::remove_cv&lt;typename std::remove_reference&lt;T&gt;::<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>&gt;::<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a></td>
+          <td class="memname">using <a class="el" href="namespacenlohmann_1_1detail.html#a53a082eedad9f4729fcd8fed552a21f7">nlohmann::detail::uncvref_t</a> = typedef typename std::remove_cv&lt;typename std::remove_reference&lt;T&gt;::type&gt;::type</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1257,7 +1257,7 @@ template&lt;typename T &gt; </div>
 template&lt;typename ... Ts&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespacenlohmann_1_1detail.html#a92a167c49c6697b6ffe4f79492c705e5">nlohmann::detail::void_t</a> = typedef typename <a class="el" href="structnlohmann_1_1detail_1_1make__void.html">make_void</a>&lt;Ts...&gt;::<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a></td>
+          <td class="memname">using <a class="el" href="namespacenlohmann_1_1detail.html#a92a167c49c6697b6ffe4f79492c705e5">nlohmann::detail::void_t</a> = typedef typename <a class="el" href="structnlohmann_1_1detail_1_1make__void.html">make_void</a>&lt;Ts...&gt;::type</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1357,7 +1357,7 @@ template&lt;typename ... Ts&gt; </div>
 <p>the JSON type enumeration </p>
 <p>This enumeration collects the different JSON types. It is internally used to distinguish the stored values, and the functions <a class="el" href="classnlohmann_1_1basic__json.html#a8faa039ca82427ed29c486ffd00600c3">basic_json::is_null()</a>, <a class="el" href="classnlohmann_1_1basic__json.html#af8f511af124e82e4579f444b4175787c">basic_json::is_object()</a>, <a class="el" href="classnlohmann_1_1basic__json.html#aef9ce5dd2381caee1f8ddcdb5bdd9c65">basic_json::is_array()</a>, <a class="el" href="classnlohmann_1_1basic__json.html#a69b596a4a6683b362095c9a139637396">basic_json::is_string()</a>, <a class="el" href="classnlohmann_1_1basic__json.html#a943e8cb182d0f2365c76d64b42eaa6fd">basic_json::is_boolean()</a>, <a class="el" href="classnlohmann_1_1basic__json.html#a2b9852390abb4b1ef5fac6984e2fc0f3">basic_json::is_number()</a> (with <a class="el" href="classnlohmann_1_1basic__json.html#abac8af76067f1e8fdca9052882c74428">basic_json::is_number_integer()</a>, <a class="el" href="classnlohmann_1_1basic__json.html#abc7378cba0613a78b9aad1c8e7044bb0">basic_json::is_number_unsigned()</a>, and <a class="el" href="classnlohmann_1_1basic__json.html#a33b4bf898b857c962e798fc7f6e86e70">basic_json::is_number_float()</a>), <a class="el" href="classnlohmann_1_1basic__json.html#aabe623bc8304c2ba92d96d91f390fab4">basic_json::is_discarded()</a>, <a class="el" href="classnlohmann_1_1basic__json.html#a6362b88718eb5c6d4fed6a61eed44b95">basic_json::is_primitive()</a>, and <a class="el" href="classnlohmann_1_1basic__json.html#a9f68a0af820c3ced7f9d17851ce4c22d">basic_json::is_structured()</a> rely on it.</p>
 <dl class="section note"><dt>Note</dt><dd>There are three enumeration entries (number_integer, number_unsigned, and number_float), because the library distinguishes these three types for numbers: <a class="el" href="classnlohmann_1_1basic__json.html#ab906e29b5d83ac162e823ada2156b989">basic_json::number_unsigned_t</a> is used for unsigned integers, <a class="el" href="classnlohmann_1_1basic__json.html#a98e611d67b7bd75307de99c9358ab2dc">basic_json::number_integer_t</a> is used for signed integers, and <a class="el" href="classnlohmann_1_1basic__json.html#a88d6103cb3620410b35200ee8e313d97">basic_json::number_float_t</a> is used for floating-point numbers or to approximate integers which do not fit in the limits of their respective type.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classnlohmann_1_1basic__json.html#aed115142bd0c6c66c864700e0467df55">basic_json::basic_json(const value_t value_type)</a> &ndash; create a JSON value with the default value for a given <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a></dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classnlohmann_1_1basic__json.html#aed115142bd0c6c66c864700e0467df55">basic_json::basic_json(const value_t value_type)</a> &ndash; create a JSON value with the default value for a given type</dd></dl>
 <dl class="section since"><dt>Since</dt><dd>version 1.0.0 </dd></dl>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a1ed8fc6239da25abcaf681d30ace4985a37a6259cc0c1dae299a7866489dff0bd"></a>null&#160;</td><td class="fielddoc"><p>null value </p>
@@ -1549,7 +1549,7 @@ template&lt;typename BasicJsonType , typename EnumType , enable_if_t&lt; std::is
 
 <p class="definition">Definition at line <a class="el" href="json_8hpp_source.html#l02994">2994</a> of file <a class="el" href="json_8hpp_source.html">json.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="json_8hpp_source.html#l02912">get_arithmetic_value()</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">type</a>.</p>
+<p class="reference">References <a class="el" href="json_8hpp_source.html#l02912">get_arithmetic_value()</a>, and <a class="el" href="control_8py_source.html#l00014">control::type</a>.</p>
 
 </div>
 </div>
@@ -2191,7 +2191,7 @@ template&lt;typename BasicJsonType , typename Tuple , std::size_t... Idx&gt; </d
 
 <p class="definition">Definition at line <a class="el" href="json_8hpp_source.html#l03190">3190</a> of file <a class="el" href="json_8hpp_source.html">json.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="json_8hpp_source.html#l03412">get()</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">type</a>.</p>
+<p class="reference">References <a class="el" href="json_8hpp_source.html#l03412">get()</a>, and <a class="el" href="control_8py_source.html#l00014">control::type</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="json_8hpp_source.html#l03196">from_json()</a>.</p>
 
@@ -2218,7 +2218,7 @@ template&lt;std::size_t N, typename IteratorType , enable_if_t&lt; N==0, int &gt
 
 <p class="definition">Definition at line <a class="el" href="json_8hpp_source.html#l03412">3412</a> of file <a class="el" href="json_8hpp_source.html">json.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="json_8hpp_source.html#l03190">from_json_tuple_impl()</a>, <a class="el" href="types_8cpp_source.html#l00170">hal::SMT::Constraint::get_assignment()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00199">hal::Result&lt; T &gt;::map()</a>, <a class="el" href="json_8hpp_source.html#l08540">nlohmann::detail::lexer&lt; BasicJsonType &gt;::scan()</a>, and <a class="el" href="json_8hpp_source.html#l08526">nlohmann::detail::lexer&lt; BasicJsonType &gt;::skip_bom()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="json_8hpp_source.html#l03190">from_json_tuple_impl()</a>, <a class="el" href="json_8hpp_source.html#l08540">nlohmann::detail::lexer&lt; BasicJsonType &gt;::scan()</a>, and <a class="el" href="json_8hpp_source.html#l08526">nlohmann::detail::lexer&lt; BasicJsonType &gt;::skip_bom()</a>.</p>
 
 </div>
 </div>
@@ -2787,7 +2787,7 @@ template&lt;typename BasicJsonType , typename EnumType , enable_if_t&lt; std::is
 
 <p class="definition">Definition at line <a class="el" href="json_8hpp_source.html#l03688">3688</a> of file <a class="el" href="json_8hpp_source.html">json.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">type</a>.</p>
+<p class="reference">References <a class="el" href="control_8py_source.html#l00014">control::type</a>.</p>
 
 </div>
 </div>
@@ -3038,7 +3038,7 @@ template&lt;typename BasicJsonType , typename Tuple , std::size_t... Idx&gt; </d
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacenlohmann.html">nlohmann</a></li><li class="navelem"><a class="el" href="namespacenlohmann_1_1detail.html">detail</a></li>
-    <li class="footer">Generated on Tue Jun 14 2022 15:24:47 for HAL by
+    <li class="footer">Generated on Tue Jun 14 2022 16:11:29 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
