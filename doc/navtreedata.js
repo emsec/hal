@@ -23,7 +23,7 @@ for the JavaScript code in this file
 var NAVTREE =
 [
   [ "HAL", "index.html", [
-    [ "Summer School on Real-World Crypto 2022", "index.html#autotoc_md44", null ],
+    [ "!!!!!!!!Summer School on Real-World Crypto 2022!!!!!!!!!!", "index.html#autotoc_md44", null ],
     [ "Welcome to HAL!", "index.html#autotoc_md45", null ],
     [ "Navigation", "index.html#autotoc_md46", [
       [ "What the hell is HAL?", "index.html#autotoc_md47", null ],
