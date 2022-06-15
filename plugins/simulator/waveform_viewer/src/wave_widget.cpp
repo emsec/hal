@@ -92,12 +92,12 @@ namespace hal {
         mTreeView->verticalScrollBar()->setValue(0);
         setSizes({320,880});
         mTreeModel->restore();
-        qDebug() << "+++ WaveWidget" << mController->get_id() <<  hex << (qintptr) this;
+        log_info(mController->get_name(), "Simulation controller id={} name='{}' instantiated", mController->get_id(), mController->get_name());
     }
 
     WaveWidget::~WaveWidget()
     {
-        qDebug() << "--- WaveWidget" << mController->get_id() <<  hex << (qintptr) this;
+        log_info(mController->get_name(), "Simulation controller id={} name='{}' disposed", mController->get_id(), mController->get_name());
     }
 
     void WaveWidget::refreshNetNames()
@@ -275,7 +275,7 @@ namespace hal {
 
     void WaveWidget::setGates(const std::vector<Gate*>& gats)
     {
-        if (!mController) return;
+        if (!mController || mController->get_state() != NetlistSimulatorController::NoGatesSelected) return;
         mController->reset();
         mController->add_gates(gats);
         for (const Net* inpNet : mController->get_input_nets())

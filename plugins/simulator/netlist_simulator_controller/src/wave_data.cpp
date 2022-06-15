@@ -1626,7 +1626,13 @@ namespace hal {
     {
         if (!n) return nullptr;
         int inx = mIds.value(n->get_id(),-1);
-        if (inx >= 0) return at(inx);
+        if (inx >= 0)
+        {
+            WaveData* wd = at(inx);
+            if (wd->loadPolicy()==WaveData::LoadAllData)
+                wd->loadDataUnlessAlreadyLoaded();
+            return wd;
+        }
         WaveData* wd = new WaveData(n);
         if (wd->loadSaleae(mTimeframe))
         {

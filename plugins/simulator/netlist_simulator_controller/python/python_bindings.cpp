@@ -69,7 +69,7 @@ namespace hal
                 Restore controller with waveform data from previous simulation.
 
                 :param hal_py.Netlist netlist: The netlist the simulation was performed with.
-                :param str filename: The netlist the simulation was performed with.
+                :param str filename: Full path and filename of 'netlist_simulator_controller.json'.
                 :returns: The simulator controller instance.
                 :rtype: netlist_simulator_controller.NetlistSimulatorController
             )")

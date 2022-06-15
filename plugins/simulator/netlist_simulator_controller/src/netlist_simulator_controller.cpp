@@ -776,6 +776,11 @@ namespace hal
 
     void NetlistSimulatorController::add_gates(const std::vector<Gate *> &gates)
     {
+        if (mState != NoGatesSelected)
+        {
+            log_warning(get_name(), "Command failed, gates for simulation already selected in this controller.");
+            return;
+        }
         mSimulationInput->add_gates(gates);
 
         QSet<u32> previousInputSet = mWaveDataList->toSet();
