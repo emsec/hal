@@ -1,5 +1,5 @@
 <a name="introduction"></a>
-# Summer School on Real-World Crypto 2022
+# !!!!!!!!Summer School on Real-World Crypto 2022!!!!!!!!!!
 If you are attending the RWC summer school in Croatia 2022, please go to the [dedicated branch](https://github.com/emsec/hal/tree/summer_school_2022) that we created.
 
 # Welcome to HAL! 
