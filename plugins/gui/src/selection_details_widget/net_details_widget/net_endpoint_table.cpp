@@ -91,8 +91,10 @@ namespace hal
         });
 
         menu.addSection("Python");
-        QString pythonCommand = "netlist.get_net_by_id(" + netIDStr + ").%1(lambda ep: ep.gate.get_id() == " + gateIDStr + " and ep.get_pin() == \"" + pin +"\")";
-        pythonCommand = (mEndpointModel->getType() == EndpointTableModel::Type::source) ? pythonCommand.arg("get_sources") : pythonCommand.arg("get_destinations");
+        //QString pythonCommand = "netlist.get_net_by_id(" + netIDStr + ").%1(lambda ep: ep.gate.get_id() == " + gateIDStr + " and ep.get_pin() == \"" + pin +"\")";
+        //pythonCommand = (mEndpointModel->getType() == EndpointTableModel::Type::source) ? pythonCommand.arg("get_sources") : pythonCommand.arg("get_destinations");
+        QString pythonCommand ="netlist.get_gate_by_id(" + gateIDStr + ").%1(\"" + pin + "\")";
+        pythonCommand = (mEndpointModel->getType() == EndpointTableModel::Type::source) ? pythonCommand.arg("get_fan_out_endpoint") : pythonCommand.arg("get_fan_in_endpoint");
 
         menu.addAction(QIcon(":/icons/python"), "Get endpoint", [pythonCommand](){
             QApplication::clipboard()->setText(pythonCommand);
