@@ -6,7 +6,6 @@ var namespaces_dup =
     [ "netlist_factory", "namespacenetlist__factory.html", null ],
     [ "netlist_serializer", "namespacenetlist__serializer.html", null ],
     [ "nlohmann", "namespacenlohmann.html", "namespacenlohmann" ],
-    [ "sha_256_pkg", "classsha__256__pkg.html", null ],
     [ "std", "namespacestd.html", null ],
     [ "subprocess", "namespacesubprocess.html", "namespacesubprocess" ],
     [ "test", "namespacetest.html", null ],

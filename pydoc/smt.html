@@ -1,0 +1,1279 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>SMT &mdash; hal_py v3.3.0-646-g405e5ab4e documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="HAL Plugins Documentation" href="plugins.html" />
+    <link rel="prev" title="Plugin Manager" href="plugin_manager.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> hal_py
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v3.3.0-646-g405e5ab4e
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="hal_py.html">HAL Core Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="base_plugin_interface.html">Base Plugin Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="boolean_function.html">Boolean Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core_utils.html">Core Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_container.html">Data Container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="endpoint.html">Endpoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gate.html">Gate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gate_library.html">Gate Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gate_library_manager.html">Gate Library Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gate_type.html">Gate Type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gate_type_component.html">Gate Type Component</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gate_type_property.html">Gate Type Property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="grouping.html">Grouping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gui_plugin_interface.html">GUI Plugin Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module.html">Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_pin.html">Module Pin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_pin_group.html">Module Pin Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netlist.html">Netlist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netlist_factory.html">Netlist Factory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netlist_utils.html">Netlist Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netlist_serializer.html">Netlist Serializer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netlist_writer_manager.html">Netlist Writer Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="path.html">HAL Path</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pin_direction.html">Pin Direction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pin_type.html">Pin Type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">SMT</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="plugins.html">HAL Plugins Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">hal_py</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="hal_py.html">HAL Core Documentation</a> &raquo;</li>
+        
+      <li>SMT</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/smt.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-hal_py.SMT">
+<span id="smt"></span><h1>SMT<a class="headerlink" href="#module-hal_py.SMT" title="Permalink to this headline">¶</a></h1>
+<p>SMT solver functions.</p>
+<dl class="class">
+<dt id="hal_py.SMT.Constraint">
+<em class="property">class </em><code class="descclassname">hal_py.SMT.</code><code class="descname">Constraint</code><a class="headerlink" href="#hal_py.SMT.Constraint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a constraint to the SMT query.
+A constraint is either an assignment of two Boolean functions or a single Boolean function, e.g., an equality check or similar.</p>
+<dl class="method">
+<dt id="hal_py.SMT.Constraint.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.SMT.Constraint.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">__init__(self: hal_py.SMT.Constraint, constraint: hal_py.BooleanFunction) -&gt; None</p>
+<blockquote>
+<div><p>Constructs a new constraint from one Boolean function that evaluates to a single bit.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.BooleanFunction constraint:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The constraint function.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">__init__(self: hal_py.SMT.Constraint, lhs: hal_py.BooleanFunction, rhs: hal_py.BooleanFunction) -&gt; None</p>
+<blockquote>
+<div><p>Constructs a new equality constraint from two Boolean functions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.BooleanFunction lhs:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The left-hand side of the equality constraint.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param hal_py.BooleanFunction rhs:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The right-hand side of the equality constraint.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.Constraint.__module__">
+<code class="descname">__module__</code><em class="property"> = 'hal_py.SMT'</em><a class="headerlink" href="#hal_py.SMT.Constraint.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.Constraint.constraint">
+<code class="descname">constraint</code><a class="headerlink" href="#hal_py.SMT.Constraint.constraint" title="Permalink to this definition">¶</a></dt>
+<dd><p>A constraint that is either an assignment of two Boolean functions or a single Boolean function, e.g., an equality check or similar.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a> or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)">tuple</a>(<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a>, <a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a>)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.Constraint.get_assignment">
+<code class="descname">get_assignment</code><span class="sig-paren">(</span><em>self: hal_py.SMT.Constraint</em><span class="sig-paren">)</span> &#x2192; Optional[Tuple[hal_py.BooleanFunction, hal_py.BooleanFunction]]<a class="headerlink" href="#hal_py.SMT.Constraint.get_assignment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the assignment constraint as a pair of Boolean functions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The assignment constraint on success, None otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)">tuple</a>(<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a>,<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a>) or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.Constraint.get_function">
+<code class="descname">get_function</code><span class="sig-paren">(</span><em>self: hal_py.SMT.Constraint</em><span class="sig-paren">)</span> &#x2192; Optional[hal_py.BooleanFunction]<a class="headerlink" href="#hal_py.SMT.Constraint.get_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the function constraint as a Boolean function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The function constraint on success, None otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.Constraint.is_assignment">
+<code class="descname">is_assignment</code><span class="sig-paren">(</span><em>self: hal_py.SMT.Constraint</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.SMT.Constraint.is_assignment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether the constraint is an assignment constraint.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True of the constraint is an assignment, False otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="hal_py.SMT.Model">
+<em class="property">class </em><code class="descclassname">hal_py.SMT.</code><code class="descname">Model</code><a class="headerlink" href="#hal_py.SMT.Model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a list of assignments for variable nodes that yield a satisfiable assignment for a given list of constraints.</p>
+<dl class="method">
+<dt id="hal_py.SMT.Model.__eq__">
+<code class="descname">__eq__</code><span class="sig-paren">(</span><em>self: hal_py.SMT.Model</em>, <em>arg0: hal_py.SMT.Model</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.SMT.Model.__eq__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether two SMT models are equal.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if both models are equal, False otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.Model.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>self: hal_py.SMT.Model</em>, <em>model: Dict[str</em>, <em>Tuple[int</em>, <em>int]] = {}</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.SMT.Model.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs a new model from a map of variable names to value and bit-size.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>)</em><em>]</em>) – A dict from variable name to value and bit-size.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.Model.__module__">
+<code class="descname">__module__</code><em class="property"> = 'hal_py.SMT'</em><a class="headerlink" href="#hal_py.SMT.Model.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.Model.__ne__">
+<code class="descname">__ne__</code><span class="sig-paren">(</span><em>self: hal_py.SMT.Model</em>, <em>arg0: hal_py.SMT.Model</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.SMT.Model.__ne__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether two SMT models are unequal.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if both models are unequal, False otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.Model.model">
+<code class="descname">model</code><a class="headerlink" href="#hal_py.SMT.Model.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dict from variable identifiers to a (1) value and (2) its bit-size.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)">tuple</a>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a>))</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="hal_py.SMT.Model.parse">
+<em class="property">static </em><code class="descname">parse</code><span class="sig-paren">(</span><em>model_str: str</em>, <em>solver: hal_py.SMT.SolverType</em><span class="sig-paren">)</span> &#x2192; hal::Result&lt;hal::SMT::Model&gt;<a class="headerlink" href="#hal_py.SMT.Model.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses an SMT-Lib model from a string output by a solver of the given type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>model_str</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The SMT-Lib model string.</li>
+<li><strong>solver</strong> (<a class="reference internal" href="#hal_py.SMT.SolverType" title="hal_py.SMT.SolverType"><em>hal_py.SMT.SolverType</em></a>) – The solver that computed the model.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The model on success, a string error message otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#hal_py.SMT.Model" title="hal_py.SMT.Model">hal_py.SMT.Model</a> or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="hal_py.SMT.QueryConfig">
+<em class="property">class </em><code class="descclassname">hal_py.SMT.</code><code class="descname">QueryConfig</code><a class="headerlink" href="#hal_py.SMT.QueryConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents the data structure to configure an SMT query.</p>
+<dl class="method">
+<dt id="hal_py.SMT.QueryConfig.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>self: hal_py.SMT.QueryConfig</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.SMT.QueryConfig.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs a new query configuration.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.QueryConfig.__module__">
+<code class="descname">__module__</code><em class="property"> = 'hal_py.SMT'</em><a class="headerlink" href="#hal_py.SMT.QueryConfig.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.QueryConfig.generate_model">
+<code class="descname">generate_model</code><a class="headerlink" href="#hal_py.SMT.QueryConfig.generate_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Controls whether the SMT solver should generate a model in case formula is satisfiable.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.QueryConfig.local">
+<code class="descname">local</code><a class="headerlink" href="#hal_py.SMT.QueryConfig.local" title="Permalink to this definition">¶</a></dt>
+<dd><p>Controls whether the SMT query is performed on a local or a remote machine.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.QueryConfig.solver">
+<code class="descname">solver</code><a class="headerlink" href="#hal_py.SMT.QueryConfig.solver" title="Permalink to this definition">¶</a></dt>
+<dd><p>The SMT solver identifier.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#hal_py.SMT.SolverType" title="hal_py.SMT.SolverType">hal_py.SMT.SolverType</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.QueryConfig.timeout_in_seconds">
+<code class="descname">timeout_in_seconds</code><a class="headerlink" href="#hal_py.SMT.QueryConfig.timeout_in_seconds" title="Permalink to this definition">¶</a></dt>
+<dd><p>The timeout after which the SMT solver is killed in seconds.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.QueryConfig.with_local_solver">
+<code class="descname">with_local_solver</code><span class="sig-paren">(</span><em>self: hal_py.SMT.QueryConfig</em><span class="sig-paren">)</span> &#x2192; hal_py.SMT.QueryConfig<a class="headerlink" href="#hal_py.SMT.QueryConfig.with_local_solver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Activates local SMT solver execution.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The updated SMT query configuration.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.SMT.QueryConfig" title="hal_py.SMT.QueryConfig">hal_py.SMT.QueryConfig</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.QueryConfig.with_model_generation">
+<code class="descname">with_model_generation</code><span class="sig-paren">(</span><em>self: hal_py.SMT.QueryConfig</em><span class="sig-paren">)</span> &#x2192; hal_py.SMT.QueryConfig<a class="headerlink" href="#hal_py.SMT.QueryConfig.with_model_generation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicates that the SMT solver should generate a model in case the formula is satisfiable.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The updated SMT query configuration.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.SMT.QueryConfig" title="hal_py.SMT.QueryConfig">hal_py.SMT.QueryConfig</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.QueryConfig.with_remote_solver">
+<code class="descname">with_remote_solver</code><span class="sig-paren">(</span><em>self: hal_py.SMT.QueryConfig</em><span class="sig-paren">)</span> &#x2192; hal_py.SMT.QueryConfig<a class="headerlink" href="#hal_py.SMT.QueryConfig.with_remote_solver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Activates remote SMT solver execution.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The updated SMT query configuration.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.SMT.QueryConfig" title="hal_py.SMT.QueryConfig">hal_py.SMT.QueryConfig</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.QueryConfig.with_solver">
+<code class="descname">with_solver</code><span class="sig-paren">(</span><em>self: hal_py.SMT.QueryConfig</em>, <em>solver: hal_py.SMT.SolverType</em><span class="sig-paren">)</span> &#x2192; hal_py.SMT.QueryConfig<a class="headerlink" href="#hal_py.SMT.QueryConfig.with_solver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the solver type to the desired SMT solver.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>solver</strong> (<a class="reference internal" href="#hal_py.SMT.SolverType" title="hal_py.SMT.SolverType"><em>hal_py.SMT.SolverType</em></a>) – The solver type identifier.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The updated SMT query configuration.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.SMT.QueryConfig" title="hal_py.SMT.QueryConfig">hal_py.SMT.QueryConfig</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.QueryConfig.with_timeout">
+<code class="descname">with_timeout</code><span class="sig-paren">(</span><em>self: hal_py.SMT.QueryConfig</em>, <em>seconds: int</em><span class="sig-paren">)</span> &#x2192; hal_py.SMT.QueryConfig<a class="headerlink" href="#hal_py.SMT.QueryConfig.with_timeout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets a timeout in seconds that terminates an SMT query after the specified time has passed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>seconds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – The timeout in seconds.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The updated SMT query configuration.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.SMT.QueryConfig" title="hal_py.SMT.QueryConfig">hal_py.SMT.QueryConfig</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.QueryConfig.without_model_generation">
+<code class="descname">without_model_generation</code><span class="sig-paren">(</span><em>self: hal_py.SMT.QueryConfig</em><span class="sig-paren">)</span> &#x2192; hal_py.SMT.QueryConfig<a class="headerlink" href="#hal_py.SMT.QueryConfig.without_model_generation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicates that the SMT solver should not generate a model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The updated SMT query configuration.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.SMT.QueryConfig" title="hal_py.SMT.QueryConfig">hal_py.SMT.QueryConfig</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="hal_py.SMT.Solver">
+<em class="property">class </em><code class="descclassname">hal_py.SMT.</code><code class="descname">Solver</code><a class="headerlink" href="#hal_py.SMT.Solver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides an interface to query SMT solvers for a list of constraints, i.e. statements that have to be equal. To this end, we translate constraints to a SMT-LIB v2 string representation and query solvers with a defined configuration, i.e., chosen solver, model generation etc.</p>
+<dl class="method">
+<dt id="hal_py.SMT.Solver.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>self: hal_py.SMT.Solver</em>, <em>constraints: List[hal_py.SMT.Constraint] = []</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.SMT.Solver.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs an solver with an optional list of constraints.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>constraints</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>[</em><a class="reference internal" href="#hal_py.SMT.Constraint" title="hal_py.SMT.Constraint"><em>hal_py.SMT.Constraint</em></a><em>]</em>) – The (optional) list of constraints.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.Solver.__module__">
+<code class="descname">__module__</code><em class="property"> = 'hal_py.SMT'</em><a class="headerlink" href="#hal_py.SMT.Solver.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.Solver.constraints">
+<code class="descname">constraints</code><a class="headerlink" href="#hal_py.SMT.Solver.constraints" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of constraints.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>[<a class="reference internal" href="#hal_py.SMT.Constraint" title="hal_py.SMT.Constraint">hal_py.SMT.Constraint</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.Solver.get_constraints">
+<code class="descname">get_constraints</code><span class="sig-paren">(</span><em>self: hal_py.SMT.Solver</em><span class="sig-paren">)</span> &#x2192; List[hal_py.SMT.Constraint]<a class="headerlink" href="#hal_py.SMT.Solver.get_constraints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of constraints.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The list of constraints.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>[<a class="reference internal" href="#hal_py.SMT.Constraint" title="hal_py.SMT.Constraint">hal_py.SMT.Constraint</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="hal_py.SMT.Solver.has_local_solver_for">
+<em class="property">static </em><code class="descname">has_local_solver_for</code><span class="sig-paren">(</span><em>type: hal_py.SMT.SolverType</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.SMT.Solver.has_local_solver_for" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether a SMT solver of the given type is available on the local machine.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>type</strong> (<a class="reference internal" href="#hal_py.SMT.SolverType" title="hal_py.SMT.SolverType"><em>hal_py.SMT.SolverType</em></a>) – The SMT solver type.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if an SMT solver of the requested type is available, False otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.Solver.query">
+<code class="descname">query</code><span class="sig-paren">(</span><em>self: hal_py.SMT.Solver</em>, <em>config: hal_py.SMT.QueryConfig</em><span class="sig-paren">)</span> &#x2192; Optional[hal_py.SMT.SolverResult]<a class="headerlink" href="#hal_py.SMT.Solver.query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries an SMT solver with the specified query configuration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<a class="reference internal" href="#hal_py.SMT.QueryConfig" title="hal_py.SMT.QueryConfig"><em>hal_py.SMT.QueryConfig</em></a>) – The SMT solver query configuration.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The result on success, a string error message otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">hal_py.SMT.Result or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.Solver.query_local">
+<code class="descname">query_local</code><span class="sig-paren">(</span><em>self: hal_py.SMT.Solver</em>, <em>config: hal_py.SMT.QueryConfig</em><span class="sig-paren">)</span> &#x2192; hal::Result&lt;hal::SMT::SolverResult&gt;<a class="headerlink" href="#hal_py.SMT.Solver.query_local" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries a local SMT solver with the specified query configuration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<a class="reference internal" href="#hal_py.SMT.QueryConfig" title="hal_py.SMT.QueryConfig"><em>hal_py.SMT.QueryConfig</em></a>) – The SMT solver query configuration.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The result on success, a string error message otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">hal_py.SMT.Result or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.Solver.query_remote">
+<code class="descname">query_remote</code><span class="sig-paren">(</span><em>self: hal_py.SMT.Solver</em>, <em>config: hal_py.SMT.QueryConfig</em><span class="sig-paren">)</span> &#x2192; hal::Result&lt;hal::SMT::SolverResult&gt;<a class="headerlink" href="#hal_py.SMT.Solver.query_remote" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries a remote SMT solver with the specified query configuration.</p>
+<p>WARNING: This function is not yet implemented.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<a class="reference internal" href="#hal_py.SMT.QueryConfig" title="hal_py.SMT.QueryConfig"><em>hal_py.SMT.QueryConfig</em></a>) – The SMT solver query configuration.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The result on success, a string error message otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">hal_py.SMT.Result or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.Solver.with_constraint">
+<code class="descname">with_constraint</code><span class="sig-paren">(</span><em>self: hal_py.SMT.Solver</em>, <em>constraint: hal_py.SMT.Constraint</em><span class="sig-paren">)</span> &#x2192; hal_py.SMT.Solver<a class="headerlink" href="#hal_py.SMT.Solver.with_constraint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a constraint to the SMT solver.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>constraint</strong> (<a class="reference internal" href="#hal_py.SMT.Constraint" title="hal_py.SMT.Constraint"><em>hal_py.SMT.Constraint</em></a>) – The constraint.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The updated SMT solver.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.SMT.Solver" title="hal_py.SMT.Solver">hal_py.SMT.Solver</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.Solver.with_constraints">
+<code class="descname">with_constraints</code><span class="sig-paren">(</span><em>self: hal_py.SMT.Solver, constraints: List[hal_py.SMT.Constraint]</em><span class="sig-paren">)</span> &#x2192; hal_py.SMT.Solver<a class="headerlink" href="#hal_py.SMT.Solver.with_constraints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a list of constraints to the SMT solver.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>constraints</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>[</em><a class="reference internal" href="#hal_py.SMT.Constraint" title="hal_py.SMT.Constraint"><em>hal_py.SMT.Constraint</em></a><em>]</em>) – The constraints.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The updated SMT solver.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.SMT.Solver" title="hal_py.SMT.Solver">hal_py.SMT.Solver</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="hal_py.SMT.SolverResult">
+<em class="property">class </em><code class="descclassname">hal_py.SMT.</code><code class="descname">SolverResult</code><a class="headerlink" href="#hal_py.SMT.SolverResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents the result of an SMT query.</p>
+<dl class="staticmethod">
+<dt id="hal_py.SMT.SolverResult.Sat">
+<em class="property">static </em><code class="descname">Sat</code><span class="sig-paren">(</span><em>model: Optional[hal_py.SMT.Model] = None</em><span class="sig-paren">)</span> &#x2192; hal_py.SMT.SolverResult<a class="headerlink" href="#hal_py.SMT.SolverResult.Sat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a satisfiable result with an optional model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>model</strong> (<a class="reference internal" href="#hal_py.SMT.Model" title="hal_py.SMT.Model"><em>hal_py.SMT.Model</em></a>) – Optional model for satisfiable formula.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The result.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.SMT.SolverResult" title="hal_py.SMT.SolverResult">hal_py.SMT.SolverResult</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="hal_py.SMT.SolverResult.UnSat">
+<em class="property">static </em><code class="descname">UnSat</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; hal_py.SMT.SolverResult<a class="headerlink" href="#hal_py.SMT.SolverResult.UnSat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an unsatisfiable result.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The result.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.SMT.SolverResult" title="hal_py.SMT.SolverResult">hal_py.SMT.SolverResult</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="hal_py.SMT.SolverResult.Unknown">
+<em class="property">static </em><code class="descname">Unknown</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; hal_py.SMT.SolverResult<a class="headerlink" href="#hal_py.SMT.SolverResult.Unknown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an unknown result.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The result.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.SMT.SolverResult" title="hal_py.SMT.SolverResult">hal_py.SMT.SolverResult</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.SolverResult.__init__">
+<code class="descname">__init__</code><a class="headerlink" href="#hal_py.SMT.SolverResult.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.SolverResult.__module__">
+<code class="descname">__module__</code><em class="property"> = 'hal_py.SMT'</em><a class="headerlink" href="#hal_py.SMT.SolverResult.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.SolverResult.is">
+<code class="descname">is</code><span class="sig-paren">(</span><em>self: hal_py.SMT.SolverResult</em>, <em>type: hal_py.SMT.SolverResultType</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.SMT.SolverResult.is" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether the result is of a specific type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>type</strong> (<em>hal_py.SMT.ResultType</em>) – The type to check.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True in case result matches the given type, False otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.SolverResult.is_sat">
+<code class="descname">is_sat</code><span class="sig-paren">(</span><em>self: hal_py.SMT.SolverResult</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.SMT.SolverResult.is_sat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether the result is satisfiable.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True in case result is satisfiable, False otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.SolverResult.is_unknown">
+<code class="descname">is_unknown</code><span class="sig-paren">(</span><em>self: hal_py.SMT.SolverResult</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.SMT.SolverResult.is_unknown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether the result is unknown.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True in case result is unknown, False otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.SolverResult.is_unsat">
+<code class="descname">is_unsat</code><span class="sig-paren">(</span><em>self: hal_py.SMT.SolverResult</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.SMT.SolverResult.is_unsat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether the result is unsatisfiable.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True in case result is unsatisfiable, False otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.SolverResult.model">
+<code class="descname">model</code><a class="headerlink" href="#hal_py.SMT.SolverResult.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>The (optional) model that is only available if type == SMT.ResultType.Sat and model generation is enabled.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#hal_py.SMT.Model" title="hal_py.SMT.Model">hal_py.SMT.Model</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.SolverResult.type">
+<code class="descname">type</code><a class="headerlink" href="#hal_py.SMT.SolverResult.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Result type of the SMT query.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">hal_py.SMT.ResultType</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="hal_py.SMT.SolverResultType">
+<em class="property">class </em><code class="descclassname">hal_py.SMT.</code><code class="descname">SolverResultType</code><a class="headerlink" href="#hal_py.SMT.SolverResultType" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>Result type of an SMT solver query.</div></blockquote>
+<p>Members:</p>
+<blockquote>
+<div><p>Sat : The list of constraints is satisfiable.</p>
+<p>UnSat : The list of constraints is not satisfiable.</p>
+<p>Unknown : A result could not be obtained, e.g., due to a time-out.</p>
+</div></blockquote>
+<dl class="attribute">
+<dt id="hal_py.SMT.SolverResultType.Sat">
+<code class="descname">Sat</code><em class="property"> = SolverResultType.Sat</em><a class="headerlink" href="#hal_py.SMT.SolverResultType.Sat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.SolverResultType.UnSat">
+<code class="descname">UnSat</code><em class="property"> = SolverResultType.UnSat</em><a class="headerlink" href="#hal_py.SMT.SolverResultType.UnSat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.SolverResultType.Unknown">
+<code class="descname">Unknown</code><em class="property"> = SolverResultType.Unknown</em><a class="headerlink" href="#hal_py.SMT.SolverResultType.Unknown" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.SolverResultType.__eq__">
+<code class="descname">__eq__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.SMT.SolverResultType.__eq__" title="Permalink to this definition">¶</a></dt>
+<dd><p>(self: object, arg0: object) -&gt; bool</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.SolverResultType.__getstate__">
+<code class="descname">__getstate__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.SMT.SolverResultType.__getstate__" title="Permalink to this definition">¶</a></dt>
+<dd><p>(self: object) -&gt; <a href="#id1"><span class="problematic" id="id2">int_</span></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.SolverResultType.__hash__">
+<code class="descname">__hash__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.SMT.SolverResultType.__hash__" title="Permalink to this definition">¶</a></dt>
+<dd><p>(self: object) -&gt; <a href="#id3"><span class="problematic" id="id4">int_</span></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.SolverResultType.__index__">
+<code class="descname">__index__</code><span class="sig-paren">(</span><em>self: hal_py.SMT.SolverResultType</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.SMT.SolverResultType.__index__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.SolverResultType.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>self: hal_py.SMT.SolverResultType</em>, <em>arg0: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.SMT.SolverResultType.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.SolverResultType.__int__">
+<code class="descname">__int__</code><span class="sig-paren">(</span><em>self: hal_py.SMT.SolverResultType</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.SMT.SolverResultType.__int__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.SolverResultType.__members__">
+<code class="descname">__members__</code><em class="property"> = {'Sat': SolverResultType.Sat, 'UnSat': SolverResultType.UnSat, 'Unknown': SolverResultType.Unknown}</em><a class="headerlink" href="#hal_py.SMT.SolverResultType.__members__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.SolverResultType.__module__">
+<code class="descname">__module__</code><em class="property"> = 'hal_py.SMT'</em><a class="headerlink" href="#hal_py.SMT.SolverResultType.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.SolverResultType.__ne__">
+<code class="descname">__ne__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.SMT.SolverResultType.__ne__" title="Permalink to this definition">¶</a></dt>
+<dd><p>(self: object, arg0: object) -&gt; bool</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.SolverResultType.__repr__">
+<code class="descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.SMT.SolverResultType.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>(self: handle) -&gt; str</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.SolverResultType.__setstate__">
+<code class="descname">__setstate__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.SMT.SolverResultType.__setstate__" title="Permalink to this definition">¶</a></dt>
+<dd><p>(self: hal_py.SMT.SolverResultType, arg0: int) -&gt; None</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.SolverResultType.name">
+<code class="descname">name</code><a class="headerlink" href="#hal_py.SMT.SolverResultType.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>(self: handle) -&gt; str</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="hal_py.SMT.SolverType">
+<em class="property">class </em><code class="descclassname">hal_py.SMT.</code><code class="descname">SolverType</code><a class="headerlink" href="#hal_py.SMT.SolverType" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>Identifier for the SMT solver type.</div></blockquote>
+<p>Members:</p>
+<blockquote>
+<div><p>Z3 : Z3 SMT solver.</p>
+<p>Boolector : Boolector SMT solver.</p>
+<p>Unknown : Unknown (unsupported) SMT solver.</p>
+</div></blockquote>
+<dl class="attribute">
+<dt id="hal_py.SMT.SolverType.Boolector">
+<code class="descname">Boolector</code><em class="property"> = SolverType.Boolector</em><a class="headerlink" href="#hal_py.SMT.SolverType.Boolector" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.SolverType.Unknown">
+<code class="descname">Unknown</code><em class="property"> = SolverType.Unknown</em><a class="headerlink" href="#hal_py.SMT.SolverType.Unknown" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.SolverType.Z3">
+<code class="descname">Z3</code><em class="property"> = SolverType.Z3</em><a class="headerlink" href="#hal_py.SMT.SolverType.Z3" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.SolverType.__eq__">
+<code class="descname">__eq__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.SMT.SolverType.__eq__" title="Permalink to this definition">¶</a></dt>
+<dd><p>(self: object, arg0: object) -&gt; bool</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.SolverType.__getstate__">
+<code class="descname">__getstate__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.SMT.SolverType.__getstate__" title="Permalink to this definition">¶</a></dt>
+<dd><p>(self: object) -&gt; <a href="#id5"><span class="problematic" id="id6">int_</span></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.SolverType.__hash__">
+<code class="descname">__hash__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.SMT.SolverType.__hash__" title="Permalink to this definition">¶</a></dt>
+<dd><p>(self: object) -&gt; <a href="#id7"><span class="problematic" id="id8">int_</span></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.SolverType.__index__">
+<code class="descname">__index__</code><span class="sig-paren">(</span><em>self: hal_py.SMT.SolverType</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.SMT.SolverType.__index__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.SolverType.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>self: hal_py.SMT.SolverType</em>, <em>arg0: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.SMT.SolverType.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.SolverType.__int__">
+<code class="descname">__int__</code><span class="sig-paren">(</span><em>self: hal_py.SMT.SolverType</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.SMT.SolverType.__int__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.SolverType.__members__">
+<code class="descname">__members__</code><em class="property"> = {'Boolector': SolverType.Boolector, 'Unknown': SolverType.Unknown, 'Z3': SolverType.Z3}</em><a class="headerlink" href="#hal_py.SMT.SolverType.__members__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.SolverType.__module__">
+<code class="descname">__module__</code><em class="property"> = 'hal_py.SMT'</em><a class="headerlink" href="#hal_py.SMT.SolverType.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.SolverType.__ne__">
+<code class="descname">__ne__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.SMT.SolverType.__ne__" title="Permalink to this definition">¶</a></dt>
+<dd><p>(self: object, arg0: object) -&gt; bool</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.SolverType.__repr__">
+<code class="descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.SMT.SolverType.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>(self: handle) -&gt; str</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.SolverType.__setstate__">
+<code class="descname">__setstate__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.SMT.SolverType.__setstate__" title="Permalink to this definition">¶</a></dt>
+<dd><p>(self: hal_py.SMT.SolverType, arg0: int) -&gt; None</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.SolverType.name">
+<code class="descname">name</code><a class="headerlink" href="#hal_py.SMT.SolverType.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>(self: handle) -&gt; str</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="hal_py.SMT.SymbolicExecution">
+<em class="property">class </em><code class="descclassname">hal_py.SMT.</code><code class="descname">SymbolicExecution</code><a class="headerlink" href="#hal_py.SMT.SymbolicExecution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents the symbolic execution engine that handles the evaluation and simplification of Boolean function abstract syntax trees.</p>
+<dl class="method">
+<dt id="hal_py.SMT.SymbolicExecution.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>self: hal_py.SMT.SymbolicExecution</em>, <em>variables: List[hal_py.BooleanFunction] = []</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.SMT.SymbolicExecution.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a symbolic execution engine and (optionally) initializes the variables.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>variables</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>[</em><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a><em>]</em>) – The (optional) list of variables.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.SymbolicExecution.__module__">
+<code class="descname">__module__</code><em class="property"> = 'hal_py.SMT'</em><a class="headerlink" href="#hal_py.SMT.SymbolicExecution.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.SymbolicExecution.evaluate">
+<code class="descname">evaluate</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.SMT.SymbolicExecution.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">evaluate(self: hal_py.SMT.SymbolicExecution, function: hal_py.BooleanFunction) -&gt; hal::Result&lt;hal::BooleanFunction&gt;</p>
+<blockquote>
+<div><p>Evaluates a Boolean function within the symbolic state of the symbolic execution.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.BooleanFunction function:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The Boolean function to evaluate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The evaluated Boolean function on success, a string error message otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.BooleanFunction or str</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">evaluate(self: hal_py.SMT.SymbolicExecution, constraint: hal_py.SMT.Constraint) -&gt; hal::Result&lt;std::monostate&gt;</p>
+<blockquote>
+<div><p>Evaluates an equality constraint and applies it to the symbolic state of the symbolic execution.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.SMT.Constraint constraint:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The equality constraint to evaluate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">None on success, a string error message otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">None or str</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.SymbolicExecution.state">
+<code class="descname">state</code><a class="headerlink" href="#hal_py.SMT.SymbolicExecution.state" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current symbolic state.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#hal_py.SMT.SymbolicState" title="hal_py.SMT.SymbolicState">hal_py.SMT.SymbolicState</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="hal_py.SMT.SymbolicState">
+<em class="property">class </em><code class="descclassname">hal_py.SMT.</code><code class="descname">SymbolicState</code><a class="headerlink" href="#hal_py.SMT.SymbolicState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents the data structure that keeps track of symbolic variable values (e.g., required for symbolic simplification).</p>
+<dl class="method">
+<dt id="hal_py.SMT.SymbolicState.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>self: hal_py.SMT.SymbolicState</em>, <em>variables: List[hal_py.BooleanFunction] = []</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.SMT.SymbolicState.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs a symbolic state and (optionally) initializes the variables.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>variables</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>[</em><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a><em>]</em>) – The (optional) list of variables.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.SMT.SymbolicState.__module__">
+<code class="descname">__module__</code><em class="property"> = 'hal_py.SMT'</em><a class="headerlink" href="#hal_py.SMT.SymbolicState.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.SymbolicState.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>self: hal_py.SMT.SymbolicState</em>, <em>key: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction<a class="headerlink" href="#hal_py.SMT.SymbolicState.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Looks up the Boolean function equivalent in the symbolic state.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>key</strong> (<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – The Boolean function to look up.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The Boolean function equivalent from the symbolic state or the key itself if it is not contained in the symbolic state.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SMT.SymbolicState.set">
+<code class="descname">set</code><span class="sig-paren">(</span><em>self: hal_py.SMT.SymbolicState</em>, <em>key: hal_py.BooleanFunction</em>, <em>value: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.SMT.SymbolicState.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets a Boolean function equivalent in the symbolic state.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>key</strong> (<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – The Boolean function.</li>
+<li><strong>value</strong> (<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – The equivalent Boolean function.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="plugins.html" class="btn btn-neutral float-right" title="HAL Plugins Documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="plugin_manager.html" class="btn btn-neutral float-left" title="Plugin Manager" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2022, Marc Fyrbiak, Sebastian Wallat, Max Hoffmann
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

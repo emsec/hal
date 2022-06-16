@@ -1,10 +1,10 @@
 <map id="hal::PythonEditor" name="hal::PythonEditor">
-<area shape="rect" id="node1" title="Main widget that combines all neccessary functionality to develop in python (for hal)." alt="" coords="423,815,653,1317"/>
-<area shape="rect" id="node2" href="$classhal_1_1_content_widget.html" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="264,395,543,765"/>
+<area shape="rect" id="node1" title="Main widget that combines all neccessary functionality to develop in python (for hal)." alt="" coords="423,829,653,1332"/>
+<area shape="rect" id="node2" href="$classhal_1_1_content_widget.html" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="264,395,543,780"/>
 <area shape="rect" id="node3" href="$classhal_1_1_widget.html" title="A QWidget customized for hal." alt="" coords="5,108,113,229"/>
 <area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qvboxlayout.html" title=" " alt="" coords="138,115,285,222"/>
 <area shape="rect" id="node5" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qaction.html" title=" " alt="" coords="309,5,498,332"/>
 <area shape="rect" id="node6" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qkeysequence.html" title=" " alt="" coords="522,20,666,317"/>
 <area shape="rect" id="node7" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qshortcut.html" title=" " alt="" coords="706,64,829,273"/>
-<area shape="rect" id="node8" href="$classhal_1_1_python_context_subscriber.html" title="Interface for handling python outputs." alt="" coords="567,527,781,633"/>
+<area shape="rect" id="node8" href="$classhal_1_1_python_context_subscriber.html" title="Interface for handling python outputs." alt="" coords="567,534,781,641"/>
 </map>

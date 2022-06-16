@@ -111,16 +111,16 @@ $(document).ready(function(){initNavTree('group__by__input__output__size_8cpp_so
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;                {</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;                    std::pair&lt;u32, u32&gt; min_max_connections;</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;                    <span class="keywordtype">bool</span> first = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;                    <span class="keywordflow">for</span> (<span class="keyword">auto</span> <a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a> : gates)</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;                    <span class="keywordflow">for</span> (<span class="keyword">auto</span> <a class="code" href="namespacetest.html#a795b8c55af8ab82f1840a6502cd7938f">g</a> : gates)</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;                    {</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;                        <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> val;</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;                        <span class="keywordflow">if</span> (successors)</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;                        {</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                            val = <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">state</a>-&gt;netlist_abstr.gate_to_successors.at(<a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a>).size();</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                            val = <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">state</a>-&gt;netlist_abstr.gate_to_successors.at(<a class="code" href="namespacetest.html#a795b8c55af8ab82f1840a6502cd7938f">g</a>).size();</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                        }</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;                        <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;                        {</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;                            val = <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">state</a>-&gt;netlist_abstr.gate_to_predecessors.at(<a class="code" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a>).size();</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;                            val = <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">state</a>-&gt;netlist_abstr.gate_to_predecessors.at(<a class="code" href="namespacetest.html#a795b8c55af8ab82f1840a6502cd7938f">g</a>).size();</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;                        }</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;                        <span class="keywordflow">if</span> (first)</div>
@@ -196,10 +196,10 @@ $(document).ready(function(){initNavTree('group__by__input__output__size_8cpp_so
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="anamespacetest_html_a795b8c55af8ab82f1840a6502cd7938f"><div class="ttname"><a href="namespacetest.html#a795b8c55af8ab82f1840a6502cd7938f">test.g</a></div><div class="ttdeci">g</div><div class="ttdef"><b>Definition:</b> <a href="test_8py_source.html#l00005">test.py:5</a></div></div>
 <div class="ttc" id="anamespacehal_1_1dataflow_1_1group__by__input__output__size_html_a332001062ca51597cf8f730ecd524da0"><div class="ttname"><a href="namespacehal_1_1dataflow_1_1group__by__input__output__size.html#a332001062ca51597cf8f730ecd524da0">hal::dataflow::group_by_input_output_size::process</a></div><div class="ttdeci">std::shared_ptr&lt; Grouping &gt; process(const std::shared_ptr&lt; Grouping &gt; &amp;state, bool successors)</div><div class="ttdef"><b>Definition:</b> <a href="group__by__input__output__size_8cpp_source.html#l00016">group_by_input_output_size.cpp:16</a></div></div>
 <div class="ttc" id="anetlist__abstraction_8h_html"><div class="ttname"><a href="netlist__abstraction_8h.html">netlist_abstraction.h</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00009">solver.cpp:9</a></div></div>
-<div class="ttc" id="atest__manual_8txt_html_a0c1cc4000b37ba97b39f660cc2b692f6"><div class="ttname"><a href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a></div><div class="ttdeci">How to generate a vcd file for a new test netlist Synthesize netlist in your favorite e g</div><div class="ttdef"><b>Definition:</b> <a href="test__manual_8txt_source.html#l00003">test_manual.txt:3</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
 <div class="ttc" id="agroup__by__input__output__size_8h_html"><div class="ttname"><a href="group__by__input__output__size_8h.html">group_by_input_output_size.h</a></div></div>
 <div class="ttc" id="anet__layout__point_8h_html_aa7fe0c70576e86ca2c5f641bb47ccc9d"><div class="ttname"><a href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a></div><div class="ttdeci">quint32 u32</div><div class="ttdef"><b>Definition:</b> <a href="net__layout__point_8h_source.html#l00038">net_layout_point.h:38</a></div></div>
 <div class="ttc" id="aplugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_html"><div class="ttname"><a href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html">grouping.h</a></div></div>
@@ -208,7 +208,7 @@ $(document).ready(function(){initNavTree('group__by__input__output__size_8cpp_so
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_161c827992f16c517fae38e8eb03f5dd.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dir_383eef8607738589c737c0b430bde182.html">src</a></li><li class="navelem"><a class="el" href="dir_27b66f703f923c992ad19006fb7d81a2.html">processing</a></li><li class="navelem"><a class="el" href="dir_48aa5910fdaf6ebf7e0f2983fa64fd1f.html">passes</a></li><li class="navelem"><a class="el" href="group__by__input__output__size_8cpp.html">group_by_input_output_size.cpp</a></li>
-    <li class="footer">Generated on Thu Jun 16 2022 08:27:21 for HAL by
+    <li class="footer">Generated on Thu Jun 16 2022 09:31:12 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

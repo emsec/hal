@@ -124,7 +124,7 @@ Variables</h2></td></tr>
 <tr class="separator:a568c6e216e3150f1370d16eda9bb4ee1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5254150a719f747072fee78007a6b66e"><td class="memItemLeft" align="right" valign="top">const auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_model_parser.html#a5254150a719f747072fee78007a6b66e">BOOLECTOR_MODEL_GRAMMAR</a> = +(x3::lit(&quot;(model&quot;) &gt;&gt; +SignalAssignmentRule &gt;&gt; x3::lit(&quot;)&quot;))</td></tr>
 <tr class="separator:a5254150a719f747072fee78007a6b66e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6583bd4838d29f7cd71868d729994790"><td class="memItemLeft" align="right" valign="top">const auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_model_parser.html#a6583bd4838d29f7cd71868d729994790">Z3_MODEL_GRAMMAR</a></td></tr>
+<tr class="memitem:a6583bd4838d29f7cd71868d729994790"><td class="memItemLeft" align="right" valign="top">const auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_model_parser.html#a6583bd4838d29f7cd71868d729994790">Z3_MODEL_GRAMMAR</a> = (x3::lit(&quot;(&quot;) &gt;&gt; (+<a class="el" href="namespacehal_1_1_s_m_t_1_1_model_parser.html#a568c6e216e3150f1370d16eda9bb4ee1">SignalAssignmentRule</a>) &gt;&gt; x3::lit(&quot;)&quot;)) | +(x3::lit(&quot;(model&quot;) &gt;&gt; +SignalAssignmentRule &gt;&gt; x3::lit(&quot;)&quot;))</td></tr>
 <tr class="separator:a6583bd4838d29f7cd71868d729994790"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Variable Documentation</h2>
@@ -174,7 +174,7 @@ Variables</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00080">80</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="types_8cpp_source.html#l00170">hal::SMT::Model::parse()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="types_8cpp_source.html#l00212">hal::SMT::Model::parse()</a>.</p>
 
 </div>
 </div>
@@ -256,7 +256,7 @@ Variables</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00030">30</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="types_8cpp_source.html#l00170">hal::SMT::Model::parse()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="types_8cpp_source.html#l00212">hal::SMT::Model::parse()</a>.</p>
 
 </div>
 </div>
@@ -355,16 +355,14 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const auto hal::SMT::ModelParser::Z3_MODEL_GRAMMAR</td>
+          <td class="memname">const auto hal::SMT::ModelParser::Z3_MODEL_GRAMMAR = (x3::lit(&quot;(&quot;) &gt;&gt; (+<a class="el" href="namespacehal_1_1_s_m_t_1_1_model_parser.html#a568c6e216e3150f1370d16eda9bb4ee1">SignalAssignmentRule</a>) &gt;&gt; x3::lit(&quot;)&quot;)) | +(x3::lit(&quot;(model&quot;) &gt;&gt; +SignalAssignmentRule &gt;&gt; x3::lit(&quot;)&quot;))</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= (x3::lit(<span class="stringliteral">&quot;(&quot;</span>) &gt;&gt; (+<a class="code" href="namespacehal_1_1_s_m_t_1_1_model_parser.html#a568c6e216e3150f1370d16eda9bb4ee1">SignalAssignmentRule</a>) &gt;&gt; x3::lit(<span class="stringliteral">&quot;)&quot;</span>))</div>
-<div class="line">                | +(x3::lit(<span class="stringliteral">&quot;(model&quot;</span>) &gt;&gt; +<a class="code" href="namespacehal_1_1_s_m_t_1_1_model_parser.html#a568c6e216e3150f1370d16eda9bb4ee1">SignalAssignmentRule</a> &gt;&gt; x3::lit(<span class="stringliteral">&quot;)&quot;</span>))</div>
-</div><!-- fragment -->
+
 <p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00085">85</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="types_8cpp_source.html#l00170">hal::SMT::Model::parse()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="types_8cpp_source.html#l00212">hal::SMT::Model::parse()</a>.</p>
 
 </div>
 </div>
@@ -373,14 +371,13 @@ Variables</h2></td></tr>
 <div class="ttc" id="astructhal_1_1_s_m_t_1_1_model_parser_1_1_parser_context_html_a0f9e0abe3835544cf304ecd81c9f3983"><div class="ttname"><a href="structhal_1_1_s_m_t_1_1_model_parser_1_1_parser_context.html#a0f9e0abe3835544cf304ecd81c9f3983">hal::SMT::ModelParser::ParserContext::current_name</a></div><div class="ttdeci">std::string current_name</div><div class="ttdoc">stores the current name of a variable assignment</div><div class="ttdef"><b>Definition:</b> <a href="types_8cpp_source.html#l00022">types.cpp:22</a></div></div>
 <div class="ttc" id="astructhal_1_1_s_m_t_1_1_model_parser_1_1_parser_context_html_a3876067183f85871f4f0f1bc47a2f7bd"><div class="ttname"><a href="structhal_1_1_s_m_t_1_1_model_parser_1_1_parser_context.html#a3876067183f85871f4f0f1bc47a2f7bd">hal::SMT::ModelParser::ParserContext::current_value</a></div><div class="ttdeci">std::string current_value</div><div class="ttdoc">stores the current value of a variable assignment</div><div class="ttdef"><b>Definition:</b> <a href="types_8cpp_source.html#l00026">types.cpp:26</a></div></div>
 <div class="ttc" id="anamespacehal_1_1_s_m_t_1_1_model_parser_html_a1abbca0f53ce9868ab55b56548bbcda0"><div class="ttname"><a href="namespacehal_1_1_s_m_t_1_1_model_parser.html#a1abbca0f53ce9868ab55b56548bbcda0">hal::SMT::ModelParser::parser_context</a></div><div class="ttdeci">ParserContext parser_context</div><div class="ttdef"><b>Definition:</b> <a href="types_8cpp_source.html#l00030">types.cpp:30</a></div></div>
-<div class="ttc" id="anamespacehal_1_1_s_m_t_1_1_model_parser_html_a568c6e216e3150f1370d16eda9bb4ee1"><div class="ttname"><a href="namespacehal_1_1_s_m_t_1_1_model_parser.html#a568c6e216e3150f1370d16eda9bb4ee1">hal::SMT::ModelParser::SignalAssignmentRule</a></div><div class="ttdeci">const auto SignalAssignmentRule</div><div class="ttdef"><b>Definition:</b> <a href="types_8cpp_source.html#l00075">types.cpp:75</a></div></div>
 <div class="ttc" id="astructhal_1_1_s_m_t_1_1_model_parser_1_1_parser_context_html_a857c87296215b4ae5fb1ec24561f5cb2"><div class="ttname"><a href="structhal_1_1_s_m_t_1_1_model_parser_1_1_parser_context.html#a857c87296215b4ae5fb1ec24561f5cb2">hal::SMT::ModelParser::ParserContext::current_size</a></div><div class="ttdeci">std::string current_size</div><div class="ttdoc">stores the current size of a variable assignment</div><div class="ttdef"><b>Definition:</b> <a href="types_8cpp_source.html#l00024">types.cpp:24</a></div></div>
 <div class="ttc" id="astructhal_1_1_s_m_t_1_1_model_parser_1_1_parser_context_html_a71dd9f56a65763b51e084d8c025e122c"><div class="ttname"><a href="structhal_1_1_s_m_t_1_1_model_parser_1_1_parser_context.html#a71dd9f56a65763b51e084d8c025e122c">hal::SMT::ModelParser::ParserContext::model</a></div><div class="ttdeci">std::map&lt; std::string, std::tuple&lt; u64, u16 &gt; &gt; model</div><div class="ttdoc">stores mapping from variables to its (1) value and (2) bit-size</div><div class="ttdef"><b>Definition:</b> <a href="types_8cpp_source.html#l00019">types.cpp:19</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a></li><li class="navelem"><a class="el" href="namespacehal_1_1_s_m_t_1_1_model_parser.html">ModelParser</a></li>
-    <li class="footer">Generated on Thu Jun 16 2022 08:27:30 for HAL by
+    <li class="footer">Generated on Thu Jun 16 2022 09:31:18 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

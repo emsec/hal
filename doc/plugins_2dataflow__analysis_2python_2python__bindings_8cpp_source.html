@@ -132,39 +132,47 @@ $(document).ready(function(){initNavTree('plugins_2dataflow__analysis_2python_2p
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="stringliteral">                )&quot;)</span></div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="stringliteral">            </span><span class="comment">// .def(&quot;get_cli_options&quot;, &amp;plugin_dataflow::get_cli_options)</span></div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;            <span class="comment">// .def(&quot;handle_cli_call&quot;, &amp;plugin_dataflow::handle_cli_call)</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            .def(<span class="stringliteral">&quot;execute&quot;</span>, &amp;<a class="code" href="classhal_1_1plugin__dataflow.html#ae70e297372096015810f26f87343df14">plugin_dataflow::execute</a>, py::arg(<span class="stringliteral">&quot;netlist&quot;</span>), py::arg(<span class="stringliteral">&quot;output_path&quot;</span>), py::arg(<span class="stringliteral">&quot;sizes&quot;</span>), py::arg(<span class="stringliteral">&quot;draw_graph&quot;</span>), py::arg(<span class="stringliteral">&quot;known_groups&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="stringliteral">                Executes the dataflow analysis plugin (DANA). Starting from the netlist DANA tries to identify high-level registers.</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="stringliteral">                :param hal_py.Netlist netlist: The netlist to operate on.</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="stringliteral">                :param str output_path: Path where the dataflow graph should be written to</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="stringliteral">                :param list[int] sizes: Prioritized sizes.</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="stringliteral">                :param bool draw_graph: Switch to turn on/off the generation of the graph.</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="stringliteral">                :param list[list[int]] known_groups: Previously known groups that stay untouched.</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="stringliteral">                :returns: Register groups created by DANA</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="stringliteral">                :rtype: list[list[hal_py.Gate]]</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="stringliteral">                )&quot;);</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="stringliteral"></span><span class="preprocessor">#ifndef PYBIND11_MODULE</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keywordflow">return</span> m.ptr();</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="preprocessor">#endif    // PYBIND11_MODULE</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    }</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            .def(<span class="stringliteral">&quot;execute&quot;</span>,</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                 &amp;<a class="code" href="classhal_1_1plugin__dataflow.html#adc2cd406ca4ad4e4cc3e048c1d3b0a34">plugin_dataflow::execute</a>,</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                 py::arg(<span class="stringliteral">&quot;netlist&quot;</span>),</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;                 py::arg(<span class="stringliteral">&quot;output_path&quot;</span>),</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                 py::arg(<span class="stringliteral">&quot;sizes&quot;</span>),</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                 py::arg(<span class="stringliteral">&quot;draw_graph&quot;</span>),</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                 py::arg(<span class="stringliteral">&quot;known_groups&quot;</span>)    = std::vector&lt;std::vector&lt;u32&gt;&gt;(),</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                 py::arg(<span class="stringliteral">&quot;bad_group_sizes&quot;</span>) = 7,</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                 R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="stringliteral">                Executes the dataflow analysis plugin (DANA). Starting from the netlist DANA tries to identify high-level registers.</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="stringliteral">                :param hal_py.Netlist netlist: The netlist to operate on.</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="stringliteral">                :param str output_path: Path where the dataflow graph should be written to</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="stringliteral">                :param list[int] sizes: Prioritized sizes.</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="stringliteral">                :param bool draw_graph: Switch to turn on/off the generation of the graph.</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="stringliteral">                :param list[list[int]] known_groups: Previously known groups that stay untouched.</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="stringliteral">                :returns: Register groups created by DANA</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="stringliteral">                :rtype: list[list[hal_py.Gate]]</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="stringliteral">                )&quot;);</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="stringliteral"></span><span class="preprocessor">#ifndef PYBIND11_MODULE</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keywordflow">return</span> m.ptr();</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor">#endif    // PYBIND11_MODULE</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    }</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00009">solver.cpp:9</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
 <div class="ttc" id="ainclude_2hal__core_2netlist_2netlist_8h_html"><div class="ttname"><a href="include_2hal__core_2netlist_2netlist_8h.html">netlist.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1plugin__dataflow_html_a902155f58f90aa60c2813cb456333f39"><div class="ttname"><a href="classhal_1_1plugin__dataflow.html#a902155f58f90aa60c2813cb456333f39">hal::plugin_dataflow::get_name</a></div><div class="ttdeci">std::string get_name() const override</div><div class="ttdef"><b>Definition:</b> <a href="plugin__dataflow_8cpp_source.html#l00040">plugin_dataflow.cpp:40</a></div></div>
+<div class="ttc" id="aclasshal_1_1plugin__dataflow_html_adc2cd406ca4ad4e4cc3e048c1d3b0a34"><div class="ttname"><a href="classhal_1_1plugin__dataflow.html#adc2cd406ca4ad4e4cc3e048c1d3b0a34">hal::plugin_dataflow::execute</a></div><div class="ttdeci">std::vector&lt; std::vector&lt; Gate * &gt; &gt; execute(Netlist *nl, std::string path, const std::vector&lt; u32 &gt; sizes, bool draw_graph, std::vector&lt; std::vector&lt; u32 &gt;&gt; known_groups={}, u32 bad_group_size=7)</div><div class="ttdef"><b>Definition:</b> <a href="plugin__dataflow_8cpp_source.html#l00113">plugin_dataflow.cpp:113</a></div></div>
 <div class="ttc" id="aclasshal_1_1_base_plugin_interface_html"><div class="ttname"><a href="classhal_1_1_base_plugin_interface.html">hal::BasePluginInterface</a></div><div class="ttdef"><b>Definition:</b> <a href="plugin__interface__base_8h_source.html#l00064">plugin_interface_base.h:64</a></div></div>
 <div class="ttc" id="anamespacehal_1_1_shortest_path_html_a6f60f4bfa62d51227fa5fcc3e7d838a9"><div class="ttname"><a href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">hal::ShortestPath::module</a></div><div class="ttdeci">const Module * module(const Gate *g, const NodeBoxes &amp;boxes)</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l00877">graph_graphics_view.cpp:877</a></div></div>
 <div class="ttc" id="anamespacehal_html_a034467b937d9c580d84c198167d00929"><div class="ttname"><a href="namespacehal.html#a034467b937d9c580d84c198167d00929">hal::PYBIND11_PLUGIN</a></div><div class="ttdeci">PYBIND11_PLUGIN(hal_py)</div><div class="ttdef"><b>Definition:</b> <a href="src_2python__bindings_2python__bindings_8cpp_source.html#l00010">python_bindings.cpp:10</a></div></div>
 <div class="ttc" id="apython__bindings_8h_html"><div class="ttname"><a href="python__bindings_8h.html">python_bindings.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1plugin__dataflow_html_a10faf4cad2452bb9bb3562d9245f5283"><div class="ttname"><a href="classhal_1_1plugin__dataflow.html#a10faf4cad2452bb9bb3562d9245f5283">hal::plugin_dataflow::get_version</a></div><div class="ttdeci">std::string get_version() const override</div><div class="ttdef"><b>Definition:</b> <a href="plugin__dataflow_8cpp_source.html#l00045">plugin_dataflow.cpp:45</a></div></div>
-<div class="ttc" id="aclasshal_1_1plugin__dataflow_html_ae70e297372096015810f26f87343df14"><div class="ttname"><a href="classhal_1_1plugin__dataflow.html#ae70e297372096015810f26f87343df14">hal::plugin_dataflow::execute</a></div><div class="ttdeci">std::vector&lt; std::vector&lt; Gate * &gt; &gt; execute(Netlist *nl, std::string path, const std::vector&lt; u32 &gt; sizes, bool draw_graph, std::vector&lt; std::vector&lt; u32 &gt;&gt; known_groups={})</div><div class="ttdef"><b>Definition:</b> <a href="plugin__dataflow_8cpp_source.html#l00099">plugin_dataflow.cpp:99</a></div></div>
 <div class="ttc" id="aplugin__dataflow_8h_html"><div class="ttname"><a href="plugin__dataflow_8h.html">plugin_dataflow.h</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_161c827992f16c517fae38e8eb03f5dd.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dir_3a671fdac4dcd0bb6b783f80be609887.html">python</a></li><li class="navelem"><a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp.html">python_bindings.cpp</a></li>
-    <li class="footer">Generated on Thu Jun 16 2022 08:27:26 for HAL by
+    <li class="footer">Generated on Thu Jun 16 2022 09:31:15 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

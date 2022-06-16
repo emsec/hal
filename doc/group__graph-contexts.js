@@ -79,9 +79,8 @@ var group__graph_contexts =
       [ "handleModuleCreated", "classhal_1_1_graph_context_manager.html#aa5f7923ad5eabf744e927fd3ada8c559", null ],
       [ "handleModuleGateAssigned", "classhal_1_1_graph_context_manager.html#a74346611f1400e03bdc2d20bc6ca938d", null ],
       [ "handleModuleGateRemoved", "classhal_1_1_graph_context_manager.html#aaf9534247eddb32c49610a8de46794b2", null ],
-      [ "handleModuleInputPortNameChanged", "classhal_1_1_graph_context_manager.html#acf13f4d34ab90ab0268fb3807918636d", null ],
       [ "handleModuleNameChanged", "classhal_1_1_graph_context_manager.html#a08d4ceee844a31a2d026281b6271b527", null ],
-      [ "handleModuleOutputPortNameChanged", "classhal_1_1_graph_context_manager.html#a5be185ea33fa8da45739b38cd56d3824", null ],
+      [ "handleModulePortsChanged", "classhal_1_1_graph_context_manager.html#a6701e53face1b7ce9acc0cc0d5a57e99", null ],
       [ "handleModuleRemoved", "classhal_1_1_graph_context_manager.html#aea77eca602b648beb3c42a89de25fe72", null ],
       [ "handleModuleSubmoduleAdded", "classhal_1_1_graph_context_manager.html#aa6bb29f1134155498fe94d00805dde2a", null ],
       [ "handleModuleSubmoduleRemoved", "classhal_1_1_graph_context_manager.html#ad0452a02f33a9c9088d6a9b8a74ecfbe", null ],
@@ -93,12 +92,12 @@ var group__graph_contexts =
       [ "handleNetRemoved", "classhal_1_1_graph_context_manager.html#a360bc29abf073136b7b65deb2e77a568", null ],
       [ "handleNetSourceAdded", "classhal_1_1_graph_context_manager.html#adf1d64ef01e3b7e321a1acb9c6995566", null ],
       [ "handleNetSourceRemoved", "classhal_1_1_graph_context_manager.html#a7a4b4f8476c923a6686c82906daa3d30", null ],
-      [ "handleSaveTriggered", "classhal_1_1_graph_context_manager.html#abffcdfb167e655ad2f3edd345dcb576a", null ],
+      [ "handleSaveTriggered", "classhal_1_1_graph_context_manager.html#a3685d97b77ab2f3366bd4ac827f75c3b", null ],
       [ "handleUnmarkedGlobalInput", "classhal_1_1_graph_context_manager.html#a86baed5ae448d4d126dc9594b228d312", null ],
       [ "handleUnmarkedGlobalOutput", "classhal_1_1_graph_context_manager.html#a7ca5ecaa4ee2a3d8a23e110e767b3f7b", null ],
       [ "nextDefaultName", "classhal_1_1_graph_context_manager.html#a6f1d5ea1f0e018f9340636c4f29972df", null ],
       [ "renameGraphContextAction", "classhal_1_1_graph_context_manager.html#a2809e7e6154892eff9f191080a109098", null ],
-      [ "restoreFromFile", "classhal_1_1_graph_context_manager.html#a5b60c04f6751502db45d27bd3f79da7f", null ],
+      [ "restoreFromFile", "classhal_1_1_graph_context_manager.html#ac02e7e472109776e7f9d0aeffd04506b", null ],
       [ "setContextId", "classhal_1_1_graph_context_manager.html#a2fad5a577d6bad8cc3f8d569f3def1eb", null ]
     ] ]
 ];

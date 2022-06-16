@@ -1,5 +1,5 @@
 <map id="hal::ActionFoldModule" name="hal::ActionFoldModule">
-<area shape="rect" id="node1" title="Folds a module." alt="" coords="5,507,172,643"/>
-<area shape="rect" id="node2" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="11,219,167,457"/>
-<area shape="rect" id="node3" href="$classhal_1_1_user_action_object.html" title="The UserActionObject class represents a single object used in UserAction." alt="" coords="7,5,170,156"/>
+<area shape="rect" id="node1" title="Folds a module." alt="" coords="31,580,198,716"/>
+<area shape="rect" id="node2" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="5,233,224,531"/>
+<area shape="rect" id="node3" href="$classhal_1_1_user_action_object.html" title="The UserActionObject class represents a single object used in UserAction." alt="" coords="33,5,196,156"/>
 </map>

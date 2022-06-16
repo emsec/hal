@@ -1,0 +1,7 @@
+<map id="hal::GatePinsTreeModel" name="hal::GatePinsTreeModel">
+<area shape="rect" id="node1" title="A model to display the pins of a gate." alt="" coords="185,828,372,1023"/>
+<area shape="rect" id="node2" href="$classhal_1_1_base_tree_model.html" title="The BaseTreeModel implements generic standard functions of a tree model." alt="" coords="107,380,274,751"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstractitemmodel.html" title=" " alt="" coords="5,5,197,317"/>
+<area shape="rect" id="node4" href="$classhal_1_1_tree_item.html" title="(Future) Base class for all tree models related to the details widget." alt="" coords="222,86,338,237"/>
+<area shape="rect" id="node5" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qstring.html" title=" " alt="" coords="299,409,437,721"/>
+</map>

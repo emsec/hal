@@ -89,13 +89,15 @@ $(document).ready(function(){initNavTree('grouping__manager__widget_8cpp.html','
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="grouping__manager__widget_8h_source.html">gui/grouping/grouping_manager_widget.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="gui__globals_8h_source.html">gui/gui_globals.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="action_8h_source.html">gui/action/action.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="graph__tab__widget_8h_source.html">gui/graph_tab_widget/graph_tab_widget.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="grouping__color__delegate_8h_source.html">gui/grouping/grouping_color_delegate.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="grouping__proxy__model_8h_source.html">gui/grouping/grouping_proxy_model.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="gui__def_8h_source.html">gui/gui_def.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="gui__globals_8h_source.html">gui/gui_globals.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="graphics_8h_source.html">gui/gui_utils/graphics.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="input__dialog_8h_source.html">gui/input_dialog/input_dialog.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="searchbar_8h_source.html">gui/searchbar/searchbar.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="graphics_8h_source.html">gui/gui_utils/graphics.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="toolbar_8h_source.html">gui/toolbar/toolbar.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="action__add__items__to__object_8h_source.html">gui/user_action/action_add_items_to_object.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="action__create__object_8h_source.html">gui/user_action/action_create_object.h</a>&quot;</code><br />
@@ -103,19 +105,18 @@ $(document).ready(function(){initNavTree('grouping__manager__widget_8cpp.html','
 <code>#include &quot;<a class="el" href="action__rename__object_8h_source.html">gui/user_action/action_rename_object.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="action__set__object__color_8h_source.html">gui/user_action/action_set_object_color.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="user__action__compound_8h_source.html">gui/user_action/user_action_compound.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="action_8h_source.html">gui/action/action.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="gui__def_8h_source.html">gui/gui_def.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="log_8h_source.html">hal_core/utilities/log.h</a>&quot;</code><br />
 <code>#include &lt;QAction&gt;</code><br />
+<code>#include &lt;QColorDialog&gt;</code><br />
+<code>#include &lt;QHeaderView&gt;</code><br />
 <code>#include &lt;QImage&gt;</code><br />
 <code>#include &lt;QMenu&gt;</code><br />
 <code>#include &lt;QResizeEvent&gt;</code><br />
-<code>#include &lt;QSize&gt;</code><br />
-<code>#include &lt;QVBoxLayout&gt;</code><br />
-<code>#include &lt;QHeaderView&gt;</code><br />
-<code>#include &lt;QColorDialog&gt;</code><br />
-<code>#include &lt;QStringList&gt;</code><br />
 <code>#include &lt;QShortcut&gt;</code><br />
+<code>#include &lt;QSize&gt;</code><br />
+<code>#include &lt;QStringList&gt;</code><br />
+<code>#include &lt;QVBoxLayout&gt;</code><br />
+<code>#include &lt;unordered_set&gt;</code><br />
 </div>
 <p><a href="grouping__manager__widget_8cpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -130,7 +131,7 @@ Namespaces</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_b3d26ef66a8e1f570dc589b039460223.html">grouping</a></li><li class="navelem"><a class="el" href="grouping__manager__widget_8cpp.html">grouping_manager_widget.cpp</a></li>
-    <li class="footer">Generated on Thu Jun 16 2022 08:27:27 for HAL by
+    <li class="footer">Generated on Thu Jun 16 2022 09:31:15 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

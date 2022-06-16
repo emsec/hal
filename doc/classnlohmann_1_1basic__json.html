@@ -961,20 +961,20 @@ template&lt;template&lt; typename, typename, typename... &gt; class ObjectType, 
   </table>
   </dd>
 </dl>
-<h4><a class="anchor" id="autotoc_md13"></a>
+<h4><a class="anchor" id="autotoc_md22"></a>
 Default type</h4>
 <p>With the default values for <em>ArrayType</em> (<code>std::vector</code>) and <em>AllocatorType</em> (<code>std::allocator</code>), the default value for <em>array_t</em> is:</p>
 <div class="fragment"><div class="line">std::vector&lt;</div>
 <div class="line">  <a class="code" href="classnlohmann_1_1basic__json.html#aed115142bd0c6c66c864700e0467df55">basic_json</a>, <span class="comment">// value_type</span></div>
 <div class="line">  std::allocator&lt;basic_json&gt; <span class="comment">// allocator_type</span></div>
 <div class="line">&gt;</div>
-</div><!-- fragment --><h4><a class="anchor" id="autotoc_md14"></a>
+</div><!-- fragment --><h4><a class="anchor" id="autotoc_md23"></a>
 Limits</h4>
 <p><a href="http://rfc7159.net/rfc7159">RFC 7159</a> specifies: </p><blockquote class="doxtable">
 <p>An implementation may set limits on the maximum depth of nesting. </p>
 </blockquote>
 <p>In this class, the array's limit of nesting is not explicitly constrained. However, a maximum depth of nesting may be introduced by the compiler or runtime environment. A theoretical limit can be queried by calling the <a class="el" href="classnlohmann_1_1basic__json.html#a2f47d3c6a441c57dd2be00449fbb88e1">max_size</a> function of a JSON array.</p>
-<h4><a class="anchor" id="autotoc_md15"></a>
+<h4><a class="anchor" id="autotoc_md24"></a>
 Storage</h4>
 <p>Arrays are stored as pointers in a <a class="el" href="classnlohmann_1_1basic__json.html">basic_json</a> type. That is, for any access to array values, a pointer of type <code>array_t*</code> must be dereferenced.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classnlohmann_1_1basic__json.html#a5e48a7893520e1314bf0c9723e26ea2a">object_t</a> &ndash; <a class="el" href="classnlohmann_1_1basic__json.html#a2b2d781d7f2a4ee41bc0016e931cadf7" title="return the type of the JSON value (explicit)">type</a> for an <a class="el" href="classnlohmann_1_1basic__json.html#aa13f7c0615867542ce80337cbcf13ada" title="explicitly create an object from an initializer list">object</a> <a class="el" href="classnlohmann_1_1basic__json.html#adcf8ca5079f5db993820bf50036bf45d" title="access specified object element with default value">value</a></dd></dl>
@@ -1001,11 +1001,11 @@ template&lt;template&lt; typename, typename, typename... &gt; class ObjectType, 
 <p>a type for a boolean </p>
 <p><a href="http://rfc7159.net/rfc7159">RFC 7159</a> implicitly describes a boolean as a type which differentiates the two literals <code>true</code> and <code>false</code>.</p>
 <p>To store objects in C++, a type is defined by the template parameter <em>BooleanType</em> which chooses the type to use.</p>
-<h4><a class="anchor" id="autotoc_md20"></a>
+<h4><a class="anchor" id="autotoc_md29"></a>
 Default type</h4>
 <p>With the default values for <em>BooleanType</em> (<code>bool</code>), the default value for <em>boolean_t</em> is:</p>
 <div class="fragment"><div class="line"><span class="keywordtype">bool</span></div>
-</div><!-- fragment --><h4><a class="anchor" id="autotoc_md21"></a>
+</div><!-- fragment --><h4><a class="anchor" id="autotoc_md30"></a>
 Storage</h4>
 <p>Boolean values are stored directly inside a <a class="el" href="classnlohmann_1_1basic__json.html">basic_json</a> type.</p>
 <dl class="section since"><dt>Since</dt><dd>version 1.0.0 </dd></dl>
@@ -1367,23 +1367,23 @@ template&lt;template&lt; typename, typename, typename... &gt; class ObjectType, 
 </blockquote>
 <p>This description includes both integer and floating-point numbers. However, C++ allows more precise storage if it is known whether the number is a signed integer, an unsigned integer or a floating-point number. Therefore, three different types, <a class="el" href="classnlohmann_1_1basic__json.html#a98e611d67b7bd75307de99c9358ab2dc">number_integer_t</a>, <a class="el" href="classnlohmann_1_1basic__json.html#ab906e29b5d83ac162e823ada2156b989">number_unsigned_t</a> and <a class="el" href="classnlohmann_1_1basic__json.html#a88d6103cb3620410b35200ee8e313d97">number_float_t</a> are used.</p>
 <p>To store floating-point numbers in C++, a type is defined by the template parameter <em>NumberFloatType</em> which chooses the type to use.</p>
-<h4><a class="anchor" id="autotoc_md30"></a>
+<h4><a class="anchor" id="autotoc_md39"></a>
 Default type</h4>
 <p>With the default values for <em>NumberFloatType</em> (<code>double</code>), the default value for <em>number_float_t</em> is:</p>
 <div class="fragment"><div class="line"><span class="keywordtype">double</span></div>
-</div><!-- fragment --><h4><a class="anchor" id="autotoc_md31"></a>
+</div><!-- fragment --><h4><a class="anchor" id="autotoc_md40"></a>
 Default behavior</h4>
 <ul>
 <li>The restrictions about leading zeros is not enforced in C++. Instead, leading zeros in floating-point literals will be ignored. Internally, the value will be stored as decimal number. For instance, the C++ floating-point literal <code>01.2</code> will be serialized to <code>1.2</code>. During deserialization, leading zeros yield an error.</li>
 <li>Not-a-number (NaN) values will be serialized to <code>null</code>.</li>
 </ul>
-<h4><a class="anchor" id="autotoc_md32"></a>
+<h4><a class="anchor" id="autotoc_md41"></a>
 Limits</h4>
 <p><a href="http://rfc7159.net/rfc7159">RFC 7159</a> states: </p><blockquote class="doxtable">
 <p>This specification allows implementations to set limits on the range and precision of numbers accepted. Since software that implements IEEE 754-2008 binary64 (double precision) numbers is generally available and widely used, good interoperability can be achieved by implementations that expect no more precision or range than these provide, in the sense that implementations will approximate JSON numbers within the expected precision. </p>
 </blockquote>
 <p>This implementation does exactly follow this approach, as it uses double precision floating-point numbers. Note values smaller than <code>-1.79769313486232e+308</code> and values greater than <code>1.79769313486232e+308</code> will be stored as NaN internally and be serialized to <code>null</code>.</p>
-<h4><a class="anchor" id="autotoc_md33"></a>
+<h4><a class="anchor" id="autotoc_md42"></a>
 Storage</h4>
 <p>Floating-point number values are stored directly inside a <a class="el" href="classnlohmann_1_1basic__json.html">basic_json</a> type.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classnlohmann_1_1basic__json.html#a98e611d67b7bd75307de99c9358ab2dc">number_integer_t</a> &ndash; <a class="el" href="classnlohmann_1_1basic__json.html#a2b2d781d7f2a4ee41bc0016e931cadf7" title="return the type of the JSON value (explicit)">type</a> for number values (integer)</dd>
@@ -1415,17 +1415,17 @@ template&lt;template&lt; typename, typename, typename... &gt; class ObjectType, 
 </blockquote>
 <p>This description includes both integer and floating-point numbers. However, C++ allows more precise storage if it is known whether the number is a signed integer, an unsigned integer or a floating-point number. Therefore, three different types, <a class="el" href="classnlohmann_1_1basic__json.html#a98e611d67b7bd75307de99c9358ab2dc">number_integer_t</a>, <a class="el" href="classnlohmann_1_1basic__json.html#ab906e29b5d83ac162e823ada2156b989">number_unsigned_t</a> and <a class="el" href="classnlohmann_1_1basic__json.html#a88d6103cb3620410b35200ee8e313d97">number_float_t</a> are used.</p>
 <p>To store integer numbers in C++, a type is defined by the template parameter <em>NumberIntegerType</em> which chooses the type to use.</p>
-<h4><a class="anchor" id="autotoc_md22"></a>
+<h4><a class="anchor" id="autotoc_md31"></a>
 Default type</h4>
 <p>With the default values for <em>NumberIntegerType</em> (<code>int64_t</code>), the default value for <em>number_integer_t</em> is:</p>
 <div class="fragment"><div class="line">int64_t</div>
-</div><!-- fragment --><h4><a class="anchor" id="autotoc_md23"></a>
+</div><!-- fragment --><h4><a class="anchor" id="autotoc_md32"></a>
 Default behavior</h4>
 <ul>
 <li>The restrictions about leading zeros is not enforced in C++. Instead, leading zeros in integer literals lead to an interpretation as octal number. Internally, the value will be stored as decimal number. For instance, the C++ integer literal <code>010</code> will be serialized to <code>8</code>. During deserialization, leading zeros yield an error.</li>
 <li>Not-a-number (NaN) values will be serialized to <code>null</code>.</li>
 </ul>
-<h4><a class="anchor" id="autotoc_md24"></a>
+<h4><a class="anchor" id="autotoc_md33"></a>
 Limits</h4>
 <p><a href="http://rfc7159.net/rfc7159">RFC 7159</a> specifies: </p><blockquote class="doxtable">
 <p>An implementation may set limits on the range and precision of numbers. </p>
@@ -1435,7 +1435,7 @@ Limits</h4>
 <p>Note that when such software is used, numbers that are integers and are in the range <img class="formulaInl" alt="$[-2^{53}+1, 2^{53}-1]$" src="form_0.png"/> are interoperable in the sense that implementations will agree exactly on their numeric values. </p>
 </blockquote>
 <p>As this range is a subrange of the exactly supported range [INT64_MIN, INT64_MAX], this class's integer type is interoperable.</p>
-<h4><a class="anchor" id="autotoc_md25"></a>
+<h4><a class="anchor" id="autotoc_md34"></a>
 Storage</h4>
 <p>Integer number values are stored directly inside a <a class="el" href="classnlohmann_1_1basic__json.html">basic_json</a> type.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classnlohmann_1_1basic__json.html#a88d6103cb3620410b35200ee8e313d97">number_float_t</a> &ndash; <a class="el" href="classnlohmann_1_1basic__json.html#a2b2d781d7f2a4ee41bc0016e931cadf7" title="return the type of the JSON value (explicit)">type</a> for number values (floating-point)</dd>
@@ -1467,17 +1467,17 @@ template&lt;template&lt; typename, typename, typename... &gt; class ObjectType, 
 </blockquote>
 <p>This description includes both integer and floating-point numbers. However, C++ allows more precise storage if it is known whether the number is a signed integer, an unsigned integer or a floating-point number. Therefore, three different types, <a class="el" href="classnlohmann_1_1basic__json.html#a98e611d67b7bd75307de99c9358ab2dc">number_integer_t</a>, <a class="el" href="classnlohmann_1_1basic__json.html#ab906e29b5d83ac162e823ada2156b989">number_unsigned_t</a> and <a class="el" href="classnlohmann_1_1basic__json.html#a88d6103cb3620410b35200ee8e313d97">number_float_t</a> are used.</p>
 <p>To store unsigned integer numbers in C++, a type is defined by the template parameter <em>NumberUnsignedType</em> which chooses the type to use.</p>
-<h4><a class="anchor" id="autotoc_md26"></a>
+<h4><a class="anchor" id="autotoc_md35"></a>
 Default type</h4>
 <p>With the default values for <em>NumberUnsignedType</em> (<code>uint64_t</code>), the default value for <em>number_unsigned_t</em> is:</p>
 <div class="fragment"><div class="line">uint64_t</div>
-</div><!-- fragment --><h4><a class="anchor" id="autotoc_md27"></a>
+</div><!-- fragment --><h4><a class="anchor" id="autotoc_md36"></a>
 Default behavior</h4>
 <ul>
 <li>The restrictions about leading zeros is not enforced in C++. Instead, leading zeros in integer literals lead to an interpretation as octal number. Internally, the value will be stored as decimal number. For instance, the C++ integer literal <code>010</code> will be serialized to <code>8</code>. During deserialization, leading zeros yield an error.</li>
 <li>Not-a-number (NaN) values will be serialized to <code>null</code>.</li>
 </ul>
-<h4><a class="anchor" id="autotoc_md28"></a>
+<h4><a class="anchor" id="autotoc_md37"></a>
 Limits</h4>
 <p><a href="http://rfc7159.net/rfc7159">RFC 7159</a> specifies: </p><blockquote class="doxtable">
 <p>An implementation may set limits on the range and precision of numbers. </p>
@@ -1487,7 +1487,7 @@ Limits</h4>
 <p>Note that when such software is used, numbers that are integers and are in the range <img class="formulaInl" alt="$[-2^{53}+1, 2^{53}-1]$" src="form_0.png"/> are interoperable in the sense that implementations will agree exactly on their numeric values. </p>
 </blockquote>
 <p>As this range is a subrange (when considered in conjunction with the number_integer_t type) of the exactly supported range [0, UINT64_MAX], this class's integer type is interoperable.</p>
-<h4><a class="anchor" id="autotoc_md29"></a>
+<h4><a class="anchor" id="autotoc_md38"></a>
 Storage</h4>
 <p>Integer number values are stored directly inside a <a class="el" href="classnlohmann_1_1basic__json.html">basic_json</a> type.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classnlohmann_1_1basic__json.html#a88d6103cb3620410b35200ee8e313d97">number_float_t</a> &ndash; <a class="el" href="classnlohmann_1_1basic__json.html#a2b2d781d7f2a4ee41bc0016e931cadf7" title="return the type of the JSON value (explicit)">type</a> for number values (floating-point) </dd>
@@ -1544,7 +1544,7 @@ template&lt;template&lt; typename, typename, typename... &gt; class ObjectType, 
   </table>
   </dd>
 </dl>
-<h4><a class="anchor" id="autotoc_md9"></a>
+<h4><a class="anchor" id="autotoc_md18"></a>
 Default type</h4>
 <p>With the default values for <em>ObjectType</em> (<code>std::map</code>), <em>StringType</em> (<code>std::string</code>), and <em>AllocatorType</em> (<code>std::allocator</code>), the default value for <em>object_t</em> is:</p>
 <div class="fragment"><div class="line">std::map&lt;</div>
@@ -1553,7 +1553,7 @@ Default type</h4>
 <div class="line">  std::less&lt;std::string&gt;, <span class="comment">// key_compare</span></div>
 <div class="line">  std::allocator&lt;std::pair&lt;const std::string, basic_json&gt;&gt; <span class="comment">// allocator_type</span></div>
 <div class="line">&gt;</div>
-</div><!-- fragment --><h4><a class="anchor" id="autotoc_md10"></a>
+</div><!-- fragment --><h4><a class="anchor" id="autotoc_md19"></a>
 Behavior</h4>
 <p>The choice of <em>object_t</em> influences the behavior of the JSON class. With the default type, objects have the following behavior:</p>
 <ul>
@@ -1562,13 +1562,13 @@ Behavior</h4>
 <li>Internally, name/value pairs are stored in lexicographical order of the names. Objects will also be serialized (see <a class="el" href="classnlohmann_1_1basic__json.html#a50ec80b02d0f3f51130d4abb5d1cfdc5">dump</a>) in this order. For instance, <code>{"b": 1, "a": 2}</code> and <code>{"a": 2, "b": 1}</code> will be stored and serialized as <code>{"a": 2, "b": 1}</code>.</li>
 <li>When comparing objects, the order of the name/value pairs is irrelevant. This makes objects interoperable in the sense that they will not be affected by these differences. For instance, <code>{"b": 1, "a": 2}</code> and <code>{"a": 2, "b": 1}</code> will be treated as equal.</li>
 </ul>
-<h4><a class="anchor" id="autotoc_md11"></a>
+<h4><a class="anchor" id="autotoc_md20"></a>
 Limits</h4>
 <p><a href="http://rfc7159.net/rfc7159">RFC 7159</a> specifies: </p><blockquote class="doxtable">
 <p>An implementation may set limits on the maximum depth of nesting. </p>
 </blockquote>
 <p>In this class, the object's limit of nesting is not explicitly constrained. However, a maximum depth of nesting may be introduced by the compiler or runtime environment. A theoretical limit can be queried by calling the <a class="el" href="classnlohmann_1_1basic__json.html#a2f47d3c6a441c57dd2be00449fbb88e1">max_size</a> function of a JSON object.</p>
-<h4><a class="anchor" id="autotoc_md12"></a>
+<h4><a class="anchor" id="autotoc_md21"></a>
 Storage</h4>
 <p>Objects are stored as pointers in a <a class="el" href="classnlohmann_1_1basic__json.html">basic_json</a> type. That is, for any access to object values, a pointer of type <code>object_t*</code> must be dereferenced.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classnlohmann_1_1basic__json.html#ae095578e03df97c5b3991787f1056374">array_t</a> &ndash; <a class="el" href="classnlohmann_1_1basic__json.html#a2b2d781d7f2a4ee41bc0016e931cadf7" title="return the type of the JSON value (explicit)">type</a> for an <a class="el" href="classnlohmann_1_1basic__json.html#aa80485befaffcadaa39965494e0b4d2e" title="explicitly create an array from an initializer list">array</a> <a class="el" href="classnlohmann_1_1basic__json.html#adcf8ca5079f5db993820bf50036bf45d" title="access specified object element with default value">value</a></dd></dl>
@@ -1934,20 +1934,20 @@ template&lt;template&lt; typename, typename, typename... &gt; class ObjectType, 
   </table>
   </dd>
 </dl>
-<h4><a class="anchor" id="autotoc_md16"></a>
+<h4><a class="anchor" id="autotoc_md25"></a>
 Default type</h4>
 <p>With the default values for <em>StringType</em> (<code>std::string</code>), the default value for <em>string_t</em> is:</p>
 <div class="fragment"><div class="line">std::string</div>
-</div><!-- fragment --><h4><a class="anchor" id="autotoc_md17"></a>
+</div><!-- fragment --><h4><a class="anchor" id="autotoc_md26"></a>
 Encoding</h4>
 <p>Strings are stored in UTF-8 encoding. Therefore, functions like <code>std::string::size()</code> or <code>std::string::length()</code> return the number of bytes in the string rather than the number of characters or glyphs.</p>
-<h4><a class="anchor" id="autotoc_md18"></a>
+<h4><a class="anchor" id="autotoc_md27"></a>
 String comparison</h4>
 <p><a href="http://rfc7159.net/rfc7159">RFC 7159</a> states: </p><blockquote class="doxtable">
 <p>Software implementations are typically required to test names of object members for equality. Implementations that transform the textual representation into sequences of Unicode code units and then perform the comparison numerically, code unit by code unit, are interoperable in the sense that implementations will agree in all cases on equality or inequality of two strings. For example, implementations that compare strings with escaped characters unconverted may incorrectly find that <code>"a\\b"</code> and <code>"a\u005Cb"</code> are not equal. </p>
 </blockquote>
 <p>This implementation is interoperable as it does compare strings code unit by code unit.</p>
-<h4><a class="anchor" id="autotoc_md19"></a>
+<h4><a class="anchor" id="autotoc_md28"></a>
 Storage</h4>
 <p>String values are stored as pointers in a <a class="el" href="classnlohmann_1_1basic__json.html">basic_json</a> type. That is, for any access to string values, a pointer of type <code>string_t*</code> must be dereferenced.</p>
 <dl class="section since"><dt>Since</dt><dd>version 1.0.0 </dd></dl>
@@ -7055,11 +7055,11 @@ template&lt;template&lt; typename, typename, typename... &gt; class ObjectType, 
 <p>@complexity Constant.</p>
 <p>@exceptionsafety No-throw guarantee: this member function never throws exceptions.</p>
 <p>@liveexample{The following code exemplifies <code><a class="el" href="classnlohmann_1_1basic__json.html#a2b9852390abb4b1ef5fac6984e2fc0f3" title="return whether value is a number">is_number()</a></code> for all JSON types.,is_number}</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classnlohmann_1_1basic__json.html#abac8af76067f1e8fdca9052882c74428">is_number_integer()</a> &ndash; check <a class="el" href="plugins_2netlist__simulator_2test_2_c_make_lists_8txt.html#a1adaff6b376a93d413495b3cad5c28b3">if</a> <a class="el" href="classnlohmann_1_1basic__json.html#adcf8ca5079f5db993820bf50036bf45d" title="access specified object element with default value">value</a> is an integer <a class="el" href="_apache_01_license_8txt.html#a93dfc1ef014b7dba3e8513461da78cbe">or</a> unsigned integer number </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classnlohmann_1_1basic__json.html#abac8af76067f1e8fdca9052882c74428">is_number_integer()</a> &ndash; check <a class="el" href="plugins_2liberty__parser_2test_2_c_make_lists_8txt.html#a90b6ae3c783e100816f532f7ab17e0ee">if</a> <a class="el" href="classnlohmann_1_1basic__json.html#adcf8ca5079f5db993820bf50036bf45d" title="access specified object element with default value">value</a> is an integer <a class="el" href="_apache_01_license_8txt.html#a93dfc1ef014b7dba3e8513461da78cbe">or</a> unsigned integer number </dd>
 <dd>
-<a class="el" href="classnlohmann_1_1basic__json.html#abc7378cba0613a78b9aad1c8e7044bb0">is_number_unsigned()</a> &ndash; check <a class="el" href="plugins_2netlist__simulator_2test_2_c_make_lists_8txt.html#a1adaff6b376a93d413495b3cad5c28b3">if</a> <a class="el" href="classnlohmann_1_1basic__json.html#adcf8ca5079f5db993820bf50036bf45d" title="access specified object element with default value">value</a> is an unsigned integer number </dd>
+<a class="el" href="classnlohmann_1_1basic__json.html#abc7378cba0613a78b9aad1c8e7044bb0">is_number_unsigned()</a> &ndash; check <a class="el" href="plugins_2liberty__parser_2test_2_c_make_lists_8txt.html#a90b6ae3c783e100816f532f7ab17e0ee">if</a> <a class="el" href="classnlohmann_1_1basic__json.html#adcf8ca5079f5db993820bf50036bf45d" title="access specified object element with default value">value</a> is an unsigned integer number </dd>
 <dd>
-<a class="el" href="classnlohmann_1_1basic__json.html#a33b4bf898b857c962e798fc7f6e86e70">is_number_float()</a> &ndash; check <a class="el" href="plugins_2netlist__simulator_2test_2_c_make_lists_8txt.html#a1adaff6b376a93d413495b3cad5c28b3">if</a> <a class="el" href="classnlohmann_1_1basic__json.html#adcf8ca5079f5db993820bf50036bf45d" title="access specified object element with default value">value</a> is a floating-point number</dd></dl>
+<a class="el" href="classnlohmann_1_1basic__json.html#a33b4bf898b857c962e798fc7f6e86e70">is_number_float()</a> &ndash; check <a class="el" href="plugins_2liberty__parser_2test_2_c_make_lists_8txt.html#a90b6ae3c783e100816f532f7ab17e0ee">if</a> <a class="el" href="classnlohmann_1_1basic__json.html#adcf8ca5079f5db993820bf50036bf45d" title="access specified object element with default value">value</a> is a floating-point number</dd></dl>
 <dl class="section since"><dt>Since</dt><dd>version 1.0.0 </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="json_8hpp_source.html#l16743">16743</a> of file <a class="el" href="json_8hpp_source.html">json.hpp</a>.</p>
@@ -7101,11 +7101,11 @@ template&lt;template&lt; typename, typename, typename... &gt; class ObjectType, 
 <p>@complexity Constant.</p>
 <p>@exceptionsafety No-throw guarantee: this member function never throws exceptions.</p>
 <p>@liveexample{The following code exemplifies <code><a class="el" href="classnlohmann_1_1basic__json.html#a33b4bf898b857c962e798fc7f6e86e70" title="return whether value is a floating-point number">is_number_float()</a></code> for all JSON types.,is_number_float}</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classnlohmann_1_1basic__json.html#a2b9852390abb4b1ef5fac6984e2fc0f3">is_number()</a> &ndash; check <a class="el" href="plugins_2netlist__simulator_2test_2_c_make_lists_8txt.html#a1adaff6b376a93d413495b3cad5c28b3">if</a> <a class="el" href="classnlohmann_1_1basic__json.html#adcf8ca5079f5db993820bf50036bf45d" title="access specified object element with default value">value</a> is number </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classnlohmann_1_1basic__json.html#a2b9852390abb4b1ef5fac6984e2fc0f3">is_number()</a> &ndash; check <a class="el" href="plugins_2liberty__parser_2test_2_c_make_lists_8txt.html#a90b6ae3c783e100816f532f7ab17e0ee">if</a> <a class="el" href="classnlohmann_1_1basic__json.html#adcf8ca5079f5db993820bf50036bf45d" title="access specified object element with default value">value</a> is number </dd>
 <dd>
-<a class="el" href="classnlohmann_1_1basic__json.html#abac8af76067f1e8fdca9052882c74428">is_number_integer()</a> &ndash; check <a class="el" href="plugins_2netlist__simulator_2test_2_c_make_lists_8txt.html#a1adaff6b376a93d413495b3cad5c28b3">if</a> <a class="el" href="classnlohmann_1_1basic__json.html#adcf8ca5079f5db993820bf50036bf45d" title="access specified object element with default value">value</a> is an integer number </dd>
+<a class="el" href="classnlohmann_1_1basic__json.html#abac8af76067f1e8fdca9052882c74428">is_number_integer()</a> &ndash; check <a class="el" href="plugins_2liberty__parser_2test_2_c_make_lists_8txt.html#a90b6ae3c783e100816f532f7ab17e0ee">if</a> <a class="el" href="classnlohmann_1_1basic__json.html#adcf8ca5079f5db993820bf50036bf45d" title="access specified object element with default value">value</a> is an integer number </dd>
 <dd>
-<a class="el" href="classnlohmann_1_1basic__json.html#abc7378cba0613a78b9aad1c8e7044bb0">is_number_unsigned()</a> &ndash; check <a class="el" href="plugins_2netlist__simulator_2test_2_c_make_lists_8txt.html#a1adaff6b376a93d413495b3cad5c28b3">if</a> <a class="el" href="classnlohmann_1_1basic__json.html#adcf8ca5079f5db993820bf50036bf45d" title="access specified object element with default value">value</a> is an unsigned integer number</dd></dl>
+<a class="el" href="classnlohmann_1_1basic__json.html#abc7378cba0613a78b9aad1c8e7044bb0">is_number_unsigned()</a> &ndash; check <a class="el" href="plugins_2liberty__parser_2test_2_c_make_lists_8txt.html#a90b6ae3c783e100816f532f7ab17e0ee">if</a> <a class="el" href="classnlohmann_1_1basic__json.html#adcf8ca5079f5db993820bf50036bf45d" title="access specified object element with default value">value</a> is an unsigned integer number</dd></dl>
 <dl class="section since"><dt>Since</dt><dd>version 1.0.0 </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="json_8hpp_source.html#l16828">16828</a> of file <a class="el" href="json_8hpp_source.html">json.hpp</a>.</p>
@@ -7147,11 +7147,11 @@ template&lt;template&lt; typename, typename, typename... &gt; class ObjectType, 
 <p>@complexity Constant.</p>
 <p>@exceptionsafety No-throw guarantee: this member function never throws exceptions.</p>
 <p>@liveexample{The following code exemplifies <code><a class="el" href="classnlohmann_1_1basic__json.html#abac8af76067f1e8fdca9052882c74428" title="return whether value is an integer number">is_number_integer()</a></code> for all JSON types.,is_number_integer}</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classnlohmann_1_1basic__json.html#a2b9852390abb4b1ef5fac6984e2fc0f3">is_number()</a> &ndash; check <a class="el" href="plugins_2netlist__simulator_2test_2_c_make_lists_8txt.html#a1adaff6b376a93d413495b3cad5c28b3">if</a> <a class="el" href="classnlohmann_1_1basic__json.html#adcf8ca5079f5db993820bf50036bf45d" title="access specified object element with default value">value</a> is a number </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classnlohmann_1_1basic__json.html#a2b9852390abb4b1ef5fac6984e2fc0f3">is_number()</a> &ndash; check <a class="el" href="plugins_2liberty__parser_2test_2_c_make_lists_8txt.html#a90b6ae3c783e100816f532f7ab17e0ee">if</a> <a class="el" href="classnlohmann_1_1basic__json.html#adcf8ca5079f5db993820bf50036bf45d" title="access specified object element with default value">value</a> is a number </dd>
 <dd>
-<a class="el" href="classnlohmann_1_1basic__json.html#abc7378cba0613a78b9aad1c8e7044bb0">is_number_unsigned()</a> &ndash; check <a class="el" href="plugins_2netlist__simulator_2test_2_c_make_lists_8txt.html#a1adaff6b376a93d413495b3cad5c28b3">if</a> <a class="el" href="classnlohmann_1_1basic__json.html#adcf8ca5079f5db993820bf50036bf45d" title="access specified object element with default value">value</a> is an unsigned integer number </dd>
+<a class="el" href="classnlohmann_1_1basic__json.html#abc7378cba0613a78b9aad1c8e7044bb0">is_number_unsigned()</a> &ndash; check <a class="el" href="plugins_2liberty__parser_2test_2_c_make_lists_8txt.html#a90b6ae3c783e100816f532f7ab17e0ee">if</a> <a class="el" href="classnlohmann_1_1basic__json.html#adcf8ca5079f5db993820bf50036bf45d" title="access specified object element with default value">value</a> is an unsigned integer number </dd>
 <dd>
-<a class="el" href="classnlohmann_1_1basic__json.html#a33b4bf898b857c962e798fc7f6e86e70">is_number_float()</a> &ndash; check <a class="el" href="plugins_2netlist__simulator_2test_2_c_make_lists_8txt.html#a1adaff6b376a93d413495b3cad5c28b3">if</a> <a class="el" href="classnlohmann_1_1basic__json.html#adcf8ca5079f5db993820bf50036bf45d" title="access specified object element with default value">value</a> is a floating-point number</dd></dl>
+<a class="el" href="classnlohmann_1_1basic__json.html#a33b4bf898b857c962e798fc7f6e86e70">is_number_float()</a> &ndash; check <a class="el" href="plugins_2liberty__parser_2test_2_c_make_lists_8txt.html#a90b6ae3c783e100816f532f7ab17e0ee">if</a> <a class="el" href="classnlohmann_1_1basic__json.html#adcf8ca5079f5db993820bf50036bf45d" title="access specified object element with default value">value</a> is a floating-point number</dd></dl>
 <dl class="section since"><dt>Since</dt><dd>version 1.0.0 </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="json_8hpp_source.html#l16772">16772</a> of file <a class="el" href="json_8hpp_source.html">json.hpp</a>.</p>
@@ -7193,11 +7193,11 @@ template&lt;template&lt; typename, typename, typename... &gt; class ObjectType, 
 <p>@complexity Constant.</p>
 <p>@exceptionsafety No-throw guarantee: this member function never throws exceptions.</p>
 <p>@liveexample{The following code exemplifies <code><a class="el" href="classnlohmann_1_1basic__json.html#abc7378cba0613a78b9aad1c8e7044bb0" title="return whether value is an unsigned integer number">is_number_unsigned()</a></code> for all JSON types.,is_number_unsigned}</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classnlohmann_1_1basic__json.html#a2b9852390abb4b1ef5fac6984e2fc0f3">is_number()</a> &ndash; check <a class="el" href="plugins_2netlist__simulator_2test_2_c_make_lists_8txt.html#a1adaff6b376a93d413495b3cad5c28b3">if</a> <a class="el" href="classnlohmann_1_1basic__json.html#adcf8ca5079f5db993820bf50036bf45d" title="access specified object element with default value">value</a> is a number </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classnlohmann_1_1basic__json.html#a2b9852390abb4b1ef5fac6984e2fc0f3">is_number()</a> &ndash; check <a class="el" href="plugins_2liberty__parser_2test_2_c_make_lists_8txt.html#a90b6ae3c783e100816f532f7ab17e0ee">if</a> <a class="el" href="classnlohmann_1_1basic__json.html#adcf8ca5079f5db993820bf50036bf45d" title="access specified object element with default value">value</a> is a number </dd>
 <dd>
-<a class="el" href="classnlohmann_1_1basic__json.html#abac8af76067f1e8fdca9052882c74428">is_number_integer()</a> &ndash; check <a class="el" href="plugins_2netlist__simulator_2test_2_c_make_lists_8txt.html#a1adaff6b376a93d413495b3cad5c28b3">if</a> <a class="el" href="classnlohmann_1_1basic__json.html#adcf8ca5079f5db993820bf50036bf45d" title="access specified object element with default value">value</a> is an integer <a class="el" href="_apache_01_license_8txt.html#a93dfc1ef014b7dba3e8513461da78cbe">or</a> unsigned integer number </dd>
+<a class="el" href="classnlohmann_1_1basic__json.html#abac8af76067f1e8fdca9052882c74428">is_number_integer()</a> &ndash; check <a class="el" href="plugins_2liberty__parser_2test_2_c_make_lists_8txt.html#a90b6ae3c783e100816f532f7ab17e0ee">if</a> <a class="el" href="classnlohmann_1_1basic__json.html#adcf8ca5079f5db993820bf50036bf45d" title="access specified object element with default value">value</a> is an integer <a class="el" href="_apache_01_license_8txt.html#a93dfc1ef014b7dba3e8513461da78cbe">or</a> unsigned integer number </dd>
 <dd>
-<a class="el" href="classnlohmann_1_1basic__json.html#a33b4bf898b857c962e798fc7f6e86e70">is_number_float()</a> &ndash; check <a class="el" href="plugins_2netlist__simulator_2test_2_c_make_lists_8txt.html#a1adaff6b376a93d413495b3cad5c28b3">if</a> <a class="el" href="classnlohmann_1_1basic__json.html#adcf8ca5079f5db993820bf50036bf45d" title="access specified object element with default value">value</a> is a floating-point number</dd></dl>
+<a class="el" href="classnlohmann_1_1basic__json.html#a33b4bf898b857c962e798fc7f6e86e70">is_number_float()</a> &ndash; check <a class="el" href="plugins_2liberty__parser_2test_2_c_make_lists_8txt.html#a90b6ae3c783e100816f532f7ab17e0ee">if</a> <a class="el" href="classnlohmann_1_1basic__json.html#adcf8ca5079f5db993820bf50036bf45d" title="access specified object element with default value">value</a> is a floating-point number</dd></dl>
 <dl class="section since"><dt>Since</dt><dd>version 2.0.0 </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="json_8hpp_source.html#l16800">16800</a> of file <a class="el" href="json_8hpp_source.html">json.hpp</a>.</p>
@@ -8870,7 +8870,7 @@ found"</code></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="json_8hpp_source.html#l22110">22110</a> of file <a class="el" href="json_8hpp_source.html">json.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="_apache_01_license_8txt.html#a44310e8a4338596c818c9c8cc6af8d1e">and()</a>, <a class="el" href="namespacenlohmann_1_1detail.html#a1ed8fc6239da25abcaf681d30ace4985af1f713c9e000f5d3f280adbd124df4f5">nlohmann::detail::array</a>, <a class="el" href="json_8hpp_source.html#l01947">nlohmann::detail::parse_error::create()</a>, <a class="el" href="json_8hpp_source.html#l02125">nlohmann::detail::out_of_range::create()</a>, <a class="el" href="json_8hpp_source.html#l02163">nlohmann::detail::other_error::create()</a>, <a class="el" href="json_8hpp_source.html#l01123">JSON_HEDLEY_LIKELY</a>, <a class="el" href="json_8hpp_source.html#l01124">JSON_HEDLEY_UNLIKELY</a>, <a class="el" href="json_8hpp_source.html#l01757">JSON_INTERNAL_CATCH</a>, <a class="el" href="json_8hpp_source.html#l01754">JSON_THROW</a>, <a class="el" href="json_8hpp_source.html#l01755">JSON_TRY</a>, <a class="el" href="namespacenlohmann_1_1detail.html#a1ed8fc6239da25abcaf681d30ace4985a37a6259cc0c1dae299a7866489dff0bd">nlohmann::detail::null</a>, <a class="el" href="namespacenlohmann_1_1detail.html#a1ed8fc6239da25abcaf681d30ace4985aa8cfde6331bd59eb2ac96f8911c4b666">nlohmann::detail::object</a>, <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00152">hal::gate_library_manager::remove()</a>, <a class="el" href="utils_8h_source.html#l00337">hal::utils::replace()</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
+<p class="reference">References <a class="el" href="_apache_01_license_8txt.html#a44310e8a4338596c818c9c8cc6af8d1e">and()</a>, <a class="el" href="namespacenlohmann_1_1detail.html#a1ed8fc6239da25abcaf681d30ace4985af1f713c9e000f5d3f280adbd124df4f5">nlohmann::detail::array</a>, <a class="el" href="json_8hpp_source.html#l01947">nlohmann::detail::parse_error::create()</a>, <a class="el" href="json_8hpp_source.html#l02125">nlohmann::detail::out_of_range::create()</a>, <a class="el" href="json_8hpp_source.html#l02163">nlohmann::detail::other_error::create()</a>, <a class="el" href="json_8hpp_source.html#l01123">JSON_HEDLEY_LIKELY</a>, <a class="el" href="json_8hpp_source.html#l01124">JSON_HEDLEY_UNLIKELY</a>, <a class="el" href="json_8hpp_source.html#l01757">JSON_INTERNAL_CATCH</a>, <a class="el" href="json_8hpp_source.html#l01754">JSON_THROW</a>, <a class="el" href="json_8hpp_source.html#l01755">JSON_TRY</a>, <a class="el" href="namespacenlohmann_1_1detail.html#a1ed8fc6239da25abcaf681d30ace4985a37a6259cc0c1dae299a7866489dff0bd">nlohmann::detail::null</a>, <a class="el" href="namespacenlohmann_1_1detail.html#a1ed8fc6239da25abcaf681d30ace4985aa8cfde6331bd59eb2ac96f8911c4b666">nlohmann::detail::object</a>, <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00164">hal::gate_library_manager::remove()</a>, <a class="el" href="utils_8h_source.html#l00357">hal::utils::replace()</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
 </div>
 </div>
@@ -9479,7 +9479,7 @@ template&lt;template&lt; typename, typename, typename... &gt; class ObjectType, 
 
 <p class="reference">References <a class="el" href="namespacenlohmann_1_1detail.html#a1ed8fc6239da25abcaf681d30ace4985af1f713c9e000f5d3f280adbd124df4f5">nlohmann::detail::array</a>, <a class="el" href="namespacenlohmann_1_1detail.html#a1ed8fc6239da25abcaf681d30ace4985a37a6259cc0c1dae299a7866489dff0bd">nlohmann::detail::null</a>, and <a class="el" href="namespacenlohmann_1_1detail.html#a1ed8fc6239da25abcaf681d30ace4985aa8cfde6331bd59eb2ac96f8911c4b666">nlohmann::detail::object</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="json_8hpp_source.html#l18467">nlohmann::basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt;::erase()</a>, <a class="el" href="plugin__dataflow_8cpp_source.html#l00099">hal::plugin_dataflow::execute()</a>, and <a class="el" href="json_8hpp_source.html#l19265">nlohmann::basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt;::max_size()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="json_8hpp_source.html#l18467">nlohmann::basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt;::erase()</a>, <a class="el" href="plugin__dataflow_8cpp_source.html#l00113">hal::plugin_dataflow::execute()</a>, and <a class="el" href="json_8hpp_source.html#l19265">nlohmann::basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt;::max_size()</a>.</p>
 
 </div>
 </div>
@@ -12592,7 +12592,7 @@ template&lt;template&lt; typename, typename, typename... &gt; class ObjectType, 
 <div class="ttc" id="a_apache_01_license_8txt_html_a40e859b9aaa2d8657227ee008c8a6c7b"><div class="ttname"><a href="_apache_01_license_8txt.html#a40e859b9aaa2d8657227ee008c8a6c7b">source</a></div><div class="ttdeci">Apache License January AND DISTRIBUTION Definitions License shall mean the terms and conditions for and distribution as defined by Sections through of this document Licensor shall mean the copyright owner or entity authorized by the copyright owner that is granting the License Legal Entity shall mean the union of the acting entity and all other entities that control are controlled by or are under common control with that entity For the purposes of this definition control direct or to cause the direction or management of such whether by contract or including but not limited to software source documentation source</div><div class="ttdef"><b>Definition:</b> <a href="_apache_01_license_8txt_source.html#l00028">Apache License.txt:28</a></div></div>
 <div class="ttc" id="aclassnlohmann_1_1basic__json_html_a73ae333487310e3302135189ce8ff5d8"><div class="ttname"><a href="classnlohmann_1_1basic__json.html#a73ae333487310e3302135189ce8ff5d8">nlohmann::basic_json::at</a></div><div class="ttdeci">reference at(size_type idx)</div><div class="ttdoc">access specified array element with bounds checking</div><div class="ttdef"><b>Definition:</b> <a href="json_8hpp_source.html#l17519">json.hpp:17519</a></div></div>
 <div class="ttc" id="aclassnlohmann_1_1basic__json_html_aed115142bd0c6c66c864700e0467df55"><div class="ttname"><a href="classnlohmann_1_1basic__json.html#aed115142bd0c6c66c864700e0467df55">nlohmann::basic_json::basic_json</a></div><div class="ttdeci">basic_json(const value_t v)</div><div class="ttdoc">create an empty value with a given type</div><div class="ttdef"><b>Definition:</b> <a href="json_8hpp_source.html#l15752">json.hpp:15752</a></div></div>
-<div class="ttc" id="anamespacehal_1_1gate__library__manager_html_a4fa2e4277540de2a0dcd6e9db517ed9b"><div class="ttname"><a href="namespacehal_1_1gate__library__manager.html#a4fa2e4277540de2a0dcd6e9db517ed9b">hal::gate_library_manager::remove</a></div><div class="ttdeci">void remove(std::filesystem::path file_path)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00152">gate_library_manager.cpp:152</a></div></div>
+<div class="ttc" id="anamespacehal_1_1gate__library__manager_html_a4fa2e4277540de2a0dcd6e9db517ed9b"><div class="ttname"><a href="namespacehal_1_1gate__library__manager.html#a4fa2e4277540de2a0dcd6e9db517ed9b">hal::gate_library_manager::remove</a></div><div class="ttdeci">void remove(std::filesystem::path file_path)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00164">gate_library_manager.cpp:164</a></div></div>
 <div class="ttc" id="anamespacehal_html_a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3"><div class="ttname"><a href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::AsyncSetResetBehavior::T</a></div><div class="ttdeci">@ T</div></div>
 <div class="ttc" id="aplugins_2hgl__parser_2test_2_c_make_lists_8txt_html_a90b6ae3c783e100816f532f7ab17e0ee"><div class="ttname"><a href="plugins_2hgl__parser_2test_2_c_make_lists_8txt.html#a90b6ae3c783e100816f532f7ab17e0ee">if</a></div><div class="ttdeci">if(BUILD_TESTS) configure_file($</div><div class="ttdef"><b>Definition:</b> <a href="plugins_2hgl__parser_2test_2_c_make_lists_8txt_source.html#l00001">CMakeLists.txt:1</a></div></div>
 <div class="ttc" id="aclassnlohmann_1_1basic__json_html_a543bd5f7490de54c875b2c0912dc9a49"><div class="ttname"><a href="classnlohmann_1_1basic__json.html#a543bd5f7490de54c875b2c0912dc9a49">nlohmann::basic_json::diff</a></div><div class="ttdeci">static basic_json diff(const basic_json &amp;source, const basic_json &amp;target, const std::string &amp;path=&quot;&quot;)</div><div class="ttdoc">creates a diff as a JSON patch</div><div class="ttdef"><b>Definition:</b> <a href="json_8hpp_source.html#l22406">json.hpp:22406</a></div></div>
@@ -12605,7 +12605,7 @@ template&lt;template&lt; typename, typename, typename... &gt; class ObjectType, 
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacenlohmann.html">nlohmann</a></li><li class="navelem"><a class="el" href="classnlohmann_1_1basic__json.html">basic_json</a></li>
-    <li class="footer">Generated on Thu Jun 16 2022 08:27:31 for HAL by
+    <li class="footer">Generated on Thu Jun 16 2022 09:31:19 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

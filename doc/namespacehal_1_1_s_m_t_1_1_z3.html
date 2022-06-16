@@ -91,21 +91,21 @@ $(document).ready(function(){initNavTree('namespacehal_1_1_s_m_t_1_1_z3.html',''
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a7da7431cdf4aa8a52dede7a58d12ed50"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; bool, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_z3.html#a7da7431cdf4aa8a52dede7a58d12ed50">query_binary_path</a> ()</td></tr>
-<tr class="memdesc:a7da7431cdf4aa8a52dede7a58d12ed50"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether a <a class="el" href="namespacehal_1_1_s_m_t_1_1_z3.html">Z3</a> binary is available on the system.  <a href="namespacehal_1_1_s_m_t_1_1_z3.html#a7da7431cdf4aa8a52dede7a58d12ed50">More...</a><br /></td></tr>
-<tr class="separator:a7da7431cdf4aa8a52dede7a58d12ed50"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad06cae948a98930c7554a1a8f4963a97"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; bool, bool, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_z3.html#ad06cae948a98930c7554a1a8f4963a97">query</a> (std::string input, const <a class="el" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a> &amp;config)</td></tr>
-<tr class="separator:ad06cae948a98930c7554a1a8f4963a97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec83d53e618e88eb356a2a34c5b0bd56"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_z3.html#aec83d53e618e88eb356a2a34c5b0bd56">query_binary_path</a> ()</td></tr>
+<tr class="memdesc:aec83d53e618e88eb356a2a34c5b0bd56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether a <a class="el" href="namespacehal_1_1_s_m_t_1_1_z3.html">Z3</a> binary is available on the system.  <a href="namespacehal_1_1_s_m_t_1_1_z3.html#aec83d53e618e88eb356a2a34c5b0bd56">More...</a><br /></td></tr>
+<tr class="separator:aec83d53e618e88eb356a2a34c5b0bd56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86d8a69e14b8943370e780aa47e76d8d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::tuple&lt; bool, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_z3.html#a86d8a69e14b8943370e780aa47e76d8d">query</a> (std::string input, const <a class="el" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a> &amp;config)</td></tr>
+<tr class="separator:a86d8a69e14b8943370e780aa47e76d8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="ad06cae948a98930c7554a1a8f4963a97"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad06cae948a98930c7554a1a8f4963a97">&#9670;&nbsp;</a></span>query()</h2>
+<a id="a86d8a69e14b8943370e780aa47e76d8d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86d8a69e14b8943370e780aa47e76d8d">&#9670;&nbsp;</a></span>query()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::tuple&lt;bool, bool, std::string&gt; hal::SMT::Z3::query </td>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt;std::tuple&lt;bool, std::string&gt; &gt; hal::SMT::Z3::query </td>
           <td>(</td>
           <td class="paramtype">std::string&#160;</td>
           <td class="paramname"><em>input</em>, </td>
@@ -131,25 +131,24 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>(1) status (true on success, false otherwise), <br  />
- (2) was_killed (true in case process was killed), (3) stdout Stdout of <a class="el" href="namespacehal_1_1_s_m_t_1_1_z3.html">Z3</a> process. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Ok() and status with (0) was_killed (true in case process was killed), and (1) stdout Stdout of <a class="el" href="namespacehal_1_1_s_m_t_1_1_z3.html">Z3</a> process on success, Err() otherwise </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00044">44</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00045">45</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="process_8h_source.html#l00757">subprocess::PIPE</a>, <a class="el" href="solver_8cpp_source.html#l00016">query_binary_path()</a>, <a class="el" href="process_8h_source.html#l01287">subprocess::Popen::send()</a>, <a class="el" href="types_8h_source.html#l00063">hal::SMT::QueryConfig::timeout_in_seconds</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00055">ERR_APPEND</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00047">OK</a>, <a class="el" href="process_8h_source.html#l00757">subprocess::PIPE</a>, <a class="el" href="solver_8cpp_source.html#l00017">query_binary_path()</a>, <a class="el" href="process_8h_source.html#l01287">subprocess::Popen::send()</a>, <a class="el" href="types_8h_source.html#l00064">hal::SMT::QueryConfig::timeout_in_seconds</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00175">hal::SMT::Solver::query_local()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00197">hal::SMT::Solver::query_local()</a>.</p>
 
 </div>
 </div>
-<a id="a7da7431cdf4aa8a52dede7a58d12ed50"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7da7431cdf4aa8a52dede7a58d12ed50">&#9670;&nbsp;</a></span>query_binary_path()</h2>
+<a id="aec83d53e618e88eb356a2a34c5b0bd56"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec83d53e618e88eb356a2a34c5b0bd56">&#9670;&nbsp;</a></span>query_binary_path()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::tuple&lt;bool, std::string&gt; hal::SMT::Z3::query_binary_path </td>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt;std::string&gt; hal::SMT::Z3::query_binary_path </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -159,9 +158,11 @@ Functions</h2></td></tr>
 
 <p>Checks whether a <a class="el" href="namespacehal_1_1_s_m_t_1_1_z3.html">Z3</a> binary is available on the system. </p>
 
-<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00016">16</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00017">17</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00156">hal::SMT::Solver::has_local_solver_for()</a>, and <a class="el" href="solver_8cpp_source.html#l00044">query()</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00051">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00047">OK</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00155">hal::SMT::Solver::has_local_solver_for()</a>, and <a class="el" href="solver_8cpp_source.html#l00045">query()</a>.</p>
 
 </div>
 </div>
@@ -171,7 +172,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a></li><li class="navelem"><a class="el" href="namespacehal_1_1_s_m_t_1_1_z3.html">Z3</a></li>
-    <li class="footer">Generated on Thu Jun 16 2022 08:27:30 for HAL by
+    <li class="footer">Generated on Thu Jun 16 2022 09:31:18 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

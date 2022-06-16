@@ -91,8 +91,8 @@ $(document).ready(function(){initNavTree('namespacehal_1_1netlist__serializer.ht
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a85f064e341bdd5a3968ef10be72b2fe8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__serializer.html#a85f064e341bdd5a3968ef10be72b2fe8">serialize_to_file</a> (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl, const std::filesystem::path &amp;hal_file)</td></tr>
-<tr class="separator:a85f064e341bdd5a3968ef10be72b2fe8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71a6e82f53ef9ed518f35c56f396e838"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__serializer.html#a71a6e82f53ef9ed518f35c56f396e838">serialize_to_file</a> (const <a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl, const std::filesystem::path &amp;hal_file)</td></tr>
+<tr class="separator:a71a6e82f53ef9ed518f35c56f396e838"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4a821370b9753da547dcbe238a249f97"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classhal_1_1_netlist.html">Netlist</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__serializer.html#a4a821370b9753da547dcbe238a249f97">deserialize_from_file</a> (const std::filesystem::path &amp;hal_file)</td></tr>
 <tr class="separator:a4a821370b9753da547dcbe238a249f97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -121,16 +121,16 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The deserialized netlist. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00679">679</a> of file <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html">netlist_serializer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00717">717</a> of file <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html">netlist_serializer.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87">hal::buffer</a>, <a class="el" href="hal__file__manager_8cpp_source.html#l00040">hal::hal_file_manager::deserialize()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00028">DURATION</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, <a class="el" href="log_8h_source.html#l00067">log_info</a>, <a class="el" href="log_8h_source.html#l00073">log_warning</a>, and <a class="el" href="test__multiple_8py_source.html#l00029">test_multiple::netlist</a>.</p>
+<p class="reference">References <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87">hal::buffer</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00027">DURATION</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, <a class="el" href="log_8h_source.html#l00067">log_info</a>, <a class="el" href="log_8h_source.html#l00073">log_warning</a>, <a class="el" href="test__multiple_8py_source.html#l00029">test_multiple::netlist</a>, and <a class="el" href="project__manager_8cpp_source.html#l00023">SERIALIZATION_FORMAT_VERSION</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2netlist__factory_8cpp_source.html#l00046">hal::netlist_factory::load_netlist()</a>, <a class="el" href="python__bindings_2bindings_2netlist__serializer_8cpp_source.html#l00005">hal::netlist_serializer_init()</a>, and <a class="el" href="simulator__test_8cpp_source.html#l00639">hal::TEST_F()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2netlist__factory_8cpp_source.html#l00048">hal::netlist_factory::load_netlist()</a>, and <a class="el" href="python__bindings_2bindings_2netlist__serializer_8cpp_source.html#l00005">hal::netlist_serializer_init()</a>.</p>
 
 </div>
 </div>
-<a id="a85f064e341bdd5a3968ef10be72b2fe8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a85f064e341bdd5a3968ef10be72b2fe8">&#9670;&nbsp;</a></span>serialize_to_file()</h2>
+<a id="a71a6e82f53ef9ed518f35c56f396e838"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71a6e82f53ef9ed518f35c56f396e838">&#9670;&nbsp;</a></span>serialize_to_file()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -138,7 +138,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="arch__win_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> bool hal::netlist_serializer::serialize_to_file </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classhal_1_1_netlist.html">Netlist</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="classhal_1_1_netlist.html">Netlist</a> *&#160;</td>
           <td class="paramname"><em>netlist</em>, </td>
         </tr>
         <tr>
@@ -164,11 +164,11 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00632">632</a> of file <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html">netlist_serializer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00671">671</a> of file <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html">netlist_serializer.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00028">DURATION</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, <a class="el" href="log_8h_source.html#l00067">log_info</a>, and <a class="el" href="hal__file__manager_8cpp_source.html#l00027">hal::hal_file_manager::serialize()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00027">DURATION</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, <a class="el" href="log_8h_source.html#l00067">log_info</a>, and <a class="el" href="project__manager_8cpp_source.html#l00023">SERIALIZATION_FORMAT_VERSION</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="file__manager_8cpp_source.html#l00088">hal::FileManager::autosave()</a>, <a class="el" href="python__bindings_2bindings_2netlist__serializer_8cpp_source.html#l00005">hal::netlist_serializer_init()</a>, and <a class="el" href="simulator__test_8cpp_source.html#l00639">hal::TEST_F()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2netlist__serializer_8cpp_source.html#l00005">hal::netlist_serializer_init()</a>, and <a class="el" href="project__manager_8cpp_source.html#l00113">hal::ProjectManager::serialize_project()</a>.</p>
 
 </div>
 </div>
@@ -178,7 +178,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1netlist__serializer.html">netlist_serializer</a></li>
-    <li class="footer">Generated on Thu Jun 16 2022 08:27:30 for HAL by
+    <li class="footer">Generated on Thu Jun 16 2022 09:31:18 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

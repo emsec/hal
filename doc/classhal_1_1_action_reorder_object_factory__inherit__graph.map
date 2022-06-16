@@ -1,0 +1,4 @@
+<map id="hal::ActionReorderObjectFactory" name="hal::ActionReorderObjectFactory">
+<area shape="rect" id="node1" title="UserActionFactory for ActionReorderObject." alt="" coords="5,160,233,267"/>
+<area shape="rect" id="node2" href="$classhal_1_1_user_action_factory.html" title="The UserActionFactory is the abstract base class for registration." alt="" coords="35,5,203,112"/>
+</map>

@@ -97,8 +97,10 @@ Functions</h2></td></tr>
 <tr class="separator:a74a2d2b0a04f6ead59258aa0875c654d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a734d62d90f50fbaf58f7a7d1c7a00d94"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classhal_1_1_netlist.html">Netlist</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#a734d62d90f50fbaf58f7a7d1c7a00d94">load_netlist</a> (const std::filesystem::path &amp;netlist_file)</td></tr>
 <tr class="separator:a734d62d90f50fbaf58f7a7d1c7a00d94"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3cf5163b92f072b1365e40df61da054b"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classhal_1_1_netlist.html">Netlist</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#a3cf5163b92f072b1365e40df61da054b">load_netlist</a> (const <a class="el" href="classhal_1_1_program_arguments.html">ProgramArguments</a> &amp;args)</td></tr>
-<tr class="separator:a3cf5163b92f072b1365e40df61da054b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29f519d89089b47622ae2eeaf1e76a13"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classhal_1_1_netlist.html">Netlist</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#a29f519d89089b47622ae2eeaf1e76a13">load_hal_project</a> (const std::filesystem::path &amp;project_dir)</td></tr>
+<tr class="separator:a29f519d89089b47622ae2eeaf1e76a13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55e30d51a833c10779ce28eb7a398e52"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classhal_1_1_netlist.html">Netlist</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#a55e30d51a833c10779ce28eb7a398e52">load_netlist</a> (const <a class="el" href="classhal_1_1_project_directory.html">ProjectDirectory</a> &amp;pdir, const <a class="el" href="classhal_1_1_program_arguments.html">ProgramArguments</a> &amp;args)</td></tr>
+<tr class="separator:a55e30d51a833c10779ce28eb7a398e52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adde865496a1d7f325a4801e3cbfd8533"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::unique_ptr&lt; <a class="el" href="classhal_1_1_netlist.html">Netlist</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#adde865496a1d7f325a4801e3cbfd8533">load_netlists</a> (const std::filesystem::path &amp;netlist_file)</td></tr>
 <tr class="separator:adde865496a1d7f325a4801e3cbfd8533"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -127,16 +129,48 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The netlist on success, nullptr otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2netlist__factory_8cpp_source.html#l00017">17</a> of file <a class="el" href="netlist_2netlist__factory_8cpp_source.html">netlist_factory.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2netlist__factory_8cpp_source.html#l00019">19</a> of file <a class="el" href="netlist_2netlist__factory_8cpp_source.html">netlist_factory.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="log_8h_source.html#l00077">log_critical</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00170">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00393">hal::netlist_utils::get_partial_netlist()</a>, <a class="el" href="main__window_8cpp_source.html#l00534">hal::MainWindow::handleActionNew()</a>, <a class="el" href="src_2verilog__parser_8cpp_source.html#l00188">hal::VerilogParser::instantiate()</a>, <a class="el" href="src_2vhdl__parser_8cpp_source.html#l00169">hal::VHDLParser::instantiate()</a>, and <a class="el" href="python__bindings_2bindings_2netlist__factory_8cpp_source.html#l00005">hal::netlist_factory_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00260">hal::netlist_utils::get_partial_netlist()</a>, <a class="el" href="main__window_8cpp_source.html#l00540">hal::MainWindow::handleActionNew()</a>, <a class="el" href="src_2verilog__parser_8cpp_source.html#l00634">hal::VerilogParser::instantiate()</a>, <a class="el" href="src_2vhdl__parser_8cpp_source.html#l00201">hal::VHDLParser::instantiate()</a>, and <a class="el" href="python__bindings_2bindings_2netlist__factory_8cpp_source.html#l00005">hal::netlist_factory_init()</a>.</p>
 
 </div>
 </div>
-<a id="a3cf5163b92f072b1365e40df61da054b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3cf5163b92f072b1365e40df61da054b">&#9670;&nbsp;</a></span>load_netlist() <span class="overload">[1/3]</span></h2>
+<a id="a29f519d89089b47622ae2eeaf1e76a13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29f519d89089b47622ae2eeaf1e76a13">&#9670;&nbsp;</a></span>load_hal_project()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="arch__win_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> std::unique_ptr&lt; <a class="el" href="classhal_1_1_netlist.html">Netlist</a> &gt; hal::netlist_factory::load_hal_project </td>
+          <td>(</td>
+          <td class="paramtype">const std::filesystem::path &amp;&#160;</td>
+          <td class="paramname"><em>project_dir</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Create a netlist from the given hal project.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">project_dir</td><td>- Path to the hal project directory. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The netlist on success, nullptr otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2netlist__factory_8cpp_source.html#l00059">59</a> of file <a class="el" href="netlist_2netlist__factory_8cpp_source.html">netlist_factory.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="project__manager_8cpp_source.html#l00139">hal::ProjectManager::get_netlist()</a>, <a class="el" href="project__manager_8cpp_source.html#l00034">hal::ProjectManager::instance()</a>, <a class="el" href="log_8h_source.html#l00077">log_critical</a>, and <a class="el" href="project__manager_8cpp_source.html#l00064">hal::ProjectManager::open_project()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2netlist__factory_8cpp_source.html#l00005">hal::netlist_factory_init()</a>.</p>
+
+</div>
+</div>
+<a id="a55e30d51a833c10779ce28eb7a398e52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55e30d51a833c10779ce28eb7a398e52">&#9670;&nbsp;</a></span>load_netlist() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -144,9 +178,19 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="arch__win_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> std::unique_ptr&lt; <a class="el" href="classhal_1_1_netlist.html">Netlist</a> &gt; hal::netlist_factory::load_netlist </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhal_1_1_program_arguments.html">ProgramArguments</a> &amp;&#160;</td>
-          <td class="paramname"><em>args</em></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="classhal_1_1_project_directory.html">ProjectDirectory</a> &amp;&#160;</td>
+          <td class="paramname"><em>pdir</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const <a class="el" href="classhal_1_1_program_arguments.html">ProgramArguments</a> &amp;&#160;</td>
+          <td class="paramname"><em>args</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -160,9 +204,9 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The netlist on success, nullptr otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2netlist__factory_8cpp_source.html#l00057">57</a> of file <a class="el" href="netlist_2netlist__factory_8cpp_source.html">netlist_factory.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2netlist__factory_8cpp_source.html#l00078">78</a> of file <a class="el" href="netlist_2netlist__factory_8cpp_source.html">netlist_factory.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="control_8py_source.html#l00033">control::args</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00679">hal::netlist_serializer::deserialize_from_file()</a>, <a class="el" href="log_8h_source.html#l00077">log_critical</a>, and <a class="el" href="netlist__parser__manager_8cpp_source.html#l00165">hal::netlist_parser_manager::parse()</a>.</p>
+<p class="reference">References <a class="el" href="control_8py_source.html#l00033">control::args</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00717">hal::netlist_serializer::deserialize_from_file()</a>, <a class="el" href="project__directory_8cpp_source.html#l00037">hal::ProjectDirectory::get_default_filename()</a>, <a class="el" href="log_8h_source.html#l00077">log_critical</a>, and <a class="el" href="netlist__parser__manager_8cpp_source.html#l00184">hal::netlist_parser_manager::parse()</a>.</p>
 
 </div>
 </div>
@@ -184,15 +228,15 @@ Functions</h2></td></tr>
 <p>Create a netlist from the given '.hal' file.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">netlist_file</td><td>- Path to the '.hal' file. file. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">netlist_file</td><td>- Path to the '.hal' file. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The netlist on success, nullptr otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2netlist__factory_8cpp_source.html#l00046">46</a> of file <a class="el" href="netlist_2netlist__factory_8cpp_source.html">netlist_factory.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2netlist__factory_8cpp_source.html#l00048">48</a> of file <a class="el" href="netlist_2netlist__factory_8cpp_source.html">netlist_factory.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00679">hal::netlist_serializer::deserialize_from_file()</a>, and <a class="el" href="log_8h_source.html#l00077">log_critical</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00717">hal::netlist_serializer::deserialize_from_file()</a>, and <a class="el" href="log_8h_source.html#l00077">log_critical</a>.</p>
 
 </div>
 </div>
@@ -231,11 +275,11 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The netlist on success, nullptr otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2netlist__factory_8cpp_source.html#l00028">28</a> of file <a class="el" href="netlist_2netlist__factory_8cpp_source.html">netlist_factory.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2netlist__factory_8cpp_source.html#l00030">30</a> of file <a class="el" href="netlist_2netlist__factory_8cpp_source.html">netlist_factory.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00071">hal::gate_library_manager::load()</a>, <a class="el" href="log_8h_source.html#l00077">log_critical</a>, and <a class="el" href="netlist__parser__manager_8cpp_source.html#l00165">hal::netlist_parser_manager::parse()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00071">hal::gate_library_manager::load()</a>, <a class="el" href="log_8h_source.html#l00077">log_critical</a>, and <a class="el" href="netlist__parser__manager_8cpp_source.html#l00184">hal::netlist_parser_manager::parse()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2netlist__factory_8cpp_source.html#l00005">hal::netlist_factory_init()</a>, and <a class="el" href="file__manager_8cpp_source.html#l00166">hal::FileManager::openFile()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="file__manager_8cpp_source.html#l00332">hal::FileManager::deprecatedOpenFile()</a>, and <a class="el" href="python__bindings_2bindings_2netlist__factory_8cpp_source.html#l00005">hal::netlist_factory_init()</a>.</p>
 
 </div>
 </div>
@@ -263,11 +307,11 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A vector of netlists. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2netlist__factory_8cpp_source.html#l00083">83</a> of file <a class="el" href="netlist_2netlist__factory_8cpp_source.html">netlist_factory.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2netlist__factory_8cpp_source.html#l00100">100</a> of file <a class="el" href="netlist_2netlist__factory_8cpp_source.html">netlist_factory.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="log_8h_source.html#l00077">log_critical</a>, and <a class="el" href="netlist__parser__manager_8cpp_source.html#l00207">hal::netlist_parser_manager::parse_all()</a>.</p>
+<p class="reference">References <a class="el" href="log_8h_source.html#l00077">log_critical</a>, and <a class="el" href="netlist__parser__manager_8cpp_source.html#l00226">hal::netlist_parser_manager::parse_all()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2netlist__factory_8cpp_source.html#l00005">hal::netlist_factory_init()</a>, and <a class="el" href="file__manager_8cpp_source.html#l00166">hal::FileManager::openFile()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="file__manager_8cpp_source.html#l00332">hal::FileManager::deprecatedOpenFile()</a>, and <a class="el" href="python__bindings_2bindings_2netlist__factory_8cpp_source.html#l00005">hal::netlist_factory_init()</a>.</p>
 
 </div>
 </div>
@@ -277,7 +321,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1netlist__factory.html">netlist_factory</a></li>
-    <li class="footer">Generated on Thu Jun 16 2022 08:27:30 for HAL by
+    <li class="footer">Generated on Thu Jun 16 2022 09:31:18 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

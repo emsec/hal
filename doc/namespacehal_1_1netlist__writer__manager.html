@@ -102,9 +102,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a69b04c9bcb90a1aa9ff6743c8b38d68d"><td class="memItemLeft" align="right" valign="top">const std::unordered_map&lt; std::string, std::vector&lt; std::string &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__writer__manager.html#a69b04c9bcb90a1aa9ff6743c8b38d68d">get_writer_extensions</a> ()</td></tr>
 <tr class="memdesc:a69b04c9bcb90a1aa9ff6743c8b38d68d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the extensions for which extensions have been registered.  <a href="namespacehal_1_1netlist__writer__manager.html#a69b04c9bcb90a1aa9ff6743c8b38d68d">More...</a><br /></td></tr>
 <tr class="separator:a69b04c9bcb90a1aa9ff6743c8b38d68d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada281488258c1fb92351e44a9d8ff60c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__writer__manager.html#ada281488258c1fb92351e44a9d8ff60c">register_writer</a> (const std::string &amp;name, const <a class="el" href="namespacehal_1_1netlist__writer__manager.html#a65494ac5303bc472d87e8be3b4a44505">WriterFactory</a> &amp;writer_factory, const std::vector&lt; std::string &gt; &amp;supported_file_extensions)</td></tr>
+<tr class="memitem:ada281488258c1fb92351e44a9d8ff60c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__writer__manager.html#ada281488258c1fb92351e44a9d8ff60c">register_writer</a> (const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, const <a class="el" href="namespacehal_1_1netlist__writer__manager.html#a65494ac5303bc472d87e8be3b4a44505">WriterFactory</a> &amp;writer_factory, const std::vector&lt; std::string &gt; &amp;supported_file_extensions)</td></tr>
 <tr class="separator:ada281488258c1fb92351e44a9d8ff60c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa30fb9e667974f36773a5b4de75a7fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__writer__manager.html#aaa30fb9e667974f36773a5b4de75a7fe">unregister_writer</a> (const std::string &amp;name)</td></tr>
+<tr class="memitem:aaa30fb9e667974f36773a5b4de75a7fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__writer__manager.html#aaa30fb9e667974f36773a5b4de75a7fe">unregister_writer</a> (const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
 <tr class="separator:aaa30fb9e667974f36773a5b4de75a7fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4c58af2ca2dfd952511f978dafec685"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__writer__manager.html#ab4c58af2ca2dfd952511f978dafec685">write</a> (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *netlist, const <a class="el" href="classhal_1_1_program_arguments.html">ProgramArguments</a> &amp;args)</td></tr>
 <tr class="separator:ab4c58af2ca2dfd952511f978dafec685"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -219,7 +219,7 @@ Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2netlist__writer_2netlist__writer__manager_8cpp_source.html#l00052">52</a> of file <a class="el" href="netlist_2netlist__writer_2netlist__writer__manager_8cpp_source.html">netlist_writer_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="log_8h_source.html#l00067">log_info</a>, <a class="el" href="log_8h_source.html#l00073">log_warning</a>, <a class="el" href="utils_8h_source.html#l00432">hal::utils::to_lower()</a>, and <a class="el" href="utils_8h_source.html#l00313">hal::utils::trim()</a>.</p>
+<p class="reference">References <a class="el" href="log_8h_source.html#l00067">log_info</a>, <a class="el" href="log_8h_source.html#l00073">log_warning</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>, <a class="el" href="utils_8h_source.html#l00452">hal::utils::to_lower()</a>, and <a class="el" href="utils_8h_source.html#l00333">hal::utils::trim()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugin__verilog__writer_8cpp_source.html#l00023">hal::VerilogWriterPlugin::on_load()</a>.</p>
 
@@ -250,7 +250,7 @@ Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2netlist__writer_2netlist__writer__manager_8cpp_source.html#l00073">73</a> of file <a class="el" href="netlist_2netlist__writer_2netlist__writer__manager_8cpp_source.html">netlist_writer_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="log_8h_source.html#l00067">log_info</a>.</p>
+<p class="reference">References <a class="el" href="log_8h_source.html#l00067">log_info</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugin__verilog__writer_8cpp_source.html#l00028">hal::VerilogWriterPlugin::on_unload()</a>.</p>
 
@@ -346,7 +346,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1netlist__writer__manager.html">netlist_writer_manager</a></li>
-    <li class="footer">Generated on Thu Jun 16 2022 08:27:30 for HAL by
+    <li class="footer">Generated on Thu Jun 16 2022 09:31:18 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

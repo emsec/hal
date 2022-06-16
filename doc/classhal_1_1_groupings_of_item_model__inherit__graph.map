@@ -1,0 +1,5 @@
+<map id="hal::GroupingsOfItemModel" name="hal::GroupingsOfItemModel">
+<area shape="rect" id="node1" title="A TableModel to store all Groupings that contain a specified Gate, Net or Module." alt="" coords="5,564,207,715"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstracttablemodel.html" title=" " alt="" coords="8,365,204,516"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstractitemmodel.html" title=" " alt="" coords="10,5,202,317"/>
+</map>

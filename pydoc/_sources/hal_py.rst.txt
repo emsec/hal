@@ -18,6 +18,8 @@ HAL Core Documentation
    grouping
    gui_plugin_interface
    module
+   module_pin
+   module_pin_group
    net
    netlist
    netlist_factory
@@ -28,3 +30,4 @@ HAL Core Documentation
    pin_direction
    pin_type
    plugin_manager
+   smt

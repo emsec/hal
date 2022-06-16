@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Endpoint &mdash; hal_py v3.3.0-107-g3f433b111 documentation</title>
+  <title>Endpoint &mdash; hal_py v3.3.0-646-g405e5ab4e documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.3.0-107-g3f433b111
+                v3.3.0-646-g405e5ab4e
               </div>
             
           
@@ -100,6 +100,8 @@
 <li class="toctree-l2"><a class="reference internal" href="grouping.html">Grouping</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gui_plugin_interface.html">GUI Plugin Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module.html">Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_pin.html">Module Pin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_pin_group.html">Module Pin Group</a></li>
 <li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist.html">Netlist</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_factory.html">Netlist Factory</a></li>
@@ -110,6 +112,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pin_direction.html">Pin Direction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_type.html">Pin Type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smt.html">SMT</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="plugins.html">HAL Plugins Documentation</a></li>
@@ -192,6 +195,20 @@
 </dd></dl>
 
 <dl class="attribute">
+<dt id="hal_py.Endpoint.destination_pin">
+<code class="descname">destination_pin</code><a class="headerlink" href="#hal_py.Endpoint.destination_pin" title="Permalink to this definition">¶</a></dt>
+<dd><p>True if the pin of the endpoint is a destination (input) pin, False otherwise.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="hal_py.Endpoint.gate">
 <code class="descname">gate</code><a class="headerlink" href="#hal_py.Endpoint.gate" title="Permalink to this definition">¶</a></dt>
 <dd><p>The gate associated with the endpoint.</p>
@@ -253,20 +270,6 @@
 </table>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="hal_py.Endpoint.is_destination">
-<code class="descname">is_destination</code><a class="headerlink" href="#hal_py.Endpoint.is_destination" title="Permalink to this definition">¶</a></dt>
-<dd><p>True if the pin of the endpoint is a destination (input) pin, false otherwise.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 <dl class="method">
 <dt id="hal_py.Endpoint.is_destination_pin">
 <code class="descname">is_destination_pin</code><span class="sig-paren">(</span><em>self: hal_py.Endpoint</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Endpoint.is_destination_pin" title="Permalink to this definition">¶</a></dt>
@@ -275,23 +278,9 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the endpoint is an destination (input) pin, false otherwise.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the endpoint is an destination (input) pin, False otherwise.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="hal_py.Endpoint.is_source">
-<code class="descname">is_source</code><a class="headerlink" href="#hal_py.Endpoint.is_source" title="Permalink to this definition">¶</a></dt>
-<dd><p>True if the pin of the endpoint is a source (output) pin, false otherwise.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
 </tr>
 </tbody>
 </table>
@@ -305,7 +294,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the endpoint is an source (output) pin, false otherwise.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the endpoint is an source (output) pin, False otherwise.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
 </tr>
@@ -336,6 +325,20 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Endpoint.source_pin">
+<code class="descname">source_pin</code><a class="headerlink" href="#hal_py.Endpoint.source_pin" title="Permalink to this definition">¶</a></dt>
+<dd><p>True if the pin of the endpoint is a source (output) pin, False otherwise.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
 </tr>
 </tbody>
 </table>

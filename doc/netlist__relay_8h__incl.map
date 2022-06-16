@@ -1,9 +1,12 @@
 <map id="/home/runner/work/hal/hal/plugins/gui/include/gui/netlist_relay/netlist_relay.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/netlist_relay/netlist_relay.h">
-<area shape="rect" id="node1" title=" " alt="" coords="284,5,460,76"/>
-<area shape="rect" id="node2" href="$event__handler_8h.html" title=" " alt="" coords="133,124,318,165"/>
-<area shape="rect" id="node6" title=" " alt="" coords="342,131,402,158"/>
-<area shape="rect" id="node7" title=" " alt="" coords="427,131,501,158"/>
+<area shape="rect" id="node1" title=" " alt="" coords="431,5,607,76"/>
+<area shape="rect" id="node2" href="$event__handler_8h.html" title=" " alt="" coords="146,124,331,165"/>
+<area shape="rect" id="node6" href="$grouping__color__serializer_8h.html" title=" " alt="" coords="369,124,533,165"/>
+<area shape="rect" id="node9" title=" " alt="" coords="557,131,617,158"/>
+<area shape="rect" id="node10" title=" " alt="" coords="641,131,716,158"/>
 <area shape="rect" id="node3" href="$callback__hook_8h.html" title=" " alt="" coords="5,213,136,255"/>
 <area shape="rect" id="node4" href="$enums_8h.html" title=" " alt="" coords="160,213,291,255"/>
 <area shape="rect" id="node5" title=" " alt="" coords="236,303,316,329"/>
+<area shape="rect" id="node7" href="$project__serializer_8h.html" title=" " alt="" coords="365,213,536,255"/>
+<area shape="rect" id="node8" title=" " alt="" coords="561,221,669,247"/>
 </map>

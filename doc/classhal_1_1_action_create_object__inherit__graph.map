@@ -1,4 +1,4 @@
 <map id="hal::ActionCreateObject" name="hal::ActionCreateObject">
-<area shape="rect" id="node1" title="Create a new item." alt="" coords="5,321,181,487"/>
-<area shape="rect" id="node2" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="15,5,171,273"/>
+<area shape="rect" id="node1" title="Create a new item." alt="" coords="27,351,203,516"/>
+<area shape="rect" id="node2" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="5,5,224,303"/>
 </map>

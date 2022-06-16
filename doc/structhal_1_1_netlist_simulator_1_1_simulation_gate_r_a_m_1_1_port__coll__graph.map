@@ -1,6 +1,0 @@
-<map id="hal::NetlistSimulator::SimulationGateRAM::Port" name="hal::NetlistSimulator::SimulationGateRAM::Port">
-<area shape="rect" id="node1" title=" " alt="" coords="63,683,257,804"/>
-<area shape="rect" id="node2" href="$classhal_1_1_boolean_function.html" title=" " alt="" coords="5,205,189,605"/>
-<area shape="rect" id="node3" href="$classhal_1_1_net.html" title=" " alt="" coords="214,330,338,481"/>
-<area shape="rect" id="node4" href="$classhal_1_1_data_container.html" title=" " alt="" coords="200,5,352,156"/>
-</map>

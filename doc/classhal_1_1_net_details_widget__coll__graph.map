@@ -1,7 +1,0 @@
-<map id="hal::NetDetailsWidget" name="hal::NetDetailsWidget">
-<area shape="rect" id="node1" title="Displays specific net details." alt="" coords="193,741,443,965"/>
-<area shape="rect" id="node2" href="$classhal_1_1_details_widget.html" title="Base class for specific details widgets." alt="" coords="213,512,423,692"/>
-<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qwidget.html" title=" " alt="" coords="5,5,212,449"/>
-<area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qlabel.html" title=" " alt="" coords="237,71,399,383"/>
-<area shape="rect" id="node5" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qfont.html" title=" " alt="" coords="424,64,607,391"/>
-</map>
