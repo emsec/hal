@@ -1,6 +1,6 @@
 <a name="introduction"></a>
 # !!!!!!!!Summer School on Real-World Crypto 2022!!!!!!!!!!
-If you are attending the RWC summer school in Croatia 2022, please go to the [dedicated branch](https://github.com/emsec/hal/tree/summer_school_2022) that we created.
+If you are attending the RWC summer school in Croatia 2022, please proceed to the [dedicated branch](https://github.com/emsec/hal/tree/summer_school_2022) that we created for the workshop.
 
 # Welcome to HAL! 
 [![Ubuntu 20.04](https://github.com/emsec/hal/actions/workflows/ubuntu20.04.yml/badge.svg)](https://github.com/emsec/hal/actions/workflows/ubuntu20.04.yml)  [![macOS](https://github.com/emsec/hal/actions/workflows/macOS.yml/badge.svg)](https://github.com/emsec/hal/actions/workflows/macOS.yml) [![Doc: C++](https://img.shields.io/badge/doc-c%2B%2B-orange)](https://emsec.github.io/hal/doc/) [![Doc: Python](https://img.shields.io/badge/doc-python-red)](https://emsec.github.io/hal/pydoc/)
