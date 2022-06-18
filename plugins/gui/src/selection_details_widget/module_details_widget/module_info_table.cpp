@@ -6,6 +6,10 @@
 #include "gui/python/py_code_provider.h"
 #include "gui/user_action/action_rename_object.h"
 #include "gui/user_action/action_set_object_type.h"
+#include "gui/user_action/action_create_object.h"
+#include "gui/user_action/action_add_items_to_object.h"
+#include "gui/user_action/user_action_compound.h"
+#include "gui/module_dialog/module_dialog.h"
 
 #include <QMenu>
 #include <QInputDialog>
@@ -54,6 +58,7 @@ namespace hal
         mModuleEntryContextMenu->addAction("Parent ID to clipboard", std::bind(&ModuleInfoTable::copyParentID, this));
         mModuleEntryContextMenu->addAction("Set as current Selection", std::bind(&ModuleInfoTable::setParentAsSelection, this));
         mModuleEntryContextMenu->addAction("Add to current Selection", std::bind(&ModuleInfoTable::addParentToSelection, this));
+        mChangeParentAction = mModuleEntryContextMenu->addAction("Change parent", std::bind(&ModuleInfoTable::changeParentAction, this));
         mModuleEntryContextMenu->addSection("Python");
         mModuleEntryContextMenu->addAction(mPyIcon, "Get parent", std::bind(&ModuleInfoTable::pyCopyModule, this));
 
@@ -120,6 +125,7 @@ namespace hal
         if(gNetlist->is_module_in_netlist(module))
         {
             mModule = module;
+            module->is_top_module() ? mChangeParentAction->setEnabled(false) : mChangeParentAction->setEnabled(true);
 
             setRow(nameRowKey, name(), mNameEntryContextMenu);
             setRow(idRowKey, id(), mIdEntryContextMenu);
@@ -458,6 +464,32 @@ namespace hal
             gSelectionRelay->addModule(parentModuleId);
             gSelectionRelay->relaySelectionChanged(this);
         }
+    }
+
+    void ModuleInfoTable::changeParentAction()
+    {
+        ModuleDialog md(this);
+        if (md.exec() != QDialog::Accepted) return;
+        if (md.isNewModule())
+        {
+            QString topModName = QString::fromStdString(gNetlist->get_top_module()->get_name());
+            bool ok;
+            QString name = QInputDialog::getText(nullptr, "", "New module will be created under \"" + topModName + "\"\nModule Name:", QLineEdit::Normal, "", &ok);
+            if (!ok || name.isEmpty()) return;
+
+            ActionCreateObject* actNewModule = new ActionCreateObject(UserActionObjectType::Module, name);
+            actNewModule->setParentId(gNetlist->get_top_module()->get_id());
+            UserActionCompound* compound = new UserActionCompound;
+            compound->setUseCreatedObject();
+            compound->addAction(actNewModule);
+            compound->addAction(new ActionAddItemsToObject(QSet<u32>() << mModule->get_id()));
+            compound->exec();
+            return;
+        }
+        ActionAddItemsToObject* addAct = new ActionAddItemsToObject(QSet<u32>() << mModule->get_id());
+        addAct->setObject(UserActionObject(md.selectedId(), UserActionObjectType::Module));
+        addAct->exec();
+
     }
 
     void ModuleInfoTable::refresh()

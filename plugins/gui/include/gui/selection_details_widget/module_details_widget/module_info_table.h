@@ -311,6 +311,11 @@ namespace hal
         void navModule();
 
         /**
+         * Uses the ModuleDialog to open a popup to change the module's parent.
+         */
+        void changeParentAction();
+
+        /**
          * Handle relayed removal of a module.
          * 
          * @param module - Module which has been removed.
@@ -370,6 +375,7 @@ namespace hal
         QMenu* mNumOfOutputNetsContextMenu;
         QMenu* mNumOfInternalNetsContextMenu;
         QMenu* mIsTopModuleContextMenu;
+        QAction* mChangeParentAction;//is disabled if current module is the top module
 
         std::function<void()> mModuleDoubleClickedAction;
         QIcon mPyIcon;
