@@ -5,6 +5,8 @@
 #include "gui/selection_details_widget/gate_details_widget/gate_pin_tree.h"
 #include "gui/code_editor/syntax_highlighter/python_qss_adapter.h"
 #include "gui/gui_globals.h"
+#include "gui/input_dialog/input_dialog.h"
+#include "gui/python/py_code_provider.h"
 
 
 #include "hal_core/netlist/gate.h"
@@ -13,6 +15,9 @@
 #include "hal_core/netlist/gate_library/gate_type_component/latch_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/state_component.h"
 #include <QDebug>
+#include <QMenu>
+#include <QApplication>
+#include <QClipboard>
 
 namespace hal
 {
@@ -45,8 +50,10 @@ namespace hal
         mLutFunctionTable = new BooleanFunctionTable(this);
         mLutTable = new LUTTableWidget(this);
         mLutConfigLabel = new QLabel("default", this);
+        mLutConfigLabel->setContextMenuPolicy(Qt::CustomContextMenu);
         mLutConfigLabel->setWordWrap(true);
         mLutConfigLabel->setStyleSheet(QString("QLabel{color: %1;}").arg(PythonQssAdapter::instance()->numberColor().name()));//tmp.
+        connect(mLutConfigLabel, &QWidget::customContextMenuRequested, this, &GateDetailsTabWidget::handleLutConfigContextMenuRequested);
 
         mFfFrame = new DetailsFrameWidget(mFfFunctionTable, "FF Information", this);
         mLatchFrame = new DetailsFrameWidget(mLatchFunctionTable, "Latch Information", this);
@@ -145,7 +152,7 @@ namespace hal
                 mTruthTableFrame->setVisible(false);
                 mFfFrame->setVisible(true);
                 mLatchFrame->setVisible(false);
-                label = "FF";
+                label = "Flip-Flop";
                 break;
             }
             case GateDetailsTabWidget::GateTypeCategory::latch:
@@ -215,6 +222,28 @@ namespace hal
             } 
         }
         
+    }
+
+    void GateDetailsTabWidget::handleLutConfigContextMenuRequested(QPoint pos)
+    {
+        QMenu menu;
+
+        menu.addAction("Configuration string to clipboard", [this](){
+            QApplication::clipboard()->setText(mLutConfigLabel->text().remove(" 0x"));
+        });
+        menu.addAction("Change configuration string", [this](){
+            InputDialog ipd("Change configuration string", "New configuration string", mLutConfigLabel->text().remove("0x"));
+            if(ipd.exec() == QDialog::Accepted && !ipd.textValue().isEmpty())
+            {
+                mCurrentGate->set_data("generic", "INIT", "bit_vector", ipd.textValue().toStdString());
+                setGate(mCurrentGate);//must update config string and data table
+            }
+        });
+        menu.addAction(QIcon(":/icons/python"), "Get configuration string", [this](){
+            QApplication::clipboard()->setText(PyCodeProvider::pyCodeGateData(mCurrentGate->get_id(), "generic", "INIT"));
+        });
+
+        menu.exec(mLutConfigLabel->mapToGlobal(pos));
     }
 
     void GateDetailsTabWidget::setupBooleanFunctionTables(Gate* gate, GateDetailsTabWidget::GateTypeCategory gateTypeCategory)

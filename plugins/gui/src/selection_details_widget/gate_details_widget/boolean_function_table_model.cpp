@@ -121,7 +121,7 @@ namespace hal {
 
     QString StateComponentEntry::enumTypeToString()
     {
-        const QString types[] = {"internal_state", "neg_internal_state"};
+        const QString types[] = {"Internal state", "Negated internal state"};
         return types[specificType];
     }
 
@@ -246,7 +246,7 @@ namespace hal {
 
     QString FFComponentEntry::enumToString()
     {
-        static QString types[] = {"clock", "next_state", "async_set", "async_reset", "set_reset_behavior"};
+        static QString types[] = {"Clock", "Next state", "Asynchronous set", "Asynchronous reset", "Set-Reset behavior"};
         return types[mSpecificType];
     }
 

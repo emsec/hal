@@ -58,8 +58,10 @@ namespace hal {
           ====================================*/ 
 
         QString toClipboardText = entry->getEntryIdentifier() + " = " + entry->getEntryValueString();
+        QString plainDesc = entry->getEntryIdentifier() + " function to clipboard";
         menu.addAction(
-            "Copy plain function to clipboard",
+            //"Copy plain function to clipboard",
+            plainDesc,
             [toClipboardText]()
             {
                 QApplication::clipboard()->setText( toClipboardText );
@@ -70,9 +72,10 @@ namespace hal {
                 Python to Clipboard 
           ====================================*/
         pythonCode = entry->getPythonCode();
+        QString pythonDesc = "Get " +  entry->getEntryIdentifier().toLower() + " function";
         if(!pythonCode.isEmpty())
         {
-            menu.addAction(QIcon(":/icons/python"), "Extract value as python code", [pythonCode](){
+            menu.addAction(QIcon(":/icons/python"), pythonDesc, [pythonCode](){
                 QApplication::clipboard()->setText(pythonCode);
             });
         }
