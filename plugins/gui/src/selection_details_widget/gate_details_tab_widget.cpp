@@ -48,6 +48,8 @@ namespace hal
         mFfFunctionTable = new BooleanFunctionTable(this);
         mLatchFunctionTable = new BooleanFunctionTable(this);
         mLutFunctionTable = new BooleanFunctionTable(this);
+        mLutFunctionTable->setContextMenuPlainDescr(true);
+        mLutFunctionTable->setContextMenuPythonPlainDescr(true);
         mLutTable = new LUTTableWidget(this);
         mLutConfigLabel = new QLabel("default", this);
         mLutConfigLabel->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -67,6 +69,8 @@ namespace hal
 
         //boolean functions tab
         mFullFunctionTable = new BooleanFunctionTable(this);
+        mFullFunctionTable->setContextMenuPlainDescr(true);
+        mFullFunctionTable->setContextMenuPythonPlainDescr(true);
         mBooleanFunctionsFrame = new DetailsFrameWidget(mFullFunctionTable, "Boolean Functions", this); 
 
         QList<DetailsFrameWidget*> framesBooleanFunctionsTab({mBooleanFunctionsFrame});

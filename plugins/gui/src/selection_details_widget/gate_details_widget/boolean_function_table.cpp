@@ -8,7 +8,7 @@
 
 namespace hal {
     BooleanFunctionTable::BooleanFunctionTable(QWidget *parent) : QTableView(parent),
-    mBooleanFunctionTableModel(new BooleanFunctionTableModel(this))
+    mBooleanFunctionTableModel(new BooleanFunctionTableModel(this)), mShowPlainDescr(false), mShowPlainPyDescr(false)
     {
         this->setModel(mBooleanFunctionTableModel);
         this->setSelectionMode(QAbstractItemView::NoSelection);
@@ -57,11 +57,11 @@ namespace hal {
                   Plaintext to Clipboard
           ====================================*/ 
 
-        QString toClipboardText = entry->getEntryIdentifier() + " = " + entry->getEntryValueString();
-        QString plainDesc = entry->getEntryIdentifier() + " function to clipboard";
+        QString toClipboardText = entry->getEntryValueString();
+        QString description = mShowPlainDescr ? "Boolean function to clipboard" : entry->getEntryIdentifier() + " function to clipboard";
         menu.addAction(
             //"Copy plain function to clipboard",
-            plainDesc,
+            description,
             [toClipboardText]()
             {
                 QApplication::clipboard()->setText( toClipboardText );
@@ -72,7 +72,7 @@ namespace hal {
                 Python to Clipboard 
           ====================================*/
         pythonCode = entry->getPythonCode();
-        QString pythonDesc = "Get " +  entry->getEntryIdentifier().toLower() + " function";
+        QString pythonDesc = mShowPlainPyDescr ? "Get boolean function" : "Get " +  entry->getEntryIdentifier() + " function";
         if(!pythonCode.isEmpty())
         {
             menu.addAction(QIcon(":/icons/python"), pythonDesc, [pythonCode](){

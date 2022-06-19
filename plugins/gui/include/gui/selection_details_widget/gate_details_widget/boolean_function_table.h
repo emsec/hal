@@ -61,6 +61,22 @@ namespace hal
          */
         BooleanFunctionTableModel* getModel();
 
+        /**
+         * If set to true, the context menu entry shows "Boolean function to clipboard".
+         * Otherwise it displays the actual name of the boolean function.
+         *
+         * @param enabled - False to show the actual function name, true otherwise.
+         */
+        void setContextMenuPlainDescr(bool enable){mShowPlainDescr = enable;}
+
+        /**
+         * If set to true, the context menu entry for the python code for shows "Get boolean function".
+         * Otherwise it displays the actual name of the boolean function.
+         *
+         * @param enabled - False to show the actual function name, true otherse.
+         */
+        void setContextMenuPythonPlainDescr(bool enable){mShowPlainPyDescr = enable;}
+
 
     public Q_SLOTS:
         /**
@@ -86,6 +102,9 @@ namespace hal
         BooleanFunctionTableModel* mBooleanFunctionTableModel;
         Gate* mCurrentGate;
         u32 mCurrentGateId;
+
+        bool mShowPlainDescr;
+        bool mShowPlainPyDescr;
 
     };
 } // namespace hal
