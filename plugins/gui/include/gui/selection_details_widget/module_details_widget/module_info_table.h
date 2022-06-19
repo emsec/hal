@@ -296,6 +296,16 @@ namespace hal
         void copyParentID() const;
 
         /**
+         * Copies the python code retrieve the input pins.
+         */
+        void pyCopyInputPins() const;
+
+        /**
+         * Copies the python code retriebe the output pins.
+         */
+        void pyCopyOutputPins() const;
+
+        /**
          * Sets the parent module as the current selection.
          */
         void setParentAsSelection();

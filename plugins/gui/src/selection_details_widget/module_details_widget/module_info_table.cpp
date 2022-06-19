@@ -92,10 +92,12 @@ namespace hal
         mNumOfInputNetsContextMenu = new QMenu;//making this widget the parent changes the context menu's background color...
         mNumOfInputNetsContextMenu->addAction("Number of input nets to clipboard", std::bind(&ModuleInfoTable::copyNumberOfInputs, this));
         mNumOfInputNetsContextMenu->addAction(mPyIcon, "Get input nets", std::bind(&ModuleInfoTable::pyCopyGetInputNets,this));
+        mNumOfInputNetsContextMenu->addAction(mPyIcon, "Get input pins", std::bind(&ModuleInfoTable::pyCopyInputPins, this));
 
         mNumOfOutputNetsContextMenu = new QMenu;
         mNumOfOutputNetsContextMenu->addAction("Number of output nets to clipboard", std::bind(&ModuleInfoTable::copyNumberOfOutputs, this));
         mNumOfOutputNetsContextMenu->addAction(mPyIcon, "Get output nets", std::bind(&ModuleInfoTable::pyCopyGetOutputNets, this));
+        mNumOfOutputNetsContextMenu->addAction(mPyIcon, "Get output pins", std::bind(&ModuleInfoTable::pyCopyOutputPins, this));
 
         mNumOfInternalNetsContextMenu = new QMenu;
         mNumOfInternalNetsContextMenu->addAction("Number of internal nets to clipboard", std::bind(&ModuleInfoTable::copyNumberOfInternalNets, this));
@@ -426,6 +428,16 @@ namespace hal
         if(!parentMod) return;
 
         copyToClipboard(QString::number(parentMod->get_id()));
+    }
+
+    void ModuleInfoTable::pyCopyInputPins() const
+    {
+        copyToClipboard(PyCodeProvider::pyCodeModuleInputPins(mModule->get_id()));
+    }
+
+    void ModuleInfoTable::pyCopyOutputPins() const
+    {
+        copyToClipboard(PyCodeProvider::pyCodeModuleOutputPins(mModule->get_id()));
     }
 
     void ModuleInfoTable::setParentAsSelection()

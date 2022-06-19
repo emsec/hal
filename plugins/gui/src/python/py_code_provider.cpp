@@ -56,6 +56,20 @@ namespace hal
         return pyCodeGateType(gateID) + QString(".get_pin_type(\"%1\")").arg(pin);
     }
 
+    QString PyCodeProvider::pyCodeGateInputPins(u32 gateID)
+    {
+        const QString suffix = ".get_input_pins()";
+
+        return pyCodeGateType(gateID) + suffix;
+    }
+
+    QString PyCodeProvider::pyCodeGateOutputPins(u32 gateID)
+    {
+        const QString suffix = ".get_output_pins()";
+
+        return pyCodeGateType(gateID) + suffix;
+    }
+
     QString PyCodeProvider::pyCodeGateBooleanFunction(u32 gateId, QString booleanFunctionName)
     {
         const QString suffix = QString("get_boolean_function(\"%1\")").arg(booleanFunctionName);
@@ -319,6 +333,20 @@ namespace hal
     QString PyCodeProvider::pyCodeModuleOutputNets(u32 moduleId)
     {
         const QString suffix = "get_output_nets()";
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
+    }
+
+    QString PyCodeProvider::pyCodeModuleInputPins(u32 moduleId)
+    {
+        const QString suffix = "get_pins(lambda pin: pin.get_direction() == hal_py.PinDirection.input)";
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
+    }
+
+    QString PyCodeProvider::pyCodeModuleOutputPins(u32 moduleId)
+    {
+        const QString suffix = "get_pins(lambda pin: pin.get_direction() == hal_py.PinDirection.output)";
 
         return buildPyCode(moduleCodePrefix, suffix, moduleId);
     }

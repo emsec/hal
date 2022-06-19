@@ -40,6 +40,8 @@ namespace hal
         static QString pyCodeGateType(u32 gateId);
         static QString pyCodeGateTypePinDirection(u32 gateID, QString pin);
         static QString pyCodeGateTypePinType(u32 gateID, QString pin);
+        static QString pyCodeGateInputPins(u32 gateID);
+        static QString pyCodeGateOutputPins(u32 gateID);
         static QString pyCodeProperties(u32 gateId);
         static QString pyCodeGateLocation(u32 gateId);
         static QString pyCodeGateModule(u32 gateId);
@@ -86,6 +88,8 @@ namespace hal
         static QString pyCodeModuleNets(u32 moduleId);
         static QString pyCodeModuleInputNets(u32 moduleId);
         static QString pyCodeModuleOutputNets(u32 moduleId);
+        static QString pyCodeModuleInputPins(u32 moduleId);
+        static QString pyCodeModuleOutputPins(u32 moduleId);
         static QString pyCodeModuleInternalNets(u32 moduleId);
         static QString pyCodeModuleIsTopModule(u32 moduleId);
         static QString pyCodeModuleData(u32 moduleId, QString category, QString key);
