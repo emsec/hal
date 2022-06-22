@@ -1,4 +1,4 @@
 <map id="hal::ActionRemoveItemsFromObject" name="hal::ActionRemoveItemsFromObject">
-<area shape="rect" id="node1" title="Removes an item from a Module or Grouping." alt="" coords="5,351,260,516"/>
-<area shape="rect" id="node2" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="23,5,242,303"/>
+<area shape="rect" id="node1" title="Removes an item from a Module or Grouping." alt="" coords="5,321,260,487"/>
+<area shape="rect" id="node2" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="55,5,211,273"/>
 </map>

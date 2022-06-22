@@ -1,5 +1,5 @@
 <map id="hal::UserActionFactory" name="hal::UserActionFactory">
-<area shape="rect" id="node1" title="The UserActionFactory is the abstract base class for registration." alt="" coords="1676,5,1844,112"/>
+<area shape="rect" id="node1" title="The UserActionFactory is the abstract base class for registration." alt="" coords="1544,5,1712,112"/>
 <area shape="rect" id="node2" href="$classhal_1_1_action_add_items_to_object_factory.html" title="UserActionFactory for ActionAddItemsToObject." alt="" coords="5,167,259,274"/>
 <area shape="rect" id="node3" href="$classhal_1_1_action_create_object_factory.html" title="UserActionFactory for ActionCreateObject." alt="" coords="283,175,506,267"/>
 <area shape="rect" id="node4" href="$classhal_1_1_action_delete_object_factory.html" title="UserActionFactory for ActionDeleteObject." alt="" coords="530,175,753,267"/>
@@ -8,10 +8,9 @@
 <area shape="rect" id="node7" href="$classhal_1_1_action_open_netlist_file_factory.html" title="UserActionFactory for ActionOpenNetlistFile." alt="" coords="1247,167,1481,274"/>
 <area shape="rect" id="node8" href="$classhal_1_1_action_remove_items_from_object_factory.html" title="UserActionFactory for ActionRemoveItemsFromObject." alt="" coords="1506,160,1750,281"/>
 <area shape="rect" id="node9" href="$classhal_1_1_action_rename_object_factory.html" title="UserActionFactory for ActionRenameObject." alt="" coords="1775,175,2009,267"/>
-<area shape="rect" id="node10" href="$classhal_1_1_action_reorder_object_factory.html" title="UserActionFactory for ActionReorderObject." alt="" coords="2034,167,2262,274"/>
-<area shape="rect" id="node11" href="$classhal_1_1_action_set_object_color_factory.html" title="UserActionFactory for ActionSetObjectColor." alt="" coords="2287,167,2519,274"/>
-<area shape="rect" id="node12" href="$classhal_1_1_action_set_object_type_factory.html" title="UserActionFactory for ActionSetObjectType." alt="" coords="2543,167,2771,274"/>
-<area shape="rect" id="node13" href="$classhal_1_1_action_set_selection_focus_factory.html" title="UserActionFactory for ActionSetSelectionFocus." alt="" coords="2796,167,3049,274"/>
-<area shape="rect" id="node14" href="$classhal_1_1_action_unfold_module_factory.html" title="UserActionFactory for ActionUnfoldModule." alt="" coords="3073,175,3303,267"/>
-<area shape="rect" id="node15" href="$classhal_1_1_user_action_compound_factory.html" title=" " alt="" coords="3327,175,3566,267"/>
+<area shape="rect" id="node10" href="$classhal_1_1_action_set_object_color_factory.html" title="UserActionFactory for ActionSetObjectColor." alt="" coords="2033,167,2265,274"/>
+<area shape="rect" id="node11" href="$classhal_1_1_action_set_object_type_factory.html" title="UserActionFactory for ActionSetObjectType." alt="" coords="2290,167,2518,274"/>
+<area shape="rect" id="node12" href="$classhal_1_1_action_set_selection_focus_factory.html" title="UserActionFactory for ActionSetSelectionFocus." alt="" coords="2543,167,2796,274"/>
+<area shape="rect" id="node13" href="$classhal_1_1_action_unfold_module_factory.html" title="UserActionFactory for ActionUnfoldModule." alt="" coords="2820,175,3049,267"/>
+<area shape="rect" id="node14" href="$classhal_1_1_user_action_compound_factory.html" title=" " alt="" coords="3074,175,3313,267"/>
 </map>

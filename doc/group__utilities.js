@@ -1,5 +1,6 @@
 var group__utilities =
 [
+    [ "hal_file_manager", "namespacehal_1_1hal__file__manager.html", null ],
     [ "core_strings", "namespacehal_1_1core__strings.html", null ],
     [ "utils", "namespacehal_1_1utils.html", null ],
     [ "CallbackHook< R(ArgTypes...)>", "classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html", [

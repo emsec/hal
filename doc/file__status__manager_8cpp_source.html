@@ -93,104 +93,105 @@ $(document).ready(function(){initNavTree('file__status__manager_8cpp_source.html
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;{</div>
-<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="classhal_1_1_file_status_manager.html#a3d39ce706b6b7f67c68a01b65ffeda65">    8</a></span>&#160;    <a class="code" href="classhal_1_1_file_status_manager.html#a3d39ce706b6b7f67c68a01b65ffeda65">FileStatusManager::FileStatusManager</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* parent) : <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>(parent),</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;        mModifiedFilesUuid(<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt;<a class="codeRef" href="https://doc.qt.io/qt-5/quuid.html">QUuid</a>&gt;()), mModifiedFilesDescriptors(<a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html">QMap</a>&lt;<a class="codeRef" href="https://doc.qt.io/qt-5/quuid.html">QUuid</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&gt;()),</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        mNetlistModified(false)</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    {;}</div>
+<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="classhal_1_1_file_status_manager.html#a3d39ce706b6b7f67c68a01b65ffeda65">    8</a></span>&#160;    <a class="code" href="classhal_1_1_file_status_manager.html#a3d39ce706b6b7f67c68a01b65ffeda65">FileStatusManager::FileStatusManager</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* parent) : <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>(parent), mModifiedFilesUuid(<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt;<a class="codeRef" href="https://doc.qt.io/qt-5/quuid.html">QUuid</a>&gt;()), mModifiedFilesDescriptors(<a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html">QMap</a>&lt;<a class="codeRef" href="https://doc.qt.io/qt-5/quuid.html">QUuid</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&gt;())</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    {</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        mNetlistModified = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    }</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
 <div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="classhal_1_1_file_status_manager.html#a46deb2b1aa628214ba278e1249b8df83">   13</a></span>&#160;    <a class="code" href="classhal_1_1_file_status_manager.html#a46deb2b1aa628214ba278e1249b8df83">FileStatusManager::~FileStatusManager</a>()</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    {;}</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="classhal_1_1_file_status_manager.html#a04e1d874849f50ca7fd28f569f295133">   16</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_file_status_manager.html#a04e1d874849f50ca7fd28f569f295133">FileStatusManager::fileChanged</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/quuid.html">QUuid</a> uuid, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; descriptor)</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    {</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        mModifiedFilesUuid.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#insert">insert</a>(uuid);</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        mModifiedFilesDescriptors.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html#insert">insert</a>(uuid, descriptor);</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    }</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="classhal_1_1_file_status_manager.html#a550bdd34136f3943b9dec87fe84c33f9">   22</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_file_status_manager.html#a550bdd34136f3943b9dec87fe84c33f9">FileStatusManager::fileSaved</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/quuid.html">QUuid</a> uuid)</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    {</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        mModifiedFilesUuid.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#remove">remove</a>(uuid);</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        mModifiedFilesDescriptors.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html#remove">remove</a>(uuid);</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    }</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="classhal_1_1_file_status_manager.html#aa30234a1327fed69ac1009a3f81c8dfa">   28</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_file_status_manager.html#aa30234a1327fed69ac1009a3f81c8dfa">FileStatusManager::modifiedFilesExisting</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keywordflow">if</span> (!<a class="code" href="classhal_1_1_file_manager.html#a39922020ae71b765ce940170bd936038">FileManager::get_instance</a>()-&gt;fileOpen())</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="keywordflow">return</span> !mModifiedFilesUuid.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#empty">empty</a>() || mNetlistModified;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    }</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="classhal_1_1_file_status_manager.html#a9d47629925b55d9adcc5e99432548d7c">   36</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_file_status_manager.html#a9d47629925b55d9adcc5e99432548d7c">FileStatusManager::flushUnsavedChanges</a>()</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    {</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        mModifiedFilesUuid.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#clear">clear</a>();</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        mModifiedFilesDescriptors.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html#clear">clear</a>();</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <a class="code" href="classhal_1_1_file_status_manager.html#a0ff27a9c9d5aedfc4ee4b5ce38f0abba">netlistSaved</a>();</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    }</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="classhal_1_1_file_status_manager.html#a8d5a437378ec027a15962d429aa41235">   43</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_file_status_manager.html#a8d5a437378ec027a15962d429aa41235">FileStatusManager::netlistChanged</a>()</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    {</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        mNetlistModified = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    }</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="classhal_1_1_file_status_manager.html#a0ff27a9c9d5aedfc4ee4b5ce38f0abba">   48</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_file_status_manager.html#a0ff27a9c9d5aedfc4ee4b5ce38f0abba">FileStatusManager::netlistSaved</a>()</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    {</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        mNetlistModified = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    }</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="classhal_1_1_file_status_manager.html#a4060437518086a1d8ddcbfca3d734776">   53</a></span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;QString&gt;</a> <a class="code" href="classhal_1_1_file_status_manager.html#a4060437518086a1d8ddcbfca3d734776">FileStatusManager::getUnsavedChangeDescriptors</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;QString&gt;</a> unsaved_changes_descriptors;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordflow">if</span>(mNetlistModified)</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        {</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            unsaved_changes_descriptors.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#append">append</a>(<span class="stringliteral">&quot;Netlist modifications&quot;</span>);</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        }</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keywordflow">for</span>(<a class="codeRef" href="https://doc.qt.io/qt-5/quuid.html">QUuid</a> uuid : mModifiedFilesUuid)</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        {</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            unsaved_changes_descriptors.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#append">append</a>(mModifiedFilesDescriptors.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html#value">value</a>(uuid));</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        }</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keywordflow">return</span> unsaved_changes_descriptors;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    }</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;}</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    {</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    }</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="classhal_1_1_file_status_manager.html#a04e1d874849f50ca7fd28f569f295133">   17</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_file_status_manager.html#a04e1d874849f50ca7fd28f569f295133">FileStatusManager::fileChanged</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/quuid.html">QUuid</a> uuid, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; descriptor)</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    {</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        mModifiedFilesUuid.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#insert">insert</a>(uuid);</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        mModifiedFilesDescriptors.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html#insert">insert</a>(uuid, descriptor);</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    }</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classhal_1_1_file_status_manager.html#a550bdd34136f3943b9dec87fe84c33f9">   23</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_file_status_manager.html#a550bdd34136f3943b9dec87fe84c33f9">FileStatusManager::fileSaved</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/quuid.html">QUuid</a> uuid)</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    {</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        mModifiedFilesUuid.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#remove">remove</a>(uuid);</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        mModifiedFilesDescriptors.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html#remove">remove</a>(uuid);</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    }</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classhal_1_1_file_status_manager.html#aa30234a1327fed69ac1009a3f81c8dfa">   29</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_file_status_manager.html#aa30234a1327fed69ac1009a3f81c8dfa">FileStatusManager::modifiedFilesExisting</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <span class="keywordflow">if</span> (!<a class="code" href="classhal_1_1_file_manager.html#a39922020ae71b765ce940170bd936038">FileManager::get_instance</a>()-&gt;fileOpen())</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keywordflow">return</span> !mModifiedFilesUuid.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#empty">empty</a>() || mNetlistModified;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    }</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classhal_1_1_file_status_manager.html#a9d47629925b55d9adcc5e99432548d7c">   37</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_file_status_manager.html#a9d47629925b55d9adcc5e99432548d7c">FileStatusManager::flushUnsavedChanges</a>()</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    {</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        mModifiedFilesUuid.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#clear">clear</a>();</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        mModifiedFilesDescriptors.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html#clear">clear</a>();</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <a class="code" href="classhal_1_1_file_status_manager.html#a0ff27a9c9d5aedfc4ee4b5ce38f0abba">netlistSaved</a>();</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    }</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classhal_1_1_file_status_manager.html#a8d5a437378ec027a15962d429aa41235">   44</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_file_status_manager.html#a8d5a437378ec027a15962d429aa41235">FileStatusManager::netlistChanged</a>()</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    {</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        mNetlistModified = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    }</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="classhal_1_1_file_status_manager.html#a0ff27a9c9d5aedfc4ee4b5ce38f0abba">   49</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_file_status_manager.html#a0ff27a9c9d5aedfc4ee4b5ce38f0abba">FileStatusManager::netlistSaved</a>()</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    {</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        mNetlistModified = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    }</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="classhal_1_1_file_status_manager.html#a4060437518086a1d8ddcbfca3d734776">   54</a></span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;QString&gt;</a> <a class="code" href="classhal_1_1_file_status_manager.html#a4060437518086a1d8ddcbfca3d734776">FileStatusManager::getUnsavedChangeDescriptors</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;QString&gt;</a> unsaved_changes_descriptors;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordflow">if</span>(mNetlistModified)</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        {</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            unsaved_changes_descriptors.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#append">append</a>(<span class="stringliteral">&quot;Netlist modifications&quot;</span>);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        }</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keywordflow">for</span>(<a class="codeRef" href="https://doc.qt.io/qt-5/quuid.html">QUuid</a> uuid : mModifiedFilesUuid)</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        {</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            unsaved_changes_descriptors.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#append">append</a>(mModifiedFilesDescriptors.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html#value">value</a>(uuid));</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        }</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordflow">return</span> unsaved_changes_descriptors;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    }</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aqlist_html_append"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html#append">QList::append</a></div><div class="ttdeci">void append(const T &amp;value)</div></div>
 <div class="ttc" id="aqset_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qset.html">QSet</a></div></div>
 <div class="ttc" id="afile__manager_8h_html"><div class="ttname"><a href="file__manager_8h.html">file_manager.h</a></div></div>
 <div class="ttc" id="afile__status__manager_8h_html"><div class="ttname"><a href="file__status__manager_8h.html">file_status_manager.h</a></div></div>
-<div class="ttc" id="aclasshal_1_1_file_status_manager_html_a550bdd34136f3943b9dec87fe84c33f9"><div class="ttname"><a href="classhal_1_1_file_status_manager.html#a550bdd34136f3943b9dec87fe84c33f9">hal::FileStatusManager::fileSaved</a></div><div class="ttdeci">void fileSaved(const QUuid uuid)</div><div class="ttdef"><b>Definition:</b> <a href="file__status__manager_8cpp_source.html#l00022">file_status_manager.cpp:22</a></div></div>
+<div class="ttc" id="aclasshal_1_1_file_status_manager_html_a550bdd34136f3943b9dec87fe84c33f9"><div class="ttname"><a href="classhal_1_1_file_status_manager.html#a550bdd34136f3943b9dec87fe84c33f9">hal::FileStatusManager::fileSaved</a></div><div class="ttdeci">void fileSaved(const QUuid uuid)</div><div class="ttdef"><b>Definition:</b> <a href="file__status__manager_8cpp_source.html#l00023">file_status_manager.cpp:23</a></div></div>
 <div class="ttc" id="aqset_html_remove"><div class="ttname"><a href="https://doc.qt.io/qt-5/qset.html#remove">QSet::remove</a></div><div class="ttdeci">bool remove(const T &amp;value)</div></div>
 <div class="ttc" id="aqmap_html_clear"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmap.html#clear">QMap::clear</a></div><div class="ttdeci">void clear()</div></div>
 <div class="ttc" id="aqmap_html_value"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmap.html#value">QMap::value</a></div><div class="ttdeci">const T value(const Key &amp;key, const T &amp;defaultValue) const const</div></div>
-<div class="ttc" id="aclasshal_1_1_file_status_manager_html_a4060437518086a1d8ddcbfca3d734776"><div class="ttname"><a href="classhal_1_1_file_status_manager.html#a4060437518086a1d8ddcbfca3d734776">hal::FileStatusManager::getUnsavedChangeDescriptors</a></div><div class="ttdeci">QList&lt; QString &gt; getUnsavedChangeDescriptors() const</div><div class="ttdef"><b>Definition:</b> <a href="file__status__manager_8cpp_source.html#l00053">file_status_manager.cpp:53</a></div></div>
-<div class="ttc" id="aclasshal_1_1_file_manager_html_a39922020ae71b765ce940170bd936038"><div class="ttname"><a href="classhal_1_1_file_manager.html#a39922020ae71b765ce940170bd936038">hal::FileManager::get_instance</a></div><div class="ttdeci">static FileManager * get_instance()</div><div class="ttdef"><b>Definition:</b> <a href="file__manager_8cpp_source.html#l00075">file_manager.cpp:75</a></div></div>
+<div class="ttc" id="aclasshal_1_1_file_status_manager_html_a4060437518086a1d8ddcbfca3d734776"><div class="ttname"><a href="classhal_1_1_file_status_manager.html#a4060437518086a1d8ddcbfca3d734776">hal::FileStatusManager::getUnsavedChangeDescriptors</a></div><div class="ttdeci">QList&lt; QString &gt; getUnsavedChangeDescriptors() const</div><div class="ttdef"><b>Definition:</b> <a href="file__status__manager_8cpp_source.html#l00054">file_status_manager.cpp:54</a></div></div>
+<div class="ttc" id="aclasshal_1_1_file_manager_html_a39922020ae71b765ce940170bd936038"><div class="ttname"><a href="classhal_1_1_file_manager.html#a39922020ae71b765ce940170bd936038">hal::FileManager::get_instance</a></div><div class="ttdeci">static FileManager * get_instance()</div><div class="ttdef"><b>Definition:</b> <a href="file__manager_8cpp_source.html#l00067">file_manager.cpp:67</a></div></div>
 <div class="ttc" id="aquuid_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/quuid.html">QUuid</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00009">solver.cpp:9</a></div></div>
 <div class="ttc" id="aqlist_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html">QList&lt; QString &gt;</a></div></div>
 <div class="ttc" id="aqmap_html_remove"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmap.html#remove">QMap::remove</a></div><div class="ttdeci">int remove(const Key &amp;key)</div></div>
 <div class="ttc" id="aqmap_html_insert"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmap.html#insert">QMap::insert</a></div><div class="ttdeci">QMap::iterator insert(const Key &amp;key, const T &amp;value)</div></div>
-<div class="ttc" id="aclasshal_1_1_file_status_manager_html_aa30234a1327fed69ac1009a3f81c8dfa"><div class="ttname"><a href="classhal_1_1_file_status_manager.html#aa30234a1327fed69ac1009a3f81c8dfa">hal::FileStatusManager::modifiedFilesExisting</a></div><div class="ttdeci">bool modifiedFilesExisting() const</div><div class="ttdef"><b>Definition:</b> <a href="file__status__manager_8cpp_source.html#l00028">file_status_manager.cpp:28</a></div></div>
-<div class="ttc" id="aclasshal_1_1_file_status_manager_html_a8d5a437378ec027a15962d429aa41235"><div class="ttname"><a href="classhal_1_1_file_status_manager.html#a8d5a437378ec027a15962d429aa41235">hal::FileStatusManager::netlistChanged</a></div><div class="ttdeci">void netlistChanged()</div><div class="ttdef"><b>Definition:</b> <a href="file__status__manager_8cpp_source.html#l00043">file_status_manager.cpp:43</a></div></div>
+<div class="ttc" id="aclasshal_1_1_file_status_manager_html_aa30234a1327fed69ac1009a3f81c8dfa"><div class="ttname"><a href="classhal_1_1_file_status_manager.html#aa30234a1327fed69ac1009a3f81c8dfa">hal::FileStatusManager::modifiedFilesExisting</a></div><div class="ttdeci">bool modifiedFilesExisting() const</div><div class="ttdef"><b>Definition:</b> <a href="file__status__manager_8cpp_source.html#l00029">file_status_manager.cpp:29</a></div></div>
+<div class="ttc" id="aclasshal_1_1_file_status_manager_html_a8d5a437378ec027a15962d429aa41235"><div class="ttname"><a href="classhal_1_1_file_status_manager.html#a8d5a437378ec027a15962d429aa41235">hal::FileStatusManager::netlistChanged</a></div><div class="ttdeci">void netlistChanged()</div><div class="ttdef"><b>Definition:</b> <a href="file__status__manager_8cpp_source.html#l00044">file_status_manager.cpp:44</a></div></div>
 <div class="ttc" id="aqobject_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html">QObject</a></div></div>
 <div class="ttc" id="aqstring_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstring.html">QString</a></div></div>
 <div class="ttc" id="agui__globals_8h_html"><div class="ttname"><a href="gui__globals_8h.html">gui_globals.h</a></div></div>
-<div class="ttc" id="aclasshal_1_1_file_status_manager_html_a9d47629925b55d9adcc5e99432548d7c"><div class="ttname"><a href="classhal_1_1_file_status_manager.html#a9d47629925b55d9adcc5e99432548d7c">hal::FileStatusManager::flushUnsavedChanges</a></div><div class="ttdeci">void flushUnsavedChanges()</div><div class="ttdef"><b>Definition:</b> <a href="file__status__manager_8cpp_source.html#l00036">file_status_manager.cpp:36</a></div></div>
+<div class="ttc" id="aclasshal_1_1_file_status_manager_html_a9d47629925b55d9adcc5e99432548d7c"><div class="ttname"><a href="classhal_1_1_file_status_manager.html#a9d47629925b55d9adcc5e99432548d7c">hal::FileStatusManager::flushUnsavedChanges</a></div><div class="ttdeci">void flushUnsavedChanges()</div><div class="ttdef"><b>Definition:</b> <a href="file__status__manager_8cpp_source.html#l00037">file_status_manager.cpp:37</a></div></div>
 <div class="ttc" id="aqmap_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmap.html">QMap</a></div></div>
 <div class="ttc" id="aqset_html_empty"><div class="ttname"><a href="https://doc.qt.io/qt-5/qset.html#empty">QSet::empty</a></div><div class="ttdeci">bool empty() const const</div></div>
 <div class="ttc" id="aqset_html_clear"><div class="ttname"><a href="https://doc.qt.io/qt-5/qset.html#clear">QSet::clear</a></div><div class="ttdeci">void clear()</div></div>
-<div class="ttc" id="aclasshal_1_1_file_status_manager_html_a0ff27a9c9d5aedfc4ee4b5ce38f0abba"><div class="ttname"><a href="classhal_1_1_file_status_manager.html#a0ff27a9c9d5aedfc4ee4b5ce38f0abba">hal::FileStatusManager::netlistSaved</a></div><div class="ttdeci">void netlistSaved()</div><div class="ttdef"><b>Definition:</b> <a href="file__status__manager_8cpp_source.html#l00048">file_status_manager.cpp:48</a></div></div>
+<div class="ttc" id="aclasshal_1_1_file_status_manager_html_a0ff27a9c9d5aedfc4ee4b5ce38f0abba"><div class="ttname"><a href="classhal_1_1_file_status_manager.html#a0ff27a9c9d5aedfc4ee4b5ce38f0abba">hal::FileStatusManager::netlistSaved</a></div><div class="ttdeci">void netlistSaved()</div><div class="ttdef"><b>Definition:</b> <a href="file__status__manager_8cpp_source.html#l00049">file_status_manager.cpp:49</a></div></div>
 <div class="ttc" id="aqset_html_insert"><div class="ttname"><a href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert</a></div><div class="ttdeci">QSet::iterator insert(const T &amp;value)</div></div>
 <div class="ttc" id="aclasshal_1_1_file_status_manager_html_a46deb2b1aa628214ba278e1249b8df83"><div class="ttname"><a href="classhal_1_1_file_status_manager.html#a46deb2b1aa628214ba278e1249b8df83">hal::FileStatusManager::~FileStatusManager</a></div><div class="ttdeci">~FileStatusManager()</div><div class="ttdef"><b>Definition:</b> <a href="file__status__manager_8cpp_source.html#l00013">file_status_manager.cpp:13</a></div></div>
 <div class="ttc" id="aclasshal_1_1_file_status_manager_html_a3d39ce706b6b7f67c68a01b65ffeda65"><div class="ttname"><a href="classhal_1_1_file_status_manager.html#a3d39ce706b6b7f67c68a01b65ffeda65">hal::FileStatusManager::FileStatusManager</a></div><div class="ttdeci">FileStatusManager(QObject *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="file__status__manager_8cpp_source.html#l00008">file_status_manager.cpp:8</a></div></div>
-<div class="ttc" id="aclasshal_1_1_file_status_manager_html_a04e1d874849f50ca7fd28f569f295133"><div class="ttname"><a href="classhal_1_1_file_status_manager.html#a04e1d874849f50ca7fd28f569f295133">hal::FileStatusManager::fileChanged</a></div><div class="ttdeci">void fileChanged(const QUuid uuid, const QString &amp;descriptor)</div><div class="ttdef"><b>Definition:</b> <a href="file__status__manager_8cpp_source.html#l00016">file_status_manager.cpp:16</a></div></div>
+<div class="ttc" id="aclasshal_1_1_file_status_manager_html_a04e1d874849f50ca7fd28f569f295133"><div class="ttname"><a href="classhal_1_1_file_status_manager.html#a04e1d874849f50ca7fd28f569f295133">hal::FileStatusManager::fileChanged</a></div><div class="ttdeci">void fileChanged(const QUuid uuid, const QString &amp;descriptor)</div><div class="ttdef"><b>Definition:</b> <a href="file__status__manager_8cpp_source.html#l00017">file_status_manager.cpp:17</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_c663106332897b4ed23a078bb30ece89.html">file_status_manager</a></li><li class="navelem"><a class="el" href="file__status__manager_8cpp.html">file_status_manager.cpp</a></li>
-    <li class="footer">Generated on Sun Jun 19 2022 18:24:14 for HAL by
+    <li class="footer">Generated on Wed Jun 22 2022 09:21:09 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

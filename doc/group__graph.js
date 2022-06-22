@@ -126,7 +126,6 @@ var group__graph =
       [ "removeGraphItem", "classhal_1_1_graphics_scene.html#a0366a0f81bab584cfc078c39658bba76", null ],
       [ "startDragShadow", "classhal_1_1_graphics_scene.html#a0026dfd9d3d4be7b031f10bf0f111482", null ],
       [ "stopDragShadow", "classhal_1_1_graphics_scene.html#ad3ed269a30d6af98604003dfddebc574", null ],
-      [ "updateAllItems", "classhal_1_1_graphics_scene.html#a67b93e8efb90c600b222f438f040e066", null ],
       [ "updateVisuals", "classhal_1_1_graphics_scene.html#a10ff430e7ff392dff7418144c01e30c7", null ]
     ] ]
 ];

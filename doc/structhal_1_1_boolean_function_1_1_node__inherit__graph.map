@@ -1,0 +1,5 @@
+<map id="hal::BooleanFunction::Node" name="hal::BooleanFunction::Node">
+<area shape="rect" id="node1" title=" " alt="" coords="96,5,255,200"/>
+<area shape="rect" id="node2" href="$structhal_1_1_boolean_function_1_1_operand_node.html" title=" " alt="" coords="5,248,164,472"/>
+<area shape="rect" id="node3" href="$structhal_1_1_boolean_function_1_1_operation_node.html" title=" " alt="" coords="188,277,347,443"/>
+</map>

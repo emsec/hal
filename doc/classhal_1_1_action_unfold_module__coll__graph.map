@@ -1,5 +1,5 @@
 <map id="hal::ActionUnfoldModule" name="hal::ActionUnfoldModule">
-<area shape="rect" id="node1" title="Unfolds a module." alt="" coords="23,580,206,731"/>
-<area shape="rect" id="node2" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="5,233,224,531"/>
-<area shape="rect" id="node3" href="$classhal_1_1_user_action_object.html" title="The UserActionObject class represents a single object used in UserAction." alt="" coords="33,5,196,156"/>
+<area shape="rect" id="node1" title="Unfolds a module." alt="" coords="5,507,188,657"/>
+<area shape="rect" id="node2" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="19,219,175,457"/>
+<area shape="rect" id="node3" href="$classhal_1_1_user_action_object.html" title="The UserActionObject class represents a single object used in UserAction." alt="" coords="15,5,178,156"/>
 </map>

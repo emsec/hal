@@ -133,74 +133,75 @@ $(document).ready(function(){initNavTree('verilog__parser_8h_source.html',''); i
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <a class="code" href="classhal_1_1_verilog_parser.html">VerilogParser</a>()  = <span class="keywordflow">default</span>;</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        ~<a class="code" href="classhal_1_1_verilog_parser.html">VerilogParser</a>() = <span class="keywordflow">default</span>;</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;std::monostate&gt;</a> <a class="code" href="namespacehal_1_1gate__library__parser__manager.html#a37de54423126f56b765696a03bd78c48">parse</a>(<span class="keyword">const</span> std::filesystem::path&amp; file_path) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="namespacehal_1_1gate__library__parser__manager.html#a37de54423126f56b765696a03bd78c48">parse</a>(<span class="keyword">const</span> std::filesystem::path&amp; file_path) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;std::unique_ptr&lt;Netlist&gt;</a>&gt; instantiate(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* gate_library) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        std::unique_ptr&lt;Netlist&gt; instantiate(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* gate_library) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keyword">private</span>:</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        std::stringstream m_fs;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        std::filesystem::path m_path;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="comment">// temporary netlist</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <a class="code" href="classhal_1_1_netlist.html">Netlist</a>* m_netlist = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="comment">// all modules of the netlist</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        std::vector&lt;std::unique_ptr&lt;VerilogModule&gt;&gt; m_modules;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        std::unordered_map&lt;std::string, VerilogModule*&gt; m_modules_by_name;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        std::string m_last_module;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="comment">// token stream of entire input file</span></div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <a class="code" href="classhal_1_1_token_stream.html">TokenStream&lt;std::string&gt;</a> m_token_stream;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="comment">// some caching</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        std::unordered_map&lt;std::string, GateType*&gt; m_gate_types;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        std::unordered_map&lt;std::string, GateType*&gt; m_vcc_gate_types;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        std::unordered_map&lt;std::string, GateType*&gt; m_gnd_gate_types;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        std::unordered_map&lt;Net*, std::tuple&lt;PinDirection, std::string, Module*&gt;&gt; m_module_ports;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <span class="comment">// unique aliases</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        std::unordered_map&lt;std::string, u32&gt; m_signal_name_occurrences;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        std::unordered_map&lt;std::string, u32&gt; m_instance_name_occurrences;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <span class="comment">// nets</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>* m_zero_net;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>* m_one_net;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        std::unordered_map&lt;std::string, Net*&gt; m_net_by_name;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        std::unordered_map&lt;std::string, std::vector&lt;std::string&gt;&gt; m_nets_to_merge;</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <span class="comment">// parse HDL into intermediate format</span></div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <span class="keywordtype">void</span> tokenize();</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;std::monostate&gt;</a> parse_tokens();</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;std::monostate&gt;</a> parse_module(std::vector&lt;VerilogDataEntry&gt;&amp; attributes);</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <span class="keywordtype">void</span> parse_port_list(<a class="code" href="structhal_1_1_verilog_module.html">VerilogModule</a>* <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>);</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;std::monostate&gt;</a> parse_port_declaration_list(<a class="code" href="structhal_1_1_verilog_module.html">VerilogModule</a>* <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>);</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;std::monostate&gt;</a> parse_port_definition(<a class="code" href="structhal_1_1_verilog_module.html">VerilogModule</a>* <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>, std::vector&lt;VerilogDataEntry&gt;&amp; attributes);</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;std::monostate&gt;</a> parse_signal_definition(<a class="code" href="structhal_1_1_verilog_module.html">VerilogModule</a>* <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>, std::vector&lt;VerilogDataEntry&gt;&amp; attributes);</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;std::monostate&gt;</a> parse_assignment(<a class="code" href="structhal_1_1_verilog_module.html">VerilogModule</a>* <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>);</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keywordtype">void</span> parse_attribute(std::vector&lt;VerilogDataEntry&gt;&amp; attributes);</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;std::monostate&gt;</a> parse_instance(<a class="code" href="structhal_1_1_verilog_module.html">VerilogModule</a>* <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>, std::vector&lt;VerilogDataEntry&gt;&amp; attributes);</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;std::monostate&gt;</a> parse_port_assign(<a class="code" href="structhal_1_1_verilog_instance.html">VerilogInstance</a>* instance);</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;std::vector&lt;VerilogDataEntry&gt;</a>&gt; parse_generic_assign();</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <span class="comment">// construct netlist from intermediate format</span></div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;std::monostate&gt;</a> construct_netlist(<a class="code" href="structhal_1_1_verilog_module.html">VerilogModule</a>* top_module);</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;Module*&gt;</a></div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;            instantiate_module(<span class="keyword">const</span> std::string&amp; instance_name, <a class="code" href="structhal_1_1_verilog_module.html">VerilogModule</a>* verilog_module, <a class="code" href="classhal_1_1_module.html">Module</a>* parent, <span class="keyword">const</span> std::unordered_map&lt;std::string, std::string&gt;&amp; parent_module_assignments);</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <span class="comment">// helper functions</span></div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        std::string get_unique_alias(std::unordered_map&lt;std::string, u32&gt;&amp; name_occurrences, <span class="keyword">const</span> std::string&amp; <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    };</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="comment">// temporary netlist</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <a class="code" href="classhal_1_1_netlist.html">Netlist</a>* m_netlist = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="comment">// all modules of the netlist</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        std::unordered_map&lt;std::string, VerilogModule&gt; m_modules;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        std::string m_last_module;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <span class="comment">// token stream of entire input file</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <a class="code" href="classhal_1_1_token_stream.html">TokenStream&lt;std::string&gt;</a> m_token_stream;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="comment">// some caching</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        std::unordered_map&lt;std::string, GateType*&gt; m_gate_types;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        std::unordered_map&lt;std::string, GateType*&gt; m_vcc_gate_types;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        std::unordered_map&lt;std::string, GateType*&gt; m_gnd_gate_types;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        std::unordered_map&lt;Net*, std::tuple&lt;PinDirection, std::string, Module*&gt;&gt; m_module_ports;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="comment">// unique aliases</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        std::unordered_map&lt;std::string, u32&gt; m_signal_name_occurrences;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        std::unordered_map&lt;std::string, u32&gt; m_instance_name_occurrences;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="comment">// nets</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>* m_zero_net;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>* m_one_net;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        std::unordered_map&lt;std::string, Net*&gt; m_net_by_name;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        std::unordered_map&lt;std::string, std::vector&lt;std::string&gt;&gt; m_nets_to_merge;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="comment">// parse HDL into intermediate format</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keywordtype">bool</span> tokenize();</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <span class="keywordtype">bool</span> parse_tokens();</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <span class="keywordtype">bool</span> parse_module(std::map&lt;std::string, std::string&gt;&amp; attributes);</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <span class="keywordtype">bool</span> parse_port_list(<a class="code" href="structhal_1_1_verilog_module.html">VerilogModule</a>&amp; <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>);</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <span class="keywordtype">bool</span> parse_port_declaration_list(<a class="code" href="structhal_1_1_verilog_module.html">VerilogModule</a>&amp; <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <span class="keywordtype">bool</span> parse_port_definition(<a class="code" href="structhal_1_1_verilog_module.html">VerilogModule</a>&amp; <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>, std::map&lt;std::string, std::string&gt;&amp; attributes);</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <span class="keywordtype">bool</span> parse_signal_definition(<a class="code" href="structhal_1_1_verilog_module.html">VerilogModule</a>&amp; <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>, std::map&lt;std::string, std::string&gt;&amp; attributes);</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <span class="keywordtype">bool</span> parse_assignment(<a class="code" href="structhal_1_1_verilog_module.html">VerilogModule</a>&amp; <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>);</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keywordtype">bool</span> parse_attribute(std::map&lt;std::string, std::string&gt;&amp; attributes);</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keywordtype">bool</span> parse_instance(<a class="code" href="structhal_1_1_verilog_module.html">VerilogModule</a>&amp; <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>, std::map&lt;std::string, std::string&gt;&amp; attributes);</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keywordtype">bool</span> parse_port_assign(<a class="code" href="structhal_1_1_verilog_module.html">VerilogModule</a>&amp; <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>, <span class="keyword">const</span> std::string&amp; instance_name);</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        std::vector&lt;std::tuple&lt;std::string, std::string, std::string&gt;&gt; parse_generic_assign();</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        <span class="comment">// construct netlist from intermediate format</span></div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        <span class="keywordtype">bool</span> construct_netlist(<a class="code" href="structhal_1_1_verilog_module.html">VerilogModule</a>&amp; top_module);</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <a class="code" href="classhal_1_1_module.html">Module</a>* instantiate_module(<span class="keyword">const</span> std::string&amp; instance_name, <a class="code" href="structhal_1_1_verilog_module.html">VerilogModule</a>&amp; verilog_module, <a class="code" href="classhal_1_1_module.html">Module</a>* parent, <span class="keyword">const</span> std::unordered_map&lt;std::string, std::string&gt;&amp; parent_module_assignments);</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        <span class="comment">// helper functions</span></div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        <span class="keywordtype">void</span> remove_comments(std::string&amp; line, <span class="keywordtype">bool</span>&amp; multi_line_comment) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        std::vector&lt;u32&gt; parse_range(<a class="code" href="classhal_1_1_token_stream.html">TokenStream&lt;std::string&gt;</a>&amp; range_str) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        std::vector&lt;std::string&gt; get_bin_from_literal(<span class="keyword">const</span> <a class="code" href="structhal_1_1_token.html">Token&lt;std::string&gt;</a>&amp; value_token) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        std::string get_hex_from_literal(<span class="keyword">const</span> <a class="code" href="structhal_1_1_token.html">Token&lt;std::string&gt;</a>&amp; value_token) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        std::vector&lt;std::string&gt; expand_assignment_signal(<a class="code" href="structhal_1_1_verilog_module.html">VerilogModule</a>&amp; <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>, <a class="code" href="classhal_1_1_token_stream.html">TokenStream&lt;std::string&gt;</a>&amp; signal_str, <span class="keywordtype">bool</span> allow_numerics);</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        std::vector&lt;std::string&gt; expand_ranges(<span class="keyword">const</span> std::string&amp; name, <span class="keyword">const</span> std::vector&lt;std::vector&lt;u32&gt;&gt;&amp; ranges) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        <span class="keywordtype">void</span> expand_ranges_recursively(std::vector&lt;std::string&gt;&amp; expanded_names, <span class="keyword">const</span> std::string&amp; current_name, <span class="keyword">const</span> std::vector&lt;std::vector&lt;u32&gt;&gt;&amp; ranges, <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> dimension) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        std::string get_unique_alias(std::unordered_map&lt;std::string, u32&gt;&amp; name_occurrences, <span class="keyword">const</span> std::string&amp; name) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    };</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aclasshal_1_1_module_html"><div class="ttname"><a href="classhal_1_1_module.html">hal::Module</a></div><div class="ttdef"><b>Definition:</b> <a href="module_8h_source.html#l00062">module.h:62</a></div></div>
-<div class="ttc" id="astructhal_1_1_verilog_instance_html"><div class="ttname"><a href="structhal_1_1_verilog_instance.html">hal::VerilogInstance</a></div><div class="ttdef"><b>Definition:</b> <a href="verilog__module_8h_source.html#l00077">verilog_module.h:77</a></div></div>
-<div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_a9b45b3e13bd9167aab02e17e08916231"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a></div><div class="ttdeci">std::string name</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">netlist_serializer.cpp:56</a></div></div>
-<div class="ttc" id="astructhal_1_1_verilog_module_html"><div class="ttname"><a href="structhal_1_1_verilog_module.html">hal::VerilogModule</a></div><div class="ttdef"><b>Definition:</b> <a href="verilog__module_8h_source.html#l00088">verilog_module.h:88</a></div></div>
+<div class="ttc" id="aclasshal_1_1_module_html"><div class="ttname"><a href="classhal_1_1_module.html">hal::Module</a></div><div class="ttdef"><b>Definition:</b> <a href="module_8h_source.html#l00054">module.h:54</a></div></div>
+<div class="ttc" id="astructhal_1_1_verilog_module_html"><div class="ttname"><a href="structhal_1_1_verilog_module.html">hal::VerilogModule</a></div><div class="ttdef"><b>Definition:</b> <a href="verilog__module_8h_source.html#l00031">verilog_module.h:31</a></div></div>
 <div class="ttc" id="anamespacehal_1_1gate__library__parser__manager_html_a37de54423126f56b765696a03bd78c48"><div class="ttname"><a href="namespacehal_1_1gate__library__parser__manager.html#a37de54423126f56b765696a03bd78c48">hal::gate_library_parser_manager::parse</a></div><div class="ttdeci">std::unique_ptr&lt; GateLibrary &gt; parse(std::filesystem::path file_path)</div><div class="ttdef"><b>Definition:</b> <a href="gate__library__parser__manager_8cpp_source.html#l00076">gate_library_parser_manager.cpp:76</a></div></div>
-<div class="ttc" id="aclasshal_1_1_result_html"><div class="ttname"><a href="classhal_1_1_result.html">hal::Result</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00061">result.h:61</a></div></div>
 <div class="ttc" id="amodule_8h_html"><div class="ttname"><a href="module_8h.html">module.h</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00009">solver.cpp:9</a></div></div>
 <div class="ttc" id="aspecial__strings_8h_html"><div class="ttname"><a href="special__strings_8h.html">special_strings.h</a></div></div>
 <div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="defines_8h.html">defines.h</a></div></div>
 <div class="ttc" id="agate__type_8h_html"><div class="ttname"><a href="gate__type_8h.html">gate_type.h</a></div></div>
@@ -210,7 +211,9 @@ $(document).ready(function(){initNavTree('verilog__parser_8h_source.html',''); i
 <div class="ttc" id="aclasshal_1_1_net_html"><div class="ttname"><a href="classhal_1_1_net.html">hal::Net</a></div><div class="ttdef"><b>Definition:</b> <a href="net_8h_source.html#l00052">net.h:52</a></div></div>
 <div class="ttc" id="aclasshal_1_1_verilog_parser_html"><div class="ttname"><a href="classhal_1_1_verilog_parser.html">hal::VerilogParser</a></div><div class="ttdef"><b>Definition:</b> <a href="verilog__parser_8h_source.html#l00045">verilog_parser.h:45</a></div></div>
 <div class="ttc" id="anetlist__parser_8h_html"><div class="ttname"><a href="netlist__parser_8h.html">netlist_parser.h</a></div></div>
-<div class="ttc" id="aclasshal_1_1_netlist_parser_html"><div class="ttname"><a href="classhal_1_1_netlist_parser.html">hal::NetlistParser</a></div><div class="ttdef"><b>Definition:</b> <a href="netlist__parser_8h_source.html#l00040">netlist_parser.h:40</a></div></div>
+<div class="ttc" id="anet__layout__point_8h_html_aa7fe0c70576e86ca2c5f641bb47ccc9d"><div class="ttname"><a href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a></div><div class="ttdeci">quint32 u32</div><div class="ttdef"><b>Definition:</b> <a href="net__layout__point_8h_source.html#l00038">net_layout_point.h:38</a></div></div>
+<div class="ttc" id="astructhal_1_1_token_html"><div class="ttname"><a href="structhal_1_1_token.html">hal::Token</a></div><div class="ttdef"><b>Definition:</b> <a href="token__stream_8h_source.html#l00040">token_stream.h:40</a></div></div>
+<div class="ttc" id="aclasshal_1_1_netlist_parser_html"><div class="ttname"><a href="classhal_1_1_netlist_parser.html">hal::NetlistParser</a></div><div class="ttdef"><b>Definition:</b> <a href="netlist__parser_8h_source.html#l00039">netlist_parser.h:39</a></div></div>
 <div class="ttc" id="aarch__linux_8h_html_a3541b40303f35100314d8bb7efd18371"><div class="ttname"><a href="arch__linux_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a></div><div class="ttdeci">#define NETLIST_API</div><div class="ttdef"><b>Definition:</b> <a href="arch__linux_8h_source.html#l00028">arch_linux.h:28</a></div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_html"><div class="ttname"><a href="classhal_1_1_netlist.html">hal::Netlist</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2netlist_2netlist_8h_source.html#l00053">netlist.h:53</a></div></div>
 <div class="ttc" id="anet_8h_html"><div class="ttname"><a href="net_8h.html">net.h</a></div></div>
@@ -220,7 +223,7 @@ $(document).ready(function(){initNavTree('verilog__parser_8h_source.html',''); i
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_d7fcdf7474b2628967f84c9d1dc1db2a.html">verilog_parser</a></li><li class="navelem"><a class="el" href="dir_ce71c0226d2cf540337d32157bd52585.html">include</a></li><li class="navelem"><a class="el" href="dir_37c7a6205962feb0590a50d9a5e40d47.html">verilog_parser</a></li><li class="navelem"><a class="el" href="verilog__parser_8h.html">verilog_parser.h</a></li>
-    <li class="footer">Generated on Sun Jun 19 2022 18:24:15 for HAL by
+    <li class="footer">Generated on Wed Jun 22 2022 09:21:13 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

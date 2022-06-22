@@ -1,9 +1,0 @@
-<map id="/home/runner/work/hal/hal/src/netlist/pins/module_pin.cpp" name="/home/runner/work/hal/hal/src/netlist/pins/module_pin.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="187,5,356,61"/>
-<area shape="rect" id="node2" href="$module__pin_8h.html" title=" " alt="" coords="195,109,348,151"/>
-<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="139,377,279,404"/>
-<area shape="rect" id="node4" href="$net_8h.html" title=" " alt="" coords="26,295,184,322"/>
-<area shape="rect" id="node5" title=" " alt="" coords="332,377,390,404"/>
-<area shape="rect" id="node6" href="$base__pin_8h.html" title=" " alt="" coords="310,199,463,240"/>
-<area shape="rect" id="node7" href="$pin__group_8h.html" title=" " alt="" coords="208,288,362,329"/>
-</map>

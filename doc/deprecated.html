@@ -87,21 +87,31 @@ $(document).ready(function(){initNavTree('deprecated.html',''); initResizable();
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><dl class="reflist">
+<dt>Member <a class="el" href="classhal_1_1_boolean_function.html#a21f27997ed6b4f364395ea3948084cda">hal::BooleanFunction::operator!</a>  () const</dt>
+<dd><a class="anchor" id="_deprecated000007"></a> DEPRECATED <br  />
+ Negate the Boolean function. </dd>
 <dt>Member <a class="el" href="classhal_1_1_gate.html#a0a6692d6ed8bff35f957d205fbaeeedb">hal::Gate::get_input_pins</a>  () const</dt>
-<dd><a class="anchor" id="_deprecated000005"></a> DEPRECATED <br  />
+<dd><a class="anchor" id="_deprecated000008"></a> DEPRECATED <br  />
  Get a list of all input pin types of the gate. </dd>
 <dt>Member <a class="el" href="classhal_1_1_gate.html#adf0f213a84590849b95adba5756f4f8e">hal::Gate::get_output_pins</a>  () const</dt>
-<dd><a class="anchor" id="_deprecated000006"></a> DEPRECATED <br  />
+<dd><a class="anchor" id="_deprecated000009"></a> DEPRECATED <br  />
  Get a list of all output pin types of the gate. </dd>
 <dt>Member <a class="el" href="classhal_1_1_graphics_scene.html#aadb7a14bcc7cd28a5ecb04af9c09ed2d">hal::GraphicsScene::snapToGrid</a>  (const <a class="elRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a> &amp;pos) Q_DECL_DEPRECATED</dt>
 <dd><a class="anchor" id="_deprecated000001"></a>Please use GraphGraphicsView::closestLayouterPos instead. </dd>
 <dt>Member <a class="el" href="classhal_1_1_net.html#a261285edd2702cf3bfcf47a646a55234">hal::Net::get_source</a>  () const</dt>
-<dd><a class="anchor" id="_deprecated000007"></a> DEPRECATED <br  />
+<dd><a class="anchor" id="_deprecated000010"></a> DEPRECATED <br  />
  Get the (first) source-endpoint of the net. <br  />
  If there was no source assigned, the gate element of the returned endpoint is a nullptr. <br  />
  If the net is multi-driven a warning is printed. </dd>
-<dt>Member <a class="el" href="namespacehal_1_1netlist__utils.html#a491fd812517e94f3ee40e64813d7f9c5">hal::netlist_utils::copy_netlist</a>  (const <a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl)</dt>
-<dd><a class="anchor" id="_deprecated000008"></a> Get a deep copy of an entire netlist including all of its gates, nets, modules, and groupings. </dd>
+<dt>Member <a class="el" href="namespacehal_1_1netlist__utils.html#a7252fdca08ea0f7e5c0aa4720083d23c">hal::netlist_utils::rename_luts_according_to_function</a>  (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *netlist)</dt>
+<dd><a class="anchor" id="_deprecated000011"></a> DEPRECATED <br  />
+ Rename LUTs that implement simple functions to better reflect their functionality. </dd>
+<dt>Member <a class="el" href="classhal_1_1_netlist_simulator.html#aa1aa2c16dd45753d3fb842094cc56098">hal::NetlistSimulator::load_initial_values</a>  (<a class="el" href="classhal_1_1_boolean_function.html#aac7bb4fda3bf06664f6bc717c3be92fb" title="reprsents an operand node (e.g., a variable)">BooleanFunction::Value</a> value)</dt>
+<dd><a class="anchor" id="_deprecated000005"></a> DEPRECATED <br  />
+ Load the specified initial value into the current state of all sequential elements. </dd>
+<dt>Member <a class="el" href="classhal_1_1_netlist_simulator.html#a2509530cfa1f87b13b5fb35f14938524">hal::NetlistSimulator::load_initial_values_from_netlist</a>  ()</dt>
+<dd><a class="anchor" id="_deprecated000006"></a> DEPRECATED <br  />
+ Load the initial value specified within the netlist file into the current state of all sequential elements. This is especially relevant for FPGA netlists, since these may provide initial values to load on startup.  </dd>
 <dt>Member <a class="el" href="classnlohmann_1_1basic__json.html#a5e4212986136ca1220f351c60e89906b">nlohmann::basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt;::iterator_wrapper</a>  (reference ref) noexcept</dt>
 <dd><a class="anchor" id="_deprecated000002"></a>This stream operator is deprecated and will be removed in future 4.0.0 of the library. Please use <a class="el" href="classnlohmann_1_1basic__json.html#afe3e137ace692efa08590d8df40f58dd">items()</a> instead; that is, replace <code>json::iterator_wrapper(j)</code> with <code>j.items()</code>.  </dd>
 <dt>Member <a class="el" href="classnlohmann_1_1basic__json.html#a60ca396028b8d9714c6e10efbf475af6">nlohmann::basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt;::operator&lt;&lt;</a>  (<a class="el" href="classnlohmann_1_1basic__json.html" title="a class to store JSON values">basic_json</a> &amp;j, std::istream &amp;i)</dt>
@@ -115,7 +125,7 @@ $(document).ready(function(){initNavTree('deprecated.html',''); initResizable();
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sun Jun 19 2022 18:24:16 for HAL by
+    <li class="footer">Generated on Wed Jun 22 2022 09:21:14 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

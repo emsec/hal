@@ -1,0 +1,11 @@
+<map id="/home/runner/work/hal/hal/plugins/netlist_simulator/src/simulation_gate/simulation_gate_combinational.cpp" name="/home/runner/work/hal/hal/plugins/netlist_simulator/src/simulation_gate/simulation_gate_combinational.cpp">
+<area shape="rect" id="node1" title=" " alt="" coords="178,5,473,76"/>
+<area shape="rect" id="node2" href="$netlist__simulator_8h.html" title=" " alt="" coords="237,124,414,165"/>
+<area shape="rect" id="node3" href="$gate_8h.html" title=" " alt="" coords="121,228,287,255"/>
+<area shape="rect" id="node4" href="$gate__type_8h.html" title=" " alt="" coords="43,317,197,359"/>
+<area shape="rect" id="node5" title=" " alt="" coords="268,407,319,433"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5,407,120,433"/>
+<area shape="rect" id="node7" href="$async__set__reset__behavior_8h.html" title=" " alt="" coords="363,213,527,269"/>
+<area shape="rect" id="node8" href="$net_8h.html" title=" " alt="" coords="273,325,431,351"/>
+<area shape="rect" id="node9" href="$simulation_8h.html" title=" " alt="" coords="603,228,821,255"/>
+</map>

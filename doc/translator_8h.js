@@ -1,4 +1,4 @@
 var translator_8h =
 [
-    [ "translate_to_smt2", "translator_8h.html#a1f5025c43fbfe4675f2b8b8be739f2fa", null ]
+    [ "translate_to_smt2", "translator_8h.html#a066d1c8a4e50bb0ebe58158169b479e0", null ]
 ];

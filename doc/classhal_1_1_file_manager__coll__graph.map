@@ -1,4 +1,4 @@
 <map id="hal::FileManager" name="hal::FileManager">
-<area shape="rect" id="node1" title="Stores information about the currently opened netlist." alt="" coords="5,395,183,619"/>
-<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="11,5,177,347"/>
+<area shape="rect" id="node1" title="Stores information about the currently opened netlist." alt="" coords="5,395,223,575"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="31,5,197,347"/>
 </map>

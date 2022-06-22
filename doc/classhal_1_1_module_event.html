@@ -111,22 +111,18 @@ Public Types</h2></td></tr>
 &#160;&#160;<a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fabf5556db5f4ae80fdd39c0332197241a">event::parent_changed</a>, 
 <a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53faad2650767a6bde46731f82ac16b5a690">event::submodule_added</a>, 
 <a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa82d919bd772ab56d1f06bf9d8c4bc32c">event::submodule_removed</a>, 
-<a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa87249d8954401fed6417be3ba64c684c">event::gates_assign_begin</a>, 
-<br />
-&#160;&#160;<a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53faa00f842019349e5fec426e5b5f1b7c12">event::gates_assign_end</a>, 
 <a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa43159fd1b72c5cef395389b38e4d7c25">event::gate_assigned</a>, 
-<a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53faa034ad9ff6284cea7a7af194181b2e58">event::gates_remove_begin</a>, 
-<a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa0f975f12da3a233e7b7e38665cf67f08">event::gates_remove_end</a>, 
 <br />
 &#160;&#160;<a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa5bf6888f7204acd17fd29978733807dd">event::gate_removed</a>, 
-<a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa630acdba2edff17c07b41d79be77d39e">event::pin_changed</a>
+<a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa2f271574434c0b35c248148f6a9803d4">event::input_port_name_changed</a>, 
+<a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa5b4ec692a3ed15d168fd5ee741450a15">event::output_port_name_changed</a>
 <br />
  }</td></tr>
 <tr class="separator:ac760774ea38bdeb7c7fc7f9f9e96c53f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="event__handler_8h_source.html#l00097">97</a> of file <a class="el" href="event__handler_8h_source.html">event_handler.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="event__handler_8h_source.html#l00098">98</a> of file <a class="el" href="event__handler_8h_source.html">event_handler.h</a>.</p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="ac760774ea38bdeb7c7fc7f9f9e96c53f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac760774ea38bdeb7c7fc7f9f9e96c53f">&#9670;&nbsp;</a></span>event</h2>
@@ -162,23 +158,17 @@ Public Types</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="ac760774ea38bdeb7c7fc7f9f9e96c53fa82d919bd772ab56d1f06bf9d8c4bc32c"></a>submodule_removed&#160;</td><td class="fielddoc"><p>associated_data = id of removed module </p>
 </td></tr>
-<tr><td class="fieldname"><a id="ac760774ea38bdeb7c7fc7f9f9e96c53fa87249d8954401fed6417be3ba64c684c"></a>gates_assign_begin&#160;</td><td class="fielddoc"><p>associated_data = number of gates to assign </p>
-</td></tr>
-<tr><td class="fieldname"><a id="ac760774ea38bdeb7c7fc7f9f9e96c53faa00f842019349e5fec426e5b5f1b7c12"></a>gates_assign_end&#160;</td><td class="fielddoc"><p>associated_data = number of assigned gates </p>
-</td></tr>
 <tr><td class="fieldname"><a id="ac760774ea38bdeb7c7fc7f9f9e96c53fa43159fd1b72c5cef395389b38e4d7c25"></a>gate_assigned&#160;</td><td class="fielddoc"><p>associated_data = id of inserted gate </p>
-</td></tr>
-<tr><td class="fieldname"><a id="ac760774ea38bdeb7c7fc7f9f9e96c53faa034ad9ff6284cea7a7af194181b2e58"></a>gates_remove_begin&#160;</td><td class="fielddoc"><p>associated_data = number of gates to remove </p>
-</td></tr>
-<tr><td class="fieldname"><a id="ac760774ea38bdeb7c7fc7f9f9e96c53fa0f975f12da3a233e7b7e38665cf67f08"></a>gates_remove_end&#160;</td><td class="fielddoc"><p>associated_data = number of removed gates </p>
 </td></tr>
 <tr><td class="fieldname"><a id="ac760774ea38bdeb7c7fc7f9f9e96c53fa5bf6888f7204acd17fd29978733807dd"></a>gate_removed&#160;</td><td class="fielddoc"><p>associated_data = id of removed gate </p>
 </td></tr>
-<tr><td class="fieldname"><a id="ac760774ea38bdeb7c7fc7f9f9e96c53fa630acdba2edff17c07b41d79be77d39e"></a>pin_changed&#160;</td><td class="fielddoc"><p>no associated_data </p>
+<tr><td class="fieldname"><a id="ac760774ea38bdeb7c7fc7f9f9e96c53fa2f271574434c0b35c248148f6a9803d4"></a>input_port_name_changed&#160;</td><td class="fielddoc"><p>associated_data = id of respective net </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ac760774ea38bdeb7c7fc7f9f9e96c53fa5b4ec692a3ed15d168fd5ee741450a15"></a>output_port_name_changed&#160;</td><td class="fielddoc"><p>associated_data = id of respective net </p>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="event__handler_8h_source.html#l00100">100</a> of file <a class="el" href="event__handler_8h_source.html">event_handler.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="event__handler_8h_source.html#l00101">101</a> of file <a class="el" href="event__handler_8h_source.html">event_handler.h</a>.</p>
 
 </div>
 </div>
@@ -191,7 +181,7 @@ Public Types</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_module_event.html">ModuleEvent</a></li>
-    <li class="footer">Generated on Sun Jun 19 2022 18:24:18 for HAL by
+    <li class="footer">Generated on Wed Jun 22 2022 09:21:15 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

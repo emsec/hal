@@ -1,8 +1,8 @@
 <map id="/home/runner/work/hal/hal/include/hal_core/netlist/gate_library/gate_type_component/mac_component.h" name="/home/runner/work/hal/hal/include/hal_core/netlist/gate_library/gate_type_component/mac_component.h">
-<area shape="rect" id="node1" title=" " alt="" coords="98,5,301,91"/>
-<area shape="rect" id="node2" href="$gate__type__component_8h.html" title=" " alt="" coords="89,139,309,195"/>
+<area shape="rect" id="node1" title=" " alt="" coords="117,5,319,91"/>
+<area shape="rect" id="node2" href="$gate__type__component_8h.html" title=" " alt="" coords="108,139,328,195"/>
 <area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="5,332,145,359"/>
-<area shape="rect" id="node4" href="$boolean__function_8h.html" title=" " alt="" coords="47,243,226,284"/>
-<area shape="rect" id="node5" title=" " alt="" coords="175,332,218,359"/>
-<area shape="rect" id="node6" title=" " alt="" coords="301,250,388,277"/>
+<area shape="rect" id="node4" href="$boolean__function_8h.html" title=" " alt="" coords="50,243,229,284"/>
+<area shape="rect" id="node5" title=" " alt="" coords="253,250,340,277"/>
+<area shape="rect" id="node6" title=" " alt="" coords="365,250,407,277"/>
 </map>

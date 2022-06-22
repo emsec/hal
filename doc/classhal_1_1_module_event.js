@@ -8,12 +8,9 @@ var classhal_1_1_module_event =
       [ "parent_changed", "classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fabf5556db5f4ae80fdd39c0332197241a", null ],
       [ "submodule_added", "classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53faad2650767a6bde46731f82ac16b5a690", null ],
       [ "submodule_removed", "classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa82d919bd772ab56d1f06bf9d8c4bc32c", null ],
-      [ "gates_assign_begin", "classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa87249d8954401fed6417be3ba64c684c", null ],
-      [ "gates_assign_end", "classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53faa00f842019349e5fec426e5b5f1b7c12", null ],
       [ "gate_assigned", "classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa43159fd1b72c5cef395389b38e4d7c25", null ],
-      [ "gates_remove_begin", "classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53faa034ad9ff6284cea7a7af194181b2e58", null ],
-      [ "gates_remove_end", "classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa0f975f12da3a233e7b7e38665cf67f08", null ],
       [ "gate_removed", "classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa5bf6888f7204acd17fd29978733807dd", null ],
-      [ "pin_changed", "classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa630acdba2edff17c07b41d79be77d39e", null ]
+      [ "input_port_name_changed", "classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa2f271574434c0b35c248148f6a9803d4", null ],
+      [ "output_port_name_changed", "classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa5b4ec692a3ed15d168fd5ee741450a15", null ]
     ] ]
 ];

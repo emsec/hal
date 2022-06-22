@@ -1,11 +1,11 @@
 <map id="/home/runner/work/hal/hal/plugins/gui/src/user_action/user_action_object.cpp" name="/home/runner/work/hal/hal/plugins/gui/src/user_action/user_action_object.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="332,5,512,76"/>
-<area shape="rect" id="node2" href="$user__action__object_8h.html" title=" " alt="" coords="345,124,499,165"/>
-<area shape="rect" id="node5" href="$selection__relay_8h.html" title=" " alt="" coords="5,213,151,255"/>
-<area shape="rect" id="node9" title=" " alt="" coords="523,131,625,158"/>
-<area shape="rect" id="node3" href="$gui__def_8h.html" title=" " alt="" coords="456,303,561,329"/>
-<area shape="rect" id="node4" href="$defines_8h.html" title=" " alt="" coords="439,377,579,404"/>
-<area shape="rect" id="node6" title=" " alt="" coords="287,303,362,329"/>
-<area shape="rect" id="node7" title=" " alt="" coords="175,221,325,247"/>
-<area shape="rect" id="node8" title=" " alt="" coords="349,221,495,247"/>
+<area shape="rect" id="node1" title=" " alt="" coords="329,5,509,76"/>
+<area shape="rect" id="node2" href="$user__action__object_8h.html" title=" " alt="" coords="343,124,496,165"/>
+<area shape="rect" id="node7" href="$selection__relay_8h.html" title=" " alt="" coords="5,213,151,255"/>
+<area shape="rect" id="node9" title=" " alt="" coords="520,131,623,158"/>
+<area shape="rect" id="node3" title=" " alt="" coords="287,303,362,329"/>
+<area shape="rect" id="node4" title=" " alt="" coords="175,221,320,247"/>
+<area shape="rect" id="node5" title=" " alt="" coords="344,221,495,247"/>
+<area shape="rect" id="node6" href="$defines_8h.html" title=" " alt="" coords="439,377,579,404"/>
+<area shape="rect" id="node8" href="$gui__def_8h.html" title=" " alt="" coords="456,303,561,329"/>
 </map>
