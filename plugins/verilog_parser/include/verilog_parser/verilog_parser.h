@@ -83,7 +83,7 @@ namespace hal
         std::unordered_map<std::string, GateType*> m_gate_types;
         std::unordered_map<std::string, GateType*> m_vcc_gate_types;
         std::unordered_map<std::string, GateType*> m_gnd_gate_types;
-        std::unordered_map<Net*, std::tuple<PinDirection, std::string, Module*>> m_module_ports;
+        std::unordered_map<Net*, std::vector<std::tuple<PinDirection, std::string, Module*>>> m_module_ports;
 
         // unique aliases
         std::unordered_map<std::string, u32> m_signal_name_occurrences;

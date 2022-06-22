@@ -93,7 +93,7 @@ namespace hal
         std::unordered_map<ci_string, GateType*> m_gate_types;
         std::unordered_map<ci_string, GateType*> m_vcc_gate_types;
         std::unordered_map<ci_string, GateType*> m_gnd_gate_types;
-        std::unordered_map<Net*, std::tuple<PinDirection, std::string, Module*>> m_module_ports;
+        std::unordered_map<Net*, std::vector<std::tuple<PinDirection, std::string, Module*>>> m_module_ports;
         attribute_buffer_t m_attribute_buffer;
         std::unordered_map<ci_string, ci_string> m_attribute_types;
 
