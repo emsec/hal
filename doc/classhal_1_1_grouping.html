@@ -105,7 +105,7 @@ Collaboration diagram for hal::Grouping:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aa51b165c52b5548564948f870c8a1891"><td class="memItemLeft" align="right" valign="top"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping.html#aa51b165c52b5548564948f870c8a1891">get_id</a> () const</td></tr>
 <tr class="separator:aa51b165c52b5548564948f870c8a1891"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ae38c781f4d854660d6fdbe02623813"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping.html#a9ae38c781f4d854660d6fdbe02623813">set_name</a> (std::string name)</td></tr>
+<tr class="memitem:a9ae38c781f4d854660d6fdbe02623813"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping.html#a9ae38c781f4d854660d6fdbe02623813">set_name</a> (std::string <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
 <tr class="separator:a9ae38c781f4d854660d6fdbe02623813"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8036479cd8276ae940d4ec370b1e53e3"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping.html#a8036479cd8276ae940d4ec370b1e53e3">get_name</a> () const</td></tr>
 <tr class="separator:a8036479cd8276ae940d4ec370b1e53e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -133,7 +133,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ad11c49d20876f1cd46386f69de126ce2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac97bcda52ce231e266ed4a5313b7d504"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping.html#ac97bcda52ce231e266ed4a5313b7d504">contains_gate_by_id</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> gate_id) const</td></tr>
 <tr class="separator:ac97bcda52ce231e266ed4a5313b7d504"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae987f8404ba96b884090f63966827fa6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping.html#ae987f8404ba96b884090f63966827fa6">assign_net</a> (<a class="el" href="classhal_1_1_net.html">Net</a> *net, bool force=false)</td></tr>
+<tr class="memitem:ae987f8404ba96b884090f63966827fa6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping.html#ae987f8404ba96b884090f63966827fa6">assign_net</a> (<a class="el" href="classhal_1_1_net.html">Net</a> *<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>, bool force=false)</td></tr>
 <tr class="separator:ae987f8404ba96b884090f63966827fa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad253f42f616ed52a57d9384385e1155f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping.html#ad253f42f616ed52a57d9384385e1155f">assign_net_by_id</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> net_id, bool force=false)</td></tr>
 <tr class="separator:ad253f42f616ed52a57d9384385e1155f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -141,11 +141,11 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2ad367de162bec81f235cbe2d63c7b91"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a524384c5f0299a2bca63564d859f2f45"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping.html#a524384c5f0299a2bca63564d859f2f45">get_net_ids</a> (const std::function&lt; bool(<a class="el" href="classhal_1_1_net.html">Net</a> *)&gt; &amp;filter=nullptr) const</td></tr>
 <tr class="separator:a524384c5f0299a2bca63564d859f2f45"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3cc1fbebf759f451e2f8397215eef62f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping.html#a3cc1fbebf759f451e2f8397215eef62f">remove_net</a> (<a class="el" href="classhal_1_1_net.html">Net</a> *net)</td></tr>
+<tr class="memitem:a3cc1fbebf759f451e2f8397215eef62f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping.html#a3cc1fbebf759f451e2f8397215eef62f">remove_net</a> (<a class="el" href="classhal_1_1_net.html">Net</a> *<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>)</td></tr>
 <tr class="separator:a3cc1fbebf759f451e2f8397215eef62f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a855be1c6d8b725d3ae27b99308e8b2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping.html#a5a855be1c6d8b725d3ae27b99308e8b2">remove_net_by_id</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> net_id)</td></tr>
 <tr class="separator:a5a855be1c6d8b725d3ae27b99308e8b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46a985bf29ce9e631f7c0ae27cc82f2e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping.html#a46a985bf29ce9e631f7c0ae27cc82f2e">contains_net</a> (<a class="el" href="classhal_1_1_net.html">Net</a> *net) const</td></tr>
+<tr class="memitem:a46a985bf29ce9e631f7c0ae27cc82f2e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping.html#a46a985bf29ce9e631f7c0ae27cc82f2e">contains_net</a> (<a class="el" href="classhal_1_1_net.html">Net</a> *<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>) const</td></tr>
 <tr class="separator:a46a985bf29ce9e631f7c0ae27cc82f2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b5597f42468c6d313dcbc8daa50e236"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping.html#a2b5597f42468c6d313dcbc8daa50e236">contains_net_by_id</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> net_id) const</td></tr>
 <tr class="separator:a2b5597f42468c6d313dcbc8daa50e236"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -218,7 +218,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00069">69</a> of file <a class="el" href="src_2netlist_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00074">assign_gate_by_id()</a>, <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>, and <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l01059">hal::netlist_utils::replace_gate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00074">assign_gate_by_id()</a>, <a class="el" href="grouping__serializer_8cpp_source.html#l00069">hal::GroupingSerializer::deserialize()</a>, <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>, and <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00966">hal::netlist_utils::replace_gate()</a>.</p>
 
 </div>
 </div>
@@ -261,9 +261,9 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00074">74</a> of file <a class="el" href="src_2netlist_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00069">assign_gate()</a>, and <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00183">hal::Netlist::get_gate_by_id()</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00069">assign_gate()</a>, and <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00186">hal::Netlist::get_gate_by_id()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00170">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="action__add__items__to__object_8cpp_source.html#l00076">hal::ActionAddItemsToObject::exec()</a>, and <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="action__add__items__to__object_8cpp_source.html#l00081">hal::ActionAddItemsToObject::exec()</a>, and <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>.</p>
 
 </div>
 </div>
@@ -308,7 +308,7 @@ Friends</h2></td></tr>
 
 <p class="reference">References <a class="el" href="graph__graphics__view_8cpp_source.html#l00877">hal::ShortestPath::module()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00238">assign_module_by_id()</a>, and <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00238">assign_module_by_id()</a>, <a class="el" href="grouping__serializer_8cpp_source.html#l00069">hal::GroupingSerializer::deserialize()</a>, and <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>.</p>
 
 </div>
 </div>
@@ -351,9 +351,9 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00238">238</a> of file <a class="el" href="src_2netlist_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00233">assign_module()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00579">hal::Netlist::get_module_by_id()</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00877">hal::ShortestPath::module()</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00233">assign_module()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00572">hal::Netlist::get_module_by_id()</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00877">hal::ShortestPath::module()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00170">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="action__add__items__to__object_8cpp_source.html#l00076">hal::ActionAddItemsToObject::exec()</a>, and <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="action__add__items__to__object_8cpp_source.html#l00081">hal::ActionAddItemsToObject::exec()</a>, and <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>.</p>
 
 </div>
 </div>
@@ -396,9 +396,9 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00151">151</a> of file <a class="el" href="src_2netlist_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__graphics__view_8cpp_source.html#l00868">hal::ShortestPath::net()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00055">net</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00156">assign_net_by_id()</a>, and <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00156">assign_net_by_id()</a>, <a class="el" href="grouping__serializer_8cpp_source.html#l00069">hal::GroupingSerializer::deserialize()</a>, and <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>.</p>
 
 </div>
 </div>
@@ -441,9 +441,9 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00156">156</a> of file <a class="el" href="src_2netlist_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00151">assign_net()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00343">hal::Netlist::get_net_by_id()</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00868">hal::ShortestPath::net()</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00151">assign_net()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00346">hal::Netlist::get_net_by_id()</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00055">net</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00170">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="action__add__items__to__object_8cpp_source.html#l00076">hal::ActionAddItemsToObject::exec()</a>, and <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="action__add__items__to__object_8cpp_source.html#l00081">hal::ActionAddItemsToObject::exec()</a>, and <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>.</p>
 
 </div>
 </div>
@@ -505,7 +505,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00146">146</a> of file <a class="el" href="src_2netlist_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00136">contains_gate()</a>, <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00493">hal::GraphicsScene::handleGroupingColorChanged()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00136">contains_gate()</a>, and <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>.</p>
 
 </div>
 </div>
@@ -536,7 +536,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00300">300</a> of file <a class="el" href="src_2netlist_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00310">contains_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00094">hal::Module::get_id()</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00877">hal::ShortestPath::module()</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00310">contains_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00082">hal::Module::get_id()</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00877">hal::ShortestPath::module()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>.</p>
 
@@ -569,7 +569,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00310">310</a> of file <a class="el" href="src_2netlist_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00300">contains_module()</a>, <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00493">hal::GraphicsScene::handleGroupingColorChanged()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00300">contains_module()</a>, and <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>.</p>
 
 </div>
 </div>
@@ -600,7 +600,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00218">218</a> of file <a class="el" href="src_2netlist_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00228">contains_net_by_id()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00088">hal::Net::get_id()</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00868">hal::ShortestPath::net()</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00228">contains_net_by_id()</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00055">net</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>.</p>
 
@@ -633,7 +633,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00228">228</a> of file <a class="el" href="src_2netlist_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00218">contains_net()</a>, <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00493">hal::GraphicsScene::handleGroupingColorChanged()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00218">contains_net()</a>, and <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>.</p>
 
 </div>
 </div>
@@ -656,7 +656,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00047">47</a> of file <a class="el" href="src_2netlist_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="grouping__table__model_8cpp_source.html#l00040">hal::GroupingTableEntry::color()</a>, <a class="el" href="grouping__table__model_8cpp_source.html#l00274">hal::GroupingTableModel::groupingColorChangedEvent()</a>, and <a class="el" href="event__log_8cpp_source.html#l00156">hal::event_log::handle_grouping_event()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="grouping__table__model_8cpp_source.html#l00040">hal::GroupingTableEntry::color()</a>, <a class="el" href="grouping__table__model_8cpp_source.html#l00274">hal::GroupingTableModel::groupingColorChangedEvent()</a>, and <a class="el" href="event__log_8cpp_source.html#l00159">hal::event_log::handle_grouping_event()</a>.</p>
 
 </div>
 </div>
@@ -743,7 +743,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00022">22</a> of file <a class="el" href="src_2netlist_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="action__create__object_8cpp_source.html#l00055">hal::ActionCreateObject::exec()</a>, <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>, <a class="el" href="selection__details__widget_8cpp_source.html#l00236">hal::SelectionDetailsWidget::groupingUnassignActionFactory()</a>, <a class="el" href="event__log_8cpp_source.html#l00156">hal::event_log::handle_grouping_event()</a>, <a class="el" href="grouping__table__model_8cpp_source.html#l00028">hal::GroupingTableEntry::id()</a>, <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00058">next_color()</a>, and <a class="el" href="selection__details__widget_8cpp_source.html#l00270">hal::SelectionDetailsWidget::selectionToGroupingAction()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="action__create__object_8cpp_source.html#l00055">hal::ActionCreateObject::exec()</a>, <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>, <a class="el" href="selection__details__widget_8cpp_source.html#l00230">hal::SelectionDetailsWidget::groupingUnassignActionFactory()</a>, <a class="el" href="event__log_8cpp_source.html#l00159">hal::event_log::handle_grouping_event()</a>, <a class="el" href="grouping__table__model_8cpp_source.html#l00028">hal::GroupingTableEntry::id()</a>, <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00058">next_color()</a>, and <a class="el" href="selection__details__widget_8cpp_source.html#l00264">hal::SelectionDetailsWidget::selectionToGroupingAction()</a>.</p>
 
 </div>
 </div>
@@ -774,7 +774,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00272">272</a> of file <a class="el" href="src_2netlist_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00094">hal::Module::get_id()</a>, <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00249">get_modules()</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00877">hal::ShortestPath::module()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00082">hal::Module::get_id()</a>, <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00249">get_modules()</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00877">hal::ShortestPath::module()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="action__delete__object_8cpp_source.html#l00030">hal::ActionDeleteObject::exec()</a>, and <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>.</p>
 
@@ -832,7 +832,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00042">42</a> of file <a class="el" href="src_2netlist_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="details__general__model_8h_source.html#l00238">hal::DetailsGeneralCommonInfo&lt; T &gt;::grouping()</a>, <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>, <a class="el" href="grouping__table__model_8cpp_source.html#l00258">hal::GroupingTableModel::groupingNameChangedEvent()</a>, <a class="el" href="event__log_8cpp_source.html#l00156">hal::event_log::handle_grouping_event()</a>, and <a class="el" href="grouping__table__model_8cpp_source.html#l00034">hal::GroupingTableEntry::name()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>, <a class="el" href="grouping__table__model_8cpp_source.html#l00258">hal::GroupingTableModel::groupingNameChangedEvent()</a>, <a class="el" href="event__log_8cpp_source.html#l00159">hal::event_log::handle_grouping_event()</a>, and <a class="el" href="grouping__table__model_8cpp_source.html#l00034">hal::GroupingTableEntry::name()</a>.</p>
 
 </div>
 </div>
@@ -863,7 +863,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00190">190</a> of file <a class="el" href="src_2netlist_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2net_8cpp_source.html#l00088">hal::Net::get_id()</a>, <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00167">get_nets()</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00868">hal::ShortestPath::net()</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00167">get_nets()</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00055">net</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="action__delete__object_8cpp_source.html#l00030">hal::ActionDeleteObject::exec()</a>, and <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>.</p>
 
@@ -888,7 +888,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00064">64</a> of file <a class="el" href="src_2netlist_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>, and <a class="el" href="event__log_8cpp_source.html#l00156">hal::event_log::handle_grouping_event()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>, and <a class="el" href="event__log_8cpp_source.html#l00159">hal::event_log::handle_grouping_event()</a>.</p>
 
 </div>
 </div>
@@ -919,7 +919,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00167">167</a> of file <a class="el" href="src_2netlist_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__graphics__view_8cpp_source.html#l00868">hal::ShortestPath::net()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00055">net</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00190">get_net_ids()</a>, <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>, and <a class="el" href="grouping__table__model_8cpp_source.html#l00173">hal::GroupingTableModel::removeRows()</a>.</p>
 
@@ -1006,7 +1006,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00125">125</a> of file <a class="el" href="src_2netlist_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00183">hal::Netlist::get_gate_by_id()</a>, and <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00120">remove_gate()</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00186">hal::Netlist::get_gate_by_id()</a>, and <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00120">remove_gate()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="action__remove__items__from__object_8cpp_source.html#l00054">hal::ActionRemoveItemsFromObject::exec()</a>, and <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>.</p>
 
@@ -1072,7 +1072,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00289">289</a> of file <a class="el" href="src_2netlist_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00579">hal::Netlist::get_module_by_id()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00877">hal::ShortestPath::module()</a>, and <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00284">remove_module()</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00572">hal::Netlist::get_module_by_id()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00877">hal::ShortestPath::module()</a>, and <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00284">remove_module()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="action__remove__items__from__object_8cpp_source.html#l00054">hal::ActionRemoveItemsFromObject::exec()</a>.</p>
 
@@ -1105,7 +1105,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00202">202</a> of file <a class="el" href="src_2netlist_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__graphics__view_8cpp_source.html#l00868">hal::ShortestPath::net()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00055">net</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>, <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00207">remove_net_by_id()</a>, and <a class="el" href="grouping__table__model_8cpp_source.html#l00173">hal::GroupingTableModel::removeRows()</a>.</p>
 
@@ -1138,7 +1138,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00207">207</a> of file <a class="el" href="src_2netlist_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00343">hal::Netlist::get_net_by_id()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00868">hal::ShortestPath::net()</a>, and <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00202">remove_net()</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00346">hal::Netlist::get_net_by_id()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00055">net</a>, and <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00202">remove_net()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="action__remove__items__from__object_8cpp_source.html#l00054">hal::ActionRemoveItemsFromObject::exec()</a>, and <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>.</p>
 
@@ -1169,7 +1169,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00052">52</a> of file <a class="el" href="src_2netlist_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8a3657ad381110b05b25b1ddfa4221ae09">hal::GroupingEvent::color_changed</a>, and <a class="el" href="event__handler_8cpp_source.html#l00061">hal::EventHandler::notify()</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8a3657ad381110b05b25b1ddfa4221ae09">hal::GroupingEvent::color_changed</a>, and <a class="el" href="event__handler_8cpp_source.html#l00081">hal::EventHandler::notify()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="grouping__table__model_8cpp_source.html#l00052">hal::GroupingTableEntry::setColor()</a>.</p>
 
@@ -1200,7 +1200,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00027">27</a> of file <a class="el" href="src_2netlist_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="log_8h_source.html#l00075">log_error</a>, <a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8ac2c85b49688a09eae85e889227c4f3ab">hal::GroupingEvent::name_changed</a>, <a class="el" href="event__handler_8cpp_source.html#l00061">hal::EventHandler::notify()</a>, and <a class="el" href="utils_8h_source.html#l00313">hal::utils::trim()</a>.</p>
+<p class="reference">References <a class="el" href="log_8h_source.html#l00075">log_error</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>, <a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8ac2c85b49688a09eae85e889227c4f3ab">hal::GroupingEvent::name_changed</a>, <a class="el" href="event__handler_8cpp_source.html#l00081">hal::EventHandler::notify()</a>, and <a class="el" href="utils_8h_source.html#l00333">hal::utils::trim()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="src_2python__bindings_2bindings_2grouping_8cpp_source.html#l00005">hal::grouping_init()</a>, and <a class="el" href="grouping__table__model_8cpp_source.html#l00046">hal::GroupingTableEntry::setName()</a>.</p>
 
@@ -1241,7 +1241,7 @@ Friends</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_grouping.html">Grouping</a></li>
-    <li class="footer">Generated on Wed Jun 22 2022 09:21:15 for HAL by
+    <li class="footer">Generated on Thu Jun 23 2022 10:01:46 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

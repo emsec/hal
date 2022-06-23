@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist Factory &mdash; hal_py v3.3.0-108-g608e80189 documentation</title>
+  <title>Netlist Factory &mdash; hal_py v3.3.0-649-g77d8690e8 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.3.0-108-g608e80189
+                v3.3.0-649-g77d8690e8
               </div>
             
           
@@ -100,6 +100,8 @@
 <li class="toctree-l2"><a class="reference internal" href="grouping.html">Grouping</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gui_plugin_interface.html">GUI Plugin Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module.html">Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_pin.html">Module Pin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_pin_group.html">Module Pin Group</a></li>
 <li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist.html">Netlist</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Netlist Factory</a></li>
@@ -110,6 +112,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pin_direction.html">Pin Direction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_type.html">Pin Type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smt.html">SMT</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="plugins.html">HAL Plugins Documentation</a></li>
@@ -194,6 +197,24 @@
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The netlist on success, None otherwise.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist">hal_py.Netlist</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="hal_py.NetlistFactory.load_hal_project">
+<code class="descclassname">hal_py.NetlistFactory.</code><code class="descname">load_hal_project</code><span class="sig-paren">(</span><em>project_dir: hal_py.HalPath</em><span class="sig-paren">)</span> &#x2192; hal_py.Netlist<a class="headerlink" href="#hal_py.NetlistFactory.load_hal_project" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a netlist from the given .hal file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>project_dir</strong> (<em>hal_py.hal_path</em>) – Path to the hal project directory.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The netlist on success, None otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist">hal_py.Netlist</a></td>
 </tr>
 </tbody>
 </table>

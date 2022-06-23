@@ -116,16 +116,16 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aabd5469ba4820abbb513dcbf9c9e5627"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aacbccffdad2fb9c214148f5152ed4f2e"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_parser.html#aacbccffdad2fb9c214148f5152ed4f2e">~NetlistParser</a> ()=default</td></tr>
 <tr class="separator:aacbccffdad2fb9c214148f5152ed4f2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aee94aac1a2d93608e5a283931dd931df"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_parser.html#aee94aac1a2d93608e5a283931dd931df">parse</a> (const std::filesystem::path &amp;file_path)=0</td></tr>
-<tr class="separator:aee94aac1a2d93608e5a283931dd931df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7462742a845f79a59a2a46817ff7ce65"><td class="memItemLeft" align="right" valign="top">virtual std::unique_ptr&lt; <a class="el" href="classhal_1_1_netlist.html">Netlist</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_parser.html#a7462742a845f79a59a2a46817ff7ce65">instantiate</a> (const <a class="el" href="classhal_1_1_gate_library.html">GateLibrary</a> *gate_library)=0</td></tr>
-<tr class="separator:a7462742a845f79a59a2a46817ff7ce65"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afbfa5b65c9d4ac75b48b3390c7f6ab41"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classhal_1_1_netlist.html">Netlist</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_parser.html#afbfa5b65c9d4ac75b48b3390c7f6ab41">parse_and_instantiate</a> (const std::filesystem::path &amp;file_path, const <a class="el" href="classhal_1_1_gate_library.html">GateLibrary</a> *gate_library)</td></tr>
-<tr class="separator:afbfa5b65c9d4ac75b48b3390c7f6ab41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad0b38c8eec461b9e27c851e5c9082b6"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::monostate &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_parser.html#aad0b38c8eec461b9e27c851e5c9082b6">parse</a> (const std::filesystem::path &amp;file_path)=0</td></tr>
+<tr class="separator:aad0b38c8eec461b9e27c851e5c9082b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac37aa566d2a1ca89be3ed078ef44d3b2"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::unique_ptr&lt; <a class="el" href="classhal_1_1_netlist.html">Netlist</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_parser.html#ac37aa566d2a1ca89be3ed078ef44d3b2">instantiate</a> (const <a class="el" href="classhal_1_1_gate_library.html">GateLibrary</a> *gate_library)=0</td></tr>
+<tr class="separator:ac37aa566d2a1ca89be3ed078ef44d3b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ee24a678cd03d814358160c6c7ca453"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::unique_ptr&lt; <a class="el" href="classhal_1_1_netlist.html">Netlist</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_parser.html#a1ee24a678cd03d814358160c6c7ca453">parse_and_instantiate</a> (const std::filesystem::path &amp;file_path, const <a class="el" href="classhal_1_1_gate_library.html">GateLibrary</a> *gate_library)</td></tr>
+<tr class="separator:a1ee24a678cd03d814358160c6c7ca453"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="netlist__parser_8h_source.html#l00039">39</a> of file <a class="el" href="netlist__parser_8h_source.html">netlist_parser.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__parser_8h_source.html#l00040">40</a> of file <a class="el" href="netlist__parser_8h_source.html">netlist_parser.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aabd5469ba4820abbb513dcbf9c9e5627"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aabd5469ba4820abbb513dcbf9c9e5627">&#9670;&nbsp;</a></span>NetlistParser()</h2>
@@ -178,8 +178,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a7462742a845f79a59a2a46817ff7ce65"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7462742a845f79a59a2a46817ff7ce65">&#9670;&nbsp;</a></span>instantiate()</h2>
+<a id="ac37aa566d2a1ca89be3ed078ef44d3b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac37aa566d2a1ca89be3ed078ef44d3b2">&#9670;&nbsp;</a></span>instantiate()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -188,7 +188,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual std::unique_ptr&lt;<a class="el" href="classhal_1_1_netlist.html">Netlist</a>&gt; hal::NetlistParser::instantiate </td>
+          <td class="memname">virtual <a class="el" href="classhal_1_1_result.html">Result</a>&lt;std::unique_ptr&lt;<a class="el" href="classhal_1_1_netlist.html">Netlist</a>&gt; &gt; hal::NetlistParser::instantiate </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classhal_1_1_gate_library.html">GateLibrary</a> *&#160;</td>
           <td class="paramname"><em>gate_library</em></td><td>)</td>
@@ -210,12 +210,12 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A pointer to the resulting netlist. </dd></dl>
 
-<p>Implemented in <a class="el" href="classhal_1_1_verilog_parser.html#a57c17f8bfd244845fe598cc4d919f5e2">hal::VerilogParser</a>, and <a class="el" href="classhal_1_1_v_h_d_l_parser.html#affdd3be6065a88b943ae8ac34aab4fd2">hal::VHDLParser</a>.</p>
+<p>Implemented in <a class="el" href="classhal_1_1_v_h_d_l_parser.html#afef7ad24385cdb4a5219bb96c6e55898">hal::VHDLParser</a>, and <a class="el" href="classhal_1_1_verilog_parser.html#a7f5c124cc4b16f855f2305dc049dab6a">hal::VerilogParser</a>.</p>
 
 </div>
 </div>
-<a id="aee94aac1a2d93608e5a283931dd931df"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aee94aac1a2d93608e5a283931dd931df">&#9670;&nbsp;</a></span>parse()</h2>
+<a id="aad0b38c8eec461b9e27c851e5c9082b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad0b38c8eec461b9e27c851e5c9082b6">&#9670;&nbsp;</a></span>parse()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -224,7 +224,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual bool hal::NetlistParser::parse </td>
+          <td class="memname">virtual <a class="el" href="classhal_1_1_result.html">Result</a>&lt;std::monostate&gt; hal::NetlistParser::parse </td>
           <td>(</td>
           <td class="paramtype">const std::filesystem::path &amp;&#160;</td>
           <td class="paramname"><em>file_path</em></td><td>)</td>
@@ -246,12 +246,12 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p>Implemented in <a class="el" href="classhal_1_1_verilog_parser.html#a1b6bec76c4f9665b388706cf80722360">hal::VerilogParser</a>, and <a class="el" href="classhal_1_1_v_h_d_l_parser.html#a79b8a8fc99123490531ea8339587cc45">hal::VHDLParser</a>.</p>
+<p>Implemented in <a class="el" href="classhal_1_1_v_h_d_l_parser.html#a4f2a41871abc23e22badf76ded8169ae">hal::VHDLParser</a>, and <a class="el" href="classhal_1_1_verilog_parser.html#a3098e54bc14ec96b8b398336b84da054">hal::VerilogParser</a>.</p>
 
 </div>
 </div>
-<a id="afbfa5b65c9d4ac75b48b3390c7f6ab41"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afbfa5b65c9d4ac75b48b3390c7f6ab41">&#9670;&nbsp;</a></span>parse_and_instantiate()</h2>
+<a id="a1ee24a678cd03d814358160c6c7ca453"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ee24a678cd03d814358160c6c7ca453">&#9670;&nbsp;</a></span>parse_and_instantiate()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -260,7 +260,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::unique_ptr&lt;<a class="el" href="classhal_1_1_netlist.html">Netlist</a>&gt; hal::NetlistParser::parse_and_instantiate </td>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt;std::unique_ptr&lt;<a class="el" href="classhal_1_1_netlist.html">Netlist</a>&gt; &gt; hal::NetlistParser::parse_and_instantiate </td>
           <td>(</td>
           <td class="paramtype">const std::filesystem::path &amp;&#160;</td>
           <td class="paramname"><em>file_path</em>, </td>
@@ -293,9 +293,9 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A pointer to the resulting netlist. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__parser_8h_source.html#l00068">68</a> of file <a class="el" href="netlist__parser_8h_source.html">netlist_parser.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__parser_8h_source.html#l00069">69</a> of file <a class="el" href="netlist__parser_8h_source.html">netlist_parser.h</a>.</p>
 
-<p class="reference">References <a class="el" href="gate__library__parser__manager_8cpp_source.html#l00076">hal::gate_library_parser_manager::parse()</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00051">ERR</a>, and <a class="el" href="gate__library__parser__manager_8cpp_source.html#l00076">hal::gate_library_parser_manager::parse()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="test_2verilog__parser_8cpp_source.html#l00041">hal::TEST_F()</a>.</p>
 
@@ -310,7 +310,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_netlist_parser.html">NetlistParser</a></li>
-    <li class="footer">Generated on Wed Jun 22 2022 09:21:15 for HAL by
+    <li class="footer">Generated on Thu Jun 23 2022 10:01:47 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

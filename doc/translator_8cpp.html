@@ -90,17 +90,33 @@ $(document).ready(function(){initNavTree('translator_8cpp.html',''); initResizab
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="translator_8h_source.html">hal_core/netlist/boolean_function/translator.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="log_8h_source.html">hal_core/utilities/log.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="utils_8h_source.html">hal_core/utilities/utils.h</a>&quot;</code><br />
+<code>#include &lt;boost/multiprecision/cpp_int.hpp&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for translator.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="translator_8cpp__incl.png" border="0" usemap="#_2home_2runner_2work_2hal_2hal_2src_2netlist_2boolean__function_2translator_8cpp" alt=""/></div>
 <map name="_2home_2runner_2work_2hal_2hal_2src_2netlist_2boolean__function_2translator_8cpp" id="_2home_2runner_2work_2hal_2hal_2src_2netlist_2boolean__function_2translator_8cpp">
-<area shape="rect" title=" " alt="" coords="123,5,297,61"/>
-<area shape="rect" href="translator_8h.html" title=" " alt="" coords="121,109,299,151"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="5,288,145,315"/>
-<area shape="rect" href="boolean__function_8h.html" title=" " alt="" coords="50,199,229,240"/>
-<area shape="rect" title=" " alt="" coords="253,206,311,233"/>
-<area shape="rect" title=" " alt="" coords="336,206,391,233"/>
+<area shape="rect" title=" " alt="" coords="755,5,929,61"/>
+<area shape="rect" href="translator_8h.html" title=" " alt="" coords="473,109,651,151"/>
+<area shape="rect" href="log_8h.html" title=" " alt="" coords="726,109,857,151"/>
+<area shape="rect" href="utils_8h.html" title=" " alt="" coords="1478,199,1609,240"/>
+<area shape="rect" title=" " alt="" coords="931,109,1086,151"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="304,288,444,315"/>
+<area shape="rect" href="boolean__function_8h.html" title=" " alt="" coords="473,199,651,240"/>
+<area shape="rect" title=" " alt="" coords="863,288,922,315"/>
+<area shape="rect" title=" " alt="" coords="5,288,60,315"/>
+<area shape="rect" title=" " alt="" coords="537,288,587,315"/>
+<area shape="rect" title=" " alt="" coords="665,288,707,315"/>
+<area shape="rect" href="callback__hook_8h.html" title=" " alt="" coords="777,199,907,240"/>
+<area shape="rect" title=" " alt="" coords="1500,288,1587,315"/>
+<area shape="rect" href="program__arguments_8h.html" title=" " alt="" coords="105,199,275,240"/>
+<area shape="rect" title=" " alt="" coords="151,288,229,315"/>
+<area shape="rect" href="program__options_8h.html" title=" " alt="" coords="300,199,448,240"/>
+<area shape="rect" title=" " alt="" coords="982,206,1046,233"/>
+<area shape="rect" title=" " alt="" coords="1070,206,1254,233"/>
+<area shape="rect" title=" " alt="" coords="1279,206,1403,233"/>
 </map>
 </div>
 </div>
@@ -117,10 +133,12 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a6290ad3cfbb81a9fc7e01697a190c8d1"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; bool, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_translator.html#a6290ad3cfbb81a9fc7e01697a190c8d1">hal::SMT::Translator::reduce_to_smt2</a> (const BooleanFunction::Node *node, std::vector&lt; std::string &gt; &amp;&amp;operands)</td></tr>
-<tr class="separator:a6290ad3cfbb81a9fc7e01697a190c8d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a066d1c8a4e50bb0ebe58158169b479e0"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; bool, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_translator.html#a066d1c8a4e50bb0ebe58158169b479e0">hal::SMT::Translator::translate_to_smt2</a> (const BooleanFunction &amp;function)</td></tr>
-<tr class="separator:a066d1c8a4e50bb0ebe58158169b479e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6222c3f2e18e693a1f5681505e2edd4e"><td class="memItemLeft" align="right" valign="top">Result&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_translator.html#a6222c3f2e18e693a1f5681505e2edd4e">hal::SMT::Translator::const2str</a> (const std::vector&lt; BooleanFunction::Value &gt; &amp;number)</td></tr>
+<tr class="separator:a6222c3f2e18e693a1f5681505e2edd4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50d1fbb237c473754b22a8c481e3b05f"><td class="memItemLeft" align="right" valign="top">Result&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_translator.html#a50d1fbb237c473754b22a8c481e3b05f">hal::SMT::Translator::reduce_to_smt2</a> (const BooleanFunction::Node &amp;node, std::vector&lt; std::string &gt; &amp;&amp;p, size_t index, const BooleanFunction &amp;function)</td></tr>
+<tr class="separator:a50d1fbb237c473754b22a8c481e3b05f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f5025c43fbfe4675f2b8b8be739f2fa"><td class="memItemLeft" align="right" valign="top">Result&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_translator.html#a1f5025c43fbfe4675f2b8b8be739f2fa">hal::SMT::Translator::translate_to_smt2</a> (const BooleanFunction &amp;function)</td></tr>
+<tr class="separator:a1f5025c43fbfe4675f2b8b8be739f2fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -128,7 +146,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="dir_c087a112b91d0fc4c12783641a32acb2.html">boolean_function</a></li><li class="navelem"><a class="el" href="translator_8cpp.html">translator.cpp</a></li>
-    <li class="footer">Generated on Wed Jun 22 2022 09:21:14 for HAL by
+    <li class="footer">Generated on Thu Jun 23 2022 10:01:45 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

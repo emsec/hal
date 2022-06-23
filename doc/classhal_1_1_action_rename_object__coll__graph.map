@@ -1,5 +1,5 @@
 <map id="hal::ActionRenameObject" name="hal::ActionRenameObject">
-<area shape="rect" id="node1" title="Renames an item." alt="" coords="5,507,192,657"/>
-<area shape="rect" id="node2" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="21,219,177,457"/>
-<area shape="rect" id="node3" href="$classhal_1_1_user_action_object.html" title="The UserActionObject class represents a single object used in UserAction." alt="" coords="17,5,180,156"/>
+<area shape="rect" id="node1" title="Renames an item." alt="" coords="21,580,208,731"/>
+<area shape="rect" id="node2" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="5,233,224,531"/>
+<area shape="rect" id="node3" href="$classhal_1_1_user_action_object.html" title="The UserActionObject class represents a single object used in UserAction." alt="" coords="33,5,196,156"/>
 </map>

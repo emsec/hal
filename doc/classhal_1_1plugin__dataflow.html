@@ -126,8 +126,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a181d750108725a66b573232454842d43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a539575b9223919f7ad8eba5ffb5934c6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1plugin__dataflow.html#a539575b9223919f7ad8eba5ffb5934c6">handle_cli_call</a> (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl, <a class="el" href="classhal_1_1_program_arguments.html">ProgramArguments</a> &amp;args) override</td></tr>
 <tr class="separator:a539575b9223919f7ad8eba5ffb5934c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae70e297372096015810f26f87343df14"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1plugin__dataflow.html#ae70e297372096015810f26f87343df14">execute</a> (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl, std::string path, const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; sizes, bool draw_graph, std::vector&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&gt; known_groups={})</td></tr>
-<tr class="separator:ae70e297372096015810f26f87343df14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc2cd406ca4ad4e4cc3e048c1d3b0a34"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1plugin__dataflow.html#adc2cd406ca4ad4e4cc3e048c1d3b0a34">execute</a> (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl, std::string path, const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; sizes, bool draw_graph, std::vector&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&gt; known_groups={}, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> bad_group_size=7)</td></tr>
+<tr class="separator:adc2cd406ca4ad4e4cc3e048c1d3b0a34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classhal_1_1_c_l_i_plugin_interface"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhal_1_1_c_l_i_plugin_interface')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhal_1_1_c_l_i_plugin_interface.html">hal::CLIPluginInterface</a></td></tr>
 <tr class="memitem:a1784bd703e0d7adf21c053f2694339d2 inherit pub_methods_classhal_1_1_c_l_i_plugin_interface"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_c_l_i_plugin_interface.html#a1784bd703e0d7adf21c053f2694339d2">CLIPluginInterface</a> ()=default</td></tr>
 <tr class="separator:a1784bd703e0d7adf21c053f2694339d2 inherit pub_methods_classhal_1_1_c_l_i_plugin_interface"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -209,8 +209,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ae70e297372096015810f26f87343df14"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae70e297372096015810f26f87343df14">&#9670;&nbsp;</a></span>execute()</h2>
+<a id="adc2cd406ca4ad4e4cc3e048c1d3b0a34"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc2cd406ca4ad4e4cc3e048c1d3b0a34">&#9670;&nbsp;</a></span>execute()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -243,7 +243,13 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::vector&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&gt;&#160;</td>
-          <td class="paramname"><em>known_groups</em> = <code>{}</code>&#160;</td>
+          <td class="paramname"><em>known_groups</em> = <code>{}</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramname"><em>bad_group_size</em> = <code>7</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -253,11 +259,11 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="plugin__dataflow_8cpp_source.html#l00099">99</a> of file <a class="el" href="plugin__dataflow_8cpp_source.html">plugin_dataflow.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__dataflow_8cpp_source.html#l00113">113</a> of file <a class="el" href="plugin__dataflow_8cpp_source.html">plugin_dataflow.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87">hal::buffer</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00170">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="dot__graph_8cpp_source.html#l00054">hal::dataflow::dot_graph::create_graph()</a>, <a class="el" href="state__to__module_8cpp_source.html#l00028">hal::dataflow::state_to_module::create_sets()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00106">hal::Netlist::get_design_name()</a>, <a class="el" href="utils_8h_source.html#l00367">hal::utils::join()</a>, <a class="el" href="plugin__interface__base_8h_source.html#l00105">hal::BasePluginInterface::log()</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, <a class="el" href="log_8h_source.html#l00067">log_info</a>, <a class="el" href="log_8h_source.html#l00073">log_warning</a>, <a class="el" href="processing_2configuration_8h_source.html#l00037">hal::dataflow::processing::Configuration::num_threads</a>, <a class="el" href="processing_2configuration_8h_source.html#l00036">hal::dataflow::processing::Configuration::pass_layers</a>, <a class="el" href="evaluation_2configuration_8h_source.html#l00036">hal::dataflow::evaluation::Configuration::prioritized_sizes</a>, <a class="el" href="processing_8cpp_source.html#l00146">hal::dataflow::processing::run()</a>, <a class="el" href="pre__processing_8cpp_source.html#l00249">hal::dataflow::pre_processing::run()</a>, <a class="el" href="evaluation_8cpp_source.html#l00476">hal::dataflow::evaluation::run()</a>, <a class="el" href="json__output_8cpp_source.html#l00020">hal::dataflow::json_output::save_state_to_json()</a>, <a class="el" href="json_8hpp_source.html#l19195">nlohmann::basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt;::size()</a>, <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>, and <a class="el" href="textual__output_8cpp_source.html#l00019">hal::dataflow::textual_output::write_register_output()</a>.</p>
+<p class="reference">References <a class="el" href="evaluation_2configuration_8h_source.html#l00037">hal::dataflow::evaluation::Configuration::bad_group_size</a>, <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87">hal::buffer</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00142">hal::Netlist::copy()</a>, <a class="el" href="dot__graph_8cpp_source.html#l00054">hal::dataflow::dot_graph::create_graph()</a>, <a class="el" href="state__to__module_8cpp_source.html#l00030">hal::dataflow::state_to_module::create_sets()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00104">hal::Netlist::get_design_name()</a>, <a class="el" href="utils_8h_source.html#l00387">hal::utils::join()</a>, <a class="el" href="plugin__interface__base_8h_source.html#l00105">hal::BasePluginInterface::log()</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, <a class="el" href="log_8h_source.html#l00067">log_info</a>, <a class="el" href="log_8h_source.html#l00073">log_warning</a>, <a class="el" href="processing_2configuration_8h_source.html#l00037">hal::dataflow::processing::Configuration::num_threads</a>, <a class="el" href="processing_2configuration_8h_source.html#l00036">hal::dataflow::processing::Configuration::pass_layers</a>, <a class="el" href="evaluation_2configuration_8h_source.html#l00036">hal::dataflow::evaluation::Configuration::prioritized_sizes</a>, <a class="el" href="processing_8cpp_source.html#l00146">hal::dataflow::processing::run()</a>, <a class="el" href="pre__processing_8cpp_source.html#l00230">hal::dataflow::pre_processing::run()</a>, <a class="el" href="evaluation_8cpp_source.html#l00476">hal::dataflow::evaluation::run()</a>, <a class="el" href="json__output_8cpp_source.html#l00020">hal::dataflow::json_output::save_state_to_json()</a>, <a class="el" href="json_8hpp_source.html#l19195">nlohmann::basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt;::size()</a>, <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>, and <a class="el" href="textual__output_8cpp_source.html#l00019">hal::dataflow::textual_output::write_register_output()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugin__dataflow_8cpp_source.html#l00063">handle_cli_call()</a>, and <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00018">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugin__dataflow_8cpp_source.html#l00065">handle_cli_call()</a>, and <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00018">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -396,9 +402,9 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classhal_1_1_c_l_i_plugin_interface.html#afeab0c3dcc15c62e7e7ac3a8197625d7">hal::CLIPluginInterface</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="plugin__dataflow_8cpp_source.html#l00063">63</a> of file <a class="el" href="plugin__dataflow_8cpp_source.html">plugin_dataflow.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__dataflow_8cpp_source.html#l00065">65</a> of file <a class="el" href="plugin__dataflow_8cpp_source.html">plugin_dataflow.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="control_8py_source.html#l00033">control::args</a>, <a class="el" href="plugin__dataflow_8cpp_source.html#l00099">execute()</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, and <a class="el" href="defines_8h_source.html#l00051">UNUSED</a>.</p>
+<p class="reference">References <a class="el" href="control_8py_source.html#l00033">control::args</a>, <a class="el" href="plugin__dataflow_8cpp_source.html#l00113">execute()</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, and <a class="el" href="defines_8h_source.html#l00051">UNUSED</a>.</p>
 
 </div>
 </div>
@@ -412,7 +418,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1plugin__dataflow.html">plugin_dataflow</a></li>
-    <li class="footer">Generated on Wed Jun 22 2022 09:21:15 for HAL by
+    <li class="footer">Generated on Thu Jun 23 2022 10:01:47 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

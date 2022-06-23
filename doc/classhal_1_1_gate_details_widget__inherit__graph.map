@@ -1,5 +1,0 @@
-<map id="hal::GateDetailsWidget" name="hal::GateDetailsWidget">
-<area shape="rect" id="node1" title="Displays specific gate details." alt="" coords="5,755,240,979"/>
-<area shape="rect" id="node2" href="$classhal_1_1_details_widget.html" title="Base class for specific details widgets." alt="" coords="18,497,227,707"/>
-<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qwidget.html" title=" " alt="" coords="19,5,226,449"/>
-</map>

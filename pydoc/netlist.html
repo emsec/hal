@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist &mdash; hal_py v3.3.0-108-g608e80189 documentation</title>
+  <title>Netlist &mdash; hal_py v3.3.0-649-g77d8690e8 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.3.0-108-g608e80189
+                v3.3.0-649-g77d8690e8
               </div>
             
           
@@ -100,6 +100,8 @@
 <li class="toctree-l2"><a class="reference internal" href="grouping.html">Grouping</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gui_plugin_interface.html">GUI Plugin Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module.html">Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_pin.html">Module Pin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_pin_group.html">Module Pin Group</a></li>
 <li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Netlist</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_factory.html">Netlist Factory</a></li>
@@ -110,6 +112,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pin_direction.html">Pin Direction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_type.html">Pin Type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smt.html">SMT</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="plugins.html">HAL Plugins Documentation</a></li>
@@ -190,6 +193,22 @@
 <code class="descname">clear_caches</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Netlist.clear_caches" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clear all internal caches of the netlist.
 In a typical application, calling this function is not required.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Netlist.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; hal_py.Netlist<a class="headerlink" href="#hal_py.Netlist.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a deep copy of the netlist.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The copy of the netlist.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.Netlist" title="hal_py.Netlist">hal_py.Netlist</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -497,6 +516,21 @@ The ID of the net is set automatically.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Netlist.enable_automatic_net_checks">
+<code class="descname">enable_automatic_net_checks</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em>, <em>enable_checks: bool = True</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Netlist.enable_automatic_net_checks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enables or disables automatic checks on nets that determine whether a net is an input or output of a module.</p>
+<p>WARNING: if disabled, the user is responsible to assign correct input and output nets and create respective module pins. Wrong usage may result in unknown behavior or crashes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>enable_checks</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Set True to enable automatic checks, False otherwise.</td>
 </tr>
 </tbody>
 </table>

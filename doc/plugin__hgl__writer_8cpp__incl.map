@@ -1,17 +1,17 @@
 <map id="/home/runner/work/hal/hal/plugins/hgl_writer/src/plugin_hgl_writer.cpp" name="/home/runner/work/hal/hal/plugins/hgl_writer/src/plugin_hgl_writer.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="68,5,255,61"/>
-<area shape="rect" id="node2" href="$plugin__hgl__writer_8h.html" title=" " alt="" coords="82,109,241,151"/>
+<area shape="rect" id="node1" title=" " alt="" coords="83,5,269,61"/>
+<area shape="rect" id="node2" href="$plugin__hgl__writer_8h.html" title=" " alt="" coords="97,109,255,151"/>
 <area shape="rect" id="node6" href="$gate__library__writer__manager_8h.html" title=" " alt="" coords="5,288,200,359"/>
-<area shape="rect" id="node8" href="$hgl__writer_8h.html" title=" " alt="" coords="494,117,661,143"/>
-<area shape="rect" id="node3" href="$plugin__interface__base_8h.html" title=" " alt="" coords="71,199,252,240"/>
+<area shape="rect" id="node8" href="$hgl__writer_8h.html" title=" " alt="" coords="526,117,693,143"/>
+<area shape="rect" id="node3" href="$plugin__interface__base_8h.html" title=" " alt="" coords="85,199,267,240"/>
 <area shape="rect" id="node4" href="$defines_8h.html" title=" " alt="" coords="221,407,361,433"/>
 <area shape="rect" id="node5" title=" " alt="" coords="245,481,336,508"/>
 <area shape="rect" id="node7" title=" " alt="" coords="58,407,145,433"/>
-<area shape="rect" id="node9" href="$boolean__function_8h.html" title=" " alt="" coords="607,303,785,344"/>
-<area shape="rect" id="node10" title=" " alt="" coords="634,407,758,433"/>
-<area shape="rect" id="node11" title=" " alt="" coords="804,407,919,433"/>
-<area shape="rect" id="node12" title=" " alt="" coords="943,407,1006,433"/>
-<area shape="rect" id="node13" href="$gate__library__writer_8h.html" title=" " alt="" coords="327,295,532,351"/>
-<area shape="rect" id="node14" href="$gate__type_8h.html" title=" " alt="" coords="716,199,871,240"/>
-<area shape="rect" id="node15" title=" " alt="" coords="327,206,489,233"/>
+<area shape="rect" id="node9" href="$boolean__function_8h.html" title=" " alt="" coords="745,303,924,344"/>
+<area shape="rect" id="node10" title=" " alt="" coords="773,407,897,433"/>
+<area shape="rect" id="node11" title=" " alt="" coords="950,407,1013,433"/>
+<area shape="rect" id="node12" href="$gate__library__writer_8h.html" title=" " alt="" coords="327,295,532,351"/>
+<area shape="rect" id="node13" href="$gate__type_8h.html" title=" " alt="" coords="647,199,801,240"/>
+<area shape="rect" id="node14" title=" " alt="" coords="556,310,671,337"/>
+<area shape="rect" id="node15" title=" " alt="" coords="409,206,572,233"/>
 </map>

@@ -1,21 +1,10 @@
 var searchData=
 [
-  ['sat_38842',['Sat',['../namespacehal_1_1_s_m_t.html#a2d2a8e907780db2fba506bc576c50f8fa13c7d2d737f81f7bf89aed9fbcd0ad55',1,'hal::SMT']]],
-  ['select_38843',['Select',['../classhal_1_1_graph_tab_widget.html#ad16b8bead63eca83f1744a4855b138c5ada209b726af014ecbab7ab4863f70a99',1,'hal::GraphTabWidget::Select()'],['../namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba99938282f04071859941e18f16efcf42',1,'hal::select()']]],
-  ['sequential_38844',['sequential',['../namespacehal.html#adb8da04d2161f277bd489e806a2721caa6ec7489017b25b5fff20d353b6d2162e',1,'hal']]],
-  ['set_38845',['set',['../namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bacdaeeeba9b4a4c5ebf042c0215a7bb0e',1,'hal']]],
-  ['shift_38846',['Shift',['../classhal_1_1_graph_tab_widget.html#ac7c6b48b57334893ed0d37bf6a2a59b0af3f545ed784e1f2d8c89c723b3611926',1,'hal::GraphTabWidget']]],
-  ['sourcepoint_38847',['SourcePoint',['../classhal_1_1_net_layout_wire.html#aab9de4aa1429470e0e34ef4801aeb2c4a68b118e6e3b0fbe09851049bb40f21b8',1,'hal::NetLayoutWire']]],
-  ['src_5fadded_38848',['src_added',['../classhal_1_1_net_event.html#a3ca22a15fd2d33990c22eadb808579dfa2eae9ff804a85e56debf00ddb965924e',1,'hal::NetEvent']]],
-  ['src_5fremoved_38849',['src_removed',['../classhal_1_1_net_event.html#a3ca22a15fd2d33990c22eadb808579dfa460a687d619131a1a3f60f2e03d0a911',1,'hal::NetEvent']]],
-  ['standard_38850',['Standard',['../classhal_1_1_placement_hint.html#ad09aba494db43e08dc70e4c26b83b8e0a30a5eab0be56e8fce3c17b07aff4f35b',1,'hal::PlacementHint']]],
-  ['state_38851',['state',['../classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017a9ed39e2ea931586b6a985a6942ef573e',1,'hal::GateTypeComponent::state()'],['../namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e',1,'hal::state()']]],
-  ['stderr_38852',['STDERR',['../namespacesubprocess.html#a8c21131feb99bed9ffa644851ff499edae10bd66054ab474c95855a7344dce796',1,'subprocess']]],
-  ['stdout_38853',['STDOUT',['../namespacesubprocess.html#a8c21131feb99bed9ffa644851ff499eda5e3e1175bb6163c116ba70bf87cb8c1e',1,'subprocess']]],
-  ['straightrouteerror_38854',['StraightRouteError',['../classhal_1_1_net_layout_junction.html#ad8835a50934d5b10771743ad89b799bca2fb314bc3b5a2e72c76912d1f9048f34',1,'hal::NetLayoutJunction']]],
-  ['strict_38855',['strict',['../namespacenlohmann_1_1detail.html#a5a76b60b26dc8c47256a996d18d967dfa2133fd717402a7966ee88d06f9e0b792',1,'nlohmann::detail']]],
-  ['string_38856',['string',['../namespacenlohmann_1_1detail.html#a1ed8fc6239da25abcaf681d30ace4985ab45cffe084dd3d20d928bee85e7b0f21',1,'nlohmann::detail']]],
-  ['submodule_5fadded_38857',['submodule_added',['../classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53faad2650767a6bde46731f82ac16b5a690',1,'hal::ModuleEvent']]],
-  ['submodule_5fremoved_38858',['submodule_removed',['../classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa82d919bd772ab56d1f06bf9d8c4bc32c',1,'hal::ModuleEvent']]],
-  ['swappable_38859',['Swappable',['../classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012baed0c3d91d14f803ce7606df208aeae0f',1,'hal::NodeDragShadow']]]
+  ['ram_38452',['ram',['../classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017a4641999a7679fcaef2df0e26d11e3c72',1,'hal::GateTypeComponent::ram()'],['../namespacehal.html#adb8da04d2161f277bd489e806a2721caa4641999a7679fcaef2df0e26d11e3c72',1,'hal::ram()']]],
+  ['ram_5fport_38453',['ram_port',['../classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017a8ece2e6e53ae7532e49f462073d92601',1,'hal::GateTypeComponent']]],
+  ['rejected_38454',['Rejected',['../classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012bad37b1f6c0512e2118cee17fea015b699',1,'hal::NodeDragShadow']]],
+  ['removed_38455',['removed',['../classhal_1_1_gate_event.html#afdc7242126c9534b4ec92e285983c6fbab07286ebbb5bc7aa91cc3eaa8bc19711',1,'hal::GateEvent::removed()'],['../classhal_1_1_net_event.html#a3ca22a15fd2d33990c22eadb808579dfab07286ebbb5bc7aa91cc3eaa8bc19711',1,'hal::NetEvent::removed()'],['../classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fab07286ebbb5bc7aa91cc3eaa8bc19711',1,'hal::ModuleEvent::removed()'],['../classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8ab07286ebbb5bc7aa91cc3eaa8bc19711',1,'hal::GroupingEvent::removed()']]],
+  ['replace_38456',['replace',['../namespacenlohmann_1_1detail.html#a5a76b60b26dc8c47256a996d18d967dfa9dde360102c103867bd2f45872f1129c',1,'nlohmann::detail']]],
+  ['reset_38457',['reset',['../namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba86266ee937d97f812a8e57d22b62ee29',1,'hal']]],
+  ['right_38458',['Right',['../classhal_1_1_net_layout_direction.html#a804a82ac3192d771ed7a64fe9137f142a2ee571671a1dd9ef6944fcd0773adc19',1,'hal::NetLayoutDirection::Right()'],['../classhal_1_1_selection_relay.html#a75d8c404b06807f7e57fe3f9c1a39ff2a92b09c7c48c520c3c55e497875da437c',1,'hal::SelectionRelay::Right()'],['../namespacehal.html#a5183c9d870930c09f0bff0a061797b45a7c4f29407893c334a6cb7a87bf045c0d',1,'hal::right()']]]
 ];

@@ -19,6 +19,7 @@ var classhal_1_1_content_widget =
     [ "remove", "classhal_1_1_content_widget.html#a710c4f22b31bec0e46b1183fbd8b5778", null ],
     [ "removed", "classhal_1_1_content_widget.html#a90ba2df3b6f51f27a41dece20a350d29", null ],
     [ "repolish", "classhal_1_1_content_widget.html#abcce27bb3fdc3734c38a9f92802170b9", null ],
+    [ "restoreFromProject", "classhal_1_1_content_widget.html#a264a3fb7fa07e2722272366e39974144", null ],
     [ "set_name", "classhal_1_1_content_widget.html#a534c1681313a2a2d05c550cbc6bb17fe", null ],
     [ "setAnchor", "classhal_1_1_content_widget.html#a95a6d6699dade8d1256d3b308b796b0d", null ],
     [ "setIcon", "classhal_1_1_content_widget.html#af94adef57e874fab4af873ad5f866b8e", null ],

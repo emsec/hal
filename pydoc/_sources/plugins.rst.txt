@@ -9,4 +9,5 @@ HAL Plugins Documentation
    graph_algorithm
    gui
    netlist_simulator
+   verilator
    solve_fsm

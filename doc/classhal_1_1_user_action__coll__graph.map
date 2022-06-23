@@ -1,4 +1,4 @@
 <map id="hal::UserAction" name="hal::UserAction">
-<area shape="rect" id="node1" title="The UserAction class is the abstract base class for user interactions." alt="" coords="9,219,165,457"/>
-<area shape="rect" id="node2" href="$classhal_1_1_user_action_object.html" title="The UserActionObject class represents a single object used in UserAction." alt="" coords="5,5,168,156"/>
+<area shape="rect" id="node1" title="The UserAction class is the abstract base class for user interactions." alt="" coords="5,233,224,531"/>
+<area shape="rect" id="node2" href="$classhal_1_1_user_action_object.html" title="The UserActionObject class represents a single object used in UserAction." alt="" coords="33,5,196,156"/>
 </map>

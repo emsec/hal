@@ -114,79 +114,81 @@ $(document).ready(function(){initNavTree('enums_8h_source.html',''); initResizab
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="defines_8h.html">hal_core/defines.h</a>&quot;</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &lt;iostream&gt;</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &lt;map&gt;</span></div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;{</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    template&lt;typename T, typename = typename std::enable_if&lt;std::is_enum&lt;T&gt;::value, <a class="code" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">T</a>&gt;<a class="code" href="namespacecontrol.html#a83d2dd7bc3c232a13fa9f62a01b5ba80">::type</a>&gt;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    template&lt;typename T, typename = typename std::enable_if&lt;std::is_enum&lt;T&gt;::value, <a class="code" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">T</a>&gt;<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">::type</a>&gt;</div>
 <div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="structhal_1_1_enum_strings.html">   38</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structhal_1_1_enum_strings.html">EnumStrings</a></div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    {</div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="structhal_1_1_enum_strings.html#a362a099d94ddf670b90241a538042f85">   40</a></span>&#160;        <span class="keyword">static</span> std::vector&lt;std::string&gt; <a class="code" href="structhal_1_1_enum_strings.html#a362a099d94ddf670b90241a538042f85">data</a>;</div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="structhal_1_1_enum_strings.html#aa7ca6d7993594a0052aea34d32d39e00">   40</a></span>&#160;        <span class="keyword">static</span> std::map&lt;T, std::string&gt; <a class="code" href="structhal_1_1_enum_strings.html#aa7ca6d7993594a0052aea34d32d39e00">data</a>;</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    };</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    template&lt;typename T, typename = typename std::enable_if&lt;std::is_enum&lt;T&gt;::value, <a class="code" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">T</a>&gt;<a class="code" href="namespacecontrol.html#a83d2dd7bc3c232a13fa9f62a01b5ba80">::type</a>&gt;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    template&lt;typename T, typename = typename std::enable_if&lt;std::is_enum&lt;T&gt;::value, <a class="code" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">T</a>&gt;<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">::type</a>&gt;</div>
 <div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="namespacehal.html#afe11c53f9f94ae23527944574e1f5df3">   50</a></span>&#160;    std::string <a class="code" href="namespacehal.html#afe11c53f9f94ae23527944574e1f5df3">enum_to_string</a>(T e)</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    {</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keyword">auto</span> index = <span class="keyword">static_cast&lt;</span><span class="keywordtype">size_t</span><span class="keyword">&gt;</span>(e);</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordflow">if</span> (index &gt;= <a class="code" href="structhal_1_1_enum_strings.html">EnumStrings&lt;T&gt;::data</a>.size())</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        {</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;            <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;no string for enum with value &#39;&quot;</span> + <a class="code" href="namespacenlohmann.html#ad675d1c22f5240b2b3065c241b204477">std::to_string</a>(index) + <span class="stringliteral">&quot;&#39;.&quot;</span>);</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        }</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="structhal_1_1_enum_strings.html">EnumStrings&lt;T&gt;::data</a>.at(index);</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    }</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    template&lt;typename T, typename = typename std::enable_if&lt;std::is_enum&lt;T&gt;::value, T&gt;<a class="code" href="namespacecontrol.html#a83d2dd7bc3c232a13fa9f62a01b5ba80">::type</a>&gt;</div>
-<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="namespacehal.html#a2319a036cfb2272af66101db753b7b5c">   68</a></span>&#160;    <a class="code" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">T</a> <a class="code" href="namespacehal.html#a2319a036cfb2272af66101db753b7b5c">enum_from_string</a>(<span class="keyword">const</span> std::string&amp; <a class="code" href="namespacecontrol.html#a42884b866cabdd971b4dbe8c3fcc3735">str</a>)</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    {</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; EnumStrings&lt;T&gt;::data.size(); i++)</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        {</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="structhal_1_1_enum_strings.html">EnumStrings&lt;T&gt;::data</a>.at(i) == <a class="code" href="namespacecontrol.html#a42884b866cabdd971b4dbe8c3fcc3735">str</a>)</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            {</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span><a class="code" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">T</a><span class="keyword">&gt;</span>(i);</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            }</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        }</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;no enum value for string `&quot;</span> + <a class="code" href="namespacecontrol.html#a42884b866cabdd971b4dbe8c3fcc3735">str</a> + <span class="stringliteral">&quot;` available.&quot;</span>);</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    }</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    template&lt;typename T, typename = typename std::enable_if&lt;std::is_enum&lt;T&gt;::value, T&gt;<a class="code" href="namespacecontrol.html#a83d2dd7bc3c232a13fa9f62a01b5ba80">::type</a>&gt;</div>
-<div class="line"><a name="l00090"></a><span class="lineno"><a class="line" href="namespacehal.html#a0cd05eb343d9af79934226e60f1ee55e">   90</a></span>&#160;    <a class="code" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">T</a> <a class="code" href="namespacehal.html#a2319a036cfb2272af66101db753b7b5c">enum_from_string</a>(<span class="keyword">const</span> std::string&amp; <a class="code" href="namespacecontrol.html#a42884b866cabdd971b4dbe8c3fcc3735">str</a>, <span class="keyword">const</span> T default_val) noexcept</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    {</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; EnumStrings&lt;T&gt;::data.size(); i++)</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        {</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="structhal_1_1_enum_strings.html">EnumStrings&lt;T&gt;::data</a>.at(i) == <a class="code" href="namespacecontrol.html#a42884b866cabdd971b4dbe8c3fcc3735">str</a>)</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            {</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span><a class="code" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">T</a><span class="keyword">&gt;</span>(i);</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;            }</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        }</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <span class="keywordflow">return</span> default_val;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    }</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    template&lt;typename T, typename = typename std::enable_if&lt;std::is_enum&lt;T&gt;::value, T&gt;<a class="code" href="namespacecontrol.html#a83d2dd7bc3c232a13fa9f62a01b5ba80">::type</a>&gt;</div>
-<div class="line"><a name="l00111"></a><span class="lineno"><a class="line" href="namespacehal.html#abfc41a824ec2e2d67ef693316ffca725">  111</a></span>&#160;    std::ostream&amp; <a class="code" href="namespacehal.html#aef8d4a8f510965ea04184d31d5714c79">operator&lt;&lt;</a>(std::ostream&amp; os, T e)</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    {</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <span class="keywordflow">return</span> os &lt;&lt; <a class="code" href="namespacehal.html#afe11c53f9f94ae23527944574e1f5df3">enum_to_string</a>(e);</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    }</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keywordflow">if</span> (<span class="keyword">auto</span> it = <a class="code" href="structhal_1_1_enum_strings.html">EnumStrings&lt;T&gt;::data</a>.find(e); it == <a class="code" href="structhal_1_1_enum_strings.html">EnumStrings&lt;T&gt;::data</a>.end())</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        {</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;no string for enum with value &#39;&quot;</span> + <a class="code" href="namespacenlohmann.html#ad675d1c22f5240b2b3065c241b204477">std::to_string</a>(<span class="keyword">static_cast&lt;</span><span class="keywordtype">size_t</span><span class="keyword">&gt;</span>(e)) + <span class="stringliteral">&quot;&#39;.&quot;</span>);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        }</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        {</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            <span class="keywordflow">return</span> it-&gt;second;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        }</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    }</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    template&lt;typename T, typename = typename std::enable_if&lt;std::is_enum&lt;T&gt;::value, T&gt;<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">::type</a>&gt;</div>
+<div class="line"><a name="l00070"></a><span class="lineno"><a class="line" href="namespacehal.html#a2319a036cfb2272af66101db753b7b5c">   70</a></span>&#160;    <a class="code" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">T</a> <a class="code" href="namespacehal.html#a2319a036cfb2272af66101db753b7b5c">enum_from_string</a>(<span class="keyword">const</span> std::string&amp; <a class="code" href="namespacecontrol.html#a42884b866cabdd971b4dbe8c3fcc3735">str</a>)</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    {</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [e, s] : <a class="code" href="structhal_1_1_enum_strings.html">EnumStrings&lt;T&gt;::data</a>)</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        {</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            <span class="keywordflow">if</span> (s == <a class="code" href="namespacecontrol.html#a42884b866cabdd971b4dbe8c3fcc3735">str</a>)</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            {</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;                <span class="keywordflow">return</span> e;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            }</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        }</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;no enum value for string `&quot;</span> + <a class="code" href="namespacecontrol.html#a42884b866cabdd971b4dbe8c3fcc3735">str</a> + <span class="stringliteral">&quot;` available.&quot;</span>);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    }</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    template&lt;typename T, typename = typename std::enable_if&lt;std::is_enum&lt;T&gt;::value, T&gt;<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">::type</a>&gt;</div>
+<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="namespacehal.html#a0cd05eb343d9af79934226e60f1ee55e">   92</a></span>&#160;    <a class="code" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">T</a> <a class="code" href="namespacehal.html#a2319a036cfb2272af66101db753b7b5c">enum_from_string</a>(<span class="keyword">const</span> std::string&amp; <a class="code" href="namespacecontrol.html#a42884b866cabdd971b4dbe8c3fcc3735">str</a>, <span class="keyword">const</span> T default_val) noexcept</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    {</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [e, s] : <a class="code" href="structhal_1_1_enum_strings.html">EnumStrings&lt;T&gt;::data</a>)</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        {</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            <span class="keywordflow">if</span> (s == <a class="code" href="namespacecontrol.html#a42884b866cabdd971b4dbe8c3fcc3735">str</a>)</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;            {</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                <span class="keywordflow">return</span> e;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;            }</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        }</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <span class="keywordflow">return</span> default_val;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    }</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    template&lt;typename T, typename = typename std::enable_if&lt;std::is_enum&lt;T&gt;::value, T&gt;<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">::type</a>&gt;</div>
+<div class="line"><a name="l00113"></a><span class="lineno"><a class="line" href="namespacehal.html#abfc41a824ec2e2d67ef693316ffca725">  113</a></span>&#160;    std::ostream&amp; <a class="code" href="namespacehal.html#a90756e09e3a11b7dd4e7362ae3101ce9">operator&lt;&lt;</a>(std::ostream&amp; os, T e)</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    {</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        <span class="keywordflow">return</span> os &lt;&lt; <a class="code" href="namespacehal.html#afe11c53f9f94ae23527944574e1f5df3">enum_to_string</a>(e);</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    }</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00009">solver.cpp:9</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
+<div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_a05e5f99d786b527ca4a260c21170c5e7"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a></div><div class="ttdeci">PinType type</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">netlist_serializer.cpp:57</a></div></div>
 <div class="ttc" id="anamespacecontrol_html_a42884b866cabdd971b4dbe8c3fcc3735"><div class="ttname"><a href="namespacecontrol.html#a42884b866cabdd971b4dbe8c3fcc3735">control.str</a></div><div class="ttdeci">str</div><div class="ttdef"><b>Definition:</b> <a href="control_8py_source.html#l00014">control.py:14</a></div></div>
 <div class="ttc" id="anamespacenlohmann_html_ad675d1c22f5240b2b3065c241b204477"><div class="ttname"><a href="namespacenlohmann.html#ad675d1c22f5240b2b3065c241b204477">nlohmann::to_string</a></div><div class="ttdeci">std::string to_string(const basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt; &amp;j)</div><div class="ttdoc">user-defined to_string function for JSON values</div><div class="ttdef"><b>Definition:</b> <a href="json_8hpp_source.html#l22620">json.hpp:22620</a></div></div>
-<div class="ttc" id="anamespacehal_html_aef8d4a8f510965ea04184d31d5714c79"><div class="ttname"><a href="namespacehal.html#aef8d4a8f510965ea04184d31d5714c79">hal::operator&lt;&lt;</a></div><div class="ttdeci">std::ostream &amp; operator&lt;&lt;(std::ostream &amp;os, const BooleanFunction::operation &amp;op)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2boolean__function_8cpp_source.html#l00029">boolean_function.cpp:29</a></div></div>
 <div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="defines_8h.html">defines.h</a></div></div>
-<div class="ttc" id="astructhal_1_1_enum_strings_html_a362a099d94ddf670b90241a538042f85"><div class="ttname"><a href="structhal_1_1_enum_strings.html#a362a099d94ddf670b90241a538042f85">hal::EnumStrings::data</a></div><div class="ttdeci">static std::vector&lt; std::string &gt; data</div><div class="ttdef"><b>Definition:</b> <a href="enums_8h_source.html#l00040">enums.h:40</a></div></div>
 <div class="ttc" id="astructhal_1_1_enum_strings_html"><div class="ttname"><a href="structhal_1_1_enum_strings.html">hal::EnumStrings</a></div><div class="ttdef"><b>Definition:</b> <a href="enums_8h_source.html#l00038">enums.h:38</a></div></div>
+<div class="ttc" id="astructhal_1_1_enum_strings_html_aa7ca6d7993594a0052aea34d32d39e00"><div class="ttname"><a href="structhal_1_1_enum_strings.html#aa7ca6d7993594a0052aea34d32d39e00">hal::EnumStrings::data</a></div><div class="ttdeci">static std::map&lt; T, std::string &gt; data</div><div class="ttdef"><b>Definition:</b> <a href="enums_8h_source.html#l00040">enums.h:40</a></div></div>
 <div class="ttc" id="anamespacehal_html_a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3"><div class="ttname"><a href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::AsyncSetResetBehavior::T</a></div><div class="ttdeci">@ T</div></div>
-<div class="ttc" id="anamespacehal_html_a2319a036cfb2272af66101db753b7b5c"><div class="ttname"><a href="namespacehal.html#a2319a036cfb2272af66101db753b7b5c">hal::enum_from_string</a></div><div class="ttdeci">T enum_from_string(const std::string &amp;str)</div><div class="ttdef"><b>Definition:</b> <a href="enums_8h_source.html#l00068">enums.h:68</a></div></div>
+<div class="ttc" id="anamespacehal_html_a2319a036cfb2272af66101db753b7b5c"><div class="ttname"><a href="namespacehal.html#a2319a036cfb2272af66101db753b7b5c">hal::enum_from_string</a></div><div class="ttdeci">T enum_from_string(const std::string &amp;str)</div><div class="ttdef"><b>Definition:</b> <a href="enums_8h_source.html#l00070">enums.h:70</a></div></div>
 <div class="ttc" id="anamespacehal_html_afe11c53f9f94ae23527944574e1f5df3"><div class="ttname"><a href="namespacehal.html#afe11c53f9f94ae23527944574e1f5df3">hal::enum_to_string</a></div><div class="ttdeci">std::string enum_to_string(T e)</div><div class="ttdef"><b>Definition:</b> <a href="enums_8h_source.html#l00050">enums.h:50</a></div></div>
-<div class="ttc" id="anamespacecontrol_html_a83d2dd7bc3c232a13fa9f62a01b5ba80"><div class="ttname"><a href="namespacecontrol.html#a83d2dd7bc3c232a13fa9f62a01b5ba80">control.type</a></div><div class="ttdeci">type</div><div class="ttdef"><b>Definition:</b> <a href="control_8py_source.html#l00014">control.py:14</a></div></div>
+<div class="ttc" id="anamespacehal_html_a90756e09e3a11b7dd4e7362ae3101ce9"><div class="ttname"><a href="namespacehal.html#a90756e09e3a11b7dd4e7362ae3101ce9">hal::operator&lt;&lt;</a></div><div class="ttdeci">std::ostream &amp; operator&lt;&lt;(std::ostream &amp;os, BooleanFunction::Value v)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2boolean__function_8cpp_source.html#l00205">boolean_function.cpp:205</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_8cff0e4740b4a22580dd05764b73d449.html">utilities</a></li><li class="navelem"><a class="el" href="enums_8h.html">enums.h</a></li>
-    <li class="footer">Generated on Wed Jun 22 2022 09:21:08 for HAL by
+    <li class="footer">Generated on Thu Jun 23 2022 10:01:41 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

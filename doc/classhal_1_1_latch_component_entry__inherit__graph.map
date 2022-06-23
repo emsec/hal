@@ -1,0 +1,4 @@
+<map id="hal::LatchComponentEntry" name="hal::LatchComponentEntry">
+<area shape="rect" id="node1" title="An entry type that represents properties (functions or behaviors) of a LatchComponent." alt="" coords="19,263,214,369"/>
+<area shape="rect" id="node2" href="$classhal_1_1_boolean_function_table_entry.html" title="An entry in the boolean function table model." alt="" coords="5,5,228,215"/>
+</map>

@@ -97,9 +97,9 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:aaa33c455d220a45c3eea2763f28a13e3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1gate__library__parser__manager.html#aaa33c455d220a45c3eea2763f28a13e3">register_parser</a> (const std::string &amp;name, const <a class="el" href="namespacehal_1_1gate__library__parser__manager.html#ac953effd3772be75aa045d1723121dc1">ParserFactory</a> &amp;parser_factory, const std::vector&lt; std::string &gt; &amp;supported_file_extensions)</td></tr>
+<tr class="memitem:aaa33c455d220a45c3eea2763f28a13e3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1gate__library__parser__manager.html#aaa33c455d220a45c3eea2763f28a13e3">register_parser</a> (const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, const <a class="el" href="namespacehal_1_1gate__library__parser__manager.html#ac953effd3772be75aa045d1723121dc1">ParserFactory</a> &amp;parser_factory, const std::vector&lt; std::string &gt; &amp;supported_file_extensions)</td></tr>
 <tr class="separator:aaa33c455d220a45c3eea2763f28a13e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6f6f6a58797c41a68ccc6609326237e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1gate__library__parser__manager.html#a6f6f6a58797c41a68ccc6609326237e8">unregister_parser</a> (const std::string &amp;name)</td></tr>
+<tr class="memitem:a6f6f6a58797c41a68ccc6609326237e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1gate__library__parser__manager.html#a6f6f6a58797c41a68ccc6609326237e8">unregister_parser</a> (const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
 <tr class="separator:a6f6f6a58797c41a68ccc6609326237e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37de54423126f56b765696a03bd78c48"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_library.html">GateLibrary</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1gate__library__parser__manager.html#a37de54423126f56b765696a03bd78c48">parse</a> (std::filesystem::path file_path)</td></tr>
 <tr class="separator:a37de54423126f56b765696a03bd78c48"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -152,7 +152,7 @@ Functions</h2></td></tr>
 
 <p class="reference">References <a class="el" href="log_8h_source.html#l00075">log_error</a>, <a class="el" href="log_8h_source.html#l00067">log_info</a>, and <a class="el" href="control_8py_source.html#l00013">control::parser</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00071">hal::gate_library_manager::load()</a>, and <a class="el" href="netlist__parser_8h_source.html#l00068">hal::NetlistParser::parse_and_instantiate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00071">hal::gate_library_manager::load()</a>, and <a class="el" href="netlist__parser_8h_source.html#l00069">hal::NetlistParser::parse_and_instantiate()</a>.</p>
 
 </div>
 </div>
@@ -200,7 +200,7 @@ Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="gate__library__parser__manager_8cpp_source.html#l00039">39</a> of file <a class="el" href="gate__library__parser__manager_8cpp_source.html">gate_library_parser_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="log_8h_source.html#l00067">log_info</a>, <a class="el" href="log_8h_source.html#l00073">log_warning</a>, <a class="el" href="utils_8h_source.html#l00432">hal::utils::to_lower()</a>, and <a class="el" href="utils_8h_source.html#l00313">hal::utils::trim()</a>.</p>
+<p class="reference">References <a class="el" href="log_8h_source.html#l00067">log_info</a>, <a class="el" href="log_8h_source.html#l00073">log_warning</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>, <a class="el" href="utils_8h_source.html#l00452">hal::utils::to_lower()</a>, and <a class="el" href="utils_8h_source.html#l00333">hal::utils::trim()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugin__hgl__parser_8cpp_source.html#l00023">hal::HGLParserPlugin::on_load()</a>, and <a class="el" href="plugin__liberty__parser_8cpp_source.html#l00023">hal::LibertyParserPlugin::on_load()</a>.</p>
 
@@ -231,7 +231,7 @@ Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="gate__library__parser__manager_8cpp_source.html#l00060">60</a> of file <a class="el" href="gate__library__parser__manager_8cpp_source.html">gate_library_parser_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="log_8h_source.html#l00067">log_info</a>.</p>
+<p class="reference">References <a class="el" href="log_8h_source.html#l00067">log_info</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugin__hgl__parser_8cpp_source.html#l00028">hal::HGLParserPlugin::on_unload()</a>, and <a class="el" href="plugin__liberty__parser_8cpp_source.html#l00028">hal::LibertyParserPlugin::on_unload()</a>.</p>
 
@@ -243,7 +243,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1gate__library__parser__manager.html">gate_library_parser_manager</a></li>
-    <li class="footer">Generated on Wed Jun 22 2022 09:21:16 for HAL by
+    <li class="footer">Generated on Thu Jun 23 2022 10:01:48 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

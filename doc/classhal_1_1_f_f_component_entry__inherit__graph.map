@@ -1,0 +1,4 @@
+<map id="hal::FFComponentEntry" name="hal::FFComponentEntry">
+<area shape="rect" id="node1" title="A entry type that represents properties (functions and behaviors) of an FFCompont." alt="" coords="29,263,204,369"/>
+<area shape="rect" id="node2" href="$classhal_1_1_boolean_function_table_entry.html" title="An entry in the boolean function table model." alt="" coords="5,5,228,215"/>
+</map>

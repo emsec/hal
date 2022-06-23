@@ -1,6 +1,6 @@
 <map id="hal::SelectionDetailsWidget" name="hal::SelectionDetailsWidget">
-<area shape="rect" id="node1" title="Container for all specific details widgets." alt="" coords="277,815,529,1244"/>
-<area shape="rect" id="node2" href="$classhal_1_1_content_widget.html" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="264,395,543,765"/>
+<area shape="rect" id="node1" title="Container for all specific details widgets." alt="" coords="277,829,529,1259"/>
+<area shape="rect" id="node2" href="$classhal_1_1_content_widget.html" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="264,395,543,780"/>
 <area shape="rect" id="node3" href="$classhal_1_1_widget.html" title="A QWidget customized for hal." alt="" coords="5,108,113,229"/>
 <area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qvboxlayout.html" title=" " alt="" coords="138,115,285,222"/>
 <area shape="rect" id="node5" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qaction.html" title=" " alt="" coords="309,5,498,332"/>
