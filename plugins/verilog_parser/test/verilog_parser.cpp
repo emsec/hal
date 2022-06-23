@@ -1626,6 +1626,35 @@ namespace hal {
                 ASSERT_NE(net, nullptr);
                 EXPECT_EQ(net->get_name(), "out(0)");
             }
+            {
+                // empty pin assignment
+                std::string netlist_input("module top (in) ;\n"
+                                        "  input [3:0] in;\n"
+                                        "pin_group_gate_4_to_4 gate_0 (\n"
+                                        "  .I (in),\n"
+                                        "  .O ()\n"
+                                        " ) ;\n"
+                                        "endmodule");
+                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VerilogParser verilog_parser;
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
+
+                Net* net;
+                Gate* gate;
+
+                ASSERT_NE(nl, nullptr);
+                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
+                gate = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
+
+                EXPECT_EQ(nl->get_nets().size(), 4);
+                EXPECT_EQ(nl->get_top_module()->get_pins([](const ModulePin* p) {return p->get_direction() == PinDirection::input; }).size(), 4);
+                EXPECT_EQ(nl->get_top_module()->get_pins([](const ModulePin* p) {return p->get_direction() == PinDirection::output; }).size(), 0);
+
+                EXPECT_EQ(gate->get_fan_in_nets().size(), 4);
+                EXPECT_EQ(gate->get_fan_out_nets().size(), 0);
+            }
         TEST_END
     }
 
