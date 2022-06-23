@@ -172,115 +172,115 @@ namespace hal {
         }
     };
 
-    // /**
-    //  * Testing the serialization and a followed deserialization of the example
-    //  * netlist.
-    //  *
-    //  * Functions: serialize_netlist, deserialize_netlist
-    //  */
-    // TEST_F(NetlistSerializerTest, check_serialize_and_deserialize) {
-    //     TEST_START
-    //         {// Serialize and deserialize the example netlist (with some additions) and compare the result with the original netlist
-    //             auto nl = create_example_serializer_netlist();
+    /**
+     * Testing the serialization and a followed deserialization of the example
+     * netlist.
+     *
+     * Functions: serialize_netlist, deserialize_netlist
+     */
+    TEST_F(NetlistSerializerTest, check_serialize_and_deserialize) {
+        TEST_START
+            {// Serialize and deserialize the example netlist (with some additions) and compare the result with the original netlist
+                auto nl = create_example_serializer_netlist();
 
-    //             // Serialize and deserialize the netlist now
-    //             std::filesystem::path test_hal_file_path = test_utils::create_sandbox_path("test_hal_file.hal");
-    //             ASSERT_TRUE(netlist_serializer::serialize_to_file(nl.get(), test_hal_file_path));
-    //             auto des_nl = netlist_serializer::deserialize_from_file(test_hal_file_path);
-    //             ASSERT_NE(des_nl, nullptr);
-    //             EXPECT_TRUE(*nl == *des_nl);
-    //         }
-    //         {
-    //             // Test the example netlist against its deserialized version, but flip the module ids
-    //             auto nl = create_example_serializer_netlist();
-    //             // -- Remove the modules
-    //             nl->delete_module(nl->get_module_by_id(2));
-    //             nl->delete_module(nl->get_module_by_id(3));
-    //             // -- Add them again with flipped ids
-    //             Module *test_m_0_flipped = nl->create_module(3, "test_mod_0_flipped", nl->get_top_module());
-    //             test_m_0_flipped->set_type("test_mod_type_0_flipped");
-    //             test_m_0_flipped->assign_gate(nl->get_gate_by_id(1));
-    //             test_m_0_flipped->assign_gate(nl->get_gate_by_id(4));
+                // Serialize and deserialize the netlist now
+                std::filesystem::path test_hal_file_path = test_utils::create_sandbox_path("test_hal_file.hal");
+                ASSERT_TRUE(netlist_serializer::serialize_to_file(nl.get(), test_hal_file_path));
+                auto des_nl = netlist_serializer::deserialize_from_file(test_hal_file_path);
+                ASSERT_NE(des_nl, nullptr);
+                EXPECT_TRUE(*nl == *des_nl);
+            }
+            {
+                // Test the example netlist against its deserialized version, but flip the module ids
+                auto nl = create_example_serializer_netlist();
+                // -- Remove the modules
+                nl->delete_module(nl->get_module_by_id(2));
+                nl->delete_module(nl->get_module_by_id(3));
+                // -- Add them again with flipped ids
+                Module *test_m_0_flipped = nl->create_module(3, "test_mod_0_flipped", nl->get_top_module());
+                test_m_0_flipped->set_type("test_mod_type_0_flipped");
+                test_m_0_flipped->assign_gate(nl->get_gate_by_id(1));
+                test_m_0_flipped->assign_gate(nl->get_gate_by_id(4));
 
-    //             Module *test_m_1_flipped = nl->create_module(2, "test_mod_1_flipped", test_m_0_flipped);
-    //             test_m_1_flipped->set_type("test_mod_type_1_flipped");
-    //             test_m_1_flipped->assign_gate(nl->get_gate_by_id(2));
+                Module *test_m_1_flipped = nl->create_module(2, "test_mod_1_flipped", test_m_0_flipped);
+                test_m_1_flipped->set_type("test_mod_type_1_flipped");
+                test_m_1_flipped->assign_gate(nl->get_gate_by_id(2));
 
-    //             test_m_0_flipped->set_data("category", "key_3", "data_type", "test_value");
+                test_m_0_flipped->set_data("category", "key_3", "data_type", "test_value");
 
-    //             // Set some input/output port names of module 0
-    //             auto res_1 = test_m_0_flipped->get_pin_by_net((nl->get_net_by_id(13)));
-    //             ASSERT_TRUE(res_1.is_ok());
-    //             ModulePin* pin_1 = res_1.get();
-    //             ASSERT_TRUE(test_m_0_flipped->set_pin_name(pin_1, "test_m_0_flipped_net_1_3_in").is_ok());
-    //             auto res_2 = test_m_0_flipped->get_pin_by_net((nl->get_net_by_id(20)));
-    //             ASSERT_TRUE(res_2.is_ok());
-    //             ModulePin* pin_2 = res_2.get();
-    //             ASSERT_TRUE(test_m_0_flipped->set_pin_name(pin_2, "test_m_0_flipped_net_2_0_in").is_ok());
-    //             auto res_3 = test_m_0_flipped->get_pin_by_net((nl->get_net_by_id(45)));
-    //             ASSERT_TRUE(res_3.is_ok());
-    //             ModulePin* pin_3 = res_3.get();
-    //             ASSERT_TRUE(test_m_0_flipped->set_pin_name(pin_3, "test_m_0_flipped_net_0_4_5_out").is_ok());
-    //             auto res_4 = test_m_1_flipped->get_pin_by_net((nl->get_net_by_id(13)));
-    //             ASSERT_TRUE(res_4.is_ok());
-    //             ModulePin* pin_4 = res_4.get();
-    //             ASSERT_TRUE(test_m_1_flipped->set_pin_name(pin_4, "test_m_1_flipped_net_1_3_out").is_ok());
+                // Set some input/output port names of module 0
+                auto res_1 = test_m_0_flipped->get_pin_by_net((nl->get_net_by_id(13)));
+                ASSERT_TRUE(res_1.is_ok());
+                ModulePin* pin_1 = res_1.get();
+                ASSERT_TRUE(test_m_0_flipped->set_pin_name(pin_1, "test_m_0_flipped_net_1_3_in").is_ok());
+                auto res_2 = test_m_0_flipped->get_pin_by_net((nl->get_net_by_id(20)));
+                ASSERT_TRUE(res_2.is_ok());
+                ModulePin* pin_2 = res_2.get();
+                ASSERT_TRUE(test_m_0_flipped->set_pin_name(pin_2, "test_m_0_flipped_net_2_0_in").is_ok());
+                auto res_3 = test_m_0_flipped->get_pin_by_net((nl->get_net_by_id(45)));
+                ASSERT_TRUE(res_3.is_ok());
+                ModulePin* pin_3 = res_3.get();
+                ASSERT_TRUE(test_m_0_flipped->set_pin_name(pin_3, "test_m_0_flipped_net_0_4_5_out").is_ok());
+                auto res_4 = test_m_1_flipped->get_pin_by_net((nl->get_net_by_id(13)));
+                ASSERT_TRUE(res_4.is_ok());
+                ModulePin* pin_4 = res_4.get();
+                ASSERT_TRUE(test_m_1_flipped->set_pin_name(pin_4, "test_m_1_flipped_net_1_3_out").is_ok());
 
-    //             // Serialize and deserialize the netlist now
-    //             std::filesystem::path test_hal_file_path = test_utils::create_sandbox_path("test_hal_file.hal");
-    //             ASSERT_TRUE(netlist_serializer::serialize_to_file(nl.get(), test_hal_file_path));
-    //             auto des_nl = netlist_serializer::deserialize_from_file(test_hal_file_path);
-    //             ASSERT_NE(des_nl, nullptr);
-    //             EXPECT_TRUE(*nl == *des_nl);
-    //         }
-    //         {
-    //             // Serialize and deserialize an empty netlist and compare the result with the original netlist
-    //             auto nl = std::make_unique<Netlist>(m_gl);
+                // Serialize and deserialize the netlist now
+                std::filesystem::path test_hal_file_path = test_utils::create_sandbox_path("test_hal_file.hal");
+                ASSERT_TRUE(netlist_serializer::serialize_to_file(nl.get(), test_hal_file_path));
+                auto des_nl = netlist_serializer::deserialize_from_file(test_hal_file_path);
+                ASSERT_NE(des_nl, nullptr);
+                EXPECT_TRUE(*nl == *des_nl);
+            }
+            {
+                // Serialize and deserialize an empty netlist and compare the result with the original netlist
+                auto nl = std::make_unique<Netlist>(m_gl);
 
-    //             std::filesystem::path test_hal_file_path = test_utils::create_sandbox_path("test_hal_file.hal");
-    //             ASSERT_TRUE(netlist_serializer::serialize_to_file(nl.get(), test_hal_file_path));
-    //             auto des_nl = netlist_serializer::deserialize_from_file(test_hal_file_path);
-    //             ASSERT_NE(des_nl, nullptr);
-    //             EXPECT_TRUE(*nl == *des_nl);
-    //         }
+                std::filesystem::path test_hal_file_path = test_utils::create_sandbox_path("test_hal_file.hal");
+                ASSERT_TRUE(netlist_serializer::serialize_to_file(nl.get(), test_hal_file_path));
+                auto des_nl = netlist_serializer::deserialize_from_file(test_hal_file_path);
+                ASSERT_NE(des_nl, nullptr);
+                EXPECT_TRUE(*nl == *des_nl);
+            }
 
 
-    //     TEST_END
-    // }
+        TEST_END
+    }
 
-    // /**
-    //  * Testing the serialization and deserialization of a netlist with invalid input
-    //  *
-    //  * Functions: serialize_netlist, deserialize_netlist
-    //  */
-    // TEST_F(NetlistSerializerTest, check_serialize_and_deserialize_negative) {
-    //     TEST_START
-    //         {
-    //             // Serialize a netlist which is a nullptr
-    //             std::filesystem::path test_hal_file_path = test_utils::create_sandbox_path("test_hal_file.hal");
-    //             EXPECT_FALSE(netlist_serializer::serialize_to_file(nullptr, test_hal_file_path));
-    //         }
-    //         {
-    //             // Serialize a netlist to an invalid path
-    //             NO_COUT_TEST_BLOCK;
-    //             auto nl = create_example_serializer_netlist();
-    //             EXPECT_FALSE(netlist_serializer::serialize_to_file(nl.get(), std::filesystem::path("")));
-    //         }
-    //         {
-    //             // Deserialize a netlist from a non existing path
-    //             NO_COUT_TEST_BLOCK;
-    //             EXPECT_EQ(netlist_serializer::deserialize_from_file(std::filesystem::path("/using/this/file/is/let.hal")), nullptr);
-    //         }
-    //         {
-    //             // Deserialize invalid input
-    //             NO_COUT_TEST_BLOCK;
-    //             std::filesystem::path test_hal_file_path = test_utils::create_sandbox_path("test_hal_file.hal");
-    //             std::ofstream myfile;
-    //             myfile.open(test_hal_file_path.string());
-    //             myfile << "I h4ve no JSON f0rmat!!!\n(Temporary file for testing. Should be already deleted...)";
-    //             myfile.close();
-    //             EXPECT_EQ(netlist_serializer::deserialize_from_file(test_hal_file_path), nullptr);
-    //         }
-    //     TEST_END
-    // }
+    /**
+     * Testing the serialization and deserialization of a netlist with invalid input
+     *
+     * Functions: serialize_netlist, deserialize_netlist
+     */
+    TEST_F(NetlistSerializerTest, check_serialize_and_deserialize_negative) {
+        TEST_START
+            {
+                // Serialize a netlist which is a nullptr
+                std::filesystem::path test_hal_file_path = test_utils::create_sandbox_path("test_hal_file.hal");
+                EXPECT_FALSE(netlist_serializer::serialize_to_file(nullptr, test_hal_file_path));
+            }
+            {
+                // Serialize a netlist to an invalid path
+                NO_COUT_TEST_BLOCK;
+                auto nl = create_example_serializer_netlist();
+                EXPECT_FALSE(netlist_serializer::serialize_to_file(nl.get(), std::filesystem::path("")));
+            }
+            {
+                // Deserialize a netlist from a non existing path
+                NO_COUT_TEST_BLOCK;
+                EXPECT_EQ(netlist_serializer::deserialize_from_file(std::filesystem::path("/using/this/file/is/let.hal")), nullptr);
+            }
+            {
+                // Deserialize invalid input
+                NO_COUT_TEST_BLOCK;
+                std::filesystem::path test_hal_file_path = test_utils::create_sandbox_path("test_hal_file.hal");
+                std::ofstream myfile;
+                myfile.open(test_hal_file_path.string());
+                myfile << "I h4ve no JSON f0rmat!!!\n(Temporary file for testing. Should be already deleted...)";
+                myfile.close();
+                EXPECT_EQ(netlist_serializer::deserialize_from_file(test_hal_file_path), nullptr);
+            }
+        TEST_END
+    }
 }    //namespace hal
