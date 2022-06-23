@@ -270,7 +270,10 @@ namespace hal
          QMenu* settingMenu = new QMenu(this);
          QAction* act;
          act = new QAction("Select gates for simulation", settingMenu);
-         connect(act, &QAction::triggered, this, &WaveformViewer::handleSelectGates);
+         if (!mCurrentWaveWidget || mCurrentWaveWidget->state() != NetlistSimulatorController::NoGatesSelected)
+             act->setDisabled(true);
+         else
+            connect(act, &QAction::triggered, this, &WaveformViewer::handleSelectGates);
          settingMenu->addAction(act);
 
          act = new QAction("Select clock net", settingMenu);

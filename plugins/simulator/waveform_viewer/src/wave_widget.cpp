@@ -33,6 +33,7 @@ namespace hal {
 
     WaveWidget::WaveWidget(NetlistSimulatorController *ctrl, QWidget *parent)
         : QSplitter(parent), mController(ctrl), mControllerOwner(nullptr),
+          mControllerId(ctrl->get_id()), mControllerName(ctrl->get_name()),
           mOngoingYscroll(false), mVisualizeNetState(false), mAutoAddWaves(true)
     {
         mWaveItemHash   = new WaveItemHash;
@@ -92,12 +93,12 @@ namespace hal {
         mTreeView->verticalScrollBar()->setValue(0);
         setSizes({320,880});
         mTreeModel->restore();
-        qDebug() << "+++ WaveWidget" << mController->get_id() <<  hex << (qintptr) this;
+        log_info(mControllerName, "Simulation controller id={} name='{}' instantiated", mControllerId, mControllerName);
     }
 
     WaveWidget::~WaveWidget()
     {
-        qDebug() << "--- WaveWidget" << mController->get_id() <<  hex << (qintptr) this;
+        log_info(mControllerName, "Simulation controller id={} name='{}' disposed", mControllerId, mControllerName);
     }
 
     void WaveWidget::refreshNetNames()
@@ -118,7 +119,7 @@ namespace hal {
     u32 WaveWidget::controllerId() const
     {
         if (!mController) return 0;
-        return mController->get_id();
+        return mControllerId;
     }
 
     NetlistSimulatorController::SimulationState WaveWidget::state() const
@@ -275,7 +276,7 @@ namespace hal {
 
     void WaveWidget::setGates(const std::vector<Gate*>& gats)
     {
-        if (!mController) return;
+        if (!mController || mController->get_state() != NetlistSimulatorController::NoGatesSelected) return;
         mController->reset();
         mController->add_gates(gats);
         for (const Net* inpNet : mController->get_input_nets())
@@ -300,7 +301,7 @@ namespace hal {
     {
         if (!success) return;
         if (!mController->get_results())
-            log_warning(mController->get_name(), "Cannot get simulation results");
+            log_warning(mControllerName, "Cannot get simulation results");
     }
 
     void WaveWidget::visualizeCurrentNetState(double tCursor, int xpos)
