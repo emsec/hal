@@ -159,7 +159,7 @@ namespace hal
 
                 context->remove({m->get_id()}, {});
 
-                if (context->empty())
+                if (context->empty() || context->willBeEmptied())
                     deleteGraphContext(context);
             }
     }
@@ -246,7 +246,7 @@ namespace hal
             else
                 context->testIfAffected(m->get_id(), &removed_module, nullptr);
 
-            if (context->empty())
+            if (context->empty() || context->willBeEmptied())
                 deleteGraphContext(context);
         }
     }
@@ -293,7 +293,7 @@ namespace hal
             if (context->isShowingModule(m->get_id(), {}, {}, {}, {removed_gate}, false))
             {
                 context->remove({}, {removed_gate});
-                if (context->empty())
+                if (context->empty() || context->willBeEmptied())
                 {
                     deleteGraphContext(context);
                 }

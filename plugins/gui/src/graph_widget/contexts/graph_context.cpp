@@ -246,6 +246,13 @@ namespace hal
         return mGates.empty() && mModules.empty();
     }
 
+    bool GraphContext::willBeEmptied() const
+    {
+        QSet<u32> tempMod = mModules + mAddedModules - mRemovedModules;
+        QSet<u32> tempGat = mGates   + mAddedGates   - mRemovedGates;
+        return tempMod.isEmpty() && tempGat.isEmpty();
+    }
+
     void GraphContext::testIfAffected(const u32 id, const u32* moduleId, const u32* gateId)
     {
         if (testIfAffectedInternal(id, moduleId, gateId))
@@ -570,6 +577,16 @@ namespace hal
 
     void GraphContext::applyChanges()
     {
+        // since changes are only applied once in a while added module might not exist any more
+        auto it = mAddedModules.begin();
+        while (it != mAddedModules.end())
+        {
+            if (gNetlist->get_module_by_id(*it))
+                ++it;
+            else
+                it = mAddedModules.erase(it);
+        }
+
         mModules -= mRemovedModules;
         mGates -= mRemovedGates;
 
