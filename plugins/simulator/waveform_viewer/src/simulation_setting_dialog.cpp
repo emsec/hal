@@ -146,7 +146,7 @@ namespace hal {
         mMaxSizeEditor->setMaximum(5000);
         mMaxSizeEditor->setMinimum(10);
         mMaxSizeEditor->setValue(settings->maxSizeLoadable());
-        layout->addRow("Load waveform to memory if number transitions <", mMaxSizeEditor);
+        layout->addRow("Maximum number of values to load into editor ", mMaxSizeEditor);
         layout->addItem(new QSpacerItem(0,100));
         mCustomBaseDicectory = new QCheckBox(this);
         connect(mCustomBaseDicectory,&QCheckBox::toggled,this,&SimulationSettingGlobalTab::customBaseDirectoryToggled);
