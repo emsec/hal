@@ -5,6 +5,7 @@
 #include "gui/selection_details_widget/gate_details_widget/gate_pin_tree.h"
 #include "gui/code_editor/syntax_highlighter/python_qss_adapter.h"
 #include "gui/gui_globals.h"
+#include "gui/validator/hexadecimal_validator.h"
 #include "gui/input_dialog/input_dialog.h"
 #include "gui/python/py_code_provider.h"
 
@@ -237,9 +238,11 @@ namespace hal
         });
         menu.addAction("Change configuration string", [this](){
             InputDialog ipd("Change configuration string", "New configuration string", mLutConfigLabel->text().remove("0x"));
+            HexadecimalValidator hexValidator;
+            ipd.addValidator(&hexValidator);
             if(ipd.exec() == QDialog::Accepted && !ipd.textValue().isEmpty())
             {
-                mCurrentGate->set_data("generic", "INIT", "bit_vector", ipd.textValue().toStdString());
+                mCurrentGate->set_data("generic", "INIT", "bit_vector", ipd.textValue().toUpper().toStdString());
                 setGate(mCurrentGate);//must update config string and data table
             }
         });
