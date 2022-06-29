@@ -9,13 +9,12 @@
 #include "gui/input_dialog/input_dialog.h"
 #include "gui/python/py_code_provider.h"
 
-
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/latch_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/state_component.h"
-#include <QDebug>
+#include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
 #include <QMenu>
 #include <QApplication>
 #include <QClipboard>
@@ -242,8 +241,14 @@ namespace hal
             ipd.addValidator(&hexValidator);
             if(ipd.exec() == QDialog::Accepted && !ipd.textValue().isEmpty())
             {
-                mCurrentGate->set_data("generic", "INIT", "bit_vector", ipd.textValue().toUpper().toStdString());
-                setGate(mCurrentGate);//must update config string and data table
+                if(InitComponent* init_component = mCurrentGate->get_type()->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); }); init_component != nullptr)
+                {
+                    std::string cat = init_component->get_init_category(), key = init_component->get_init_identifiers()[0], data_type = "bit_vector";
+                    mCurrentGate->set_data(cat, key, data_type,ipd.textValue().toUpper().toStdString());
+                    setGate(mCurrentGate);//must update config string and data table, no signal for that
+                }
+                else
+                    log_error("gui", "Could not load InitComponent from gate with id {}.", mCurrentGate->get_id());
             }
         });
         menu.addAction(QIcon(":/icons/python"), "Get configuration string", [this](){
@@ -365,9 +370,16 @@ namespace hal
                 }
                 mLutFunctionTable->setEntries(lutEntries);
 
-                //Setup LUT CONFIGURATION STRING
-                auto typeAndValueTuple = gate->get_data("generic", "INIT");
-                mLutConfigLabel->setText(" 0x" + QString::fromStdString(std::get<1>(typeAndValueTuple)));//some space to align
+                //Setup lut config (init) string
+                if(InitComponent* init_component = gt->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); }); init_component != nullptr)
+                {
+                    auto typeAndValue = gate->get_data(init_component->get_init_category(), init_component->get_init_identifiers()[0]);
+                    mLutConfigLabel->setText(" 0x" + QString::fromStdString(std::get<1>(typeAndValue)));
+                }
+                else
+                {
+                    mLutConfigLabel->setText(" Could not load init string.");
+                }
 
                 // The table is only updated if the gate has a LUT pin
                 if(lutPins.size() > 0){
