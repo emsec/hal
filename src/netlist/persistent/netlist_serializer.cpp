@@ -679,8 +679,11 @@ namespace hal
 
             // create directory if it got erased in the meantime
             std::filesystem::path serialize_to_dir = hal_file.parent_path();
+            if (serialize_to_dir.empty()) return false;
             if (!std::filesystem::exists(serialize_to_dir))
-                std::filesystem::create_directory(serialize_to_dir);
+            {
+                if (!std::filesystem::create_directory(serialize_to_dir)) return false;
+            }
 
             std::ofstream hal_file_stream;
             hal_file_stream.open(hal_file.string());
