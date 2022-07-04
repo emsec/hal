@@ -5,10 +5,14 @@
 #include <QtWidgets/QMenu>
 #include <QApplication>
 #include <QClipboard>
+#include <QDebug>
+#include "gui/user_action/action_add_boolean_function.h"
+#include "gui/input_dialog/input_dialog.h"
 
 namespace hal {
     BooleanFunctionTable::BooleanFunctionTable(QWidget *parent) : QTableView(parent),
-    mBooleanFunctionTableModel(new BooleanFunctionTableModel(this)), mShowPlainDescr(false), mShowPlainPyDescr(false)
+    mBooleanFunctionTableModel(new BooleanFunctionTableModel(this)), mCurrentGate(nullptr),
+      mCurrentGateId(0), mShowPlainDescr(false), mShowPlainPyDescr(false), mChangeBooleanFunc(false)
     {
         this->setModel(mBooleanFunctionTableModel);
         this->setSelectionMode(QAbstractItemView::NoSelection);
@@ -33,6 +37,12 @@ namespace hal {
         adjustTableSizes();
         this->clearSelection();
         this->update();
+    }
+
+    void BooleanFunctionTable::setGateInformation(Gate *g)
+    {
+        mCurrentGate = g;
+        mCurrentGateId = g ? g->get_id() : 0;
     }
 
     void BooleanFunctionTable::resizeEvent(QResizeEvent *event)
@@ -67,6 +77,25 @@ namespace hal {
                 QApplication::clipboard()->setText( toClipboardText );
             }
         );
+
+        if(mChangeBooleanFunc && mCurrentGate)
+        {
+            QString entryIdentifier = entry->getEntryIdentifier();
+            menu.addAction("Change Boolean function", [this, entryIdentifier](){
+                    InputDialog ipd("Change Boolean function", "New function", "");
+                    if(ipd.exec() == QDialog::Accepted && !ipd.textValue().isEmpty())
+                    {
+                        auto funcRes = BooleanFunction::from_string(ipd.textValue().toStdString());
+                        if(funcRes.is_ok())
+                        {
+                            ActionAddBooleanFunction* act = new ActionAddBooleanFunction(entryIdentifier, funcRes.get(), mCurrentGateId);
+                            act->exec();
+                        }
+                        else
+                            qDebug() << "result was not ok :(";
+                    }
+            });
+        }
 
         /*====================================
                 Python to Clipboard 

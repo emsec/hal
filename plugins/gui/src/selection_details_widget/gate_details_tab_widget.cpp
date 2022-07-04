@@ -50,6 +50,7 @@ namespace hal
         mLutFunctionTable = new BooleanFunctionTable(this);
         mLutFunctionTable->setContextMenuPlainDescr(true);
         mLutFunctionTable->setContextMenuPythonPlainDescr(true);
+        mLutFunctionTable->enableChangeBooleanFunctionOption(true);
         mLutTable = new LUTTableWidget(this);
         mLutConfigLabel = new QLabel("default", this);
         mLutConfigLabel->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -369,6 +370,7 @@ namespace hal
                     }
                 }
                 mLutFunctionTable->setEntries(lutEntries);
+                mLutFunctionTable->setGateInformation(gate);
 
                 //Setup lut config (init) string
                 if(InitComponent* init_component = gt->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); }); init_component != nullptr)
