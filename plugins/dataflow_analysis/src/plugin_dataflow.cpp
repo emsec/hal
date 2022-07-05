@@ -109,6 +109,21 @@ namespace hal
         return true;
     }
 
+    std::vector<PluginParameter> plugin_dataflow::get_parameter() const
+    {
+        std::vector<PluginParameter> retval;
+        retval.push_back(PluginParameter(PluginParameter::Integer, "sizes", "Expected register size", "8"));
+        retval.push_back(PluginParameter(PluginParameter::Boolean, "draw", "Draw dot graph", "true"));
+        retval.push_back(PluginParameter(PluginParameter::ExistingDir, "output", "Directory for results"));
+        retval.push_back(PluginParameter(PluginParameter::PushButton, "exec", "Execute dataflow analysis"));
+        return retval;
+    }
+
+    void plugin_dataflow::set_parameter(const std::vector<PluginParameter>& params)
+    {
+
+    }
+
     std::vector<std::vector<Gate*>>
         plugin_dataflow::execute(Netlist* nl, std::string output_path, const std::vector<u32> sizes, bool draw_graph, std::vector<std::vector<u32>> known_groups, u32 bad_group_size)
     {

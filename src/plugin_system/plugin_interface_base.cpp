@@ -36,4 +36,9 @@ namespace hal
                || (t == PluginInterfaceType::gui && dynamic_cast<const GUIPluginInterface*>(this));
         return false;
     }
+
+    std::vector<PluginParameter> BasePluginInterface::get_parameter() const { return std::vector<PluginParameter>(); }
+
+    void BasePluginInterface::set_parameter(const std::vector<PluginParameter>&) {;}
+
 }    // namespace hal

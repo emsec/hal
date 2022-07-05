@@ -64,5 +64,18 @@ namespace hal
         bool handle_cli_call(Netlist* nl, ProgramArguments& args) override;
 
         std::vector<std::vector<Gate*>> execute(Netlist* nl, std::string path, const std::vector<u32> sizes, bool draw_graph, std::vector<std::vector<u32>> known_groups = {}, u32 bad_group_size = 7);
+
+        /**
+         * Get list of configurable parameter
+         *
+         * @returns  list of parameter
+         */
+        std::vector<PluginParameter> get_parameter() const override;
+
+        /**
+         * Set configurable parameter to values
+         * @param params The parameter with values
+         */
+        void set_parameter(const std::vector<PluginParameter>& params) override;
     };
 }    // namespace hal

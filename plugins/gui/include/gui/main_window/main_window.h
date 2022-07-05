@@ -437,6 +437,8 @@ namespace hal
          */
         void handleEventLogEnabled(bool enable);
 
+        void setPluginParameter();
+
     private:
         /**
          * Overwritten Qt function to handle the close event.
@@ -468,6 +470,8 @@ namespace hal
          */
         void saveState();
 
+        void pluginMenu();
+
         QVBoxLayout* mLayout;
         QMenuBar* mMenuBar;
         QStackedWidget* mStackedWidget;
@@ -497,6 +501,7 @@ namespace hal
         QMenu* mMenuFile;
         QMenu* mMenuEdit;
         QMenu* mMenuMacro;
+        QMenu* mMenuPlugin;
         QMenu* mMenuHelp;
 
         QString mHalIconStyle;

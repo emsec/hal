@@ -25,6 +25,7 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/plugin_system/plugin_parameter.h"
 
 #include <set>
 #include <string>
@@ -129,6 +130,10 @@ namespace hal
          * If not overwritten, a logging channel equal to the plugin name is created.
          */
         virtual void initialize_logging();
+
+        virtual std::vector<PluginParameter> get_parameter() const;
+
+        virtual void set_parameter(const std::vector<PluginParameter>& params);
     };
 
     using instantiate_plugin_function = std::unique_ptr<BasePluginInterface> (*)();

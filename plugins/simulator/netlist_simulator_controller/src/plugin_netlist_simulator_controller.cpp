@@ -149,4 +149,33 @@ namespace hal
         sSimulationSettings = new SimulationSettings(userConfigDir.absoluteFilePath("simulationsettings.ini"));
         sSimulatorSerializer = new SimulatorSerializer;
     }
+
+    std::vector<PluginParameter> NetlistSimulatorControllerPlugin::get_parameter() const
+    {
+        const char* colorLabel[] = {"Regular waveform", "Selected waveform", "Undefined value", "Background X", "Background 0", "Background 1"};
+        std::vector<PluginParameter> retval;
+        retval.push_back(PluginParameter(PluginParameter::TabName,"tab1","Global settings"));
+        retval.push_back(PluginParameter(PluginParameter::Integer,"tab1/max_mem","Max events to load into memory",QString::number(sSimulationSettings->maxSizeLoadable()).toStdString()));
+        retval.push_back(PluginParameter(PluginParameter::Integer,"tab1/max_edit","Max events to load into editor",QString::number(sSimulationSettings->maxSizeEditor()).toStdString()));
+        retval.push_back(PluginParameter(PluginParameter::ExistingDir,"tab1/base_dir","Base directory for simulation work directory"));
+        retval.push_back(PluginParameter(PluginParameter::TabName,"tab2","Engine parameter"));
+        retval.push_back(PluginParameter(PluginParameter::Dictionary,"tab2/par", "Engine parameter"));
+        retval.push_back(PluginParameter(PluginParameter::TabName,"tab3","Color settings"));
+        for (int i=0; i<SimulationSettings::MaxColorSetting; i++)
+        {
+            SimulationSettings::ColorSetting cs = (SimulationSettings::ColorSetting) i;
+            retval.push_back(
+                        PluginParameter(PluginParameter::Color,
+                                        QString("tab3/col%1").arg(i).toStdString(),
+                                        std::string(colorLabel[i]),
+                                        sSimulationSettings->color(cs).toStdString()));
+        }
+        retval.push_back(PluginParameter(PluginParameter::PushButton,"ok","Ok"));
+        return retval;
+    }
+
+    void NetlistSimulatorControllerPlugin::set_parameter(const std::vector<PluginParameter>& params)
+    {
+
+    }
 }    // namespace hal
