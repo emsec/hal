@@ -54,7 +54,7 @@ namespace hal
          * @param[in] initial_state - A mapping from the state registers to their initial value. If omitted the intial state will be set to 0.
          * @param[in] graph_path - Path where the transition state graph in dot format is saved.
          * @param[in] timeout - Timeout value for the sat solvers. Defaults to 600000 ms.
-         * @returns A mapping from each state to all its possible transitions.
+         * @returns A mapping from each state to all its possible transitions. The transitions are a map from the successor state to all the possible input mappings that lead to it.
          */
         std::map<u64, std::map<u64, std::vector<std::map<u32, u8>>>> solve_fsm(Netlist* nl,
                                                   const std::vector<Gate*> state_reg,
@@ -70,7 +70,7 @@ namespace hal
          * @param[in] state_reg - A vector containing all the gates of the fsm representing the state register.
          * @param[in] transition_logic - A vector containing all the gates of the fsm representing the transition_logic.
          * @param[in] graph_path - Path where the transition state graph in dot format is saved.
-         * @returns A mapping from each state to all its successors states.
+         * @returns A mapping from each state to all its possible successors states.
          */
         std::map<u64, std::vector<u64>> solve_fsm_brute_force(Netlist* nl, const std::vector<Gate*> state_reg, const std::vector<Gate*> transition_logic, const std::string graph_path = "");
 

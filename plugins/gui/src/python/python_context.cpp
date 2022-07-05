@@ -16,11 +16,15 @@
 #include <Python.h>
 #include <compile.h>
 #include <errcode.h>
+
+#if PY_VERSION_HEX < 0x030900a0 // Python 3.9.0
+
 #include <grammar.h>
 #include <node.h>
 #include <parsetok.h>
-
 extern grammar _PyParser_Grammar;
+
+#endif
 
 namespace hal
 {
@@ -266,6 +270,10 @@ namespace hal
 
     int PythonContext::checkCompleteStatement(const QString& text)
     {
+        
+        #if PY_VERSION_HEX < 0x030900a0 // Python 3.9.0
+        // PEG not yet available, use PyParser
+
         node* n;
         perrdetail e;
 
@@ -281,6 +289,17 @@ namespace hal
 
         PyNode_Free(n);
         return 1;
+
+        #else
+
+        // attempt to parse Python expression into AST using PEG
+        PyCompilerFlags flags {PyCF_ONLY_AST, PY_MINOR_VERSION};
+        PyObject* o = Py_CompileStringExFlags(text.toStdString().c_str(), "stdin", Py_file_input, &flags, 0);
+        // if parsing failed (-> not a complete statement), nullptr is returned
+        // (apparently no need to PyObject_Free(o) here)
+        return o != nullptr;
+
+        #endif
     }
 
     void PythonContext::handleReset()

@@ -19,40 +19,23 @@ namespace hal {
     const int maxErrorMessages = 3;
 
     VcdSerializerElement::VcdSerializerElement(int inx, const WaveData* wd)
-        : mIndex(inx), mData(wd)
-    {
-        mIterator = mData->data().constBegin();
-    }
-
-    void VcdSerializerElement::hasNextElement() const
-    {
-
-    }
-
-    int VcdSerializerElement::time() const
-    {
-        if (mIterator == mData->data().constEnd()) return -1;
-        return mIterator.key();
-    }
-
-    int VcdSerializerElement::value() const
-    {
-        return mIterator.value();
-    }
-
-    bool VcdSerializerElement::next()
-    {
-        return (++mIterator != mData->data().constEnd());
-    }
-
-    int VcdSerializerElement::priorityCode(int n) const
-    {
-        return n*time() + mIndex;
-    }
+        : mIndex(inx), mData(wd), mTime(0), mValue(SaleaeDataTuple::sReadError)
+    {;}
 
     QString VcdSerializerElement::name() const
     {
         return mData->name();
+    }
+
+    bool VcdSerializerElement::hasData() const
+    {
+        return mValue != SaleaeDataTuple::sReadError;
+    }
+
+    void VcdSerializerElement::reset()
+    {
+        mValue = SaleaeDataTuple::sReadError;
+        mTime = 0;
     }
 
     QByteArray VcdSerializerElement::charCode() const
@@ -70,9 +53,15 @@ namespace hal {
     }
 
 //----------------------------------
-    VcdSerializer::VcdSerializer(QObject *parent)
-        : QObject(parent), mSaleaeWriter(nullptr), mLastProgress(-1)
-    {;}
+    VcdSerializer::VcdSerializer(const QString& workdir, QObject *parent)
+        : QObject(parent), mSaleaeWriter(nullptr), mWorkdir(workdir), mLastProgress(-1)
+    {
+        if (!mWorkdir.isEmpty())
+        {
+            QDir saleaeDir = QDir(mWorkdir).absoluteFilePath("saleae");
+            mSaleaeDirectoryFilename = saleaeDir.absoluteFilePath("saleae.json");
+        }
+    }
 
 
     void VcdSerializer::deleteFiles()
@@ -82,47 +71,66 @@ namespace hal {
         memset(mErrorCount, 0, sizeof(mErrorCount));
     }
 
-    bool VcdSerializer::serialize(const QString& filename, const QList<const WaveData*>& waves) const
+    void VcdSerializer::writeVcdEvent(QFile&of)
     {
+        if (mTime < mFirstTimestamp || mTime > mLastTimestamp) return;
+        bool first = true;
+        for (VcdSerializerElement* vse : mWriteElements)
+        {
+            if (vse->hasData())
+            {
+                if (first)
+                {
+                    of.write('#' + QByteArray::number((qulonglong)vse->time()) + '\n');
+                    first = false;
+                }
+                of.write(QByteArray::number(vse->value()) + vse->charCode() + '\n');
+                vse->value();
+                vse->reset();
+            }
+        }
+    }
+
+    bool VcdSerializer::exportVcd(const QString &filename, const QList<const WaveData*>& waves, u32 startTime, u32 endTime)
+    {
+        mFirstTimestamp = startTime;
+        mLastTimestamp  = endTime;
+        if (waves.isEmpty()) return false;
+        SaleaeParser parser(mSaleaeDirectoryFilename.toStdString());
+
         QFile of(filename);
         if (!of.open(QIODevice::WriteOnly)) return false;
 
+        mTime = 0;
         of.write(QByteArray("$scope module top_module $end\n"));
 
-        int dumpTime = -1;
-        QMap<int,VcdSerializerElement*> priorityMap;
         int n = waves.size();
 
         for (int i=0; i<n; i++)
         {
-            VcdSerializerElement* vse = new VcdSerializerElement(i,waves.at(i));
-            int prio = vse->priorityCode(n);
-            if (prio<0)
-                delete vse;
-            else
-            {
-                QString line = QString("$var wire 1 %1 %2 $end\n").arg(QString::fromUtf8(vse->charCode())).arg(vse->name());
-                of.write(line.toUtf8());
-                priorityMap.insert(prio,vse);
-            }
+            const WaveData* wd = waves.at(i);
+            VcdSerializerElement* vse = new VcdSerializerElement(i,wd);
+            mWriteElements.append(vse);
+            parser.register_callback(wd->name().toStdString(),wd->id(),[this,&of](const void* obj, uint64_t t, int val) {
+                if (t != mTime)
+                {
+                    writeVcdEvent(of);
+                    mTime = t;
+                }
+                VcdSerializerElement* vse = (VcdSerializerElement*) obj;
+                vse->setEvent(t,val);
+            },vse);
+            QString line = QString("$var wire 1 %1 %2 $end\n").arg(QString::fromUtf8(vse->charCode())).arg(vse->name());
+            of.write(line.toUtf8());
         }
 
         of.write(QByteArray("$upscope $end\n$enddefinitions $end\n"));
 
-        while (!priorityMap.isEmpty())
-        {
-            auto it = priorityMap.begin();
-            VcdSerializerElement* vse = it.value();
-            if (vse->time() != dumpTime)
-            {
-                of.write('#' + QByteArray::number(vse->time()) + '\n');
-                dumpTime = vse->time();
-            }
-            of.write(QByteArray::number(vse->value()) + vse->charCode() + '\n');
-            if (vse->next())
-                priorityMap.insert(vse->priorityCode(n),vse);
-            priorityMap.erase(it);
-        }
+        while (parser.next_event()) {;}
+        for (VcdSerializerElement* vse : mWriteElements)
+            delete vse;
+        mWriteElements.clear();
+
         return true;
     }
 

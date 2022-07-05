@@ -10,7 +10,8 @@
 #include "rapidjson/writer.h"
 #endif
 
-namespace hal {
+namespace hal
+{
 //--- Data -------
     JsonWriteData::JsonWriteData(const std::string& tag, JsonWriteComplex *parent)
         : mTagname(tag), mParent(parent)
@@ -58,6 +59,16 @@ namespace hal {
         assert(p);
         p->add_member(rapidjson::Value(mTagname, allocator()),
                       rapidjson::Value(u64Value),
+                      allocator());
+        return *this;
+    }
+
+    JsonWriteData& JsonWriteData::operator=(double value)
+    {
+        JsonWriteObject* p = dynamic_cast<JsonWriteObject*>(mParent);
+        assert(p);
+        p->add_member(rapidjson::Value(mTagname, allocator()),
+                      rapidjson::Value(value),
                       allocator());
         return *this;
     }

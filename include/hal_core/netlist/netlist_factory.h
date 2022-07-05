@@ -32,6 +32,7 @@ namespace hal
     /* forward declaration */
     class Netlist;
     class GateLibrary;
+    class ProjectDirectory;
 
     /**
      * @file
@@ -64,10 +65,17 @@ namespace hal
          * Create a netlist from the given '.hal' file.
          *
          * @param[in] netlist_file - Path to the '.hal' file.
-         * file.
          * @returns The netlist on success, nullptr otherwise.
          */
         NETLIST_API std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& netlist_file);
+
+        /**
+         * Create a netlist from the given hal project.
+         *
+         * @param[in] project_dir - Path to the hal project directory.
+         * @returns The netlist on success, nullptr otherwise.
+         */
+        NETLIST_API std::unique_ptr<Netlist> load_hal_project(const std::filesystem::path& project_dir);
 
         /**
          * Create a netlist using information specified in command line arguments on startup.<br>
@@ -76,7 +84,7 @@ namespace hal
          * @param[in] args - Command line arguments.
          * @returns The netlist on success, nullptr otherwise.
          */
-        NETLIST_API std::unique_ptr<Netlist> load_netlist(const ProgramArguments& args);
+        NETLIST_API std::unique_ptr<Netlist> load_netlist(const ProjectDirectory& pdir, const ProgramArguments& args);
 
         /**
           * Create a netlist from a given file for each matching pre-loaded gate library.

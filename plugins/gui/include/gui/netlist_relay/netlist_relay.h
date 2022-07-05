@@ -24,7 +24,7 @@
 #pragma once
 
 #include "hal_core/netlist/event_system/event_handler.h"
-
+#include "gui/grouping/grouping_color_serializer.h"
 #include <QMap>
 #include <QObject>
 
@@ -615,5 +615,6 @@ namespace hal
 
         QMap<u32, QColor> mModuleColors;
         ModuleModel* mModuleModel;
+        ModuleColorSerializer mColorSerializer;
     };
 }    // namespace hal

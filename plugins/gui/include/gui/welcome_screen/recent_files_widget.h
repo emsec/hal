@@ -56,13 +56,16 @@ namespace hal
         void repolish();
 
     public Q_SLOTS:
+
         /**
-         * Q_SLOT to handle that a file has been opened. Used to append the file to the list of recently used files.
+         * Q_SLOT to handle that a project has been opend or saved.
+         * Used to append the project to the list of recently used files.
          * The updated list is persisted by updating the settings.
          *
-         * @param fileName - The path of the opened file
+         * @param projDir - The path of the opened project folder
+         * @param fileName - The path of the opened netlist file
          */
-        void handleFileOpened(const QString& fileName);
+        void handleProjectUsed(const QString& projDir, const QString& fileName);
 
         /**
          * Handles that a recentFileItem should be removed (by clicking the 'x'). It removed the item from the widget.
@@ -78,5 +81,8 @@ namespace hal
         QVBoxLayout* mLayout;
 
         QList<RecentFileItem*> mItems;
+
+        void prependPath(const QString& path);
+        static const int sMaxItems = 14;
     };
 }

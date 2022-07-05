@@ -28,6 +28,8 @@ namespace hal {
     {
         const SimulationSettingGlobalTab* globTab = static_cast<const SimulationSettingGlobalTab*>(mTabWidget->widget(0));
         mSettings->setMaxSizeLoadable(globTab->maxSizeLoadable());
+        mSettings->setMaxSizeEditor(globTab->maxSizeEditor());
+        mSettings->setBaseDirectory(globTab->isCustomBaseDirectory() ? globTab->baseDirectory() : QString(""));
 
         const SimulationSettingPropertiesTab* propTab = static_cast<const SimulationSettingPropertiesTab*>(mTabWidget->widget(1));
         mSettings->setEngineProperties(propTab->engineProperties());
@@ -144,7 +146,19 @@ namespace hal {
         mMaxSizeEditor->setMaximum(5000);
         mMaxSizeEditor->setMinimum(10);
         mMaxSizeEditor->setValue(settings->maxSizeLoadable());
-        layout->addRow("Load waveform to memory if number transitions <", mMaxSizeEditor);
+        layout->addRow("Maximum number of values to load into editor ", mMaxSizeEditor);
+        layout->addItem(new QSpacerItem(0,100));
+        mCustomBaseDicectory = new QCheckBox(this);
+        connect(mCustomBaseDicectory,&QCheckBox::toggled,this,&SimulationSettingGlobalTab::customBaseDirectoryToggled);
+        layout->addRow("Custom base directory instead of project dir:", mCustomBaseDicectory);
+        mEditBaseDirectory = new QLineEdit(this);
+        mEditBaseDirectory->setText(settings->baseDirectory());
+        layout->addRow("Base directory:", mEditBaseDirectory);
+    }
+
+    void SimulationSettingGlobalTab::customBaseDirectoryToggled(bool on)
+    {
+        mEditBaseDirectory->setEnabled(on);
     }
 
     //-----------------------------------

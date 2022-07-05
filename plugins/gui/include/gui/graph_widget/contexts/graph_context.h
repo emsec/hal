@@ -149,6 +149,12 @@ namespace hal
         bool empty() const;
 
         /**
+         * Checks whether the context will be empty after pending changes are applied.
+         * @return <b>true</b> if the context is empty.
+         */
+        bool willBeEmptied() const;
+
+        /**
          * Checks if the context represents the content of the given module i.e. after double-clicking the module item.
          *
          * @param id - The id of the module

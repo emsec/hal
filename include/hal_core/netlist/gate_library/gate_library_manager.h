@@ -56,6 +56,12 @@ namespace hal
         NETLIST_API void load_all(bool reload = false);
 
         /**
+         * Lists all pathnames to gate libraries
+         * @return Vector of path
+         */
+        NETLIST_API std::vector<std::filesystem::path> get_all_path();
+
+        /**
          * Save a gate library to file.
          * 
          * @param[in] file_path - The output path. 

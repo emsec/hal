@@ -30,7 +30,8 @@ namespace hal {
         void updateScale(double deltaScale, double tEvent, quint64 visibleWidth);
         int xPosI(double t) const;
         double xPosF(double t) const;
-        double tPos(int x) const;
+        double tPosF(int x) const;
+        quint64 tPosI(int x) const;
         int viewportWidth() const { return mVieportWidth; }
     };
 }

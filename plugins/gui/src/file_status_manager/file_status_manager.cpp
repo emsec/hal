@@ -5,14 +5,13 @@
 
 namespace hal
 {
-    FileStatusManager::FileStatusManager(QObject* parent) : QObject(parent), mModifiedFilesUuid(QSet<QUuid>()), mModifiedFilesDescriptors(QMap<QUuid, QString>())
-    {
-        mNetlistModified = false;
-    }
+    FileStatusManager::FileStatusManager(QObject* parent) : QObject(parent),
+        mModifiedFilesUuid(QSet<QUuid>()), mModifiedFilesDescriptors(QMap<QUuid, QString>()),
+        mNetlistModified(false)
+    {;}
 
     FileStatusManager::~FileStatusManager()
-    {
-    }
+    {;}
 
     void FileStatusManager::fileChanged(const QUuid uuid, const QString& descriptor)
     {

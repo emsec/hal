@@ -803,8 +803,17 @@ hal--RecentFileItem
     padding-bottom       : 6px;
     padding-left         : 10px;
     padding-right        : 10px;
-    qproperty-iconPath  : ":/icons/folder";
     qproperty-iconStyle : "all->#000000";
+}
+
+hal--RecentFileItem[isProject=true]
+{
+    qproperty-iconPath  : ":/icons/folder";
+}
+
+hal--RecentFileItem[isProject=false]
+{
+    qproperty-iconPath  : ":/icons/detach";
 }
 
 hal--RecentFileItem *
@@ -848,17 +857,17 @@ hal--RecentFileItem QToolButton:hover
     color: white;
 }
 
-hal--RecentFileItem[disabled=true]
+hal--RecentFileItem[missing=true]
 {
     qproperty-iconStyle : "all->#888888"
 }
 
-hal--RecentFileItem[disabled=true] #name-label
+hal--RecentFileItem[missing=true] #name-label
 {
     color: #555555;
 }
 
-hal--RecentFileItem[disabled=true] #path-label
+hal--RecentFileItem[missing=true] #path-label
 {
     color: red;
 }

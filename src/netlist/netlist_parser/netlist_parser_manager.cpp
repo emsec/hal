@@ -44,7 +44,7 @@ namespace hal
 
                 if (auto res = parser->parse(file_name); res.is_error())
                 {
-                    log_error("netlist_parser", "error encountered during netlist parsing:\n{}", res.get_error().get());
+                    log_error("netlist_parser", "failed to parse '{}':\n{}", file_name.string(), res.get_error().get());
                     return {};
                 }
 
@@ -62,7 +62,7 @@ namespace hal
 
                     if (auto res = parser->instantiate(gate_library); res.is_error())
                     {
-                        log_error("netlist_parser", "error encountered during netlist instantiation:\n{}", res.get_error().get());
+                        log_info("netlist_parser", "failed to instantiate '{}' with gate library '{}':\n{}", file_name.string(), gate_library->get_name(), res.get_error().get());
                         return {};
                     }
                     else
@@ -91,8 +91,8 @@ namespace hal
 
                         if (auto res = parser->instantiate(lib_it); res.is_error())
                         {
-                            log_info("netlist_parser", "failed to instantiate '{}' with gate library '{}'", file_name.string(), lib_it->get_name());
-                            log_debug("netlist_parser", "error encountered during netlist instantiation:\n{}", res.get_error().get());
+                            log_info("netlist_parser", "failed to instantiate '{}' with gate library '{}':\n{}", file_name.string(), lib_it->get_name(), res.get_error().get());
+                            // log_debug("netlist_parser", "error encountered during netlist instantiation:\n{}", res.get_error().get());
                             continue;
                         }
                         else
@@ -129,6 +129,19 @@ namespace hal
         ProgramOptions get_cli_options()
         {
             return ProgramOptions();
+        }
+
+        bool can_parse(const std::filesystem::path& file_name)
+        {
+            std::string extension = utils::to_lower(file_name.extension().string());
+            if (!extension.empty() && extension[0] != '.')
+            {
+                extension = "." + extension;
+            }
+
+            if (extension == ".hal") return true;
+
+            return (m_extension_to_parser.find(extension) != m_extension_to_parser.end());
         }
 
         void register_parser(const std::string& name, const ParserFactory& parser_factory, const std::vector<std::string>& supported_file_extensions)

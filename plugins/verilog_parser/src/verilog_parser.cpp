@@ -331,7 +331,7 @@ namespace hal
 
             if (stream.size() == 0)
             {
-                return ERR("could not parse assignment expression: token stream is empty");
+                return OK({});
             }
 
             if (stream.peek() == "{")
@@ -680,8 +680,41 @@ namespace hal
         }
         m_net_by_name[m_one_net->get_name()] = m_one_net;
 
-        // construct the netlist with the last module being considered the top module
-        VerilogModule* top_module = m_modules_by_name.at(m_last_module);
+        // TODO: This tries to find the topmodule by searching for a module that is not referenced by any other module. This fails when there are multiple of those modules (for example with unused modules). There is also a top=1 flag that is set bz yosys for example that we could check first, before using this approach.
+        std::map<std::string, u32> module_name_to_refereneces;
+        for (const auto& [_name, module] : m_modules_by_name)
+        {
+            for (const auto& instance : module->m_instances)
+            {
+                if (const auto it = m_modules_by_name.find(instance->m_type); it != m_modules_by_name.end())
+                {
+                    module_name_to_refereneces[it->first]++;
+                }
+            }
+        }
+
+        std::vector<std::string> top_module_candidates;
+        for (const auto& [name, module] : m_modules_by_name)
+        {
+           if (module_name_to_refereneces.find(name) == module_name_to_refereneces.end())
+           {
+               top_module_candidates.push_back(name);
+           }
+        }
+
+        if (top_module_candidates.empty())
+        {
+            return ERR("could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': unable to find any top module candidates");
+        }
+
+        if (top_module_candidates.size() > 1)
+        {
+            return ERR("could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': found multiple modules as candidates for the top module");
+        }
+
+        // construct the netlist with the the top module
+        VerilogModule* top_module = m_modules_by_name.at(top_module_candidates.front());
+
         if (const auto res = construct_netlist(top_module); res.is_error())
         {
             return ERR_APPEND(res.get_error(), "could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': unable to construct netlist");
@@ -740,10 +773,10 @@ namespace hal
         // delete unused nets
         for (auto net : m_netlist->get_nets())
         {
-            const u32 num_of_sources = net->get_num_of_sources();
+            const u32 num_of_sources      = net->get_num_of_sources();
             const u32 num_of_destinations = net->get_num_of_destinations();
-            const bool no_source      = num_of_sources == 0 && !(net->is_global_input_net() && num_of_destinations != 0);
-            const bool no_destination = num_of_destinations == 0 && !(net->is_global_output_net() && num_of_sources != 0);
+            const bool no_source          = num_of_sources == 0 && !(net->is_global_input_net() && num_of_destinations != 0);
+            const bool no_destination     = num_of_destinations == 0 && !(net->is_global_output_net() && num_of_sources != 0);
             if (no_source && no_destination)
             {
                 m_netlist->delete_net(net);
@@ -1325,6 +1358,10 @@ namespace hal
                     port_assignment.m_assignment = res.get();
                 }
                 m_token_stream.consume(")", true);
+                if (port_assignment.m_assignment.empty())
+                {
+                    continue;
+                }
                 instance->m_port_assignments.push_back(std::move(port_assignment));
             }
         } while (m_token_stream.consume(",", false));
@@ -1648,7 +1685,7 @@ namespace hal
                     // update module ports
                     if (const auto it = m_module_ports.find(slave_net); it != m_module_ports.end())
                     {
-                        m_module_ports[master_net] = it->second;
+                        m_module_ports[master_net].insert(m_module_ports[master_net].end(), it->second.begin(), it->second.end());
                         m_module_ports.erase(it);
                     }
 
@@ -1674,19 +1711,25 @@ namespace hal
         }
 
         // assign module pins
-        for (const auto& [net, port_info] : m_module_ports)
+        for (const auto& [net, port_infos] : m_module_ports)
         {
-            if (net->get_num_of_sources() == 0 && net->get_num_of_destinations() == 0)
+            for (const auto& port_info : port_infos)
             {
-                continue;
-            }
+                if (net->get_num_of_sources() == 0 && net->get_num_of_destinations() == 0)
+                {
+                    continue;
+                }
 
-            Module* mod = std::get<2>(port_info);
-            if (auto res = mod->create_pin(std::get<1>(port_info), net); res.is_error())
-            {
-                return ERR_APPEND(res.get_error(),
-                                  "could not construct netlist: failed to create pin '" + std::get<1>(port_info) + "' at net '" + net->get_name() + "' with ID " + std::to_string(net->get_id())
-                                      + " within module '" + mod->get_name() + "' with ID " + std::to_string(mod->get_id()));
+                Module* mod = std::get<2>(port_info);
+                if (auto res = mod->create_pin(std::get<1>(port_info), net); res.is_error())
+                {
+                    // return ERR_APPEND(res.get_error(),
+                    //                 "could not construct netlist: failed to create pin '" + std::get<1>(port_info) + "' at net '" + net->get_name() + "' with ID " + std::to_string(net->get_id())
+                    //                     + " within module '" + mod->get_name() + "' with ID " + std::to_string(mod->get_id()));
+                    // NOTE: The pin creation fails when there are unused ports that never get a net assigned to them (verliog...), 
+                    //       but this also happens when the net just passes through the module (since there is no gate inside the module with that net as either input or output net, the net does not get listed as module input or output)
+                    log_warning("verilog_parser", "{}", res.get_error().get());
+                }
             }
         }
 
@@ -1768,7 +1811,7 @@ namespace hal
                 if (const auto it = parent_module_assignments.find(expanded_port_identifier); it != parent_module_assignments.end())
                 {
                     Net* port_net            = m_net_by_name.at(it->second);
-                    m_module_ports[port_net] = std::make_tuple(port->m_direction, expanded_port_identifier, module);
+                    m_module_ports[port_net].push_back(std::make_tuple(port->m_direction, expanded_port_identifier, module));
 
                     // assign port attributes
                     for (const VerilogDataEntry& attribute : port->m_attributes)
@@ -2062,7 +2105,7 @@ namespace hal
     // ###########################################################################
     // ###################          Helper Functions          ####################
     // ###########################################################################
-    
+
     std::string VerilogParser::get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const
     {
         // if the name only appears once, we don't have to suffix it

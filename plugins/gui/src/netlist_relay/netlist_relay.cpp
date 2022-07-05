@@ -593,6 +593,7 @@ namespace hal
         for (Module* m : gNetlist->get_modules())
             mModuleModel->setRandomColor(m->get_id());
         mModuleModel->init();
+        mColorSerializer.restore(mModuleModel);
     }
 
     void NetlistRelay::debugHandleFileClosed()

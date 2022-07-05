@@ -190,6 +190,12 @@ namespace hal
             }
 
             const Gate* start_gate    = net->get_sources()[0]->get_gate();
+
+            if (std::find(subgraph_gates.begin(), subgraph_gates.end(), start_gate) == subgraph_gates.end())
+            {
+                return BooleanFunction::Var("net_" + std::to_string(net->get_id()));
+            }
+
             const std::string src_pin = net->get_sources()[0]->get_pin();
             BooleanFunction result    = get_function_of_gate(start_gate, src_pin, cache);
 

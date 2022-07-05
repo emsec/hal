@@ -33,12 +33,14 @@ namespace hal {
 
     WaveWidget::WaveWidget(NetlistSimulatorController *ctrl, QWidget *parent)
         : QSplitter(parent), mController(ctrl), mControllerOwner(nullptr),
+          mControllerId(ctrl->get_id()), mControllerName(ctrl->get_name()),
           mOngoingYscroll(false), mVisualizeNetState(false), mAutoAddWaves(true)
     {
-        mWaveItemHash = new WaveItemHash;
-        mWaveDataList = ctrl->get_waves();
-        mTreeView     = new WaveTreeView(mWaveDataList,  mWaveItemHash, this);
-        mTreeModel    = new WaveTreeModel(mWaveDataList, mWaveItemHash, this);
+        mWaveItemHash   = new WaveItemHash;
+        mWaveDataList   = ctrl->get_waves();
+        mTreeView       = new WaveTreeView(mWaveDataList,  mWaveItemHash, this);
+        mGraphicsCanvas = new WaveGraphicsCanvas(mWaveDataList,  mWaveItemHash, this);
+        mTreeModel      = new WaveTreeModel(mWaveDataList, mWaveItemHash, mGraphicsCanvas, this);
         mTreeView->setModel(mTreeModel);
         mTreeView->expandAll();
         mTreeView->setColumnWidth(0,200);
@@ -47,7 +49,6 @@ namespace hal {
         mTreeView->header()->setStretchLastSection(true);
         addWidget(mTreeView);
 
-        mGraphicsCanvas = new WaveGraphicsCanvas(mWaveDataList,  mWaveItemHash, this);
         addWidget(mGraphicsCanvas);
 
         connect(mWaveDataList,&WaveDataList::waveAdded,mTreeModel,&WaveTreeModel::handleWaveAdded);
@@ -91,10 +92,13 @@ namespace hal {
         connect(mController, &NetlistSimulatorController::stateChanged, this, &WaveWidget::handleStateChanged);
         mTreeView->verticalScrollBar()->setValue(0);
         setSizes({320,880});
+        mTreeModel->restore();
+        log_info(mControllerName, "Simulation controller id={} name='{}' instantiated", mControllerId, mControllerName);
     }
 
     WaveWidget::~WaveWidget()
     {
+        log_info(mControllerName, "Simulation controller id={} name='{}' disposed", mControllerId, mControllerName);
     }
 
     void WaveWidget::refreshNetNames()
@@ -115,7 +119,7 @@ namespace hal {
     u32 WaveWidget::controllerId() const
     {
         if (!mController) return 0;
-        return mController->get_id();
+        return mControllerId;
     }
 
     NetlistSimulatorController::SimulationState WaveWidget::state() const
@@ -272,9 +276,11 @@ namespace hal {
 
     void WaveWidget::setGates(const std::vector<Gate*>& gats)
     {
-        if (!mController) return;
+        if (!mController || mController->get_state() != NetlistSimulatorController::NoGatesSelected) return;
         mController->reset();
         mController->add_gates(gats);
+        for (const Net* inpNet : mController->get_input_nets())
+            mController->get_waveform_by_net(inpNet);
     }
 
     void WaveWidget::handleNumberWaveformChanged(int count)
@@ -295,7 +301,7 @@ namespace hal {
     {
         if (!success) return;
         if (!mController->get_results())
-            log_warning(mController->get_name(), "Cannot get simulation results");
+            log_warning(mControllerName, "Cannot get simulation results");
     }
 
     void WaveWidget::visualizeCurrentNetState(double tCursor, int xpos)

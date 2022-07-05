@@ -5,6 +5,7 @@
 #include "gui/docking_system/dock_bar.h"
 #include "gui/export/export_registered_format.h"
 #include "gui/file_manager/file_manager.h"
+#include "gui/file_manager/project_dir_dialog.h"
 #include "gui/gatelibrary_management/gatelibrary_management_dialog.h"
 #include "gui/gui_def.h"
 #include "gui/gui_globals.h"
@@ -27,6 +28,8 @@
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/netlist/event_system/event_log.h"
+#include "hal_core/netlist/project_manager.h"
+#include "hal_core/utilities/project_directory.h"
 
 #include <QApplication>
 #include <QCloseEvent>
@@ -49,6 +52,7 @@ namespace hal
     {
         ensurePolished();    // ADD REPOLISH METHOD
         connect(FileManager::get_instance(), &FileManager::fileOpened, this, &MainWindow::handleFileOpened);
+        connect(FileManager::get_instance(), &FileManager::projectOpened, this, &MainWindow::handleProjectOpened);
 
         mLayout = new QVBoxLayout(this);
         mLayout->setContentsMargins(0, 0, 0, 0);
@@ -117,7 +121,8 @@ namespace hal
         setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
 
         mActionNew                = new Action(this);
-        mActionOpen               = new Action(this);
+        mActionOpenProject  = new Action(this);
+        mActionImport       = new Action(this);
         mActionSave               = new Action(this);
         mActionSaveAs             = new Action(this);
         mActionGateLibraryManager = new Action(this);
@@ -157,7 +162,8 @@ namespace hal
         setWindowIcon(gui_utility::getStyledSvgIcon(mHalIconStyle, mHalIconPath));
 
         mActionNew->setIcon(gui_utility::getStyledSvgIcon(mNewFileIconStyle, mNewFileIconPath));
-        mActionOpen->setIcon(gui_utility::getStyledSvgIcon(mOpenIconStyle, mOpenIconPath));
+        mActionOpenProject->setIcon(gui_utility::getStyledSvgIcon(mOpenIconStyle, mOpenIconPath));
+        mActionImport->setIcon(gui_utility::getStyledSvgIcon(mOpenIconStyle, mOpenIconPath));
         mActionSave->setIcon(gui_utility::getStyledSvgIcon(mSaveIconStyle, mSaveIconPath));
         mActionSaveAs->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
         mActionGateLibraryManager->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
@@ -174,7 +180,8 @@ namespace hal
         mMenuBar->addAction(mMenuMacro->menuAction());
         mMenuBar->addAction(mMenuHelp->menuAction());
         mMenuFile->addAction(mActionNew);
-        mMenuFile->addAction(mActionOpen);
+        mMenuFile->addAction(mActionOpenProject);
+        mMenuFile->addAction(mActionImport);
         mMenuFile->addAction(mActionClose);
         mMenuFile->addAction(mActionSave);
         mMenuFile->addAction(mActionSaveAs);
@@ -223,7 +230,7 @@ namespace hal
         mMenuMacro->addAction(mActionPlayMacro);
         mMenuHelp->addAction(mActionAbout);
         mLeftToolBar->addAction(mActionNew);
-        mLeftToolBar->addAction(mActionOpen);
+        mLeftToolBar->addAction(mActionOpenProject);
         mLeftToolBar->addAction(mActionSave);
         mLeftToolBar->addAction(mActionSaveAs);
         mLeftToolBar->addAction(mActionUndo);
@@ -239,7 +246,8 @@ namespace hal
 
         setWindowTitle("HAL");
         mActionNew->setText("New Netlist");
-        mActionOpen->setText("Open");
+        mActionOpenProject->setText("Open Project");
+        mActionImport->setText("Import Netlist");
         mActionSave->setText("Save");
         mActionSaveAs->setText("Save As");
         mActionGateLibraryManager->setText("Gate Library Manager");
@@ -277,12 +285,13 @@ namespace hal
         connect(mSettingUndoLast, &SettingsItemKeybind::keySequenceChanged, shortCutUndoLast, &QShortcut::setKey);
 
         connect(shortCutNewFile, &QShortcut::activated, mActionNew, &QAction::trigger);
-        connect(shortCutOpenFile, &QShortcut::activated, mActionOpen, &QAction::trigger);
+        connect(shortCutOpenFile, &QShortcut::activated, mActionOpenProject, &QAction::trigger);
         connect(shortCutSaveFile, &QShortcut::activated, mActionSave, &QAction::trigger);
         connect(shortCutUndoLast, &QShortcut::activated, mActionUndo, &QAction::trigger);
 
         connect(mActionNew, &Action::triggered, this, &MainWindow::handleActionNew);
-        connect(mActionOpen, &Action::triggered, this, &MainWindow::handleActionOpen);
+        connect(mActionOpenProject, &Action::triggered, this, &MainWindow::handleActionOpenProject);
+        connect(mActionImport, &Action::triggered, this, &MainWindow::handleActionImport);
         connect(mActionAbout, &Action::triggered, this, &MainWindow::handleActionAbout);
         connect(mActionSettings, &Action::triggered, this, &MainWindow::toggleSettings);
         connect(mSettings, &MainSettingsWidget::close, this, &MainWindow::closeSettings);
@@ -295,9 +304,6 @@ namespace hal
         connect(mActionStopRecording, &Action::triggered, this, &MainWindow::handleActionStopRecording);
         connect(mActionPlayMacro, &Action::triggered, this, &MainWindow::handleActionPlayMacro);
         connect(mActionUndo, &Action::triggered, this, &MainWindow::handleActionUndo);
-
-        //connect(this, &MainWindow::saveTriggered, gContentManager, &ContentManager::handleSaveTriggered);
-        connect(this, &MainWindow::saveTriggered, gGraphContextManager, &GraphContextManager::handleSaveTriggered);
 
         connect(UserActionManager::instance(), &UserActionManager::canUndoLastAction, this, &MainWindow::enableUndo);
         connect(sSettingStyle, &SettingsItemDropdown::intChanged, this, &MainWindow::reloadStylsheet);
@@ -567,7 +573,7 @@ namespace hal
         }
     }
 
-    void MainWindow::handleActionOpen()
+    void MainWindow::handleActionOpenProject()
     {
         if (gNetlist != nullptr)
         {
@@ -581,7 +587,28 @@ namespace hal
             return;
         }
 
-        QString title = "Open File";
+        ProjectDirDialog pdd("Open netlist", this);
+        if (pdd.exec() != QDialog::Accepted) return;
+        if (pdd.selectedFiles().isEmpty()) return;
+        ActionOpenNetlistFile* act = new ActionOpenNetlistFile(pdd.selectedFiles().at(0),true);
+        act->exec();
+    }
+
+    void MainWindow::handleActionImport()
+    {
+        if (gNetlist != nullptr)
+        {
+            QMessageBox msgBox;
+            msgBox.setText("Error");
+            msgBox.setInformativeText("You are already working on a file. Restart HAL to switch to a different file.");
+            msgBox.setStyleSheet("QLabel{min-width: 600px;}");
+            msgBox.setStandardButtons(QMessageBox::Ok);
+            msgBox.setDefaultButton(QMessageBox::Ok);
+            msgBox.exec();
+            return;
+        }
+
+        QString title = "Import Netlist";
         QString text  = "All Files(*.vhd *.vhdl *.v *.hal);;VHDL Files (*.vhd *.vhdl);;Verilog Files (*.v);;HAL Progress Files (*.hal)";
 
         // Non native dialogs does not work on macOS. Therefore do net set DontUseNativeDialog!
@@ -596,9 +623,15 @@ namespace hal
         {
             gGuiState->setValue("FileDialog/Path/MainWindow", fileName);
 
-            ActionOpenNetlistFile* actOpenfile = new ActionOpenNetlistFile(fileName);
+            ActionOpenNetlistFile* actOpenfile = new ActionOpenNetlistFile(fileName,false);
             actOpenfile->exec();
         }
+    }
+
+    void MainWindow::handleProjectOpened(const QString& projDir, const QString& fileName)
+    {
+        Q_UNUSED(projDir);
+        handleFileOpened(fileName);
     }
 
     void MainWindow::handleFileOpened(const QString& fileName)
@@ -641,47 +674,58 @@ namespace hal
 
     void MainWindow::handleSaveTriggered()
     {
-        saveHandler(FileManager::get_instance()->fileName());
+        ProjectManager* pm = ProjectManager::instance();
+        if (pm->get_project_status() == ProjectManager::None) return;
+        QString  projectDir = QString::fromStdString(pm->get_project_directory().string());
+        saveHandler(projectDir);
+        gContentManager->setWindowTitle(projectDir);
     }
 
-    QString MainWindow::saveHandler(const QString &filename)
+    QString MainWindow::saveHandler(const QString &projectDir)
     {
         if (!gNetlist) return QString();
 
-        std::filesystem::path path;
-        QString newName;
+        QString saveProjectDir(projectDir);
 
-        if (filename.isEmpty())
+        ProjectManager* pm = ProjectManager::instance();
+
+        if (saveProjectDir.isEmpty())
         {
-            QString title = "Save File";
-            QString text  = "HAL Progress Files (*.hal)";
+            QString title = "Save Project";
+            QString filter = "HAL Directory Folder (*)";
 
             // Non native dialogs does not work on macOS. Therefore do net set DontUseNativeDialog!
-            newName = QFileDialog::getSaveFileName(nullptr, title, QDir::currentPath(), text, nullptr);
-            if (!newName.isNull())
+            saveProjectDir = QFileDialog::getSaveFileName(nullptr, title, QDir::currentPath(), filter, nullptr);
+            if (saveProjectDir.isEmpty()) return QString();
+
+            if (QFileInfo(saveProjectDir).exists())
             {
-                path = newName.toStdString();
+                QMessageBox::warning(this,"Save Error", "folder " + saveProjectDir + " already exists");
+                return QString();
             }
-            else
+
+            if (!pm->create_project_directory(saveProjectDir.toStdString()))
             {
+                QMessageBox::warning(this,"Save Error", "cannot create folder " + saveProjectDir);
                 return QString();
             }
         }
-        else
+
+        QString qNetlistPath = QString::fromStdString(pm->get_project_directory().get_default_filename(".hal"));
+
+        if (!pm->serialize_project(gNetlist))
         {
-            path = filename.toStdString();
+            log_warning("gui", "error saving netlist to <" + qNetlistPath.toStdString() + ">");
+            return QString();
         }
 
-
-        path.replace_extension(".hal");
-        netlist_serializer::serialize_to_file(gNetlist, path);
-
         gFileStatusManager->netlistSaved();
-        FileManager::get_instance()->watchFile(QString::fromStdString(path.string()));
 
-        Q_EMIT saveTriggered();
+        FileManager* fm = FileManager::get_instance();
+        fm->watchFile(qNetlistPath);
+        fm->emitProjectSaved(saveProjectDir, qNetlistPath);
 
-        return newName;
+        return QString::fromStdString(pm->get_project_directory().string());
     }
 
     void MainWindow::handleActionStartRecording()
