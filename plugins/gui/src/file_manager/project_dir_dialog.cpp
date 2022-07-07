@@ -83,6 +83,7 @@ namespace hal {
         else
         {
             QMessageBox::warning(this,"Warning","Selected directory is not a hal project");
+            QDialog::reject();
         }
     }
 
