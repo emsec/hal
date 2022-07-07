@@ -115,7 +115,7 @@ namespace hal
          * Set configurable parameter to values
          * @param params The parameter with values
          */
-        void set_parameter(const std::vector<PluginParameter>& params) override;
+        void set_parameter(Netlist *nl, const std::vector<PluginParameter>& params) override;
 
         /**
          * Pointer to simulation controller settings. Use sync() to persist settings.

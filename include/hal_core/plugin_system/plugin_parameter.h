@@ -35,14 +35,12 @@ namespace hal
         ParameterType m_type;
         std::string m_tagname;
         std::string m_label;
-        std::string m_default;
         std::string m_value;
     public:
-        PluginParameter(ParameterType tp=Absent, const std::string& tag=std::string(), const std::string& lbl=std::string(), const std::string& dfl=std::string())
-            : m_type(tp), m_tagname(tag), m_label(lbl), m_default(dfl) {;}
+        PluginParameter(ParameterType tp=Absent, const std::string& tag=std::string(), const std::string& lbl=std::string(), const std::string& val=std::string())
+            : m_type(tp), m_tagname(tag), m_label(lbl), m_value(val) {;}
         std::string get_tagname() const { return m_tagname; }
         std::string get_label() const { return m_label; }
-        std::string get_default_value() const { return m_default;}
         std::string get_value() const { return m_value; }
         ParameterType get_type() const { return m_type; }
         void set_value(const std::string& v)  { m_value = v; }

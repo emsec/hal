@@ -119,9 +119,32 @@ namespace hal
         return retval;
     }
 
-    void plugin_dataflow::set_parameter(const std::vector<PluginParameter>& params)
+    void plugin_dataflow::set_parameter(Netlist *nl, const std::vector<PluginParameter>& params)
     {
+        if (!nl)
+        {
+            log_warning("dataflow", "Error setting paramater: no netlist loaded.");
+            return;
+        }
+        bool isExecPushed = false;
 
+        std::vector<u32> sizes;
+        std::string output_path = "/tmp";
+        bool draw_graph = true;
+
+        for (const PluginParameter& par : params)
+        {
+            if (par.get_tagname() == "sizes")
+                sizes.push_back(atoi(par.get_value().c_str()));
+            else if (par.get_tagname() == "draw")
+                draw_graph = (par.get_value() == "true");
+            else if (par.get_tagname() == "output")
+                output_path = par.get_value();
+            else if (par.get_tagname() == "exec")
+                isExecPushed = (par.get_value() == "clicked");
+        }
+
+        if (isExecPushed) execute(nl,output_path,sizes,draw_graph);
     }
 
     std::vector<std::vector<Gate*>>

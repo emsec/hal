@@ -23,57 +23,18 @@
 
 #pragma once
 
-#include <QDialog>
-#include "hal_core/plugin_system/plugin_parameter.h"
-#include <QMap>
-#include <QList>
-
-class QFormLayout;
-class QDialogButtonBox;
-class QPushButton;
-class QLineEdit;
+#include <QTableWidget>
+#include <QLabel>
+#include <string>
 
 namespace hal {
-
-    class BasePluginInterface;
-
-    class PluginParameterFileDialog : public QWidget
+    class KeyValueTable : public QWidget
     {
         Q_OBJECT
-
-        PluginParameter mParameter;
-        QPushButton* mButton;
-        QLineEdit* mEditor;
-    private Q_SLOTS:
-        void handleActivateFileDialog();
-
+        QTableWidget* mTable;
     public:
-        PluginParameterFileDialog(const PluginParameter& par, QWidget* parent = nullptr);
-        QString getFilename() const;
-    };
-
-    class PluginParameterDialog : public QDialog
-    {
-        Q_OBJECT
-
-        BasePluginInterface* mPluginInterface;
-        QList<PluginParameter> mParameterList;
-        QMap<QString,QWidget*> mWidgetMap;
-
-        QMap<QString,QString> mTabNames;
-
-    private:
-        void setupHash();
-        void setupForm(QFormLayout* form, const QString& tabTag = QString());
-        QDialogButtonBox* setupButtonBox();
-
-    private Q_SLOTS:
-        void handlePushbuttonClicked();
-
-    public Q_SLOTS:
-        void accept() override;
-
-    public:
-        PluginParameterDialog(BasePluginInterface* bpif, QWidget* parent = nullptr);
+        KeyValueTable(const QString& labl, QWidget* parent = nullptr);
+        void setJson(const std::string& jsonTxt);
+        std::string toJson() const;
     };
 }

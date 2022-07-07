@@ -30,15 +30,17 @@ namespace hal {
     class ColorSelection : public QPushButton
     {
         Q_OBJECT
+    private:
+        QString mColorName;
+        QString mLabel;
+        bool mBullet;
     private Q_SLOTS:
         void execColorDialog();
     Q_SIGNALS:
         void colorChanged(QString colorName);
     public:
-        QString mColorName;
-        QString mLabel;
-        bool mBullet;
         ColorSelection(const QString& col, const QString& labl, bool bullet, QWidget* parent = nullptr);
         void paintEvent(QPaintEvent* evt) override;
+        QString colorName() const { return mColorName; }
     };
 }

@@ -174,7 +174,7 @@ namespace hal
         return retval;
     }
 
-    void NetlistSimulatorControllerPlugin::set_parameter(const std::vector<PluginParameter>& params)
+    void NetlistSimulatorControllerPlugin::set_parameter(Netlist *nl, const std::vector<PluginParameter>& params)
     {
 
     }

@@ -9,6 +9,8 @@ namespace hal {
     ColorSelection::ColorSelection(const QString& col, const QString &labl, bool bullet, QWidget* parent)
         : QPushButton(" ", parent), mColorName(col), mLabel(labl), mBullet(bullet)
     {
+        setMaximumSize(QSize(32,24));
+        setAutoFillBackground(true);
         connect(this,&QPushButton::clicked,this,&ColorSelection::execColorDialog);
     }
 

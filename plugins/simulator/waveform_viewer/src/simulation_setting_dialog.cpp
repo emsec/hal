@@ -66,35 +66,14 @@ namespace hal {
                 break;
             }
 
-            mActivateColorDialog[irow] = new ColorSelection(settings->color((SimulationSettings::ColorSetting)irow), irow>=3, this);
-            mActivateColorDialog[irow]->setMaximumSize(QSize(32,24));
-            mActivateColorDialog[irow]->setAutoFillBackground(true);
-            connect(mActivateColorDialog[irow],&QPushButton::clicked,this,&SimulationSettingColorTab::activateColorDialog);
+            mActivateColorDialog[irow] = new ColorSelection(settings->color((SimulationSettings::ColorSetting)irow), QString(labl[irow]), irow>=3, this);
             layout->addRow(QString(labl[irow]),mActivateColorDialog[irow]);
-        }
-    }
-
-    void SimulationSettingColorTab::activateColorDialog()
-    {
-        QObject* obj = sender();
-        for (int irow = 0; irow < SimulationSettings::MaxColorSetting; irow++)
-        {
-            if (mActivateColorDialog[irow] == obj)
-            {
-                QColor currentColor = colorSetting(irow);
-                QColor selectedColor = QColorDialog::getColor(currentColor, this, "Select color for " + mActivateColorDialog[irow]->text());
-                if (selectedColor.isValid() && selectedColor != currentColor)
-                {
-                    mActivateColorDialog[irow]->mColorName = selectedColor.name();
-                    mActivateColorDialog[irow]->update();
-                }
-            }
         }
     }
 
     QString SimulationSettingColorTab::colorSetting(int inx) const
     {
-        return mActivateColorDialog[inx]->mColorName;
+        return mActivateColorDialog[inx]->colorName();
     }
 
     //-----------------------------------

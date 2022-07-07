@@ -30,6 +30,7 @@
 
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 namespace hal {
     class JsonWriteComplex;
@@ -256,4 +257,20 @@ namespace hal {
          */
         void dump();
    };
+
+    namespace JsonConverter {
+        /**
+         * Convert JSON string to key->value map (aka dictionary)
+         * @param[in] json_string String in JSON format
+         * @return the dictionary
+         */
+        std::unordered_map<std::string,std::string> stringToDictionary(const std::string& json_string);
+
+        /**
+         * Convert key->value map (aka dictionary) to JSON string
+         * @param key_values key->value map of std::string
+         * @return the JSON string
+         */
+        std::string dictionaryToString(const std::unordered_map<std::string,std::string>& key_values);
+    }
 }

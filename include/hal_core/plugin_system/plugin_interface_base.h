@@ -26,6 +26,7 @@
 #include "hal_core/defines.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/plugin_system/plugin_parameter.h"
+#include "hal_core/netlist/netlist.h"
 
 #include <set>
 #include <string>
@@ -131,9 +132,18 @@ namespace hal
          */
         virtual void initialize_logging();
 
+        /**
+         * Get list of configurable parameter
+         * @return List of configurable parameter
+         */
         virtual std::vector<PluginParameter> get_parameter() const;
 
-        virtual void set_parameter(const std::vector<PluginParameter>& params);
+        /**
+         * Set values for configurable parameter
+         * @param[in] nl The current netlist
+         * @param[in] params List of configurable parameter with values
+         */
+        virtual void set_parameter(Netlist* nl, const std::vector<PluginParameter>& params);
     };
 
     using instantiate_plugin_function = std::unique_ptr<BasePluginInterface> (*)();
