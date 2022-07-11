@@ -252,7 +252,11 @@ namespace hal
         {
             for (const auto& instance_name : entity.m_instances)
             {
-               entity_name_to_refereneces[instance_name]++;
+                auto it = entity.m_instance_types.find(instance_name);
+                if (it != entity.m_instance_types.end())
+                    entity_name_to_refereneces[it->second]++;
+                else
+                    entity_name_to_refereneces[instance_name]++;
             }
         }
 
