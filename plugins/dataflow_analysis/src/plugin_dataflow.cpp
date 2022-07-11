@@ -158,6 +158,9 @@ namespace hal
             return std::vector<std::vector<Gate*>>();
         }
 
+        if (s_progress_indicator_function)
+            s_progress_indicator_function(0, "dataflow analysis running ...");
+
         // manage output
         if (!output_path.empty())
         {
@@ -287,6 +290,17 @@ namespace hal
 
         log("dataflow processing finished in {:3.2f}s", total_time);
 
+        if (s_progress_indicator_function)
+            s_progress_indicator_function(100, "dataflow analysis finished");
+
         return dataflow::state_to_module::create_sets(nl, final_grouping);
     }
+
+    std::function<void(int,const std::string&)> plugin_dataflow::s_progress_indicator_function = nullptr;
+
+    void plugin_dataflow::register_progress_indicator(std::function<void(int,const std::string&)> pif)
+    {
+        s_progress_indicator_function = pif;
+    }
+
 }    // namespace hal

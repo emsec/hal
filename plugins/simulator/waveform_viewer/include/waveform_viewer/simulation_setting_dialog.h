@@ -21,8 +21,6 @@ namespace hal {
         Q_OBJECT
         ColorSelection* mActivateColorDialog[SimulationSettings::MaxColorSetting];
 
-    private Q_SLOTS:
-        void activateColorDialog();
     public:
         SimulationSettingColorTab(SimulationSettings* settings, QWidget* parent = nullptr);
         QString colorSetting(int inx) const;

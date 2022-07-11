@@ -7,6 +7,7 @@
 #include "gui/file_manager/file_manager.h"
 #include "gui/file_manager/project_dir_dialog.h"
 #include "gui/gatelibrary_management/gatelibrary_management_dialog.h"
+#include "gui/graph_widget/graph_widget.h"
 #include "gui/gui_def.h"
 #include "gui/gui_globals.h"
 #include "gui/logger/logger_widget.h"

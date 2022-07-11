@@ -25,6 +25,8 @@ namespace hal {
 
         QDialogButtonBox* bbox = setupButtonBox();
 
+        setWindowTitle("Settings for " + QString::fromStdString(mPluginInterface->get_name()) + " plugin");
+
         if (mTabNames.isEmpty())
         {
             QFormLayout* layout = new QFormLayout(this);
@@ -218,9 +220,8 @@ namespace hal {
             }
             settings.push_back(par);
         }
-        qDebug() << "PluginParameterDialog::accept()";
-        mPluginInterface->set_parameter(gNetlist, settings);
         QDialog::accept();
+        mPluginInterface->set_parameter(gNetlist, settings);
     }
 
     void PluginParameterDialog::handlePushbuttonClicked()

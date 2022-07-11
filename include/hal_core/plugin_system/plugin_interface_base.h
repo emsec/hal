@@ -144,6 +144,12 @@ namespace hal
          * @param[in] params List of configurable parameter with values
          */
         virtual void set_parameter(Netlist* nl, const std::vector<PluginParameter>& params);
+
+        /**
+         * Register function to indicate work progress when busy
+         * @param pif Progress Indicator Function to register
+         */
+        virtual void register_progress_indicator(std::function<void(int,const std::string&)> pif);
     };
 
     using instantiate_plugin_function = std::unique_ptr<BasePluginInterface> (*)();

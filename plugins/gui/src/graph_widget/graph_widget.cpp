@@ -28,6 +28,7 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/utils.h"
+#include "hal_core/plugin_system/plugin_manager.h"
 
 #include <QApplication>
 #include <QDebug>
@@ -48,6 +49,8 @@ namespace hal
                                 10,
                                 "Appearance:Graph View",
                                 "Duration of 'fly to gate' animation when viewport is zooming in on new target. Unit is 1/10 second, thus 20=2sec, 10=1sec. Value of zero turns animation off.");
+
+    GraphWidget* GraphWidget::sInstance = nullptr;
 
     GraphWidget::GraphWidget(GraphContext* context, QWidget* parent)
         : ContentWidget("Graph", parent), mView(new GraphGraphicsView(this)), mContext(context), mOverlay(new WidgetOverlay(this)), mNavigationWidgetV3(new GraphNavigationWidget(false)),
@@ -78,6 +81,19 @@ namespace hal
             mView->setScene(mContext->scene());
             mView->centerOn(0, 0);
         }
+        sInstance = this;
+        for (const std::string& pluginName : plugin_manager::get_plugin_names())
+        {
+            BasePluginInterface* bpif = plugin_manager::get_plugin_instance(pluginName);
+            if (!bpif) continue;
+            bpif->register_progress_indicator(&GraphWidget::pluginProgressIndicator);
+        }
+
+    }
+
+    GraphWidget::~GraphWidget()
+    {
+        sInstance = nullptr;
     }
 
     GraphContext* GraphWidget::getContext() const
@@ -94,9 +110,9 @@ namespace hal
         mOverlay->hide();
         if (mProgressBar)
         {
-            ProgressBar* removeBar = mProgressBar;
+            AbstractBusyIndicator* removeBusyIndicator = mProgressBar;
             mProgressBar           = nullptr;
-            removeBar->deleteLater();
+            removeBusyIndicator->deleteLater();
         }
         mSpinnerWidget->hide();
         mOverlay->setWidget(mNavigationWidgetV3);
@@ -107,6 +123,22 @@ namespace hal
         {
             mView->fitInView(restoreViewport(), Qt::KeepAspectRatio);
         }
+    }
+
+    void GraphWidget::showBusy(int percent, const QString &text)
+    {
+        if (!mProgressBar)
+        {
+            mProgressBar = new BusyIndicator;
+            mProgressBar->setMinimumSize(256,288);
+            mOverlay->setWidget(mProgressBar);
+            mProgressBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+            mOverlay->show();
+        }
+        if (!text.isEmpty())
+            mProgressBar->setText(text);
+        mProgressBar->setValue(percent);
+        qApp->processEvents();
     }
 
     void GraphWidget::showProgress(int percent, const QString& text)
@@ -940,4 +972,15 @@ namespace hal
     {
         return mView;
     }
+
+    void GraphWidget::pluginProgressIndicator(int percent, const std::string& msg)
+    {
+        if (!sInstance) return;
+        qDebug() << "pluginProgressIndicator" << percent << msg.c_str();
+        if (percent==100)
+            sInstance->handleSceneAvailable();
+        else
+            sInstance->showBusy(percent, QString::fromStdString(msg));
+    }
+
 }    // namespace hal

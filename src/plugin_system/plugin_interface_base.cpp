@@ -39,6 +39,8 @@ namespace hal
 
     std::vector<PluginParameter> BasePluginInterface::get_parameter() const { return std::vector<PluginParameter>(); }
 
-    void BasePluginInterface::set_parameter(Netlist* nl, const std::vector<PluginParameter>&) {;}
+    void BasePluginInterface::register_progress_indicator(std::function<void(int,const std::string&)>) {;}
+
+    void BasePluginInterface::set_parameter(Netlist*, const std::vector<PluginParameter>&) {;}
 
 }    // namespace hal

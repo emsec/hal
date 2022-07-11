@@ -77,5 +77,13 @@ namespace hal
          * @param params The parameter with values
          */
         void set_parameter(Netlist* nl, const std::vector<PluginParameter>& params) override;
+
+        /**
+         * Register function to indicate work progress when busy
+         * @param pif Progress Indicator Function to register
+         */
+        virtual void register_progress_indicator(std::function<void(int,const std::string&)> pif) override;
+
+        static std::function<void(int,const std::string&)> s_progress_indicator_function;
     };
 }    // namespace hal
