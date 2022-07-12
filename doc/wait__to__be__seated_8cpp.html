@@ -90,38 +90,37 @@ $(document).ready(function(){initNavTree('wait__to__be__seated_8cpp.html',''); i
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="wait__to__be__seated_8h_source.html">gui/graph_widget/layouters/wait_to_be_seated.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="gui__globals_8h_source.html">gui/gui_globals.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="endpoint_8h_source.html">hal_core/netlist/endpoint.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="include_2hal__core_2netlist_2netlist_8h_source.html">hal_core/netlist/netlist.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="utils_8h_source.html">hal_core/utilities/utils.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="endpoint_8h_source.html">hal_core/netlist/endpoint.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="gui__globals_8h_source.html">gui/gui_globals.h</a>&quot;</code><br />
+<code>#include &lt;QTextStream&gt;</code><br />
 <code>#include &lt;QDebug&gt;</code><br />
 <code>#include &lt;QMap&gt;</code><br />
-<code>#include &lt;QTextStream&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for wait_to_be_seated.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="wait__to__be__seated_8cpp__incl.png" border="0" usemap="#_2home_2runner_2work_2hal_2hal_2plugins_2gui_2src_2graph__widget_2layouters_2wait__to__be__seated_8cpp" alt=""/></div>
 <map name="_2home_2runner_2work_2hal_2hal_2plugins_2gui_2src_2graph__widget_2layouters_2wait__to__be__seated_8cpp" id="_2home_2runner_2work_2hal_2hal_2plugins_2gui_2src_2graph__widget_2layouters_2wait__to__be__seated_8cpp">
-<area shape="rect" title=" " alt="" coords="798,5,977,76"/>
-<area shape="rect" href="wait__to__be__seated_8h.html" title=" " alt="" coords="1611,213,1809,255"/>
-<area shape="rect" title=" " alt="" coords="385,303,445,329"/>
-<area shape="rect" href="gui__globals_8h.html" title=" " alt="" coords="651,131,783,158"/>
-<area shape="rect" href="include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="26,221,205,247"/>
-<area shape="rect" href="endpoint_8h.html" title=" " alt="" coords="858,131,1053,158"/>
-<area shape="rect" href="utils_8h.html" title=" " alt="" coords="1077,124,1207,165"/>
-<area shape="rect" title=" " alt="" coords="1231,131,1306,158"/>
-<area shape="rect" title=" " alt="" coords="1330,131,1437,158"/>
-<area shape="rect" title=" " alt="" coords="1124,303,1179,329"/>
-<area shape="rect" title=" " alt="" coords="1321,377,1374,404"/>
-<area shape="rect" title=" " alt="" coords="1441,377,1507,404"/>
-<area shape="rect" href="gui__def_8h.html" title=" " alt="" coords="1359,303,1464,329"/>
-<area shape="rect" href="file__status__manager_8h.html" title=" " alt="" coords="426,213,605,255"/>
-<area shape="rect" href="graph__context__manager_8h.html" title=" " alt="" coords="629,213,804,255"/>
-<area shape="rect" href="content__manager_8h.html" title=" " alt="" coords="829,213,989,255"/>
-<area shape="rect" href="netlist__relay_8h.html" title=" " alt="" coords="229,213,401,255"/>
-<area shape="rect" href="plugin__relay_8h.html" title=" " alt="" coords="1183,213,1354,255"/>
-<area shape="rect" href="python__context_8h.html" title=" " alt="" coords="1378,221,1586,247"/>
-<area shape="rect" href="selection__relay_8h.html" title=" " alt="" coords="1013,213,1159,255"/>
+<area shape="rect" title=" " alt="" coords="459,5,638,76"/>
+<area shape="rect" href="wait__to__be__seated_8h.html" title=" " alt="" coords="128,124,327,165"/>
+<area shape="rect" title=" " alt="" coords="5,213,65,240"/>
+<area shape="rect" href="include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="751,213,930,240"/>
+<area shape="rect" href="endpoint_8h.html" title=" " alt="" coords="401,213,595,240"/>
+<area shape="rect" href="gui__globals_8h.html" title=" " alt="" coords="587,131,719,158"/>
+<area shape="rect" title=" " alt="" coords="743,131,850,158"/>
+<area shape="rect" title=" " alt="" coords="874,131,949,158"/>
+<area shape="rect" title=" " alt="" coords="89,213,144,240"/>
+<area shape="rect" title=" " alt="" coords="169,295,222,322"/>
+<area shape="rect" title=" " alt="" coords="304,295,369,322"/>
+<area shape="rect" href="gui__def_8h.html" title=" " alt="" coords="220,213,325,240"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="373,377,513,404"/>
+<area shape="rect" href="event__handler_8h.html" title=" " alt="" coords="683,288,868,329"/>
+<area shape="rect" href="gate__library_8h.html" title=" " alt="" coords="495,288,658,329"/>
+<area shape="rect" title=" " alt="" coords="561,377,619,404"/>
+<area shape="rect" title=" " alt="" coords="944,295,1031,322"/>
+<area shape="rect" title=" " alt="" coords="1055,295,1133,322"/>
+<area shape="rect" title=" " alt="" coords="1157,295,1212,322"/>
+<area shape="rect" title=" " alt="" coords="1236,295,1328,322"/>
 </map>
 </div>
 </div>
@@ -143,7 +142,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_62580450d675343767dbe0503393e994.html">graph_widget</a></li><li class="navelem"><a class="el" href="dir_fda276515715e6a42081e8e393a99d09.html">layouters</a></li><li class="navelem"><a class="el" href="wait__to__be__seated_8cpp.html">wait_to_be_seated.cpp</a></li>
-    <li class="footer">Generated on Thu Jun 23 2022 10:01:45 for HAL by
+    <li class="footer">Generated on Tue Jul 12 2022 15:50:04 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

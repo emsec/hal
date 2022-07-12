@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['layoutlockermanager_39259',['LayoutLockerManager',['../classhal_1_1_graph_context.html#a86285ea7584f0c31dd775ee66c145412',1,'hal::GraphContext']]]
+  ['module_39652',['Module',['../classhal_1_1_netlist_internal_manager.html#a21f639900c480510650969df9c74d17d',1,'hal::NetlistInternalManager']]]
 ];

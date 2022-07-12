@@ -1,5 +1,11 @@
 var dir_4879fcb29556b162a25e28b16e2ad258 =
 [
+    [ "custom_gate_dialog.h", "custom__gate__dialog_8h.html", [
+      [ "CustomGateDialog", "classhal_1_1_custom_gate_dialog.html", "classhal_1_1_custom_gate_dialog" ]
+    ] ],
+    [ "custom_module_dialog.h", "custom__module__dialog_8h.html", [
+      [ "CustomModuleDialog", "classhal_1_1_custom_module_dialog.html", "classhal_1_1_custom_module_dialog" ]
+    ] ],
     [ "gate_dialog.h", "gate__dialog_8h.html", [
       [ "GateDialog", "classhal_1_1_gate_dialog.html", "classhal_1_1_gate_dialog" ]
     ] ],

@@ -1,6 +1,6 @@
 <map id="hal::GraphicsGate" name="hal::GraphicsGate">
-<area shape="rect" id="node1" title="Abstract base class for gates." alt="" coords="41,593,179,715"/>
-<area shape="rect" id="node4" href="$classhal_1_1_standard_graphics_gate.html" title="The standard gate to visualize netlist gates." alt="" coords="5,763,215,957"/>
+<area shape="rect" id="node1" title="Abstract base class for gates." alt="" coords="41,593,179,700"/>
+<area shape="rect" id="node4" href="$classhal_1_1_standard_graphics_gate.html" title="The standard gate to visualize netlist gates." alt="" coords="5,748,215,943"/>
 <area shape="rect" id="node2" href="$classhal_1_1_graphics_node.html" title="Abstract base class for nodes (e.g. gates, modules)" alt="" coords="9,336,211,545"/>
 <area shape="rect" id="node3" href="$classhal_1_1_graphics_item.html" title="Superclass for all graphic items used ins the GraphicsScene. It contains information about the underl..." alt="" coords="40,5,180,288"/>
 </map>

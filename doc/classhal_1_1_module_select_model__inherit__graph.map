@@ -1,5 +1,5 @@
 <map id="hal::ModuleSelectModel" name="hal::ModuleSelectModel">
-<area shape="rect" id="node1" title="The ModuleSelectModel class is the source model for module selection." alt="" coords="14,564,193,729"/>
+<area shape="rect" id="node1" title="The ModuleSelectModel class is the source model for module selection." alt="" coords="14,564,193,715"/>
 <area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstracttablemodel.html" title=" " alt="" coords="5,365,201,516"/>
 <area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstractitemmodel.html" title=" " alt="" coords="7,5,199,317"/>
 </map>

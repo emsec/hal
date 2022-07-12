@@ -1,17 +1,16 @@
 <map id="hal::UserAction" name="hal::UserAction">
-<area shape="rect" id="node1" title="The UserAction class is the abstract base class for user interactions." alt="" coords="1371,5,1590,303"/>
-<area shape="rect" id="node2" href="$classhal_1_1_action_add_items_to_object.html" title="Adds an item to a module or grouping." alt="" coords="5,358,215,523"/>
-<area shape="rect" id="node3" href="$classhal_1_1_action_create_object.html" title="Create a new item." alt="" coords="239,358,415,523"/>
-<area shape="rect" id="node4" href="$classhal_1_1_action_delete_object.html" title="Deletes an object." alt="" coords="439,387,615,494"/>
-<area shape="rect" id="node5" href="$classhal_1_1_action_fold_module.html" title="Folds a module." alt="" coords="640,373,807,509"/>
-<area shape="rect" id="node6" href="$classhal_1_1_action_move_node.html" title="Moves a node." alt="" coords="831,358,992,523"/>
-<area shape="rect" id="node7" href="$classhal_1_1_action_open_netlist_file.html" title="Loads a netlist." alt="" coords="1016,365,1207,516"/>
-<area shape="rect" id="node8" href="$classhal_1_1_action_remove_items_from_object.html" title="Removes an item from a Module or Grouping." alt="" coords="1231,358,1485,523"/>
-<area shape="rect" id="node9" href="$classhal_1_1_action_rename_object.html" title="Renames an item." alt="" coords="1510,365,1697,516"/>
-<area shape="rect" id="node10" href="$classhal_1_1_action_reorder_object.html" title="Reorders an item within a container." alt="" coords="1721,387,1905,494"/>
-<area shape="rect" id="node11" href="$classhal_1_1_action_set_object_color.html" title="Recolors the object." alt="" coords="1929,365,2117,516"/>
-<area shape="rect" id="node12" href="$classhal_1_1_action_set_object_type.html" title="Assigns a new type to a module." alt="" coords="2142,365,2326,516"/>
-<area shape="rect" id="node13" href="$classhal_1_1_action_set_selection_focus.html" title="Set the selection and focus." alt="" coords="2351,365,2560,516"/>
-<area shape="rect" id="node14" href="$classhal_1_1_action_unfold_module.html" title="Unfolds a module." alt="" coords="2584,365,2767,516"/>
-<area shape="rect" id="node15" href="$classhal_1_1_user_action_compound.html" title=" " alt="" coords="2791,351,2981,531"/>
+<area shape="rect" id="node1" title="The UserAction class is the abstract base class for user interactions." alt="" coords="1280,5,1436,273"/>
+<area shape="rect" id="node2" href="$classhal_1_1_action_add_items_to_object.html" title="Adds an item to a module or grouping." alt="" coords="5,329,215,494"/>
+<area shape="rect" id="node3" href="$classhal_1_1_action_create_object.html" title="Create a new item." alt="" coords="239,329,415,494"/>
+<area shape="rect" id="node4" href="$classhal_1_1_action_delete_object.html" title="Deletes an object." alt="" coords="439,358,615,465"/>
+<area shape="rect" id="node5" href="$classhal_1_1_action_fold_module.html" title="Folds a module." alt="" coords="640,343,807,479"/>
+<area shape="rect" id="node6" href="$classhal_1_1_action_move_node.html" title="Moves a node." alt="" coords="831,329,992,494"/>
+<area shape="rect" id="node7" href="$classhal_1_1_action_open_netlist_file.html" title="Loads a netlist." alt="" coords="1016,336,1207,487"/>
+<area shape="rect" id="node8" href="$classhal_1_1_action_remove_items_from_object.html" title="Removes an item from a Module or Grouping." alt="" coords="1231,329,1485,494"/>
+<area shape="rect" id="node9" href="$classhal_1_1_action_rename_object.html" title="Renames an item." alt="" coords="1510,336,1697,487"/>
+<area shape="rect" id="node10" href="$classhal_1_1_action_set_object_color.html" title="Recolors the object." alt="" coords="1721,336,1909,487"/>
+<area shape="rect" id="node11" href="$classhal_1_1_action_set_object_type.html" title="Assigns a new type to a module." alt="" coords="1934,336,2118,487"/>
+<area shape="rect" id="node12" href="$classhal_1_1_action_set_selection_focus.html" title="Set the selection and focus." alt="" coords="2143,336,2352,487"/>
+<area shape="rect" id="node13" href="$classhal_1_1_action_unfold_module.html" title="Unfolds a module." alt="" coords="2376,336,2559,487"/>
+<area shape="rect" id="node14" href="$classhal_1_1_user_action_compound.html" title=" " alt="" coords="2583,321,2773,501"/>
 </map>

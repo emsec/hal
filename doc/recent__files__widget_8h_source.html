@@ -129,45 +129,41 @@ $(document).ready(function(){initNavTree('recent__files__widget_8h_source.html',
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_recent_files_widget.html#ae2e51f7a48d099173dacc0983641ee38">repolish</a>();</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_recent_files_widget.html#a5d5de41ea4ef0da1407c29bf614c0611">handleProjectUsed</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; projDir, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; fileName);</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_recent_files_widget.html#adc85b1875e68a7aa2226f4f519d56aee">handleRemoveRequested</a>(<a class="code" href="classhal_1_1_recent_file_item.html">RecentFileItem</a>* item);</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keywordtype">void</span> readSettings();</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keywordtype">void</span> updateSettings();</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qvboxlayout.html">QVBoxLayout</a>* mLayout;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;RecentFileItem*&gt;</a> mItems;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keywordtype">void</span> prependPath(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; path);</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> sMaxItems = 14;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    };</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;}</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_recent_files_widget.html#a47d4bd36696baff7eedde03d1906fbfc">handleFileOpened</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; fileName);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_recent_files_widget.html#adc85b1875e68a7aa2226f4f519d56aee">handleRemoveRequested</a>(<a class="code" href="classhal_1_1_recent_file_item.html">RecentFileItem</a>* item);</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="keywordtype">void</span> readSettings();</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <span class="keywordtype">void</span> updateSettings();</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qvboxlayout.html">QVBoxLayout</a>* mLayout;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;RecentFileItem*&gt;</a> mItems;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    };</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aqobject_html_Q_OBJECT"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">QObject::Q_OBJECT</a></div><div class="ttdeci">Q_OBJECTQ_OBJECT</div></div>
 <div class="ttc" id="aqvboxlayout_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qvboxlayout.html">QVBoxLayout</a></div></div>
-<div class="ttc" id="aclasshal_1_1_recent_files_widget_html_a5d5de41ea4ef0da1407c29bf614c0611"><div class="ttname"><a href="classhal_1_1_recent_files_widget.html#a5d5de41ea4ef0da1407c29bf614c0611">hal::RecentFilesWidget::handleProjectUsed</a></div><div class="ttdeci">void handleProjectUsed(const QString &amp;projDir, const QString &amp;fileName)</div><div class="ttdef"><b>Definition:</b> <a href="recent__files__widget_8cpp_source.html#l00049">recent_files_widget.cpp:49</a></div></div>
 <div class="ttc" id="aqframe_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qframe.html">QFrame</a></div></div>
 <div class="ttc" id="aqobject_html_Q_SLOTS"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">QObject::Q_SLOTS</a></div><div class="ttdeci">Q_SLOTSQ_SLOTS</div></div>
 <div class="ttc" id="aclasshal_1_1_recent_files_widget_html"><div class="ttname"><a href="classhal_1_1_recent_files_widget.html">hal::RecentFilesWidget</a></div><div class="ttdoc">The welcome screen's RecentFiles section.</div><div class="ttdef"><b>Definition:</b> <a href="recent__files__widget_8h_source.html#l00040">recent_files_widget.h:40</a></div></div>
 <div class="ttc" id="aqwidget_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
-<div class="ttc" id="aclasshal_1_1_recent_files_widget_html_a4362c02a0e0849c8c5040a50d4242e98"><div class="ttname"><a href="classhal_1_1_recent_files_widget.html#a4362c02a0e0849c8c5040a50d4242e98">hal::RecentFilesWidget::RecentFilesWidget</a></div><div class="ttdeci">RecentFilesWidget(QWidget *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="recent__files__widget_8cpp_source.html#l00019">recent_files_widget.cpp:19</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00009">solver.cpp:9</a></div></div>
+<div class="ttc" id="aclasshal_1_1_recent_files_widget_html_a4362c02a0e0849c8c5040a50d4242e98"><div class="ttname"><a href="classhal_1_1_recent_files_widget.html#a4362c02a0e0849c8c5040a50d4242e98">hal::RecentFilesWidget::RecentFilesWidget</a></div><div class="ttdeci">RecentFilesWidget(QWidget *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="recent__files__widget_8cpp_source.html#l00017">recent_files_widget.cpp:17</a></div></div>
 <div class="ttc" id="aqlist_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html">QList</a></div></div>
+<div class="ttc" id="aclasshal_1_1_recent_files_widget_html_a47d4bd36696baff7eedde03d1906fbfc"><div class="ttname"><a href="classhal_1_1_recent_files_widget.html#a47d4bd36696baff7eedde03d1906fbfc">hal::RecentFilesWidget::handleFileOpened</a></div><div class="ttdeci">void handleFileOpened(const QString &amp;fileName)</div><div class="ttdef"><b>Definition:</b> <a href="recent__files__widget_8cpp_source.html#l00046">recent_files_widget.cpp:46</a></div></div>
 <div class="ttc" id="aclasshal_1_1_recent_file_item_html"><div class="ttname"><a href="classhal_1_1_recent_file_item.html">hal::RecentFileItem</a></div><div class="ttdoc">One item in the welcome screen's RecentFiles section.</div><div class="ttdef"><b>Definition:</b> <a href="recent__file__item_8h_source.html#l00043">recent_file_item.h:43</a></div></div>
 <div class="ttc" id="aqstring_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstring.html">QString</a></div></div>
-<div class="ttc" id="aclasshal_1_1_recent_files_widget_html_ae2e51f7a48d099173dacc0983641ee38"><div class="ttname"><a href="classhal_1_1_recent_files_widget.html#ae2e51f7a48d099173dacc0983641ee38">hal::RecentFilesWidget::repolish</a></div><div class="ttdeci">void repolish()</div><div class="ttdef"><b>Definition:</b> <a href="recent__files__widget_8cpp_source.html#l00033">recent_files_widget.cpp:33</a></div></div>
-<div class="ttc" id="aclasshal_1_1_recent_files_widget_html_adc85b1875e68a7aa2226f4f519d56aee"><div class="ttname"><a href="classhal_1_1_recent_files_widget.html#adc85b1875e68a7aa2226f4f519d56aee">hal::RecentFilesWidget::handleRemoveRequested</a></div><div class="ttdeci">void handleRemoveRequested(RecentFileItem *item)</div><div class="ttdef"><b>Definition:</b> <a href="recent__files__widget_8cpp_source.html#l00081">recent_files_widget.cpp:81</a></div></div>
+<div class="ttc" id="aclasshal_1_1_recent_files_widget_html_ae2e51f7a48d099173dacc0983641ee38"><div class="ttname"><a href="classhal_1_1_recent_files_widget.html#ae2e51f7a48d099173dacc0983641ee38">hal::RecentFilesWidget::repolish</a></div><div class="ttdeci">void repolish()</div><div class="ttdef"><b>Definition:</b> <a href="recent__files__widget_8cpp_source.html#l00030">recent_files_widget.cpp:30</a></div></div>
+<div class="ttc" id="aclasshal_1_1_recent_files_widget_html_adc85b1875e68a7aa2226f4f519d56aee"><div class="ttname"><a href="classhal_1_1_recent_files_widget.html#adc85b1875e68a7aa2226f4f519d56aee">hal::RecentFilesWidget::handleRemoveRequested</a></div><div class="ttdeci">void handleRemoveRequested(RecentFileItem *item)</div><div class="ttdef"><b>Definition:</b> <a href="recent__files__widget_8cpp_source.html#l00071">recent_files_widget.cpp:71</a></div></div>
 <div class="ttc" id="aqobject_html_parent"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent</a></div><div class="ttdeci">QObject * parent() const const</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_1bd9b4259c60790a6464df7ae008ae59.html">welcome_screen</a></li><li class="navelem"><a class="el" href="recent__files__widget_8h.html">recent_files_widget.h</a></li>
-    <li class="footer">Generated on Thu Jun 23 2022 10:01:42 for HAL by
+    <li class="footer">Generated on Tue Jul 12 2022 15:49:59 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

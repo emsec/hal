@@ -1,5 +1,0 @@
-<map id="hal::DataTableWidget" name="hal::DataTableWidget">
-<area shape="rect" id="node1" title="A widget to display the data of a DataContainer (Module, Gate or Net)" alt="" coords="29,799,191,935"/>
-<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qtableview.html" title=" " alt="" coords="23,453,197,751"/>
-<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qabstractitemview.html" title=" " alt="" coords="5,5,215,405"/>
-</map>

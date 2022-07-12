@@ -9,7 +9,7 @@ var dir_0e3c062ea52198934dd88b06ad8cfdb3 =
     ] ],
     [ "pass_collection.h", "pass__collection_8h.html", "pass__collection_8h" ],
     [ "processing.h", "processing_8h.html", "processing_8h" ],
-    [ "result.h", "plugins_2dataflow__analysis_2include_2dataflow__analysis_2processing_2result_8h.html", [
+    [ "result.h", "processing_2result_8h.html", [
       [ "Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", "structhal_1_1dataflow_1_1processing_1_1_result" ]
     ] ]
 ];

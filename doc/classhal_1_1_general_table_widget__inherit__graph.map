@@ -1,8 +1,0 @@
-<map id="hal::GeneralTableWidget" name="hal::GeneralTableWidget">
-<area shape="rect" id="node1" title=" " alt="" coords="158,652,339,773"/>
-<area shape="rect" id="node4" href="$classhal_1_1_gate_info_table.html" title=" " alt="" coords="5,821,145,913"/>
-<area shape="rect" id="node5" href="$classhal_1_1_module_info_table.html" title=" " alt="" coords="170,821,327,913"/>
-<area shape="rect" id="node6" href="$classhal_1_1_net_info_table.html" title=" " alt="" coords="352,821,484,913"/>
-<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qtablewidget.html" title=" " alt="" coords="153,351,344,604"/>
-<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qtableview.html" title=" " alt="" coords="162,5,335,303"/>
-</map>

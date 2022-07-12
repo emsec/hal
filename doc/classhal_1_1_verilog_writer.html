@@ -116,8 +116,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ad13fe35b61f1e73bc02faea1932275fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4315596753d22349d61b69c6ae074543"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_verilog_writer.html#a4315596753d22349d61b69c6ae074543">~VerilogWriter</a> ()=default</td></tr>
 <tr class="separator:a4315596753d22349d61b69c6ae074543"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7797209e784a32a1d198bc61a8dd2ebb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::monostate &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_verilog_writer.html#a7797209e784a32a1d198bc61a8dd2ebb">write</a> (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *netlist, const std::filesystem::path &amp;file_path) override</td></tr>
-<tr class="separator:a7797209e784a32a1d198bc61a8dd2ebb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ce646ac2a422610b1f6d13189bf09d0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_verilog_writer.html#a3ce646ac2a422610b1f6d13189bf09d0">write</a> (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *netlist, const std::filesystem::path &amp;file_path) override</td></tr>
+<tr class="separator:a3ce646ac2a422610b1f6d13189bf09d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classhal_1_1_netlist_writer"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhal_1_1_netlist_writer')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhal_1_1_netlist_writer.html">hal::NetlistWriter</a></td></tr>
 <tr class="memitem:a3f9c6797526b4848681da7ac8bcd4818 inherit pub_methods_classhal_1_1_netlist_writer"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_writer.html#a3f9c6797526b4848681da7ac8bcd4818">NetlistWriter</a> ()=default</td></tr>
 <tr class="separator:a3f9c6797526b4848681da7ac8bcd4818 inherit pub_methods_classhal_1_1_netlist_writer"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -179,8 +179,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a7797209e784a32a1d198bc61a8dd2ebb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7797209e784a32a1d198bc61a8dd2ebb">&#9670;&nbsp;</a></span>write()</h2>
+<a id="a3ce646ac2a422610b1f6d13189bf09d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ce646ac2a422610b1f6d13189bf09d0">&#9670;&nbsp;</a></span>write()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -189,7 +189,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::monostate &gt; hal::VerilogWriter::write </td>
+          <td class="memname">bool hal::VerilogWriter::write </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classhal_1_1_netlist.html">Netlist</a> *&#160;</td>
           <td class="paramname"><em>netlist</em>, </td>
@@ -222,11 +222,11 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p>Implements <a class="el" href="classhal_1_1_netlist_writer.html#a145a1be44dddd25fd30f3d7d34007e9e">hal::NetlistWriter</a>.</p>
+<p>Implements <a class="el" href="classhal_1_1_netlist_writer.html#a95032d856f2daa850213148858ddd0f8">hal::NetlistWriter</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="src_2verilog__writer_8cpp_source.html#l00015">15</a> of file <a class="el" href="src_2verilog__writer_8cpp_source.html">verilog_writer.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00051">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00055">ERR_APPEND</a>, <a class="el" href="_apache_01_license_8txt_source.html#l00109">file</a>, <a class="el" href="test__multiple_8py_source.html#l00029">test_multiple::netlist</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00047">OK</a>.</p>
+<p class="reference">References <a class="el" href="_apache_01_license_8txt_source.html#l00109">file</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, and <a class="el" href="test__multiple_8py_source.html#l00029">test_multiple::netlist</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="test_2verilog__writer_8cpp_source.html#l00041">hal::TEST_F()</a>.</p>
 
@@ -242,7 +242,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_verilog_writer.html">VerilogWriter</a></li>
-    <li class="footer">Generated on Thu Jun 23 2022 10:01:48 for HAL by
+    <li class="footer">Generated on Tue Jul 12 2022 15:50:07 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

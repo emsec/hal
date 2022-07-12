@@ -90,34 +90,31 @@ $(document).ready(function(){initNavTree('graph__widget_8cpp.html',''); initResi
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="graph__widget_8h_source.html">gui/graph_widget/graph_widget.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="content__manager_8h_source.html">gui/content_manager/content_manager.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="action__unfold__module_8h_source.html">gui/user_action/action_unfold_module.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="graph__tab__widget_8h_source.html">gui/graph_tab_widget/graph_tab_widget.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="graph__context_8h_source.html">gui/graph_widget/contexts/graph_context.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="graph__context__manager_8h_source.html">gui/graph_widget/graph_context_manager.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="graph__graphics__view_8h_source.html">gui/graph_widget/graph_graphics_view.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="action__unfold__module_8h_source.html">gui/user_action/action_unfold_module.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="spinner__widget_8h_source.html">gui/spinner_widget/spinner_widget.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="graph__navigation__widget_8h_source.html">gui/graph_widget/graph_navigation_widget.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="graphics__scene_8h_source.html">gui/graph_widget/graphics_scene.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="progress__bar_8h_source.html">gui/graph_widget/progress_bar.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="graphics__gate_8h_source.html">gui/graph_widget/items/nodes/gates/graphics_gate.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="graphics__module_8h_source.html">gui/graph_widget/items/nodes/modules/graphics_module.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="progress__bar_8h_source.html">gui/graph_widget/progress_bar.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="module__widget_8h_source.html">gui/module_widget/module_widget.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="gui__def_8h_source.html">gui/gui_def.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="gui__globals_8h_source.html">gui/gui_globals.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="plugins_2gui_2include_2gui_2gui__utils_2netlist_8h_source.html">gui/gui_utils/netlist.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="module__widget_8h_source.html">gui/module_widget/module_widget.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="widget__overlay_8h_source.html">gui/overlay/widget_overlay.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="settings__item__spinbox_8h_source.html">gui/settings/settings_items/settings_item_spinbox.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="spinner__widget_8h_source.html">gui/spinner_widget/spinner_widget.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="toolbar_8h_source.html">gui/toolbar/toolbar.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="action__add__items__to__object_8h_source.html">gui/user_action/action_add_items_to_object.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="action__remove__items__from__object_8h_source.html">gui/user_action/action_remove_items_from_object.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="action__rename__object_8h_source.html">gui/user_action/action_rename_object.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="settings__item__spinbox_8h_source.html">gui/settings/settings_items/settings_item_spinbox.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="gate_8h_source.html">hal_core/netlist/gate.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="module_8h_source.html">hal_core/netlist/module.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="net_8h_source.html">hal_core/netlist/net.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="utils_8h_source.html">hal_core/utilities/utils.h</a>&quot;</code><br />
-<code>#include &lt;QApplication&gt;</code><br />
-<code>#include &lt;QDebug&gt;</code><br />
-<code>#include &lt;QGraphicsRectItem&gt;</code><br />
 <code>#include &lt;QInputDialog&gt;</code><br />
 <code>#include &lt;QKeyEvent&gt;</code><br />
 <code>#include &lt;QMessageBox&gt;</code><br />
@@ -125,6 +122,9 @@ $(document).ready(function(){initNavTree('graph__widget_8cpp.html',''); initResi
 <code>#include &lt;QToolButton&gt;</code><br />
 <code>#include &lt;QVBoxLayout&gt;</code><br />
 <code>#include &lt;QVariantAnimation&gt;</code><br />
+<code>#include &lt;QGraphicsRectItem&gt;</code><br />
+<code>#include &lt;QApplication&gt;</code><br />
+<code>#include &lt;QDebug&gt;</code><br />
 </div>
 <p><a href="graph__widget_8cpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -139,7 +139,7 @@ Namespaces</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_62580450d675343767dbe0503393e994.html">graph_widget</a></li><li class="navelem"><a class="el" href="graph__widget_8cpp.html">graph_widget.cpp</a></li>
-    <li class="footer">Generated on Thu Jun 23 2022 10:01:45 for HAL by
+    <li class="footer">Generated on Tue Jul 12 2022 15:50:04 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

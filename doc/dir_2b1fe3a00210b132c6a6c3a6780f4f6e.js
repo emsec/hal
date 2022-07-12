@@ -6,7 +6,6 @@ var dir_2b1fe3a00210b132c6a6c3a6780f4f6e =
     [ "netlist_parser", "dir_13551ef05da0f8cff948ade59013ecb9.html", "dir_13551ef05da0f8cff948ade59013ecb9" ],
     [ "netlist_writer", "dir_d6ac0a703a041fc298dbf850a3fddf24.html", "dir_d6ac0a703a041fc298dbf850a3fddf24" ],
     [ "persistent", "dir_f6f96dce44487d3d8542a38135ce2374.html", "dir_f6f96dce44487d3d8542a38135ce2374" ],
-    [ "pins", "dir_9bc4d5074f9a0a383460c9031ed6e53c.html", "dir_9bc4d5074f9a0a383460c9031ed6e53c" ],
     [ "boolean_function.cpp", "netlist_2boolean__function_8cpp.html", "netlist_2boolean__function_8cpp" ],
     [ "data_container.cpp", "netlist_2data__container_8cpp.html", null ],
     [ "endpoint.cpp", "netlist_2endpoint_8cpp.html", null ],
@@ -17,7 +16,5 @@ var dir_2b1fe3a00210b132c6a6c3a6780f4f6e =
     [ "netlist.cpp", "src_2netlist_2netlist_8cpp.html", null ],
     [ "netlist_factory.cpp", "netlist_2netlist__factory_8cpp.html", "netlist_2netlist__factory_8cpp" ],
     [ "netlist_internal_manager.cpp", "netlist__internal__manager_8cpp.html", null ],
-    [ "netlist_utils.cpp", "netlist_2netlist__utils_8cpp.html", "netlist_2netlist__utils_8cpp" ],
-    [ "project_manager.cpp", "project__manager_8cpp.html", "project__manager_8cpp" ],
-    [ "project_serializer.cpp", "project__serializer_8cpp.html", null ]
+    [ "netlist_utils.cpp", "netlist_2netlist__utils_8cpp.html", "netlist_2netlist__utils_8cpp" ]
 ];
