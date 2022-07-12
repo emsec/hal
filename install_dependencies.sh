@@ -3,9 +3,11 @@
 platform='unknown'
 unamestr=$(uname)
 distribution='unknown'
+release='unknown'
 if [[ "$unamestr" == 'Linux' ]]; then
    platform='linux'
    distribution=$(lsb_release -is)
+   release=$(lsb_release -rs)
 elif [[ "$unamestr" == 'Darwin' ]]; then
    platform='macOS'
 fi
@@ -16,46 +18,56 @@ if [[ "$platform" == 'macOS' ]]; then
     pip3 install -r requirements.txt
     BREW_PREFIX=$(brew --prefix)
     if [ -n "$($SHELL -c 'echo $ZSH_VERSION')" ]; then
-       grep -Fxq 'export PATH="$BREW_PREFIX/opt/qt@5/bin:$PATH"' ~/.zshrc
-       if ! [[ $? -eq 0 ]]; then
+        grep -Fxq 'export PATH="$BREW_PREFIX/opt/qt@5/bin:$PATH"' ~/.zshrc
+        if ! [[ $? -eq 0 ]]; then
             echo 'export PATH="$BREW_PREFIX/opt/qt@5/bin:$PATH"' >> ~/.zshrc
-       fi
+        fi
 
-       grep -Fxq 'export PATH="$BREW_PREFIX/opt/flex/bin:$PATH"' ~/.zshrc
-       if ! [[ $? -eq 0 ]]; then
+        grep -Fxq 'export PATH="$BREW_PREFIX/opt/flex/bin:$PATH"' ~/.zshrc
+        if ! [[ $? -eq 0 ]]; then
             echo 'export PATH="$BREW_PREFIX/opt/flex/bin:$PATH"' >> ~/.zshrc
-       fi
+        fi
 
-       grep -Fxq 'export PATH="$BREW_PREFIX/opt/bison/bin:$PATH"' ~/.zshrc
-       if ! [[ $?  -eq 0 ]]; then
+        grep -Fxq 'export PATH="$BREW_PREFIX/opt/bison/bin:$PATH"' ~/.zshrc
+        if ! [[ $?  -eq 0 ]]; then
             echo 'export PATH="$BREW_PREFIX/opt/bison/bin:$PATH"' >> ~/.zshrc
-       fi
-       source ~/.zshrc
-    elif [ -n "$($SHELL -c 'echo $BASH_VERSION')" ]; then
-       grep -Fxq 'export PATH="$BREW_PREFIX/opt/qt@5/bin:$PATH"' ~/.bash_profile
-       if ! [[ $? -eq 0 ]]; then
+        fi
+        source ~/.zshrc
+        elif [ -n "$($SHELL -c 'echo $BASH_VERSION')" ]; then
+        grep -Fxq 'export PATH="$BREW_PREFIX/opt/qt@5/bin:$PATH"' ~/.bash_profile
+        if ! [[ $? -eq 0 ]]; then
             echo 'export PATH="$BREW_PREFIX/opt/qt@5/bin:$PATH"' >> ~/.bash_profile
-       fi
+        fi
 
-       grep -Fxq 'export PATH="$BREW_PREFIX/opt/flex/bin:$PATH"' ~/.bash_profile
-       if ! [[ $? -eq 0 ]]; then
+        grep -Fxq 'export PATH="$BREW_PREFIX/opt/flex/bin:$PATH"' ~/.bash_profile
+        if ! [[ $? -eq 0 ]]; then
             echo 'export PATH="$BREW_PREFIX/opt/flex/bin:$PATH"' >> ~/.bash_profile
-       fi
+        fi
 
-       grep -Fxq 'export PATH="$BREW_PREFIX/opt/bison/bin:$PATH"' ~/.bash_profile
-       if ! [[ $?  -eq 0 ]]; then
+        grep -Fxq 'export PATH="$BREW_PREFIX/opt/bison/bin:$PATH"' ~/.bash_profile
+        if ! [[ $?  -eq 0 ]]; then
             echo 'export PATH="$BREW_PREFIX/opt/bison/bin:$PATH"' >> ~/.bash_profile
-       fi
-       source ~/.bash_profile
+        fi
+        source ~/.bash_profile
     else
-       echo "Unknown User Shell: abort!"
-       exit 255
+        echo "Unknown User Shell: abort!"
+        exit 255
     fi
 elif [[ "$platform" == 'linux' ]]; then
     if [ "$distribution" == 'Ubuntu' ] || [ "$distribution" == 'LinuxMint' ]; then
-        sudo apt-get update && sudo apt-get install -y build-essential lsb-release git cmake pkgconf qt5-default libboost-all-dev \
-        libpython3-dev ccache autoconf autotools-dev libsodium-dev libigraph0-dev \
-        libqt5svg5-dev libqt5svg5* ninja-build lcov gcovr python3-sphinx doxygen python3-sphinx-rtd-theme python3-jedi python3-pip pybind11-dev python3-pybind11 rapidjson-dev libspdlog-dev libz3-dev\
+        if [[ "$release" == '22.04' ]]; then
+            additional_deps="libigraph-dev"
+        else
+            additional_deps="libigraph0-dev"
+        fi
+
+        sudo apt-get update && sudo apt-get install -y build-essential \
+        lsb-release git cmake pkgconf libboost-all-dev qtbase5-dev \
+        libpython3-dev ccache autoconf autotools-dev libsodium-dev \
+        libqt5svg5-dev libqt5svg5* ninja-build lcov gcovr python3-sphinx \
+        doxygen python3-sphinx-rtd-theme python3-jedi python3-pip \
+        pybind11-dev python3-pybind11 rapidjson-dev libspdlog-dev libz3-dev \
+        $additional_deps \
         graphviz libomp-dev libsuitesparse-dev # For documentation
         sudo pip3 install -r requirements.txt
     elif [[ "$distribution" == "Arch" ]]; then
@@ -63,7 +75,7 @@ elif [[ "$platform" == 'linux' ]]; then
         qt5-base python ccache autoconf libsodium igraph qt5-svg ninja lcov \
         gcovr python-sphinx doxygen python-sphinx_rtd_theme python-jedi \
         python-pip pybind11 rapidjson spdlog graphviz boost \
-        python-dateutil z3 
+        python-dateutil z3
     else
        echo "Unsupported Linux distribution: abort!"
        exit 255

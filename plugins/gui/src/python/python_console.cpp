@@ -298,12 +298,17 @@ namespace hal
 
     void PythonConsole::handleUpKeyPressed()
     {
-        auto length = mHistory->size() - 1;
+        auto lastIndex = mHistory->size() - 1;
+        if (lastIndex < 0)
+        {
+            // history empty
+            return;
+        }
 
         if (mCurrentHistoryIndex == -1)
         {
             mCurrentInput         = getCurrentCommand();
-            mCurrentHistoryIndex = length;
+            mCurrentHistoryIndex = lastIndex;
             replaceCurrentCommand(QString::fromStdString(mHistory->getHistoryItem(mCurrentHistoryIndex)));
         }
         else
@@ -320,14 +325,14 @@ namespace hal
 
     void PythonConsole::handleDownKeyPressed()
     {
-        auto length = mHistory->size() - 1;
+        auto lastIndex = mHistory->size() - 1;
 
         if (mCurrentHistoryIndex == -1)
         {
             return;
         }
 
-        if (mCurrentHistoryIndex == length)
+        if (mCurrentHistoryIndex == lastIndex)
         {
             mCurrentHistoryIndex = -1;
             replaceCurrentCommand(mCurrentInput);
