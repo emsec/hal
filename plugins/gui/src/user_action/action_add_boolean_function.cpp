@@ -1,5 +1,6 @@
 #include "gui/user_action/action_add_boolean_function.h"
 #include"gui/gui_globals.h"
+#include <QDebug>
 
 namespace hal
 {
@@ -27,10 +28,22 @@ namespace hal
         if(!gate)
             return false;
 
-        //if(gate->get_boolean_function(mName.toStdString()).is_empty())//function is added, undo = delete
+        auto bf = gate->get_boolean_function(mName.toStdString());
+        mUndoAction = !bf.is_empty() ? new ActionAddBooleanFunction(mName, bf, mObject.id()) : nullptr;
 
-        gate->add_boolean_function(mName.toStdString(), mFunction);
-        return true;
+        qDebug() << "Setting BF: " << QString::fromStdString(mFunction.to_string());
+        if(!gate->add_boolean_function(mName.toStdString(), mFunction))
+                return false;
+
+//        if(mUndoAction){
+//            qDebug() << "undo is not null";
+//            qDebug() << "old bf: " << QString::fromStdString(bf.to_string());
+//        }
+//        else
+//            qDebug() << "undo is null";
+
+
+        return UserAction::exec();
     }
 
     QString ActionAddBooleanFunction::tagname() const
