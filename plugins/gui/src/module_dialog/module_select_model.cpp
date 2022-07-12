@@ -14,6 +14,8 @@
 #include <QMessageBox>
 #include <QSortFilterProxyModel>
 
+#include <QDebug>
+
 namespace hal
 {
     //---------------- HISTORY ----------------------------------------
@@ -61,23 +63,31 @@ namespace hal
     }
 
     //---------------- MODEL ------------------------------------------
-    ModuleSelectModel::ModuleSelectModel(bool history, QObject* parent) : QAbstractTableModel(parent)
+    ModuleSelectModel::ModuleSelectModel(QObject* parent) : QAbstractTableModel(parent)
     {
-        ModuleSelectExclude excl;
+
+    }
+
+    void ModuleSelectModel::appendEntries(bool history)
+    {
         if (history)
         {
             for (u32 id : *ModuleSelectHistory::instance())
             {
                 Module* m = gNetlist->get_module_by_id(id);
-                if (m && excl.isAccepted(m->get_id()))
+                if (m && mExcl.isAccepted(m->get_id()))
                     mEntries.append(ModuleSelectEntry(m));
             }
         }
         else
         {
             for (Module* m : gNetlist->get_modules())
-                if (excl.isAccepted(m->get_id()))
+            {
+                if (mExcl.isAccepted(m->get_id()))
+                {
                     mEntries.append(ModuleSelectEntry(m));
+                }
+            }
         }
     }
 
@@ -197,27 +207,6 @@ namespace hal
     {
         mModules = gSelectionRelay->selectedModulesList();
         mGates   = gSelectionRelay->selectedGatesList();
-
-        for (u32 gid : mGates)
-        {
-            Gate* g = gNetlist->get_gate_by_id(gid);
-            if (!g)
-                continue;
-            mExclude.insert(g->get_module()->get_id());
-        }
-
-        for (u32 mid : mModules)
-        {
-            mExclude.insert(mid);
-            Module* m = gNetlist->get_module_by_id(mid);
-            if (!m)
-                continue;
-            Module* pm = m->get_parent_module();
-            if (pm)
-                mExclude.insert(pm->get_id());
-            for (Module* sm : m->get_submodules(nullptr, true))
-                mExclude.insert(sm->get_id());
-        }
     }
 
     QString ModuleSelectExclude::selectionToString() const
@@ -332,7 +321,7 @@ namespace hal
     }
 
     //---------------- VIEW -------------------------------------------
-    ModuleSelectView::ModuleSelectView(bool history, Searchbar* sbar, QWidget* parent) : QTableView(parent)
+    ModuleSelectView::ModuleSelectView(bool history, Searchbar* sbar, QSet<u32>* exclude_ids, QWidget* parent) : QTableView(parent)
     {
         setSelectionBehavior(QAbstractItemView::SelectRows);
         setSelectionMode(QAbstractItemView::SingleSelection);
@@ -340,7 +329,14 @@ namespace hal
         ModuleSelectProxy* prox = new ModuleSelectProxy(this);
         connect(sbar, &Searchbar::textEdited, prox, &ModuleSelectProxy::searchTextChanged);
 
-        ModuleSelectModel* modl = new ModuleSelectModel(history, this);
+        ModuleSelectModel* modl = new ModuleSelectModel(this);
+
+        if (exclude_ids != nullptr)
+        {
+            modl->excludeModulesById(*exclude_ids);
+        }
+        modl->appendEntries(history);
+
         prox->setSourceModel(modl);
         setModel(prox);
 

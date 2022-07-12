@@ -127,6 +127,9 @@ namespace hal
         void handleGroupingAssignNew();
         void handleGroupingAssingExisting();
 
+        void handleAddModuleToView();
+        void handleAddGateToView();
+
         void handleAddSuccessorToView();
         void handleAddPredecessorToView();
         void handleAddCommonSuccessorToView();
