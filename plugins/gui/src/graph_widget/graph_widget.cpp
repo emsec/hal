@@ -976,7 +976,6 @@ namespace hal
     void GraphWidget::pluginProgressIndicator(int percent, const std::string& msg)
     {
         if (!sInstance) return;
-        qDebug() << "pluginProgressIndicator" << percent << msg.c_str();
         if (percent==100)
             sInstance->handleSceneAvailable();
         else
