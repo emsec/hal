@@ -227,14 +227,14 @@ namespace hal
 
         for (const auto& it : m_functions)
         {
-            res.emplace(it.first, it.second);
+            res[it.first] = it.second;
         }
 
         if (!only_custom_functions && m_type->has_component_of_type(GateTypeComponent::ComponentType::lut))
         {
             for (auto pin : m_type->get_pins_of_type(PinType::lut))
             {
-                res.emplace(pin, get_lut_function(pin));
+                res[pin] = get_lut_function(pin);
             }
         }
 
@@ -356,7 +356,7 @@ namespace hal
         }
 
         auto f = result.simplify();
-        cache.emplace(cache_key, f);
+        cache[cache_key] = f;
         return f;
     }
 
@@ -415,7 +415,7 @@ namespace hal
             }
         }
 
-        m_functions.emplace(name, func);
+        m_functions[name] = func;
         m_event_handler->notify(GateEvent::event::boolean_function_changed, this);
         return true;
     }

@@ -86,6 +86,13 @@ namespace hal
                 QJsonObject simEntry = simArr.at(i).toObject();
                 QString workdir = simEntry["workdir"].toString();
                 if (workdir.isEmpty()) continue;
+                if (QFileInfo(workdir).isRelative())
+                    workdir = mProjDir.absoluteFilePath(workdir);
+                if (!QFileInfo(workdir).isDir())
+                {
+                    log_warning("simualtion_plugin", "Cannot restore simulation from workdir '{}'.", workdir.toStdString());
+                    continue;
+                }
                 QString contrFile = QDir(workdir).absoluteFilePath("netlist_simulator_controller.json");
                 retval.push_back(ctrlPlug->restore_simulator_controller(mNetlist,contrFile.toStdString()));
             }
