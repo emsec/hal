@@ -370,13 +370,6 @@ namespace hal
                         lutEntries.append(bfEntry);
                     }
                 }
-                qDebug() << "Bevor setting entries:";
-                qDebug() << "Specific O func: " << QString::fromStdString(gate->get_boolean_function("O").to_string());
-                qDebug() << "All boolean functions (size " << gate->get_boolean_functions().size() << "):";
-                for(auto it : gate->get_boolean_functions()){
-                    qDebug() << (QString("O").compare(QString::fromStdString(it.first))); //0 = equal (true)
-                    qDebug() << QString::fromStdString(it.first) << ": " << QString::fromStdString(it.second.to_string());
-                }
 
                 mLutFunctionTable->setEntries(lutEntries);
                 mLutFunctionTable->setGateInformation(gate);
