@@ -297,6 +297,7 @@ int main(int argc, const char* argv[])
     ProgramOptions tool_options("tool options");
     tool_options.add("ls", "Lists content of saleae directory file saleae.json");
     tool_options.add("cat", "Dump content of binary file into console", {""});
+    tool_options.add("diff", "Compares content of database in current saleae directory with other saleae database", {""});
 
     ProgramOptions ls_options("ls options");
     ls_options.add({"-d", "--dir"}, "lists saleae directory from directory given by absolute or relative path name", {ProgramOptions::A_REQUIRED_PARAMETER});
@@ -307,6 +308,13 @@ int main(int argc, const char* argv[])
     cat_options.add({"-d", "--dir"}, "binary file is not in current directory but in directory given by path name", {ProgramOptions::A_REQUIRED_PARAMETER});
     cat_options.add({"-h", "--only-header"}, "dump only header");
     cat_options.add({"-b", "--only-data"}, "dump only data including start value");
+
+    ProgramOptions diff_options("diff options");
+    diff_options.add({"-d", "--dir"}, "current database not in current directory but in directory given by path name", {ProgramOptions::A_REQUIRED_PARAMETER});
+    diff_options.add({"-i", "--id"}, "compares only entries where ID matches entry in list", {ProgramOptions::A_REQUIRED_PARAMETER});
+    diff_options.add({"-x", "--only-differences"}, "when dumping waveform data values all rows without differences are suppressed (except header row)");
+    diff_options.add({"-t", "--max-tolerance"}, "the integer value sets the maximum tolerance when comparing waveform data. On default (zero tolerance) two waveforms A,B with transition values A=[0,12000,16000] B=[0,12010,16010] are considered to be different. However, when tolerance is set to 10 or higher the comparison will not find any differences", {ProgramOptions::A_REQUIRED_PARAMETER});
+
 
     ProgramArguments args = tool_options.parse(argc, argv);
 
@@ -344,7 +352,8 @@ int main(int argc, const char* argv[])
         {
             std::cout << tool_options.get_options_string();
             std::cout << ls_options.get_options_string();
-            std::cout << cat_options.get_options_string() << std::endl;
+            std::cout << cat_options.get_options_string();
+            std::cout << diff_options.get_options_string() << std::endl;
         }
         else if (args.is_option_set("--help") || unknown_option_exists)
         {
@@ -353,12 +362,40 @@ int main(int argc, const char* argv[])
         {
             saleae_cat(args.get_parameter("--dir"), filename, args.is_option_set("--only-header"), args.is_option_set("--only-data"));
         }
+    } else if (args.is_option_set("diff"))
+    {
+        std::string diff_path = args.get_parameter("diff");
+        diff_options.add(generic_options);
+        ProgramArguments args = diff_options.parse(argc, argv);
+
+        bool unknown_option_exists = false;
+        for (std::string opt : diff_options.get_unknown_arguments())
+        {
+            unknown_option_exists = ((opt != "diff") && (opt != diff_path)) ? true : unknown_option_exists;
+        }
+
+        if (diff_path == "")
+        {
+            std::cout << tool_options.get_options_string();
+            std::cout << ls_options.get_options_string();
+            std::cout << cat_options.get_options_string();
+            std::cout << diff_options.get_options_string() << std::endl;
+        }
+        else if (args.is_option_set("--help") || unknown_option_exists)
+        {
+            std::cout << diff_options.get_options_string() << std::endl;
+        } else
+        {
+            std::cout << "call diff" << std::endl;
+            //saleae_diff();
+        }
     } else
     {
         tool_options.add(generic_options);
 
         std::cout << tool_options.get_options_string();
         std::cout << ls_options.get_options_string();
-        std::cout << cat_options.get_options_string() << std::endl;
+        std::cout << cat_options.get_options_string();
+        std::cout << diff_options.get_options_string() << std::endl;
     }
 }
