@@ -308,11 +308,13 @@ void saleae_diff(std::string path_1, std::string path_2) {
     struct diff_struct {
         int id;
         std::string name;
-        std::vector<*SaleaeInputFile> bin_files;
+        //std::vector<*SaleaeInputFile> bin_files;
     };
     std::vector<std::vector<diff_struct>> diff_vec;
 
     std::vector<int> ids_not_in_2;
+    std::vector<int> ids_not_in_1;
+
     for (const SaleaeDirectoryNetEntry& sdne_1 : net_entries_1)
     {
         bool id_found = false;
@@ -352,6 +354,21 @@ void saleae_diff(std::string path_1, std::string path_2) {
         if (!id_found) {
             ids_not_in_2.push_back(sdne_1.id());
             std::cout << sdne_1.id() << std::endl;
+        }
+    }
+    for (const SaleaeDirectoryNetEntry& sdne_2 : net_entries_2)
+    {
+        bool id_found = false;
+        for (const SaleaeDirectoryNetEntry& sdne_1 : net_entries_1) {
+            // ist sdne1_id == sdne2_id? wenn nein continue
+            if (sdne_2.id() != sdne_1.id()) {
+                continue;
+            }
+            id_found = true;
+        }
+        if (!id_found) {
+            ids_not_in_1.push_back(sdne_2.id());
+            std::cout << sdne_2.id() << std::endl;
         }
     }
 
