@@ -303,53 +303,62 @@ void saleae_diff(std::string path_1, std::string path_2) {
     std::vector<SaleaeDirectoryNetEntry> net_entries_2 = sd_2->dump();
 
 
-
-
-    struct diff_struct {
-        int id;
-        std::string name;
-        //std::vector<*SaleaeInputFile> bin_files;
+    struct row_t {
+        int val_1;
+        bool val_1_avail;
+        int val_2;
+        bool val_2_avail;
+        bool diff;
     };
-    std::vector<std::vector<diff_struct>> diff_vec;
 
     std::vector<int> ids_not_in_2;
     std::vector<int> ids_not_in_1;
-
     for (const SaleaeDirectoryNetEntry& sdne_1 : net_entries_1)
     {
         bool id_found = false;
         for (const SaleaeDirectoryNetEntry& sdne_2 : net_entries_2) {
-            // ist sdne1_id == sdne2_id? wenn nein continue
             if (sdne_1.id() != sdne_2.id()) {
                 continue;
             }
             id_found = true;
 
-            bool diff_found = false;
-
-            struct diff_struct diff_1;
-            struct diff_struct diff_2;
-            // ist sdne1_name != sdne2_name? wenn ja speicher name1 und name2
-            if (sdne_1.name() != sdne_2.name()) {
-                diff_found = true;
+            std::map<uint64_t, row_t> net_data;
+            for (const SaleaeDirectoryFileIndex& sdfi : sdne_1.indexes()) {
+                std::string bin_path = path_1 + std::to_string(sdfi.index());
+                if (!file_exists(bin_path))
+                {
+                    std::cout << "Error in database: " << path_1 << "\nCannot open file: " << bin_path << std::endl;
+                    return;
+                }
+                SaleaeInputFile *sf = new SaleaeInputFile(bin_path);
+                SaleaeDataBuffer *db = sf->get_buffered_data(sf->header()->mNumTransitions);
+                for (int i = 0; i < db->mCount; i++) {
+                    net_data[db->mTimeArray[i]] = row_t{.val_1 = db->mValueArray[i], .val_1_avail = true, .val_2_avail = false, .diff = true};
+                }
             }
 
+            for (const SaleaeDirectoryFileIndex& sdfi : sdne_2.indexes()) {
+                std::string bin_path = path_2 + std::to_string(sdfi.index());
+                if (!file_exists(bin_path))
+                {
+                    std::cout << "Error in database: " << path_2 << "\nCannot open file: " << bin_path << std::endl;
+                    return;
+                }
+                SaleaeInputFile *sf = new SaleaeInputFile(bin_path);
+                SaleaeDataBuffer *db = sf->get_buffered_data(sf->header()->mNumTransitions);
 
-
-            // vergleiche werte der einzelnen indexe und binary files
-            // gibt es hier unterscheidungen speicher sdne1 und sdne2 ab
-            // NEIN? dann speicher name1 und name2 in vector ab
-
-
-
-            if (diff_found) {
-                diff_1.id = sdne_1.id();
-                diff_2.id = sdne_2.id();
-                diff_1.name = sdne_1.name();
-                diff_2.name = sdne_2.name();
-
-                diff_vec.push_back({diff_1, diff_2});
+                for (int i = 0; i < db->mCount; i++) {
+                    uint64_t t = db->mTimeArray[i];
+                    if (net_data.contains(t)) {
+                        net_data[t].val_2 = db->mValueArray[i];
+                        net_data[t].val_2_avail = true;
+                        net_data[t].diff = (abs(net_data[t].val_1 - net_data[t].val_2]]) > 0); // 0 wird durch tolarance getauscht
+                    } else {
+                        net_data[t] = row_t{.val_1_avail = false, .val_2 = db->mValueArray[i], .val_2_avail = true, .diff = true};
+                    }
+                }
             }
+
         }
         if (!id_found) {
             ids_not_in_2.push_back(sdne_1.id());
