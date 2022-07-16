@@ -297,12 +297,6 @@ void saleae_diff(std::string path_1, std::string path_2) {
         return;
     }
 
-    SaleaeDirectory *sd_1 = new SaleaeDirectory(path_1, false);
-    std::vector<SaleaeDirectoryNetEntry> net_entries_1 = sd_1->dump();
-    SaleaeDirectory *sd_2 = new SaleaeDirectory(path_2, false);
-    std::vector<SaleaeDirectoryNetEntry> net_entries_2 = sd_2->dump();
-
-
     struct row_t {
         int val_1;
         bool val_1_avail;
@@ -313,6 +307,11 @@ void saleae_diff(std::string path_1, std::string path_2) {
 
     std::vector<int> ids_not_in_2;
     std::vector<int> ids_not_in_1;
+
+    SaleaeDirectory *sd_1 = new SaleaeDirectory(path_1, false);
+    std::vector<SaleaeDirectoryNetEntry> net_entries_1 = sd_1->dump();
+    SaleaeDirectory *sd_2 = new SaleaeDirectory(path_2, false);
+    std::vector<SaleaeDirectoryNetEntry> net_entries_2 = sd_2->dump();
     for (const SaleaeDirectoryNetEntry& sdne_1 : net_entries_1)
     {
         bool id_found = false;
@@ -322,6 +321,7 @@ void saleae_diff(std::string path_1, std::string path_2) {
             }
             id_found = true;
 
+            int diff_cnt = 0;
             std::map<uint64_t, row_t> net_data;
             for (const SaleaeDirectoryFileIndex& sdfi : sdne_1.indexes()) {
                 std::string bin_path = path_1 + std::to_string(sdfi.index());
@@ -334,6 +334,7 @@ void saleae_diff(std::string path_1, std::string path_2) {
                 SaleaeDataBuffer *db = sf->get_buffered_data(sf->header()->mNumTransitions);
                 for (int i = 0; i < db->mCount; i++) {
                     net_data[db->mTimeArray[i]] = row_t{.val_1 = db->mValueArray[i], .val_1_avail = true, .val_2_avail = false, .diff = true};
+                    diff_cnt++;
                 }
             }
 
@@ -353,10 +354,16 @@ void saleae_diff(std::string path_1, std::string path_2) {
                         net_data[t].val_2 = db->mValueArray[i];
                         net_data[t].val_2_avail = true;
                         net_data[t].diff = (abs(net_data[t].val_1 - net_data[t].val_2]]) > 0); // 0 wird durch tolarance getauscht
+                        diff_cnt = net_data[t].diff ? diff_cnt : diff_cnt - 1;
                     } else {
                         net_data[t] = row_t{.val_1_avail = false, .val_2 = db->mValueArray[i], .val_2_avail = true, .diff = true};
+                        diff_cnt++;
                     }
                 }
+                // wenn diff_cnt > 0 = bool diff true
+
+
+                // namen comparision
             }
 
         }
@@ -364,12 +371,15 @@ void saleae_diff(std::string path_1, std::string path_2) {
             ids_not_in_2.push_back(sdne_1.id());
             std::cout << sdne_1.id() << std::endl;
         }
+
+        // formatting
+
+        // output
     }
     for (const SaleaeDirectoryNetEntry& sdne_2 : net_entries_2)
     {
         bool id_found = false;
         for (const SaleaeDirectoryNetEntry& sdne_1 : net_entries_1) {
-            // ist sdne1_id == sdne2_id? wenn nein continue
             if (sdne_2.id() != sdne_1.id()) {
                 continue;
             }
