@@ -150,7 +150,17 @@ void saleae_ls(std::string path, std::string size, std::string ids) {
 }
 
 
-void saleae_cat(std::string path, bool dump_header, bool dump_data) {
+void saleae_cat(std::string path, std::string file_name, bool dump_header, bool dump_data) {
+    path = (path == "") ? "./" + file_name : path + "/" + file_name;
+    if (!file_exists(path)) {
+        std::cout << "Cannot open file: " << path << std::endl;
+        return;
+    }
+    if (!dump_header && !dump_data) {
+        dump_header = true;
+        dump_data = true;
+    }
+
     SaleaeInputFile *sf = new SaleaeInputFile(path);
     uint64_t num_transitions = sf->header()->mNumTransitions;
 
@@ -246,7 +256,7 @@ int main(int argc, const char* argv[]) {
 
     ProgramOptions tool_options("tool options");
     tool_options.add("ls", "Lists content of saleae directory file saleae.json");
-    tool_options.add("cat", "Dump content of binary file into console");//, {ProgramOptions::A_REQUIRED_PARAMETER});
+    tool_options.add("cat", "Dump content of binary file into console", {""});
 
     ProgramOptions ls_options("ls options");
     ls_options.add({"-d", "--dir"}, "lists saleae directory from directory given by absolute or relative path name", {ProgramOptions::A_REQUIRED_PARAMETER});
@@ -275,19 +285,24 @@ int main(int argc, const char* argv[]) {
             saleae_ls(args.get_parameter("--dir"), args.get_parameter("--size"), args.get_parameter("--id"));
         }
     } else if (args.is_option_set("cat")) {
-
+        std::string filename = args.get_parameter("cat");
         cat_options.add(generic_options);
         ProgramArguments args = cat_options.parse(argc, argv);
 
         bool unknown_option_exists = false;
         for (std::string opt : cat_options.get_unknown_arguments()) {
-            unknown_option_exists = (opt != "cat") ? true : unknown_option_exists;     
+            unknown_option_exists = ((opt != "cat") && (opt != filename)) ? true : unknown_option_exists;
         }
         
-        if (args.is_option_set("--help") || unknown_option_exists) {
+        if (filename == "") {
+            std::cout << tool_options.get_options_string();
+            std::cout << ls_options.get_options_string();
+            std::cout << cat_options.get_options_string() << std::endl;
+        }
+        else if (args.is_option_set("--help") || unknown_option_exists) {
             std::cout << cat_options.get_options_string() << std::endl;
         } else {
-            saleae_cat("/home/parallels/Desktop/saleae/digital_52.bin", true, true);
+            saleae_cat(args.get_parameter("--dir"), filename, args.is_option_set("--only-header"), args.is_option_set("--only-data"));
         }
     } else {
         tool_options.add(generic_options);
