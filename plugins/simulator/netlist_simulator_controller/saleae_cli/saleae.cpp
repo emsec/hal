@@ -150,12 +150,33 @@ void saleae_ls(std::string path, std::string size, std::string ids) {
 }
 
 
-// void saleae_cat(string path) {
-//     SaleaeInputFile *sf = new SaleaeInputFile("/home/parallels/Desktop/saleae/digital_0.bin");
-//     SaleaeDataBuffer *db = new SaleaeDataBuffer();
-//     db = sf->get_buffered_data(1);
-//     db->dump();
-// }
+ void saleae_cat(std::string path) {
+     SaleaeInputFile *sf = new SaleaeInputFile(path);
+     uint64_t begin_time = sf->header()->mBeginTime;
+     uint64_t end_time = sf->header()->mEndTime;
+     uint64_t num_transitions = sf->header()->mNumTransitions;
+     std::string data_format;
+     switch (sf->header()->storageFormat())
+     {
+     case SaleaeHeader::Double:
+         data_format = "Double";
+         break;
+     case SaleaeHeader::Uint64:
+         data_format = "Uint64";
+         break;
+     case SaleaeHeader::Coded:
+         data_format = "Coded";
+         break;
+     }
+
+     std::cout << "----------- Header -----------\n   data format: " << data_format
+               << "\n   start value: " << begin_time
+               << "\n   end value: " << end_time
+               << "\n   number of transitions: " << num_transitions
+               << "\n------------------------------" << std::endl;
+     SaleaeDataBuffer *db = sf->get_buffered_data(sf->header()->mNumTransitions);
+     db->dump();
+ }
 
 
 int main(int argc, const char* argv[]) {
@@ -171,7 +192,7 @@ int main(int argc, const char* argv[]) {
 
     ProgramOptions tool_options("tool options");
     tool_options.add("ls", "Lists content of saleae directory file saleae.json");
-    tool_options.add("cat", "Dump content of binary file into console", {ProgramOptions::A_REQUIRED_PARAMETER});
+    tool_options.add("cat", "Dump content of binary file into console");//, {ProgramOptions::A_REQUIRED_PARAMETER});
 
     ProgramOptions ls_options("ls options");
     ls_options.add({"-d", "--dir"}, "lists saleae directory from directory given by absolute or relative path name", {ProgramOptions::A_REQUIRED_PARAMETER});
@@ -200,6 +221,7 @@ int main(int argc, const char* argv[]) {
             saleae_ls(args.get_parameter("--dir"), args.get_parameter("--size"), args.get_parameter("--id"));
         }
     } else if (args.is_option_set("cat")) {
+
         cat_options.add(generic_options);
         ProgramArguments args = cat_options.parse(argc, argv);
 
@@ -211,7 +233,7 @@ int main(int argc, const char* argv[]) {
         if (args.is_option_set("--help") || unknown_option_exists) {
             std::cout << cat_options.get_options_string() << std::endl;
         } else {
-            //saleae_cat("/home/parallels/Desktop/saleae/digital_0.bin");
+            saleae_cat("/home/parallels/Desktop/saleae/digital_62.bin");
         }
     } else {
         tool_options.add(generic_options);
