@@ -178,12 +178,15 @@ void saleae_ls(std::string path, std::string size, std::string ids)
 
 void saleae_cat(std::string path, std::string file_name, bool dump_header, bool dump_data)
 {
+    // handle --dir option
     path = (path == "") ? "./" + file_name : path + "/" + file_name;
     if (!file_exists(path))
     {
         std::cout << "Cannot open file: " << path << std::endl;
         return;
     }
+
+    // handle -b and -h option
     if (!dump_header && !dump_data)
     {
         dump_header = true;
@@ -193,8 +196,10 @@ void saleae_cat(std::string path, std::string file_name, bool dump_header, bool 
     SaleaeInputFile *sf = new SaleaeInputFile(path);
     uint64_t num_transitions = sf->header()->mNumTransitions;
 
+    // dump header
     if (dump_header)
     {
+        // get header content
         uint64_t begin_time = sf->header()->mBeginTime;
         uint64_t end_time = sf->header()->mEndTime;
         std::string data_format;
@@ -211,13 +216,15 @@ void saleae_cat(std::string path, std::string file_name, bool dump_header, bool 
             break;
         }
 
-        int format_length [4] = {12, 11, 9, 21};
+        // collect length for better formatting
+        int format_length [4] = {12, 11, 9, 21}; // length of the column titles
         format_length[0] = (format_length[0] < data_format.length()) ? data_format.length() : format_length[0];
         format_length[1] = (format_length[1] < std::to_string(begin_time).length()) ? std::to_string(begin_time).length() : format_length[1];
         format_length[2] = (format_length[2] < std::to_string(end_time).length()) ? std::to_string(end_time).length() : format_length[2];
         format_length[3] = (format_length[3] < std::to_string(num_transitions).length()) ? std::to_string(num_transitions).length() : format_length[3];
-
         int abs_length = format_length[0] + format_length[1] + format_length[2] + format_length[3] + 10;
+
+        // print saleae-file header
         std::cout << std::string(abs_length + 2, '-') << std::endl;
         std::cout << '|';
         print_element(" Data Format", format_length[0], true);
@@ -226,7 +233,6 @@ void saleae_cat(std::string path, std::string file_name, bool dump_header, bool 
         print_element("Number of Transitions", format_length[3], true);
         std::cout << std::endl;
         std::cout << '|' << std::string(abs_length, '-') << '|' << std::endl;
-
         std::cout << "| ";
         print_element(data_format, format_length[0] - 1, true);
         print_element(begin_time, format_length[1], false);
@@ -234,25 +240,28 @@ void saleae_cat(std::string path, std::string file_name, bool dump_header, bool 
         print_element(num_transitions, format_length[3], false);
         std::cout << std::endl;
         std::cout << std::string(abs_length + 2, '-') << std::endl;
-
     }
 
-
+    // dump data
     if (dump_data)
     {
         SaleaeDataBuffer *db = sf->get_buffered_data(num_transitions);
+
+        // get data
         uint64_t* time_array = db->mTimeArray;
         int* value_array = db->mValueArray;
 
-        int format_length [3] = {4, 4, 5};
+        // collect length for better formatting
+        int format_length [3] = {4, 4, 5}; // length of the column titles
         for (int i = 0; i < num_transitions; i++)
         {
             format_length[0] = (format_length[0] < std::to_string(i).length()) ? std::to_string(i).length() : format_length[0];
             format_length[1] = (format_length[1] < std::to_string(time_array[i]).length()) ? std::to_string(time_array[i]).length() : format_length[1];
             format_length[2] = (format_length[2] < std::to_string(value_array[i]).length()) ? std::to_string(time_array[i]).length() : format_length[2];
         }
-
         int abs_length = format_length[0] + format_length[1] + format_length[2] + 7;
+
+        // print saleae-file data
         std::cout << std::string(abs_length + 2, '-') << std::endl;
         std::cout << '|';
         print_element(" No.", format_length[0], true);
@@ -260,7 +269,6 @@ void saleae_cat(std::string path, std::string file_name, bool dump_header, bool 
         print_element("Value", format_length[2], true);
         std::cout << std::endl;
         std::cout << '|' << std::string(abs_length, '-') << '|' << std::endl;
-
         for (int i = 0; i < num_transitions; i++)
         {
             std::cout << '|';
