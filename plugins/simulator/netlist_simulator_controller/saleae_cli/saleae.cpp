@@ -305,13 +305,12 @@ void saleae_diff(std::string path_1, std::string path_2) {
 
 
 
-//    struct differences2 {
-//        int id;
-//        std::string name;
-
-
-//    };
-
+    struct diff_struct {
+        int id;
+        std::string name;
+        std::vector<*SaleaeInputFile> bin_files;
+    };
+    std::vector<std::vector<diff_struct>> diff_vec;
 
     std::vector<int> ids_not_in_2;
     for (const SaleaeDirectoryNetEntry& sdne_1 : net_entries_1)
@@ -323,11 +322,32 @@ void saleae_diff(std::string path_1, std::string path_2) {
                 continue;
             }
             id_found = true;
+
+            bool diff_found = false;
+
+            struct diff_struct diff_1;
+            struct diff_struct diff_2;
             // ist sdne1_name != sdne2_name? wenn ja speicher name1 und name2
+            if (sdne_1.name() != sdne_2.name()) {
+                diff_found = true;
+            }
+
+
 
             // vergleiche werte der einzelnen indexe und binary files
             // gibt es hier unterscheidungen speicher sdne1 und sdne2 ab
             // NEIN? dann speicher name1 und name2 in vector ab
+
+
+
+            if (diff_found) {
+                diff_1.id = sdne_1.id();
+                diff_2.id = sdne_2.id();
+                diff_1.name = sdne_1.name();
+                diff_2.name = sdne_2.name();
+
+                diff_vec.push_back({diff_1, diff_2});
+            }
         }
         if (!id_found) {
             ids_not_in_2.push_back(sdne_1.id());
