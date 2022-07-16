@@ -282,6 +282,62 @@ void saleae_cat(std::string path, std::string file_name, bool dump_header, bool 
 }
 
 
+void saleae_diff(std::string path_1, std::string path_2) {
+    // path_1 is cur, path_2 is diff
+    path_1 = (path_1 == "") ? "./saleae.json" : path_1 + "/saleae.json";
+    if (!file_exists(path_1))
+    {
+        std::cout << "Cannot open file: " << path_1 << std::endl;
+        return;
+    }
+    path_2 = path_2 + "/saleae.json";
+    if (!file_exists(path_2))
+    {
+        std::cout << "Cannot open file: " << path_2 << std::endl;
+        return;
+    }
+
+    SaleaeDirectory *sd_1 = new SaleaeDirectory(path_1, false);
+    std::vector<SaleaeDirectoryNetEntry> net_entries_1 = sd_1->dump();
+    SaleaeDirectory *sd_2 = new SaleaeDirectory(path_2, false);
+    std::vector<SaleaeDirectoryNetEntry> net_entries_2 = sd_2->dump();
+
+
+
+
+//    struct differences2 {
+//        int id;
+//        std::string name;
+
+
+//    };
+
+
+    std::vector<int> ids_not_in_2;
+    for (const SaleaeDirectoryNetEntry& sdne_1 : net_entries_1)
+    {
+        bool id_found = false;
+        for (const SaleaeDirectoryNetEntry& sdne_2 : net_entries_2) {
+            // ist sdne1_id == sdne2_id? wenn nein continue
+            if (sdne_1.id() != sdne_2.id()) {
+                continue;
+            }
+            id_found = true;
+            // ist sdne1_name != sdne2_name? wenn ja speicher name1 und name2
+
+            // vergleiche werte der einzelnen indexe und binary files
+            // gibt es hier unterscheidungen speicher sdne1 und sdne2 ab
+            // NEIN? dann speicher name1 und name2 in vector ab
+        }
+        if (!id_found) {
+            ids_not_in_2.push_back(sdne_1.id());
+            std::cout << sdne_1.id() << std::endl;
+        }
+    }
+
+}
+
+
 int main(int argc, const char* argv[])
 {
 
@@ -386,8 +442,8 @@ int main(int argc, const char* argv[])
             std::cout << diff_options.get_options_string() << std::endl;
         } else
         {
-            std::cout << "call diff" << std::endl;
-            //saleae_diff();
+            //std::cout << "call diff" << std::endl;
+            saleae_diff("/home/parallels/Desktop/Test/saleae1", "/home/parallels/Desktop/Test/saleae2");
         }
     } else
     {
