@@ -108,7 +108,7 @@ void saleae_ls(std::string path, std::string size, std::string ids) {
 
     // collect length for better formatting
     int format_length [6] = {7, 8, 19, 11, 10, 15}; // length of the column titles
-    for (const SaleaeDirectoryNetEntry& sdne : net_entries) {
+    for (const SaleaeDirectoryNetEntry& sdne : net_entries){
         for (const SaleaeDirectoryFileIndex& sdfi : sdne.indexes()) {
             if (check_size(size_necessary, size_op, size_val, sdfi.numberValues()) && check_ids(ids_necessary, id_set, sdne.id())) {
                 format_length[0] = (format_length[0] < std::to_string(sdne.id()).length()) ? std::to_string(sdne.id()).length() : format_length[0];
@@ -150,33 +150,68 @@ void saleae_ls(std::string path, std::string size, std::string ids) {
 }
 
 
- void saleae_cat(std::string path) {
-     SaleaeInputFile *sf = new SaleaeInputFile(path);
-     uint64_t begin_time = sf->header()->mBeginTime;
-     uint64_t end_time = sf->header()->mEndTime;
-     uint64_t num_transitions = sf->header()->mNumTransitions;
-     std::string data_format;
-     switch (sf->header()->storageFormat())
-     {
-     case SaleaeHeader::Double:
-         data_format = "Double";
-         break;
-     case SaleaeHeader::Uint64:
-         data_format = "Uint64";
-         break;
-     case SaleaeHeader::Coded:
-         data_format = "Coded";
-         break;
-     }
+void saleae_cat(std::string path) {
+    SaleaeInputFile *sf = new SaleaeInputFile(path);
+    uint64_t begin_time = sf->header()->mBeginTime;
+    uint64_t end_time = sf->header()->mEndTime;
+    uint64_t num_transitions = sf->header()->mNumTransitions;
+    std::string data_format;
+    switch (sf->header()->storageFormat())
+    {
+    case SaleaeHeader::Double:
+        data_format = "Double";
+        break;
+    case SaleaeHeader::Uint64:
+        data_format = "Uint64";
+        break;
+    case SaleaeHeader::Coded:
+        data_format = "Coded";
+        break;
+    }
 
-     std::cout << "----------- Header -----------\n   data format: " << data_format
-               << "\n   start value: " << begin_time
-               << "\n   end value: " << end_time
-               << "\n   number of transitions: " << num_transitions
-               << "\n------------------------------" << std::endl;
-     SaleaeDataBuffer *db = sf->get_buffered_data(sf->header()->mNumTransitions);
-     db->dump();
- }
+    std::cout << "----------- Header -----------\n   data format: " << data_format
+              << "\n   start value: " << begin_time
+              << "\n   end value: " << end_time
+              << "\n   number of transitions: " << num_transitions
+              << "\n------------------------------" << std::endl;
+    SaleaeDataBuffer *db = sf->get_buffered_data(num_transitions);
+
+
+    // data
+
+    uint64_t* time_array = db->mTimeArray;
+    int* value_array = db->mValueArray;
+
+
+    // time, value
+    int format_length [3] = {4, 4, 5};
+    for (int i = 0; i < num_transitions; i++)
+    {
+        format_length[0] = (format_length[0] < std::to_string(i).length()) ? std::to_string(i).length() : format_length[0];
+        format_length[1] = (format_length[1] < std::to_string(time_array[i]).length()) ? std::to_string(time_array[i]).length() : format_length[1];
+        format_length[2] = (format_length[2] < std::to_string(value_array[i]).length()) ? std::to_string(time_array[i]).length() : format_length[2];
+    }
+
+    int abs_length = format_length[0] + format_length[1] + format_length[2] + 7;
+    std::cout << std::string(abs_length + 2, '-') << std::endl;
+    std::cout << '|';
+    print_element(" No.", format_length[0], true);
+    print_element("Time", format_length[1], true);
+    print_element("Value", format_length[2], true);
+    std::cout << std::endl;
+    std::cout << '|' << std::string(abs_length, '-') << '|' << std::endl;
+
+    for (int i = 0; i < num_transitions; i++)
+    {
+        std::cout << '|';
+        print_element(i, format_length[0], false);
+        print_element(time_array[i], format_length[1], false);
+        print_element(value_array[i], format_length[2], false);
+        std::cout << std::endl;
+    }
+    std::cout << std::string(abs_length + 2, '-') << std::endl;
+
+}
 
 
 int main(int argc, const char* argv[]) {
@@ -233,7 +268,7 @@ int main(int argc, const char* argv[]) {
         if (args.is_option_set("--help") || unknown_option_exists) {
             std::cout << cat_options.get_options_string() << std::endl;
         } else {
-            saleae_cat("/home/parallels/Desktop/saleae/digital_62.bin");
+            saleae_cat("/home/parallels/Desktop/saleae/digital_52.bin");
         }
     } else {
         tool_options.add(generic_options);
