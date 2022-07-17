@@ -640,7 +640,7 @@ int main(int argc, const char* argv[])
         } else
         {
             //std::cout << "call diff" << std::endl;
-            saleae_diff("/home/parallels/Desktop/Test/saleae1", "/home/parallels/Desktop/Test/saleae2", "1,2,59,5", false);
+            saleae_diff(args.get_parameter("--dir"), diff_path, args.get_parameter("--id"), args.is_option_set("--only-differences"));
         }
     } else
     {
