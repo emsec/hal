@@ -312,6 +312,7 @@ void saleae_diff(std::string path_1, std::string path_2) {
         bool name_diff;
         bool data_diff;
         std::map<uint64_t, row_t> net_data;
+        int format_length[4];
     };
 
     std::vector<int> ids_not_in_2;
@@ -330,12 +331,24 @@ void saleae_diff(std::string path_1, std::string path_2) {
                 continue;
             }
             id_found = true;
+
+            // save net info
             struct net_t cur_net;
             cur_net.id = sdne_1.id();
             cur_net.name_1 = sdne_1.name();
             cur_net.name_2 = sdne_2.name();
+
+            // format len
+            cur_net.format_length[0] = 1;
+            cur_net.format_length[1] = 4;
+            cur_net.format_length[2] = cur_net.name_1.length();
+            cur_net.format_length[3] = cur_net.name_2.length();
+
+            // name diff?
             cur_net.name_diff = cur_net.name_1 != cur_net.name_2;
 
+
+            // compare data
             int diff_cnt = 0;
             std::map<uint64_t, row_t> net_data; // key=time, value=row struct
             for (const SaleaeDirectoryFileIndex& sdfi : sdne_1.indexes()) {
@@ -348,8 +361,12 @@ void saleae_diff(std::string path_1, std::string path_2) {
                 SaleaeInputFile *sf = new SaleaeInputFile(bin_path);
                 SaleaeDataBuffer *db = sf->get_buffered_data(sf->header()->mNumTransitions);
                 for (int i = 0; i < db->mCount; i++) {
-                    net_data[db->mTimeArray[i]] = row_t{.val_1 = db->mValueArray[i], .val_1_avail = true, .val_2_avail = false, .diff = true};
+                    uint64_t t = db->mTimeArray[i];
+                    net_data[t] = row_t{.val_1 = db->mValueArray[i], .val_1_avail = true, .val_2_avail = false, .diff = true};
                     diff_cnt++;
+                    // update format len
+                    cur_net.format_length[1] = (cur_net.format_length[1] < std::to_string(t).length()) ? std::to_string(t).length() : cur_net.format_length[1];
+                    cur_net.format_length[2] = (cur_net.format_length[2] < std::to_string(net_data[t].val_1).length()) ? std::to_string(net_data[t].val_1).length() : cur_net.format_length[2];
                 }
             }
 
@@ -370,11 +387,17 @@ void saleae_diff(std::string path_1, std::string path_2) {
                         net_data[t].val_2_avail = true;
                         net_data[t].diff = (abs(net_data[t].val_1 - net_data[t].val_2]]) > 0); // 0 wird durch tolarance getauscht
                         diff_cnt = net_data[t].diff ? diff_cnt : diff_cnt - 1;
+                        // update format len
+                        cur_net.format_length[3] = (cur_net.format_length[3] < std::to_string(net_data[t].val_2).length()) ? std::to_string(net_data[t].val_2).length() : cur_net.format_length[3];
                     } else {
                         net_data[t] = row_t{.val_1_avail = false, .val_2 = db->mValueArray[i], .val_2_avail = true, .diff = true};
                         diff_cnt++;
+                        // update format len
+                        cur_net.format_length[1] = (cur_net.format_length[1] < std::to_string(t).length()) ? std::to_string(t).length() : cur_net.format_length[1];
+                        cur_net.format_length[3] = (cur_net.format_length[3] < std::to_string(net_data[t].val_2).length()) ? std::to_string(net_data[t].val_2).length() : cur_net.format_length[3];
                     }
                 }
+                // data diff?
                 cur_net.data_diff = diff_cnt > 0;
                 if (cur_net.data_diff) {
                     cur_net.net_data = net_data;
@@ -389,12 +412,6 @@ void saleae_diff(std::string path_1, std::string path_2) {
         if (!id_found) {
             ids_not_in_2.push_back(sdne_1.id());
         }
-
-
-
-        // formatting
-
-        // output
     }
     for (const SaleaeDirectoryNetEntry& sdne_2 : net_entries_2)
     {
@@ -410,6 +427,8 @@ void saleae_diff(std::string path_1, std::string path_2) {
         }
     }
 
+
+    // output
 }
 
 
