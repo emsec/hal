@@ -185,6 +185,7 @@ void saleae_ls(std::string path, std::string size, std::string ids)
 }
 
 
+// saleae cat-tool
 void saleae_cat(std::string path, std::string file_name, bool dump_header, bool dump_data)
 {
     // handle --dir option
@@ -195,7 +196,7 @@ void saleae_cat(std::string path, std::string file_name, bool dump_header, bool 
         return;
     }
 
-    // handle -b and -h option
+    // handle --only-data and --only-header option
     if (!dump_header && !dump_data)
     {
         dump_header = true;
@@ -291,9 +292,10 @@ void saleae_cat(std::string path, std::string file_name, bool dump_header, bool 
 }
 
 
+// saleae diff-tool
 void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool only_diff)
 {
-    // path_1 is cur, path_2 is diff
+    // handle --dir option
     std::string path_1_json = (path_1 == "") ? "./saleae.json" : path_1 + "/saleae.json";
     if (!file_exists(path_1_json))
     {
@@ -339,6 +341,7 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
     std::vector<int> ids_not_in_2;
     std::vector<int> ids_not_in_1;
     std::vector<net_t> diff_vec;
+    bool diff_found = false;
 
     SaleaeDirectory *sd_1 = new SaleaeDirectory(path_1_json, false);
     std::vector<SaleaeDirectoryNetEntry> net_entries_1 = sd_1->dump();
@@ -373,7 +376,6 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
 
             // name diff?
             cur_net.name_diff = cur_net.name_1 != cur_net.name_2;
-
 
             // compare data
             int diff_cnt = 0;
@@ -441,6 +443,7 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
                 if (cur_net.data_diff || cur_net.name_diff)
                 {
                     diff_vec.push_back(cur_net);
+                    diff_found = true;
                 }
             }
 
@@ -448,6 +451,7 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
         if (!id_found)
         {
             ids_not_in_2.push_back(sdne_1.id());
+            diff_found = true;
         }
     }
     for (const SaleaeDirectoryNetEntry& sdne_2 : net_entries_2)
@@ -468,10 +472,15 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
         if (!id_found)
         {
             ids_not_in_1.push_back(sdne_2.id());
+            diff_found = true;
         }
     }
 
     // output
+    if (!diff_found) {
+        std::cout << "- Content of waveform database is the same" << std::endl;
+        exit (0);
+    }
     std::cout << "=> Database 1: " << path_1 << "\n=> Database 2: " << path_2 << "\n\n" << std::endl;
     // id not found
     for (int id : ids_not_in_2)
@@ -529,6 +538,7 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
             std::cout << "\n" << std::endl;
         }
     }
+    exit (1);
 }
 
 
