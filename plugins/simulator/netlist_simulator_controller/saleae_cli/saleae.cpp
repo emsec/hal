@@ -305,8 +305,18 @@ void saleae_diff(std::string path_1, std::string path_2) {
         bool diff;
     };
 
+    struct net_t {
+        int id;
+        std::string name_1;
+        std::string name_2;
+        bool name_diff;
+        bool data_diff;
+        std::map<uint64_t, row_t> net_data;
+    };
+
     std::vector<int> ids_not_in_2;
     std::vector<int> ids_not_in_1;
+    std::vector<net_t> diff_vec;
 
     SaleaeDirectory *sd_1 = new SaleaeDirectory(path_1, false);
     std::vector<SaleaeDirectoryNetEntry> net_entries_1 = sd_1->dump();
@@ -320,9 +330,14 @@ void saleae_diff(std::string path_1, std::string path_2) {
                 continue;
             }
             id_found = true;
+            struct net_t cur_net;
+            cur_net.id = sdne_1.id();
+            cur_net.name_1 = sdne_1.name();
+            cur_net.name_2 = sdne_2.name();
+            cur_net.name_diff = cur_net.name_1 != cur_net.name_2;
 
             int diff_cnt = 0;
-            std::map<uint64_t, row_t> net_data;
+            std::map<uint64_t, row_t> net_data; // key=time, value=row struct
             for (const SaleaeDirectoryFileIndex& sdfi : sdne_1.indexes()) {
                 std::string bin_path = path_1 + std::to_string(sdfi.index());
                 if (!file_exists(bin_path))
@@ -360,17 +375,22 @@ void saleae_diff(std::string path_1, std::string path_2) {
                         diff_cnt++;
                     }
                 }
-                // wenn diff_cnt > 0 = bool diff true
-
-
-                // namen comparision
+                cur_net.data_diff = diff_cnt > 0;
+                if (cur_net.data_diff) {
+                    cur_net.net_data = net_data;
+                }
+                // save net struct if there is a difference
+                if (cur_net.data_diff || cur_net.name_diff) {
+                    diff_vec.push_back(cur_net);
+                }
             }
 
         }
         if (!id_found) {
             ids_not_in_2.push_back(sdne_1.id());
-            std::cout << sdne_1.id() << std::endl;
         }
+
+
 
         // formatting
 
@@ -387,7 +407,6 @@ void saleae_diff(std::string path_1, std::string path_2) {
         }
         if (!id_found) {
             ids_not_in_1.push_back(sdne_2.id());
-            std::cout << sdne_2.id() << std::endl;
         }
     }
 
