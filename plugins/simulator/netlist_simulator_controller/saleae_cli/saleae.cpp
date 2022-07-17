@@ -54,7 +54,8 @@ bool check_ids(bool necessary, std::unordered_set<int> id_set, int id_to_check)
 }
 
 
-std::unordered_set<int> parse_list_of_ids(std::string list_of_ids) {
+std::unordered_set<int> parse_list_of_ids(std::string list_of_ids)
+{
     std::unordered_set<int> id_set;
     std::stringstream ss(list_of_ids);
     std::vector<std::string> splited_ids;
@@ -129,39 +130,6 @@ void saleae_ls(std::string path, std::string size, std::string ids)
     {
         ids_necessary = true;
         id_set = parse_list_of_ids(ids);
-//        std::stringstream ss(ids);
-//        std::vector<std::string> splited_ids;
-//        while (ss.good())
-//        {
-//            std::string substr;
-//            getline(ss, substr, ',');
-//            splited_ids.push_back(substr);
-//        }
-
-//        for (std::string id_entry : splited_ids)
-//        {
-//            if (id_entry.find('-') != std::string::npos)
-//            {
-//                std::stringstream range_stream(id_entry);
-//                std::vector<std::string> range;
-//                while (range_stream.good())
-//                {
-//                    std::string substr;
-//                    getline(range_stream, substr, '-');
-//                    range.push_back(substr);
-//                }
-//                int tmp_id = std::stoi(range.front());
-//                while (tmp_id <= std::stoi(range.back()))
-//                {
-//                    id_set.insert(tmp_id);
-//                    tmp_id ++;
-//                }
-//            }
-//            else
-//            {
-//               id_set.insert(std::stoi(id_entry));
-//            }
-//        }
     }
 
     SaleaeDirectory *sd = new SaleaeDirectory(path, false);
@@ -323,7 +291,8 @@ void saleae_cat(std::string path, std::string file_name, bool dump_header, bool 
 }
 
 
-void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool only_diff) {
+void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool only_diff)
+{
     // path_1 is cur, path_2 is diff
     std::string path_1_json = (path_1 == "") ? "./saleae.json" : path_1 + "/saleae.json";
     if (!file_exists(path_1_json))
@@ -347,7 +316,8 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
         id_set = parse_list_of_ids(ids);
     }
 
-    struct row_t {
+    struct row_t
+    {
         int val_1;
         bool val_1_avail;
         int val_2;
@@ -355,7 +325,8 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
         bool diff;
     };
 
-    struct net_t {
+    struct net_t
+    {
         int id;
         std::string name_1;
         std::string name_2;
@@ -375,12 +346,15 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
     std::vector<SaleaeDirectoryNetEntry> net_entries_2 = sd_2->dump();
     for (const SaleaeDirectoryNetEntry& sdne_1 : net_entries_1)
     {
-        if (!check_ids(ids_necessary, id_set, sdne_1.id())) {
+        if (!check_ids(ids_necessary, id_set, sdne_1.id()))
+        {
             continue;
         }
         bool id_found = false;
-        for (const SaleaeDirectoryNetEntry& sdne_2 : net_entries_2) {
-            if (sdne_1.id() != sdne_2.id()) {
+        for (const SaleaeDirectoryNetEntry& sdne_2 : net_entries_2)
+        {
+            if (sdne_1.id() != sdne_2.id())
+            {
                 continue;
             }
             id_found = true;
@@ -404,7 +378,8 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
             // compare data
             int diff_cnt = 0;
             std::map<uint64_t, row_t> net_data; // key=time, value=row struct
-            for (const SaleaeDirectoryFileIndex& sdfi : sdne_1.indexes()) {
+            for (const SaleaeDirectoryFileIndex& sdfi : sdne_1.indexes())
+            {
                 std::string bin_path = path_1 + "/digital_" + std::to_string(sdfi.index()) + ".bin";
                 if (!file_exists(bin_path))
                 {
@@ -413,7 +388,8 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
                 }
                 SaleaeInputFile *sf = new SaleaeInputFile(bin_path);
                 SaleaeDataBuffer *db = sf->get_buffered_data(sf->header()->mNumTransitions);
-                for (int i = 0; i < db->mCount; i++) {
+                for (int i = 0; i < db->mCount; i++)
+                {
                     uint64_t t = db->mTimeArray[i];
                     net_data[t] = row_t{.val_1 = db->mValueArray[i], .val_1_avail = true, .val_2_avail = false, .diff = true};
                     diff_cnt++;
@@ -423,7 +399,8 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
                 }
             }
 
-            for (const SaleaeDirectoryFileIndex& sdfi : sdne_2.indexes()) {
+            for (const SaleaeDirectoryFileIndex& sdfi : sdne_2.indexes())
+            {
                 std::string bin_path = path_2 + "/digital_" + std::to_string(sdfi.index()) + ".bin";
                 if (!file_exists(bin_path))
                 {
@@ -433,16 +410,20 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
                 SaleaeInputFile *sf = new SaleaeInputFile(bin_path);
                 SaleaeDataBuffer *db = sf->get_buffered_data(sf->header()->mNumTransitions);
 
-                for (int i = 0; i < db->mCount; i++) {
+                for (int i = 0; i < db->mCount; i++)
+                {
                     uint64_t t = db->mTimeArray[i];
-                    if (net_data.count(t) > 0) {
+                    if (net_data.count(t) > 0)
+                    {
                         net_data[t].val_2 = db->mValueArray[i];
                         net_data[t].val_2_avail = true;
                         net_data[t].diff = (abs(net_data[t].val_1 - net_data[t].val_2)) > 0; // 0 wird durch tolarance getauscht
                         diff_cnt = net_data[t].diff ? diff_cnt : diff_cnt - 1;
                         // update format len
                         cur_net.format_length[3] = (cur_net.format_length[3] < std::to_string(net_data[t].val_2).length()) ? std::to_string(net_data[t].val_2).length() : cur_net.format_length[3];
-                    } else {
+                    }
+                    else
+                    {
                         net_data[t] = row_t{.val_1_avail = false, .val_2 = db->mValueArray[i], .val_2_avail = true, .diff = true};
                         diff_cnt++;
                         // update format len
@@ -452,54 +433,66 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
                 }
                 // data diff?
                 cur_net.data_diff = diff_cnt > 0;
-                if (cur_net.data_diff) {
+                if (cur_net.data_diff)
+                {
                     cur_net.net_data = net_data;
                 }
                 // save net struct if there is a difference
-                if (cur_net.data_diff || cur_net.name_diff) {
+                if (cur_net.data_diff || cur_net.name_diff)
+                {
                     diff_vec.push_back(cur_net);
                 }
             }
 
         }
-        if (!id_found) {
+        if (!id_found)
+        {
             ids_not_in_2.push_back(sdne_1.id());
         }
     }
     for (const SaleaeDirectoryNetEntry& sdne_2 : net_entries_2)
     {
-        if (!check_ids(ids_necessary, id_set, sdne_2.id())) {
+        if (!check_ids(ids_necessary, id_set, sdne_2.id()))
+        {
             continue;
         }
         bool id_found = false;
-        for (const SaleaeDirectoryNetEntry& sdne_1 : net_entries_1) {
-            if (sdne_2.id() != sdne_1.id()) {
+        for (const SaleaeDirectoryNetEntry& sdne_1 : net_entries_1)
+        {
+            if (sdne_2.id() != sdne_1.id())
+            {
                 continue;
             }
             id_found = true;
         }
-        if (!id_found) {
+        if (!id_found)
+        {
             ids_not_in_1.push_back(sdne_2.id());
         }
     }
 
     // output
-    std::cout << "Database 1: " << path_1 << "\nDatabase 2: " << path_2 << "\n\n" << std::endl;
-
-    // - id not found
-    for (int id : ids_not_in_2) {
+    std::cout << "=> Database 1: " << path_1 << "\n=> Database 2: " << path_2 << "\n\n" << std::endl;
+    // id not found
+    for (int id : ids_not_in_2)
+    {
         std::cout << "- Waveform ID " << id << " found in database 1 but not in database 2\n" << std::endl;
     }
-    for (int id : ids_not_in_1) {
+    for (int id : ids_not_in_1)
+    {
         std::cout << "- Waveform ID " << id << " found in database 2 but not in database 1\n" << std::endl;
     }
-
-    // - name or data differs
-    for (net_t cur_net : diff_vec) {
-        // name only diff?
-        if (cur_net.name_diff && !cur_net.data_diff) {
+    for (net_t cur_net : diff_vec)
+    {
+        if (cur_net.name_diff && !cur_net.data_diff)
+        {
+            // only diffrent name
             std::cout << "- Waveform ID " << cur_net.id << " is named \"" << cur_net.name_1 << "\" in database 1 but \"" << cur_net.name_2 << "\" in database 2\n" << std::endl;
-        } else {
+        }
+        else
+        {
+            // diffrent data
+            // header row
             std::cout << "\n- Waveform ID " << cur_net.id << " has a data difference" << std::endl;
             int abs_length = cur_net.format_length[0] + cur_net.format_length[1] + cur_net.format_length[2] + cur_net.format_length[3] + 10;
             std::cout << std::string(abs_length + 2, '-') << std::endl;
@@ -512,10 +505,13 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
             std::cout << std::endl;
             std::cout << '|' << std::string(abs_length, '-') << '|' << std::endl;
 
-            // TODO: print only diff rows
-            for (auto &item : cur_net.net_data) {
+            // data rows
+            for (auto &item : cur_net.net_data)
+            {
                 struct row_t cur_row = item.second;
-                if (only_diff && !cur_row.diff) {
+                // handle --only-differences option
+                if (only_diff && !cur_row.diff)
+                {
                     continue;
                 }
                 std::string diff_char = cur_row.diff ? "*" : " ";
@@ -530,6 +526,7 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
                 std::cout << std::endl;
             }
             std::cout << std::string(abs_length + 2, '-') << std::endl;
+            std::cout << "\n" << std::endl;
         }
     }
 }
@@ -585,11 +582,13 @@ int main(int argc, const char* argv[])
         if (args.is_option_set("--help") || unknown_option_exists)
         {
             std::cout << ls_options.get_options_string() << std::endl;
-        } else
+        }
+        else
         {
             saleae_ls(args.get_parameter("--dir"), args.get_parameter("--size"), args.get_parameter("--id"));
         }
-    } else if (args.is_option_set("cat"))
+    }
+    else if (args.is_option_set("cat"))
     {
         std::string filename = args.get_parameter("cat");
         cat_options.add(generic_options);
@@ -611,11 +610,13 @@ int main(int argc, const char* argv[])
         else if (args.is_option_set("--help") || unknown_option_exists)
         {
             std::cout << cat_options.get_options_string() << std::endl;
-        } else
+        }
+        else
         {
             saleae_cat(args.get_parameter("--dir"), filename, args.is_option_set("--only-header"), args.is_option_set("--only-data"));
         }
-    } else if (args.is_option_set("diff"))
+    }
+    else if (args.is_option_set("diff"))
     {
         std::string diff_path = args.get_parameter("diff");
         diff_options.add(generic_options);
@@ -637,12 +638,13 @@ int main(int argc, const char* argv[])
         else if (args.is_option_set("--help") || unknown_option_exists)
         {
             std::cout << diff_options.get_options_string() << std::endl;
-        } else
+        }
+        else
         {
-            //std::cout << "call diff" << std::endl;
             saleae_diff(args.get_parameter("--dir"), diff_path, args.get_parameter("--id"), args.is_option_set("--only-differences"));
         }
-    } else
+    }
+    else
     {
         tool_options.add(generic_options);
 
