@@ -284,16 +284,16 @@ void saleae_cat(std::string path, std::string file_name, bool dump_header, bool 
 
 void saleae_diff(std::string path_1, std::string path_2) {
     // path_1 is cur, path_2 is diff
-    path_1 = (path_1 == "") ? "./saleae.json" : path_1 + "/saleae.json";
-    if (!file_exists(path_1))
+    std::string path_1_json = (path_1 == "") ? "./saleae.json" : path_1 + "/saleae.json";
+    if (!file_exists(path_1_json))
     {
-        std::cout << "Cannot open file: " << path_1 << std::endl;
+        std::cout << "Cannot open file: " << path_1_json << std::endl;
         return;
     }
-    path_2 = path_2 + "/saleae.json";
-    if (!file_exists(path_2))
+    std::string path_2_json = path_2 + "/saleae.json";
+    if (!file_exists(path_2_json))
     {
-        std::cout << "Cannot open file: " << path_2 << std::endl;
+        std::cout << "Cannot open file: " << path_2_json << std::endl;
         return;
     }
 
@@ -319,9 +319,9 @@ void saleae_diff(std::string path_1, std::string path_2) {
     std::vector<int> ids_not_in_1;
     std::vector<net_t> diff_vec;
 
-    SaleaeDirectory *sd_1 = new SaleaeDirectory(path_1, false);
+    SaleaeDirectory *sd_1 = new SaleaeDirectory(path_1_json, false);
     std::vector<SaleaeDirectoryNetEntry> net_entries_1 = sd_1->dump();
-    SaleaeDirectory *sd_2 = new SaleaeDirectory(path_2, false);
+    SaleaeDirectory *sd_2 = new SaleaeDirectory(path_2_json, false);
     std::vector<SaleaeDirectoryNetEntry> net_entries_2 = sd_2->dump();
     for (const SaleaeDirectoryNetEntry& sdne_1 : net_entries_1)
     {
@@ -339,7 +339,7 @@ void saleae_diff(std::string path_1, std::string path_2) {
             cur_net.name_2 = sdne_2.name();
 
             // format len
-            cur_net.format_length[0] = 1;
+            cur_net.format_length[0] = 2;
             cur_net.format_length[1] = 4;
             cur_net.format_length[2] = cur_net.name_1.length();
             cur_net.format_length[3] = cur_net.name_2.length();
@@ -352,7 +352,7 @@ void saleae_diff(std::string path_1, std::string path_2) {
             int diff_cnt = 0;
             std::map<uint64_t, row_t> net_data; // key=time, value=row struct
             for (const SaleaeDirectoryFileIndex& sdfi : sdne_1.indexes()) {
-                std::string bin_path = path_1 + std::to_string(sdfi.index());
+                std::string bin_path = path_1 + "/digital_" + std::to_string(sdfi.index()) + ".bin";
                 if (!file_exists(bin_path))
                 {
                     std::cout << "Error in database: " << path_1 << "\nCannot open file: " << bin_path << std::endl;
@@ -371,7 +371,7 @@ void saleae_diff(std::string path_1, std::string path_2) {
             }
 
             for (const SaleaeDirectoryFileIndex& sdfi : sdne_2.indexes()) {
-                std::string bin_path = path_2 + std::to_string(sdfi.index());
+                std::string bin_path = path_2 + "/digital_" + std::to_string(sdfi.index()) + ".bin";
                 if (!file_exists(bin_path))
                 {
                     std::cout << "Error in database: " << path_2 << "\nCannot open file: " << bin_path << std::endl;
@@ -382,10 +382,10 @@ void saleae_diff(std::string path_1, std::string path_2) {
 
                 for (int i = 0; i < db->mCount; i++) {
                     uint64_t t = db->mTimeArray[i];
-                    if (net_data.contains(t)) {
+                    if (net_data.count(t) > 0) {
                         net_data[t].val_2 = db->mValueArray[i];
                         net_data[t].val_2_avail = true;
-                        net_data[t].diff = (abs(net_data[t].val_1 - net_data[t].val_2]]) > 0); // 0 wird durch tolarance getauscht
+                        net_data[t].diff = (abs(net_data[t].val_1 - net_data[t].val_2)) > 0; // 0 wird durch tolarance getauscht
                         diff_cnt = net_data[t].diff ? diff_cnt : diff_cnt - 1;
                         // update format len
                         cur_net.format_length[3] = (cur_net.format_length[3] < std::to_string(net_data[t].val_2).length()) ? std::to_string(net_data[t].val_2).length() : cur_net.format_length[3];
@@ -427,8 +427,51 @@ void saleae_diff(std::string path_1, std::string path_2) {
         }
     }
 
-
     // output
+    std::cout << "Database 1: " << path_1 << "\nDatabase 2: " << path_2 << "\n\n" << std::endl;
+
+    // - id not found
+    for (int id : ids_not_in_2) {
+        std::cout << "- Waveform ID " << id << " found in database 1 but not in database 2\n" << std::endl;
+    }
+    for (int id : ids_not_in_1) {
+        std::cout << "- Waveform ID " << id << " found in database 2 but not in database 1\n" << std::endl;
+    }
+
+    // - name or data differs
+    for (net_t cur_net : diff_vec) {
+        // name only diff?
+        if (cur_net.name_diff && !cur_net.data_diff) {
+        std::cout << "- Waveform ID " << cur_net.id << " is named \"" << cur_net.name_1 << "\" in database 1 but \"" << cur_net.name_2 << "\" in database 2\n" << std::endl;
+        } else {
+
+            int abs_length = cur_net.format_length[0] + cur_net.format_length[1] + cur_net.format_length[2] + cur_net.format_length[3] + cur_net.format_length[4] + 12;
+            std::cout << std::string(abs_length + 2, '-') << std::endl;
+            std::string diff_char = cur_net.name_diff ? "*" : " ";
+            print_element("| " + diff_char, cur_net.format_length[0], true);
+            print_element("Time", cur_net.format_length[1], true);
+            print_element(cur_net.name_1, cur_net.format_length[2], true);
+            print_element(cur_net.name_2, cur_net.format_length[3], true);
+            std::cout << std::endl;
+            std::cout << '|' << std::string(abs_length, '-') << '|' << std::endl;
+
+            // TODO: print only diff rows
+            for (auto &item : cur_net.net_data) {
+                struct row_t cur_row = item.second;
+                std::string diff_char = cur_row.diff ? "*" : " ";
+                std::string val_1 = cur_row.val_1_avail ? std::to_string(cur_row.val_1) : " ";
+                std::string val_2 = cur_row.val_2_avail ? std::to_string(cur_row.val_2) : " ";
+
+                std::cout << '|';
+                print_element(diff_char, cur_net.format_length[0], true);
+                print_element(item.first, cur_net.format_length[1], false);
+                print_element(val_1, cur_net.format_length[2], true);
+                print_element(val_2, cur_net.format_length[3], true);
+                std::cout << std::endl;
+            }
+            std::cout << std::string(abs_length + 2, '-') << std::endl;
+        }
+    }
 }
 
 
