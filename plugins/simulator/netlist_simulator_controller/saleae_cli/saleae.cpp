@@ -323,7 +323,7 @@ void saleae_cat(std::string path, std::string file_name, bool dump_header, bool 
 }
 
 
-void saleae_diff(std::string path_1, std::string path_2) {
+void saleae_diff(std::string path_1, std::string path_2, std::string ids) {
     // path_1 is cur, path_2 is diff
     std::string path_1_json = (path_1 == "") ? "./saleae.json" : path_1 + "/saleae.json";
     if (!file_exists(path_1_json))
@@ -336,6 +336,15 @@ void saleae_diff(std::string path_1, std::string path_2) {
     {
         std::cout << "Cannot open file: " << path_2_json << std::endl;
         return;
+    }
+
+    // handle --id option
+    bool ids_necessary = false;
+    std::unordered_set<int> id_set;
+    if (ids != "")
+    {
+        ids_necessary = true;
+        id_set = parse_list_of_ids(ids);
     }
 
     struct row_t {
@@ -366,6 +375,9 @@ void saleae_diff(std::string path_1, std::string path_2) {
     std::vector<SaleaeDirectoryNetEntry> net_entries_2 = sd_2->dump();
     for (const SaleaeDirectoryNetEntry& sdne_1 : net_entries_1)
     {
+        if (!check_ids(ids_necessary, id_set, sdne_1.id())) {
+            continue;
+        }
         bool id_found = false;
         for (const SaleaeDirectoryNetEntry& sdne_2 : net_entries_2) {
             if (sdne_1.id() != sdne_2.id()) {
@@ -456,6 +468,9 @@ void saleae_diff(std::string path_1, std::string path_2) {
     }
     for (const SaleaeDirectoryNetEntry& sdne_2 : net_entries_2)
     {
+        if (!check_ids(ids_necessary, id_set, sdne_2.id())) {
+            continue;
+        }
         bool id_found = false;
         for (const SaleaeDirectoryNetEntry& sdne_1 : net_entries_1) {
             if (sdne_2.id() != sdne_1.id()) {
@@ -622,7 +637,7 @@ int main(int argc, const char* argv[])
         } else
         {
             //std::cout << "call diff" << std::endl;
-            saleae_diff("/home/parallels/Desktop/Test/saleae1", "/home/parallels/Desktop/Test/saleae2");
+            saleae_diff("/home/parallels/Desktop/Test/saleae1", "/home/parallels/Desktop/Test/saleae2", "1,2,59,5");
         }
     } else
     {
