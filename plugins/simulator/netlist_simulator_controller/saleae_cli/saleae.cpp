@@ -53,6 +53,46 @@ bool check_ids(bool necessary, std::unordered_set<int> id_set, int id_to_check)
     return ((id_set.count(id_to_check)) || (!necessary));
 }
 
+
+std::unordered_set<int> parse_list_of_ids(std::string list_of_ids) {
+    std::unordered_set<int> id_set;
+    std::stringstream ss(list_of_ids);
+    std::vector<std::string> splited_ids;
+    while (ss.good())
+    {
+        std::string substr;
+        getline(ss, substr, ',');
+        splited_ids.push_back(substr);
+    }
+
+    for (std::string id_entry : splited_ids)
+    {
+        if (id_entry.find('-') != std::string::npos)
+        {
+            std::stringstream range_stream(id_entry);
+            std::vector<std::string> range;
+            while (range_stream.good())
+            {
+                std::string substr;
+                getline(range_stream, substr, '-');
+                range.push_back(substr);
+            }
+            int tmp_id = std::stoi(range.front());
+            while (tmp_id <= std::stoi(range.back()))
+            {
+                id_set.insert(tmp_id);
+                tmp_id ++;
+            }
+        }
+        else
+        {
+           id_set.insert(std::stoi(id_entry));
+        }
+    }
+    return id_set;
+}
+
+
 // saleae ls-tool
 void saleae_ls(std::string path, std::string size, std::string ids)
 {
@@ -88,39 +128,40 @@ void saleae_ls(std::string path, std::string size, std::string ids)
     if (ids != "")
     {
         ids_necessary = true;
-        std::stringstream ss(ids);
-        std::vector<std::string> splited_ids;
-        while (ss.good())
-        {
-            std::string substr;
-            getline(ss, substr, ',');
-            splited_ids.push_back(substr);
-        }
+        id_set = parse_list_of_ids(ids);
+//        std::stringstream ss(ids);
+//        std::vector<std::string> splited_ids;
+//        while (ss.good())
+//        {
+//            std::string substr;
+//            getline(ss, substr, ',');
+//            splited_ids.push_back(substr);
+//        }
 
-        for (std::string id_entry : splited_ids)
-        {
-            if (id_entry.find('-') != std::string::npos)
-            {
-                std::stringstream range_stream(id_entry);
-                std::vector<std::string> range;
-                while (range_stream.good())
-                {
-                    std::string substr;
-                    getline(range_stream, substr, '-');
-                    range.push_back(substr);
-                }
-                int tmp_id = std::stoi(range.front());
-                while (tmp_id <= std::stoi(range.back()))
-                {
-                    id_set.insert(tmp_id);
-                    tmp_id ++;
-                }
-            }
-            else
-            {
-               id_set.insert(std::stoi(id_entry));
-            }
-        }
+//        for (std::string id_entry : splited_ids)
+//        {
+//            if (id_entry.find('-') != std::string::npos)
+//            {
+//                std::stringstream range_stream(id_entry);
+//                std::vector<std::string> range;
+//                while (range_stream.good())
+//                {
+//                    std::string substr;
+//                    getline(range_stream, substr, '-');
+//                    range.push_back(substr);
+//                }
+//                int tmp_id = std::stoi(range.front());
+//                while (tmp_id <= std::stoi(range.back()))
+//                {
+//                    id_set.insert(tmp_id);
+//                    tmp_id ++;
+//                }
+//            }
+//            else
+//            {
+//               id_set.insert(std::stoi(id_entry));
+//            }
+//        }
     }
 
     SaleaeDirectory *sd = new SaleaeDirectory(path, false);
