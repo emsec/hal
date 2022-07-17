@@ -323,7 +323,7 @@ void saleae_cat(std::string path, std::string file_name, bool dump_header, bool 
 }
 
 
-void saleae_diff(std::string path_1, std::string path_2, std::string ids) {
+void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool only_diff) {
     // path_1 is cur, path_2 is diff
     std::string path_1_json = (path_1 == "") ? "./saleae.json" : path_1 + "/saleae.json";
     if (!file_exists(path_1_json))
@@ -515,6 +515,9 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids) {
             // TODO: print only diff rows
             for (auto &item : cur_net.net_data) {
                 struct row_t cur_row = item.second;
+                if (only_diff && !cur_row.diff) {
+                    continue;
+                }
                 std::string diff_char = cur_row.diff ? "*" : " ";
                 std::string val_1 = cur_row.val_1_avail ? std::to_string(cur_row.val_1) : "-";
                 std::string val_2 = cur_row.val_2_avail ? std::to_string(cur_row.val_2) : "-";
@@ -637,7 +640,7 @@ int main(int argc, const char* argv[])
         } else
         {
             //std::cout << "call diff" << std::endl;
-            saleae_diff("/home/parallels/Desktop/Test/saleae1", "/home/parallels/Desktop/Test/saleae2", "1,2,59,5");
+            saleae_diff("/home/parallels/Desktop/Test/saleae1", "/home/parallels/Desktop/Test/saleae2", "1,2,59,5", false);
         }
     } else
     {
