@@ -43,17 +43,28 @@ namespace hal
 
     void ActionAddBooleanFunction::writeToXml(QXmlStreamWriter &xmlOut) const
     {
-
+        xmlOut.writeTextElement("name", mName);
+        xmlOut.writeTextElement("bf", QString::fromStdString(mFunction.to_string()));
     }
 
     void ActionAddBooleanFunction::readFromXml(QXmlStreamReader &xmlIn)
     {
-
+        while(xmlIn.readNextStartElement())
+        {
+            if(xmlIn.name() == "name")
+                mName = xmlIn.readElementText();
+            if(xmlIn.name() == "bf")
+            {
+                auto res = BooleanFunction::from_string(xmlIn.readElementText().toStdString());
+                if(res.is_ok())
+                    mFunction = res.get();
+            }
+        }
     }
 
     void ActionAddBooleanFunction::addToHash(QCryptographicHash &cryptoHash) const
     {
-
+        cryptoHash.addData(QString::fromStdString(mFunction.to_string()).toUtf8());
     }
 
 }
