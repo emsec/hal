@@ -58,6 +58,7 @@ namespace hal
         buffer,        /**< Buffer gate type. **/
         carry,         /**< Carry gate type. **/
         pll,           /**< PLL gate type. **/
+        oscillator,    /**< Oscillator gate type. **/
     };
 
     template<>
