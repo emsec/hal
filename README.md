@@ -116,6 +116,15 @@ To speed up the building process of a clean build, you have the option to instal
 +#define VER_WORD_SIZE            6553600
 ```
 
+We also adjusted the file `abc/src/base/abc/abcFunc.c` as follows:
+
+
+```git
+-#define ABC_MAX_CUBES   100000
++#define ABC_MAX_CUBES   2000000
+```
+
+
 Installation instructions:
 
 ```bash
