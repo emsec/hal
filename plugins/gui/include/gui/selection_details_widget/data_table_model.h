@@ -60,7 +60,7 @@ namespace hal {
             QString key; /// The data's key
             QString dataType; // The data type
             QString value; // The value of the data 
-            QString getPropertyValueByPropType(propertyType prop)//helper function to generically acces a propertys value
+            QString getPropertyValueByPropType(propertyType prop)//helper function to generically access a property value
             {
                 QString val =  (prop == 0) ? category : ( (prop == 1) ? key : ( (prop == 2) ? dataType : value ) );
                 return val;

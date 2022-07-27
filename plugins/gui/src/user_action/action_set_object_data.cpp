@@ -63,10 +63,8 @@ namespace hal
             mUndoAction->setObject(mObject);
             container->set_data(mCat.toStdString(), mKey.toStdString(), mType.toStdString(), mVal.toStdString());
         }
-        else //if the data does not already exists -> it is new data -> undo action deletes it
+        else //if the data does not already exists -> it is new data -> undo action deletes it (yet to come)
         {
-
-
         }
 
         return UserAction::exec();

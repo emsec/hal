@@ -2,6 +2,7 @@
 #include "gui/gui_globals.h"
 #include "gui/python/py_code_provider.h"
 #include "gui/input_dialog/input_dialog.h"
+#include "gui/user_action/action_set_object_data.h"
 #include <QHeaderView>
 #include <QtWidgets/QMenu>
 #include <QApplication>
@@ -13,7 +14,6 @@ namespace hal
     DataTableWidget::DataTableWidget(QWidget *parent) : QTableView(parent),
     mDataTableModel(new DataTableModel(this))
     {
-        mCurrentObjectType=DataContainerType::DATA_CONTAINER;
         mCurrentContainer = nullptr;
 
         this->setModel(mDataTableModel);
@@ -38,10 +38,9 @@ namespace hal
         if(gate == nullptr){
             return;
         }
-        mCurrentObjectType = DataContainerType::GATE;
-        mCurrentObjectId = gate->get_id();
         mCurrentContainer = dynamic_cast<DataContainer*>(gate);
         mDataTableModel->updateData(gate->get_data_map());
+        mCurrentObject = UserActionObject(gate->get_id(), UserActionObjectType::Gate);
         clearSelection();
         adjustTableSizes();
     }
@@ -51,10 +50,9 @@ namespace hal
         if(net == nullptr){
             return;
         }
-        mCurrentObjectType = DataContainerType::NET;
-        mCurrentObjectId = net->get_id();
         mCurrentContainer = dynamic_cast<DataContainer*>(net);
         mDataTableModel->updateData(net->get_data_map());
+        mCurrentObject = UserActionObject(net->get_id(), UserActionObjectType::Net);
         clearSelection();
         adjustTableSizes();
     }
@@ -64,10 +62,9 @@ namespace hal
         if(module == nullptr){
             return;
         }
-        mCurrentObjectType = DataContainerType::MODULE;
-        mCurrentObjectId = module->get_id();
         mDataTableModel->updateData(module->get_data_map());
         mCurrentContainer = dynamic_cast<DataContainer*>(module);
+        mCurrentObject = UserActionObject(module->get_id(), UserActionObjectType::Module);
         clearSelection();
         adjustTableSizes();
     }
@@ -83,7 +80,7 @@ namespace hal
     {
         QModelIndex idx = indexAt(pos);
         // A pure data container can't be accessed via python
-        if(!idx.isValid() || mCurrentObjectType==DataContainerType::DATA_CONTAINER){
+        if(!idx.isValid() || mCurrentObject.type() == UserActionObjectType::None){
             return;
         }
 
@@ -101,11 +98,11 @@ namespace hal
         menu.addAction("Change value", [this](){changePropertyRequested(DataTableModel::propertyType::value);});
 
         QString pyCode = "";
-        switch(mCurrentObjectType)
+        switch(mCurrentObject.type())
         {
-            case DataContainerType::GATE: pyCode = PyCodeProvider::pyCodeGateData(mCurrentObjectId, entry.category, entry.key); break;
-            case DataContainerType::NET: pyCode = PyCodeProvider::pyCodeNetData(mCurrentObjectId, entry.category, entry.key); break;
-            case DataContainerType::MODULE: pyCode = PyCodeProvider::pyCodeModuleData(mCurrentObjectId, entry.category, entry.key); break;
+            case UserActionObjectType::Gate: pyCode = PyCodeProvider::pyCodeGateData(mCurrentObject.id(), entry.category, entry.key); break;
+            case UserActionObjectType::Net: pyCode = PyCodeProvider::pyCodeNetData(mCurrentObject.id(), entry.category, entry.key); break;
+            case UserActionObjectType::Module: pyCode = PyCodeProvider::pyCodeModuleData(mCurrentObject.id(), entry.category, entry.key); break;
             default: break;
         }
         menu.addSection("Python");
@@ -142,12 +139,15 @@ namespace hal
         InputDialog ipd("Change " + propertyString[(int)prop], "Choose new value for the " + propertyString[(int)prop] + " field.", entry.getPropertyValueByPropType(prop));
         if(ipd.exec() == QDialog::Accepted)
         {
-            QString values[] = {entry.category, entry.key, entry.dataType, entry.value};
+            QString oldValues[] = {entry.category, entry.key, entry.dataType, entry.value};
+            QString newValues[] = {entry.category, entry.key, entry.dataType, entry.value};
+            newValues[(int)prop] = ipd.textValue();
+            ActionSetObjectData* act = new ActionSetObjectData(newValues[0], newValues[1], newValues[2], newValues[3]);
+            act->setObject(mCurrentObject); //check if not none?
             if(prop == DataTableModel::propertyType::category || prop == DataTableModel::propertyType::key)
-                mCurrentContainer->delete_data(values[0].toStdString(), values[1].toStdString());
+                act->setChangeKeyAndOrCategory(oldValues[0], oldValues[1]);
+            act->exec();
 
-            values[(int)prop] = ipd.textValue();
-            mCurrentContainer->set_data(values[0].toStdString(), values[1].toStdString(), values[2].toStdString(), values[3].toStdString());
             mDataTableModel->updateData(mCurrentContainer->get_data_map());
             clearSelection();
             adjustTableSizes();

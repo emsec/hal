@@ -32,7 +32,7 @@
 #include <QWidget>
 #include <QTableWidget>
 #include "gui/selection_details_widget/data_table_model.h"
-
+#include "gui/user_action/user_action_object.h"
 
 namespace hal
 {
@@ -100,20 +100,10 @@ namespace hal
 
     private:
         void adjustTableSizes();
-
-        enum DataContainerType
-        {
-            GATE,
-            NET,
-            MODULE,
-            DATA_CONTAINER // <- A class that is simply a data container
-        };
-
         void changePropertyRequested(DataTableModel::propertyType prop);
 
         DataTableModel* mDataTableModel;
-        DataContainerType mCurrentObjectType;
-        u32 mCurrentObjectId;
         DataContainer* mCurrentContainer;
+        UserActionObject mCurrentObject;
     };
 } // namespace hal
