@@ -183,6 +183,10 @@ namespace hal
                 log_error("netlist_utils", "target net with ID {} has more than one source.", net->get_id());
                 return BooleanFunction();
             }
+            else if (net->is_global_input_net())
+            {
+                return BooleanFunction::Var("net_" + std::to_string(net->get_id()));
+            }
             else if (net->get_num_of_sources() == 0)
             {
                 log_error("netlist_utils", "target net with ID {} has no sources.", net->get_id());
