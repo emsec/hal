@@ -32,6 +32,11 @@ namespace hal
 
         // manager, netlist_id, and top_module are set in the constructor
 
+        // copy design name, device name, input filename
+        c_netlist->set_design_name(nl->get_design_name());
+        c_netlist->set_device_name(nl->get_device_name());
+        c_netlist->set_input_filename(nl->get_input_filename());
+
         // copy nets
         for (const Net* net : nl->m_nets)
         {
