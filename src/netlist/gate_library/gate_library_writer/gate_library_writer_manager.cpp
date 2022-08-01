@@ -73,7 +73,7 @@ namespace hal
             }
         }
 
-        bool write(GateLibrary* gate_lib, const std::filesystem::path& file_path)
+        bool write(const GateLibrary* gate_lib, const std::filesystem::path& file_path)
         {
             auto factory = get_writer_factory_for_file(file_path);
             if (!factory)
