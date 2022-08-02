@@ -77,17 +77,59 @@ namespace hal
 
     void ActionSetObjectData::writeToXml(QXmlStreamWriter &xmlOut) const
     {
-
+        xmlOut.writeTextElement("category", mCat);
+        xmlOut.writeTextElement("key", mKey);
+        xmlOut.writeTextElement("type", mType);
+        xmlOut.writeTextElement("value", mVal);
+        if(mKeyOrCatModified)
+        {
+            xmlOut.writeTextElement("oldCategory", mOldCat);
+            xmlOut.writeTextElement("oldKey", mOldKey);
+        }
     }
 
     void ActionSetObjectData::readFromXml(QXmlStreamReader &xmlIn)
     {
-
+        while(xmlIn.readNextStartElement())
+        {
+            if(xmlIn.name() == "category")
+                mCat = xmlIn.readElementText();
+            else if(xmlIn.name() == "key")
+                mKey = xmlIn.readElementText();
+            else if(xmlIn.name() == "type")
+                mType = xmlIn.readElementText();
+            else if(xmlIn.name() == "value")
+                mVal = xmlIn.readElementText();
+            else if(xmlIn.name() == "oldCategory")
+            {
+                mKeyOrCatModified = true;
+                mOldCat = xmlIn.readElementText();
+            }
+            else if(xmlIn.name() == "oldKey")
+            {
+                mKeyOrCatModified = true;
+                mOldKey = xmlIn.readElementText();
+            }
+        }
     }
 
     void ActionSetObjectData::addToHash(QCryptographicHash &cryptoHash) const
     {
-
+        cryptoHash.addData("cat", 3);
+        cryptoHash.addData(mCat.toUtf8());
+        cryptoHash.addData("key", 3);
+        cryptoHash.addData(mKey.toUtf8());
+        cryptoHash.addData("type", 4);
+        cryptoHash.addData(mType.toUtf8());
+        cryptoHash.addData("val", 3);
+        cryptoHash.addData(mVal.toUtf8());
+        if(mKeyOrCatModified)
+        {
+            cryptoHash.addData("oldCat", 6);
+            cryptoHash.addData(mOldCat.toUtf8());
+            cryptoHash.addData("oldKey", 6);
+            cryptoHash.addData(mOldKey.toUtf8());
+        }
     }
 
     void ActionSetObjectData::setChangeKeyAndOrCategory(QString oldCategory, QString oldKey)
