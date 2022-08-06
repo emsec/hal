@@ -457,7 +457,7 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
                 for (int i = 0; i < db->mCount; i++) 
                 {
                     uint64_t t = db->mTimeArray[i];
-                    // is there a time within tolerance range?
+                    // is there a timestamp within tolerance range?
                     int twt = time_within_tolerance(time_vec, t, tolerance);
                     if (twt >= 0)
                     {
@@ -681,7 +681,15 @@ int main(int argc, const char* argv[])
         {
             unknown_option_exists = ((opt != "diff") && (opt != diff_path)) ? true : unknown_option_exists;
         }
-
+        int tolerance = 0;
+        if (args.is_option_set("--max-tolerance"))
+        {
+            tolerance = std::stoi(args.get_parameter("--max-tolerance"));
+            if (tolerance < 0)
+            {
+                unknown_option_exists = true;
+            }
+        }
         if (diff_path == "")
         {
             std::cout << tool_options.get_options_string();
@@ -695,11 +703,7 @@ int main(int argc, const char* argv[])
         }
         else
         {
-            int tolerance = 0;
-            if (args.is_option_set("--max-tolerance"))
-            {
-                tolerance = std::stoi(args.get_parameter("--max-tolerance"));
-            }
+
             saleae_diff(args.get_parameter("--dir"), diff_path, args.get_parameter("--id"), args.is_option_set("--only-differences"), tolerance);
         }
     }
