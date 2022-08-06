@@ -463,7 +463,7 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
                     {
                         net_data[twt].val_2 = db->mValueArray[i];
                         net_data[twt].val_2_avail = true;
-                        net_data[twt].diff = (abs(net_data[twt].val_1 - net_data[twt].val_2)) > 0; // 0 wird durch tolarance getauscht OLD CODE
+                        net_data[twt].diff = (net_data[twt].val_1 != net_data[twt].val_2);
                         diff_cnt = net_data[twt].diff ? diff_cnt : diff_cnt - 1;
                         // update format len
                         cur_net.format_length[3] = (cur_net.format_length[3] < std::to_string(net_data[twt].val_2).length()) ? std::to_string(net_data[twt].val_2).length() : cur_net.format_length[3];
