@@ -93,7 +93,7 @@ std::unordered_set<int> parse_list_of_ids(std::string list_of_ids)
     return id_set;
 }
 
-uint64_t time_within_tolerance(const std::vector<uint64_t>& time_vec, int cur_time, int tolerance) {
+int time_within_tolerance(const std::vector<uint64_t>& time_vec, int cur_time, int tolerance) {
 
     // find closest time
     int closest_time;
@@ -123,8 +123,8 @@ uint64_t time_within_tolerance(const std::vector<uint64_t>& time_vec, int cur_ti
         suitable_time = closest_time;
         std::cout << "DEBUG - time in tolerance: " << suitable_time << std::endl;
     } else {
-        suitable_time = cur_time;
-        std::cout << "DEBUG - no time in tolerance: " << suitable_time << std::endl;
+        suitable_time = -1;
+        std::cout << "DEBUG - no time in tolerance" << std::endl;
     }
 
     return suitable_time;
@@ -330,7 +330,7 @@ void saleae_cat(std::string path, std::string file_name, bool dump_header, bool 
 
 
 // saleae diff-tool
-void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool only_diff)
+void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool only_diff, int tolerance)
 {
     // handle --dir option
     std::string path_1_json = (path_1 == "") ? "./saleae.json" : path_1 + "/saleae.json";
@@ -456,14 +456,16 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
                 for (int i = 0; i < db->mCount; i++) 
                 {
                     uint64_t t = db->mTimeArray[i];
-                    if (net_data.count(t) > 0)
+                    // is there a time within tolerance range?
+                    int twt = time_within_tolerance(time_vec, t, tolerance);
+                    if (twt >= 0)
                     {
-                        net_data[t].val_2 = db->mValueArray[i];
-                        net_data[t].val_2_avail = true;
-                        net_data[t].diff = (abs(net_data[t].val_1 - net_data[t].val_2)) > 0; // 0 wird durch tolarance getauscht
-                        diff_cnt = net_data[t].diff ? diff_cnt : diff_cnt - 1;
+                        net_data[twt].val_2 = db->mValueArray[i];
+                        net_data[twt].val_2_avail = true;
+                        net_data[twt].diff = (abs(net_data[twt].val_1 - net_data[twt].val_2)) > 0; // 0 wird durch tolarance getauscht OLD CODE
+                        diff_cnt = net_data[twt].diff ? diff_cnt : diff_cnt - 1;
                         // update format len
-                        cur_net.format_length[3] = (cur_net.format_length[3] < std::to_string(net_data[t].val_2).length()) ? std::to_string(net_data[t].val_2).length() : cur_net.format_length[3];
+                        cur_net.format_length[3] = (cur_net.format_length[3] < std::to_string(net_data[twt].val_2).length()) ? std::to_string(net_data[twt].val_2).length() : cur_net.format_length[3];
                     }
                     else
                     {
@@ -692,9 +694,13 @@ int main(int argc, const char* argv[])
         }
         else
         {
-            //saleae_diff(args.get_parameter("--dir"), diff_path, args.get_parameter("--id"), args.is_option_set("--only-differences"));
-            std::vector<uint64_t> time_vec = {100, 500, 1000, 1159, 1200, 1300, 1400};
-            time_within_tolerance(time_vec, 1100, 100);
+            int tolerance = 0;
+            if (args.is_option_set("--max-tolerance")) {
+                tolerance = std::stoi(args.get_parameter("--max-tolerance"));
+            }
+            saleae_diff(args.get_parameter("--dir"), diff_path, args.get_parameter("--id"), args.is_option_set("--only-differences"), tolerance);
+            //std::vector<uint64_t> time_vec = {100, 500, 1000, 1159, 1200, 1300, 1400};
+            //time_within_tolerance(time_vec, 1100, 100);
         }
     }
     else
