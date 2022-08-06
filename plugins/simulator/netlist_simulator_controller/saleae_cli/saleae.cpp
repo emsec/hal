@@ -93,8 +93,8 @@ std::unordered_set<int> parse_list_of_ids(std::string list_of_ids)
     return id_set;
 }
 
-int time_within_tolerance(const std::vector<uint64_t>& time_vec, int cur_time, int tolerance) {
-
+int time_within_tolerance(const std::vector<uint64_t>& time_vec, int cur_time, int tolerance)
+{
     // find closest time
     int closest_time;
     auto i = std::lower_bound(
@@ -103,28 +103,29 @@ int time_within_tolerance(const std::vector<uint64_t>& time_vec, int cur_time, i
         cur_time
     );
 
-    if (i == time_vec.begin()) {
+    if (i == time_vec.begin())
+    {
         closest_time = cur_time;
-    } else {
+    }
+    else
+    {
         int s_time = *(i - 1); // smaller time
         int g_time = *(i); // greater time
-
-        if (abs(cur_time - s_time) <= abs(cur_time - g_time)) {
+        if (abs(cur_time - s_time) <= abs(cur_time - g_time))
+        {
             closest_time = time_vec[i - time_vec.begin() - 1];
-        } else {
-
+        }
+        else
+        {
             closest_time = time_vec[i - time_vec.begin()];
         }
     }
-    std::cout << "DEBUG - closest time: " << closest_time << std::endl;
 
-    int suitable_time;
-    if (abs(cur_time - closest_time) <= tolerance) {
+    // is closest time in tolerance range
+    int suitable_time = -1;
+    if (abs(cur_time - closest_time) <= tolerance)
+    {
         suitable_time = closest_time;
-        std::cout << "DEBUG - time in tolerance: " << suitable_time << std::endl;
-    } else {
-        suitable_time = -1;
-        std::cout << "DEBUG - no time in tolerance" << std::endl;
     }
 
     return suitable_time;
@@ -587,7 +588,7 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
 
 int main(int argc, const char* argv[])
 {
-
+    std::cout << std::endl;
     // initialize logging
     LogManager& lm = LogManager::get_instance();
     lm.add_channel("core", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
@@ -699,8 +700,6 @@ int main(int argc, const char* argv[])
                 tolerance = std::stoi(args.get_parameter("--max-tolerance"));
             }
             saleae_diff(args.get_parameter("--dir"), diff_path, args.get_parameter("--id"), args.is_option_set("--only-differences"), tolerance);
-            //std::vector<uint64_t> time_vec = {100, 500, 1000, 1159, 1200, 1300, 1400};
-            //time_within_tolerance(time_vec, 1100, 100);
         }
     }
     else
