@@ -696,7 +696,8 @@ int main(int argc, const char* argv[])
         else
         {
             int tolerance = 0;
-            if (args.is_option_set("--max-tolerance")) {
+            if (args.is_option_set("--max-tolerance"))
+            {
                 tolerance = std::stoi(args.get_parameter("--max-tolerance"));
             }
             saleae_diff(args.get_parameter("--dir"), diff_path, args.get_parameter("--id"), args.is_option_set("--only-differences"), tolerance);
