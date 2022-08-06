@@ -93,6 +93,43 @@ std::unordered_set<int> parse_list_of_ids(std::string list_of_ids)
     return id_set;
 }
 
+uint64_t time_within_tolerance(const std::vector<uint64_t>& time_vec, int cur_time, int tolerance) {
+
+    // find closest time
+    int closest_time;
+    auto i = std::lower_bound(
+        time_vec.begin(),
+        time_vec.end(),
+        cur_time
+    );
+
+    if (i == time_vec.begin()) {
+        closest_time = cur_time;
+    } else {
+        int s_time = *(i - 1); // smaller time
+        int g_time = *(i); // greater time
+
+        if (abs(cur_time - s_time) <= abs(cur_time - g_time)) {
+            closest_time = time_vec[i - time_vec.begin() - 1];
+        } else {
+
+            closest_time = time_vec[i - time_vec.begin()];
+        }
+    }
+    std::cout << "DEBUG - closest time: " << closest_time << std::endl;
+
+    int suitable_time;
+    if (abs(cur_time - closest_time) <= tolerance) {
+        suitable_time = closest_time;
+        std::cout << "DEBUG - time in tolerance: " << suitable_time << std::endl;
+    } else {
+        suitable_time = cur_time;
+        std::cout << "DEBUG - no time in tolerance: " << suitable_time << std::endl;
+    }
+
+    return suitable_time;
+}
+
 
 // saleae ls-tool
 void saleae_ls(std::string path, std::string size, std::string ids)
@@ -380,6 +417,7 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
             // compare data
             int diff_cnt = 0;
             std::map<uint64_t, row_t> net_data; // key=time, value=row struct
+            std::vector<uint64_t> time_vec;
             for (const SaleaeDirectoryFileIndex& sdfi : sdne_1.indexes())
             {
                 std::string bin_path = path_1 + "/digital_" + std::to_string(sdfi.index()) + ".bin";
@@ -390,9 +428,11 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
                 }
                 SaleaeInputFile *sf = new SaleaeInputFile(bin_path);
                 SaleaeDataBuffer *db = sf->get_buffered_data(sf->header()->mNumTransitions);
+                // save first net_data times in map
                 for (int i = 0; i < db->mCount; i++)
                 {
                     uint64_t t = db->mTimeArray[i];
+                    time_vec.push_back(t);
                     net_data[t] = row_t{.val_1 = db->mValueArray[i], .val_1_avail = true, .val_2_avail = false, .diff = true};
                     diff_cnt++;
                     // update format len
@@ -412,7 +452,8 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
                 SaleaeInputFile *sf = new SaleaeInputFile(bin_path);
                 SaleaeDataBuffer *db = sf->get_buffered_data(sf->header()->mNumTransitions);
 
-                for (int i = 0; i < db->mCount; i++)
+                // save second net_data times in map
+                for (int i = 0; i < db->mCount; i++) 
                 {
                     uint64_t t = db->mTimeArray[i];
                     if (net_data.count(t) > 0)
@@ -651,7 +692,9 @@ int main(int argc, const char* argv[])
         }
         else
         {
-            saleae_diff(args.get_parameter("--dir"), diff_path, args.get_parameter("--id"), args.is_option_set("--only-differences"));
+            //saleae_diff(args.get_parameter("--dir"), diff_path, args.get_parameter("--id"), args.is_option_set("--only-differences"));
+            std::vector<uint64_t> time_vec = {100, 500, 1000, 1159, 1200, 1300, 1400};
+            time_within_tolerance(time_vec, 1100, 100);
         }
     }
     else
