@@ -234,7 +234,6 @@ namespace hal
         clearLayoutData();
 
         createBoxes();
-        qDebug() << "createBoxes done" << mBoxes.size() << mContext->id() << hex << (qintptr) mContext;
         if (mOptimizeNetLayout)
         {
             alternateLayout();

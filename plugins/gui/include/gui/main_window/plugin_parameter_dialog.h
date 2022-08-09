@@ -23,64 +23,57 @@
 
 #pragma once
 
-#include <QFrame>
-#include <QProgressBar>
-#include <QLabel>
-#include <QPushButton>
-#include <QImage>
-#include <QTimer>
+#include <QDialog>
+#include "hal_core/plugin_system/plugin_parameter.h"
+#include <QMap>
+#include <QList>
+
+class QFormLayout;
+class QDialogButtonBox;
+class QPushButton;
+class QLineEdit;
 
 namespace hal {
 
-    class GraphContext;
+    class BasePluginInterface;
 
-    class AbstractBusyIndicator : public QFrame
-    {
-        Q_OBJECT
-    public:
-        AbstractBusyIndicator(QWidget* parent = nullptr) : QFrame(parent) {;}
-        virtual void setValue(int percent) = 0;
-        virtual void setText(const QString& txt) = 0;
-    };
-
-    class ProgressBar : public AbstractBusyIndicator
+    class PluginParameterFileDialog : public QWidget
     {
         Q_OBJECT
 
-        QProgressBar* mProgressBar;
-        QLabel*       mLabel;
-        QPushButton*  mButAbort;
+        PluginParameter mParameter;
+        QPushButton* mButton;
+        QLineEdit* mEditor;
+    private Q_SLOTS:
+        void handleActivateFileDialog();
 
     public:
-        ProgressBar(GraphContext* context, QWidget* parent = nullptr);
-        void setValue(int percent) override;
-        void setText(const QString& txt) override;
+        PluginParameterFileDialog(const PluginParameter& par, QWidget* parent = nullptr);
+        QString getFilename() const;
     };
 
-    class BusyAnimation : public QWidget
+    class PluginParameterDialog : public QDialog
     {
         Q_OBJECT
-        QImage mImage;
-        double mAngle;
+
+        BasePluginInterface* mPluginInterface;
+        QList<PluginParameter> mParameterList;
+        QMap<QString,QWidget*> mWidgetMap;
+
+        QMap<QString,QString> mTabNames;
+
+    private:
+        void setupHash();
+        void setupForm(QFormLayout* form, const QString& tabTag = QString());
+        QDialogButtonBox* setupButtonBox();
+
+    private Q_SLOTS:
+        void handlePushbuttonClicked();
+
     public Q_SLOTS:
-        void handleTimeout();
-    protected:
-        void paintEvent(QPaintEvent* event) override;
-    public:
-        BusyAnimation(QWidget* parent = nullptr);
-    };
+        void accept() override;
 
-    class BusyIndicator : public AbstractBusyIndicator
-    {
-        BusyAnimation* mAnimation;
-        QTimer* mTimer;
-        QLabel* mLabel;
-        QProgressBar* mProgressBar;
     public:
-        BusyIndicator(QWidget* parent = nullptr);
-        ~BusyIndicator();
-        void setValue(int percent) override;
-        void setText(const QString& txt) override;
+        PluginParameterDialog(BasePluginInterface* bpif, QWidget* parent = nullptr);
     };
 }
-

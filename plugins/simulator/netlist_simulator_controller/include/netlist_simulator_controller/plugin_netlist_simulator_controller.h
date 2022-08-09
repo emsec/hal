@@ -103,6 +103,20 @@ namespace hal
          */
         std::shared_ptr<NetlistSimulatorController> simulator_controller_by_id(u32 id) const;
 
+
+        /**
+         * Get list of configurable parameter
+         *
+         * @returns  list of parameter
+         */
+        std::vector<PluginParameter> get_parameter() const override;
+
+        /**
+         * Set configurable parameter to values
+         * @param params The parameter with values
+         */
+        void set_parameter(Netlist *nl, const std::vector<PluginParameter>& params) override;
+
         /**
          * Pointer to simulation controller settings. Use sync() to persist settings.
          */

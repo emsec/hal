@@ -23,64 +23,18 @@
 
 #pragma once
 
-#include <QFrame>
-#include <QProgressBar>
+#include <QTableWidget>
 #include <QLabel>
-#include <QPushButton>
-#include <QImage>
-#include <QTimer>
+#include <string>
 
 namespace hal {
-
-    class GraphContext;
-
-    class AbstractBusyIndicator : public QFrame
+    class KeyValueTable : public QWidget
     {
         Q_OBJECT
+        QTableWidget* mTable;
     public:
-        AbstractBusyIndicator(QWidget* parent = nullptr) : QFrame(parent) {;}
-        virtual void setValue(int percent) = 0;
-        virtual void setText(const QString& txt) = 0;
-    };
-
-    class ProgressBar : public AbstractBusyIndicator
-    {
-        Q_OBJECT
-
-        QProgressBar* mProgressBar;
-        QLabel*       mLabel;
-        QPushButton*  mButAbort;
-
-    public:
-        ProgressBar(GraphContext* context, QWidget* parent = nullptr);
-        void setValue(int percent) override;
-        void setText(const QString& txt) override;
-    };
-
-    class BusyAnimation : public QWidget
-    {
-        Q_OBJECT
-        QImage mImage;
-        double mAngle;
-    public Q_SLOTS:
-        void handleTimeout();
-    protected:
-        void paintEvent(QPaintEvent* event) override;
-    public:
-        BusyAnimation(QWidget* parent = nullptr);
-    };
-
-    class BusyIndicator : public AbstractBusyIndicator
-    {
-        BusyAnimation* mAnimation;
-        QTimer* mTimer;
-        QLabel* mLabel;
-        QProgressBar* mProgressBar;
-    public:
-        BusyIndicator(QWidget* parent = nullptr);
-        ~BusyIndicator();
-        void setValue(int percent) override;
-        void setText(const QString& txt) override;
+        KeyValueTable(const QString& labl, QWidget* parent = nullptr);
+        void setJson(const std::string& jsonTxt);
+        std::string toJson() const;
     };
 }
-

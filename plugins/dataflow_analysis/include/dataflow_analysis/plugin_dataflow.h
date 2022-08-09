@@ -64,5 +64,26 @@ namespace hal
         bool handle_cli_call(Netlist* nl, ProgramArguments& args) override;
 
         std::vector<std::vector<Gate*>> execute(Netlist* nl, std::string path, const std::vector<u32> sizes, bool draw_graph, std::vector<std::vector<u32>> known_groups = {}, u32 bad_group_size = 7);
+
+        /**
+         * Get list of configurable parameter
+         *
+         * @returns  list of parameter
+         */
+        std::vector<PluginParameter> get_parameter() const override;
+
+        /**
+         * Set configurable parameter to values
+         * @param params The parameter with values
+         */
+        void set_parameter(Netlist* nl, const std::vector<PluginParameter>& params) override;
+
+        /**
+         * Register function to indicate work progress when busy
+         * @param pif Progress Indicator Function to register
+         */
+        virtual void register_progress_indicator(std::function<void(int,const std::string&)> pif) override;
+
+        static std::function<void(int,const std::string&)> s_progress_indicator_function;
     };
 }    // namespace hal

@@ -7,10 +7,12 @@
 #include "gui/file_manager/file_manager.h"
 #include "gui/file_manager/project_dir_dialog.h"
 #include "gui/gatelibrary_management/gatelibrary_management_dialog.h"
+#include "gui/graph_widget/graph_widget.h"
 #include "gui/gui_def.h"
 #include "gui/gui_globals.h"
 #include "gui/logger/logger_widget.h"
 #include "gui/main_window/about_dialog.h"
+#include "gui/main_window/plugin_parameter_dialog.h"
 #include "gui/python/python_editor.h"
 #include "gui/settings/settings_items/settings_item_checkbox.h"
 #include "gui/settings/settings_items/settings_item_dropdown.h"
@@ -30,6 +32,7 @@
 #include "hal_core/netlist/event_system/event_log.h"
 #include "hal_core/netlist/project_manager.h"
 #include "hal_core/utilities/project_directory.h"
+#include "hal_core/plugin_system/plugin_manager.h"
 
 #include <QApplication>
 #include <QCloseEvent>
@@ -173,11 +176,13 @@ namespace hal
         mMenuFile  = new QMenu(mMenuBar);
         mMenuEdit  = new QMenu(mMenuBar);
         mMenuMacro = new QMenu(mMenuBar);
+        mMenuPlugin = new QMenu(mMenuBar);
         mMenuHelp  = new QMenu(mMenuBar);
 
         mMenuBar->addAction(mMenuFile->menuAction());
         mMenuBar->addAction(mMenuEdit->menuAction());
         mMenuBar->addAction(mMenuMacro->menuAction());
+        mMenuBar->addAction(mMenuPlugin->menuAction());
         mMenuBar->addAction(mMenuHelp->menuAction());
         mMenuFile->addAction(mActionNew);
         mMenuFile->addAction(mActionOpenProject);
@@ -244,6 +249,7 @@ namespace hal
         mActionStopRecording->setEnabled(false);
         mActionPlayMacro->setEnabled(true);
 
+        pluginMenu();
         setWindowTitle("HAL");
         mActionNew->setText("New Netlist");
         mActionOpenProject->setText("Open Project");
@@ -258,6 +264,7 @@ namespace hal
         mMenuFile->setTitle("File");
         mMenuEdit->setTitle("Edit");
         mMenuMacro->setTitle("Macro");
+        mMenuPlugin->setTitle("Plugins");
         mMenuHelp->setTitle("Help");
 
         gPythonContext = std::make_unique<PythonContext>();
@@ -535,6 +542,40 @@ namespace hal
             mStackedWidget->setCurrentWidget(mLayoutArea);
         else
             mStackedWidget->setCurrentWidget(mWelcomeScreen);
+    }
+
+    void MainWindow::setPluginParameter()
+    {
+        QAction* act = static_cast<QAction*>(sender());
+        if (!act) return;
+        BasePluginInterface* bpif = static_cast<BasePluginInterface*>(act->data().value<void*>());
+        if (!bpif) return;
+        PluginParameterDialog ppd(bpif,this);
+        ppd.exec();
+    }
+
+    void MainWindow::pluginMenu()
+    {
+        QMap<QString,void*> plugins[2];   // 0 = configurable  1 = only listed
+        for (const std::string& pluginName : plugin_manager::get_plugin_names())
+        {
+            BasePluginInterface* bpif = plugin_manager::get_plugin_instance(pluginName);
+            if (!bpif) continue;
+            plugins[bpif->get_parameter().empty()?1:0].insert(QString::fromStdString(pluginName),bpif);
+        }
+
+        for (auto it = plugins[0].constBegin(); it != plugins[0].constEnd(); ++it)
+        {
+            QAction* act = mMenuPlugin->addAction(it.key());
+            act->setData(QVariant::fromValue<void*>(it.value()));
+            connect(act,&QAction::triggered,this,&MainWindow::setPluginParameter);
+        }
+        mMenuPlugin->addSeparator();
+        for (auto it = plugins[1].constBegin(); it != plugins[1].constEnd(); ++it)
+        {
+            QAction* act = mMenuPlugin->addAction(it.key());
+            act->setDisabled(true);
+        }
     }
 
     void MainWindow::handleActionNew()

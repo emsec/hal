@@ -10,28 +10,17 @@
 #include <QLineEdit>
 #include <QCheckBox>
 #include "netlist_simulator_controller/simulation_settings.h"
+#include "gui/main_window/color_selection.h"
 
 namespace hal {
 
     class SimulationSettings;
 
-    class SimulationSettingColorButton : public QPushButton
-    {
-        Q_OBJECT
-    public:
-        QString mColorName;
-        bool mBullet;
-        SimulationSettingColorButton(const QString& col, bool bullet, QWidget* parent = nullptr);
-        void paintEvent(QPaintEvent* evt) override;
-    };
-
     class SimulationSettingColorTab : public QWidget
     {
         Q_OBJECT
-        SimulationSettingColorButton* mActivateColorDialog[SimulationSettings::MaxColorSetting];
+        ColorSelection* mActivateColorDialog[SimulationSettings::MaxColorSetting];
 
-    private Q_SLOTS:
-        void activateColorDialog();
     public:
         SimulationSettingColorTab(SimulationSettings* settings, QWidget* parent = nullptr);
         QString colorSetting(int inx) const;

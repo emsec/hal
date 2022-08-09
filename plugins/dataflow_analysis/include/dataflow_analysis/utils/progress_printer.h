@@ -24,6 +24,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "dataflow_analysis/plugin_dataflow.h"
 
 #include <iostream>
 #include <sstream>
@@ -84,7 +85,10 @@ namespace hal
                     print_message = print_message.substr(0, m_max_message_size - 3) + "...";
                 }
                 str << "] ";
+
                 u32 int_progress = (u32)(progress * 100.0f);
+                if (plugin_dataflow::s_progress_indicator_function)
+                    plugin_dataflow::s_progress_indicator_function(int_progress<100 ? int_progress : 99, "dataflow analysis running ...");
                 if (int_progress < 10)
                 {
                     str << " ";
