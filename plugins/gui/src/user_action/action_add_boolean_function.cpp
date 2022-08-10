@@ -64,6 +64,7 @@ namespace hal
 
     void ActionAddBooleanFunction::addToHash(QCryptographicHash &cryptoHash) const
     {
+        cryptoHash.addData(mName.toUtf8());
         cryptoHash.addData(QString::fromStdString(mFunction.to_string()).toUtf8());
     }
 
