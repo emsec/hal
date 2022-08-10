@@ -5,7 +5,6 @@
 #include <QtWidgets/QMenu>
 #include <QApplication>
 #include <QClipboard>
-#include <QDebug>
 #include "gui/user_action/action_add_boolean_function.h"
 #include "gui/input_dialog/input_dialog.h"
 
@@ -91,8 +90,6 @@ namespace hal {
                             ActionAddBooleanFunction* act = new ActionAddBooleanFunction(entryIdentifier, funcRes.get(), mCurrentGateId);
                             act->exec();
                         }
-                        else
-                            qDebug() << "result was not ok :(";
                     }
             });
         }

@@ -7,6 +7,7 @@
 #include "gui/gui_globals.h"
 #include "gui/validator/hexadecimal_validator.h"
 #include "gui/input_dialog/input_dialog.h"
+#include "gui/user_action/action_set_object_data.h"
 #include "gui/python/py_code_provider.h"
 
 #include "hal_core/netlist/gate.h"
@@ -245,8 +246,11 @@ namespace hal
             {
                 if(InitComponent* init_component = mCurrentGate->get_type()->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); }); init_component != nullptr)
                 {
-                    std::string cat = init_component->get_init_category(), key = init_component->get_init_identifiers()[0], data_type = "bit_vector";
-                    mCurrentGate->set_data(cat, key, data_type,ipd.textValue().toUpper().toStdString());
+                    std::string cat = init_component->get_init_category(), key = init_component->get_init_identifiers()[0];
+                    QString data_type = "bit_vector";
+                    ActionSetObjectData* act = new ActionSetObjectData(QString::fromStdString(cat), QString::fromStdString(key), data_type, ipd.textValue().toUpper());
+                    act->setObject(UserActionObject(mCurrentGate->get_id(), UserActionObjectType::Gate));
+                    act->exec();
                     setGate(mCurrentGate);//must update config string and data table, no signal for that
                 }
                 else
@@ -254,7 +258,13 @@ namespace hal
             }
         });
         menu.addAction(QIcon(":/icons/python"), "Get configuration string", [this](){
-            QApplication::clipboard()->setText(PyCodeProvider::pyCodeGateData(mCurrentGate->get_id(), "generic", "INIT"));
+            if(InitComponent* init_component = mCurrentGate->get_type()->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); }); init_component != nullptr)
+            {
+                std::string cat = init_component->get_init_category(), key = init_component->get_init_identifiers()[0];
+                QApplication::clipboard()->setText(PyCodeProvider::pyCodeGateData(mCurrentGate->get_id(), QString::fromStdString(cat), QString::fromStdString(key)));
+            }
+            else
+                log_error("gui", "Could not load InitComponent from gate with id {}.", mCurrentGate->get_id());
         });
 
         menu.exec(mLutConfigLabel->mapToGlobal(pos));

@@ -33,6 +33,7 @@ namespace hal
 
         mIdEntryContextMenu = new QMenu();
         mIdEntryContextMenu->addAction("ID to clipboard", std::bind(&GateInfoTable::copyId, this));
+        mIdEntryContextMenu->addSection("Misc");
         mIdEntryContextMenu->addAction(QIcon(":/icons/python"), "Get ID", std::bind(&GateInfoTable::pyCopyId, this));
 
         mTypeEntryContextMenu = new QMenu();

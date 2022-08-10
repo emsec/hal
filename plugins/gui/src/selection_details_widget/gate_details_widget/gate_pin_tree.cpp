@@ -8,7 +8,6 @@
 #include <QMenu>
 #include "gui/python/py_code_provider.h"
 #include "gui/graph_widget/graph_navigation_widget.h"
-#include <QDebug>
 #include <QMouseEvent>
 
 namespace hal

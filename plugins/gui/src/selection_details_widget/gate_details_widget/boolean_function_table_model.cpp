@@ -1,4 +1,3 @@
-
 #include <gui/include/gui/selection_details_widget/gate_details_widget/boolean_function_table_model.h>
 
 #include "gui/selection_details_widget/gate_details_widget/lut_table_model.h"
@@ -294,7 +293,7 @@ namespace hal {
 
     QString LatchComponentEntry::enumToString()
     {
-        const QString types[] = {"enable", "data_in_func", "async_set", "async_reset", "set_reset_behav"};
+        const QString types[] = {"Enable", "Data in bf", "Asynchronous set", "Asynchronous Reset", "Set reset behavior"};
         return types[mSpecificType];
     }
 

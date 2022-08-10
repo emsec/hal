@@ -67,7 +67,7 @@ namespace hal
         mNumOfAllGatesContextMenu->addAction(mPyIcon, "Get all gates recursively", std::bind(&ModuleInfoTable::pyCopyAllGates, this));
 
         mNumOfDirectGatesContextMenu = new QMenu();
-        mNumOfDirectGatesContextMenu->addAction("Number of direct member gates", std::bind(&ModuleInfoTable::copyNumberOfDirectGates,this));
+        mNumOfDirectGatesContextMenu->addAction("Number of gates to clipboard", std::bind(&ModuleInfoTable::copyNumberOfDirectGates,this));
         mNumOfDirectGatesContextMenu->addAction(mPyIcon, "Get direct member gates", std::bind(&ModuleInfoTable::pyCopyDirectMemberGates, this));
 
         mNumOfGatesInSubmodulesContextMenu = new QMenu();
