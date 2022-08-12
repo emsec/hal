@@ -28,6 +28,7 @@
 #include <QFrame>
 #include <QHash>
 #include <QStringList>
+#include <QTabWidget>
 #include "hal_core/defines.h"
 
 #include "hal_core/netlist/net.h"
@@ -202,11 +203,6 @@ namespace hal {
         SelectionRelay::Subfocus direction() const { return mDirection; }
 
         /**
-         * Closes the navigation widget.
-         */
-        void closeRequest();
-
-        /**
          * Checks if the navigation widget is empty. It is considered empty if neither the GraphNavigationTableWidget nor
          * the GraphNavigationTreeWidget contain data to show.
          *
@@ -257,6 +253,12 @@ namespace hal {
          */
         void resetFocus();
 
+    public Q_SLOTS:
+        /**
+         * Closes the navigation widget.
+         */
+        void closeRequest();
+
     private Q_SLOTS:
         void handleNavigateSelected(int irow, int icol);
         void handleAddToViewSelected(QTreeWidgetItem* item, int icol);
@@ -267,8 +269,9 @@ namespace hal {
 
     private:
         bool mOnlyNavigate;
-        QFrame*       mNavigateFrame;
-        QFrame*       mAddToViewFrame;
+        QTabWidget*   mTabs;
+//        QFrame*       mNavigateFrame;
+//        QFrame*       mAddToViewFrame;
         GraphNavigationTableWidget* mNavigateWidget;
         GraphNavigationTreeWidget*  mAddToViewWidget;
 
