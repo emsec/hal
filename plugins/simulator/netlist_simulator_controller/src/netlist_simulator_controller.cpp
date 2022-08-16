@@ -41,6 +41,7 @@ namespace hal
     NetlistSimulatorController::NetlistSimulatorController(u32 id, const std::string nam, const std::string &workdir, QObject *parent)
         : QObject(parent), mId(id), mName(QString::fromStdString(nam)), mState(NoGatesSelected), mSimulationEngine(nullptr),
           mTempDir(nullptr),
+          mWaveDataList(nullptr),
           mSimulationInput(new SimulationInput)
     {
         if (mName.isEmpty()) mName = QString("sim_controller%1").arg(mId);
@@ -76,6 +77,7 @@ namespace hal
     NetlistSimulatorController::NetlistSimulatorController(u32 id, Netlist* nl, const std::string& filename, QObject* parent)
         : QObject(parent), mId(id), mState(NoGatesSelected), mSimulationEngine(nullptr),
           mTempDir(nullptr),
+          mWaveDataList(nullptr),
           mSimulationInput(new SimulationInput)
     {
         FILE* ff = fopen(filename.c_str(), "rb");
@@ -173,7 +175,7 @@ namespace hal
     NetlistSimulatorController::~NetlistSimulatorController()
     {
         NetlistSimulatorControllerMap::instance()->removeController(mId);
-        mWaveDataList->deleteLater();
+        if (mWaveDataList) mWaveDataList->deleteLater();
         delete mSimulationInput;
       //  delete mTempDir;
     }
