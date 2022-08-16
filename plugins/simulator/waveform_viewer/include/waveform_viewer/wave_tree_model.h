@@ -13,6 +13,7 @@ namespace hal {
     class WaveData;
     class WaveDataList;
     class WaveDataGroup;
+    class WaveGraphicsCanvas;
 
     class WaveDataRoot : public WaveDataGroup
     {
@@ -21,6 +22,8 @@ namespace hal {
             : WaveDataGroup(wdList,0,"root") {;}
         void recalcData() override {;}
         bool moveGroupPosition(int sourceRow, int targetRow);
+        void clearAll() { mGroupList.clear(); }
+        void dump() const;
     };
 
     class WaveValueThread : public QThread
@@ -28,7 +31,7 @@ namespace hal {
         Q_OBJECT
         WaveItem* mItem;
         QDir mWorkDir;
-        float mTpos;
+        u64 mTpos;
         int mXpos;
         int mValue;
         bool mAbort;
@@ -37,7 +40,7 @@ namespace hal {
     private Q_SLOTS:
         void handleValueThreadFinished();
     public:
-        WaveValueThread(WaveItem* item, const QString& workdir, float tpos, int xpos, QObject* parent = nullptr);
+        WaveValueThread(WaveItem* item, const QString& workdir, u64 tpos, int xpos, QObject* parent = nullptr);
         void run() override;
         void abort() { mAbort = true; }
         bool wasAborted() const { return mAbort; }
@@ -63,11 +66,12 @@ namespace hal {
     private:
         WaveDataList* mWaveDataList;
         WaveItemHash* mWaveItemHash;
+        WaveGraphicsCanvas* mGraphicsCanvas;
         WaveDataRoot* mRoot;
         QModelIndexList mDragIndexList;
         DragCommand mDragCommand;
         bool mDragIsGroup;
-        double mCursorTime;
+        u64 mCursorTime;
         int mCursorXpos;
         bool mIgnoreSignals;
         int mReorderRequestWaiting;
@@ -98,7 +102,7 @@ namespace hal {
         void handleGroupAdded(int grpId);
         void handleGroupAboutToBeRemoved(WaveDataGroup* grp);
         void handleGroupUpdated(int grpId);
-        void handleCursorMoved(double tCursor, int xpos);
+        void handleCursorMoved(u64 tCursor, int xpos);
         void forwardBeginResetModel();
         void forwardEndResetModel();
         //void handleValueLoaderFinished();
@@ -106,7 +110,7 @@ namespace hal {
         void handleEndValueThread(WaveItem* item);
 
     public:
-        WaveTreeModel(WaveDataList* wdlist, WaveItemHash* wHash, QObject* obj=nullptr);
+        WaveTreeModel(WaveDataList* wdlist, WaveItemHash* wHash, WaveGraphicsCanvas* wgc, QObject* obj=nullptr);
         bool isLeaveItem(const QModelIndex &index) const;
         QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
         QModelIndexList indexes(const WaveData* wd) const;
@@ -143,11 +147,13 @@ namespace hal {
         void addWaves(const QVector<WaveData*>& wds);
         bool onlyRootItemsSelected(const QModelIndexList& selectList) const;
 
-        double cursorTime() const { return mCursorTime; }
+        u64 cursorTime() const { return mCursorTime; }
         int cursorXpos() const { return mCursorXpos; }
 
         QSet<int> waveDataIndexSet() const;
 
         static const char* sStateColor[3];
+        bool persist() const;
+        void restore();
     };
 }

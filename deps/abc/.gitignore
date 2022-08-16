@@ -1,0 +1,4 @@
+abc
+arch_flags
+src/**/*.d
+src/**/**/*.d

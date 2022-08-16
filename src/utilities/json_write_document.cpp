@@ -10,7 +10,8 @@
 #include "rapidjson/writer.h"
 #endif
 
-namespace hal {
+namespace hal
+{
 //--- Data -------
     JsonWriteData::JsonWriteData(const std::string& tag, JsonWriteComplex *parent)
         : mTagname(tag), mParent(parent)
@@ -58,6 +59,16 @@ namespace hal {
         assert(p);
         p->add_member(rapidjson::Value(mTagname, allocator()),
                       rapidjson::Value(u64Value),
+                      allocator());
+        return *this;
+    }
+
+    JsonWriteData& JsonWriteData::operator=(double value)
+    {
+        JsonWriteObject* p = dynamic_cast<JsonWriteObject*>(mParent);
+        assert(p);
+        p->add_member(rapidjson::Value(mTagname, allocator()),
+                      rapidjson::Value(value),
                       allocator());
         return *this;
     }
@@ -238,4 +249,38 @@ namespace hal {
         }
 */
     }
+
+
+    std::unordered_map<std::string,std::string> JsonConverter::stringToDictionary(const std::string& json_string)
+    {
+        std::unordered_map<std::string,std::string> retval;
+        rapidjson::Document doc;
+        doc.Parse(json_string.c_str());
+        if (doc.IsObject())
+        {
+            for (rapidjson::Value::ConstMemberIterator it = doc.GetObject().MemberBegin(); it != doc.GetObject().MemberEnd(); ++it)
+            {
+                retval[it->name.GetString()] = it->value.GetString();
+            }
+        }
+        return retval;
+    }
+
+    std::string JsonConverter::dictionaryToString(const std::unordered_map<std::string,std::string>& key_values)
+    {
+        rapidjson::StringBuffer s;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(s);
+        rapidjson::Document d;
+        d.SetObject();
+        for (auto it = key_values.begin(); it != key_values.end(); ++it)
+        {
+            rapidjson::Value k(it->first, d.GetAllocator());
+            rapidjson::Value v(it->second, d.GetAllocator());
+            d.AddMember(k,v,d.GetAllocator());
+        }
+        d.Accept(writer);
+        return s.GetString();
+    }
+
+
 }

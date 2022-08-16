@@ -132,13 +132,26 @@ namespace hal
             return out;
         }
 
-        Constraint::Constraint(const BooleanFunction& _lhs, const BooleanFunction& _rhs) : lhs(_lhs), rhs(_rhs)
+        Constraint::Constraint(BooleanFunction&& _constraint) : constraint(std::move(_constraint))
+        {
+        }
+
+        Constraint::Constraint(BooleanFunction&& _lhs, BooleanFunction&& _rhs) : constraint(std::make_pair(std::move(_lhs), std::move(_rhs)))
         {
         }
 
         std::ostream& operator<<(std::ostream& out, const Constraint& constraint)
         {
-            out << constraint.lhs << " = " << constraint.rhs;
+            if (constraint.is_assignment())
+            {
+                const auto assignment = constraint.get_assignment().get();
+                out << assignment->first << " = " << assignment->second;
+            }
+            else
+            {
+                out << *constraint.get_function().get();
+            }
+
             return out;
         }
 
@@ -147,6 +160,29 @@ namespace hal
             std::stringstream ss;
             ss << *this;
             return ss.str();
+        }
+
+        bool Constraint::is_assignment() const
+        {
+            return std::get_if<std::pair<BooleanFunction, BooleanFunction>>(&constraint);
+        }
+
+        Result<const std::pair<BooleanFunction, BooleanFunction>*> Constraint::get_assignment() const
+        {
+            if (this->is_assignment())
+            {
+                return OK(&std::get<std::pair<BooleanFunction, BooleanFunction>>(constraint));
+            }
+            return ERR("constraint is not an assignment");
+        }
+
+        Result<const BooleanFunction*> Constraint::get_function() const
+        {
+            if (!this->is_assignment())
+            {
+                return OK(&std::get<BooleanFunction>(constraint));
+            }
+            return ERR("constraint is not a function");
         }
 
         Model::Model(const std::map<std::string, std::tuple<u64, u16>>& _model) : model(_model)

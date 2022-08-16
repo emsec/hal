@@ -2,6 +2,7 @@
 
 #include "gui/file_manager/file_manager.h"
 #include "gui/gui_utils/graphics.h"
+#include "hal_core/utilities/log.h"
 
 #include <QDragEnterEvent>
 #include <QLabel>
@@ -63,7 +64,23 @@ namespace hal
             //            return;
 
             QString file = mime_data->urls().at(0).toLocalFile();
-            FileManager::get_instance()->openFile(file);
+            FileManager::DirectoryStatus stat = FileManager::directoryStatus(file);
+
+            switch (stat)
+            {
+            case FileManager::ProjectDirectory:
+                FileManager::get_instance()->openProject(file);
+                break;
+            case FileManager::OtherDirectory:
+                log_warning("gui", "directory {} is not a hal project.", file.toStdString());
+                break;
+            case FileManager::IsFile:
+                FileManager::get_instance()->importFile(file);
+                break;
+            default:
+                log_warning("gui", "cannot open nor import {}.", file.toStdString());
+                break;
+            }
 
             //        for (int i = 0; i < url_list.size() && i < 32; ++i)
             //        {

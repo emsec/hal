@@ -11,6 +11,8 @@
 #include <QLabel>
 #include <QScrollBar>
 #include <QVBoxLayout>
+#include <QShortcut>
+#include <QDebug>
 
 namespace hal
 {
@@ -134,13 +136,16 @@ namespace hal
                      << "Parent Module";
 
         QGridLayout* layTop = new QGridLayout(this);
-        mNavigateFrame      = new QFrame(this);
-        mNavigateFrame->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-        QVBoxLayout* layNavigateView = new QVBoxLayout(mNavigateFrame);
-        QLabel* labNavigate          = new QLabel("Navigate to …", mNavigateFrame);
-        labNavigate->setFixedHeight(sLabelHeight);
-        layNavigateView->addWidget(labNavigate);
-        mNavigateWidget = new GraphNavigationTableWidget(this, mNavigateFrame);
+        mTabs               = new QTabWidget(this);
+
+//        mNavigateFrame      = new QFrame(this);
+//        mNavigateFrame->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+//        QVBoxLayout* layNavigateView = new QVBoxLayout(mNavigateFrame);
+//        QLabel* labNavigate          = new QLabel("Navigate to …", mNavigateFrame);
+//        labNavigate->setFixedHeight(sLabelHeight);
+//        layNavigateView->addWidget(labNavigate);
+//        mNavigateWidget = new GraphNavigationTableWidget(this, mNavigateFrame);
+        mNavigateWidget = new GraphNavigationTableWidget(this, mTabs);
         mNavigateWidget->setSelectionMode(QAbstractItemView::SingleSelection);
         mNavigateWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
         mNavigateWidget->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
@@ -150,16 +155,18 @@ namespace hal
         mNavigateWidget->setHorizontalHeaderLabels(headerLabels);
         mNavigateWidget->setShowGrid(false);
         connect(mNavigateWidget, &QTableWidget::cellDoubleClicked, this, &GraphNavigationWidget::handleNavigateSelected);
-        layNavigateView->addWidget(mNavigateWidget);
-        layTop->addWidget(mNavigateFrame);
+        mTabs->addTab(mNavigateWidget, "Navigate to …");
+//        layNavigateView->addWidget(mNavigateWidget);
+//        layTop->addWidget(mNavigateFrame);
 
-        mAddToViewFrame = new QFrame(this);
-        mAddToViewFrame->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-        QVBoxLayout* layAddtoView = new QVBoxLayout(mAddToViewFrame);
-        QLabel* labAddToView      = new QLabel("Add to view …", mAddToViewFrame);
-        labAddToView->setFixedHeight(sLabelHeight);
-        layAddtoView->addWidget(labAddToView);
-        mAddToViewWidget = new GraphNavigationTreeWidget(this, mAddToViewFrame);
+//        mAddToViewFrame = new QFrame(this);
+//        mAddToViewFrame->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+//        QVBoxLayout* layAddtoView = new QVBoxLayout(mAddToViewFrame);
+//        QLabel* labAddToView      = new QLabel("Add to view …", mAddToViewFrame);
+//        labAddToView->setFixedHeight(sLabelHeight);
+//        layAddtoView->addWidget(labAddToView);
+//        mAddToViewWidget = new GraphNavigationTreeWidget(this, mAddToViewFrame);
+        mAddToViewWidget = new GraphNavigationTreeWidget(this, mTabs);
         mAddToViewWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
         mAddToViewWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
         mAddToViewWidget->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
@@ -168,9 +175,17 @@ namespace hal
         mAddToViewWidget->setHeaderLabels(headerLabels);
         // mAddToViewWidget->setAllColumnsShowFocus(true);
         connect(mAddToViewWidget, &QTreeWidget::itemDoubleClicked, this, &GraphNavigationWidget::handleAddToViewSelected);
-        layAddtoView->addWidget(mAddToViewWidget);
-        layTop->addWidget(mAddToViewFrame);
+        mTabs->addTab(mAddToViewWidget, "Add to view …");
+        layTop->addWidget(mTabs);
+//        layAddtoView->addWidget(mAddToViewWidget);
+//        layTop->addWidget(mAddToViewFrame);
+
+        QShortcut* tabKey = new QShortcut(QKeySequence(Qt::Key_Tab),this);
+        connect (tabKey,&QShortcut::activated,this,&GraphNavigationWidget::toggleWidget);
+        QShortcut* escKey = new QShortcut(QKeySequence(Qt::Key_Escape),this);
+        connect (escKey,&QShortcut::activated,this,&GraphNavigationWidget::closeRequest);
     }
+
 
     void GraphNavigationWidget::closeRequest()
     {
@@ -386,14 +401,17 @@ namespace hal
     {
         if (!hasBothWidgets())
             return;
-        if (mNavigateWidget->hasFocus())
+//        if (mNavigateWidget->hasFocus())
+        if (!mTabs->currentIndex())
         {
+            mTabs->setCurrentIndex(1);
             mAddToViewWidget->setFocus();
             mAddToViewWidget->setCurrentIndex(mAddToViewWidget->firstIndex());
             mNavigateWidget->clearSelection();
         }
         else
         {
+            mTabs->setCurrentIndex(0);
             mNavigateWidget->setFocus();
             mNavigateWidget->setCurrentCell(0, 0);
             mNavigateWidget->selectRow(0);
@@ -460,13 +478,16 @@ namespace hal
 
         if (mNavigateVisible)
         {
-            mNavigateFrame->show();
+//            mNavigateFrame->show();
+            mTabs->setTabEnabled(0,true);
+            mTabs->setCurrentIndex(0);
             mNavigateWidget->setCurrentCell(0, 0);
             mNavigateWidget->selectRow(0);
             mNavigateWidget->setFocus();
         }
         else
-            mNavigateFrame->hide();
+            mTabs->setTabEnabled(0,false);
+//            mNavigateFrame->hide();
 
         mAddToViewVisible = false;
         if (!mEndpointNotInView.isEmpty() && !mOnlyNavigate)
@@ -480,14 +501,19 @@ namespace hal
 
         if (mAddToViewVisible)
         {
-            mAddToViewFrame->show();
+//            mAddToViewFrame->show();
+            mTabs->setTabEnabled(1,true);
             mAddToViewWidget->expandAll();
             mAddToViewWidget->setCurrentIndex(mAddToViewWidget->firstIndex());
             if (!mNavigateVisible)
+            {
+                mTabs->setCurrentIndex(1);
                 mAddToViewWidget->setFocus();
+            }
         }
         else
-            mAddToViewFrame->hide();
+            mTabs->setTabEnabled(1,false);
+//            mAddToViewFrame->hide();
 
         resizeToFit();
     }

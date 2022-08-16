@@ -33,7 +33,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 * fixed description of flip-flops and latches in all FPGA gate libraries
 
 ## [3.3.0] - 2021-10-13 16:20:00+02:00 (urgency: medium)
-* **WARNING:** this release partially breaks the `GateType` API, please make sure to adjust your code accordingly.
+  * Layouts from all views are saved and restored
+  * Grouping names and colors are saved and restored
+  * Command line option -p to open project added
+  * Command line option -i revised, will now import netlist file
 * added user action system to enable recording and reverting actions within the GUI
   * moved most GUI actions to the new user action system, including interactions with the graph view and view management
   * user actions can be recorded and exported as a macro file allowing easier debugging and crash reporting

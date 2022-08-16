@@ -3,12 +3,43 @@
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
 
+#include <boost/multiprecision/cpp_int.hpp>
+
 namespace hal
 {
     namespace SMT
     {
         namespace Translator
         {
+            /**
+             * Helper function to translate arbitrary-long constant values into 
+             * an decimal string for SMT-LIB v2 translation compatibility.
+             * 
+             * @param[in] number - Boolean function constant node values.
+             * @returns OK() and constant on success, Err() otherwise.
+             */
+            Result<std::string> const2str(const std::vector<BooleanFunction::Value>& number)
+            {
+                boost::multiprecision::cpp_int value = 0;
+
+                for (auto i = 0u; i < number.size(); i++)
+                {
+                    if ((number[i] == BooleanFunction::Value::X) || (number[i] == BooleanFunction::Value::Z))
+                    {
+                        return ERR("Cannot translate the number to a constant value as it is undefined.");
+                    }
+
+                    if (number[i] == BooleanFunction::Value::ONE)
+                    {
+                        boost::multiprecision::bit_set(value, i);
+                    }
+                }
+
+                std::stringstream ss;
+                ss << value;
+                return OK(ss.str());
+            }
+
             /**
              * Helper function to reduce a view into the abstract syntax tree of a node
              * and its parameter leaf nodes to an SMT-LIB string.
@@ -29,10 +60,11 @@ namespace hal
                 switch (node.type)
                 {
                     case BooleanFunction::NodeType::Constant: {
-                        if (auto [ok, str] = utils::translate_to<u64>(node.to_string()); ok)
+                        if (auto str = const2str(node.constant); str.is_ok())
                         {
-                            return OK("(_ bv" + std::to_string(str) + " " + std::to_string(node.size) + ")");
+                            return OK(std::string("(_ bv") + str.get() + " " + std::to_string(node.size) + ")");
                         }
+
                         return ERR("could not reduce into SMT-Lib v2 string: unable to translate constant '" + node.to_string() + "'");
                     }
                     case BooleanFunction::NodeType::Index:
@@ -53,6 +85,16 @@ namespace hal
                         return OK("(bvadd " + p[0] + " " + p[1] + ")");
                     case BooleanFunction::NodeType::Sub:
                         return OK("(bvsub " + p[0] + " " + p[1] + ")");
+                    case BooleanFunction::NodeType::Mul:
+                        return OK("(bvmul " + p[0] + " " + p[1] + ")");
+                    case BooleanFunction::NodeType::Sdiv:
+                        return OK("(bvsdiv " + p[0] + " " + p[1] + ")");
+                    case BooleanFunction::NodeType::Udiv:
+                        return OK("(bvudiv " + p[0] + " " + p[1] + ")");
+                    case BooleanFunction::NodeType::Srem:
+                        return OK("(bvsrem " + p[0] + " " + p[1] + ")");
+                    case BooleanFunction::NodeType::Urem:
+                        return OK("(bvurem " + p[0] + " " + p[1] + ")");
 
                     case BooleanFunction::NodeType::Concat:
                         return OK("(concat " + p[0] + " " + p[1] + ")");
@@ -84,7 +126,7 @@ namespace hal
             Result<std::string> translate_to_smt2(const BooleanFunction& function)
             {
                 std::vector<std::string> stack;
-                for (auto index = 0; index < function.length(); index++)
+                for (auto index = 0ul; index < function.length(); index++)
                 {
                     const auto& node = function.get_nodes().at(index);
                     std::vector<std::string> operands;

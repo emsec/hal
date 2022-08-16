@@ -211,7 +211,7 @@ namespace hal
          * @param[in] name - The function name, usually an output port.
          * @param[in] func - The function.
          */
-        void add_boolean_function(const std::string& name, const BooleanFunction& func);
+        bool add_boolean_function(const std::string& name, const BooleanFunction& func);
 
         /**
          * Mark this gate as a global vcc gate.

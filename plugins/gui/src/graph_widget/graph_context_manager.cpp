@@ -20,6 +20,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QTextStream>
+#include <QDir>
 
 namespace hal
 {
@@ -158,7 +159,7 @@ namespace hal
 
                 context->remove({m->get_id()}, {});
 
-                if (context->empty())
+                if (context->empty() || context->willBeEmptied())
                     deleteGraphContext(context);
             }
     }
@@ -245,7 +246,7 @@ namespace hal
             else
                 context->testIfAffected(m->get_id(), &removed_module, nullptr);
 
-            if (context->empty())
+            if (context->empty() || context->willBeEmptied())
                 deleteGraphContext(context);
         }
     }
@@ -292,7 +293,7 @@ namespace hal
             if (context->isShowingModule(m->get_id(), {}, {}, {}, {removed_gate}, false))
             {
                 context->remove({}, {removed_gate});
-                if (context->empty())
+                if (context->empty() || context->willBeEmptied())
                 {
                     deleteGraphContext(context);
                 }
@@ -520,16 +521,16 @@ namespace hal
         mContextTableModel->clear();
     }
 
-    void GraphContextManager::restoreFromFile()
+    GraphContext* GraphContextManager::restoreFromFile(const QString& filename)
     {
-        QString filename = FileManager::get_instance()->fileName();
-        if (filename.isEmpty())
-            return;
-        QFile jsFile(filename + "v");
+        QFile jsFile(filename);
         if (!jsFile.open(QIODevice::ReadOnly))
-            return;
+            return nullptr;
         QJsonDocument jsonDoc   = QJsonDocument::fromJson(jsFile.readAll());
         const QJsonObject& json = jsonDoc.object();
+        GraphContext* firstContext = nullptr;
+        GraphContext* selectedContext = nullptr;
+
         if (json.contains("views") && json["views"].isArray())
         {
             QJsonArray jsonViews = json["views"].toArray();
@@ -545,58 +546,70 @@ namespace hal
                 QString viewName = jsonView["name"].toString();
                 if (viewId > mMaxContextId)
                     mMaxContextId = viewId;
-                u32 exclusiveModuleId = jsonView["exclusiveModuleId"].toInt();
-                GraphContext* context = new GraphContext(viewId, viewName);
-                context->setLayouter(getDefaultLayouter(context));
-                context->setShader(getDefaultShader(context));
-                context->setExclusiveModuleId(exclusiveModuleId);
-                context->scene()->setDebugGridEnabled(mSettingDebugGrid->value().toBool());
-                connect(mSettingDebugGrid, &SettingsItemCheckbox::boolChanged, context->scene(), &GraphicsScene::setDebugGridEnabled);
-
-                if (!context->readFromFile(jsonView))
+                GraphContext* context = gGraphContextManager->getContextById(viewId);
+                if (context)
                 {
-                    log_warning("gui", "failed to read view file {}.", (filename + "v").toStdString());
-                    return;
+                    // load view in existing context
+                    context->clear();
+                    if (viewName != context->mName)
+                        renameGraphContextAction(context,viewName);
+                    if (!context->readFromFile(jsonView))
+                    {
+                        log_warning("gui", "failed to set up existing context ID={} from view file {}.", context->id(), filename.toStdString());
+                        continue;
+                    }
+                }
+                else
+                {
+                    // create new context
+                    context = new GraphContext(viewId, viewName);
+                    context->setLayouter(getDefaultLayouter(context));
+                    context->setShader(getDefaultShader(context));
+                    // context->setExclusiveModuleId(exclusiveModuleId); TODO exclusive module ID
+                    context->scene()->setDebugGridEnabled(mSettingDebugGrid->value().toBool());
+                    connect(mSettingDebugGrid, &SettingsItemCheckbox::boolChanged, context->scene(), &GraphicsScene::setDebugGridEnabled);
+
+                    if (!context->readFromFile(jsonView))
+                    {
+                        log_warning("gui", "failed to create context context ID={} view file {}.", context->id(), filename.toStdString());
+                        deleteGraphContext(context);
+                        continue;
+                    }
+
+                    mContextTableModel->beginInsertContext(context);
+                    mContextTableModel->addContext(context);
+                    mContextTableModel->endInsertContext();
+                    Q_EMIT contextCreated(context);
                 }
 
-                mContextTableModel->beginInsertContext(context);
-                mContextTableModel->addContext(context);
-                mContextTableModel->endInsertContext();
-
-                Q_EMIT contextCreated(context);
+                if (jsonView.contains("exclusiveModuleId"))
+                    context->setExclusiveModuleId(jsonView["exclusiveModuleId"].toInt(),false);
+                if (jsonView.contains("selected"))
+                    selectedContext = context;
+                if (!firstContext)
+                    firstContext = context;
                 context->setDirty(false);
             }
         }
+        if (selectedContext) return selectedContext;
+        return firstContext;
     }
 
-    void GraphContextManager::handleSaveTriggered()
+    bool GraphContextManager::handleSaveTriggered(const QString& filename)
     {
-        QString filename = FileManager::get_instance()->fileName();
-        if (filename.isEmpty())
-            return;
-        bool needToSave = false;
-        for (GraphContext* context : mContextTableModel->list())
-            if (context->id() > 1)
-            {
-                needToSave = true;
-                break;
-            }
-        if (!needToSave)
-            return;
-        QFile jsFile(filename + "v");
+        QFile jsFile(filename);
         if (!jsFile.open(QIODevice::WriteOnly))
-            return;
+            return false;
 
         QJsonObject json;
         QJsonArray jsonViews;
         for (GraphContext* context : mContextTableModel->list())
-            if (context->id() > 1)
             {
                 QJsonObject jsonView;
                 context->writeToFile(jsonView);
                 jsonViews.append(jsonView);
             }
         json["views"] = jsonViews;
-        jsFile.write(QJsonDocument(json).toJson(QJsonDocument::Compact));
+        return (jsFile.write(QJsonDocument(json).toJson(QJsonDocument::Compact)) >= 0); // neg return value indicates error
     }
 }    // namespace hal

@@ -6,6 +6,8 @@
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/program_arguments.h"
+#include "hal_core/netlist/project_manager.h"
+#include "hal_core/utilities/project_directory.h"
 
 #include <fstream>
 #include <unistd.h>
@@ -54,15 +56,30 @@ namespace hal
             return netlist_serializer::deserialize_from_file(netlist_file);
         }
 
-        std::unique_ptr<Netlist> load_netlist(const ProgramArguments& args)
+        std::unique_ptr<Netlist> load_hal_project(const std::filesystem::path& project_dir)
         {
-            if (!args.is_option_set("--input-file"))
+            if (!std::filesystem::is_directory(project_dir))
             {
-                log_critical("netlist", "no file to process specified.");
+                log_critical("netlist", "could not access hal project '{}'.", project_dir.string());
                 return nullptr;
             }
 
-            std::filesystem::path netlist_file = std::filesystem::path(args.get_parameter("--input-file"));
+            ProjectManager* pm = ProjectManager::instance();
+            if (!pm->open_project(project_dir.string()))
+            {
+                log_critical("netlist", "could not open hal project '{}'.", project_dir.string());
+                return nullptr;
+            }
+
+            std::unique_ptr<Netlist> retval = std::move(pm->get_netlist());
+            return retval;
+        }
+
+        std::unique_ptr<Netlist> load_netlist(const ProjectDirectory& pdir, const ProgramArguments& args)
+        {
+            std::filesystem::path netlist_file = args.is_option_set("--import-netlist")
+                    ? std::filesystem::path(args.get_parameter("--import-netlist"))
+                    : pdir.get_default_filename();
 
             if (access(netlist_file.c_str(), F_OK | R_OK) == -1)
             {

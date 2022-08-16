@@ -112,8 +112,7 @@ namespace hal {
     class WaveDataProviderTrigger : public WaveDataProvider
     {
         SaleaeParser mParser;
-        SaleaeInputFile* mFilterFile;
-        SaleaeDataBuffer* mFilterBuffer;
+        WaveData* mFilter;
         int* mTransitionToValue;
         u64 mCurrentTime;
         bool mCurrentTrigger;

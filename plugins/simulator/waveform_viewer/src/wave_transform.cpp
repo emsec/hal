@@ -46,4 +46,8 @@ namespace hal {
         return (mWidth == 0 || mScale <= 0);
     }
 
+    QString WaveZoomShift::dumpString() const
+    {
+        return QString("<sc:%1|l:%2|w:%3>").arg(mScale,0,'f',8).arg(mTleft).arg(mWidth);
+    }
 }

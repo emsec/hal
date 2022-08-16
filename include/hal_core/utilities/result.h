@@ -75,7 +75,7 @@ namespace hal
         }
 
         template<typename... Args, typename U = T, typename std::enable_if_t<!std::is_same_v<U, void>, int> = 0>
-        Result(result_constructor_type::OK, T&& value) : m_result(std::move(value))
+        Result(result_constructor_type::OK, std::remove_reference_t<T>&& value) : m_result(std::move(value))
         {
         }
 
@@ -100,7 +100,7 @@ namespace hal
          * @copydoc Ok(const T&)
          */
         template<typename... Args, typename U = T, typename std::enable_if_t<!std::is_same_v<U, void>, int> = 0>
-        static Result<T> Ok(T&& value)
+        static Result<T> Ok(std::remove_reference_t<T>&& value)
         {
             return OK(std::move(value));
         }

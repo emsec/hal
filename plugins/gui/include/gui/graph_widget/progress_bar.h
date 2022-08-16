@@ -27,12 +27,23 @@
 #include <QProgressBar>
 #include <QLabel>
 #include <QPushButton>
+#include <QImage>
+#include <QTimer>
 
 namespace hal {
 
     class GraphContext;
 
-    class ProgressBar : public QFrame
+    class AbstractBusyIndicator : public QFrame
+    {
+        Q_OBJECT
+    public:
+        AbstractBusyIndicator(QWidget* parent = nullptr) : QFrame(parent) {;}
+        virtual void setValue(int percent) = 0;
+        virtual void setText(const QString& txt) = 0;
+    };
+
+    class ProgressBar : public AbstractBusyIndicator
     {
         Q_OBJECT
 
@@ -42,8 +53,34 @@ namespace hal {
 
     public:
         ProgressBar(GraphContext* context, QWidget* parent = nullptr);
-        void setValue(int percent);
-        void setText(const QString& txt);
+        void setValue(int percent) override;
+        void setText(const QString& txt) override;
+    };
+
+    class BusyAnimation : public QWidget
+    {
+        Q_OBJECT
+        QImage mImage;
+        double mAngle;
+    public Q_SLOTS:
+        void handleTimeout();
+    protected:
+        void paintEvent(QPaintEvent* event) override;
+    public:
+        BusyAnimation(QWidget* parent = nullptr);
+    };
+
+    class BusyIndicator : public AbstractBusyIndicator
+    {
+        BusyAnimation* mAnimation;
+        QTimer* mTimer;
+        QLabel* mLabel;
+        QProgressBar* mProgressBar;
+    public:
+        BusyIndicator(QWidget* parent = nullptr);
+        ~BusyIndicator();
+        void setValue(int percent) override;
+        void setText(const QString& txt) override;
     };
 }
 

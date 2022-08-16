@@ -28,7 +28,7 @@ namespace hal {
         fTable->setFrameStyle(QFrame::Panel | QFrame::Sunken);
         fTable->setLineWidth(2);
         QVBoxLayout* layTable = new QVBoxLayout(fTable);
-        layTable->addWidget(new QLabel("Trigger only upon transiton to value (X = all values)", fTable));
+        layTable->addWidget(new QLabel("Trigger only upon transiton to value VT (X = all values)", fTable));
         mTableWidget = new QTableWidget(fTable);
         mTableWidget->setRowCount(inputList.size());
         mTableWidget->setColumnCount(3);
@@ -45,6 +45,7 @@ namespace hal {
             mTableWidget->setColumnWidth(1,360);
             mTableWidget->setColumnWidth(2,36);
         }
+        mTableWidget->setHorizontalHeaderLabels({"ID", "Name", "VT"});
         connect(mTableWidget,&QTableWidget::cellChanged,this,&TriggerDialog::handleTableCellChanged);
         layTable->addWidget(mTableWidget);
         layout->addWidget(fTable,0,0,1,2);

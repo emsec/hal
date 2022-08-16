@@ -35,13 +35,14 @@ namespace hal
     class ActionOpenNetlistFile : public UserAction
     {
         QString mFilename;
+        bool mProject;
     public:
         /**
          * Action constructor.
          *
          * @param filename_ - The path of the netlist file to open.
          */
-        ActionOpenNetlistFile(const QString& filename_ = QString());
+        ActionOpenNetlistFile(const QString& filename_ = QString(), bool isProj = true);
         QString tagname() const override;
         bool exec() override;
         void writeToXml(QXmlStreamWriter& xmlOut) const override;

@@ -10,7 +10,7 @@
 #include <vector>
 #include <QString>
 #include <QVector>
-#include <QSet>
+#include <QMap>
 #include <QDir>
 #include <stdio.h>
 #include <QDebug>
@@ -130,9 +130,23 @@ namespace hal {
         mDirty = true;
     }
 
-    int WaveData::get_value_at(u64 t) const
+    int WaveData::get_value_at(u64 t)
     {
+        if (loadPolicy()==LoadAllData)
+            loadDataUnlessAlreadyLoaded();
         return intValue(t);
+    }
+
+    SaleaeDirectoryNetEntry::Type WaveData::composedType() const
+    {
+        switch (mNetType)
+        {
+        case NetGroup: return SaleaeDirectoryNetEntry::Group;
+        case BooleanNet: return SaleaeDirectoryNetEntry::Boolean;
+        case TriggerTime: return SaleaeDirectoryNetEntry::Trigger;
+        default: break;
+        }
+        return SaleaeDirectoryNetEntry::None;
     }
 
     bool WaveData::isEqual(const WaveData& other, int tolerance) const
@@ -189,21 +203,45 @@ namespace hal {
     {
         std::vector<std::pair<u64,int>> retval;
         if (loadPolicy() == LoadAllData)
-        {
+        {       
             for (auto it = mData.lowerBound(t0); it != mData.constEnd(); ++it)
                 retval.push_back(std::make_pair(it.key(),it.value()));
         }
         else
         {
-            const WaveDataGroup* grp = dynamic_cast<const WaveDataGroup*>(this);
-            if (grp)
+            WaveDataProvider* wdp = nullptr;
+            std::string saleaeDirectory = mWaveDataList->saleaeDirectory().get_filename();
+            switch (mNetType)
             {
-                WaveDataProviderGroup wdpg(mWaveDataList->saleaeDirectory().get_filename(),grp->children());
-                SaleaeDataTuple sdt = wdpg.startValue(t0);
+            case WaveData::NetGroup:
+            {
+                const WaveDataGroup* wdGrp = static_cast<const WaveDataGroup*>(this);
+                wdp = new WaveDataProviderGroup(saleaeDirectory, wdGrp->children());
+                break;
+            }
+            case WaveData::BooleanNet:
+            {
+                const WaveDataBoolean* wdBool = static_cast<const WaveDataBoolean*>(this);
+                wdp = new WaveDataProviderBoolean(saleaeDirectory, wdBool->children(), wdBool->truthTable());
+                break;
+            }
+            case WaveData::TriggerTime:
+            {
+                const WaveDataTrigger* wdTrig = static_cast<const WaveDataTrigger*>(this);
+                wdp = new WaveDataProviderTrigger(saleaeDirectory, wdTrig->children(), wdTrig->toValueList(), wdTrig->get_filter_wave());
+                break;
+            }
+            default:
+                break;
+            }
+
+            if (wdp)
+            {
+                SaleaeDataTuple sdt = wdp->startValue(t0);
                 while (sdt.mValue != SaleaeDataTuple::sReadError)
                 {
                     retval.push_back(std::make_pair(sdt.mTime,sdt.mValue));
-                    sdt = wdpg.nextPoint();
+                    sdt = wdp->nextPoint();
                 }
                 return retval;
             }
@@ -664,15 +702,17 @@ namespace hal {
             break;
         }
 
-        QSet<u64> triggerTime;
+        QMap<u64,int> transitionTime;
         // TODO : not loadable
         for (int i=0; i<mInputCount; i++)
         {
             mInputWaves[i]->loadDataUnlessAlreadyLoaded();
-            triggerTime += mInputWaves[i]->data().keys().toSet();
+            for (u64 t : mInputWaves[i]->data().keys())
+                ++transitionTime[t];
         }
 
-        for (u64 t : triggerTime)
+        int lastval = SaleaeDataTuple::sReadError;
+        for (u64 t : transitionTime.keys())
         {
             int ttInx = 0;
             for (int i=0; i<mInputCount; i++)
@@ -686,13 +726,19 @@ namespace hal {
                 if (val == 1)
                     ttInx |= (1<<i);
             }
+            int nextval = SaleaeDataTuple::sReadError;
             if (ttInx < 0)
-                mData.insert(t,-1);
+                nextval = -1;
             else
             {
                 int j = ttInx / 8;
                 int k = ttInx % 8;
-                mData.insert(t, (mTruthTable[j] & (1<<k)) ? 1 : 0);
+                nextval = (mTruthTable[j] & (1<<k)) ? 1 : 0;
+            }
+            if (nextval != lastval)
+            {
+                mData.insert(t,nextval);
+                lastval = nextval;
             }
         }
     }
@@ -744,6 +790,7 @@ namespace hal {
         : WaveData(wdList->nextTriggerId(),"",TriggerTime),
           mTriggerCount(wdTrigger.size()), mTriggerWaves(nullptr), mFilterWave(nullptr), mToValue(nullptr)
     {
+        mWaveDataList = wdList;
         rename(QString("trigger%1").arg(id()));
         if (!mTriggerCount) return;
         mTriggerWaves = new WaveData*[mTriggerCount];
@@ -768,6 +815,14 @@ namespace hal {
         if (wd && (wd->netType() == WaveData::NetGroup || wd->netType() == WaveData::TriggerTime)) return;
         mFilterWave = wd;
         recalcData();
+        SaleaeDirectoryComposedEntry sdce = mWaveDataList->saleaeDirectory().get_composed(id(),SaleaeDirectoryNetEntry::Trigger);
+        if (!sdce.isNull())
+        {
+            SaleaeDirectoryStoreRequest save(&mWaveDataList->saleaeDirectory());
+            SaleaeDirectoryNetEntry trigEntry(wd->name().toStdString(),wd->id(),wd->composedType());
+            sdce.set_filter_entry(trigEntry.uniqueKey());
+            mWaveDataList->saleaeDirectory().add_or_replace_composed(sdce);
+        }
     }
 
     int WaveDataTrigger::intValue(double t) const
@@ -972,17 +1027,15 @@ namespace hal {
     void WaveDataGroup::restoreIndex()
     {
         SaleaeDirectoryStoreRequest save(&mWaveDataList->saleaeDirectory());
-        SaleaeDirectoryGroupEntry* sdge = mWaveDataList->saleaeDirectory().get_group(id());
-        if (sdge) sdge->get_nets().clear();
-
+        SaleaeDirectoryComposedEntry sdce(get_name(),id(),SaleaeDirectoryNetEntry::Group);
         mIndex.clear();
         int inx = 0;
         for (const WaveData* wd : mGroupList)
         {
-            if (sdge)
-                sdge->add_net(SaleaeDirectoryNetEntry(wd->name().toStdString(),wd->id()));
+            sdce.add_child(wd->id());
             mIndex[WaveDataGroupIndex(wd)] = inx++;
         }
+        mWaveDataList->saleaeDirectory().add_or_replace_composed(sdce);
     }
 
     void WaveDataGroup::addNet(const Net* n)
@@ -1242,52 +1295,16 @@ namespace hal {
         Q_EMIT timeframeChanged(&mTimeframe);
     }
 
+    void WaveDataList::emitTimeframeChanged()
+    {
+        Q_EMIT timeframeChanged(&mTimeframe);
+    }
+
     void WaveDataList::incrementSimulTime(u64 deltaT)
     {
         mTimeframe.mSimulateMaxTime += deltaT;
         if (mTimeframe.mSimulateMaxTime > mTimeframe.mSceneMaxTime)
             setMaxTime(mTimeframe.mSimulateMaxTime);
-    }
-
-    QList<const WaveData*> WaveDataList::partialList(u64 start_time, u64 end_time, const std::set<const Net*> &nets) const
-    {
-        QSet<u32> netIds;
-        for (const Net* n : nets)
-            netIds.insert(n->get_id());
-
-        QList<const WaveData*> retval;
-
-        for (const WaveData* wd : *this)
-        {
-            if (!netIds.isEmpty() && !netIds.contains(wd->id())) continue;
-            QMap<u64,int> xdata = wd->data();
-            auto it = xdata.begin();
-            int rememberValue = -99;
-            while (it != xdata.end())
-            {
-                if (it.key() < start_time)
-                {
-                    rememberValue = it.value();
-                    it = xdata.erase(it);
-                }
-                else if (it.key() == start_time)
-                {
-                    rememberValue = -99;
-                    ++it;
-                }
-                else if (end_time && it.key() > end_time)
-                    it = xdata.erase(it);
-                else
-                {
-                    ++it;
-                }
-            }
-            if (rememberValue > -99)
-                xdata.insert(start_time,rememberValue);
-            WaveData* wdCopy = new WaveData(wd->id(),wd->name(),wd->netType(),xdata);
-            retval.append(wdCopy);
-        }
-        return retval;
     }
 
     void WaveDataList::setUserTimeframe(u64 t0, u64 t1)
@@ -1441,6 +1458,23 @@ namespace hal {
         u32 trigId = wdTrig->id();
         Q_ASSERT(!mDataTrigger.contains(trigId));
         mDataTrigger.insert(trigId,wdTrig);
+        SaleaeDirectoryComposedEntry sdce(wdTrig->name().toStdString(),trigId,SaleaeDirectoryNetEntry::Trigger);
+        for (WaveData* wd : wdTrig->children())
+        {
+            sdce.add_child(wd->id());
+        }
+        std::vector<int> toValue;
+        for (int tval : wdTrig->toValueList())
+            toValue.push_back(tval);
+        sdce.set_data(toValue);
+
+        WaveData* wdFilt = wdTrig->get_filter_wave();
+        if (wdFilt)
+        {
+            SaleaeDirectoryNetEntry filterEntry(wdFilt->name().toStdString(),wdFilt->id(),wdFilt->composedType());
+            sdce.set_filter_entry(filterEntry.uniqueKey());
+        }
+        mSaleaeDirectory.add_or_replace_composed(sdce);
         Q_EMIT triggerAdded(trigId);
     }
 
@@ -1449,6 +1483,23 @@ namespace hal {
        u32 boolId = wdBool->id();
        Q_ASSERT(!mDataBooleans.contains(boolId));
        mDataBooleans.insert(boolId,wdBool);
+       SaleaeDirectoryComposedEntry sdce(wdBool->name().toStdString(),boolId,SaleaeDirectoryNetEntry::Boolean);
+       int n = 1;
+       for (WaveData* wd : wdBool->children())
+       {
+           n <<= 1;
+           sdce.add_child(wd->id());
+       }
+       std::vector<int> acceptVal;
+       const char* ttable = wdBool->truthTable();
+       for (int i=0; i<n; i++)
+       {
+           int j = i/8;
+           int k = i%8;
+           if (ttable[j] & (1<<k)) acceptVal.push_back(i);
+       }
+       sdce.set_data(acceptVal);
+       mSaleaeDirectory.add_or_replace_composed(sdce);
        Q_EMIT booleanAdded(boolId);
     }
 
@@ -1459,16 +1510,10 @@ namespace hal {
         mDataGroups.insert(grpId,grp);
         if (grpId)
         {
-            mSaleaeDirectory.add_group(SaleaeDirectoryGroupEntry(grp->name().toStdString(),grpId));
+            mSaleaeDirectory.add_or_replace_composed(SaleaeDirectoryComposedEntry(grp->name().toStdString(),grpId,SaleaeDirectoryNetEntry::Group));
             updateMaxTime();
             Q_EMIT groupAdded(grpId);
         }
-    }
-
-    u32 WaveDataList::createGroup(QString grpName)
-    {
-        WaveDataGroup* grp = new WaveDataGroup(this, grpName);
-        return grp->id();
     }
 
     void WaveDataList::addWavesToGroup(u32 grpId, const QVector<WaveData*>& wds)
@@ -1500,7 +1545,7 @@ namespace hal {
         WaveDataGroup* grp = mDataGroups.value(grpId);
         if (!grp) return;
         Q_EMIT groupAboutToBeRemoved(grp);
-        mSaleaeDirectory.remove_group(grpId);
+        mSaleaeDirectory.remove_composed(grpId,SaleaeDirectoryNetEntry::Group);
         delete grp;
     }
 
@@ -1581,7 +1626,13 @@ namespace hal {
     {
         if (!n) return nullptr;
         int inx = mIds.value(n->get_id(),-1);
-        if (inx >= 0) return at(inx);
+        if (inx >= 0)
+        {
+            WaveData* wd = at(inx);
+            if (wd->loadPolicy()==WaveData::LoadAllData)
+                wd->loadDataUnlessAlreadyLoaded();
+            return wd;
+        }
         WaveData* wd = new WaveData(n);
         if (wd->loadSaleae(mTimeframe))
         {

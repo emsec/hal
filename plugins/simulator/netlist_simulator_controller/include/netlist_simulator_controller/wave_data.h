@@ -78,6 +78,7 @@ namespace hal {
         u64     fileSize()                  const { return mFileSize; }
         int     valueBase()                 const { return mValueBase; }
         std::string fileName()              const;
+        SaleaeDirectoryNetEntry::Type composedType() const;
         void setId(u32 id_);
         bool rename(const QString& nam);
         void setBits(int bts);
@@ -95,7 +96,7 @@ namespace hal {
         void saveSaleae();
         void setData(const QMap<u64,int>& dat);
         virtual int  intValue(double t) const;
-        int get_value_at(u64 t) const;
+        int get_value_at(u64 t);
         std::string get_name() const { return mName.toStdString(); }
         std::vector<std::pair<u64,int>> get_events(u64 t0 = 0) const;
         std::vector<std::pair<u64,int>> get_triggered_events(const WaveDataTrigger* wdTrig, u64 t0 = 0);
@@ -162,7 +163,6 @@ namespace hal {
         WaveDataList(const QString& sdFilename, QObject* parent = nullptr);
         ~WaveDataList();
 
-        u32  createGroup(QString grpName);
         u32  nextGroupId() { return ++mMaxGroupId; }
         u32  maxGroupId() const { return mMaxGroupId; }
         u32  nextBooleanId() { return ++ mMaxBooleanId; }
@@ -189,11 +189,11 @@ namespace hal {
         const WaveDataTimeframe& timeFrame() const { return mTimeframe; }
         void setValueForEmpty(int val);
         void dump() const;
-        QList<const WaveData*> partialList(u64 start_time, u64 end_time, const std::set<const Net*>& nets) const;
         void emitWaveAdded(int inx);
         void emitWaveUpdated(int inx);
         void emitGroupUpdated(int grpId);
         void emitWaveRemovedFromGroup(int iwave, int grpId);
+        void emitTimeframeChanged();
         void updateFromSaleae();
         SaleaeDirectory& saleaeDirectory() { return mSaleaeDirectory; }
         void insertBooleanValue(WaveData* wd, u64 t, BooleanFunction::Value bval);

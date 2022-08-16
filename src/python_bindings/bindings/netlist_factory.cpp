@@ -42,6 +42,16 @@ namespace hal
                 :rtype: hal_py.Netlist
             )")
 
+           .def(
+               "load_hal_project", [](const std::filesystem::path& project_dir) { return std::shared_ptr<Netlist>(netlist_factory::load_hal_project(project_dir)); }, py::arg("project_dir"), R"(
+                Create a netlist from the given .hal file.
+
+                :param project_dir: Path to the hal project directory.
+                :type project_dir: hal_py.hal_path
+                :returns: The netlist on success, None otherwise.
+                :rtype: hal_py.Netlist
+            )")
+
             .def(
                 "load_netlists",
                 [](const std::filesystem::path& hal_file) {
