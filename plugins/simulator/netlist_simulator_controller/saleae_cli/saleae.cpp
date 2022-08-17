@@ -480,20 +480,17 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
                     }
                 }
                 // data diff?
-//                cur_net.data_diff = diff_cnt > 0;
-//                if (cur_net.data_diff)
-//                {
-//                    cur_net.net_data = net_data;
-//                }
-//                // save net struct if there is a difference
-//                if (cur_net.data_diff || cur_net.name_diff)
-//                {
-//                    diff_vec.push_back(cur_net);
-//                    diff_found = true;
-//                }
-                cur_net.net_data = net_data;
-                diff_vec.push_back(cur_net);
-                diff_found = true;
+                cur_net.data_diff = diff_cnt > 0;
+                if (cur_net.data_diff)
+                {
+                    cur_net.net_data = net_data;
+                }
+                // save net struct if there is a difference
+                if (cur_net.data_diff || cur_net.name_diff)
+                {
+                    diff_vec.push_back(cur_net);
+                    diff_found = true;
+                }
             }
 
         }
