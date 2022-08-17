@@ -59,10 +59,16 @@ namespace hal {
 
         for (int iroad=0; iroad<nEntries; iroad++)
         {
+            bool isRouted = false;
             u32 id = mEntries.mEntries[leftOrRight.index()].at(iroad);
             if (!id) continue; // pin not connected to any net
 
-            bool isRouted = false;
+            auto itNet = mNetsInput.find(id);
+            Q_ASSERT(itNet != mNetsInput.end());
+
+            // pin is a global input or output and not connected with anything
+            if (itNet.value().pattern() == (1 << leftOrRight.index() ))
+                continue;
 
             for (const NetLayoutJunctionRange& rng : mOccupied[0].value(iroad))
             {

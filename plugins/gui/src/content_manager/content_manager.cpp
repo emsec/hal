@@ -7,6 +7,7 @@
 #include "gui/file_manager/file_manager.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/graph_widget/graph_context_manager.h"
+#include "gui/graph_widget/graph_context_serializer.h"
 #include "gui/graph_widget/graph_graphics_view.h"
 #include "gui/graph_widget/graph_widget.h"
 #include "gui/grouping/grouping_manager_widget.h"
@@ -45,8 +46,8 @@ namespace hal
 
     SettingsItemDropdown* ContentManager::sSettingSortMechanism;
     SettingsItemKeybind* ContentManager::sSettingSearch;
-    bool ContentManager::sSettingsInitialized = initializeSettins();
-    bool ContentManager::initializeSettins()
+    bool ContentManager::sSettingsInitialized = initializeSettings();
+    bool ContentManager::initializeSettings()
     {
         sSettingSortMechanism = new SettingsItemDropdown(
             "Sort Mechanism", "navigation/sort_mechanism", gui_utility::mSortMechanism::lexical, "eXpert Settings:Miscellaneous", "Specifies the sort mechanism used in every list ");
@@ -62,7 +63,8 @@ namespace hal
         return true;
     }
 
-    ContentManager::ContentManager(MainWindow* parent) : QObject(parent), mMainWindow(parent)
+    ContentManager::ContentManager(MainWindow* parent) : QObject(parent), mMainWindow(parent),
+        mContextSerializer(nullptr)
     {
         // has to be created this early in order to receive deserialization by the core signals
         mPythonWidget = new PythonEditor();
@@ -88,6 +90,7 @@ namespace hal
         mGraphTabWidget         = nullptr;
         mContextManagerWidget   = nullptr;
         mSelectionDetailsWidget = nullptr;
+        if (mContextSerializer) delete mContextSerializer;
     }
 
     PythonEditor* ContentManager::getPythonEditorWidget()
@@ -214,12 +217,21 @@ namespace hal
 
         sSettingSearch->keySequenceChanged(sSettingSearch->value().toString());
 
-        GraphContext* new_context = nullptr;
-        new_context               = gGraphContextManager->createNewContext(QString::fromStdString(gNetlist->get_top_module()->get_name()));
-        new_context->add({gNetlist->get_top_module()->get_id()}, {});
+        GraphContext* selectedContext = nullptr;
 
-        mContextManagerWidget->selectViewContext(new_context);
-        gGraphContextManager->restoreFromFile();
+//        mContextManagerWidget->selectViewContext(new_context);
+
+        // try to restore from project directory
+        mContextSerializer = new GraphContextSerializer;
+        if (mContextSerializer->restore())
+        {
+            selectedContext = mContextSerializer->selectedContext();
+        }
+        else
+        {
+            selectedContext = topModuleContextFactory();
+            gGraphContextManager->restoreFromFile(fileName + "v");
+        }
 
         int count = 6;
         for (ContentFactory* cf : *ExternalContent::instance())
@@ -227,20 +239,34 @@ namespace hal
             ContentWidget* cw = cf->contentFactory();
             mMainWindow->addContent(cw, count++, content_anchor::right);
             cw->open();
+            cw->restoreFromProject();
         }
-        Module* top_module               = gNetlist->get_top_module();
-        GraphContext* top_module_context = gGraphContextManager->getContextByExclusiveModuleId(top_module->get_id());
+        /*
+        GraphContext* top_module_context = gGraphContextManager->getContextByExclusiveModuleId(gNetlist->get_top_module()->get_id());
 
         if (!top_module_context)
         {
-            QString context_name = QString::fromStdString(top_module->get_name()) + " (ID: " + QString::number(top_module->get_id()) + ")";
             top_module_context   = gGraphContextManager->createNewContext(context_name);
             top_module_context->add({top_module->get_id()}, {});
             top_module_context->setExclusiveModuleId(top_module->get_id());
             top_module_context->setDirty(false);
         }
-        mContextManagerWidget->selectViewContext(top_module_context);
+        */
+        if (selectedContext)
+            mContextManagerWidget->selectViewContext(selectedContext);
         mContextManagerWidget->handleOpenContextClicked();
+    }
+
+    GraphContext* ContentManager::topModuleContextFactory()
+    {
+        Module* top_module        = gNetlist->get_top_module();
+        if (!top_module) return nullptr;
+        QString context_name      = QString::fromStdString(top_module->get_name()) + " (ID: " + QString::number(top_module->get_id()) + ")";
+        GraphContext* retval      = gGraphContextManager->createNewContext(context_name);
+        retval->add({top_module->get_id()}, {});
+        retval->setExclusiveModuleId(top_module->get_id());
+        retval->setDirty(false);
+        return retval;
     }
 
     void ContentManager::setWindowTitle(const QString& filename)

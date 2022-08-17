@@ -83,7 +83,7 @@ namespace hal
         std::unordered_map<std::string, GateType*> m_gate_types;
         std::unordered_map<std::string, GateType*> m_vcc_gate_types;
         std::unordered_map<std::string, GateType*> m_gnd_gate_types;
-        std::unordered_map<Net*, std::tuple<PinDirection, std::string, Module*>> m_module_ports;
+        std::unordered_map<Net*, std::vector<std::tuple<PinDirection, std::string, Module*>>> m_module_ports;
 
         // unique aliases
         std::unordered_map<std::string, u32> m_signal_name_occurrences;
@@ -115,7 +115,6 @@ namespace hal
             instantiate_module(const std::string& instance_name, VerilogModule* verilog_module, Module* parent, const std::unordered_map<std::string, std::string>& parent_module_assignments);
 
         // helper functions
-        void remove_comments(std::string& line, bool& multi_line_comment) const;
         std::string get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const;
     };
 }    // namespace hal

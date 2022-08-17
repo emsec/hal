@@ -10,6 +10,7 @@
 #include <QTextDocumentFragment>
 #include <QVBoxLayout>
 #include <QShortcut>
+#include <QDir>
 
 namespace hal
 {

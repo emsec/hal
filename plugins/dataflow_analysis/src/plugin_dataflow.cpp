@@ -109,6 +109,44 @@ namespace hal
         return true;
     }
 
+    std::vector<PluginParameter> plugin_dataflow::get_parameter() const
+    {
+        std::vector<PluginParameter> retval;
+        retval.push_back(PluginParameter(PluginParameter::Integer, "sizes", "Expected register size", "8"));
+        retval.push_back(PluginParameter(PluginParameter::Boolean, "draw", "Draw dot graph", "true"));
+        retval.push_back(PluginParameter(PluginParameter::ExistingDir, "output", "Directory for results"));
+        retval.push_back(PluginParameter(PluginParameter::PushButton, "exec", "Execute dataflow analysis"));
+        return retval;
+    }
+
+    void plugin_dataflow::set_parameter(Netlist *nl, const std::vector<PluginParameter>& params)
+    {
+        if (!nl)
+        {
+            log_warning("dataflow", "Error setting paramater: no netlist loaded.");
+            return;
+        }
+        bool isExecPushed = false;
+
+        std::vector<u32> sizes;
+        std::string output_path = "/tmp";
+        bool draw_graph = true;
+
+        for (const PluginParameter& par : params)
+        {
+            if (par.get_tagname() == "sizes")
+                sizes.push_back(atoi(par.get_value().c_str()));
+            else if (par.get_tagname() == "draw")
+                draw_graph = (par.get_value() == "true");
+            else if (par.get_tagname() == "output")
+                output_path = par.get_value();
+            else if (par.get_tagname() == "exec")
+                isExecPushed = (par.get_value() == "clicked");
+        }
+
+        if (isExecPushed) execute(nl,output_path,sizes,draw_graph);
+    }
+
     std::vector<std::vector<Gate*>>
         plugin_dataflow::execute(Netlist* nl, std::string output_path, const std::vector<u32> sizes, bool draw_graph, std::vector<std::vector<u32>> known_groups, u32 bad_group_size)
     {
@@ -119,6 +157,9 @@ namespace hal
             log_error("dataflow", "dataflow can't be initialized (nullptr)");
             return std::vector<std::vector<Gate*>>();
         }
+
+        if (s_progress_indicator_function)
+            s_progress_indicator_function(0, "dataflow analysis running ...");
 
         // manage output
         if (!output_path.empty())
@@ -249,6 +290,17 @@ namespace hal
 
         log("dataflow processing finished in {:3.2f}s", total_time);
 
+        if (s_progress_indicator_function)
+            s_progress_indicator_function(100, "dataflow analysis finished");
+
         return dataflow::state_to_module::create_sets(nl, final_grouping);
     }
+
+    std::function<void(int,const std::string&)> plugin_dataflow::s_progress_indicator_function = nullptr;
+
+    void plugin_dataflow::register_progress_indicator(std::function<void(int,const std::string&)> pif)
+    {
+        s_progress_indicator_function = pif;
+    }
+
 }    // namespace hal

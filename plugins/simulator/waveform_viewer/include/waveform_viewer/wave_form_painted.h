@@ -3,6 +3,7 @@
 #include <QMap>
 #include <QMutex>
 #include "waveform_viewer/wave_transform.h"
+#include "hal_core/defines.h"
 
 class QPainter;
 
@@ -31,13 +32,15 @@ namespace hal {
         QList<WaveFormPrimitive*> mPrimitives;
         WaveZoomShift mValidity;
         TimeInterval mShortestToggle;
-        double mCursorTime;
+        u64 mCursorTime;
         int mCursorXpos;
         int mCursorValue;
         QMutex mMutex;
 
+        void clonePrimitives(const WaveFormPainted& other);
     public:
         WaveFormPainted();
+        WaveFormPainted(const WaveFormPainted& other);
         ~WaveFormPainted();
         void clearPrimitives();
 
@@ -59,9 +62,10 @@ namespace hal {
         bool isEmpty() const { return mPrimitives.isEmpty(); }
         QMap<float,int> primitiveValues();
         TimeInterval shortestToggle() const { return mShortestToggle; }
-        void setCursorValue(double tCursor, int xpos, int val);
-        int cursorValueStored(double tCursor, int xpos) const;
-        int cursorValuePainted(double tCursor, int xpos);
-        int cursorValueTrigger(double tCursor, int xpos);
+        void setCursorValue(u64 tCursor, int xpos, int val);
+        int cursorValueStored(u64 tCursor, int xpos) const;
+        int cursorValuePainted(u64 tCursor, int xpos);
+        int cursorValueTrigger(u64 tCursor, int xpos);
+        WaveFormPainted& operator=(const WaveFormPainted& other);
     };
 }

@@ -64,6 +64,8 @@ namespace hal {
         NetlistSimulatorController* mController;
         std::unique_ptr<NetlistSimulatorController> mControllerOwner;
 
+        u32 mControllerId;
+        std::string mControllerName;
 
         WaveTreeView*        mTreeView;
         WaveTreeModel*       mTreeModel;

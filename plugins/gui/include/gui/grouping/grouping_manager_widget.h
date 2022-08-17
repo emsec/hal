@@ -28,6 +28,7 @@
 #include "hal_core/defines.h"
 
 #include <QColor>
+#include "gui/grouping/grouping_color_serializer.h"
 #include <QListWidget>
 #include <QMap>
 #include <QMenu>
@@ -360,6 +361,7 @@ namespace hal
         QString mSearchActiveIconStyle;
 
         QString mDisabledIconStyle;
+        GroupingColorSerializer mColorSerializer;
 
         GroupingTableEntry getCurrentGrouping();
     };

@@ -31,6 +31,7 @@ namespace hal {
         quint64 mTleft;
         int mWidth;
     public:
+        WaveZoomShift(double sc, quint64 tl, int w) : mScale(sc), mTleft(tl), mWidth(w) {;}
         WaveZoomShift(const WaveTransform* trans = nullptr, const WaveScrollbar* sbar = nullptr);
         bool operator==(const WaveZoomShift& other) const;
         bool operator!=(const WaveZoomShift& other) const { return ! operator==(other); }
@@ -39,5 +40,6 @@ namespace hal {
         int width() const { return mWidth; }
         double scale() const { return mScale; }
         quint64 leftTime() const { return mTleft; }
+        QString dumpString() const;
     };
 }

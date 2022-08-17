@@ -225,6 +225,11 @@ namespace hal
          */
         void handleSearchKeysequenceChanged(QKeySequence seq);
 
+        /**
+         * Derived classes might want to restore content from project directory.
+         */
+        virtual void restoreFromProject() {;}
+
     private:
         void closeEvent(QCloseEvent* event);
 

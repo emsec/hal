@@ -232,11 +232,24 @@ namespace hal
                 std::set<std::tuple<std::string, u16>> inputs;
                 for (const auto& constraint : _constraints)
                 {
-                    for (const auto& node : constraint.lhs.get_nodes())
+                    if (constraint.is_assignment())
                     {
-                        if (node.is_variable())
+                        for (const auto& node : constraint.get_assignment().get()->first.get_nodes())
                         {
-                            inputs.insert(std::make_tuple(node.variable, node.size));
+                            if (node.is_variable())
+                            {
+                                inputs.insert(std::make_tuple(node.variable, node.size));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (const auto& node : constraint.get_function().get()->get_nodes())
+                        {
+                            if (node.is_variable())
+                            {
+                                inputs.insert(std::make_tuple(node.variable, node.size));
+                            }
                         }
                     }
                 }
@@ -258,12 +271,33 @@ namespace hal
                         return ERR(accumulator.get_error());
                     }
 
-                    auto lhs = Translator::translate_to_smt2(constraint.lhs), rhs = Translator::translate_to_smt2(constraint.rhs);
-                    if (lhs.is_ok() && rhs.is_ok())
+                    if (constraint.is_assignment())
                     {
-                        return OK(accumulator.get() + "(assert (= " + lhs.get() + " " + rhs.get() + "))\n");
+                        const auto assignment = constraint.get_assignment().get();
+                        auto lhs              = Translator::translate_to_smt2(assignment->first);
+                        auto rhs              = Translator::translate_to_smt2(assignment->second);
+                        if (lhs.is_error())
+                        {
+                            return ERR_APPEND(lhs.get_error(), "could not translate constraint to SMT-LIB v2: '" + constraint.to_string() + "'");
+                        }
+                        else if (rhs.is_error())
+                        {
+                            return ERR_APPEND(rhs.get_error(), "could not translate constraint to SMT-LIB v2: '" + constraint.to_string() + "'");
+                        }
+                        else
+                        {
+                            return OK(accumulator.get() + "(assert (= " + lhs.get() + " " + rhs.get() + "))\n");
+                        }
                     }
-                    return ERR_APPEND(lhs.get_error(), "could not translate constraint to SMT-LIB v2: '" + constraint.to_string() + "'");
+                    else
+                    {
+                        auto lhs = Translator::translate_to_smt2(*constraint.get_function().get());
+                        if (lhs.is_ok())
+                        {
+                            return OK(accumulator.get() + "(assert (= #b1 " + lhs.get() + "))\n");
+                        }
+                        return ERR_APPEND(lhs.get_error(), "could not translate constraint to SMT-LIB v2: '" + constraint.to_string() + "'");
+                    }
                 });
             };
 

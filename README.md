@@ -1,6 +1,5 @@
-<a name="introduction"></a>
 # Welcome to HAL! 
-[![Ubuntu 20.04](https://github.com/emsec/hal/actions/workflows/ubuntu20.04.yml/badge.svg)](https://github.com/emsec/hal/actions/workflows/ubuntu20.04.yml)  [![macOS](https://github.com/emsec/hal/actions/workflows/macOS.yml/badge.svg)](https://github.com/emsec/hal/actions/workflows/macOS.yml) [![Doc: C++](https://img.shields.io/badge/doc-c%2B%2B-orange)](https://emsec.github.io/hal/doc/) [![Doc: Python](https://img.shields.io/badge/doc-python-red)](https://emsec.github.io/hal/pydoc/) 
+[![Ubuntu 20.04](https://github.com/emsec/hal/actions/workflows/ubuntu20.04.yml/badge.svg)](https://github.com/emsec/hal/actions/workflows/ubuntu20.04.yml)  [![macOS](https://github.com/emsec/hal/actions/workflows/macOS.yml/badge.svg)](https://github.com/emsec/hal/actions/workflows/macOS.yml) [![Doc: C++](https://img.shields.io/badge/doc-c%2B%2B-orange)](https://emsec.github.io/hal/doc/) [![Doc: Python](https://img.shields.io/badge/doc-python-red)](https://emsec.github.io/hal/pydoc/)
 
 
 HAL \[/hel/\] is a comprehensive netlist reverse engineering and manipulation framework.
@@ -116,6 +115,15 @@ To speed up the building process of a clean build, you have the option to instal
 +#define VER_OFFSET_SIZE          6553600
 +#define VER_WORD_SIZE            6553600
 ```
+
+We also adjusted the file `abc/src/base/abc/abcFunc.c` as follows:
+
+
+```git
+-#define ABC_MAX_CUBES   100000
++#define ABC_MAX_CUBES   2000000
+```
+
 
 Installation instructions:
 

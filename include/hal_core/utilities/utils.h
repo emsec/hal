@@ -184,32 +184,6 @@ namespace hal
         }
 
         /**
-         * Translates a string to an integer.
-         * 
-         * @param[in] s - The string to translate.
-         * @returns (1) status (true on success, false otherwise)
-         *          (2) 64-bit integer
-         */
-        template<typename T>
-        CORE_API std::tuple<bool, T> translate_to(const std::string& s)
-        {
-            auto ss = std::stringstream();
-            if (starts_with(s, std::string("0b"))) {
-                ss << std::setbase(2);
-                ss << s.substr(2);
-            }
-
-            T value {};
-            ss >> value;
-
-            if (ss.eof() && !ss.fail()) {
-                return {true, value};
-            }
-
-            return {false, 0ul};
-        }
-
-        /**
          * Checks whether a string represents a real number.
          *
          * @param[in] s - The string to analyze.
@@ -646,7 +620,7 @@ namespace hal
         /**
          * A recursive range of directories starting at a top level root directory.
          */
-        class CORE_API RecursiveDirectoryRange
+        class CORE_API  RecursiveDirectoryRange
         {
         public:
             using iterator = std::filesystem::recursive_directory_iterator;
