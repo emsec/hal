@@ -422,6 +422,7 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
             std::vector<uint64_t> time_vec;
             for (const SaleaeDirectoryFileIndex& sdfi : sdne_1.indexes())
             {
+                path_1 = (path_1 == "") ? "." : path_1;
                 std::string bin_path = path_1 + "/digital_" + std::to_string(sdfi.index()) + ".bin";
                 if (!file_exists(bin_path))
                 {
