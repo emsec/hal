@@ -293,7 +293,7 @@ void saleae_cat(std::string path, std::string file_name, bool dump_header, bool 
     // dump data
     if (dump_data && (num_transitions > 0))
     {
-        SaleaeDataBuffer *db = sf->get_buffered_data(num_transitions);
+        SaleaeDataBuffer *db = sf->get_buffered_data(num_transitions + 1);
 
         // get data
         uint64_t* time_array = db->mTimeArray;
@@ -301,7 +301,7 @@ void saleae_cat(std::string path, std::string file_name, bool dump_header, bool 
 
         // collect length for better formatting
         int format_length [3] = {4, 4, 5}; // length of the column titles
-        for (int i = 0; i < num_transitions; i++)
+        for (int i = 0; i <= num_transitions; i++)
         {
             format_length[0] = (format_length[0] < std::to_string(i).length()) ? std::to_string(i).length() : format_length[0];
             format_length[1] = (format_length[1] < std::to_string(time_array[i]).length()) ? std::to_string(time_array[i]).length() : format_length[1];
@@ -317,7 +317,7 @@ void saleae_cat(std::string path, std::string file_name, bool dump_header, bool 
         print_element("Value", format_length[2], true);
         std::cout << std::endl;
         std::cout << '|' << std::string(abs_length, '-') << '|' << std::endl;
-        for (int i = 0; i < num_transitions; i++)
+        for (int i = 0; i <= num_transitions; i++)
         {
             std::cout << '|';
             print_element(i, format_length[0], false);
