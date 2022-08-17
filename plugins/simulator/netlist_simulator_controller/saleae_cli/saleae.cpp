@@ -249,6 +249,7 @@ void saleae_cat(std::string path, std::string file_name, bool dump_header, bool 
     {
         // get header content
         uint64_t begin_time = sf->header()->mBeginTime;
+        uint64_t end_time = sf->header()->mEndTime;
         int32_t start_val = sf->header()->mValue;
         std::string data_format;
         switch (sf->header()->storageFormat())
@@ -265,27 +266,30 @@ void saleae_cat(std::string path, std::string file_name, bool dump_header, bool 
         }
 
         // collect length for better formatting
-        int format_length [4] = {12, 10, 11, 21}; // length of the column titles
+        int format_length [5] = {12, 10, 8, 11, 21}; // length of the column titles
         format_length[0] = (format_length[0] < data_format.length()) ? data_format.length() : format_length[0];
         format_length[1] = (format_length[1] < std::to_string(begin_time).length()) ? std::to_string(begin_time).length() : format_length[1];
+        format_length[1] = (format_length[1] < std::to_string(end_time).length()) ? std::to_string(end_time).length() : format_length[1];
         format_length[2] = (format_length[2] < std::to_string(start_val).length()) ? std::to_string(start_val).length() : format_length[2];
         format_length[3] = (format_length[3] < std::to_string(num_transitions).length()) ? std::to_string(num_transitions).length() : format_length[3];
-        int abs_length = format_length[0] + format_length[1] + format_length[2] + format_length[3] + 10;
+        int abs_length = format_length[0] + format_length[1] + format_length[2] + format_length[3] + format_length[4] + 13;
 
         // print saleae-file header
         std::cout << std::string(abs_length + 2, '-') << std::endl;
         std::cout << '|';
         print_element(" Data Format", format_length[0], true);
         print_element("Start Time", format_length[1], true);
-        print_element("Start Value", format_length[2], true);
-        print_element("Number of Transitions", format_length[3], true);
+        print_element("End Time", format_length[2], true);
+        print_element("Start Value", format_length[3], true);
+        print_element("Number of Transitions", format_length[4], true);
         std::cout << std::endl;
         std::cout << '|' << std::string(abs_length, '-') << '|' << std::endl;
         std::cout << "| ";
         print_element(data_format, format_length[0] - 1, true);
         print_element(begin_time, format_length[1], false);
-        print_element(start_val, format_length[2], false);
-        print_element(num_transitions, format_length[3], false);
+        print_element(end_time, format_length[2], false);
+        print_element(start_val, format_length[3], false);
+        print_element(num_transitions, format_length[4], false);
         std::cout << std::endl;
         std::cout << std::string(abs_length + 2, '-') << std::endl;
     }
