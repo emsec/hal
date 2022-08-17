@@ -40,7 +40,9 @@ namespace hal
             QJsonObject simEntry;
             simEntry["id"] = (int) ctrl->get_id();
             simEntry["name"] = ctrl->name();
-            simEntry["workdir"] = QString::fromStdString(ctrl->get_working_directory());
+            std::string absoluteWorkingDir = ctrl->get_working_directory();
+            std::filesystem::path relProjdir = ProjectManager::instance()->get_project_directory().get_relative_file_path(ctrl->get_working_directory());
+            simEntry["workdir"] = QString::fromStdString(relProjdir.string());
             simArr.append(simEntry);
         }
         simObj["simulator"] = simArr;
@@ -86,6 +88,8 @@ namespace hal
                 QJsonObject simEntry = simArr.at(i).toObject();
                 QString workdir = simEntry["workdir"].toString();
                 if (workdir.isEmpty()) continue;
+                if (QFileInfo(workdir).isRelative()) workdir =
+                        QString::fromStdString(ProjectManager::instance()->get_project_directory().get_filename(workdir.toStdString()).string());
                 QString contrFile = QDir(workdir).absoluteFilePath("netlist_simulator_controller.json");
                 retval.push_back(ctrlPlug->restore_simulator_controller(mNetlist,contrFile.toStdString()));
             }
