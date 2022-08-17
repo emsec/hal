@@ -358,6 +358,7 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
 
     struct row_t
     {
+        int alt_time;
         int val_1;
         bool val_1_avail;
         int val_2;
@@ -461,6 +462,7 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
                     int twt = time_within_tolerance(time_vec, t, tolerance);
                     if (twt >= 0)
                     {
+                        net_data[twt].alt_time = t;
                         net_data[twt].val_2 = db->mValueArray[i];
                         net_data[twt].val_2_avail = true;
                         net_data[twt].diff = (net_data[twt].val_1 != net_data[twt].val_2);
@@ -478,17 +480,20 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
                     }
                 }
                 // data diff?
-                cur_net.data_diff = diff_cnt > 0;
-                if (cur_net.data_diff)
-                {
-                    cur_net.net_data = net_data;
-                }
-                // save net struct if there is a difference
-                if (cur_net.data_diff || cur_net.name_diff)
-                {
-                    diff_vec.push_back(cur_net);
-                    diff_found = true;
-                }
+//                cur_net.data_diff = diff_cnt > 0;
+//                if (cur_net.data_diff)
+//                {
+//                    cur_net.net_data = net_data;
+//                }
+//                // save net struct if there is a difference
+//                if (cur_net.data_diff || cur_net.name_diff)
+//                {
+//                    diff_vec.push_back(cur_net);
+//                    diff_found = true;
+//                }
+                cur_net.net_data = net_data;
+                diff_vec.push_back(cur_net);
+                diff_found = true;
             }
 
         }
@@ -570,10 +575,22 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
                 std::string diff_char = cur_row.diff ? "*" : " ";
                 std::string val_1 = cur_row.val_1_avail ? std::to_string(cur_row.val_1) : "-";
                 std::string val_2 = cur_row.val_2_avail ? std::to_string(cur_row.val_2) : "-";
+                int main_time = item.first;
+                int alt_time = (cur_row.val_1_avail && cur_row.val_2_avail) ? cur_row.alt_time : main_time;
 
                 std::cout << '|';
                 print_element(diff_char, cur_net.format_length[0], true);
-                print_element(item.first, cur_net.format_length[1], false);
+
+                if (alt_time < main_time)
+                {
+                    print_element(alt_time, cur_net.format_length[1], false);
+                }
+                else
+                {
+                    print_element(main_time, cur_net.format_length[1], false);
+                }
+
+
                 print_element(val_1, cur_net.format_length[2], true);
                 print_element(val_2, cur_net.format_length[3], true);
                 std::cout << std::endl;
