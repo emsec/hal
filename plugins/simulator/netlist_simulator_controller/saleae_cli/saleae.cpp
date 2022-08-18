@@ -200,9 +200,12 @@ void saleae_ls(std::string p_path, std::string size, std::string ids, bool valid
     // print saleae-dir content
     std::cout << std::string(abs_length + 2, '-') << std::endl;
 
-    if (validate) {
+    if (validate)
+    {
         print_element("|   | Net ID", format_length[0] + 4, true);
-    } else {
+    }
+    else
+    {
         print_element("| Net ID", format_length[0], true);
     }
 
@@ -228,10 +231,12 @@ void saleae_ls(std::string p_path, std::string size, std::string ids, bool valid
                     if (!file_exists(bin_path))
                     {
                         valid_char = "*";
-                    } else {
+                    } else
+                    {
                         SaleaeInputFile *sf = new SaleaeInputFile(bin_path);
                         SaleaeDataBuffer *db = sf->get_buffered_data(sf->header()->mNumTransitions);
-                        if ((sdfi.beginTime() != sf->header()->mBeginTime) || (sdfi.endTime() != sf->header()->mEndTime) || (sdfi.numberValues() - 1 != sf->header()->mNumTransitions) || (QFileInfo(QString::fromStdString(bin_path)).size() != 44 + sdfi.numberValues() * 8)) {
+                        if ((sdfi.beginTime() != sf->header()->mBeginTime) || (sdfi.endTime() != sf->header()->mEndTime) || (sdfi.numberValues() - 1 != sf->header()->mNumTransitions) || (QFileInfo(QString::fromStdString(bin_path)).size() != 44 + sdfi.numberValues() * 8))
+                        {
                             valid_char = "*";
                         }
                     }
