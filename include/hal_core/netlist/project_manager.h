@@ -181,6 +181,12 @@ namespace hal
         bool create_project_directory(const std::string& path);
 
         /**
+         * Remove existing project directory and empties path member variable
+         * @return true on success, false on error (e.g. directory had been removed before)
+         */
+        bool remove_project_directory();
+
+        /**
          * Getter for netlist filename
          *
          * @return the netlist filename

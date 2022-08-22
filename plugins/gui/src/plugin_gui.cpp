@@ -99,7 +99,8 @@ namespace hal
                 LogManager& lm              = LogManager::get_instance();
                 std::filesystem::path lpath = pm->get_project_directory().get_default_filename(".log");
                 lm.set_file_name(lpath);
-                FileManager::get_instance()->deprecatedOpenFile(QString::fromStdString(fileName.string()),gateLibraryPath);
+                if (!FileManager::get_instance()->deprecatedOpenFile(QString::fromStdString(fileName.string()),gateLibraryPath))
+                    log_error("gui", "Failed to open netlist '{}'.", fileName.string());
             }
             break;
         }

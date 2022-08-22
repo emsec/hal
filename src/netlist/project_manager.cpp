@@ -95,6 +95,12 @@ namespace hal {
         return serialize_to_projectfile(false);
     }
 
+    bool ProjectManager::remove_project_directory()
+    {
+        if (m_proj_dir.empty()) return false;
+        return std::filesystem::remove_all(m_proj_dir);
+    }
+
     void ProjectManager::set_project_status(ProjectStatus stat)
     {
         m_project_status = stat;
