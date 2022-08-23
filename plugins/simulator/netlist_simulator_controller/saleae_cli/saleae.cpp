@@ -162,6 +162,9 @@ void saleae_ls(std::string p_path, std::string size, std::string ids, bool valid
         }
     }
 
+    // handle --validate option (counter)
+    int val_cnt = 0;
+
     // handle --id option
     bool ids_necessary = false;
     std::unordered_set<int> id_set;
@@ -232,6 +235,7 @@ void saleae_ls(std::string p_path, std::string size, std::string ids, bool valid
                     if (!file_exists(bin_path))
                     {
                         valid_char = "*";
+                        val_cnt++;
                     }
                     else
                     {
@@ -240,6 +244,7 @@ void saleae_ls(std::string p_path, std::string size, std::string ids, bool valid
                         if ((sdfi.beginTime() != sf->header()->mBeginTime) || (sdfi.endTime() != sf->header()->mEndTime) || (sdfi.numberValues() - 1 != sf->header()->mNumTransitions) || (QFileInfo(QString::fromStdString(bin_path)).size() != 44 + (sdfi.numberValues() - 1) * 8))
                         {
                             valid_char = "*";
+                            val_cnt++;
                         }
                     }
 
@@ -256,6 +261,18 @@ void saleae_ls(std::string p_path, std::string size, std::string ids, bool valid
         }
     }
     std::cout << std::string(abs_length + 2, '-') << std::endl;
+    if (validate)
+    {
+        if (val_cnt > 0)
+        {
+            std::cout << "Number of non-matching directory entries: " << val_cnt << std::endl;
+        }
+        else
+        {
+            std::cout << "validation OK" << std::endl;
+        }
+    }
+
 }
 
 
