@@ -226,16 +226,17 @@ void saleae_ls(std::string p_path, std::string size, std::string ids, bool valid
                 if (validate) {
                     std::string valid_char = " ";
 
-                    p_path = (p_path == "") ? "." : p_path;
+                    p_path = (p_path == "") ? "" : p_path + "/";
                     std::string bin_path = p_path + "digital_" + std::to_string(sdfi.index()) + ".bin";
                     if (!file_exists(bin_path))
                     {
+                        std::cout << "cannot open " << bin_path << std::endl;
                         valid_char = "*";
                     } else
                     {
                         SaleaeInputFile *sf = new SaleaeInputFile(bin_path);
                         SaleaeDataBuffer *db = sf->get_buffered_data(sf->header()->mNumTransitions);
-                        if ((sdfi.beginTime() != sf->header()->mBeginTime) || (sdfi.endTime() != sf->header()->mEndTime) || (sdfi.numberValues() - 1 != sf->header()->mNumTransitions) || (QFileInfo(QString::fromStdString(bin_path)).size() != 44 + sdfi.numberValues() * 8))
+                        if ((sdfi.beginTime() != sf->header()->mBeginTime) || (sdfi.endTime() != sf->header()->mEndTime) || (sdfi.numberValues() - 1 != sf->header()->mNumTransitions) || (QFileInfo(QString::fromStdString(bin_path)).size() != 44 + (sdfi.numberValues() - 1) * 8))
                         {
                             valid_char = "*";
                         }
