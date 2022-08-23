@@ -223,16 +223,17 @@ void saleae_ls(std::string p_path, std::string size, std::string ids, bool valid
             if (check_size(size_necessary, size_op, size_val, sdfi.numberValues()) && check_ids(ids_necessary, id_set, sdne.id()))
             {
                 std::cout << '|';
-                if (validate) {
+                if (validate)
+                {
                     std::string valid_char = " ";
 
                     p_path = (p_path == "") ? "" : p_path + "/";
                     std::string bin_path = p_path + "digital_" + std::to_string(sdfi.index()) + ".bin";
                     if (!file_exists(bin_path))
                     {
-                        std::cout << "cannot open " << bin_path << std::endl;
                         valid_char = "*";
-                    } else
+                    }
+                    else
                     {
                         SaleaeInputFile *sf = new SaleaeInputFile(bin_path);
                         SaleaeDataBuffer *db = sf->get_buffered_data(sf->header()->mNumTransitions);
