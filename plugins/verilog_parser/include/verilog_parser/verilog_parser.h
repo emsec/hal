@@ -33,6 +33,7 @@
 #include "verilog_parser/verilog_module.h"
 
 #include <optional>
+#include <sstream>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
