@@ -289,6 +289,8 @@ namespace hal
         CallbackHook<void(const spdlog::level::level_enum&, const std::string&, const std::string&)> m_gui_callback;
 
         ProgramOptions m_descriptions;
+
+        std::string m_enforce_level;
     };
 
     class log_gui_sink : public spdlog::sinks::base_sink<std::mutex>
