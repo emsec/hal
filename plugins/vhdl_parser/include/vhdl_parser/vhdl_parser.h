@@ -34,6 +34,7 @@
 #include "vhdl_parser/vhdl_entity.h"
 
 #include <optional>
+#include <sstream>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
