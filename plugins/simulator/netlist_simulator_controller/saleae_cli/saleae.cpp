@@ -670,27 +670,27 @@ int main(int argc, const char* argv[])
     ProgramOptions generic_options("generic options");
     generic_options.add("--help", "print help messages");
 
-    ProgramOptions tool_options("tool options");
+    ProgramOptions tool_options("tools");
     tool_options.add("ls", "Lists content of saleae directory file saleae.json");
-    tool_options.add("cat", "Dump content of binary file into console", {""});
-    tool_options.add("diff", "Compares content of database in current saleae directory with other saleae database", {""});
+    tool_options.add("cat", "Dump content of binary file <arg> into console", {""});
+    tool_options.add("diff", "Compares content of database in current directory with other saleae database at <arg>", {""});
 
     ProgramOptions ls_options("ls options");
-    ls_options.add({"-d", "--dir"}, "lists saleae directory from directory given by absolute or relative path name", {ProgramOptions::A_REQUIRED_PARAMETER});
-    ls_options.add({"-s", "--size"}, "lists only entries with given number of waveform events", {ProgramOptions::A_REQUIRED_PARAMETER});
-    ls_options.add({"-i", "--id"}, "list only entries where ID matches entry in list. Entries are separated by comma. A single entry can be either an ID or a range sepearated by hyphen", {ProgramOptions::A_REQUIRED_PARAMETER});
+    ls_options.add({"-d", "--dir"}, "lists saleae directory from directory given by absolute or relative path name <ARG>", {ProgramOptions::A_REQUIRED_PARAMETER});
+    ls_options.add({"-s", "--size"}, "lists only entries with given number <ARG> of waveform events", {ProgramOptions::A_REQUIRED_PARAMETER});
+    ls_options.add({"-i", "--id"}, "list only entries where ID matches entry in list <ARG>. Entries are separated by comma. A single entry can be either an ID or a range sepearated by hyphen", {ProgramOptions::A_REQUIRED_PARAMETER});
     ls_options.add({"-v", "--validate"}, "validates time stamps and number of waveform events by comparing directory information with binary file header and binary file sizes.");
 
     ProgramOptions cat_options("cat options");
-    cat_options.add({"-d", "--dir"}, "binary file is not in current directory but in directory given by path name", {ProgramOptions::A_REQUIRED_PARAMETER});
+    cat_options.add({"-d", "--dir"}, "binary file is not in current directory but in directory given by path name <ARG>", {ProgramOptions::A_REQUIRED_PARAMETER});
     cat_options.add({"-h", "--only-header"}, "dump only header");
     cat_options.add({"-b", "--only-data"}, "dump only data including start value");
 
     ProgramOptions diff_options("diff options");
-    diff_options.add({"-d", "--dir"}, "current database not in current directory but in directory given by path name", {ProgramOptions::A_REQUIRED_PARAMETER});
-    diff_options.add({"-i", "--id"}, "compares only entries where ID matches entry in list", {ProgramOptions::A_REQUIRED_PARAMETER});
+    diff_options.add({"-d", "--dir"}, "current database not in current directory but in directory given by path name <ARG>", {ProgramOptions::A_REQUIRED_PARAMETER});
+    diff_options.add({"-i", "--id"}, "compares only entries where ID matches entry in list <ARG>. Entries are separated by comma. A single entry can be either an ID or a range sepearated by hyphen", {ProgramOptions::A_REQUIRED_PARAMETER});
     diff_options.add({"-x", "--only-differences"}, "when dumping waveform data values all rows without differences are suppressed (except header row)");
-    diff_options.add({"-t", "--max-tolerance"}, "the integer value sets the maximum tolerance when comparing waveform data. On default (zero tolerance) two waveforms A,B with transition values A=[0,12000,16000] B=[0,12010,16010] are considered to be different. However, when tolerance is set to 10 or higher the comparison will not find any differences", {ProgramOptions::A_REQUIRED_PARAMETER});
+    diff_options.add({"-t", "--max-tolerance"}, "the integer value <ARG> sets the maximum tolerance when comparing waveform data. On default (zero tolerance) two waveforms A,B with transition values A=[0,12000,16000] B=[0,12010,16010] are considered to be different. However, when tolerance is set to 10 or higher the comparison will not find any differences", {ProgramOptions::A_REQUIRED_PARAMETER});
 
 
     ProgramArguments args = tool_options.parse(argc, argv);
