@@ -53,13 +53,20 @@ namespace hal {
     }
 
 //----------------------------------
-    VcdSerializer::VcdSerializer(const QString& workdir, QObject *parent)
+    VcdSerializer::VcdSerializer(const QString& workdir, bool saleae_cli, QObject *parent)
         : QObject(parent), mSaleaeWriter(nullptr), mWorkdir(workdir), mLastProgress(-1)
     {
-        if (!mWorkdir.isEmpty())
+        if (!mWorkdir.isEmpty() && !saleae_cli)
         {
-            QDir saleaeDir = QDir(mWorkdir).absoluteFilePath("saleae");
+            std::cout << "DEBUG(vcd_serializer) " << "nicht empty " << std::endl;
+            QDir saleaeDir = QDir(mWorkdir).absoluteFilePath("xsaleae");
+            std::cout << "DEBUG(vcd_serializer) " << "63: " << saleaeDir.absolutePath().toStdString() << std::endl;
             mSaleaeDirectoryFilename = saleaeDir.absoluteFilePath("saleae.json");
+            std::cout << "DEBUG(vcd_serializer) " << "65: " << mSaleaeDirectoryFilename.toStdString() << std::endl;
+        }
+        else
+        {
+            mSaleaeDirectoryFilename = workdir + "/saleae.json";
         }
     }
 
@@ -93,31 +100,41 @@ namespace hal {
 
     bool VcdSerializer::exportVcd(const QString &filename, const QList<const WaveData*>& waves, u32 startTime, u32 endTime)
     {
+        std::cout << "DEBUG(vcd_serializer) " << "start export" << std::endl;
         mFirstTimestamp = startTime;
         mLastTimestamp  = endTime;
+        std::cout << "DEBUG(vcd_serializer) " << "startTime: " << mFirstTimestamp << " endTime: " << mLastTimestamp << std::endl;
         if (waves.isEmpty()) return false;
+        std::cout << "DEBUG(vcd_serializer) " << "wave_list not empty" << std::endl;
         SaleaeParser parser(mSaleaeDirectoryFilename.toStdString());
+        std::cout << "DEBUG(vcd_serializer) " << "mSaleaeDir: " << mSaleaeDirectoryFilename.toStdString() << std::endl;
 
         QFile of(filename);
         if (!of.open(QIODevice::WriteOnly)) return false;
+        std::cout << "DEBUG(vcd_serializer) " << "cat open file" << std::endl;
 
         mTime = 0;
         of.write(QByteArray("$scope module top_module $end\n"));
+        std::cout << "DEBUG(vcd_serializer) " << "write: $scope module top_module $end" << std::endl;
 
         int n = waves.size();
+        std::cout << "DEBUG(vcd_serializer) " << "wave_size: " << n << std::endl;
 
         for (int i=0; i<n; i++)
         {
             const WaveData* wd = waves.at(i);
             VcdSerializerElement* vse = new VcdSerializerElement(i,wd);
             mWriteElements.append(vse);
+            //std::cout << "DEBUG(vcd_serializer) " << "wd_name: " << wd->name().toStdString() << std::endl;
             parser.register_callback(wd->name().toStdString(),wd->id(),[this,&of](const void* obj, uint64_t t, int val) {
+
                 if (t != mTime)
                 {
                     writeVcdEvent(of);
                     mTime = t;
                 }
                 VcdSerializerElement* vse = (VcdSerializerElement*) obj;
+                std::cout << "DEBUG(vcd_serializer) " << "vse->setEvent(" << t << ", " << val << ");" << std::endl;
                 vse->setEvent(t,val);
             },vse);
             QString line = QString("$var wire 1 %1 %2 $end\n").arg(QString::fromUtf8(vse->charCode())).arg(vse->name());
@@ -125,6 +142,7 @@ namespace hal {
         }
 
         of.write(QByteArray("$upscope $end\n$enddefinitions $end\n"));
+        std::cout << "DEBUG(vcd_serializer) " << "write: $upscope $end" << std::endl;
 
         while (parser.next_event()) {;}
         for (VcdSerializerElement* vse : mWriteElements)

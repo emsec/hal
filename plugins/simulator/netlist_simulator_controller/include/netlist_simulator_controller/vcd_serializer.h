@@ -68,7 +68,7 @@ namespace hal {
         void emitImportDone();
 
     public:
-        VcdSerializer(const QString& workdir=QString(), QObject* parent = nullptr);
+        VcdSerializer(const QString& workdir=QString(), bool saleae_cli=false, QObject* parent = nullptr);
         std::string get_saleae_directory_filename() const { return mSaleaeDirectoryFilename.toStdString(); }
         bool exportVcd(const QString& filename, const QList<const WaveData*>& waves, u32 startTime, u32 endTime);
         bool importVcd(const QString& vcdFilename, const QString& workdir=QString(), const QList<const Net*>& onlyNets = QList<const Net*>());

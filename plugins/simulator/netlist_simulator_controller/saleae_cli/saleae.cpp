@@ -667,11 +667,11 @@ void saleae_export(std::string path_1, std::string path_2) {
 
 
 
-    VcdSerializer *vcd_s = new VcdSerializer(QString::fromStdString(path_2));
+    VcdSerializer *vcd_s = new VcdSerializer(QString::fromStdString(path_2), true);
 
 
     std::string saleae_filepath = path_2 + "/saleae.json";
-    std::cout << "DEBUG(saleae) " << "saleae dir path: " << saleae_filepath << std::endl;
+    //std::cout << "DEBUG(saleae) " << "saleae dir path: " << saleae_filepath << std::endl;
     WaveDataList *wave_data_list = new WaveDataList(QString::fromStdString(saleae_filepath));
     wave_data_list->updateFromSaleae();
     QList<const WaveData*> wave_data_qlist;
