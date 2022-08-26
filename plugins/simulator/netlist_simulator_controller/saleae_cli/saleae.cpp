@@ -662,6 +662,7 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
 
 
 void saleae_export(std::string path_1, std::string path_2) {
+
     std::cout << "DEBUG(saleae) " << "export to: " << path_1 << std::endl;
     std::cout << "DEBUG(saleae) " << "export from: " << path_2 << "\n" << std::endl;
 
@@ -828,7 +829,7 @@ int main(int argc, const char* argv[])
         }
         else
         {
-            saleae_export("/home/parallels/Desktop/test_vcd.vcd", "/home/parallels/Desktop/saleae");
+            saleae_export(export_path, args.get_parameter("--dir"));
         }
     }
     else
