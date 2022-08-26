@@ -665,27 +665,15 @@ void saleae_export(std::string path_1, std::string path_2) {
     std::cout << "DEBUG(saleae) " << "export to: " << path_1 << std::endl;
     std::cout << "DEBUG(saleae) " << "export from: " << path_2 << "\n" << std::endl;
 
-
-
     VcdSerializer *vcd_s = new VcdSerializer(QString::fromStdString(path_2), true);
-
-
     std::string saleae_filepath = path_2 + "/saleae.json";
-    //std::cout << "DEBUG(saleae) " << "saleae dir path: " << saleae_filepath << std::endl;
     WaveDataList *wave_data_list = new WaveDataList(QString::fromStdString(saleae_filepath));
     wave_data_list->updateFromSaleae();
     QList<const WaveData*> wave_data_qlist;
     for (const WaveData* wd : *wave_data_list) {
-        //std::cout << "DEBUG(saleae) " << "wave: " << wd->id() << std::endl;
         wave_data_qlist.append(wd);
     }
-    u32 start_time = wave_data_list->timeFrame().sceneMinTime();
-    u32 end_time = wave_data_list->timeFrame().sceneMaxTime();
-
-    bool ret = vcd_s->exportVcd(QString::fromStdString(path_1), wave_data_qlist, start_time, end_time);
-
-    if (ret) std::cout << "DEBUG(saleae) " << "GEKLAPPT!" << std::endl;
-
+    bool ret = vcd_s->exportVcd(QString::fromStdString(path_1), wave_data_qlist, wave_data_list->timeFrame().sceneMinTime(), wave_data_list->timeFrame().sceneMaxTime());
 }
 
 
