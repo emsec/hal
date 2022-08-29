@@ -190,7 +190,7 @@ namespace hal
 
         log_debug("boolean_influence", "Created context, function and generator. Trying to generator function now: ");
 
-        if (!function_gates.empty())
+        if (!gates.empty())
         {
             g.get_subgraph_z3_function_recursive(start_net, *func);
         }
@@ -210,7 +210,7 @@ namespace hal
         // translate net_ids back to nets
         std::map<Net*, double> nets_to_inf;
 
-        Netlist* nl = gate->get_netlist();
+        Netlist* nl = gates.front()->get_netlist();
         for (const auto& [net_id, inf] : net_ids_to_inf)
         {
             Net* net = nl->get_net_by_id(net_id);
