@@ -24,11 +24,13 @@ namespace hal {
         const WaveData* mData;
         u64 mTime;
         int mValue;
+        int mStartVal;
     public:
         VcdSerializerElement(int inx, const WaveData* wd);
         u64 time() const {return mTime; }
         int value() const { return mValue; }
         void setEvent(u64 t, int val) { mTime = t; mValue = val; }
+        void setStartVal(int val) { mStartVal = val; }
         bool hasData() const;
         void reset();
         QString name() const;
@@ -38,9 +40,10 @@ namespace hal {
     class VcdSerializer : public QObject
     {
         Q_OBJECT
-        u64 mTime;
+        int mTime;
         u64 mFirstTimestamp;
         u64 mLastTimestamp;
+        u64 mTimeShift;
         QMap<QString,SaleaeOutputFile*> mSaleaeFiles;
         SaleaeWriter* mSaleaeWriter;
         QList<VcdSerializerElement*> mWriteElements;
@@ -70,7 +73,7 @@ namespace hal {
     public:
         VcdSerializer(const QString& workdir=QString(), bool saleae_cli=false, QObject* parent = nullptr);
         std::string get_saleae_directory_filename() const { return mSaleaeDirectoryFilename.toStdString(); }
-        bool exportVcd(const QString& filename, const QList<const WaveData*>& waves, u32 startTime, u32 endTime);
+        bool exportVcd(const QString& filename, const QList<const WaveData*>& waves, u32 startTime, u32 endTime, u32 timeShift=0);
         bool importVcd(const QString& vcdFilename, const QString& workdir=QString(), const QList<const Net*>& onlyNets = QList<const Net*>());
         bool importCsv(const QString& csvFilename, const QString& workdir=QString(), const QList<const Net*>& onlyNets = QList<const Net*>(), u64 timeScale = 1000000000);
         bool importSaleae(const QString& saleaeDirecotry, const std::unordered_map<Net*,int>& lookupTable, const QString& workdir=QString(),  u64 timeScale = 1000000000);

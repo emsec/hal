@@ -690,11 +690,13 @@ void saleae_export(std::string path_1, std::string path_2, std::string ids, std:
 
     // handle --time-range option
     bool tr_necessary = false;
-    int first_time, last_time;
+    int time_shift, last_time;
     if (timerange != "") {
         tr_necessary = true;
-        auto [first_time, last_time] = parse_timerange(timerange);
-        if (first_time > last_time) {
+        auto [t1, t2] = parse_timerange(timerange);
+        time_shift = t1;
+        last_time = t2;
+        if (time_shift > last_time) {
             std::cout << "Invalid timerange. First time must be smaller then second time!" << std::endl;
             exit (1);
         }
@@ -721,12 +723,12 @@ void saleae_export(std::string path_1, std::string path_2, std::string ids, std:
         }
     }
 
-    if (true) {
-        first_time = wave_data_list->timeFrame().sceneMinTime();
+    if (!tr_necessary) {
+        time_shift = 0;
         last_time = wave_data_list->timeFrame().sceneMaxTime();
     }
 
-    bool ret = vcd_s->exportVcd(QString::fromStdString(path_1), wave_data_qlist, first_time, last_time);
+    bool ret = vcd_s->exportVcd(QString::fromStdString(path_1), wave_data_qlist, wave_data_list->timeFrame().sceneMinTime(), last_time, time_shift);
 
     if (ret) {
         exit (0);
