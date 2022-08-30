@@ -24,13 +24,11 @@ namespace hal {
         const WaveData* mData;
         u64 mTime;
         int mValue;
-        int mStartVal;
     public:
         VcdSerializerElement(int inx, const WaveData* wd);
         u64 time() const {return mTime; }
         int value() const { return mValue; }
         void setEvent(u64 t, int val) { mTime = t; mValue = val; }
-        void setStartVal(int val) { mStartVal = val; }
         bool hasData() const;
         void reset();
         QString name() const;
