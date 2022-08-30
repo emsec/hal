@@ -58,11 +58,8 @@ namespace hal {
     {
         if (!mWorkdir.isEmpty() && !saleae_cli)
         {
-            std::cout << "DEBUG(vcd_serializer) " << "nicht empty " << std::endl;
-            QDir saleaeDir = QDir(mWorkdir).absoluteFilePath("xsaleae");
-            std::cout << "DEBUG(vcd_serializer) " << "63: " << saleaeDir.absolutePath().toStdString() << std::endl;
+            QDir saleaeDir = QDir(mWorkdir).absoluteFilePath("saleae");
             mSaleaeDirectoryFilename = saleaeDir.absoluteFilePath("saleae.json");
-            std::cout << "DEBUG(vcd_serializer) " << "65: " << mSaleaeDirectoryFilename.toStdString() << std::endl;
         }
         else
         {
@@ -100,6 +97,9 @@ namespace hal {
 
     bool VcdSerializer::exportVcd(const QString &filename, const QList<const WaveData*>& waves, u32 startTime, u32 endTime)
     {
+        //int test_first_t = 45000;
+        //int test_last_t = 100000;
+
         mFirstTimestamp = startTime;
         mLastTimestamp  = endTime;
         if (waves.isEmpty()) return false;

@@ -56,7 +56,7 @@ bool check_ids(bool necessary, std::unordered_set<int> id_set, int id_to_check)
     return ((id_set.count(id_to_check)) || (!necessary));
 }
 
-
+// parses a string containing ids to a set of ids
 std::unordered_set<int> parse_list_of_ids(std::string list_of_ids)
 {
     std::unordered_set<int> id_set;
@@ -95,6 +95,16 @@ std::unordered_set<int> parse_list_of_ids(std::string list_of_ids)
     }
     return id_set;
 }
+
+
+// parses a string containing a timerange to a timerange tuple
+std::tuple<int,int> parse_timerange(std::string timerange) {
+    size_t del_pos = timerange.find(',');
+    int time_1 = std::stoi(timerange.substr(0, del_pos));
+    int time_2 = std::stoi(timerange.substr(del_pos + 1, std::string::npos));
+    return std::make_tuple(time_1, time_2);
+}
+
 
 int time_within_tolerance(const std::vector<uint64_t>& time_vec, int cur_time, int tolerance)
 {
@@ -143,7 +153,7 @@ void saleae_ls(std::string p_path, std::string size, std::string ids, bool valid
     if (!file_exists(path))
     {
         std::cout << "Cannot open file: " << path << std::endl;
-        return;
+        exit (1);
     }
 
     // handle --size option
@@ -268,13 +278,15 @@ void saleae_ls(std::string p_path, std::string size, std::string ids, bool valid
         if (val_cnt > 0)
         {
             std::cout << "Number of non-matching directory entries: " << val_cnt << std::endl;
+            exit (1);
         }
         else
         {
             std::cout << "validation OK" << std::endl;
+            exit (0);
         }
     }
-
+    exit (0);
 }
 
 
@@ -286,7 +298,7 @@ void saleae_cat(std::string path, std::string file_name, bool dump_header, bool 
     if (!file_exists(path))
     {
         std::cout << "Cannot open file: " << path << std::endl;
-        return;
+        exit (1);
     }
 
     // handle --only-data and --only-header option
@@ -386,6 +398,8 @@ void saleae_cat(std::string path, std::string file_name, bool dump_header, bool 
         }
         std::cout << std::string(abs_length + 2, '-') << std::endl;
     }
+
+    exit (0);
 }
 
 
@@ -397,13 +411,13 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
     if (!file_exists(path_1_json))
     {
         std::cout << "Cannot open file: " << path_1_json << std::endl;
-        return;
+        exit (1);
     }
     std::string path_2_json = path_2 + "/saleae.json";
     if (!file_exists(path_2_json))
     {
         std::cout << "Cannot open file: " << path_2_json << std::endl;
-        return;
+        exit (1);
     }
 
     // handle --id option
@@ -486,7 +500,7 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
                 if (!file_exists(bin_path))
                 {
                     std::cout << "Error in database: " << path_1 << "\nCannot open file: " << bin_path << std::endl;
-                    return;
+                    exit (1);
                 }
                 SaleaeInputFile *sf = new SaleaeInputFile(bin_path);
                 SaleaeDataBuffer *db = sf->get_buffered_data(sf->header()->mNumTransitions);
@@ -509,7 +523,7 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
                 if (!file_exists(bin_path))
                 {
                     std::cout << "Error in database: " << path_2 << "\nCannot open file: " << bin_path << std::endl;
-                    return;
+                    exit (1);
                 }
                 SaleaeInputFile *sf = new SaleaeInputFile(bin_path);
                 SaleaeDataBuffer *db = sf->get_buffered_data(sf->header()->mNumTransitions);
@@ -661,9 +675,8 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
 
 
 
-void saleae_export(std::string path_1, std::string path_2, std::string ids) {
-
-    //std::cout << "DEBUG(saleae) " << "export to: " << path_1 << std::endl;
+void saleae_export(std::string path_1, std::string path_2, std::string ids, std::string timerange) {
+    // handle --dir option
     path_2 = (path_2 == "") ? "." : path_2;
 
     // handle --id option
@@ -674,6 +687,19 @@ void saleae_export(std::string path_1, std::string path_2, std::string ids) {
         ids_necessary = true;
         id_set = parse_list_of_ids(ids);
     }
+
+    // handle --time-range option
+    bool tr_necessary = false;
+    int first_time, last_time;
+    if (timerange != "") {
+        tr_necessary = true;
+        auto [first_time, last_time] = parse_timerange(timerange);
+        if (first_time > last_time) {
+            std::cout << "Invalid timerange. First time must be smaller then second time!" << std::endl;
+            exit (1);
+        }
+    }
+
 
     VcdSerializer *vcd_s = new VcdSerializer(QString::fromStdString(path_2), true);
     std::string saleae_fp= path_2 + "/saleae.json";
@@ -694,7 +720,20 @@ void saleae_export(std::string path_1, std::string path_2, std::string ids) {
             wave_data_qlist.append(wd);
         }
     }
-    bool ret = vcd_s->exportVcd(QString::fromStdString(path_1), wave_data_qlist, wave_data_list->timeFrame().sceneMinTime(), wave_data_list->timeFrame().sceneMaxTime());
+
+    if (true) {
+        first_time = wave_data_list->timeFrame().sceneMinTime();
+        last_time = wave_data_list->timeFrame().sceneMaxTime();
+    }
+
+    bool ret = vcd_s->exportVcd(QString::fromStdString(path_1), wave_data_qlist, first_time, last_time);
+
+    if (ret) {
+        exit (0);
+    }
+    else {
+        exit (1);
+    }
 }
 
 
@@ -849,7 +888,7 @@ int main(int argc, const char* argv[])
         }
         else
         {
-            saleae_export(export_path, args.get_parameter("--dir"), args.get_parameter("--id"));
+            saleae_export(export_path, args.get_parameter("--dir"), args.get_parameter("--id"), args.get_parameter("--time-range"));
         }
     }
     else
