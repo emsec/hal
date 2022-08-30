@@ -661,18 +661,38 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
 
 
 
-void saleae_export(std::string path_1, std::string path_2) {
+void saleae_export(std::string path_1, std::string path_2, std::string ids) {
 
-    std::cout << "DEBUG(saleae) " << "export to: " << path_1 << std::endl;
-    std::cout << "DEBUG(saleae) " << "export from: " << path_2 << "\n" << std::endl;
+    //std::cout << "DEBUG(saleae) " << "export to: " << path_1 << std::endl;
+    path_2 = (path_2 == "") ? "." : path_2;
+
+    // handle --id option
+    bool ids_necessary = false;
+    std::unordered_set<int> id_set;
+    if (ids != "")
+    {
+        ids_necessary = true;
+        id_set = parse_list_of_ids(ids);
+    }
 
     VcdSerializer *vcd_s = new VcdSerializer(QString::fromStdString(path_2), true);
-    std::string saleae_filepath = path_2 + "/saleae.json";
-    WaveDataList *wave_data_list = new WaveDataList(QString::fromStdString(saleae_filepath));
+    std::string saleae_fp= path_2 + "/saleae.json";
+    WaveDataList *wave_data_list = new WaveDataList(QString::fromStdString(saleae_fp));
     wave_data_list->updateFromSaleae();
+
     QList<const WaveData*> wave_data_qlist;
-    for (const WaveData* wd : *wave_data_list) {
-        wave_data_qlist.append(wd);
+    if (ids_necessary) {
+        for (int id : id_set) {
+            const WaveData* wd = wave_data_list->waveDataById(id);
+            if (wd != nullptr) {
+                wave_data_qlist.append(wd);
+            }
+        }
+    }
+    else {
+        for (const WaveData* wd : *wave_data_list) {
+            wave_data_qlist.append(wd);
+        }
     }
     bool ret = vcd_s->exportVcd(QString::fromStdString(path_1), wave_data_qlist, wave_data_list->timeFrame().sceneMinTime(), wave_data_list->timeFrame().sceneMaxTime());
 }
@@ -829,7 +849,7 @@ int main(int argc, const char* argv[])
         }
         else
         {
-            saleae_export(export_path, args.get_parameter("--dir"));
+            saleae_export(export_path, args.get_parameter("--dir"), args.get_parameter("--id"));
         }
     }
     else
