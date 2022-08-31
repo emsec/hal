@@ -2,6 +2,7 @@
 
 #include "gui/gui_globals.h"
 #include "gui/input_dialog/input_dialog.h"
+#include "gui/input_dialog/combobox_dialog.h"
 #include "gui/input_dialog/pingroup_selector_dialog.h"
 #include "gui/python/py_code_provider.h"
 #include "gui/selection_details_widget/module_details_widget/port_tree_model.h"
@@ -13,6 +14,7 @@
 #include "gui/user_action/user_action_compound.h"
 #include "hal_core/netlist/gate_library/enums/pin_direction.h"
 #include "hal_core/utilities/enums.h"
+#include "hal_core/netlist/gate_library/enums/pin_type.h"
 
 #include <QApplication>
 #include <QClipboard>
@@ -194,6 +196,24 @@ namespace hal
                         renameObj->exec();
                     }
                 }
+            });
+
+            menu.addAction("Change type", [mod, name, itemId](){
+
+                auto pinRes = mod->get_pin_by_id(itemId);
+                if(pinRes.is_error())
+                    return;
+
+                auto pin = pinRes.get();
+                QStringList types;
+                for(auto const& [k, v] : EnumStrings<PinType>::data)
+                    types << QString::fromStdString(v);
+
+                ComboboxDialog cbd("Pin Types", "Select pin type", types);
+
+                if(cbd.exec() == QDialog::Accepted)
+                    mod->set_pin_type(pin, enum_from_string<PinType>(cbd.textValue().toStdString()));
+
             });
             menu.addAction("Add net to current selection", [this, n](){
                 gSelectionRelay->addNet(n->get_id());
