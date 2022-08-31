@@ -30,21 +30,30 @@ namespace hal
             .def_property_readonly("version", &BooleanInfluencePlugin::get_version)
             .def("get_version", &BooleanInfluencePlugin::get_version)
             .def("get_boolean_influences_of_gate", &BooleanInfluencePlugin::get_boolean_influences_of_gate, py::arg("gate"), R"(
-            Generates the function of the dataport net of the given flip-flop.
-            Afterwards the generated function gets translated from a z3::expr to efficent c code, compiled, executed and evalated.
+                Generates the function of the dataport net of the given flip-flop.
+                Afterwards the generated function gets translated from a z3::expr to efficent c code, compiled, executed and evalated.
 
-            :param halPy.Gate gate: The flip-flop which data input net is used to build the boolean function..
-            :returns: A mapping of the gates that appear in the function of the data net to their boolean influence in said function.
-            :rtype: dict
-        )")
+                :param hal_py.Gate gate: The flip-flop which data input net is used to build the boolean function.
+                :returns: A mapping of the gates that appear in the function of the data net to their boolean influence in said function.
+                :rtype: dict
+            )")
+            .def("get_boolean_influences_of_subcircuit", &BooleanInfluencePlugin::get_boolean_influences_of_subcircuit, py::arg("gates"), py::arg("start_net"), R"(
+                Generates the function of the net using only the given gates.
+                Afterwards the generated function gets translated from a z3::expr to efficent c code, compiled, executed and evalated.
+
+                :param list[hal_py.Gate] gates: The gates of the subcircuit.
+                :param hal_py.Net start_net: The output net of the subcircuit at which to start the analysis.
+                :returns: A mapping of the gates that appear in the function of the data net to their boolean influence in said function.
+                :rtype: dict
+            )")
             .def("get_ff_dependency_matrix", &BooleanInfluencePlugin::get_ff_dependency_matrix, py::arg("netlist"), py::arg("with_boolean_influence"), R"(
-            Get the FF dependency matrix of a netlist, with or without boolean influences.
+                Get the FF dependency matrix of a netlist, with or without boolean influences.
 
-            :param hal_py.Netlist netlist: The netlist to extract the dependency matrix from.
-            :param bool with_boolean_influence: True -- set boolean influence, False -- sets 1.0 if connection between FFs
-            :returns: A pair consisting of std::map<u32, Gate*>, which includes the mapping from the original gate
-            :rtype: pair(dict(int, hal_py.Gate), list[list[double]])
-        )");
+                :param hal_py.Netlist netlist: The netlist to extract the dependency matrix from.
+                :param bool with_boolean_influence: True -- set boolean influence, False -- sets 1.0 if connection between FFs
+                :returns: A pair consisting of std::map<u32, Gate*>, which includes the mapping from the original gate
+                :rtype: pair(dict(int, hal_py.Gate), list[list[double]])
+            )");
         ;
 
 #ifndef PYBIND11_MODULE

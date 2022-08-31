@@ -439,6 +439,9 @@ namespace hal
         QMap<int, qreal> mMaxLeftIoPaddingForChannelX;
         QMap<int, qreal> mMaxRightIoPaddingForChannelX;
 
+        QSet<u32> mViewInput;
+        QSet<u32> mViewOutput;
+
         int mMinXIndex;
         int mMinYIndex;
 

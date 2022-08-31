@@ -33,7 +33,7 @@ namespace hal
     {
         namespace pre_processing
         {
-            NetlistAbstraction run(Netlist* netlist);
+            NetlistAbstraction run(Netlist* netlist, bool register_stage_identification);
         }    // namespace pre_processing
     }        // namespace dataflow
 }    // namespace hal
