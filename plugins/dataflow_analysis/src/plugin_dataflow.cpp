@@ -15,6 +15,7 @@
 #include "dataflow_analysis/processing/passes/group_by_control_signals.h"
 #include "dataflow_analysis/processing/processing.h"
 #include "dataflow_analysis/utils/timing_utils.h"
+#include "dataflow_analysis/utils/gui_layout_locker.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/netlist.h"
@@ -200,6 +201,8 @@ namespace hal
 
         if (s_progress_indicator_function)
             s_progress_indicator_function(0, "dataflow analysis running ...");
+
+        dataflow::GuiLayoutLocker gll;
 
         // manage output
         if (!output_path.empty())

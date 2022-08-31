@@ -13,6 +13,7 @@
 #include "gui/user_action/user_action_manager.h"
 #include "gui/settings/settings_items/settings_item_dropdown.h"
 #include "gui/style/style.h"
+#include "gui/graph_widget/layout_locker.h"
 
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/netlist.h"
@@ -262,4 +263,15 @@ namespace hal
         return mDescription;
     }
 
+    void PluginGui::set_layout_locker(bool enable)
+    {
+        if (enable)
+            mLayoutLockerList.append(new LayoutLocker);
+        else
+        {
+            if (mLayoutLockerList.isEmpty()) return;
+            LayoutLocker* ll = mLayoutLockerList.takeLast();
+            delete ll;
+        }
+    }
 }    // namespace hal

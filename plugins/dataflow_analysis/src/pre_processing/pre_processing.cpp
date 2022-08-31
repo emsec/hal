@@ -199,7 +199,7 @@ namespace hal
                 void identify_all_succesors_predecessors_ffs_of_all_ffs(NetlistAbstraction& netlist_abstr)
                 {
                     log_info("dataflow", "identifying successors and predecessors of sequential gates...");
-                    measure_block_time("identifying successors and predecessors of sequential gates") progress_printer progress_bar;
+                    measure_block_time("identifying successors and predecessors of sequential gates") ProgressPrinter progress_bar;
                     float cnt = 0;
 
                     std::unordered_map<u32, std::vector<Gate*>> cache;
