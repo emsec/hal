@@ -674,8 +674,9 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
 }
 
 
-
-void saleae_export(std::string path_1, std::string path_2, std::string ids, std::string timerange) {
+// saleae export tool
+void saleae_export(std::string path_1, std::string path_2, std::string ids, std::string timerange)
+{
     // handle --dir option
     path_2 = (path_2 == "") ? "." : path_2;
 
@@ -691,7 +692,8 @@ void saleae_export(std::string path_1, std::string path_2, std::string ids, std:
     // handle --time-range option
     bool tr_necessary = false;
     int time_shift, last_time;
-    if (timerange != "") {
+    if (timerange != "")
+    {
         tr_necessary = true;
         auto [t1, t2] = parse_timerange(timerange);
         time_shift = t1;
@@ -701,7 +703,6 @@ void saleae_export(std::string path_1, std::string path_2, std::string ids, std:
             exit (1);
         }
     }
-
 
     VcdSerializer *vcd_s = new VcdSerializer(QString::fromStdString(path_2), true);
     std::string saleae_fp= path_2 + "/saleae.json";
@@ -722,14 +723,12 @@ void saleae_export(std::string path_1, std::string path_2, std::string ids, std:
             wave_data_qlist.append(wd);
         }
     }
-
     if (!tr_necessary) {
         time_shift = 0;
         last_time = wave_data_list->timeFrame().sceneMaxTime();
     }
 
     bool ret = vcd_s->exportVcd(QString::fromStdString(path_1), wave_data_qlist, wave_data_list->timeFrame().sceneMinTime(), last_time, time_shift);
-
     if (ret) {
         exit (0);
     }

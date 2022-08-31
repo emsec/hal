@@ -77,16 +77,12 @@ namespace hal {
 
     void VcdSerializer::writeVcdEvent(QFile&of)
     {
-        std::cout << "mTime: " << mTime << std::endl;
-
         if (mTime < mFirstTimestamp || mTime > mLastTimestamp) return;
         bool first = true;
         for (VcdSerializerElement* vse : mWriteElements)
         {
             if (vse->hasData())
             {
-                std::cout << "val: " << vse->value() << std::endl;
-                std::cout << "time: " << vse->time() << std::endl;
                 qulonglong ts = (vse->time() == 0) ? 0 : vse->time() - mTimeShift;
                 if (first)
                 {
@@ -124,7 +120,6 @@ namespace hal {
             parser.register_callback(wd->name().toStdString(),wd->id(),[this,&of](const void* obj, uint64_t t, int val) {
                 VcdSerializerElement* vse = (VcdSerializerElement*) obj;
                 if ((int)t - (int)mTimeShift < 0) {
-                    std::cout << "sdadsd: " << std::endl;
                     vse->setEvent(0,val);
                 }
                 else {
