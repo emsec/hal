@@ -26,6 +26,7 @@
 #include "gui/python/python_console.h"
 
 #include <QString>
+#include <QObject>
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
@@ -40,6 +41,8 @@
 namespace hal
 {
     class PythonContextSubscriber;
+    class PythonThread;
+    class PythonEditor;
 
     namespace py = pybind11;
     /**
@@ -49,13 +52,14 @@ namespace hal
      * This class provides an interface for using pybind11. It can call a python interpreter to run python expressions and
      * scripts. Moreover it provides a function to get auto-completion candidates that are available in the context.
      */
-    class __attribute__((visibility("default"))) PythonContext
+    class __attribute__((visibility("default"))) PythonContext : public QObject
     {
+        Q_OBJECT
     public:
         /**
          * Constructor.
          */
-        PythonContext();
+        PythonContext(QObject* parent=nullptr);
 
         /**
          * Destructor.
@@ -76,7 +80,7 @@ namespace hal
          *
          * @param input - The python script as a string.
          */
-        void interpretScript(const QString& input);
+        void interpretScript(PythonEditor *editor, const QString& input);
 
         /**
          * Forwards standard output to the python console.
@@ -148,8 +152,20 @@ namespace hal
          */
         void updateNetlist();
 
+        PythonThread* currentThread() { return mThread; }
+
+        static void initializeContext(py::dict* context);
+        static void initializeScript(py::dict* context);
+
+    Q_SIGNALS:
+        void threadFinished();
+
+    private Q_SLOTS:
+        void handleScriptFinished();
+        void handleScriptOutput(const QString& txt);
+        void handleScriptError(const QString& txt);
+
     private:
-        void initializeContext(py::dict* context);
 
         void handleReset();
 
@@ -163,5 +179,6 @@ namespace hal
 
         PythonConsole* mConsole;
         bool mTriggerReset = false;
+        PythonThread* mThread;
     };
 }    // namespace hal

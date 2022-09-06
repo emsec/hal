@@ -835,6 +835,15 @@ namespace hal
 
     void PythonEditor::handleActionRun()
     {
+        if (!mFileModifiedBar->isHidden())
+        {
+            QMessageBox::warning(this, "Script execution error", "Please respond to code editor message before executing the script");
+            return;
+        }
+
+        mFileModifiedBar->handleScriptExecute(mTabWidget->tabText(mTabWidget->currentIndex()));
+        mFileModifiedBar->setHidden(false);
+
         // Update snapshots when clicking on run
         this->updateSnapshots();
 
@@ -843,12 +852,17 @@ namespace hal
             ctx->beginChange();
         }
 
-        gPythonContext->interpretScript(dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->toPlainText());
+        gPythonContext->interpretScript(this,dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->toPlainText());
+    }
 
+    void PythonEditor::handleThreadFinished()
+    {
         for (const auto& ctx : gGraphContextManager->getContexts())
         {
             ctx->endChange();
         }
+
+        mFileModifiedBar->setHidden(true);
     }
 
     void PythonEditor::handleActionNewTab()

@@ -559,6 +559,8 @@ namespace hal
          */
         void toggleSearchbar();
 
+        void handleThreadFinished();
+
         /**
          * Q_SLOT to close the tab given by its index. If there are unsaved changes the user is ask whether to save
          * the changes, discard the changes or cancel the closing.
