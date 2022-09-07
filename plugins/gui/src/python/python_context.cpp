@@ -85,13 +85,19 @@ namespace hal
                      "        pass\n"
                      "    def write(self, stuff):\n"
                      "        from hal_gui import console\n"
-                     "        console.redirector.write_stdout(stuff)\n"
+                     "        if threading.current_thread() is threading.main_thread():\n"
+                     "            console.redirector.write_stdout(stuff)\n"
+                     "        else:\n"
+                     "            console.redirector.thread_stdout(stuff)\n"
                      "class StdErrCatcher(io.TextIOBase):\n"
                      "    def __init__(self):\n"
                      "        pass\n"
                      "    def write(self, stuff):\n"
                      "        from hal_gui import console\n"
-                     "        console.redirector.write_stderr(stuff)\n"
+                     "        if threading.current_thread() is threading.main_thread():\n"
+                     "            console.redirector.write_stderr(stuff)\n"
+                     "        else:\n"
+                     "            console.redirector.thread_stderr(stuff)\n"
                      "sys.stdout = StdOutCatcher()\n"
                      "sys.__stdout__ = sys.stdout\n"
                      "sys.stderr = StdErrCatcher()\n"
@@ -113,32 +119,10 @@ namespace hal
         // GIL must be held
 
         std::string command = "import __main__\n"
-                              "import io, sys\n";
-        for (auto path : utils::get_plugin_directories())
-        {
-            command += "sys.path.append('" + path.string() + "')\n";
-        }
-        command += "sys.path.append('" + utils::get_library_directory().string()
-                   + "')\n"
-                     "from hal_gui.console import reset\n"
-                     "from hal_gui.console import clear\n"
-                     "class StdOutCatcher(io.TextIOBase):\n"
-                     "    def __init__(self):\n"
-                     "        pass\n"
-                     "    def write(self, stuff):\n"
-                     "        from hal_gui import console\n"
-                     "        console.redirector.thread_stdout(stuff)\n"
-                     "class StdErrCatcher(io.TextIOBase):\n"
-                     "    def __init__(self):\n"
-                     "        pass\n"
-                     "    def write(self, stuff):\n"
-                     "        from hal_gui import console\n"
-                     "        console.redirector.thread_stderr(stuff)\n"
-                     "sys.stdout = StdOutCatcher()\n"
-                     "sys.__stdout__ = sys.stdout\n"
-                     "sys.stderr = StdErrCatcher()\n"
-                     "sys.__stderr__ = sys.stderr\n"
-                     "import hal_py\n";
+                              "import io, sys, threading\n"
+                              "from hal_gui.console import reset\n"
+                              "from hal_gui.console import clear\n"
+                              "import hal_py\n";
 
         py::exec(command, *context, *context);
 
@@ -199,8 +183,8 @@ namespace hal
         
         // since we've released the GIL in the constructor, re-acquire it here before
         // running some Python code on the main thread
-        //PyGILState_STATE state = PyGILState_Ensure();
-        PyEval_RestoreThread(mMainThreadState);
+        PyGILState_STATE state = PyGILState_Ensure();
+        //PyEval_RestoreThread(mMainThreadState);
 
         // TODO should the console also be moved to threads? Maybe actually catch Ctrl+C there
         // as a method to interrupt? Currently you can hang the GUI by running an endless loop
