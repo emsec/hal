@@ -180,5 +180,7 @@ namespace hal
         PythonConsole* mConsole;
         bool mTriggerReset = false;
         PythonThread* mThread;
+
+        PyThreadState* mMainThreadState;
     };
 }    // namespace hal

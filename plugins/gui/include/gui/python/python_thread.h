@@ -32,17 +32,19 @@ namespace hal {
         Q_OBJECT
         QString mScript;
         QString mErrorMessage;
-        int mPid;
     Q_SIGNALS:
         void stdOutput(QString txt);
         void stdError(QString txt);
     public:
-        PythonThread(const QString& script, QObject* parent = nullptr) : QThread(parent), mScript(script), mPid(-1) {;}
+        PythonThread(const QString& script, QObject* parent = nullptr) : QThread(parent), mScript(script) {;}
         void run() override;
+        void interrupt();
         QString errorMessage() const { return mErrorMessage; }
-        int pid() const { return mPid; }
         void handleStdout(const QString& output) override;
         virtual void handleError(const QString& output) override;
         virtual void clear() override;
+        long tid() { return mThreadID; }
+    private:
+        long mThreadID;
     };
 }
