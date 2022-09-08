@@ -183,5 +183,6 @@ namespace hal
         bool mTriggerReset;
         PythonThread* mThread;
         bool mThreadAborted;
+        PyThreadState* mMainThreadState;
     };
 }    // namespace hal

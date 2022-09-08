@@ -80,11 +80,13 @@ namespace hal
         mMessageLabel->setText(path + " has been moved on disk.");
     }
 
+    // FIXME why are we using FileModifiedBar for aborting a python script?
     void FileModifiedBar::handleAbortClicked()
     {
         gPythonContext->abortThread();
     }
 
+    
     void FileModifiedBar::handleReloadClicked()
     {
         Q_EMIT reloadClicked();

@@ -37,10 +37,27 @@ namespace hal
     {
         py::initialize_interpreter();
         initPython();
+
+        // The Python interpreter is not thread safe, so it implements an internal
+        // Global Interpreter Lock that means only one thread can actively be
+        // executing Python code at a time (though the interpreter can switch between
+        // threads, for example if one thread is blocked for I/O).
+        // Take care to always handle the GIL correctly, or you will cause deadlocks,
+        // weird issues with threads that are running but Python believes that they
+        // don't exist, etc.
+        // DO NOT EVER run Python code while not holding the GIL!
+        // Wherever possible, use the PyGILState_Ensure / PyGILState_Release API to
+        // acquire/release the GIL.
+
+        // We must release the GIL, otherwise any spawning thread will deadlock.
+        mMainThreadState = PyEval_SaveThread();
+
     }
 
     PythonContext::~PythonContext()
     {
+        PyEval_RestoreThread(mMainThreadState);
+
         closePython();
         py::finalize_interpreter();
     }
@@ -54,14 +71,17 @@ namespace hal
     {
         if (!mThread) return;
         mThreadAborted = true;
-        qDebug() << "Issue PyErr_SetInterrupt() ...";
-        qDebug() << "Done PyErr_SetInterrupt()";
+        qDebug() << "Issue interrupt ...";
+        mThread->interrupt();
+        qDebug() << "Done interrupt";
     }
 
     void PythonContext::initializeContext(py::dict* context)
     {
+        // GIL must be held
+
         std::string command = "import __main__\n"
-                              "import io, sys\n";
+                              "import io, sys, threading\n";
         for (auto path : utils::get_plugin_directories())
         {
             command += "sys.path.append('" + path.string() + "')\n";
@@ -75,13 +95,19 @@ namespace hal
                      "        pass\n"
                      "    def write(self, stuff):\n"
                      "        from hal_gui import console\n"
-                     "        console.redirector.write_stdout(stuff)\n"
+                     "        if threading.current_thread() is threading.main_thread():\n"
+                     "            console.redirector.write_stdout(stuff)\n"
+                     "        else:\n"
+                     "            console.redirector.thread_stdout(stuff)\n"
                      "class StdErrCatcher(io.TextIOBase):\n"
                      "    def __init__(self):\n"
                      "        pass\n"
                      "    def write(self, stuff):\n"
                      "        from hal_gui import console\n"
-                     "        console.redirector.write_stderr(stuff)\n"
+                     "        if threading.current_thread() is threading.main_thread():\n"
+                     "            console.redirector.write_stderr(stuff)\n"
+                     "        else:\n"
+                     "            console.redirector.thread_stderr(stuff)\n"
                      "sys.stdout = StdOutCatcher()\n"
                      "sys.__stdout__ = sys.stdout\n"
                      "sys.stderr = StdErrCatcher()\n"
@@ -100,33 +126,13 @@ namespace hal
 
     void PythonContext::initializeScript(py::dict *context)
     {
+        // GIL must be held
+
         std::string command = "import __main__\n"
-                              "import io, sys\n";
-        for (auto path : utils::get_plugin_directories())
-        {
-            command += "sys.path.append('" + path.string() + "')\n";
-        }
-        command += "sys.path.append('" + utils::get_library_directory().string()
-                   + "')\n"
-                     "from hal_gui.console import reset\n"
-                     "from hal_gui.console import clear\n"
-                     "class StdOutCatcher(io.TextIOBase):\n"
-                     "    def __init__(self):\n"
-                     "        pass\n"
-                     "    def write(self, stuff):\n"
-                     "        from hal_gui import console\n"
-                     "        console.redirector.thread_stdout(stuff)\n"
-                     "class StdErrCatcher(io.TextIOBase):\n"
-                     "    def __init__(self):\n"
-                     "        pass\n"
-                     "    def write(self, stuff):\n"
-                     "        from hal_gui import console\n"
-                     "        console.redirector.thread_stderr(stuff)\n"
-                     "sys.stdout = StdOutCatcher()\n"
-                     "sys.__stdout__ = sys.stdout\n"
-                     "sys.stderr = StdErrCatcher()\n"
-                     "sys.__stderr__ = sys.stderr\n"
-                     "import hal_py\n";
+                              "import io, sys, threading\n"
+                              "from hal_gui.console import reset\n"
+                              "from hal_gui.console import clear\n"
+                              "import hal_py\n";
 
         py::exec(command, *context, *context);
 
@@ -136,6 +142,8 @@ namespace hal
 
     void PythonContext::initPython()
     {
+        // GIL must be held
+
         //    using namespace py::literals;
 
         new py::dict();
@@ -154,6 +162,8 @@ namespace hal
 
     void PythonContext::interpret(const QString& input, bool multiple_expressions)
     {
+        qDebug() << "in interpret()";
+
         if (input.isEmpty())
         {
             return;
@@ -176,10 +186,26 @@ namespace hal
             forwardError("license() cannot be used in this interpreter.\n");
             return;
         }
+        
         log_info("python", "Python console execute: \"{}\".", input.toStdString());
+
+        qDebug() << "trying to get lock";
+        
+        // since we've released the GIL in the constructor, re-acquire it here before
+        // running some Python code on the main thread
+        PyGILState_STATE state = PyGILState_Ensure();
+        //PyEval_RestoreThread(mMainThreadState);
+
+        // TODO should the console also be moved to threads? Maybe actually catch Ctrl+C there
+        // as a method to interrupt? Currently you can hang the GUI by running an endless loop
+        // from the console.
+
+        qDebug() << "have lock";
+
         try
         {
             pybind11::object rc;
+            qDebug() << "starting execution";
             if (multiple_expressions)
             {
                 rc = py::eval<py::eval_statements>(input.toStdString(), *mContext, *mContext);
@@ -188,6 +214,7 @@ namespace hal
             {
                 rc = py::eval<py::eval_single_statement>(input.toStdString(), *mContext, *mContext);
             }
+            qDebug() << "execution succeeded";
             if (!rc.is_none())
             {
                 forwardStdout(QString::fromStdString(py::str(rc).cast<std::string>()));
@@ -196,14 +223,24 @@ namespace hal
         }
         catch (py::error_already_set& e)
         {
+            qDebug() << "error set";
             forwardError(QString::fromStdString(std::string(e.what())));
             e.restore();
             PyErr_Clear();
         }
         catch (std::exception& e)
         {
+            qDebug() << "exception";
             forwardError(QString::fromStdString(std::string(e.what())));
         }
+        qDebug() << "trying to release lock";
+
+        // make sure we release the GIL, otherwise we interfere with threading
+        PyGILState_Release(state);
+        //mMainThreadState = PyEval_SaveThread();
+
+        qDebug() << "released lock";
+
     }
 
     void PythonContext::interpretScript(PythonEditor* editor, const QString& input)
@@ -213,7 +250,6 @@ namespace hal
             log_warning("python", "Not executed, python script already running");
             return;
         }
-        py::print(py::globals());
 
         //log_info("python", "Python editor execute script:\n{}\n", input.toStdString());
 #ifdef HAL_STUDY
@@ -306,6 +342,8 @@ namespace hal
 
     std::vector<std::tuple<std::string, std::string>> PythonContext::complete(const QString& text, bool use_console_context)
     {
+        PyGILState_STATE state = PyGILState_Ensure();
+
         std::vector<std::tuple<std::string, std::string>> ret_val;
         py::dict tmp_context;
         try
@@ -347,11 +385,15 @@ namespace hal
             PyErr_Clear();
         }
 
+        PyGILState_Release(state);
+
         return ret_val;
     }
 
     int PythonContext::checkCompleteStatement(const QString& text)
     {
+
+        PyGILState_STATE state = PyGILState_Ensure();
         
         #if PY_VERSION_HEX < 0x030900a0 // Python 3.9.0
         // PEG not yet available, use PyParser
@@ -364,12 +406,15 @@ namespace hal
         {
             if (e.error == E_EOF)
             {
+                PyGILState_Release(state);
                 return 0;
             }
+            PyGILState_Release(state);
             return -1;
         }
 
         PyNode_Free(n);
+        PyGILState_Release(state);
         return 1;
 
         #else
@@ -379,6 +424,7 @@ namespace hal
         PyObject* o = Py_CompileStringExFlags(text.toStdString().c_str(), "stdin", Py_file_input, &flags, 0);
         // if parsing failed (-> not a complete statement), nullptr is returned
         // (apparently no need to PyObject_Free(o) here)
+        PyGILState_Release(state);
         return o != nullptr;
 
         #endif
