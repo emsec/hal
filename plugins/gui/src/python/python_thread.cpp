@@ -2,10 +2,12 @@
 #include <QDebug>
 
 namespace hal {
+    PythonThread::PythonThread(const QString& script, QObject* parent)
+        : QThread(parent), mScript(script)
+    {;}
+
     void PythonThread::run()
     {
-        mPid = getpid();
-
         py::dict tmp_context(py::globals());
         PythonContext::initializeScript(&tmp_context);
 

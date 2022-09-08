@@ -4,8 +4,6 @@
 #include "gui/python/python_thread.h"
 #include <QFileInfo>
 #include <sys/types.h>
-#include <signal.h>
-#include <QDebug>
 
 namespace hal
 {
@@ -84,12 +82,7 @@ namespace hal
 
     void FileModifiedBar::handleAbortClicked()
     {
-        if (gPythonContext->currentThread())
-        {
-            qDebug() << "about to terminate thread..." << gPythonContext->currentThread()->pid();
-            gPythonContext->currentThread()->terminate();
-            qDebug() << "thread terminated";
-        }
+        gPythonContext->abortThread();
     }
 
     void FileModifiedBar::handleReloadClicked()

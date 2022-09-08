@@ -44,8 +44,8 @@ PYBIND11_PLUGIN(hal_gui)
     py::module m2 = py_console.def_submodule("redirector", "redirector");
     m2.def("write_stdout", [](std::string s) -> void { gPythonContext->forwardStdout(QString::fromStdString(s)); });
     m2.def("write_stderr", [](std::string s) -> void { gPythonContext->forwardError(QString::fromStdString(s)); });
-    m2.def("thread_stdout", [](std::string s) -> void { gPythonContext->currentThread()->handleStdout(QString::fromStdString(s)); });
-    m2.def("thread_stderr", [](std::string s) -> void { gPythonContext->currentThread()->handleError(QString::fromStdString(s)); });
+    m2.def("thread_stdout", [](std::string s) -> void { if (gPythonContext->currentThread()) gPythonContext->currentThread()->handleStdout(QString::fromStdString(s)); });
+    m2.def("thread_stderr", [](std::string s) -> void { if (gPythonContext->currentThread()) gPythonContext->currentThread()->handleError(QString::fromStdString(s)); });
 
     py::class_<GuiApi> py_gui_api(m, "GuiApi", R"(GUI API)");
 

@@ -157,6 +157,8 @@ namespace hal
         static void initializeContext(py::dict* context);
         static void initializeScript(py::dict* context);
 
+        void abortThread();
+
     Q_SIGNALS:
         void threadFinished();
 
@@ -178,7 +180,8 @@ namespace hal
         std::string mHistoryFile;
 
         PythonConsole* mConsole;
-        bool mTriggerReset = false;
+        bool mTriggerReset;
         PythonThread* mThread;
+        bool mThreadAborted;
     };
 }    // namespace hal

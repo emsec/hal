@@ -24,6 +24,7 @@
 #pragma once
 #include <QThread>
 #include <QString>
+#include "hal_core/defines.h"
 #include "gui/python/python_context.h"
 
 namespace hal {
@@ -31,16 +32,16 @@ namespace hal {
     {
         Q_OBJECT
         QString mScript;
+        py::dict mGlobalsClone;
         QString mErrorMessage;
-        int mPid;
     Q_SIGNALS:
         void stdOutput(QString txt);
         void stdError(QString txt);
     public:
-        PythonThread(const QString& script, QObject* parent = nullptr) : QThread(parent), mScript(script), mPid(-1) {;}
+        PythonThread(const QString& script, QObject* parent = nullptr);
+        ~PythonThread() {;}
         void run() override;
         QString errorMessage() const { return mErrorMessage; }
-        int pid() const { return mPid; }
         void handleStdout(const QString& output) override;
         virtual void handleError(const QString& output) override;
         virtual void clear() override;

@@ -32,7 +32,8 @@ extern grammar _PyParser_Grammar;
 namespace hal
 {
     PythonContext::PythonContext(QObject *parent)
-        : QObject(parent), mContext(nullptr), mSender(nullptr), mThread(nullptr)
+        : QObject(parent), mContext(nullptr), mSender(nullptr), mTriggerReset(false), mThread(nullptr),
+          mThreadAborted(false)
     {
         py::initialize_interpreter();
         initPython();
@@ -47,6 +48,14 @@ namespace hal
     void PythonContext::setConsole(PythonConsole* c)
     {
         mConsole = c;
+    }
+
+    void PythonContext::abortThread()
+    {
+        if (!mThread) return;
+        mThreadAborted = true;
+        qDebug() << "Issue PyErr_SetInterrupt() ...";
+        qDebug() << "Done PyErr_SetInterrupt()";
     }
 
     void PythonContext::initializeContext(py::dict* context)
@@ -204,7 +213,7 @@ namespace hal
             log_warning("python", "Not executed, python script already running");
             return;
         }
-        // py::print(py::globals());
+        py::print(py::globals());
 
         //log_info("python", "Python editor execute script:\n{}\n", input.toStdString());
 #ifdef HAL_STUDY
@@ -236,8 +245,21 @@ namespace hal
 
     void PythonContext::handleScriptFinished()
     {
-        if (!mThread) return;
-        QString errmsg = mThread->errorMessage();
+        QString errmsg;
+        if (!mThread)
+        {
+            mThreadAborted = false;
+            return;
+        }
+
+        if (!mThreadAborted)
+            errmsg = mThread->errorMessage();
+        else
+        {
+            mThreadAborted = false;
+            // handleReset();
+        }
+
         mThread->deleteLater();
         mThread = 0;
 
@@ -248,6 +270,7 @@ namespace hal
         {
             mConsole->displayPrompt();
         }
+
         qDebug() << "PythonContext::handleScriptFinished done!";
         Q_EMIT threadFinished();
     }
