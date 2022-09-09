@@ -77,4 +77,23 @@ namespace hal {
         PyGILState_Release(state);
         qDebug() << "thread terminated";
     }
+
+    std::string PythonThread::handleInput(const QString& prompt)
+    {
+        if (!mInputMutex.tryLock())
+        {
+            qDebug() << "Oh no! Function already locked waiting for input.";
+            return std::string();
+        }
+        Q_EMIT requireInput(prompt);
+        mInputMutex.lock(); // wait for set Input
+        mInputMutex.unlock();
+        return mInputString.toStdString();
+    }
+
+    void PythonThread::setInput(const QString& inp)
+    {
+        mInputString = inp;
+        mInputMutex.unlock();
+    }
 }

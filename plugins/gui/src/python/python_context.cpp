@@ -10,6 +10,8 @@
 
 #include <QDir>
 #include <QDebug>
+#include <QInputDialog>
+#include <QApplication>
 #include <fstream>
 #include <gui/python/python_context.h>
 
@@ -263,6 +265,7 @@ namespace hal
         connect(mThread,&QThread::finished,this,&PythonContext::handleScriptFinished);
         connect(mThread,&PythonThread::stdOutput,this,&PythonContext::handleScriptOutput);
         connect(mThread,&PythonThread::stdError,this,&PythonContext::handleScriptError);
+        connect(mThread,&PythonThread::requireInput,this,&PythonContext::handleInputRequired);
         connect(this,&PythonContext::threadFinished,editor,&PythonEditor::handleThreadFinished);
         mThread->start();
     }
@@ -277,6 +280,15 @@ namespace hal
     {
         if (!txt.isEmpty())
             forwardError(txt);
+    }
+
+    void PythonContext::handleInputRequired(const QString& prompt)
+    {
+        bool confirm;
+        QString userInput = QInputDialog::getText(qApp->activeWindow(), "Python Script Input", prompt, QLineEdit::Normal, QString(), &confirm);
+        if (!confirm) userInput.clear();
+        if (mThread)
+            mThread->setInput(userInput);
     }
 
     void PythonContext::handleScriptFinished()

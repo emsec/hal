@@ -24,6 +24,7 @@
 #pragma once
 #include <QThread>
 #include <QString>
+#include <QMutex>
 #include "gui/python/python_context.h"
 
 namespace hal {
@@ -33,16 +34,21 @@ namespace hal {
         QString mScript;
         QString mErrorMessage;
         unsigned long mThreadID;
+        QString mInputString;
+        QMutex mInputMutex;
     Q_SIGNALS:
         void stdOutput(QString txt);
         void stdError(QString txt);
+        void requireInput(QString prompt);
     public:
         PythonThread(const QString& script, QObject* parent = nullptr);
         void run() override;
         void interrupt();
         QString errorMessage() const { return mErrorMessage; }
         void handleStdout(const QString& output) override;
-        virtual void handleError(const QString& output) override;
-        virtual void clear() override;
+        void handleError(const QString& output) override;
+        std::string handleInput(const QString& prompt);
+        void clear() override;
+        void setInput(const QString& inp);
      };
 }
