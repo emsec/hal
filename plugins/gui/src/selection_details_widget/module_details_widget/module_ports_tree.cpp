@@ -12,6 +12,7 @@
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/action_remove_items_from_object.h"
 #include "gui/user_action/user_action_compound.h"
+#include "gui/user_action/action_set_object_type.h"
 #include "hal_core/netlist/gate_library/enums/pin_direction.h"
 #include "hal_core/utilities/enums.h"
 #include "hal_core/netlist/gate_library/enums/pin_type.h"
@@ -212,7 +213,12 @@ namespace hal
                 ComboboxDialog cbd("Pin Types", "Select pin type", types);
 
                 if(cbd.exec() == QDialog::Accepted)
-                    mod->set_pin_type(pin, enum_from_string<PinType>(cbd.textValue().toStdString()));
+                {
+                    ActionSetObjectType* act = new ActionSetObjectType(cbd.textValue());
+                    act->setObject(UserActionObject(pin->get_id(), UserActionObjectType::Pin));
+                    act->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+                    act->exec();
+                }
 
             });
             menu.addAction("Add net to current selection", [this, n](){
