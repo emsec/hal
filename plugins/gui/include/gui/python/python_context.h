@@ -167,6 +167,7 @@ namespace hal
         void handleScriptOutput(const QString& txt);
         void handleScriptError(const QString& txt);
         void handleInputRequired(const QString& prompt);
+        void handleInputReceived(const QString& input);
 
     private:
 

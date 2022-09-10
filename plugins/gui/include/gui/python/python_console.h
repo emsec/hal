@@ -48,6 +48,9 @@ namespace hal
          */
         PythonConsole(QWidget* parent = nullptr);
 
+        enum PromptType { Standard, Compound, Input };
+
+    protected:
         /**
          * Overrides QTextEdit::keyPressEvent. It is used to handle the following (default) inputs: <br>
          * @li Ctrl+C: Copy
@@ -69,6 +72,10 @@ namespace hal
          */
         void mousePressEvent(QMouseEvent* event) override;
 
+    Q_SIGNALS:
+        void inputReceived(QString input);
+
+    public:
         /**
          * Prints forwarded standard output messages.
          *
@@ -151,6 +158,13 @@ namespace hal
          */
         void insertAtEnd(const QString& text, QColor textColor);
 
+        /**
+         * Set input mode on or off. In input mode input for running script is expected.
+         *
+         * @param state - true=on, false=off
+         */
+        void setInputMode(bool state);
+
     private:
         QColor mPromptColor;
         QColor mStandardColor;
@@ -158,13 +172,14 @@ namespace hal
 
         QString mStandardPrompt;
         QString mCompoundPrompt;
+        QString mInputPrompt;
 
         int mPromptBlockNumber;
         int mPromptLength;
         int mPromptEndPosition;
         int mCompoundPromptEndPosition;
 
-        bool mInCompoundPrompt;
+        PromptType mPromptType;
         bool mInCompletion;
 
         QString mCurrentCompoundInput;
@@ -174,5 +189,10 @@ namespace hal
         int mCurrentCompleterIndex;
 
         std::shared_ptr<PythonConsoleHistory> mHistory;
+
+        bool isCompound() const { return mPromptType == Compound; }
+        bool isInputMode() const { return mPromptType == Input; }
+
+        void keyPressEventInputMode(QKeyEvent* e);
     };
 }

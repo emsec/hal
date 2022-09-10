@@ -67,6 +67,7 @@ namespace hal
     void PythonContext::setConsole(PythonConsole* c)
     {
         mConsole = c;
+        connect(mConsole,&PythonConsole::inputReceived,this,&PythonContext::handleInputReceived);
     }
 
     void PythonContext::abortThread()
@@ -282,13 +283,25 @@ namespace hal
             forwardError(txt);
     }
 
+//    void PythonContext::handleInputRequired(const QString& prompt)
+//    {
+//        bool confirm;
+//        QString userInput = QInputDialog::getText(qApp->activeWindow(), "Python Script Input", prompt, QLineEdit::Normal, QString(), &confirm);
+//        if (!confirm) userInput.clear();
+//        if (mThread)
+//            mThread->setInput(userInput);
+//    }
     void PythonContext::handleInputRequired(const QString& prompt)
     {
-        bool confirm;
-        QString userInput = QInputDialog::getText(qApp->activeWindow(), "Python Script Input", prompt, QLineEdit::Normal, QString(), &confirm);
-        if (!confirm) userInput.clear();
-        if (mThread)
-            mThread->setInput(userInput);
+        mConsole->handleStdout(prompt + "\n");
+        mConsole->setInputMode(true);
+        mConsole->displayPrompt();
+    }
+
+    void PythonContext::handleInputReceived(const QString& input)
+    {
+        mConsole->setInputMode(false);
+        mThread->setInput(input);
     }
 
     void PythonContext::handleScriptFinished()
