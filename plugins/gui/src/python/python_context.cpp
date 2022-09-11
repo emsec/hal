@@ -4,6 +4,7 @@
 #include "gui/python/python_context_subscriber.h"
 #include "gui/python/python_thread.h"
 #include "gui/python/python_editor.h"
+#include "gui/module_dialog/gate_dialog.h"
 #include "hal_core/python_bindings/python_bindings.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
@@ -67,7 +68,7 @@ namespace hal
     void PythonContext::setConsole(PythonConsole* c)
     {
         mConsole = c;
-        connect(mConsole,&PythonConsole::inputReceived,this,&PythonContext::handleInputReceived);
+        connect(mConsole,&PythonConsole::inputReceived,this,&PythonContext::handleConsoleInputReceived);
     }
 
     void PythonContext::abortThread()
@@ -283,22 +284,46 @@ namespace hal
             forwardError(txt);
     }
 
-//    void PythonContext::handleInputRequired(const QString& prompt)
-//    {
-//        bool confirm;
-//        QString userInput = QInputDialog::getText(qApp->activeWindow(), "Python Script Input", prompt, QLineEdit::Normal, QString(), &confirm);
-//        if (!confirm) userInput.clear();
-//        if (mThread)
-//            mThread->setInput(userInput);
-//    }
-    void PythonContext::handleInputRequired(const QString& prompt)
+    void PythonContext::handleInputRequired(int type, const QString& prompt, const QVariant &defaultValue)
     {
-        mConsole->handleStdout(prompt + "\n");
-        mConsole->setInputMode(true);
-        mConsole->displayPrompt();
+        qDebug() << "PythonContext::handleInputRequired" << type << prompt;
+        bool confirm;
+        switch (type) {
+        case PythonThread::ConsoleInput:
+            mConsole->handleStdout(prompt + "\n");
+            mConsole->setInputMode(true);
+            mConsole->displayPrompt();
+            break;
+        case PythonThread::StringInput:
+        {
+            QString userInput = QInputDialog::getText(qApp->activeWindow(), "Python Script Input", prompt, QLineEdit::Normal, defaultValue.toString(), &confirm);
+            if (!confirm) userInput.clear();
+            if (mThread) mThread->setInput(userInput);
+            break;
+        }
+        case PythonThread::NumberInput:
+        {
+            int userInput = QInputDialog::getInt(qApp->activeWindow(), "Python Script Input", prompt, defaultValue.toInt());
+            if (mThread) mThread->setInput(userInput);
+            break;
+        }
+        case PythonThread::GateInput:
+        {
+            QSet<u32> gats;
+            for (const Gate* g : gNetlist->get_gates()) gats.insert(g->get_id());
+            GateDialog gd(*gats.begin(), true, gats, qApp->activeWindow());
+            Gate* gSelect = (gd.exec() == QDialog::Accepted)
+                    ? gNetlist->get_gate_by_id(gd.selectedId())
+                    : nullptr;
+            if (mThread) mThread->setInput(QVariant::fromValue<void*>(gSelect));
+            break;
+        }
+        default:
+            break;
+        }
     }
 
-    void PythonContext::handleInputReceived(const QString& input)
+    void PythonContext::handleConsoleInputReceived(const QString& input)
     {
         mConsole->setInputMode(false);
         mThread->setInput(input);

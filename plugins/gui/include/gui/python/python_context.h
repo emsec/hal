@@ -24,6 +24,7 @@
 #pragma once
 
 #include "gui/python/python_console.h"
+#include "gui/python/python_thread.h"
 
 #include <QString>
 #include <QObject>
@@ -41,7 +42,6 @@
 namespace hal
 {
     class PythonContextSubscriber;
-    class PythonThread;
     class PythonEditor;
 
     namespace py = pybind11;
@@ -166,8 +166,9 @@ namespace hal
         void handleScriptFinished();
         void handleScriptOutput(const QString& txt);
         void handleScriptError(const QString& txt);
-        void handleInputRequired(const QString& prompt);
-        void handleInputReceived(const QString& input);
+        void handleInputRequired(int type, const QString& prompt, const QVariant& defaultValue);
+        void handleConsoleInputReceived(const QString& input);
+        void handleGuiInputReceived(const QWidget* widget);
 
     private:
 

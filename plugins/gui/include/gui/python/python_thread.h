@@ -25,21 +25,29 @@
 #include <QThread>
 #include <QString>
 #include <QMutex>
-#include "gui/python/python_context.h"
+#include <QVariant>
+#include "gui/python/python_context_subscriber.h"
 
 namespace hal {
+    class Module;
+    class Gate;
+
     class PythonThread : public QThread, public PythonContextSubscriber
     {
+    public:
+        enum InputType {ConsoleInput, StringInput, NumberInput, ModuleInput, GateInput};
+    private:
         Q_OBJECT
         QString mScript;
         QString mErrorMessage;
         unsigned long mThreadID;
-        QString mInputString;
+        QVariant mInput;
         QMutex mInputMutex;
+        bool getInput(InputType type, QString prompt, QVariant defaultValue);
     Q_SIGNALS:
         void stdOutput(QString txt);
         void stdError(QString txt);
-        void requireInput(QString prompt);
+        void requireInput(int type, QString prompt, QVariant defaultValue);
     public:
         PythonThread(const QString& script, QObject* parent = nullptr);
         void run() override;
@@ -47,8 +55,12 @@ namespace hal {
         QString errorMessage() const { return mErrorMessage; }
         void handleStdout(const QString& output) override;
         void handleError(const QString& output) override;
-        std::string handleInput(const QString& prompt);
+        std::string handleConsoleInput(const QString& prompt);
+        std::string handleStringInput(const QString& prompt, const QString& defval);
+        int handleNumberInput(const QString& prompt, int defval);
+        Module* handleModuleInput(const QString& prompt);
+        Gate* handleGateInput(const QString& prompt);
         void clear() override;
-        void setInput(const QString& inp);
+        void setInput(const QVariant& inp);
      };
 }

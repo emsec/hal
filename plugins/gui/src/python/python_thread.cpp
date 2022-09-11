@@ -1,9 +1,12 @@
 #include "gui/python/python_thread.h"
+#include "gui/python/python_context.h"
 #include <QDebug>
 
 #include <pyerrors.h>
 #include <ceval.h>
 #include <pystate.h>
+#include "hal_core/netlist/module.h"
+#include "hal_core/netlist/gate.h"
 
 namespace hal {
     PythonThread::PythonThread(const QString& script, QObject* parent)
@@ -78,22 +81,54 @@ namespace hal {
         qDebug() << "thread terminated";
     }
 
-    std::string PythonThread::handleInput(const QString& prompt)
+    bool PythonThread::getInput(InputType type, QString prompt, QVariant defaultValue)
     {
         if (!mInputMutex.tryLock())
         {
             qDebug() << "Oh no! Function already locked waiting for input.";
-            return std::string();
+            return false;
         }
-        Q_EMIT requireInput(prompt);
+        qDebug() << "requireInput ..." << type << prompt;
+        Q_EMIT requireInput(type,prompt,defaultValue);
+        qDebug() << "requireInput done" << type << prompt;
         mInputMutex.lock(); // wait for set Input
         mInputMutex.unlock();
-        return mInputString.toStdString();
+        return true;
     }
 
-    void PythonThread::setInput(const QString& inp)
+    std::string PythonThread::handleConsoleInput(const QString& prompt)
     {
-        mInputString = inp;
+        if (!getInput(ConsoleInput, prompt, QString())) return std::string();
+        return mInput.toString().toStdString();
+    }
+
+    std::string PythonThread::handleStringInput(const QString& prompt, const QString& defval)
+    {
+        if (!getInput(StringInput, prompt, defval)) return std::string();
+        return mInput.toString().toStdString();
+    }
+
+    int PythonThread::handleNumberInput(const QString& prompt, int defval)
+    {
+        if (!getInput(NumberInput, prompt, defval)) return 0;
+        return mInput.toInt();
+    }
+
+    Module* PythonThread::handleModuleInput(const QString& prompt)
+    {
+        if (!getInput(ModuleInput, prompt, QString())) return 0;
+        return static_cast<Module*>(mInput.value<void*>());
+    }
+
+    Gate* PythonThread::handleGateInput(const QString& prompt)
+    {
+        if (!getInput(GateInput, prompt, QString())) return 0;
+        return static_cast<Gate*>(mInput.value<void*>());
+    }
+
+    void PythonThread::setInput(const QVariant &inp)
+    {
+        mInput = inp;
         mInputMutex.unlock();
     }
 }

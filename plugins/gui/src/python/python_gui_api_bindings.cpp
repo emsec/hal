@@ -34,7 +34,7 @@ PYBIND11_PLUGIN(hal_gui)
 
     auto py_console = m.def_submodule("console", R"(
         GUI Console
-)");
+    )");
 
     py_console.def("clear", []() -> void { gPythonContext->forwardClear(); });
     py_console.def("reset", []() -> void { gPythonContext->forwardReset(); });
@@ -46,9 +46,28 @@ PYBIND11_PLUGIN(hal_gui)
     m2.def("write_stderr", [](std::string s) -> void { gPythonContext->forwardError(QString::fromStdString(s)); });
     m2.def("thread_stdout", [](std::string s) -> void { if (gPythonContext->currentThread()) gPythonContext->currentThread()->handleStdout(QString::fromStdString(s)); });
     m2.def("thread_stderr", [](std::string s) -> void { if (gPythonContext->currentThread()) gPythonContext->currentThread()->handleError(QString::fromStdString(s)); });
-    m2.def("thread_stdin", [](std::string s) -> std::string { return (gPythonContext->currentThread()
-                                                                      ?gPythonContext->currentThread()->handleInput(QString::fromStdString(s))
+    m2.def("thread_stdin", [](std::string s = std::string("Please enter input:")) -> std::string { return (gPythonContext->currentThread()
+                                                                      ?gPythonContext->currentThread()->handleConsoleInput(QString::fromStdString(s))
                                                                       :std::string());});
+    auto gui_input = m.def_submodule("gui_input", R"(
+        GUI Input Widgets
+    )");
+    gui_input.def("inputString", [](std::string prompt = std::string("Please enter value"), std::string defval = std::string()) ->
+            std::string { return (gPythonContext->currentThread()
+                                 ?gPythonContext->currentThread()->handleStringInput(QString::fromStdString(prompt),QString::fromStdString(defval))
+                                 :std::string());});
+    gui_input.def("inputNumber", [](std::string prompt = std::string("Please enter number"), int defval = 0) ->
+            int { return (gPythonContext->currentThread()
+                          ?gPythonContext->currentThread()->handleNumberInput(QString::fromStdString(prompt),defval)
+                          :0);});
+    gui_input.def("inputGate", [](std::string prompt = std::string("Please select gate")) ->
+            Gate* { return (gPythonContext->currentThread()
+                           ?gPythonContext->currentThread()->handleGateInput(QString::fromStdString(prompt))
+                           :nullptr);});
+    gui_input.def("inputModule", [](std::string prompt = std::string("Please select module")) ->
+            Module* { return (gPythonContext->currentThread()
+                             ?gPythonContext->currentThread()->handleModuleInput(QString::fromStdString(prompt))
+                             :nullptr);});
 
     py::class_<GuiApi> py_gui_api(m, "GuiApi", R"(GUI API)");
 
