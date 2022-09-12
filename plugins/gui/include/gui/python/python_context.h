@@ -80,7 +80,7 @@ namespace hal
          *
          * @param input - The python script as a string.
          */
-        void interpretScript(PythonEditor *editor, const QString& input);
+        void interpretScript(const QString& input);
 
         /**
          * Forwards standard output to the python console.

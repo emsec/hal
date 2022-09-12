@@ -247,7 +247,7 @@ namespace hal
 
     }
 
-    void PythonContext::interpretScript(PythonEditor* editor, const QString& input)
+    void PythonContext::interpretScript(const QString& input)
     {
         if (mThread)
         {
@@ -268,7 +268,6 @@ namespace hal
         connect(mThread,&PythonThread::stdOutput,this,&PythonContext::handleScriptOutput);
         connect(mThread,&PythonThread::stdError,this,&PythonContext::handleScriptError);
         connect(mThread,&PythonThread::requireInput,this,&PythonContext::handleInputRequired);
-        connect(this,&PythonContext::threadFinished,editor,&PythonEditor::handleThreadFinished);
         mThread->start();
     }
 
@@ -286,7 +285,6 @@ namespace hal
 
     void PythonContext::handleInputRequired(int type, const QString& prompt, const QVariant &defaultValue)
     {
-        qDebug() << "PythonContext::handleInputRequired" << type << prompt;
         bool confirm;
         switch (type) {
         case PythonThread::ConsoleInput:
@@ -357,7 +355,6 @@ namespace hal
             mConsole->displayPrompt();
         }
 
-        qDebug() << "PythonContext::handleScriptFinished done!";
         Q_EMIT threadFinished();
     }
 
