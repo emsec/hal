@@ -1,5 +1,5 @@
 #include "gui/channel_manager/channel_model.h"
-
+#include <iostream>
 #include "hal_core/utilities/log.h"
 
 #define ALL_CHANNEL "all"
@@ -176,10 +176,15 @@ namespace hal
             item = addChannel(QString::fromStdString(channel_name));
         }
 
-        all_channel->appendEntry(new ChannelEntry(msg_text, t));
-        item->appendEntry(new ChannelEntry(msg_text, t));
-        Q_EMIT updated(t, ALL_CHANNEL, msg_text);
-        Q_EMIT updated(t, channel_name, msg_text);
+        std::string shown_text = msg_text;
+        if (shown_text.length() > 255)
+        {
+            shown_text = shown_text.substr(0, 255) + "...";
+        }
+        all_channel->appendEntry(new ChannelEntry(shown_text, t));
+        item->appendEntry(new ChannelEntry(shown_text, t));
+        Q_EMIT updated(t, ALL_CHANNEL, shown_text);
+        Q_EMIT updated(t, channel_name, shown_text);
     }
 }    // namespace hal
 
