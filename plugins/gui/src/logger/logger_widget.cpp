@@ -197,7 +197,6 @@ namespace hal
         for (ChannelEntry* entry : *(item->getEntries()))
         {
             bool filter = false;
-            std::cout << entry->mMsg << std::endl;
             // If entry msg matches with search string
             QRegularExpression re(mSearchFilter);
             if (re.match(QString::fromStdString(entry->mMsg)).hasMatch())
