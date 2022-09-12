@@ -39,7 +39,6 @@ namespace hal
         mContentLayout->addWidget(mPlainTextEdit);
 
         mPlainTextEdit->setContextMenuPolicy(Qt::CustomContextMenu);
-
         // Get last severity settings
         restoreSettings();
 
@@ -180,6 +179,10 @@ namespace hal
         // Set "all" Channel
         if (p == -1) {
             mCurrentChannelIndex = model->rowCount() - 1;
+        }
+
+        if (mCurrentChannelIndex == -2) {
+            return;
         }
 
         ChannelItem* item   = static_cast<ChannelItem*>((model->index(mCurrentChannelIndex, 0, QModelIndex())).internalPointer());

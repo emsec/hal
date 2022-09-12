@@ -206,7 +206,7 @@ namespace hal
         QString mSearchFilter;
 
         LoggerMarshall* mLogMarshall;
-        int mCurrentChannelIndex;
+        int mCurrentChannelIndex = -2;
         std::string mCurrentChannel;
         QReadWriteLock mLock;
         QScrollBar* mPlainTextEditScrollbar;
