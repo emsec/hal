@@ -1655,6 +1655,17 @@ namespace hal {
         return nullptr;
     }
 
+    WaveData* WaveDataList::waveDataById(const int id)
+    {
+        for (WaveData* wd : *this)
+            if (wd->id() == id)
+                return wd;
+        for (WaveDataBoolean* wdb : mDataBooleans.values())
+            if (wdb->id() == id)
+                return wdb;
+        return nullptr;
+    }
+
     void WaveDataList::testDoubleCount()
     {
         QMap<u32,int> doubleCount;

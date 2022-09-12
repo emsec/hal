@@ -180,6 +180,7 @@ namespace hal {
 
         WaveData* waveDataByNet(const Net* n);
         WaveData* waveDataByName(const std::string& nam) const;
+        WaveData* waveDataById(const int id);
         int waveIndexByNetId(u32 id) const { return mIds.value(id,-1); }
         void triggerAddToView(u32 id) const;
         bool hasNet(u32 id) const { return mIds.contains(id); }

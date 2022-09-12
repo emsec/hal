@@ -56,7 +56,10 @@ namespace hal
         NetlistSimulatorControllerPlugin* ctrlPlug = static_cast<NetlistSimulatorControllerPlugin*>(plugin_manager::get_plugin_instance("netlist_simulator_controller"));
         if (!ctrlPlug || !ctrlPlug->sSimulatorSerializer) return;
         for (std::unique_ptr<NetlistSimulatorController>& ctrlRef : ctrlPlug->sSimulatorSerializer->restore())
+        {
+            if (!ctrlRef) continue;
             takeControllerOwnership(ctrlRef);
+        }
     }
 
     WaveformViewer::WaveformViewer(QWidget *parent)

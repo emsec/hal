@@ -53,13 +53,17 @@ namespace hal {
     }
 
 //----------------------------------
-    VcdSerializer::VcdSerializer(const QString& workdir, QObject *parent)
+    VcdSerializer::VcdSerializer(const QString& workdir, bool saleae_cli, QObject *parent)
         : QObject(parent), mSaleaeWriter(nullptr), mWorkdir(workdir), mLastProgress(-1)
     {
-        if (!mWorkdir.isEmpty())
+        if (!mWorkdir.isEmpty() && !saleae_cli)
         {
             QDir saleaeDir = QDir(mWorkdir).absoluteFilePath("saleae");
             mSaleaeDirectoryFilename = saleaeDir.absoluteFilePath("saleae.json");
+        }
+        else
+        {
+            mSaleaeDirectoryFilename = workdir + "/saleae.json";
         }
     }
 
@@ -79,25 +83,27 @@ namespace hal {
         {
             if (vse->hasData())
             {
+                qulonglong ts = (vse->time() == 0) ? 0 : vse->time() - mTimeShift;
                 if (first)
                 {
-                    of.write('#' + QByteArray::number((qulonglong)vse->time()) + '\n');
+                    of.write('#' + QByteArray::number(ts) + '\n');
                     first = false;
                 }
                 of.write(QByteArray::number(vse->value()) + vse->charCode() + '\n');
                 vse->value();
                 vse->reset();
+
             }
         }
     }
 
-    bool VcdSerializer::exportVcd(const QString &filename, const QList<const WaveData*>& waves, u32 startTime, u32 endTime)
+    bool VcdSerializer::exportVcd(const QString &filename, const QList<const WaveData*>& waves, u32 startTime, u32 endTime, u32 timeSift)
     {
+        mTimeShift = timeSift;
         mFirstTimestamp = startTime;
-        mLastTimestamp  = endTime;
+        mLastTimestamp  = endTime - mTimeShift;
         if (waves.isEmpty()) return false;
         SaleaeParser parser(mSaleaeDirectoryFilename.toStdString());
-
         QFile of(filename);
         if (!of.open(QIODevice::WriteOnly)) return false;
 
@@ -112,13 +118,18 @@ namespace hal {
             VcdSerializerElement* vse = new VcdSerializerElement(i,wd);
             mWriteElements.append(vse);
             parser.register_callback(wd->name().toStdString(),wd->id(),[this,&of](const void* obj, uint64_t t, int val) {
-                if (t != mTime)
-                {
-                    writeVcdEvent(of);
-                    mTime = t;
-                }
                 VcdSerializerElement* vse = (VcdSerializerElement*) obj;
-                vse->setEvent(t,val);
+                if ((int)t - (int)mTimeShift < 0) {
+                    vse->setEvent(0,val);
+                }
+                else {
+                    if (t != mTime)
+                    {
+                        writeVcdEvent(of);
+                        mTime = t - mTimeShift;
+                    }
+                    vse->setEvent(t,val);
+                }
             },vse);
             QString line = QString("$var wire 1 %1 %2 $end\n").arg(QString::fromUtf8(vse->charCode())).arg(vse->name());
             of.write(line.toUtf8());

@@ -256,13 +256,21 @@ namespace hal
         std::filesystem::path lpath = pm->get_project_directory().get_default_filename(".log");
         lm.set_file_name(lpath);
 
-        deprecatedOpenFile(netlistFilename, gatelib);
-
-        gFileStatusManager->netlistChanged();
-        if (gNetlist)
-            if (pm->serialize_project(gNetlist))
-                gFileStatusManager->netlistSaved();
-        Q_EMIT projectOpened(projectDir.absolutePath(),QString::fromStdString(pm->get_netlist_filename()));
+        if (deprecatedOpenFile(netlistFilename, gatelib))
+        {
+            gFileStatusManager->netlistChanged();
+            if (gNetlist)
+                if (pm->serialize_project(gNetlist))
+                    gFileStatusManager->netlistSaved();
+            Q_EMIT projectOpened(projectDir.absolutePath(),QString::fromStdString(pm->get_netlist_filename()));
+        }
+        else
+        {
+            if (pm->remove_project_directory())
+                log_info("gui", "Project directory removed since import failed.");
+            else
+                log_warning("gui", "Failed to remove project directory after failed import attempt");
+        }
     }
 
     void FileManager::moveShadowToProject(const QDir& shDir) const
@@ -329,14 +337,14 @@ namespace hal
         lm.set_file_name(lpath);
     }
 
-    void FileManager::deprecatedOpenFile(QString filename, QString gatelibraryPath)
+    bool FileManager::deprecatedOpenFile(QString filename, QString gatelibraryPath)
     {
         QString logical_file_name = filename;
 
         if (gNetlist)
         {
             // ADD ERROR MESSAGE
-            return;
+            return false;
         }
 
         if (filename.isEmpty())
@@ -344,7 +352,7 @@ namespace hal
             QString errorMsg("Unable to open file. File name is empty");
             log_error("gui", "{}", errorMsg.toStdString());
             displayErrorMessage(errorMsg);
-            return;
+            return false;
         }
 
         QFile file(filename);
@@ -354,7 +362,7 @@ namespace hal
             std::string error_message("Unable to open file" + filename.toStdString());
             log_error("gui", "Unable to open file '{}'", error_message);
             displayErrorMessage(QString::fromStdString(error_message));
-            return;
+            return false;
         }
 
         if (filename.endsWith(".hal"))
@@ -368,15 +376,15 @@ namespace hal
                 gNetlist       = gNetlistOwner.get();
                 gNetlistRelay->registerNetlistCallbacks();
                 fileSuccessfullyLoaded(logical_file_name);
+                return true;
             }
             else
             {
                 std::string error_message("Failed to create netlist from .hal file");
                 log_error("gui", "{}", error_message);
                 displayErrorMessage(QString::fromStdString(error_message));
+                return false;
             }
-
-            return;
         }
 
         if (!gatelibraryPath.isEmpty())
@@ -390,11 +398,13 @@ namespace hal
                 gNetlist       = gNetlistOwner.get();
                 gNetlistRelay->registerNetlistCallbacks();
                 fileSuccessfullyLoaded(logical_file_name);
-                return;
+                return true;
             }
             else
             {
                 log_error("gui", "Failed using gate library {}.", gatelibraryPath.toStdString());
+                displayErrorMessage("Failed to open netlist\nwith user selected gate library\n"+gatelibraryPath);
+                return false;
             }
         }
 
@@ -413,7 +423,7 @@ namespace hal
                 gNetlist       = gNetlistOwner.get();
                 gNetlistRelay->registerNetlistCallbacks();
                 fileSuccessfullyLoaded(logical_file_name);
-                return;
+                return true;
             }
             else
             {
@@ -432,7 +442,7 @@ namespace hal
             std::string error_message("Unable to find a compatible gate library. Deserialization failed!");
             log_error("gui", "{}", error_message);
             displayErrorMessage(QString::fromStdString(error_message));
-            return;
+            return false;
         }
         else if (netlists.size() == 1)
         {
@@ -473,11 +483,12 @@ namespace hal
             }
             else
             {
-                return;
+                return false;
             }
         }
 
         fileSuccessfullyLoaded(logical_file_name);
+        return true;
     }
 
     void FileManager::closeFile()

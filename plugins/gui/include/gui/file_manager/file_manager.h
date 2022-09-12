@@ -155,7 +155,7 @@ namespace hal
          * @param fileName - The file to be opened.
          * @param gatelibraryPath - Path to gate library, auto detection if empty
          */
-        void deprecatedOpenFile(QString filename, QString gatelibraryPath);
+        bool deprecatedOpenFile(QString filename, QString gatelibraryPath);
 
 
         /**

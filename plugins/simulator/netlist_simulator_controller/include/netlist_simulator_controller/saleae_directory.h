@@ -214,7 +214,7 @@ namespace hal
         void add_or_replace_net(SaleaeDirectoryNetEntry& sdne);
 
         /// Dump content of class instance to console for debugging purpose
-        void dump() const;
+        std::vector<SaleaeDirectoryNetEntry> dump() const;
 
         /// Update file index information (like number of transitions, end time ...) after writing SALEAE files
         void update_file_indexes(std::unordered_map<int, SaleaeDirectoryFileIndex>& fileIndexes);
