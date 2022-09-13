@@ -34,7 +34,9 @@
 #include "gui/user_action/action_unfold_module.h"
 #include "gui/user_action/user_action_compound.h"
 #include "gui/module_dialog/module_dialog.h"
+#include "gui/module_dialog/custom_module_dialog.h"
 #include "gui/module_dialog/gate_dialog.h"
+#include "gui/module_dialog/custom_gate_dialog.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
@@ -628,7 +630,6 @@ namespace hal
 
         bool isMultiGates = gSelectionRelay->selectedGates().size() > 1 &&
                 gSelectionRelay->selectedModules().isEmpty();
-
         if (item)
         {
             mItem   = static_cast<GraphicsItem*>(item);
@@ -803,6 +804,17 @@ namespace hal
                 }
             }
         }
+        else
+        {
+            context_menu.addAction("This view:")->setEnabled(false);
+
+            action = context_menu.addAction("Add module to view");
+            QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleAddModuleToView);
+
+            action = context_menu.addAction("Add gate to view");
+            QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleAddGateToView);
+        }
+
 
         // if (!item || isNet)
         // {
@@ -888,6 +900,126 @@ namespace hal
 
     }
 
+
+    void GraphGraphicsView::handleAddModuleToView()
+    {
+        GraphContext* context = mGraphWidget->getContext();
+
+        QSet<u32> not_selectable_modules;
+        QSet<u32> modules_in_context = context->modules();
+        QSet<u32> gates_in_context = context->gates();
+
+        for (Module* module : gNetlist->get_modules())
+        {
+            bool module_in_context = false;
+            for (Module* submodule: module->get_submodules(nullptr, true))
+            {
+                if (modules_in_context.contains(submodule->get_id()))
+                {
+                    module_in_context = true;
+                    break;
+                }
+            }
+            for (Gate* subgate : module->get_gates(nullptr, true))
+            {
+                if (gates_in_context.contains(subgate->get_id()))
+                {
+                    module_in_context = true;
+                    break;
+                }
+            }
+            if (module_in_context)
+            {
+                not_selectable_modules.insert(module->get_id());
+            }
+        }
+
+        not_selectable_modules += modules_in_context;
+
+        QSet<u32> direct_par_modules;
+        for (u32 id : modules_in_context)
+        {
+            Module* cur_module = gNetlist->get_module_by_id(id);
+            for (Module* module : cur_module->get_submodules(nullptr, true))
+            {
+                not_selectable_modules.insert(module->get_id());
+            }
+
+            if (!cur_module->is_top_module())
+            {
+                direct_par_modules.insert(cur_module->get_parent_module()->get_id());
+            }
+        }
+
+        if (!gates_in_context.empty())
+        {
+            for (u32 id : gates_in_context)
+            {
+                direct_par_modules.insert(gNetlist->get_gate_by_id(id)->get_module()->get_id());
+            }
+        }
+
+        for (u32 id : direct_par_modules)
+        {
+            not_selectable_modules.insert(id);
+
+            Module* tmp_module = gNetlist->get_module_by_id(id);
+            while (!tmp_module->is_top_module())
+            {
+                Module* par_module = tmp_module->get_parent_module();
+                tmp_module = par_module;
+                not_selectable_modules.insert(par_module->get_id());
+            }
+        }
+
+        CustomModuleDialog module_dialog(not_selectable_modules, this);
+        if (module_dialog.exec() == QDialog::Accepted)
+        {
+            QSet<u32> module_to_add;
+            module_to_add.insert(module_dialog.selectedId());
+            ActionAddItemsToObject* act = new ActionAddItemsToObject(module_to_add, {});
+            act->setObject(UserActionObject(context->id(), UserActionObjectType::Context));
+            act->exec();
+        }
+    }
+
+
+    void GraphGraphicsView::handleAddGateToView()
+    {
+        GraphContext* context = mGraphWidget->getContext();
+
+        QSet<u32> not_selectable_gates = context->gates();
+        QSet<u32> modules_in_context = context->modules();
+
+        for (u32 module_id : modules_in_context)
+        {
+            for (Gate* gate : gNetlist->get_module_by_id(module_id)->get_gates(nullptr, true))
+            {
+                not_selectable_gates.insert(gate->get_id());
+            }
+        }
+
+        QSet<u32> selectable_gates;
+        for (Gate* gate : gNetlist->get_gates())
+        {
+            if (!not_selectable_gates.contains(gate->get_id()))
+            {
+                selectable_gates.insert(gate->get_id());
+            }
+        }
+
+        CustomGateDialog gate_dialog(0, true, selectable_gates, this);
+        if (gate_dialog.exec() == QDialog::Accepted)
+        {
+            QSet<u32> gate_to_add;
+            gate_to_add.insert(gate_dialog.selectedId());
+            ActionAddItemsToObject* act = new ActionAddItemsToObject({}, gate_to_add);
+            act->setObject(UserActionObject(context->id(), UserActionObjectType::Context));
+            act->exec();
+        }
+    }
+
+
     void GraphGraphicsView::handleAddSuccessorToView()
     {
         QAction* send = static_cast<QAction*>(sender());
@@ -969,7 +1101,7 @@ namespace hal
                 {
                     if (gatsHandled.contains(g)) continue;
                     gatsHandled.insert(g);
-                    if (boxes.boxForGate(g)) continue; // already in view
+                    if (boxes.boxForGate(g)) continue; // by in view
                     foundList.append(g);
                 }
             }
@@ -1057,7 +1189,9 @@ namespace hal
         Q_ASSERT(gOrigin);
 
         for (Gate* g : netlist_utils::get_next_gates(gOrigin,succ))
+        {
             selectableGates.insert(g->get_id());
+        }
 
         GateDialog gd(mItem->id(),succ,selectableGates,this);
         gd.hidePicker();
