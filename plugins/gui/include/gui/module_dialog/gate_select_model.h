@@ -106,28 +106,35 @@ namespace hal {
         gui_utility::mSortMechanism mSortMechanism;
     };
 
+    class GateSelectReceiver : public QObject
+    {
+        Q_OBJECT
+    public Q_SLOTS:
+        virtual void handleGatesPicked(const QSet<u32>& gats) = 0;
+    public:
+        GateSelectReceiver(QObject* parent = nullptr) : QObject(parent) {;}
+        virtual ~GateSelectReceiver() {;}
+    };
+
     /**
      * @brief The GateSelectPicker class instance gets spawned to pick module from graph
      */
     class GateSelectPicker : public QObject
     {
         Q_OBJECT
-        u32 mOrigin;
-        bool mPickSuccessor;
         QSet<u32> mSelectableGates;
-        static GateSelectPicker* sCurrentPicker;
+        QSet<u32> mGatesSelected;
 
     public:
-        GateSelectPicker(u32 orig, bool succ, const QSet<u32>& selectable);
-
-        static void terminateCurrentPicker();
+        GateSelectPicker(const QSet<u32>& selectable, GateSelectReceiver* receiver);
 
     Q_SIGNALS:
         void triggerCursor(int icurs);
-        void gatesPicked(u32 idFrom, u32 idTo);
+        void gatesPicked(QSet<u32> gats);
 
     public Q_SLOTS:
         void handleSelectionChanged(void* sender);
+        void terminatePicker();
     };
 
     /**

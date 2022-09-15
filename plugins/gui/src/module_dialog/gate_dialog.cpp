@@ -17,9 +17,9 @@
 #include <QTreeView>
 
 namespace hal {
-    GateDialog::GateDialog(u32 orig, bool succ, const QSet<u32> &selectable, QWidget* parent)
-        : QDialog(parent), mSelectedId(0), mOrigin(orig), mQuerySuccessor(succ),
-          mSelectableGates(selectable)
+    GateDialog::GateDialog(const QSet<u32> &selectable, GateSelectReceiver* receiver, QWidget* parent)
+        : QDialog(parent), mSelectedId(0), mReceiver(receiver),
+          mSelectableGates(selectable),  mPickerModeActivated(false)
     {
         setWindowTitle("Select Gate …");
         QGridLayout* layout = new QGridLayout(this);
@@ -80,12 +80,11 @@ namespace hal {
         connect(mButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
         connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 //        connect(mTreeView->selectionModel(),&QItemSelectionModel::currentChanged,this,&GateDialog::handleTreeSelectionChanged);
-    }
-
-    void GateDialog::hidePicker()
-    {
-        mButtonPick->setDisabled(true);
-        mButtonPick->hide();
+        if (receiver == nullptr)
+        {
+            mButtonPick->setDisabled(true);
+            mButtonPick->hide();
+        }
     }
 
     void GateDialog::enableButtons()
@@ -139,11 +138,8 @@ namespace hal {
 
     void GateDialog::handlePickFromGraph()
     {
-        GateSelectPicker* msp = new GateSelectPicker(mOrigin, mQuerySuccessor, mSelectableGates);
-        connect(gSelectionRelay, &SelectionRelay::selectionChanged, msp, &GateSelectPicker::handleSelectionChanged);
-        GraphGraphicsView* ggv = dynamic_cast<GraphGraphicsView*>(parent());
-        if (ggv)
-            connect(msp, &GateSelectPicker::gatesPicked, ggv, &GraphGraphicsView::handleShortestPath);
+        new GateSelectPicker(mSelectableGates, mReceiver);
+        mPickerModeActivated = true;
         reject(); // wait for picker, no selection done in dialog
     }
 

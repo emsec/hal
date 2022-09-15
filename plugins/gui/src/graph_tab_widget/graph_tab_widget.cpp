@@ -337,4 +337,9 @@ namespace hal
                 mTabWidget->widget(i)->setCursor(gcurs);
         }
     }
+
+    void GraphTabWidget::emitTerminatePicker() const
+    {
+        Q_EMIT triggerTerminatePicker();
+    }
 }

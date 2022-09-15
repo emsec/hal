@@ -309,16 +309,27 @@ namespace hal
         {
             QSet<u32> gats;
             for (const Gate* g : gNetlist->get_gates()) gats.insert(g->get_id());
-            GateDialog gd(*gats.begin(), true, gats, qApp->activeWindow());
+
+            PythonGateSelector* pgs = new PythonGateSelector(mThread,this);
+            GateDialog gd(gats, pgs, qApp->activeWindow());
             Gate* gSelect = (gd.exec() == QDialog::Accepted)
                     ? gNetlist->get_gate_by_id(gd.selectedId())
                     : nullptr;
-            if (mThread) mThread->setInput(QVariant::fromValue<void*>(gSelect));
+            if (!gd.pickerModeActivated() && mThread) mThread->setInput(QVariant::fromValue<void*>(gSelect));
             break;
         }
         default:
             break;
         }
+    }
+
+    void PythonGateSelector::handleGatesPicked(const QSet<u32>& gats)
+    {
+        Gate* gSelect = gats.isEmpty()
+                ? nullptr
+                : gNetlist->get_gate_by_id(*gats.constBegin());
+        if (mThread) mThread->setInput(QVariant::fromValue<void*>(gSelect));
+        this->deleteLater();
     }
 
     void PythonContext::handleConsoleInputReceived(const QString& input)

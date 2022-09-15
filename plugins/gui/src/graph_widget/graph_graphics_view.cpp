@@ -763,7 +763,7 @@ namespace hal
                 Module* m = isModule ? gNetlist->get_module_by_id(mItem->id()) : nullptr;
 
                 // only allow move actions on anything that is not the top module
-                if (gContentManager->getGraphTabWidget()->selectCursor() != GraphTabWidget::Select)
+                if (!gContentManager->getGraphTabWidget()->isSelectMode())
                 {
                     action = context_menu.addAction("  Cancel pick-item mode");
                     connect(action, &QAction::triggered, this, &GraphGraphicsView::handleCancelPickMode);
@@ -872,7 +872,7 @@ namespace hal
     void GraphGraphicsView::handleCancelPickMode()
     {
         ModuleSelectPicker::terminateCurrentPicker();
-        GateSelectPicker::terminateCurrentPicker();
+        gContentManager->getGraphTabWidget()->emitTerminatePicker();
     }
 
     namespace ShortestPath
@@ -1193,8 +1193,8 @@ namespace hal
             selectableGates.insert(g->get_id());
         }
 
-        GateDialog gd(mItem->id(),succ,selectableGates,this);
-        gd.hidePicker();
+//        GraphGraphicsViewNeighborSelector* ggvns = new GraphGraphicsViewNeighborSelector(mItem->id(), succ, this);
+        GateDialog gd(selectableGates, nullptr, this);
 
         if (gd.exec() != QDialog::Accepted) return;
 
@@ -1252,7 +1252,8 @@ namespace hal
         for (Gate* g : netlist_utils::get_next_gates(gNetlist->get_gate_by_id(mItem->id()),succ))
             selectableGates.insert(g->get_id());
 
-        GateDialog gd(mItem->id(),succ,selectableGates,this);
+        GraphGraphicsViewNeighborSelector* ggvns = new GraphGraphicsViewNeighborSelector(mItem->id(), succ, this);
+        GateDialog gd(selectableGates,ggvns,this);
 
         if (gd.exec() != QDialog::Accepted) return;
 
@@ -1734,4 +1735,20 @@ namespace hal
         mPanModifier = panModifier;
     }
 
+    void GraphGraphicsViewNeighborSelector::handleGatesPicked(const QSet<u32>& gats)
+    {
+        if (!gats.empty())
+        {
+            u32 pickedGate = *gats.constBegin();
+            GraphGraphicsView* ggv = dynamic_cast<GraphGraphicsView*>(parent());
+            if (ggv)
+            {
+                if (mPickSuccessor)
+                    ggv->handleShortestPath(mOrigin,pickedGate);
+                else
+                    ggv->handleShortestPath(pickedGate,mOrigin);
+            }
+        }
+        this->deleteLater();
+    }
 }    // namespace hal

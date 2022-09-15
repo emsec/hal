@@ -27,6 +27,7 @@
 #include "gui/gui_globals.h"
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
 #include "gui/graph_widget/graphics_scene.h"
+#include "gui/module_dialog/gate_select_model.h"
 
 #include <QGraphicsView>
 #include <QAction>
@@ -41,6 +42,19 @@ namespace hal
     {
         enum class grid_type;
     }
+
+    class GraphGraphicsViewNeighborSelector : public GateSelectReceiver
+    {
+        Q_OBJECT
+
+        u32 mOrigin;
+        bool mPickSuccessor;
+    public:
+        GraphGraphicsViewNeighborSelector(u32 orig, bool pickSuc, QObject* parent = nullptr)
+            : GateSelectReceiver(parent), mOrigin(orig), mPickSuccessor(pickSuc) {;}
+    public Q_SLOTS:
+        void handleGatesPicked(const QSet<u32>& gats) override;
+    };
 
     /**
      * @ingroup graph-visuals
@@ -93,6 +107,11 @@ namespace hal
          * @param id - The id of the module that was double clicked.
          */
         void moduleDoubleClicked(u32 id);
+
+        /**
+         * Q_SIGNAL that gets emitted to close all picker
+         */
+        void triggerTerminatePicker();
 
     public Q_SLOTS:
         /**
