@@ -8,7 +8,6 @@
 #include <QMenu>
 #include "gui/python/py_code_provider.h"
 #include "gui/graph_widget/graph_navigation_widget.h"
-#include <QDebug>
 #include <QMouseEvent>
 
 namespace hal
@@ -107,17 +106,17 @@ namespace hal
         bool isMiscSectionSet = false;//so that the misc-section is not set multiple times
 
         //PLAINTEXT: NAME, DIRECTION, TYPE
-        menu.addAction("Extract name as plain text",
+        menu.addAction("Name to clipboard",
             [clickedItem](){
             QApplication::clipboard()->setText(clickedItem->getData(GatePinsTreeModel::sNameColumn).toString());
         });
 
-        menu.addAction("Extract direction as plain text",
+        menu.addAction("Direction to clipboard",
             [clickedItem](){
             QApplication::clipboard()->setText(clickedItem->getData(GatePinsTreeModel::sDirectionColumn).toString());
         });
 
-        menu.addAction("Extract type as plain text",
+        menu.addAction("Type to clipboard",
             [clickedItem](){
             QApplication::clipboard()->setText(clickedItem->getData(GatePinsTreeModel::sTypeColumn).toString());
         });
@@ -129,34 +128,34 @@ namespace hal
             auto clickedNet = gNetlist->get_net_by_id(netId);
             if(clickedNet)
             {
-                //check if input or output pin (use enums, todo: save PinDirection in items as additional data(?))
-                auto direction = clickedItem->getData(GatePinsTreeModel::sDirectionColumn).toString();
-                if(direction == "output" && !clickedNet->is_global_output_net())
-                {
-                    menu.addSection("Misc");
-                    isMiscSectionSet = true;
-                    menu.addAction("Overwrite selection with destination gate", [this, netId](){
-                        mClearSelection = true;
-                        addSourceOurDestinationToSelection(netId, false);
-                    });
-                    menu.addAction("Add destination gate to selection", [this, netId](){
-                        mClearSelection = false;
-                        addSourceOurDestinationToSelection(netId, false);
-                    });
-                }
-                else if (direction == "input" && !clickedNet->is_global_input_net())
-                {
-                    menu.addSection("Misc");
-                    isMiscSectionSet = true;
-                    menu.addAction("Overwrite selection with source gate", [this, netId](){
-                        mClearSelection = true;
-                        addSourceOurDestinationToSelection(netId, true);
-                    });
-                    menu.addAction("Add source gate to selection", [this, netId](){
-                        mClearSelection = false;
-                        addSourceOurDestinationToSelection(netId, true);
-                    });
-                }
+//                //check if input or output pin (use enums, todo: save PinDirection in items as additional data(?))
+//                auto direction = clickedItem->getData(GatePinsTreeModel::sDirectionColumn).toString();
+//                if(direction == "output" && !clickedNet->is_global_output_net())
+//                {
+//                    menu.addSection("Misc");
+//                    isMiscSectionSet = true;
+//                    menu.addAction("Overwrite selection with destination gate", [this, netId](){
+//                        mClearSelection = true;
+//                        addSourceOurDestinationToSelection(netId, false);
+//                    });
+//                    menu.addAction("Add destination gate to selection", [this, netId](){
+//                        mClearSelection = false;
+//                        addSourceOurDestinationToSelection(netId, false);
+//                    });
+//                }
+//                else if (direction == "input" && !clickedNet->is_global_input_net())
+//                {
+//                    menu.addSection("Misc");
+//                    isMiscSectionSet = true;
+//                    menu.addAction("Overwrite selection with source gate", [this, netId](){
+//                        mClearSelection = true;
+//                        addSourceOurDestinationToSelection(netId, true);
+//                    });
+//                    menu.addAction("Add source gate to selection", [this, netId](){
+//                        mClearSelection = false;
+//                        addSourceOurDestinationToSelection(netId, true);
+//                    });
+//                }
             }
         }
 
@@ -173,13 +172,20 @@ namespace hal
         }
         if(netIds.size() != 0)
         {
-            QString desc = (netIds.size() == 1) ? "Add net to current selection" : "Add net(s) to current selection";
+            QString desc = (netIds.size() == 1) ? "Set net as current selection" : "Set net(s) as current selection";
+            QString desc2 = (netIds.size() == 1) ? "Add net to current selection" : "Add net(s) to current selection";
             if(!isMiscSectionSet)
             {
                 menu.addSection("Misc");
                 isMiscSectionSet = true;
             }
-            menu.addAction(desc,
+            menu.addAction(desc, [this, netIds](){
+                gSelectionRelay->clear();
+                for(const int id : netIds)
+                    gSelectionRelay->addNet(id);
+                gSelectionRelay->relaySelectionChanged(this);
+            });
+            menu.addAction(desc2,
                 [this, netIds](){
                 for(const int id : netIds)
                     gSelectionRelay->addNet(id);

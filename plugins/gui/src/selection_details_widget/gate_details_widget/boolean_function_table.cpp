@@ -5,10 +5,13 @@
 #include <QtWidgets/QMenu>
 #include <QApplication>
 #include <QClipboard>
+#include "gui/user_action/action_add_boolean_function.h"
+#include "gui/input_dialog/input_dialog.h"
 
 namespace hal {
     BooleanFunctionTable::BooleanFunctionTable(QWidget *parent) : QTableView(parent),
-    mBooleanFunctionTableModel(new BooleanFunctionTableModel(this))
+    mBooleanFunctionTableModel(new BooleanFunctionTableModel(this)), mCurrentGate(nullptr),
+      mCurrentGateId(0), mShowPlainDescr(false), mShowPlainPyDescr(false), mChangeBooleanFunc(false)
     {
         this->setModel(mBooleanFunctionTableModel);
         this->setSelectionMode(QAbstractItemView::NoSelection);
@@ -35,6 +38,12 @@ namespace hal {
         this->update();
     }
 
+    void BooleanFunctionTable::setGateInformation(Gate *g)
+    {
+        mCurrentGate = g;
+        mCurrentGateId = g ? g->get_id() : 0;
+    }
+
     void BooleanFunctionTable::resizeEvent(QResizeEvent *event)
     {
         QAbstractItemView::resizeEvent(event);
@@ -57,22 +66,42 @@ namespace hal {
                   Plaintext to Clipboard
           ====================================*/ 
 
-        QString toClipboardText = entry->getEntryIdentifier() + " = " + entry->getEntryValueString();
+        QString toClipboardText = entry->getEntryValueString();
+        QString description = mShowPlainDescr ? "Boolean function to clipboard" : entry->getEntryIdentifier() + " function to clipboard";
         menu.addAction(
-            "Copy plain function to clipboard",
+            //"Copy plain function to clipboard",
+            description,
             [toClipboardText]()
             {
                 QApplication::clipboard()->setText( toClipboardText );
             }
         );
 
+        if(mChangeBooleanFunc && mCurrentGate)
+        {
+            QString entryIdentifier = entry->getEntryIdentifier();
+            menu.addAction("Change Boolean function", [this, entryIdentifier](){
+                    InputDialog ipd("Change Boolean function", "New function", "");
+                    if(ipd.exec() == QDialog::Accepted && !ipd.textValue().isEmpty())
+                    {
+                        auto funcRes = BooleanFunction::from_string(ipd.textValue().toStdString());
+                        if(funcRes.is_ok())
+                        {
+                            ActionAddBooleanFunction* act = new ActionAddBooleanFunction(entryIdentifier, funcRes.get(), mCurrentGateId);
+                            act->exec();
+                        }
+                    }
+            });
+        }
+
         /*====================================
                 Python to Clipboard 
           ====================================*/
         pythonCode = entry->getPythonCode();
+        QString pythonDesc = mShowPlainPyDescr ? "Get boolean function" : "Get " +  entry->getEntryIdentifier() + " function";
         if(!pythonCode.isEmpty())
         {
-            menu.addAction(QIcon(":/icons/python"), "Extract value as python code", [pythonCode](){
+            menu.addAction(QIcon(":/icons/python"), pythonDesc, [pythonCode](){
                 QApplication::clipboard()->setText(pythonCode);
             });
         }

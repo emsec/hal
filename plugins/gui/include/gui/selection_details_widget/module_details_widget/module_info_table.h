@@ -81,9 +81,19 @@ namespace hal
         QString parentModule() const;
 
         /**
-         * Returns the number of gates contained in the module in a suitable mannfer for table and the clipboard.
+         * Returns the total number of gates contained in the module.
          */
-        QString numberOfGates() const;
+        QString numberOfAllGates() const;
+
+        /**
+         * Returns the number of gates directly contained in the module.
+         */
+        QString numberOfDirectGateMembers() const;
+
+        /**
+         * Returns the number of gates contained in all submodules.
+         */
+        QString numberOfGatesInSubmodules() const;
 
         /**
          * Returns the number of submodules contained in the module in a suitable mannfer for table and the clipboard.
@@ -94,6 +104,36 @@ namespace hal
          * Returns the number of nets contained in the module in a suitable mannfer for table and the clipboard.
          */
         QString numberOfNets() const;
+
+        /**
+         * Returns the module's number of pins.
+         */
+        QString numberOfPins() const;
+
+        /**
+         * Returns the module's number of pin groups.
+         */
+        QString numberOfPinGroups() const;
+
+        /**
+         * Returns the module's number of input nets.
+         */
+        QString numberOfInputNets() const;
+
+        /**
+         * Returns the module's number of output nets.
+         */
+        QString numberOfOutputNets() const;
+
+        /**
+         * Returns the module's number of internal nets.
+         */
+        QString numberOfInternalNets() const;
+
+        /**
+         * Returns True as a QString if the module is the top module, False otherwise.
+         */
+        QString isTopModule() const;
 
         /**
          * Opens a Dialog to change the modules's name.
@@ -114,6 +154,11 @@ namespace hal
          * Copies the module's id to the clipboard.
          */
         void copyId() const;
+
+        /**
+         * Copies the python code to retrieve the module's id to the clipvoard.
+         */
+        void pyCopyId() const;
 
         /**
          * Opens a Dialog to change the modules's type.
@@ -143,7 +188,32 @@ namespace hal
         /**
          * Copies the number of gates contained in the module to the clipboard.
          */
-        void copyNumberOfGates() const;
+        void copyNumberOfAllGates() const;
+
+        /**
+         * Copies the python code to retrieve all gates in the module and its submodules.
+         */
+        void pyCopyAllGates() const;
+
+        /**
+         * Copies the number of gates directly contained in the module.
+         */
+        void copyNumberOfDirectGates() const;
+
+        /**
+         * Copies the python code to retrieve all direct gates of the module
+         */
+        void pyCopyDirectMemberGates() const;
+
+        /**
+         * Copies the number of gates contained in all submodules.
+         */
+        void copyNumberOfGatesInSubmodules() const;
+
+        /**
+         * Copies the python code to retrieve only gates in the submodules.
+         */
+        void pyCopyGatesInSubmodules() const;
 
         /**
          * Copies the number of submodules contained in the module to the clipboard.
@@ -151,14 +221,109 @@ namespace hal
         void copyNumberOfSubmodules() const;
 
         /**
-         * Copies the number of nets contained in the module to the clipboard.
+         * Copies the python code to retrieve the submodules to the clipboard.
+         */
+        void pyCopyGetSubmodules() const;
+
+        /**
+         * Copies the number of ALL nets contained in the module to the clipboard.
          */
         void copyNumberOfNets() const;
+
+        /**
+         * Copies the python code to retrieve ALL nets to the clipboard.
+         */
+        void pyCopyGetNets() const;
+
+        /**
+         * Copies the number of pins to the clipboard.
+         */
+        void copyNumberOfPins() const;
+
+        /**
+         * Copies the python code to retrieve the module's pins to the clipboard.
+         */
+        void pyCopyGetPins() const;
+
+        /**
+         * Copies the number of pin groups to the clipboard.
+         */
+        void copyNumberOfPinGroups() const;
+
+        /**
+         * Copies the python code to retrieve the module's pin groups to the clipboard.
+         */
+        void pyCopyGetPinGroups() const;
+
+        /**
+         * Copies the module's number of inputs.
+         */
+        void copyNumberOfInputs() const;
+
+        /**
+         * Copies the python code to retrieve the module's input nets.
+         */
+        void pyCopyGetInputNets() const;
+
+        /**
+         * Copies the module's number of outputs.
+         */
+        void copyNumberOfOutputs() const;
+
+        /**
+         * Copies the python code to retrieve the module's output nets.
+         */
+        void pyCopyGetOutputNets() const;
+
+        /**
+         * Copies the module's number of internal nets to the clipboard.
+         */
+        void copyNumberOfInternalNets() const;
+
+        /**
+         * Copies the python code to retrieve the internal nets to the clipboard.
+         */
+        void pyCopyGetInternalNets() const;
+
+        /**
+         * Copies the python code to check if the module is the top module.
+         */
+        void pyCopyIsTopModule() const;
+
+        /**
+         * Copies the ID of the parent module to the clipboard.
+         */
+        void copyParentID() const;
+
+        /**
+         * Copies the python code retrieve the input pins.
+         */
+        void pyCopyInputPins() const;
+
+        /**
+         * Copies the python code retriebe the output pins.
+         */
+        void pyCopyOutputPins() const;
+
+        /**
+         * Sets the parent module as the current selection.
+         */
+        void setParentAsSelection();
+
+        /**
+         * Adds the parent module to the current selection.
+         */
+        void addParentToSelection();
 
         /**
          * Changes the selection to the modules's parent module.
          */
         void navModule();
+
+        /**
+         * Uses the ModuleDialog to open a popup to change the module's parent.
+         */
+        void changeParentAction();
 
         /**
          * Handle relayed removal of a module.
@@ -209,19 +374,37 @@ namespace hal
         QMenu* mIdEntryContextMenu;
         QMenu* mTypeEntryContextMenu;
         QMenu* mModuleEntryContextMenu;
-        QMenu* mNumOfGatesContextMenu;
+        QMenu* mNumOfAllGatesContextMenu;
+        QMenu* mNumOfDirectGatesContextMenu;
+        QMenu* mNumOfGatesInSubmodulesContextMenu;
         QMenu* mNumOfSubmodulesContextMenu;
         QMenu* mNumOfNetsContextMenu;
+        QMenu* mNumOfPinsContextMenu;
+        QMenu* mNumOfPinGroupsContextMenu;
+        QMenu* mNumOfInputNetsContextMenu;
+        QMenu* mNumOfOutputNetsContextMenu;
+        QMenu* mNumOfInternalNetsContextMenu;
+        QMenu* mIsTopModuleContextMenu;
+        QAction* mChangeParentAction;//is disabled if current module is the top module
 
         std::function<void()> mModuleDoubleClickedAction;
+        QIcon mPyIcon;
 
         static const QString nameRowKey;
         static const QString idRowKey;
         static const QString typeRowKey;
         static const QString moduleRowKey;
-        static const QString noOfGatesRowKey;
+        static const QString noOfAllGatesRowKey;
+        static const QString noOfDirectGatesRowKey;
+        static const QString noOfGatesInSubmodulesRowKey;
         static const QString noOfModulesRowKey;
         static const QString noOfNetsRowKey;
+        static const QString noOfPinsKey;
+        static const QString noOfPinGroupsKey;
+        static const QString noOfInputNetsKey;
+        static const QString noOfOutputNetsKey;
+        static const QString noOfInternalNetsKey;
+        static const QString isTopModuleKey;
 
     }; 
 }

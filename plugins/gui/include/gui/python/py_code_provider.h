@@ -35,10 +35,13 @@ namespace hal
     public:
 
         static QString pyCodeGate(u32 gateId);
+        static QString pyCodeGateId(u32 gateId);
         static QString pyCodeGateName(u32 gateId);
         static QString pyCodeGateType(u32 gateId);
         static QString pyCodeGateTypePinDirection(u32 gateID, QString pin);
         static QString pyCodeGateTypePinType(u32 gateID, QString pin);
+        static QString pyCodeGateInputPins(u32 gateID);
+        static QString pyCodeGateOutputPins(u32 gateID);
         static QString pyCodeProperties(u32 gateId);
         static QString pyCodeGateLocation(u32 gateId);
         static QString pyCodeGateModule(u32 gateId);
@@ -67,23 +70,38 @@ namespace hal
 
 
         static QString pyCodeNet(u32 netId);
+        static QString pyCodeNetId(u32 netId);
         static QString pyCodeNetName(u32 netId);
         static QString pyCodeNetType(u32 netId);
+        static QString pyCodeNetSources(u32 netId);
+        static QString pyCodeNetDestinations(u32 netId);
         static QString pyCodeNetData(u32 netId, QString category, QString key);
         static QString pyCodeNetDataMap(u32 netId);
 
         static QString pyCodeModule(u32 moduleId);
+        static QString pyCodeModuleId(u32 moduleId);
         static QString pyCodeModuleName(u32 moduleId);
         static QString pyCodeModuleType(u32 moduleId);
         static QString pyCodeModuleModule(u32 moduleId);
+        static QString pyCodeModuleSubmodules(u32 moduleId);
+        static QString pyCodeModuleGates(u32 moduleId, bool recursively = false);
+        static QString pyCodeModuleNets(u32 moduleId);
+        static QString pyCodeModuleInputNets(u32 moduleId);
+        static QString pyCodeModuleOutputNets(u32 moduleId);
+        static QString pyCodeModuleInputPins(u32 moduleId);
+        static QString pyCodeModuleOutputPins(u32 moduleId);
+        static QString pyCodeModuleInternalNets(u32 moduleId);
+        static QString pyCodeModuleIsTopModule(u32 moduleId);
         static QString pyCodeModuleData(u32 moduleId, QString category, QString key);
         static QString pyCodeModuleDataMap(u32 moduleId);
-        static QString pyCodeModulePinGroup(u32 moduleId, QString groupName);
-        static QString pyCodeModulePinGroupName(u32 moduleId, QString groupName);
-        static QString pyCodeModulePinByName(u32 moduleId, QString pinName);
-        static QString pyCodeModulePinName(u32 moduleId, QString pinName);
-        static QString pyCodeModulePinDirection(u32 moduleId, QString pinName);
-        static QString pyCodeModulePinType(u32 moduleId, QString pinName);
+        static QString pyCodeModulePinGroup(u32 moduleId, u32 groupId);
+        static QString pyCodeModulePinGroups(u32 moduleId);
+        static QString pyCodeModulePinGroupName(u32 moduleId, u32 groupId);
+        static QString pyCodeModulePinById(u32 moduleId, u32 pinId);
+        static QString pyCodeModulePinName(u32 moduleId, u32 pinId);
+        static QString pyCodeModulePinDirection(u32 moduleId, u32 pinId);
+        static QString pyCodeModulePinType(u32 moduleId, u32 pinId);
+        static QString pyCodeModulePins(u32 moduleId);
 
         static QString pyCodeGrouping(u32 groupingId);
         static QString pyCodeGroupingName(u32 groupingId);

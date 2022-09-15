@@ -104,6 +104,11 @@ namespace hal
          */
         GateTypeCategory getGateTypeCategory(Gate* gate) const;
 
+        /**
+         * Shows the requested context menu. It is connected to the LutConfigLabel.
+         */
+        void handleLutConfigContextMenuRequested(QPoint pos);//might make an own class for the configstring, context menu is handled there?
+
         bool mMultiTabVisible = true; 
         int mMultiTabIndex;
         QWidget* mMultiTabContent;

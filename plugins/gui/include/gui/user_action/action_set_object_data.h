@@ -26,44 +26,50 @@
 
 namespace hal
 {
-    /**
-     * @ingroup user_action
-     * @brief Create a new item
-     *
-     * Creates a new object with a given type and name.
-     *
-     * Undo Action: ActionDeleteObject.
-     */
-    class ActionCreateObject : public UserAction
+    class ActionSetObjectData : public UserAction
     {
-        QString mObjectName;
-        u32 mParentId;
+
     public:
-        /**
-         * Action Constructor.
-         *
-         * @param type - The UserActionObjectType of the item that should be created (default type: None)
-         * @param objName - The name of the object to create (default name: "").
-         */
-        ActionCreateObject(UserActionObjectType::ObjectType type=UserActionObjectType::None,
-                           const QString& objName = QString());
+        ActionSetObjectData(QString category = QString(), QString key = QString(), QString type = QString(), QString val = QString());
+
         bool exec() override;
         QString tagname() const override;
         void writeToXml(QXmlStreamWriter& xmlOut) const override;
         void readFromXml(QXmlStreamReader& xmlIn) override;
         void addToHash(QCryptographicHash& cryptoHash) const override;
-        void setParentId(u32 pid) {mParentId = pid;}//todo: remove this, use setParentObject instead
+
+        /**
+         * This function must be called when the key and/or category property of an already existing entry
+         * shall to be modified. Otherwise, instead of changing the 4 tupel from (oldKey, oldCat, oldType, oldVal)
+         * to (newKey, newCat, newType, newVal), a new entry would be inserted and both of them would coexist.
+         * (This also applies if, for example, one wants to only modify the category)
+         *
+         * @param oldKey - The old key that is to "potentionally" overwritten.
+         * @param oldCategory - The old category that is to "potentionally" overwritten.
+         */
+        void setChangeKeyAndOrCategory(QString oldCategory, QString oldKey);
+
+    private:
+        QString mKey;
+        QString mCat;
+        QString mType;
+        QString mVal;
+
+        QString mOldKey;
+        QString mOldCat;
+        bool mKeyOrCatModified;
     };
 
     /**
-     * @ingroup user_action
-     * @brief UserActionFactory for ActionCreateObject
+     * @brief The ActionSetObjectDataFactory class
      */
-    class ActionCreateObjectFactory : public UserActionFactory
+    class ActionSetObjectDataFactory : public UserActionFactory
     {
     public:
-        ActionCreateObjectFactory();
-        UserAction* newAction() const;
-        static ActionCreateObjectFactory* sFactory;
+        ActionSetObjectDataFactory();
+        UserAction * newAction() const override;
+        static ActionSetObjectDataFactory* sFactory;
+
     };
+
 }

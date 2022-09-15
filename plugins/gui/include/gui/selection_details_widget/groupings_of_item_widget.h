@@ -36,6 +36,8 @@
 
 namespace hal
 {
+
+    class GroupingTableEntry;
     /**
      * @ingroup utility_widgets-selection_details
      * @brief A TableView to display all groupings that contain a specified Gate, Net or Module.
@@ -111,6 +113,10 @@ namespace hal
         void adjustTableSizes();
 
         void notifyNewTitle(int elementCount);
+
+        void changeNameTriggered(GroupingTableEntry entry);
+
+        void changeColorTriggered(GroupingTableEntry entry);
 
         ItemType mCurrentObjectType;
         u32 mCurrentObjectId;

@@ -41,7 +41,6 @@ namespace hal
                     ActionReorderObject* undo = new ActionReorderObject(oldIndex);
                     undo->setObject(mObject);
                     undo->setParentObject(mParentObject);
-                    //undo->setPinOrPingroupIdentifier(mPinOrPingroupIdentifier);
                     mUndoAction = undo;
                 }
                 else
@@ -57,6 +56,28 @@ namespace hal
     QString ActionReorderObject::tagname() const
     {
         return ActionReorderObjectFactory::sFactory->tagname();
+    }
+
+    void ActionReorderObject::writeToXml(QXmlStreamWriter &xmlOut) const
+    {
+        writeParentObjectToXml(xmlOut);
+        xmlOut.writeTextElement("index",QString::number(mNewIndex));
+    }
+
+    void ActionReorderObject::readFromXml(QXmlStreamReader &xmlIn)
+    {
+        while(xmlIn.readNextStartElement())
+        {
+            readParentObjectFromXml(xmlIn);
+            if(xmlIn.name() == "index")
+                //check with bool (toInt(bool, base)) if conversions failed?
+                mNewIndex = xmlIn.readElementText().toInt();
+        }
+    }
+
+    void ActionReorderObject::addToHash(QCryptographicHash &cryptoHash) const
+    {
+        cryptoHash.addData(QByteArray::number(mNewIndex));
     }
 
 }

@@ -1,6 +1,8 @@
 #include "gui/user_action/action_set_object_type.h"
 #include "gui/gui_globals.h"
 #include "hal_core/netlist/module.h"
+#include "hal_core/netlist/gate_library/enums/pin_type.h"
+#include "hal_core/utilities/enums.h"
 
 namespace hal
 {
@@ -42,7 +44,27 @@ namespace hal
     {
         QString oldType;
         Module* mod;
-        switch (mObject.type()) {
+        switch (mObject.type())
+        {
+        case UserActionObjectType::Pin: //only possible to change module pin types
+        {
+            //should also check if its a valid type? (enum_from_string default value doesnt help
+            //since there is no default pintype value)
+            if(mObjectType.isEmpty())
+                return false;
+
+            mod = gNetlist->get_module_by_id(mParentObject.id());
+            if(!mod) return false;
+
+            auto pin = mod->get_pin_by_id(mObject.id());
+            if(pin.is_error()) return false;
+
+            oldType = QString::fromStdString(enum_to_string(pin.get()->get_type()));
+
+            auto ret = mod->set_pin_type(pin.get(), enum_from_string<PinType>(mObjectType.toStdString(), PinType::none));
+            if(ret.is_error()) return false;
+
+        } break;
         case UserActionObjectType::Module:
             mod = gNetlist->get_module_by_id(mObject.id());
             if (mod)
@@ -58,6 +80,7 @@ namespace hal
         }
         mUndoAction = new ActionSetObjectType(oldType);
         mUndoAction->setObject(mObject);
+        mUndoAction->setParentObject(mParentObject);
         return UserAction::exec();
     }
 }
