@@ -871,7 +871,6 @@ namespace hal
 
     void GraphGraphicsView::handleCancelPickMode()
     {
-        ModuleSelectPicker::terminateCurrentPicker();
         gContentManager->getGraphTabWidget()->emitTerminatePicker();
     }
 
@@ -1305,7 +1304,33 @@ namespace hal
 
     void GraphGraphicsView::handleModuleDialog()
     {
-        ModuleDialog md(this);
+        QSet<u32> exclude_ids;
+        QList<u32> modules = gSelectionRelay->selectedModulesList();
+        QList<u32> gates   = gSelectionRelay->selectedGatesList();
+
+        for (u32 gid : gates)
+        {
+            Gate* g = gNetlist->get_gate_by_id(gid);
+            if (!g)
+                continue;
+            exclude_ids.insert(g->get_module()->get_id());
+        }
+
+        for (u32 mid : modules)
+        {
+            exclude_ids.insert(mid);
+            Module* m = gNetlist->get_module_by_id(mid);
+            if (!m)
+                continue;
+            Module* pm = m->get_parent_module();
+            if (pm)
+                exclude_ids.insert(pm->get_id());
+            for (Module* sm : m->get_submodules(nullptr, true))
+                exclude_ids.insert(sm->get_id());
+        }
+
+        AddToModuleReceiver* receiver = new AddToModuleReceiver(this);
+        ModuleDialog md(receiver, exclude_ids, this);
         if (md.exec() != QDialog::Accepted) return;
         if (md.isNewModule())
         {

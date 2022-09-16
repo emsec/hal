@@ -30,6 +30,7 @@
 #include <QTableView>
 #include <QColor>
 #include <QList>
+#include <QDebug>
 
 namespace hal {
 
@@ -136,6 +137,16 @@ namespace hal {
         gui_utility::mSortMechanism mSortMechanism;
     };
 
+    class ModuleSelectReceiver : public QObject
+    {
+        Q_OBJECT
+    public:
+        ModuleSelectReceiver(QObject* parent = nullptr) : QObject(parent) {;}
+        virtual ~ModuleSelectReceiver() {;}
+    public Q_SLOTS:
+        virtual void handleModulesPicked(const QSet<u32>& mods) = 0;
+    };
+
     /**
      * @brief The ModuleSelectPicker class instance gets spawned to pick module from graph
      */
@@ -143,15 +154,17 @@ namespace hal {
     {
         Q_OBJECT
         ModuleSelectExclude mSelectExclude;
-        static ModuleSelectPicker* sCurrentPicker;
+        QSet<u32> mModulesSelected;
 
     public:
-        ModuleSelectPicker();
+        ModuleSelectPicker(ModuleSelectReceiver* receiver, QObject* parent = nullptr);
 
-        static void terminateCurrentPicker();
+    public Q_SLOTS:
+        void terminatePicker();
 
     Q_SIGNALS:
         void triggerCursor(int icurs);
+        void modulesPicked(QSet<u32> mods);
 
     public Q_SLOTS:
         void handleSelectionChanged(void* sender);

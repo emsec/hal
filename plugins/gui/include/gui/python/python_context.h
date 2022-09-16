@@ -26,6 +26,7 @@
 #include "gui/python/python_console.h"
 #include "gui/python/python_thread.h"
 #include "gui/module_dialog/gate_select_model.h"
+#include "gui/module_dialog/module_select_model.h"
 
 #include <QString>
 #include <QObject>
@@ -46,15 +47,26 @@ namespace hal
     class PythonEditor;
     class PythonThread;
 
-    class PythonGateSelector : public GateSelectReceiver
+    class PythonGateSelectionReceiver : public GateSelectReceiver
     {
         Q_OBJECT
         PythonThread* mThread;
     public Q_SLOTS:
         void handleGatesPicked(const QSet<u32>& gats) override;
     public:
-        PythonGateSelector(PythonThread* thread, QObject* parent = nullptr)
+        PythonGateSelectionReceiver(PythonThread* thread, QObject* parent = nullptr)
             : GateSelectReceiver(parent), mThread(thread) {;}
+    };
+
+    class PythonModuleSelectionReceiver : public ModuleSelectReceiver
+    {
+        Q_OBJECT
+        PythonThread* mThread;
+    public Q_SLOTS:
+        void handleModulesPicked(const QSet<u32>& gats) override;
+    public:
+        PythonModuleSelectionReceiver(PythonThread* thread, QObject* parent = nullptr)
+            : ModuleSelectReceiver(parent), mThread(thread) {;}
     };
 
     namespace py = pybind11;

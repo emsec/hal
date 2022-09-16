@@ -5,6 +5,7 @@
 #include "gui/python/python_thread.h"
 #include "gui/python/python_editor.h"
 #include "gui/module_dialog/gate_dialog.h"
+#include "gui/module_dialog/module_dialog.h"
 #include "hal_core/python_bindings/python_bindings.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
@@ -166,8 +167,6 @@ namespace hal
 
     void PythonContext::interpret(const QString& input, bool multiple_expressions)
     {
-        qDebug() << "in interpret()";
-
         if (input.isEmpty())
         {
             return;
@@ -309,26 +308,46 @@ namespace hal
         {
             QSet<u32> gats;
             for (const Gate* g : gNetlist->get_gates()) gats.insert(g->get_id());
-
-            PythonGateSelector* pgs = new PythonGateSelector(mThread,this);
+            if (gSelectionRelay->numberSelectedGates()) gSelectionRelay->clearAndUpdate();
+            PythonGateSelectionReceiver* pgs = new PythonGateSelectionReceiver(mThread,this);
             GateDialog gd(gats, pgs, qApp->activeWindow());
-            Gate* gSelect = (gd.exec() == QDialog::Accepted)
+            Gate* gatSelect = (gd.exec() == QDialog::Accepted)
                     ? gNetlist->get_gate_by_id(gd.selectedId())
                     : nullptr;
-            if (!gd.pickerModeActivated() && mThread) mThread->setInput(QVariant::fromValue<void*>(gSelect));
+            if (!gd.pickerModeActivated() && mThread) mThread->setInput(QVariant::fromValue<void*>(gatSelect));
             break;
+        }
+        case PythonThread::ModuleInput:
+        {
+            QSet<u32> mods;
+            if (gSelectionRelay->numberSelectedModules()) gSelectionRelay->clearAndUpdate();
+            PythonModuleSelectionReceiver* pms = new PythonModuleSelectionReceiver(mThread,this);
+            ModuleDialog md(pms, {}, qApp->activeWindow());
+            Module* modSelect = (md.exec() == QDialog::Accepted)
+                    ? gNetlist->get_module_by_id(md.selectedId())
+                    : nullptr;
+            if (!md.pickerModeActivated() && mThread) mThread->setInput(QVariant::fromValue<void*>(modSelect));
         }
         default:
             break;
         }
     }
 
-    void PythonGateSelector::handleGatesPicked(const QSet<u32>& gats)
+    void PythonGateSelectionReceiver::handleGatesPicked(const QSet<u32>& gats)
     {
-        Gate* gSelect = gats.isEmpty()
+        Gate* gatSelect = gats.isEmpty()
                 ? nullptr
                 : gNetlist->get_gate_by_id(*gats.constBegin());
-        if (mThread) mThread->setInput(QVariant::fromValue<void*>(gSelect));
+        if (mThread) mThread->setInput(QVariant::fromValue<void*>(gatSelect));
+        this->deleteLater();
+    }
+
+    void PythonModuleSelectionReceiver::handleModulesPicked(const QSet<u32>& mods)
+    {
+        Module* modSelect = mods.isEmpty()
+                ? nullptr
+                : gNetlist->get_module_by_id(*mods.constBegin());
+        if (mThread) mThread->setInput(QVariant::fromValue<void*>(modSelect));
         this->deleteLater();
     }
 

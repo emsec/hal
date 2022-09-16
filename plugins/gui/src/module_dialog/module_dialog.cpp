@@ -4,9 +4,11 @@
 #include "gui/module_model/module_model.h"
 #include "gui/module_model/module_proxy_model.h"
 #include "gui/module_model/module_item.h"
+#include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/searchbar/searchbar.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/settings/settings_items/settings_item_keybind.h"
+#include "gui/user_action/action_add_items_to_object.h"
 #include "hal_core/utilities/log.h"
 
 #include <QDialogButtonBox>
@@ -15,14 +17,19 @@
 #include <QTabWidget>
 #include <QTableView>
 #include <QTreeView>
+#include <QMessageBox>
+#include <QApplication>
 
 namespace hal {
-    ModuleDialog::ModuleDialog(QWidget* parent)
+    ModuleDialog::ModuleDialog(ModuleSelectReceiver* receiver, const QSet<u32>& excludeIds, QWidget* parent)
         : QDialog(parent),
           mSelectedId(0),
+          mExcludeIds(excludeIds),
           mLastUsed(nullptr),
           mSearchbar(new Searchbar(this)),
-          mNewModule(false)
+          mNewModule(false),
+          mReceiver(receiver),
+          mPickerModeActivated(false)
     {
         setWindowTitle("Move to module …");
         QGridLayout* layout = new QGridLayout(this);
@@ -32,7 +39,10 @@ namespace hal {
         layout->addWidget(butNew, 0, 0);
 
         mButtonPick = new QPushButton("Pick module from graph", this);
-        connect(mButtonPick, &QPushButton::pressed, this, &ModuleDialog::handlePickFromGraph);
+        if (mReceiver)
+            connect(mButtonPick, &QPushButton::pressed, this, &ModuleDialog::handlePickFromGraph);
+        else
+            mButtonPick->setDisabled(true);
         layout->addWidget(mButtonPick, 0, 1);
 
         QPushButton* butSearch = new QPushButton("Search", this);
@@ -44,41 +54,13 @@ namespace hal {
         mTreeView  = new QTreeView(mTabWidget);
         mTabWidget->addTab(mTreeView, "Module tree");
 
-
-        QSet<u32> exclude_ids;
-        QList<u32> modules = gSelectionRelay->selectedModulesList();
-        QList<u32> gates   = gSelectionRelay->selectedGatesList();
-
-        for (u32 gid : gates)
-        {
-            Gate* g = gNetlist->get_gate_by_id(gid);
-            if (!g)
-                continue;
-            exclude_ids.insert(g->get_module()->get_id());
-        }
-
-        for (u32 mid : modules)
-        {
-            exclude_ids.insert(mid);
-            Module* m = gNetlist->get_module_by_id(mid);
-            if (!m)
-                continue;
-            Module* pm = m->get_parent_module();
-            if (pm)
-                exclude_ids.insert(pm->get_id());
-            for (Module* sm : m->get_submodules(nullptr, true))
-                exclude_ids.insert(sm->get_id());
-        }
-
-
-
-        mTableView = new ModuleSelectView(false, mSearchbar, &exclude_ids, mTabWidget);
+        mTableView = new ModuleSelectView(false, mSearchbar, &mExcludeIds, mTabWidget);
         connect(mTableView, &ModuleSelectView::moduleSelected, this, &ModuleDialog::handleTableSelection);
         mTabWidget->addTab(mTableView, "Module list");
 
         if (!ModuleSelectHistory::instance()->isEmpty())
         {
-            mLastUsed = new ModuleSelectView(true, mSearchbar, &exclude_ids, mTabWidget);
+            mLastUsed = new ModuleSelectView(true, mSearchbar, &mExcludeIds, mTabWidget);
             if (mLastUsed->model()->rowCount())
             {
                 connect(mLastUsed, &ModuleSelectView::moduleSelected, this, &ModuleDialog::handleTableSelection);
@@ -170,10 +152,39 @@ namespace hal {
         if (mSelectedId && doubleClick) accept();
     }
 
+    void AddToModuleReceiver::handleModulesPicked(const QSet<u32>& mods)
+    {
+        if (!mods.empty())
+        {
+            u32 moduleId = *mods.constBegin();
+            Module* firstAccepted = gNetlist->get_module_by_id(moduleId);
+            Q_ASSERT(firstAccepted);
+            if (QMessageBox::question(qApp->activeWindow(),
+                                      "Confirm:",
+                                      QString("Ok to move %1 into module '%2'[%3]").arg(mSelectExclude.selectionToString()).arg(QString::fromStdString(firstAccepted->get_name())).arg(moduleId),
+                                      QMessageBox::Ok | QMessageBox::Cancel)
+                == QMessageBox::Ok)
+            {
+                ActionAddItemsToObject* act = new ActionAddItemsToObject(mSelectExclude.modules(), mSelectExclude.gates());
+                act->setObject(UserActionObject(moduleId, UserActionObjectType::Module));
+                act->exec();
+                gSelectionRelay->clear();
+                gSelectionRelay->addModule(moduleId);
+                gSelectionRelay->setFocus(SelectionRelay::ItemType::Module, moduleId);
+                gSelectionRelay->relaySelectionChanged(this);
+                gContentManager->getGraphTabWidget()->ensureSelectionVisible();
+
+                ModuleSelectHistory::instance()->add(moduleId);
+            }
+        }
+        deleteLater();
+    }
+
     void ModuleDialog::handlePickFromGraph()
     {
-        ModuleSelectPicker* msp = new ModuleSelectPicker;
-        connect(gSelectionRelay, &SelectionRelay::selectionChanged, msp, &ModuleSelectPicker::handleSelectionChanged);
+        Q_ASSERT(mReceiver);
+        new ModuleSelectPicker(mReceiver);
+        mPickerModeActivated = true;
         reject(); // wait for picker, no selection done in dialog
     }
 
