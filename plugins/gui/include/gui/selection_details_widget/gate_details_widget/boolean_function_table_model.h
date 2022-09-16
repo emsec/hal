@@ -269,6 +269,7 @@ namespace hal {
         StateComponentEntry(u32 gateId, StateCompType type, QString stateVal);
 
         QString getPythonCode() override;
+        StateCompType getStateCompType(){return specificType;};
 
     private:
 

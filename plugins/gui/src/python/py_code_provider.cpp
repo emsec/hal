@@ -25,6 +25,13 @@ namespace hal
         return gateCodePrefix.arg(gateId);
     }
 
+    QString PyCodeProvider::pyCodeGateId(u32 gateId)
+    {
+        const QString suffix = "get_id()";
+
+        return buildPyCode(gateCodePrefix, suffix, gateId);
+    }
+
     QString PyCodeProvider::pyCodeGateName(u32 gateId)
     {
         const QString suffix = "get_name()";
@@ -47,6 +54,20 @@ namespace hal
     QString PyCodeProvider::pyCodeGateTypePinType(u32 gateID, QString pin)
     {
         return pyCodeGateType(gateID) + QString(".get_pin_type(\"%1\")").arg(pin);
+    }
+
+    QString PyCodeProvider::pyCodeGateInputPins(u32 gateID)
+    {
+        const QString suffix = ".get_input_pins()";
+
+        return pyCodeGateType(gateID) + suffix;
+    }
+
+    QString PyCodeProvider::pyCodeGateOutputPins(u32 gateID)
+    {
+        const QString suffix = ".get_output_pins()";
+
+        return pyCodeGateType(gateID) + suffix;
     }
 
     QString PyCodeProvider::pyCodeGateBooleanFunction(u32 gateId, QString booleanFunctionName)
@@ -188,6 +209,13 @@ namespace hal
         return netCodePrefix.arg(netId);
     }
 
+    QString PyCodeProvider::pyCodeNetId(u32 netId)
+    {
+        const QString suffix = "get_id()";
+
+        return buildPyCode(netCodePrefix, suffix, netId);
+    }
+
     QString PyCodeProvider::pyCodeNetName(u32 netId)
     {
         const QString suffix = "get_name()";
@@ -213,6 +241,20 @@ namespace hal
         return pyCode;
     }
 
+    QString PyCodeProvider::pyCodeNetSources(u32 netId)
+    {
+        const QString suffix = "get_sources()";
+
+        return buildPyCode(netCodePrefix, suffix, netId);
+    }
+
+    QString PyCodeProvider::pyCodeNetDestinations(u32 netId)
+    {
+        const QString suffix = "get_destinations()";
+
+        return buildPyCode(netCodePrefix, suffix, netId);
+    }
+
     QString PyCodeProvider::pyCodeNetData(u32 netId, QString category, QString key)
     {
         const QString suffix = QString("data[(\"%1\", \"%2\")]").arg(category, key);
@@ -229,6 +271,13 @@ namespace hal
     QString PyCodeProvider::pyCodeModule(u32 moduleId)
     {
         return moduleCodePrefix.arg(moduleId);
+    }
+
+    QString PyCodeProvider::pyCodeModuleId(u32 moduleId)
+    {
+        const QString suffix = "get_id()";
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
     }
 
     QString PyCodeProvider::pyCodeModuleName(u32 moduleId)
@@ -253,6 +302,69 @@ namespace hal
         return buildPyCode(moduleCodePrefix, suffix, moduleId);
     }
 
+    QString PyCodeProvider::pyCodeModuleSubmodules(u32 moduleId)
+    {
+        const QString suffix = "get_submodules()";
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
+    }
+
+    QString PyCodeProvider::pyCodeModuleGates(u32 moduleId, bool recursively)
+    {
+        QString rec = recursively ? QString("None, True") : QString("");
+        const QString suffix = "get_gates(%2)";
+        return QString(moduleCodePrefix + "." + suffix).arg(QString::number(moduleId), rec);
+    }
+
+    QString PyCodeProvider::pyCodeModuleNets(u32 moduleId)
+    {
+        const QString suffix = "get_nets()";
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
+    }
+
+    QString PyCodeProvider::pyCodeModuleInputNets(u32 moduleId)
+    {
+        const QString suffix = "get_input_nets()";
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
+    }
+
+    QString PyCodeProvider::pyCodeModuleOutputNets(u32 moduleId)
+    {
+        const QString suffix = "get_output_nets()";
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
+    }
+
+    QString PyCodeProvider::pyCodeModuleInputPins(u32 moduleId)
+    {
+        const QString suffix = "get_pins(lambda pin: pin.get_direction() == hal_py.PinDirection.input)";
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
+    }
+
+    QString PyCodeProvider::pyCodeModuleOutputPins(u32 moduleId)
+    {
+        const QString suffix = "get_pins(lambda pin: pin.get_direction() == hal_py.PinDirection.output)";
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
+    }
+
+    QString PyCodeProvider::pyCodeModuleInternalNets(u32 moduleId)
+    {
+        const QString suffix = "get_internal_nets()";
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
+    }
+
+    QString PyCodeProvider::pyCodeModuleIsTopModule(u32 moduleId)
+    {
+        const QString suffix = "is_top_module()";
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
+    }
+
     QString PyCodeProvider::pyCodeModuleData(u32 moduleId, QString category, QString key)
     {
         const QString suffix = QString("data[(\"%1\", \"%2\")]").arg(category, key);
@@ -266,38 +378,52 @@ namespace hal
         return buildPyCode(moduleCodePrefix, suffix, moduleId);
     }
 
-    QString PyCodeProvider::pyCodeModulePinGroup(u32 moduleId, QString groupName)
+    QString PyCodeProvider::pyCodeModulePinGroup(u32 moduleId, u32 groupId)
     {
-        const QString suffix = QString("get_pin_group(\"%1\")").arg(groupName);
+        const QString suffix = QString("get_pin_group_by_id(%1)").arg(groupId);
 
         return buildPyCode(moduleCodePrefix, suffix, moduleId);
     }
 
-    QString PyCodeProvider::pyCodeModulePinGroupName(u32 moduleId, QString groupName)
+    QString PyCodeProvider::pyCodeModulePinGroups(u32 moduleId)
     {
-        return pyCodeModulePinGroup(moduleId, groupName) + ".get_name()";
-    }
-
-    QString PyCodeProvider::pyCodeModulePinByName(u32 moduleId, QString pinName)
-    {
-        const QString suffix = QString("get_pin(\"%1\")").arg(pinName);
+        const QString suffix = "get_pin_groups()";
 
         return buildPyCode(moduleCodePrefix, suffix, moduleId);
     }
 
-    QString PyCodeProvider::pyCodeModulePinName(u32 moduleId, QString pinName)
+    QString PyCodeProvider::pyCodeModulePinGroupName(u32 moduleId, u32 groupId)
     {
-        return pyCodeModulePinByName(moduleId, pinName) + ".get_name()";
+        return pyCodeModulePinGroup(moduleId, groupId) + ".get_name()";
     }
 
-    QString PyCodeProvider::pyCodeModulePinDirection(u32 moduleId, QString pinName)
+    QString PyCodeProvider::pyCodeModulePinById(u32 moduleId, u32 pinId)
     {
-        return pyCodeModulePinByName(moduleId, pinName) + ".get_direction()";
+        const QString suffix = QString("get_pin_by_id(%1)").arg(pinId);
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
     }
 
-    QString PyCodeProvider::pyCodeModulePinType(u32 moduleId, QString pinName)
+    QString PyCodeProvider::pyCodeModulePinName(u32 moduleId, u32 pinId)
     {
-        return pyCodeModulePinByName(moduleId, pinName) + ".get_type()";
+        return pyCodeModulePinById(moduleId, pinId) + ".get_name()";
+    }
+
+    QString PyCodeProvider::pyCodeModulePinDirection(u32 moduleId, u32 pinId)
+    {
+        return pyCodeModulePinById(moduleId, pinId) + ".get_direction()";
+    }
+
+    QString PyCodeProvider::pyCodeModulePinType(u32 moduleId, u32 pinId)
+    {
+        return pyCodeModulePinById(moduleId, pinId) + ".get_type()";
+    }
+
+    QString PyCodeProvider::pyCodeModulePins(u32 moduleId)
+    {
+        static QString suffix = "get_pins()";
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
     }
 
     QString PyCodeProvider::pyCodeGrouping(u32 groupingId)

@@ -13,31 +13,37 @@ namespace hal
     const QString NetInfoTable::nameRowKey    = "Name";
     const QString NetInfoTable::idRowKey      = "ID";
     const QString NetInfoTable::typeRowKey    = "Type";
-    const QString NetInfoTable::noOfSrcRowKey = "No. of Sources";
-    const QString NetInfoTable::noOfDstRowKey = "No. of Destinations";
+    const QString NetInfoTable::noOfSrcRowKey = "Number of Sources";
+    const QString NetInfoTable::noOfDstRowKey = "Number of Destinations";
 
     NetInfoTable::NetInfoTable(QWidget* parent) : GeneralTableWidget(parent), mNet(nullptr)
     {
         mNameEntryContextMenu = new QMenu();
-        mNameEntryContextMenu->addAction("Extract net name as plain text", std::bind(&NetInfoTable::copyName, this));
+        mNameEntryContextMenu->addAction("Name to clipboard", std::bind(&NetInfoTable::copyName, this));
         mNameEntryContextMenu->addSection("Misc");
-        mNameEntryContextMenu->addAction("Change net name", std::bind(&NetInfoTable::changeName, this));
+        mNameEntryContextMenu->addAction("Change name", std::bind(&NetInfoTable::changeName, this));
         mNameEntryContextMenu->addSection("Phyton");
-        mNameEntryContextMenu->addAction(QIcon(":/icons/python"), "Extract net name as phyton code", std::bind(&NetInfoTable::pyCopyName, this));
+        mNameEntryContextMenu->addAction(QIcon(":/icons/python"), "Get name", std::bind(&NetInfoTable::pyCopyName, this));
 
         mIdEntryContextMenu = new QMenu();
-        mIdEntryContextMenu->addAction("Extract net ID as plain text", std::bind(&NetInfoTable::copyId, this));
+        mIdEntryContextMenu->addAction("ID to clipboard", std::bind(&NetInfoTable::copyId, this));
+        mIdEntryContextMenu->addSection("Python");
+        mIdEntryContextMenu->addAction(QIcon(":/icons/python"), "Get ID", std::bind(&NetInfoTable::pyCopyId, this));
 
         mTypeEntryContextMenu = new QMenu();
-        mTypeEntryContextMenu->addAction("Extract net type as plain text", std::bind(&NetInfoTable::copyType, this));
+        mTypeEntryContextMenu->addAction("Type to clipboard", std::bind(&NetInfoTable::copyType, this));
         mTypeEntryContextMenu->addSection("Python");
-        mTypeEntryContextMenu->addAction(QIcon(":/icons/python"), "Extract net type as python code", std::bind(&NetInfoTable::pyCopyType, this));
+        mTypeEntryContextMenu->addAction(QIcon(":/icons/python"), "Get type", std::bind(&NetInfoTable::pyCopyType, this));
 
         mNumSrcsEntryContextMenu = new QMenu();
-        mNumSrcsEntryContextMenu->addAction("Copy number of sources as plain text", std::bind(&NetInfoTable::copyNumberOfSrcs, this));
+        mNumSrcsEntryContextMenu->addAction("Number of sources to clipboard", std::bind(&NetInfoTable::copyNumberOfSrcs, this));
+        mNumSrcsEntryContextMenu->addSection("Python");
+        mNumSrcsEntryContextMenu->addAction(QIcon(":/icons/python"), "Get sources", std::bind(&NetInfoTable::pyCopySrcs, this));
 
         mNumDstsEntryContextMenu = new QMenu();
-        mNumDstsEntryContextMenu->addAction("Copy number of destinations as plain text", std::bind(&NetInfoTable::copyNumberOfDsts, this));
+        mNumDstsEntryContextMenu->addAction("Number of destinations to clipboard", std::bind(&NetInfoTable::copyNumberOfDsts, this));
+        mNumDstsEntryContextMenu->addSection("Python");
+        mNumDstsEntryContextMenu->addAction(QIcon(":/icons/python"), "Get destinations", std::bind(&NetInfoTable::pyCopyDsts, this));
 
         connect(gNetlistRelay, &NetlistRelay::netRemoved, this, &NetInfoTable::handleNetRemoved);
         connect(gNetlistRelay, &NetlistRelay::netNameChanged, this, &NetInfoTable::handleNetNameChanged);
@@ -134,6 +140,11 @@ namespace hal
         copyToClipboard(id());
     }
 
+    void NetInfoTable::pyCopyId() const
+    {
+        copyToClipboard(PyCodeProvider::pyCodeNetId(mNet->get_id()));
+    }
+
     void NetInfoTable::copyType() const
     {
         copyToClipboard(type());
@@ -149,9 +160,19 @@ namespace hal
         copyToClipboard(numberOfSrcs());
     }
 
+    void NetInfoTable::pyCopySrcs() const
+    {
+        copyToClipboard(PyCodeProvider::pyCodeNetSources(mNet->get_id()));
+    }
+
     void NetInfoTable::copyNumberOfDsts() const
     {
         copyToClipboard(numberOfDsts());
+    }
+
+    void NetInfoTable::pyCopyDsts() const
+    {
+        copyToClipboard(PyCodeProvider::pyCodeNetDestinations(mNet->get_id()));
     }
 
     void NetInfoTable::handleNetRemoved(Net* net)

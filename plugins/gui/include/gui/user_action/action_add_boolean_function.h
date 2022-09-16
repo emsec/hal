@@ -23,47 +23,46 @@
 
 #pragma once
 #include "user_action.h"
+#include "hal_core/netlist/boolean_function.h"
+
 
 namespace hal
 {
     /**
-     * @ingroup user_action
-     * @brief Create a new item
+     * @ingroup gui
+     * @brief Either adds a new function or changes an exisiting function of a given gate.
      *
-     * Creates a new object with a given type and name.
-     *
-     * Undo Action: ActionDeleteObject.
+     * To add a new function to a gate, a function name must be given that is not currently in use.
+     * If a function name is given that already exists in the gate, the corresponding function is
+     * overwritten with the new one. The undo action is either a DeleteBooleanFunction- or
+     * AddBooleanFunction-Action, depending on wether a new one was added or an already existing
+     * modified.
      */
-    class ActionCreateObject : public UserAction
+    class ActionAddBooleanFunction : public UserAction
     {
-        QString mObjectName;
-        u32 mParentId;
     public:
-        /**
-         * Action Constructor.
-         *
-         * @param type - The UserActionObjectType of the item that should be created (default type: None)
-         * @param objName - The name of the object to create (default name: "").
-         */
-        ActionCreateObject(UserActionObjectType::ObjectType type=UserActionObjectType::None,
-                           const QString& objName = QString());
+        ActionAddBooleanFunction(QString booleanFuncName = QString(), BooleanFunction func = BooleanFunction(), u32 gateID = 0);
+
         bool exec() override;
         QString tagname() const override;
         void writeToXml(QXmlStreamWriter& xmlOut) const override;
         void readFromXml(QXmlStreamReader& xmlIn) override;
         void addToHash(QCryptographicHash& cryptoHash) const override;
-        void setParentId(u32 pid) {mParentId = pid;}//todo: remove this, use setParentObject instead
+
+    private:
+        QString mName;
+        BooleanFunction mFunction;
     };
 
     /**
-     * @ingroup user_action
-     * @brief UserActionFactory for ActionCreateObject
+     * @brief The ActionAddBooleanFunctionFactory class
      */
-    class ActionCreateObjectFactory : public UserActionFactory
+    class ActionAddBooleanFunctionFactory : public UserActionFactory
     {
     public:
-        ActionCreateObjectFactory();
-        UserAction* newAction() const;
-        static ActionCreateObjectFactory* sFactory;
+        ActionAddBooleanFunctionFactory();
+        UserAction * newAction() const override;
+        static ActionAddBooleanFunctionFactory* sFactory;
+
     };
 }

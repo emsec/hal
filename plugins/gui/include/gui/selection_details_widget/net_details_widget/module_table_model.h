@@ -50,6 +50,8 @@ private:
         u32 id;
         QString type;
         QString used_port;
+        //only to hold additional information (not displayed)
+        u32 pinId;
     };
 
 public:
@@ -130,6 +132,22 @@ public:
      * @return The port name.
      */
     QString getPortNameFromIndex(const QModelIndex& index);
+
+    /**
+     * Get the id of the pin at the index. Index has to be valid.
+     *
+     * @param index -  The index in the table.
+     * @return The pin id.
+     */
+    u32 getPinIDFromIndex(const QModelIndex& index);
+
+    /**
+     * Get the name of the module at the index. Index has to be valid.
+     *
+     * @param index - The index in the table.
+     * @return The module name.
+     */
+    QString getModuleNameFromIndex(const QModelIndex& index);
 
     /** @name Event Handler Functions
      */

@@ -5,6 +5,10 @@
 #include "gui/gui_globals.h"
 #include "gui/python/py_code_provider.h"
 #include "gui/user_action/action_rename_object.h"
+#include "gui/user_action/action_create_object.h"
+#include "gui/user_action/user_action_compound.h"
+#include "gui/user_action/action_add_items_to_object.h"
+#include "gui/module_dialog/module_dialog.h"
 
 #include <QMenu>
 #include <QInputDialog>
@@ -14,43 +18,49 @@ namespace hal
     const QString GateInfoTable::nameRowKey = "Name";
     const QString GateInfoTable::idRowKey = "ID";
     const QString GateInfoTable::typeRowKey = "Type";
-    const QString GateInfoTable::gateTypePropertiesRowKey = "Gate type properties";
+    const QString GateInfoTable::gateTypePropertiesRowKey = "Properties";
     const QString GateInfoTable::locationRowKey = "Location";
-    const QString GateInfoTable::moduleRowKey = "Parent module";
+    const QString GateInfoTable::moduleRowKey = "Module";
 
     GateInfoTable::GateInfoTable(QWidget* parent) : GeneralTableWidget(parent), mGate(nullptr)
     {
         mNameEntryContextMenu = new QMenu();
-        mNameEntryContextMenu->addAction("Extract gate name as plain text", std::bind(&GateInfoTable::copyName, this));
+        mNameEntryContextMenu->addAction("Name to clipboard", std::bind(&GateInfoTable::copyName, this));
         mNameEntryContextMenu->addSection("Misc");
-        mNameEntryContextMenu->addAction("Change gate name", std::bind(&GateInfoTable::changeName, this));
+        mNameEntryContextMenu->addAction("Change name", std::bind(&GateInfoTable::changeName, this));
         mNameEntryContextMenu->addSection("Python");
-        mNameEntryContextMenu->addAction(QIcon(":/icons/python"), "Extract gate name as python code", std::bind(&GateInfoTable::pyCopyName, this));
+        mNameEntryContextMenu->addAction(QIcon(":/icons/python"), "Get name", std::bind(&GateInfoTable::pyCopyName, this));
 
         mIdEntryContextMenu = new QMenu();
-        mIdEntryContextMenu->addAction("Extract gate ID as plain text", std::bind(&GateInfoTable::copyId, this));
+        mIdEntryContextMenu->addAction("ID to clipboard", std::bind(&GateInfoTable::copyId, this));
+        mIdEntryContextMenu->addSection("Misc");
+        mIdEntryContextMenu->addAction(QIcon(":/icons/python"), "Get ID", std::bind(&GateInfoTable::pyCopyId, this));
 
         mTypeEntryContextMenu = new QMenu();
-        mTypeEntryContextMenu->addAction("Extract gate type as plain text", std::bind(&GateInfoTable::copyType, this));
+        mTypeEntryContextMenu->addAction("Type name to clipboard", std::bind(&GateInfoTable::copyType, this));
         mTypeEntryContextMenu->addSection("Python");
-        mTypeEntryContextMenu->addAction(QIcon(":/icons/python"), "Extract gate type as python code", std::bind(&GateInfoTable::pyCopyType, this));
+        mTypeEntryContextMenu->addAction(QIcon(":/icons/python"), "Get type", std::bind(&GateInfoTable::pyCopyType, this));
 
         mPropertiesEntryContextMenu = new QMenu();
-        mPropertiesEntryContextMenu->addAction("Extract gate type properties as plaintaxt", std::bind(&GateInfoTable::copyproperties, this));
+        mPropertiesEntryContextMenu->addAction("Properties to clipboard", std::bind(&GateInfoTable::copyproperties, this));
         mPropertiesEntryContextMenu->addSection("Python");
-        mPropertiesEntryContextMenu->addAction(QIcon(":/icons/python"), "Extract gate type properties as phython code", std::bind(&GateInfoTable::pyCopyproperties, this));
+        mPropertiesEntryContextMenu->addAction(QIcon(":/icons/python"), "Get properties", std::bind(&GateInfoTable::pyCopyproperties, this));
 
         mLocationEntryContextMenu = new QMenu();
-        mLocationEntryContextMenu->addAction("Extract gate location as plain text", std::bind(&GateInfoTable::copyLocation, this));
+        mLocationEntryContextMenu->addAction("Location to clipboard", std::bind(&GateInfoTable::copyLocation, this));
         mLocationEntryContextMenu->addSection("Phyton");
-        mLocationEntryContextMenu->addAction(QIcon(":/icons/python"), "Extract gate location as phyton code", std::bind(&GateInfoTable::pyCopyLocation, this));
+        mLocationEntryContextMenu->addAction(QIcon(":/icons/python"), "Get location", std::bind(&GateInfoTable::pyCopyLocation, this));
 
         mModuleEntryContextMenu = new QMenu();
-        mModuleEntryContextMenu->addAction("Extract parent module name as plain text", std::bind(&GateInfoTable::copyModule, this));
+        mModuleEntryContextMenu->addAction("Module name to clipboard", std::bind(&GateInfoTable::copyModuleName, this));
+        mModuleEntryContextMenu->addAction("Module ID to clipboard", std::bind(&GateInfoTable::copyModuleID, this));
+        mModuleEntryContextMenu->addAction("Set as current selection", std::bind(&GateInfoTable::setModuleAsSelection, this));
+        mModuleEntryContextMenu->addAction("Add to current selection", std::bind(&GateInfoTable::addModuleToSelection, this));
+        mModuleEntryContextMenu->addAction("Change module", std::bind(&GateInfoTable::moveToModuleAction, this));
         mModuleEntryContextMenu->addSection("Python");
-        mModuleEntryContextMenu->addAction(QIcon(":/icons/python"), "Extract parent module name as phyton text", std::bind(&GateInfoTable::pyCopyModule, this));
+        mModuleEntryContextMenu->addAction(QIcon(":/icons/python"), "Get module", std::bind(&GateInfoTable::pyCopyModule, this));
 
-        mModuleDoubleClickedAction = std::bind(&GateInfoTable::navModule, this);
+        mModuleDoubleClickedAction = std::bind(&GateInfoTable::setModuleAsSelection, this);
 
         connect(gNetlistRelay, &NetlistRelay::gateRemoved, this, &GateInfoTable::handleGateRemoved);
         connect(gNetlistRelay, &NetlistRelay::gateNameChanged, this, &GateInfoTable::handleGateNameChanged);
@@ -171,6 +181,11 @@ namespace hal
         copyToClipboard(id());
     }
 
+    void GateInfoTable::pyCopyId() const
+    {
+        copyToClipboard(PyCodeProvider::pyCodeGateId(mGate->get_id()));
+    }
+
     void GateInfoTable::copyType() const
     {
         copyToClipboard(type());
@@ -201,9 +216,10 @@ namespace hal
         copyToClipboard(PyCodeProvider::pyCodeGateLocation(mGate->get_id()));
     }
 
-    void GateInfoTable::copyModule() const
+    void GateInfoTable::copyModuleName() const
     {
-        copyToClipboard(parentModule().replace(QRegularExpression("\\[Id:\\d*]"), ""));
+        //copyToClipboard(parentModule().replace(QRegularExpression("\\[Id:\\d*]"), ""));
+        copyToClipboard(QString::fromStdString(mGate->get_module()->get_name()));
     }
 
     void GateInfoTable::pyCopyModule() const
@@ -211,13 +227,47 @@ namespace hal
         copyToClipboard(PyCodeProvider::pyCodeGateModule(mGate->get_id()));
     }
 
-    void GateInfoTable::navModule()
+    void GateInfoTable::copyModuleID() const
     {
-        u32 parentModuleId = mGate->get_module()->get_id();
+        copyToClipboard(QString::number(mGate->get_module()->get_id()));
+    }
 
-        gSelectionRelay->clear();
-        gSelectionRelay->addModule(parentModuleId);
+    void GateInfoTable::addModuleToSelection()
+    {
+        gSelectionRelay->addModule(mGate->get_module()->get_id());
         gSelectionRelay->relaySelectionChanged(this);
+    }
+
+    void GateInfoTable::setModuleAsSelection()
+    {
+        gSelectionRelay->clear();
+        gSelectionRelay->addModule(mGate->get_module()->get_id());
+        gSelectionRelay->relaySelectionChanged(this);
+    }
+
+    void GateInfoTable::moveToModuleAction()
+    {
+        ModuleDialog md(this);
+        if (md.exec() != QDialog::Accepted) return;
+        if (md.isNewModule())
+        {
+            QString currModName = QString::fromStdString(mGate->get_module()->get_name());
+            bool ok;
+            QString name = QInputDialog::getText(nullptr, "", "New module will be created under \"" + currModName + "\"\nModule Name:", QLineEdit::Normal, "", &ok);
+            if (!ok || name.isEmpty()) return;
+
+            ActionCreateObject* actNewModule = new ActionCreateObject(UserActionObjectType::Module, name);
+            actNewModule->setParentId(mGate->get_module()->get_id());
+            UserActionCompound* compound = new UserActionCompound;
+            compound->setUseCreatedObject();
+            compound->addAction(actNewModule);
+            compound->addAction(new ActionAddItemsToObject(QSet<u32>(), QSet<u32>() << mGate->get_id()));
+            compound->exec();
+            return;
+        }
+        ActionAddItemsToObject* addAct = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>() << mGate->get_id());
+        addAct->setObject(UserActionObject(md.selectedId(), UserActionObjectType::Module));
+        addAct->exec();
     }
 
     void GateInfoTable::handleGateRemoved(Gate* gate)

@@ -37,6 +37,28 @@ namespace hal
         LayoutLocker llock;
 
         switch (mObject.type()) {
+        case UserActionObjectType::PinGroup:
+        {
+            mod = gNetlist->get_module_by_id(mParentObject.id());
+            if(mod && mod->get_pin_group_by_id(mObject.id()).is_ok())
+            {
+                auto pinGroup = mod->get_pin_group_by_id(mObject.id()).get();
+                QSet<u32> pins;
+                for(const auto &pin : pinGroup->get_pins())
+                    pins.insert(pin->get_id());
+                UserActionCompound* act = new UserActionCompound;
+                act->setUseCreatedObject();
+                ActionCreateObject* actCreate = new ActionCreateObject(UserActionObjectType::PinGroup, QString::fromStdString(pinGroup->get_name()));
+                actCreate->setParentObject(mParentObject);
+                act->addAction(actCreate);
+                act->addAction(new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), pins));//setting of obj/parentobj handled in compound
+                mUndoAction = act;
+                auto res = mod->delete_pin_group(pinGroup);
+            }
+            else
+                return false;
+        }
+            break;
         case UserActionObjectType::Module:
             mod = gNetlist->get_module_by_id(mObject.id());
             if (mod)

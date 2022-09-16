@@ -4,10 +4,9 @@
 #include "gui/graph_widget/layout_locker.h"
 #include "gui/gui_globals.h"
 #include "gui/user_action/action_remove_items_from_object.h"
+#include "gui/user_action/action_create_object.h"
 #include "gui/user_action/user_action_compound.h"
 #include "hal_core/netlist/grouping.h"
-
-#include <QDebug>
 
 namespace hal
 {
@@ -36,10 +35,13 @@ namespace hal
         cryptoHash.addData(setToText(mGates).toUtf8());
         cryptoHash.addData("net", 3);
         cryptoHash.addData(setToText(mNets).toUtf8());
+        cryptoHash.addData("pin", 3);
+        cryptoHash.addData(setToText(mPins).toUtf8());
     }
 
     void ActionAddItemsToObject::writeToXml(QXmlStreamWriter& xmlOut) const
     {
+        writeParentObjectToXml(xmlOut);
         if (mPlacementHint.mode() != PlacementHint::Standard)
         {
             UserActionObjectType::ObjectType tp = UserActionObjectType::fromNodeType(mPlacementHint.preferredOrigin().type());
@@ -55,12 +57,15 @@ namespace hal
             xmlOut.writeTextElement("gates", setToText(mGates));
         if (!mNets.isEmpty())
             xmlOut.writeTextElement("nets", setToText(mNets));
+        if (!mPins.isEmpty())
+            xmlOut.writeTextElement("pins", setToText(mPins));
     }
 
     void ActionAddItemsToObject::readFromXml(QXmlStreamReader& xmlIn)
     {
         while (xmlIn.readNextStartElement())
         {
+            readParentObjectFromXml(xmlIn);
             if (xmlIn.name() == "placement")
             {
                 u32 id                                = xmlIn.attributes().value("id").toInt();
@@ -75,6 +80,8 @@ namespace hal
                 mGates = setFromText(xmlIn.readElementText());
             else if (xmlIn.name() == "nets")
                 mNets = setFromText(xmlIn.readElementText());
+            else if (xmlIn.name() == "pins")
+                mPins = setFromText(xmlIn.readElementText());
         }
     }
 
@@ -165,6 +172,58 @@ namespace hal
                 }
                 else
                     return false;
+                break;
+            case UserActionObjectType::PinGroup:
+            {
+                if(mPins.empty())
+                    return true;
+
+                auto mod = gNetlist->get_module_by_id(mParentObject.id());
+                if(mod)
+                {
+                    auto pinGrpRes = mod->get_pin_group_by_id(mObject.id());
+                    QHash<u32, QSet<u32>> sourceGroups;
+                    if(pinGrpRes.is_error())
+                        return false;
+                    for(auto id : mPins)
+                        if(auto res = mod->get_pin_by_id(id); res.is_ok())
+                            sourceGroups[res.get()->get_group().first->get_id()].insert(id);
+                        else
+                            return false;
+
+                    for(auto id : mPins)
+                        mod->assign_pin_to_group(pinGrpRes.get(), mod->get_pin_by_id(id).get(), false);
+
+                    UserActionCompound* undo = new UserActionCompound;
+                    for(auto it = sourceGroups.constBegin(); it != sourceGroups.constEnd(); it++)
+                    {
+                        auto group = mod->get_pin_group_by_id(it.key()).get();
+                        if(group->empty())
+                        {
+                            UserActionCompound* act = new UserActionCompound;
+                            act->setUseCreatedObject();
+                            ActionCreateObject* crtAct = new ActionCreateObject(UserActionObjectType::PinGroup, QString::fromStdString(group->get_name()));
+                            crtAct->setParentObject(mParentObject);
+                            ActionAddItemsToObject* addAction = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), it.value());
+                            if(mUsedInCreateContext) addAction->mDeleteSource = false;
+                            act->addAction(crtAct);
+                            act->addAction(addAction);
+                            undo->addAction(act);
+                            if(mDeleteSource)
+                                mod->delete_pin_group(group);
+                        }
+                        else
+                        {
+                            ActionAddItemsToObject* act = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), it.value());
+                            act->setObject(UserActionObject(it.key(), UserActionObjectType::PinGroup));
+                            act->setParentObject(mParentObject);
+                            if(mUsedInCreateContext) act->mDeleteSource = false;
+                            undo->addAction(act);
+                        }
+                    }
+                    mUndoAction = undo;
+                }
+            }
                 break;
             default:
                 return false;

@@ -9,11 +9,14 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/enums.h"
 #include "gui/user_action/action_reorder_object.h"
+#include "gui/user_action/action_add_items_to_object.h"
+#include "gui/user_action/user_action_compound.h"
 #include <QMimeData>
+#include <QDebug>
 
 namespace hal
 {
-    ModulePinsTreeModel::ModulePinsTreeModel(QObject* parent) : BaseTreeModel(parent), mIgnoreNextPinsChanged(false)
+    ModulePinsTreeModel::ModulePinsTreeModel(QObject* parent) : BaseTreeModel(parent), mIgnoreEventsFlag(false)
     {
         setHeaderLabels(QList<QVariant>() << "Name"
                                           << "Direction"
@@ -111,11 +114,14 @@ namespace hal
                     return false;
 
                 removeItem(droppedItem);
-                mIgnoreNextPinsChanged = true;
+                mIgnoreEventsFlag = true;
                 if(bottomEdge)
                 {
                     insertItem(newItem, droppedParentItem, row-1);
-                    mod->move_pin_within_group(droppedPin->get_group().first, droppedPin, desiredIndex);
+                    ActionReorderObject* reorderObj = new ActionReorderObject(desiredIndex);
+                    reorderObj->setObject(UserActionObject(droppedPin->get_id(), UserActionObjectType::Pin));
+                    reorderObj->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+                    reorderObj->exec();
                 }
                 else
                 {
@@ -125,38 +131,53 @@ namespace hal
                     }
                     else
                         insertItem(newItem, droppedParentItem, row);
-                    mod->move_pin_within_group(droppedPin->get_group().first, droppedPin, desiredIndex);
+                    ActionReorderObject* reorderObj = new ActionReorderObject(desiredIndex);
+                    reorderObj->setObject(UserActionObject(droppedPin->get_id(), UserActionObjectType::Pin));
+                    reorderObj->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+                    reorderObj->exec();
                 }
+                mIgnoreEventsFlag = false;
                 return true;
             }
 
             //different parents v1 (dropped's parent = mRoot, onDropped's parent=group)
-            if(droppedParentItem == mRootItem && onDroppedParentItem != mRootItem)
+            //+ different parents v2(droppedItem's parent != root, ondropped's != root)
+            if((droppedParentItem == mRootItem && onDroppedParentItem != mRootItem) ||
+                    (droppedParentItem != mRootItem && onDroppedParentItem != mRootItem))
             {
                 auto pinGroupRes = mod->get_pin_group_by_id(getIdOfItem(onDroppedParentItem));
                 if(pinGroupRes.is_error()) return false;
                 auto pinGroup = pinGroupRes.get();
-                mIgnoreNextPinsChanged = true;
-                bool ret = mod->assign_pin_to_group(pinGroup, droppedPin).is_ok();
-                mIgnoreNextPinsChanged = false;//if action above failed
+
+                mIgnoreEventsFlag = true;
+                UserActionCompound* comp = new UserActionCompound;
+
+                if(droppedParentItem != mRootItem && onDroppedParentItem != mRootItem)
+                {
+                    //for undo action, reordering can only be performed when not dragging from the top level
+                    ActionReorderObject* reordActHack = new ActionReorderObject(droppedPin->get_group().second);
+                    reordActHack->setObject(UserActionObject(droppedPin->get_id(), UserActionObjectType::Pin));
+                    reordActHack->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+                    comp->addAction(reordActHack);
+                }
+                ActionAddItemsToObject* addAct = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), QSet<u32>() << droppedPin->get_id());
+                addAct->setObject(UserActionObject(pinGroup->get_id(), UserActionObjectType::PinGroup));
+                addAct->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+                ActionReorderObject* reordAct = new ActionReorderObject(bottomEdge ? desiredIndex+1 : desiredIndex);
+                reordAct->setObject(UserActionObject(droppedPin->get_id(), UserActionObjectType::Pin));
+                reordAct->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+                comp->addAction(addAct);
+                comp->addAction(reordAct);
+                bool ret = comp->exec();
+                mIgnoreEventsFlag = false;
                 if(ret)
                 {
-                    mIgnoreNextPinsChanged = true;
-                    ret = mod->move_pin_within_group(pinGroup, droppedPin, bottomEdge ? desiredIndex+1 : desiredIndex).is_ok();
-                    if(ret)
-                    {
-                        removeItem(droppedItem);
-                        insertItem(newItem, onDroppedParentItem, row);
-                        return true;
-                    }
-                    mIgnoreNextPinsChanged = false;
                     removeItem(droppedItem);
-                    insertItem(newItem, onDroppedParentItem, onDroppedParentItem->getChildCount());
-                    return false;
+                    insertItem(newItem, onDroppedParentItem, row);
                 }
-                return false;
+                else
+                    setModule(gNetlist->get_module_by_id(mModuleId));
             }
-            //different parents v2(droppedItem's parent != root, ondropped's != root)
         }
         else// on item
         {
@@ -165,17 +186,23 @@ namespace hal
             if(onDroppedGroupRes.is_error()) return false;
             auto onDroppedGroup = onDroppedGroupRes.get();
             //on group (dropped parent = mRoot)
-            if(droppedParentItem == mRootItem)
+            //if(droppedParentItem == mRootItem)//item which is dropped
+            if(droppedParentItem != onDroppedItem)
             {
-                mIgnoreNextPinsChanged = true;
-                int ret = mod->assign_pin_to_group(onDroppedGroup, droppedPin).is_ok();
+                mIgnoreEventsFlag = true;
+                //int ret = mod->assign_pin_to_group(onDroppedGroup, droppedPin).is_ok();
+                ActionAddItemsToObject* addAct = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), QSet<u32>() << droppedPin->get_id());
+                addAct->setObject(UserActionObject(onDroppedGroup->get_id(), UserActionObjectType::PinGroup));
+                addAct->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+                bool ret = addAct->exec();
                 if(ret)
                 {
                     removeItem(droppedItem);
                     insertItem(newItem, onDroppedItem, onDroppedItem->getChildCount());
+                    mIgnoreEventsFlag = false;
                     return true;
                 }
-                mIgnoreNextPinsChanged = false;
+                mIgnoreEventsFlag = false;
                 return false;
             }
         }
@@ -288,9 +315,7 @@ namespace hal
     {
         if ((int)m->get_id() == mModuleId)
         {
-            if(mIgnoreNextPinsChanged)
-                mIgnoreNextPinsChanged = false;
-            else
+            if(!mIgnoreEventsFlag)
                 setModule(m);
         }
     }
