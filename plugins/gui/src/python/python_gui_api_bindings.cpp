@@ -46,7 +46,7 @@ PYBIND11_PLUGIN(hal_gui)
     m2.def("write_stderr", [](std::string s) -> void { gPythonContext->forwardError(QString::fromStdString(s)); });
     m2.def("thread_stdout", [](std::string s) -> void { if (gPythonContext->currentThread()) gPythonContext->currentThread()->handleStdout(QString::fromStdString(s)); });
     m2.def("thread_stderr", [](std::string s) -> void { if (gPythonContext->currentThread()) gPythonContext->currentThread()->handleError(QString::fromStdString(s)); });
-    m2.def("thread_stdin", [](std::string s = std::string("Please enter input:")) -> std::string { return (gPythonContext->currentThread()
+    m2.def("thread_stdin", [](std::string s) -> std::string { return (gPythonContext->currentThread()
                                                                       ?gPythonContext->currentThread()->handleConsoleInput(QString::fromStdString(s))
                                                                       :std::string());});
     auto gui_input = m.def_submodule("gui_input", R"(
@@ -68,6 +68,10 @@ PYBIND11_PLUGIN(hal_gui)
             Module* { return (gPythonContext->currentThread()
                              ?gPythonContext->currentThread()->handleModuleInput(QString::fromStdString(prompt))
                              :nullptr);});
+    gui_input.def("inputFilename", [](std::string prompt = std::string("Please select filename"), std::string filetype = std::string()) ->
+            std::string { return (gPythonContext->currentThread()
+                             ?gPythonContext->currentThread()->handleFilenameInput(QString::fromStdString(prompt), QString::fromStdString(filetype))
+                             :std::string());});
 
     py::class_<GuiApi> py_gui_api(m, "GuiApi", R"(GUI API)");
 

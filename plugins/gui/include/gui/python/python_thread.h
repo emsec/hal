@@ -26,6 +26,7 @@
 #include <QString>
 #include <QMutex>
 #include <QVariant>
+#include <QElapsedTimer>
 #include "gui/python/python_context_subscriber.h"
 
 namespace hal {
@@ -35,32 +36,42 @@ namespace hal {
     class PythonThread : public QThread, public PythonContextSubscriber
     {
     public:
-        enum InputType {ConsoleInput, StringInput, NumberInput, ModuleInput, GateInput};
+        enum InputType {ConsoleInput, StringInput, NumberInput, ModuleInput, GateInput, FilenameInput};
     private:
         Q_OBJECT
         QString mScript;
         QString mErrorMessage;
+        QString mResult;
+        QString mStdoutBuffer;
         unsigned long mThreadID;
         QVariant mInput;
         QMutex mInputMutex;
+        QElapsedTimer mElapsedTimer;
+        bool mSingleStatement;
+        bool mAbortRequested;
+        int mSpamCount;
         bool getInput(InputType type, QString prompt, QVariant defaultValue);
     Q_SIGNALS:
         void stdOutput(QString txt);
         void stdError(QString txt);
         void requireInput(int type, QString prompt, QVariant defaultValue);
     public:
-        PythonThread(const QString& script, QObject* parent = nullptr);
+        PythonThread(const QString& script, bool singleStatement, QObject* parent = nullptr);
         void run() override;
         void interrupt();
         QString errorMessage() const { return mErrorMessage; }
+        QString result() const { return mResult; }
         void handleStdout(const QString& output) override;
         void handleError(const QString& output) override;
         std::string handleConsoleInput(const QString& prompt);
         std::string handleStringInput(const QString& prompt, const QString& defval);
-        int handleNumberInput(const QString& prompt, int defval);
-        Module* handleModuleInput(const QString& prompt);
-        Gate* handleGateInput(const QString& prompt);
+        int         handleNumberInput(const QString& prompt, int defval);
+        Module*     handleModuleInput(const QString& prompt);
+        Gate*       handleGateInput(const QString& prompt);
+        std::string handleFilenameInput(const QString& prompt, const QString& filetype);
         void clear() override;
         void setInput(const QVariant& inp);
+        const QString& stdoutBuffer() const { return mStdoutBuffer; }
+        QString flushStdout();
      };
 }

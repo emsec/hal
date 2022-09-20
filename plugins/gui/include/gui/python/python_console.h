@@ -28,9 +28,30 @@
 #include <QTextEdit>
 #include <memory>
 
+class QLabel;
+class QPushButton;
+class QTimer;
+
 namespace hal
 {
     class PythonConsoleHistory;
+
+    class PythonConsoleAbortThread : public QFrame
+    {
+        Q_OBJECT
+        int mCount;
+        QLabel* mLabel;
+        QPushButton* mAbortButton;
+        QTimer* mTimer;
+
+    private Q_SLOTS:
+        void handleTimeout();
+        void handleAbortButton();
+    public:
+        PythonConsoleAbortThread(QWidget* parent = nullptr);
+        void start();
+        void stop();
+    };
 
     /**
      * @ingroup python-console
@@ -71,6 +92,9 @@ namespace hal
          * @param event - The mouse event
          */
         void mousePressEvent(QMouseEvent* event) override;
+
+    public Q_SLOTS:
+        void handleThreadFinished();
 
     Q_SIGNALS:
         void inputReceived(QString input);
@@ -165,6 +189,8 @@ namespace hal
          */
         void setInputMode(bool state);
 
+        PythonConsoleAbortThread* abortThreadWidget();
+
     private:
         QColor mPromptColor;
         QColor mStandardColor;
@@ -189,6 +215,7 @@ namespace hal
         int mCurrentCompleterIndex;
 
         std::shared_ptr<PythonConsoleHistory> mHistory;
+        PythonConsoleAbortThread* mAbortThreadWidget;
 
         bool isCompound() const { return mPromptType == Compound; }
         bool isInputMode() const { return mPromptType == Input; }

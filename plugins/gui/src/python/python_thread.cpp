@@ -7,10 +7,12 @@
 #include <pystate.h>
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/gate.h"
+#include <QApplication>
 
 namespace hal {
-    PythonThread::PythonThread(const QString& script, QObject* parent)
-        : QThread(parent), mScript(script)
+    PythonThread::PythonThread(const QString& script, bool singleStatement, QObject* parent)
+        : QThread(parent), mScript(script), mSingleStatement(singleStatement),
+          mAbortRequested(false), mSpamCount(0)
     {;}
 
     void PythonThread::run()
@@ -25,9 +27,17 @@ namespace hal {
         pybind11::object rc = py::eval("threading.get_ident()", tmp_context, tmp_context);
         mThreadID = rc.cast<unsigned long>();
 
+        mElapsedTimer.start();
         try
         {
-            py::eval<py::eval_statements>(mScript.toStdString(), tmp_context, tmp_context);
+            py::object rc;
+            if (mSingleStatement)
+                rc = py::eval<py::eval_single_statement>(mScript.toStdString(), tmp_context, tmp_context);
+            else
+                rc = py::eval<py::eval_statements>(mScript.toStdString(), tmp_context, tmp_context);
+
+            if (!rc.is_none())
+                mResult = QString::fromStdString(py::str(rc).cast<std::string>());
         }
         catch (py::error_already_set& e)
         {
@@ -42,16 +52,38 @@ namespace hal {
             mErrorMessage = QString::fromStdString(std::string(e.what()) + "#\n");
         }
 
-        qDebug() << "Execution completed";
-
         PyGILState_Release(state);
-
-        qDebug() << "GIL released";
     }
 
     void PythonThread::handleStdout(const QString& output)
     {
-        Q_EMIT stdOutput(output);
+        if (mElapsedTimer.elapsed() > 100)
+        {
+            if (!mStdoutBuffer.isEmpty())
+                ++mSpamCount;
+            else
+                mSpamCount = 0;
+            if (mSpamCount > 1000)
+                mStdoutBuffer += output;
+            else if (mSpamCount < 10 || mElapsedTimer.elapsed() > 1000)
+            {
+                Q_EMIT stdOutput(mStdoutBuffer + output);
+                mStdoutBuffer.clear();
+                mElapsedTimer.restart();
+            }
+            else
+                mStdoutBuffer += output;
+        }
+        else
+            mStdoutBuffer += output;
+    }
+
+    QString PythonThread::flushStdout()
+    {
+        QString retval = mStdoutBuffer;
+        mStdoutBuffer.clear();
+        mElapsedTimer.restart();
+        return retval;
     }
 
     void PythonThread::handleError(const QString& output)
@@ -63,6 +95,16 @@ namespace hal {
     {;}
 
     void PythonThread::interrupt() {
+        if (!mInputMutex.tryLock())
+        {
+            mAbortRequested = true;
+            mInputMutex.unlock();
+            return;
+        }
+        else
+        {
+            mInputMutex.unlock();
+        }
         qDebug() << "about to terminate thread..." << mThreadID;
         PyGILState_STATE state = PyGILState_Ensure();
         // We interrupt the thread by forcibly injecting an exception
@@ -91,6 +133,11 @@ namespace hal {
         Q_EMIT requireInput(type,prompt,defaultValue);
         mInputMutex.lock(); // wait for set Input
         mInputMutex.unlock();
+        if (mAbortRequested)
+        {
+            throw std::runtime_error(std::string("Python script aborted by user"));
+            return false;
+        }
         return true;
     }
 
@@ -122,6 +169,12 @@ namespace hal {
     {
         if (!getInput(GateInput, prompt, QString())) return 0;
         return static_cast<Gate*>(mInput.value<void*>());
+    }
+
+    std::string PythonThread::handleFilenameInput(const QString& prompt, const QString& filetype)
+    {
+        if (!getInput(FilenameInput, prompt, filetype)) return std::string();
+        return mInput.toString().toStdString();
     }
 
     void PythonThread::setInput(const QVariant &inp)

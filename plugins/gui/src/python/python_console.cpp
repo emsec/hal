@@ -4,8 +4,11 @@
 #include "gui/gui_globals.h"
 
 #include <QKeyEvent>
-
 #include <QDebug>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QTimer>
 
 #include "gui/python/python_console_history.h"
 
@@ -28,9 +31,10 @@ namespace hal
         mErrorColor = PythonConsoleQssAdapter::instance()->errorColor();
         mPromptColor = PythonConsoleQssAdapter::instance()->promtColor();
         gPythonContext->setConsole(this);
-        gPythonContext->interpret("print(\"Python \" + sys.version)", false);
-        gPythonContext->interpret("print(sys.executable + \" on \" + sys.platform)", false);
+        gPythonContext->interpretForeground("print(\"Python \" + sys.version)");
+        gPythonContext->interpretForeground("print(sys.executable + \" on \" + sys.platform)");
         displayPrompt();
+        mAbortThreadWidget = new PythonConsoleAbortThread(this);
     }
 
     void PythonConsole::keyPressEventInputMode(QKeyEvent *e)
@@ -272,6 +276,11 @@ namespace hal
         mPromptEndPosition = textCursor().position();
     }
 
+    void PythonConsole::handleThreadFinished()
+    {
+        mAbortThreadWidget->stop();
+    }
+
     void PythonConsole::interpretCommand()
     {
         QString input      = getCurrentCommand();
@@ -288,15 +297,15 @@ namespace hal
             mCurrentCompoundInput += input;
             if (isCompound())
             {
-                gPythonContext->interpret(mCurrentCompoundInput, true);
+                gPythonContext->interpretBackground(this, mCurrentCompoundInput, true);
             }
             else
             {
-                gPythonContext->interpret(input, false);
+                gPythonContext->interpretBackground(this, input, false);
             }
             mPromptType     = Standard;
             mCurrentCompoundInput = "";
-            displayPrompt();
+            mAbortThreadWidget->start();
         }
         else
         {
@@ -444,4 +453,67 @@ namespace hal
             }
         }
     }
+
+    PythonConsoleAbortThread* PythonConsole::abortThreadWidget()
+    {
+        return mAbortThreadWidget;
+    }
+
+    //------------------------------
+    PythonConsoleAbortThread::PythonConsoleAbortThread(QWidget* parent)
+        : QFrame(parent), mCount(0)
+    {
+        setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+        setLineWidth(2);
+        QHBoxLayout* layout = new QHBoxLayout(this);
+        layout->setMargin(2);
+        mLabel = new QLabel(this);
+        layout->addWidget(mLabel);
+        mAbortButton = new QPushButton("Abort", this);
+        mAbortButton->setDisabled(true);
+        mAbortButton->setMaximumWidth(270);
+        connect(mAbortButton,&QPushButton::clicked,this,&PythonConsoleAbortThread::handleAbortButton);
+        layout->addWidget(mAbortButton);
+        mTimer = new QTimer(this);
+        connect(mTimer,&QTimer::timeout,this,&PythonConsoleAbortThread::handleTimeout);
+    }
+
+    void  PythonConsoleAbortThread::handleAbortButton()
+    {
+        qDebug() << "abort";
+        gPythonContext->abortThread();
+    }
+
+
+    void PythonConsoleAbortThread::handleTimeout()
+    {
+        if (isVisible() && !gPythonContext->isThreadRunning())
+        {
+            stop();
+            return;
+        }
+        ++mCount;
+        mLabel->setText(QString("Python interpreter running for %1 seconds").arg(mCount));
+        if (mCount > 5)
+        {
+            mAbortButton->setEnabled(true);
+            show();
+        }
+    }
+
+    void PythonConsoleAbortThread::start()
+    {
+        mCount = 0;
+        mTimer->start(1000);
+        mAbortButton->setDisabled(true);
+        hide();
+    }
+
+    void PythonConsoleAbortThread::stop()
+    {
+        mTimer->stop();
+        mAbortButton->setDisabled(true);
+        hide();
+    }
+
 }

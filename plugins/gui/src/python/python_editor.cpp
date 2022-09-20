@@ -273,7 +273,6 @@ namespace hal
 
         handleActionNewTab();
 
-        connect(gPythonContext,&PythonContext::threadFinished,this,&PythonEditor::handleThreadFinished);
         using namespace std::placeholders;
     }
 
@@ -853,7 +852,7 @@ namespace hal
             ctx->beginChange();
         }
 
-        gPythonContext->interpretScript(dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->toPlainText());
+        gPythonContext->interpretScript(this,dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->toPlainText());
     }
 
     void PythonEditor::handleThreadFinished()

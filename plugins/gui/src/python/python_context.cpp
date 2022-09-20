@@ -14,6 +14,7 @@
 #include <QDebug>
 #include <QInputDialog>
 #include <QApplication>
+#include <QFileDialog>
 #include <fstream>
 #include <gui/python/python_context.h>
 
@@ -37,7 +38,7 @@ namespace hal
 {
     PythonContext::PythonContext(QObject *parent)
         : QObject(parent), mContext(nullptr), mSender(nullptr), mTriggerReset(false), mThread(nullptr),
-          mThreadAborted(false)
+          mThreadAborted(false), mInterpreterCaller(nullptr)
     {
         py::initialize_interpreter();
         initPython();
@@ -86,7 +87,7 @@ namespace hal
         // GIL must be held
 
         std::string command = "import __main__\n"
-                              "import io, sys, threading\n";
+                              "import io, sys, threading, builtins\n";
         for (auto path : utils::get_plugin_directories())
         {
             command += "sys.path.append('" + path.string() + "')\n";
@@ -113,10 +114,17 @@ namespace hal
                      "            console.redirector.write_stderr(stuff)\n"
                      "        else:\n"
                      "            console.redirector.thread_stderr(stuff)\n"
+                     "def redirect_input(prompt=\"Please enter input:\"):\n"
+                     "    if threading.current_thread() is threading.main_thread():\n"
+                     "        return \"input in main thread not supported\"\n"
+                     "    else:\n"
+                     "        return console.redirector.thread_stdin(prompt)\n"
                      "sys.stdout = StdOutCatcher()\n"
                      "sys.__stdout__ = sys.stdout\n"
                      "sys.stderr = StdErrCatcher()\n"
                      "sys.__stderr__ = sys.stderr\n"
+                     "builtins.input = redirect_input\n"
+                     "builtins.raw_input = redirect_input\n"
                      "import hal_py\n";
 
         py::exec(command, *context, *context);
@@ -165,7 +173,7 @@ namespace hal
         mContext = nullptr;
     }
 
-    void PythonContext::interpret(const QString& input, bool multiple_expressions)
+    void PythonContext::interpretBackground(QObject* caller, const QString& input, bool multiple_expressions)
     {
         if (input.isEmpty())
         {
@@ -190,10 +198,39 @@ namespace hal
             return;
         }
         
+        if (mThread)
+        {
+            forwardError("python thread already running. Please retry after other thread finished.\n");
+            return;
+        }
+        log_info("python", "Python console execute: \"{}\".", input.toStdString());
+
+        mInterpreterCaller = caller;
+        startThread(input,!multiple_expressions);
+    }
+
+    void PythonContext::startThread(const QString& input, bool singleStatement)
+    {
+        mThread = new PythonThread(input,singleStatement,this);
+        connect(mThread,&QThread::finished,this,&PythonContext::handleThreadFinished);
+        connect(mThread,&PythonThread::stdOutput,this,&PythonContext::handleScriptOutput);
+        connect(mThread,&PythonThread::stdError,this,&PythonContext::handleScriptError);
+        connect(mThread,&PythonThread::requireInput,this,&PythonContext::handleInputRequired);
+        if (mConsole) mConsole->setReadOnly(true);
+        mThread->start();
+    }
+
+    void PythonContext::interpretForeground(const QString &input)
+    {
+        if (input.isEmpty())
+        {
+            return;
+        }
+
         log_info("python", "Python console execute: \"{}\".", input.toStdString());
 
         qDebug() << "trying to get lock";
-        
+
         // since we've released the GIL in the constructor, re-acquire it here before
         // running some Python code on the main thread
         PyGILState_STATE state = PyGILState_Ensure();
@@ -208,16 +245,7 @@ namespace hal
         try
         {
             pybind11::object rc;
-            qDebug() << "starting execution";
-            if (multiple_expressions)
-            {
-                rc = py::eval<py::eval_statements>(input.toStdString(), *mContext, *mContext);
-            }
-            else
-            {
-                rc = py::eval<py::eval_single_statement>(input.toStdString(), *mContext, *mContext);
-            }
-            qDebug() << "execution succeeded";
+            rc = py::eval<py::eval_single_statement>(input.toStdString(), *mContext, *mContext);
             if (!rc.is_none())
             {
                 forwardStdout(QString::fromStdString(py::str(rc).cast<std::string>()));
@@ -243,10 +271,9 @@ namespace hal
         //mMainThreadState = PyEval_SaveThread();
 
         qDebug() << "released lock";
-
     }
 
-    void PythonContext::interpretScript(const QString& input)
+    void PythonContext::interpretScript(QObject* caller, const QString& input)
     {
         if (mThread)
         {
@@ -262,12 +289,8 @@ namespace hal
         forwardStdout("<Execute Python Editor content>");
         forwardStdout("\n");
 
-        mThread = new PythonThread(input,this);
-        connect(mThread,&QThread::finished,this,&PythonContext::handleScriptFinished);
-        connect(mThread,&PythonThread::stdOutput,this,&PythonContext::handleScriptOutput);
-        connect(mThread,&PythonThread::stdError,this,&PythonContext::handleScriptError);
-        connect(mThread,&PythonThread::requireInput,this,&PythonContext::handleInputRequired);
-        mThread->start();
+        mInterpreterCaller = caller;
+        startThread(input,false);
     }
 
     void PythonContext::handleScriptOutput(const QString& txt)
@@ -287,9 +310,12 @@ namespace hal
         bool confirm;
         switch (type) {
         case PythonThread::ConsoleInput:
+            if (mThread && !mThread->stdoutBuffer().isEmpty())
+                mConsole->handleStdout(mThread->flushStdout());
             mConsole->handleStdout(prompt + "\n");
             mConsole->setInputMode(true);
             mConsole->displayPrompt();
+            mConsole->setReadOnly(false);
             break;
         case PythonThread::StringInput:
         {
@@ -328,6 +354,12 @@ namespace hal
                     : nullptr;
             if (!md.pickerModeActivated() && mThread) mThread->setInput(QVariant::fromValue<void*>(modSelect));
         }
+        case PythonThread::FilenameInput:
+        {
+            QString userInput = QFileDialog::getOpenFileName(qApp->activeWindow(),prompt,".",defaultValue.toString());
+            if (mThread) mThread->setInput(userInput);
+            break;
+        }
         default:
             break;
         }
@@ -354,24 +386,32 @@ namespace hal
     void PythonContext::handleConsoleInputReceived(const QString& input)
     {
         mConsole->setInputMode(false);
+        mConsole->setReadOnly(true);
         mThread->setInput(input);
     }
 
-    void PythonContext::handleScriptFinished()
+    void PythonContext::handleThreadFinished()
     {
+        if (mConsole) mConsole->setReadOnly(false);
+        PythonEditor* calledFromEditor = dynamic_cast<PythonEditor*>(mInterpreterCaller);
         QString errmsg;
         if (!mThread)
         {
             mThreadAborted = false;
             return;
         }
-
         if (!mThreadAborted)
+        {
             errmsg = mThread->errorMessage();
+            if (!mThread->stdoutBuffer().isEmpty())
+                forwardStdout(mThread->stdoutBuffer());
+            if (!calledFromEditor && !mThread->result().isEmpty() && errmsg.isEmpty())
+                forwardStdout(mThread->result());
+        }
         else
         {
+            forwardError("\nPython thread aborted\n");
             mThreadAborted = false;
-            // handleReset();
         }
 
         mThread->deleteLater();
@@ -380,12 +420,19 @@ namespace hal
         if (!errmsg.isEmpty())
             forwardError(errmsg);
 
-        if (mConsole)
+        if (calledFromEditor)
+            calledFromEditor->handleThreadFinished();
+        else if (mConsole)
         {
-            mConsole->displayPrompt();
+            handleReset();
+            mConsole->handleThreadFinished();
         }
 
-        Q_EMIT threadFinished();
+        if (mConsole)
+        {
+            mConsole->setInputMode(PythonConsole::Standard);
+            mConsole->displayPrompt();
+        }
     }
 
     void PythonContext::forwardStdout(const QString& output)
@@ -527,4 +574,5 @@ namespace hal
     {
         (*mContext)["netlist"] = gNetlistOwner;    // assign the shared_ptr here, not the raw ptr
     }
+
 }    // namespace hal

@@ -92,20 +92,29 @@ namespace hal
         ~PythonContext();
 
         /**
-         * Interprets an input string in python format.
+         * Interprets an input string in python format in GUI thread.
          *
+         * @param input - The input string in python format.
+         */
+        void interpretForeground(const QString& input);
+
+        /**
+         * Interprets an input string in python format in new thread.
+         *
+         * @param caller - The caller of interpreter, will be notified when finished
          * @param input - The input string in python format.
          * @param multiple_expressions - Must be set to <b>true</b> if the input contains multiple expressions
          *                               (i.e. is a compound statement).
          */
-        void interpret(const QString& input, bool multiple_expressions = false);
+        void interpretBackground(QObject* caller, const QString& input, bool multiple_expressions = false);
 
         /**
          * Interprets a python script.
          *
+         * @param caller - The caller of interpreter, will be notified when finished
          * @param input - The python script as a string.
          */
-        void interpretScript(const QString& input);
+        void interpretScript(QObject* caller, const QString& input);
 
         /**
          * Forwards standard output to the python console.
@@ -183,12 +192,10 @@ namespace hal
         static void initializeScript(py::dict* context);
 
         void abortThread();
-
-    Q_SIGNALS:
-        void threadFinished();
+        bool isThreadRunning() const { return mThread != nullptr; }
 
     private Q_SLOTS:
-        void handleScriptFinished();
+        void handleThreadFinished();
         void handleScriptOutput(const QString& txt);
         void handleScriptError(const QString& txt);
         void handleInputRequired(int type, const QString& prompt, const QVariant& defaultValue);
@@ -212,5 +219,8 @@ namespace hal
         PythonThread* mThread;
         bool mThreadAborted;
         PyThreadState* mMainThreadState;
+        QObject* mInterpreterCaller;
+
+        void startThread(const QString& input, bool singleStatement);
     };
 }    // namespace hal
