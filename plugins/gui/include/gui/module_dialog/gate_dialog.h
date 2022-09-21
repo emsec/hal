@@ -58,7 +58,8 @@ namespace hal {
          */
 
 
-        GateDialog(const QSet<u32>& selectable = QSet<u32>(), GateSelectReceiver* receiver = nullptr, QWidget* parent=nullptr);
+        GateDialog(const QSet<u32>& selectable = QSet<u32>(), const QString& title = QString("Select gate"),
+                   GateSelectReceiver* receiver = nullptr, QWidget* parent=nullptr);
 
         /**
          * Get the through this dialog selected id.
@@ -118,6 +119,8 @@ namespace hal {
 
         QPushButton* mButtonPick;
         bool mPickerModeActivated;
+
+        QString mWindowTitle;
 
         void enableButtons();
         u32 treeGateId(const QModelIndex& index);

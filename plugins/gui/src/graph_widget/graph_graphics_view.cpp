@@ -1193,7 +1193,7 @@ namespace hal
         }
 
 //        GraphGraphicsViewNeighborSelector* ggvns = new GraphGraphicsViewNeighborSelector(mItem->id(), succ, this);
-        GateDialog gd(selectableGates, nullptr, this);
+        GateDialog gd(selectableGates, QString("Shortest path %1 gate").arg(succ?"to":"from"), nullptr, this);
 
         if (gd.exec() != QDialog::Accepted) return;
 
@@ -1252,7 +1252,7 @@ namespace hal
             selectableGates.insert(g->get_id());
 
         GraphGraphicsViewNeighborSelector* ggvns = new GraphGraphicsViewNeighborSelector(mItem->id(), succ, this);
-        GateDialog gd(selectableGates,ggvns,this);
+        GateDialog gd(selectableGates,QString("Shortest path %1 gate").arg(succ?"to":"from"),ggvns,this);
 
         if (gd.exec() != QDialog::Accepted) return;
 
@@ -1330,7 +1330,7 @@ namespace hal
         }
 
         AddToModuleReceiver* receiver = new AddToModuleReceiver(this);
-        ModuleDialog md(receiver, exclude_ids, this);
+        ModuleDialog md(receiver, "Move to module", exclude_ids, this);
         if (md.exec() != QDialog::Accepted) return;
         if (md.isNewModule())
         {

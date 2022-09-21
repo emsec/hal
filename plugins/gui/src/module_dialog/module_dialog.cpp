@@ -21,7 +21,7 @@
 #include <QApplication>
 
 namespace hal {
-    ModuleDialog::ModuleDialog(ModuleSelectReceiver* receiver, const QSet<u32>& excludeIds, QWidget* parent)
+    ModuleDialog::ModuleDialog(ModuleSelectReceiver* receiver, const QString &title, const QSet<u32>& excludeIds, QWidget* parent)
         : QDialog(parent),
           mSelectedId(0),
           mExcludeIds(excludeIds),
@@ -29,9 +29,10 @@ namespace hal {
           mSearchbar(new Searchbar(this)),
           mNewModule(false),
           mReceiver(receiver),
-          mPickerModeActivated(false)
+          mPickerModeActivated(false),
+          mWindowTitle(title)
     {
-        setWindowTitle("Move to module …");
+        setWindowTitle(mWindowTitle + " …");
         QGridLayout* layout = new QGridLayout(this);
 
         QPushButton* butNew = new QPushButton("Create new module", this);
@@ -115,7 +116,7 @@ namespace hal {
             Module* m = gNetlist->get_module_by_id(mSelectedId);
             if (m) target = QString("%1[%2]").arg(QString::fromStdString(m->get_name())).arg(mSelectedId);
         }
-        setWindowTitle("Move to module " + target);
+        setWindowTitle(mWindowTitle + " " + target);
     }
 
      u32 ModuleDialog::treeModuleId(const QModelIndex& index)

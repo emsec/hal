@@ -156,7 +156,7 @@ namespace hal
     {
         if (gSelectionRelay->numberSelectedNodes() <= 0) return;
 
-        ModuleDialog md(nullptr,{},this);
+        ModuleDialog md(nullptr,"Move to module",{},this);
         if (md.exec() != QDialog::Accepted) return;
 
         if (md.isNewModule())

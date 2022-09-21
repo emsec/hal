@@ -308,10 +308,11 @@ namespace hal
     void PythonContext::handleInputRequired(int type, const QString& prompt, const QVariant &defaultValue)
     {
         bool confirm;
+        if (mThread && !mThread->stdoutBuffer().isEmpty())
+            mConsole->handleStdout(mThread->flushStdout());
+
         switch (type) {
         case PythonThread::ConsoleInput:
-            if (mThread && !mThread->stdoutBuffer().isEmpty())
-                mConsole->handleStdout(mThread->flushStdout());
             mConsole->handleStdout(prompt + "\n");
             mConsole->setInputMode(true);
             mConsole->displayPrompt();
@@ -336,7 +337,7 @@ namespace hal
             for (const Gate* g : gNetlist->get_gates()) gats.insert(g->get_id());
             if (gSelectionRelay->numberSelectedGates()) gSelectionRelay->clearAndUpdate();
             PythonGateSelectionReceiver* pgs = new PythonGateSelectionReceiver(mThread,this);
-            GateDialog gd(gats, pgs, qApp->activeWindow());
+            GateDialog gd(gats, prompt, pgs, qApp->activeWindow());
             Gate* gatSelect = (gd.exec() == QDialog::Accepted)
                     ? gNetlist->get_gate_by_id(gd.selectedId())
                     : nullptr;
@@ -348,11 +349,12 @@ namespace hal
             QSet<u32> mods;
             if (gSelectionRelay->numberSelectedModules()) gSelectionRelay->clearAndUpdate();
             PythonModuleSelectionReceiver* pms = new PythonModuleSelectionReceiver(mThread,this);
-            ModuleDialog md(pms, {}, qApp->activeWindow());
+            ModuleDialog md(pms, prompt, {}, qApp->activeWindow());
             Module* modSelect = (md.exec() == QDialog::Accepted)
                     ? gNetlist->get_module_by_id(md.selectedId())
                     : nullptr;
             if (!md.pickerModeActivated() && mThread) mThread->setInput(QVariant::fromValue<void*>(modSelect));
+            break;
         }
         case PythonThread::FilenameInput:
         {

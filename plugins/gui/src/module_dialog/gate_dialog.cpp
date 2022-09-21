@@ -17,11 +17,11 @@
 #include <QTreeView>
 
 namespace hal {
-    GateDialog::GateDialog(const QSet<u32> &selectable, GateSelectReceiver* receiver, QWidget* parent)
+    GateDialog::GateDialog(const QSet<u32> &selectable, const QString &title, GateSelectReceiver* receiver, QWidget* parent)
         : QDialog(parent), mSelectedId(0), mReceiver(receiver),
-          mSelectableGates(selectable),  mPickerModeActivated(false)
+          mSelectableGates(selectable),  mPickerModeActivated(false), mWindowTitle(title)
     {
-        setWindowTitle("Select Gate …");
+        setWindowTitle(mWindowTitle + " …");
         QGridLayout* layout = new QGridLayout(this);
 
         mButtonPick = new QPushButton("Pick gate from graph", this);
@@ -97,7 +97,7 @@ namespace hal {
             Gate* g = gNetlist->get_gate_by_id(mSelectedId);
             if (g) target = QString("%1[%2]").arg(QString::fromStdString(g->get_name())).arg(mSelectedId);
         }
-        setWindowTitle("Move to module " + target);
+        setWindowTitle(mWindowTitle + " " + target);
     }
 
      u32 GateDialog::treeGateId(const QModelIndex& index)
