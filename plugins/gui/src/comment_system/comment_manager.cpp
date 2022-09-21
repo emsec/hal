@@ -3,6 +3,8 @@
 namespace hal
 {
 
-
+    CommentManager::CommentManager(QObject* parent)
+        : QObject(parent)
+    {;}
 
 }

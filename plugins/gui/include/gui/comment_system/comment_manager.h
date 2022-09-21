@@ -21,14 +21,25 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
+#include <QObject>
+#include <QList>
+#include <QMultiHash>
+
+#include "gui/comment_system/comment_entry.h"
+#include "gui/gui_def.h"
+
 namespace hal
 {
-    class CommentManager
+    class CommentManager : public QObject
     {
-    public:
-        CommentManager();
-        ~CommentManager();
+        Q_OBJECT
 
+    public:
+        CommentManager(QObject* parent = nullptr);
+        ~CommentManager() {;}
+        bool save() {return false;}
+        bool restore() {return false;}
     private:
+        QMultiHash<Node,CommentEntry*> mEntries;
     };
 }
