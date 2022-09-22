@@ -270,6 +270,7 @@ namespace hal
         gPythonContext = std::make_unique<PythonContext>();
 
         gContentManager = new ContentManager(this);
+        gCommentManager = new CommentManager(this);
 
         mSettingCreateFile = new SettingsItemKeybind(
             "HAL Shortcut 'Create Empty Netlist'", "keybinds/project_create_file", QKeySequence("Ctrl+N"), "Keybindings:Global", "Keybind for creating a new and empty netlist in HAL.");
@@ -886,6 +887,8 @@ namespace hal
         gContentManager->deleteContent();
         // PYTHON ???
         gSelectionRelay->clear();
+        gCommentManager->clear();
+
         FileManager::get_instance()->closeFile();
         setWindowTitle("HAL");
 

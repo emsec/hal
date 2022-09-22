@@ -25,6 +25,7 @@
 #include "gui/gui_def.h"
 #include <QString>
 #include <QDateTime>
+#include <QJsonObject>
 
 namespace hal
 {
@@ -41,16 +42,20 @@ namespace hal
     {
     public:
         CommentEntry(Node n, QString text = QString(), QString header = QString());
+        CommentEntry(const QJsonObject& jsonObj);
         ~CommentEntry(){};
 
         void setHeader(QString newHeader);
         void setText(QString newText);
         void setDirty(bool dirty);
 
-        QString getHeader();
-        QString getText();
-
-        QDateTime getCreationTime();
+        QString getHeader() const;
+        QString getText() const;
+        Node getNode() const;
+        QDateTime getCreationTime() const;
+        QJsonObject toJson() const;
+        bool isInvalid() const;
+        void dump() const;
 
         //create all setter/getter for datetimes for serialization/deserialization in case
         //the content manager parses file? Or omit them and create parse/write json methods

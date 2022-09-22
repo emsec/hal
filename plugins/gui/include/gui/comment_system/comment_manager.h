@@ -27,19 +27,47 @@
 
 #include "gui/comment_system/comment_entry.h"
 #include "gui/gui_def.h"
+#include "hal_core/netlist/project_serializer.h"
 
 namespace hal
 {
-    class CommentManager : public QObject
+    class CommentManager : public QObject, public ProjectSerializer
     {
         Q_OBJECT
 
     public:
         CommentManager(QObject* parent = nullptr);
-        ~CommentManager() {;}
-        bool save() {return false;}
-        bool restore() {return false;}
+
+        ~CommentManager();
+
+        /**
+         * Call to restore
+         * @return true if successful, false otherwise
+         */
+        bool restore();
+
+        /**
+         * ProjectSerializer callback gets called upon save and autosave
+         * @param netlist The current netlist (unused)
+         * @param savedir The directory to which the project gets persisted
+         * @param isAutosave Whether save request was issued from autosave (unused)
+         * @return relative filename where the comments were saved
+         */
+        std::string serialize(Netlist* netlist, const std::filesystem::path& savedir, bool isAutosave) override;
+
+        /**
+         * ProjectSerializer callback when project gets loaded
+         * @param netlist The current netlist (unused)
+         * @param loaddir The directory from which the file gets loaded
+         */
+        void deserialize(Netlist* netlist, const std::filesystem::path& loaddir) override;
+
+        /**
+         * Cleanup and clear when netlist gets closed
+         */
+        void clear();
     private:
         QMultiHash<Node,CommentEntry*> mEntries;
+        bool restoreInternal(const std::filesystem::path& loaddir, const std::string& relFilename);
     };
 }
