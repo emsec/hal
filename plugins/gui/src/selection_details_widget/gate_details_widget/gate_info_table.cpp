@@ -249,7 +249,7 @@ namespace hal
     {
         QSet<u32> excludeMods;
         if (mGate) excludeMods.insert(mGate->get_module()->get_id());
-        ModuleDialog md(nullptr,"Move to module", excludeMods,this);
+        ModuleDialog md(excludeMods, "Move to module", nullptr, this);
         if (md.exec() != QDialog::Accepted) return;
         if (md.isNewModule())
         {

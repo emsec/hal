@@ -67,8 +67,8 @@ namespace hal {
          * @param receiver - The receiver for graphical picker, picker will be hidden if nullptr
          * @param parent - The dialog's parent.
          */
-        ModuleDialog(ModuleSelectReceiver* receiver=nullptr, const QString& title=QString("Select module"),
-                     const QSet<u32>& excludeIds = {}, QWidget* parent=nullptr);
+        ModuleDialog(const QSet<u32>& excludeIds = {}, const QString& title=QString("Select module"),
+                     ModuleSelectReceiver* receiver=nullptr, QWidget* parent=nullptr);
 
         /**
          * Get the through this dialog selected id.

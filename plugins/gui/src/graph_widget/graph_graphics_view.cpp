@@ -34,9 +34,7 @@
 #include "gui/user_action/action_unfold_module.h"
 #include "gui/user_action/user_action_compound.h"
 #include "gui/module_dialog/module_dialog.h"
-#include "gui/module_dialog/custom_module_dialog.h"
 #include "gui/module_dialog/gate_dialog.h"
-#include "gui/module_dialog/custom_gate_dialog.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
@@ -971,7 +969,7 @@ namespace hal
             }
         }
 
-        CustomModuleDialog module_dialog(not_selectable_modules, this);
+        ModuleDialog module_dialog(not_selectable_modules,"Add module to view", nullptr, this);
         if (module_dialog.exec() == QDialog::Accepted)
         {
             QSet<u32> module_to_add;
@@ -1007,7 +1005,7 @@ namespace hal
             }
         }
 
-        CustomGateDialog gate_dialog(0, true, selectable_gates, this);
+        GateDialog gate_dialog(selectable_gates, "Add gate to view", nullptr, this);
         if (gate_dialog.exec() == QDialog::Accepted)
         {
             QSet<u32> gate_to_add;
@@ -1330,7 +1328,7 @@ namespace hal
         }
 
         AddToModuleReceiver* receiver = new AddToModuleReceiver(this);
-        ModuleDialog md(receiver, "Move to module", exclude_ids, this);
+        ModuleDialog md(exclude_ids, "Move to module", receiver, this);
         if (md.exec() != QDialog::Accepted) return;
         if (md.isNewModule())
         {

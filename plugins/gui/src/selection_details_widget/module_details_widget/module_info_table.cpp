@@ -486,7 +486,7 @@ namespace hal
             Module* parentMod = mModule->get_parent_module();
             if (parentMod) excludeMods.insert(parentMod->get_id());
         }
-        ModuleDialog md(nullptr,"Move to module", excludeMods,this);
+        ModuleDialog md(excludeMods, "Move to module", nullptr, this);
         if (md.exec() != QDialog::Accepted) return;
         if (md.isNewModule())
         {

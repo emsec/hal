@@ -21,7 +21,7 @@
 #include <QApplication>
 
 namespace hal {
-    ModuleDialog::ModuleDialog(ModuleSelectReceiver* receiver, const QString &title, const QSet<u32>& excludeIds, QWidget* parent)
+    ModuleDialog::ModuleDialog(const QSet<u32>& excludeIds, const QString &title, ModuleSelectReceiver* receiver, QWidget* parent)
         : QDialog(parent),
           mSelectedId(0),
           mExcludeIds(excludeIds),
