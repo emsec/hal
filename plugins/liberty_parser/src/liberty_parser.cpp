@@ -930,18 +930,9 @@ namespace hal
 
             for (const auto& pin_name : pin.pin_names)
             {
-                GatePin* pin_inst;
                 if (auto res = gt->create_pin(pin_name, pin.direction, pin.type); res.is_error())
                 {
                     return ERR_APPEND(res.get_error(), "could not construct gate type '" + cell.name + "': failed to create pin '" + pin_name + "'");
-                }
-                else
-                {
-                    pin_inst = res.get();
-                }
-                if (auto res = gt->create_pin_group(pin_name, {pin_inst}, pin.direction, pin.type); res.is_error())
-                {
-                    return ERR_APPEND(res.get_error(), "could not construct gate type '" + cell.name + "': failed to create pin group '" + pin_name + "'");
                 }
             }
         }

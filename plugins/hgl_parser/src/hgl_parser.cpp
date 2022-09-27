@@ -187,22 +187,10 @@ namespace hal
 
         for (const auto& pin_name : pin_ctx.pins)
         {
-            GatePin* pin;
             if (auto res = gt->create_pin(pin_name, pin_ctx.pin_to_direction.at(pin_name), pin_ctx.pin_to_type.at(pin_name)); res.is_error())
             {
                 return ERR_APPEND(res.get_error(),
                                   "could not parse gate type '" + name + "': failed to create pin '" + pin_name + "' of gate type '" + gt->get_name() + "' with ID " + std::to_string(gt->get_id()));
-            }
-            else
-            {
-                pin = res.get();
-            }
-
-            if (auto res = gt->create_pin_group(pin_name, {pin}, pin->get_direction(), pin->get_type()); res.is_error())
-            {
-                return ERR_APPEND(res.get_error(),
-                                  "could not parse gate type '" + name + "': failed to create pin group '" + pin_name + "' of gate type '" + gt->get_name() + "' with ID "
-                                      + std::to_string(gt->get_id()));
             }
         }
 
