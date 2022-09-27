@@ -197,6 +197,12 @@ namespace hal
          */
         void setParentObjectLock(bool lock) {mParentObjectLock = lock;}
 
+        /**
+         * Executing this action will modify the project thus a warning pops up when leaving hal without saving.
+         * @return True if executing the action will modify the project, false otherwise.
+         */
+        bool hasProjectModified() const { return mProjectModified; }
+
     protected:
         UserAction();
         UserActionObject mObject;
@@ -207,6 +213,7 @@ namespace hal
         qint64 mTimeStamp;
         bool mObjectLock;
         bool mParentObjectLock;
+        bool mProjectModified;
 
         static QString setToText(const QSet<u32>& set);
         static QSet<u32> setFromText(const QString& s);

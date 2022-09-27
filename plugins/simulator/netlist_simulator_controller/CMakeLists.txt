@@ -32,6 +32,7 @@ if(PL_NETLIST_SIMULATOR_CONTROLLER OR PL_SIMULATOR OR BUILD_ALL_PLUGINS)
                    LINK_LIBRARIES PUBLIC Qt5::Core)
 
     add_subdirectory(test)
+    add_subdirectory(saleae_cli)
 
     if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
         add_sanitizers(netlist_simulator)

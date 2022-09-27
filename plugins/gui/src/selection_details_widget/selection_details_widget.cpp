@@ -156,7 +156,7 @@ namespace hal
     {
         if (gSelectionRelay->numberSelectedNodes() <= 0) return;
 
-        ModuleDialog md = new ModuleDialog(this);
+        ModuleDialog md({},"Move to module",nullptr,this);
         if (md.exec() != QDialog::Accepted) return;
 
         if (md.isNewModule())
@@ -307,7 +307,7 @@ namespace hal
                 ? mToModuleIconStyle
                 : mDisabledIconStyle;
         mSelectionToModule->setIcon(gui_utility::getStyledSvgIcon(iconStyle, mToModuleIconPath));
-        mSelectionToModule->setEnabled(gContentManager->getGraphTabWidget()->selectCursor()==GraphTabWidget::Select
+        mSelectionToModule->setEnabled(gContentManager->getGraphTabWidget()->isSelectMode()
                                        && nodes > 0);
     }
 
@@ -339,7 +339,7 @@ namespace hal
             canMoveToModule(gSelectionRelay->numberSelectedNodes());
             enableSearchbar(true);
 
-            bool toModuleEnabled = gContentManager->getGraphTabWidget()->selectCursor()==GraphTabWidget::Select;
+            bool toModuleEnabled = gContentManager->getGraphTabWidget()->isSelectMode();
             mSelectionToGrouping->setEnabled(true);
             mSelectionToModule->setEnabled(toModuleEnabled);
             mSelectionToGrouping->setIcon(gui_utility::getStyledSvgIcon(mToGroupingIconStyle, mToGroupingIconPath));

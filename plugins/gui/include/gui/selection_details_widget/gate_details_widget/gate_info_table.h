@@ -115,6 +115,11 @@ namespace hal
         void copyId() const;
 
         /**
+         * Copies the python code to retrieve the gate's id.
+         */
+        void pyCopyId() const;
+
+        /**
          * Copies the gate's type to the clipboard.
          */
         void copyType() const;
@@ -145,9 +150,9 @@ namespace hal
         void pyCopyLocation() const;
         
         /**
-         * Copies the gate's parent module to the clipboard.
+         * Copies the gate's parent module's name to the clipboard.
          */
-        void copyModule() const;
+        void copyModuleName() const;
 
         /**
          * Copies the python code to retrieve the gate's parent module to the clipboard.
@@ -155,9 +160,24 @@ namespace hal
         void pyCopyModule() const;
 
         /**
+         * Copies the id of the gate's module to the clipboard.
+         */
+        void copyModuleID() const;
+
+        /**
+         * Adds the gate's module to the current selection.
+         */
+        void addModuleToSelection();
+
+        /**
          * Changes the selection to the gate's parent module.
          */
-        void navModule();
+        void setModuleAsSelection();
+
+        /**
+         * Uses the ModuleDialog to open a popup for the Change module action.
+         */
+        void moveToModuleAction();
 
         /**
          * Handle relayed removal of a gate.

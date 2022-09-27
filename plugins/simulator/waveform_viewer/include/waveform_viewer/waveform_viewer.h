@@ -83,6 +83,10 @@ namespace hal
          */
         virtual void setupToolbar(Toolbar* toolbar) override;
 
+        /**
+         * Restore previous controller and waveform viewer from saved data files.
+         */
+        void restoreFromProject() override;
     private Q_SLOTS:
         void handleCreateControl();
         void handleSimulSettings();

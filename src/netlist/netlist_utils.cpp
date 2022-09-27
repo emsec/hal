@@ -206,12 +206,21 @@ namespace hal
             {
                 return ERR("could not get subgraph function of net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": net has more than one source");
             }
+            else if (net->is_global_input_net())
+            {
+                return OK(BooleanFunction::Var("net_" + std::to_string(net->get_id())));
+            }
             else if (net->get_num_of_sources() == 0)
             {
                 return ERR("could not get subgraph function of net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": net has no sources");
             }
 
             const Gate* start_gate = net->get_sources()[0]->get_gate();
+            if (std::find(subgraph_gates.begin(), subgraph_gates.end(), start_gate) == subgraph_gates.end())
+            {
+                return OK(BooleanFunction::Var("net_" + std::to_string(net->get_id())));
+            }
+
             const GatePin* src_pin = net->get_sources()[0]->get_pin();
 
             BooleanFunction result;

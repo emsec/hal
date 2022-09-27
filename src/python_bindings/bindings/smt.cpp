@@ -21,6 +21,10 @@ namespace hal
             Represents the data structure to configure an SMT query.
         )");
 
+        py_smt_query_config.def(py::init<>(), R"(
+            Constructs a new query configuration.
+        )");
+
         py_smt_query_config.def_readwrite("solver", &SMT::QueryConfig::solver, R"(
             The SMT solver identifier.
 
@@ -122,11 +126,11 @@ namespace hal
 
         py_smt_constraint.def(
             "get_assignment",
-            [](const SMT::Constraint& self) -> std::optional<const std::pair<BooleanFunction, BooleanFunction>*> {
+            [](const SMT::Constraint& self) -> std::optional<std::pair<BooleanFunction, BooleanFunction>> {
                 auto res = self.get_assignment();
                 if (res.is_ok())
                 {
-                    return res.get();
+                    return *res.get();
                 }
                 else
                 {
@@ -193,6 +197,12 @@ namespace hal
 
             :returns: True if both models are unequal, False otherwise.
             :rtype: bool
+        )");
+
+        py_smt_model.def_readwrite("model", &SMT::Model::model, R"(
+            A dict from variable identifiers to a (1) value and (2) its bit-size.
+
+            :type: dict(str,tuple(int,int))
         )");
 
         py_smt_model.def_static("parse", &SMT::Model::parse, py::arg("model_str"), py::arg("solver"), R"(
@@ -318,7 +328,22 @@ namespace hal
             :rtype: bool
         )");
 
-        py_smt_solver.def("query", &SMT::Solver::query, py::arg("config"), R"(
+        py_smt_solver.def(
+            "query",
+            [](const SMT::Solver& self, const SMT::QueryConfig& config) -> std::optional<SMT::SolverResult> {
+                auto res = self.query(config);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("config"),
+            R"(
             Queries an SMT solver with the specified query configuration.
 
             :param hal_py.SMT.QueryConfig config: The SMT solver query configuration.

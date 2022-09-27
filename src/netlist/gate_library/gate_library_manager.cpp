@@ -131,6 +131,18 @@ namespace hal
             }
         }
 
+        std::vector<std::filesystem::path> get_all_path()
+        {
+            std::vector<std::filesystem::path> retval;
+            for (const auto& lib_dir : utils::get_gate_library_directories())
+            {
+                if (!std::filesystem::exists(lib_dir)) continue;
+                for (const auto& lib_path : utils::RecursiveDirectoryRange(lib_dir))
+                    retval.push_back(lib_path.path());
+            }
+            return retval;
+        }
+
         bool save(std::filesystem::path file_path, GateLibrary* gate_lib, bool overwrite)
         {
             if (std::filesystem::exists(file_path))

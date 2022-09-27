@@ -31,18 +31,156 @@
 #include <QVBoxLayout>
 #include <chrono>
 #include <fstream>
+#include "hal_core/netlist/project_manager.h"
+#include "hal_core/utilities/project_directory.h"
+#include <QDir>
+#include "rapidjson/filereadstream.h"
 
 namespace hal
 {
+    PythonSerializer::PythonSerializer()
+        : ProjectSerializer("pythoneditor")
+    {
+        ProjectManager* pm = ProjectManager::instance();
+        if (pm->get_project_status() == ProjectManager::None) return;
+
+        mSaveDir = QString::fromStdString(pm->get_project_directory().get_filename("py").string());
+        QDir().mkpath(mSaveDir);
+
+        std::string relname = pm->get_filename(m_name);
+        if (!relname.empty())
+            restoreTabs(pm->get_project_directory(), relname);
+    }
+
+    QString PythonSerializer::sPythonRelDir = "py";
+
+    std::string PythonSerializer::serialize(Netlist* netlist, const std::filesystem::path &savedir, bool isAutosave)
+    {
+        Q_UNUSED(netlist);
+        QDir pyDir(QString::fromStdString((savedir / sPythonRelDir.toStdString()).string()));
+        gContentManager->getPythonEditorWidget()->saveAllTabs(pyDir.absolutePath(),isAutosave);
+
+        return serialize_control(savedir,isAutosave);
+    }
+
+    std::string PythonSerializer::serialize_control(const std::filesystem::path& savedir, bool isAutosave)
+    {
+        const std::string retval("pythoneditor.json");
+        QDir workDir(QString::fromStdString(savedir.empty()
+                                            ? ProjectManager::instance()->get_project_directory().get_canonical_path().string()
+                                            : savedir.string()));
+        QDir pyDir(workDir.absoluteFilePath(sPythonRelDir));
+        QString pythonEditorControl = workDir.absoluteFilePath(QString::fromStdString(retval));
+
+        JsonWriteDocument doc;
+
+        doc["python_dir"] = sPythonRelDir.toStdString();
+
+        JsonWriteArray& tabArr = doc.add_array("tabs");
+
+        PythonEditor* pedit = gContentManager->getPythonEditorWidget();
+        if (!pedit) return std::string();
+
+        QTabWidget* tabw = pedit->getTabWidget();
+        for (int tabInx=0; tabInx < tabw->count(); tabInx++)
+        {
+            PythonCodeEditor* pce = pedit->getPythonEditor(tabInx);
+            if (!pce) continue;
+
+            JsonWriteObject& tabObj = tabArr.add_object();
+            tabObj["tab"]  = tabInx;
+
+            QString tabPath = pce->getFileName();
+            if (tabPath.isEmpty())
+                tabPath = pyDir.absoluteFilePath(pedit->unnamedFilename(tabInx));
+            else if (isAutosave)
+            {
+                tabObj["restore"] = tabPath.toStdString();
+                tabPath = pyDir.absoluteFilePath(pedit->autosaveFilename(tabInx));
+            }
+            QString pydirPrefix = pyDir.absolutePath() + "/";
+            QString tabFilename = tabPath.startsWith(pydirPrefix)
+                    ? tabPath.mid(pydirPrefix.size())
+                    : tabPath;
+            tabObj["filename"] = tabFilename.toStdString();
+            tabObj.close();
+        }
+
+        tabArr.close();
+
+        doc.serialize(pythonEditorControl.toStdString());
+
+        return retval;
+    }
+
+    void PythonSerializer::deserialize(Netlist* netlist, const std::filesystem::path& loaddir)
+    {
+        Q_UNUSED(netlist);
+        std::string relname = ProjectManager::instance()->get_filename(m_name);
+        if (!relname.empty())
+            restoreTabs(loaddir, relname);
+    }
+
+    void PythonSerializer::restoreTabs(const std::filesystem::path& loaddir, const std::string& jsonfile)
+    {
+        std::filesystem::path jsonpath(loaddir);
+        jsonpath.append(jsonfile);
+
+        FILE* pytabFile = fopen(jsonpath.string().c_str(), "rb");
+        if (pytabFile == NULL)
+        {
+            log_error("GroupingSerializer::deserialize", "unable to open '{}'.", jsonpath.string());
+            return;
+        }
+
+        PythonEditor* pedit = gContentManager->getPythonEditorWidget();
+
+        char buffer[65536];
+        rapidjson::FileReadStream frs(pytabFile, buffer, sizeof(buffer));
+        rapidjson::Document document;
+        document.ParseStream<0, rapidjson::UTF8<>, rapidjson::FileReadStream>(frs);
+
+        QDir pyDir(QString::fromStdString((loaddir / std::filesystem::path(document.HasMember("python_dir")?document["python_dir"].GetString():std::string("py"))).string()));
+
+        bool restoreAutosave = false;
+
+        if (document.HasMember("tabs"))
+        {
+            for (const rapidjson::Value& tabVal : document["tabs"].GetArray())
+            {
+                if (!tabVal.HasMember("tab") || !tabVal.HasMember("filename")) continue;
+                int tabInx      = tabVal["tab"].GetUint();
+                QString tabFilename = QString::fromStdString(tabVal["filename"].GetString());
+                QString tabPath = QFileInfo(tabFilename).isRelative() ? pyDir.absoluteFilePath(tabFilename) : tabFilename;
+                if (tabFilename.startsWith(".autosave_tab") && tabVal.HasMember("restore"))
+                {
+                    QString restorePath = QString::fromStdString(tabVal["restore"].GetString());
+                    if (QFileInfo(restorePath).exists()) QFile::remove(restorePath);
+                    QFile::copy(tabPath,restorePath);
+                    tabPath = restorePath;
+                    restoreAutosave = true;
+                }
+                pedit->tabLoadFile(tabInx, tabPath);
+            }
+        }
+
+        if (restoreAutosave)
+        {
+            std::filesystem::path workdir = ProjectManager::instance()->get_project_directory().get_canonical_path();
+            pedit->saveAllTabs(QString::fromStdString(workdir.string()),false);
+            pedit->saveControl();
+        }
+    }
+
+
     PythonEditor::PythonEditor(QWidget* parent)
         : ContentWidget("Python Editor", parent), PythonContextSubscriber(), mSearchbar(new Searchbar()), mActionOpenFile(new Action(this)), mActionRun(new Action(this)),
-          mActionSave(new Action(this)), mActionSaveAs(new Action(this)), mActionToggleMinimap(new Action(this)), mActionNewFile(new Action(this))
+          mActionSave(new Action(this)), mActionSaveAs(new Action(this)), mActionToggleMinimap(new Action(this)), mActionNewFile(new Action(this)),
+          mFileWatcher(nullptr)
     {
         ensurePolished();
         mNewFileCounter = 0;
         mLastClickTime  = 0;
-
-        mLastOpenedPath = QDir::currentPath();
 
         mTabWidget = new QTabWidget(this);
         mTabWidget->setTabsClosable(true);
@@ -67,7 +205,7 @@ namespace hal
         mActionSave->setText("Save");
         mActionSaveAs->setText("Save as");
         mActionRun->setText("Execute Script");
-        mActionNewFile->setText("New File");
+        mActionNewFile->setText("New Script");
         mActionToggleMinimap->setText("Toggle Minimap");
         mSearchAction->setText("Search");
 
@@ -136,8 +274,6 @@ namespace hal
         handleActionNewTab();
 
         using namespace std::placeholders;
-        hal_file_manager::register_on_serialize_callback("PythonEditor", std::bind(&PythonEditor::handleSerializationToHalFile, this, _1, _2, _3));
-        hal_file_manager::register_on_deserialize_callback("PythonEditor", std::bind(&PythonEditor::handleDeserializationFromHalFile, this, _1, _2, _3));
     }
 
     bool PythonEditor::handleSerializationToHalFile(const std::filesystem::path& path, const Netlist* netlist, rapidjson::Document& document)
@@ -238,12 +374,12 @@ namespace hal
             {
                 if (file_name.isEmpty())
                 {
-                    bool suc = saveFile(true, index);
+                    bool suc = saveFile(false, QueryAlways, index);
                     if (!suc)
                         return;
                 }
                 else
-                    saveFile(false, index);
+                    saveFile(false, QueryIfEmpty, index);
             }
             this->discardTab(index);
         }
@@ -251,24 +387,13 @@ namespace hal
         {
             this->discardTab(index);
         }
+        saveControl();
     }
 
     void PythonEditor::handleActionToggleMinimap()
     {
         if (mTabWidget->currentWidget())
             dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->toggleMinimap();
-    }
-
-    void PythonEditor::handleModificationChanged(bool changed)
-    {
-        if (changed && !(mTabWidget->tabText(mTabWidget->currentIndex()).endsWith("*")))
-        {
-            mTabWidget->setTabText(mTabWidget->currentIndex(), mTabWidget->tabText(mTabWidget->currentIndex()).append("*"));
-        }
-        if (!changed && (mTabWidget->tabText(mTabWidget->currentIndex()).endsWith("*")))
-        {
-            mTabWidget->setTabText(mTabWidget->currentIndex(), mTabWidget->tabText(mTabWidget->currentIndex()).remove('*'));
-        }
     }
 
     void PythonEditor::handleKeyPressed()
@@ -280,15 +405,15 @@ namespace hal
     {
         if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count() - 100 < mLastClickTime)
         {
-            PythonCodeEditor* current_editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget());
+            PythonCodeEditor* currentEditor = dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget());
 
-            QString tab_name = mTabWidget->tabText(mTabWidget->indexOf(current_editor));
+            QString tab_name = mTabWidget->tabText(mTabWidget->indexOf(currentEditor));
 
-            if (current_editor)
-                gFileStatusManager->fileChanged(current_editor->getUuid(), "Python tab: " + tab_name);
+            if (currentEditor)
+                gFileStatusManager->fileChanged(currentEditor->getUuid(), "Python tab: " + tab_name);
 
             if (!tab_name.endsWith("*"))
-                mTabWidget->setTabText(mTabWidget->indexOf(current_editor), tab_name + "*");
+                mTabWidget->setTabText(mTabWidget->indexOf(currentEditor), tab_name + "*");
         }
     }
 
@@ -328,14 +453,14 @@ namespace hal
             return;
         }
 
-        PythonCodeEditor* current_editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget());
+        PythonCodeEditor* currentEditor = dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget());
 
         if (!mSearchbar->isHidden())
-            current_editor->search(mSearchbar->getCurrentText(), getFindFlags());
-        else if (!current_editor->extraSelections().isEmpty())
-            current_editor->search("");
+            currentEditor->search(mSearchbar->getCurrentText(), getFindFlags());
+        else if (!currentEditor->extraSelections().isEmpty())
+            currentEditor->search("");
 
-        if (current_editor->isBaseFileModified())
+        if (currentEditor->isBaseFileModified())
             mFileModifiedBar->setHidden(false);
         else
             mFileModifiedBar->setHidden(true);
@@ -345,8 +470,6 @@ namespace hal
 
     PythonEditor::~PythonEditor()
     {
-        hal_file_manager::unregister_on_serialize_callback("PythonEditor");
-        hal_file_manager::unregister_on_deserialize_callback("PythonEditor");
     }
 
     void PythonEditor::setupToolbar(Toolbar* Toolbar)
@@ -409,11 +532,11 @@ namespace hal
 
     void PythonEditor::handleActionOpenFile()
     {
-        QString title = "Open File";
-        QString text  = "Python Scripts(*.py)";
+        QString caption = "Open File";
+        QString filter = "Python Scripts(*.py)";
 
         // Non native dialogs does not work on macOS. Therefore do net set DontUseNativeDialog!
-        QStringList file_names = QFileDialog::getOpenFileNames(nullptr, title, mLastOpenedPath, text, nullptr);
+        QStringList file_names = QFileDialog::getOpenFileNames(nullptr, caption, getDefaultPath(), filter);
 
         if (file_names.isEmpty())
         {
@@ -445,109 +568,187 @@ namespace hal
             tabLoadFile(mTabWidget->count() - 1, fileName);
         }
 
-        mLastOpenedPath = QFileInfo(file_names.last()).absolutePath();
+        mDefaultPath = QFileInfo(file_names.last()).path();
     }
 
     void PythonEditor::tabLoadFile(u32 index, QString fileName)
     {
-        std::ifstream file(fileName.toStdString(), std::ios::in);
-
-        if (!file.is_open())
-        {
+        QFile pyFile(fileName);
+        if (!pyFile.open(QIODevice::ReadOnly))
             return;
-        }
 
-        std::string f((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+        QByteArray pyText = pyFile.readAll();
         QFileInfo info(fileName);
+
+        while (mTabWidget->count() <= (int)index)
+            handleActionNewTab();
 
         auto tab = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(index));
 
-        tab->setPlainText(QString::fromStdString(f));
-        tab->set_file_name(fileName);
-        tab->document()->setModified(false);
-        mTabWidget->setTabText(mTabWidget->indexOf(tab), info.completeBaseName() + "." + info.completeSuffix());
-        mNewFileCounter--;
+        tab->setPlainText(QString::fromUtf8(pyText));
 
-        mPathEditorMap.insert(fileName, tab);
-        mFileWatcher->addPath(fileName);
+        if (!info.fileName().startsWith(".unnamed_tab"))
+        {
+            tab->document()->setModified(false);
+            tab->set_file_name(fileName);
+            mTabWidget->setTabText(mTabWidget->indexOf(tab), info.completeBaseName() + "." + info.completeSuffix());
+            mNewFileCounter--;
 
-        gFileStatusManager->fileSaved(tab->getUuid());
+            mPathEditorMap.insert(fileName, tab);
+            mFileWatcher->addPath(fileName);
+
+            gFileStatusManager->fileSaved(tab->getUuid());
+        }
     }
 
-    bool PythonEditor::saveFile(const bool ask_path, int index)
+    QString PythonEditor::getDefaultPath() const
+    {
+        if (!mDefaultPath.isEmpty()) return mDefaultPath;
+        ProjectManager* pm = ProjectManager::instance();
+        if (pm->get_project_status() != ProjectManager::None)
+            return QString::fromStdString(pm->get_project_directory().get_filename("py").string());
+        return QDir::currentPath();
+    }
+
+    PythonCodeEditor* PythonEditor::getPythonEditor(int tabIndex)
+    {
+        return dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(tabIndex));
+    }
+
+    bool PythonEditor::saveFile(bool isAutosave, PythonEditor::QueryFilenamePolicy queryPolicy, int index)
     {
         QString title = "Save File";
-        QString text  = "Python Scripts(*.py)";
+        QString filter = "Python Scripts(*.py)";
 
         QString selected_file_name;
+
+        bool isUnnamed = false;
 
         if (index == -1)
         {
             index = mTabWidget->currentIndex();
         }
 
-        PythonCodeEditor* current_editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(index));
-
-        if (!current_editor)
+        PythonCodeEditor* currentEditor = getPythonEditor(index);
+        if (!currentEditor)
             return false;
 
-        if (ask_path || current_editor->getFileName().isEmpty())
+        // currentFilename : unnamed -> empty      autosave -> into autosave
+        QString currentFilename = currentEditor->getFileName();
+        if (isAutosave && !currentFilename.isEmpty())
         {
-            selected_file_name = QFileDialog::getSaveFileName(nullptr, title, mLastOpenedPath, text, nullptr, QFileDialog::DontUseNativeDialog);
+            currentFilename = QDir(mGenericPath).absoluteFilePath(autosaveFilename(index));
+        }
+
+        // evaluate query policy
+        if (queryPolicy == QueryAlways ||
+                ( queryPolicy == QueryIfEmpty && currentFilename.isEmpty()))
+        {
+            selected_file_name = QFileDialog::getSaveFileName(this, title, getDefaultPath(), filter, nullptr, QFileDialog::DontUseNativeDialog);
             if (selected_file_name.isEmpty())
                 return false;
 
             if (!selected_file_name.endsWith(".py"))
                 selected_file_name.append(".py");
 
-            current_editor->set_file_name(selected_file_name);
-            mLastOpenedPath = selected_file_name;
+            currentEditor->set_file_name(selected_file_name);
+            mDefaultPath = QFileInfo(selected_file_name).path();
 
             // Remove an existing snapshot and update its location
-            removeSnapshotFile(current_editor);
+            removeSnapshotFile(currentEditor);
             QString snapShotDirectory = getSnapshotDirectory(true);
             if (!snapShotDirectory.isEmpty())
             {
                 QString new_snapshot_path = snapShotDirectory + "/" + selected_file_name + ".py";
-                if (mTabToSnapshotPath.contains(current_editor))
+                if(mTabToSnapshotPath.contains(currentEditor))
                 {
-                    mTabToSnapshotPath[current_editor] = new_snapshot_path;
+                    mTabToSnapshotPath[currentEditor] = new_snapshot_path;
                 }
                 else
                 {
-                    mTabToSnapshotPath.insert(current_editor, new_snapshot_path);
+                    mTabToSnapshotPath.insert(currentEditor, new_snapshot_path);
                 }
             }
         }
+        else if (queryPolicy == GenericName && currentFilename.isEmpty())
+        {
+            selected_file_name = QDir(mGenericPath).absoluteFilePath(unnamedFilename(index));
+            isUnnamed = true;
+        }
         else
         {
-            selected_file_name = current_editor->getFileName();
+            selected_file_name = currentFilename;
             // Remove an existing snapshot
-            removeSnapshotFile(current_editor);
+            removeSnapshotFile(currentEditor);
         }
 
-        mFileWatcher->removePath(current_editor->getFileName());
-        mPathEditorMap.remove(current_editor->getFileName());
+        bool isFileWatched = mFileWatcher->files().contains(currentFilename);
+        if (isFileWatched)
+        {
+            mFileWatcher->removePath(currentFilename);
+            mPathEditorMap.remove(currentFilename);
+        }
 
         std::ofstream out(selected_file_name.toStdString(), std::ios::out);
-
         if (!out.is_open())
         {
-            log_error("gui", "could not open file path");
+            log_error("gui", "could not open file path '{}' to serialize python script", selected_file_name.toStdString());
             return false;
         }
-        out << current_editor->toPlainText().toStdString();
+        out << currentEditor->toPlainText().toStdString();
         out.close();
-        current_editor->document()->setModified(false);
 
-        gFileStatusManager->fileSaved(current_editor->getUuid());
+        if (!isAutosave)
+        {
+            currentEditor->document()->setModified(false);
+            gFileStatusManager->fileSaved(currentEditor->getUuid());
+        }
 
-        mPathEditorMap.insert(selected_file_name, current_editor);
-        mFileWatcher->addPath(selected_file_name);
+        if (isFileWatched)
+        {
+            mPathEditorMap.insert(selected_file_name, currentEditor);
+            mFileWatcher->addPath(selected_file_name);
+        }
 
         QFileInfo info(selected_file_name);
-        mTabWidget->setTabText(index, info.completeBaseName() + "." + info.completeSuffix());
+        if (!isAutosave) {
+            if (isUnnamed)
+            {
+                QString unnamedTabName = mTabWidget->tabText(index);
+                while (unnamedTabName.endsWith("*")) unnamedTabName.chop(1);
+                mTabWidget->setTabText(index, unnamedTabName);
+            }
+            else
+                mTabWidget->setTabText(index, info.completeBaseName() + "." + info.completeSuffix());
+        }
+
         return true;
+    }
+
+    QString PythonEditor::unnamedFilename(int index) const
+    {
+        return QString(".unnamed_tab%1.py").arg(index);
+    }
+
+    QString PythonEditor::autosaveFilename(int index)
+    {
+        PythonCodeEditor* pce = getPythonEditor(index);
+        if (!pce || pce->getFileName().isEmpty()) return unnamedFilename(index);
+        return QString(".autosave_tab%1_%2").arg(index).arg(QFileInfo(pce->getFileName()).fileName());
+    }
+
+    void PythonEditor::saveAllTabs(const QString& genericPath, bool isAutosave)
+    {
+        mGenericPath = genericPath;
+        QDir().mkpath(mGenericPath);
+        QStringList retval;
+        for (int inx=0; inx<mTabWidget->count(); ++inx)
+            saveFile(isAutosave,GenericName,inx);
+    }
+
+    void PythonEditor::saveControl()
+    {
+        mSerializer.serialize_control();
     }
 
     QTabWidget* PythonEditor::getTabWidget()
@@ -622,16 +823,27 @@ namespace hal
 
     void PythonEditor::handleActionSaveFile()
     {
-        this->saveFile(false);
+        this->saveFile(false, QueryIfEmpty);
+        saveControl();
     }
 
     void PythonEditor::handleActionSaveFileAs()
     {
-        this->saveFile(true);
+        this->saveFile(false, QueryAlways);
+        saveControl();
     }
 
     void PythonEditor::handleActionRun()
     {
+        if (!mFileModifiedBar->isHidden())
+        {
+            QMessageBox::warning(this, "Script execution error", "Please respond to code editor message before executing the script");
+            return;
+        }
+
+        mFileModifiedBar->handleScriptExecute(mTabWidget->tabText(mTabWidget->currentIndex()));
+        mFileModifiedBar->setHidden(false);
+
         // Update snapshots when clicking on run
         this->updateSnapshots();
 
@@ -640,12 +852,17 @@ namespace hal
             ctx->beginChange();
         }
 
-        gPythonContext->interpretScript(dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->toPlainText());
+        gPythonContext->interpretScript(this,dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->toPlainText());
+    }
 
+    void PythonEditor::handleThreadFinished()
+    {
         for (const auto& ctx : gGraphContextManager->getContexts())
         {
             ctx->endChange();
         }
+
+        mFileModifiedBar->setHidden(true);
     }
 
     void PythonEditor::handleActionNewTab()
@@ -665,10 +882,9 @@ namespace hal
 
         new PythonSyntaxHighlighter(editor->document());
         new PythonSyntaxHighlighter(editor->minimap()->document());
-        mTabWidget->addTab(editor, QString("New File ").append(QString::number(++mNewFileCounter)));
+        mTabWidget->addTab(editor, QString("Unnamed Script ").append(QString::number(++mNewFileCounter)));
         mTabWidget->setCurrentIndex(mTabWidget->count() - 1);
         editor->document()->setModified(false);
-        //connect(editor, &PythonCodeEditor::modificationChanged, this, &PythonEditor::handleModificationChanged);
         connect(editor, &PythonCodeEditor::keyPressed, this, &PythonEditor::handleKeyPressed);
         connect(editor, &PythonCodeEditor::textChanged, this, &PythonEditor::handleTextChanged);
     }
@@ -792,16 +1008,17 @@ namespace hal
     {
         PythonCodeEditor* editor_with_modified_base_file = mPathEditorMap.value(path);
         editor_with_modified_base_file->setBaseFileModified(true);
-        QString tab_name = mTabWidget->tabText(mTabWidget->indexOf(editor_with_modified_base_file));
+        int tabIndex = mTabWidget->indexOf(editor_with_modified_base_file);
+        QString tab_name = mTabWidget->tabText(tabIndex);
 
         if (!tab_name.endsWith("*"))
-            mTabWidget->setTabText(mTabWidget->indexOf(editor_with_modified_base_file), tab_name + "*");
+            mTabWidget->setTabText(tabIndex, tab_name + "*");
 
         gFileStatusManager->fileChanged(editor_with_modified_base_file->getUuid(), "Python tab: " + tab_name);
 
-        PythonCodeEditor* current_editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget());
+        PythonCodeEditor* currentEditor = getPythonEditor(tabIndex);
 
-        if (editor_with_modified_base_file == current_editor)
+        if (editor_with_modified_base_file == currentEditor)
             mFileModifiedBar->setHidden(false);
 
         mFileWatcher->addPath(path);
@@ -809,25 +1026,25 @@ namespace hal
 
     void PythonEditor::handleBaseFileModifiedReload()
     {
-        PythonCodeEditor* current_editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget());
+        PythonCodeEditor* currentEditor = dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget());
         mNewFileCounter++;
-        //tabLoadFile(current_editor, current_editor->getFileName());
-        tabLoadFile(mTabWidget->indexOf(current_editor), current_editor->getFileName());
-        current_editor->setBaseFileModified(false);
+        //tabLoadFile(currentEditor, currentEditor->getFileName());
+        tabLoadFile(mTabWidget->indexOf(currentEditor), currentEditor->getFileName());
+        currentEditor->setBaseFileModified(false);
         mFileModifiedBar->setHidden(true);
     }
 
     void PythonEditor::handleBaseFileModifiedIgnore()
     {
-        PythonCodeEditor* current_editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget());
-        current_editor->setBaseFileModified(false);
+        PythonCodeEditor* currentEditor = dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget());
+        currentEditor->setBaseFileModified(false);
         mFileModifiedBar->setHidden(true);
     }
 
     void PythonEditor::handleBaseFileModifiedOk()
     {
-        PythonCodeEditor* current_editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget());
-        current_editor->setBaseFileModified(false);
+        PythonCodeEditor* currentEditor = dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget());
+        currentEditor->setBaseFileModified(false);
         mFileModifiedBar->setHidden(true);
     }
 

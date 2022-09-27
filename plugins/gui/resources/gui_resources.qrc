@@ -29,6 +29,7 @@
         <file alias="arrow-up">icons/0307-arrow-up.svg</file>
         <file alias="arrow-down">icons/0311-arrow-down.svg</file>
         <file alias="hal">icons/HAL9000.svg</file>
+        <file alias="hal9000">icons/HAL9000.png</file>
         <file alias="fire">icons/0170-fire.svg</file>
         <file alias="settings">icons/0190-menu.svg</file>
         <file alias="cross">icons/0272-cross.svg</file>

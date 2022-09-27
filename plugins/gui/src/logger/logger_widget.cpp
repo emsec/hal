@@ -39,7 +39,6 @@ namespace hal
         mContentLayout->addWidget(mPlainTextEdit);
 
         mPlainTextEdit->setContextMenuPolicy(Qt::CustomContextMenu);
-
         // Get last severity settings
         restoreSettings();
 
@@ -182,6 +181,10 @@ namespace hal
             mCurrentChannelIndex = model->rowCount() - 1;
         }
 
+        if (mCurrentChannelIndex == -2) {
+            return;
+        }
+
         ChannelItem* item   = static_cast<ChannelItem*>((model->index(mCurrentChannelIndex, 0, QModelIndex())).internalPointer());
         mCurrentChannel = item->name().toStdString();
         mChannelLabel->setText(QString::fromStdString(mCurrentChannel));
@@ -194,7 +197,6 @@ namespace hal
         for (ChannelEntry* entry : *(item->getEntries()))
         {
             bool filter = false;
-            std::cout << entry->mMsg << std::endl;
             // If entry msg matches with search string
             QRegularExpression re(mSearchFilter);
             if (re.match(QString::fromStdString(entry->mMsg)).hasMatch())

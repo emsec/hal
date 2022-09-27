@@ -235,4 +235,35 @@ namespace hal
         }
     */
     }
+
+    std::unordered_map<std::string, std::string> JsonConverter::stringToDictionary(const std::string& json_string)
+    {
+        std::unordered_map<std::string, std::string> retval;
+        rapidjson::Document doc;
+        doc.Parse(json_string.c_str());
+        if (doc.IsObject())
+        {
+            for (rapidjson::Value::ConstMemberIterator it = doc.GetObject().MemberBegin(); it != doc.GetObject().MemberEnd(); ++it)
+            {
+                retval[it->name.GetString()] = it->value.GetString();
+            }
+        }
+        return retval;
+    }
+
+    std::string JsonConverter::dictionaryToString(const std::unordered_map<std::string, std::string>& key_values)
+    {
+        rapidjson::StringBuffer s;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(s);
+        rapidjson::Document d;
+        d.SetObject();
+        for (auto it = key_values.begin(); it != key_values.end(); ++it)
+        {
+            rapidjson::Value k(it->first, d.GetAllocator());
+            rapidjson::Value v(it->second, d.GetAllocator());
+            d.AddMember(k, v, d.GetAllocator());
+        }
+        d.Accept(writer);
+        return s.GetString();
+    }
 }    // namespace hal

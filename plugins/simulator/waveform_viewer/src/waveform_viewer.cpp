@@ -51,6 +51,17 @@ namespace hal
         return new WaveformViewer;
     }
 
+    void WaveformViewer::restoreFromProject()
+    {
+        NetlistSimulatorControllerPlugin* ctrlPlug = static_cast<NetlistSimulatorControllerPlugin*>(plugin_manager::get_plugin_instance("netlist_simulator_controller"));
+        if (!ctrlPlug || !ctrlPlug->sSimulatorSerializer) return;
+        for (std::unique_ptr<NetlistSimulatorController>& ctrlRef : ctrlPlug->sSimulatorSerializer->restore())
+        {
+            if (!ctrlRef) continue;
+            takeControllerOwnership(ctrlRef);
+        }
+    }
+
     WaveformViewer::WaveformViewer(QWidget *parent)
         : ContentWidget("VcdViewer",parent),
           mVisualizeNetState(false), mCurrentWaveWidget(nullptr)
@@ -262,7 +273,10 @@ namespace hal
          QMenu* settingMenu = new QMenu(this);
          QAction* act;
          act = new QAction("Select gates for simulation", settingMenu);
-         connect(act, &QAction::triggered, this, &WaveformViewer::handleSelectGates);
+         if (!mCurrentWaveWidget || mCurrentWaveWidget->state() != NetlistSimulatorController::NoGatesSelected)
+             act->setDisabled(true);
+         else
+            connect(act, &QAction::triggered, this, &WaveformViewer::handleSelectGates);
          settingMenu->addAction(act);
 
          act = new QAction("Select clock net", settingMenu);

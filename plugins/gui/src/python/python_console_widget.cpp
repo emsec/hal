@@ -6,9 +6,13 @@
 
 namespace hal
 {
-    PythonConsoleWidget::PythonConsoleWidget(QWidget* parent) : ContentWidget("Python Console", parent), mConsole(new PythonConsole())
+    PythonConsoleWidget::PythonConsoleWidget(QWidget* parent) : ContentWidget("Python Console", parent)
     {
+        mConsole = new PythonConsole(this);
         mContentLayout->addWidget(mConsole);
+        PythonConsoleAbortThread* pcat = mConsole->abortThreadWidget();
+        mContentLayout->addWidget(pcat);
+        pcat->hide();
     }
 
     void PythonConsoleWidget::setupToolbar(Toolbar* Toolbar)

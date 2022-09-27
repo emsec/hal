@@ -354,6 +354,8 @@ namespace hal
         mGlobalInputHash.clear();
         mGlobalOutputHash.clear();
         mNodeBoundingBox = QRect();
+        mViewInput.clear();
+        mViewOutput.clear();
     }
 
     void GraphLayouter::createBoxes()
@@ -425,7 +427,11 @@ namespace hal
                 // FIND SRC BOX
                 const NodeBox* srcBox = mBoxes.boxForGate(src->get_gate());
                 if (!srcBox)
+                {
+                    // not among visible boxes
+                    mViewInput.insert(n->get_id());
                     continue;
+                }
 
                 if (!verifyModulePort(n, srcBox->getNode(), false))
                     continue;
@@ -440,7 +446,11 @@ namespace hal
                 // find dst box
                 const NodeBox* dstBox = mBoxes.boxForGate(dst->get_gate());
                 if (!dstBox)
+                {
+                    // not among visible boxes
+                    mViewOutput.insert(n->get_id());
                     continue;
+                }
 
                 if (!verifyModulePort(n, dstBox->getNode(), true))
                     continue;
@@ -455,7 +465,7 @@ namespace hal
 
             // test for global inputs
             EndpointList::EndpointType nType = mWireEndpoint.value(id).netType();
-            if ((nType == EndpointList::SingleDestination && dstPoints.size() > 1) || (nType == EndpointList::SourceAndDestination && n->is_global_input_net()))
+            if ((nType == EndpointList::SingleDestination && dstPoints.size() > 1) || (nType == EndpointList::SourceAndDestination && mViewInput.contains(n->get_id())))
             {
                 // global input connects to multiple boxes
                 int ypos = mGlobalInputHash.size();
@@ -466,7 +476,7 @@ namespace hal
                 mWireEndpoint[id].setNetType(EndpointList::MultipleDestination);
             }
 
-            if ((nType == EndpointList::SingleSource && srcPoints.size() > 1) || (nType == EndpointList::SourceAndDestination && n->is_global_output_net()))
+            if ((nType == EndpointList::SingleSource && srcPoints.size() > 1) || (nType == EndpointList::SourceAndDestination && mViewOutput.contains(n->get_id())))
             {
                 // multi-driven global output or global output back coupled to net gate
                 int ypos = mGlobalOutputHash.size();

@@ -30,6 +30,7 @@
 #include <QTableView>
 #include <QColor>
 #include <QList>
+#include <QDebug>
 
 namespace hal {
 
@@ -73,6 +74,7 @@ namespace hal {
         ModuleSelectExclude();
         bool isAccepted(u32 modId) const { return !mExclude.contains(modId); }
 
+        void append(QSet<u32> mod_ids) { mExclude += mod_ids; }
         /**
          * @brief selectionToString function is used to generate selection as text for message box
          * @return selected items as formatted string
@@ -90,6 +92,7 @@ namespace hal {
         Q_OBJECT
 
         QList<ModuleSelectEntry> mEntries;
+        ModuleSelectExclude mExcl;
 
     public:
         /**
@@ -97,12 +100,16 @@ namespace hal {
          * @param history if true a list of modules previously selected gets generated
          * @param parent the parent object
          */
-        ModuleSelectModel(bool history, QObject* parent=nullptr);
+        ModuleSelectModel(QObject* parent=nullptr);
+
+        void appendEntries(bool history);
 
         int rowCount(const QModelIndex &parent = QModelIndex()) const override;
         int columnCount(const QModelIndex &parent = QModelIndex()) const override;
         QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
         QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+
+        void excludeModulesById(QSet<u32> id_set) { mExcl.append(id_set); }
 
         u32 moduleId(int irow) const;
         QColor moduleColor(int irow) const;
@@ -130,6 +137,16 @@ namespace hal {
         gui_utility::mSortMechanism mSortMechanism;
     };
 
+    class ModuleSelectReceiver : public QObject
+    {
+        Q_OBJECT
+    public:
+        ModuleSelectReceiver(QObject* parent = nullptr) : QObject(parent) {;}
+        virtual ~ModuleSelectReceiver() {;}
+    public Q_SLOTS:
+        virtual void handleModulesPicked(const QSet<u32>& mods) = 0;
+    };
+
     /**
      * @brief The ModuleSelectPicker class instance gets spawned to pick module from graph
      */
@@ -137,15 +154,17 @@ namespace hal {
     {
         Q_OBJECT
         ModuleSelectExclude mSelectExclude;
-        static ModuleSelectPicker* sCurrentPicker;
+        QSet<u32> mModulesSelected;
 
     public:
-        ModuleSelectPicker();
+        ModuleSelectPicker(ModuleSelectReceiver* receiver, QObject* parent = nullptr);
 
-        static void terminateCurrentPicker();
+    public Q_SLOTS:
+        void terminatePicker();
 
     Q_SIGNALS:
         void triggerCursor(int icurs);
+        void modulesPicked(QSet<u32> mods);
 
     public Q_SLOTS:
         void handleSelectionChanged(void* sender);
@@ -179,7 +198,7 @@ namespace hal {
          * @param sbar the filter-string editor to connect with
          * @param parent the parent widget
          */
-        ModuleSelectView(bool history, Searchbar* sbar,
+        ModuleSelectView(bool history, Searchbar* sbar, QSet<u32>* exclude_ids,
                           QWidget* parent=nullptr);
 
     Q_SIGNALS:

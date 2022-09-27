@@ -27,6 +27,7 @@
 #include "hal_core/netlist/gate_library/gate_type.h"
 
 #include <variant>
+#include <optional>
 
 namespace hal
 {

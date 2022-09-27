@@ -247,7 +247,41 @@ namespace hal
         m_net_by_name[core_strings::to<ci_string>(m_one_net->get_name())] = m_one_net;
 
         // construct the netlist with the last module being considered the top module
-        VHDLEntity& top_entity = m_entities.at(m_last_entity);
+        std::map<ci_string, u32> entity_name_to_refereneces;
+        for (const auto& [_name, entity] : m_entities)
+        {
+            for (const auto& instance_name : entity.m_instances)
+            {
+                auto it = entity.m_instance_types.find(instance_name);
+                if (it != entity.m_instance_types.end())
+                    entity_name_to_refereneces[it->second]++;
+                else
+                    entity_name_to_refereneces[instance_name]++;
+            }
+        }
+
+        std::vector<ci_string> top_module_candidates;
+        for (const auto& [name, _entity] : m_entities)
+        {
+            if (entity_name_to_refereneces.find(name) == entity_name_to_refereneces.end())
+            {
+                top_module_candidates.push_back(name);
+            }
+        }
+
+        if (top_module_candidates.empty())
+        {
+            return ERR("could not instantiate VHDL netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': unable to find any top entity candidates");
+        }
+
+        if (top_module_candidates.size() > 1)
+        {
+            return ERR("could not instantiate VHDL netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': found multiple entity as candidates for the top entity");
+        }
+
+        // construct the netlist with the the top module
+        VHDLEntity& top_entity = m_entities.at(top_module_candidates.front());
+
         if (const auto res = construct_netlist(top_entity); res.is_error())
         {
             return ERR_APPEND(res.get_error(), "could not instantiate VHDL netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "'");
@@ -1374,14 +1408,25 @@ namespace hal
         }
 
         // assign module pins
-        for (const auto& [net, port_info] : m_module_ports)
+        for (const auto& [net, port_infos] : m_module_ports)
         {
-            Module* mod = std::get<2>(port_info);
-            if (auto res = mod->create_pin(std::get<1>(port_info), net); res.is_error())
+            for (const auto& port_info : port_infos)
             {
-                return ERR_APPEND(res.get_error(),
-                                  "could not construct netlist: failed to create pin '" + std::get<1>(port_info) + "' at net '" + net->get_name() + "' with ID " + std::to_string(net->get_id())
-                                      + " within module '" + mod->get_name() + "' with ID " + std::to_string(mod->get_id()));
+                if (net->get_num_of_sources() == 0 && net->get_num_of_destinations() == 0)
+                {
+                    continue;
+                }
+
+                Module* mod = std::get<2>(port_info);
+                if (auto res = mod->create_pin(std::get<1>(port_info), net); res.is_error())
+                {
+                    // return ERR_APPEND(res.get_error(),
+                    //                 "could not construct netlist: failed to create pin '" + std::get<1>(port_info) + "' at net '" + net->get_name() + "' with ID " + std::to_string(net->get_id())
+                    //                     + " within module '" + mod->get_name() + "' with ID " + std::to_string(mod->get_id()));
+                    // NOTE: The pin creation fails when there are unused ports that never get a net assigned to them (verliog...),
+                    //       but this also happens when the net just passes through the module (since there is no gate inside the module with that net as either input or output net, the net does not get listed as module input or output)
+                    log_warning("verilog_parser", "{}", res.get_error().get());
+                }
             }
         }
 
@@ -1469,8 +1514,8 @@ namespace hal
             {
                 if (const auto it = parent_module_assignments.find(expanded_identifier); it != parent_module_assignments.end())
                 {
-                    Net* port_net            = m_net_by_name.at(it->second);
-                    m_module_ports[port_net] = std::make_tuple(direction, core_strings::to<std::string>(expanded_identifier), module);
+                    Net* port_net = m_net_by_name.at(it->second);
+                    m_module_ports[port_net].push_back(std::make_tuple(direction, core_strings::to<std::string>(expanded_identifier), module));
 
                     // assign port attributes
                     if (const auto port_attr_it = vhdl_entity.m_port_attributes.find(port_identifier); port_attr_it != vhdl_entity.m_port_attributes.end())

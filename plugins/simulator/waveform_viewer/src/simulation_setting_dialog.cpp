@@ -28,6 +28,8 @@ namespace hal {
     {
         const SimulationSettingGlobalTab* globTab = static_cast<const SimulationSettingGlobalTab*>(mTabWidget->widget(0));
         mSettings->setMaxSizeLoadable(globTab->maxSizeLoadable());
+        mSettings->setMaxSizeEditor(globTab->maxSizeEditor());
+        mSettings->setBaseDirectory(globTab->isCustomBaseDirectory() ? globTab->baseDirectory() : QString(""));
 
         const SimulationSettingPropertiesTab* propTab = static_cast<const SimulationSettingPropertiesTab*>(mTabWidget->widget(1));
         mSettings->setEngineProperties(propTab->engineProperties());
@@ -64,70 +66,14 @@ namespace hal {
                 break;
             }
 
-            mActivateColorDialog[irow] = new SimulationSettingColorButton(settings->color((SimulationSettings::ColorSetting)irow), irow>=3, this);
-            mActivateColorDialog[irow]->setMaximumSize(QSize(32,24));
-            mActivateColorDialog[irow]->setAutoFillBackground(true);
-            connect(mActivateColorDialog[irow],&QPushButton::clicked,this,&SimulationSettingColorTab::activateColorDialog);
+            mActivateColorDialog[irow] = new ColorSelection(settings->color((SimulationSettings::ColorSetting)irow), QString(labl[irow]), irow>=3, this);
             layout->addRow(QString(labl[irow]),mActivateColorDialog[irow]);
-        }
-    }
-
-    SimulationSettingColorButton::SimulationSettingColorButton(const QString& col, bool bullet, QWidget* parent)
-        : QPushButton(" ", parent), mColorName(col), mBullet(bullet) {;}
-
-    void SimulationSettingColorButton::paintEvent(QPaintEvent* evt)
-    {
-        Q_UNUSED(evt);
-        QPainter painter(this);
-
-        painter.setPen(QPen(Qt::black,0));
-        QRectF r = rect();
-        if (mBullet)
-        {
-            painter.setBrush(QBrush(QColor(mColorName)));
-            int delta = (r.width() - r.height()) / 2;
-            if (delta > 0)
-            {
-                r.setLeft(r.left() + delta);
-                r.setRight(r.right() - delta);
-            }
-            else if (delta < 0)
-            {
-                r.setTop(r.top() - delta);
-                r.setBottom(r.bottom() + delta);
-            }
-            painter.drawEllipse(r);
-        }
-        else
-        {
-            painter.drawRect(r);
-            painter.setPen(QPen(QColor(mColorName),5.));
-            int yc = r.top() + r.height()/2;
-            painter.drawLine(r.left(),yc,r.right(),yc);
-        }
-    }
-
-    void SimulationSettingColorTab::activateColorDialog()
-    {
-        QObject* obj = sender();
-        for (int irow = 0; irow < SimulationSettings::MaxColorSetting; irow++)
-        {
-            if (mActivateColorDialog[irow] == obj)
-            {
-                QColor currentColor = colorSetting(irow);
-                QColor selectedColor = QColorDialog::getColor(currentColor, this, "Select color for " + mActivateColorDialog[irow]->text());
-                if (selectedColor.isValid() && selectedColor != currentColor)
-                {
-                    mActivateColorDialog[irow]->mColorName = selectedColor.name();
-                    mActivateColorDialog[irow]->update();
-                }
-            }
         }
     }
 
     QString SimulationSettingColorTab::colorSetting(int inx) const
     {
-        return mActivateColorDialog[inx]->mColorName;
+        return mActivateColorDialog[inx]->colorName();
     }
 
     //-----------------------------------
@@ -144,7 +90,19 @@ namespace hal {
         mMaxSizeEditor->setMaximum(5000);
         mMaxSizeEditor->setMinimum(10);
         mMaxSizeEditor->setValue(settings->maxSizeLoadable());
-        layout->addRow("Load waveform to memory if number transitions <", mMaxSizeEditor);
+        layout->addRow("Maximum number of values to load into editor ", mMaxSizeEditor);
+        layout->addItem(new QSpacerItem(0,100));
+        mCustomBaseDicectory = new QCheckBox(this);
+        connect(mCustomBaseDicectory,&QCheckBox::toggled,this,&SimulationSettingGlobalTab::customBaseDirectoryToggled);
+        layout->addRow("Custom base directory instead of project dir:", mCustomBaseDicectory);
+        mEditBaseDirectory = new QLineEdit(this);
+        mEditBaseDirectory->setText(settings->baseDirectory());
+        layout->addRow("Base directory:", mEditBaseDirectory);
+    }
+
+    void SimulationSettingGlobalTab::customBaseDirectoryToggled(bool on)
+    {
+        mEditBaseDirectory->setEnabled(on);
     }
 
     //-----------------------------------

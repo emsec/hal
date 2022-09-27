@@ -130,8 +130,10 @@ namespace hal {
         mDirty = true;
     }
 
-    int WaveData::get_value_at(u64 t) const
+    int WaveData::get_value_at(u64 t)
     {
+        if (loadPolicy()==LoadAllData)
+            loadDataUnlessAlreadyLoaded();
         return intValue(t);
     }
 
@@ -813,11 +815,13 @@ namespace hal {
         if (wd && (wd->netType() == WaveData::NetGroup || wd->netType() == WaveData::TriggerTime)) return;
         mFilterWave = wd;
         recalcData();
-        SaleaeDirectoryComposedEntry* sdce = mWaveDataList->saleaeDirectory().get_composed(id(),SaleaeDirectoryNetEntry::Trigger);
-        if (sdce)
+        SaleaeDirectoryComposedEntry sdce = mWaveDataList->saleaeDirectory().get_composed(id(),SaleaeDirectoryNetEntry::Trigger);
+        if (!sdce.isNull())
         {
             SaleaeDirectoryStoreRequest save(&mWaveDataList->saleaeDirectory());
-            sdce->set_filter_entry(SaleaeDirectoryNetEntry(wd->name().toStdString(),wd->id(),wd->composedType()));
+            SaleaeDirectoryNetEntry trigEntry(wd->name().toStdString(),wd->id(),wd->composedType());
+            sdce.set_filter_entry(trigEntry.uniqueKey());
+            mWaveDataList->saleaeDirectory().add_or_replace_composed(sdce);
         }
     }
 
@@ -1023,17 +1027,15 @@ namespace hal {
     void WaveDataGroup::restoreIndex()
     {
         SaleaeDirectoryStoreRequest save(&mWaveDataList->saleaeDirectory());
-        SaleaeDirectoryComposedEntry* sdce = mWaveDataList->saleaeDirectory().get_composed(id(),SaleaeDirectoryNetEntry::Group);
-        if (sdce) sdce->get_nets().clear();
-
+        SaleaeDirectoryComposedEntry sdce(get_name(),id(),SaleaeDirectoryNetEntry::Group);
         mIndex.clear();
         int inx = 0;
         for (const WaveData* wd : mGroupList)
         {
-            if (sdce)
-                sdce->add_net(SaleaeDirectoryNetEntry(wd->name().toStdString(),wd->id()));
+            sdce.add_child(wd->id());
             mIndex[WaveDataGroupIndex(wd)] = inx++;
         }
+        mWaveDataList->saleaeDirectory().add_or_replace_composed(sdce);
     }
 
     void WaveDataGroup::addNet(const Net* n)
@@ -1305,47 +1307,6 @@ namespace hal {
             setMaxTime(mTimeframe.mSimulateMaxTime);
     }
 
-    QList<const WaveData*> WaveDataList::partialList(u64 start_time, u64 end_time, const std::set<const Net*> &nets) const
-    {
-        QSet<u32> netIds;
-        for (const Net* n : nets)
-            netIds.insert(n->get_id());
-
-        QList<const WaveData*> retval;
-
-        for (const WaveData* wd : *this)
-        {
-            if (!netIds.isEmpty() && !netIds.contains(wd->id())) continue;
-            QMap<u64,int> xdata = wd->data();
-            auto it = xdata.begin();
-            int rememberValue = -99;
-            while (it != xdata.end())
-            {
-                if (it.key() < start_time)
-                {
-                    rememberValue = it.value();
-                    it = xdata.erase(it);
-                }
-                else if (it.key() == start_time)
-                {
-                    rememberValue = -99;
-                    ++it;
-                }
-                else if (end_time && it.key() > end_time)
-                    it = xdata.erase(it);
-                else
-                {
-                    ++it;
-                }
-            }
-            if (rememberValue > -99)
-                xdata.insert(start_time,rememberValue);
-            WaveData* wdCopy = new WaveData(wd->id(),wd->name(),wd->netType(),xdata);
-            retval.append(wdCopy);
-        }
-        return retval;
-    }
-
     void WaveDataList::setUserTimeframe(u64 t0, u64 t1)
     {
         if (t0 == mTimeframe.mUserdefMinTime && t1 == mTimeframe.mUserdefMaxTime) return;
@@ -1500,7 +1461,7 @@ namespace hal {
         SaleaeDirectoryComposedEntry sdce(wdTrig->name().toStdString(),trigId,SaleaeDirectoryNetEntry::Trigger);
         for (WaveData* wd : wdTrig->children())
         {
-            sdce.add_net(SaleaeDirectoryNetEntry(wd->name().toStdString(),wd->id()));
+            sdce.add_child(wd->id());
         }
         std::vector<int> toValue;
         for (int tval : wdTrig->toValueList())
@@ -1509,9 +1470,11 @@ namespace hal {
 
         WaveData* wdFilt = wdTrig->get_filter_wave();
         if (wdFilt)
-            sdce.set_filter_entry(SaleaeDirectoryNetEntry(wdFilt->name().toStdString(),wdFilt->id(),wdFilt->composedType()));
-        if (!mSaleaeDirectory.get_composed(trigId,SaleaeDirectoryNetEntry::Trigger))
-            mSaleaeDirectory.add_composed(sdce);
+        {
+            SaleaeDirectoryNetEntry filterEntry(wdFilt->name().toStdString(),wdFilt->id(),wdFilt->composedType());
+            sdce.set_filter_entry(filterEntry.uniqueKey());
+        }
+        mSaleaeDirectory.add_or_replace_composed(sdce);
         Q_EMIT triggerAdded(trigId);
     }
 
@@ -1525,7 +1488,7 @@ namespace hal {
        for (WaveData* wd : wdBool->children())
        {
            n <<= 1;
-           sdce.add_net(SaleaeDirectoryNetEntry(wd->name().toStdString(),wd->id()));
+           sdce.add_child(wd->id());
        }
        std::vector<int> acceptVal;
        const char* ttable = wdBool->truthTable();
@@ -1536,8 +1499,7 @@ namespace hal {
            if (ttable[j] & (1<<k)) acceptVal.push_back(i);
        }
        sdce.set_data(acceptVal);
-       if (!mSaleaeDirectory.get_composed(boolId,SaleaeDirectoryNetEntry::Boolean))
-           mSaleaeDirectory.add_composed(sdce);
+       mSaleaeDirectory.add_or_replace_composed(sdce);
        Q_EMIT booleanAdded(boolId);
     }
 
@@ -1548,8 +1510,7 @@ namespace hal {
         mDataGroups.insert(grpId,grp);
         if (grpId)
         {
-            if (!mSaleaeDirectory.get_composed(grpId,SaleaeDirectoryNetEntry::Group))
-                mSaleaeDirectory.add_composed(SaleaeDirectoryComposedEntry(grp->name().toStdString(),grpId,SaleaeDirectoryNetEntry::Group));
+            mSaleaeDirectory.add_or_replace_composed(SaleaeDirectoryComposedEntry(grp->name().toStdString(),grpId,SaleaeDirectoryNetEntry::Group));
             updateMaxTime();
             Q_EMIT groupAdded(grpId);
         }
@@ -1665,7 +1626,13 @@ namespace hal {
     {
         if (!n) return nullptr;
         int inx = mIds.value(n->get_id(),-1);
-        if (inx >= 0) return at(inx);
+        if (inx >= 0)
+        {
+            WaveData* wd = at(inx);
+            if (wd->loadPolicy()==WaveData::LoadAllData)
+                wd->loadDataUnlessAlreadyLoaded();
+            return wd;
+        }
         WaveData* wd = new WaveData(n);
         if (wd->loadSaleae(mTimeframe))
         {
@@ -1684,6 +1651,17 @@ namespace hal {
                 return wd;
         for (WaveDataBoolean* wdb : mDataBooleans.values())
             if (wdb->name()==needle)
+                return wdb;
+        return nullptr;
+    }
+
+    WaveData* WaveDataList::waveDataById(const int id)
+    {
+        for (WaveData* wd : *this)
+            if (wd->id() == id)
+                return wd;
+        for (WaveDataBoolean* wdb : mDataBooleans.values())
+            if (wdb->id() == id)
                 return wdb;
         return nullptr;
     }

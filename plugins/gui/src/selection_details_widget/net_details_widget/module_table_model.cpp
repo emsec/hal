@@ -111,7 +111,7 @@ namespace hal
                 newEntry.id        = m->get_id();
                 newEntry.type      = QString::fromStdString(m->get_type());
                 newEntry.used_port = QString::fromStdString(pin->get_name());
-
+                newEntry.pinId     = pin->get_id();
                 newEntryList.append(newEntry);
                 mModIds.insert((int)m->get_id());
             }
@@ -166,6 +166,16 @@ namespace hal
     QString ModuleTableModel::getPortNameFromIndex(const QModelIndex& index)
     {
         return mEntries[index.row()].used_port;
+    }
+
+    u32 ModuleTableModel::getPinIDFromIndex(const QModelIndex& index)
+    {
+        return mEntries[index.row()].pinId;
+    }
+
+    QString ModuleTableModel::getModuleNameFromIndex(const QModelIndex& index)
+    {
+        return mEntries[index.row()].name;
     }
 
     void ModuleTableModel::handleModulePortsChanged(Module* m)

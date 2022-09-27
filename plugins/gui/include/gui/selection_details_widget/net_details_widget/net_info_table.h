@@ -108,6 +108,11 @@ namespace hal
         void copyId() const;
 
         /**
+         * Copies the python code to retrieve the net's id to the clipboard.
+         */
+        void pyCopyId() const;
+
+        /**
          * Copies the net's type to the clipboard.
          */
         void copyType() const;
@@ -123,9 +128,19 @@ namespace hal
         void copyNumberOfSrcs() const;
 
         /**
+         * Copies the python code to retrieve the net's sources to the clipboard.
+         */
+        void pyCopySrcs() const;
+
+        /**
          * Copies the net's number of destinations to the clipboard.
          */
         void copyNumberOfDsts() const;
+
+        /**
+         * Copies the python code to retrieve the net's destinations to the clipboard.
+         */
+        void pyCopyDsts() const;
 
         /**
          * Handle relayed removal of a net.

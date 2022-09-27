@@ -49,10 +49,10 @@ namespace hal {
         font.setPointSizeF(10);
         paint.setFont(font);
 
-        if (mTimeValue < 0) mTimeValue = mScrollbar->tPos(mPosition.x());
+        if (mTimeValue < 0) mTimeValue = mScrollbar->tPosI(mPosition.x());
         WaveGraphicsCanvas* wgc = static_cast<WaveGraphicsCanvas*>(parent());
         if (wgc) wgc->setCursorPosition(mTimeValue,mPosition.x());
-        paint.drawText(rectTvalue, QString::number(mTimeValue,'f',0), Qt::AlignHCenter | Qt::AlignVCenter);
+        paint.drawText(rectTvalue, QString::number(mTimeValue), Qt::AlignHCenter | Qt::AlignVCenter);
     }
 
     void WaveCursor::setViewportHeight(int height)
@@ -66,7 +66,7 @@ namespace hal {
         return QRect(mPosition.x()-sWidth/2,mPosition.y()-sLabHeight/2,sWidth,sLabHeight);
     }
 
-    void WaveCursor::setCursorToTime(double t)
+    void WaveCursor::setCursorToTime(u64 t)
     {
         Q_ASSERT(mScrollbar);
         mTimeValue = t;
@@ -78,7 +78,7 @@ namespace hal {
     void WaveCursor::recalcTime()
     {
         Q_ASSERT(mScrollbar);
-        mTimeValue = mScrollbar->tPos(mPosition.x());
+        mTimeValue = mScrollbar->tPosI(mPosition.x());
         update();
     }
 
@@ -86,7 +86,7 @@ namespace hal {
     {
         Q_ASSERT(mScrollbar);
         mPosition = pos;
-        mTimeValue = mScrollbar->tPos(mPosition.x());
+        mTimeValue = mScrollbar->tPosI(mPosition.x());
         move(pos.x()-sWidth/2,0);
         update();
     }

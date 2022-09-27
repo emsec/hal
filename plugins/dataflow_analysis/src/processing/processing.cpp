@@ -24,7 +24,7 @@ namespace hal
         {
             namespace
             {
-                progress_printer m_progress_printer;
+                ProgressPrinter m_progress_printer;
 
                 void process_pass_configuration(const Configuration& config, Context& ctx)
                 {
@@ -165,7 +165,7 @@ namespace hal
                     ctx.pass_counter    = 0;
                     ctx.finished_passes = 0;
 
-                    m_progress_printer = progress_printer(30);
+                    m_progress_printer = ProgressPrinter(30);
 
                     // spawn threads
                     std::vector<std::thread> workers;

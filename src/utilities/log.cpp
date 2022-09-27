@@ -103,7 +103,11 @@ namespace hal
         spdlog::details::registry::instance().initialize_logger(m_logger.at(channel_name));
 
         m_logger_sinks[channel_name] = sinks;
-        this->set_level_of_channel(channel_name, level);
+
+        if (m_enforce_level.empty())
+            this->set_level_of_channel(channel_name, level);
+        else
+            this->set_level_of_channel(channel_name, m_enforce_level);
 
         return channel;
     }
@@ -341,6 +345,7 @@ namespace hal
             auto level = args.get_parameter("--log.level");
             if (m_level.find(level) != m_level.end())
             {
+                m_enforce_level = level;
                 for (const auto& channel : this->get_channels())
                 {
                     if (default_enabled)

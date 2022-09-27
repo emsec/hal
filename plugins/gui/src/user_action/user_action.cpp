@@ -1,4 +1,5 @@
 #include "gui/user_action/user_action.h"
+#include "gui/gui_globals.h"
 
 namespace hal
 {
@@ -11,7 +12,8 @@ namespace hal
     UserAction::UserAction()
         : mParentObject(UserActionObject(0, UserActionObjectType::None)),
           mWaitForReady(false), mCompoundOrder(-1), mUndoAction(nullptr),
-          mTimeStamp(0), mObjectLock(false), mParentObjectLock(false)
+          mTimeStamp(0), mObjectLock(false), mParentObjectLock(false),
+          mProjectModified(true)
     {;}
 
     UserAction::~UserAction()
@@ -24,6 +26,7 @@ namespace hal
         UserActionManager* uam = UserActionManager::instance();
         mTimeStamp = uam->timeStamp();
         uam->addExecutedAction(this);
+        if (hasProjectModified()) gFileStatusManager->netlistChanged();
         return true;
     }
 

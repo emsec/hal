@@ -39,7 +39,7 @@ namespace hal
     class SpinnerWidget;
     class SettingsItemSpinbox;
     class GraphNavigationWidget;
-    class ProgressBar;
+    class AbstractBusyIndicator;
 
     /**
      * @ingroup graph
@@ -60,6 +60,11 @@ namespace hal
          * @param parent - The parent widget.
          */
         explicit GraphWidget(GraphContext* context, QWidget* parent = nullptr);
+
+        /**
+         * Destructor.
+         */
+        ~GraphWidget();
 
         /**
          * Gets the GraphContext this GraphWidget shows.
@@ -107,9 +112,12 @@ namespace hal
          */
         void showProgress(int percent, const QString& text=QString());
 
+        void showBusy(int percent, const QString& text);
+
         void focusGate(u32 gateId);
         void focusNet(u32 netId);
         void focusModule(u32 moduleId);
+        static void pluginProgressIndicator(int percent, const std::string& msg);
 
     protected:
         /**
@@ -145,7 +153,7 @@ namespace hal
 
         WidgetOverlay* mOverlay;
         GraphNavigationWidget* mNavigationWidgetV3;
-        ProgressBar* mProgressBar;
+        AbstractBusyIndicator* mProgressBar;
 
         SpinnerWidget* mSpinnerWidget;
 
@@ -168,5 +176,8 @@ namespace hal
         StoreViewport mStoreViewport;
 
         static SettingsItemSpinbox* sSettingAnimationDuration;
+
+        static GraphWidget* sInstance;
+
     };
 }

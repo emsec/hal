@@ -246,14 +246,14 @@ namespace hal
 
         for (const auto& it : m_functions)
         {
-            res.emplace(it.first, it.second);
+            res[it.first] = it.second;
         }
 
         if (!only_custom_functions && m_type->has_component_of_type(GateTypeComponent::ComponentType::lut))
         {
             for (auto pin : m_type->get_pins([](const GatePin* pin) { return pin->get_type() == PinType::lut; }))
             {
-                res.emplace(pin->get_name(), get_lut_function(pin));
+                res[pin->get_name()] = get_lut_function(pin);
             }
         }
 
@@ -374,12 +374,12 @@ namespace hal
             }
         }
 
-        auto f = result.simplify();
-        cache.emplace(cache_key, f);
+        auto f           = result.simplify();
+        cache[cache_key] = f;
         return f;
     }
 
-    void Gate::add_boolean_function(const std::string& name, const BooleanFunction& func)
+    bool Gate::add_boolean_function(const std::string& name, const BooleanFunction& func)
     {
         LUTComponent* lut_component = m_type->get_component_as<LUTComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::lut; });
         if (lut_component != nullptr)
@@ -395,13 +395,13 @@ namespace hal
                     if (tt.is_error())
                     {
                         log_error("netlist", "Boolean function '{} = {}' cannot be added to LUT gate '{}' wiht ID {}.", name, func.to_string(), m_name, m_id);
-                        return;
+                        return false;
                     }
                     auto truth_table = tt.get();
                     if (truth_table.size() > 1)
                     {
                         log_error("netlist", "Boolean function '{} = {}' cannot be added to LUT gate '{}' with ID {} (= function is > 1-bit in output size). ", name, func.to_string(), m_name, m_id);
-                        return;
+                        return false;
                     }
 
                     u64 config_value = 0;
@@ -420,7 +420,7 @@ namespace hal
                                       m_name,
                                       m_id,
                                       m_internal_manager->m_netlist->get_id());
-                            return;
+                            return false;
                         }
                         config_value <<= 1;
                         config_value |= v;
@@ -436,8 +436,9 @@ namespace hal
             }
         }
 
-        m_functions.emplace(name, func);
+        m_functions[name] = func;
         m_event_handler->notify(GateEvent::event::boolean_function_changed, this);
+        return true;
     }
 
     bool Gate::mark_vcc_gate()

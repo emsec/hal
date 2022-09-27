@@ -68,6 +68,7 @@ namespace hal
         //mDeleteAction->setEnabled(false);
 
         mGroupingTableModel = new GroupingTableModel(false, this);
+        mColorSerializer.restore(mGroupingTableModel);
 
         mProxyModel->setSourceModel(mGroupingTableModel);
         mProxyModel->setSortRole(Qt::UserRole);

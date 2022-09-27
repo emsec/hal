@@ -88,12 +88,23 @@ namespace hal
         void ensureSelectionVisible();
 
         /**
-         * returns whether shape of cursor has been changed to indicate pick-select-module mode
+         * returns whether we are in normal select mode (select item curser) or
+         *         whether we are in module/gate pick mode (G or M in cursor shape)
          */
-        GraphCursor selectCursor() const { return mSelectCursor; }
+        bool isSelectMode() const { return mSelectCursor == Select; }
 
         enum KeyboardModifier{Alt, Ctrl, Shift};
         Q_ENUM(KeyboardModifier)
+
+        /**
+         * emit Q_SIGNAL to close all picker
+         */
+        void emitTerminatePicker() const;
+    Q_SIGNALS:
+        /**
+         * Q_SIGNAL that gets emitted to close all picker
+         */
+        void triggerTerminatePicker() const;
 
     public Q_SLOTS:
 

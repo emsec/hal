@@ -218,49 +218,51 @@ namespace hal
         py_gate.def("add_boolean_function", &Gate::add_boolean_function, py::arg("name"), py::arg("func"), R"(
             Add a Boolean function with the given name to the gate.
 
-            :param str name:  The name.
-            :param hal_py.BooleanFunction func: The function.
+            :param str name: The name.
+            :param hal_py.BooleanFunction func:  The function.
+            :returns: True on success, False otherwise.
+            :rtype: bool
         )");
 
         py_gate.def("mark_vcc_gate", &Gate::mark_vcc_gate, R"(
             Mark this gate as a global vcc gate.
 
-            :returns: True on success.
+            :returns: True on success, False otherwise.
             :rtype: bool
         )");
 
         py_gate.def("mark_gnd_gate", &Gate::mark_gnd_gate, R"(
             Mark this gate as a global gnd gate.
 
-            :returns: True on success.
+            :returns: True on success, False otherwise.
             :rtype: bool
         )");
 
         py_gate.def("unmark_vcc_gate", &Gate::unmark_vcc_gate, R"(
             Unmark this gate as a global vcc gate.
 
-            :returns: True on success.
+            :returns: True on success, False otherwise.
             :rtype: bool
         )");
 
         py_gate.def("unmark_gnd_gate", &Gate::unmark_gnd_gate, R"(
             Unmark this gate as a global gnd gate.
 
-            :returns: True on success.
+            :returns: True on success, False otherwise.
             :rtype: bool
         )");
 
         py_gate.def("is_vcc_gate", &Gate::is_vcc_gate, R"(
             Checks whether this gate is a global vcc gate.
 
-            :returns: True if the gate is a global vcc gate.
+            :returns: True if the gate is a global vcc gate, False otherwise.
             :rtype: bool
         )");
 
         py_gate.def("is_gnd_gate", &Gate::is_gnd_gate, R"(
             Checks whether this gate is a global gnd gate.
 
-            :returns: True if the gate is a global gnd gate.
+            :returns: True if the gate is a global gnd gate, False otherwise.
             :rtype: bool
         )");
 

@@ -199,7 +199,7 @@ namespace hal
                 void identify_all_succesors_predecessors_ffs_of_all_ffs(NetlistAbstraction& netlist_abstr)
                 {
                     log_info("dataflow", "identifying successors and predecessors of sequential gates...");
-                    measure_block_time("identifying successors and predecessors of sequential gates") progress_printer progress_bar;
+                    measure_block_time("identifying successors and predecessors of sequential gates") ProgressPrinter progress_bar;
                     float cnt = 0;
 
                     std::unordered_map<u32, std::vector<Gate*>> cache;
@@ -227,7 +227,7 @@ namespace hal
                 }
             }    // namespace
 
-            NetlistAbstraction run(Netlist* netlist)
+            NetlistAbstraction run(Netlist* netlist, bool register_stage_identification)
             {
                 log_info("dataflow", "pre-processing netlist...");
                 measure_block_time("pre-processing");
@@ -237,8 +237,12 @@ namespace hal
                 //merge_duplicated_logic_cones(netlist_abstr);
                 identify_all_control_signals(netlist_abstr);
                 identify_all_succesors_predecessors_ffs_of_all_ffs(netlist_abstr);
-                //identify_counters(netlist_abstr);
-                //identify_register_stages(netlist_abstr);
+
+                if (register_stage_identification)
+                {
+                    identify_register_stages(netlist_abstr);
+                }
+
                 return netlist_abstr;
             }
         }    // namespace pre_processing

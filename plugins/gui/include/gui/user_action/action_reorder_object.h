@@ -59,6 +59,27 @@ namespace hal
              */
             QString tagname() const override;
 
+            /**
+             * Overwritten user_action function.
+             *
+             * @param xmlOut - The writer.
+             */
+            void writeToXml(QXmlStreamWriter &xmlOut) const override;
+
+            /**
+             * Overwritten user_action function.
+             *
+             * @param xmlIn - The reader.
+             */
+            void readFromXml(QXmlStreamReader &xmlIn) override;
+
+            /**
+             * Overwritten user_action function.
+             *
+             * @param cryptoHash - The hash to add to.
+             */
+            void addToHash(QCryptographicHash &cryptoHash) const override;
+
         private:
             int mNewIndex;
     };

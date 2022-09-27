@@ -65,20 +65,38 @@ namespace hal
         if (!idx.isValid())
             return;
 
-        u32 gateID   = mEndpointModel->getGateIDFromIndex(idx);
-        QString pin  = mEndpointModel->getPinNameFromIndex(idx);
+        u32 gateID = mEndpointModel->getGateIDFromIndex(idx);
+        auto gate = gNetlist->get_gate_by_id(gateID);
+        QString pin = mEndpointModel->getPinNameFromIndex(idx);
         QString desc = mEndpointModel->typeString().toLower();
+        QString netIDStr = QString::number(mEndpointModel->getCurrentNetID());
+        QString gateIDStr = QString::number(gateID);
 
         QMenu menu;
 
-        //menu.addSection("Python");
+        menu.addAction("Gate name to clipboard", [gate](){
+            QApplication::clipboard()->setText(QString::fromStdString(gate->get_name()));
+        });
 
-        menu.addAction(QString("Overwrite selection with %1 gate").arg(desc), [this, gateID, pin]() { addSourceOurDestinationToSelection(gateID, pin, true); });
+        menu.addAction("Gate ID to clipboard", [gateID](){
+            QApplication::clipboard()->setText(QString::number(gateID));
+        });
 
-        menu.addAction(QString("Add %1 gate to selection").arg(desc), [this, gateID, pin]() { addSourceOurDestinationToSelection(gateID, pin); });
+        menu.addAction("Gate type name to clipboard", [gate](){
+            QApplication::clipboard()->setText(QString::fromStdString(gate->get_type()->get_name()));
+        });
 
-        QString pythonCommandGate = PyCodeProvider::pyCodeGate(gateID);
-        menu.addAction(QIcon(":/icons/python"), "Extract gate as python code", [pythonCommandGate]() { QApplication::clipboard()->setText(pythonCommandGate); });
+        menu.addAction("Gate pin name to clipboard", [pin](){
+            QApplication::clipboard()->setText(pin);
+        });
+
+        menu.addSection("Python");
+        QString pythonCommand ="netlist.get_gate_by_id(" + gateIDStr + ").%1(\"" + pin + "\")";
+        pythonCommand = (mEndpointModel->getType() == EndpointTableModel::Type::source) ? pythonCommand.arg("get_fan_out_endpoint") : pythonCommand.arg("get_fan_in_endpoint");
+
+        menu.addAction(QIcon(":/icons/python"), "Get endpoint", [pythonCommand](){
+            QApplication::clipboard()->setText(pythonCommand);
+        });
 
         menu.move(mapToGlobal(pos));
         menu.exec();

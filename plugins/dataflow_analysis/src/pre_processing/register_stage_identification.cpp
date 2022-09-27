@@ -46,7 +46,7 @@ namespace hal
 
                     {
                         measure_block_time(ctx.name + " analysis");
-                        progress_printer progress_bar;
+                        ProgressPrinter progress_bar;
                         float cnt = 0;
                         std::unordered_map<u32, u32> stage_index_of_gate;
 
@@ -133,7 +133,7 @@ namespace hal
                             ctx.stages[i].erase(std::unique(ctx.stages[i].begin(), ctx.stages[i].end()), ctx.stages[i].end());
                         }
 
-                        progress_printer progress_bar;
+                        ProgressPrinter progress_bar;
                         float cnt = 0;
 
                         u32 stages_to_split = ctx.stages.size();
@@ -225,7 +225,7 @@ namespace hal
                     log_info("dataflow", "merging directional stages...");
                     measure_block_time("merging directional stages");
 
-                    progress_printer progress_bar;
+                    ProgressPrinter progress_bar;
 
                     for (u32 i = 0; i < 2; ++i)
                     {
@@ -290,7 +290,7 @@ namespace hal
 
                     // step 1: precompute all stage indices that are in one multi-stage
 
-                    progress_printer progress_bar;
+                    ProgressPrinter progress_bar;
                     float cnt = 0;
                     std::vector<std::unordered_set<u32>> spread_stages;
                     std::set<std::vector<u32>> seen;

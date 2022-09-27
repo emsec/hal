@@ -37,6 +37,7 @@ namespace hal
     class PythonConsoleWidget;
     class PythonEditor;
     class GraphTabWidget;
+    class GraphContext;
     class GroupingManagerWidget;
     class ContextManagerWidget;
     class SelectionDetailsWidget;
@@ -44,6 +45,7 @@ namespace hal
     class LoggerWidget;
     class SettingsItemDropdown;
     class SettingsItemKeybind;
+    class GraphContextSerializer;
 
     class ContentFactory
     {
@@ -165,10 +167,12 @@ namespace hal
         GroupingManagerWidget* mGroupingManagerWidget;
         SelectionDetailsWidget* mSelectionDetailsWidget;
         LoggerWidget* mLoggerWidget;
+        GraphContextSerializer *mContextSerializer;
 
+        GraphContext* topModuleContextFactory();
         static SettingsItemDropdown* sSettingSortMechanism;
         static bool sSettingsInitialized;
-        static bool initializeSettins();
+        static bool initializeSettings();
 
 #ifdef HAL_STUDY
         SpecialLogContentManager* mSpecialLogContentManager;

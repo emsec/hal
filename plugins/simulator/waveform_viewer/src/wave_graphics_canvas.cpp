@@ -33,6 +33,7 @@ namespace hal {
         mCursor->show();
         setContextMenuPolicy(Qt::CustomContextMenu);
         connect(this,&QWidget::customContextMenuRequested,this,&WaveGraphicsCanvas::handleContextMenuRequested);
+        mCursor->recalcTime();
     }
 
     void WaveGraphicsCanvas::resizeEvent(QResizeEvent* evt)
@@ -183,8 +184,8 @@ namespace hal {
             QRect geo = mDragZoom->geometry();
             mDragZoom->deleteLater();
             mDragZoom = nullptr;
-            double t0 = mScrollbar->tPos(geo.left());
-            double dt = mScrollbar->tPos(geo.right()) - t0;
+            double t0 = mScrollbar->tPosF(geo.left());
+            double dt = mScrollbar->tPosF(geo.right()) - t0;
             if (dt > 0)
             {
                 mTransform.setScale(viewport()->width()/dt);
@@ -241,7 +242,7 @@ namespace hal {
         if (newScale >= 100) return;
         if (newScale*mTransform.deltaT()*1.2<viewport()->width() && newScale < oldScale) return;
         double tEvent = (evt->modifiers() & Qt::ShiftModifier)
-                ? mScrollbar->tPos(evt->pos().x())
+                ? mScrollbar->tPosF(evt->pos().x())
                 : mCursorTime;
 
         mTransform.setScale(newScale);

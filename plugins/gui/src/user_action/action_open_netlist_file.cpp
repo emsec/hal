@@ -18,26 +18,31 @@ namespace hal
         return ActionOpenNetlistFileFactory::sFactory->tagname();
     }
 
-    ActionOpenNetlistFile::ActionOpenNetlistFile(const QString &filename_)
-        : mFilename(filename_)
+    ActionOpenNetlistFile::ActionOpenNetlistFile(const QString &filename_, bool isProj)
+        : mFilename(filename_), mProject(isProj)
     {
-        // mWaitForReady = true;
+        mProjectModified = false;
     }
 
     bool ActionOpenNetlistFile::exec()
     {
-        FileManager::get_instance()->openFile(mFilename);
+        if (mProject)
+            FileManager::get_instance()->openProject(mFilename);
+        else
+            FileManager::get_instance()->importFile(mFilename);
         return UserAction::exec();
     }
 
     void ActionOpenNetlistFile::addToHash(QCryptographicHash& cryptoHash) const
     {
         cryptoHash.addData(mFilename.toUtf8());
+        cryptoHash.addData((char*) &mProject, sizeof(mProject));
     }
 
     void ActionOpenNetlistFile::writeToXml(QXmlStreamWriter& xmlOut) const
     {
         xmlOut.writeTextElement("filename", mFilename);
+        xmlOut.writeTextElement("isproject", mProject ? "true" : "false");
     }
 
     void ActionOpenNetlistFile::readFromXml(QXmlStreamReader& xmlIn)
@@ -46,6 +51,8 @@ namespace hal
         {
             if (xmlIn.name() == "filename")
                 mFilename = xmlIn.readElementText();
+            if (xmlIn.name() == "isproject")
+                mProject = (xmlIn.readElementText() == "true");
         }
     }
 }

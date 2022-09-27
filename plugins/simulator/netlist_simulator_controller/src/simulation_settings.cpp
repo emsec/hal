@@ -59,4 +59,14 @@ namespace hal {
     {
         setValue("global/max_editor",mse);
     }
+
+    QString SimulationSettings::baseDirectory() const
+    {
+        return value("global/base_directory").toString();
+    }
+
+    void SimulationSettings::setBaseDirectory(const QString& dir)
+    {
+        setValue("global/base_directory",dir);
+    }
 }

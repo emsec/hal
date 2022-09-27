@@ -620,7 +620,7 @@ namespace hal
         /**
          * A recursive range of directories starting at a top level root directory.
          */
-        class CORE_API RecursiveDirectoryRange
+        class CORE_API  RecursiveDirectoryRange
         {
         public:
             using iterator = std::filesystem::recursive_directory_iterator;

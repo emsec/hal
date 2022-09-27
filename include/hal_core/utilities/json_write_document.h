@@ -30,9 +30,9 @@
 
 #include <string>
 #include <vector>
+#include <unordered_map>
 
-namespace hal
-{
+namespace hal {
     class JsonWriteComplex;
     class JsonWriteObject;
     class JsonWriteArray;
@@ -54,30 +54,27 @@ namespace hal
 
     public:
         /**
-         * Constructor.
+         * Constructor
          * 
-         * @param[in] tag - JSON tag name.
-         * @param[in] parent - Parent instance.
+         * @param[in] tag JSON tag name
+         * @param[in] parent Parent instance
          */
         JsonWriteData(const std::string& tag, JsonWriteComplex* parent);
-        virtual ~JsonWriteData()
-        {
-            ;
-        }
+        virtual ~JsonWriteData() {;}
 
         /**
-         * Assign text string to JSON field.
+         * Assign text string to JSON field
          * 
-         * @param[in] txt - The text content.
-         * @return The instance of the class.
+         * @param[in] txt The text content
+         * @return The instance of the class
          */
         JsonWriteData& operator=(const std::string& txt);
 
         /**
-         * Assign int value to JSON field.
+         * Assign int value to JSON field
          * 
-         * @param[in] ivalue - The numerical content (integer).
-         * @return The instance of the class.
+         * @param[in] ivalue The numerical content
+         * @return The instance of the class
          */
         JsonWriteData& operator=(int ivalue);
 
@@ -128,7 +125,7 @@ namespace hal
         virtual ~JsonWriteComplex();
 
         /**
-         * Must be called when no more data gets added to complex JSON element.
+         * Must be called when no more data gets added to complex JSON element
          */
         void close();
     };
@@ -139,43 +136,43 @@ namespace hal
         friend class JsonWriteDocument;
 
     protected:
-        virtual void add_member(rapidjson::Document::ValueType&& name, rapidjson::Document::ValueType&& value, rapidjson::Document::AllocatorType& allocator);
+
+        virtual void add_member(rapidjson::Document::ValueType&& name,
+                                rapidjson::Document::ValueType&& value,
+                                rapidjson::Document::AllocatorType& allocator);
         virtual void finalize(JsonWriteComplex* cplx) override;
 
     public:
         /**
-         * Constructor.
+         * Constructor
          * 
-         * @param[in] tag - JSON tag name.
-         * @param[in] parent - Parent instance.
+         * @param[in] tag JSON tag name
+         * @param[in] parent Parent instance
          */
         JsonWriteObject(const std::string& tag, JsonWriteComplex* parent);
-        virtual ~JsonWriteObject()
-        {
-            ;
-        }
+        virtual ~JsonWriteObject() {;}
 
         /**
-         * Bracket operator to assign named tag.
+         * Bracket operator to assign named tag
          * 
-         * @param[in] tag - The tag name.
-         * @return The assigned JSON data instance.
+         * @param[in] tag The tag name
+         * @return The assigned JSON data instance
          */
         JsonWriteData& operator[](const std::string& tag);
 
         /**
-         * Add complex child object.
+         * Add complex child object
          * 
-         * @param[in] tag - The tag name for child object.
-         * @return The child object created by method.
+         * @param[in] tag The tag name for child object
+         * @return The child object created by method
          */
         JsonWriteObject& add_object(const std::string& tag);
 
         /**
-         * Add child array.
+         * Add child array
          * 
-         * @param[in] tag - The tag name for child array.
-         * @return The child array created by method.
+         * @param[in] tag The tag name for child array
+         * @return The child array created by method
          */
         JsonWriteArray& add_array(const std::string& tag);
     };
@@ -190,44 +187,41 @@ namespace hal
 
     public:
         /**
-         * Constructor.
+         * Constructor
          * 
-         * @param[in] tag - JSON tag name.
-         * @param[in] parent - Parent instance.
+         * @param[in] tag JSON tag name
+         * @param[in] parent Parent instance
          */
         JsonWriteArray(const std::string& tag, JsonWriteComplex* parent);
-        virtual ~JsonWriteArray()
-        {
-            ;
-        }
+        virtual ~JsonWriteArray() {;}
 
         /**
-         * Operator to add unnamed text field to array.
+         * Operator to add unnamed text field to array
          * 
-         * @param[in] txt - The text content.
-         * @return The JSON array where the text was added.
+         * @param[in] txt The text content
+         * @return The JSON array where the text was added
          */
         JsonWriteArray& operator<<(const std::string& txt);
 
         /**
-         * Operator to add an integer value to array.
+         * Operator to add an integer value to array
          * 
-         * @param[in] ivalue - The integer value.
-         * @return The JSON array where the integer value was added.
+         * @param[in] ivalue The integer value
+         * @return The JSON array where the integer value was added
          */
         JsonWriteArray& operator<<(int ivalue);
 
         /**
-         * Add child array to array.
+         * Add child array to array
          * 
-         * @return The JSON array where the array was added.
+         * @return The JSON array where the array was added
          */
         JsonWriteArray& add_array();
 
         /**
-         * Add child array to array.
+         * Add child array to array
          * 
-         * @return The JSON array where the array was added.
+         * @return The JSON array where the array was added
          */
         JsonWriteObject& add_object();
     };
@@ -241,27 +235,42 @@ namespace hal
 
         virtual rapidjson::Document::AllocatorType& allocator() override;
         virtual void finalize(JsonWriteComplex* cplx) override;
-        virtual void add_member(rapidjson::Document::ValueType&& name, rapidjson::Document::ValueType&& value, rapidjson::Document::AllocatorType& allocator) override;
+        virtual void add_member(rapidjson::Document::ValueType&& name,
+                                rapidjson::Document::ValueType&& value,
+                                rapidjson::Document::AllocatorType& allocator) override;
         void dump(rapidjson::Value& parent);
 
     public:
         JsonWriteDocument();
-        virtual ~JsonWriteDocument()
-        {
-            ;
-        }
+        virtual ~JsonWriteDocument() {;}
 
         /**
-         * Serialize to file method.
+         * Serialize to file method
          * 
-         * @param[in] filename - The output filename.
-         * @return `true` on success, `false` otherwise.
+         * @param[in] filename The output filename
+         * @return true if successful, false otherwise
          */
         bool serialize(const std::string& filename);
 
         /**
-         * Dump content for debugging purpose.
+         * Dump content for debugging purpose
          */
         void dump();
-    };
-}    // namespace hal
+   };
+
+    namespace JsonConverter {
+        /**
+         * Convert JSON string to key->value map (aka dictionary)
+         * @param[in] json_string String in JSON format
+         * @return the dictionary
+         */
+        std::unordered_map<std::string,std::string> stringToDictionary(const std::string& json_string);
+
+        /**
+         * Convert key->value map (aka dictionary) to JSON string
+         * @param key_values key->value map of std::string
+         * @return the JSON string
+         */
+        std::string dictionaryToString(const std::unordered_map<std::string,std::string>& key_values);
+    }
+}

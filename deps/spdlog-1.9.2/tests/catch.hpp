@@ -8161,7 +8161,7 @@ namespace Catch {
                 ["-d"]["--durations"]
                 ( "show test durations" )
             | Opt( loadTestNamesFromFile, "filename" )
-                ["-f"]["--input-file"]
+                ["-f"]["--import-netlist"]
                 ( "load test names to run from a file" )
             | Opt( config.filenamesAsTags )
                 ["-#"]["--filenames-as-tags"]

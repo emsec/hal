@@ -58,7 +58,8 @@ namespace hal {
          */
 
 
-        GateDialog(u32 orig, bool succ, const QSet<u32>& selectable = QSet<u32>(), QWidget* parent=nullptr);
+        GateDialog(const QSet<u32>& selectable = QSet<u32>(), const QString& title = QString("Select gate"),
+                   GateSelectReceiver* receiver = nullptr, QWidget* parent=nullptr);
 
         /**
          * Get the through this dialog selected id.
@@ -66,11 +67,6 @@ namespace hal {
          * @return The selected id.
          */
         u32 selectedId() const { return mSelectedId; }
-
-        /**
-         * hide picker button
-         */
-        void hidePicker();
 
     private Q_SLOTS:
         void handlePickFromGraph();
@@ -102,10 +98,14 @@ namespace hal {
          */
         void keybindToggleSearchbar(const QKeySequence& seq);
 
+        /**
+         * Indicates that user has activated graphical gate picker mode.
+         * @return true if picker mode activated, false otherwise.
+         */
+        bool pickerModeActivated() const { return mPickerModeActivated; }
     private:
         u32 mSelectedId;
-        u32 mOrigin;
-        bool mQuerySuccessor;
+        GateSelectReceiver* mReceiver;
         QSet<u32> mSelectableGates;
         QDialogButtonBox* mButtonBox;
         GateSelectView* mTableView;
@@ -118,6 +118,9 @@ namespace hal {
         QAction* mToggleSearchbar;
 
         QPushButton* mButtonPick;
+        bool mPickerModeActivated;
+
+        QString mWindowTitle;
 
         void enableButtons();
         u32 treeGateId(const QModelIndex& index);

@@ -25,6 +25,8 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
+#include "hal_core/netlist/project_serializer.h"
+#include <QDir>
 
 namespace hal
 {
@@ -32,6 +34,22 @@ namespace hal
     class NetlistSimulatorController;
     class NetlistSimulator;
     class SimulationSettings;
+    class Netlist;
+
+    class SimulatorSerializer : public ProjectSerializer
+    {
+        Netlist* mNetlist;
+        QDir mProjDir;
+     //   void restoreSimulator(const std::filesystem::path& loaddir, const std::string& jsonfile);
+    public:
+        SimulatorSerializer();
+
+        std::string serialize(Netlist* netlist, const std::filesystem::path& savedir, bool isAutosave) override;
+
+        void deserialize(Netlist* netlist, const std::filesystem::path& loaddir) override;
+
+        std::vector<std::unique_ptr<NetlistSimulatorController>> restore();
+    };
 
     class PLUGIN_API NetlistSimulatorControllerPlugin : public BasePluginInterface
     {
@@ -66,12 +84,13 @@ namespace hal
          *
          * @returns The simulator instance.
          */
-        std::unique_ptr<NetlistSimulatorController> create_simulator_controller(const std::string& nam=std::string()) const;
+        std::unique_ptr<NetlistSimulatorController> create_simulator_controller(const std::string& nam=std::string(), const std::string& workdir=std::string()) const;
 
         /**
          * Restore controller with waveform data from previous simulation.
          * @param[in] nl The netlist the simulation was performed with.
          * @param[in] filename Full path and filename of 'netlist_simulator_controller.json'.
+         * @param[in] workdir Working directory will be created at given location.
          *
          * @returns The simulator instance.
          */
@@ -84,9 +103,24 @@ namespace hal
          */
         std::shared_ptr<NetlistSimulatorController> simulator_controller_by_id(u32 id) const;
 
+
+        /**
+         * Get list of configurable parameter
+         *
+         * @returns  list of parameter
+         */
+        std::vector<PluginParameter> get_parameter() const override;
+
+        /**
+         * Set configurable parameter to values
+         * @param params The parameter with values
+         */
+        void set_parameter(Netlist *nl, const std::vector<PluginParameter>& params) override;
+
         /**
          * Pointer to simulation controller settings. Use sync() to persist settings.
          */
         static SimulationSettings* sSimulationSettings;
+        static SimulatorSerializer* sSimulatorSerializer;
     };
 }    // namespace hal

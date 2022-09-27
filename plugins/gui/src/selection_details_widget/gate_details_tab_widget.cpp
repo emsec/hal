@@ -5,12 +5,21 @@
 #include "gui/selection_details_widget/details_frame_widget.h"
 #include "gui/selection_details_widget/gate_details_widget/gate_info_table.h"
 #include "gui/selection_details_widget/gate_details_widget/gate_pin_tree.h"
+#include "gui/code_editor/syntax_highlighter/python_qss_adapter.h"
+#include "gui/gui_globals.h"
+#include "gui/validator/hexadecimal_validator.h"
+#include "gui/input_dialog/input_dialog.h"
+#include "gui/user_action/action_set_object_data.h"
+#include "gui/python/py_code_provider.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/latch_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/state_component.h"
-
+#include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
+#include <QMenu>
+#include <QApplication>
+#include <QClipboard>
 #include <QDebug>
 
 namespace hal
@@ -41,11 +50,16 @@ namespace hal
         //(ff / latch / lut) tab - would love to use seperate tabs, but it's a hassle to hide multiple individual tabs witouth setTabVisible() from qt 5.15
         mFfFunctionTable    = new BooleanFunctionTable(this);
         mLatchFunctionTable = new BooleanFunctionTable(this);
-        mLutFunctionTable   = new BooleanFunctionTable(this);
-        mLutTable           = new LUTTableWidget(this);
-        mLutConfigLabel     = new QLabel("default", this);
+        mLutFunctionTable = new BooleanFunctionTable(this);
+        mLutFunctionTable->setContextMenuPlainDescr(true);
+        mLutFunctionTable->setContextMenuPythonPlainDescr(true);
+        mLutFunctionTable->enableChangeBooleanFunctionOption(true);
+        mLutTable = new LUTTableWidget(this);
+        mLutConfigLabel = new QLabel("default", this);
+        mLutConfigLabel->setContextMenuPolicy(Qt::CustomContextMenu);
         mLutConfigLabel->setWordWrap(true);
-        mLutConfigLabel->setStyleSheet(QString("QLabel{color: %1;}").arg(PythonQssAdapter::instance()->numberColor().name()));    //tmp.
+        mLutConfigLabel->setStyleSheet(QString("QLabel{color: %1;}").arg(PythonQssAdapter::instance()->numberColor().name()));//tmp.
+        connect(mLutConfigLabel, &QWidget::customContextMenuRequested, this, &GateDetailsTabWidget::handleLutConfigContextMenuRequested);
 
         mFfFrame               = new DetailsFrameWidget(mFfFunctionTable, "FF Information", this);
         mLatchFrame            = new DetailsFrameWidget(mLatchFunctionTable, "Latch Information", this);
@@ -58,8 +72,10 @@ namespace hal
         mMultiTabContent = widget(mMultiTabIndex);                               // save content of multi tab -> needed for show / hide
 
         //boolean functions tab
-        mFullFunctionTable     = new BooleanFunctionTable(this);
-        mBooleanFunctionsFrame = new DetailsFrameWidget(mFullFunctionTable, "Boolean Functions", this);
+        mFullFunctionTable = new BooleanFunctionTable(this);
+        mFullFunctionTable->setContextMenuPlainDescr(true);
+        mFullFunctionTable->setContextMenuPythonPlainDescr(true);
+        mBooleanFunctionsFrame = new DetailsFrameWidget(mFullFunctionTable, "Boolean Functions", this); 
 
         QList<DetailsFrameWidget*> framesBooleanFunctionsTab({mBooleanFunctionsFrame});
         addTab("Boolean Functions", framesBooleanFunctionsTab);
@@ -141,7 +157,7 @@ namespace hal
                 mTruthTableFrame->setVisible(false);
                 mFfFrame->setVisible(true);
                 mLatchFrame->setVisible(false);
-                label = "FF";
+                label = "Flip-Flop";
                 break;
             }
             case GateDetailsTabWidget::GateTypeCategory::latch: {
@@ -206,6 +222,45 @@ namespace hal
                 break;
             }
         }
+    }
+
+    void GateDetailsTabWidget::handleLutConfigContextMenuRequested(QPoint pos)
+    {
+        QMenu menu;
+
+        menu.addAction("Configuration string to clipboard", [this](){
+            QApplication::clipboard()->setText(mLutConfigLabel->text().remove(" 0x"));
+        });
+        menu.addAction("Change configuration string", [this](){
+            InputDialog ipd("Change configuration string", "New configuration string", mLutConfigLabel->text().remove("0x"));
+            HexadecimalValidator hexValidator;
+            ipd.addValidator(&hexValidator);
+            if(ipd.exec() == QDialog::Accepted && !ipd.textValue().isEmpty())
+            {
+                if(InitComponent* init_component = mCurrentGate->get_type()->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); }); init_component != nullptr)
+                {
+                    std::string cat = init_component->get_init_category(), key = init_component->get_init_identifiers()[0];
+                    QString data_type = "bit_vector";
+                    ActionSetObjectData* act = new ActionSetObjectData(QString::fromStdString(cat), QString::fromStdString(key), data_type, ipd.textValue().toUpper());
+                    act->setObject(UserActionObject(mCurrentGate->get_id(), UserActionObjectType::Gate));
+                    act->exec();
+                    setGate(mCurrentGate);//must update config string and data table, no signal for that
+                }
+                else
+                    log_error("gui", "Could not load InitComponent from gate with id {}.", mCurrentGate->get_id());
+            }
+        });
+        menu.addAction(QIcon(":/icons/python"), "Get configuration string", [this](){
+            if(InitComponent* init_component = mCurrentGate->get_type()->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); }); init_component != nullptr)
+            {
+                std::string cat = init_component->get_init_category(), key = init_component->get_init_identifiers()[0];
+                QApplication::clipboard()->setText(PyCodeProvider::pyCodeGateData(mCurrentGate->get_id(), QString::fromStdString(cat), QString::fromStdString(key)));
+            }
+            else
+                log_error("gui", "Could not load InitComponent from gate with id {}.", mCurrentGate->get_id());
+        });
+
+        menu.exec(mLutConfigLabel->mapToGlobal(pos));
     }
 
     void GateDetailsTabWidget::setupBooleanFunctionTables(Gate* gate, GateDetailsTabWidget::GateTypeCategory gateTypeCategory)
@@ -335,11 +390,20 @@ namespace hal
                         lutEntries.append(bfEntry);
                     }
                 }
-                mLutFunctionTable->setEntries(lutEntries);
 
-                //Setup LUT CONFIGURATION STRING
-                auto typeAndValueTuple = gate->get_data("generic", "INIT");
-                mLutConfigLabel->setText(" 0x" + QString::fromStdString(std::get<1>(typeAndValueTuple)));    //some space to align
+                mLutFunctionTable->setEntries(lutEntries);
+                mLutFunctionTable->setGateInformation(gate);
+
+                //Setup lut config (init) string
+                if(InitComponent* init_component = gt->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); }); init_component != nullptr)
+                {
+                    auto typeAndValue = gate->get_data(init_component->get_init_category(), init_component->get_init_identifiers()[0]);
+                    mLutConfigLabel->setText(" 0x" + QString::fromStdString(std::get<1>(typeAndValue)));
+                }
+                else
+                {
+                    mLutConfigLabel->setText(" Could not load init string.");
+                }
 
                 // The table is only updated if the gate has a LUT pin
                 if (lutPins.size() > 0)

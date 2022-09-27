@@ -64,61 +64,43 @@ namespace hal
         ModuleTreeModel::itemType type = mModel->getTypeOfItem(clickedItem);
         QMenu menu;
 
-        //Strings for first menu entry (python get net/gate/module)
-        QString pythonGetObject, pythonGetName, pythonGetType;
-        QString plainName, plainType = "not defined";
-        QList<QString> descriptions;
-
-        auto createCommonDescriptionList = [](QString objectType){
-          QList<QString> descriptionList =
-          {
-              QString("Extract %1 as python code").arg(objectType),
-              "Extract name as python code",
-              "Extract type as python code"
-          };
-          return descriptionList;
-        };
-
-        switch (type)
-        {
-            case ModuleTreeModel::itemType::module:
-                descriptions = createCommonDescriptionList("module");
-                pythonGetObject = PyCodeProvider::pyCodeModule(id);
-                pythonGetName = PyCodeProvider::pyCodeModuleName(id);
-                pythonGetType = PyCodeProvider::pyCodeModuleType(id);
-                break;
-            case ModuleTreeModel::itemType::gate:
-                descriptions = createCommonDescriptionList("gate");
-                pythonGetObject = PyCodeProvider::pyCodeGate(id);
-                pythonGetName = PyCodeProvider::pyCodeGateName(id);
-                pythonGetType = PyCodeProvider::pyCodeGateType(id);
-                break;
-        }
-
         //menu.addSection("here comes the plaintext");
 
-        menu.addAction("Extract name as plain text",
+        menu.addAction("Name to clipboard",
            [clickedItem]()
            {
                QApplication::clipboard()->setText(clickedItem->getData(NetlistElementsTreeModel::sNameColumn).toString());
            }
         );
 
-        menu.addAction("Extract type as plain text",
-           [clickedItem]()
-           {
-               QApplication::clipboard()->setText(clickedItem->getData(NetlistElementsTreeModel::sTypeColumn).toString());
-           }
-        );
-
-        menu.addAction("Extract ID as plain text",
+        menu.addAction("ID to clipboard",
            [id]()
            {
                QApplication::clipboard()->setText(QString::number(id));
            }
         );
 
+        menu.addAction("Type to clipboard",
+           [clickedItem]()
+           {
+               QApplication::clipboard()->setText(clickedItem->getData(NetlistElementsTreeModel::sTypeColumn).toString());
+           }
+        );
+
         menu.addSection("Misc");
+
+        menu.addAction("Set as current selection",
+           [this, id, type]()
+           {
+            gSelectionRelay->clear();
+            switch(type)
+            {
+                case ModuleTreeModel::itemType::module: gSelectionRelay->addModule(id); break;
+                case ModuleTreeModel::itemType::gate: gSelectionRelay->addGate(id); break;
+            }
+            gSelectionRelay->relaySelectionChanged(this);
+           }
+        );
 
         menu.addAction("Add to current selection",
            [this, id, type]()
@@ -134,26 +116,28 @@ namespace hal
 
         menu.addSection("Python Code");
 
-        menu.addAction(QIcon(":/icons/python"), descriptions.at(0),
+        QString pythonGetObject = (type == ModuleTreeModel::itemType::module) ? PyCodeProvider::pyCodeModule(id) : PyCodeProvider::pyCodeGate(id);
+        QString pythonDescription = (type == ModuleTreeModel::itemType::module) ? "Get module" : "Get gate";
+        menu.addAction(QIcon(":/icons/python"), pythonDescription,
            [pythonGetObject]()
            {
                QApplication::clipboard()->setText(pythonGetObject);
            }
         );
 
-        menu.addAction(QIcon(":/icons/python"), descriptions.at(1),
-           [pythonGetName]()
-           {
-               QApplication::clipboard()->setText(pythonGetName);
-           }
-        );
+//        menu.addAction(QIcon(":/icons/python"), descriptions.at(1),
+//           [pythonGetName]()
+//           {
+//               QApplication::clipboard()->setText(pythonGetName);
+//           }
+//        );
 
-        menu.addAction(QIcon(":/icons/python"), descriptions.at(2),
-           [pythonGetType]()
-           {
-               QApplication::clipboard()->setText(pythonGetType);
-           }
-        );
+//        menu.addAction(QIcon(":/icons/python"), descriptions.at(2),
+//           [pythonGetType]()
+//           {
+//               QApplication::clipboard()->setText(pythonGetType);
+//           }
+//        );
 
         menu.move(this->mapToGlobal(pos));
         menu.exec();

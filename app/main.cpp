@@ -12,12 +12,14 @@
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/program_arguments.h"
 #include "hal_core/utilities/program_options.h"
+#include "hal_core/netlist/project_manager.h"
 #include "hal_core/utilities/utils.h"
 #include "hal_version.h"
 
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <filesystem>
 
 #define SUCCESS 0
 #define ERROR 1
@@ -44,9 +46,10 @@ void initialize_cli_options(ProgramOptions& cli_options)
     generic_options.add({"--log-time"}, "includes time information into the log");
     generic_options.add({"--licenses"}, "Shows the licenses of projects used by HAL");
 
-    generic_options.add({"-i", "--input-file"}, "input file", {ProgramOptions::A_REQUIRED_PARAMETER});
+    generic_options.add({"-i", "--import-netlist"}, "import netlist into new project", {ProgramOptions::A_REQUIRED_PARAMETER});
+    generic_options.add({"-p", "--project-dir"}, "hal project directory", {ProgramOptions::A_REQUIRED_PARAMETER});
     generic_options.add({"-gl", "--gate-library"}, "used gate-library of the netlist", {ProgramOptions::A_REQUIRED_PARAMETER});
-    generic_options.add({"-e", "--empty-netlist"}, "create a new empty netlist, requires a gate library to be specified");
+    generic_options.add({"-e", "--empty-project"}, "create a new empty project, requires a gate library to be specified");
     generic_options.add("--volatile-mode", "[cli only] prevents hal from creating a .hal progress file (e.g. cluster use)");
     generic_options.add("--no-log", "prevents hal from creating a .log file");
 
@@ -219,30 +222,69 @@ int main(int argc, const char* argv[])
         return cleanup();
     }
 
-    /* handle input file */
-    if (args.is_option_set("--empty-netlist") && args.is_option_set("--input-file"))
+    /* empty project requires gate library, import or existing project args not allowed */
+    if (args.is_option_set("--empty-project") && args.is_option_set("--import-netlist"))
     {
-        log_error("core", "Found --empty-netlist and --input-file!");
+        log_error("core", "Found --empty-project and --import-netlist!");
         return cleanup();
     }
 
-    if (args.is_option_set("--empty-netlist") && !args.is_option_set("--gate-library"))
+    if (args.is_option_set("--empty-project") && args.is_option_set("--project-dir"))
     {
-        log_error("core", "Found --empty-netlist but --gate-library is missing!");
+        log_error("core", "Found --empty-project and --project-dir!");
         return cleanup();
     }
 
-    std::filesystem::path file_name;
-
-    if (args.is_option_set("--empty-netlist"))
+    if (args.is_option_set("--empty-project") && !args.is_option_set("--gate-library"))
     {
-        file_name = std::filesystem::path("./empty_netlist.hal");
+        log_error("core", "Found --empty-project but --gate-library is missing!");
+        return cleanup();
+    }
+
+    std::filesystem::path proj_path;
+    std::filesystem::path import_nl;
+    bool openExisting = true;
+
+    if (args.is_option_set("--empty-project"))
+    {
+        proj_path = std::filesystem::path(args.get_parameter("--empty-project"));
+        openExisting = false;
+    }
+    else if (args.is_option_set("--project-dir"))
+    {
+        proj_path = std::filesystem::path(args.get_parameter("--project-dir"));
+    }
+    if (args.is_option_set("--import-netlist"))
+    {
+        import_nl = std::filesystem::path(args.get_parameter("--import-netlist"));
+        if (proj_path.empty()) proj_path = import_nl;
+        openExisting = false;
+    }
+
+
+    if (proj_path.string().empty())
+    {
+        log_error("core", "No hal project directory specified");
+        return cleanup();
+    }
+
+    ProjectManager* pm = ProjectManager::instance();
+    if (openExisting)
+    {
+        if (!pm->open_project(proj_path.string()))
+        {
+            log_error("core", "Cannot open project <" + proj_path.string() + ">");
+            return cleanup();
+        }
     }
     else
     {
-        file_name = std::filesystem::path(args.get_parameter("--input-file"));
+        if (!pm->create_project_directory(proj_path.string()))
+        {
+            log_error("core", "Cannot create project <" + proj_path.string() + ">");
+            return cleanup();
+        }
     }
-
     if (args.is_option_set("--no-log"))
     {
         log_warning("core",
@@ -251,20 +293,20 @@ int main(int argc, const char* argv[])
     }
     else if (!args.is_option_set("--logfile"))
     {
-        auto log_path = file_name;
-        lm.set_file_name(log_path.replace_extension(".log"));
+        std::filesystem::path log_path = pm->get_project_directory().get_default_filename(".log");
+        lm.set_file_name(log_path);
     }
 
     std::unique_ptr<Netlist> netlist;
 
-    if (args.is_option_set("--empty-netlist"))
+    if (args.is_option_set("--empty-project"))
     {
         auto lib = gate_library_manager::load(args.get_parameter("--gate-library"));
         netlist  = netlist_factory::create_netlist(lib);
     }
     else
     {
-        netlist = netlist_factory::load_netlist(args);
+        netlist = netlist_factory::load_netlist(pm->get_project_directory(), args);
     }
 
     if (netlist == nullptr)
@@ -277,6 +319,11 @@ int main(int argc, const char* argv[])
     {
         volatile_mode = true;
         log_warning("core", "your modifications will not be written to a .hal file (--volatile-mode).");
+    }
+
+    if (!import_nl.empty() && !volatile_mode)
+    {
+        pm->serialize_project(netlist.get());
     }
 
     /* cli plugins */
@@ -335,9 +382,7 @@ int main(int argc, const char* argv[])
 
     if (!volatile_mode)
     {
-        auto path = file_name;
-        path.replace_extension(".hal");
-        netlist_serializer::serialize_to_file(netlist.get(), path);
+        pm->serialize_project(netlist.get());
     }
 
     /* handle file writer */

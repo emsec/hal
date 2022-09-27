@@ -24,8 +24,12 @@
 #pragma once
 
 #include "gui/python/python_console.h"
+#include "gui/python/python_thread.h"
+#include "gui/module_dialog/gate_select_model.h"
+#include "gui/module_dialog/module_select_model.h"
 
 #include <QString>
+#include <QObject>
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
@@ -40,6 +44,30 @@
 namespace hal
 {
     class PythonContextSubscriber;
+    class PythonEditor;
+    class PythonThread;
+
+    class PythonGateSelectionReceiver : public GateSelectReceiver
+    {
+        Q_OBJECT
+        PythonThread* mThread;
+    public Q_SLOTS:
+        void handleGatesPicked(const QSet<u32>& gats) override;
+    public:
+        PythonGateSelectionReceiver(PythonThread* thread, QObject* parent = nullptr)
+            : GateSelectReceiver(parent), mThread(thread) {;}
+    };
+
+    class PythonModuleSelectionReceiver : public ModuleSelectReceiver
+    {
+        Q_OBJECT
+        PythonThread* mThread;
+    public Q_SLOTS:
+        void handleModulesPicked(const QSet<u32>& gats) override;
+    public:
+        PythonModuleSelectionReceiver(PythonThread* thread, QObject* parent = nullptr)
+            : ModuleSelectReceiver(parent), mThread(thread) {;}
+    };
 
     namespace py = pybind11;
     /**
@@ -49,13 +77,14 @@ namespace hal
      * This class provides an interface for using pybind11. It can call a python interpreter to run python expressions and
      * scripts. Moreover it provides a function to get auto-completion candidates that are available in the context.
      */
-    class __attribute__((visibility("default"))) PythonContext
+    class __attribute__((visibility("default"))) PythonContext : public QObject
     {
+        Q_OBJECT
     public:
         /**
          * Constructor.
          */
-        PythonContext();
+        PythonContext(QObject* parent=nullptr);
 
         /**
          * Destructor.
@@ -63,20 +92,29 @@ namespace hal
         ~PythonContext();
 
         /**
-         * Interprets an input string in python format.
+         * Interprets an input string in python format in GUI thread.
          *
+         * @param input - The input string in python format.
+         */
+        void interpretForeground(const QString& input);
+
+        /**
+         * Interprets an input string in python format in new thread.
+         *
+         * @param caller - The caller of interpreter, will be notified when finished
          * @param input - The input string in python format.
          * @param multiple_expressions - Must be set to <b>true</b> if the input contains multiple expressions
          *                               (i.e. is a compound statement).
          */
-        void interpret(const QString& input, bool multiple_expressions = false);
+        void interpretBackground(QObject* caller, const QString& input, bool multiple_expressions = false);
 
         /**
          * Interprets a python script.
          *
+         * @param caller - The caller of interpreter, will be notified when finished
          * @param input - The python script as a string.
          */
-        void interpretScript(const QString& input);
+        void interpretScript(QObject* caller, const QString& input);
 
         /**
          * Forwards standard output to the python console.
@@ -148,8 +186,22 @@ namespace hal
          */
         void updateNetlist();
 
+        PythonThread* currentThread() { return mThread; }
+
+        static void initializeContext(py::dict* context);
+        static void initializeScript(py::dict* context);
+
+        void abortThread();
+        bool isThreadRunning() const { return mThread != nullptr; }
+
+    private Q_SLOTS:
+        void handleThreadFinished();
+        void handleScriptOutput(const QString& txt);
+        void handleScriptError(const QString& txt);
+        void handleInputRequired(int type, const QString& prompt, const QVariant& defaultValue);
+        void handleConsoleInputReceived(const QString& input);
+
     private:
-        void initializeContext(py::dict* context);
 
         void handleReset();
 
@@ -162,6 +214,12 @@ namespace hal
         std::string mHistoryFile;
 
         PythonConsole* mConsole;
-        bool mTriggerReset = false;
+        bool mTriggerReset;
+        PythonThread* mThread;
+        bool mThreadAborted;
+        PyThreadState* mMainThreadState;
+        QObject* mInterpreterCaller;
+
+        void startThread(const QString& input, bool singleStatement);
     };
 }    // namespace hal

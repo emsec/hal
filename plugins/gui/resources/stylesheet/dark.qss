@@ -781,8 +781,17 @@ hal--RecentFileItem
     padding-bottom       : 6px;
     padding-left         : 10px;
     padding-right        : 10px;
-    qproperty-iconPath  : ":/icons/folder";
     qproperty-iconStyle : "all->#3192C5";
+}
+
+hal--RecentFileItem[isProject=true]
+{
+    qproperty-iconPath  : ":/icons/folder";
+}
+
+hal--RecentFileItem[isProject=false]
+{
+    qproperty-iconPath  : ":/icons/detach";
 }
 
 hal--RecentFileItem *
@@ -825,17 +834,17 @@ hal--RecentFileItem QToolButton:hover
     color: white;
 }
 
-hal--RecentFileItem[disabled=true]
+hal--RecentFileItem[missing=true]
 {
     qproperty-iconStyle : "all->#888888"
 }
 
-hal--RecentFileItem[disabled=true] #name-label
+hal--RecentFileItem[missing=true] #name-label
 {
     color: #555555;
 }
 
-hal--RecentFileItem[disabled=true] #path-label
+hal--RecentFileItem[missing=true] #path-label
 {
     color: red;
 }
@@ -873,6 +882,18 @@ hal--OpenFileWidget #text-label
 hal--OpenFileWidget #icon-label
 {
     margin-top : 220px;
+}
+
+hal--ImportNetlistDialog
+{
+    qproperty-saveIconStyle: "all->#3192C5";
+    qproperty-saveIconPath: ":/icons/folder-down";
+}
+
+hal--ImportNetlistDialog QWidget:disabled
+{
+    color: #777777;
+    background: #2a2a2a;
 }
 
 hal--GetInTouchWidget

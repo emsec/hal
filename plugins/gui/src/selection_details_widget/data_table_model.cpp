@@ -10,13 +10,13 @@ namespace hal
 {
     DataTableModel::DataTableModel(QObject* parent) : QAbstractTableModel(parent) 
     {
-
     }
 
     int DataTableModel::columnCount(const QModelIndex &parent) const
     {
         Q_UNUSED(parent)
-        return 2;
+        //return 2;
+        return 4;
     }
 
     int DataTableModel::rowCount(const QModelIndex &parent) const
@@ -30,45 +30,66 @@ namespace hal
         DataEntry entry = mDataEntries[index.row()];
         RowStyle style = mEntryToRowStyle[QPair(entry.category, entry.key)];
 
-        if (role == Qt::DisplayRole){
-            if(index.column() == 0){
-                return (entry.key + ":");
-            }
-            else{
-                return style.valueString;
-            }
-        }
-
-        if (role == Qt::ForegroundRole){
-            if(index.column() == 1){
-                if(style.valueColor.isValid())
-                    return style.valueColor;
+        if(role == Qt::DisplayRole && index.column() < columnCount())
+        {
+            switch (index.column())
+            {
+                case 0: return entry.category;
+                case 1: return entry.key;
+                case 2: return entry.dataType;
+                case 3: return style.valueString;//e.g. 0x at the front if bitvector
             }
         }
+        if(role == Qt::ForegroundRole && index.column() == 3 && style.valueColor.isValid())
+            return style.valueColor;
 
-        else if (role == Qt::TextAlignmentRole){
+        if(role == Qt::TextAlignmentRole)
             return Qt::AlignLeft;
-        }
 
-        else if (role == Qt::ToolTipRole){
-            if (index.column() == 0){
-                if(!style.keyToolTip.isEmpty())
-                    return style.keyToolTip;
-            }
-            else {
-                if(!style.valueToolTip.isEmpty())
-                    return style.valueToolTip;
-            }
-        }
+//        if (role == Qt::DisplayRole){
+//            if(index.column() == 0){
+//                return (entry.key + ":");
+//            }
+//            else{
+//                return style.valueString;
+//            }
+//        }
+
+//        if (role == Qt::ForegroundRole){
+//            if(index.column() == 1){
+//                if(style.valueColor.isValid())
+//                    return style.valueColor;
+//            }
+//        }
+
+//        else if (role == Qt::TextAlignmentRole){
+//            return Qt::AlignLeft;
+//        }
+
+//        else if (role == Qt::ToolTipRole){
+//            if (index.column() == 0){
+//                if(!style.keyToolTip.isEmpty())
+//                    return style.keyToolTip;
+//            }
+//            else {
+//                if(!style.valueToolTip.isEmpty())
+//                    return style.valueToolTip;
+//            }
+//        }
 
         return QVariant();
     }
 
     QVariant DataTableModel::headerData(int section, Qt::Orientation orientation, int role) const
     {
-        Q_UNUSED(section)
-        Q_UNUSED(orientation)
-        Q_UNUSED(role)
+//        Q_UNUSED(section)
+//        Q_UNUSED(orientation)
+//        Q_UNUSED(role)
+//        return QVariant();
+        const char* horizontalHeader[] = { "Category", "Key", "Type", "Value"};
+        if (orientation == Qt::Horizontal && role == Qt::DisplayRole && section < columnCount())
+            return QString(horizontalHeader[section]);
+
         return QVariant();
     }
 

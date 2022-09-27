@@ -13,12 +13,15 @@
 #include "gui/user_action/user_action_manager.h"
 #include "gui/settings/settings_items/settings_item_dropdown.h"
 #include "gui/style/style.h"
+#include "gui/graph_widget/layout_locker.h"
 
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
+#include "hal_core/netlist/project_manager.h"
+#include "hal_core/utilities/project_directory.h"
 
 #include <QDir>
 #include <QApplication>
@@ -52,15 +55,55 @@ namespace hal
     FileStatusManager* gFileStatusManager         = nullptr;
     GraphContextManager* gGraphContextManager     = nullptr;
     GuiApi* gGuiApi                               = nullptr;
-    std::unique_ptr<PythonContext> gPythonContext = nullptr;
+    PythonContext* gPythonContext                 = nullptr;
 
     static void handleProgramArguments(const ProgramArguments& args)
     {
-        if (args.is_option_set("--input-file"))
+        enum OpenArgs { None = 0, OpenProject = 1, DefaultImport = 2, ImportToProject = 3 } openArgs = None;
+        ProjectManager* pm = ProjectManager::instance();
+        std::filesystem::path fileName;
+        ProjectDirectory projDir;
+        QString gateLibraryPath;
+        if (args.is_option_set("--project-dir"))
         {
-            auto fileName = std::filesystem::path(args.get_parameter("--input-file"));
+            openArgs = (OpenArgs) (openArgs|OpenProject);
+            projDir = ProjectDirectory(args.get_parameter("--project-dir"));
+            log_info("gui", "GUI started with project {}.", projDir.string());
+        }
+        if (args.is_option_set("--import-netlist"))
+        {
+            openArgs = (OpenArgs) (openArgs|DefaultImport);
+            fileName = std::filesystem::path(args.get_parameter("--import-netlist"));
             log_info("gui", "GUI started with file {}.", fileName.string());
-            FileManager::get_instance()->openFile(QString::fromStdString(fileName.string()));
+            if (args.is_option_set("--gate-library"))
+                gateLibraryPath = QString::fromStdString(args.get_parameter("--gate-library"));
+        }
+        switch (openArgs)
+        {
+        case None:
+            return;
+        case OpenProject:
+            FileManager::get_instance()->openProject(QString::fromStdString(projDir.string()));
+            break;
+        case DefaultImport:
+            projDir = ProjectDirectory(fileName);
+            [[fallthrough]];
+            // continue with Import
+        case ImportToProject:
+            if (!pm->create_project_directory(projDir.string()))
+            {
+                log_error("gui", "Cannot create project directory {}.", projDir.string());
+                return;
+            }
+            else
+            {
+                LogManager& lm              = LogManager::get_instance();
+                std::filesystem::path lpath = pm->get_project_directory().get_default_filename(".log");
+                lm.set_file_name(lpath);
+                if (!FileManager::get_instance()->deprecatedOpenFile(QString::fromStdString(fileName.string()),gateLibraryPath))
+                    log_error("gui", "Failed to open netlist '{}'.", fileName.string());
+            }
+            break;
         }
     }
 
@@ -136,7 +179,7 @@ namespace hal
         QFontDatabase::addApplicationFont(":/fonts/Montserrat/Montserrat-Black");
         QFontDatabase::addApplicationFont(":/fonts/Source Code Pro/SourceCodePro-Black");
 
-        gate_library_manager::load_all();
+//        gate_library_manager::load_all();
 
         //TEMPORARY CODE TO CHANGE BETWEEN THE 2 STYLESHEETS WITH SETTINGS (NOT FINAL)
         //this settingsobject is currently neccessary to read from the settings from here, because the mGSettings are not yet initialized(?)
@@ -220,4 +263,15 @@ namespace hal
         return mDescription;
     }
 
+    void PluginGui::set_layout_locker(bool enable)
+    {
+        if (enable)
+            mLayoutLockerList.append(new LayoutLocker);
+        else
+        {
+            if (mLayoutLockerList.isEmpty()) return;
+            LayoutLocker* ll = mLayoutLockerList.takeLast();
+            delete ll;
+        }
+    }
 }    // namespace hal

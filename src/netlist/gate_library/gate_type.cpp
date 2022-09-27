@@ -18,7 +18,8 @@ namespace hal
                                                                                    {GateTypeProperty::mux, "mux"},
                                                                                    {GateTypeProperty::buffer, "buffer"},
                                                                                    {GateTypeProperty::carry, "carry"},
-                                                                                   {GateTypeProperty::pll, "pll"}};
+                                                                                   {GateTypeProperty::pll, "pll"},
+                                                                                   {GateTypeProperty::oscillator, "oscillator"},};
 
     GateType::GateType(GateLibrary* gate_library, u32 id, const std::string& name, std::set<GateTypeProperty> properties, std::unique_ptr<GateTypeComponent> component)
         : m_gate_library(gate_library), m_id(id), m_name(name), m_properties(properties), m_component(std::move(component))

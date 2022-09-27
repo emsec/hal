@@ -319,12 +319,6 @@ namespace hal
 
         static SettingsItemDropdown* sSettingStyle;
 
-    Q_SIGNALS:
-        /**
-         * Q_SIGNAL that is emitted, after the current project is stored as a .hal file.
-         */
-        void saveTriggered();
-
     public Q_SLOTS:
         /**
          * Q_SLOT to quit the program.
@@ -354,9 +348,14 @@ namespace hal
         void handleActionNew();
 
         /**
-         * Q_SLOT to open a netlist. Asks the user for the .hal/.vhdl/.v file to open.
+         * Q_SLOT to import a netlist. Asks the user for the .hal/.vhdl/.v file to open.
          */
-        void handleActionOpen();
+        void handleActionImport();
+
+        /**
+         * Q_SLOT to open a hal project located in project directory.
+         */
+        void handleActionOpenProject();
 
         /**
          * Q_SLOT to switch to the layout area after a file was opened (or a new one was created).
@@ -366,15 +365,23 @@ namespace hal
         void handleFileOpened(const QString& fileName);
 
         /**
+         * Q_SLOT to switch to the layout area after a project was opened (or a new one was created).
+         *
+         * @param projDir - the project directory
+         * @param fileName - the netlist file
+         */
+        void handleProjectOpened(const QString& projDir, const QString& fileName);
+
+        /**
          * Q_SLOT to save the current project as a .hal file.
-         * Emits saveTriggered().
+         * call to FileManager::emitSaveTriggered().
          */
         void handleSaveTriggered();
 
         /**
          * Q_SLOT to save the current project as a new .hal file.
          * Will query for new name.
-         * Emits saveTriggered().
+         * call to FileManager::emitSaveTriggered().
          */
         void handleSaveAsTriggered();
 
@@ -430,6 +437,8 @@ namespace hal
          */
         void handleEventLogEnabled(bool enable);
 
+        void setPluginParameter();
+
     private:
         /**
          * Overwritten Qt function to handle the close event.
@@ -443,12 +452,12 @@ namespace hal
 
         /**
          * Internal handler for "save" and "save as" commands. If neccessary a new-file dialog
-         * will query for output file name.
+         * will query for hal project directory name.
          *
-         * @param filename, might be empty
-         * @return file name from new-file dialog (if any)
+         * @param project directory, might be empty
+         * @return project directory name from new-file dialog (if any)
          */
-        QString saveHandler(const QString& filename = QString());
+        QString saveHandler(const QString& projectDir = QString());
 
         /**
          * Restores the window geometry of the MainWindow and all its children, configured with saveState().
@@ -460,6 +469,8 @@ namespace hal
          * This state can be restored calling saveState().
          */
         void saveState();
+
+        void pluginMenu();
 
         QVBoxLayout* mLayout;
         QMenuBar* mMenuBar;
@@ -473,7 +484,8 @@ namespace hal
         ContentLayoutArea* mLayoutArea;
 
         Action* mActionNew;
-        Action* mActionOpen;
+        Action* mActionOpenProject;
+        Action* mActionImport;
         Action* mActionSave;
         Action* mActionSaveAs;
         Action* mActionGateLibraryManager;
@@ -489,6 +501,7 @@ namespace hal
         QMenu* mMenuFile;
         QMenu* mMenuEdit;
         QMenu* mMenuMacro;
+        QMenu* mMenuPlugin;
         QMenu* mMenuHelp;
 
         QString mHalIconStyle;

@@ -19,6 +19,7 @@ namespace hal
                 static const std::vector<std::string> z3_binary_paths = {
                     "/usr/bin/z3",
                     "/usr/local/bin/z3",
+                    "/opt/homebrew/bin/z3",
                 };
 
                 for (const auto& path : z3_binary_paths)
@@ -75,6 +76,7 @@ namespace hal
                 static const std::vector<std::string> boolector_binary_paths = {
                     "/usr/bin/boolector",
                     "/usr/local/bin/boolector",
+                    "/opt/homebrew/bin/boolector",
                 };
 
                 for (const auto& path : boolector_binary_paths)

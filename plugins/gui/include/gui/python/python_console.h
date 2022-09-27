@@ -28,9 +28,30 @@
 #include <QTextEdit>
 #include <memory>
 
+class QLabel;
+class QPushButton;
+class QTimer;
+
 namespace hal
 {
     class PythonConsoleHistory;
+
+    class PythonConsoleAbortThread : public QFrame
+    {
+        Q_OBJECT
+        int mCount;
+        QLabel* mLabel;
+        QPushButton* mAbortButton;
+        QTimer* mTimer;
+
+    private Q_SLOTS:
+        void handleTimeout();
+        void handleAbortButton();
+    public:
+        PythonConsoleAbortThread(QWidget* parent = nullptr);
+        void start();
+        void stop();
+    };
 
     /**
      * @ingroup python-console
@@ -48,6 +69,9 @@ namespace hal
          */
         PythonConsole(QWidget* parent = nullptr);
 
+        enum PromptType { Standard, Compound, Input };
+
+    protected:
         /**
          * Overrides QTextEdit::keyPressEvent. It is used to handle the following (default) inputs: <br>
          * @li Ctrl+C: Copy
@@ -69,6 +93,13 @@ namespace hal
          */
         void mousePressEvent(QMouseEvent* event) override;
 
+    public Q_SLOTS:
+        void handleThreadFinished();
+
+    Q_SIGNALS:
+        void inputReceived(QString input);
+
+    public:
         /**
          * Prints forwarded standard output messages.
          *
@@ -151,6 +182,15 @@ namespace hal
          */
         void insertAtEnd(const QString& text, QColor textColor);
 
+        /**
+         * Set input mode on or off. In input mode input for running script is expected.
+         *
+         * @param state - true=on, false=off
+         */
+        void setInputMode(bool state);
+
+        PythonConsoleAbortThread* abortThreadWidget();
+
     private:
         QColor mPromptColor;
         QColor mStandardColor;
@@ -158,13 +198,14 @@ namespace hal
 
         QString mStandardPrompt;
         QString mCompoundPrompt;
+        QString mInputPrompt;
 
         int mPromptBlockNumber;
         int mPromptLength;
         int mPromptEndPosition;
         int mCompoundPromptEndPosition;
 
-        bool mInCompoundPrompt;
+        PromptType mPromptType;
         bool mInCompletion;
 
         QString mCurrentCompoundInput;
@@ -174,5 +215,11 @@ namespace hal
         int mCurrentCompleterIndex;
 
         std::shared_ptr<PythonConsoleHistory> mHistory;
+        PythonConsoleAbortThread* mAbortThreadWidget;
+
+        bool isCompound() const { return mPromptType == Compound; }
+        bool isInputMode() const { return mPromptType == Input; }
+
+        void keyPressEventInputMode(QKeyEvent* e);
     };
 }
