@@ -24,12 +24,20 @@
 #pragma once
 
 #include <QWidget>
+#include "gui/gui_def.h"
+#include <QLabel>
 
 namespace hal
 {
     class CommentWidget : public QWidget
     {
+        Q_OBJECT
+    public:
         CommentWidget(QWidget* parent = nullptr);
         ~CommentWidget();
+    public Q_SLOTS:
+        void nodeChanged(const Node& nd);
+    private:
+        QLabel* _mTemporaryTextOutputForDebuggingOnly_;
     };
 }

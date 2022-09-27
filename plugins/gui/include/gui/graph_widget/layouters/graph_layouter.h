@@ -55,6 +55,7 @@ namespace hal
 
     class NetLayoutJunctionHash;
     class NetLayoutJunctionEntries;
+    class CommentSpeechBubble;
 
     /**
      * @ingroup graph-layouter
@@ -255,7 +256,7 @@ namespace hal
          * @param context - The GraphContext the layouter works on
          * @param parent - The parent QObject
          */
-        explicit GraphLayouter(const GraphContext* const context, QObject* parent = nullptr);
+        explicit GraphLayouter(GraphContext *context, QObject* parent = nullptr);
 
         /**
          * Destructor.
@@ -334,13 +335,14 @@ namespace hal
 
     protected:
         GraphicsScene* mScene;
-        const GraphContext* const mContext;
+        GraphContext* mParentContext;
         QMap<Node, QPoint> mNodeToPositionMap;
         QMap<QPoint, Node> mPositionToNodeMap;
         QMap<Node, QPoint> mNodeToPositionRollback;
 
     private:
         void clearLayoutData();
+        void clearComments();
         void createBoxes();
         void calculateNets();
         void getWireHash();
@@ -356,6 +358,7 @@ namespace hal
         void resetRoadsAndJunctions();
         void drawNets();
         void alternateDrawNets();
+        void drawComments();
         void drawNetsJunction(StandardGraphicsNet::Lines& lines, u32 id);
         void drawNetsEndpoint(StandardGraphicsNet::Lines& lines, u32 id);
         void drawNetsIsolated(u32 id, Net* n, const EndpointList& epl);
@@ -473,5 +476,6 @@ namespace hal
         QHash<u32, int> mGlobalOutputHash;
 
         bool mOptimizeNetLayout;
+        QList<CommentSpeechBubble*> mCommentBubbles;
     };
 }    // namespace hal

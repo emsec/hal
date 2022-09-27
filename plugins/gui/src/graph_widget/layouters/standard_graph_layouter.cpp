@@ -11,7 +11,7 @@
 
 namespace hal
 {
-    StandardGraphLayouter::StandardGraphLayouter(const GraphContext* const context) : GraphLayouter(context), mParseLayout(true), mLayoutBoxes(true)
+    StandardGraphLayouter::StandardGraphLayouter(GraphContext* context) : GraphLayouter(context), mParseLayout(true), mLayoutBoxes(true)
     {
     }
 

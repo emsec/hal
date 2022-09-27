@@ -66,6 +66,22 @@ namespace hal
          * Cleanup and clear when netlist gets closed
          */
         void clear();
+
+        /**
+         * Get list of entries for node sorted by creation date.
+         * Developer might want to sort criteria parameter eventually.
+         * @param nd The node key for search.
+         * @return List of pointer to entries.
+         */
+        QList<CommentEntry*> getEntriesForNode(const Node& nd) const;
+
+        /**
+         * Return whether or not comment entries for node exist.
+         * @param nd The node key for search.
+         * @return True if at least a single entry exists, false otherwise
+         */
+        bool contains(const Node& nd) const;
+
     private:
         QMultiHash<Node,CommentEntry*> mEntries;
         bool restoreInternal(const std::filesystem::path& loaddir, const std::string& relFilename);

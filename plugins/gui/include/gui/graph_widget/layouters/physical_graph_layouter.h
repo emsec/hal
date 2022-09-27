@@ -34,7 +34,7 @@ namespace hal
     class PhysicalGraphLayouter final : public GraphLayouter
     {
     public:
-        explicit PhysicalGraphLayouter(const GraphContext* const context);
+        explicit PhysicalGraphLayouter(GraphContext *context);
 
         QString name() const override;
         QString mDescription() const override;

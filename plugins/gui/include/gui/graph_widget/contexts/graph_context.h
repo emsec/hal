@@ -421,6 +421,12 @@ namespace hal
          */
         void exclusiveModuleCheck();
 
+        /**
+         * Open overlay and show nodes
+         * @param nd The node for which comments should be shown
+         */
+        void showComments(const Node& nd);
+
     Q_SIGNALS:
         void dataChanged();
         void exclusiveModuleLost(u32 old_id);

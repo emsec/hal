@@ -1,5 +1,6 @@
 #include "gui/graph_widget/graph_graphics_view.h"
 
+#include "gui/comment_system/comment_speech_bubble.h"
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graph_widget.h"
 #include "gui/graph_widget/graph_widget_constants.h"
@@ -324,13 +325,23 @@ namespace hal
         if (event->button() != Qt::LeftButton)
             return;
 
-        GraphicsItem* item = static_cast<GraphicsItem*>(itemAt(event->pos()));
+        QGraphicsItem* item = itemAt(event->pos());
+        if (!item) return;
 
-        if (!item)
+        CommentSpeechBubble* csb = dynamic_cast<CommentSpeechBubble*>(item);
+        if (csb)
+        {
+            qDebug() << "double click csb";
+            csb->mouseDoubleClickEvent(nullptr);
+            return;
+        }
+
+        GraphicsItem* git = dynamic_cast<GraphicsItem*>(itemAt(event->pos()));
+
+        if (!git || git->itemType() != ItemType::Module)
             return;
 
-        if (item->itemType() == ItemType::Module)
-            Q_EMIT moduleDoubleClicked(item->id());
+        Q_EMIT moduleDoubleClicked(git->id());
     }
 
     void GraphGraphicsView::drawForeground(QPainter* painter, const QRectF& rect)

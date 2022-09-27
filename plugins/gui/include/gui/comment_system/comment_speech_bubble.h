@@ -23,15 +23,36 @@
 
 #pragma once
 
-#include <QFrame>
+#include <QGraphicsItem>
+#include <QRectF>
+#include "gui/gui_def.h"
 
-namespace hal
-{
-    class CommentItem : public QFrame
+namespace hal {
+    class GraphContext;
+
+    class CommentSpeechBubble : public QGraphicsItem
     {
-        Q_OBJECT
+        bool mHover;
+        QRectF mBubble;
+        QString mText;
+        Node mNode;
+        GraphContext* mContext;
+
+        void paintText(QPainter *painter, int maxWidth);
+
+        static const int sBubbleWidth = 75;
+        static const int sTextMargin = 4;
+        static const int sTextHeight = 27;
+        static const int sBubbleWidthExtension = 350;
+    protected:
+        void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
+        void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
+
     public:
-        CommentItem(QWidget* parent = nullptr);
-        ~CommentItem();
+        CommentSpeechBubble(const QString& txt, const Node& nd, GraphContext* ctx);
+        QRectF boundingRect() const override;
+        QPainterPath shape() const override;
+        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+        void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
     };
 }

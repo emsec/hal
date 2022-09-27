@@ -876,6 +876,12 @@ namespace hal
         mSpecialUpdate = state;
     }
 
+    void GraphContext::showComments(const Node &nd)
+    {
+        if (mParentWidget)
+            mParentWidget->showComments(nd);
+    }
+
     void GraphContext::setExclusiveModuleId(u32 id, bool emitSignal)
     {
         u32 old_id = mExclusiveModuleId;

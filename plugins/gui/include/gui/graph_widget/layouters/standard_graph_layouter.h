@@ -34,7 +34,7 @@ namespace hal
     class StandardGraphLayouter final : public GraphLayouter
     {
     public:
-        StandardGraphLayouter(const GraphContext* const context);
+        StandardGraphLayouter(GraphContext *context);
 
         QString name() const override;
         QString mDescription() const override;

@@ -40,6 +40,7 @@ namespace hal
     class SettingsItemSpinbox;
     class GraphNavigationWidget;
     class AbstractBusyIndicator;
+    class CommentWidget;
 
     /**
      * @ingroup graph
@@ -112,6 +113,12 @@ namespace hal
          */
         void showProgress(int percent, const QString& text=QString());
 
+        /**
+         * Open overlay and show nodes
+         * @param nd The node for which comments should be shown
+         */
+        void showComments(const Node& nd);
+
         void showBusy(int percent, const QString& text);
 
         void focusGate(u32 gateId);
@@ -132,6 +139,7 @@ namespace hal
         void handleNavigationJumpRequested(const Node& origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);
         void handleModuleDoubleClicked(const u32 id);
         void resetFocus();
+        void hideOverlay();
 
     private:
         void handleNavigationLeftRequest();
@@ -156,6 +164,7 @@ namespace hal
         AbstractBusyIndicator* mProgressBar;
 
         SpinnerWidget* mSpinnerWidget;
+        CommentWidget* mCommentWidget;
 
         u32 mCurrentExpansion;
 
