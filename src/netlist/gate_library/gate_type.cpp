@@ -5,21 +5,23 @@
 namespace hal
 {
     template<>
-    std::map<GateTypeProperty, std::string> EnumStrings<GateTypeProperty>::data = {{GateTypeProperty::combinational, "combinational"},
-                                                                                   {GateTypeProperty::sequential, "sequential"},
-                                                                                   {GateTypeProperty::power, "power"},
-                                                                                   {GateTypeProperty::ground, "ground"},
-                                                                                   {GateTypeProperty::lut, "lut"},
-                                                                                   {GateTypeProperty::ff, "ff"},
-                                                                                   {GateTypeProperty::latch, "latch"},
-                                                                                   {GateTypeProperty::ram, "ram"},
-                                                                                   {GateTypeProperty::io, "io"},
-                                                                                   {GateTypeProperty::dsp, "dsp"},
-                                                                                   {GateTypeProperty::mux, "mux"},
-                                                                                   {GateTypeProperty::buffer, "buffer"},
-                                                                                   {GateTypeProperty::carry, "carry"},
-                                                                                   {GateTypeProperty::pll, "pll"},
-                                                                                   {GateTypeProperty::oscillator, "oscillator"},};
+    std::map<GateTypeProperty, std::string> EnumStrings<GateTypeProperty>::data = {
+        {GateTypeProperty::combinational, "combinational"},
+        {GateTypeProperty::sequential, "sequential"},
+        {GateTypeProperty::power, "power"},
+        {GateTypeProperty::ground, "ground"},
+        {GateTypeProperty::lut, "lut"},
+        {GateTypeProperty::ff, "ff"},
+        {GateTypeProperty::latch, "latch"},
+        {GateTypeProperty::ram, "ram"},
+        {GateTypeProperty::io, "io"},
+        {GateTypeProperty::dsp, "dsp"},
+        {GateTypeProperty::mux, "mux"},
+        {GateTypeProperty::buffer, "buffer"},
+        {GateTypeProperty::carry, "carry"},
+        {GateTypeProperty::pll, "pll"},
+        {GateTypeProperty::oscillator, "oscillator"},
+    };
 
     GateType::GateType(GateLibrary* gate_library, u32 id, const std::string& name, std::set<GateTypeProperty> properties, std::unique_ptr<GateTypeComponent> component)
         : m_gate_library(gate_library), m_id(id), m_name(name), m_properties(properties), m_component(std::move(component))
@@ -332,11 +334,11 @@ namespace hal
         }
         if (m_used_pin_group_ids.find(id) != m_used_pin_group_ids.end())
         {
-            return ERR("could not create pin group'" + name + "' for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": ID " + std::to_string(id) + " is already taken");
+            return ERR("could not create pin group '" + name + "' for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": ID " + std::to_string(id) + " is already taken");
         }
         if (m_pin_group_names_map.find(name) != m_pin_group_names_map.end())
         {
-            return ERR("could not create pin group'" + name + "' for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": name '" + name + "' is already taken");
+            return ERR("could not create pin group '" + name + "' for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": name '" + name + "' is already taken");
         }
 
         // create pin group
@@ -380,12 +382,12 @@ namespace hal
                 if (pg->empty())
                 {
                     // erase pin group
-                    u32 del_id                  = pin_group->get_id();
-                    const std::string& del_name = pin_group->get_name();
+                    u32 del_id                  = pg->get_id();
+                    const std::string& del_name = pg->get_name();
                     m_pin_groups_map.erase(del_id);
                     m_pin_group_names_map.erase(del_name);
-                    m_pin_groups_ordered.erase(std::find(m_pin_groups_ordered.begin(), m_pin_groups_ordered.end(), pin_group));
-                    m_pin_groups.erase(std::find_if(m_pin_groups.begin(), m_pin_groups.end(), [pin_group](const auto& group) { return group.get() == pin_group; }));
+                    m_pin_groups_ordered.erase(std::find(m_pin_groups_ordered.begin(), m_pin_groups_ordered.end(), pg));
+                    m_pin_groups.erase(std::find_if(m_pin_groups.begin(), m_pin_groups.end(), [pg](const auto& group) { return group.get() == pg; }));
 
                     // free pin group ID
                     m_free_pin_group_ids.insert(del_id);
