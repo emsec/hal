@@ -200,7 +200,6 @@ namespace hal
         void handleScriptError(const QString& txt);
         void handleInputRequired(int type, const QString& prompt, const QVariant& defaultValue);
         void handleConsoleInputReceived(const QString& input);
-        void handleGuiInputReceived(const QWidget* widget);
 
     private:
 
