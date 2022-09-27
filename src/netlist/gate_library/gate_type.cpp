@@ -24,6 +24,8 @@ namespace hal
     GateType::GateType(GateLibrary* gate_library, u32 id, const std::string& name, std::set<GateTypeProperty> properties, std::unique_ptr<GateTypeComponent> component)
         : m_gate_library(gate_library), m_id(id), m_name(name), m_properties(properties), m_component(std::move(component))
     {
+        m_next_pin_id       = 1;
+        m_next_pin_group_id = 1;
     }
 
     std::vector<GateTypeComponent*> GateType::get_components(const std::function<bool(const GateTypeComponent*)>& filter) const
