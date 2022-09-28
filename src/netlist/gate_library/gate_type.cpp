@@ -344,17 +344,6 @@ namespace hal
         // create pin group
         std::unique_ptr<PinGroup<GatePin>> pin_group_owner(new PinGroup<GatePin>(id, name, direction, type, ascending, start_index));
         PinGroup<GatePin>* pin_group = pin_group_owner.get();
-        m_pin_groups.push_back(std::move(pin_group_owner));
-        m_pin_groups_ordered.push_back(pin_group);
-        m_pin_groups_map[id]        = pin_group;
-        m_pin_group_names_map[name] = pin_group;
-
-        // mark pin group ID as used
-        if (auto free_id_it = m_free_pin_group_ids.find(id); free_id_it != m_free_pin_group_ids.end())
-        {
-            m_free_pin_group_ids.erase(free_id_it);
-        }
-        m_used_pin_group_ids.insert(id);
 
         for (auto pin : pins)
         {
@@ -400,6 +389,19 @@ namespace hal
                 return ERR_APPEND(res.get_error(), "could not create pin group '" + name + "' for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": failed to assign pin to pin group");
             }
         }
+
+        // register pin group
+        m_pin_groups.push_back(std::move(pin_group_owner));
+        m_pin_groups_ordered.push_back(pin_group);
+        m_pin_groups_map[id]        = pin_group;
+        m_pin_group_names_map[name] = pin_group;
+
+        // mark pin group ID as used
+        if (auto free_id_it = m_free_pin_group_ids.find(id); free_id_it != m_free_pin_group_ids.end())
+        {
+            m_free_pin_group_ids.erase(free_id_it);
+        }
+        m_used_pin_group_ids.insert(id);
 
         return OK(pin_group);
     }
