@@ -295,8 +295,15 @@ namespace hal
 
             cell.AddMember("pins", pins, allocator);
 
-            // groups
-            const std::vector<PinGroup<GatePin>*> pin_groups = gt->get_pin_groups();
+            // groups (avoid writing pin groups automatically created for each pin)
+            const std::vector<PinGroup<GatePin>*> pin_groups = gt->get_pin_groups([](const PinGroup<GatePin>* pg) {
+                if (pg->size() == 1)
+                {
+                    const GatePin* p = pg->get_pins().front();
+                    return pg->get_name() != p->get_name() || pg->get_direction() != p->get_direction() || pg->get_type() != p->get_type() || pg->get_start_index() != 0 || pg->is_ascending() != false;
+                }
+                return true;
+            });
             if (!pin_groups.empty())
             {
                 rapidjson::Value groups(rapidjson::kArrayType);
