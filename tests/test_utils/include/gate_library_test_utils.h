@@ -31,5 +31,9 @@ namespace hal
     {
         std::unique_ptr<GateLibrary> create_gate_library(const std::filesystem::path& file_path = "");
         const GateLibrary* get_gate_library();
+
+        bool gate_pin_groups_are_equal(const PinGroup<GatePin>* const pg1, const PinGroup<GatePin>* const pg2);
+        bool gate_types_are_equal(const GateType* const gt1, const GateType* const gt2);
+        bool gate_libraries_are_equal(const GateLibrary* const gl1, const GateLibrary* const gl2);
     }    // namespace test_utils
 }    // namespace hal
