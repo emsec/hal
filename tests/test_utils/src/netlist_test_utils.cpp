@@ -1160,16 +1160,16 @@ namespace hal
         return [pin](auto ep) { return *ep->get_pin() == *pin; };
     }
 
-    std::function<bool(const GatePin*, Endpoint*)> test_utils::adjacent_pin_filter(const GatePin* pin)
+    std::function<bool(const GatePin*, Endpoint*)> test_utils::adjacent_pin_filter(const std::string& pin_name)
     {
-        return [pin](auto, auto ep) { return *ep->get_pin() == *pin; };
+        return [pin_name](auto, auto ep) { return ep->get_pin()->get_name() == pin_name; };
     }
-    std::function<bool(const GatePin*, Endpoint*)> test_utils::starting_pin_filter(const GatePin* pin)
+    std::function<bool(const GatePin*, Endpoint*)> test_utils::starting_pin_filter(const std::string& pin_name)
     {
-        return [pin](auto starting_pin, auto) { return *starting_pin == *pin; };
+        return [pin_name](auto* starting_pin, auto) { return starting_pin->get_name() == pin_name; };
     }
 
-    std::function<bool(const std::string&, Endpoint*)> test_utils::adjacent_gate_type_filter(const std::string& type)
+    std::function<bool(const GatePin*, Endpoint*)> test_utils::adjacent_gate_type_filter(const std::string& type)
     {
         return [type](auto, auto ep) { return ep->get_gate()->get_type()->get_name() == type; };
     }

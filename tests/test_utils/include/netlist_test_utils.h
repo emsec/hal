@@ -497,18 +497,18 @@ namespace hal
         /**
          * Filter returns true, for all connected Endpoints (of adjacent gates) of type 'pin'
          *
-         * @param type - the type of the endpoints the filter is searching for
+         * @param pin_name - The pin name.
          * @return the std::function object of the filter function
          */
-        std::function<bool(const GatePin*, Endpoint*)> adjacent_pin_filter(const GatePin* pin);
+        std::function<bool(const GatePin*, Endpoint*)> adjacent_pin_filter(const std::string& pin_name);
 
         /**
          * Filter returns true for all endpoints, that are connected to the pin of pintype 'pin' of the calling Gate
          *
-         * @param pin - the pin of the Gate, calling the get_predecessors/sucesseors function
+         * @param pin_name - The pin name.
          * @return the std::function object of the filter function
          */
-        std::function<bool(const GatePin*, Endpoint*)> starting_pin_filter(const GatePin* pin);
+        std::function<bool(const GatePin*, Endpoint*)> starting_pin_filter(const std::string& pin_name);
 
         /**
          * Filter returns true for all endpoints of adjacent gates of Gate type 'type'
@@ -516,7 +516,7 @@ namespace hal
          * @param type - the type of adjacent gates, the filter is searching for
          * @return the std::function object of the filter function
          */
-        std::function<bool(const std::string&, Endpoint*)> adjacent_gate_type_filter(const std::string& type);
+        std::function<bool(const GatePin*, Endpoint*)> adjacent_gate_type_filter(const std::string& type);
 
         /**
          * Used to test the event system. It can create callback hooks (via get_callback/get_conditional_callback) and
