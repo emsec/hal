@@ -1,16 +1,73 @@
 #include "gui/comment_system/widgets/comment_widget.h"
 #include "gui/gui_globals.h"
 #include "gui/comment_system/comment_entry.h"
-#include <QVBoxLayout>
 #include <QDebug>
+#include <QVBoxLayout>
+#include <QScrollArea>
+#include <QHBoxLayout>
+#include <QPushButton>
+#include <QAction>
+#include <QIcon>
+#include <QSpacerItem>
+#include <QToolBar>
+#include "gui/toolbar/toolbar.h"
+#include "gui/searchbar/searchbar.h"
 
 namespace hal
 {
     CommentWidget::CommentWidget(QWidget *parent) : QWidget(parent)
     {
-        QVBoxLayout* layout = new QVBoxLayout(this);
-        _mTemporaryTextOutputForDebuggingOnly_ = new QLabel(this);
-        layout->addWidget(_mTemporaryTextOutputForDebuggingOnly_);
+//        QVBoxLayout* layout = new QVBoxLayout(this);
+//        _mTemporaryTextOutputForDebuggingOnly_ = new QLabel(this);
+//        layout->addWidget(_mTemporaryTextOutputForDebuggingOnly_);
+
+        mTopLayout = new QVBoxLayout(this);
+        mTopLayout->setMargin(0);
+        mTopLayout->setSpacing(0);
+        mSearchbar = new Searchbar();
+
+        // top bar
+        // 1. Option
+        mHeaderLayout = new QHBoxLayout();
+        mHeaderLayout->addWidget(new QPushButton("Add"));// alignleft without spacer
+        //mHeaderLayout->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Preferred));
+        mHeaderLayout->addWidget(new QPushButton("Search"));// alignright without spacer
+        mHeaderLayout->addWidget(mSearchbar);
+        mTopLayout->addLayout(mHeaderLayout);
+
+//        mToolbar = new QToolBar("Title?");
+//        //mToolbar = new Toolbar();
+//        QAction* newCommentAction = new QAction(QIcon(":/icons/plus"), "New Comment");
+//        QAction* mSearchAction = new QAction(QIcon(":/icons/search"), "Search");
+//        mToolbar->addAction(newCommentAction);
+//        //mToolbar->addSpacer();
+//        QWidget* spacer = new QWidget(); // must be used when using QToolBar
+//        spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+//        mToolbar->addWidget(spacer);
+//        mToolbar->addAction(mSearchAction);
+//        mToolbar->addWidget(mSearchbar);
+//        mSearchbar->show();
+//        mToolbar->setMinimumHeight(mSearchbar->height());// can be set if QToolbar is used (not custom)
+//        mTopLayout->addWidget(mToolbar);
+
+        // comment part
+        mCommentsLayout = new QVBoxLayout();
+        mScrollArea = new QScrollArea();
+        mCommentsContainer = new QWidget();
+        mCommentsContainer->show();
+        mCommentsContainer->setLayout(mCommentsLayout);
+        mCommentsContainer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        mScrollArea->setWidget(mCommentsContainer);
+        mScrollArea->show();
+        mCommentsContainer->setMinimumSize(500,200);
+        //mTopLayout->addWidget(mScrollArea);
+
+        // test fillings
+        QLabel* commentImposter = new QLabel("Perhaps i will be a comment someday?");
+        commentImposter->show();
+        //mScrollArea->setWidget(commentImposter);
+        mCommentsLayout->addWidget(commentImposter);
+        mTopLayout->addWidget(mScrollArea);
     }
 
     CommentWidget::~CommentWidget()
@@ -20,13 +77,23 @@ namespace hal
 
     void CommentWidget::nodeChanged(const Node& nd)
     {
-        QString txt;
-        QList<CommentEntry*> ceList = gCommentManager->getEntriesForNode(nd);
-        for (const CommentEntry* ce : ceList)
-           txt += ce->getHeader() + "\n  created: " +
-                   ce->getCreationTime().toString("dd.MM.yyyy hh:mm:ss\n") +
-                   ce->getText() + "\n-----------\n";
-        _mTemporaryTextOutputForDebuggingOnly_->setText(txt);
+//        QString txt;
+//        QList<CommentEntry*> ceList = gCommentManager->getEntriesForNode(nd);
+//        for (const CommentEntry* ce : ceList)
+//           txt += ce->getHeader() + "\n  created: " +
+//                   ce->getCreationTime().toString("dd.MM.yyyy hh:mm:ss\n") +
+//                   ce->getText() + "\n-----------\n";
+        //        _mTemporaryTextOutputForDebuggingOnly_->setText(txt);
+    }
+
+    void CommentWidget::init_style1()
+    {
+
+    }
+
+    void CommentWidget::init_style2()
+    {
+
     }
 
 }

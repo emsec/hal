@@ -26,9 +26,19 @@
 #include <QWidget>
 #include "gui/gui_def.h"
 #include <QLabel>
+//#include <QVBoxLayout>
+//#include <QHBoxLayout>
+
+class QVBoxLayout;
+class QHBoxLayout;
+class QScrollArea;
+class QToolBar;
 
 namespace hal
 {
+    class Toolbar;
+    class Searchbar;
+
     class CommentWidget : public QWidget
     {
         Q_OBJECT
@@ -39,5 +49,27 @@ namespace hal
         void nodeChanged(const Node& nd);
     private:
         QLabel* _mTemporaryTextOutputForDebuggingOnly_;
+        QVBoxLayout* mTopLayout;
+
+        // header part
+        QHBoxLayout* mHeaderLayout; //perhaps put in a container?
+        QToolBar* mToolbar; //put 2 actions and a widget in there? (or use simple qwidget(headerlayout) with buttons)
+        //Toolbar* mToolbar;
+        Searchbar* mSearchbar;
+
+        // with toolbar:
+        //add action - add spacer (expanding, preferred) - add action - add searchbar
+        //when toggling the search action,  hide spacer (and/or change properties) and show searchbar
+        //other idea: put the searchbar between header and comments, show/hide there (search action in header doesnt disappear)
+
+        // comment part
+        QScrollArea* mScrollArea;
+        QWidget* mCommentsContainer;
+        QVBoxLayout* mCommentsLayout;
+
+
+        // temp helper function to test different ways
+        void init_style1();
+        void init_style2();
     };
 }
