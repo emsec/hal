@@ -25,12 +25,12 @@ namespace hal
         mTopLayout->setMargin(0);
         mTopLayout->setSpacing(0);
         mSearchbar = new Searchbar();
-
+        mSearchbar->hide();
         // top bar
         // 1. Option
         mHeaderLayout = new QHBoxLayout();
         mHeaderLayout->addWidget(new QPushButton("Add"));// alignleft without spacer
-        //mHeaderLayout->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Preferred));
+        mHeaderLayout->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Preferred));
         mHeaderLayout->addWidget(new QPushButton("Search"));// alignright without spacer
         mHeaderLayout->addWidget(mSearchbar);
         mTopLayout->addLayout(mHeaderLayout);
@@ -53,20 +53,23 @@ namespace hal
         // comment part
         mCommentsLayout = new QVBoxLayout();
         mScrollArea = new QScrollArea();
+        mScrollArea->setWidgetResizable(true);//important as it seems so that the child widget will expandd if possible
         mCommentsContainer = new QWidget();
         mCommentsContainer->show();
         mCommentsContainer->setLayout(mCommentsLayout);
         mCommentsContainer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         mScrollArea->setWidget(mCommentsContainer);
         mScrollArea->show();
-        mCommentsContainer->setMinimumSize(500,200);
+        //mCommentsContainer->setMinimumSize(500,200);
         //mTopLayout->addWidget(mScrollArea);
 
         // test fillings
         QLabel* commentImposter = new QLabel("Perhaps i will be a comment someday?");
-        commentImposter->show();
+        commentImposter->setWordWrap(true);
+        //commentImposter->show();
         //mScrollArea->setWidget(commentImposter);
         mCommentsLayout->addWidget(commentImposter);
+        mCommentsLayout->addWidget(new QLabel("II will be another Comment (hopefully)"));
         mTopLayout->addWidget(mScrollArea);
     }
 
