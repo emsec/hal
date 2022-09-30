@@ -1899,7 +1899,7 @@ namespace hal {
                                         "  input global_in ;"
                                         "  output global_out ;"
                                         "  wire [0:1] net_vec_0, net_vec_1 ;"    // <- !!!
-                                        "gate_4_to_1 gate_0 ("
+                                        "COMB41 gate_0 ("
                                         "  .I0 (net_vec_0[0] ),"
                                         "  .I1 (net_vec_0[1] ),"
                                         "  .I2 (net_vec_1[0] ),"
@@ -1927,6 +1927,9 @@ namespace hal {
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
                 auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
+                if(nl_res.is_error()) {
+                    std::cout << nl_res.get_error().get() << std::endl;
+                }
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
 
