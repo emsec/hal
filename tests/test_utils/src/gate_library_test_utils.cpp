@@ -1,5 +1,6 @@
 #include "gate_library_test_utils.h"
 
+#include "hal_core/utilities/log.h"
 #include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/latch_component.h"
@@ -380,7 +381,7 @@ namespace hal
                 {
                     return nullptr;
                 }
-                mux->add_boolean_function("CO", BooleanFunction::from_string("(!S & I0) | (S & I1)").get());
+                mux->add_boolean_function("O", BooleanFunction::from_string("(!S & I0) | (S & I1)").get());
             }
             {
                 GateType* carry = lib->create_gate_type("CARRY", {GateTypeProperty::combinational, GateTypeProperty::carry});
@@ -712,8 +713,9 @@ namespace hal
                 GateType* dff =
                     lib->create_gate_type("DFF",
                                           {GateTypeProperty::sequential, GateTypeProperty::ff},
-                                          GateTypeComponent::create_ff_component(
-                                              GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"), BooleanFunction::from_string("D").get(), BooleanFunction::from_string("CLK").get()));
+                                          GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"),
+                                                                                 BooleanFunction::from_string("D").get(),
+                                                                                 BooleanFunction::from_string("CLK").get()));
                 if (auto res = dff->create_pin("CLK", PinDirection::input, PinType::clock); res.is_error())
                 {
                     return nullptr;
@@ -722,11 +724,11 @@ namespace hal
                 {
                     return nullptr;
                 }
-                if (auto res = dff->create_pin("Q", PinDirection::input, PinType::state); res.is_error())
+                if (auto res = dff->create_pin("Q", PinDirection::output, PinType::state); res.is_error())
                 {
                     return nullptr;
                 }
-                if (auto res = dff->create_pin("QN", PinDirection::input, PinType::neg_state); res.is_error())
+                if (auto res = dff->create_pin("QN", PinDirection::output, PinType::neg_state); res.is_error())
                 {
                     return nullptr;
                 }
@@ -734,11 +736,12 @@ namespace hal
                 dff->add_boolean_function("QN", BooleanFunction::from_string("IQN").get());
             }
             {
-                GateType* dff_e = lib->create_gate_type("DFFE",
-                                                        {GateTypeProperty::sequential, GateTypeProperty::ff},
-                                                        GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"),
-                                                                                               BooleanFunction::from_string("D").get(),
-                                                                                               BooleanFunction::from_string("CLK & EN").get()));
+                GateType* dff_e =
+                    lib->create_gate_type("DFFE",
+                                          {GateTypeProperty::sequential, GateTypeProperty::ff},
+                                          GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"),
+                                                                                 BooleanFunction::from_string("D").get(),
+                                                                                 BooleanFunction::from_string("CLK & EN").get()));
                 if (auto res = dff_e->create_pin("CLK", PinDirection::input, PinType::clock); res.is_error())
                 {
                     return nullptr;
@@ -751,11 +754,11 @@ namespace hal
                 {
                     return nullptr;
                 }
-                if (auto res = dff_e->create_pin("Q", PinDirection::input, PinType::state); res.is_error())
+                if (auto res = dff_e->create_pin("Q", PinDirection::output, PinType::state); res.is_error())
                 {
                     return nullptr;
                 }
-                if (auto res = dff_e->create_pin("QN", PinDirection::input, PinType::neg_state); res.is_error())
+                if (auto res = dff_e->create_pin("QN", PinDirection::output, PinType::neg_state); res.is_error())
                 {
                     return nullptr;
                 }
@@ -766,8 +769,9 @@ namespace hal
                 GateType* dff_s =
                     lib->create_gate_type("DFFS",
                                           {GateTypeProperty::sequential, GateTypeProperty::ff},
-                                          GateTypeComponent::create_ff_component(
-                                              GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"), BooleanFunction::from_string("D").get(), BooleanFunction::from_string("CLK").get()));
+                                          GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"),
+                                                                                 BooleanFunction::from_string("D").get(),
+                                                                                 BooleanFunction::from_string("CLK").get()));
                 FFComponent* ff_component = dff_s->get_component_as<FFComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::ff; });
                 assert(ff_component != nullptr);
                 ff_component->set_async_set_function(BooleanFunction::from_string("S").get());
@@ -783,11 +787,11 @@ namespace hal
                 {
                     return nullptr;
                 }
-                if (auto res = dff_s->create_pin("Q", PinDirection::input, PinType::state); res.is_error())
+                if (auto res = dff_s->create_pin("Q", PinDirection::output, PinType::state); res.is_error())
                 {
                     return nullptr;
                 }
-                if (auto res = dff_s->create_pin("QN", PinDirection::input, PinType::neg_state); res.is_error())
+                if (auto res = dff_s->create_pin("QN", PinDirection::output, PinType::neg_state); res.is_error())
                 {
                     return nullptr;
                 }
@@ -798,8 +802,9 @@ namespace hal
                 GateType* dff_r =
                     lib->create_gate_type("DFFR",
                                           {GateTypeProperty::sequential, GateTypeProperty::ff},
-                                          GateTypeComponent::create_ff_component(
-                                              GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"), BooleanFunction::from_string("D").get(), BooleanFunction::from_string("CLK").get()));
+                                          GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"),
+                                                                                 BooleanFunction::from_string("D").get(),
+                                                                                 BooleanFunction::from_string("CLK").get()));
                 FFComponent* ff_component = dff_r->get_component_as<FFComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::ff; });
                 assert(ff_component != nullptr);
                 ff_component->set_async_reset_function(BooleanFunction::from_string("R").get());
@@ -815,11 +820,11 @@ namespace hal
                 {
                     return nullptr;
                 }
-                if (auto res = dff_r->create_pin("Q", PinDirection::input, PinType::state); res.is_error())
+                if (auto res = dff_r->create_pin("Q", PinDirection::output, PinType::state); res.is_error())
                 {
                     return nullptr;
                 }
-                if (auto res = dff_r->create_pin("QN", PinDirection::input, PinType::neg_state); res.is_error())
+                if (auto res = dff_r->create_pin("QN", PinDirection::output, PinType::neg_state); res.is_error())
                 {
                     return nullptr;
                 }
@@ -830,8 +835,9 @@ namespace hal
                 GateType* dff_rs =
                     lib->create_gate_type("DFFRS",
                                           {GateTypeProperty::sequential, GateTypeProperty::ff},
-                                          GateTypeComponent::create_ff_component(
-                                              GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"), BooleanFunction::from_string("D").get(), BooleanFunction::from_string("CLK").get()));
+                                          GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"),
+                                                                                 BooleanFunction::from_string("D").get(),
+                                                                                 BooleanFunction::from_string("CLK").get()));
                 FFComponent* ff_component = dff_rs->get_component_as<FFComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::ff; });
                 assert(ff_component != nullptr);
                 ff_component->set_async_set_function(BooleanFunction::from_string("S").get());
@@ -853,11 +859,11 @@ namespace hal
                 {
                     return nullptr;
                 }
-                if (auto res = dff_rs->create_pin("Q", PinDirection::input, PinType::state); res.is_error())
+                if (auto res = dff_rs->create_pin("Q", PinDirection::output, PinType::state); res.is_error())
                 {
                     return nullptr;
                 }
-                if (auto res = dff_rs->create_pin("QN", PinDirection::input, PinType::neg_state); res.is_error())
+                if (auto res = dff_rs->create_pin("QN", PinDirection::output, PinType::neg_state); res.is_error())
                 {
                     return nullptr;
                 }
@@ -865,11 +871,12 @@ namespace hal
                 dff_rs->add_boolean_function("QN", BooleanFunction::from_string("IQN").get());
             }
             {
-                GateType* dff_se          = lib->create_gate_type("DFFSE",
-                                                         {GateTypeProperty::sequential, GateTypeProperty::ff},
-                                                         GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"),
-                                                                                                BooleanFunction::from_string("D").get(),
-                                                                                                BooleanFunction::from_string("CLK & EN").get()));
+                GateType* dff_se =
+                    lib->create_gate_type("DFFSE",
+                                          {GateTypeProperty::sequential, GateTypeProperty::ff},
+                                          GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"),
+                                                                                 BooleanFunction::from_string("D").get(),
+                                                                                 BooleanFunction::from_string("CLK & EN").get()));
                 FFComponent* ff_component = dff_se->get_component_as<FFComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::ff; });
                 assert(ff_component != nullptr);
                 ff_component->set_async_set_function(BooleanFunction::from_string("S").get());
@@ -889,11 +896,11 @@ namespace hal
                 {
                     return nullptr;
                 }
-                if (auto res = dff_se->create_pin("Q", PinDirection::input, PinType::state); res.is_error())
+                if (auto res = dff_se->create_pin("Q", PinDirection::output, PinType::state); res.is_error())
                 {
                     return nullptr;
                 }
-                if (auto res = dff_se->create_pin("QN", PinDirection::input, PinType::neg_state); res.is_error())
+                if (auto res = dff_se->create_pin("QN", PinDirection::output, PinType::neg_state); res.is_error())
                 {
                     return nullptr;
                 }
@@ -901,11 +908,12 @@ namespace hal
                 dff_se->add_boolean_function("QN", BooleanFunction::from_string("IQN").get());
             }
             {
-                GateType* dff_re          = lib->create_gate_type("DFFRE",
-                                                         {GateTypeProperty::sequential, GateTypeProperty::ff},
-                                                         GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"),
-                                                                                                BooleanFunction::from_string("D").get(),
-                                                                                                BooleanFunction::from_string("CLK & EN").get()));
+                GateType* dff_re =
+                    lib->create_gate_type("DFFRE",
+                                          {GateTypeProperty::sequential, GateTypeProperty::ff},
+                                          GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"),
+                                                                                 BooleanFunction::from_string("D").get(),
+                                                                                 BooleanFunction::from_string("CLK & EN").get()));
                 FFComponent* ff_component = dff_re->get_component_as<FFComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::ff; });
                 assert(ff_component != nullptr);
                 ff_component->set_async_reset_function(BooleanFunction::from_string("R").get());
@@ -925,11 +933,11 @@ namespace hal
                 {
                     return nullptr;
                 }
-                if (auto res = dff_re->create_pin("Q", PinDirection::input, PinType::state); res.is_error())
+                if (auto res = dff_re->create_pin("Q", PinDirection::output, PinType::state); res.is_error())
                 {
                     return nullptr;
                 }
-                if (auto res = dff_re->create_pin("QN", PinDirection::input, PinType::neg_state); res.is_error())
+                if (auto res = dff_re->create_pin("QN", PinDirection::output, PinType::neg_state); res.is_error())
                 {
                     return nullptr;
                 }
@@ -937,11 +945,12 @@ namespace hal
                 dff_re->add_boolean_function("QN", BooleanFunction::from_string("IQN").get());
             }
             {
-                GateType* dff_rse         = lib->create_gate_type("DFFRSE",
-                                                          {GateTypeProperty::sequential, GateTypeProperty::ff},
-                                                          GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"),
-                                                                                                 BooleanFunction::from_string("D").get(),
-                                                                                                 BooleanFunction::from_string("CLK & EN").get()));
+                GateType* dff_rse =
+                    lib->create_gate_type("DFFRSE",
+                                          {GateTypeProperty::sequential, GateTypeProperty::ff},
+                                          GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"),
+                                                                                 BooleanFunction::from_string("D").get(),
+                                                                                 BooleanFunction::from_string("CLK & EN").get()));
                 FFComponent* ff_component = dff_rse->get_component_as<FFComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::ff; });
                 assert(ff_component != nullptr);
                 ff_component->set_async_set_function(BooleanFunction::from_string("S").get());
@@ -967,18 +976,18 @@ namespace hal
                 {
                     return nullptr;
                 }
-                if (auto res = dff_rse->create_pin("Q", PinDirection::input, PinType::state); res.is_error())
+                if (auto res = dff_rse->create_pin("Q", PinDirection::output, PinType::state); res.is_error())
                 {
                     return nullptr;
                 }
-                if (auto res = dff_rse->create_pin("QN", PinDirection::input, PinType::neg_state); res.is_error())
+                if (auto res = dff_rse->create_pin("QN", PinDirection::output, PinType::neg_state); res.is_error())
                 {
                     return nullptr;
                 }
                 dff_rse->add_boolean_function("Q", BooleanFunction::from_string("IQ").get());
                 dff_rse->add_boolean_function("QN", BooleanFunction::from_string("IQN").get());
             }
-            { // just an empty dummy for now, does not come with relevant components
+            {    // just an empty dummy for now, does not come with relevant components
                 GateType* ram = lib->create_gate_type("RAM", {GateTypeProperty::sequential});
                 if (auto res = ram->create_pin("CLK", PinDirection::input, PinType::clock); res.is_error())
                 {
@@ -1120,16 +1129,34 @@ namespace hal
 
         bool gate_pin_groups_are_equal(const PinGroup<GatePin>* const pg1, const PinGroup<GatePin>* const pg2)
         {
-            return pg1 == pg2;
+            return *pg1 == *pg2;
         }
 
         bool gate_types_are_equal(const GateType* const gt1, const GateType* const gt2)
         {
-            bool is_equal = true;
-            is_equal &= gt1->get_id() == gt2->get_id();
-            is_equal &= gt1->get_name() == gt2->get_name();
-            is_equal &= gt1->get_properties() == gt2->get_properties();
-            is_equal &= gt1->get_boolean_functions() == gt2->get_boolean_functions();
+            if (gt1->get_id() != gt2->get_id()) 
+            {
+                log_info("test_utils", "unequal ID of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
+                return false;
+            }
+
+            if (gt1->get_name() != gt2->get_name()) 
+            {
+                log_info("test_utils", "unequal name of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
+                return false;
+            }
+
+            if (gt1->get_properties() != gt2->get_properties()) 
+            {
+                log_info("test_utils", "unequal properties of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
+                return false;
+            }
+
+            if (gt1->get_boolean_functions() != gt2->get_boolean_functions()) 
+            {
+                log_info("test_utils", "unequal Boolean functions of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
+                return false;
+            }
 
             auto pg1 = gt1->get_pin_groups();
             auto pg2 = gt2->get_pin_groups();
@@ -1138,84 +1165,105 @@ namespace hal
                 return false;
             }
             for (auto [pg1_it, pg2_it] = std::tuple{pg1.begin(), pg2.begin()}; pg1_it != pg1.end() && pg2_it != pg2.end(); pg1_it++, pg2_it++)
-            {
-                is_equal &= gate_pin_groups_are_equal(*pg1_it, *pg2_it);
-            }
-
-            if (const LUTComponent* lut_component1 =
-                    gt1->get_component_as<LUTComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::lut; });
-                lut_component1 != nullptr)
-            {
-                const LUTComponent* lut_component2 =
-                    gt2->get_component_as<LUTComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::lut; });
-                if (lut_component2 == nullptr)
+            {   
+                if (!gate_pin_groups_are_equal(*pg1_it, *pg2_it)) 
                 {
+                    log_info("test_utils", "unequal pin groups of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
                     return false;
                 }
-                is_equal &= lut_component1->is_init_ascending() == lut_component2->is_init_ascending();
             }
 
-            if (const FFComponent* ff_component1 = gt1->get_component_as<FFComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::ff; });
-                ff_component1 != nullptr)
+            const LUTComponent* lut_component1 = gt1->get_component_as<LUTComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::lut; });
+            const LUTComponent* lut_component2 = gt2->get_component_as<LUTComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::lut; });
+            if (lut_component1 != nullptr && lut_component2 != nullptr)
             {
-                const FFComponent* ff_component2 = gt2->get_component_as<FFComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::ff; });
-                if (ff_component2 == nullptr)
+                if (lut_component1->is_init_ascending() != lut_component2->is_init_ascending()) 
                 {
+                    log_info("test_utils", "unequal LUT components of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
                     return false;
                 }
-                is_equal &= ff_component1->get_next_state_function() == ff_component2->get_next_state_function();
-                is_equal &= ff_component1->get_clock_function() == ff_component2->get_clock_function();
-                is_equal &= ff_component1->get_async_reset_function() == ff_component2->get_async_reset_function();
-                is_equal &= ff_component1->get_async_set_function() == ff_component2->get_async_set_function();
-                is_equal &= ff_component1->get_async_set_reset_behavior() == ff_component2->get_async_set_reset_behavior();
+            } 
+            else if (lut_component1 != nullptr || lut_component2 != nullptr) 
+            {
+                log_info("test_utils", "unequal LUT components of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
+                return false;
             }
 
-            if (const LatchComponent* latch_component1 =
-                    gt1->get_component_as<LatchComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::latch; });
-                latch_component1 != nullptr)
+            const FFComponent* ff_component1 = gt1->get_component_as<FFComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::ff; });
+            const FFComponent* ff_component2 = gt2->get_component_as<FFComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::ff; });
+            if (ff_component1 != nullptr && ff_component2 != nullptr)
             {
-                const LatchComponent* latch_component2 =
-                    gt2->get_component_as<LatchComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::latch; });
-                if (latch_component2 == nullptr)
+                if (ff_component1->get_next_state_function() != ff_component2->get_next_state_function() ||
+                    ff_component1->get_clock_function() != ff_component2->get_clock_function() ||
+                    ff_component1->get_async_reset_function() != ff_component2->get_async_reset_function() ||
+                    ff_component1->get_async_set_function() != ff_component2->get_async_set_function() ||
+                    ff_component1->get_async_set_reset_behavior() != ff_component2->get_async_set_reset_behavior()) 
                 {
+                    log_info("test_utils", "unequal FF components of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
                     return false;
                 }
-                is_equal &= latch_component1->get_data_in_function() == latch_component2->get_data_in_function();
-                is_equal &= latch_component1->get_enable_function() == latch_component2->get_enable_function();
-                is_equal &= latch_component1->get_async_reset_function() == latch_component2->get_async_reset_function();
-                is_equal &= latch_component1->get_async_set_function() == latch_component2->get_async_set_function();
-                is_equal &= latch_component1->get_async_set_reset_behavior() == latch_component2->get_async_set_reset_behavior();
+            } 
+            else if (ff_component1 != nullptr || ff_component2 != nullptr) 
+            {
+                log_info("test_utils", "unequal FF components of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
+                return false;
             }
 
-            if (const InitComponent* init_component1 =
-                    gt1->get_component_as<InitComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::init; });
-                init_component1 != nullptr)
+            const LatchComponent* latch_component1 = gt1->get_component_as<LatchComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::latch; });
+            const LatchComponent* latch_component2 = gt2->get_component_as<LatchComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::latch; });
+            if (latch_component1 != nullptr && latch_component2 != nullptr)
             {
-                const InitComponent* init_component2 =
-                    gt2->get_component_as<InitComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::init; });
-                if (init_component2 == nullptr)
+                if (latch_component1->get_data_in_function() != latch_component2->get_data_in_function() ||
+                    latch_component1->get_enable_function() != latch_component2->get_enable_function() ||
+                    latch_component1->get_async_reset_function() != latch_component2->get_async_reset_function() ||
+                    latch_component1->get_async_set_function() != latch_component2->get_async_set_function() ||
+                    latch_component1->get_async_set_reset_behavior() != latch_component2->get_async_set_reset_behavior()) 
                 {
+                    log_info("test_utils", "unequal Latch components of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
                     return false;
                 }
-                is_equal &= init_component1->get_init_category() == init_component2->get_init_category();
-                is_equal &= init_component1->get_init_identifiers() == init_component2->get_init_identifiers();
+            } 
+            else if (latch_component1 != nullptr || latch_component2 != nullptr) 
+            {
+                log_info("test_utils", "unequal Latch components of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
+                return false;
             }
 
-            if (const StateComponent* state_component1 =
-                    gt1->get_component_as<StateComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::state; });
-                state_component1 != nullptr)
+            const InitComponent* init_component1 = gt1->get_component_as<InitComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::init; });
+            const InitComponent* init_component2 = gt2->get_component_as<InitComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::init; });
+            if (init_component1 != nullptr && init_component2 != nullptr)
             {
-                const StateComponent* state_component2 =
-                    gt2->get_component_as<StateComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::state; });
-                if (state_component2 == nullptr)
+                if (init_component1->get_init_category() != init_component2->get_init_category() ||
+                    init_component1->get_init_identifiers() != init_component2->get_init_identifiers()) 
                 {
+                    log_info("test_utils", "unequal Init components of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
                     return false;
                 }
-                is_equal &= state_component1->get_state_identifier() == state_component2->get_state_identifier();
-                is_equal &= state_component1->get_neg_state_identifier() == state_component2->get_neg_state_identifier();
+            } 
+            else if (init_component1 != nullptr || init_component2 != nullptr) 
+            {
+                log_info("test_utils", "unequal Init components of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
+                return false;
             }
 
-            return is_equal;
+            const StateComponent* state_component1 = gt1->get_component_as<StateComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::state; });
+            const StateComponent* state_component2 = gt2->get_component_as<StateComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::state; });
+            if (state_component1 != nullptr && state_component2 != nullptr)
+            {
+                if (state_component1->get_state_identifier() != state_component2->get_state_identifier() ||
+                    state_component1->get_neg_state_identifier() != state_component2->get_neg_state_identifier()) 
+                {
+                    log_info("test_utils", "unequal Init components of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
+                    return false;
+                }
+            } 
+            else if (state_component1 != nullptr || state_component2 != nullptr) 
+            {
+                log_info("test_utils", "unequal Init components of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
+                return false;
+            }
+
+            return true;
         }
 
         bool gate_libraries_are_equal(const GateLibrary* const gl1, const GateLibrary* const gl2)
@@ -1223,15 +1271,34 @@ namespace hal
             bool is_equal = true;
             is_equal &= gl1->get_name() == gl2->get_name();
 
-            auto gt1 = gl1->get_gate_types();
-            auto gt2 = gl2->get_gate_types();
+            std::vector<GateType*> gt1;
+            for (const auto& [_, type] : gl1->get_gate_types()) 
+            {
+                UNUSED(_);
+                gt1.push_back(type);
+            }
+            std::sort(gt1.begin(), gt1.end(), [](GateType* a, GateType* b) { return a->get_name() < b->get_name(); });
+
+            std::vector<GateType*> gt2;
+            for (const auto& [_, type] : gl2->get_gate_types()) 
+            {
+                UNUSED(_);
+                gt2.push_back(type);
+            }
+            std::sort(gt2.begin(), gt2.end(), [](GateType* a, GateType* b) { return a->get_name() < b->get_name(); });
+            
             if (gt1.size() != gt2.size())
             {
+                log_info("test_utils", "unequal number of gate types: '{}' vs. '{}'", gt1.size(), gt2.size());
                 return false;
             }
             for (auto [gt1_it, gt2_it] = std::tuple{gt1.begin(), gt2.begin()}; gt1_it != gt1.end() && gt2_it != gt2.end(); gt1_it++, gt2_it++)
             {
-                is_equal &= gate_types_are_equal(gt1_it->second, gt2_it->second);
+                if (!gate_types_are_equal(*gt1_it, *gt2_it)) 
+                {
+                    log_info("test_utils", "unequal gate types with names '{}' and '{}'", (*gt1_it)->get_name(), (*gt2_it)->get_name());
+                    return false;
+                }
             }
 
             return is_equal;

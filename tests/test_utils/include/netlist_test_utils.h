@@ -8,7 +8,6 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
-#include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
 #include "test_def.h"
 

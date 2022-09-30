@@ -1,6 +1,7 @@
 
 #include "netlist_test_utils.h"
 
+#include "hal_core/utilities/log.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
 #include "gate_library_test_utils.h"
 
