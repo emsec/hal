@@ -255,12 +255,12 @@ namespace hal
                 {
                     nets.push_back(nullptr);
                 }
+            }
 
-                // only append if at least one pin of the group is connected
-                if (std::any_of(nets.begin(), nets.end(), [](const Net* net) { return net != nullptr; }))
-                {
-                    pin_assignments.push_back(std::make_pair(pin_group->get_name(), nets));
-                }
+            // only append if at least one pin of the group is connected
+            if (std::any_of(nets.begin(), nets.end(), [](const Net* net) { return net != nullptr; }))
+            {
+                pin_assignments.push_back(std::make_pair(pin_group->get_name(), nets));
             }
         }
 
