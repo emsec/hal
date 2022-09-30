@@ -200,7 +200,7 @@ namespace hal
             }
             else if (net == nullptr)
             {
-                return ERR("could not get subgraph function of net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": net is a 'nullptr'");
+                return ERR("could not get subgraph function: net is a 'nullptr'");
             }
             else if (net->get_num_of_sources() > 1)
             {
@@ -765,6 +765,12 @@ namespace hal
 
             for (const auto& pin : pins)
             {
+                if (pin == nullptr) 
+                {
+                    log_warning("netlist_utils", "'nullptr' given as pin.");
+                    continue;
+                }
+
                 PinDirection direction = pin->get_direction();
                 if (direction == PinDirection::input || direction == PinDirection::inout)
                 {
