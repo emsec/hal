@@ -282,7 +282,6 @@ namespace hal
         CORE_API Result<std::monostate> replace_gate(Gate* gate, GateType* target_type, std::map<GatePin*, GatePin*> pin_map);
 
         /**
-         * TODO test
          * Find a sequence of identical gates that are connected via the specified input and output pins.
          * The start gate may be any gate within a such a sequence, it is not required to be the first or the last gate.
          * If input and/or output pins are specified, the gates must be connected through one of the input pins and/or one of the output pins.
