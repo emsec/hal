@@ -316,7 +316,7 @@ namespace hal {
 
                 // Check that only the pins outside the comments are created
                 const auto pins = gt->get_pins();
-                ASSERT_EQ(pins.size(), 7);
+                ASSERT_EQ(pins.size(), 5);
                 {
                     const auto* o0_pin = pins.at(0);
                     EXPECT_EQ(o0_pin->get_id(), 1);
@@ -344,18 +344,6 @@ namespace hal {
                 {
                     const auto* g_pin = pins.at(4);
                     EXPECT_EQ(g_pin->get_id(), 5);
-                    EXPECT_EQ(g_pin->get_name(), "C2");
-                    EXPECT_EQ(g_pin->get_direction(), PinDirection::output);
-                }
-                {
-                    const auto* g_pin = pins.at(5);
-                    EXPECT_EQ(g_pin->get_id(), 6);
-                    EXPECT_EQ(g_pin->get_name(), "C3");
-                    EXPECT_EQ(g_pin->get_direction(), PinDirection::output);
-                }
-                {
-                    const auto* g_pin = pins.at(6);
-                    EXPECT_EQ(g_pin->get_id(), 7);
                     EXPECT_EQ(g_pin->get_name(), "O3");
                     EXPECT_EQ(g_pin->get_direction(), PinDirection::output);
                 }
@@ -376,10 +364,7 @@ namespace hal {
                 std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/test_noexist.lib";
                 LibertyParser liberty_parser;
                 auto gl_res = liberty_parser.parse(path_lib);
-                ASSERT_TRUE(gl_res.is_ok());
-                std::unique_ptr<GateLibrary> gl = gl_res.get();
-
-                EXPECT_EQ(gl, nullptr);
+                ASSERT_TRUE(gl_res.is_error());
             }
             {
                 // For a ff, use an undefined clear_preset_var1 behaviour (not in {L,H,N,T,X})
@@ -387,10 +372,7 @@ namespace hal {
                 std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/invalid_test1.lib";
                 LibertyParser liberty_parser;
                 auto gl_res = liberty_parser.parse(path_lib);
-                ASSERT_TRUE(gl_res.is_ok());
-                std::unique_ptr<GateLibrary> gl = gl_res.get();
-
-                EXPECT_EQ(gl, nullptr);
+                ASSERT_TRUE(gl_res.is_error());
             }
             {
                 // For a ff, use an undefined clear_preset_var2 behaviour (not in {L,H,N,T,X})
@@ -398,10 +380,7 @@ namespace hal {
                 std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/invalid_test2.lib";
                 LibertyParser liberty_parser;
                 auto gl_res = liberty_parser.parse(path_lib);
-                ASSERT_TRUE(gl_res.is_ok());
-                std::unique_ptr<GateLibrary> gl = gl_res.get();
-
-                EXPECT_EQ(gl, nullptr);
+                ASSERT_TRUE(gl_res.is_error());
             }
             {
                 // For a latch, use an undefined clear_preset_var1 behaviour (not in {L,H,N,T,X})
@@ -409,10 +388,7 @@ namespace hal {
                 std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/invalid_test3.lib";
                 LibertyParser liberty_parser;
                 auto gl_res = liberty_parser.parse(path_lib);
-                ASSERT_TRUE(gl_res.is_ok());
-                std::unique_ptr<GateLibrary> gl = gl_res.get();
-
-                EXPECT_EQ(gl, nullptr);
+                ASSERT_TRUE(gl_res.is_error());
             }
             {
                 // For a latch, use an undefined clear_preset_var1 behaviour (not in {L,H,N,T,X})
@@ -420,10 +396,7 @@ namespace hal {
                 std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/invalid_test4.lib";
                 LibertyParser liberty_parser;
                 auto gl_res = liberty_parser.parse(path_lib);
-                ASSERT_TRUE(gl_res.is_ok());
-                std::unique_ptr<GateLibrary> gl = gl_res.get();
-
-                EXPECT_EQ(gl, nullptr);
+                ASSERT_TRUE(gl_res.is_error());
             }
             {
                 // Use a pin with an unknown direction (not in {input, output}) as an input pin
@@ -431,10 +404,7 @@ namespace hal {
                 std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/invalid_test6.lib";
                 LibertyParser liberty_parser;
                 auto gl_res = liberty_parser.parse(path_lib);
-                ASSERT_TRUE(gl_res.is_ok());
-                std::unique_ptr<GateLibrary> gl = gl_res.get();
-
-                ASSERT_EQ(gl, nullptr);
+                ASSERT_TRUE(gl_res.is_error());
             }
             // { // NOTE: Works (is ok?)
             //     // Use an unknown variable in a boolean function
@@ -466,10 +436,7 @@ namespace hal {
                 std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/invalid_test9.lib";
                 LibertyParser liberty_parser;
                 auto gl_res = liberty_parser.parse(path_lib);
-                ASSERT_TRUE(gl_res.is_ok());
-                std::unique_ptr<GateLibrary> gl = gl_res.get();
-
-                EXPECT_EQ(gl, nullptr);
+                ASSERT_TRUE(gl_res.is_error());
 
             }
             {
@@ -478,21 +445,15 @@ namespace hal {
                 std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/invalid_test10.lib";
                 LibertyParser liberty_parser;
                 auto gl_res = liberty_parser.parse(path_lib);
-                ASSERT_TRUE(gl_res.is_ok());
-                std::unique_ptr<GateLibrary> gl = gl_res.get();
-
-                EXPECT_EQ(gl, nullptr);
+                ASSERT_TRUE(gl_res.is_error());
             }
             {
-                // Pin got no direction (should be ignored)
+                // Pin got no direction
                 NO_COUT_TEST_BLOCK;
                 std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/invalid_test11.lib";
                 LibertyParser liberty_parser;
                 auto gl_res = liberty_parser.parse(path_lib);
-                ASSERT_TRUE(gl_res.is_ok());
-                std::unique_ptr<GateLibrary> gl = gl_res.get();
-
-                ASSERT_EQ(gl, nullptr);
+                ASSERT_TRUE(gl_res.is_error());
             }
             {
                 // Test the usage of complex attributes
@@ -515,10 +476,7 @@ namespace hal {
                 std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/invalid_test13.lib";
                 LibertyParser liberty_parser;
                 auto gl_res = liberty_parser.parse(path_lib);
-                ASSERT_TRUE(gl_res.is_ok());
-                std::unique_ptr<GateLibrary> gl = gl_res.get();
-
-                ASSERT_EQ(gl, nullptr);
+                ASSERT_TRUE(gl_res.is_error());
             }
         TEST_END
     }
