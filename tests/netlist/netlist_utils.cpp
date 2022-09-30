@@ -63,43 +63,30 @@ namespace hal
         }
         // NEGATIVE
         {
-            NO_COUT_BLOCK;
             // No subgraph gates are passed
             const std::vector<const Gate*> subgraph_gates({});
-            const Net* output_net        = test_nl->get_net_by_id(MIN_NET_ID + 045);
+            const Net* output_net = test_nl->get_net_by_id(MIN_NET_ID + 045);
             
             auto res = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
-            ASSERT_TRUE(res.is_ok());
-            BooleanFunction sub_graph_bf = res.get();
-
-            EXPECT_TRUE(sub_graph_bf.is_empty());
+            ASSERT_TRUE(res.is_error());
         }
         {
-            NO_COUT_BLOCK;
             // One of the gates is a nullptr
             const std::vector<const Gate*> subgraph_gates({gate_0, nullptr, gate_3});
-            const Net* output_net        = test_nl->get_net_by_id(MIN_NET_ID + 045);
+            const Net* output_net = test_nl->get_net_by_id(MIN_NET_ID + 045);
             
             auto res = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
-            ASSERT_TRUE(res.is_ok());
-            BooleanFunction sub_graph_bf = res.get();
-
-            EXPECT_TRUE(sub_graph_bf.is_empty());
+            ASSERT_TRUE(res.is_error());
         }
         {
-            NO_COUT_BLOCK;
             // The output net is a nullptr
             const std::vector<const Gate*> subgraph_gates({gate_0, gate_3});
-            const Net* output_net        = nullptr;
+            const Net* output_net = nullptr;
             
             auto res = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
-            ASSERT_TRUE(res.is_ok());
-            BooleanFunction sub_graph_bf = res.get();
-
-            EXPECT_TRUE(sub_graph_bf.is_empty());
+            ASSERT_TRUE(res.is_error());
         }
         {
-            NO_COUT_BLOCK;
             // The output net has multiple sources
             // -- create such a net
             Net* multi_src_net = test_nl->create_net("muli_src_net");
@@ -110,15 +97,12 @@ namespace hal
             const Net* output_net        = multi_src_net;
             
             auto res = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
-            ASSERT_TRUE(res.is_ok());
-            BooleanFunction sub_graph_bf = res.get();
-
-            EXPECT_TRUE(sub_graph_bf.is_empty());
+            ASSERT_TRUE(res.is_error());
+            
             // -- remove the net
             test_nl->delete_net(multi_src_net);
         }
         {
-            NO_COUT_BLOCK;
             // The output net has no source
             // -- create such a net
             Net* no_src_net = test_nl->create_net("muli_src_net");
@@ -127,16 +111,13 @@ namespace hal
             const Net* output_net        = no_src_net;
             
             auto res = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
-            ASSERT_TRUE(res.is_ok());
-            BooleanFunction sub_graph_bf = res.get();
-
-            EXPECT_TRUE(sub_graph_bf.is_empty());
+            ASSERT_TRUE(res.is_error());
+            
             // -- remove the net
             test_nl->delete_net(no_src_net);
         }
         {
-            NO_COUT_BLOCK;
-            // A net in between has multiple sources (expansion should stop in this direction)
+            // A net in between has multiple sources
             // -- add a source to net 30 temporarily
             test_nl->get_net_by_id(MIN_NET_ID + 30)->add_source(test_nl->get_gate_by_id(MIN_GATE_ID + 8), "O");
 
@@ -144,15 +125,9 @@ namespace hal
             const Net* output_net        = test_nl->get_net_by_id(MIN_NET_ID + 045);
             
             auto res = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
-            ASSERT_TRUE(res.is_ok());
-            BooleanFunction sub_graph_bf = res.get();
-
-            BooleanFunction expected_bf = BooleanFunction::from_string((net_30_name + " & " + net_20_name)).get();
-
-            EXPECT_EQ(sub_graph_bf, expected_bf);
+            ASSERT_TRUE(res.is_error());
         }
         {
-            NO_COUT_BLOCK;
             // The netlist contains a cycle
             // -- create such a netlist:
             /*   .-=|gate_0|=----.
@@ -174,16 +149,12 @@ namespace hal
             EXPECT_TRUE(res.is_error());
         }
         {
-            NO_COUT_BLOCK;
             // A gate of the subgraph has unconnected input pins
             const std::vector<const Gate*> subgraph_gates({gate_7});
             const Net* output_net        = test_nl->get_net_by_id(MIN_NET_ID + 78);
             
             auto res = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
-            ASSERT_TRUE(res.is_ok());
-            BooleanFunction sub_graph_bf = res.get();
-
-            EXPECT_EQ(sub_graph_bf, gate_7->get_boolean_function("O"));
+            ASSERT_TRUE(res.is_error());
         }
         TEST_END
     }
@@ -357,7 +328,7 @@ namespace hal
             Net* n3 = test_utils::connect(nl.get(), l3, "O", l4, "I3");
 
             EXPECT_EQ(netlist_utils::get_nets_at_pins(l4, {lut4->get_pin_by_name("I0"), lut4->get_pin_by_name("I2")}), std::vector<Net*>({n0, n2}));
-            EXPECT_EQ(netlist_utils::get_nets_at_pins(l4, {lut4->get_pin_by_name("I1"), lut4->get_pin_by_name("I2"), lut4->get_pin_by_name("I4")}), std::vector<Net*>({n1, n2}));
+            EXPECT_EQ(netlist_utils::get_nets_at_pins(l4, {lut4->get_pin_by_name("I1"), lut4->get_pin_by_name("I2")}), std::vector<Net*>({n1, n2}));
             EXPECT_EQ(netlist_utils::get_nets_at_pins(l4, {lut4->get_pin_by_name("I1"), lut4->get_pin_by_name("I2"), lut4->get_pin_by_name("I3")}), std::vector<Net*>({n1, n2, n3}));
             EXPECT_EQ(netlist_utils::get_nets_at_pins(l0, {lut4->get_pin_by_name("O")}), std::vector<Net*>({n0}));
             EXPECT_EQ(netlist_utils::get_nets_at_pins(l0, {lut4->get_pin_by_name("A"), lut4->get_pin_by_name("B"), lut4->get_pin_by_name("C")}), std::vector<Net*>());
@@ -713,9 +684,7 @@ namespace hal
                 auto res = netlist_utils::get_gate_chain(g0, {carry->get_pin_by_name("CI")}, {carry->get_pin_by_name("CO")}, [](const Gate* g) {
                     return g->get_type()->has_property(GateTypeProperty::carry);
                 });
-                ASSERT_TRUE(res.is_ok());
-                std::vector<Gate*> chain = res.get();
-                EXPECT_TRUE(chain.empty());
+                ASSERT_TRUE(res.is_error());
             }
         }
         {
