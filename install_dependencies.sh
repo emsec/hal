@@ -15,6 +15,9 @@ fi
 if [[ "$platform" == 'macOS' ]]; then
     echo "Executing brew bundle"
     brew bundle
+    brew tap joern274/igraph.0.9
+    brew install homebrew-igraph.0.9
+    brew link homebrew-igraph.0.9
     pip3 install -r requirements.txt
     BREW_PREFIX=$(brew --prefix)
     if [ -n "$($SHELL -c 'echo $ZSH_VERSION')" ]; then

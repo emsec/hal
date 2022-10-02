@@ -37,6 +37,7 @@
 #include <string>
 #include <tuple>
 
+#define FMT_HEADER_ONLY
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
 #include <spdlog/sinks/base_sink.h>

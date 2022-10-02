@@ -576,7 +576,7 @@ namespace hal {
                 if (!parseVcdDataline(buf,sizeRead))
                 {
                     if (mErrorCount[8]++ < maxErrorMessages)
-                        log_warning("waveform_viewer", "Cannot parse VCD data line '{}'.", QByteArray(buf,sizeRead));
+                        log_warning("waveform_viewer", "Cannot parse VCD data line '{}'.", QByteArray(buf,sizeRead).data());
                     return false;
                 }
             }
