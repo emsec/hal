@@ -119,6 +119,14 @@ namespace hal {
                 mWidgetMap[parTagname] = intBox;
                 break;
             }
+            case PluginParameter::Float:
+            {
+                QDoubleSpinBox* floatBox = new QDoubleSpinBox(this);
+                floatBox->setMaximum(1.E99);
+                floatBox->setValue(parDefault.toDouble());
+                mWidgetMap[parTagname] = floatBox;
+                break;
+            }
             case PluginParameter::String:
             {
                 QLineEdit* ledit = new QLineEdit(this);
@@ -199,6 +207,12 @@ namespace hal {
             {
                 const QSpinBox* intBox = static_cast<const QSpinBox*>(w);
                 par.set_value(QString::number(intBox->value()).toStdString());
+                break;
+            }
+            case PluginParameter::Float:
+            {
+                const QDoubleSpinBox* floatBox = static_cast<const QDoubleSpinBox*>(w);
+                par.set_value(QString::number(floatBox->value()).toStdString());
                 break;
             }
             case PluginParameter::String:

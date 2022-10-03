@@ -263,10 +263,10 @@ namespace hal
         std::vector<ci_string> top_module_candidates;
         for (const auto& [name, _entity] : m_entities)
         {
-           if (entity_name_to_refereneces.find(name) == entity_name_to_refereneces.end())
-           {
-               top_module_candidates.push_back(name);
-           }
+            if (entity_name_to_refereneces.find(name) == entity_name_to_refereneces.end())
+            {
+                top_module_candidates.push_back(name);
+            }
         }
 
         if (top_module_candidates.empty())
@@ -1353,7 +1353,7 @@ namespace hal
                     }
 
                     // merge generics and attributes
-                    for (const auto it : slave_net->get_data_map())
+                    for (const auto& it : slave_net->get_data_map())
                     {
                         if (!master_net->set_data(std::get<0>(it.first), std::get<1>(it.first), std::get<0>(it.second), std::get<1>(it.second)))
                         {
@@ -1411,7 +1411,7 @@ namespace hal
                     // return ERR_APPEND(res.get_error(),
                     //                 "could not construct netlist: failed to create pin '" + std::get<1>(port_info) + "' at net '" + net->get_name() + "' with ID " + std::to_string(net->get_id())
                     //                     + " within module '" + mod->get_name() + "' with ID " + std::to_string(mod->get_id()));
-                    // NOTE: The pin creation fails when there are unused ports that never get a net assigned to them (verliog...), 
+                    // NOTE: The pin creation fails when there are unused ports that never get a net assigned to them (verliog...),
                     //       but this also happens when the net just passes through the module (since there is no gate inside the module with that net as either input or output net, the net does not get listed as module input or output)
                     log_warning("verilog_parser", "{}", res.get_error().get());
                 }
@@ -1502,7 +1502,7 @@ namespace hal
             {
                 if (const auto it = parent_module_assignments.find(expanded_identifier); it != parent_module_assignments.end())
                 {
-                    Net* port_net            = m_net_by_name.at(it->second);
+                    Net* port_net = m_net_by_name.at(it->second);
                     m_module_ports[port_net].push_back(std::make_tuple(direction, core_strings::to<std::string>(expanded_identifier), module));
 
                     // assign port attributes

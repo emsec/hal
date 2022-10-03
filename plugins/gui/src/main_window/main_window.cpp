@@ -267,7 +267,7 @@ namespace hal
         mMenuPlugin->setTitle("Plugins");
         mMenuHelp->setTitle("Help");
 
-        gPythonContext = std::make_unique<PythonContext>();
+        gPythonContext = new PythonContext(this);
 
         gContentManager = new ContentManager(this);
         gCommentManager = new CommentManager(this);

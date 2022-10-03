@@ -6,7 +6,6 @@
 #include "gui/gui_utils/graphics.h"
 #include "gui/module_dialog/module_dialog.h"
 #include "gui/searchbar/searchbar.h"
-#include "gui/user_action/action_add_items_to_object.h"
 #include "hal_core/netlist/module.h"
 
 #include <QApplication>
@@ -242,15 +241,15 @@ namespace hal
     }
 
     //---------------- PICKER -----------------------------------------
-    ModuleSelectPicker* ModuleSelectPicker::sCurrentPicker = nullptr;
 
-    ModuleSelectPicker::ModuleSelectPicker()
+    ModuleSelectPicker::ModuleSelectPicker(ModuleSelectReceiver* receiver, QObject* parent)
+        : QObject(parent)
     {
-        if (sCurrentPicker)
-            sCurrentPicker->deleteLater();
+        connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &ModuleSelectPicker::handleSelectionChanged);
+        connect(gContentManager->getGraphTabWidget(),&GraphTabWidget::triggerTerminatePicker,this,&ModuleSelectPicker::terminatePicker);
         connect(this, &ModuleSelectPicker::triggerCursor, gContentManager->getGraphTabWidget(), &GraphTabWidget::setSelectCursor);
-        sCurrentPicker = this;
-        Q_EMIT(triggerCursor(GraphTabWidget::PickModule));
+        connect(this, &ModuleSelectPicker::modulesPicked, receiver, &ModuleSelectReceiver::handleModulesPicked);
+        Q_EMIT triggerCursor(GraphTabWidget::PickModule);
     }
 
     void ModuleSelectPicker::handleSelectionChanged(void* sender)
@@ -281,43 +280,30 @@ namespace hal
 
         if (firstAccepted)
         {
-            u32 moduleId = firstAccepted->get_id();
-            if (QMessageBox::question(qApp->activeWindow(),
-                                      "Confirm:",
-                                      QString("Ok to move %1 into module '%2'[%3]").arg(mSelectExclude.selectionToString()).arg(QString::fromStdString(firstAccepted->get_name())).arg(moduleId),
-                                      QMessageBox::Ok | QMessageBox::Cancel)
-                == QMessageBox::Ok)
-            {
-                ActionAddItemsToObject* act = new ActionAddItemsToObject(mSelectExclude.modules(), mSelectExclude.gates());
-                act->setObject(UserActionObject(moduleId, UserActionObjectType::Module));
-                act->exec();
-                gSelectionRelay->clear();
-                gSelectionRelay->addModule(moduleId);
-                gSelectionRelay->setFocus(SelectionRelay::ItemType::Module, moduleId);
-                gSelectionRelay->relaySelectionChanged(this);
-                gContentManager->getGraphTabWidget()->ensureSelectionVisible();
-
-                ModuleSelectHistory::instance()->add(moduleId);
-            }
+            mModulesSelected.insert(firstAccepted->get_id());
         }
         else if (notAccepted)
-            QMessageBox::warning(qApp->activeWindow(), "Warning", QString("Cannot move %1 into module [%2]").arg(mSelectExclude.selectionToString()).arg(notAccepted));
+        {
+            Module* mRefused = gNetlist->get_module_by_id(notAccepted);
+            if (mRefused)
+                QMessageBox::warning(qApp->activeWindow(), "Warning", QString("Cannot select module '%1' [id=%2]").arg(QString::fromStdString(mRefused->get_name())).arg(notAccepted));
+            else
+                QMessageBox::warning(qApp->activeWindow(), "Warning", QString("Module with id=%1 not found in netlist").arg(notAccepted));
+        }
         else
-            terminate = false;
+            terminate = gSelectionRelay->numberSelectedItems() > 0;
 
         if (terminate)
-            terminateCurrentPicker();
+            terminatePicker();
     }
 
-    void ModuleSelectPicker::terminateCurrentPicker()
+    void ModuleSelectPicker::terminatePicker()
     {
-        if (!sCurrentPicker)
-            return;
-        ModuleSelectPicker* toDelete = sCurrentPicker;
-        sCurrentPicker               = nullptr;
-        toDelete->triggerCursor(false);
-        disconnect(gSelectionRelay, &SelectionRelay::selectionChanged, toDelete, &ModuleSelectPicker::handleSelectionChanged);
-        toDelete->deleteLater();
+        disconnect(gContentManager->getGraphTabWidget(),&GraphTabWidget::triggerTerminatePicker,this,&ModuleSelectPicker::terminatePicker);
+        disconnect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &ModuleSelectPicker::handleSelectionChanged);
+        Q_EMIT modulesPicked(mModulesSelected);
+        Q_EMIT triggerCursor(GraphTabWidget::Select);
+        deleteLater();
     }
 
     //---------------- VIEW -------------------------------------------

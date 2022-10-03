@@ -57,8 +57,7 @@ namespace hal
     GraphContextManager* gGraphContextManager     = nullptr;
     GuiApi* gGuiApi                               = nullptr;
     CommentManager* gCommentManager               = nullptr;
-
-    std::unique_ptr<PythonContext> gPythonContext = nullptr;
+    PythonContext* gPythonContext                 = nullptr;
 
     static void handleProgramArguments(const ProgramArguments& args)
     {

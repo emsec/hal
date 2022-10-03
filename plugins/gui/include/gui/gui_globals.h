@@ -94,7 +94,7 @@ namespace hal
     /**
      * The global PythonContext (see doc)
      */
-    extern std::unique_ptr<PythonContext> gPythonContext;
+    extern PythonContext* gPythonContext;
 
     /**
      * The global GuiApi (see doc)

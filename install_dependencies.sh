@@ -15,12 +15,20 @@ fi
 if [[ "$platform" == 'macOS' ]]; then
     echo "Executing brew bundle"
     brew bundle
+    brew tap joern274/igraph.0.9
+    brew install homebrew-igraph.0.9
+    brew link homebrew-igraph.0.9
     pip3 install -r requirements.txt
     BREW_PREFIX=$(brew --prefix)
     if [ -n "$($SHELL -c 'echo $ZSH_VERSION')" ]; then
         grep -Fxq 'export PATH="$BREW_PREFIX/opt/qt@5/bin:$PATH"' ~/.zshrc
         if ! [[ $? -eq 0 ]]; then
             echo 'export PATH="$BREW_PREFIX/opt/qt@5/bin:$PATH"' >> ~/.zshrc
+        fi
+
+        grep -Fxq 'export PATH="$BREW_PREFIX/opt/llvm@14/bin:$PATH"' ~/.zshrc
+        if ! [[ $? -eq 0 ]]; then
+            echo 'export PATH="$BREW_PREFIX/opt/llvm@14/bin:$PATH"' >> ~/.zshrc
         fi
 
         grep -Fxq 'export PATH="$BREW_PREFIX/opt/flex/bin:$PATH"' ~/.zshrc
@@ -33,10 +41,15 @@ if [[ "$platform" == 'macOS' ]]; then
             echo 'export PATH="$BREW_PREFIX/opt/bison/bin:$PATH"' >> ~/.zshrc
         fi
         source ~/.zshrc
-        elif [ -n "$($SHELL -c 'echo $BASH_VERSION')" ]; then
+    elif [ -n "$($SHELL -c 'echo $BASH_VERSION')" ]; then
         grep -Fxq 'export PATH="$BREW_PREFIX/opt/qt@5/bin:$PATH"' ~/.bash_profile
         if ! [[ $? -eq 0 ]]; then
             echo 'export PATH="$BREW_PREFIX/opt/qt@5/bin:$PATH"' >> ~/.bash_profile
+        fi
+
+        grep -Fxq 'export PATH="$BREW_PREFIX/opt/llvm@14/bin:$PATH"' ~/.bash_profile
+        if ! [[ $? -eq 0 ]]; then
+            echo 'export PATH="$BREW_PREFIX/opt/llvm@14/bin:$PATH"' >> ~/.bash_profile
         fi
 
         grep -Fxq 'export PATH="$BREW_PREFIX/opt/flex/bin:$PATH"' ~/.bash_profile

@@ -480,7 +480,13 @@ namespace hal
 
     void ModuleInfoTable::changeParentAction()
     {
-        ModuleDialog md(this);
+        QSet<u32> excludeMods;
+        if (mModule)
+        {
+            Module* parentMod = mModule->get_parent_module();
+            if (parentMod) excludeMods.insert(parentMod->get_id());
+        }
+        ModuleDialog md(excludeMods, "Move to module", nullptr, this);
         if (md.exec() != QDialog::Accepted) return;
         if (md.isNewModule())
         {

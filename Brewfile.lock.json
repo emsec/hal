@@ -611,45 +611,6 @@
           }
         }
       },
-      "igraph": {
-        "version": "0.9.6",
-        "bottle": {
-          "rebuild": 0,
-          "root_url": "https://ghcr.io/v2/homebrew/core",
-          "files": {
-            "arm64_monterey": {
-              "cellar": ":any",
-              "url": "https://ghcr.io/v2/homebrew/core/igraph/blobs/sha256:bf18add8549fe2af4fbab150c8ad18d77d0186dbe8b646173e3cdb85ee218ca8",
-              "sha256": "bf18add8549fe2af4fbab150c8ad18d77d0186dbe8b646173e3cdb85ee218ca8"
-            },
-            "arm64_big_sur": {
-              "cellar": ":any",
-              "url": "https://ghcr.io/v2/homebrew/core/igraph/blobs/sha256:d42a9c19e8b446d02648515ca4193c0e456d355e2e419984e2f16a6d558e5d1e",
-              "sha256": "d42a9c19e8b446d02648515ca4193c0e456d355e2e419984e2f16a6d558e5d1e"
-            },
-            "monterey": {
-              "cellar": ":any",
-              "url": "https://ghcr.io/v2/homebrew/core/igraph/blobs/sha256:9aa5f5c22c06c39b5eee34734c4d59b0d8074441a2359f306e0309d6123fa449",
-              "sha256": "9aa5f5c22c06c39b5eee34734c4d59b0d8074441a2359f306e0309d6123fa449"
-            },
-            "big_sur": {
-              "cellar": ":any",
-              "url": "https://ghcr.io/v2/homebrew/core/igraph/blobs/sha256:374b57ecf003139a94fecc7e7e4dc24e13194451d4e66199343b05028e33b2c3",
-              "sha256": "374b57ecf003139a94fecc7e7e4dc24e13194451d4e66199343b05028e33b2c3"
-            },
-            "catalina": {
-              "cellar": ":any",
-              "url": "https://ghcr.io/v2/homebrew/core/igraph/blobs/sha256:36f2a4a74d1042ef9cbb624f3bf2fb3eaad9dac45334571ef8c3dcdd886c0558",
-              "sha256": "36f2a4a74d1042ef9cbb624f3bf2fb3eaad9dac45334571ef8c3dcdd886c0558"
-            },
-            "x86_64_linux": {
-              "cellar": ":any_skip_relocation",
-              "url": "https://ghcr.io/v2/homebrew/core/igraph/blobs/sha256:fac228845b3bd3853b2941f022f36741e64cc2e5316c4248a9a585203f383c9e",
-              "sha256": "fac228845b3bd3853b2941f022f36741e64cc2e5316c4248a9a585203f383c9e"
-            }
-          }
-        }
-      },
       "doxygen": {
         "version": "1.9.3_1",
         "bottle": {
