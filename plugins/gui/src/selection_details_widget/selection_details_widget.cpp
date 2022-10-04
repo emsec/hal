@@ -16,6 +16,11 @@
 #include "gui/selection_details_widget/net_details_tab_widget.h"
 #include "gui/selection_details_widget/module_details_tab_widget.h"
 
+// TEMPORAL DEBUG INCLUDES
+#include "gui/comment_system/widgets/comment_item.h"
+#include "gui/comment_system/comment_entry.h"
+#include "gui/gui_def.h"
+
 
 #include "gui/gui_globals.h"
 #include "hal_core/netlist/gate.h"
@@ -61,6 +66,11 @@ namespace hal
     {
         //needed to load the properties
         ensurePolished();
+
+        CommentEntry* entry = new CommentEntry(Node(1, Node::NodeType::Gate),
+                                               "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.","Example Header :D");
+        CommentItem* item = new CommentItem(entry);
+        item->show();
 
         mSplitter = new QSplitter(Qt::Horizontal, this);
         //mSplitter->setStretchFactor(0,5); /* Doesn't do anything? */

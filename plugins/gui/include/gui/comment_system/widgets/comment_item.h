@@ -25,13 +25,50 @@
 
 #include <QFrame>
 
+
+class QVBoxLayout;
+class QHBoxLayout;
+class QToolBar;
+class QLabel;
+class QAction;
+class QToolButton;
+
 namespace hal
 {
+    class CommentEntry;
+
     class CommentItem : public QFrame
     {
         Q_OBJECT
     public:
         CommentItem(QWidget* parent = nullptr);
+        CommentItem(CommentEntry* entry, QWidget* parent = nullptr);
         ~CommentItem();
+
+        void setComment(CommentEntry* entry);
+        void updateCurrentEntry();
+
+    private:
+        QVBoxLayout* mLayout;
+        CommentEntry* mEntry;
+
+        // header part (perhaps no toolbar but a layout with toolbuttons instead of actions?)
+        QToolBar* mTopToolbar;
+        QLabel* mHeader;
+        QLabel* mCreationDate;
+        QAction* mModifyAction;
+        QAction* mDeleteAction;
+
+        // header part v2
+        QWidget* mTopWidget;
+        QHBoxLayout* mTopLayout;
+        QToolButton* mModifyButton;
+        QToolButton* mDeleteButton;
+
+        //This can either be an QLabel or an QTextEdit / QPlainTextEdit (TODO: decide...)
+        QLabel* mText;
+
+        void init();
+        void initV2();
     };
 }
