@@ -51,29 +51,25 @@ namespace hal {
 
         addWidget(mGraphicsCanvas);
 
-        connect(mWaveDataList,&WaveDataList::waveAdded,mTreeModel,&WaveTreeModel::handleWaveAdded);
-        connect(mWaveDataList,&WaveDataList::groupAdded,mTreeModel,&WaveTreeModel::handleGroupAdded);
-        connect(mWaveDataList,&WaveDataList::booleanAdded,mTreeModel,&WaveTreeModel::handleBooleanAdded);
-        connect(mWaveDataList,&WaveDataList::triggerAdded,mTreeModel,&WaveTreeModel::handleTriggerAdded);
-        connect(mWaveDataList,&WaveDataList::waveAddedToGroup,mTreeModel,&WaveTreeModel::handleWaveAddedToGroup);
-        connect(mWaveDataList,&WaveDataList::waveRemovedFromGroup,mTreeModel,&WaveTreeModel::handleWaveRemovedFromGroup);
-        connect(mWaveDataList,&WaveDataList::groupAboutToBeRemoved,mTreeModel,&WaveTreeModel::handleGroupAboutToBeRemoved);
-        connect(mWaveDataList,&WaveDataList::waveRenamed,mTreeModel,&WaveTreeModel::handleWaveRenamed);
-        connect(mWaveDataList,&WaveDataList::groupRenamed,mTreeModel,&WaveTreeModel::handleGroupRenamed);
-        connect(mWaveDataList,&WaveDataList::groupUpdated,mTreeModel,&WaveTreeModel::handleGroupUpdated);
-        connect(mWaveDataList,&WaveDataList::waveUpdated,mGraphicsCanvas,&WaveGraphicsCanvas::handleWaveUpdated);
-        connect(mTreeModel,&WaveTreeModel::inserted,mTreeView,&WaveTreeView::handleInserted);
-        connect(mTreeModel,&WaveTreeModel::triggerReorder,mTreeView,&WaveTreeView::reorder);
-        connect(mTreeModel,&WaveTreeModel::numberEntriesChanged,this,&WaveWidget::handleNumberWaveformChanged);
-//        connect(mTreeView,&WaveTreeView::viewportHeightChanged,mGraphicsView,&WaveGraphicsView::handleViewportHeightChanged);
-//        connect(mTreeView,&WaveTreeView::sizeChanged,mGraphicsView,&WaveGraphicsView::handleSizeChanged);
-        connect(mTreeView,&WaveTreeView::triggerUpdateWaveItems,mGraphicsCanvas,&WaveGraphicsCanvas::updateRequest);
-//        connect(mTreeView,&WaveTreeView::numberVisibleChanged,mGraphicsView,&WaveGraphicsView::handleNumberVisibileChanged);
-//        connect(mGraphicsView,&WaveGraphicsView::changedXscale,mScene,&WaveScene::xScaleChanged);
-        connect(mGraphicsCanvas,&WaveGraphicsCanvas::cursorMoved,mTreeModel,&WaveTreeModel::handleCursorMoved);
-        connect(mWaveDataList,&WaveDataList::timeframeChanged,mGraphicsCanvas,&WaveGraphicsCanvas::handleTimeframeChanged);
-        connect(mWaveDataList,&WaveDataList::triggerBeginResetModel,mTreeModel,&WaveTreeModel::forwardBeginResetModel);
-        connect(mWaveDataList,&WaveDataList::triggerEndResetModel,mTreeModel,&WaveTreeModel::forwardEndResetModel);
+        connect(mWaveDataList,&WaveDataList::waveAdded,mTreeModel,&WaveTreeModel::handleWaveAdded,Qt::QueuedConnection);
+        connect(mWaveDataList,&WaveDataList::groupAdded,mTreeModel,&WaveTreeModel::handleGroupAdded,Qt::QueuedConnection);
+        connect(mWaveDataList,&WaveDataList::booleanAdded,mTreeModel,&WaveTreeModel::handleBooleanAdded,Qt::QueuedConnection);
+        connect(mWaveDataList,&WaveDataList::triggerAdded,mTreeModel,&WaveTreeModel::handleTriggerAdded,Qt::QueuedConnection);
+        connect(mWaveDataList,&WaveDataList::waveAddedToGroup,mTreeModel,&WaveTreeModel::handleWaveAddedToGroup,Qt::QueuedConnection);
+        connect(mWaveDataList,&WaveDataList::waveRemovedFromGroup,mTreeModel,&WaveTreeModel::handleWaveRemovedFromGroup,Qt::QueuedConnection);
+        connect(mWaveDataList,&WaveDataList::groupAboutToBeRemoved,mTreeModel,&WaveTreeModel::handleGroupAboutToBeRemoved,Qt::QueuedConnection);
+        connect(mWaveDataList,&WaveDataList::waveRenamed,mTreeModel,&WaveTreeModel::handleWaveRenamed,Qt::QueuedConnection);
+        connect(mWaveDataList,&WaveDataList::groupRenamed,mTreeModel,&WaveTreeModel::handleGroupRenamed,Qt::QueuedConnection);
+        connect(mWaveDataList,&WaveDataList::groupUpdated,mTreeModel,&WaveTreeModel::handleGroupUpdated,Qt::QueuedConnection);
+        connect(mWaveDataList,&WaveDataList::waveUpdated,mGraphicsCanvas,&WaveGraphicsCanvas::handleWaveUpdated,Qt::QueuedConnection);
+        connect(mTreeModel,&WaveTreeModel::inserted,mTreeView,&WaveTreeView::handleInserted,Qt::QueuedConnection);
+        connect(mTreeModel,&WaveTreeModel::triggerReorder,mTreeView,&WaveTreeView::reorder,Qt::QueuedConnection);
+        connect(mTreeModel,&WaveTreeModel::numberEntriesChanged,this,&WaveWidget::handleNumberWaveformChanged,Qt::QueuedConnection);
+        connect(mTreeView,&WaveTreeView::triggerUpdateWaveItems,mGraphicsCanvas,&WaveGraphicsCanvas::updateRequest,Qt::QueuedConnection);
+        connect(mGraphicsCanvas,&WaveGraphicsCanvas::cursorMoved,mTreeModel,&WaveTreeModel::handleCursorMoved,Qt::QueuedConnection);
+        connect(mWaveDataList,&WaveDataList::timeframeChanged,mGraphicsCanvas,&WaveGraphicsCanvas::handleTimeframeChanged,Qt::QueuedConnection);
+        connect(mWaveDataList,&WaveDataList::triggerBeginResetModel,mTreeModel,&WaveTreeModel::forwardBeginResetModel,Qt::QueuedConnection);
+        connect(mWaveDataList,&WaveDataList::triggerEndResetModel,mTreeModel,&WaveTreeModel::forwardEndResetModel,Qt::QueuedConnection);
 
 
         if (parent && parent->parent())   // VcdViewer -> QTabWidget -> WaveWidget
@@ -81,9 +77,9 @@ namespace hal {
             WaveformViewer* vv = static_cast<WaveformViewer*>(parent->parent());
             if (vv)
             {
-                connect(mController,&NetlistSimulatorController::parseComplete,vv,&WaveformViewer::handleParseComplete);
-                connect(mController,&NetlistSimulatorController::loadProgress,vv,&WaveformViewer::showProgress);
-                connect(mGraphicsCanvas,&WaveGraphicsCanvas::undoStateChanged,vv,&WaveformViewer::testUndoEnable);
+                connect(mController,&NetlistSimulatorController::parseComplete,vv,&WaveformViewer::handleParseComplete,Qt::QueuedConnection);
+                connect(mController,&NetlistSimulatorController::loadProgress,vv,&WaveformViewer::showProgress,Qt::QueuedConnection);
+                connect(mGraphicsCanvas,&WaveGraphicsCanvas::undoStateChanged,vv,&WaveformViewer::testUndoEnable,Qt::QueuedConnection);
             }
         }
 

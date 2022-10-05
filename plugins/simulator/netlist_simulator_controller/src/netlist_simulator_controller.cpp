@@ -766,6 +766,11 @@ namespace hal
 
     void NetlistSimulatorController::add_clock_period(const Net* clock_net, u64 period, bool start_at_zero, u64 duration)
     {
+        if (!period)
+        {
+            log_warning(get_name(), "Generating clock failed, period must not be zero!");
+            return;
+        }
         SimulationInput::Clock clk;
         clk.clock_net     = clock_net;
         clk.switch_time   = period / 2;

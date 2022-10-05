@@ -24,9 +24,16 @@
 #pragma once
 
 #include "hal_core/plugin_system/plugin_interface_base.h"
+#include <QMetaType>
+#include "netlist_simulator_controller/netlist_simulator_controller.h"
+
+Q_DECLARE_METATYPE(u32)
+Q_DECLARE_METATYPE(std::string)
+Q_DECLARE_METATYPE(hal::NetlistSimulatorController::SimulationState)
 
 namespace hal
 {
+
     class WaveformViewer;
     class NetlistSimulator;
 

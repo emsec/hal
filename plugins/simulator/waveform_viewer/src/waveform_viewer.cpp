@@ -121,8 +121,10 @@ namespace hal
             connect(gSelectionRelay,&SelectionRelay::selectionChanged,this,&WaveformViewer::handleSelectionChanged);
 
         NetlistSimulatorControllerMap* nscm = NetlistSimulatorControllerMap::instance();
-        connect(nscm, &NetlistSimulatorControllerMap::controllerAdded, this, &WaveformViewer::handleControllerAdded);
-        connect(nscm, &NetlistSimulatorControllerMap::controllerRemoved, this, &WaveformViewer::handleControllerRemoved);
+        connect(nscm, &NetlistSimulatorControllerMap::controllerAdded,
+                this, &WaveformViewer::handleControllerAdded, Qt::QueuedConnection);
+        connect(nscm, &NetlistSimulatorControllerMap::controllerRemoved,
+                this, &WaveformViewer::handleControllerRemoved, Qt::QueuedConnection);
         currentStateChanged(NetlistSimulatorController::NoGatesSelected);
     }
 
@@ -219,7 +221,7 @@ namespace hal
             switch (state) {
             case NetlistSimulatorController::NoGatesSelected: displayStatusMessage("Select gates to create (partial) netlist for simulation");       break;
             case NetlistSimulatorController::ParameterSetup:  displayStatusMessage("Setup parameter for simulation");                                break;
-            case NetlistSimulatorController::ParameterReady:  displayStatusMessage("Continue parameter setup or start simulation");                                break;
+            case NetlistSimulatorController::ParameterReady:  displayStatusMessage("Continue parameter setup or start simulation");                  break;
             case NetlistSimulatorController::SimulationRun:   displayStatusMessage("Simulation engine running, please wait ...");                    break;
             case NetlistSimulatorController::ShowResults:     displayStatusMessage("Simulation successful, add waveform data to visualize results"); break;
             case NetlistSimulatorController::EngineFailed:    displayStatusMessage("Simulation engine failed");                                      break;
