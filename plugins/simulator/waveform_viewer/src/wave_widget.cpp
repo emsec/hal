@@ -72,7 +72,7 @@ namespace hal {
         connect(mWaveDataList,&WaveDataList::triggerEndResetModel,mTreeModel,&WaveTreeModel::forwardEndResetModel,Qt::QueuedConnection);
 
 
-        if (parent && parent->parent())   // VcdViewer -> QTabWidget -> WaveWidget
+        if (parent && parent->parent())   // WaveformViewer -> QTabWidget -> WaveWidget
         {
             WaveformViewer* vv = static_cast<WaveformViewer*>(parent->parent());
             if (vv)

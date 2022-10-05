@@ -39,7 +39,6 @@ namespace hal
 
     class PLUGIN_API WaveformViewerPlugin : public BasePluginInterface
     {
-   //     VcdViewer* mVcdViewer;
     public:
         std::string get_name() const override;
         std::string get_version() const override;

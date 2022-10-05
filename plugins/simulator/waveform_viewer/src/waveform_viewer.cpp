@@ -63,7 +63,7 @@ namespace hal
     }
 
     WaveformViewer::WaveformViewer(QWidget *parent)
-        : ContentWidget("VcdViewer",parent),
+        : ContentWidget("WaveformViewer",parent),
           mVisualizeNetState(false), mCurrentWaveWidget(nullptr)
     {
         LogManager::get_instance().add_channel(std::string("waveform_viewer"), {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
