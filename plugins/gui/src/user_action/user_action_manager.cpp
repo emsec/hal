@@ -18,7 +18,7 @@ namespace hal
 
     UserActionManager::UserActionManager(QObject *parent)
         : QObject(parent), mStartRecording(-1),
-          mWaitCount(0), mRecordHashAttribute(true),
+          mRecordHashAttribute(true),
           mDumpAction(nullptr)
     {
         mElapsedTime.start();
@@ -155,14 +155,6 @@ namespace hal
             {
                 log_warning("gui", "failed to execute user action {}", act->tagname().toStdString());
                 break;
-            }
-            if (act->isWaitForReady()) mWaitCount=100;
-            while (mWaitCount > 0)
-            {
-                --mWaitCount;
-                qDebug() << "wait" << mWaitCount;
-                QCoreApplication::processEvents();
-                QThread::msleep(10);
             }
         }
         mStartRecording = -1;

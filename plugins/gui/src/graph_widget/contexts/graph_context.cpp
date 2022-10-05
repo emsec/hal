@@ -37,7 +37,6 @@ namespace hal
           mExclusiveModuleId(0)
     {
         mTimestamp = QDateTime::currentDateTime();
-        UserActionManager::instance()->clearWaitCount();
         connect(MainWindow::sSettingStyle,&SettingsItemDropdown::intChanged,this,&GraphContext::handleStyleChanged);
         connect(gNetlistRelay, &NetlistRelay::moduleNameChanged, this, &GraphContext::handleModuleNameChanged);
         connect(this, &GraphContext::exclusiveModuleLost, this, &GraphContext::handleExclusiveModuleLost);

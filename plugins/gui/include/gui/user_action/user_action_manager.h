@@ -107,11 +107,6 @@ namespace hal
         bool hasRecorded() const;
 
         /**
-         * Resets wait flag issued from action.
-         */
-        void clearWaitCount() { mWaitCount = 0; }
-
-        /**
          * Creates UserAction instance for next command found by xml parser.
          *
          * @param xmlIn - The xml reader.
@@ -146,7 +141,6 @@ namespace hal
         QList<UserAction*> mActionHistory;
         QHash<QString,UserActionFactory*> mActionFactory;
         int mStartRecording;
-        int mWaitCount;
         QElapsedTimer mElapsedTime;
         bool mRecordHashAttribute;
 
