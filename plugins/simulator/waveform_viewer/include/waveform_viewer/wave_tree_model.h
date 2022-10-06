@@ -73,7 +73,6 @@ namespace hal {
         bool mDragIsGroup;
         u64 mCursorTime;
         int mCursorXpos;
-        bool mIgnoreSignals;
         int mReorderRequestWaiting;
         QMap<WaveItem*,WaveValueThread*> mValueThreads;
 
