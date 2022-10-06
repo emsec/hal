@@ -10,16 +10,16 @@ namespace hal {
 
     class VerilogParserTest : public ::testing::Test {
     protected:
-        GateLibrary* m_gl;
-
-        virtual void SetUp() {
+        virtual void SetUp() 
+        {
             NO_COUT_BLOCK;
             test_utils::init_log_channels();
             test_utils::create_sandbox_directory();
-            m_gl = test_utils::get_testing_gate_library();
         }
 
-        virtual void TearDown() {
+        virtual void TearDown() 
+        {
+            test_utils::remove_sandbox_directory();
         }
     };
 
@@ -50,35 +50,36 @@ namespace hal {
                                     "  output net_global_out ;"
                                     "  wire net_0 ;"
                                     "  wire net_1 ;"
-                                    "gate_1_to_1 gate_0 ("
+                                    "BUF gate_0 ("
                                     "  .I (net_global_in ),"
                                     "  .O (net_0 )"
                                     " ) ;"
-                                    "gate_2_to_1 gate_1 ("
+                                    "AND2 gate_1 ("
                                     "  .I0 (net_global_in ),"
                                     "  .I1 (net_global_in ),"
                                     "  .O (net_1 )"
                                     " ) ;"
-                                    "gate_3_to_1 gate_2 ("
+                                    "AND3 gate_2 ("
                                     "  .I0 (net_0 ),"
                                     "  .I1 (net_1 ),"
                                     "  .O (net_global_out )"
                                     " ) ;"
                                     "endmodule");
+            const GateLibrary* gate_lib = test_utils::get_gate_library();
             std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
             VerilogParser verilog_parser;
-            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
             ASSERT_TRUE(nl_res.is_ok());
             std::unique_ptr<Netlist> nl = nl_res.get();
             ASSERT_NE(nl, nullptr);
 
             // Check if the gates are parsed correctly
-            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
-            Gate* gate_0 = *(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).begin());
-            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_2_to_1")).size(), 1);
-            Gate* gate_1 = *(nl->get_gates(test_utils::gate_type_filter("gate_2_to_1")).begin());
-            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_3_to_1")).size(), 1);
-            Gate* gate_2 = *(nl->get_gates(test_utils::gate_type_filter("gate_3_to_1")).begin());
+            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("BUF")).size(), 1);
+            Gate* gate_0 = *(nl->get_gates(test_utils::gate_type_filter("BUF")).begin());
+            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("AND2")).size(), 1);
+            Gate* gate_1 = *(nl->get_gates(test_utils::gate_type_filter("AND2")).begin());
+            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("AND3")).size(), 1);
+            Gate* gate_2 = *(nl->get_gates(test_utils::gate_type_filter("AND3")).begin());
 
             ASSERT_NE(gate_0, nullptr);
             EXPECT_EQ(gate_0->get_name(), "gate_0");
@@ -148,33 +149,34 @@ namespace hal {
     {
         TEST_START
         {
-            std::string netlist_input("module top(net_global_in,net_global_out);input net_global_in;\n"
-                                    "  output net_global_out;wire net_0;wire net_1;gate_1_to_1 gate_0 (\n"
+             std::string netlist_input("module top(net_global_in,net_global_out);input net_global_in;\n"
+                                    "  output net_global_out;wire net_0;wire net_1;BUF gate_0 (\n"
                                     "  .I (net_global_in),\n"
                                     "\n"
                                     " \t.O (net_0 )\n"
                                     " );\n"
-                                    "gate_2_to_1 gate_1 (.I0\n\t"
+                                    "AND2 gate_1 (.I0\n\t"
                                     "  (\n"
                                     "    net_global_in\n"
                                     "   \t)\n"
                                     "    ,\n"
                                     "  .I1 (net_global_in),.O (net_1));\n"
-                                    "gate_3_to_1 gate_2 (.I0 (net_0 ),.I1 (net_1 ),.O (net_global_out ));endmodule");
+                                    "AND3 gate_2 (.I0 (net_0 ),.I1 (net_1 ),.O (net_global_out ));endmodule");
+            const GateLibrary* gate_lib = test_utils::get_gate_library();
             std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
             VerilogParser verilog_parser;
-            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
             ASSERT_TRUE(nl_res.is_ok());
             std::unique_ptr<Netlist> nl = nl_res.get();
             ASSERT_NE(nl, nullptr);
 
             // Check if the gates are parsed correctly
-            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
-            Gate* gate_0 = *(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).begin());
-            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_2_to_1")).size(), 1);
-            Gate* gate_1 = *(nl->get_gates(test_utils::gate_type_filter("gate_2_to_1")).begin());
-            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_3_to_1")).size(), 1);
-            Gate* gate_2 = *(nl->get_gates(test_utils::gate_type_filter("gate_3_to_1")).begin());
+            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("BUF")).size(), 1);
+            Gate* gate_0 = *(nl->get_gates(test_utils::gate_type_filter("BUF")).begin());
+            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("AND2")).size(), 1);
+            Gate* gate_1 = *(nl->get_gates(test_utils::gate_type_filter("AND2")).begin());
+            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("AND3")).size(), 1);
+            Gate* gate_2 = *(nl->get_gates(test_utils::gate_type_filter("AND3")).begin());
 
             ASSERT_NE(gate_0, nullptr);
             EXPECT_EQ(gate_0->get_name(), "gate_0");
@@ -242,7 +244,7 @@ namespace hal {
                                     " ) ;"
                                     "  input global_in ;"
                                     "  output global_out ;"
-                                    "gate_1_to_1 #("
+                                    "BUF #("
                                     ".key_integer(1234),"
                                     ".key_floating_point(1.234),"
                                     ".key_string(\"test_string\"),"
@@ -257,15 +259,16 @@ namespace hal {
                                     "  .O (global_out )"
                                     " ) ;"
                                     "endmodule");
+            const GateLibrary* gate_lib = test_utils::get_gate_library();
             std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
             VerilogParser verilog_parser;
-            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
             ASSERT_TRUE(nl_res.is_ok());
             std::unique_ptr<Netlist> nl = nl_res.get();
             ASSERT_NE(nl, nullptr);
 
-            ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).size(), 1);
-            Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
+            ASSERT_EQ(nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).size(), 1);
+            Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).begin();
 
             // Integers are stored in their hex representation
             EXPECT_EQ(gate_0->get_data("generic", "key_integer"), std::make_tuple("integer", "1234"));
@@ -311,14 +314,14 @@ namespace hal {
                                         "  output global_out ; "
                                         "  wire [0:3] n_vec_1 ; "
                                         "  wire [3:0] n_vec_2 ; "
-                                        " gate_1_to_4 gate_0 ( "
+                                        " COMB14 gate_0 ( "
                                         "  .I (global_in ), "
                                         "  .O0 (n_vec_1[0]), "
                                         "  .O1 (n_vec_1[1]), "
                                         "  .O2 (n_vec_1[2]), "
                                         "  .O3 (n_vec_1[3]) "
                                         " ) ; "
-                                        " gate_4_to_4 gate_1 ( "
+                                        " COMB44 gate_1 ( "
                                         "   .I0 (n_vec_1[0]), "
                                         "   .I1 (n_vec_1[1]), "
                                         "   .I2 (n_vec_1[2]), "
@@ -328,7 +331,7 @@ namespace hal {
                                         "   .O2 (n_vec_2[2]), "
                                         "   .O3 (n_vec_2[3]) "
                                         "  ) ; "
-                                        "  gate_4_to_1 gate_2 ( "
+                                        "  COMB41 gate_2 ( "
                                         "    .I0 (n_vec_2[0]), "
                                         "    .I1 (n_vec_2[1]), "
                                         "    .I2 (n_vec_2[2]), "
@@ -336,9 +339,10 @@ namespace hal {
                                         "    .O (global_out ) "
                                         "   ) ; "
                                         "endmodule");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
@@ -355,11 +359,11 @@ namespace hal {
                     Net* n_vec_1_i = *nl->get_nets(test_utils::net_name_filter("n_vec_1(" + i_str + ")")).begin();
                     Net* n_vec_2_i = *nl->get_nets(test_utils::net_name_filter("n_vec_2(" + i_str + ")")).begin();
                     ASSERT_EQ(n_vec_1_i->get_sources().size(), 1);
-                    EXPECT_EQ(n_vec_1_i->get_sources()[0]->get_pin(), "O" + i_str);
-                    EXPECT_EQ((*n_vec_1_i->get_destinations().begin())->get_pin(), "I" + i_str);
+                    EXPECT_EQ(n_vec_1_i->get_sources()[0]->get_pin()->get_name(), "O" + i_str);
+                    EXPECT_EQ((*n_vec_1_i->get_destinations().begin())->get_pin()->get_name(), "I" + i_str);
                     ASSERT_EQ(n_vec_2_i->get_sources().size(), 1);
-                    EXPECT_EQ(n_vec_2_i->get_sources()[0]->get_pin(), "O" + i_str);
-                    EXPECT_EQ((*n_vec_2_i->get_destinations().begin())->get_pin(), "I" + i_str);
+                    EXPECT_EQ(n_vec_2_i->get_sources()[0]->get_pin()->get_name(), "O" + i_str);
+                    EXPECT_EQ((*n_vec_2_i->get_destinations().begin())->get_pin()->get_name(), "I" + i_str);
                 }
             }
             {
@@ -371,14 +375,14 @@ namespace hal {
                                         "  input global_in ; "
                                         "  output global_out ; "
                                         "  wire [0:1][2:3] n_vec ; "
-                                        "gate_1_to_4 gate_0 ( "
+                                        "COMB14 gate_0 ( "
                                         "  .I (global_in ), "
                                         "  .O0 (n_vec[0][2]), "
                                         "  .O1 (n_vec[0][3]), "
                                         "  .O2 (n_vec[1][2]), "
                                         "  .O3 (n_vec[1][3]) "
                                         " ) ; "
-                                        "gate_4_to_1 gate_1 ( "
+                                        "COMB41 gate_1 ( "
                                         "  .I0 (n_vec[0][2]), "
                                         "  .I1 (n_vec[0][3]), "
                                         "  .I2 (n_vec[1][2]), "
@@ -386,9 +390,10 @@ namespace hal {
                                         "  .O (global_out ) "
                                         " ) ; "
                                         "endmodule");
-                std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
@@ -400,8 +405,8 @@ namespace hal {
                     ASSERT_FALSE(nl->get_nets(test_utils::net_name_filter(n)).empty());
                     Net* n_vec_i_j = *nl->get_nets(test_utils::net_name_filter(n)).begin();
                     ASSERT_EQ(n_vec_i_j->get_sources().size(), 1);
-                    EXPECT_EQ(n_vec_i_j->get_sources()[0]->get_pin(), "O" + std::to_string(pin));
-                    EXPECT_EQ((*n_vec_i_j->get_destinations().begin())->get_pin(), "I" + std::to_string(pin));
+                    EXPECT_EQ(n_vec_i_j->get_sources()[0]->get_pin()->get_name(), "O" + std::to_string(pin));
+                    EXPECT_EQ((*n_vec_i_j->get_destinations().begin())->get_pin()->get_name(), "I" + std::to_string(pin));
                     pin++;
                 }
             }
@@ -414,7 +419,7 @@ namespace hal {
                                         "  input global_in ; "
                                         "  output global_out ; "
                                         "  wire [0:1][1:0][0:1] n_vec ; "
-                                        "gate_1_to_8 gate_0 ( "
+                                        "COMB18 gate_0 ( "
                                         "  .I (global_in ), "
                                         "  .O0 (n_vec[0][0][0]), "
                                         "  .O1 (n_vec[0][0][1]), "
@@ -425,7 +430,7 @@ namespace hal {
                                         "  .O6 (n_vec[1][1][0]), "
                                         "  .O7 (n_vec[1][1][1]) "
                                         " ) ; "
-                                        "gate_8_to_1 gate_1 ( "
+                                        "COMB81 gate_1 ( "
                                         "  .I0 (n_vec[0][0][0]), "
                                         "  .I1 (n_vec[0][0][1]), "
                                         "  .I2 (n_vec[0][1][0]), "
@@ -437,9 +442,10 @@ namespace hal {
                                         "  .O (global_out ) "
                                         " ) ; "
                                         "endmodule");
-                std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
@@ -452,10 +458,10 @@ namespace hal {
                 for (size_t idx = 0; idx < 8; idx++) 
                 {
                     ASSERT_FALSE(nl->get_nets(test_utils::net_name_filter("n_vec" + net_idx[idx])).empty());
-                    Net* n_vec_i_j = *nl->get_nets(test_utils::net_name_filter("n_vec" + net_idx[idx])).begin();
+                    Net* n_vec_i_j = nl->get_nets(test_utils::net_name_filter("n_vec" + net_idx[idx])).front();
                     ASSERT_EQ(n_vec_i_j->get_sources().size(), 1);
-                    EXPECT_EQ(n_vec_i_j->get_sources()[0]->get_pin(), "O" + std::to_string(idx));
-                    EXPECT_EQ((*n_vec_i_j->get_destinations().begin())->get_pin(), "I" + std::to_string(idx));
+                    EXPECT_EQ(n_vec_i_j->get_sources()[0]->get_pin()->get_name(), "O" + std::to_string(idx));
+                    EXPECT_EQ((*n_vec_i_j->get_destinations().begin())->get_pin()->get_name(), "I" + std::to_string(idx));
                 }
             }
         TEST_END
@@ -485,9 +491,10 @@ namespace hal {
                                         "   assign gate_1_in = 1'd0;"
                                         "endmodule");
                 
-                std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
@@ -524,37 +531,38 @@ namespace hal {
                                         "  output global_out_1 ;"
                                         "  output global_out_2 ;"
                                         "  output global_out_3 ;"
-                                        "gate_1_to_1 gate_0 ("
+                                        "BUF gate_0 ("
                                         "  .I ('b0 ),"
                                         "  .O (global_out_0)"
                                         " ) ;"
-                                        "gate_1_to_1 gate_1 ("
+                                        "BUF gate_1 ("
                                         "  .I ('b1 ),"
                                         "  .O (global_out_1)"
                                         " ) ;"
-                                        "gate_1_to_1 gate_2 ("
+                                        "BUF gate_2 ("
                                         "  .I ('bZ ),"
                                         "  .O (global_out_2)"
                                         " ) ;"
-                                        "gate_1_to_1 gate_3 ("
+                                        "BUF gate_3 ("
                                         "  .I ('bX ),"
                                         "  .O (global_out_3)"
                                         " ) ;"
                                         "endmodule");
-                std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
 
-                Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
+                Gate* gate_0 = nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).front();
                 ASSERT_NE(gate_0, nullptr);
-                Gate* gate_1 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1")).begin();
+                Gate* gate_1 = nl->get_gates(test_utils::gate_filter("BUF", "gate_1")).front();
                 ASSERT_NE(gate_1, nullptr);
-                Gate* gate_2 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_2")).begin();
+                Gate* gate_2 = nl->get_gates(test_utils::gate_filter("BUF", "gate_2")).front();
                 ASSERT_NE(gate_2, nullptr);
-                Gate* gate_3 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_3")).begin();
+                Gate* gate_3 = nl->get_gates(test_utils::gate_filter("BUF", "gate_3")).front();
                 ASSERT_NE(gate_3, nullptr);
 
                 // check whether net '0' was created and is connected to a GND gate through input pin "I"
@@ -611,11 +619,11 @@ namespace hal {
                                     "  input child_in ;"
                                     "  output child_out ;"
                                     "  wire net_0_child ;"
-                                    "gate_1_to_1 gate_0_child ("
+                                    "BUF gate_0_child ("
                                     "  .I (child_in ),"
                                     "  .O (net_0_child )"
                                     " ) ;"
-                                    "gate_1_to_1 gate_1_child ("
+                                    "BUF gate_1_child ("
                                     "  .I (net_0_child ),"
                                     "  .O (child_out )"
                                     " ) ;"
@@ -629,7 +637,7 @@ namespace hal {
                                     "  output net_global_out ;"
                                     "  wire net_0 ;"
                                     "  wire net_1 ;"
-                                    "gate_1_to_1 gate_0 ("
+                                    "BUF gate_0 ("
                                     "  .I (net_global_in ),"
                                     "  .O (net_0 )"
                                     " ) ;"
@@ -637,27 +645,28 @@ namespace hal {
                                     "  .\\child_in (net_0 ),"
                                     "  .\\child_out (net_1 )"
                                     " ) ;"
-                                    "gate_1_to_1 gate_1 ("
+                                    "BUF gate_1 ("
                                     "  .I (net_1 ), "
                                     "  .O (net_global_out )"
                                     " ) ;"
                                     "endmodule");
-            std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+            const GateLibrary* gate_lib = test_utils::get_gate_library();
+            auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
             VerilogParser verilog_parser;
-            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
             ASSERT_TRUE(nl_res.is_ok());
             std::unique_ptr<Netlist> nl = nl_res.get();
             ASSERT_NE(nl, nullptr);
 
             // check gates
-            ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).size(), 1);
-            ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1")).size(), 1);
-            ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0_child")).size(), 1);
-            ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1_child")).size(), 1);
-            Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
-            Gate* gate_1 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1")).begin();
-            Gate* gate_0_child = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0_child")).begin();
-            Gate* gate_1_child = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1_child")).begin();
+            Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).begin();
+            ASSERT_NE(gate_0, nullptr);
+            Gate* gate_1 = *nl->get_gates(test_utils::gate_filter("BUF", "gate_1")).begin();
+            ASSERT_NE(gate_1, nullptr);
+            Gate* gate_0_child = *nl->get_gates(test_utils::gate_filter("BUF", "gate_0_child")).begin();
+            ASSERT_NE(gate_0_child, nullptr);
+            Gate* gate_1_child = *nl->get_gates(test_utils::gate_filter("BUF", "gate_1_child")).begin();
+            ASSERT_NE(gate_1_child, nullptr);
 
             // check nets
             ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_0")).size(), 1);
@@ -724,7 +733,7 @@ namespace hal {
                                     " ) ; "
                                     "  input I_c2 ; "
                                     "  output O_c2 ; "
-                                    "gate_1_to_1 gate_child_two ( "
+                                    "BUF gate_child_two ( "
                                     "  .I (I_c2 ), "
                                     "  .O (O_c2 ) "
                                     " ) ; "
@@ -746,7 +755,7 @@ namespace hal {
                                     "  .\\I_c2 (net_child_0 ), "
                                     "  .\\O_c2 (net_child_1 ) "
                                     " ) ; "
-                                    "gate_1_to_1 gate_child_one ( "
+                                    "BUF gate_child_one ( "
                                     "  .I (net_child_1 ), "
                                     "  .O (O_c1 ) "
                                     " ) ; "
@@ -770,14 +779,15 @@ namespace hal {
                                     "  .\\I_c2 (net_0 ),"
                                     "  .\\O_c2 (net_1 )"
                                     " ) ;"
-                                    "gate_1_to_1 gate_top ("
+                                    "BUF gate_top ("
                                     "  .I (net_1 ),"
                                     "  .O (net_global_out )"
                                     " ) ;"
                                     "endmodule");
+            const GateLibrary* gate_lib = test_utils::get_gate_library();
             auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
             VerilogParser verilog_parser;
-            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
             ASSERT_TRUE(nl_res.is_ok());
             std::unique_ptr<Netlist> nl = nl_res.get();
 
@@ -859,11 +869,11 @@ namespace hal {
                                     "  output mod_out ; "
                                     "  wire mod_inner ; "
                                     "  assign mod_out = mod_inner ; "
-                                    "gate_1_to_1 gate_a ( "
+                                    "BUF gate_a ( "
                                     "  .I (mod_in ), "
                                     "  .O (mod_inner ) "
                                     " ) ; "
-                                    "gate_1_to_1 gate_b ( "
+                                    "BUF gate_b ( "
                                     "  .I (mod_inner ) "
                                     " ) ; "
                                     "endmodule "
@@ -880,15 +890,15 @@ namespace hal {
                                     "  .\\mod_in (net_global_in ), "
                                     "  .\\mod_out (net_0 ) "
                                     " ) ; "
-                                    "gate_1_to_1 gate_top ( "
+                                    "BUF gate_top ( "
                                     "  .I (net_0 ), "
                                     "  .O (net_global_out ) "
                                     " ) ; "
                                     "endmodule");
-            // ISSUE: mod_out/mod_inner is not connected to gate_top (assign statement is not applied)
+            const GateLibrary* gate_lib = test_utils::get_gate_library();
             auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
             VerilogParser verilog_parser;
-            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
             ASSERT_TRUE(nl_res.is_ok());
             std::unique_ptr<Netlist> nl = nl_res.get();
 
@@ -955,12 +965,12 @@ namespace hal {
                                     "  output O_A ; "
                                     "  wire shared_net_name ; "
                                     "  wire net_a ;  "
-                                    "gate_1_to_2 shared_gate_name ( "
+                                    "COMB12 shared_gate_name ( "
                                     "  .\\I (I_A ), "
                                     "  .\\O0 (shared_net_name ), "
                                     "  .\\O1 (net_a ) "
                                     " ) ; "
-                                    "gate_2_to_1 gate_a ( "
+                                    "COMB21 gate_a ( "
                                     "  .\\I0 (shared_net_name ), "
                                     "  .\\I1 (net_a ), "
                                     "  .\\O (O_A ) "
@@ -975,12 +985,12 @@ namespace hal {
                                     "  output O_B ; "
                                     "  wire shared_net_name ; "
                                     "  wire net_b ; "
-                                    "gate_1_to_2 shared_gate_name ( "
+                                    "COMB12 shared_gate_name ( "
                                     "  .\\I (I_B ), "
                                     "  .\\O0 (shared_net_name ), "
                                     "  .\\O1 (net_b ) "
                                     " ) ; "
-                                    "gate_2_to_1 gate_b ( "
+                                    "COMB21 gate_b ( "
                                     "  .\\I0 (shared_net_name ), "
                                     "  .\\I1 (net_b ), "
                                     "  .\\O (O_B ) "
@@ -1008,14 +1018,15 @@ namespace hal {
                                     "  .\\I_B (net_1 ), "
                                     "  .\\O_B (net_2 ) "
                                     " ) ; "
-                                    "gate_1_to_1 gate_top ( "
+                                    "BUF gate_top ( "
                                     "  .\\I (net_2 ), "
                                     "  .\\O (net_global_out ) "
                                     " ) ; "
                                     "endmodule");
+            const GateLibrary* gate_lib = test_utils::get_gate_library();
             auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
             VerilogParser verilog_parser;
-            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
             ASSERT_TRUE(nl_res.is_ok());
             std::unique_ptr<Netlist> nl = nl_res.get();
 
@@ -1106,11 +1117,11 @@ namespace hal {
                                         "  assign net_slave_1 = net_slave_0;\n"
                                         "  assign net_slave_0 = net_master;\n"
                                         "  assign net_slave_2 = net_slave_0;\n"
-                                        "gate_1_to_1 gate_0 (\n"
+                                        "BUF gate_0 (\n"
                                         "  .I (net_global_in ),\n"
                                         "  .O (net_slave_0 )\n"
                                         " ) ;\n"
-                                        "gate_3_to_1 gate_1 (\n"
+                                        "AND3 gate_1 (\n"
                                         " .I0 (net_master ),\n"
                                         " .I1 (net_slave_1 ),\n"
                                         " .I2 (net_slave_2 ),\n"
@@ -1118,9 +1129,10 @@ namespace hal {
                                         ") ;\n"
                                         "endmodule");
 
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
 
@@ -1129,11 +1141,11 @@ namespace hal {
                 ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_master")).size(), 1);
                 Net* net_master = *nl->get_nets(test_utils::net_name_filter("net_master")).begin();
 
-                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).size(), 1);
-                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_3_to_1", "gate_1")).size(), 1);
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).size(), 1);
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("AND3", "gate_1")).size(), 1);
 
-                Gate* g_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
-                Gate* g_1 = *nl->get_gates(test_utils::gate_filter("gate_3_to_1", "gate_1")).begin();
+                Gate* g_0 = *nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).begin();
+                Gate* g_1 = *nl->get_gates(test_utils::gate_filter("AND3", "gate_1")).begin();
 
                 // Check the connections
                 EXPECT_EQ(g_0->get_fan_out_net("O"), net_master);
@@ -1175,14 +1187,14 @@ namespace hal {
                             brackets << "[" << (i_bs[j] ? "1" : "0") << "]";
                         }
 
-                        gate_list << "gate_1_to_1 in_gate_" << i
+                        gate_list << "BUF in_gate_" << i
                                   << " ("
                                      "  .I (global_in ),"
                                      "  .O ( net_slave_vector"
                                   << brackets.str()
                                   << ")"
                                      " ) ;";
-                        gate_list << "gate_1_to_1 out_gate_" << i
+                        gate_list << "BUF out_gate_" << i
                                   << " ("
                                      "  .I (net_slave_vector"
                                   << brackets.str()
@@ -1204,9 +1216,10 @@ namespace hal {
                           << "  assign net_slave_vector = net_master_vector;"    // <- !!!
                           << gate_list.str() << "endmodule";
 
+                    const GateLibrary* gate_lib = test_utils::get_gate_library();
                     auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input.str());
                     VerilogParser verilog_parser;
-                    auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                    auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                     ASSERT_TRUE(nl_res.is_ok());
                     std::unique_ptr<Netlist> nl = nl_res.get();
 
@@ -1220,15 +1233,15 @@ namespace hal {
                             *nl->get_nets(test_utils::net_name_filter("net_master_vector(" + std::to_string(i) + ")"))
                                 .begin();
 
-                        ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "in_gate_" + std::to_string(i)))
+                        ASSERT_EQ(nl->get_gates(test_utils::gate_filter("BUF", "in_gate_" + std::to_string(i)))
                                       .size(), 1);
-                        ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "out_gate_" + std::to_string(i)))
+                        ASSERT_EQ(nl->get_gates(test_utils::gate_filter("BUF", "out_gate_" + std::to_string(i)))
                                       .size(), 1);
                         Gate* in_gate_i =
-                            *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "in_gate_" + std::to_string(i)))
+                            *nl->get_gates(test_utils::gate_filter("BUF", "in_gate_" + std::to_string(i)))
                                 .begin();
                         Gate* out_gate_i =
-                            *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "out_gate_" + std::to_string(i)))
+                            *nl->get_gates(test_utils::gate_filter("BUF", "out_gate_" + std::to_string(i)))
                                 .begin();
 
                         EXPECT_EQ(in_gate_i->get_fan_out_net("O"), net_i);
@@ -1245,14 +1258,15 @@ namespace hal {
                                         "  wire [0:3] bit_vector ;"
                                         "  assign bit_vector = 4'hA ;"
                                         ""
-                                        "  gate_1_to_1 test_gate ("
+                                        "  BUF test_gate ("
                                         "  .I (bit_vector[0] ),"
                                         "  .O (global_out )"
                                         " ) ;"
                                         "endmodule");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
 
@@ -1279,7 +1293,7 @@ namespace hal {
                                         "  wire [0:11] net_vector_master;"
                                         "  assign {single_net, big_vector[3], big_vector[0:1], _2_d_vector_0[0:1][0:1], _2_d_vector_1[1:0][0:1]} = net_vector_master;"
                                         ""
-                                        "gate_4_to_1 test_gate_0 ("
+                                        "AND4 test_gate_0 ("
                                         "  .I0 (single_net ),"
                                         "  .I1 (big_vector[3] ),"
                                         "  .I2 (big_vector[0] ),"
@@ -1287,14 +1301,14 @@ namespace hal {
                                         "  .O (global_out_0 )"
                                         " ) ;"
                                         ""
-                                        "gate_4_to_1 test_gate_1 ("
+                                        "AND4 test_gate_1 ("
                                         "  .I0 (_2_d_vector_0[0][0] ),"
                                         "  .I1 (_2_d_vector_0[0][1] ),"
                                         "  .I2 (_2_d_vector_0[1][0] ),"
                                         "  .I3 (_2_d_vector_0[1][1] ),"
                                         "  .O (global_out_1 )"
                                         " ) ;"
-                                        "gate_4_to_1 test_gate_2 ("
+                                        "AND4 test_gate_2 ("
                                         "  .I0 (_2_d_vector_1[1][0] ),"
                                         "  .I1 (_2_d_vector_1[1][1] ),"
                                         "  .I2 (_2_d_vector_1[0][0] ),"
@@ -1302,9 +1316,10 @@ namespace hal {
                                         "  .O (global_out_2 )"
                                         " ) ;"
                                         "endmodule");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
 
@@ -1321,7 +1336,7 @@ namespace hal {
                     ASSERT_EQ(net_master_vector[i]->get_destinations().size(), 1);
                     Endpoint *ep = *net_master_vector[i]->get_destinations().begin();
                     EXPECT_EQ(ep->get_gate()->get_name(), "test_gate_" + std::to_string(i / 4));
-                    EXPECT_EQ(ep->get_pin(), "I" + std::to_string(i % 4));
+                    EXPECT_EQ(ep->get_pin()->get_name(), "I" + std::to_string(i % 4));
                 }
             }
             {
@@ -1335,16 +1350,17 @@ namespace hal {
                                         "    wire net_master_1 ;"
                                         "    wire [0:1] net_vector_slave;"
                                         "    assign net_vector_slave = { net_master_0, net_master_1 };"
-                                        "    gate_2_to_1 test_gate ("
+                                        "    AND2 test_gate ("
                                         "        .I0 ( net_vector_slave[0] ),"
                                         "        .I1 ( net_vector_slave[1] ),"
                                         "        .O (global_out )"
                                         "    ) ;"
                                         "endmodule");
 
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
 
@@ -1358,8 +1374,8 @@ namespace hal {
                     net_vector_master_1 = *nl->get_nets(test_utils::net_name_filter("net_master_1")).begin();
                 ASSERT_EQ(net_vector_master_0->get_destinations().size(), 1);
                 ASSERT_EQ(net_vector_master_1->get_destinations().size(), 1);
-                EXPECT_EQ((*net_vector_master_0->get_destinations().begin())->get_pin(), "I0");
-                EXPECT_EQ((*net_vector_master_1->get_destinations().begin())->get_pin(), "I1");
+                EXPECT_EQ((*net_vector_master_0->get_destinations().begin())->get_pin()->get_name(), "I0");
+                EXPECT_EQ((*net_vector_master_1->get_destinations().begin())->get_pin()->get_name(), "I1");
             }
             {
                 // Verilog specific: Testing assignments, where escaped identifiers are used (e.g.\Net[1:3][2:3] stands for a Net, literally named "Net[1:3][2:3]")
@@ -1373,16 +1389,17 @@ namespace hal {
                                         "    wire \\escaped_net[0] ;"
                                         "    wire [0:1] net_vector_master ;"
                                         "    assign { \\escaped_net_range[0:3] , \\escaped_net[0] } = net_vector_master;"
-                                        "    gate_2_to_1 test_gate ("
+                                        "    AND2 test_gate ("
                                         "        .I0 ( \\escaped_net_range[0:3] ),"
                                         "        .I1 ( \\escaped_net[0] ),"
                                         "        .O (global_out )"
                                         "    ) ;"
                                         "endmodule");
 
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
 
@@ -1405,32 +1422,33 @@ namespace hal {
                                         " ) ;\n"
                                         "  wire [0:3] l_vec;\n"
                                         "  wire net_1 ;\n"
-                                        "pin_group_gate_4_to_4 gate_0 (\n"
-                                        "  .I ('b0101)\n"
+                                        "RAM gate_0 (\n"
+                                        "  .ADDR ('b0101)\n"
                                         " ) ;\n"
                                         "endmodule");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
-                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
-                Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
-                Net* net_0 = gate_0->get_fan_in_net("I(0)");
+                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("RAM", "gate_0")).empty());
+                Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("RAM", "gate_0")).begin());
+                Net* net_0 = gate_0->get_fan_in_net("ADDR(0)");
                 ASSERT_NE(net_0, nullptr);
                 EXPECT_EQ(net_0->get_name(), "'1'");
 
-                Net* net_1 = gate_0->get_fan_in_net("I(1)");
+                Net* net_1 = gate_0->get_fan_in_net("ADDR(1)");
                 ASSERT_NE(net_1, nullptr);
                 EXPECT_EQ(net_1->get_name(), "'0'");
 
-                Net* net_2 = gate_0->get_fan_in_net("I(2)");
+                Net* net_2 = gate_0->get_fan_in_net("ADDR(2)");
                 ASSERT_NE(net_2, nullptr);
                 EXPECT_EQ(net_2->get_name(), "'1'");
 
-                Net* net_3 = gate_0->get_fan_in_net("I(3)");
+                Net* net_3 = gate_0->get_fan_in_net("ADDR(3)");
                 ASSERT_NE(net_3, nullptr);
                 EXPECT_EQ(net_3->get_name(), "'0'");
 
@@ -1442,35 +1460,36 @@ namespace hal {
                                         "  wire net_0;\n"
                                         "  wire net_1;\n"
                                         "  wire[0:1] l_vec;\n"
-                                        "pin_group_gate_4_to_4 gate_0 (\n"
-                                        "  .O ({net_0, net_1, l_vec[0], l_vec[1]})\n"
+                                        "RAM gate_0 (\n"
+                                        "  .DATA_OUT ({net_0, net_1, l_vec[0], l_vec[1]})\n"
                                         " ) ;\n"
                                         "endmodule");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
-                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
-                Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
+                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("RAM", "gate_0")).empty());
+                Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("RAM", "gate_0")).begin());
 
                 EXPECT_EQ(gate_0->get_fan_out_nets().size(), 4);
 
-                Net* net_0 = gate_0->get_fan_out_net("O(0)");
+                Net* net_0 = gate_0->get_fan_out_net("DATA_OUT(0)");
                 ASSERT_NE(net_0, nullptr);
                 EXPECT_EQ(net_0->get_name(), "l_vec(1)");
 
-                Net* net_1 = gate_0->get_fan_out_net("O(1)");
+                Net* net_1 = gate_0->get_fan_out_net("DATA_OUT(1)");
                 ASSERT_NE(net_1, nullptr);
                 EXPECT_EQ(net_1->get_name(), "l_vec(0)");
 
-                Net* net_2 = gate_0->get_fan_out_net("O(2)");
+                Net* net_2 = gate_0->get_fan_out_net("DATA_OUT(2)");
                 ASSERT_NE(net_2, nullptr);
                 EXPECT_EQ(net_2->get_name(), "net_1");
 
-                Net* net_3 = gate_0->get_fan_out_net("O(3)");
+                Net* net_3 = gate_0->get_fan_out_net("DATA_OUT(3)");
                 ASSERT_NE(net_3, nullptr);
                 EXPECT_EQ(net_3->get_name(), "net_0");
             }
@@ -1480,34 +1499,35 @@ namespace hal {
                                         " ) ;\n"
                                         "  wire [3:0] l_vec;\n"
                                         "  wire net_1 ;\n"
-                                        "pin_group_gate_4_to_4 gate_0 (\n"
-                                        "  .O (l_vec)\n"
+                                        "RAM gate_0 (\n"
+                                        "  .DATA_OUT (l_vec)\n"
                                         " ) ;\n"
                                         "endmodule");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
-                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
-                Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
+                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("RAM", "gate_0")).empty());
+                Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("RAM", "gate_0")).begin());
 
                 EXPECT_EQ(gate_0->get_fan_out_nets().size(), 4);
-                Net* net_0 = gate_0->get_fan_out_net("O(0)");
+                Net* net_0 = gate_0->get_fan_out_net("DATA_OUT(0)");
                 ASSERT_NE(net_0, nullptr);
                 EXPECT_EQ(net_0->get_name(), "l_vec(0)");
 
-                Net* net_1 = gate_0->get_fan_out_net("O(1)");
+                Net* net_1 = gate_0->get_fan_out_net("DATA_OUT(1)");
                 ASSERT_NE(net_1, nullptr);
                 EXPECT_EQ(net_1->get_name(), "l_vec(1)");
 
-                Net* net_2 = gate_0->get_fan_out_net("O(2)");
+                Net* net_2 = gate_0->get_fan_out_net("DATA_OUT(2)");
                 ASSERT_NE(net_2, nullptr);
                 EXPECT_EQ(net_2->get_name(), "l_vec(2)");
 
-                Net* net_3 = gate_0->get_fan_out_net("O(3)");
+                Net* net_3 = gate_0->get_fan_out_net("DATA_OUT(3)");
                 ASSERT_NE(net_3, nullptr);
                 EXPECT_EQ(net_3->get_name(), "l_vec(3)");
 
@@ -1518,34 +1538,35 @@ namespace hal {
                 std::string netlist_input("module top (\n"
                                         " ) ;\n"
                                         "  wire [2:0] l_vec;\n"
-                                        "pin_group_gate_4_to_4 gate_0 (\n"
-                                        "  .O (l_vec)\n"
+                                        "RAM gate_0 (\n"
+                                        "  .DATA_OUT (l_vec)\n"
                                         " ) ;\n"
                                         "endmodule");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
-                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
-                Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
+                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("RAM", "gate_0")).empty());
+                Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("RAM", "gate_0")).begin());
 
                 EXPECT_EQ(gate_0->get_fan_out_nets().size(), 3);
-                Net* net_0 = gate_0->get_fan_out_net("O(0)");
+                Net* net_0 = gate_0->get_fan_out_net("DATA_OUT(0)");
                 ASSERT_NE(net_0, nullptr);
                 EXPECT_EQ(net_0->get_name(), "l_vec(0)");
 
-                Net* net_1 = gate_0->get_fan_out_net("O(1)");
+                Net* net_1 = gate_0->get_fan_out_net("DATA_OUT(1)");
                 ASSERT_NE(net_1, nullptr);
                 EXPECT_EQ(net_1->get_name(), "l_vec(1)");
 
-                Net* net_2 = gate_0->get_fan_out_net("O(2)");
+                Net* net_2 = gate_0->get_fan_out_net("DATA_OUT(2)");
                 ASSERT_NE(net_2, nullptr);
                 EXPECT_EQ(net_2->get_name(), "l_vec(2)");
 
-                EXPECT_EQ(gate_0->get_fan_out_net("O(3)"), nullptr);
+                EXPECT_EQ(gate_0->get_fan_out_net("DATA_OUT(3)"), nullptr);
 
             }
             {
@@ -1553,14 +1574,15 @@ namespace hal {
                 std::string netlist_input("module top (in, out) ;\n"
                                         "  input [1:0] in;\n"
                                         "  output [2:0] out;\n"
-                                        "pin_group_gate_4_to_4 gate_0 (\n"
-                                        "  .I (in),\n"
-                                        "  .O (out)\n"
+                                        "RAM gate_0 (\n"
+                                        "  .DATA_IN (in),\n"
+                                        "  .DATA_OUT (out)\n"
                                         " ) ;\n"
                                         "endmodule");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
 
@@ -1568,25 +1590,25 @@ namespace hal {
                 Gate* gate;
 
                 ASSERT_NE(nl, nullptr);
-                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
-                gate = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
+                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("RAM", "gate_0")).empty());
+                gate = *(nl->get_gates(test_utils::gate_filter("RAM", "gate_0")).begin());
 
                 EXPECT_EQ(gate->get_fan_in_nets().size(), 2);
-                net = gate->get_fan_in_net("I(0)");
+                net = gate->get_fan_in_net("DATA_IN(0)");
                 ASSERT_NE(net, nullptr);
                 EXPECT_EQ(net->get_name(), "in(0)");
-                net = gate->get_fan_in_net("I(1)");
+                net = gate->get_fan_in_net("DATA_IN(1)");
                 ASSERT_NE(net, nullptr);
                 EXPECT_EQ(net->get_name(), "in(1)");
 
                 EXPECT_EQ(gate->get_fan_out_nets().size(), 3);
-                net = gate->get_fan_out_net("O(0)");
+                net = gate->get_fan_out_net("DATA_OUT(0)");
                 ASSERT_NE(net, nullptr);
                 EXPECT_EQ(net->get_name(), "out(0)");
-                net = gate->get_fan_out_net("O(1)");
+                net = gate->get_fan_out_net("DATA_OUT(1)");
                 ASSERT_NE(net, nullptr);
                 EXPECT_EQ(net->get_name(), "out(1)");
-                net = gate->get_fan_out_net("O(2)");
+                net = gate->get_fan_out_net("DATA_OUT(2)");
                 ASSERT_NE(net, nullptr);
                 EXPECT_EQ(net->get_name(), "out(2)");
             }
@@ -1595,14 +1617,15 @@ namespace hal {
                 std::string netlist_input("module top (in, out) ;\n"
                                         "  input [1:0] in;\n"
                                         "  output [1:0] out;\n"
-                                        "gate_1_to_1 gate_0 (\n"
+                                        "BUF gate_0 (\n"
                                         "  .I (in[1]),\n"
                                         "  .O (out[0])\n"
                                         " ) ;\n"
                                         "endmodule");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
 
@@ -1610,8 +1633,8 @@ namespace hal {
                 Gate* gate;
 
                 ASSERT_NE(nl, nullptr);
-                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).empty());
-                gate = *(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin());
+                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).empty());
+                gate = *(nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).begin());
 
                 EXPECT_EQ(nl->get_nets().size(), 2);
                 EXPECT_EQ(nl->get_top_module()->get_pins().size(), 2);
@@ -1630,14 +1653,15 @@ namespace hal {
                 // empty pin assignment
                 std::string netlist_input("module top (in) ;\n"
                                         "  input [3:0] in;\n"
-                                        "pin_group_gate_4_to_4 gate_0 (\n"
-                                        "  .I (in),\n"
-                                        "  .O ()\n"
+                                        "RAM gate_0 (\n"
+                                        "  .DATA_IN (in),\n"
+                                        "  .DATA_OUT ()\n"
                                         " ) ;\n"
                                         "endmodule");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
 
@@ -1645,8 +1669,8 @@ namespace hal {
                 Gate* gate;
 
                 ASSERT_NE(nl, nullptr);
-                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
-                gate = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
+                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("RAM", "gate_0")).empty());
+                gate = *(nl->get_gates(test_utils::gate_filter("RAM", "gate_0")).begin());
 
                 EXPECT_EQ(nl->get_nets().size(), 4);
                 EXPECT_EQ(nl->get_top_module()->get_pins([](const ModulePin* p) {return p->get_direction() == PinDirection::input; }).size(), 4);
@@ -1654,6 +1678,41 @@ namespace hal {
 
                 EXPECT_EQ(gate->get_fan_in_nets().size(), 4);
                 EXPECT_EQ(gate->get_fan_out_nets().size(), 0);
+            }
+            {
+                // Connect a vector of output pins with a list of nets using '{ net_0, net_1, ... }' that is wider than
+                // the input port size (only the last elements of the list should be assigned)
+                std::string netlist_input("module top (\n"
+                                        " ) ;\n"
+                                        "  wire net_0;\n"
+                                        "  wire net_1;\n"
+                                        "  wire[5:0] l_vec;\n"
+                                        "RAM gate_0 (\n"
+                                        "  .DATA_OUT (l_vec)\n"
+                                        " ) ;\n"
+                                        "endmodule");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VerilogParser verilog_parser;
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
+                ASSERT_NE(nl, nullptr);
+                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("RAM", "gate_0")).empty());
+                Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("RAM", "gate_0")).begin());
+                EXPECT_EQ(gate_0->get_fan_out_nets().size(), 4);
+                Net* net_0 = gate_0->get_fan_out_net("DATA_OUT(0)");
+                ASSERT_NE(net_0, nullptr);
+                EXPECT_EQ(net_0->get_name(), "l_vec(0)");
+                Net* net_1 = gate_0->get_fan_out_net("DATA_OUT(1)");
+                ASSERT_NE(net_1, nullptr);
+                EXPECT_EQ(net_1->get_name(), "l_vec(1)");
+                Net* net_2 = gate_0->get_fan_out_net("DATA_OUT(2)");
+                ASSERT_NE(net_2, nullptr);
+                EXPECT_EQ(net_2->get_name(), "l_vec(2)");
+                Net* net_3 = gate_0->get_fan_out_net("DATA_OUT(3)");
+                ASSERT_NE(net_3, nullptr);
+                EXPECT_EQ(net_3->get_name(), "l_vec(3)");
             }
         TEST_END
     }
@@ -1679,7 +1738,7 @@ namespace hal {
                                         "  input global_in;\n"
                                         "  output \\global_out_with//comment ;\n"
                                         "\n"
-                                        "gate_1_to_1 #(\n"
+                                        "BUF #(\n"
                                         "  .no_comment_0(123), //.comment_0(123),\n"
                                         "  //.comment_1(123),\n"
                                         "  .no_comment_1(123), /*.comment_2(123),*/ .no_comment_2(123),\n"
@@ -1698,16 +1757,17 @@ namespace hal {
                                         "  .O (\\global_out_with//comment )\n"
                                         " ) ;\n"
                                         "endmodule");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
-                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "test_gate")).size(), 1);
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("BUF", "test_gate")).size(), 1);
                 Gate*
-                    test_gate = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "test_gate")).begin();
+                    test_gate = *nl->get_gates(test_utils::gate_filter("BUF", "test_gate")).begin();
 
                 // Test that the comments did not removed other parts (all no_comment_n generics should be created)
                 for (std::string key : std::set<std::string>({"no_comment_0", "no_comment_1", "no_comment_2",
@@ -1753,14 +1813,15 @@ namespace hal {
                                         "  input net_global_in ;\n"
                                         "  output net_global_out ;\n"
                                         "(* ATTRIBUTE_GATE=attri_gate, FLAG_GATE *)\n"
-                                        "gate_1_to_1 gate_0 (\n"
+                                        "BUF gate_0 (\n"
                                         "  .\\I (net_global_in ),\n"
                                         "  .\\O (net_global_out )\n"
                                         " ) ;\n"
                                         "endmodule");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
 
@@ -1769,8 +1830,8 @@ namespace hal {
                 // Access the Elements with attributes
                 Module* attri_module = nl->get_top_module();
 
-                ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
-                Gate* attri_gate = *nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).begin();
+                ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("BUF")).size(), 1);
+                Gate* attri_gate = *nl->get_gates(test_utils::gate_type_filter("BUF")).begin();
 
                 ASSERT_EQ(nl->get_global_input_nets().size(), 1);
                 Net* attri_net = *nl->get_global_input_nets().begin();
@@ -1798,20 +1859,21 @@ namespace hal {
                                         "  input net_global_in ;\n"
                                         "  output net_global_out ;\n"
                                         "  (* ATTRI_COMMA_STRING=\"test, 1, 2, 3\", ATTRI_FLOAT_STRING=\"1.234\" *)\n"
-                                        "gate_1_to_1 gate_0 (\n"
+                                        "BUF gate_0 (\n"
                                         "  .\\I (net_global_in ),\n"
                                         "  .\\O (net_global_out )\n"
                                         " ) ;\n"
                                         "endmodule");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
-                ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
-                Gate* attri_gate = *nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).begin();
+                ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("BUF")).size(), 1);
+                Gate* attri_gate = *nl->get_gates(test_utils::gate_type_filter("BUF")).begin();
                 EXPECT_EQ(attri_gate->get_data("attribute", "ATTRI_COMMA_STRING"),
                           std::make_tuple("unknown", "test, 1, 2, 3"));
                 EXPECT_EQ(attri_gate->get_data("attribute", "ATTRI_FLOAT_STRING"),
@@ -1837,33 +1899,37 @@ namespace hal {
                                         "  input global_in ;"
                                         "  output global_out ;"
                                         "  wire [0:1] net_vec_0, net_vec_1 ;"    // <- !!!
-                                        "gate_4_to_1 gate_0 ("
+                                        "COMB41 gate_0 ("
                                         "  .I0 (net_vec_0[0] ),"
                                         "  .I1 (net_vec_0[1] ),"
                                         "  .I2 (net_vec_1[0] ),"
                                         "  .I3 (net_vec_1[1] ),"
                                         "  .O (global_out )"
                                         " ) ;"
-                                        "gate_1_to_1 gate_1 ("
+                                        "BUF gate_1 ("
                                         "  .I (global_in ),"
                                         "  .O (net_vec_0[0] )"
                                         ") ;"
-                                        "gate_1_to_1 gate_2 ("
+                                        "BUF gate_2 ("
                                         "  .I (global_in ),"
                                         "  .O (net_vec_0[1] )"
                                         ") ;"
-                                        "gate_1_to_1 gate_3 ("
+                                        "BUF gate_3 ("
                                         "  .I (global_in ),"
                                         "  .O (net_vec_1[0] )"
                                         ") ;"
-                                        "gate_1_to_1 gate_4 ("
+                                        "BUF gate_4 ("
                                         "  .I (global_in ),"
                                         "  .O (net_vec_1[1] )"
                                         ") ;"
                                         "endmodule");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
+                if(nl_res.is_error()) {
+                    std::cout << nl_res.get_error().get() << std::endl;
+                }
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
 
@@ -1892,7 +1958,7 @@ namespace hal {
                                         "  input global_in_3,"
                                         "  output global_out_3"
                                         " ) ; \n"
-                                        "gate_4_to_4 gate_0 ( \n"
+                                        "COMB44 gate_0 ( \n"
                                         "  .I0 (global_in_0 ), \n"
                                         "  .I1 (global_in_1 ), \n"
                                         "  .I2 (global_in_2 ), \n"
@@ -1903,9 +1969,10 @@ namespace hal {
                                         "  .O3 (global_out_3 ) \n"
                                         " ) ; \n"
                                         "endmodule \n");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
 
@@ -1931,7 +1998,7 @@ namespace hal {
                                         "  input [3:2] global_in_desc,"
                                         "  output [3:2] global_out_desc"
                                         " ) ; \n"
-                                        "gate_4_to_4 gate_0 ( \n"
+                                        "COMB44 gate_0 ( \n"
                                         "  .I0 (global_in_asc[0] ), \n"
                                         "  .I1 (global_in_asc[1] ), \n"
                                         "  .I2 (global_in_desc[2] ), \n"
@@ -1942,9 +2009,10 @@ namespace hal {
                                         "  .O3 (global_out_desc[3] ) \n"
                                         " ) ; \n"
                                         "endmodule \n");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
 
@@ -1968,7 +2036,7 @@ namespace hal {
                                         "  input [0:1][1:0] global_in,\n"
                                         "  output [1:0][0:1] global_out"
                                         " ) ; \n"
-                                        "gate_4_to_4 gate_0 ( \n"
+                                        "COMB44 gate_0 ( \n"
                                         "  .I0 (global_in[0][0] ), \n"
                                         "  .I1 (global_in[0][1] ), \n"
                                         "  .I2 (global_in[1][0] ), \n"
@@ -1979,9 +2047,10 @@ namespace hal {
                                         "  .O3 (global_out[1][1] ) \n"
                                         " ) ; \n"
                                         "endmodule \n");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
 
@@ -2016,13 +2085,14 @@ namespace hal {
                                         " ) ;"
                                         "  input global_in ;"
 
-                                        "gate_1_to_1 gate_0 ("
+                                        "BUF gate_0 ("
                                         "  .\\NON_EXISTING_PIN (global_in)"
                                         " ) ;"
                                         "endmodule");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_error());
             }
             {
@@ -2039,18 +2109,20 @@ namespace hal {
                                         "  .O (global_out )"
                                         " ) ;"
                                         "endmodule");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_error());
             }
             {
                 // The input does not contain any Module (is empty)
                 NO_COUT_TEST_BLOCK;
                 std::string netlist_input("");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_error());
             }
         /* non-used entity test commented out (entity erroneously considered as top module)
@@ -2063,7 +2135,7 @@ namespace hal {
                                         " ) ;"
                                         "  input min ;"
                                         "  output mout ;"
-                                        "gate_1_to_1 gate_0 ("
+                                        "BUF gate_0 ("
                                         "  .I (min ),"
                                         "  .O (mout )"
                                         " ) ;"
@@ -2075,7 +2147,7 @@ namespace hal {
                                         " ) ;"
                                         "  input global_in ;"
                                         "  output global_out ;"
-                                        "gate_1_to_1 gate_0 ("
+                                        "BUF gate_0 ("
                                         "  .I (global_in ),"
                                         "  .O (global_out )"
                                         " ) ;"
@@ -2103,18 +2175,19 @@ namespace hal {
                                         "  wire net_1;"
                                         "  assign net_0 = net_1;"
                                         "  assign net_1 = net_0;"
-                                        "gate_1_to_1 gate_0 ("
+                                        "BUF gate_0 ("
                                         "  .I (global_in ),"
                                         "  .O (net_0 )"
                                         " ) ;"
-                                        "gate_1_to_1 gate_1 ("
+                                        "BUF gate_1 ("
                                         "  .I (net_1 ),"
                                         "  .O (global_out )"
                                         " ) ;"
                                         "endmodule");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_error());
             }
             if(test_utils::known_issue_tests_active())
@@ -2135,9 +2208,10 @@ namespace hal {
                              "  .\\O (global_out )"
                              " ) ;"
                              "endmodule");
-                    auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_error());
             }
             // ------ Verilog specific tests ------
@@ -2150,14 +2224,15 @@ namespace hal {
                                         " ) ;"
                                         "  input global_in ;"
                                         "  output global_out ;"
-                                        "gate_1_to_1 gate_0 ("
+                                        "BUF gate_0 ("
                                         "  .I (global_in ),"
                                         "  .O (global_out )"
                                         " ) ;"
                                         "endmodule");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_error());
             }
             if(test_utils::known_issue_tests_active())
@@ -2173,9 +2248,10 @@ namespace hal {
                          "  wire signal_0 ;"
                          "  assign signal_0 = ;"
                          "endmodule");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_error());
             }
             {
@@ -2203,9 +2279,10 @@ namespace hal {
                                         "  .\\OE0 (OE1 )"
                                         " ) ;"
                                         "endmodule");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_error());
             }
             {
@@ -2218,62 +2295,29 @@ namespace hal {
                                         "  input global_in ;"
                                         "  output global_out ;"
                                         "  wire net_0;"
-                                        "gate_1_to_1 gate_0 ("
+                                        "BUF gate_0 ("
                                         "  .I ({net_0, global_in} )"
                                         " ) ;"
-                                        "gate_1_to_1 gate_1 ("
+                                        "BUF gate_1 ("
                                         "  .I (net_0 ),"
                                         "  .O (global_out )"
                                         " ) ;"
                                         "endmodule");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
 
                 Gate* gate;
 
                 ASSERT_NE(nl, nullptr);
-                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).empty());
-                gate = *(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin());
+                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).empty());
+                gate = *(nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).begin());
 
                 ASSERT_NE(gate->get_fan_in_net("I"), nullptr);
                 EXPECT_EQ(gate->get_fan_in_net("I")->get_name(), "global_in");
-            }
-            {
-                // Connect a vector of output pins with a list of nets using '{ net_0, net_1, ... }' that is wider than
-                // the input port size (only the last elements of the list should be assigned)
-                std::string netlist_input("module top (\n"
-                                        " ) ;\n"
-                                        "  wire net_0;\n"
-                                        "  wire net_1;\n"
-                                        "  wire[5:0] l_vec;\n"
-                                        "pin_group_gate_4_to_4 gate_0 (\n"
-                                        "  .O (l_vec)\n"
-                                        " ) ;\n"
-                                        "endmodule");
-                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-                ASSERT_TRUE(nl_res.is_ok());
-                std::unique_ptr<Netlist> nl = nl_res.get();
-                ASSERT_NE(nl, nullptr);
-                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
-                Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
-                EXPECT_EQ(gate_0->get_fan_out_nets().size(), 4);
-                Net* net_0 = gate_0->get_fan_out_net("O(0)");
-                ASSERT_NE(net_0, nullptr);
-                EXPECT_EQ(net_0->get_name(), "l_vec(0)");
-                Net* net_1 = gate_0->get_fan_out_net("O(1)");
-                ASSERT_NE(net_1, nullptr);
-                EXPECT_EQ(net_1->get_name(), "l_vec(1)");
-                Net* net_2 = gate_0->get_fan_out_net("O(2)");
-                ASSERT_NE(net_2, nullptr);
-                EXPECT_EQ(net_2->get_name(), "l_vec(2)");
-                Net* net_3 = gate_0->get_fan_out_net("O(3)");
-                ASSERT_NE(net_3, nullptr);
-                EXPECT_EQ(net_3->get_name(), "l_vec(3)");
             }
             {
                 // Store an unknown data type
@@ -2284,16 +2328,17 @@ namespace hal {
                                         " ) ;"
                                         "  input global_in ;"
                                         "  output global_out ;"
-                                        "gate_1_to_1 #("
+                                        "BUF #("
                                         ".key_unknown(#Unkn0wn!)) "
                                         "gate_0 ("
                                         "  .I (global_in ),"
                                         "  .O (global_out )"
                                         " ) ;"
                                         "endmodule");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_error());
             }
             {
@@ -2305,18 +2350,19 @@ namespace hal {
                                         " ) ;"
                                         "  input global_in ;"
                                         "  output global_out ;"
-                                        "gate_1_to_1 gate_0 ("
+                                        "BUF gate_0 ("
                                         "  .I (global_in ),"
                                         "  .O (net_0 )"    // <- undeclared
                                         " ) ;"
-                                        "gate_1_to_1 gate_1 ("
+                                        "BUF gate_1 ("
                                         "  .I (net_0 ),"
                                         "  .O (global_out )"
                                         " ) ;"
                                         "endmodule");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_error());
             }
             {
@@ -2330,14 +2376,15 @@ namespace hal {
                          "  output global_out ;"
                          "  wire [0:4] signal_vec ;"
                          "  assign signal_unknown[0:4] = signal_vec[0:4];"
-                         "gate_1_to_1 gate_0 ("
+                         "BUF gate_0 ("
                          "  .I (global_in ),"
                          "  .O (global_out )"
                          " ) ;"
                          "endmodule");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
-                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_error());
             }
         TEST_END

@@ -25,7 +25,7 @@ namespace hal
 
                 if (LatchComponent* latch_component = gt->get_component_as<LatchComponent>([](const GateTypeComponent* c) { return LatchComponent::is_class_of(c); }); latch_component != nullptr)
                 {
-                    std::vector<std::string> output_pins = gt->get_output_pins();
+                    std::vector<GatePin*> output_pins = gt->get_output_pins();
                     // TODO: JULIAN
                     // std::string internal_state           = latch_component->get_state_identifier();
                     // std::string internal_negated_state   = latch_component->get_neg_state_identifier();
@@ -231,21 +231,20 @@ namespace hal
                     function << "end" << std::endl;
 
                     // set output wires
-                    for (const auto& output_pin : output_pins)
+                    for (const GatePin* output_pin : output_pins)
                     {
-                        function << "assign " << output_pin << " = ";
-                        if (gt->get_pin_type(output_pin) == hal::PinType::state)
+                        function << "assign " << output_pin->get_name() << " = ";
+                        switch (output_pin->get_type())
                         {
-                            function << "" << internal_state << "";
-                        }
-                        else if (gt->get_pin_type(output_pin) == hal::PinType::neg_state)
-                        {
-                            function << "" << internal_negated_state << "";
-                        }
-                        else
-                        {
-                            log_error("verilator", "unsupported reached: Latch has weird outpin '{}' for gate '{}', aborting...", output_pin, gt->get_name());
-                            return std::string();
+                            case PinType::state:
+                                function << "" << internal_state << "";
+                                break;
+                            case PinType::neg_state:
+                                function << "" << internal_negated_state << "";
+                                break;
+                            default:
+                                log_error("verilator", "unsupported reached: Latch has weird outpin '{}' for gate '{}', aborting...", output_pin->get_name(), gt->get_name());
+                                return std::string();
                         }
                         function << ";" << std::endl;
                     }

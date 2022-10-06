@@ -59,12 +59,12 @@ namespace hal
             simulation_port.enable_func = port_component->get_enable_function();
             simulation_port.is_write    = port_component->is_write_port();
 
-            for (const auto& [index, pin] : gate_type->get_pins_of_group(port_component->get_data_group()))
+            for (GatePin* pin : gate_type->get_pin_group_by_name(port_component->get_data_group())->get_pins())
             {
                 simulation_port.data_pins.push_back(pin);
             }
 
-            for (const auto& [index, pin] : gate_type->get_pins_of_group(port_component->get_address_group()))
+            for (GatePin* pin : gate_type->get_pin_group_by_name(port_component->get_address_group())->get_pins())
             {
                 simulation_port.address_pins.push_back(pin);
             }
@@ -72,9 +72,9 @@ namespace hal
             // determine clock net
             for (const std::string& var : simulation_port.clock_func.get_variable_names())
             {
-                if (gate_type->get_pin_type(var) == PinType::clock)
+                if (const GatePin* pin = gate_type->get_pin_by_name(var); pin != nullptr && pin->get_type() == PinType::clock)
                 {
-                    simulation_port.clock_net = gate->get_fan_in_net(var);
+                    simulation_port.clock_net = gate->get_fan_in_net(pin);
                 }
             }
 
@@ -168,7 +168,7 @@ namespace hal
         }
     }
 
-    bool NetlistSimulator::SimulationGateRAM::simulate(const Simulation& simulation, const WaveEvent &event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events)
+    bool NetlistSimulator::SimulationGateRAM::simulate(const Simulation& simulation, const WaveEvent& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events)
     {
         UNUSED(simulation);
         UNUSED(new_events);
@@ -214,9 +214,9 @@ namespace hal
             Port port = m_ports.at(index);
 
             std::vector<BooleanFunction::Value> address_values;
-            for (const std::string& pin : port.address_pins)
+            for (const GatePin* pin : port.address_pins)
             {
-                address_values.push_back(m_input_values.at(pin));
+                address_values.push_back(m_input_values.at(pin->get_name()));
             }
 
             u32 address   = simulation_utils::values_to_int(address_values);
@@ -247,15 +247,15 @@ namespace hal
 
             for (u32 i = 0; i < data_size; i++)
             {
-                const std::string& pin = port.data_pins.at(i);
+                const GatePin* pin = port.data_pins.at(i);
 
                 // do not change memory content of masking function specified and not evaluating to 1
-                if (auto func_it = functions.find(pin); func_it != functions.end() && func_it->second.evaluate(m_input_values).get() != BooleanFunction::Value::ONE)
+                if (auto func_it = functions.find(pin->get_name()); func_it != functions.end() && func_it->second.evaluate(m_input_values).get() != BooleanFunction::Value::ONE)
                 {
                     continue;
                 }
 
-                data_values[i] = m_input_values.at(pin);
+                data_values[i] = m_input_values.at(pin->get_name());
             }
             u32 write_data = simulation_utils::values_to_int(data_values);
             set_data_word(m_data, write_data, address, data_size);

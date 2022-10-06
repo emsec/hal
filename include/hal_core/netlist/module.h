@@ -130,8 +130,9 @@ namespace hal
         Grouping* get_grouping() const;
 
         /**
-         * Get submodule depth of module
-         * @returns 0=top_level module, 1=submodule from top_level, 2=submodule from submodule, ...
+         * Get the depth of the module within the module hierarchie (0 = top module, 1 = direct child of top module, ...).
+         * 
+         * @returns The depth within the module hierarchie.
          */
         int get_submodule_depth() const;
 
@@ -145,10 +146,10 @@ namespace hal
 
         /**
          * Get all direct parent of this module.<br>
-         * If \p recursive is set to true, all indirect parents are also included.<br>
-         * A filter can be applied to the result to only get parents matching the specified condition.
+         * If `recursive` is set to true, all indirect parents are also included.<br>
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
-         * @param[in] filter - Filter to be applied to the modules.
+         * @param[in] filter - An optional filter.
          * @param[in] recursive - True to include indirect parents as well, false otherwise.
          * @returns A vector of parent modules.
          */
@@ -174,10 +175,10 @@ namespace hal
 
         /**
          * Get all direct submodules of this module.<br>
-         * If \p recursive is set to true, all indirect submodules are also included.<br>
-         * A filter can be applied to the result to only get submodules matching the specified condition.
+         * If `recursive` is set to true, all indirect submodules are also included.<br>
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
-         * @param[in] filter - Filter to be applied to the modules.
+         * @param[in] filter - An optional filter.
          * @param[in] recursive - True to include indirect submodules as well, false otherwise.
          * @returns A vector of submodules.
          */
@@ -241,11 +242,11 @@ namespace hal
 
         /**
          * TODO add pybind
-         * Get all nets that have at least one source or one destination within the module.<br>
-         * A filter can be applied to the result to only get nets matching the specified condition.<br>
+         * Get all nets that have at least one source or one destination within the module.
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          * If \p recursive is true, nets in submodules are considered as well.
          *
-         * @param[in] filter - Filter to be applied to the nets.
+         * @param[in] filter - An optional filter.
          * @param[in] recursive - True to also consider nets in submodules, false otherwise.
          * @returns An unordered set of nets.
          */
@@ -357,18 +358,18 @@ namespace hal
 
         /**
          * Get the (ordered) pins of the module.
-         * The optional filter is evaluated on every pin such that the result only contains pins matching the specified condition.
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          * 
-         * @param[in] filter - Filter function to be evaluated on each pin.
+         * @param[in] filter - An optional filter.
          * @returns A vector of pins.
          */
         std::vector<ModulePin*> get_pins(const std::function<bool(ModulePin*)>& filter = nullptr) const;
 
         /**
          * Get all pin groups of the module.
-         * The optional filter is evaluated on every pin group such that the result only contains pin groups matching the specified condition.
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          * 
-         * @param[in] filter - Filter function to be evaluated on each pin group.
+         * @param[in] filter - An optional filter.
          * @returns A vector of pin groups.
          */
         std::vector<PinGroup<ModulePin>*> get_pin_groups(const std::function<bool(PinGroup<ModulePin>*)>& filter = nullptr) const;
@@ -377,70 +378,88 @@ namespace hal
          * Get the pin corresponding to the given ID.
          * 
          * @param[in] id - The ID of the pin.
-         * @returns The pin on success, an error message otherwise.
+         * @returns The pin on success, a `nullptr` otherwise.
          */
-        Result<ModulePin*> get_pin_by_id(const u32 id) const;
+        ModulePin* get_pin_by_id(const u32 id) const;
+
+        /**
+         * TODO test
+         * Get the pin corresponding to the given name.
+         * 
+         * @param[in] name - The name of the pin.
+         * @returns The pin on success, a `nullptr` otherwise.
+         */
+        ModulePin* get_pin_by_name(const std::string& name) const;
 
         /**
          * Get the pin that passes through the specified net.
          * 
          * @param[in] net - The net.
-         * @returns The pin on success, an error message otherwise.
+         * @returns The pin on success, a `nullptr` otherwise.
          */
-        Result<ModulePin*> get_pin_by_net(Net* net) const;
+        ModulePin* get_pin_by_net(Net* net) const;
 
         /**
          * Get the pin group corresponding to the given ID.
          * 
          * @param[in] id - The ID of the pin group.
-         * @returns The pin group on success, an error message otherwise.
+         * @returns The pin group on success, a `nullptr` otherwise.
          */
-        Result<PinGroup<ModulePin>*> get_pin_group_by_id(const u32 id) const;
+        PinGroup<ModulePin>* get_pin_group_by_id(const u32 id) const;
+
+        /**
+         * TODO test
+         * Get the pin group corresponding to the given name.
+         * 
+         * @param[in] name - The name of the pin group.
+         * @returns The pin group on success, a `nullptr` otherwise.
+         */
+        PinGroup<ModulePin>* get_pin_group_by_name(const std::string& name) const;
 
         /**
          * Set the name of the given pin.
          * 
          * @param[in] pin - The pin.
          * @param[in] new_name - The name to be assigned to the pin.
-         * @returns Ok on success, an error message otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
-        Result<std::monostate> set_pin_name(ModulePin* pin, const std::string& new_name);
+        bool set_pin_name(ModulePin* pin, const std::string& new_name);
 
         /**
          * Set the name of the given pin group.
          * 
          * @param[in] pin_group - The pin group.
          * @param[in] new_name - The name to be assigned to the pin group.
-         * @returns Ok on success, an error message otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
-        Result<std::monostate> set_pin_group_name(PinGroup<ModulePin>* pin_group, const std::string& new_name);
+        bool set_pin_group_name(PinGroup<ModulePin>* pin_group, const std::string& new_name);
 
         /**
          * Set the type of the given pin.
          * 
          * @param[in] pin - The pin.
          * @param[in] new_type - The type to be assigned to the pin.
-         * @returns Ok on success, an error message otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
-        Result<std::monostate> set_pin_type(ModulePin* pin, PinType new_type);
+        bool set_pin_type(ModulePin* pin, PinType new_type);
 
         /**
          * Set the type of the given pin group.
          * 
          * @param[in] pin_group - The pin group.
          * @param[in] new_type - The type to be assigned to the pin group.
-         * @returns Ok on success, an error message otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
-        Result<std::monostate> set_pin_group_type(PinGroup<ModulePin>* pin_group, PinType new_type);
+        bool set_pin_group_type(PinGroup<ModulePin>* pin_group, PinType new_type);
 
         /**
          * Set the direction of the given pin group.
          * 
          * @param[in] pin_group - The pin group.
          * @param[in] new_direction - The direction to be assigned to the pin group.
-         * @returns Ok on success, an error message otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
-        Result<std::monostate> set_pin_group_direction(PinGroup<ModulePin>* pin_group, PinDirection new_direction);
+        bool set_pin_group_direction(PinGroup<ModulePin>* pin_group, PinDirection new_direction);
 
         /**
          * Create a new pin group with the given name.
@@ -537,7 +556,7 @@ namespace hal
          * The gate is removed from its previous module in the process.
          *
          * @param[in] gate - The gate to assign.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool assign_gate(Gate* gate);
 
@@ -546,7 +565,7 @@ namespace hal
          * The gates are removed from their previous module in the process.
          *
          * @param[in] gates - The gates to assign.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool assign_gates(const std::vector<Gate*>& gates);
 
@@ -555,7 +574,7 @@ namespace hal
          * Automatically moves the gate to the top module of the netlist.
          *
          * @param[in] gate - The gate to remove.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool remove_gate(Gate* gate);
 
@@ -564,37 +583,37 @@ namespace hal
          * Automatically moves the gates to the top module of the netlist.
          *
          * @param[in] gates - The gates to remove.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool remove_gates(const std::vector<Gate*>& gates);
 
         /**
          * Check whether a gate is contained in the module.<br>
-         * If \p recursive is true, gates in submodules are considered as well.
+         * If `recursive` is `true`, gates in submodules are considered as well.
          *
          * @param[in] gate - The gate to check for.
-         * @param[in] recursive - True to also consider gates in submodules, false otherwise.
-         * @returns True if the gate is contained in the module, false otherwise.
+         * @param[in] recursive - Set to `true` to also consider gates in submodules, `false` otherwise.
+         * @returns `true` if the gate is contained in the module, `false` otherwise.
          */
         bool contains_gate(Gate* gate, bool recursive = false) const;
 
         /**
          * Get a gate specified by the given ID.<br>
-         * If \p recursive is true, gates in submodules are considered as well.
+         * If `recursive` is `true`, gates in submodules are considered as well.
          *
          * @param[in] id - The unique ID of the gate.
-         * @param[in] recursive - True to also consider gates in submodules, false otherwise.
-         * @returns The gate if found, a nullptr otherwise.
+         * @param[in] recursive - Set to `true` to also consider gates in submodules, `false` otherwise.
+         * @returns The gate on success, a nullptr otherwise.
          */
         Gate* get_gate_by_id(const u32 id, bool recursive = false) const;
 
         /**
-         * Get all gates contained within the module.<br>
-         * A filter can be applied to the result to only get gates matching the specified condition.<br>
-         * If \p recursive is true, gates in submodules are considered as well.
+         * Get all gates contained within the module.
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+         * If `recursive` is `true`, gates in submodules are considered as well.
          *
-         * @param[in] filter - Filter to be applied to the gates.
-         * @param[in] recursive - True to also consider gates in submodules, false otherwise.
+         * @param[in] filter - An optional filter.
+         * @param[in] recursive - Set to `true` to also consider gates in submodules, `false` otherwise.
          * @return A vector of gates.
          */
         std::vector<Gate*> get_gates(const std::function<bool(Gate*)>& filter = nullptr, bool recursive = false) const;
@@ -649,10 +668,12 @@ namespace hal
         u32 m_next_output_index = 0;
 
         std::vector<std::unique_ptr<ModulePin>> m_pins;
-        std::vector<std::unique_ptr<PinGroup<ModulePin>>> m_pin_groups;
-        std::list<PinGroup<ModulePin>*> m_pin_groups_ordered;
         std::unordered_map<u32, ModulePin*> m_pins_map;
+        std::unordered_map<std::string, ModulePin*> m_pin_names_map;
+        std::vector<std::unique_ptr<PinGroup<ModulePin>>> m_pin_groups;
         std::unordered_map<u32, PinGroup<ModulePin>*> m_pin_groups_map;
+        std::unordered_map<std::string, PinGroup<ModulePin>*> m_pin_group_names_map;
+        std::list<PinGroup<ModulePin>*> m_pin_groups_ordered;
 
         /* stores gates sorted by id */
         std::unordered_map<u32, Gate*> m_gates_map;

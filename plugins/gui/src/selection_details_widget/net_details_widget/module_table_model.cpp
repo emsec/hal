@@ -103,16 +103,15 @@ namespace hal
         //1.variant
         for (auto const& m : gNetlist->get_modules())
         {
-            if (const auto res = m->get_pin_by_net(net); res.is_ok())
+            if (const auto pin = m->get_pin_by_net(net); pin != nullptr)
             {
                 Entry newEntry;
 
                 newEntry.name      = QString::fromStdString(m->get_name());
                 newEntry.id        = m->get_id();
                 newEntry.type      = QString::fromStdString(m->get_type());
-                newEntry.used_port = QString::fromStdString(res.get()->get_name());
-                newEntry.pinId = res.get()->get_id();
-
+                newEntry.used_port = QString::fromStdString(pin->get_name());
+                newEntry.pinId     = pin->get_id();
                 newEntryList.append(newEntry);
                 mModIds.insert((int)m->get_id());
             }
@@ -169,12 +168,12 @@ namespace hal
         return mEntries[index.row()].used_port;
     }
 
-    u32 ModuleTableModel::getPinIDFromIndex(const QModelIndex &index)
+    u32 ModuleTableModel::getPinIDFromIndex(const QModelIndex& index)
     {
         return mEntries[index.row()].pinId;
     }
 
-    QString ModuleTableModel::getModuleNameFromIndex(const QModelIndex &index)
+    QString ModuleTableModel::getModuleNameFromIndex(const QModelIndex& index)
     {
         return mEntries[index.row()].name;
     }

@@ -46,8 +46,8 @@ namespace hal
          * Parses the gate library definition file.
          *
          * @param[in] file_path - Path to the file containing the gate library definition.
-         * @returns The gate library or a nullptr on failure.
+         * @returns The gate library on success, an error otherwise.
          */
-        virtual std::unique_ptr<GateLibrary> parse(const std::filesystem::path& file_path) = 0;
+        virtual Result<std::unique_ptr<GateLibrary>> parse(const std::filesystem::path& file_path) = 0;
     };
 }    // namespace hal

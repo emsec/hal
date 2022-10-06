@@ -150,9 +150,9 @@ namespace hal
         /**
          * Create a deep copy of the netlist.
          * 
-         * @returns The copy of the netlist.
+         * @returns The copy of the netlist on success, an error otherwise.
          */
-        std::unique_ptr<Netlist> copy() const;
+        Result<std::unique_ptr<Netlist>> copy() const;
 
         /*
          * ################################################################

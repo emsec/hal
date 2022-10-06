@@ -20,26 +20,34 @@ namespace hal
             {
                 std::stringstream function;
 
-                for (const auto& [output_pin, bf] : gt->get_boolean_functions())
+                for (const auto& [output_pin_name, bf] : gt->get_boolean_functions())
                 {
                     BooleanFunction bf_copy = bf;
                     function << "assign ";
 
-                    if (std::string group = gt->get_pin_group(output_pin); !group.empty())
+                    const GatePin* output_pin = gt->get_pin_by_name(output_pin_name);
+                    if (output_pin == nullptr)
                     {
-                        function << group << "[" << gt->get_index_in_group_of_pin(group, output_pin) << "]";
+                        continue;
+                    }
+
+                    const auto group = output_pin->get_group();
+                    if (group.first->size() > 1)
+                    {
+                        function << group.first->get_name() << "[" << group.second << "]";
                     }
                     else
                     {
-                        function << output_pin;
+                        function << output_pin->get_name();
                     }
 
                     for (const std::string& var : bf_copy.get_variable_names())
                     {
-                        if (std::string group = gt->get_pin_group(var); !group.empty())
+                        if (const auto* pin = gt->get_pin_by_name(var); pin != nullptr)
                         {
-                            std::string pin = group + "[" + std::to_string(gt->get_index_in_group_of_pin(group, var)) + "]";
-                            bf_copy         = bf_copy.substitute(var, pin);
+                            const auto pin_group = pin->get_group();
+                            std::string pin_str  = pin_group.first->get_name() + "[" + std::to_string(pin_group.second) + "]";
+                            bf_copy              = bf_copy.substitute(var, pin_str);
                         }
                     }
 

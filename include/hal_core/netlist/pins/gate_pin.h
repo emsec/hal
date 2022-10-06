@@ -19,15 +19,6 @@ namespace hal
     class GatePin : public BasePin<GatePin>
     {
     public:
-        ~GatePin() = default;
-
-    private:
-        GatePin(const GatePin&) = delete;
-        GatePin(GatePin&&)      = delete;
-        GatePin& operator=(const GatePin&) = delete;
-        GatePin& operator=(GatePin&&) = delete;
-
-    protected:
         /**
          * Construct a new gate pin from its name, direction and type.
          * 
@@ -36,5 +27,11 @@ namespace hal
          * @param[in] type - The type of the pin.
          */
         GatePin(const u32 id, const std::string& name, PinDirection direction, PinType type = PinType::none);
+
+    private:
+        GatePin(const GatePin&) = delete;
+        GatePin(GatePin&&)      = delete;
+        GatePin& operator=(const GatePin&) = delete;
+        GatePin& operator=(GatePin&&) = delete;
     };
 }    // namespace hal

@@ -1,4 +1,4 @@
-#include "SubgraphFunctionGenerator.h"
+#include "subgraph_function_generator.h"
 
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate.h"
@@ -13,7 +13,7 @@ namespace hal
 {
     namespace z3_utils
     {
-        BooleanFunction SubgraphFunctionGenerator::get_function_of_gate(const Gate* gate, const std::string& out_pin)
+        BooleanFunction SubgraphFunctionGenerator::get_function_of_gate(const Gate* gate, const GatePin* out_pin)
         {
             if (auto it = m_cache.find({gate->get_id(), out_pin}); it != m_cache.end())
             {
@@ -23,12 +23,12 @@ namespace hal
 
             if (bf.is_empty())
             {
-                log_error("z3_utils", "function of gate {} (type {}) associated with pin {} is empty!", gate->get_name(), gate->get_type()->get_name(), out_pin);
+                log_error("z3_utils", "function of gate {} (type {}) associated with pin {} is empty!", gate->get_name(), gate->get_type()->get_name(), out_pin->get_name());
                 return BooleanFunction();
             }
 
             // before replacing input pins with their connected net id, check if the function depends on other output pins
-            auto output_pins = gate->get_type()->get_output_pins();
+            auto output_pins = gate->get_type()->get_output_pin_names();
             while (true)
             {
                 auto vars = bf.get_variable_names();
@@ -42,20 +42,34 @@ namespace hal
 
                 for (auto const& output_pin : output_pins_that_are_also_function_inputs)
                 {
-                    bf = bf.substitute(output_pin, gate->get_boolean_function(output_pin)).get();
+                    const auto gate_func = gate->get_boolean_function(output_pin);
+                    if (auto res = bf.substitute(output_pin, gate_func); res.is_error())
+                    {
+                        log_error("z3_utils",
+                                  "error encountered while substituting variable '{}' with Boolean function of gate '{}' with ID {}:\n{}",
+                                  output_pin,
+                                  gate->get_name(),
+                                  gate->get_id(),
+                                  res.get_error().get());
+                        return BooleanFunction();
+                    }
+                    else
+                    {
+                        bf = res.get();
+                    }
                 }
             }
 
             // replace input pins with their connected net id
-            for (auto const& input_pin : gate->get_type()->get_input_pins())
+            for (const auto& input_pin : gate->get_type()->get_input_pins())
             {
                 const auto& input_net = gate->get_fan_in_net(input_pin);
                 if (!input_net)
                 {
-                    log_debug("z3_utils", "Pin ({}) has no input net. Gate id: ({})", input_pin, gate->get_id());
+                    log_debug("z3_utils", "Pin ({}) has no input net. Gate id: ({})", input_pin->get_name(), gate->get_id());
                     continue;
                 }
-                bf = bf.substitute(input_pin, std::to_string(input_net->get_id()));
+                bf = bf.substitute(input_pin->get_name(), std::to_string(input_net->get_id()));
             }
 
             m_cache.emplace(std::make_tuple(gate->get_id(), out_pin), bf);
@@ -170,7 +184,7 @@ namespace hal
         {
         }
 
-        BooleanFunction RecursiveSubgraphFunctionGenerator::get_function_of_gate(const Gate* gate, const std::string& out_pin)
+        BooleanFunction RecursiveSubgraphFunctionGenerator::get_function_of_gate(const Gate* gate, const GatePin* out_pin)
         {
             if (auto it = m_cache.find({gate->get_id(), out_pin}); it != m_cache.end())
             {
@@ -180,13 +194,13 @@ namespace hal
 
             if (bf.is_empty())
             {
-                log_error("z3_utils", "function of gate {} (type {}) associated with pin {} is empty!", gate->get_name(), gate->get_type()->get_name(), out_pin);
+                log_error("z3_utils", "function of gate {} (type {}) associated with pin {} is empty!", gate->get_name(), gate->get_type()->get_name(), out_pin->get_name());
                 return BooleanFunction();
             }
 
             // TODO should this also take internal pins into account?
             // before replacing input pins with their connected net id, check if the function depends on other output pins
-            std::vector<std::string> output_pins = gate->get_type()->get_output_pins();
+            std::vector<std::string> output_pins = gate->get_type()->get_output_pin_names();
             while (true)
             {
                 auto vars = bf.get_variable_names();
@@ -200,7 +214,21 @@ namespace hal
 
                 for (auto const& output_pin : output_pins_that_are_also_function_inputs)
                 {
-                    bf = bf.substitute(output_pin, gate->get_boolean_function(output_pin)).get();
+                    const auto gate_func = gate->get_boolean_function(output_pin);
+                    if (auto res = bf.substitute(output_pin, gate_func); res.is_error())
+                    {
+                        log_error("z3_utils",
+                                  "error encountered while substituting variable '{}' with Boolean function of gate '{}' with ID {}:\n{}",
+                                  output_pin,
+                                  gate->get_name(),
+                                  gate->get_id(),
+                                  res.get_error().get());
+                        return BooleanFunction();
+                    }
+                    else
+                    {
+                        bf = res.get();
+                    }
                 }
             }
 
@@ -254,16 +282,15 @@ namespace hal
 
             std::map<std::string, z3::expr> pin_to_expr;
 
-            for (const std::string& pin : bf.get_variable_names())
+            for (const std::string& pin_name : bf.get_variable_names())
             {
-                Net* in_net = src->get_fan_in_net(pin);
-
+                Net* in_net = src->get_fan_in_net(pin_name);
                 if (in_net == nullptr)
                 {
-                    log_error("z3_utils", "Cannot find in_net at pin {} of gate {}!", pin, src->get_id());
+                    log_error("z3_utils", "Cannot find in_net at pin {} of gate {}!", pin_name, src->get_id());
                 }
 
-                pin_to_expr.insert({pin, get_function_of_net(in_net, ctx, subgraph_gates)});
+                pin_to_expr.insert({pin_name, get_function_of_net(in_net, ctx, subgraph_gates)});
             }
 
             z3::expr ret = bf.to_z3(ctx, pin_to_expr);

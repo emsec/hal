@@ -6,8 +6,8 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
-#include "hal_core/utilities/log.h"
 #include "hal_core/netlist/project_manager.h"
+#include "hal_core/utilities/log.h"
 #include "rapidjson/filereadstream.h"
 #include "rapidjson/stringbuffer.h"
 
@@ -34,7 +34,7 @@ namespace hal
         // serializing functions
         namespace
         {
-            const int SERIALIZATION_FORMAT_VERSION = 10;
+            const int SERIALIZATION_FORMAT_VERSION = 11;
 
 #define JSON_STR_HELPER(x) rapidjson::Value{}.SetString(x.c_str(), x.length(), allocator)
 
@@ -72,7 +72,7 @@ namespace hal
             rapidjson::Value serialize(const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& data, rapidjson::Document::AllocatorType& allocator)
             {
                 rapidjson::Value val(rapidjson::kArrayType);
-                for (const std::pair<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& it : data)
+                for (const auto& it : data)
                 {
                     rapidjson::Value entry(rapidjson::kArrayType);
                     entry.PushBack(JSON_STR_HELPER(std::get<0>(it.first)), allocator);
@@ -97,35 +97,100 @@ namespace hal
             {
                 rapidjson::Value val(rapidjson::kObjectType);
                 val.AddMember("gate_id", ep->get_gate()->get_id(), allocator);
-                val.AddMember("pin_type", ep->get_pin(), allocator);
+                val.AddMember("pin_id", ep->get_pin()->get_id(), allocator);
                 return val;
             }
 
             bool deserialize_destination(Netlist* nl, Net* net, const rapidjson::Value& val)
             {
-                return net->add_destination(nl->get_gate_by_id(val["gate_id"].GetUint()), val["pin_type"].GetString());
+                Gate* gate = nl->get_gate_by_id(val["gate_id"].GetUint());
+                GatePin* pin;
+                if (val.HasMember("pin_id"))
+                {
+                    const u32 pin_id = val["pin_id"].GetUint();
+                    pin              = gate->get_type()->get_pin_by_id(pin_id);
+                    if (pin == nullptr)
+                    {
+                        log_error("netlist_persistent",
+                                  "could not deserialize destination of net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": failed to get pin with ID "
+                                      + std::to_string(pin_id));
+                        return false;
+                    }
+                }
+                else
+                {
+                    // legacy code for backward compatibility
+                    const std::string pin_name = val["pin_type"].GetString();
+                    pin                        = gate->get_type()->get_pin_by_name(pin_name);
+                    if (pin == nullptr)
+                    {
+                        log_error("netlist_persistent",
+                                  "could not deserialize destination of net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": failed to get pin with name '" + pin_name + "'");
+                        return false;
+                    }
+                }
+                if (!net->add_destination(gate, pin))
+                {
+                    log_error("netlist_persistent",
+                              "could not deserialize destination of net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": failed to add pin '" + pin->get_name()
+                                  + "' as destination to net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()));
+                    return false;
+                }
+                return true;
             }
 
             bool deserialize_source(Netlist* nl, Net* net, const rapidjson::Value& val)
             {
-                return net->add_source(nl->get_gate_by_id(val["gate_id"].GetUint()), val["pin_type"].GetString());
+                Gate* gate = nl->get_gate_by_id(val["gate_id"].GetUint());
+                GatePin* pin;
+                if (val.HasMember("pin_id"))
+                {
+                    const u32 pin_id = val["pin_id"].GetUint();
+                    pin              = gate->get_type()->get_pin_by_id(pin_id);
+                    if (pin == nullptr)
+                    {
+                        log_error("netlist_persistent",
+                                  "could not deserialize source of net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": failed to get pin with ID " + std::to_string(pin_id));
+                        return false;
+                    }
+                }
+                else
+                {
+                    // legacy code for backward compatibility
+                    const std::string pin_name = val["pin_type"].GetString();
+                    pin                        = gate->get_type()->get_pin_by_name(pin_name);
+                    if (pin == nullptr)
+                    {
+                        log_error("netlist_persistent",
+                                  "could not deserialize source of net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": failed to get pin with name '" + pin_name + "'");
+                        return false;
+                    }
+                }
+                if (net->add_source(gate, pin) == nullptr)
+                {
+                    log_error("netlist_persistent",
+                              "could not deserialize source of net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": failed to add pin '" + pin->get_name()
+                                  + "' as source to net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()));
+                    return false;
+                }
+                return true;
             }
 
             // serialize gate
-            rapidjson::Value serialize(const Gate* g, rapidjson::Document::AllocatorType& allocator)
+            rapidjson::Value serialize(const Gate* gate, rapidjson::Document::AllocatorType& allocator)
             {
                 rapidjson::Value val(rapidjson::kObjectType);
-                val.AddMember("id", g->get_id(), allocator);
-                val.AddMember("name", g->get_name(), allocator);
-                val.AddMember("type", g->get_type()->get_name(), allocator);
-                auto data_val = serialize(g->get_data_map(), allocator);
-                if (!data_val.Empty())
+                val.AddMember("id", gate->get_id(), allocator);
+                val.AddMember("name", gate->get_name(), allocator);
+                val.AddMember("type", gate->get_type()->get_name(), allocator);
+                auto data = serialize(gate->get_data_map(), allocator);
+                if (!data.Empty())
                 {
-                    val.AddMember("data", data_val, allocator);
+                    val.AddMember("data", data, allocator);
                 }
                 {
                     rapidjson::Value functions(rapidjson::kObjectType);
-                    for (const auto& [name, function] : g->get_boolean_functions(true))
+                    for (const auto& [name, function] : gate->get_boolean_functions(true))
                     {
                         const std::string function_str = function.to_string();
                         functions.AddMember(JSON_STR_HELPER(name), JSON_STR_HELPER(function_str), allocator);
@@ -140,20 +205,21 @@ namespace hal
 
             bool deserialize_gate(Netlist* nl, const rapidjson::Value& val, const std::unordered_map<std::string, hal::GateType*>& gate_types)
             {
-                auto gt_name = val["type"].GetString();
-                auto it      = gate_types.find(gt_name);
-                if (it != gate_types.end())
+                const u32 gate_id           = val["id"].GetUint();
+                const std::string gate_name = val["name"].GetString();
+                const std::string gate_type = val["type"].GetString();
+                if (auto it = gate_types.find(gate_type); it != gate_types.end())
                 {
-                    auto g = nl->create_gate(val["id"].GetUint(), it->second, val["name"].GetString());
-
-                    if (g == nullptr)
+                    auto gate = nl->create_gate(gate_id, it->second, gate_name);
+                    if (gate == nullptr)
                     {
+                        log_error("netlist_persistent", "could not deserialize gate '" + gate_name + "' with ID " + std::to_string(gate_id) + ": failed to create gate");
                         return false;
                     }
 
                     if (val.HasMember("data"))
                     {
-                        deserialize_data(g, val["data"]);
+                        deserialize_data(gate, val["data"]);
                     }
 
                     if (val.HasMember("custom_functions"))
@@ -161,27 +227,37 @@ namespace hal
                         auto functions = val["custom_functions"].GetObject();
                         for (auto f_it = functions.MemberBegin(); f_it != functions.MemberEnd(); ++f_it)
                         {
-                            auto function = BooleanFunction::from_string(f_it->value.GetString());
-                            g->add_boolean_function(f_it->name.GetString(), (function.is_ok()) ? function.get() : BooleanFunction());
+                            auto func = BooleanFunction::from_string(f_it->value.GetString());
+                            if (func.is_error())
+                            {
+                                log_error("netlist_persistent",
+                                          "could not deserialize gate '" + gate_name + "' with ID " + std::to_string(gate_id) + ": failed to parse Boolean function from string\n{}",
+                                          func.get_error().get());
+                                return false;
+                            }
+                            gate->add_boolean_function(f_it->name.GetString(), func.get());
                         }
                     }
 
                     return true;
                 }
 
+                log_error("netlist_persistent",
+                          "could not deserialize gate '" + gate_name + "' with ID " + std::to_string(gate_id) + ": failed to find gate '" + gate_type + "' in gate library '"
+                              + nl->get_gate_library()->get_name() + "'");
                 return false;
             }
 
             // serialize net
-            rapidjson::Value serialize(const Net* n, rapidjson::Document::AllocatorType& allocator)
+            rapidjson::Value serialize(const Net* net, rapidjson::Document::AllocatorType& allocator)
             {
                 rapidjson::Value val(rapidjson::kObjectType);
-                val.AddMember("id", n->get_id(), allocator);
-                val.AddMember("name", n->get_name(), allocator);
+                val.AddMember("id", net->get_id(), allocator);
+                val.AddMember("name", net->get_name(), allocator);
 
                 {
                     rapidjson::Value srcs(rapidjson::kArrayType);
-                    std::vector<Endpoint*> sorted = n->get_sources();
+                    std::vector<Endpoint*> sorted = net->get_sources();
                     std::sort(sorted.begin(), sorted.end(), [](Endpoint* lhs, Endpoint* rhs) { return lhs->get_gate()->get_id() < rhs->get_gate()->get_id(); });
                     for (const Endpoint* src : sorted)
                     {
@@ -195,7 +271,7 @@ namespace hal
 
                 {
                     rapidjson::Value dsts(rapidjson::kArrayType);
-                    std::vector<Endpoint*> sorted = n->get_destinations();
+                    std::vector<Endpoint*> sorted = net->get_destinations();
                     std::sort(sorted.begin(), sorted.end(), [](Endpoint* lhs, Endpoint* rhs) { return lhs->get_gate()->get_id() < rhs->get_gate()->get_id(); });
                     for (const Endpoint* dst : sorted)
                     {
@@ -207,19 +283,22 @@ namespace hal
                     }
                 }
 
-                auto data_val = serialize(n->get_data_map(), allocator);
-                if (!data_val.Empty())
+                auto data = serialize(net->get_data_map(), allocator);
+                if (!data.Empty())
                 {
-                    val.AddMember("data", data_val, allocator);
+                    val.AddMember("data", data, allocator);
                 }
                 return val;
             }
 
             bool deserialize_net(Netlist* nl, const rapidjson::Value& val)
             {
-                auto n = nl->create_net(val["id"].GetUint(), val["name"].GetString());
-                if (n == nullptr)
+                const u32 net_id           = val["id"].GetUint();
+                const std::string net_name = val["name"].GetString();
+                auto net                   = nl->create_net(net_id, net_name);
+                if (net == nullptr)
                 {
+                    log_error("netlist_persistent", "could not deserialize net '" + net_name + "' with ID " + std::to_string(net_id) + ": failed to create net");
                     return false;
                 }
 
@@ -227,8 +306,9 @@ namespace hal
                 {
                     for (const auto& src_node : val["srcs"].GetArray())
                     {
-                        if (!deserialize_source(nl, n, src_node))
+                        if (!deserialize_source(nl, net, src_node))
                         {
+                            log_error("netlist_persistent", "could not deserialize net '" + net_name + "' with ID " + std::to_string(net_id) + ": failed to deserialize source");
                             return false;
                         }
                     }
@@ -238,8 +318,9 @@ namespace hal
                 {
                     for (const auto& dst_node : val["dsts"].GetArray())
                     {
-                        if (!deserialize_destination(nl, n, dst_node))
+                        if (!deserialize_destination(nl, net, dst_node))
                         {
+                            log_error("netlist_persistent", "could not deserialize net '" + net_name + "' with ID " + std::to_string(net_id) + ": failed to deserialize destination");
                             return false;
                         }
                     }
@@ -247,30 +328,31 @@ namespace hal
 
                 if (val.HasMember("data"))
                 {
-                    deserialize_data(n, val["data"]);
+                    deserialize_data(net, val["data"]);
                 }
 
                 return true;
             }
 
             // serialize module
-            rapidjson::Value serialize(const Module* m, rapidjson::Document::AllocatorType& allocator)
+            rapidjson::Value serialize(const Module* module, rapidjson::Document::AllocatorType& allocator)
             {
                 rapidjson::Value val(rapidjson::kObjectType);
-                val.AddMember("id", m->get_id(), allocator);
-                val.AddMember("type", m->get_type(), allocator);
-                val.AddMember("name", m->get_name(), allocator);
-                if (m->get_parent_module() == nullptr)
+                val.AddMember("id", module->get_id(), allocator);
+                val.AddMember("type", module->get_type(), allocator);
+                val.AddMember("name", module->get_name(), allocator);
+                Module* parent = module->get_parent_module();
+                if (parent == nullptr)
                 {
                     val.AddMember("parent", 0, allocator);
                 }
                 else
                 {
-                    val.AddMember("parent", m->get_parent_module()->get_id(), allocator);
+                    val.AddMember("parent", parent->get_id(), allocator);
                 }
                 {
                     rapidjson::Value gates(rapidjson::kArrayType);
-                    std::vector<Gate*> sorted = m->get_gates(nullptr, false);
+                    std::vector<Gate*> sorted = module->get_gates(nullptr, false);
                     std::sort(sorted.begin(), sorted.end(), [](Gate* lhs, Gate* rhs) { return lhs->get_id() < rhs->get_id(); });
                     for (const Gate* g : sorted)
                     {
@@ -283,7 +365,7 @@ namespace hal
                 }
                 {
                     rapidjson::Value json_pin_groups(rapidjson::kArrayType);
-                    for (const PinGroup<ModulePin>* pin_group : m->get_pin_groups())
+                    for (const PinGroup<ModulePin>* pin_group : module->get_pin_groups())
                     {
                         rapidjson::Value json_pin_group(rapidjson::kObjectType);
                         json_pin_group.AddMember("id", pin_group->get_id(), allocator);
@@ -311,30 +393,36 @@ namespace hal
                     }
                 }
 
-                auto data_val = serialize(m->get_data_map(), allocator);
-                if (!data_val.Empty())
+                auto data = serialize(module->get_data_map(), allocator);
+                if (!data.Empty())
                 {
-                    val.AddMember("data", data_val, allocator);
+                    val.AddMember("data", data, allocator);
                 }
                 return val;
             }
 
             bool deserialize_module(Netlist* nl, const rapidjson::Value& val, std::unordered_map<Module*, std::vector<PinGroupInformation>>& pin_group_cache)
             {
-                u32 parent_id = val["parent"].GetUint();
-                Module* sm    = nl->get_top_module();
+                const u32 module_id           = val["id"].GetUint();
+                const std::string module_name = val["name"].GetString();
+                const u32 parent_id           = val["parent"].GetUint();
+                Module* sm                    = nl->get_top_module();
+
                 if (parent_id == 0)
                 {
                     // top_module must not be created but might be renamed
-                    std::string top_module_name = val["name"].GetString();
+                    const std::string top_module_name = val["name"].GetString();
                     if (top_module_name != sm->get_name())
+                    {
                         sm->set_name(top_module_name);
+                    }
                 }
                 else
                 {
-                    sm = nl->create_module(val["id"].GetUint(), val["name"].GetString(), nl->get_module_by_id(parent_id));
+                    sm = nl->create_module(module_id, module_name, nl->get_module_by_id(parent_id));
                     if (sm == nullptr)
                     {
+                        log_error("netlist_persistent", "could not deserialize module '" + module_name + "' with ID " + std::to_string(module_id) + ": failed to create module");
                         return false;
                     }
                 }
@@ -362,30 +450,30 @@ namespace hal
                     deserialize_data(sm, val["data"]);
                 }
 
-                // u32 ctr = 0;
-                // for (ModulePin* pin : sm->get_pins())
-                // {
-                //     // pin names must be unique, hence automatically generated groups may conflict with deserialized ones
-                //     sm->set_pin_name(pin, "____deserialize_tmp_pin_[" + std::to_string(ctr) + "]____");
-                // }
-
-                // ctr = 0;
-                // for (PinGroup<ModulePin>* pin_group : sm->get_pin_groups())
-                // {
-                //     // pin group names must be unique, hence automatically generated groups may conflict with deserialized ones
-                //     sm->set_pin_group_name(pin_group, "____deserialize_tmp_pin_group_[" + std::to_string(ctr) + "]____");
-                // }
-
                 if (val.HasMember("pin_groups"))
                 {
                     // pins need to be cached until all modules have been instantiated
                     for (const auto& json_pin_group : val["pin_groups"].GetArray())
                     {
                         PinGroupInformation pin_group;
-                        pin_group.id          = json_pin_group["id"].GetUint();
-                        pin_group.name        = json_pin_group["name"].GetString();
-                        pin_group.direction   = enum_from_string<PinDirection>(json_pin_group["direction"].GetString());
-                        pin_group.type        = enum_from_string<PinType>(json_pin_group["type"].GetString());
+                        pin_group.id   = json_pin_group["id"].GetUint();
+                        pin_group.name = json_pin_group["name"].GetString();
+                        if (json_pin_group.HasMember("direction"))
+                        {
+                            pin_group.direction = enum_from_string<PinDirection>(json_pin_group["direction"].GetString());
+                        }
+                        else
+                        {
+                            pin_group.direction = PinDirection::none;
+                        }
+                        if (json_pin_group.HasMember("type"))
+                        {
+                            pin_group.type = enum_from_string<PinType>(json_pin_group["type"].GetString());
+                        }
+                        else
+                        {
+                            pin_group.type = PinType::none;
+                        }
                         pin_group.ascending   = json_pin_group["ascending"].GetBool();
                         pin_group.start_index = json_pin_group["start_index"].GetUint();
 
@@ -447,7 +535,9 @@ namespace hal
                             u32 pid = (p.id > 0) ? (u32)p.id : sm->get_unique_pin_id();
                             if (auto res = sm->create_pin(pid, p.name, p.net, p.type, false); res.is_error())
                             {
-                                log_error("netlist_persistent", "{}", res.get_error().get());
+                                log_error("netlist_persistent",
+                                          "could not deserialize pin '" + p.name + "' of module '" + sm->get_name() + "' with ID " + std::to_string(sm->get_id()) + ": failed to create pin\n{}",
+                                          res.get_error().get());
                                 return false;
                             }
                             else
@@ -458,7 +548,10 @@ namespace hal
                         u32 pgid = (pg.id > 0) ? (u32)pg.id : sm->get_unique_pin_group_id();
                         if (auto res = sm->create_pin_group(pgid, pg.name, pins, pg.direction, pg.type, pg.ascending, pg.start_index); res.is_error())
                         {
-                            log_error("netlist_persistent", "{}", res.get_error().get());
+                            log_error("netlist_persistent",
+                                      "could not deserialize pin group '" + pg.name + "' of module '" + sm->get_name() + "' with ID " + std::to_string(sm->get_id())
+                                          + ": failed to create pin group\n{}",
+                                      res.get_error().get());
                             return false;
                         }
                     }
@@ -466,7 +559,7 @@ namespace hal
                 return true;
             }
 
-             // serialize netlist
+            // serialize netlist
             void serialize(const Netlist* nl, rapidjson::Document& document)
             {
                 rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
@@ -487,10 +580,12 @@ namespace hal
                     for (const Gate* gate : sorted)
                     {
                         gates.PushBack(serialize(gate, allocator), allocator);
+
                         if (nl->is_gnd_gate(gate))
                         {
                             global_gnds.PushBack(gate->get_id(), allocator);
                         }
+
                         if (nl->is_vcc_gate(gate))
                         {
                             global_vccs.PushBack(gate->get_id(), allocator);
@@ -509,10 +604,12 @@ namespace hal
                     for (const Net* net : sorted)
                     {
                         nets.PushBack(serialize(net, allocator), allocator);
+
                         if (nl->is_global_input_net(net))
                         {
                             global_in.PushBack(net->get_id(), allocator);
                         }
+
                         if (nl->is_global_output_net(net))
                         {
                             global_out.PushBack(net->get_id(), allocator);
@@ -530,12 +627,12 @@ namespace hal
                     q.push(nl->get_top_module());
                     while (!q.empty())
                     {
-                        const Module* m = q.front();
+                        const Module* module = q.front();
                         q.pop();
 
-                        modules.PushBack(serialize(m, allocator), allocator);
+                        modules.PushBack(serialize(module, allocator), allocator);
 
-                        for (const Module* sm : m->get_submodules())
+                        for (const Module* sm : module->get_submodules())
                         {
                             q.push(sm);
                         }
@@ -550,11 +647,15 @@ namespace hal
             {
                 if (!document.HasMember("netlist"))
                 {
-                    log_critical("netlist_persistent", "file does not include a 'netlist' node");
+                    log_error("netlist_persistent", "could not deserialize netlist: file has no 'netlist' node");
                     return nullptr;
                 }
                 auto root = document["netlist"].GetObject();
-                assert_availablility("gate_library");
+                if (!root.HasMember("gate_library"))
+                {
+                    log_error("netlist_persistent", "could not deserialize netlist: node 'netlist' has no node 'gate_library'");
+                    return nullptr;
+                }
 
                 std::filesystem::path glib_path(root["gate_library"].GetString());
 
@@ -563,19 +664,23 @@ namespace hal
                 if (glib == nullptr)
                 {
                     if (glib_path.extension() == ".hgl")
+                    {
                         glib_path.replace_extension(".lib");
+                    }
                     else
+                    {
                         glib_path.replace_extension(".hgl");
-                    glib = gate_library_manager::get_gate_library(glib_path.string());
+                    }
 
+                    glib = gate_library_manager::get_gate_library(glib_path.string());
                     if (glib == nullptr)
                     {
-                        log_critical("netlist_persistent", "error loading gate library '{}'.", root["gate_library"].GetString());
+                        log_critical("netlist_persistent", "could not deserialize netlist: failed to load gate library '" + std::string(root["gate_library"].GetString()) + "'");
                         return nullptr;
                     }
                     else
                     {
-                        log_info("netlist_persistent", "gate library '{}' demanded but using '{}' instead.", root["gate_library"].GetString(), glib_path.string());
+                        log_info("netlist_persistent", "gate library '{}' required but using '{}' instead.", root["gate_library"].GetString(), glib_path.string());
                     }
                 }
 
@@ -584,67 +689,130 @@ namespace hal
                 // disable automatically checking module nets
                 nl->enable_automatic_net_checks(false);
 
-                assert_availablility("id");
+                if (!root.HasMember("id"))
+                {
+                    log_error("netlist_persistent", "could not deserialize netlist: node 'netlist' has no node 'id'");
+                    return nullptr;
+                }
                 nl->set_id(root["id"].GetUint());
 
-                assert_availablility("input_file");
+                if (!root.HasMember("input_file"))
+                {
+                    log_error("netlist_persistent", "could not deserialize netlist: node 'netlist' has no node 'input_file'");
+                    return nullptr;
+                }
                 nl->set_input_filename(root["input_file"].GetString());
 
-                assert_availablility("design_name");
+                if (!root.HasMember("design_name"))
+                {
+                    log_error("netlist_persistent", "could not deserialize netlist: node 'netlist' has no node 'design_name'");
+                    return nullptr;
+                }
                 nl->set_design_name(root["design_name"].GetString());
 
-                assert_availablility("device_name");
+                if (!root.HasMember("device_name"))
+                {
+                    log_error("netlist_persistent", "could not deserialize netlist: node 'netlist' has no node 'device_name'");
+                    return nullptr;
+                }
                 nl->set_device_name(root["device_name"].GetString());
 
-                assert_availablility("gates");
+                if (!root.HasMember("gates"))
+                {
+                    log_error("netlist_persistent", "could not deserialize netlist: node 'netlist' has no node 'gates'");
+                    return nullptr;
+                }
                 auto gate_types = nl->get_gate_library()->get_gate_types();
                 for (auto& gate_node : root["gates"].GetArray())
                 {
                     if (!deserialize_gate(nl.get(), gate_node, gate_types))
                     {
+                        log_error("netlist_persistent", "could not deserialize netlist: failed to deserialize gate");
                         return nullptr;
                     }
                 }
 
-                assert_availablility("global_vcc");
+                if (!root.HasMember("global_vcc"))
+                {
+                    log_error("netlist_persistent", "could not deserialize netlist: node 'netlist' has no node 'global_vcc'");
+                    return nullptr;
+                }
                 for (auto& gate_node : root["global_vcc"].GetArray())
                 {
-                    nl->mark_vcc_gate(nl->get_gate_by_id(gate_node.GetUint()));
+                    if (!nl->mark_vcc_gate(nl->get_gate_by_id(gate_node.GetUint())))
+                    {
+                        log_error("netlist_persistent", "could not deserialize netlist: failed to mark VCC gate");
+                        return nullptr;
+                    }
                 }
 
-                assert_availablility("global_gnd");
+                if (!root.HasMember("global_gnd"))
+                {
+                    log_error("netlist_persistent", "could not deserialize netlist: node 'netlist' has no node 'global_gnd'");
+                    return nullptr;
+                }
                 for (auto& gate_node : root["global_gnd"].GetArray())
                 {
-                    nl->mark_gnd_gate(nl->get_gate_by_id(gate_node.GetUint()));
+                    if (!nl->mark_gnd_gate(nl->get_gate_by_id(gate_node.GetUint())))
+                    {
+                        log_error("netlist_persistent", "could not deserialize netlist: failed to mark GND gate");
+                        return nullptr;
+                    }
                 }
 
-                assert_availablility("nets");
+                if (!root.HasMember("nets"))
+                {
+                    log_error("netlist_persistent", "could not deserialize netlist: node 'netlist' has no node 'nets'");
+                    return nullptr;
+                }
                 for (auto& net_node : root["nets"].GetArray())
                 {
                     if (!deserialize_net(nl.get(), net_node))
                     {
+                        log_error("netlist_persistent", "could not deserialize netlist: failed to deserialize net");
                         return nullptr;
                     }
                 }
 
-                assert_availablility("global_in");
+                if (!root.HasMember("global_in"))
+                {
+                    log_error("netlist_persistent", "could not deserialize netlist: node 'netlist' has no node 'global_in'");
+                    return nullptr;
+                }
                 for (auto& net_node : root["global_in"].GetArray())
                 {
-                    nl->mark_global_input_net(nl->get_net_by_id(net_node.GetUint()));
+                    if (!nl->mark_global_input_net(nl->get_net_by_id(net_node.GetUint())))
+                    {
+                        log_error("netlist_persistent", "could not deserialize netlist: failed to mark global input net");
+                        return nullptr;
+                    }
                 }
 
-                assert_availablility("global_out");
+                if (!root.HasMember("global_out"))
+                {
+                    log_error("netlist_persistent", "could not deserialize netlist: node 'netlist' has no node 'global_out'");
+                    return nullptr;
+                }
                 for (auto& net_node : root["global_out"].GetArray())
                 {
-                    nl->mark_global_output_net(nl->get_net_by_id(net_node.GetUint()));
+                    if (!nl->mark_global_output_net(nl->get_net_by_id(net_node.GetUint())))
+                    {
+                        log_error("netlist_persistent", "could not deserialize netlist: failed to mark global output net");
+                        return nullptr;
+                    }
                 }
 
-                assert_availablility("modules");
+                if (!root.HasMember("modules"))
+                {
+                    log_error("netlist_persistent", "could not deserialize netlist: node 'netlist' has no node 'modules'");
+                    return nullptr;
+                }
                 std::unordered_map<Module*, std::vector<PinGroupInformation>> pin_group_cache;
                 for (auto& module_node : root["modules"].GetArray())
                 {
                     if (!deserialize_module(nl.get(), module_node, pin_group_cache))
                     {
+                        log_error("netlist_persistent", "could not deserialize netlist: failed to deserialize module");
                         return nullptr;
                     }
                 }
@@ -658,6 +826,7 @@ namespace hal
                 // load module pins (nets must have been updated beforehand)
                 if (!deserialize_module_pins(pin_group_cache))
                 {
+                    log_error("netlist_persistent", "could not deserialize netlist: failed to deserialize module pins");
                     return nullptr;
                 }
 
@@ -679,17 +848,19 @@ namespace hal
 
             // create directory if it got erased in the meantime
             std::filesystem::path serialize_to_dir = hal_file.parent_path();
-            if (serialize_to_dir.empty()) return false;
+            if (serialize_to_dir.empty())
+                return false;
             if (!std::filesystem::exists(serialize_to_dir))
             {
-                if (!std::filesystem::create_directory(serialize_to_dir)) return false;
+                if (!std::filesystem::create_directory(serialize_to_dir))
+                    return false;
             }
 
             std::ofstream hal_file_stream;
             hal_file_stream.open(hal_file.string());
             if (hal_file_stream.fail())
             {
-                log_error("hdl_writer", "Cannot open or create file {}. Please verify that the file and the containing directory is writable!", hal_file.string());
+                log_error("netlist_persistent", "could not open or create file {}: please verify that the file and the containing directory is writable", hal_file.string());
                 return false;
             }
 

@@ -232,11 +232,6 @@ namespace hal {
 
         for (const auto& [s, expected] : data) {
             auto function = BooleanFunction::from_string(s);
-
-            if (function.is_error()) {
-                log_error("netlist", "{}", function.get_error().get());   
-            }
-
             ASSERT_TRUE(function.is_ok());
             ASSERT_EQ(function.get(), expected);
         }
@@ -1119,9 +1114,6 @@ namespace hal {
         
         for (const auto& [function, input, expected]: data) {
             auto value = function.evaluate(input);
-            if (value.is_error()) {
-                log_error("netlist", "{}", value.get_error().get());
-            }
             EXPECT_EQ(expected, value.get());
         }
     }
@@ -1176,9 +1168,6 @@ namespace hal {
         
         for (const auto& [function, input, expected]: data) {
             auto value = function.evaluate(input);
-            if (value.is_error()) {
-                log_error("netlist", "{}", value.get_error().get());
-            }
             EXPECT_EQ(expected, value.get());
         }
     }

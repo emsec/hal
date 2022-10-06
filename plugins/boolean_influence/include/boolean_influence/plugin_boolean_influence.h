@@ -70,7 +70,7 @@ namespace hal
         std::pair<std::map<u32, Gate*>, std::vector<std::vector<double>>> get_ff_dependency_matrix(const Netlist* nl, bool with_boolean_influence);
 
     private:
-        std::vector<Gate*> extract_function_gates(const Gate* start, const std::string& pin);
+        std::vector<Gate*> extract_function_gates(const Gate* start, const GatePin* pin);
         void add_inputs(Gate* gate, std::unordered_set<Gate*>& gates);
     };
 }    // namespace hal

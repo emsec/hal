@@ -54,15 +54,34 @@ namespace hal
 
         for (const auto& ff : state_reg)
         {
-            const std::unordered_set<std::string> d_ports = ff->get_type()->get_pins_of_type(PinType::data);
+            const std::vector<GatePin*> d_ports = ff->get_type()->get_pins([](const GatePin* pin) { return pin->get_type() == PinType::data; });
             if (d_ports.size() != 1)
             {
-                log_error("Fsm solver", "currently not supporting flip-flops with multiple or no data inputs. ({})", d_ports.size());
+                log_error("solve_fsm", "currently not supporting flip-flops with multiple or no data inputs. ({})", d_ports.size());
+                return {};
             }
-            const hal::Net* input_net = ff->get_fan_in_net(*d_ports.begin());
+            hal::Net* input_net;
+            if (auto res = ff->get_fan_in_net(d_ports.front()); res == nullptr)
+            {
+                log_error("solve_fsm", "could not get fan-in net at pin {} of gate '{}' with ID {}", d_ports.front()->get_name(), ff->get_name(), ff->get_id());
+                return {};
+            }
+            else
+            {
+                input_net = res;
+            }
             state_input_net_ids.push_back(input_net->get_id());
 
-            BooleanFunction bf = netlist_utils::get_subgraph_function(input_net, subgraph_gates);
+            BooleanFunction bf;
+            if (auto res = netlist_utils::get_subgraph_function(input_net, subgraph_gates); res.is_error())
+            {
+                log_error("solve_fsm", "error encountered while getting subgraph function:\n{}", res.get_error().get());
+                return {};
+            }
+            else
+            {
+                bf = res.get();
+            }
 
             // Special case if a flip-flop has another flip-flop as a direct predecessor
             if (bf.is_empty())
@@ -101,14 +120,13 @@ namespace hal
                 // check for multidriven nets
                 if (out->get_sources().size() != 1)
                 {
-                    log_error("Fsm solver", "Multidriven nets are not supported! Aborting at Net {}.", out->get_id());
+                    log_error("solve_fsm", "Multidriven nets are not supported! Aborting at Net {}.", out->get_id());
                     return {};
                 }
 
                 // negate if the output stems from the negated state output
-                const std::string src_pin                            = out->get_sources().front()->get_pin();
-                const std::unordered_set<std::string> neg_state_pins = out->get_sources().front()->get_gate()->get_type()->get_pins_of_type(PinType::neg_state);
-                if (neg_state_pins.find(src_pin) != neg_state_pins.end())
+                const GatePin* src_pin = out->get_sources().front()->get_pin();
+                if (src_pin->get_type() == PinType::neg_state)
                 {
                     to = ~to;
                 }
@@ -122,17 +140,17 @@ namespace hal
         const u32 state_size = state_net_to_func.size();
         if (state_size > 64)
         {
-            log_error("Fsm solver", "Current maximum for state size is 64 bit.");
+            log_error("solve_fsm", "Current maximum for state size is 64 bit.");
             return {};
         }
 
         if (external_ids.size() > 64)
         {
-            log_error("Fsm solver", "Current maximum for input size is 64 bit.");
+            log_error("solve_fsm", "Current maximum for input size is 64 bit.");
             return {};
         }
 
-        log_info("Fsm solver", "Starting brute force on state with {} bits and {} external inputs.", state_size, external_ids.size());
+        log_info("solve_fsm", "Starting brute force on state with {} bits and {} external inputs.", state_size, external_ids.size());
 
         // generate all transitions that are reachable from the inital state.
         std::vector<FsmTransition> all_transitions;
@@ -198,7 +216,8 @@ namespace hal
             std::ofstream ofs(graph_path);
             if (!ofs.is_open())
             {
-                log_error("Fsm solver", "could not open file '{}' for writing.", graph_path);
+                log_error("solve_fsm", "could not open file '{}' for writing.", graph_path);
+                return {};
             }
             ofs << graph;
         }
@@ -221,11 +240,11 @@ namespace hal
     }
 
     std::map<u64, std::map<u64, std::vector<std::map<u32, u8>>>> SolveFsmPlugin::solve_fsm(Netlist* nl,
-                                                              const std::vector<Gate*> state_reg,
-                                                              const std::vector<Gate*> transition_logic,
-                                                              const std::map<Gate*, bool> initial_state,
-                                                              const std::string graph_path,
-                                                              const u32 timeout)
+                                                                                           const std::vector<Gate*> state_reg,
+                                                                                           const std::vector<Gate*> transition_logic,
+                                                                                           const std::map<Gate*, bool> initial_state,
+                                                                                           const std::string graph_path,
+                                                                                           const u32 timeout)
     {
         // create mapping between (negated) output nets and data input nets of state flip-flops in in order to later replace them.
         const std::map<hal::Net*, hal::Net*> output_net_to_input_net = find_output_net_to_input_net({state_reg.begin(), state_reg.end()});
@@ -245,28 +264,41 @@ namespace hal
 
         for (const auto& ff : state_reg)
         {
-            const std::unordered_set<std::string> d_ports = ff->get_type()->get_pins_of_type(PinType::data);
+            const std::vector<GatePin*> d_ports = ff->get_type()->get_pins([](const GatePin* pin) { return pin->get_type() == PinType::data; });
             if (d_ports.size() != 1)
             {
-                log_error("Fsm solver", "currently not supporting flip-flops with multiple or no data inputs. ({})", d_ports.size());
+                log_error("solve_fsm", "currently not supporting flip-flops with multiple or no data inputs. ({})", d_ports.size());
+                return {};
             }
-            const hal::Net* input_net = ff->get_fan_in_net(*d_ports.begin());
+            hal::Net* input_net;
+            if (auto res = ff->get_fan_in_net(d_ports.front()); res == nullptr)
+            {
+                log_error("solve_fsm", "could not get fan-in net at pin {} of gate '{}' with ID {}", d_ports.front()->get_name(), ff->get_name(), ff->get_id());
+                return {};
+            }
+            else
+            {
+                input_net = res;
+            }
 
             z3::expr r(ctx);
             std::unordered_set<u32> ids;
             g.get_subgraph_z3_function(input_net, subgraph_gates, ctx, r, ids);
 
             // replace all vcc and gnd nets with constant zeros and ones
-            for (const auto& gnd_gate : nl->get_gnd_gates()) {
-                if (gnd_gate->get_fan_out_nets().size() != 1) {
+            for (const auto& gnd_gate : nl->get_gnd_gates())
+            {
+                if (gnd_gate->get_fan_out_nets().size() != 1)
+                {
                     log_error("fsm_solve", "GND gate {} with {} outputs!", gnd_gate->get_id(), gnd_gate->get_fan_out_nets().size());
+                    return {};
                 }
 
-                Net* gnd_net = gnd_gate->get_fan_out_nets().at(0);
+                Net* gnd_net   = gnd_gate->get_fan_out_nets().at(0);
                 u32 gnd_net_id = gnd_net->get_id();
 
                 z3::expr from = ctx.bv_const(std::to_string(gnd_net_id).c_str(), 1);
-                z3::expr to = ctx.bv_val(0, 1);
+                z3::expr to   = ctx.bv_val(0, 1);
 
                 z3::expr_vector from_vec(ctx);
                 z3::expr_vector to_vec(ctx);
@@ -277,16 +309,19 @@ namespace hal
                 r = r.substitute(from_vec, to_vec);
             }
 
-            for (const auto& vcc_gate : nl->get_vcc_gates()) {
-                if (vcc_gate->get_fan_out_nets().size() != 1) {
+            for (const auto& vcc_gate : nl->get_vcc_gates())
+            {
+                if (vcc_gate->get_fan_out_nets().size() != 1)
+                {
                     log_error("fsm_solve", "GND gate {} with {} outputs!", vcc_gate->get_id(), vcc_gate->get_fan_out_nets().size());
+                    return {};
                 }
 
-                Net* vcc_net = vcc_gate->get_fan_out_nets().at(0);
+                Net* vcc_net   = vcc_gate->get_fan_out_nets().at(0);
                 u32 vcc_net_id = vcc_net->get_id();
 
                 z3::expr from = ctx.bv_const(std::to_string(vcc_net_id).c_str(), 1);
-                z3::expr to = ctx.bv_val(1, 1);
+                z3::expr to   = ctx.bv_val(1, 1);
 
                 z3::expr_vector from_vec(ctx);
                 z3::expr_vector to_vec(ctx);
@@ -324,14 +359,13 @@ namespace hal
                 // check for multidriven nets
                 if (out->get_sources().size() != 1)
                 {
-                    log_error("Fsm solver", "Multidriven nets are not supported! Aborting at Net {}.", out->get_id());
+                    log_error("solve_fsm", "Multidriven nets are not supported! Aborting at Net {}.", out->get_id());
                     return {};
                 }
 
                 // negate if the output stems from the negated state output
-                const std::string src_pin                            = out->get_sources().front()->get_pin();
-                const std::unordered_set<std::string> neg_state_pins = out->get_sources().front()->get_gate()->get_type()->get_pins_of_type(PinType::neg_state);
-                if (neg_state_pins.find(src_pin) != neg_state_pins.end())
+                const GatePin* src_pin = out->get_sources().front()->get_pin();
+                if (src_pin->get_type() == PinType::neg_state)
                 {
                     to = ~to;
                 }
@@ -355,12 +389,22 @@ namespace hal
         for (const auto& gate : state_reg)
         {
             // reconstruct input net id
-            const std::unordered_set<std::string> d_ports = gate->get_type()->get_pins_of_type(PinType::data);
+            const std::vector<GatePin*> d_ports = gate->get_type()->get_pins([](const GatePin* pin) { return pin->get_type() == PinType::data; });
             if (d_ports.size() != 1)
             {
-                log_error("Fsm solver", "currently not supporting flip-flops with multiple or no data inputs. ({})", d_ports.size());
+                log_error("solve_fsm", "currently not supporting flip-flops with multiple or no data inputs. ({})", d_ports.size());
+                return {};
             }
-            const u32 net_id = gate->get_fan_in_net(*d_ports.begin())->get_id();
+            u32 net_id;
+            if (auto res = gate->get_fan_in_net(d_ports.front()); res == nullptr)
+            {
+                log_error("solve_fsm", "could not get fan-in net at pin {} of gate '{}' with ID {}", d_ports.front()->get_name(), gate->get_name(), gate->get_id());
+                return {};
+            }
+            else
+            {
+                net_id = res->get_id();
+            }
 
             // bitvector representing the previous state
             z3::expr prev_expr = ctx.bv_const((std::to_string(net_id)).c_str(), 1);
@@ -401,7 +445,7 @@ namespace hal
                 z3::expr temp(ctx);
                 if (initial_state.find(gate) == initial_state.end())
                 {
-                    log_error("Fsm solver", "Initial state map does not contain value for gate {}. Set to zero.", gate->get_id());
+                    log_error("solve_fsm", "Initial state map does not contain value for gate {}. Set to zero.", gate->get_id());
                     temp = ctx.bv_val(0x0, 1);
                 }
                 else
@@ -464,7 +508,8 @@ namespace hal
             std::ofstream ofs(graph_path);
             if (!ofs.is_open())
             {
-                log_error("Fsm solver", "could not open file '{}' for writing.", graph_path);
+                log_error("solve_fsm", "could not open file '{}' for writing.", graph_path);
+                return {};
             }
             ofs << graph;
         }
@@ -500,12 +545,22 @@ namespace hal
         {
             for (const auto& back_net : ff->get_fan_out_nets())
             {
-                const std::unordered_set<std::string> d_ports = ff->get_type()->get_pins_of_type(PinType::data);
+                const std::vector<GatePin*> d_ports = ff->get_type()->get_pins([](const GatePin* pin) { return pin->get_type() == PinType::data; });
                 if (d_ports.size() != 1)
                 {
-                    log_error("Fsm solver", "currently not supporting flip-flops with multiple or no data inputs. ({})", d_ports.size());
+                    log_error("solve_fsm", "currently not supporting flip-flops with multiple or no data inputs. ({})", d_ports.size());
+                    return {};
                 }
-                hal::Net* input_net = ff->get_fan_in_net(*d_ports.begin());
+                hal::Net* input_net;
+                if (auto res = ff->get_fan_in_net(d_ports.front()); res == nullptr)
+                {
+                    log_error("solve_fsm", "could not get fan-in net at pin {} of gate '{}' with ID {}", d_ports.front()->get_name(), ff->get_name(), ff->get_id());
+                    return {};
+                }
+                else
+                {
+                    input_net = res;
+                }
                 output_net_to_input_net.insert({back_net, input_net});
             }
         }
@@ -631,7 +686,7 @@ namespace hal
             m_transitions.push_back(n_transition);
         }
 
-        log_info("Fsm solver", "Merged transitions. ({} -> {})", transitions.size(), m_transitions.size());
+        log_info("solve_fsm", "Merged transitions. ({} -> {})", transitions.size(), m_transitions.size());
 
         return m_transitions;
     }

@@ -510,8 +510,8 @@ namespace hal {
                 // The expected result
                 std::vector<Gate*> ex_gates = {nl->get_gate_by_id(MIN_GATE_ID + 3), nl->get_gate_by_id(MIN_GATE_ID + 4)};
 
-                EXPECT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")), ex_gates);
-                EXPECT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")), ex_gates);
+                EXPECT_EQ(nl->get_gates(test_utils::gate_type_filter("BUF")), ex_gates);
+                EXPECT_EQ(nl->get_gates(test_utils::gate_type_filter("BUF")), ex_gates);
             }
             {// Get an existing Gate of the example netlist by its name
                 auto nl = test_utils::create_example_netlist();

@@ -8,22 +8,22 @@ namespace hal
 
         m_output_pins = gate->get_type()->get_output_pins();
 
-        for (const std::string& pin : m_output_pins)
+        for (const GatePin* pin : m_output_pins)
         {
             const Net* out_net = gate->get_fan_out_net(pin);
             m_output_nets.push_back(out_net);
 
             // resolve recursion within output functions
-            BooleanFunction& func = functions.at(pin);
+            BooleanFunction& func = functions.at(pin->get_name());
             while (true)
             {
                 auto vars = func.get_variable_names();
-                bool exit                     = true;
-                for (const std::string& other_pin : m_output_pins)
+                bool exit = true;
+                for (const GatePin* other_pin : m_output_pins)
                 {
-                    if (std::find(vars.begin(), vars.end(), other_pin) != vars.end())
+                    if (const std::string& other_pin_name = other_pin->get_name(); std::find(vars.begin(), vars.end(), other_pin_name) != vars.end())
                     {
-                        func = func.substitute(other_pin, functions.at(other_pin)).get();
+                        func = func.substitute(other_pin_name, functions.at(other_pin_name)).get();
                         exit = false;
                     }
                 }
@@ -36,7 +36,7 @@ namespace hal
         }
     }
 
-    bool NetlistSimulator::SimulationGateCombinational::simulate(const Simulation& simulation, const WaveEvent &event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events)
+    bool NetlistSimulator::SimulationGateCombinational::simulate(const Simulation& simulation, const WaveEvent& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events)
     {
         UNUSED(simulation);
 

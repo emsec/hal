@@ -53,42 +53,40 @@ namespace hal
             // Get the boolean function of a normal sub-graph
             const std::vector<const Gate*> subgraph_gates({gate_0, gate_3});
             const Net* output_net        = test_nl->get_net_by_id(MIN_NET_ID + 045);
-            BooleanFunction sub_graph_bf = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
+
+            auto res = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
+            ASSERT_TRUE(res.is_ok());
+            BooleanFunction sub_graph_bf = res.get();
 
             BooleanFunction expected_bf = BooleanFunction::from_string(("!" + net_13_name + " & " + net_20_name)).get();
-
             EXPECT_EQ(sub_graph_bf, expected_bf);
         }
         // NEGATIVE
         {
-            NO_COUT_BLOCK;
             // No subgraph gates are passed
             const std::vector<const Gate*> subgraph_gates({});
-            const Net* output_net        = test_nl->get_net_by_id(MIN_NET_ID + 045);
-            BooleanFunction sub_graph_bf = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
-
-            EXPECT_TRUE(sub_graph_bf.is_empty());
+            const Net* output_net = test_nl->get_net_by_id(MIN_NET_ID + 045);
+            
+            auto res = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
+            ASSERT_TRUE(res.is_error());
         }
         {
-            NO_COUT_BLOCK;
             // One of the gates is a nullptr
             const std::vector<const Gate*> subgraph_gates({gate_0, nullptr, gate_3});
-            const Net* output_net        = test_nl->get_net_by_id(MIN_NET_ID + 045);
-            BooleanFunction sub_graph_bf = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
-
-            EXPECT_TRUE(sub_graph_bf.is_empty());
+            const Net* output_net = test_nl->get_net_by_id(MIN_NET_ID + 045);
+            
+            auto res = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
+            ASSERT_TRUE(res.is_error());
         }
         {
-            NO_COUT_BLOCK;
             // The output net is a nullptr
             const std::vector<const Gate*> subgraph_gates({gate_0, gate_3});
-            const Net* output_net        = nullptr;
-            BooleanFunction sub_graph_bf = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
-
-            EXPECT_TRUE(sub_graph_bf.is_empty());
+            const Net* output_net = nullptr;
+            
+            auto res = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
+            ASSERT_TRUE(res.is_error());
         }
         {
-            NO_COUT_BLOCK;
             // The output net has multiple sources
             // -- create such a net
             Net* multi_src_net = test_nl->create_net("muli_src_net");
@@ -97,42 +95,39 @@ namespace hal
 
             const std::vector<const Gate*> subgraph_gates({gate_0, gate_3});
             const Net* output_net        = multi_src_net;
-            BooleanFunction sub_graph_bf = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
-
-            EXPECT_TRUE(sub_graph_bf.is_empty());
+            
+            auto res = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
+            ASSERT_TRUE(res.is_error());
+            
             // -- remove the net
             test_nl->delete_net(multi_src_net);
         }
         {
-            NO_COUT_BLOCK;
             // The output net has no source
             // -- create such a net
             Net* no_src_net = test_nl->create_net("muli_src_net");
 
             const std::vector<const Gate*> subgraph_gates({gate_0, gate_3});
             const Net* output_net        = no_src_net;
-            BooleanFunction sub_graph_bf = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
-
-            EXPECT_TRUE(sub_graph_bf.is_empty());
+            
+            auto res = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
+            ASSERT_TRUE(res.is_error());
+            
             // -- remove the net
             test_nl->delete_net(no_src_net);
         }
         {
-            NO_COUT_BLOCK;
-            // A net in between has multiple sources (expansion should stop in this direction)
+            // A net in between has multiple sources
             // -- add a source to net 30 temporarily
             test_nl->get_net_by_id(MIN_NET_ID + 30)->add_source(test_nl->get_gate_by_id(MIN_GATE_ID + 8), "O");
 
             const std::vector<const Gate*> subgraph_gates({gate_0, gate_3});
             const Net* output_net        = test_nl->get_net_by_id(MIN_NET_ID + 045);
-            BooleanFunction sub_graph_bf = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
-
-            BooleanFunction expected_bf = BooleanFunction::from_string((net_30_name + " & " + net_20_name)).get();
-
-            EXPECT_EQ(sub_graph_bf, expected_bf);
+            
+            auto res = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
+            ASSERT_TRUE(res.is_error());
         }
         {
-            NO_COUT_BLOCK;
             // The netlist contains a cycle
             // -- create such a netlist:
             /*   .-=|gate_0|=----.
@@ -149,18 +144,17 @@ namespace hal
 
             const std::vector<const Gate*> subgraph_gates({cy_gate_0, cy_gate_1});
             const Net* output_net        = cy_net_0;
-            BooleanFunction sub_graph_bf = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
-
-            EXPECT_TRUE(sub_graph_bf.is_empty());
+            
+            auto res = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
+            EXPECT_TRUE(res.is_error());
         }
         {
-            NO_COUT_BLOCK;
             // A gate of the subgraph has unconnected input pins
             const std::vector<const Gate*> subgraph_gates({gate_7});
             const Net* output_net        = test_nl->get_net_by_id(MIN_NET_ID + 78);
-            BooleanFunction sub_graph_bf = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
-
-            EXPECT_EQ(sub_graph_bf, gate_7->get_boolean_function("O"));
+            
+            auto res = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
+            ASSERT_TRUE(res.is_error());
         }
         TEST_END
     }
@@ -320,22 +314,24 @@ namespace hal
             const GateLibrary* gl       = nl->get_gate_library();
             ASSERT_NE(gl, nullptr);
 
-            Gate* l0 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l0");
-            Gate* l1 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l1");
-            Gate* l2 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l2");
-            Gate* l3 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l3");
-            Gate* l4 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l4");
+            GateType* lut4 = gl->get_gate_type_by_name("LUT4");
+
+            Gate* l0 = nl->create_gate(lut4, "l0");
+            Gate* l1 = nl->create_gate(lut4, "l1");
+            Gate* l2 = nl->create_gate(lut4, "l2");
+            Gate* l3 = nl->create_gate(lut4, "l3");
+            Gate* l4 = nl->create_gate(lut4, "l4");
 
             Net* n0 = test_utils::connect(nl.get(), l0, "O", l4, "I0");
             Net* n1 = test_utils::connect(nl.get(), l1, "O", l4, "I1");
             Net* n2 = test_utils::connect(nl.get(), l2, "O", l4, "I2");
             Net* n3 = test_utils::connect(nl.get(), l3, "O", l4, "I3");
 
-            EXPECT_EQ(netlist_utils::get_nets_at_pins(l4, {"I0", "I2"}, true), std::unordered_set<Net*>({n0, n2}));
-            EXPECT_EQ(netlist_utils::get_nets_at_pins(l4, {"I1", "I2", "I4"}, true), std::unordered_set<Net*>({n1, n2}));
-            EXPECT_EQ(netlist_utils::get_nets_at_pins(l4, {"I1", "I2", "I3"}, true), std::unordered_set<Net*>({n1, n2, n3}));
-            EXPECT_EQ(netlist_utils::get_nets_at_pins(l0, {"O"}, false), std::unordered_set<Net*>({n0}));
-            EXPECT_EQ(netlist_utils::get_nets_at_pins(l0, {"A", "B", "C"}, true), std::unordered_set<Net*>());
+            EXPECT_EQ(netlist_utils::get_nets_at_pins(l4, {lut4->get_pin_by_name("I0"), lut4->get_pin_by_name("I2")}), std::vector<Net*>({n0, n2}));
+            EXPECT_EQ(netlist_utils::get_nets_at_pins(l4, {lut4->get_pin_by_name("I1"), lut4->get_pin_by_name("I2")}), std::vector<Net*>({n1, n2}));
+            EXPECT_EQ(netlist_utils::get_nets_at_pins(l4, {lut4->get_pin_by_name("I1"), lut4->get_pin_by_name("I2"), lut4->get_pin_by_name("I3")}), std::vector<Net*>({n1, n2, n3}));
+            EXPECT_EQ(netlist_utils::get_nets_at_pins(l0, {lut4->get_pin_by_name("O")}), std::vector<Net*>({n0}));
+            EXPECT_EQ(netlist_utils::get_nets_at_pins(l0, {lut4->get_pin_by_name("A"), lut4->get_pin_by_name("B"), lut4->get_pin_by_name("C")}), std::vector<Net*>());
         }
         TEST_END
     }
@@ -382,7 +378,9 @@ namespace hal
             Net* n3 = test_utils::connect(nl.get(), g0, "O", g1, "I");
             Net* n4 = test_utils::connect(nl.get(), g1, "O", g2, "I0");
 
-            netlist_utils::remove_buffers(nl.get());
+            auto res = netlist_utils::remove_buffers(nl.get());
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get(), 1);
 
             ASSERT_EQ(nl->get_gates().size(), 4);
             ASSERT_EQ(nl->get_nets().size(), 6);
@@ -426,7 +424,9 @@ namespace hal
             Net* n3 = test_utils::connect(nl.get(), g0, "O", g1, "I1");
             Net* n4 = test_utils::connect(nl.get(), g1, "O", g2, "I0");
 
-            netlist_utils::remove_buffers(nl.get());
+            auto res = netlist_utils::remove_buffers(nl.get());
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get(), 1);
 
             ASSERT_EQ(nl->get_gates().size(), 4);
             ASSERT_EQ(nl->get_nets().size(), 6);
@@ -469,7 +469,9 @@ namespace hal
             Net* n3 = test_utils::connect(nl.get(), g0, "O", g1, "I1");
             Net* n4 = test_utils::connect(nl.get(), g1, "O", g2, "I0");
 
-            netlist_utils::remove_buffers(nl.get(), true);
+            auto res = netlist_utils::remove_buffers(nl.get(), true);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get(), 1);
 
             ASSERT_EQ(nl->get_gates().size(), 4);
             ASSERT_EQ(nl->get_nets().size(), 6);
@@ -499,12 +501,14 @@ namespace hal
             Net* gnd_net = nl->create_net("gnd");
             gnd_net->add_source(gnd_gate, "O");
 
-            Gate* l0 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l0");
-            Gate* l1 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l1");
-            Gate* l2 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l2");
-            Gate* l3 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l3");
-            Gate* l4 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l4");
-            Gate* l5 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l5");
+            GateType* lut4 = gl->get_gate_type_by_name("LUT4");
+
+            Gate* l0 = nl->create_gate(lut4, "l0");
+            Gate* l1 = nl->create_gate(lut4, "l1");
+            Gate* l2 = nl->create_gate(lut4, "l2");
+            Gate* l3 = nl->create_gate(lut4, "l3");
+            Gate* l4 = nl->create_gate(lut4, "l4");
+            Gate* l5 = nl->create_gate(lut4, "l5");
             l4->add_boolean_function("O", BooleanFunction::from_string("I0 & I1 & I2 & I3").get());
             l5->add_boolean_function("O", BooleanFunction::Var("I2"));
 
@@ -528,7 +532,9 @@ namespace hal
             EXPECT_EQ(l5->get_predecessor("I2")->get_gate(), l2);
             EXPECT_EQ(l5->get_predecessor("I3")->get_gate(), l3);
 
-            netlist_utils::remove_unused_lut_endpoints(nl.get());
+            auto res = netlist_utils::remove_unused_lut_endpoints(nl.get());
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get(), 3);
 
             EXPECT_EQ(l4->get_predecessor("I0")->get_gate(), l0);
             EXPECT_EQ(l4->get_predecessor("I1")->get_gate(), l1);
@@ -626,13 +632,16 @@ namespace hal
             const GateLibrary* gl       = nl->get_gate_library();
             ASSERT_NE(gl, nullptr);
 
-            Gate* c0 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c0");
-            Gate* c1 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c1");
-            Gate* c2 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c2");
-            Gate* c3 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c3");
+            GateType* carry = gl->get_gate_type_by_name("CARRY");
+            GateType* buffer = gl->get_gate_type_by_name("BUF");
 
-            Gate* g0 = nl->create_gate(gl->get_gate_type_by_name("BUF"), "g0");
-            Gate* g1 = nl->create_gate(gl->get_gate_type_by_name("BUF"), "g1");
+            Gate* c0 = nl->create_gate(carry, "c0");
+            Gate* c1 = nl->create_gate(carry, "c1");
+            Gate* c2 = nl->create_gate(carry, "c2");
+            Gate* c3 = nl->create_gate(carry, "c3");
+
+            Gate* g0 = nl->create_gate(buffer, "g0");
+            Gate* g1 = nl->create_gate(buffer, "g1");
 
             test_utils::connect(nl.get(), c0, "CO", c1, "CI");
             test_utils::connect(nl.get(), c1, "CO", c2, "CI");
@@ -643,22 +652,40 @@ namespace hal
 
             std::vector<Gate*> expected_chain = {c0, c1, c2, c3};
 
-            std::vector<Gate*> chain_0 = netlist_utils::get_gate_chain(c0, {"CI"}, {"CO"});
-            EXPECT_EQ(chain_0, expected_chain);
+            {
+                auto res = netlist_utils::get_gate_chain(c0, {carry->get_pin_by_name("CI")}, {carry->get_pin_by_name("CO")});
+                ASSERT_TRUE(res.is_ok());
+                std::vector<Gate*> chain = res.get();
+                EXPECT_EQ(chain, expected_chain);
+            }
 
-            std::vector<Gate*> chain_1 = netlist_utils::get_gate_chain(c1, {"CI"}, {"CO"});
-            EXPECT_EQ(chain_1, expected_chain);
+            {
+                auto res = netlist_utils::get_gate_chain(c1, {carry->get_pin_by_name("CI")}, {carry->get_pin_by_name("CO")});
+                ASSERT_TRUE(res.is_ok());
+                std::vector<Gate*> chain = res.get();
+                EXPECT_EQ(chain, expected_chain);
+            }
 
-            std::vector<Gate*> chain_2 = netlist_utils::get_gate_chain(c2, {"CI"}, {"CO"});
-            EXPECT_EQ(chain_2, expected_chain);
+            {
+                auto res = netlist_utils::get_gate_chain(c2, {carry->get_pin_by_name("CI")}, {carry->get_pin_by_name("CO")});
+                ASSERT_TRUE(res.is_ok());
+                std::vector<Gate*> chain = res.get();
+                EXPECT_EQ(chain, expected_chain);
+            }
 
-            std::vector<Gate*> chain_3 = netlist_utils::get_gate_chain(c3, {"CI"}, {"CO"});
-            EXPECT_EQ(chain_3, expected_chain);
+            {
+                auto res = netlist_utils::get_gate_chain(c3, {carry->get_pin_by_name("CI")}, {carry->get_pin_by_name("CO")});
+                ASSERT_TRUE(res.is_ok());
+                std::vector<Gate*> chain = res.get();
+                EXPECT_EQ(chain, expected_chain);
+            }
 
-            std::vector<Gate*> chain_4 = netlist_utils::get_gate_chain(g0, {"CI"}, {"CO"}, [](const Gate* g) {
-                return g->get_type()->has_property(GateTypeProperty::carry);
-            });
-            EXPECT_EQ(chain_4, std::vector<Gate*>());
+            {
+                auto res = netlist_utils::get_gate_chain(g0, {carry->get_pin_by_name("CI")}, {carry->get_pin_by_name("CO")}, [](const Gate* g) {
+                    return g->get_type()->has_property(GateTypeProperty::carry);
+                });
+                ASSERT_TRUE(res.is_error());
+            }
         }
         {
             // test connection through unspecified pins
@@ -667,13 +694,16 @@ namespace hal
             const GateLibrary* gl       = nl->get_gate_library();
             ASSERT_NE(gl, nullptr);
 
-            Gate* c0 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c0");
-            Gate* c1 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c1");
-            Gate* c2 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c2");
-            Gate* c3 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c3");
+            GateType* carry = gl->get_gate_type_by_name("CARRY");
+            GateType* buffer = gl->get_gate_type_by_name("BUF");
 
-            Gate* g0 = nl->create_gate(gl->get_gate_type_by_name("BUF"), "g0");
-            Gate* g1 = nl->create_gate(gl->get_gate_type_by_name("BUF"), "g1");
+            Gate* c0 = nl->create_gate(carry, "c0");
+            Gate* c1 = nl->create_gate(carry, "c1");
+            Gate* c2 = nl->create_gate(carry, "c2");
+            Gate* c3 = nl->create_gate(carry, "c3");
+
+            Gate* g0 = nl->create_gate(buffer, "g0");
+            Gate* g1 = nl->create_gate(buffer, "g1");
 
             test_utils::connect(nl.get(), c0, "CO", c1, "I0");
             test_utils::connect(nl.get(), c1, "CO", c2, "CI");
@@ -684,17 +714,30 @@ namespace hal
 
             std::vector<Gate*> expected_chain = {c0, c1, c2, c3};
 
-            std::vector<Gate*> chain_0 = netlist_utils::get_gate_chain(c0);
-            EXPECT_EQ(chain_0, expected_chain);
-
-            std::vector<Gate*> chain_1 = netlist_utils::get_gate_chain(c1);
-            EXPECT_EQ(chain_1, expected_chain);
-
-            std::vector<Gate*> chain_2 = netlist_utils::get_gate_chain(c2);
-            EXPECT_EQ(chain_2, expected_chain);
-
-            std::vector<Gate*> chain_3 = netlist_utils::get_gate_chain(c3);
-            EXPECT_EQ(chain_3, expected_chain);
+            {
+                auto res = netlist_utils::get_gate_chain(c0);
+                ASSERT_TRUE(res.is_ok());
+                std::vector<Gate*> chain = res.get();
+                EXPECT_EQ(chain, expected_chain);
+            }
+            {
+                auto res = netlist_utils::get_gate_chain(c1);
+                ASSERT_TRUE(res.is_ok());
+                std::vector<Gate*> chain = res.get();
+                EXPECT_EQ(chain, expected_chain);
+            }
+            {
+                auto res = netlist_utils::get_gate_chain(c2);
+                ASSERT_TRUE(res.is_ok());
+                std::vector<Gate*> chain = res.get();
+                EXPECT_EQ(chain, expected_chain);
+            }
+            {
+                auto res = netlist_utils::get_gate_chain(c3);
+                ASSERT_TRUE(res.is_ok());
+                std::vector<Gate*> chain = res.get();
+                EXPECT_EQ(chain, expected_chain);
+            }
         }
         {
             // test loop
@@ -703,18 +746,24 @@ namespace hal
             const GateLibrary* gl       = nl->get_gate_library();
             ASSERT_NE(gl, nullptr);
 
-            Gate* c0 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c0");
-            Gate* c1 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c1");
-            Gate* c2 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c2");
-            Gate* c3 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c3");
+            GateType* carry = gl->get_gate_type_by_name("CARRY");
+
+            Gate* c0 = nl->create_gate(carry, "c0");
+            Gate* c1 = nl->create_gate(carry, "c1");
+            Gate* c2 = nl->create_gate(carry, "c2");
+            Gate* c3 = nl->create_gate(carry, "c3");
 
             test_utils::connect(nl.get(), c0, "CO", c1, "CI");
             test_utils::connect(nl.get(), c1, "CO", c2, "CI");
             test_utils::connect(nl.get(), c2, "CO", c3, "CI");
             test_utils::connect(nl.get(), c3, "CO", c0, "CI");
 
-            std::vector<Gate*> chain = netlist_utils::get_gate_chain(c0);
-            EXPECT_EQ(chain, std::vector<Gate*>({c0, c1, c2, c3}));
+            {
+                auto res = netlist_utils::get_gate_chain(c0);
+                ASSERT_TRUE(res.is_ok());
+                std::vector<Gate*> chain = res.get();
+                EXPECT_EQ(chain, std::vector<Gate*>({c0, c1, c2, c3}));
+            }
         }
         {
             // test multiple successors
@@ -723,12 +772,14 @@ namespace hal
             const GateLibrary* gl       = nl->get_gate_library();
             ASSERT_NE(gl, nullptr);
 
-            Gate* c0 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c0");
-            Gate* c1 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c1");
-            Gate* c2 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c2");
-            Gate* c3 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c3");
-            Gate* c4 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c4");
-            Gate* c5 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c5");
+            GateType* carry = gl->get_gate_type_by_name("CARRY");
+
+            Gate* c0 = nl->create_gate(carry, "c0");
+            Gate* c1 = nl->create_gate(carry, "c1");
+            Gate* c2 = nl->create_gate(carry, "c2");
+            Gate* c3 = nl->create_gate(carry, "c3");
+            Gate* c4 = nl->create_gate(carry, "c4");
+            Gate* c5 = nl->create_gate(carry, "c5");
 
             test_utils::connect(nl.get(), c0, "CO", c1, "CI");
             test_utils::connect(nl.get(), c1, "CO", c2, "CI");
@@ -736,23 +787,42 @@ namespace hal
             test_utils::connect(nl.get(), c1, "CO", c4, "CI");
             test_utils::connect(nl.get(), c4, "CO", c5, "CI");
 
-            std::vector<Gate*> chain_0 = netlist_utils::get_gate_chain(c0);
-            EXPECT_EQ(chain_0, std::vector<Gate*>({c0, c1}));
-
-            std::vector<Gate*> chain_1 = netlist_utils::get_gate_chain(c1);
-            EXPECT_EQ(chain_1, std::vector<Gate*>({c0, c1}));
-
-            std::vector<Gate*> chain_2 = netlist_utils::get_gate_chain(c2);
-            EXPECT_EQ(chain_2, std::vector<Gate*>({c0, c1, c2, c3}));
-
-            std::vector<Gate*> chain_3 = netlist_utils::get_gate_chain(c3);
-            EXPECT_EQ(chain_3, std::vector<Gate*>({c0, c1, c2, c3}));
-
-            std::vector<Gate*> chain_4 = netlist_utils::get_gate_chain(c4);
-            EXPECT_EQ(chain_4, std::vector<Gate*>({c0, c1, c4, c5}));
-
-            std::vector<Gate*> chain_5 = netlist_utils::get_gate_chain(c5);
-            EXPECT_EQ(chain_5, std::vector<Gate*>({c0, c1, c4, c5}));
+            {
+                auto res = netlist_utils::get_gate_chain(c0);
+                ASSERT_TRUE(res.is_ok());
+                std::vector<Gate*> chain = res.get();
+                EXPECT_EQ(chain, std::vector<Gate*>({c0, c1}));
+            }
+            {
+                auto res = netlist_utils::get_gate_chain(c1);
+                ASSERT_TRUE(res.is_ok());
+                std::vector<Gate*> chain = res.get();
+                EXPECT_EQ(chain, std::vector<Gate*>({c0, c1}));
+            }
+            {
+                auto res = netlist_utils::get_gate_chain(c2);
+                ASSERT_TRUE(res.is_ok());
+                std::vector<Gate*> chain = res.get();
+                EXPECT_EQ(chain, std::vector<Gate*>({c0, c1, c2, c3}));
+            }
+            {
+                auto res = netlist_utils::get_gate_chain(c3);
+                ASSERT_TRUE(res.is_ok());
+                std::vector<Gate*> chain = res.get();
+                EXPECT_EQ(chain, std::vector<Gate*>({c0, c1, c2, c3}));
+            }
+            {
+                auto res = netlist_utils::get_gate_chain(c4);
+                ASSERT_TRUE(res.is_ok());
+                std::vector<Gate*> chain = res.get();
+                EXPECT_EQ(chain, std::vector<Gate*>({c0, c1, c4, c5}));
+            }
+            {
+                auto res = netlist_utils::get_gate_chain(c5);
+                ASSERT_TRUE(res.is_ok());
+                std::vector<Gate*> chain = res.get();
+                EXPECT_EQ(chain, std::vector<Gate*>({c0, c1, c4, c5}));
+            }
         }
         TEST_END
     }

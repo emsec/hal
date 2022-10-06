@@ -1,13 +1,16 @@
 #include "gui/user_action/action_set_object_type.h"
+
 #include "gui/gui_globals.h"
-#include "hal_core/netlist/module.h"
 #include "hal_core/netlist/gate_library/enums/pin_type.h"
+#include "hal_core/netlist/module.h"
 #include "hal_core/utilities/enums.h"
 
 namespace hal
 {
-    ActionSetObjectTypeFactory::ActionSetObjectTypeFactory()
-       : UserActionFactory("SetObjectType") {;}
+    ActionSetObjectTypeFactory::ActionSetObjectTypeFactory() : UserActionFactory("SetObjectType")
+    {
+        ;
+    }
 
     ActionSetObjectTypeFactory* ActionSetObjectTypeFactory::sFactory = new ActionSetObjectTypeFactory;
 
@@ -46,41 +49,47 @@ namespace hal
         Module* mod;
         switch (mObject.type())
         {
-        case UserActionObjectType::Pin: //only possible to change module pin types
-        {
-            //should also check if its a valid type? (enum_from_string default value doesnt help
-            //since there is no default pintype value)
-            if(mObjectType.isEmpty())
-                return false;
-
-            mod = gNetlist->get_module_by_id(mParentObject.id());
-            if(!mod) return false;
-
-            auto pin = mod->get_pin_by_id(mObject.id());
-            if(pin.is_error()) return false;
-
-            oldType = QString::fromStdString(enum_to_string(pin.get()->get_type()));
-
-            auto ret = mod->set_pin_type(pin.get(), enum_from_string<PinType>(mObjectType.toStdString(), PinType::none));
-            if(ret.is_error()) return false;
-
-        } break;
-        case UserActionObjectType::Module:
-            mod = gNetlist->get_module_by_id(mObject.id());
-            if (mod)
+            case UserActionObjectType::Pin:    //only possible to change module pin types
             {
-                oldType = QString::fromStdString(mod->get_type());
-                mod->set_type(mObjectType.toStdString());
+                //should also check if its a valid type? (enum_from_string default value doesnt help
+                //since there is no default pintype value)
+                if (mObjectType.isEmpty())
+                    return false;
+
+                mod = gNetlist->get_module_by_id(mParentObject.id());
+                if (!mod)
+                    return false;
+
+                auto* pin = mod->get_pin_by_id(mObject.id());
+                if (pin == nullptr)
+                {
+                    return false;
+                }
+
+                oldType = QString::fromStdString(enum_to_string(pin->get_type()));
+
+                if (mod->set_pin_type(pin, enum_from_string<PinType>(mObjectType.toStdString(), PinType::none)) == false)
+                {
+                    return false;
+                }
             }
-            else
-                return false;
             break;
-        default:
-            return false;
+            case UserActionObjectType::Module:
+                mod = gNetlist->get_module_by_id(mObject.id());
+                if (mod != nullptr)
+                {
+                    oldType = QString::fromStdString(mod->get_type());
+                    mod->set_type(mObjectType.toStdString());
+                }
+                else
+                    return false;
+                break;
+            default:
+                return false;
         }
         mUndoAction = new ActionSetObjectType(oldType);
         mUndoAction->setObject(mObject);
         mUndoAction->setParentObject(mParentObject);
         return UserAction::exec();
     }
-}
+}    // namespace hal

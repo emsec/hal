@@ -139,9 +139,16 @@ namespace hal
         return m_event_handler.get();
     }
 
-    std::unique_ptr<Netlist> Netlist::copy() const
+    Result<std::unique_ptr<Netlist>> Netlist::copy() const
     {
-        return std::move(m_manager->copy_netlist(this));
+        if (auto res = m_manager->copy_netlist(this); res.is_error())
+        {
+            return ERR(res.get_error());
+        }
+        else
+        {
+            return res;
+        }
     }
 
     /*
