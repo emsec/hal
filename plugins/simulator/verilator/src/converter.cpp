@@ -206,8 +206,8 @@ namespace hal
                 // in and outputs of module
                 prologue << "(" << std::endl;
 
-                std::unordered_set<std::string> visited_pins;
-                for (const std::string& pin : gt->get_pins())
+                std::unordered_set<GatePin*> visited_pins;
+                for (const auto pin : gt->get_pins())
                 {
                     // check if pin was contained in a group that has already been dealt with
                     if (visited_pins.find(pin) != visited_pins.end())
@@ -215,23 +215,24 @@ namespace hal
                         continue;
                     }
 
-                    PinDirection direction = gt->get_pin_direction(pin);
+                    PinDirection direction = pin->get_direction();
                     prologue << "\t" << enum_to_string(direction) << " ";
 
-                    if (std::string pin_group = gt->get_pin_group(pin); !pin_group.empty())
+                    if (const auto* pin_group = pin->get_group().first; pin_group != nullptr)
                     {
-                        std::vector<std::pair<u32, std::string>> group_pins = gt->get_pins_of_group(pin_group);
-                        prologue << " [" << std::to_string(group_pins.back().first) << ":" << std::to_string(group_pins.front().first) << "] " << pin_group << "," << std::endl;
+                        const auto group_pins = pin_group->get_pins();
+                        prologue << " [" << std::to_string(pin_group->get_index(group_pins.back()).get()) << ":" << std::to_string(pin_group->get_index(group_pins.front()).get()) << "] "
+                                 << pin_group->get_name() << "," << std::endl;
 
-                        for (const auto& [index, group_pin] : gt->get_pins_of_group(pin_group))
+                        for (const auto pin : group_pins)
                         {
-                            visited_pins.insert(group_pin);
+                            visited_pins.insert(pin);
                         }
                     }
                     else
                     {
                         // append all connected pins
-                        prologue << pin << "," << std::endl;
+                        prologue << pin->get_name() << "," << std::endl;
                     }
                 }
 

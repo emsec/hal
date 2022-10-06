@@ -19,9 +19,10 @@ namespace hal
 {
 #define measure_block_time(X)
 
-    NetlistSimulator::NetlistSimulator(const std::string &nam)
-        : SimulationEngineEventDriven(nam)
-    {;}
+    NetlistSimulator::NetlistSimulator(const std::string& nam) : SimulationEngineEventDriven(nam)
+    {
+        ;
+    }
 
     void NetlistSimulator::set_input(const Net* net, BooleanFunction::Value value)
     {
@@ -81,29 +82,33 @@ namespace hal
         {
             if (gate->get_type()->has_property(GateTypeProperty::ff))
             {
-                GateType* gate_type                                       = gate->get_type();
-                const std::unordered_map<std::string, PinType>& pin_types = gate_type->get_pin_types();
+                GateType* gate_type = gate->get_type();
 
                 BooleanFunction::Value inv_value = simulation_utils::toggle(value);
 
                 // generate events
                 for (Endpoint* ep : gate->get_fan_out_endpoints())
                 {
-                    if (pin_types.at(ep->get_pin()) == PinType::state)
+                    switch (ep->get_pin()->get_type())
                     {
-                        WaveEvent e;
-                        e.affected_net = ep->get_net();
-                        e.new_value    = value;
-                        e.time         = m_current_time;
-                        m_event_queue.push_back(e);
-                    }
-                    else if (pin_types.at(ep->get_pin()) == PinType::neg_state)
-                    {
-                        WaveEvent e;
-                        e.affected_net = ep->get_net();
-                        e.new_value    = inv_value;
-                        e.time         = m_current_time;
-                        m_event_queue.push_back(e);
+                        case PinType::state: {
+                            WaveEvent e;
+                            e.affected_net = ep->get_net();
+                            e.new_value    = value;
+                            e.time         = m_current_time;
+                            m_event_queue.push_back(e);
+                            break;
+                        }
+                        case PinType::neg_state: {
+                            WaveEvent e;
+                            e.affected_net = ep->get_net();
+                            e.new_value    = inv_value;
+                            e.time         = m_current_time;
+                            m_event_queue.push_back(e);
+                            break;
+                        }
+                        default:
+                            break;
                     }
                 }
             }
@@ -119,8 +124,7 @@ namespace hal
         {
             if (gate->get_type()->has_property(GateTypeProperty::ff))
             {
-                GateType* gate_type                                       = gate->get_type();
-                const std::unordered_map<std::string, PinType>& pin_types = gate_type->get_pin_types();
+                GateType* gate_type = gate->get_type();
 
                 // extract init string
                 const InitComponent* init_component =
@@ -154,21 +158,26 @@ namespace hal
                     // generate events
                     for (Endpoint* ep : gate->get_fan_out_endpoints())
                     {
-                        if (pin_types.at(ep->get_pin()) == PinType::state)
+                        switch (ep->get_pin()->get_type())
                         {
-                            WaveEvent e;
-                            e.affected_net = ep->get_net();
-                            e.new_value    = value;
-                            e.time         = m_current_time;
-                            m_event_queue.push_back(e);
-                        }
-                        else if (pin_types.at(ep->get_pin()) == PinType::neg_state)
-                        {
-                            WaveEvent e;
-                            e.affected_net = ep->get_net();
-                            e.new_value    = inv_value;
-                            e.time         = m_current_time;
-                            m_event_queue.push_back(e);
+                            case PinType::state: {
+                                WaveEvent e;
+                                e.affected_net = ep->get_net();
+                                e.new_value    = value;
+                                e.time         = m_current_time;
+                                m_event_queue.push_back(e);
+                                break;
+                            }
+                            case PinType::neg_state: {
+                                WaveEvent e;
+                                e.affected_net = ep->get_net();
+                                e.new_value    = inv_value;
+                                e.time         = m_current_time;
+                                m_event_queue.push_back(e);
+                                break;
+                            }
+                            default:
+                                break;
                         }
                     }
                 }
@@ -208,7 +217,6 @@ namespace hal
         return m_simulation;
     }
 
-
     void NetlistSimulator::set_iteration_timeout(u64 iterations)
     {
         m_timeout_iterations = iterations;
@@ -233,7 +241,6 @@ namespace hal
         simulate(netEv.get_simulation_duration());
         return true;
     }
-
 
     /*
      * This function precomputes all the stuff that shall be cached for simulation.
@@ -317,7 +324,7 @@ namespace hal
                 continue;
             }
             auto endpoints = net->get_destinations();
-            std::unordered_map<Gate*, std::vector<std::string>> affected_pins;
+            std::unordered_map<Gate*, std::vector<const GatePin*>> affected_pins;
             for (auto ep : endpoints)
             {
                 auto gate = ep->get_gate();
@@ -494,7 +501,7 @@ namespace hal
                     {
                         for (auto& pin : pins)
                         {
-                            gate->m_input_values[pin] = event.new_value;
+                            gate->m_input_values[pin->get_name()] = event.new_value;
                         }
                         if (!gate->simulate(m_simulation, event, new_events))
                         {
@@ -617,7 +624,7 @@ namespace hal
 
         for (const auto& simulated_net : simulated_nets)
         {
-            std::vector<WaveEvent> net_events        = event_tracker.at(simulated_net);
+            std::vector<WaveEvent> net_events    = event_tracker.at(simulated_net);
             BooleanFunction::Value initial_value = BooleanFunction::Value::X;
             u32 initial_time                     = 0;
 

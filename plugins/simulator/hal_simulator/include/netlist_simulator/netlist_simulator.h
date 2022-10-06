@@ -40,9 +40,8 @@ namespace hal
     class NetlistSimulator : public SimulationEngineEventDriven
     {
         friend class NetlistSimulatorFactory;
+
     public:
-
-
         /**
          * Get all gates that are in the simulation set.
          *
@@ -109,7 +108,10 @@ namespace hal
          */
         void simulate(u64 picoseconds);
 
-        SimulationInput* get_simulation_input() const { return mSimulationInput; }
+        SimulationInput* get_simulation_input() const override
+        {
+            return mSimulationInput;
+        }
 
         /**
          * Reset the simulator state, i.e., treat all signals as unknown.
@@ -175,7 +177,7 @@ namespace hal
         struct SimulationGate
         {
             const Gate* m_gate;
-            std::vector<std::string> m_input_pins;
+            std::vector<GatePin*> m_input_pins;
             std::vector<const Net*> m_input_nets;
             std::unordered_map<std::string, BooleanFunction::Value> m_input_values;
 
@@ -187,7 +189,7 @@ namespace hal
 
         struct SimulationGateCombinational : public SimulationGate
         {
-            std::vector<std::string> m_output_pins;
+            std::vector<GatePin*> m_output_pins;
             std::vector<const Net*> m_output_nets;
             std::unordered_map<const Net*, BooleanFunction> m_functions;
 
@@ -200,9 +202,9 @@ namespace hal
         {
             SimulationGateSequential(const Gate* gate);
 
-            virtual void initialize(std::map<const Net*, BooleanFunction::Value>& new_events, bool from_netlist, BooleanFunction::Value value)                = 0;
+            virtual void initialize(std::map<const Net*, BooleanFunction::Value>& new_events, bool from_netlist, BooleanFunction::Value value)                    = 0;
             virtual bool simulate(const Simulation& simulation, const WaveEvent& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) = 0;
-            virtual void clock(const u64 current_time, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events)                              = 0;
+            virtual void clock(const u64 current_time, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events)                                  = 0;
         };
 
         struct SimulationGateFF : public SimulationGateSequential
@@ -235,8 +237,8 @@ namespace hal
                 BooleanFunction enable_func;
                 bool is_write;
 
-                std::vector<std::string> address_pins;
-                std::vector<std::string> data_pins;
+                std::vector<GatePin*> address_pins;
+                std::vector<GatePin*> data_pins;
             };
 
             std::vector<Port> m_ports;
@@ -261,7 +263,7 @@ namespace hal
         u64 m_timeout_iterations = 10000000ul;
         u64 m_id_counter         = 0;
 
-        std::unordered_map<const Net*, std::vector<std::pair<SimulationGate*, std::vector<std::string>>>> m_successors;
+        std::unordered_map<const Net*, std::vector<std::pair<SimulationGate*, std::vector<const GatePin*>>>> m_successors;
         std::vector<std::unique_ptr<SimulationGate>> m_sim_gates;
         std::vector<SimulationGate*> m_sim_gates_raw;
 
@@ -277,7 +279,10 @@ namespace hal
     class NetlistSimulatorFactory : public SimulationEngineFactory
     {
     public:
-        NetlistSimulatorFactory() : SimulationEngineFactory("hal_simulator") {;}
+        NetlistSimulatorFactory() : SimulationEngineFactory("hal_simulator")
+        {
+            ;
+        }
         SimulationEngine* createEngine() const override;
     };
 }    // namespace hal

@@ -25,6 +25,7 @@
 
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate_library/enums/async_set_reset_behavior.h"
+#include "hal_core/netlist/pins/gate_pin.h"
 #include "hal_core/utilities/log.h"
 
 namespace hal
@@ -35,6 +36,6 @@ namespace hal
         BooleanFunction::Value process_clear_preset_behavior(AsyncSetResetBehavior behavior, BooleanFunction::Value previous_output);
         std::vector<BooleanFunction::Value> int_to_values(u32 integer, u32 len);
         u32 values_to_int(const std::vector<BooleanFunction::Value>& values);
-        u32 get_int_bus_value(const std::unordered_map<std::string, BooleanFunction::Value>& signal_values, const std::vector<std::string>& ordered_pins);
+        u32 get_int_bus_value(const std::unordered_map<std::string, BooleanFunction::Value>& signal_values, const std::vector<GatePin*>& ordered_pins);
     }    // namespace simulation_utils
 }    // namespace hal

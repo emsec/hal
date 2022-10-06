@@ -21,9 +21,9 @@ namespace hal
             std::string get_function_for_lut(const GateType* gt)
             {
                 std::stringstream function;
-                u32 lut_size                         = gt->get_input_pins().size();
-                std::vector<std::string> input_pins  = gt->get_input_pins();
-                std::vector<std::string> output_pins = gt->get_output_pins();
+                u32 lut_size                      = gt->get_input_pins().size();
+                std::vector<GatePin*> input_pins  = gt->get_input_pins();
+                std::vector<GatePin*> output_pins = gt->get_output_pins();
 
                 // check if LUTComponent exists, if not abort
                 if (LUTComponent* lut_component = gt->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); }); lut_component != nullptr)
@@ -44,16 +44,16 @@ namespace hal
 
                 std::reverse(input_pins.begin(), input_pins.end());    // needs to be reverted due to access in INIT string
                 function << "wire [" << lut_size - 1 << ":0] lut_lookup = {";
-                for (const auto& input_pin : input_pins)
+                for (const auto input_pin : input_pins)
                 {
-                    function << input_pin << ", ";
+                    function << input_pin->get_name() << ", ";
                 }
                 function.seekp(-2, function.cur);    // remove the additional colon and space
                 function << "};" << std::endl;
 
                 for (const auto& output_pin : output_pins)
                 {
-                    function << "assign " << output_pin << " = INIT[lut_lookup];" << std::endl;
+                    function << "assign " << output_pin->get_name() << " = INIT[lut_lookup];" << std::endl;
                 }
 
                 return function.str();
