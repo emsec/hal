@@ -54,7 +54,10 @@ namespace hal
     void WaveformViewer::restoreFromProject()
     {
         NetlistSimulatorControllerPlugin* ctrlPlug = static_cast<NetlistSimulatorControllerPlugin*>(plugin_manager::get_plugin_instance("netlist_simulator_controller"));
-        if (!ctrlPlug || !ctrlPlug->sSimulatorSerializer) return;
+        if (!ctrlPlug || !ctrlPlug->sSimulatorSerializer)
+        {
+            return;
+        }
         for (std::unique_ptr<NetlistSimulatorController>& ctrlRef : ctrlPlug->sSimulatorSerializer->restore())
         {
             if (!ctrlRef) continue;
@@ -105,9 +108,6 @@ namespace hal
         connect(mTabWidget,&QTabWidget::tabCloseRequested,this,&WaveformViewer::handleTabClosed);
         connect(mTabWidget,&QTabWidget::currentChanged,this,&WaveformViewer::currentTabChanged);
         mContentLayout->addWidget(mTabWidget);
-//        mWaveWidget = new WaveWidget(this);
-//        mWaveWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-//        mContentLayout->addWidget(mWaveWidget);
         mStatusBar = new QStatusBar(this);
         mProgress = new QProgressBar(mStatusBar);
         mProgress->setFormat("Import waveform data : %p%");
@@ -372,6 +372,12 @@ namespace hal
 
     void WaveformViewer::handleControllerAdded(u32 controllerId)
     {
+        // check whether controller already added
+        for (int inx=0; inx<mTabWidget->count(); inx++)
+        {
+            WaveWidget* ww = static_cast<WaveWidget*>(mTabWidget->widget(inx));
+            if (controllerId == ww->controllerId()) return;
+        }
         NetlistSimulatorController* nsc = NetlistSimulatorControllerMap::instance()->controller(controllerId);
         if (!nsc) return;
         WaveWidget* ww = new WaveWidget(nsc, mTabWidget);
@@ -403,9 +409,11 @@ namespace hal
         if (filename.endsWith(NetlistSimulatorController::sPersistFile))
         {
             NetlistSimulatorControllerPlugin* ctrlPlug = static_cast<NetlistSimulatorControllerPlugin*>(plugin_manager::get_plugin_instance("netlist_simulator_controller"));
-            if (!ctrlPlug) return;
-            std::unique_ptr<NetlistSimulatorController> ctrlRef = ctrlPlug->restore_simulator_controller(gNetlist,filename.toStdString());
-            takeControllerOwnership(ctrlRef);
+            if (ctrlPlug)
+            {
+                std::unique_ptr<NetlistSimulatorController> ctrlRef = ctrlPlug->restore_simulator_controller(gNetlist,filename.toStdString());
+                takeControllerOwnership(ctrlRef);
+            }
         }
         else if (mCurrentWaveWidget && mCurrentWaveWidget->controller()->can_import_data() && filename.toLower().endsWith(".vcd"))
             mCurrentWaveWidget->controller()->import_vcd(filename.toStdString(),NetlistSimulatorController::GlobalInputs);
@@ -419,16 +427,11 @@ namespace hal
 
     void WaveformViewer::takeControllerOwnership(std::unique_ptr<NetlistSimulatorController> &ctrlRef)
     {
-        u32 ctrlId = ctrlRef.get()->get_id();
-        for (int inx=0; inx<mTabWidget->count(); inx++)
-        {
-            WaveWidget* ww = static_cast<WaveWidget*>(mTabWidget->widget(inx));
-            if (ctrlId == ww->controllerId())
-            {
-                ww->takeOwnership(ctrlRef);
-                break;
-            }
-        }
+        NetlistSimulatorController* nsc = ctrlRef.get();
+
+        WaveWidget* ww = new WaveWidget(nsc, mTabWidget);
+        mTabWidget->addTab(ww,nsc->name());
+        ww->takeOwnership(ctrlRef);
     }
 
     void WaveformViewer::handleSaveWaveforms()

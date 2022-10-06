@@ -1506,6 +1506,7 @@ namespace hal {
     void WaveDataList::registerGroup(WaveDataGroup *grp)
     {
         u32 grpId = grp->id();
+//        if (!grpId) return;
         Q_ASSERT(!mDataGroups.contains(grpId));
         mDataGroups.insert(grpId,grp);
         if (grpId)
