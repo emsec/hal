@@ -77,6 +77,7 @@ namespace hal {
         QString mName;
         NetType mNetType;
         int mBits;
+        int mSubscriber;
     protected:
         int mValueBase;
         QMap<u64,int> mData;
@@ -133,6 +134,9 @@ namespace hal {
         void setValueBase(int bas) { mValueBase = bas; }
         bool isEqual(const WaveData& other, int tolerance=0) const;
         static QString stringValue(int val, int bits, int base);
+        bool hasSubscriber() const { return mSubscriber > 0; }
+        void addSubscriber() { ++mSubscriber; }
+        void removeSubscriber() { if (mSubscriber) -- mSubscriber; }
     };
 
     class WaveDataClock : public WaveData
@@ -163,6 +167,7 @@ namespace hal {
         u32               mMaxGroupId;
         u32               mMaxBooleanId;
         u32               mMaxTriggerid;
+        QList<WaveData*>  mTrashCan;
         void testDoubleCount();
         void restoreIndex();
         void updateMaxTime();
@@ -222,6 +227,7 @@ namespace hal {
         SaleaeDirectory& saleaeDirectory() { return mSaleaeDirectory; }
         void insertBooleanValue(WaveData* wd, u64 t, BooleanFunction::Value bval);
         void setUserTimeframe(u64 t0=0, u64 t1=0);
+        void emptyTrash();
     Q_SIGNALS:
         void waveAdded(int inx);
         void groupAdded(int grpId);
