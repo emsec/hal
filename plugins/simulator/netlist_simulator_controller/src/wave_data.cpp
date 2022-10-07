@@ -12,7 +12,6 @@
 #include <QDir>
 #include <stdio.h>
 #include <QDebug>
-#include <QCoreApplication>
 
 namespace hal {
 
@@ -1299,7 +1298,6 @@ namespace hal {
     {
         qDebug() << "emitTimeframeChanged-Tfc" << mTimeframe.sceneMaxTime();
         Q_EMIT timeframeChanged(&mTimeframe);
-        qApp->processEvents();
     }
 
     void WaveDataList::incrementSimulTime(u64 deltaT)
@@ -1337,8 +1335,9 @@ namespace hal {
             Q_EMIT waveRemoved(-1);
         setMaxTime(0);
         for (auto it=begin(); it!=end(); ++it)
-            delete *it;
+            mTrashCan.append(*it);
         clear();
+        emptyTrash();
     }
 
     void WaveDataList::dump() const
@@ -1399,6 +1398,21 @@ namespace hal {
     void WaveDataList::emitGroupUpdated(int grpId)
     {
         Q_EMIT groupUpdated(grpId);
+    }
+
+    void WaveDataList::emptyTrash()
+    {
+        auto it = mTrashCan.begin();
+        while (it != mTrashCan.end())
+        {
+            if ((*it)->hasSubscriber())
+                ++it;
+            else
+            {
+                delete (*it);
+                it = mTrashCan.erase(it);
+            }
+        }
     }
 
     void WaveDataList::updateWaveData(int inx)
@@ -1511,7 +1525,7 @@ namespace hal {
     void WaveDataList::registerGroup(WaveDataGroup *grp)
     {
         u32 grpId = grp->id();
-//        if (!grpId) return;
+        if (!grpId) return;
         Q_ASSERT(!mDataGroups.contains(grpId));
         mDataGroups.insert(grpId,grp);
         if (grpId)
@@ -1552,7 +1566,7 @@ namespace hal {
         if (!grp) return;
         Q_EMIT groupAboutToBeRemoved(grp);
         mSaleaeDirectory.remove_composed(grpId,SaleaeDirectoryNetEntry::Group);
-        delete grp;
+        mTrashCan.append(grp);
     }
 
     void WaveDataList::replaceWaveData(int inx, WaveData* wdNew)
@@ -1575,7 +1589,7 @@ namespace hal {
 
 
         emitWaveUpdated(inx);
-        delete wdOld;
+        mTrashCan.append(wdOld);
         triggerEndResetModel();
     }
 
@@ -1607,7 +1621,7 @@ namespace hal {
             if (wd->loadPolicy() == WaveData::LoadAllData)
                 wd->loadSaleae(mTimeframe);
             emitWaveUpdated(i);
-            delete it.value();
+            mTrashCan.append(it.value());
             saleaeWaves.erase(it);
         }
 
@@ -1712,7 +1726,7 @@ namespace hal {
         removeAt(inx);
         restoreIndex();
         Q_EMIT waveRemoved(inx);
-        delete toDelete;
+        mTrashCan.append(toDelete);
     }
 
     void WaveDataList::setValueForEmpty(int val)

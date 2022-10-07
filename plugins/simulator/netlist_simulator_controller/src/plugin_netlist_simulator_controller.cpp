@@ -13,6 +13,7 @@
 #include <QFile>
 #include <QSettings>
 #include <QDir>
+#include <QCoreApplication>
 
 namespace hal
 {
@@ -115,7 +116,9 @@ namespace hal
 
     std::unique_ptr<NetlistSimulatorController> NetlistSimulatorControllerPlugin::create_simulator_controller(const std::string &nam, const std::string &workdir) const
     {
-        return std::unique_ptr<NetlistSimulatorController>(new NetlistSimulatorController(++sMaxControllerId, nam, workdir));
+        NetlistSimulatorController* nsc = new NetlistSimulatorController(++sMaxControllerId, nam, workdir);
+        qApp->processEvents();
+        return std::unique_ptr<NetlistSimulatorController>(nsc);
     }
 
     std::unique_ptr<NetlistSimulatorController> NetlistSimulatorControllerPlugin::restore_simulator_controller(Netlist* nl, const std::string &filename) const
@@ -126,6 +129,7 @@ namespace hal
             delete nsc;
             return nullptr;
         }
+        qApp->processEvents();
         return std::unique_ptr<NetlistSimulatorController>(nsc);
     }
 
@@ -133,6 +137,7 @@ namespace hal
     {
         NetlistSimulatorController* ctrl = NetlistSimulatorControllerMap::instance()->controller(id);
         if (!ctrl) return nullptr;
+        qApp->processEvents();
         return std::shared_ptr<NetlistSimulatorController>(ctrl,[](void*){;});
     }
 

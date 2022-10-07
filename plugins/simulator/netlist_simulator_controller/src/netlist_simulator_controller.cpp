@@ -370,6 +370,7 @@ namespace hal
 
         mWaveDataList->setValueForEmpty(0);
         mWaveDataList->emitTimeframeChanged();
+        qApp->processEvents();
 
         for (auto it = mBadAssignInputWarnings.constBegin(); it != mBadAssignInputWarnings.constEnd(); ++it)
             if (it.value() > 3)

@@ -52,7 +52,7 @@ namespace hal
         for (std::unique_ptr<NetlistSimulatorController>& ctrlRef : ctrlPlug->sSimulatorSerializer->restore())
         {
             if (!ctrlRef) continue;
-            takeControllerOwnership(ctrlRef);
+            takeControllerOwnership(ctrlRef, false); // already created by restore()
         }
     }
 
@@ -258,7 +258,7 @@ namespace hal
             return;
         }
         std::unique_ptr<NetlistSimulatorController> ctrlRef = ctrlPlug->create_simulator_controller();
-        takeControllerOwnership(ctrlRef);
+        takeControllerOwnership(ctrlRef, true);
     }
 
     void WaveformViewer::handleSimulSettings()
@@ -403,7 +403,7 @@ namespace hal
             if (ctrlPlug)
             {
                 std::unique_ptr<NetlistSimulatorController> ctrlRef = ctrlPlug->restore_simulator_controller(gNetlist,filename.toStdString());
-                takeControllerOwnership(ctrlRef);
+                takeControllerOwnership(ctrlRef, true);
             }
         }
         else if (mCurrentWaveWidget && mCurrentWaveWidget->controller()->can_import_data() && filename.toLower().endsWith(".vcd"))
@@ -416,12 +416,30 @@ namespace hal
             log_warning("simulation_plugin", "Unable to restore saved data from file '{}'.", filename.toStdString());
     }
 
-    void WaveformViewer::takeControllerOwnership(std::unique_ptr<NetlistSimulatorController> &ctrlRef)
+    void WaveformViewer::takeControllerOwnership(std::unique_ptr<NetlistSimulatorController> &ctrlRef, bool create)
     {
         NetlistSimulatorController* nsc = ctrlRef.get();
 
-        WaveWidget* ww = new WaveWidget(nsc, mTabWidget);
-        mTabWidget->addTab(ww,nsc->name());
+        WaveWidget* ww = nullptr;
+        if (create)
+        {
+            ww = new WaveWidget(nsc, mTabWidget);
+            mTabWidget->addTab(ww,nsc->name());
+        }
+        else
+        {
+            for (int inx=0; inx<mTabWidget->count(); inx++)
+            {
+                WaveWidget* wwTest = static_cast<WaveWidget*>(mTabWidget->widget(inx));
+                if (ctrlRef.get()->get_id() == wwTest->controllerId())
+                {
+                    ww = wwTest;
+                    break;
+                }
+            }
+
+        }
+        Q_ASSERT(ww);
         ww->takeOwnership(ctrlRef);
     }
 
