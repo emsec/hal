@@ -3,24 +3,18 @@
 #include "waveform_viewer/wave_widget.h"
 #include "waveform_viewer/simulation_setting_dialog.h"
 #include "netlist_simulator_controller/simulation_process.h"
-#include "netlist_simulator_controller/wave_data.h"
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
 #include "netlist_simulator_controller/simulation_engine.h"
 
-#include "netlist_simulator_controller/vcd_serializer.h"
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
 #include "waveform_viewer/gate_selection_dialog.h"
-#include "waveform_viewer/plugin_waveform_viewer.h"
 #include "waveform_viewer/clock_set_dialog.h"
 #include "waveform_viewer/wave_graphics_canvas.h"
-#include "hal_core/netlist/module.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/plugin_system/plugin_manager.h"
-#include "hal_version.h"
-#include "gui/netlist_relay/netlist_relay.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"
 #include "gui/toolbar/toolbar.h"
@@ -39,9 +33,6 @@
 #include <QProgressBar>
 #include <QInputDialog>
 #include "hal_core/plugin_system/plugin_manager.h"
-#include "netlist_simulator/plugin_netlist_simulator.h"
-#include "netlist_simulator/netlist_simulator.h"
-#include "netlist_simulator_controller/simulation_input.h"
 
 namespace hal
 {

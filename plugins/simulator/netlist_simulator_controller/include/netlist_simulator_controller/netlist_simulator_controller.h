@@ -389,7 +389,7 @@ public Q_SLOTS:
     void handleRunFinished(bool success);
 
 Q_SIGNALS:
-    void stateChanged(SimulationState state);
+    void stateChanged(hal::NetlistSimulatorController::SimulationState state);
     void engineFinished(bool success);
     void parseComplete();
     void loadProgress(int percent);

@@ -1,11 +1,9 @@
 #include "netlist_simulator_controller/wave_data.h"
 #include "netlist_simulator_controller/saleae_file.h"
-#include "netlist_simulator_controller/wave_event.h"
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
 #include "netlist_simulator_controller/simulation_settings.h"
 #include "netlist_simulator_controller/wave_data_provider.h"
 #include "hal_core/netlist/net.h"
-#include "hal_core/utilities/log.h"
 #include <math.h>
 #include <vector>
 #include <QString>
@@ -14,6 +12,7 @@
 #include <QDir>
 #include <stdio.h>
 #include <QDebug>
+#include <QCoreApplication>
 
 namespace hal {
 
@@ -1300,6 +1299,7 @@ namespace hal {
     {
         qDebug() << "emitTimeframeChanged-Tfc" << mTimeframe.sceneMaxTime();
         Q_EMIT timeframeChanged(&mTimeframe);
+        qApp->processEvents();
     }
 
     void WaveDataList::incrementSimulTime(u64 deltaT)
@@ -1454,7 +1454,8 @@ namespace hal {
     {
         int iwave = waveIndexByNetId(id);
         if (iwave<0) return;
-        Q_EMIT waveAdded(iwave);
+        // ugly but save. While emit is not const because of Q_SIGNAL syntax it will not modify object
+        const_cast<WaveDataList*>(this)->emitWaveAdded(iwave);
     }
 
     void WaveDataList::registerTrigger(WaveDataTrigger *wdTrig)
