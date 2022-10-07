@@ -21,7 +21,7 @@ namespace hal {
     WaveTreeModel::WaveTreeModel(WaveDataList *wdlist, WaveItemHash *wHash, WaveGraphicsCanvas *wgc, QObject *obj)
         : QAbstractItemModel(obj), mWaveDataList(wdlist), mWaveItemHash(wHash), mGraphicsCanvas(wgc),
           mDragCommand(None), mDragIsGroup(false),
-          mCursorTime(0), mCursorXpos(0), mIgnoreSignals(false),
+          mCursorTime(0), mCursorXpos(0),
           mReorderRequestWaiting(0)
     {
 
@@ -276,7 +276,8 @@ namespace hal {
     void WaveTreeModel::handleTriggerAdded(int trigId)
     {
         ReorderRequest req(this);
-        if (mIgnoreSignals) return;
+        WaveItemIndex wii(trigId, WaveItemIndex::Trig);
+        if (mWaveItemHash->contains(wii)) return;
         WaveDataTrigger* wdTrig = mWaveDataList->mDataTrigger.value(trigId);
         if (!wdTrig) return;
         insertTrigger(createIndex(mRoot->size(),0,mRoot),QList<WaveData*>(),QList<int>(),nullptr,wdTrig);
@@ -286,7 +287,8 @@ namespace hal {
     void WaveTreeModel::handleBooleanAdded(int boolId)
     {
         ReorderRequest req(this);
-        if (mIgnoreSignals) return;
+        WaveItemIndex wii(boolId, WaveItemIndex::Bool);
+        if (mWaveItemHash->contains(wii)) return;
         WaveDataBoolean* wdBool = mWaveDataList->mDataBooleans.value(boolId);
         if (!wdBool) return;
         insertBoolean(createIndex(mRoot->size(),0,mRoot),QString(),wdBool);
@@ -296,7 +298,8 @@ namespace hal {
     void WaveTreeModel::handleGroupAdded(int grpId)
     {
         ReorderRequest req(this);
-        if (mIgnoreSignals) return;
+        WaveItemIndex wii(grpId, WaveItemIndex::Group);
+        if (mWaveItemHash->contains(wii)) return;
         WaveDataGroup* grp = mWaveDataList->mDataGroups.value(grpId);
         if (!grp) return;
         insertGroup(createIndex(mRoot->size(),0,mRoot),grp);
@@ -1016,7 +1019,6 @@ namespace hal {
         if (trigIndex.internalPointer() != mRoot) return;
 
         ReorderRequest req(this);
-        mIgnoreSignals = true;
         if (!wdTrig)
         {
             wdTrig = new WaveDataTrigger(mWaveDataList,trigWaves,toVal);
@@ -1025,7 +1027,6 @@ namespace hal {
         beginResetModel();
         insertItem(trigIndex.row(),trigIndex.parent(),wdTrig);
         endResetModel();
-        mIgnoreSignals = false;
         wdTrig->recalcData();
     }
 
@@ -1034,12 +1035,10 @@ namespace hal {
         if (boolIndex.internalPointer() != mRoot) return;
 
         ReorderRequest req(this);
-        mIgnoreSignals = true;
         if (!wdBool) wdBool = new WaveDataBoolean(mWaveDataList,boolExpression);
         beginResetModel();
         insertItem(boolIndex.row(),boolIndex.parent(),wdBool);
         endResetModel();
-        mIgnoreSignals = false;
         wdBool->recalcData();
     }
 
@@ -1048,12 +1047,10 @@ namespace hal {
         if (boolIndex.internalPointer() != mRoot) return;
 
         ReorderRequest req(this);
-        mIgnoreSignals = true;
         WaveDataBoolean* wdBool = new WaveDataBoolean(mWaveDataList,boolWaves,acceptMask);
         beginResetModel();
         insertItem(boolIndex.row(),boolIndex.parent(),wdBool);
         endResetModel();
-        mIgnoreSignals = false;
         wdBool->recalcData();
     }
 
@@ -1062,12 +1059,10 @@ namespace hal {
         if (groupIndex.internalPointer() != mRoot) return;
 
         ReorderRequest req(this);
-        mIgnoreSignals = true;
         if (!grp) grp = new WaveDataGroup(mWaveDataList);
         beginResetModel();
         insertItem(groupIndex.row(),groupIndex.parent(),grp);
         endResetModel();
-        mIgnoreSignals = false;
         grp->recalcData();
     }
 

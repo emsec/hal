@@ -1,11 +1,9 @@
 #include "netlist_simulator_controller/wave_data.h"
 #include "netlist_simulator_controller/saleae_file.h"
-#include "netlist_simulator_controller/wave_event.h"
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
 #include "netlist_simulator_controller/simulation_settings.h"
 #include "netlist_simulator_controller/wave_data_provider.h"
 #include "hal_core/netlist/net.h"
-#include "hal_core/utilities/log.h"
 #include <math.h>
 #include <vector>
 #include <QString>
@@ -14,6 +12,7 @@
 #include <QDir>
 #include <stdio.h>
 #include <QDebug>
+#include <QCoreApplication>
 
 namespace hal {
 
@@ -1292,17 +1291,21 @@ namespace hal {
 
         mTimeframe.setSceneMaxTime(tmax);
         if (mustUpdateClocks) updateClocks();
+        qDebug() << "setMaxTime-Tfc" << mTimeframe.sceneMaxTime();
         Q_EMIT timeframeChanged(&mTimeframe);
     }
 
     void WaveDataList::emitTimeframeChanged()
     {
+        qDebug() << "emitTimeframeChanged-Tfc" << mTimeframe.sceneMaxTime();
         Q_EMIT timeframeChanged(&mTimeframe);
+        qApp->processEvents();
     }
 
     void WaveDataList::incrementSimulTime(u64 deltaT)
     {
         mTimeframe.mSimulateMaxTime += deltaT;
+        qDebug() << "incrementSimulTime-Tfc" << mTimeframe.mSimulateMaxTime << ">" << mTimeframe.mSceneMaxTime;
         if (mTimeframe.mSimulateMaxTime > mTimeframe.mSceneMaxTime)
             setMaxTime(mTimeframe.mSimulateMaxTime);
     }
@@ -1322,6 +1325,7 @@ namespace hal {
                 wd->clear();
             }
         }
+        qDebug() << "setUserTimeframe-Tfc" << mTimeframe.sceneMaxTime();
         Q_EMIT timeframeChanged(&mTimeframe);
     }
 
@@ -1450,7 +1454,8 @@ namespace hal {
     {
         int iwave = waveIndexByNetId(id);
         if (iwave<0) return;
-        Q_EMIT waveAdded(iwave);
+        // ugly but save. While emit is not const because of Q_SIGNAL syntax it will not modify object
+        const_cast<WaveDataList*>(this)->emitWaveAdded(iwave);
     }
 
     void WaveDataList::registerTrigger(WaveDataTrigger *wdTrig)

@@ -201,7 +201,9 @@ namespace hal {
 
     void WaveGraphicsCanvas::handleTimeframeChanged(const WaveDataTimeframe* tframe)
     {
+        qDebug() << "WaveGraphicsCanvas::callTfc" << tframe->sceneMaxTime() << "=?=" << mTransform.tMax();
         if (mTransform.tMin() == tframe->sceneMinTime() && mTransform.tMax() == tframe->sceneMaxTime()) return;
+        qDebug() << "WaveGraphicsCanvas::handleTfc" << tframe->sceneMaxTime();
         mTransform.setTmin(tframe->sceneMinTime());
         mTransform.setTmax(tframe->sceneMaxTime());
         mRenderEngine->update();

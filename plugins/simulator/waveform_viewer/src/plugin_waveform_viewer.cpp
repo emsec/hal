@@ -36,7 +36,7 @@ namespace hal
     {
         qRegisterMetaType<u32>();
         qRegisterMetaType<std::string>();
-        qRegisterMetaType<NetlistSimulatorController::SimulationState>();
+        qRegisterMetaType<hal::NetlistSimulatorController::SimulationState>();
         ExternalContent::instance()->append(new VcdViewerFactory);
     }
 
