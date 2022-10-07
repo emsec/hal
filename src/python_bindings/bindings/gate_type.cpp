@@ -183,8 +183,8 @@ namespace hal
 
         py_gate_type.def(
             "create_pin",
-            [](GateType& self, const u32 id, const std::string& name, PinDirection direction, PinType type = PinType::none) -> GatePin* {
-                auto res = self.create_pin(id, name, direction, type);
+            [](GateType& self, const u32 id, const std::string& name, PinDirection direction, PinType type = PinType::none, bool create_group = true) -> GatePin* {
+                auto res = self.create_pin(id, name, direction, type, create_group);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -198,7 +198,8 @@ namespace hal
             py::arg("id"),
             py::arg("name"),
             py::arg("direction"),
-            py::arg("type") = PinType::none,
+            py::arg("type")         = PinType::none,
+            py::arg("create_group") = true,
             R"(
             Create a gate pin with the specified name.
 
@@ -206,14 +207,15 @@ namespace hal
             :param str name: The name of the pin.
             :param hal_py.PinDirection direction: The direction of the pin.
             :param hal_py.PinType type: The type of the pin. Defaults to hal_py.PinType.none.
+            :param bool create_group: Set True to automatically assign the pin to a new pin group, False otherwise. Defaults to True.
             :returns: The gate pin on success, None otherwise.
             :rtype: hal_py.GatePin or None
         )");
 
         py_gate_type.def(
             "create_pin",
-            [](GateType& self, const std::string& name, PinDirection direction, PinType type = PinType::none) -> GatePin* {
-                auto res = self.create_pin(name, direction, type);
+            [](GateType& self, const std::string& name, PinDirection direction, PinType type = PinType::none, bool create_group = true) -> GatePin* {
+                auto res = self.create_pin(name, direction, type, create_group);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -226,7 +228,8 @@ namespace hal
             },
             py::arg("name"),
             py::arg("direction"),
-            py::arg("type") = PinType::none,
+            py::arg("type")         = PinType::none,
+            py::arg("create_group") = true,
             R"(
             Create a gate pin with the specified name.
             The ID of the pin is set automatically.
@@ -234,6 +237,7 @@ namespace hal
             :param str name: The name of the pin.
             :param hal_py.PinDirection direction: The direction of the pin.
             :param hal_py.PinType type: The type of the pin. Defaults to hal_py.PinType.none.
+            :param bool create_group: Set True to automatically assign the pin to a new pin group, False otherwise. Defaults to True.
             :returns: The gate pin on success, None otherwise.
             :rtype: hal_py.GatePin or None
         )");

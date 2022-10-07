@@ -56,6 +56,9 @@ namespace hal
     {
         rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
 
+        // file format version
+        document.AddMember("version", HGL_FORMAT_VERSION, allocator);
+
         // library name
         document.AddMember("library", gate_lib->get_name(), allocator);
 
@@ -264,78 +267,53 @@ namespace hal
             }
 
             // pins
-            std::vector<PinCtx> pin_data = get_pins(gt, functions);
-            rapidjson::Value pins(rapidjson::kArrayType);
-
-            for (const auto& pin_ctx : pin_data)
+            const auto pin_groups = gt->get_pin_groups();
+            rapidjson::Value pg_array(rapidjson::kArrayType);
+            for (const auto* group : pin_groups)
             {
-                rapidjson::Value pin(rapidjson::kObjectType);
+                rapidjson::Value pg_val(rapidjson::kObjectType);
+                pg_val.AddMember("name", group->get_name(), allocator);
+                pg_val.AddMember("direction", enum_to_string(group->get_direction()), allocator);
+                pg_val.AddMember("type", enum_to_string(group->get_type()), allocator);
+                pg_val.AddMember("ascending", group->is_ascending(), allocator);
+                pg_val.AddMember("start_index", group->get_start_index(), allocator);
 
-                pin.AddMember("name", pin_ctx.name, allocator);
-                pin.AddMember("direction", pin_ctx.direction, allocator);
-                if (pin_ctx.type != "")
+                // pins of group
+                rapidjson::Value p_array(rapidjson::kArrayType);
+                for (const auto* pin : group->get_pins())
                 {
-                    pin.AddMember("type", pin_ctx.type, allocator);
-                }
-                if (pin_ctx.function != "")
-                {
-                    pin.AddMember("function", pin_ctx.function, allocator);
-                }
-                if (pin_ctx.x_function != "")
-                {
-                    pin.AddMember("x_function", pin_ctx.x_function, allocator);
-                }
-                if (pin_ctx.z_function != "")
-                {
-                    pin.AddMember("z_function", pin_ctx.z_function, allocator);
-                }
+                    rapidjson::Value p_val(rapidjson::kObjectType);
+                    p_val.AddMember("name", pin->get_name(), allocator);
+                    p_val.AddMember("direction", enum_to_string(pin->get_direction()), allocator);
+                    p_val.AddMember("type", enum_to_string(pin->get_type()), allocator);
 
-                pins.PushBack(pin, allocator);
-            }
-
-            cell.AddMember("pins", pins, allocator);
-
-            // groups (avoid writing pin groups automatically created for each pin)
-            const std::vector<PinGroup<GatePin>*> pin_groups = gt->get_pin_groups([](const PinGroup<GatePin>* pg) {
-                if (pg->size() == 1)
-                {
-                    const GatePin* p = pg->get_pins().front();
-                    return pg->get_name() != p->get_name() || pg->get_direction() != p->get_direction() || pg->get_type() != p->get_type() || pg->get_start_index() != 0 || pg->is_ascending() != false;
-                }
-                return true;
-            });
-            if (!pin_groups.empty())
-            {
-                rapidjson::Value groups(rapidjson::kArrayType);
-
-                for (const auto* pin_group : pin_groups)
-                {
-                    rapidjson::Value group(rapidjson::kObjectType);
-
-                    group.AddMember("name", pin_group->get_name(), allocator);
-
-                    rapidjson::Value group_pin_array(rapidjson::kArrayType);
-                    u32 i         = pin_group->get_start_index();
-                    i32 direction = pin_group->is_ascending() ? 1 : -1;
-                    for (const auto* pin : pin_group->get_pins())
+                    // check pin function
+                    if (pin->get_direction() == PinDirection::output || pin->get_direction() == PinDirection::inout)
                     {
-                        rapidjson::Value group_pin(rapidjson::kObjectType);
-                        std::string index       = std::to_string(i);
-                        const std::string& name = pin->get_name();
-                        rapidjson::Value v_index(index.c_str(), index.size(), allocator);
-                        rapidjson::Value v_pin(name.c_str(), name.size(), allocator);
-                        group_pin.AddMember(v_index, v_pin, allocator);
-                        group_pin_array.PushBack(group_pin, allocator);
-                        i += direction;
-                    }
-                    group.AddMember("pins", group_pin_array, allocator);
+                        if (const auto it = functions.find(pin->get_name()); it != functions.end())
+                        {
+                            p_val.AddMember("function", it->second.to_string(), allocator);
+                        }
 
-                    groups.PushBack(group, allocator);
+                        if (const auto it = functions.find(pin->get_name() + "_undefined"); it != functions.end())
+                        {
+                            p_val.AddMember("x_function", it->second.to_string(), allocator);
+                        }
+
+                        if (const auto it = functions.find(pin->get_name() + "_tristate"); it != functions.end())
+                        {
+                            p_val.AddMember("z_function", it->second.to_string(), allocator);
+                        }
+                    }
+
+                    p_array.PushBack(p_val, allocator);
                 }
 
-                cell.AddMember("groups", groups, allocator);
+                pg_val.AddMember("pins", p_array, allocator);
+                pg_array.PushBack(pg_val, allocator);
             }
 
+            cell.AddMember("pin_groups", pg_array, allocator);
             cells.PushBack(cell, allocator);
         }
 

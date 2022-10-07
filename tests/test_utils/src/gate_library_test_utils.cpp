@@ -1,12 +1,12 @@
 #include "gate_library_test_utils.h"
 
-#include "hal_core/utilities/log.h"
 #include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/latch_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/ram_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/state_component.h"
+#include "hal_core/utilities/log.h"
 
 namespace hal
 {
@@ -999,7 +999,7 @@ namespace hal
                 }
 
                 std::vector<GatePin*> addr_pins;
-                if (auto res = ram->create_pin("ADDR(0)", PinDirection::input, PinType::address); res.is_error())
+                if (auto res = ram->create_pin("ADDR(0)", PinDirection::input, PinType::address, false); res.is_error())
                 {
                     return nullptr;
                 }
@@ -1007,7 +1007,7 @@ namespace hal
                 {
                     addr_pins.push_back(res.get());
                 }
-                if (auto res = ram->create_pin("ADDR(1)", PinDirection::input, PinType::address); res.is_error())
+                if (auto res = ram->create_pin("ADDR(1)", PinDirection::input, PinType::address, false); res.is_error())
                 {
                     return nullptr;
                 }
@@ -1015,7 +1015,7 @@ namespace hal
                 {
                     addr_pins.push_back(res.get());
                 }
-                if (auto res = ram->create_pin("ADDR(2)", PinDirection::input, PinType::address); res.is_error())
+                if (auto res = ram->create_pin("ADDR(2)", PinDirection::input, PinType::address, false); res.is_error())
                 {
                     return nullptr;
                 }
@@ -1023,7 +1023,7 @@ namespace hal
                 {
                     addr_pins.push_back(res.get());
                 }
-                if (auto res = ram->create_pin("ADDR(3)", PinDirection::input, PinType::address); res.is_error())
+                if (auto res = ram->create_pin("ADDR(3)", PinDirection::input, PinType::address, false); res.is_error())
                 {
                     return nullptr;
                 }
@@ -1033,7 +1033,7 @@ namespace hal
                 }
 
                 std::vector<GatePin*> data_in_pins;
-                if (auto res = ram->create_pin("DATA_IN(0)", PinDirection::input, PinType::data); res.is_error())
+                if (auto res = ram->create_pin("DATA_IN(0)", PinDirection::input, PinType::data, false); res.is_error())
                 {
                     return nullptr;
                 }
@@ -1041,7 +1041,7 @@ namespace hal
                 {
                     data_in_pins.push_back(res.get());
                 }
-                if (auto res = ram->create_pin("DATA_IN(1)", PinDirection::input, PinType::data); res.is_error())
+                if (auto res = ram->create_pin("DATA_IN(1)", PinDirection::input, PinType::data, false); res.is_error())
                 {
                     return nullptr;
                 }
@@ -1049,7 +1049,7 @@ namespace hal
                 {
                     data_in_pins.push_back(res.get());
                 }
-                if (auto res = ram->create_pin("DATA_IN(2)", PinDirection::input, PinType::data); res.is_error())
+                if (auto res = ram->create_pin("DATA_IN(2)", PinDirection::input, PinType::data, false); res.is_error())
                 {
                     return nullptr;
                 }
@@ -1057,7 +1057,7 @@ namespace hal
                 {
                     data_in_pins.push_back(res.get());
                 }
-                if (auto res = ram->create_pin("DATA_IN(3)", PinDirection::input, PinType::data); res.is_error())
+                if (auto res = ram->create_pin("DATA_IN(3)", PinDirection::input, PinType::data, false); res.is_error())
                 {
                     return nullptr;
                 }
@@ -1067,7 +1067,7 @@ namespace hal
                 }
 
                 std::vector<GatePin*> data_out_pins;
-                if (auto res = ram->create_pin("DATA_OUT(0)", PinDirection::output, PinType::data); res.is_error())
+                if (auto res = ram->create_pin("DATA_OUT(0)", PinDirection::output, PinType::data, false); res.is_error())
                 {
                     return nullptr;
                 }
@@ -1075,7 +1075,7 @@ namespace hal
                 {
                     data_out_pins.push_back(res.get());
                 }
-                if (auto res = ram->create_pin("DATA_OUT(1)", PinDirection::output, PinType::data); res.is_error())
+                if (auto res = ram->create_pin("DATA_OUT(1)", PinDirection::output, PinType::data, false); res.is_error())
                 {
                     return nullptr;
                 }
@@ -1083,7 +1083,7 @@ namespace hal
                 {
                     data_out_pins.push_back(res.get());
                 }
-                if (auto res = ram->create_pin("DATA_OUT(2)", PinDirection::output, PinType::data); res.is_error())
+                if (auto res = ram->create_pin("DATA_OUT(2)", PinDirection::output, PinType::data, false); res.is_error())
                 {
                     return nullptr;
                 }
@@ -1091,7 +1091,7 @@ namespace hal
                 {
                     data_out_pins.push_back(res.get());
                 }
-                if (auto res = ram->create_pin("DATA_OUT(3)", PinDirection::output, PinType::data); res.is_error())
+                if (auto res = ram->create_pin("DATA_OUT(3)", PinDirection::output, PinType::data, false); res.is_error())
                 {
                     return nullptr;
                 }
@@ -1134,25 +1134,25 @@ namespace hal
 
         bool gate_types_are_equal(const GateType* const gt1, const GateType* const gt2)
         {
-            if (gt1->get_id() != gt2->get_id()) 
+            if (gt1->get_id() != gt2->get_id())
             {
                 log_info("test_utils", "unequal ID of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
                 return false;
             }
 
-            if (gt1->get_name() != gt2->get_name()) 
+            if (gt1->get_name() != gt2->get_name())
             {
                 log_info("test_utils", "unequal name of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
                 return false;
             }
 
-            if (gt1->get_properties() != gt2->get_properties()) 
+            if (gt1->get_properties() != gt2->get_properties())
             {
                 log_info("test_utils", "unequal properties of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
                 return false;
             }
 
-            if (gt1->get_boolean_functions() != gt2->get_boolean_functions()) 
+            if (gt1->get_boolean_functions() != gt2->get_boolean_functions())
             {
                 log_info("test_utils", "unequal Boolean functions of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
                 return false;
@@ -1165,8 +1165,8 @@ namespace hal
                 return false;
             }
             for (auto [pg1_it, pg2_it] = std::tuple{pg1.begin(), pg2.begin()}; pg1_it != pg1.end() && pg2_it != pg2.end(); pg1_it++, pg2_it++)
-            {   
-                if (!gate_pin_groups_are_equal(*pg1_it, *pg2_it)) 
+            {
+                if (!gate_pin_groups_are_equal(*pg1_it, *pg2_it))
                 {
                     log_info("test_utils", "unequal pin groups of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
                     return false;
@@ -1177,13 +1177,13 @@ namespace hal
             const LUTComponent* lut_component2 = gt2->get_component_as<LUTComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::lut; });
             if (lut_component1 != nullptr && lut_component2 != nullptr)
             {
-                if (lut_component1->is_init_ascending() != lut_component2->is_init_ascending()) 
+                if (lut_component1->is_init_ascending() != lut_component2->is_init_ascending())
                 {
                     log_info("test_utils", "unequal LUT components of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
                     return false;
                 }
-            } 
-            else if (lut_component1 != nullptr || lut_component2 != nullptr) 
+            }
+            else if (lut_component1 != nullptr || lut_component2 != nullptr)
             {
                 log_info("test_utils", "unequal LUT components of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
                 return false;
@@ -1193,71 +1193,73 @@ namespace hal
             const FFComponent* ff_component2 = gt2->get_component_as<FFComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::ff; });
             if (ff_component1 != nullptr && ff_component2 != nullptr)
             {
-                if (ff_component1->get_next_state_function() != ff_component2->get_next_state_function() ||
-                    ff_component1->get_clock_function() != ff_component2->get_clock_function() ||
-                    ff_component1->get_async_reset_function() != ff_component2->get_async_reset_function() ||
-                    ff_component1->get_async_set_function() != ff_component2->get_async_set_function() ||
-                    ff_component1->get_async_set_reset_behavior() != ff_component2->get_async_set_reset_behavior()) 
+                if (ff_component1->get_next_state_function() != ff_component2->get_next_state_function() || ff_component1->get_clock_function() != ff_component2->get_clock_function()
+                    || ff_component1->get_async_reset_function() != ff_component2->get_async_reset_function() || ff_component1->get_async_set_function() != ff_component2->get_async_set_function()
+                    || ff_component1->get_async_set_reset_behavior() != ff_component2->get_async_set_reset_behavior())
                 {
                     log_info("test_utils", "unequal FF components of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
                     return false;
                 }
-            } 
-            else if (ff_component1 != nullptr || ff_component2 != nullptr) 
+            }
+            else if (ff_component1 != nullptr || ff_component2 != nullptr)
             {
                 log_info("test_utils", "unequal FF components of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
                 return false;
             }
 
-            const LatchComponent* latch_component1 = gt1->get_component_as<LatchComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::latch; });
-            const LatchComponent* latch_component2 = gt2->get_component_as<LatchComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::latch; });
+            const LatchComponent* latch_component1 =
+                gt1->get_component_as<LatchComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::latch; });
+            const LatchComponent* latch_component2 =
+                gt2->get_component_as<LatchComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::latch; });
             if (latch_component1 != nullptr && latch_component2 != nullptr)
             {
-                if (latch_component1->get_data_in_function() != latch_component2->get_data_in_function() ||
-                    latch_component1->get_enable_function() != latch_component2->get_enable_function() ||
-                    latch_component1->get_async_reset_function() != latch_component2->get_async_reset_function() ||
-                    latch_component1->get_async_set_function() != latch_component2->get_async_set_function() ||
-                    latch_component1->get_async_set_reset_behavior() != latch_component2->get_async_set_reset_behavior()) 
+                if (latch_component1->get_data_in_function() != latch_component2->get_data_in_function() || latch_component1->get_enable_function() != latch_component2->get_enable_function()
+                    || latch_component1->get_async_reset_function() != latch_component2->get_async_reset_function()
+                    || latch_component1->get_async_set_function() != latch_component2->get_async_set_function()
+                    || latch_component1->get_async_set_reset_behavior() != latch_component2->get_async_set_reset_behavior())
                 {
                     log_info("test_utils", "unequal Latch components of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
                     return false;
                 }
-            } 
-            else if (latch_component1 != nullptr || latch_component2 != nullptr) 
+            }
+            else if (latch_component1 != nullptr || latch_component2 != nullptr)
             {
                 log_info("test_utils", "unequal Latch components of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
                 return false;
             }
 
-            const InitComponent* init_component1 = gt1->get_component_as<InitComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::init; });
-            const InitComponent* init_component2 = gt2->get_component_as<InitComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::init; });
+            const InitComponent* init_component1 =
+                gt1->get_component_as<InitComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::init; });
+            const InitComponent* init_component2 =
+                gt2->get_component_as<InitComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::init; });
             if (init_component1 != nullptr && init_component2 != nullptr)
             {
-                if (init_component1->get_init_category() != init_component2->get_init_category() ||
-                    init_component1->get_init_identifiers() != init_component2->get_init_identifiers()) 
+                if (init_component1->get_init_category() != init_component2->get_init_category() || init_component1->get_init_identifiers() != init_component2->get_init_identifiers())
                 {
                     log_info("test_utils", "unequal Init components of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
                     return false;
                 }
-            } 
-            else if (init_component1 != nullptr || init_component2 != nullptr) 
+            }
+            else if (init_component1 != nullptr || init_component2 != nullptr)
             {
                 log_info("test_utils", "unequal Init components of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
                 return false;
             }
 
-            const StateComponent* state_component1 = gt1->get_component_as<StateComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::state; });
-            const StateComponent* state_component2 = gt2->get_component_as<StateComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::state; });
+            const StateComponent* state_component1 =
+                gt1->get_component_as<StateComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::state; });
+            const StateComponent* state_component2 =
+                gt2->get_component_as<StateComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::state; });
             if (state_component1 != nullptr && state_component2 != nullptr)
             {
-                if (state_component1->get_state_identifier() != state_component2->get_state_identifier() ||
-                    state_component1->get_neg_state_identifier() != state_component2->get_neg_state_identifier()) 
+                if (state_component1->get_state_identifier() != state_component2->get_state_identifier()
+                    || state_component1->get_neg_state_identifier() != state_component2->get_neg_state_identifier())
                 {
                     log_info("test_utils", "unequal Init components of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
                     return false;
                 }
-            } 
-            else if (state_component1 != nullptr || state_component2 != nullptr) 
+            }
+            else if (state_component1 != nullptr || state_component2 != nullptr)
             {
                 log_info("test_utils", "unequal Init components of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
                 return false;
@@ -1272,7 +1274,7 @@ namespace hal
             is_equal &= gl1->get_name() == gl2->get_name();
 
             std::vector<GateType*> gt1;
-            for (const auto& [_, type] : gl1->get_gate_types()) 
+            for (const auto& [_, type] : gl1->get_gate_types())
             {
                 UNUSED(_);
                 gt1.push_back(type);
@@ -1280,13 +1282,13 @@ namespace hal
             std::sort(gt1.begin(), gt1.end(), [](GateType* a, GateType* b) { return a->get_name() < b->get_name(); });
 
             std::vector<GateType*> gt2;
-            for (const auto& [_, type] : gl2->get_gate_types()) 
+            for (const auto& [_, type] : gl2->get_gate_types())
             {
                 UNUSED(_);
                 gt2.push_back(type);
             }
             std::sort(gt2.begin(), gt2.end(), [](GateType* a, GateType* b) { return a->get_name() < b->get_name(); });
-            
+
             if (gt1.size() != gt2.size())
             {
                 log_info("test_utils", "unequal number of gate types: '{}' vs. '{}'", gt1.size(), gt2.size());
@@ -1294,7 +1296,7 @@ namespace hal
             }
             for (auto [gt1_it, gt2_it] = std::tuple{gt1.begin(), gt2.begin()}; gt1_it != gt1.end() && gt2_it != gt2.end(); gt1_it++, gt2_it++)
             {
-                if (!gate_types_are_equal(*gt1_it, *gt2_it)) 
+                if (!gate_types_are_equal(*gt1_it, *gt2_it))
                 {
                     log_info("test_utils", "unequal gate types with names '{}' and '{}'", (*gt1_it)->get_name(), (*gt2_it)->get_name());
                     return false;

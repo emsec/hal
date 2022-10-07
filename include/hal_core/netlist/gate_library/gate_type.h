@@ -73,7 +73,6 @@ namespace hal
     {
     public:
         /**
-         * TODO test
          * Get all components matching the filter condition (if provided) as a vector. 
          * Returns an empty vector if (i) the gate type does not contain any components or (ii) no component matches the filter condition.
          * 
@@ -83,7 +82,6 @@ namespace hal
         std::vector<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const;
 
         /**
-         * TODO test
          * Get a single component matching the filter condition (if provided).
          * Returns a nullptr if (i) the gate type does not contain any components, (ii) multiple components match the filter condition, or (iii) no component matches the filter condition.
          * 
@@ -93,7 +91,6 @@ namespace hal
         GateTypeComponent* get_component(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const;
 
         /**
-         * TODO test
          * Get a single component and convert it to a component of the type specified by the template parameter.
          * A user-defined filter may be applied to the result set, but is disabled by default.
          * If more no or than one components match the filter condition, a nullptr is returned.
@@ -115,7 +112,6 @@ namespace hal
         }
 
         /**
-         * TODO test
          * Check if the gate type contains a component of the specified type.
          * 
          * @param[in] type - The component type to check for.
@@ -138,7 +134,6 @@ namespace hal
         const std::string& get_name() const;
 
         /**
-         * TODO test
          * Assign a new property to the gate type.
          * 
          * @param[in] property - The property to assign.
@@ -200,7 +195,6 @@ namespace hal
         bool operator!=(const GateType& other) const;
 
         /**
-         * TODO pybind, test
          * Get a spare pin ID.<br>
          * The value of 0 is reserved and represents an invalid ID.
          * 
@@ -209,7 +203,6 @@ namespace hal
         u32 get_unique_pin_id();
 
         /**
-         * TODO pybind, test
          * Get a spare pin group ID.<br>
          * The value of 0 is reserved and represents an invalid ID.
          * 
@@ -218,19 +211,18 @@ namespace hal
         u32 get_unique_pin_group_id();
 
         /**
-         * TODO test
          * Create a gate pin with the specified name.
          * 
          * @param[in] id - The ID of the pin.
          * @param[in] name - The name of the pin.
          * @param[in] direction - The direction of the pin.
          * @param[in] type - The type of the pin. Defaults to `PinType::none`.
+         * @param[in] create_group - Set `true` to automatically assign the pin to a new pin group, `false` otherwise. Defaults to `true`.
          * @returns The gate pin on success, an error message otherwise.
          */
-        Result<GatePin*> create_pin(const u32 id, const std::string& name, PinDirection direction, PinType type = PinType::none);
+        Result<GatePin*> create_pin(const u32 id, const std::string& name, PinDirection direction, PinType type = PinType::none, bool create_group = true);
 
         /**
-         * TODO test
          * Create a gate pin with the specified name.
          * The ID of the pin is set automatically.
          * 
@@ -239,10 +231,9 @@ namespace hal
          * @param[in] type - The type of the pin. Defaults to `PinType::none`.
          * @returns The gate pin on success, an error message otherwise.
          */
-        Result<GatePin*> create_pin(const std::string& name, PinDirection direction, PinType type = PinType::none);
+        Result<GatePin*> create_pin(const std::string& name, PinDirection direction, PinType type = PinType::none, bool create_group = true);
 
         /**
-         * TODO test
          * Get an ordered vector of all pins of the gate type.
          * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          * 
@@ -252,7 +243,6 @@ namespace hal
         std::vector<GatePin*> get_pins(const std::function<bool(GatePin*)>& filter = nullptr) const;
 
         /**
-         * TODO test
          * Get an ordered vector of the names of all pins of the gate type.
          * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          * 
@@ -262,7 +252,6 @@ namespace hal
         std::vector<std::string> get_pin_names(const std::function<bool(GatePin*)>& filter = nullptr) const;
 
         /**
-         * TODO test
          * Get an ordered vector of all input pins of the gate type (including inout pins).
          * 
          * @returns An ordered vector of input pins.
@@ -270,7 +259,6 @@ namespace hal
         std::vector<GatePin*> get_input_pins() const;
 
         /**
-         * TODO test
          * Get an ordered vector of the names of all input pins of the gate type (including inout pins).
          * 
          * @returns An ordered vector of input pin names.
@@ -278,7 +266,6 @@ namespace hal
         std::vector<std::string> get_input_pin_names() const;
 
         /**
-         * TODO test
          * Get an ordered vector of all output pins of the gate type (including inout pins).
          * 
          * @returns An ordered vector of output pins.
@@ -286,7 +273,6 @@ namespace hal
         std::vector<GatePin*> get_output_pins() const;
 
         /**
-         * TODO test
          * Get an ordered vector of the names of all output pins of the gate type (including inout pins).
          * 
          * @returns An ordered vector of output pin names.
@@ -294,7 +280,6 @@ namespace hal
         std::vector<std::string> get_output_pin_names() const;
 
         /**
-         * TODO test
          * Get the pin corresponding to the given ID.
          * 
          * @param[in] id - The ID of the pin.
@@ -311,7 +296,6 @@ namespace hal
         GatePin* get_pin_by_name(const std::string& name) const;
 
         /** 
-         * TODO test
          * Create a pin group with the given name.
          * 
          * @param[in] id - The ID of the pin group.
@@ -332,7 +316,6 @@ namespace hal
                                                     u32 start_index                  = 0);
 
         /**
-         * TODO pybind, test
          * Create a pin group with the given name.
          * The ID of the pin group is set automatically.
          * 
@@ -352,7 +335,6 @@ namespace hal
                                                     u32 start_index                  = 0);
 
         /**
-         * TODO test
          * Get an ordered vector of all pin groups of the gate type.
          * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          * 
@@ -362,7 +344,6 @@ namespace hal
         std::vector<PinGroup<GatePin>*> get_pin_groups(const std::function<bool(PinGroup<GatePin>*)>& filter = nullptr) const;
 
         /**
-         * TODO test
          * Get the pin group corresponding to the given ID.
          * 
          * @param[in] id - The ID of the pin group.
@@ -371,7 +352,6 @@ namespace hal
         PinGroup<GatePin>* get_pin_group_by_id(const u32 id) const;
 
         /**
-         * TODO test
          * Get the pin group corresponding to the given name.
          * 
          * @param[in] name - The name of the pin group.
@@ -402,7 +382,6 @@ namespace hal
         const std::unordered_map<std::string, BooleanFunction>& get_boolean_functions() const;
 
         /**
-         * TODO test
          * Get the Boolean function specified by the given name.
          * This name can for example be an output pin of the gate or any other user-defined function name.
          * 
@@ -412,7 +391,6 @@ namespace hal
         BooleanFunction get_boolean_function(const std::string& name) const;
 
         /**
-         * TODO test
          * Get the Boolean function corresponding to the given output pin.
          * If `pin` is a `nullptr`, the Boolean function of the first output pin is returned.
          * 
@@ -451,7 +429,7 @@ namespace hal
 
         GateType(GateLibrary* gate_library, u32 id, const std::string& name, std::set<GateTypeProperty> properties, std::unique_ptr<GateTypeComponent> component = nullptr);
 
-        GateType(const GateType&) = delete;
+        GateType(const GateType&)            = delete;
         GateType& operator=(const GateType&) = delete;
     };
 }    // namespace hal

@@ -146,7 +146,7 @@ namespace hal
         return m_next_pin_group_id;
     }
 
-    Result<GatePin*> GateType::create_pin(const u32 id, const std::string& name, PinDirection direction, PinType type)
+    Result<GatePin*> GateType::create_pin(const u32 id, const std::string& name, PinDirection direction, PinType type, bool create_group)
     {
         if (name.empty())
         {
@@ -164,7 +164,7 @@ namespace hal
         {
             return ERR("could not create pin '" + name + "' for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": name '" + name + "' is already taken");
         }
-        if (direction == PinDirection::none || direction == PinDirection::internal)
+        if (direction == PinDirection::none)
         {
             return ERR("could not create pin '" + name + "' for gate type '" + m_name + "' with " + std::to_string(m_id) + ": direction '" + enum_to_string(direction) + "' is invalid");
         }
@@ -183,17 +183,20 @@ namespace hal
         }
         m_used_pin_ids.insert(id);
 
-        if (auto res = create_pin_group(name, {pin}, direction, type); res.is_error())
+        if (create_group)
         {
-            return ERR_APPEND(res.get_error(), "could not create pin '" + name + "' for gate type '" + m_name + "' with " + std::to_string(m_id) + ": failed to create pin group");
+            if (auto res = create_pin_group(name, {pin}, direction, type); res.is_error())
+            {
+                return ERR_APPEND(res.get_error(), "could not create pin '" + name + "' for gate type '" + m_name + "' with " + std::to_string(m_id) + ": failed to create pin group");
+            }
         }
 
         return OK(pin);
     }
 
-    Result<GatePin*> GateType::create_pin(const std::string& name, PinDirection direction, PinType type)
+    Result<GatePin*> GateType::create_pin(const std::string& name, PinDirection direction, PinType type, bool create_group)
     {
-        return create_pin(get_unique_pin_id(), name, direction, type);
+        return create_pin(get_unique_pin_id(), name, direction, type, create_group);
     }
 
     std::vector<GatePin*> GateType::get_pins(const std::function<bool(GatePin*)>& filter) const
