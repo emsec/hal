@@ -348,6 +348,73 @@ namespace hal
         }
         else if (file_version < 2)
         {
+            std::map<std::string, std::string> pins_to_groups;
+            std::map<std::string, GroupCtx> groups_to_pins;
+
+            if (gate_type.HasMember("groups") && gate_type["groups"].IsArray())
+            {
+                for (const auto& group_val : gate_type["groups"].GetArray())
+                {
+                    // read name
+                    std::string pg_name;
+                    if (!group_val.HasMember("name") || !group_val["name"].IsString())
+                    {
+                        return ERR("could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": missing or invalid pin group name");
+                    }
+
+                    pg_name = group_val["name"].GetString();
+                    if (!group_val.HasMember("pins") || !group_val["pins"].IsArray())
+                    {
+                        return ERR("could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": missing or invalid pins for pin group '" + pg_name + "'");
+                    }
+
+                    // TODO will need changes to HGL format to be fancy
+                    i32 start     = -1;
+                    i32 direction = 0;
+                    std::vector<std::string> pins;
+                    GroupCtx pin_group_info;
+                    for (const auto& pin_obj : group_val["pins"].GetArray())
+                    {
+                        if (!pin_obj.IsObject())
+                        {
+                            return ERR("could not parse pin group '" + name + "' with ID " + std::to_string(gt->get_id()) + ": invalid pin group assignment");
+                        }
+                        const auto pin_val   = pin_obj.GetObject().MemberBegin();
+                        u32 pin_index        = std::stoul(pin_val->name.GetString());
+                        std::string pin_name = pin_val->value.GetString();
+                        pin_group_info.pins.push_back(pin_name);
+                        pins_to_groups[pin_name] = pg_name;
+
+                        // if (auto res = gt->get_pin_by_name(pin_name); res == nullptr)
+                        // {
+                        //     return ERR("could not parse pin group '" + name + "': failed to get pin by name '" + pin_name + "'");
+                        // }
+                        // else
+                        // {
+                        //     pins.push_back(res);
+                        // }
+
+                        if (start == -1)
+                        {
+                            start = pin_index;
+                        }
+                        else
+                        {
+                            direction = (start < (i32)pin_index) ? 1 : -1;
+                        }
+                    }
+
+                    pin_group_info.ascending   = (direction == 1) ? true : false;
+                    pin_group_info.start_index = start;
+
+                    // if (auto res = gt->create_pin_group(name, pins, pins.at(0)->get_direction(), pins.at(0)->get_type(), , start); res.is_error())
+                    // {
+                    //     return ERR_APPEND(res.get_error(), "could not parse pin group '" + name + "': failed to create pin group");
+                    // }
+                    groups_to_pins[pg_name] = pin_group_info;
+                }
+            }
+
             PinCtx pin_ctx;
             if (gate_type.HasMember("pins") && gate_type["pins"].IsArray())
             {
@@ -355,28 +422,43 @@ namespace hal
                 {
                     if (auto res = parse_pin(pin_ctx, pin); res.is_error())
                     {
-                        return ERR_APPEND(res.get_error(), "could not parse gate type '" + name + "': failed parsing pin");
+                        return ERR_APPEND(res.get_error(), "could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": failed parsing pin");
                     }
                 }
             }
 
             for (const auto& pin_name : pin_ctx.pins)
             {
-                if (auto res = gt->create_pin(pin_name, pin_ctx.pin_to_direction.at(pin_name), pin_ctx.pin_to_type.at(pin_name)); res.is_error())
+                if (const auto it = pins_to_groups.find(pin_name); it == pins_to_groups.end())
                 {
-                    return ERR_APPEND(res.get_error(),
-                                      "could not parse gate type '" + name + "': failed to create pin '" + pin_name + "' of gate type '" + gt->get_name() + "' with ID "
-                                          + std::to_string(gt->get_id()));
-                }
-            }
-
-            if (gate_type.HasMember("groups") && gate_type["groups"].IsArray())
-            {
-                for (const auto& group_val : gate_type["groups"].GetArray())
-                {
-                    if (auto res = parse_group(gt, group_val); res.is_error())
+                    if (auto res = gt->create_pin(pin_name, pin_ctx.pin_to_direction.at(pin_name), pin_ctx.pin_to_type.at(pin_name), true); res.is_error())
                     {
-                        return ERR_APPEND(res.get_error(), "could not parse gate type '" + name + "': failed parsing pin group");
+                        return ERR_APPEND(res.get_error(), "could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": failed to create pin '" + pin_name);
+                    }
+                }
+                else
+                {
+                    if (gt->get_pin_group_by_name(it->second) != nullptr)
+                    {
+                        continue;
+                    }
+
+                    std::vector<GatePin*> pins;
+                    auto pg_info = groups_to_pins.at(it->second);
+                    for (const auto& p_name : pg_info.pins)
+                    {
+                        if (auto res = gt->create_pin(p_name, pin_ctx.pin_to_direction.at(p_name), pin_ctx.pin_to_type.at(p_name), false); res.is_error())
+                        {
+                            return ERR_APPEND(res.get_error(), "could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": failed to create pin '" + p_name);
+                        }
+                        else
+                        {
+                            pins.push_back(res.get());
+                        }
+                    }
+                    if (auto res = gt->create_pin_group(it->second, pins, pins.front()->get_direction(), pins.front()->get_type(), pg_info.ascending, pg_info.start_index); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(), "could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": failed to create pin group '" + it->second);
                     }
                 }
             }
@@ -385,7 +467,8 @@ namespace hal
             {
                 if (auto res = BooleanFunction::from_string(func); res.is_error())
                 {
-                    return ERR_APPEND(res.get_error(), "could not parse gate type '" + name + "': failed parsing Boolean function with name '" + f_name + "' from string");
+                    return ERR_APPEND(res.get_error(),
+                                      "could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": failed parsing Boolean function with name '" + f_name + "' from string");
                 }
                 else
                 {
@@ -451,61 +534,6 @@ namespace hal
         else
         {
             pin_ctx.pin_to_type[name] = PinType::none;
-        }
-
-        return OK({});
-    }
-
-    Result<std::monostate> HGLParser::parse_group(GateType* gt, const rapidjson::Value& group)
-    {
-        // read name
-        std::string name;
-        if (!group.HasMember("name") || !group["name"].IsString())
-        {
-            return ERR("could not parse pin group: missing or invalid name");
-        }
-
-        name = group["name"].GetString();
-        if (!group.HasMember("pins") || !group["pins"].IsArray())
-        {
-            return ERR("could not parse pin group '" + name + "': missing or invalid pins");
-        }
-
-        // TODO will need changes to HGL format to be fancy
-        i32 start     = -1;
-        i32 direction = 0;
-        std::vector<GatePin*> pins;
-        for (const auto& pin_obj : group["pins"].GetArray())
-        {
-            if (!pin_obj.IsObject())
-            {
-                return ERR("could not parse pin group '" + name + "': invalid pin group assignment");
-            }
-            const auto pin_val   = pin_obj.GetObject().MemberBegin();
-            u32 pin_index        = std::stoul(pin_val->name.GetString());
-            std::string pin_name = pin_val->value.GetString();
-            if (auto res = gt->get_pin_by_name(pin_name); res == nullptr)
-            {
-                return ERR("could not parse pin group '" + name + "': failed to get pin by name '" + pin_name + "'");
-            }
-            else
-            {
-                pins.push_back(res);
-            }
-
-            if (start == -1)
-            {
-                start = pin_index;
-            }
-            else
-            {
-                direction = (start < (i32)pin_index) ? 1 : -1;
-            }
-        }
-
-        if (auto res = gt->create_pin_group(name, pins, pins.at(0)->get_direction(), pins.at(0)->get_type(), (direction == 1) ? true : false, start); res.is_error())
-        {
-            return ERR_APPEND(res.get_error(), "could not parse pin group '" + name + "': failed to create pin group");
         }
 
         return OK({});

@@ -64,6 +64,13 @@ namespace hal
             std::unordered_map<std::string, std::string> boolean_functions;
         };
 
+        struct GroupCtx
+        {
+            std::vector<std::string> pins;
+            bool ascending;
+            u32 start_index;
+        };
+
         std::unique_ptr<GateLibrary> m_gate_lib;
         std::filesystem::path m_path;
 
@@ -72,7 +79,6 @@ namespace hal
         Result<std::monostate> parse_gate_library(const rapidjson::Document& document);
         Result<std::monostate> parse_gate_type(const rapidjson::Value& gate_type);
         Result<std::monostate> parse_pin(PinCtx& pin_ctx, const rapidjson::Value& pin);
-        Result<std::monostate> parse_group(GateType* gt, const rapidjson::Value& group);
         Result<std::unique_ptr<GateTypeComponent>> parse_lut_config(const rapidjson::Value& lut_config);
         Result<std::unique_ptr<GateTypeComponent>> parse_ff_config(const rapidjson::Value& ff_config);
         Result<std::unique_ptr<GateTypeComponent>> parse_latch_config(const rapidjson::Value& latch_config);

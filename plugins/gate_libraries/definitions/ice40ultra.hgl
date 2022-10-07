@@ -1807,95 +1807,6 @@
                     ]
                 },
                 {
-                    "name": "WDATA",
-                    "direction": "input",
-                    "type": "data",
-                    "ascending": true,
-                    "start_index": 0,
-                    "pins": [
-                        {
-                            "name": "WDATA(0)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(1)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(2)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(3)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(4)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(5)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(6)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(7)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(8)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(9)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(10)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(11)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(12)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(13)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(14)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(15)",
-                            "direction": "input",
-                            "type": "data"
-                        }
-                    ]
-                },
-                {
                     "name": "WADDR",
                     "direction": "input",
                     "type": "address",
@@ -1956,95 +1867,6 @@
                             "name": "WADDR(10)",
                             "direction": "input",
                             "type": "address"
-                        }
-                    ]
-                },
-                {
-                    "name": "RDATA",
-                    "direction": "output",
-                    "type": "data",
-                    "ascending": true,
-                    "start_index": 0,
-                    "pins": [
-                        {
-                            "name": "RDATA(0)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "RDATA(1)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "RDATA(2)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "RDATA(3)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "RDATA(4)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "RDATA(5)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "RDATA(6)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "RDATA(7)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "RDATA(8)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "RDATA(9)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "RDATA(10)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "RDATA(11)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "RDATA(12)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "RDATA(13)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "RDATA(14)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "RDATA(15)",
-                            "direction": "output",
-                            "type": "data"
                         }
                     ]
                 },
@@ -2200,6 +2022,184 @@
                             "type": "none"
                         }
                     ]
+                },
+                {
+                    "name": "WDATA",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "WDATA(0)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(1)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(2)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(3)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(4)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(5)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(6)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(7)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(8)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(9)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(10)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(11)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(12)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(13)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(14)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(15)",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "RDATA",
+                    "direction": "output",
+                    "type": "data",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "RDATA(0)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "RDATA(1)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "RDATA(2)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "RDATA(3)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "RDATA(4)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "RDATA(5)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "RDATA(6)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "RDATA(7)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "RDATA(8)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "RDATA(9)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "RDATA(10)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "RDATA(11)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "RDATA(12)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "RDATA(13)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "RDATA(14)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "RDATA(15)",
+                            "direction": "output",
+                            "type": "data"
+                        }
+                    ]
                 }
             ]
         },
@@ -2333,95 +2333,6 @@
                     ]
                 },
                 {
-                    "name": "WDATA",
-                    "direction": "input",
-                    "type": "data",
-                    "ascending": true,
-                    "start_index": 0,
-                    "pins": [
-                        {
-                            "name": "WDATA(0)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(1)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(2)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(3)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(4)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(5)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(6)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(7)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(8)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(9)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(10)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(11)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(12)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(13)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(14)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "WDATA(15)",
-                            "direction": "input",
-                            "type": "data"
-                        }
-                    ]
-                },
-                {
                     "name": "WADDR",
                     "direction": "input",
                     "type": "address",
@@ -2467,111 +2378,6 @@
                             "name": "WADDR(7)",
                             "direction": "input",
                             "type": "address"
-                        }
-                    ]
-                },
-                {
-                    "name": "RDATA",
-                    "direction": "output",
-                    "type": "data",
-                    "ascending": true,
-                    "start_index": 0,
-                    "pins": [
-                        {
-                            "name": "RDATA(0)",
-                            "direction": "output",
-                            "type": "data",
-                            "function": "(RDATA(0) & (! MASK(0)))"
-                        },
-                        {
-                            "name": "RDATA(1)",
-                            "direction": "output",
-                            "type": "data",
-                            "function": "(RDATA(1) & (! MASK(1)))"
-                        },
-                        {
-                            "name": "RDATA(2)",
-                            "direction": "output",
-                            "type": "data",
-                            "function": "(RDATA(2) & (! MASK(2)))"
-                        },
-                        {
-                            "name": "RDATA(3)",
-                            "direction": "output",
-                            "type": "data",
-                            "function": "(RDATA(3) & (! MASK(3)))"
-                        },
-                        {
-                            "name": "RDATA(4)",
-                            "direction": "output",
-                            "type": "data",
-                            "function": "(RDATA(4) & (! MASK(4)))"
-                        },
-                        {
-                            "name": "RDATA(5)",
-                            "direction": "output",
-                            "type": "data",
-                            "function": "(RDATA(5) & (! MASK(5)))"
-                        },
-                        {
-                            "name": "RDATA(6)",
-                            "direction": "output",
-                            "type": "data",
-                            "function": "(RDATA(6) & (! MASK(6)))"
-                        },
-                        {
-                            "name": "RDATA(7)",
-                            "direction": "output",
-                            "type": "data",
-                            "function": "(RDATA(7) & (! MASK(7)))"
-                        },
-                        {
-                            "name": "RDATA(8)",
-                            "direction": "output",
-                            "type": "data",
-                            "function": "(RDATA(8) & (! MASK(8)))"
-                        },
-                        {
-                            "name": "RDATA(9)",
-                            "direction": "output",
-                            "type": "data",
-                            "function": "(RDATA(9) & (! MASK(9)))"
-                        },
-                        {
-                            "name": "RDATA(10)",
-                            "direction": "output",
-                            "type": "data",
-                            "function": "(RDATA(10) & (! MASK(10)))"
-                        },
-                        {
-                            "name": "RDATA(11)",
-                            "direction": "output",
-                            "type": "data",
-                            "function": "(RDATA(11) & (! MASK(11)))"
-                        },
-                        {
-                            "name": "RDATA(12)",
-                            "direction": "output",
-                            "type": "data",
-                            "function": "(RDATA(12) & (! MASK(12)))"
-                        },
-                        {
-                            "name": "RDATA(13)",
-                            "direction": "output",
-                            "type": "data",
-                            "function": "(RDATA(13) & (! MASK(13)))"
-                        },
-                        {
-                            "name": "RDATA(14)",
-                            "direction": "output",
-                            "type": "data",
-                            "function": "(RDATA(14) & (! MASK(14)))"
-                        },
-                        {
-                            "name": "RDATA(15)",
-                            "direction": "output",
-                            "type": "data",
-                            "function": "(RDATA(15) & (! MASK(15)))"
                         }
                     ]
                 },
@@ -2710,6 +2516,200 @@
                             "name": "MASK(15)",
                             "direction": "input",
                             "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "WDATA",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "WDATA(0)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(1)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(2)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(3)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(4)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(5)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(6)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(7)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(8)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(9)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(10)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(11)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(12)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(13)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(14)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(15)",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "RDATA",
+                    "direction": "output",
+                    "type": "data",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "RDATA(0)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "(RDATA(0) & (! MASK(0)))"
+                        },
+                        {
+                            "name": "RDATA(1)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "(RDATA(1) & (! MASK(1)))"
+                        },
+                        {
+                            "name": "RDATA(2)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "(RDATA(2) & (! MASK(2)))"
+                        },
+                        {
+                            "name": "RDATA(3)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "(RDATA(3) & (! MASK(3)))"
+                        },
+                        {
+                            "name": "RDATA(4)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "(RDATA(4) & (! MASK(4)))"
+                        },
+                        {
+                            "name": "RDATA(5)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "(RDATA(5) & (! MASK(5)))"
+                        },
+                        {
+                            "name": "RDATA(6)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "(RDATA(6) & (! MASK(6)))"
+                        },
+                        {
+                            "name": "RDATA(7)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "(RDATA(7) & (! MASK(7)))"
+                        },
+                        {
+                            "name": "RDATA(8)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "(RDATA(8) & (! MASK(8)))"
+                        },
+                        {
+                            "name": "RDATA(9)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "(RDATA(9) & (! MASK(9)))"
+                        },
+                        {
+                            "name": "RDATA(10)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "(RDATA(10) & (! MASK(10)))"
+                        },
+                        {
+                            "name": "RDATA(11)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "(RDATA(11) & (! MASK(11)))"
+                        },
+                        {
+                            "name": "RDATA(12)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "(RDATA(12) & (! MASK(12)))"
+                        },
+                        {
+                            "name": "RDATA(13)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "(RDATA(13) & (! MASK(13)))"
+                        },
+                        {
+                            "name": "RDATA(14)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "(RDATA(14) & (! MASK(14)))"
+                        },
+                        {
+                            "name": "RDATA(15)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "(RDATA(15) & (! MASK(15)))"
                         }
                     ]
                 }
@@ -3479,175 +3479,95 @@
                     ]
                 },
                 {
-                    "name": "O",
-                    "direction": "output",
+                    "name": "A",
+                    "direction": "input",
                     "type": "data",
                     "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
-                            "name": "O(0)",
-                            "direction": "output",
+                            "name": "A(0)",
+                            "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "O(1)",
-                            "direction": "output",
+                            "name": "A(1)",
+                            "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "O(2)",
-                            "direction": "output",
+                            "name": "A(2)",
+                            "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "O(3)",
-                            "direction": "output",
+                            "name": "A(3)",
+                            "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "O(4)",
-                            "direction": "output",
+                            "name": "A(4)",
+                            "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "O(5)",
-                            "direction": "output",
+                            "name": "A(5)",
+                            "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "O(6)",
-                            "direction": "output",
+                            "name": "A(6)",
+                            "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "O(7)",
-                            "direction": "output",
+                            "name": "A(7)",
+                            "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "O(8)",
-                            "direction": "output",
+                            "name": "A(8)",
+                            "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "O(9)",
-                            "direction": "output",
+                            "name": "A(9)",
+                            "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "O(10)",
-                            "direction": "output",
+                            "name": "A(10)",
+                            "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "O(11)",
-                            "direction": "output",
+                            "name": "A(11)",
+                            "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "O(12)",
-                            "direction": "output",
+                            "name": "A(12)",
+                            "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "O(13)",
-                            "direction": "output",
+                            "name": "A(13)",
+                            "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "O(14)",
-                            "direction": "output",
+                            "name": "A(14)",
+                            "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "O(15)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "O(16)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "O(17)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "O(18)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "O(19)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "O(20)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "O(21)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "O(22)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "O(23)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "O(24)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "O(25)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "O(26)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "O(27)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "O(28)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "O(29)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "O(30)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "O(31)",
-                            "direction": "output",
+                            "name": "A(15)",
+                            "direction": "input",
                             "type": "data"
                         }
                     ]
-                },
-                {
+                        },
+                        {
                     "name": "B",
                     "direction": "input",
                     "type": "data",
@@ -3731,95 +3651,6 @@
                         },
                         {
                             "name": "B(15)",
-                            "direction": "input",
-                            "type": "data"
-                        }
-                    ]
-                },
-                {
-                    "name": "D",
-                    "direction": "input",
-                    "type": "data",
-                    "ascending": true,
-                    "start_index": 0,
-                    "pins": [
-                        {
-                            "name": "D(0)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "D(1)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "D(2)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "D(3)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "D(4)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "D(5)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "D(6)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "D(7)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "D(8)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "D(9)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "D(10)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "D(11)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "D(12)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "D(13)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "D(14)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "D(15)",
                             "direction": "input",
                             "type": "data"
                         }
@@ -3915,90 +3746,259 @@
                     ]
                 },
                 {
-                    "name": "A",
+                    "name": "D",
                     "direction": "input",
                     "type": "data",
                     "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
-                            "name": "A(0)",
+                            "name": "D(0)",
                             "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "A(1)",
+                            "name": "D(1)",
                             "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "A(2)",
+                            "name": "D(2)",
                             "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "A(3)",
+                            "name": "D(3)",
                             "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "A(4)",
+                            "name": "D(4)",
                             "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "A(5)",
+                            "name": "D(5)",
                             "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "A(6)",
+                            "name": "D(6)",
                             "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "A(7)",
+                            "name": "D(7)",
                             "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "A(8)",
+                            "name": "D(8)",
                             "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "A(9)",
+                            "name": "D(9)",
                             "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "A(10)",
+                            "name": "D(10)",
                             "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "A(11)",
+                            "name": "D(11)",
                             "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "A(12)",
+                            "name": "D(12)",
                             "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "A(13)",
+                            "name": "D(13)",
                             "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "A(14)",
+                            "name": "D(14)",
                             "direction": "input",
                             "type": "data"
                         },
                         {
-                            "name": "A(15)",
+                            "name": "D(15)",
                             "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "O",
+                    "direction": "output",
+                    "type": "data",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O(0)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(1)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(2)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(3)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(4)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(5)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(6)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(7)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(8)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(9)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(10)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(11)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(12)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(13)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(14)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(15)",
+                            "direction": "output",
+                            "type": "data"
+                },
+                {
+                            "name": "O(16)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(17)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(18)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(19)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(20)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(21)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(22)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(23)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(24)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(25)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(26)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(27)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(28)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(29)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(30)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "O(31)",
+                            "direction": "output",
                             "type": "data"
                         }
                     ]

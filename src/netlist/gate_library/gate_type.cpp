@@ -465,7 +465,7 @@ namespace hal
             return it->second;
         }
 
-        log_warning("gate_library", "could not get pin group by name for gate type '{}' with ID {}: no pin group with name {} exists", m_name, std::to_string(m_id), name);
+        log_debug("gate_library", "could not get pin group by name for gate type '{}' with ID {}: no pin group with name '{}' exists", m_name, std::to_string(m_id), name);
         return nullptr;
     }
 
