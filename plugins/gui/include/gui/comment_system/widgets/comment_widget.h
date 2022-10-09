@@ -33,11 +33,13 @@ class QVBoxLayout;
 class QHBoxLayout;
 class QScrollArea;
 class QToolBar;
+class QToolButton;
 
 namespace hal
 {
     class Toolbar;
     class Searchbar;
+    class CommentItem;
 
     class CommentWidget : public QWidget
     {
@@ -45,9 +47,15 @@ namespace hal
     public:
         CommentWidget(QWidget* parent = nullptr);
         ~CommentWidget();
+
+        // temporary debug helper function
+        void setItem(CommentItem* item);
+
     public Q_SLOTS:
         void nodeChanged(const Node& nd);
+
     private:
+        QList<CommentItem*> mEntryItems;
         QLabel* _mTemporaryTextOutputForDebuggingOnly_;
         QVBoxLayout* mTopLayout;
 
@@ -56,6 +64,8 @@ namespace hal
         QToolBar* mToolbar; //put 2 actions and a widget in there? (or use simple qwidget(headerlayout) with buttons)
         //Toolbar* mToolbar;
         Searchbar* mSearchbar;
+        QToolButton* mSearchButton;
+        QToolButton* mNewCommentButton;
 
         // with toolbar:
         //add action - add spacer (expanding, preferred) - add action - add searchbar
@@ -71,5 +81,8 @@ namespace hal
         // temp helper function to test different ways
         void init_style1();
         void init_style2();
+
+        void handleSearchbarTriggered();
+        void handleNewCommentTriggered();
     };
 }

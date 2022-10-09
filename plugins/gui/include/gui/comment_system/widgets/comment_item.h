@@ -48,6 +48,16 @@ namespace hal
         void setComment(CommentEntry* entry);
         void updateCurrentEntry();
 
+        CommentEntry* getEntry();
+        // temporary debug func
+        QLabel* getCreatedDate(){return mCreationDate;};
+
+    Q_SIGNALS:
+
+        //perhaps the CommentEntry for which a delete is requested?
+        //Getter for CommentEntry needed
+        void delete_requested(CommentItem* item);
+
     private:
         QVBoxLayout* mLayout;
         CommentEntry* mEntry;
@@ -70,5 +80,8 @@ namespace hal
 
         void init();
         void initV2();
+
+        void handleDeleteButtonTriggered();
+        void handleModifyButtonTriggered();
     };
 }

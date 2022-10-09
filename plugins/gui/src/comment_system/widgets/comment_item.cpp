@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <QAction>
 #include <QToolButton>
+#include <QDebug>
 
 
 namespace hal
@@ -41,8 +42,14 @@ namespace hal
         mText->setText(mEntry->getText());
     }
 
+    CommentEntry *CommentItem::getEntry()
+    {
+        return mEntry;
+    }
+
     void CommentItem::init()
     {
+        mEntry = nullptr;
         mLayout = new QVBoxLayout(this);
         mLayout->setSpacing(0);
         mLayout->setMargin(0);
@@ -90,6 +97,7 @@ namespace hal
 
     void CommentItem::initV2()
     {
+        mEntry = nullptr;
         // TODO: replace fixed sizes (put them in stylesheet / compute them?)
         mLayout = new QVBoxLayout(this);
         mLayout->setSpacing(0);
@@ -131,5 +139,20 @@ namespace hal
         mLayout->addWidget(mText);
 
         setLayout(mLayout);
+
+        // connections / logic
+        connect(mDeleteButton, &QAbstractButton::clicked, this, &CommentItem::handleDeleteButtonTriggered);
+        connect(mModifyButton, &QAbstractButton::clicked, this, &CommentItem::handleModifyButtonTriggered);
+    }
+
+    void CommentItem::handleDeleteButtonTriggered()
+    {
+        qDebug() << "I want to be deleted!";
+        Q_EMIT delete_requested(this);
+    }
+
+    void CommentItem::handleModifyButtonTriggered()
+    {
+        qDebug() << "I want to be modified!";
     }
 }

@@ -20,6 +20,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QDebug>
+#include "gui/comment_system/widgets/comment_widget.h"
 
 namespace hal
 {
@@ -86,6 +87,13 @@ namespace hal
         
         QList<DetailsFrameWidget*> framesDataTab({mDataFrame});
         addTab("Data", framesDataTab);
+
+        //comments tab
+        mCommentWidget = new CommentWidget(this);
+        //mCommentWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        mCommentFrame = new DetailsFrameWidget(mCommentWidget, "Comments", this);
+        //mCommentFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
+        addTab("Comments",  {mCommentFrame});
     }
  
     void GateDetailsTabWidget::setGate(Gate* gate)
@@ -96,6 +104,7 @@ namespace hal
         mGroupingsOfItemTable->setGate(gate);
         mPinsTree->setGate(gate);
         mDataTable->setGate(gate);
+        mCommentWidget->nodeChanged(Node(gate->get_id(), Node::NodeType::Gate));
 
         // Logic for LUT/FF/LATCH
         GateDetailsTabWidget::GateTypeCategory gateTypeCategory = getGateTypeCategory(gate);
