@@ -1,8 +1,6 @@
 #include "converter/verilog_converter.h"
 
-
 #include "hal_core/utilities/log.h"
-
 #include "z3++.h"
 
 namespace hal
@@ -38,7 +36,8 @@ namespace hal
         {
             std::string op;
 
-            switch (operation) {
+            switch (operation)
+            {
                 case Converter::bvand:
                     for (const auto& o : operands)
                     {
@@ -86,7 +85,7 @@ namespace hal
             auto sub_expressions_size   = l.size() - sub_expressions_start - 2;    // hardcoded -2 for the last two closing brackest (just for my ocd)
             auto sub_expressions_string = l.substr(sub_expressions_start, sub_expressions_size);
 
-            auto sub_expressions            = extract_sub_exrepssions(sub_expressions_string);
+            auto sub_expressions = extract_sub_exrepssions(sub_expressions_string);
 
             log_debug("z3_utils", "Found {} sub_expressions.", sub_expressions.size());
 
@@ -140,20 +139,22 @@ namespace hal
             // NOTE the inputs are unused because they are included in the initialization for the verilog converter
             UNUSED(inputs);
             std::string return_var;
-            if (assignments.empty()) {
+            if (assignments.empty())
+            {
                 const auto begin = initialization.find("i");
                 const auto end   = initialization.find(",");
-                return_var = initialization.substr(begin, end - begin);
-            } else {
+                return_var       = initialization.substr(begin, end - begin);
+            }
+            else
+            {
                 const auto last_assigment_pos = assignments.rfind("assign") + 7;    // length of "assign" + one space
-                if (last_assigment_pos == std::string::npos) std::cout << "nils error coming" << std::endl;
-                const auto last_line = assignments.substr(last_assigment_pos);
-                return_var = extract_lhs(last_line);
+                const auto last_line          = assignments.substr(last_assigment_pos);
+                return_var                    = extract_lhs(last_line);
             }
 
             std::string final_words = "\tassign out = " + return_var + ";\n";
             final_words += "endmodule";
             return (initialization + assignments + final_words);
         }
-    }  // namespace z3_utils
+    }    // namespace z3_utils
 }    // namespace hal
