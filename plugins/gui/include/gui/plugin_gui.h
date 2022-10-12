@@ -26,6 +26,8 @@
 #include "hal_core/plugin_system/plugin_interface_ui.h"
 #include <QList>
 
+Q_DECLARE_METATYPE(u32)
+
 namespace hal
 {
     class LayoutLocker;

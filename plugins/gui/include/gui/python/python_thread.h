@@ -57,6 +57,7 @@ namespace hal {
         void requireInput(int type, QString prompt, QVariant defaultValue);
     public:
         PythonThread(const QString& script, bool singleStatement, QObject* parent = nullptr);
+        ~PythonThread();
         void run() override;
         void interrupt();
         QString errorMessage() const { return mErrorMessage; }

@@ -27,6 +27,7 @@ namespace hal
     NetlistRelay::NetlistRelay(QObject* parent) : QObject(parent), mModuleModel(new ModuleModel(this))
     {
         connect(FileManager::get_instance(), &FileManager::fileOpened, this, &NetlistRelay::debugHandleFileOpened);    // DEBUG LINE
+        connect(this, &NetlistRelay::signalThreadEvent, this, &NetlistRelay::handleThreadEvent, Qt::QueuedConnection);
     }
 
     NetlistRelay::~NetlistRelay()
@@ -194,6 +195,12 @@ namespace hal
 
         handleNetlistModified();
 
+        if (gPythonContext->thread())
+        {
+            Q_EMIT signalThreadEvent(TetNetlist, (int) ev, object, associated_data);
+            return;
+        }
+
         switch (ev)
         {
             case NetlistEvent::event::id_changed: {
@@ -285,6 +292,12 @@ namespace hal
 
         handleNetlistModified();
 
+        if (gPythonContext->thread())
+        {
+            Q_EMIT signalThreadEvent(TetGrouping, (int) ev, grp, associated_data);
+            return;
+        }
+
         switch (ev)
         {
             case GroupingEvent::event::created:
@@ -329,6 +342,12 @@ namespace hal
             return;
 
         handleNetlistModified();
+
+        if (gPythonContext->thread())
+        {
+            Q_EMIT signalThreadEvent(TetModule, (int) ev, mod, associated_data);
+            return;
+        }
 
         switch (ev)
         {
@@ -463,6 +482,13 @@ namespace hal
 
         handleNetlistModified();
 
+        qDebug() << "relayGateEvent" << hex << (quintptr)gPythonContext->thread() << (quintptr)QThread::currentThread() << (quintptr) dynamic_cast<PythonThread*>(QThread::currentThread());
+        if (gPythonContext->thread() && QThread::currentThread() == gPythonContext->thread())
+        {
+            Q_EMIT signalThreadEvent(TetGate, (int) ev, gat, associated_data);
+            return;
+        }
+
         switch (ev)
         {
             case GateEvent::event::created: {
@@ -515,6 +541,12 @@ namespace hal
             return;
 
         handleNetlistModified();
+
+        if (gPythonContext->thread())
+        {
+            Q_EMIT signalThreadEvent(TetNet, (int) ev, net, associated_data);
+            return;
+        }
 
         switch (ev)
         {
@@ -585,6 +617,28 @@ namespace hal
                 Q_EMIT netDestinationRemoved(net, associated_data);
                 break;
             }
+        }
+    }
+
+    void NetlistRelay::handleThreadEvent(int type, int evt, void* object, u32 associated_data)
+    {
+        switch (type)
+        {
+        case TetNetlist:
+            relayNetlistEvent((NetlistEvent::event) evt, static_cast<Netlist*>(object), associated_data);
+            break;
+        case TetModule:
+            relayModuleEvent((ModuleEvent::event) evt, static_cast<Module*>(object), associated_data);
+            break;
+        case TetGate:
+            relayGateEvent((GateEvent::event) evt, static_cast<Gate*>(object), associated_data);
+            break;
+        case TetNet:
+            relayNetEvent((NetEvent::event) evt, static_cast<Net*>(object), associated_data);
+            break;
+        case TetGrouping:
+            relayGroupingEvent((GroupingEvent::event) evt, static_cast<Grouping*>(object), associated_data);
+            break;
         }
     }
 

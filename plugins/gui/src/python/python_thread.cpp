@@ -8,12 +8,20 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/gate.h"
 #include <QApplication>
+#include <QDebug>
 
 namespace hal {
     PythonThread::PythonThread(const QString& script, bool singleStatement, QObject* parent)
         : QThread(parent), mScript(script), mSingleStatement(singleStatement),
           mAbortRequested(false), mSpamCount(0)
-    {;}
+    {
+        qDebug() << "+++PythonThread";
+    }
+
+    PythonThread::~PythonThread()
+    {
+        qDebug() << "---PythonThread";
+    }
 
     void PythonThread::run()
     {

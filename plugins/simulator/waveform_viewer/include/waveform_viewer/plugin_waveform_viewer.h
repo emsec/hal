@@ -27,7 +27,6 @@
 #include <QMetaType>
 #include "netlist_simulator_controller/netlist_simulator_controller.h"
 
-Q_DECLARE_METATYPE(u32)
 Q_DECLARE_METATYPE(std::string)
 Q_DECLARE_METATYPE(hal::NetlistSimulatorController::SimulationState)
 

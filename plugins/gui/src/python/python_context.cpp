@@ -471,7 +471,6 @@ namespace hal
         PyGILState_STATE state = PyGILState_Ensure();
 
         std::vector<std::tuple<std::string, std::string>> ret_val;
-        py::dict tmp_context;
         try
         {
             auto namespaces = py::list();
@@ -482,7 +481,7 @@ namespace hal
             }
             else
             {
-                tmp_context = py::globals();
+                py::dict tmp_context = py::globals();
                 initializeContext(&tmp_context);
                 namespaces.append(tmp_context);
                 namespaces.append(tmp_context);

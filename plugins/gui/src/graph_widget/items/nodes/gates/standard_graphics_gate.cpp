@@ -148,10 +148,13 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 
         for (int i = 0; i < mInputPins.size(); ++i)
         {
+            Q_ASSERT(i < inpNets.size());
+            u32 inpNetId = inpNets.at(i);
+            if (!inpNetId) continue;
             int yText = yFirstTextline + i * (sPinFontHeight + sPinInnerVerticalSpacing);
             if (gGraphContextManager->sSettingNetGroupingToPins->value().toBool())
             {
-                QColor pinBackground = gContentManager->getGroupingManagerWidget()->getModel()->colorForItem(ItemType::Net, inpNets.at(i));
+                QColor pinBackground = gContentManager->getGroupingManagerWidget()->getModel()->colorForItem(ItemType::Net, inpNetId);
                 if (pinBackground.isValid())
                 {
                     QBrush lastBrush = painter->brush();
@@ -175,6 +178,9 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 
         for (int i = 0; i < mOutputPins.size(); ++i)
         {
+            Q_ASSERT(i < outNets.size());
+            u32 outNetId = outNets.at(i);
+            if (!outNetId) continue;
             int yText = yFirstTextline + i * (sPinFontHeight + sPinInnerVerticalSpacing);
             if (gGraphContextManager->sSettingNetGroupingToPins->value().toBool())
             {

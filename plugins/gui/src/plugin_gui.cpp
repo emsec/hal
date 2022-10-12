@@ -211,6 +211,7 @@ namespace hal
 
         style::debugUpdate();
 
+        qRegisterMetaType<u32>("u32");
         qRegisterMetaType<spdlog::level::level_enum>("spdlog::level::level_enum");
 
         mGSettings           = new QSettings(QString::fromStdString((utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat);
