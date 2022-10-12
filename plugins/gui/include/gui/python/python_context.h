@@ -46,6 +46,7 @@ namespace hal
     class PythonContextSubscriber;
     class PythonEditor;
     class PythonThread;
+    class LayoutLocker;
 
     class PythonGateSelectionReceiver : public GateSelectReceiver
     {
@@ -186,7 +187,7 @@ namespace hal
          */
         void updateNetlist();
 
-        PythonThread* currentThread() { return mThread; }
+        PythonThread* currentThread() const;
 
         static void initializeContext(py::dict* context);
         static void initializeScript(py::dict* context);
@@ -215,6 +216,7 @@ namespace hal
 
         PythonConsole* mConsole;
         bool mTriggerReset;
+        LayoutLocker* mLayoutLocker;
         PythonThread* mThread;
         bool mThreadAborted;
         PyThreadState* mMainThreadState;

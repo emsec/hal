@@ -6,6 +6,7 @@
 #include "gui/python/python_editor.h"
 #include "gui/module_dialog/gate_dialog.h"
 #include "gui/module_dialog/module_dialog.h"
+#include "gui/graph_widget/layout_locker.h"
 #include "hal_core/python_bindings/python_bindings.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
@@ -71,6 +72,11 @@ namespace hal
     {
         mConsole = c;
         connect(mConsole,&PythonConsole::inputReceived,this,&PythonContext::handleConsoleInputReceived);
+    }
+
+    PythonThread* PythonContext::currentThread() const
+    {
+        return mThread;
     }
 
     void PythonContext::abortThread()
@@ -217,6 +223,7 @@ namespace hal
         connect(mThread,&PythonThread::stdError,this,&PythonContext::handleScriptError);
         connect(mThread,&PythonThread::requireInput,this,&PythonContext::handleInputRequired);
         if (mConsole) mConsole->setReadOnly(true);
+        mLayoutLocker = new LayoutLocker;
         mThread->start();
     }
 
@@ -229,8 +236,6 @@ namespace hal
 
         log_info("python", "Python console execute: \"{}\".", input.toStdString());
 
-        qDebug() << "trying to get lock";
-
         // since we've released the GIL in the constructor, re-acquire it here before
         // running some Python code on the main thread
         PyGILState_STATE state = PyGILState_Ensure();
@@ -239,8 +244,6 @@ namespace hal
         // TODO should the console also be moved to threads? Maybe actually catch Ctrl+C there
         // as a method to interrupt? Currently you can hang the GUI by running an endless loop
         // from the console.
-
-        qDebug() << "have lock";
 
         try
         {
@@ -254,23 +257,21 @@ namespace hal
         }
         catch (py::error_already_set& e)
         {
-            qDebug() << "error set";
+            qDebug() << "interpret error set";
             forwardError(QString::fromStdString(std::string(e.what())));
             e.restore();
             PyErr_Clear();
         }
         catch (std::exception& e)
         {
-            qDebug() << "exception";
+            qDebug() << "interpret exception";
             forwardError(QString::fromStdString(std::string(e.what())));
         }
-        qDebug() << "trying to release lock";
 
         // make sure we release the GIL, otherwise we interfere with threading
         PyGILState_Release(state);
         //mMainThreadState = PyEval_SaveThread();
 
-        qDebug() << "released lock";
     }
 
     void PythonContext::interpretScript(QObject* caller, const QString& input)
@@ -418,6 +419,7 @@ namespace hal
 
         mThread->deleteLater();
         mThread = 0;
+        delete mLayoutLocker;
 
         if (!errmsg.isEmpty())
             forwardError(errmsg);

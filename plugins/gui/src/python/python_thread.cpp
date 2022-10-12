@@ -15,12 +15,12 @@ namespace hal {
         : QThread(parent), mScript(script), mSingleStatement(singleStatement),
           mAbortRequested(false), mSpamCount(0)
     {
-        qDebug() << "+++PythonThread";
+//        qDebug() << "+++PythonThread" << hex << (quintptr) this;
     }
 
     PythonThread::~PythonThread()
     {
-        qDebug() << "---PythonThread";
+//        qDebug() << "---PythonThread" << hex << (quintptr) this;
     }
 
     void PythonThread::run()
@@ -33,7 +33,7 @@ namespace hal {
         // Capture the Python-internal thread ID, which is needed if we want to
         // interrupt the thread later
         pybind11::object rc = py::eval("threading.get_ident()", tmp_context, tmp_context);
-        mThreadID = rc.cast<unsigned long>();
+        mPythonThreadID = rc.cast<unsigned long>();
 
         mElapsedTimer.start();
         try
@@ -113,11 +113,11 @@ namespace hal {
         {
             mInputMutex.unlock();
         }
-        qDebug() << "about to terminate thread..." << mThreadID;
+        qDebug() << "about to terminate thread..." << mPythonThreadID;
         PyGILState_STATE state = PyGILState_Ensure();
         // We interrupt the thread by forcibly injecting an exception
         // (namely the KeyboardInterrupt exception, but any other one works as well)
-        int nThreads = PyThreadState_SetAsyncExc(mThreadID, PyExc_KeyboardInterrupt);
+        int nThreads = PyThreadState_SetAsyncExc(mPythonThreadID, PyExc_KeyboardInterrupt);
         if (nThreads == 0)
         {
             qDebug() << "Oh no! The Python interpreter doesn't know that thread.";

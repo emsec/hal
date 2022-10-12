@@ -43,7 +43,7 @@ namespace hal {
         QString mErrorMessage;
         QString mResult;
         QString mStdoutBuffer;
-        unsigned long mThreadID;
+        unsigned long mPythonThreadID;
         QVariant mInput;
         QMutex mInputMutex;
         QElapsedTimer mElapsedTimer;

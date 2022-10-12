@@ -20,6 +20,7 @@
 #include <QColorDialog>
 #include <QDebug>
 #include <QInputDialog>
+#include <QApplication>
 #include <functional>
 
 namespace hal
@@ -27,7 +28,7 @@ namespace hal
     NetlistRelay::NetlistRelay(QObject* parent) : QObject(parent), mModuleModel(new ModuleModel(this))
     {
         connect(FileManager::get_instance(), &FileManager::fileOpened, this, &NetlistRelay::debugHandleFileOpened);    // DEBUG LINE
-        connect(this, &NetlistRelay::signalThreadEvent, this, &NetlistRelay::handleThreadEvent, Qt::QueuedConnection);
+        connect(this, &NetlistRelay::signalThreadEvent, this, &NetlistRelay::handleThreadEvent, Qt::BlockingQueuedConnection);
     }
 
     NetlistRelay::~NetlistRelay()
@@ -195,9 +196,10 @@ namespace hal
 
         handleNetlistModified();
 
-        if (gPythonContext->thread())
+        if (dynamic_cast<PythonThread*>(QThread::currentThread()))
         {
             Q_EMIT signalThreadEvent(TetNetlist, (int) ev, object, associated_data);
+            qApp->processEvents();
             return;
         }
 
@@ -292,9 +294,10 @@ namespace hal
 
         handleNetlistModified();
 
-        if (gPythonContext->thread())
+        if (dynamic_cast<PythonThread*>(QThread::currentThread()))
         {
             Q_EMIT signalThreadEvent(TetGrouping, (int) ev, grp, associated_data);
+            qApp->processEvents();
             return;
         }
 
@@ -343,9 +346,10 @@ namespace hal
 
         handleNetlistModified();
 
-        if (gPythonContext->thread())
+        if (dynamic_cast<PythonThread*>(QThread::currentThread()))
         {
             Q_EMIT signalThreadEvent(TetModule, (int) ev, mod, associated_data);
+            qApp->processEvents();
             return;
         }
 
@@ -482,10 +486,10 @@ namespace hal
 
         handleNetlistModified();
 
-        qDebug() << "relayGateEvent" << hex << (quintptr)gPythonContext->thread() << (quintptr)QThread::currentThread() << (quintptr) dynamic_cast<PythonThread*>(QThread::currentThread());
-        if (gPythonContext->thread() && QThread::currentThread() == gPythonContext->thread())
+        if (dynamic_cast<PythonThread*>(QThread::currentThread()))
         {
             Q_EMIT signalThreadEvent(TetGate, (int) ev, gat, associated_data);
+            qApp->processEvents();
             return;
         }
 
@@ -542,9 +546,10 @@ namespace hal
 
         handleNetlistModified();
 
-        if (gPythonContext->thread())
+        if (dynamic_cast<PythonThread*>(QThread::currentThread()))
         {
             Q_EMIT signalThreadEvent(TetNet, (int) ev, net, associated_data);
+            qApp->processEvents();
             return;
         }
 
@@ -625,18 +630,23 @@ namespace hal
         switch (type)
         {
         case TetNetlist:
+//            qDebug() << "Evt nlst" << evt << associated_data;
             relayNetlistEvent((NetlistEvent::event) evt, static_cast<Netlist*>(object), associated_data);
             break;
         case TetModule:
+//            qDebug() << "Evt modu" << evt << static_cast<Module*>(object)->get_id() << associated_data;
             relayModuleEvent((ModuleEvent::event) evt, static_cast<Module*>(object), associated_data);
             break;
         case TetGate:
+//            qDebug() << "Evt gate" << evt << static_cast<Gate*>(object)->get_id() << associated_data;
             relayGateEvent((GateEvent::event) evt, static_cast<Gate*>(object), associated_data);
             break;
         case TetNet:
+//            qDebug() << "Evt net_" << evt << static_cast<Net*>(object)->get_id() << associated_data;
             relayNetEvent((NetEvent::event) evt, static_cast<Net*>(object), associated_data);
             break;
         case TetGrouping:
+//            qDebug() << "Evt grup" << evt << static_cast<Grouping*>(object)->get_id() << associated_data;
             relayGroupingEvent((GroupingEvent::event) evt, static_cast<Grouping*>(object), associated_data);
             break;
         }
