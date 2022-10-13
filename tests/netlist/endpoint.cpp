@@ -141,7 +141,7 @@ namespace hal {
             ASSERT_NE(ep, nullptr);
 
             EXPECT_EQ(ep->get_gate(), test_gate);
-            EXPECT_EQ(ep->get_pin(), "I");
+            EXPECT_EQ(ep->get_pin()->get_name(), "I");
             EXPECT_EQ(ep->get_net(), test_net);
             EXPECT_TRUE(ep->is_destination_pin());
             EXPECT_FALSE(ep->is_source_pin());
@@ -162,7 +162,7 @@ namespace hal {
             ASSERT_NE(ep, nullptr);
 
             EXPECT_EQ(ep->get_gate(), test_gate);
-            EXPECT_EQ(ep->get_pin(), "O");
+            EXPECT_EQ(ep->get_pin()->get_name(), "O");
             EXPECT_EQ(ep->get_net(), test_net);
             EXPECT_FALSE(ep->is_destination_pin());
             EXPECT_TRUE(ep->is_source_pin());

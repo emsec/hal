@@ -1,47 +1,113 @@
 {
+    "version": 2,
     "library": "EXAMPLE_GATE_LIBRARY",
+    "gate_locations": {
+        "data_category": "generic",
+        "data_x_identifier": "X_COORDINATE",
+        "data_y_identifier": "Y_COORDINATE"
+    },
     "cells": [
         {
             "name": "BUF",
             "types": [
-                "combinational", 
+                "combinational",
                 "buffer"
             ],
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "I",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
                     "direction": "output",
-                    "function": "I"
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "I"
+                        }
+                    ]
                 }
             ]
         },
         {
             "name": "TBUF",
             "types": [
-                "combinational", 
+                "combinational",
                 "buffer"
             ],
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "I",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "T",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "T",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
                     "direction": "output",
-                    "function": "IO"
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "IO"
+                        }
+                    ]
                 },
                 {
                     "name": "IO",
-                    "direction": "inout"
+                    "direction": "inout",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "IO",
+                            "direction": "inout",
+                            "type": "none"
+                        }
+                    ]
                 }
             ]
         },
@@ -50,42 +116,101 @@
             "types": [
                 "combinational"
             ],
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "I",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
                     "direction": "output",
-                    "function": "!I"
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(! I)"
+                        }
+                    ]
                 }
             ]
         },
         {
             "name": "MUX",
             "types": [
-                "combinational", 
+                "combinational",
                 "mux"
             ],
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "I0",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I1",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "S",
                     "direction": "input",
-                    "type": "select"
+                    "type": "select",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "S",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
                     "direction": "output",
-                    "function": "(!S & I0) | (S & I1)"
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(((! S) & I0) | (S & I1))"
+                        }
+                    ]
                 }
             ]
         },
@@ -94,19 +219,49 @@
             "types": [
                 "combinational"
             ],
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "I0",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I1",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
                     "direction": "output",
-                    "function": "I0 ^ I1"
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(I0 ^ I1)"
+                        }
+                    ]
                 }
             ]
         },
@@ -115,19 +270,49 @@
             "types": [
                 "combinational"
             ],
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "I0",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I1",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
                     "direction": "output",
-                    "function": "I0 & I1"
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(I0 & I1)"
+                        }
+                    ]
                 }
             ]
         },
@@ -136,23 +321,63 @@
             "types": [
                 "combinational"
             ],
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "I0",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I1",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I2",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I2",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
                     "direction": "output",
-                    "function": "I0 & I1 & I2"
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(I0 & (I1 & I2))"
+                        }
+                    ]
                 }
             ]
         },
@@ -161,27 +386,77 @@
             "types": [
                 "combinational"
             ],
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "I0",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I1",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I2",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I2",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I3",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I3",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
                     "direction": "output",
-                    "function": "I0 & I1 & I2 & I3"
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(I0 & (I1 & (I2 & I3)))"
+                        }
+                    ]
                 }
             ]
         },
@@ -190,31 +465,91 @@
             "types": [
                 "combinational"
             ],
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "I0",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I1",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I2",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I2",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I3",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I3",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I4",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I4",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
                     "direction": "output",
-                    "function": "I0 & I1 & I2 & I3 & I4"
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(I0 & (I1 & (I2 & (I3 & I4))))"
+                        }
+                    ]
                 }
             ]
         },
@@ -223,35 +558,105 @@
             "types": [
                 "combinational"
             ],
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "I0",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I1",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I2",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I2",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I3",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I3",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I4",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I4",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I5",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I5",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
                     "direction": "output",
-                    "function": "I0 & I1 & I2 & I3 & I4 & I5"
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(I0 & (I1 & (I2 & (I3 & (I4 & I5)))))"
+                        }
+                    ]
                 }
             ]
         },
@@ -260,39 +665,119 @@
             "types": [
                 "combinational"
             ],
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "I0",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I1",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I2",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I2",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I3",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I3",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I4",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I4",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I5",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I5",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I6",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I6",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
                     "direction": "output",
-                    "function": "I0 & I1 & I2 & I3 & I4 & I5 & I6"
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(I0 & (I1 & (I2 & (I3 & (I4 & (I5 & I6))))))"
+                        }
+                    ]
                 }
             ]
         },
@@ -301,43 +786,133 @@
             "types": [
                 "combinational"
             ],
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "I0",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I1",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I2",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I2",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I3",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I3",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I4",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I4",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I5",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I5",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I6",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I6",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I7",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I7",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
                     "direction": "output",
-                    "function": "I0 & I1 & I2 & I3 & I4 & I5 & I6 & I7"
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(I0 & (I1 & (I2 & (I3 & (I4 & (I5 & (I6 & I7)))))))"
+                        }
+                    ]
                 }
             ]
         },
@@ -346,19 +921,49 @@
             "types": [
                 "combinational"
             ],
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "I0",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I1",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
                     "direction": "output",
-                    "function": "I0 | I1"
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(I0 | I1)"
+                        }
+                    ]
                 }
             ]
         },
@@ -367,23 +972,63 @@
             "types": [
                 "combinational"
             ],
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "I0",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I1",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I2",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I2",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
                     "direction": "output",
-                    "function": "I0 | I1 | I2"
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(I0 | (I1 | I2))"
+                        }
+                    ]
                 }
             ]
         },
@@ -392,27 +1037,77 @@
             "types": [
                 "combinational"
             ],
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "I0",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I1",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I2",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I2",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I3",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I3",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
                     "direction": "output",
-                    "function": "I0 | I1 | I2 | I3"
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(I0 | (I1 | (I2 | I3)))"
+                        }
+                    ]
                 }
             ]
         },
@@ -421,31 +1116,91 @@
             "types": [
                 "combinational"
             ],
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "I0",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I1",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I2",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I2",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I3",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I3",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I4",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I4",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
                     "direction": "output",
-                    "function": "I0 | I1 | I2 | I3 | I4"
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(I0 | (I1 | (I2 | (I3 | I4))))"
+                        }
+                    ]
                 }
             ]
         },
@@ -454,35 +1209,105 @@
             "types": [
                 "combinational"
             ],
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "I0",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I1",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I2",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I2",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I3",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I3",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I4",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I4",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I5",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I5",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
                     "direction": "output",
-                    "function": "I0 | I1 | I2 | I3 | I4 | I5"
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(I0 | (I1 | (I2 | (I3 | (I4 | I5)))))"
+                        }
+                    ]
                 }
             ]
         },
@@ -491,39 +1316,119 @@
             "types": [
                 "combinational"
             ],
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "I0",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I1",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I2",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I2",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I3",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I3",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I4",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I4",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I5",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I5",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I6",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I6",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
                     "direction": "output",
-                    "function": "I0 | I1 | I2 | I3 | I4 | I5 | I6"
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(I0 | (I1 | (I2 | (I3 | (I4 | (I5 | I6))))))"
+                        }
+                    ]
                 }
             ]
         },
@@ -532,43 +1437,133 @@
             "types": [
                 "combinational"
             ],
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "I0",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I1",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I2",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I2",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I3",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I3",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I4",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I4",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I5",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I5",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I6",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I6",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I7",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I7",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
                     "direction": "output",
-                    "function": "I0 | I1 | I2 | I3 | I4 | I5 | I6 | I7"
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(I0 | (I1 | (I2 | (I3 | (I4 | (I5 | (I6 | I7)))))))"
+                        }
+                    ]
                 }
             ]
         },
@@ -583,15 +1578,34 @@
                 "data_category": "generic",
                 "data_identifier": "INIT"
             },
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "I0",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
                     "direction": "output",
-                    "type": "lut"
+                    "type": "lut",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "lut"
+                        }
+                    ]
                 }
             ]
         },
@@ -606,19 +1620,48 @@
                 "data_category": "generic",
                 "data_identifier": "INIT"
             },
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "I0",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I1",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
                     "direction": "output",
-                    "type": "lut"
+                    "type": "lut",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "lut"
+                        }
+                    ]
                 }
             ]
         },
@@ -633,23 +1676,62 @@
                 "data_category": "generic",
                 "data_identifier": "INIT"
             },
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "I0",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I1",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I2",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I2",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
                     "direction": "output",
-                    "type": "lut"
+                    "type": "lut",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "lut"
+                        }
+                    ]
                 }
             ]
         },
@@ -664,27 +1746,76 @@
                 "data_category": "generic",
                 "data_identifier": "INIT"
             },
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "I0",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I1",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I2",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I2",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I3",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I3",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
                     "direction": "output",
-                    "type": "lut"
+                    "type": "lut",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "lut"
+                        }
+                    ]
                 }
             ]
         },
@@ -699,31 +1830,90 @@
                 "data_category": "generic",
                 "data_identifier": "INIT"
             },
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "I0",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I1",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I2",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I2",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I3",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I3",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I4",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I4",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
                     "direction": "output",
-                    "type": "lut"
+                    "type": "lut",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "lut"
+                        }
+                    ]
                 }
             ]
         },
@@ -738,35 +1928,104 @@
                 "data_category": "generic",
                 "data_identifier": "INIT"
             },
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "I0",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I1",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I2",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I2",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I3",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I3",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I4",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I4",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "I5",
-                    "direction": "input"
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I5",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
                     "direction": "output",
-                    "type": "lut"
+                    "type": "lut",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "lut"
+                        }
+                    ]
                 }
             ]
         },
@@ -779,30 +2038,66 @@
             "ff_config": {
                 "state": "IQ",
                 "neg_state": "IQN",
-                "next_state": "D",
-                "clocked_on": "CE & C"
+                "next_state": "(D & CE)",
+                "clocked_on": "C"
             },
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "C",
                     "direction": "input",
-                    "type": "clock"
+                    "type": "clock",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "C",
+                            "direction": "input",
+                            "type": "clock"
+                        }
+                    ]
                 },
                 {
                     "name": "CE",
                     "direction": "input",
-                    "type": "enable"
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "CE",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
                 },
                 {
                     "name": "D",
                     "direction": "input",
-                    "type": "data"
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "D",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "Q",
                     "direction": "output",
-                    "function": "IQ",
-                    "type": "state"
+                    "type": "state",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "Q",
+                            "direction": "output",
+                            "type": "state",
+                            "function": "IQ"
+                        }
+                    ]
                 }
             ]
         },
@@ -815,36 +2110,81 @@
             "ff_config": {
                 "state": "IQ",
                 "neg_state": "IQN",
-                "next_state": "D",
-                "clocked_on": "CE & C",
+                "next_state": "(D & CE)",
+                "clocked_on": "C",
                 "preset_on": "S"
             },
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "C",
                     "direction": "input",
-                    "type": "clock"
+                    "type": "clock",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "C",
+                            "direction": "input",
+                            "type": "clock"
+                        }
+                    ]
                 },
                 {
                     "name": "CE",
                     "direction": "input",
-                    "type": "enable"
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "CE",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
                 },
                 {
                     "name": "D",
                     "direction": "input",
-                    "type": "data"
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "D",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "S",
                     "direction": "input",
-                    "type": "set"
+                    "type": "set",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "S",
+                            "direction": "input",
+                            "type": "set"
+                        }
+                    ]
                 },
                 {
                     "name": "Q",
                     "direction": "output",
-                    "function": "IQ",
-                    "type": "state"
+                    "type": "state",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "Q",
+                            "direction": "output",
+                            "type": "state",
+                            "function": "IQ"
+                        }
+                    ]
                 }
             ]
         },
@@ -857,36 +2197,81 @@
             "ff_config": {
                 "state": "IQ",
                 "neg_state": "IQN",
-                "next_state": "D",
-                "clocked_on": "CE & C",
+                "next_state": "(D & CE)",
+                "clocked_on": "C",
                 "clear_on": "R"
             },
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "C",
                     "direction": "input",
-                    "type": "clock"
+                    "type": "clock",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "C",
+                            "direction": "input",
+                            "type": "clock"
+                        }
+                    ]
                 },
                 {
                     "name": "CE",
                     "direction": "input",
-                    "type": "enable"
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "CE",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
                 },
                 {
                     "name": "D",
                     "direction": "input",
-                    "type": "data"
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "D",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "R",
                     "direction": "input",
-                    "type": "reset"
+                    "type": "reset",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "R",
+                            "direction": "input",
+                            "type": "reset"
+                        }
+                    ]
                 },
                 {
                     "name": "Q",
                     "direction": "output",
-                    "function": "IQ",
-                    "type": "state"
+                    "type": "state",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "Q",
+                            "direction": "output",
+                            "type": "state",
+                            "function": "IQ"
+                        }
+                    ]
                 }
             ]
         },
@@ -899,44 +2284,98 @@
             "ff_config": {
                 "state": "IQ",
                 "neg_state": "IQN",
-                "next_state": "D",
-                "clocked_on": "CE & C",
+                "next_state": "(D & CE)",
+                "clocked_on": "C",
                 "clear_on": "R",
                 "preset_on": "S",
                 "state_clear_preset": "L",
                 "neg_state_clear_preset": "H"
             },
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "C",
                     "direction": "input",
-                    "type": "clock"
+                    "type": "clock",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "C",
+                            "direction": "input",
+                            "type": "clock"
+                        }
+                    ]
                 },
                 {
                     "name": "CE",
                     "direction": "input",
-                    "type": "enable"
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "CE",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
                 },
                 {
                     "name": "D",
                     "direction": "input",
-                    "type": "data"
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "D",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "R",
                     "direction": "input",
-                    "type": "reset"
+                    "type": "reset",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "R",
+                            "direction": "input",
+                            "type": "reset"
+                        }
+                    ]
                 },
                 {
                     "name": "S",
                     "direction": "input",
-                    "type": "set"
+                    "type": "set",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "S",
+                            "direction": "input",
+                            "type": "set"
+                        }
+                    ]
                 },
                 {
                     "name": "Q",
                     "direction": "output",
-                    "function": "IQ",
-                    "type": "state"
+                    "type": "state",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "Q",
+                            "direction": "output",
+                            "type": "state",
+                            "function": "IQ"
+                        }
+                    ]
                 }
             ]
         },
@@ -946,12 +2385,21 @@
                 "combinational",
                 "ground"
             ],
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "O",
                     "direction": "output",
                     "type": "ground",
-                    "function": "0"
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "ground",
+                            "function": "0b0"
+                        }
+                    ]
                 }
             ]
         },
@@ -961,12 +2409,21 @@
                 "combinational",
                 "power"
             ],
-            "pins": [
+            "pin_groups": [
                 {
                     "name": "O",
                     "direction": "output",
                     "type": "power",
-                    "function": "1"
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "power",
+                            "function": "0b1"
+                        }
+                    ]
                 }
             ]
         }

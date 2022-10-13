@@ -44,13 +44,25 @@ namespace hal
                 )")
             // .def("get_cli_options", &plugin_dataflow::get_cli_options)
             // .def("handle_cli_call", &plugin_dataflow::handle_cli_call)
-            .def("execute", &plugin_dataflow::execute, py::arg("netlist"), py::arg("output_path"), py::arg("sizes"), py::arg("draw_graph"), py::arg("known_groups"), R"(
+            .def("execute",
+                 &plugin_dataflow::execute,
+                 py::arg("netlist"),
+                 py::arg("output_path"),
+                 py::arg("sizes"),
+                 py::arg("draw_graph") = false,
+                 py::arg("create_modules") = false,
+                 py::arg("register_stage_identification") = false,
+                 py::arg("known_groups")    = std::vector<std::vector<u32>>(),
+                 py::arg("bad_group_sizes") = 7,
+                 R"(
                 Executes the dataflow analysis plugin (DANA). Starting from the netlist DANA tries to identify high-level registers.
 
                 :param hal_py.Netlist netlist: The netlist to operate on.
                 :param str output_path: Path where the dataflow graph should be written to
                 :param list[int] sizes: Prioritized sizes.
                 :param bool draw_graph: Switch to turn on/off the generation of the graph.
+                :param bool create_modules: Switch to turn on/off the creation of HAL modules for the registers.
+                :param bool register_stage_identification: Switch to turn on/off the register stage rule. Note that this rule can be too restrictive and is turned off by default.
                 :param list[list[int]] known_groups: Previously known groups that stay untouched.
                 :returns: Register groups created by DANA
                 :rtype: list[list[hal_py.Gate]]

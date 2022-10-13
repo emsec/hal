@@ -4,10 +4,14 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
+#include "hal_core/netlist/netlist_parser/netlist_parser_manager.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/netlist/project_manager.h"
+#include "hal_core/utilities/project_directory.h"
 
 #include "gui/settings/settings_items/settings_item_checkbox.h"
 #include "gui/settings/settings_items/settings_item_spinbox.h"
+#include "gui/file_manager/import_netlist_dialog.h"
 
 #include <QDateTime>
 #include <QFile>
@@ -19,6 +23,10 @@
 #include <QPushButton>
 #include <QSpacerItem>
 #include <QTextStream>
+#include <QApplication>
+#include <QDir>
+#include <QRegularExpression>
+#include <QDebug>
 
 namespace hal
 {
@@ -70,16 +78,6 @@ namespace hal
         return &manager;
     }
 
-    void FileManager::handleProgramArguments(const ProgramArguments& args)
-    {
-        if (args.is_option_set("--input-file"))
-        {
-            auto fileName = std::filesystem::path(args.get_parameter("--input-file"));
-            log_info("gui", "GUI started with file {}.", fileName.string());
-            openFile(QString::fromStdString(fileName.string()));
-        }
-    }
-
     bool FileManager::fileOpen() const
     {
         return mFileOpen;
@@ -87,10 +85,11 @@ namespace hal
 
     void FileManager::autosave()
     {
-        if (!mShadowFileName.isEmpty() && mAutosaveEnabled)
+        ProjectManager* pm = ProjectManager::instance();
+        if (pm->get_project_status() != ProjectManager::None && mAutosaveEnabled)
         {
             log_info("gui", "saving a backup in case something goes wrong...");
-            netlist_serializer::serialize_to_file(gNetlist, mShadowFileName.toStdString());
+            ProjectManager::instance()->serialize_project(gNetlist, true);
         }
     }
 
@@ -112,7 +111,7 @@ namespace hal
         if (!mFileName.isEmpty())
         {
             mFileWatcher->removePath(mFileName);
-            removeShadowFile();
+            removeShadowDirectory();
         }
 
         mTimer->stop();
@@ -128,126 +127,248 @@ namespace hal
             mTimer->start(mAutosaveInterval * 1000);
 
             mFileName        = fileName;
-            mShadowFileName = getShadowFile(fileName);
             mFileWatcher->addPath(mFileName);
             mFileOpen = true;
             updateRecentFiles(mFileName);
         }
     }
 
-    void FileManager::fileSuccessfullyLoaded(QString fileName)
+    void FileManager::emitProjectSaved(QString& projectDir, QString& file)
     {
-        watchFile(fileName);
-        Q_EMIT fileOpened(mFileName);
+        Q_EMIT projectSaved(projectDir, file);
     }
 
-    void FileManager::removeShadowFile()
+    void FileManager::projectSuccessfullyLoaded(QString& projectDir, QString& file)
     {
-        if (QFileInfo::exists(mShadowFileName) && QFileInfo(mShadowFileName).isFile())
+        watchFile(file);
+        Q_EMIT projectOpened(projectDir, file);
+        gNetlistRelay->debugHandleFileOpened();
+        gContentManager->handleOpenDocument(file);
+        ProjectManager::instance()->set_project_status(ProjectManager::Opened);
+    }
+
+    FileManager::DirectoryStatus FileManager::directoryStatus(const QString& pathname)
+    {
+        QFileInfo info(pathname);
+        if (!info.exists()) return NotExisting;
+
+        if (info.isFile())
         {
-            QFile(mShadowFileName).remove();
+            if (netlist_parser_manager::can_parse(pathname.toStdString()))
+                return IsFile;
+            else
+                return NotSelectable;
         }
+
+        if (info.isDir())
+        {
+            if (QFileInfo(QDir(pathname).absoluteFilePath(QString::fromStdString(ProjectManager::s_project_file))).exists())
+                return ProjectDirectory;
+            else
+                return OtherDirectory;
+        }
+
+        return NotSelectable;
     }
 
-    QString FileManager::getShadowFile(QString file)
+    void FileManager::fileSuccessfullyLoaded(QString file)
     {
-        QString shadow_file_name;
-        if (file.contains('/'))
+        watchFile(file);
+        Q_EMIT fileOpened(file);
+        ProjectManager::instance()->set_project_status(ProjectManager::Opened);
+    }
+
+    void FileManager::removeShadowDirectory()
+    {
+        ProjectManager* pm = ProjectManager::instance();
+        if (pm->get_project_status() == ProjectManager::None) return;
+        QDir shDir(QString::fromStdString(pm->get_project_directory().get_shadow_dir()));
+        if (shDir.exists())
         {
-            shadow_file_name = file.left(file.lastIndexOf('/') + 1) + "~" + file.right(file.size() - file.lastIndexOf('/') - 1);
+            shDir.removeRecursively();
+            QDir().mkpath(shDir.absolutePath());
+        }
+
+    }
+
+    void FileManager::importFile(QString filename)
+    {
+        // check whether there is already a project with the same name as file-to-be-imported
+        QString testProjectExists(filename);
+        testProjectExists.remove(QRegularExpression("\\.\\w*$"));
+        if (directoryStatus(testProjectExists) == FileManager::ProjectDirectory)
+        {
+            QMessageBox msgBox;
+            msgBox.setIcon(QMessageBox::Question);
+            msgBox.setWindowTitle("Resume previous work");
+            msgBox.setText("A hal project exists for the selected netlist.");
+            auto butLoadProject   = msgBox.addButton("Load hal project", QMessageBox::ActionRole);
+            auto butImportNetlist = msgBox.addButton("Parse " + QFileInfo(filename).suffix() + " file", QMessageBox::ActionRole);
+            msgBox.addButton("Abort", QMessageBox::RejectRole);
+
+            QSpacerItem* horizontalSpacer = new QSpacerItem(500, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+            QGridLayout* layout           = (QGridLayout*)msgBox.layout();
+            layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
+
+            msgBox.exec();
+
+            if (msgBox.clickedButton() == (QAbstractButton*)butLoadProject)
+            {
+                openProject(testProjectExists);
+                return;
+            }
+            else if (msgBox.clickedButton() != (QAbstractButton*)butImportNetlist)
+            {
+                return;
+            }
+        }
+
+        ImportNetlistDialog ind(filename, qApp->activeWindow());
+        if (ind.exec() != QDialog::Accepted) return;
+        QString projdir = ind.projectDirectory();
+        if (projdir.isEmpty()) return;
+
+        ProjectManager* pm = ProjectManager::instance();
+        if (!pm->create_project_directory(projdir.toStdString()))
+        {
+            QMessageBox::warning(qApp->activeWindow(),"Aborted", "Error creating project directory <" + projdir + ">");
+            return;
+        }
+
+        QDir projectDir(projdir);
+        QString netlistFilename = filename;
+        if (ind.isMoveNetlistChecked())
+        {
+            netlistFilename = projectDir.absoluteFilePath(QFileInfo(filename).fileName());
+            QDir().rename(filename,netlistFilename);
+        }
+
+        QString gatelib = ind.gateLibraryPath();
+        if (ind.isCopyGatelibChecked() && !gatelib.isEmpty())
+        {
+            QFileInfo glInfo(gatelib);
+            QString targetGateLib = projectDir.absoluteFilePath(glInfo.fileName());
+            if (QFile::copy(gatelib,targetGateLib))
+                gatelib = targetGateLib;
+        }
+
+        LogManager& lm              = LogManager::get_instance();
+        std::filesystem::path lpath = pm->get_project_directory().get_default_filename(".log");
+        lm.set_file_name(lpath);
+
+        if (deprecatedOpenFile(netlistFilename, gatelib))
+        {
+            gFileStatusManager->netlistChanged();
+            if (gNetlist)
+                if (pm->serialize_project(gNetlist))
+                    gFileStatusManager->netlistSaved();
+            Q_EMIT projectOpened(projectDir.absolutePath(),QString::fromStdString(pm->get_netlist_filename()));
         }
         else
         {
-            shadow_file_name = "~" + file;
+            if (pm->remove_project_directory())
+                log_info("gui", "Project directory removed since import failed.");
+            else
+                log_warning("gui", "Failed to remove project directory after failed import attempt");
         }
-        return shadow_file_name.left(shadow_file_name.lastIndexOf('.')) + ".hal";
     }
 
-    void FileManager::openFile(QString fileName)
+    void FileManager::moveShadowToProject(const QDir& shDir) const
     {
-        QString logical_file_name = fileName;
+        QString replaceToken = "/" + QString::fromStdString(ProjectDirectory::s_shadow_dir) + "/";
+        for (QFileInfo finfo : shDir.entryInfoList(QDir::Dirs | QDir::Files | QDir::Hidden | QDir::NoDotAndDotDot))
+        {
+            QString targetPath(finfo.absoluteFilePath());
+            targetPath.replace(replaceToken,"/");
+
+            if (finfo.isDir())
+            {
+                QDir().mkpath(targetPath);
+                moveShadowToProject(QDir(finfo.absoluteFilePath()));
+            }
+            else if (finfo.isFile())
+            {
+                if (QFileInfo(targetPath).exists()) QFile::remove(targetPath);
+                QFile::copy(finfo.absoluteFilePath(),targetPath);
+                log_info("gui", "File restored from autosave: {}.", targetPath.toStdString());
+            }
+            else
+            {
+                log_info("gui","Cannot move {} from autosave to project directory.", finfo.absoluteFilePath().toStdString());
+            }
+        }
+    }
+
+    void FileManager::openProject(QString projPath)
+    {
+        ProjectManager* pm = ProjectManager::instance();
+        pm->set_project_directory(projPath.toStdString());
+
+        QDir shDir(QString::fromStdString(pm->get_project_directory().get_shadow_dir()));
+        QFileInfo shInfo(shDir.absoluteFilePath(QString::fromStdString(ProjectManager::s_project_file)));
+        if (shInfo.exists() && shInfo.isFile())
+        {
+            QString message =
+                "It seems that HAL crashed during your last session. Last autosave was on " +
+                    shInfo.lastModified().toString("dd.MM.yyyy hh:mm") + ". Restore that state?";
+            if (QMessageBox::question(nullptr, "HAL did not exit cleanly", message, QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+            {
+                moveShadowToProject(shDir);
+                pm->restore_project_file_from_autosave();
+            }
+        }
+
+        if (!pm->open_project())
+        {
+            QString errorMsg = QString("Error opening project <%1>").arg(projPath);
+            log_error("gui", "{}", errorMsg.toStdString());
+            displayErrorMessage(errorMsg);
+            return;
+        }
+
+        gNetlistOwner = std::move(pm->get_netlist());
+        gNetlist       = gNetlistOwner.get();
+        gNetlistRelay->registerNetlistCallbacks();
+        QString filename = QString::fromStdString(pm->get_netlist_filename());
+        projectSuccessfullyLoaded(projPath, filename);
+
+        LogManager& lm              = LogManager::get_instance();
+        std::filesystem::path lpath = pm->get_project_directory().get_default_filename(".log");
+        lm.set_file_name(lpath);
+    }
+
+    bool FileManager::deprecatedOpenFile(QString filename, QString gatelibraryPath)
+    {
+        QString logical_file_name = filename;
 
         if (gNetlist)
         {
             // ADD ERROR MESSAGE
-            return;
+            return false;
         }
 
-        if (fileName.isEmpty())
+        if (filename.isEmpty())
         {
-            std::string error_message("Unable to open file. File name is empty");
-            log_error("gui", "{}", error_message);
-            displayErrorMessage(QString::fromStdString(error_message));
-            return;
+            QString errorMsg("Unable to open file. File name is empty");
+            log_error("gui", "{}", errorMsg.toStdString());
+            displayErrorMessage(errorMsg);
+            return false;
         }
 
-        if (!fileName.endsWith(".hal"))
-        {
-            QString hal_file_name = fileName.left(fileName.lastIndexOf('.')) + ".hal";
-            QString extension     = fileName.right(fileName.size() - fileName.lastIndexOf('.'));
-
-            if (QFileInfo::exists(hal_file_name) && QFileInfo(hal_file_name).isFile())
-            {
-                QMessageBox msgBox;
-                msgBox.setIcon(QMessageBox::Question);
-                msgBox.setWindowTitle("Resume previous work");
-                msgBox.setText("A .hal file exists for the selected netlist.");
-                auto parse_hal_btn = msgBox.addButton("Load .hal file", QMessageBox::ActionRole);
-                auto parse_hdl_btn = msgBox.addButton("Parse " + extension + " file", QMessageBox::ActionRole);
-                msgBox.addButton("Abort", QMessageBox::RejectRole);
-
-                QSpacerItem* horizontalSpacer = new QSpacerItem(500, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
-                QGridLayout* layout           = (QGridLayout*)msgBox.layout();
-                layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
-
-                msgBox.exec();
-
-                if (msgBox.clickedButton() == (QAbstractButton*)parse_hal_btn)
-                {
-                    fileName         = hal_file_name;
-                    logical_file_name = hal_file_name;
-                }
-                else if (msgBox.clickedButton() != (QAbstractButton*)parse_hdl_btn)
-                {
-                    return;
-                }
-            }
-        }
-
-        LogManager& lm                 = LogManager::get_instance();
-        std::filesystem::path log_path = fileName.toStdString();
-        lm.set_file_name(std::filesystem::path(log_path.replace_extension(".log")));
-
-        if (fileName.endsWith(".hal"))
-        {
-            QString shadow_file_name = getShadowFile(fileName);
-
-            if (QFileInfo::exists(shadow_file_name) && QFileInfo(shadow_file_name).isFile())
-            {
-                QString message =
-                    "It seems that HAL crashed during your last session. Last autosave was on " + QFileInfo(shadow_file_name).lastModified().toString("dd.MM.yyyy hh:mm") + ". Restore that state?";
-                if (QMessageBox::question(nullptr, "HAL did not exit cleanly", message, QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
-                {
-                    // logical_file_name is not changed
-                    fileName = shadow_file_name;
-                }
-            }
-        }
-
-        QFile file(fileName);
+        QFile file(filename);
 
         if (!file.open(QFile::ReadOnly))
         {
-            std::string error_message("Unable to open file" + fileName.toStdString());
+            std::string error_message("Unable to open file" + filename.toStdString());
             log_error("gui", "Unable to open file '{}'", error_message);
             displayErrorMessage(QString::fromStdString(error_message));
-            return;
+            return false;
         }
 
-        if (fileName.endsWith(".hal"))
+        if (filename.endsWith(".hal"))
         {
             // event_controls::enable_all(false); won't get events until callbacks are registered
-            auto netlist = netlist_factory::load_netlist(fileName.toStdString());
+            auto netlist = netlist_factory::load_netlist(filename.toStdString());
             // event_controls::enable_all(true);
             if (netlist)
             {
@@ -255,24 +376,45 @@ namespace hal
                 gNetlist       = gNetlistOwner.get();
                 gNetlistRelay->registerNetlistCallbacks();
                 fileSuccessfullyLoaded(logical_file_name);
+                return true;
             }
             else
             {
                 std::string error_message("Failed to create netlist from .hal file");
                 log_error("gui", "{}", error_message);
                 displayErrorMessage(QString::fromStdString(error_message));
+                return false;
             }
-
-            return;
         }
 
-        QString lib_file_name = fileName.left(fileName.lastIndexOf('.')) + ".lib";
+        if (!gatelibraryPath.isEmpty())
+        {
+            log_info("gui", "Trying to use gate library {}.", gatelibraryPath.toStdString());
+            auto netlist = netlist_factory::load_netlist(filename.toStdString(), gatelibraryPath.toStdString());
+
+            if (netlist)
+            {
+                gNetlistOwner = std::move(netlist);
+                gNetlist       = gNetlistOwner.get();
+                gNetlistRelay->registerNetlistCallbacks();
+                fileSuccessfullyLoaded(logical_file_name);
+                return true;
+            }
+            else
+            {
+                log_error("gui", "Failed using gate library {}.", gatelibraryPath.toStdString());
+                displayErrorMessage("Failed to open netlist\nwith user selected gate library\n"+gatelibraryPath);
+                return false;
+            }
+        }
+
+        QString lib_file_name = filename.left(filename.lastIndexOf('.')) + ".lib";
         if (QFileInfo::exists(lib_file_name) && QFileInfo(lib_file_name).isFile())
         {
             log_info("gui", "Trying to use gate library {}.", lib_file_name.toStdString());
 
             // event_controls::enable_all(false);
-            auto netlist = netlist_factory::load_netlist(fileName.toStdString(), lib_file_name.toStdString());
+            auto netlist = netlist_factory::load_netlist(filename.toStdString(), lib_file_name.toStdString());
             // event_controls::enable_all(true);
 
             if (netlist)
@@ -281,7 +423,7 @@ namespace hal
                 gNetlist       = gNetlistOwner.get();
                 gNetlistRelay->registerNetlistCallbacks();
                 fileSuccessfullyLoaded(logical_file_name);
-                return;
+                return true;
             }
             else
             {
@@ -292,7 +434,7 @@ namespace hal
         log_info("gui", "Searching for (other) compatible netlists.");
 
         // event_controls::enable_all(false);
-        std::vector<std::unique_ptr<Netlist>> netlists = netlist_factory::load_netlists(fileName.toStdString());
+        std::vector<std::unique_ptr<Netlist>> netlists = netlist_factory::load_netlists(filename.toStdString());
         // event_controls::enable_all(true);
 
         if (netlists.empty())
@@ -300,7 +442,7 @@ namespace hal
             std::string error_message("Unable to find a compatible gate library. Deserialization failed!");
             log_error("gui", "{}", error_message);
             displayErrorMessage(QString::fromStdString(error_message));
-            return;
+            return false;
         }
         else if (netlists.size() == 1)
         {
@@ -341,11 +483,12 @@ namespace hal
             }
             else
             {
-                return;
+                return false;
             }
         }
 
         fileSuccessfullyLoaded(logical_file_name);
+        return true;
     }
 
     void FileManager::closeFile()
@@ -363,12 +506,13 @@ namespace hal
         mFileName = "";
         mFileOpen = false;
 
-        removeShadowFile();
+        removeShadowDirectory();
 
         gNetlistOwner.reset();
         gNetlist = nullptr;
 
         gNetlistRelay->debugHandleFileClosed();
+        ProjectManager::instance()->set_project_status(ProjectManager::None);
 
         Q_EMIT fileClosed();
     }

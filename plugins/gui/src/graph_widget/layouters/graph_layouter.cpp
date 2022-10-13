@@ -6,19 +6,19 @@
 #include "gui/graph_widget/items/nets/arrow_separated_net.h"
 #include "gui/graph_widget/items/nets/circle_separated_net.h"
 #include "gui/graph_widget/items/nets/labeled_separated_net.h"
-#include "gui/graph_widget/items/nets/standard_graphics_net.h"
 #include "gui/graph_widget/items/nets/standard_arrow_net.h"
-#include "gui/selection_details_widget/selection_details_widget.h"
-#include "gui/gui_globals.h"
+#include "gui/graph_widget/items/nets/standard_graphics_net.h"
 #include "gui/gui_def.h"
+#include "gui/gui_globals.h"
 #include "gui/implementations/qpoint_extension.h"
+#include "gui/selection_details_widget/selection_details_widget.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 
-#include <qmath.h>
 #include <QDebug>
 #include <QElapsedTimer>
+#include <qmath.h>
 
 namespace hal
 {
@@ -32,10 +32,10 @@ namespace hal
         map.insert(key, value);
     }
 
-    const static qreal sLaneSpacing             = 10;
-    const static qreal sJunctionPadding         = 10;
-    const static qreal sHRoadPadding           = 10;
-    const static qreal sVRoadPadding           = 10;
+    const static qreal sLaneSpacing           = 10;
+    const static qreal sJunctionPadding       = 10;
+    const static qreal sHRoadPadding          = 10;
+    const static qreal sVRoadPadding          = 10;
     const static qreal sMinimumVChannelWidth  = 20;
     const static qreal sMinimumHChannelHeight = 20;
 
@@ -43,7 +43,8 @@ namespace hal
         : QObject(parent), mScene(new GraphicsScene(this)), mContext(context), mDone(false), mRollbackStatus(0), mOptimizeNetLayout(true)
     {
         SelectionDetailsWidget* details = gContentManager->getSelectionDetailsWidget();
-        if (details) connect(details, &SelectionDetailsWidget::triggerHighlight, mScene, &GraphicsScene::handleHighlight);
+        if (details)
+            connect(details, &SelectionDetailsWidget::triggerHighlight, mScene, &GraphicsScene::handleHighlight);
     }
 
     GraphLayouter::~GraphLayouter()
@@ -74,12 +75,12 @@ namespace hal
         xout << "=======\n";
     }
 
-    const QMap<QPoint,Node> GraphLayouter::positionToNodeMap() const
+    const QMap<QPoint, Node> GraphLayouter::positionToNodeMap() const
     {
         return mPositionToNodeMap;
     }
 
-    void GraphLayouter::setNodePosition(const Node &n, const QPoint& p)
+    void GraphLayouter::setNodePosition(const Node& n, const QPoint& p)
     {
         if (mNodeToPositionMap.contains(n))
         {
@@ -93,7 +94,7 @@ namespace hal
         //manual relayout call needed
     }
 
-    void GraphLayouter::swapNodePositions(const Node &n1, const Node &n2)
+    void GraphLayouter::swapNodePositions(const Node& n1, const Node& n2)
     {
         assert(mNodeToPositionMap.contains(n1));
         assert(mNodeToPositionMap.contains(n2));
@@ -108,7 +109,7 @@ namespace hal
         mPositionToNodeMap.insert(p2, n1);
     }
 
-    void GraphLayouter::removeNodeFromMaps(const Node &n)
+    void GraphLayouter::removeNodeFromMaps(const Node& n)
     {
         if (mNodeToPositionMap.contains(n))
         {
@@ -120,11 +121,13 @@ namespace hal
 
     QPoint GraphLayouter::gridPointByItem(GraphicsNode* item) const
     {
-        QPoint retval(INT_MIN,INT_MIN);
-        if (!item) return retval;
+        QPoint retval(INT_MIN, INT_MIN);
+        if (!item)
+            return retval;
         const NodeBox* nbox = mBoxes.boxForItem(item);
-        if (!nbox) return retval;
-        return QPoint(nbox->x(),nbox->y());
+        if (!nbox)
+            return retval;
+        return QPoint(nbox->x(), nbox->y());
     }
 
     int GraphLayouter::minXIndex() const
@@ -176,8 +179,10 @@ namespace hal
     {
         Q_ASSERT(!mXValues.isEmpty());
         int inx = ix - mMinXIndex;
-        if (inx < 0) return mXValues[0] - inx * defaultGridWidth();
-        if (inx < mXValues.size()) return mXValues[inx];
+        if (inx < 0)
+            return mXValues[0] - inx * defaultGridWidth();
+        if (inx < mXValues.size())
+            return mXValues[inx];
         return mXValues.last() + (inx - mXValues.size() - 1) * defaultGridWidth();
     }
 
@@ -185,8 +190,10 @@ namespace hal
     {
         Q_ASSERT(!mYValues.isEmpty());
         int inx = iy - mMinYIndex;
-        if (inx < 0) return mYValues[0] - inx * defaultGridHeight();
-        if (inx < mYValues.size()) return mYValues[inx];
+        if (inx < 0)
+            return mYValues[0] - inx * defaultGridHeight();
+        if (inx < mYValues.size())
+            return mYValues[inx];
         return mYValues.last() + (inx - mYValues.size() - 1) * defaultGridHeight();
     }
 
@@ -213,9 +220,9 @@ namespace hal
         mScene->moveNetsToBackground();
         mScene->handleExternSelectionChanged(nullptr);
 
-    #ifdef GUI_DEBUG_GRID
+#ifdef GUI_DEBUG_GRID
         mScene->debugSetLayouterGrid(xValues(), yValues(), defaultGridHeight(), defaultGridWidth());
-    #endif
+#endif
         mRollbackStatus = 0;
     }
 
@@ -247,9 +254,9 @@ namespace hal
         mScene->moveNetsToBackground();
         mScene->handleExternSelectionChanged(nullptr);
 
-    #ifdef GUI_DEBUG_GRID
+#ifdef GUI_DEBUG_GRID
         mScene->debugSetLayouterGrid(xValues(), yValues(), defaultGridHeight(), defaultGridWidth());
-    #endif
+#endif
         mRollbackStatus = 0;
         qDebug() << "elapsed time (classic) layout [ms]" << timer.elapsed();
     }
@@ -257,7 +264,7 @@ namespace hal
     void GraphLayouter::prepareRollback()
     {
         mNodeToPositionRollback = mNodeToPositionMap;
-        mRollbackStatus = 1;
+        mRollbackStatus         = 1;
     }
 
     bool GraphLayouter::canRollback() const
@@ -267,16 +274,16 @@ namespace hal
 
     bool GraphLayouter::rollback()
     {
-        if (!canRollback())  return false;
-        mRollbackStatus = -1;
+        if (!canRollback())
+            return false;
+        mRollbackStatus    = -1;
         mNodeToPositionMap = mNodeToPositionRollback;
         mNodeToPositionRollback.clear();
         mPositionToNodeMap.clear();
-        for (auto it = mNodeToPositionMap.begin(); it !=mNodeToPositionMap.end(); it++)
-            mPositionToNodeMap.insert(it.value(),it.key());
+        for (auto it = mNodeToPositionMap.begin(); it != mNodeToPositionMap.end(); it++)
+            mPositionToNodeMap.insert(it.value(), it.key());
         return true;
     }
-
 
     void GraphLayouter::clearLayoutData()
     {
@@ -347,39 +354,58 @@ namespace hal
         mGlobalInputHash.clear();
         mGlobalOutputHash.clear();
         mNodeBoundingBox = QRect();
+        mViewInput.clear();
+        mViewOutput.clear();
     }
 
     void GraphLayouter::createBoxes()
     {
         bool first = true;
         int xmin, xmax, ymin, ymax;
-        xmin = ymin = xmax = ymax = 0;
+        xmin = ymin = xmax = ymax            = 0;
         QMap<QPoint, Node>::const_iterator i = positionToNodeMap().constBegin();
         while (i != positionToNodeMap().constEnd())
         {
             int x = i.key().x();
             int y = i.key().y();
-            if (first || x+1 > xmax) xmax = x+1;
-            if (first || y+1 > ymax) ymax = y+1;
-            if (first || x < xmin) xmin = x;
-            if (first || y < ymin) ymin = y;
+            if (first || x + 1 > xmax)
+                xmax = x + 1;
+            if (first || y + 1 > ymax)
+                ymax = y + 1;
+            if (first || x < xmin)
+                xmin = x;
+            if (first || y < ymin)
+                ymin = y;
             first = false;
             mBoxes.addBox(i.value(), x, y);
             ++i;
         }
-        mNodeBoundingBox = QRect(xmin, ymin, xmax-xmin, ymax-ymin);
+        mNodeBoundingBox = QRect(xmin, ymin, xmax - xmin, ymax - ymin);
     }
 
-    bool GraphLayouter::verifyModulePort(const Net* n, const Node &modNode, bool isModInput)
+    bool GraphLayouter::verifyModulePort(Net* n, const Node& modNode, bool isModInput)
     {
         // bypass test for gates
-        if (modNode.type() != Node::Module) return true;
+        if (modNode.type() != Node::Module)
+            return true;
 
         Module* m = gNetlist->get_module_by_id(modNode.id());
         Q_ASSERT(m);
-        std::vector<Net*> knownNets = isModInput ? m->get_input_nets() : m->get_output_nets();
-        for (const Net* kn : knownNets)
-            if (kn == n) return true;
+        if (isModInput)
+        {
+            if (std::unordered_set<Net*> nets = m->get_input_nets(); nets.find(n) != nets.end())
+            {
+                return true;
+            }
+        }
+        else
+        {
+            if (std::unordered_set<Net*> nets = m->get_output_nets(); nets.find(n) != nets.end())
+            {
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -388,7 +414,8 @@ namespace hal
         for (const u32 id : mContext->nets())
         {
             Net* n = gNetlist->get_net_by_id(id);
-            if (!n) continue;
+            if (!n)
+                continue;
 
             QSet<NetLayoutPoint> srcPoints;
             QSet<NetLayoutPoint> dstPoints;
@@ -400,12 +427,16 @@ namespace hal
                 // FIND SRC BOX
                 const NodeBox* srcBox = mBoxes.boxForGate(src->get_gate());
                 if (!srcBox)
+                {
+                    // not among visible boxes
+                    mViewInput.insert(n->get_id());
+                    continue;
+                }
+
+                if (!verifyModulePort(n, srcBox->getNode(), false))
                     continue;
 
-                if (!verifyModulePort(n,srcBox->getNode(),false))
-                    continue;
-
-                NetLayoutPoint srcPnt(srcBox->x()+1,2*srcBox->y());
+                NetLayoutPoint srcPnt(srcBox->x() + 1, 2 * srcBox->y());
                 srcPoints.insert(srcPnt);
                 mWireEndpoint[id].addSource(srcPnt);
             }
@@ -415,12 +446,16 @@ namespace hal
                 // find dst box
                 const NodeBox* dstBox = mBoxes.boxForGate(dst->get_gate());
                 if (!dstBox)
+                {
+                    // not among visible boxes
+                    mViewOutput.insert(n->get_id());
+                    continue;
+                }
+
+                if (!verifyModulePort(n, dstBox->getNode(), true))
                     continue;
 
-                if (!verifyModulePort(n,dstBox->getNode(),true))
-                    continue;
-
-                NetLayoutPoint dstPnt(dstBox->x(),2*dstBox->y());
+                NetLayoutPoint dstPnt(dstBox->x(), 2 * dstBox->y());
                 dstPoints.insert(dstPnt);
                 mWireEndpoint[id].addDestination(dstPnt);
             }
@@ -430,24 +465,22 @@ namespace hal
 
             // test for global inputs
             EndpointList::EndpointType nType = mWireEndpoint.value(id).netType();
-            if ((nType == EndpointList::SingleDestination && dstPoints.size() > 1) ||
-                    (nType == EndpointList::SourceAndDestination && n->is_global_input_net()))
+            if ((nType == EndpointList::SingleDestination && dstPoints.size() > 1) || (nType == EndpointList::SourceAndDestination && mViewInput.contains(n->get_id())))
             {
                 // global input connects to multiple boxes
                 int ypos = mGlobalInputHash.size();
-                NetLayoutPoint srcPnt(mNodeBoundingBox.left(),2*ypos);
+                NetLayoutPoint srcPnt(mNodeBoundingBox.left(), 2 * ypos);
                 srcPoints.insert(srcPnt);
                 mWireEndpoint[id].addSource(srcPnt);
                 mGlobalInputHash[id] = ypos;
                 mWireEndpoint[id].setNetType(EndpointList::MultipleDestination);
             }
 
-            if ((nType == EndpointList::SingleSource && srcPoints.size() > 1) ||
-                    (nType == EndpointList::SourceAndDestination && n->is_global_output_net()))
+            if ((nType == EndpointList::SingleSource && srcPoints.size() > 1) || (nType == EndpointList::SourceAndDestination && mViewOutput.contains(n->get_id())))
             {
                 // multi-driven global output or global output back coupled to net gate
                 int ypos = mGlobalOutputHash.size();
-                NetLayoutPoint dstPnt(mNodeBoundingBox.right()+1,2*ypos);
+                NetLayoutPoint dstPnt(mNodeBoundingBox.right() + 1, 2 * ypos);
                 dstPoints.insert(dstPnt);
                 mWireEndpoint[id].addDestination(dstPnt);
                 mGlobalOutputHash[id] = ypos;
@@ -455,49 +488,47 @@ namespace hal
             }
 
             const EndpointList& epl = mWireEndpoint.value(id);
-            switch (epl.netType()) {
-            case EndpointList::SingleSource:
-            case EndpointList::SingleDestination:
-            case EndpointList::ConstantLevel:
+            switch (epl.netType())
             {
-                int ipnt = 0;
-                for (const NetLayoutPoint& pnt : epl)
-                {
-                    bool isInput = epl.isInput(ipnt++);
-                    SeparatedGraphicsNet* net_item = epl.netType() == EndpointList::ConstantLevel
-                            ? static_cast<SeparatedGraphicsNet*>(new LabeledSeparatedNet(n,QString::fromStdString(n->get_name())))
-                            : static_cast<SeparatedGraphicsNet*>(new ArrowSeparatedNet(n));
-                    if (isInput)
-                        mSeparatedWidth[pnt].requireInputSpace(net_item->inputWidth()+sLaneSpacing);
-                    else
+                case EndpointList::SingleSource:
+                case EndpointList::SingleDestination:
+                case EndpointList::ConstantLevel: {
+                    int ipnt = 0;
+                    for (const NetLayoutPoint& pnt : epl)
                     {
-                        const NodeBox* nb = mBoxes.boxForPoint(QPoint(pnt.x()-1,pnt.y()/2));
-                        Q_ASSERT(nb);
-                        mSeparatedWidth[pnt].requireOutputSpace(
-                                    nb->item()->width() + net_item->outputWidth() + sLaneSpacing);
+                        bool isInput                   = epl.isInput(ipnt++);
+                        SeparatedGraphicsNet* net_item = epl.netType() == EndpointList::ConstantLevel
+                                                             ? static_cast<SeparatedGraphicsNet*>(new LabeledSeparatedNet(n, QString::fromStdString(n->get_name())))
+                                                             : static_cast<SeparatedGraphicsNet*>(new ArrowSeparatedNet(n));
+                        if (isInput)
+                            mSeparatedWidth[pnt].requireInputSpace(net_item->inputWidth() + sLaneSpacing);
+                        else
+                        {
+                            const NodeBox* nb = mBoxes.boxForPoint(QPoint(pnt.x() - 1, pnt.y() / 2));
+                            Q_ASSERT(nb);
+                            mSeparatedWidth[pnt].requireOutputSpace(nb->item()->width() + net_item->outputWidth() + sLaneSpacing);
+                        }
+                        delete net_item;
                     }
-                    delete net_item;
                 }
-            }
                 break;
-            case EndpointList::SourceAndDestination:
-            case EndpointList::MultipleDestination:
-            case EndpointList::MultipleSource:
-            {
-                NetLayoutConnectionFactory nlcf(srcPoints.toList(),dstPoints.toList());
-                // nlcf.dump(QString("wire %1").arg(id));
-                mConnectionMetric.insert(NetLayoutMetric(id,nlcf.connection),nlcf.connection);
-            }
+                case EndpointList::SourceAndDestination:
+                case EndpointList::MultipleDestination:
+                case EndpointList::MultipleSource: {
+                    NetLayoutConnectionFactory nlcf(srcPoints.toList(), dstPoints.toList());
+                    // nlcf.dump(QString("wire %1").arg(id));
+                    mConnectionMetric.insert(NetLayoutMetric(id, nlcf.connection), nlcf.connection);
+                }
                 break;
-            default:
-                break;
+                default:
+                    break;
             }
         }
 
         /// logic nets -> wire mLanes
-        for (auto it = mConnectionMetric.constBegin(); it!=mConnectionMetric.constEnd(); ++it)
+        for (auto it = mConnectionMetric.constBegin(); it != mConnectionMetric.constEnd(); ++it)
         {
-            u32 id = it.key().getId();
+            u32 id                         = it.key().getId();
             const NetLayoutConnection* nlc = it.value();
             for (const NetLayoutWire& w : *nlc)
             {
@@ -508,61 +539,55 @@ namespace hal
         /// wires -> junction entries
         for (auto it = mWireHash.constBegin(); it != mWireHash.constEnd(); ++it)
         {
-            for (int iend=0; iend<2; iend++)
+            for (int iend = 0; iend < 2; iend++)
             {
                 // iend == 0 =>  horizontal wire: right endpoint   junction: left entry
-                NetLayoutPoint pnt = iend
-                        ? it.key().endPoint(NetLayoutWire::SourcePoint)
-                        : it.key().endPoint(NetLayoutWire::DestinationPoint);
-                int idirBase = it.key().isHorizontal() ? NetLayoutDirection::Left : NetLayoutDirection::Up;
-                mJunctionEntries[pnt].setEntries(idirBase+iend, it.value());
+                NetLayoutPoint pnt = iend ? it.key().endPoint(NetLayoutWire::SourcePoint) : it.key().endPoint(NetLayoutWire::DestinationPoint);
+                int idirBase       = it.key().isHorizontal() ? NetLayoutDirection::Left : NetLayoutDirection::Up;
+                mJunctionEntries[pnt].setEntries(idirBase + iend, it.value());
             }
         }
 
         /// end points -> junction entries
         for (const NodeBox* nbox : mBoxes)
         {
-            NetLayoutPoint inPnt(nbox->x(),nbox->y()*2);
+            NetLayoutPoint inPnt(nbox->x(), nbox->y() * 2);
             QList<u32> inpNets = nbox->item()->inputNets();
             mJunctionEntries[inPnt].setEntries(NetLayoutDirection::Right, nbox->item()->inputNets());
-            mEndpointHash[inPnt].setInputPins(nbox->item()->inputNets(),
-                                              nbox->item()->yTopPinDistance(),
-                                              nbox->item()->yEndpointDistance());
-            NetLayoutPoint outPnt(nbox->x()+1,nbox->y()*2);
+            mEndpointHash[inPnt].setInputPins(nbox->item()->inputNets(), nbox->item()->yTopPinDistance(), nbox->item()->yEndpointDistance());
+            NetLayoutPoint outPnt(nbox->x() + 1, nbox->y() * 2);
             mJunctionEntries[outPnt].setEntries(NetLayoutDirection::Left, nbox->item()->outputNets());
-            mEndpointHash[outPnt].setOutputPins(nbox->item()->outputNets(),
-                                                nbox->item()->yTopPinDistance(),
-                                                nbox->item()->yEndpointDistance());
+            mEndpointHash[outPnt].setOutputPins(nbox->item()->outputNets(), nbox->item()->yTopPinDistance(), nbox->item()->yEndpointDistance());
         }
 
         for (auto itGlInp = mGlobalInputHash.constBegin(); itGlInp != mGlobalInputHash.constEnd(); ++itGlInp)
         {
             QList<u32> netIds;
             netIds.append(itGlInp.key());
-            NetLayoutPoint pnt(mNodeBoundingBox.left(), 2*itGlInp.value());
+            NetLayoutPoint pnt(mNodeBoundingBox.left(), 2 * itGlInp.value());
             mJunctionEntries[pnt].setEntries(NetLayoutDirection::Left, netIds);
             if (!mEndpointHash.contains(pnt))
-                mEndpointHash[pnt].setOutputPins(netIds,0,0);
+                mEndpointHash[pnt].setOutputPins(netIds, 0, 0);
         }
 
         for (auto itGlOut = mGlobalOutputHash.constBegin(); itGlOut != mGlobalOutputHash.constEnd(); ++itGlOut)
         {
             QList<u32> netIds;
             netIds.append(itGlOut.key());
-            NetLayoutPoint pnt(mNodeBoundingBox.right()+1, 2*itGlOut.value());
+            NetLayoutPoint pnt(mNodeBoundingBox.right() + 1, 2 * itGlOut.value());
             mJunctionEntries[pnt].setEntries(NetLayoutDirection::Right, netIds);
             if (!mEndpointHash.contains(pnt))
-                mEndpointHash[pnt].setInputPins(netIds,0,0);
+                mEndpointHash[pnt].setInputPins(netIds, 0, 0);
         }
 
         for (auto it = mJunctionEntries.constBegin(); it != mJunctionEntries.constEnd(); ++it)
         {
-//            it.value().dumpFile(it.key());
-//            qDebug() << "Junction at" << it.key().x() << it.key().y();
+            //            it.value().dumpFile(it.key());
+            //            qDebug() << "Junction at" << it.key().x() << it.key().y();
             NetLayoutJunction* nlj = new NetLayoutJunction(it.value());
             if (nlj->lastError() != NetLayoutJunction::Ok)
                 qDebug() << "Junction route error" << nlj->lastError() << it.key();
-            mJunctionHash.insert(it.key(),nlj);
+            mJunctionHash.insert(it.key(), nlj);
         }
     }
 
@@ -873,9 +898,8 @@ namespace hal
         // maximum parallel wires for atomic network
         for (auto it = mWireHash.constBegin(); it != mWireHash.constEnd(); ++it)
         {
-            const NetLayoutPoint& pnt =
-                    it.key().endPoint(NetLayoutWire::SourcePoint);
-            unsigned int nw = it.value().size();
+            const NetLayoutPoint& pnt = it.key().endPoint(NetLayoutWire::SourcePoint);
+            unsigned int nw           = it.value().size();
             if (it.key().isHorizontal())
                 mCoordY[pnt.y()].testMinMax(nw);
             else
@@ -886,7 +910,7 @@ namespace hal
         for (auto it = mJunctionHash.constBegin(); it != mJunctionHash.constEnd(); ++it)
         {
             const NetLayoutPoint& pnt = it.key();
-            const QRect& rect = it.value()->rect();
+            const QRect& rect         = it.value()->rect();
             mCoordX[pnt.x()].testMinMax(rect.left());
             mCoordX[pnt.x()].testMinMax(rect.right());
             mCoordY[pnt.y()].testMinMax(rect.top());
@@ -897,9 +921,9 @@ namespace hal
         if (!mCoordX.isEmpty())
         {
             auto itx0 = mCoordX.begin();
-            for (auto itx1 = itx0+1; itx1 != mCoordX.end(); ++itx1)
+            for (auto itx1 = itx0 + 1; itx1 != mCoordX.end(); ++itx1)
             {
-                for (int x = itx0.key()+1; x<itx1.key(); x++)
+                for (int x = itx0.key() + 1; x < itx1.key(); x++)
                     mCoordX[x].testMinMax(0);
                 itx0 = itx1;
             }
@@ -907,9 +931,9 @@ namespace hal
         if (!mCoordY.isEmpty())
         {
             auto ity0 = mCoordY.begin();
-            for (auto ity1 = ity0+1; ity1 != mCoordY.end(); ++ity1)
+            for (auto ity1 = ity0 + 1; ity1 != mCoordY.end(); ++ity1)
             {
-                for (int y = ity0.key()+1; y<ity1.key(); y++)
+                for (int y = ity0.key() + 1; y < ity1.key(); y++)
                     mCoordY[y].testMinMax(0);
                 ity0 = ity1;
             }
@@ -1035,87 +1059,91 @@ namespace hal
 
     void GraphLayouter::calculateJunctionMinDistance()
     {
-        for (auto itJun = mJunctionHash.constBegin();
-             itJun!=mJunctionHash.constEnd(); ++itJun)
+        for (auto itJun = mJunctionHash.constBegin(); itJun != mJunctionHash.constEnd(); ++itJun)
         {
-            const NetLayoutPoint& pnt0 = itJun.key();
-            NetLayoutPoint pnt1 = pnt0 + QPoint(0,1);
+            const NetLayoutPoint& pnt0  = itJun.key();
+            NetLayoutPoint pnt1         = pnt0 + QPoint(0, 1);
             const NetLayoutJunction* j1 = mJunctionHash.value(pnt1);
-            if (!j1) continue;
+            if (!j1)
+                continue;
             const NetLayoutJunction* j0 = itJun.value();
-            auto itEdp = mEndpointHash.find(pnt1.isEndpoint()? pnt1 : pnt0);
-            if (itEdp == mEndpointHash.constEnd()) continue;
+            auto itEdp                  = mEndpointHash.find(pnt1.isEndpoint() ? pnt1 : pnt0);
+            if (itEdp == mEndpointHash.constEnd())
+                continue;
             float minDistance = 0;
-            int iy = pnt1.y();
+            int iy            = pnt1.y();
             if (pnt1.isEndpoint())
             {
                 // net junction -> endpoint
-                minDistance = (j0->rect().bottom() + 1) * sLaneSpacing
-                        - itEdp.value().lanePosition(j1->rect().top(),false);
+                minDistance = (j0->rect().bottom() + 1) * sLaneSpacing - itEdp.value().lanePosition(j1->rect().top(), false);
             }
             else
             {
                 // endpoint -> net junction
-                minDistance = itEdp.value().lanePosition(j0->rect().bottom(),false)
-                        + (1-j1->rect().top()) * sLaneSpacing;
+                minDistance = itEdp.value().lanePosition(j0->rect().bottom(), false) + (1 - j1->rect().top()) * sLaneSpacing;
             }
-            if (minDistance > mJunctionMinDistanceY[iy]) mJunctionMinDistanceY[iy] = minDistance;
+            if (minDistance > mJunctionMinDistanceY[iy])
+                mJunctionMinDistanceY[iy] = minDistance;
         }
     }
 
     void GraphLayouter::alternateGateOffsets()
     {
-        QHash<int,float> xInputPadding;
-        QHash<int,float> xOutputPadding;
+        QHash<int, float> xInputPadding;
+        QHash<int, float> xOutputPadding;
         for (auto itSep = mSeparatedWidth.constBegin(); itSep != mSeparatedWidth.constEnd(); itSep++)
         {
             NetLayoutJunction* jx = mJunctionHash.value(itSep.key());
-            if (!jx) continue;
-            int ix = itSep.key().x();
+            if (!jx)
+                continue;
+            int ix     = itSep.key().x();
             float xinp = jx->rect().right() * sLaneSpacing + itSep.value().mInputSpace;
             float xout = itSep.value().mOutputSpace - jx->rect().left() * sLaneSpacing;
-            if (xinp > xInputPadding[ix])  xInputPadding[ix] = xinp;
-            if (xout > xOutputPadding[ix]) xOutputPadding[ix] = xout;
+            if (xinp > xInputPadding[ix])
+                xInputPadding[ix] = xinp;
+            if (xout > xOutputPadding[ix])
+                xOutputPadding[ix] = xout;
         }
 
         int ix0 = mNodeBoundingBox.x();
 
         float x0 = mCoordX[ix0].preLanes() * sLaneSpacing + sHRoadPadding;
-        if (!mGlobalInputHash.isEmpty()) x0 += 50;
+        if (!mGlobalInputHash.isEmpty())
+            x0 += 50;
         mCoordX[ix0].setOffset(x0);
         mCoordX[ix0].setPadding(xInputPadding[ix0]);
 
         mXValues.append(mCoordX.value(ix0).xBoxOffset());
 
         auto itxLast = mCoordX.begin();
-        for(auto itNext = itxLast + 1; itNext!= mCoordX.end(); ++itNext)
+        for (auto itNext = itxLast + 1; itNext != mCoordX.end(); ++itNext)
         {
-            ix0 = itxLast.key();
-            int ix1 = itNext.key();
+            ix0        = itxLast.key();
+            int ix1    = itNext.key();
             float xsum = 0;
 
             // loop in case that we span several columns
-            for (int ix=ix0; ix<ix1;ix++)
+            for (int ix = ix0; ix < ix1; ix++)
             {
                 auto xn = mMaxNodeWidthForX.find(ix);
                 if (xn != mMaxNodeWidthForX.end())
                     xsum += xn.value();
             }
-            itNext->setOffsetX(itxLast.value(), xsum + 2*sHRoadPadding, xOutputPadding[ix1], xInputPadding[ix1]);
+            itNext->setOffsetX(itxLast.value(), xsum + 2 * sHRoadPadding, xOutputPadding[ix1], xInputPadding[ix1]);
             mXValues.append(itNext.value().xBoxOffset());
             itxLast = itNext;
         }
 
-        int iy0 = mNodeBoundingBox.y()*2;
+        int iy0  = mNodeBoundingBox.y() * 2;
         float y0 = mCoordY[iy0].preLanes() * sLaneSpacing + sVRoadPadding;
         mCoordY[iy0].setOffset(y0);
         mYValues.append(mCoordY.value(iy0).lanePosition(0));
         auto ityLast = mCoordY.begin();
-        for(auto itNext = ityLast + 1; itNext!= mCoordY.end(); ++itNext)
+        for (auto itNext = ityLast + 1; itNext != mCoordY.end(); ++itNext)
         {
-            iy0 = ityLast.key();
+            iy0     = ityLast.key();
             int iy1 = itNext.key();
-            Q_ASSERT(iy1 == iy0+1);
+            Q_ASSERT(iy1 == iy0 + 1);
             if (iy0 % 2 != 0)
             {
                 // netjunction -> endpoint
@@ -1126,7 +1154,7 @@ namespace hal
             {
                 // endpoint -> netjunction
                 float ydelta = sVRoadPadding;
-                auto yn = mMaxNodeHeightForY.find(iy0/2);
+                auto yn      = mMaxNodeHeightForY.find(iy0 / 2);
                 if (yn != mMaxNodeHeightForY.constEnd())
                     ydelta += yn.value();
                 itNext->setOffsetYej(ityLast.value(), ydelta, mJunctionMinDistanceY.value(iy1));
@@ -1180,27 +1208,26 @@ namespace hal
     {
         for (const NodeBox* box : mBoxes)
         {
-            box->item()->setPos(mCoordX[box->x()].xBoxOffset(),
-                             mCoordY[box->y()*2].lanePosition(0));
+            box->item()->setPos(mCoordX[box->x()].xBoxOffset(), mCoordY[box->y() * 2].lanePosition(0));
             mScene->addGraphItem(box->item());
 
-            NetLayoutPoint outPnt(box->x()+1,box->y()*2);
-            QPointF outPos = box->item()->endpointPositionByIndex(0,false);
+            NetLayoutPoint outPnt(box->x() + 1, box->y() * 2);
+            QPointF outPos = box->item()->endpointPositionByIndex(0, false);
             mEndpointHash[outPnt].setOutputPosition(outPos);
 
-            NetLayoutPoint inPnt(box->x(),box->y()*2);
-            QPointF inPos = box->item()->endpointPositionByIndex(0,true);
+            NetLayoutPoint inPnt(box->x(), box->y() * 2);
+            QPointF inPos = box->item()->endpointPositionByIndex(0, true);
             mEndpointHash[inPnt].setInputPosition(inPos);
         }
 
         /// place endpoints which are not connected to any box
         for (auto itEp = mEndpointHash.begin(); itEp != mEndpointHash.end(); ++itEp)
         {
-            if (itEp.value().lanePosition(0,true) <= 0)
+            if (itEp.value().lanePosition(0, true) <= 0)
             {
                 float px = mCoordX[itEp.key().x()].lanePosition(-1);
                 float py = mCoordY[itEp.key().y()].lanePosition(0);
-                itEp->setOutputPosition(QPointF(px,py));
+                itEp->setOutputPosition(QPointF(px, py));
             }
         }
     }
@@ -1217,18 +1244,18 @@ namespace hal
     void GraphLayouter::alternateDrawNets()
     {
         // lane for given wire and net id
-        QHash<u32,QHash<NetLayoutWire,int>> laneMap;
+        QHash<u32, QHash<NetLayoutWire, int>> laneMap;
 
-        for (auto it=mWireHash.constBegin(); it!=mWireHash.constEnd(); ++it)
+        for (auto it = mWireHash.constBegin(); it != mWireHash.constEnd(); ++it)
         {
             int ilane = 0;
-            for(u32 id : it.value())
-                laneMap[id].insert(it.key(),ilane++);
+            for (u32 id : it.value())
+                laneMap[id].insert(it.key(), ilane++);
         }
 
-        int netCount = mContext->nets().size();
+        int netCount     = mContext->nets().size();
         int percentCount = netCount / 93;
-        int doneCount = 0;
+        int doneCount    = 0;
 
         for (const u32 id : mContext->nets())
         {
@@ -1239,57 +1266,54 @@ namespace hal
                     mContext->layoutProgress(6 + doneCount / percentCount);
             }
             else
-                mContext->layoutProgress(6 + (int) floor(93. * doneCount / netCount));
+                mContext->layoutProgress(6 + (int)floor(93. * doneCount / netCount));
 
             Net* n = gNetlist->get_net_by_id(id);
-            if (!n) continue;
+            if (!n)
+                continue;
 
             const EndpointList& epl = mWireEndpoint.value(id);
-            bool regularNet = false;
+            bool regularNet         = false;
 
-            switch(epl.netType())
+            switch (epl.netType())
             {
-            case EndpointList::NoEndpoint:
-                break;
-            case EndpointList::SingleSource:
-            case EndpointList::SingleDestination:
-            case EndpointList::ConstantLevel:
-                drawNetsIsolated(id,n,epl);
-                break;;
-            default:
-                regularNet = true;
-                break;
+                case EndpointList::NoEndpoint:
+                    break;
+                case EndpointList::SingleSource:
+                case EndpointList::SingleDestination:
+                case EndpointList::ConstantLevel:
+                    drawNetsIsolated(id, n, epl);
+                    break;
+                    ;
+                default:
+                    regularNet = true;
+                    break;
             }
-
 
             if (!regularNet)
                 continue;
 
             StandardGraphicsNet::Lines lines;
 
-            const QHash<NetLayoutWire,int>& wMap = laneMap.value(id);
-            for (auto it=wMap.constBegin(); it!=wMap.constEnd(); ++it)
+            const QHash<NetLayoutWire, int>& wMap = laneMap.value(id);
+            for (auto it = wMap.constBegin(); it != wMap.constEnd(); ++it)
             {
                 NetLayoutPoint wFromPoint = it.key().endPoint(NetLayoutWire::SourcePoint);
                 NetLayoutPoint wToPoint   = it.key().endPoint(NetLayoutWire::DestinationPoint);
-                NetLayoutJunction* j0 = mJunctionHash.value(wFromPoint);
-                NetLayoutJunction* j1 = mJunctionHash.value(wToPoint);
-                int ilane = it.value();
-                int ix0 = wFromPoint.x();
-                int iy0 = wFromPoint.y();
-                int ix1 = wToPoint.x();
-                int iy1 = wToPoint.y();
+                NetLayoutJunction* j0     = mJunctionHash.value(wFromPoint);
+                NetLayoutJunction* j1     = mJunctionHash.value(wToPoint);
+                int ilane                 = it.value();
+                int ix0                   = wFromPoint.x();
+                int iy0                   = wFromPoint.y();
+                int ix1                   = wToPoint.x();
+                int iy1                   = wToPoint.y();
 
                 if (it.key().isHorizontal())
                 {
-                    float x0 = j0
-                            ? mCoordX[ix0].lanePosition(j0->rect().right())
-                            : mCoordX[ix0].junctionExit();
-                    float x1 = j1
-                            ? mCoordX[ix1].lanePosition(j1->rect().left())
-                            : mCoordX[ix1].junctionEntry();
+                    float x0 = j0 ? mCoordX[ix0].lanePosition(j0->rect().right()) : mCoordX[ix0].junctionExit();
+                    float x1 = j1 ? mCoordX[ix1].lanePosition(j1->rect().left()) : mCoordX[ix1].junctionEntry();
                     float yy = mCoordY[iy0].lanePosition(ilane);
-                    lines.appendHLine(x0,x1,yy);
+                    lines.appendHLine(x0, x1, yy);
                 }
                 else
                 {
@@ -1299,89 +1323,77 @@ namespace hal
                     {
                         // netjunction -> endpoint
                         auto itEpc = mEndpointHash.find(wToPoint);
-                        y0 = j0
-                                ? mCoordY[iy0].lanePosition(j0->rect().bottom())
-                                : mCoordY[iy0].junctionExit();
-                        y1 = itEpc != mEndpointHash.constEnd()
-                                ? itEpc.value().lanePosition(j1->rect().top(),true)
-                                : mCoordY[iy1].junctionEntry();
-//                        if (itEpc==mEndpointHash.constEnd())
-//                            qDebug() << "xxx to endp" << wToPoint.x() << wToPoint.y() << y0 << y1;
+                        y0         = j0 ? mCoordY[iy0].lanePosition(j0->rect().bottom()) : mCoordY[iy0].junctionExit();
+                        y1         = itEpc != mEndpointHash.constEnd() ? itEpc.value().lanePosition(j1->rect().top(), true) : mCoordY[iy1].junctionEntry();
+                        //                        if (itEpc==mEndpointHash.constEnd())
+                        //                            qDebug() << "xxx to endp" << wToPoint.x() << wToPoint.y() << y0 << y1;
                     }
                     else
                     {
                         // endpoint -> netjunction
                         auto itEpc = mEndpointHash.find(wFromPoint);
-                        y0 = itEpc != mEndpointHash.constEnd()
-                                ? itEpc.value().lanePosition(j0->rect().bottom(),true)
-                                : mCoordY[iy0].junctionExit();
-                        y1 = j1
-                                ? mCoordY[iy1].lanePosition(j1->rect().top())
-                                : mCoordY[iy1].junctionEntry();
-//                        if (itEpc==mEndpointHash.constEnd())
-//                            qDebug() << "xxx fr endp" << wFromPoint.x() << wFromPoint.y() << y0 << y1;
+                        y0         = itEpc != mEndpointHash.constEnd() ? itEpc.value().lanePosition(j0->rect().bottom(), true) : mCoordY[iy0].junctionExit();
+                        y1         = j1 ? mCoordY[iy1].lanePosition(j1->rect().top()) : mCoordY[iy1].junctionEntry();
+                        //                        if (itEpc==mEndpointHash.constEnd())
+                        //                            qDebug() << "xxx fr endp" << wFromPoint.x() << wFromPoint.y() << y0 << y1;
                     }
                     if (y1 > y0)
-                        lines.appendVLine(xx,y0,y1);
+                        lines.appendVLine(xx, y0, y1);
                 }
             }
-            drawNetsJunction(lines,id);
-            drawNetsEndpoint(lines,id);
+            drawNetsJunction(lines, id);
+            drawNetsEndpoint(lines, id);
 
             lines.mergeLines();
 
             GraphicsNet* graphicsNet = nullptr;
-            switch (epl.netType()) {
-            case EndpointList::MultipleDestination:
+            switch (epl.netType())
             {
-                StandardArrowNet* san = new StandardArrowNet(n, lines);
-                graphicsNet = san;
-                int yGridPos = mGlobalInputHash.value(id,-1);
-                Q_ASSERT(yGridPos >= 0);
-                const EndpointCoordinate& epc = mEndpointHash.value(QPoint(mNodeBoundingBox.left(),yGridPos*2));
-                san->setInputPosition(QPointF(mCoordX.value(mNodeBoundingBox.left()).lanePosition(-1),epc.lanePosition(0,true)));
-            }
+                case EndpointList::MultipleDestination: {
+                    StandardArrowNet* san = new StandardArrowNet(n, lines);
+                    graphicsNet           = san;
+                    int yGridPos          = mGlobalInputHash.value(id, -1);
+                    Q_ASSERT(yGridPos >= 0);
+                    const EndpointCoordinate& epc = mEndpointHash.value(QPoint(mNodeBoundingBox.left(), yGridPos * 2));
+                    san->setInputPosition(QPointF(mCoordX.value(mNodeBoundingBox.left()).lanePosition(-1), epc.lanePosition(0, true)));
+                }
                 break;
-            case EndpointList::MultipleSource:
-            {
-                StandardArrowNet* san = new StandardArrowNet(n, lines);
-                graphicsNet = san;
-                int yGridPos = mGlobalOutputHash.value(id,-1);
-                Q_ASSERT(yGridPos >= 0);
-                QPoint pnt(mNodeBoundingBox.right()+1,yGridPos*2);
-                const EndpointCoordinate& epc = mEndpointHash.value(pnt);
-                const NetLayoutJunction* nlj = mJunctionHash.value(pnt);
-                Q_ASSERT(nlj);
-                san->setOutputPosition(QPointF(mCoordX.value(pnt.x()).lanePosition(nlj->rect().right()+1),
-                                               epc.lanePosition(0,true)));
-            }
+                case EndpointList::MultipleSource: {
+                    StandardArrowNet* san = new StandardArrowNet(n, lines);
+                    graphicsNet           = san;
+                    int yGridPos          = mGlobalOutputHash.value(id, -1);
+                    Q_ASSERT(yGridPos >= 0);
+                    QPoint pnt(mNodeBoundingBox.right() + 1, yGridPos * 2);
+                    const EndpointCoordinate& epc = mEndpointHash.value(pnt);
+                    const NetLayoutJunction* nlj  = mJunctionHash.value(pnt);
+                    Q_ASSERT(nlj);
+                    san->setOutputPosition(QPointF(mCoordX.value(pnt.x()).lanePosition(nlj->rect().right() + 1), epc.lanePosition(0, true)));
+                }
                 break;
-            case EndpointList::SourceAndDestination:
-                if (lines.nLines() > 0)
-                    graphicsNet = new StandardGraphicsNet(n, lines);
-                break;
-            default:
-                Q_ASSERT(0 > 1); // should never occur
-                break;
+                case EndpointList::SourceAndDestination:
+                    if (lines.nLines() > 0)
+                        graphicsNet = new StandardGraphicsNet(n, lines);
+                    break;
+                default:
+                    Q_ASSERT(0 > 1);    // should never occur
+                    break;
             }
 
             if (graphicsNet)
                 mScene->addGraphItem(graphicsNet);
-
         }
     }
 
-    void GraphLayouter::drawNetsIsolated(u32 id, Net* n, const EndpointList &epl)
+    void GraphLayouter::drawNetsIsolated(u32 id, Net* n, const EndpointList& epl)
     {
-        SeparatedGraphicsNet* net_item = epl.netType() == EndpointList::ConstantLevel
-                ? static_cast<SeparatedGraphicsNet*>(new LabeledSeparatedNet(n,QString::fromStdString(n->get_name())))
-                : static_cast<SeparatedGraphicsNet*>(new ArrowSeparatedNet(n));
+        SeparatedGraphicsNet* net_item = epl.netType() == EndpointList::ConstantLevel ? static_cast<SeparatedGraphicsNet*>(new LabeledSeparatedNet(n, QString::fromStdString(n->get_name())))
+                                                                                      : static_cast<SeparatedGraphicsNet*>(new ArrowSeparatedNet(n));
 
         int ipnt = 0;
         for (const NetLayoutPoint& pnt : epl)
         {
             bool isInput = epl.isInput(ipnt++);
-            auto itPnt = mEndpointHash.find(pnt);
+            auto itPnt   = mEndpointHash.find(pnt);
             Q_ASSERT(itPnt != mEndpointHash.constEnd());
             if (isInput)
             {
@@ -1389,12 +1401,12 @@ namespace hal
                 const NodeBox* nbox = mBoxes.boxForPoint(pnt.gridPoint());
                 Q_ASSERT(nbox);
                 QList<u32> inpList = nbox->item()->inputNets();
-                for (int jnx=0; jnx<inpList.size(); jnx++)
+                for (int jnx = 0; jnx < inpList.size(); jnx++)
                 {
                     u32 inpNetId = inpList.at(jnx);
-                    if (inpNetId!=id) continue;
-                    QPointF inpPnt(itPnt.value().xInput(),
-                                   itPnt.value().lanePosition(jnx,true));
+                    if (inpNetId != id)
+                        continue;
+                    QPointF inpPnt(itPnt.value().xInput(), itPnt.value().lanePosition(jnx, true));
                     net_item->addInput(inpPnt);
                 }
             }
@@ -1402,8 +1414,7 @@ namespace hal
             {
                 for (int inx : itPnt.value().outputPinIndex(id))
                 {
-                    QPointF outPnt(itPnt.value().xOutput(),
-                                   itPnt.value().lanePosition(inx,true));
+                    QPointF outPnt(itPnt.value().xOutput(), itPnt.value().lanePosition(inx, true));
                     net_item->addOutput(outPnt);
                 }
             }
@@ -1412,20 +1423,21 @@ namespace hal
         mScene->addGraphItem(net_item);
     }
 
-    void GraphLayouter::drawNetsEndpoint(StandardGraphicsNet::Lines &lines, u32 id)
+    void GraphLayouter::drawNetsEndpoint(StandardGraphicsNet::Lines& lines, u32 id)
     {
-        for (auto it=mEndpointHash.constBegin(); it!=mEndpointHash.constEnd(); ++it)
+        for (auto it = mEndpointHash.constBegin(); it != mEndpointHash.constEnd(); ++it)
         {
             const EndpointCoordinate& epc = it.value();
 
             QList<int> inputsById  = epc.inputPinIndex(id);
             QList<int> outputsById = epc.outputPinIndex(id);
-            if (inputsById.isEmpty() && outputsById.isEmpty()) continue;
+            if (inputsById.isEmpty() && outputsById.isEmpty())
+                continue;
 
-            const NetLayoutJunction* nlj = mJunctionHash.value(it.key());
+            const NetLayoutJunction* nlj     = mJunctionHash.value(it.key());
             const SceneCoordinate& xScenePos = mCoordX.value(it.key().x());
-            float xjLeft  = xScenePos.lanePosition(nlj->rect().left());
-            float xjRight = xScenePos.lanePosition(nlj->rect().right());
+            float xjLeft                     = xScenePos.lanePosition(nlj->rect().left());
+            float xjRight                    = xScenePos.lanePosition(nlj->rect().right());
             Q_ASSERT(nlj);
 
             for (int inpInx : inputsById)
@@ -1434,43 +1446,40 @@ namespace hal
                 {
                     // don't complain if "input" is in fact global output pin
                     auto ityOut = mGlobalOutputHash.find(id);
-                    if (ityOut == mGlobalOutputHash.constEnd() ||
-                            QPoint(mNodeBoundingBox.right()+1, 2*ityOut.value()) != it.key())
-                        qDebug() << "cannot connect input pin" << id << it.key().x() << it.key().y()/2 << xjRight << epc.xInput();
+                    if (ityOut == mGlobalOutputHash.constEnd() || QPoint(mNodeBoundingBox.right() + 1, 2 * ityOut.value()) != it.key())
+                        qDebug() << "cannot connect input pin" << id << it.key().x() << it.key().y() / 2 << xjRight << epc.xInput();
                 }
                 else
-                    lines.appendHLine(xjRight, epc.xInput(), epc.lanePosition(inpInx,true));
+                    lines.appendHLine(xjRight, epc.xInput(), epc.lanePosition(inpInx, true));
             }
             for (int outInx : outputsById)
             {
                 if (epc.xOutput() >= xjLeft)
-                    qDebug() << "cannot connect output pin" << id << it.key().x() << it.key().y()/2 << xjLeft << epc.xOutput();
+                    qDebug() << "cannot connect output pin" << id << it.key().x() << it.key().y() / 2 << xjLeft << epc.xOutput();
                 else
-                    lines.appendHLine(epc.xOutput(), xjLeft, epc.lanePosition(outInx,true));
+                    lines.appendHLine(epc.xOutput(), xjLeft, epc.lanePosition(outInx, true));
             }
         }
     }
 
     void GraphLayouter::drawNetsJunction(StandardGraphicsNet::Lines& lines, u32 id)
     {
-        for (auto jt = mJunctionHash.constBegin(); jt!=mJunctionHash.constEnd(); ++jt)
+        for (auto jt = mJunctionHash.constBegin(); jt != mJunctionHash.constEnd(); ++jt)
         {
-            auto epcIt = mEndpointHash.find(jt.key());
-            int x = jt.key().x();
-            int y = jt.key().y();
-            bool isEndpoint = (y%2 == 0);
+            auto epcIt      = mEndpointHash.find(jt.key());
+            int x           = jt.key().x();
+            int y           = jt.key().y();
+            bool isEndpoint = (y % 2 == 0);
 
             for (const NetLayoutJunctionWire& jw : jt.value()->netById(id).mWires)
             {
-                if (jw.mHorizontal==0)
+                if (jw.mHorizontal == 0)
                 {
                     Q_ASSERT(epcIt != mEndpointHash.constEnd() || !isEndpoint);
                     float x0 = mCoordX.value(x).lanePosition(jw.mFirst);
                     float x1 = mCoordX.value(x).lanePosition(jw.mLast);
-                    float yy = isEndpoint
-                            ? epcIt.value().lanePosition(jw.mRoad,true)
-                            : mCoordY.value(y).lanePosition(jw.mRoad);
-                    lines.appendHLine(x0,x1,yy);
+                    float yy = isEndpoint ? epcIt.value().lanePosition(jw.mRoad, true) : mCoordY.value(y).lanePosition(jw.mRoad);
+                    lines.appendHLine(x0, x1, yy);
                 }
                 else
                 {
@@ -1482,17 +1491,18 @@ namespace hal
                     }
                     else if (epcIt != mEndpointHash.constEnd())
                     {
-                        y0 = epcIt.value().lanePosition(jw.mFirst,true);
-                        y1 = epcIt.value().lanePosition(jw.mLast,true);
+                        y0 = epcIt.value().lanePosition(jw.mFirst, true);
+                        y1 = epcIt.value().lanePosition(jw.mLast, true);
                     }
                     else
                     {
                         y0 = mCoordY.value(y).junctionEntry();
                         y1 = mCoordY.value(y).junctionExit();
-                        if (y1 <= y0) y1 = y0 + 1;
+                        if (y1 <= y0)
+                            y1 = y0 + 1;
                     }
                     float xx = mCoordX.value(x).lanePosition(jw.mRoad);
-                    lines.appendVLine(xx,y0,y1);
+                    lines.appendVLine(xx, y0, y1);
                 }
             }
         }
@@ -1525,8 +1535,7 @@ namespace hal
                         const NodeBox* nb = mBoxes.boxForNode(node);
                         if (nb && !outputAssigned.contains(nb))
                         {
-                            net_item->addOutput(nb->item()->getOutputScenePosition(n->get_id(),
-                                                 QString::fromStdString(src->get_pin())));
+                            net_item->addOutput(nb->item()->getOutputScenePosition(n->get_id(), QString::fromStdString(src->get_pin()->get_name())));
                             outputAssigned.insert(nb);
                         }
                     }
@@ -1546,8 +1555,7 @@ namespace hal
                         const NodeBox* nb = mBoxes.boxForNode(node);
                         if (nb && !inputAssigned.contains(nb))
                         {
-                            net_item->addInput(nb->item()->getInputScenePosition(n->get_id(),
-                                                QString::fromStdString(dst->get_pin())));
+                            net_item->addInput(nb->item()->getInputScenePosition(n->get_id(), QString::fromStdString(dst->get_pin()->get_name())));
                             inputAssigned.insert(nb);
                         }
                     }
@@ -1572,8 +1580,7 @@ namespace hal
                     {
                         const NodeBox* nb = mBoxes.boxForNode(node);
                         if (nb)
-                            net_item->addOutput(nb->item()->getOutputScenePosition(n->get_id(),
-                                                 QString::fromStdString(src->get_pin())));
+                            net_item->addOutput(nb->item()->getOutputScenePosition(n->get_id(), QString::fromStdString(src->get_pin()->get_name())));
                     }
                 }
 
@@ -1586,8 +1593,7 @@ namespace hal
 
                     const NodeBox* nb = mBoxes.boxForNode(node);
                     if (nb)
-                        net_item->addInput(nb->item()->getInputScenePosition(n->get_id(),
-                                            QString::fromStdString(dst->get_pin())));
+                        net_item->addInput(nb->item()->getInputScenePosition(n->get_id(), QString::fromStdString(dst->get_pin()->get_name())));
                 }
 
                 net_item->finalize();
@@ -1599,22 +1605,24 @@ namespace hal
             // incomplete_net: existing destination or source of net not visible
             // bool incomplete_net = false;
 
-            bool src_found      = false;
-            bool dst_found      = false;
+            bool src_found = false;
+            bool dst_found = false;
 
             for (Endpoint* src : n->get_sources())
             {
                 Node node = mContext->nodeForGate(src->get_gate()->get_id());
 
-                if (!node.isNull()) src_found = true;
-                 //   else incomplete_net = true;
+                if (!node.isNull())
+                    src_found = true;
+                //   else incomplete_net = true;
             }
 
             for (Endpoint* dst : n->get_destinations())
             {
                 Node node = mContext->nodeForGate(dst->get_gate()->get_id());
 
-                if (!node.isNull()) dst_found = true;
+                if (!node.isNull())
+                    dst_found = true;
                 //    else incomplete_net = true;
             }
 
@@ -1631,8 +1639,7 @@ namespace hal
 
                     const NodeBox* nb = mBoxes.boxForNode(node);
                     if (nb)
-                        net_item->addOutput(nb->item()->getOutputScenePosition(n->get_id(),
-                                             QString::fromStdString(src->get_pin())));
+                        net_item->addOutput(nb->item()->getOutputScenePosition(n->get_id(), QString::fromStdString(src->get_pin()->get_name())));
                 }
 
                 net_item->finalize();
@@ -1654,7 +1661,7 @@ namespace hal
 
                     const NodeBox* nb = mBoxes.boxForNode(node);
                     if (nb)
-                        net_item->addInput(nb->item()->getInputScenePosition(n->get_id(), QString::fromStdString(dst->get_pin())));
+                        net_item->addInput(nb->item()->getInputScenePosition(n->get_id(), QString::fromStdString(dst->get_pin()->get_name())));
                 }
 
                 net_item->finalize();
@@ -1679,11 +1686,12 @@ namespace hal
                         continue;
 
                     const NodeBox* nb = mBoxes.boxForNode(node);
-                    if (nb) src_box = nb;
+                    if (nb)
+                        src_box = nb;
                 }
                 assert(src_box);
 
-                const QPointF src_pin_position = src_box->item()->getOutputScenePosition(n->get_id(), QString::fromStdString(src->get_pin()));
+                const QPointF src_pin_position = src_box->item()->getOutputScenePosition(n->get_id(), QString::fromStdString(src->get_pin()->get_name()));
 
                 // FOR EVERY DST
                 for (Endpoint* dst : n->get_destinations())
@@ -1697,7 +1705,8 @@ namespace hal
                         continue;
 
                     const NodeBox* nb = mBoxes.boxForNode(node);
-                    if (nb) dst_box = nb;
+                    if (nb)
+                        dst_box = nb;
 
                     assert(dst_box);
 
@@ -1707,7 +1716,7 @@ namespace hal
                     if (src_box == dst_box && src_box->type() == Node::Module)
                         continue;
 
-                    QPointF dst_pin_position = dst_box->item()->getInputScenePosition(n->get_id(), QString::fromStdString(dst->get_pin()));
+                    QPointF dst_pin_position = dst_box->item()->getInputScenePosition(n->get_id(), QString::fromStdString(dst->get_pin()->get_name()));
 
                     // ROAD BASED DISTANCE (x_distance - 1)
                     const int x_distance = dst_box->x() - src_box->x() - 1;
@@ -2290,7 +2299,7 @@ namespace hal
 
     bool GraphLayouter::boxExists(const int x, const int y) const
     {
-        return mBoxes.boxForPoint(QPoint(x,y)) != nullptr;
+        return mBoxes.boxForPoint(QPoint(x, y)) != nullptr;
     }
 
     bool GraphLayouter::hRoadJumpPossible(const int x, const int y1, const int y2) const
@@ -2363,31 +2372,31 @@ namespace hal
 
     GraphLayouter::Road* GraphLayouter::getHRoad(const int x, const int y)
     {
-        QPoint p(x,y);
+        QPoint p(x, y);
         auto it = mHRoads.find(p);
         if (it != mHRoads.end())
             return it.value();
 
         GraphLayouter::Road* r = new Road(x, y);
-        mHRoads.insert(p,r);
+        mHRoads.insert(p, r);
         return r;
     }
 
     GraphLayouter::Road* GraphLayouter::getVRoad(const int x, const int y)
     {
-        QPoint p(x,y);
+        QPoint p(x, y);
         auto it = mVRoads.find(p);
         if (it != mVRoads.end())
             return it.value();
 
         GraphLayouter::Road* r = new Road(x, y);
-        mVRoads.insert(p,r);
+        mVRoads.insert(p, r);
         return r;
     }
 
     GraphLayouter::Junction* GraphLayouter::getJunction(const int x, const int y)
     {
-        QPoint p(x,y);
+        QPoint p(x, y);
         auto it = mJunctions.find(p);
         if (it != mJunctions.end())
         {
@@ -2395,7 +2404,7 @@ namespace hal
         }
 
         GraphLayouter::Junction* j = new Junction(x, y);
-        mJunctions.insert(p,j);
+        mJunctions.insert(p, j);
         return j;
     }
 
@@ -2453,11 +2462,9 @@ namespace hal
         assert(mNodeOffsetForX.contains(channel_x) || mNodeOffsetForX.contains(channel_x - 1));
 
         if (mNodeOffsetForX.contains(channel_x))
-            return mNodeOffsetForX.value(channel_x) - mMaxVChannelWidthForX.value(channel_x) + mMaxVChannelLeftSpacingForX.value(channel_x) - sJunctionPadding
-                   - lane_change * sLaneSpacing;
+            return mNodeOffsetForX.value(channel_x) - mMaxVChannelWidthForX.value(channel_x) + mMaxVChannelLeftSpacingForX.value(channel_x) - sJunctionPadding - lane_change * sLaneSpacing;
         else
-            return mNodeOffsetForX.value(channel_x - 1) + mMaxNodeWidthForX.value(channel_x - 1) + mMaxVChannelLeftSpacingForX.value(channel_x) - sJunctionPadding
-                   - lane_change * sLaneSpacing;
+            return mNodeOffsetForX.value(channel_x - 1) + mMaxNodeWidthForX.value(channel_x - 1) + mMaxVChannelLeftSpacingForX.value(channel_x) - sJunctionPadding - lane_change * sLaneSpacing;
     }
 
     qreal GraphLayouter::sceneXForFarLeftLaneChange(const int channel_x, unsigned int lane_change) const
@@ -2466,11 +2473,11 @@ namespace hal
         assert(mNodeOffsetForX.contains(channel_x) || mNodeOffsetForX.contains(channel_x - 1));
 
         if (mNodeOffsetForX.contains(channel_x))
-            return mNodeOffsetForX.value(channel_x) - mMaxVChannelWidthForX.value(channel_x) + mMaxVChannelLeftSpacingForX.value(channel_x)
-                   - mMaxLeftJunctionSpacingForX.value(channel_x) + lane_change * sLaneSpacing;
+            return mNodeOffsetForX.value(channel_x) - mMaxVChannelWidthForX.value(channel_x) + mMaxVChannelLeftSpacingForX.value(channel_x) - mMaxLeftJunctionSpacingForX.value(channel_x)
+                   + lane_change * sLaneSpacing;
         else
-            return mNodeOffsetForX.value(channel_x - 1) + mMaxNodeWidthForX.value(channel_x - 1) + mMaxVChannelLeftSpacingForX.value(channel_x)
-                   - mMaxLeftJunctionSpacingForX.value(channel_x) + lane_change * sLaneSpacing;
+            return mNodeOffsetForX.value(channel_x - 1) + mMaxNodeWidthForX.value(channel_x - 1) + mMaxVChannelLeftSpacingForX.value(channel_x) - mMaxLeftJunctionSpacingForX.value(channel_x)
+                   + lane_change * sLaneSpacing;
     }
 
     qreal GraphLayouter::sceneXForCloseRightLaneChange(const int channel_x, unsigned int lane_change) const
@@ -2481,8 +2488,8 @@ namespace hal
         if (mNodeOffsetForX.contains(channel_x))
             return mNodeOffsetForX.value(channel_x) - mMaxVChannelRightSpacingForX.value(channel_x) + sJunctionPadding + lane_change * sLaneSpacing;
         else
-            return mNodeOffsetForX.value(channel_x - 1) + mMaxNodeWidthForX.value(channel_x - 1) + mMaxVChannelWidthForX.value(channel_x)
-                   - mMaxVChannelRightSpacingForX.value(channel_x) + sJunctionPadding + lane_change * sLaneSpacing;
+            return mNodeOffsetForX.value(channel_x - 1) + mMaxNodeWidthForX.value(channel_x - 1) + mMaxVChannelWidthForX.value(channel_x) - mMaxVChannelRightSpacingForX.value(channel_x)
+                   + sJunctionPadding + lane_change * sLaneSpacing;
     }
 
     qreal GraphLayouter::sceneXForFarRightLaneChange(const int channel_x, unsigned int lane_change) const
@@ -2493,30 +2500,28 @@ namespace hal
         if (mNodeOffsetForX.contains(channel_x))
             return mNodeOffsetForX.value(channel_x) - mMaxVChannelRightSpacingForX.value(channel_x) + mMaxRightJunctionSpacingForX.value(channel_x) - lane_change * sLaneSpacing;
         else
-            return mNodeOffsetForX.value(channel_x - 1) + mMaxNodeWidthForX.value(channel_x - 1) + mMaxVChannelWidthForX.value(channel_x)
-                   - mMaxVChannelRightSpacingForX.value(channel_x) + mMaxRightJunctionSpacingForX.value(channel_x) - lane_change * sLaneSpacing;
+            return mNodeOffsetForX.value(channel_x - 1) + mMaxNodeWidthForX.value(channel_x - 1) + mMaxVChannelWidthForX.value(channel_x) - mMaxVChannelRightSpacingForX.value(channel_x)
+                   + mMaxRightJunctionSpacingForX.value(channel_x) - lane_change * sLaneSpacing;
     }
 
     qreal GraphLayouter::sceneYForCloseTopLaneChange(const int channel_y, unsigned int lane_change) const
     {
         // LANE CHANGES COUNTED FROM 0
         if (channel_y == 0)
-            return mNodeOffsetForY.value(channel_y) - mMaxHChannelHeightForY.value(channel_y) + mMaxHChannelTopSpacingForY.value(channel_y) - sJunctionPadding
-                   - lane_change * sLaneSpacing;
+            return mNodeOffsetForY.value(channel_y) - mMaxHChannelHeightForY.value(channel_y) + mMaxHChannelTopSpacingForY.value(channel_y) - sJunctionPadding - lane_change * sLaneSpacing;
         else
-            return mNodeOffsetForY.value(channel_y - 1) + mMaxNodeHeightForY.value(channel_y - 1) + mMaxHChannelTopSpacingForY.value(channel_y) - sJunctionPadding
-                   - lane_change * sLaneSpacing;
+            return mNodeOffsetForY.value(channel_y - 1) + mMaxNodeHeightForY.value(channel_y - 1) + mMaxHChannelTopSpacingForY.value(channel_y) - sJunctionPadding - lane_change * sLaneSpacing;
     }
 
     qreal GraphLayouter::sceneYForFarTopLaneChange(const int channel_y, unsigned int lane_change) const
     {
         // LANE CHANGES COUNTED FROM 0
         if (channel_y == 0)
-            return mNodeOffsetForY.value(channel_y) - mMaxHChannelHeightForY.value(channel_y) + mMaxHChannelTopSpacingForY.value(channel_y)
-                   - mMaxTopJunctionSpacingForY.value(channel_y) + lane_change * sLaneSpacing;
+            return mNodeOffsetForY.value(channel_y) - mMaxHChannelHeightForY.value(channel_y) + mMaxHChannelTopSpacingForY.value(channel_y) - mMaxTopJunctionSpacingForY.value(channel_y)
+                   + lane_change * sLaneSpacing;
         else
-            return mNodeOffsetForY.value(channel_y - 1) + mMaxNodeHeightForY.value(channel_y - 1) + mMaxHChannelTopSpacingForY.value(channel_y)
-                   - mMaxTopJunctionSpacingForY.value(channel_y) + lane_change * sLaneSpacing;
+            return mNodeOffsetForY.value(channel_y - 1) + mMaxNodeHeightForY.value(channel_y - 1) + mMaxHChannelTopSpacingForY.value(channel_y) - mMaxTopJunctionSpacingForY.value(channel_y)
+                   + lane_change * sLaneSpacing;
     }
 
     qreal GraphLayouter::sceneYForCloseBottomLaneChange(const int channel_y, unsigned int lane_change) const
@@ -2525,8 +2530,8 @@ namespace hal
         if (channel_y == 0)
             return mNodeOffsetForY.value(channel_y) - mMaxHChannelBottomSpacingForY.value(channel_y) + sJunctionPadding + lane_change * sLaneSpacing;
         else
-            return mNodeOffsetForY.value(channel_y - 1) + mMaxNodeHeightForY.value(channel_y - 1) + mMaxHChannelHeightForY.value(channel_y)
-                   - mMaxHChannelBottomSpacingForY.value(channel_y) + sJunctionPadding + lane_change * sLaneSpacing;
+            return mNodeOffsetForY.value(channel_y - 1) + mMaxNodeHeightForY.value(channel_y - 1) + mMaxHChannelHeightForY.value(channel_y) - mMaxHChannelBottomSpacingForY.value(channel_y)
+                   + sJunctionPadding + lane_change * sLaneSpacing;
     }
 
     qreal GraphLayouter::sceneYForFarBottomLaneChange(const int channel_y, unsigned int lane_change) const
@@ -2535,8 +2540,8 @@ namespace hal
         if (channel_y == 0)
             return mNodeOffsetForY.value(channel_y) - mMaxHChannelBottomSpacingForY.value(channel_y) + mMaxBottomJunctionSpacingForY.value(channel_y) - lane_change * sLaneSpacing;
         else
-            return mNodeOffsetForY.value(channel_y - 1) + mMaxNodeHeightForY.value(channel_y - 1) + mMaxHChannelHeightForY.value(channel_y)
-                   - mMaxHChannelBottomSpacingForY.value(channel_y) + mMaxBottomJunctionSpacingForY.value(channel_y) - lane_change * sLaneSpacing;
+            return mNodeOffsetForY.value(channel_y - 1) + mMaxNodeHeightForY.value(channel_y - 1) + mMaxHChannelHeightForY.value(channel_y) - mMaxHChannelBottomSpacingForY.value(channel_y)
+                   + mMaxBottomJunctionSpacingForY.value(channel_y) - lane_change * sLaneSpacing;
     }
 
     qreal GraphLayouter::sceneXForCloseLeftLaneChange(const Junction* const j) const
@@ -2603,7 +2608,7 @@ namespace hal
         return sceneYForFarBottomLaneChange(j->y, j->mFarBottomLaneChanges);
     }
 
-    void GraphLayouter::commitUsedPaths(const UsedPaths &used)
+    void GraphLayouter::commitUsedPaths(const UsedPaths& used)
     {
         for (Road* r : used.mHRoads)
             r->mLanes += 1;
@@ -2644,15 +2649,18 @@ namespace hal
 
     void GraphLayouter::SceneCoordinate::testMinMax(int ilane)
     {
-        if (ilane  < minLane) minLane = ilane;
-        if (ilane+1> maxLane) maxLane = ilane+1;
+        if (ilane < minLane)
+            minLane = ilane;
+        if (ilane + 1 > maxLane)
+            maxLane = ilane + 1;
     }
 
     void GraphLayouter::SceneCoordinate::setOffsetX(const SceneCoordinate& previous, float maximumBlock, float sepOut, float sepInp)
     {
-        float delta =  maximumBlock;
-        if (delta < sepOut) delta = sepOut;
-        mOffset = previous.xBoxOffset() + (1 - minLane) * sLaneSpacing  + delta;
+        float delta = maximumBlock;
+        if (delta < sepOut)
+            delta = sepOut;
+        mOffset                  = previous.xBoxOffset() + (1 - minLane) * sLaneSpacing + delta;
         float xDefaultBoxPadding = maxLane * sLaneSpacing;
         if (xDefaultBoxPadding < sepInp)
             mPadding = sepInp - xDefaultBoxPadding;
@@ -2661,14 +2669,16 @@ namespace hal
     void GraphLayouter::SceneCoordinate::setOffsetYje(const SceneCoordinate& previous, float minimumJunction)
     {
         float delta = (previous.maxLane) * sLaneSpacing + sVRoadPadding;
-        if (delta < minimumJunction) delta = minimumJunction;
+        if (delta < minimumJunction)
+            delta = minimumJunction;
         mOffset = previous.mOffset + delta;
     }
 
     void GraphLayouter::SceneCoordinate::setOffsetYej(const SceneCoordinate& previous, float maximumBlock, float minimumJunction)
     {
         float delta = (-minLane - 1) * sLaneSpacing + maximumBlock + sVRoadPadding;
-        if (delta < minimumJunction) delta = minimumJunction;
+        if (delta < minimumJunction)
+            delta = minimumJunction;
         mOffset = previous.mOffset + delta;
     }
 
@@ -2685,15 +2695,18 @@ namespace hal
     float GraphLayouter::EndpointCoordinate::lanePosition(int ilane, bool absolute) const
     {
         float y0 = absolute ? mYoffset : mTopPin;
-        if (ilane < 0) return y0 + ilane * sLaneSpacing;
+        if (ilane < 0)
+            return y0 + ilane * sLaneSpacing;
         int n = numberPins() - 1;
-        if (ilane <= n) return y0 + ilane * mPinDistance;
-        return y0 + n * mPinDistance + (ilane-n) * sLaneSpacing;
+        if (ilane <= n)
+            return y0 + ilane * mPinDistance;
+        return y0 + n * mPinDistance + (ilane - n) * sLaneSpacing;
     }
 
-    GraphLayouter::EndpointCoordinate::EndpointCoordinate()
-        : mYoffset(0), mXoutput(0), mXinput(0), mPinDistance(0), mTopPin(0), mNumberPins(0)
-    {;}
+    GraphLayouter::EndpointCoordinate::EndpointCoordinate() : mYoffset(0), mXoutput(0), mXinput(0), mPinDistance(0), mTopPin(0), mNumberPins(0)
+    {
+        ;
+    }
 
     int GraphLayouter::EndpointCoordinate::numberPins() const
     {
@@ -2709,7 +2722,8 @@ namespace hal
     void GraphLayouter::EndpointCoordinate::setOutputPosition(QPointF p0pos)
     {
         mXoutput = p0pos.x();
-        if (mXinput < mXoutput) mXinput = mXoutput;
+        if (mXinput < mXoutput)
+            mXinput = mXoutput;
         mYoffset = p0pos.y();
     }
 
@@ -2723,58 +2737,68 @@ namespace hal
         return mOutputHash.values(id);
     }
 
-    void GraphLayouter::EndpointCoordinate::setInputPins(const QList<u32> &pinList, float p0dist, float pdist)
+    void GraphLayouter::EndpointCoordinate::setInputPins(const QList<u32>& pinList, float p0dist, float pdist)
     {
         int n = pinList.size();
-        if (n > mNumberPins) mNumberPins = n;
-        for (int i=0; i<n; i++)
+        if (n > mNumberPins)
+            mNumberPins = n;
+        for (int i = 0; i < n; i++)
         {
             u32 id = pinList.at(i);
-            if (id) mInputHash.insert(id,i);
+            if (id)
+                mInputHash.insert(id, i);
         }
-        if (p0dist > mTopPin) mTopPin = p0dist;
+        if (p0dist > mTopPin)
+            mTopPin = p0dist;
         mPinDistance = pdist;
     }
 
     void GraphLayouter::EndpointCoordinate::setOutputPins(const QList<u32>& pinList, float p0dist, float pdist)
     {
         int n = pinList.size();
-        if (n > mNumberPins) mNumberPins = n;
-        for (int i=0; i<n; i++)
+        if (n > mNumberPins)
+            mNumberPins = n;
+        for (int i = 0; i < n; i++)
         {
             u32 id = pinList.at(i);
-            if (id) mOutputHash.insert(id,i);
+            if (id)
+                mOutputHash.insert(id, i);
         }
-        if (p0dist > mTopPin) mTopPin = p0dist;
+        if (p0dist > mTopPin)
+            mTopPin = p0dist;
         mPinDistance = pdist;
     }
 
-    void GraphLayouter::EndpointList::addSource(const NetLayoutPoint &pnt)
+    void GraphLayouter::EndpointList::addSource(const NetLayoutPoint& pnt)
     {
-        mNetType = static_cast<EndpointType>(mNetType | SingleSource);
+        mNetType          = static_cast<EndpointType>(mNetType | SingleSource);
         int existingIndex = indexOf(pnt);
-        if (existingIndex >= 0 && !mPointIsInput.at(existingIndex)) return;
+        if (existingIndex >= 0 && !mPointIsInput.at(existingIndex))
+            return;
         append(pnt);
         mPointIsInput.append(false);
     }
 
-    void GraphLayouter::EndpointList::addDestination(const NetLayoutPoint &pnt)
+    void GraphLayouter::EndpointList::addDestination(const NetLayoutPoint& pnt)
     {
-        mNetType = static_cast<EndpointType>(mNetType | SingleDestination);
+        mNetType          = static_cast<EndpointType>(mNetType | SingleDestination);
         int existingIndex = indexOf(pnt);
-        if (existingIndex >= 0 && mPointIsInput.at(existingIndex)) return;
+        if (existingIndex >= 0 && mPointIsInput.at(existingIndex))
+            return;
         append(pnt);
         mPointIsInput.append(true);
     }
 
     void GraphLayouter::SeparatedNetWidth::requireInputSpace(float spc)
     {
-        if (spc > mInputSpace) mInputSpace = spc;
+        if (spc > mInputSpace)
+            mInputSpace = spc;
     }
 
     void GraphLayouter::SeparatedNetWidth::requireOutputSpace(float spc)
     {
-        if (spc > mOutputSpace) mOutputSpace = spc;
+        if (spc > mOutputSpace)
+            mOutputSpace = spc;
     }
 
     bool GraphLayouter::isConstNet(const Net* n)
@@ -2796,4 +2820,4 @@ namespace hal
     {
         mOptimizeNetLayout = enabled;
     }
-}
+}    // namespace hal

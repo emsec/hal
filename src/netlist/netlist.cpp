@@ -57,8 +57,6 @@ namespace hal
             }
         }
 
-        // gates check included within modules
-
         // modules are checked recursively
         if (*m_top_module != *other.get_top_module())
         {
@@ -103,7 +101,7 @@ namespace hal
         }
     }
 
-    std::string Netlist::get_design_name() const
+    const std::string& Netlist::get_design_name() const
     {
         return m_design_name;
     }
@@ -117,7 +115,7 @@ namespace hal
         }
     }
 
-    std::string Netlist::get_device_name() const
+    const std::string& Netlist::get_device_name() const
     {
         return m_device_name;
     }
@@ -139,6 +137,18 @@ namespace hal
     EventHandler* Netlist::get_event_handler() const
     {
         return m_event_handler.get();
+    }
+
+    Result<std::unique_ptr<Netlist>> Netlist::copy() const
+    {
+        if (auto res = m_manager->copy_netlist(this); res.is_error())
+        {
+            return ERR(res.get_error());
+        }
+        else
+        {
+            return res;
+        }
     }
 
     /*
@@ -387,20 +397,17 @@ namespace hal
         }
         m_global_input_nets.push_back(n);
 
-        // mark module caches as dirty
-        std::unordered_set<Module*> affected_modules;
-        for (Endpoint* ep : n->get_sources())
+        // update internal nets and port nets
+        if (m_manager->m_net_checks_enabled)
         {
-            affected_modules.insert(ep->get_gate()->get_module());
-        }
-        for (Endpoint* ep : n->get_destinations())
-        {
-            affected_modules.insert(ep->get_gate()->get_module());
-        }
-
-        for (Module* m : affected_modules)
-        {
-            m->set_cache_dirty();
+            for (Endpoint* ep : n->get_sources())
+            {
+                m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
+            }
+            for (Endpoint* ep : n->get_destinations())
+            {
+                m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
+            }
         }
 
         m_event_handler->notify(NetlistEvent::event::marked_global_input, this, n->get_id());
@@ -420,20 +427,17 @@ namespace hal
         }
         m_global_output_nets.push_back(n);
 
-        // mark module caches as dirty
-        std::unordered_set<Module*> affected_modules;
-        for (Endpoint* ep : n->get_sources())
+        // update internal nets and port nets
+        if (m_manager->m_net_checks_enabled)
         {
-            affected_modules.insert(ep->get_gate()->get_module());
-        }
-        for (Endpoint* ep : n->get_destinations())
-        {
-            affected_modules.insert(ep->get_gate()->get_module());
-        }
-
-        for (Module* m : affected_modules)
-        {
-            m->set_cache_dirty();
+            for (Endpoint* ep : n->get_sources())
+            {
+                m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
+            }
+            for (Endpoint* ep : n->get_destinations())
+            {
+                m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
+            }
         }
 
         m_event_handler->notify(NetlistEvent::event::marked_global_output, this, n->get_id());
@@ -454,20 +458,17 @@ namespace hal
         }
         m_global_input_nets.erase(it);
 
-        // mark module caches as dirty
-        std::unordered_set<Module*> affected_modules;
-        for (Endpoint* ep : n->get_sources())
+        // update internal nets and port nets
+        if (m_manager->m_net_checks_enabled)
         {
-            affected_modules.insert(ep->get_gate()->get_module());
-        }
-        for (Endpoint* ep : n->get_destinations())
-        {
-            affected_modules.insert(ep->get_gate()->get_module());
-        }
-
-        for (Module* m : affected_modules)
-        {
-            m->set_cache_dirty();
+            for (Endpoint* ep : n->get_sources())
+            {
+                m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
+            }
+            for (Endpoint* ep : n->get_destinations())
+            {
+                m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
+            }
         }
 
         m_event_handler->notify(NetlistEvent::event::unmarked_global_input, this, n->get_id());
@@ -488,20 +489,17 @@ namespace hal
         }
         m_global_output_nets.erase(it);
 
-        // mark module caches as dirty
-        std::unordered_set<Module*> affected_modules;
-        for (Endpoint* ep : n->get_sources())
+        // update internal nets and port nets
+        if (m_manager->m_net_checks_enabled)
         {
-            affected_modules.insert(ep->get_gate()->get_module());
-        }
-        for (Endpoint* ep : n->get_destinations())
-        {
-            affected_modules.insert(ep->get_gate()->get_module());
-        }
-
-        for (Module* m : affected_modules)
-        {
-            m->set_cache_dirty();
+            for (Endpoint* ep : n->get_sources())
+            {
+                m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
+            }
+            for (Endpoint* ep : n->get_destinations())
+            {
+                m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
+            }
         }
 
         m_event_handler->notify(NetlistEvent::event::unmarked_global_output, this, n->get_id());
@@ -526,6 +524,11 @@ namespace hal
     const std::vector<Net*>& Netlist::get_global_output_nets() const
     {
         return m_global_output_nets;
+    }
+
+    void Netlist::enable_automatic_net_checks(bool enable_checks)
+    {
+        m_manager->m_net_checks_enabled = enable_checks;
     }
 
     /*
@@ -554,10 +557,7 @@ namespace hal
         {
             return nullptr;
         }
-        for (auto g : gates)
-        {
-            m->assign_gate(g);
-        }
+        m->assign_gates(gates);
         return m;
     }
 

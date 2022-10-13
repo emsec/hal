@@ -32,6 +32,8 @@ namespace hal
 {
     class Gate;
 
+    class Grouping;
+
     /**
      * @ingroup graph-visuals
      * @brief Abstract base class for gates.
@@ -51,6 +53,12 @@ namespace hal
         GraphicsGate(Gate* g);
 
     protected:
+
+        /**
+         * Pointer to gate in hal core
+         */
+        Gate* mGate;
+
         /**
          * The gate type of the underlying gate
          */

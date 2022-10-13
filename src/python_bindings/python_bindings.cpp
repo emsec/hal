@@ -37,6 +37,14 @@ namespace hal
 
         netlist_utils_init(m);
 
+        base_pin_init(m);
+
+        gate_pin_init(m);
+
+        module_pin_init(m);
+
+        pin_group_init(m);
+
         gate_init(m);
 
         net_init(m);
@@ -54,6 +62,8 @@ namespace hal
         plugin_interfaces_init(m);
 
         boolean_function_init(m);
+
+        smt_init(m);
 
 #ifndef PYBIND11_MODULE
         return m.ptr();

@@ -66,5 +66,11 @@ namespace hal
          * @returns True on success.
          */
         bool exec(ProgramArguments& args) override;
+
+        /**
+         * Nothing to do for GUI layout locker
+         * @param enable[in] unused
+         */
+        void set_layout_locker(bool) override {;}
     };
 }    // namespace hal

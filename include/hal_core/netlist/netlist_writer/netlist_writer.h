@@ -24,6 +24,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/utilities/result.h"
 
 #include <filesystem>
 
@@ -48,6 +49,6 @@ namespace hal
          * @param[in] file_path - The output path.
          * @returns True on success, false otherwise.
          */
-        virtual bool write(Netlist* netlist, const std::filesystem::path& file_path) = 0;
+        virtual Result<std::monostate> write(Netlist* netlist, const std::filesystem::path& file_path) = 0;
     };
 }    // namespace hal

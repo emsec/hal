@@ -110,9 +110,9 @@ namespace hal
             log_info("netlist_writer", "writing netlist '{}' to file '{}'...", netlist->get_design_name(), file_path.string());
 
             auto begin_time = std::chrono::high_resolution_clock::now();
-            if (!writer->write(netlist, file_path))
+            if (auto res = writer->write(netlist, file_path); res.is_error())
             {
-                log_error("netlist", "failed to write netlist '{}' to file '{}'.", netlist->get_design_name(), file_path.string());
+                log_error("netlist", "error encountered during netlist writing:\n{}", res.get_error().get());
                 return false;
             }
 

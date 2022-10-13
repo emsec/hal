@@ -15,13 +15,48 @@ namespace hal
     {
         bool state_to_module::create_modules(Netlist* nl, const std::shared_ptr<const Grouping>& state)
         {
+            // delete all modules that start with DANA
+            for (auto const& mod : nl->get_modules())
+            {
+                if (mod->get_name().find("DANA") != std::string::npos)
+                {
+                    nl->delete_module(mod);
+                }
+            }
+            log_info("dataflow", "succesufully deleted old DANA modules");
+
+            // create new modules and try to keep hierachy if possible
             for (const auto& [id, group] : state->gates_of_group)
             {
-                Module* group_module = nl->create_module("group_" + std::to_string(id), nl->get_top_module());
-                for (const auto& gateId : group)
+                bool gate_hierachy_matches_for_all = true;
+                bool first_run                     = true;
+                hal::Module* reference_module      = nl->get_top_module();
+
+                std::vector<Gate*> gates;
+                for (const auto& gate_id : group)
                 {
-                    group_module->assign_gate(nl->get_gate_by_id(gateId));
+                    gates.push_back(nl->get_gate_by_id(gate_id));
+
+                    if (first_run)
+                    {
+                        reference_module = nl->get_gate_by_id(gate_id)->get_module();
+                        first_run        = false;
+                    }
+                    else if (!gate_hierachy_matches_for_all)
+                    {
+                        continue;
+                    }
+                    else if (nl->get_gate_by_id(gate_id)->get_module() != reference_module)
+                    {
+                        gate_hierachy_matches_for_all = false;
+                    }
                 }
+
+                if (!gate_hierachy_matches_for_all)
+                {
+                    reference_module = nl->get_top_module();
+                }
+                nl->create_module("DANA_register_" + std::to_string(id), reference_module, gates);
             }
             return true;
         }

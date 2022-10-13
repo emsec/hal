@@ -1,12 +1,14 @@
 #include "gui/grouping/grouping_manager_widget.h"
 
-#include "gui/gui_globals.h"
+#include "gui/action/action.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/grouping/grouping_color_delegate.h"
 #include "gui/grouping/grouping_proxy_model.h"
+#include "gui/gui_def.h"
+#include "gui/gui_globals.h"
+#include "gui/gui_utils/graphics.h"
 #include "gui/input_dialog/input_dialog.h"
 #include "gui/searchbar/searchbar.h"
-#include "gui/gui_utils/graphics.h"
 #include "gui/toolbar/toolbar.h"
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/action_create_object.h"
@@ -14,33 +16,25 @@
 #include "gui/user_action/action_rename_object.h"
 #include "gui/user_action/action_set_object_color.h"
 #include "gui/user_action/user_action_compound.h"
-#include "gui/action/action.h"
-#include "gui/gui_def.h"
 #include "hal_core/utilities/log.h"
 
 #include <QAction>
+#include <QColorDialog>
+#include <QHeaderView>
 #include <QImage>
 #include <QMenu>
 #include <QResizeEvent>
-#include <QSize>
-#include <QVBoxLayout>
-#include <QHeaderView>
-#include <QColorDialog>
-#include <QStringList>
 #include <QShortcut>
+#include <QSize>
+#include <QStringList>
+#include <QVBoxLayout>
+#include <unordered_set>
 
 namespace hal
 {
     GroupingManagerWidget::GroupingManagerWidget(QWidget* parent)
-        : ContentWidget("Groupings", parent),
-          mProxyModel(new GroupingProxyModel(this)),
-          mSearchbar(new Searchbar(this)),
-          mNewGroupingAction(new QAction(this)),
-          mToolboxAction(new QAction(this)),
-          mRenameAction(new QAction(this)),
-          mColorSelectAction(new QAction(this)),
-          mDeleteAction(new QAction(this)),
-          mToSelectionAction(new QAction(this))
+        : ContentWidget("Groupings", parent), mProxyModel(new GroupingProxyModel(this)), mSearchbar(new Searchbar(this)), mNewGroupingAction(new QAction(this)), mToolboxAction(new QAction(this)),
+          mRenameAction(new QAction(this)), mColorSelectAction(new QAction(this)), mDeleteAction(new QAction(this)), mToSelectionAction(new QAction(this))
     {
         //needed to load the properties
         ensurePolished();
@@ -74,6 +68,7 @@ namespace hal
         //mDeleteAction->setEnabled(false);
 
         mGroupingTableModel = new GroupingTableModel(false, this);
+        mColorSerializer.restore(mGroupingTableModel);
 
         mProxyModel->setSourceModel(mGroupingTableModel);
         mProxyModel->setSortRole(Qt::UserRole);
@@ -81,11 +76,11 @@ namespace hal
         mGroupingTableView = new QTableView(this);
         mGroupingTableView->setModel(mProxyModel);
         mGroupingTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-        mGroupingTableView->setSelectionMode(QAbstractItemView::SingleSelection); // ERROR ???
+        mGroupingTableView->setSelectionMode(QAbstractItemView::SingleSelection);    // ERROR ???
         mGroupingTableView->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
         mGroupingTableView->verticalHeader()->hide();
         mGroupingTableView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        mGroupingTableView->setItemDelegateForColumn(2,new GroupingColorDelegate(mGroupingTableView));
+        mGroupingTableView->setItemDelegateForColumn(2, new GroupingColorDelegate(mGroupingTableView));
         mGroupingTableView->setSortingEnabled(true);
         mGroupingTableView->sortByColumn(0, Qt::SortOrder::AscendingOrder);
 
@@ -137,17 +132,17 @@ namespace hal
     {
         QIcon retval(":/icons/toolbox");
         QImage img(":/icons/toolbox");
-        for (int x=0; x<img.width();x++)
-            for (int y=0;y<img.width();y++)
+        for (int x = 0; x < img.width(); x++)
+            for (int y = 0; y < img.width(); y++)
             {
-                int h,s,v;
-                QColor col = img.pixelColor(x,y);
-                col.getHsv(&h,&s,&v);
+                int h, s, v;
+                QColor col = img.pixelColor(x, y);
+                col.getHsv(&h, &s, &v);
                 v /= 3;
-                col.setHsv(h,s,v);
-                img.setPixelColor(x,y,col);
+                col.setHsv(h, s, v);
+                img.setPixelColor(x, y, col);
             }
-        retval.addPixmap(QPixmap::fromImage(img),QIcon::Disabled);
+        retval.addPixmap(QPixmap::fromImage(img), QIcon::Disabled);
         return retval;
     }
 
@@ -160,47 +155,50 @@ namespace hal
     void GroupingManagerWidget::handleColorSelectClicked()
     {
         QModelIndex currentIndex = mProxyModel->mapToSource(mGroupingTableView->currentIndex());
-        if (!currentIndex.isValid()) return;
-        QModelIndex nameIndex = mGroupingTableModel->index(currentIndex.row(),0);
-        QString name = mGroupingTableModel->data(nameIndex,Qt::DisplayRole).toString();
-        QModelIndex idIndex = mGroupingTableModel->index(currentIndex.row(),1);
-        u32 id = mGroupingTableModel->data(idIndex,Qt::DisplayRole).toInt();
-        QModelIndex modelIndex = mGroupingTableModel->index(currentIndex.row(),2);
-        QColor color = mGroupingTableModel->data(modelIndex,Qt::BackgroundRole).value<QColor>();
-        color = QColorDialog::getColor(color,this,"Select color for grouping " + name);
+        if (!currentIndex.isValid())
+            return;
+        QModelIndex nameIndex  = mGroupingTableModel->index(currentIndex.row(), 0);
+        QString name           = mGroupingTableModel->data(nameIndex, Qt::DisplayRole).toString();
+        QModelIndex idIndex    = mGroupingTableModel->index(currentIndex.row(), 1);
+        u32 id                 = mGroupingTableModel->data(idIndex, Qt::DisplayRole).toInt();
+        QModelIndex modelIndex = mGroupingTableModel->index(currentIndex.row(), 2);
+        QColor color           = mGroupingTableModel->data(modelIndex, Qt::BackgroundRole).value<QColor>();
+        color                  = QColorDialog::getColor(color, this, "Select color for grouping " + name);
         if (color.isValid())
         {
             ActionSetObjectColor* act = new ActionSetObjectColor(color);
-            act->setObject(UserActionObject(id,UserActionObjectType::Grouping));
+            act->setObject(UserActionObject(id, UserActionObjectType::Grouping));
             act->exec();
         }
     }
 
     void GroupingManagerWidget::handleToolboxClicked()
     {
-        QMenu* toolboxMenu = new QMenu(this);
+        QMenu* toolboxMenu       = new QMenu(this);
         QAction* toolPredecessor = new Action("Predecessor tree to new grouping");
-        connect(toolPredecessor,&QAction::triggered,this,&GroupingManagerWidget::handleToolboxPredecessor);
+        connect(toolPredecessor, &QAction::triggered, this, &GroupingManagerWidget::handleToolboxPredecessor);
         toolboxMenu->addAction(toolPredecessor);
         QAction* toolSuccessor = new Action("Successor tree to new grouping");
-        connect(toolSuccessor,&QAction::triggered,this,&GroupingManagerWidget::handleToolboxSuccessor);
+        connect(toolSuccessor, &QAction::triggered, this, &GroupingManagerWidget::handleToolboxSuccessor);
         toolboxMenu->addAction(toolSuccessor);
         QAction* toolPreStep = new Action("Groupings by predecessor distance");
         toolboxMenu->addAction(toolPreStep);
-        connect(toolPreStep,&QAction::triggered,this,&GroupingManagerWidget::handleToolboxPredecessorDistance);
+        connect(toolPreStep, &QAction::triggered, this, &GroupingManagerWidget::handleToolboxPredecessorDistance);
         QAction* toolSucStep = new Action("Groupings by successor distance");
         toolboxMenu->addAction(toolSucStep);
-        connect(toolSucStep,&QAction::triggered,this,&GroupingManagerWidget::handleToolboxSuccessorDistance);
-        toolboxMenu->exec(mapToGlobal(pos()+QPoint(100,-25)));
+        connect(toolSucStep, &QAction::triggered, this, &GroupingManagerWidget::handleToolboxSuccessorDistance);
+        toolboxMenu->exec(mapToGlobal(pos() + QPoint(100, -25)));
     }
 
-    void GroupingManagerWidget::handleDoubleClicked(const QModelIndex & index)
+    void GroupingManagerWidget::handleDoubleClicked(const QModelIndex& index)
     {
-        if (index.column() == 0) handleRenameGroupingClicked();
-        if (index.column() == 2) handleColorSelectClicked();
+        if (index.column() == 0)
+            handleRenameGroupingClicked();
+        if (index.column() == 2)
+            handleColorSelectClicked();
     }
 
-    GroupingManagerWidget::ToolboxNode::ToolboxNode(Endpoint* ep, const ToolboxModuleHash *tmh)
+    GroupingManagerWidget::ToolboxNode::ToolboxNode(Endpoint* ep, const ToolboxModuleHash* tmh)
     {
         if (ep)
         {
@@ -213,61 +211,64 @@ namespace hal
         else
         {
             if (gSelectionRelay->numberSelectedModules())
-                mNode = Node(gSelectionRelay->selectedModulesList().at(0),Node::Module);
+                mNode = Node(gSelectionRelay->selectedModulesList().at(0), Node::Module);
             else
                 mNode = Node(gSelectionRelay->selectedGatesList().at(0), Node::Gate);
         }
-        switch (mNode.type()) {
-        case Node::Module:
-            mName = QString::fromStdString(gNetlist->get_module_by_id(mNode.id())->get_name());
-            break;
-        case Node::Gate:
-            mName = QString::fromStdString(gNetlist->get_gate_by_id(mNode.id())->get_name());
-            break;
-        default:
-            return;
+        switch (mNode.type())
+        {
+            case Node::Module:
+                mName = QString::fromStdString(gNetlist->get_module_by_id(mNode.id())->get_name());
+                break;
+            case Node::Gate:
+                mName = QString::fromStdString(gNetlist->get_gate_by_id(mNode.id())->get_name());
+                break;
+            default:
+                return;
         }
     }
 
     GroupingManagerWidget::ToolboxNode::ToolboxNode(const GraphicsItem* item)
     {
-        switch(item->itemType())
+        switch (item->itemType())
         {
-        case ItemType::Module:
-            mNode = Node(item->id(),Node::Module);
-            mName = QString::fromStdString(gNetlist->get_module_by_id(mNode.id())->get_name());
-            break;
-        case ItemType::Gate:
-            mNode = Node(item->id(),Node::Gate);
-            mName = QString::fromStdString(gNetlist->get_gate_by_id(mNode.id())->get_name());
-            break;
-        default:
-            break;
+            case ItemType::Module:
+                mNode = Node(item->id(), Node::Module);
+                mName = QString::fromStdString(gNetlist->get_module_by_id(mNode.id())->get_name());
+                break;
+            case ItemType::Gate:
+                mNode = Node(item->id(), Node::Gate);
+                mName = QString::fromStdString(gNetlist->get_gate_by_id(mNode.id())->get_name());
+                break;
+            default:
+                break;
         }
     }
 
     std::vector<Net*> GroupingManagerWidget::ToolboxNode::inputNets() const
     {
-        switch (mNode.type()) {
-        case Node::Module:
-            return gNetlist->get_module_by_id(mNode.id())->get_input_nets();
-        case Node::Gate:
-            return gNetlist->get_gate_by_id(mNode.id())->get_fan_in_nets();
-        default:
-            break;
+        switch (mNode.type())
+        {
+            case Node::Module:
+                return utils::to_vector(gNetlist->get_module_by_id(mNode.id())->get_input_nets());
+            case Node::Gate:
+                return gNetlist->get_gate_by_id(mNode.id())->get_fan_in_nets();
+            default:
+                break;
         }
         return std::vector<Net*>();
     }
 
     std::vector<Net*> GroupingManagerWidget::ToolboxNode::outputNets() const
     {
-        switch (mNode.type()) {
-        case Node::Module:
-            return gNetlist->get_module_by_id(mNode.id())->get_output_nets();
-        case Node::Gate:
-            return gNetlist->get_gate_by_id(mNode.id())->get_fan_out_nets();
-        default:
-            break;
+        switch (mNode.type())
+        {
+            case Node::Module:
+                return utils::to_vector(gNetlist->get_module_by_id(mNode.id())->get_output_nets());
+            case Node::Gate:
+                return gNetlist->get_gate_by_id(mNode.id())->get_fan_out_nets();
+            default:
+                break;
         }
         return std::vector<Net*>();
     }
@@ -275,18 +276,20 @@ namespace hal
     GroupingManagerWidget::ToolboxModuleHash::ToolboxModuleHash(const Node& nd)
     {
         Module* parentModule = nullptr;
-        switch (nd.type()) {
-        case Node::Module:
-            parentModule = gNetlist->get_module_by_id(nd.id())->get_parent_module();
-            break;
-        case Node::Gate:
-            parentModule = gNetlist->get_gate_by_id(nd.id())->get_module();
-        default:
-            break;
+        switch (nd.type())
+        {
+            case Node::Module:
+                parentModule = gNetlist->get_module_by_id(nd.id())->get_parent_module();
+                break;
+            case Node::Gate:
+                parentModule = gNetlist->get_gate_by_id(nd.id())->get_module();
+            default:
+                break;
         }
-        if (!parentModule) return;
+        if (!parentModule)
+            return;
         for (Module* sm : parentModule->get_submodules())
-            for (Gate* g : sm->get_gates(nullptr,true))
+            for (Gate* g : sm->get_gates(nullptr, true))
                 mHash[g] = sm;
     }
 
@@ -304,62 +307,70 @@ namespace hal
     {
         QSet<u32> mods, gats, nets;
         ToolboxNode tbn;
-        if (item) tbn = ToolboxNode(item);
+        if (item)
+            tbn = ToolboxNode(item);
         ToolboxModuleHash tmh(tbn.mNode);
         QVector<Net*> todoNet;
         QSet<Node> handledBox;
         QSet<Net*> handledNet;
         todoNet.append(QVector<Net*>::fromStdVector(succ ? tbn.outputNets() : tbn.inputNets()));
         handledBox.insert(tbn.mNode);
-        for (int loop=0; !maxDepth || loop<maxDepth; loop++)
+        for (int loop = 0; !maxDepth || loop < maxDepth; loop++)
         {
-            if (todoNet.isEmpty()) break;
+            if (todoNet.isEmpty())
+                break;
             QVector<Net*> nextRound;
             for (Net* n : todoNet)
             {
-                if (handledNet.contains(n)) continue;
+                if (handledNet.contains(n))
+                    continue;
                 handledNet.insert(n);
                 nets.insert(n->get_id());
                 for (Endpoint* ep : (succ ? n->get_destinations() : n->get_sources()))
                 {
                     ToolboxNode nextNode(ep, &tmh);
-                    if (handledBox.contains(nextNode.mNode)) continue;
+                    if (handledBox.contains(nextNode.mNode))
+                        continue;
                     handledBox.insert(nextNode.mNode);
-                    switch (nextNode.mNode.type()) {
-                    case Node::Module:  mods.insert(nextNode.mNode.id()); break;
-                    case Node::Gate:    gats.insert(nextNode.mNode.id()); break;
-                    default: continue;
+                    switch (nextNode.mNode.type())
+                    {
+                        case Node::Module:
+                            mods.insert(nextNode.mNode.id());
+                            break;
+                        case Node::Gate:
+                            gats.insert(nextNode.mNode.id());
+                            break;
+                        default:
+                            continue;
                     }
-                    nextRound.append(QVector<Net*>::fromStdVector(succ
-                                                                  ? nextNode.outputNets()
-                                                                  : nextNode.inputNets()));
-                }                
+                    nextRound.append(QVector<Net*>::fromStdVector(succ ? nextNode.outputNets() : nextNode.inputNets()));
+                }
             }
             todoNet = nextRound;
         }
 
         UserActionCompound* act = new UserActionCompound;
         act->setUseCreatedObject();
-        act->addAction(new ActionCreateObject(UserActionObjectType::Grouping,
-                                              tbn.mName + (succ ? " successor" : " predecessor")));
-        act->addAction(new ActionAddItemsToObject(mods,gats,nets));
+        act->addAction(new ActionCreateObject(UserActionObjectType::Grouping, tbn.mName + (succ ? " successor" : " predecessor")));
+        act->addAction(new ActionAddItemsToObject(mods, gats, nets));
         act->exec();
     }
 
     void GroupingManagerWidget::handleToolboxPredecessorDistance()
     {
-        newGroupingByDistance(3,false,nullptr);
+        newGroupingByDistance(3, false, nullptr);
     }
 
     void GroupingManagerWidget::handleToolboxSuccessorDistance()
     {
-        newGroupingByDistance(3,true,nullptr);
+        newGroupingByDistance(3, true, nullptr);
     }
 
     void GroupingManagerWidget::newGroupingByDistance(int maxDepth, bool succ, const GraphicsItem* item)
     {
         ToolboxNode tbn;
-        if (item) tbn = ToolboxNode(item);
+        if (item)
+            tbn = ToolboxNode(item);
         ToolboxModuleHash tmh(tbn.mNode);
         QVector<Net*> thisDst;
         QVector<Net*> nextDst;
@@ -367,39 +378,45 @@ namespace hal
         QSet<Net*> handledNet;
         nextDst.append(QVector<Net*>::fromStdVector(succ ? tbn.outputNets() : tbn.inputNets()));
         handledNode.insert(tbn.mNode);
-        for (int iround=1; iround<=maxDepth; iround++)
+        for (int iround = 1; iround <= maxDepth; iround++)
         {
-            if (nextDst.isEmpty()) break;
+            if (nextDst.isEmpty())
+                break;
             thisDst = nextDst;
             nextDst.clear();
             QSet<u32> mods, gats, nets;
             for (Net* n : thisDst)
             {
-                if (handledNet.contains(n)) continue;
+                if (handledNet.contains(n))
+                    continue;
                 handledNet.insert(n);
                 nets.insert(n->get_id());
                 for (Endpoint* ep : succ ? n->get_destinations() : n->get_sources())
                 {
                     ToolboxNode nextNode(ep, &tmh);
-                    if (handledNode.contains(nextNode.mNode)) continue;
+                    if (handledNode.contains(nextNode.mNode))
+                        continue;
                     handledNode.insert(nextNode.mNode);
-                    switch (nextNode.mNode.type()) {
-                    case Node::Module:  mods.insert(nextNode.mNode.id()); break;
-                    case Node::Gate:    gats.insert(nextNode.mNode.id()); break;
-                    default: continue;
+                    switch (nextNode.mNode.type())
+                    {
+                        case Node::Module:
+                            mods.insert(nextNode.mNode.id());
+                            break;
+                        case Node::Gate:
+                            gats.insert(nextNode.mNode.id());
+                            break;
+                        default:
+                            continue;
                     }
-                    nextDst.append(QVector<Net*>::fromStdVector(succ
-                                                                ? nextNode.outputNets()
-                                                                : nextNode.inputNets()));
+                    nextDst.append(QVector<Net*>::fromStdVector(succ ? nextNode.outputNets() : nextNode.inputNets()));
                 }
             }
             if (!mods.isEmpty() || !nets.isEmpty() || !gats.isEmpty())
             {
                 UserActionCompound* act = new UserActionCompound;
                 act->setUseCreatedObject();
-                act->addAction(new ActionCreateObject(UserActionObjectType::Grouping,
-                                                      QString("%1 step to %2").arg(iround).arg(tbn.mName)));
-                act->addAction(new ActionAddItemsToObject(mods,gats,nets));
+                act->addAction(new ActionCreateObject(UserActionObjectType::Grouping, QString("%1 step to %2").arg(iround).arg(tbn.mName)));
+                act->addAction(new ActionAddItemsToObject(mods, gats, nets));
                 act->exec();
             }
         }
@@ -408,9 +425,11 @@ namespace hal
     void GroupingManagerWidget::handleToSelectionClicked()
     {
         QModelIndex currentIndex = mProxyModel->mapToSource(mGroupingTableView->currentIndex());
-        if (!currentIndex.isValid()) return;
+        if (!currentIndex.isValid())
+            return;
         Grouping* grp = getCurrentGrouping().grouping();
-        if (!grp) return;
+        if (!grp)
+            return;
         for (Module* m : grp->get_modules())
             gSelectionRelay->addModule(m->get_id());
         for (Gate* g : grp->get_gates())
@@ -423,14 +442,14 @@ namespace hal
     void GroupingManagerWidget::handleRenameGroupingClicked()
     {
         QModelIndex currentIndex = mProxyModel->mapToSource(mGroupingTableView->currentIndex());
-        if (!currentIndex.isValid()) return;
+        if (!currentIndex.isValid())
+            return;
 
         InputDialog ipd;
         ipd.setWindowTitle("Rename Grouping");
         ipd.setInfoText("Please select a new unique name for the grouping.");
-        int irow = currentIndex.row();
-        QString oldName = mGroupingTableModel->data(
-                    mGroupingTableModel->index(irow,0),Qt::DisplayRole).toString();
+        int irow        = currentIndex.row();
+        QString oldName = mGroupingTableModel->data(mGroupingTableModel->index(irow, 0), Qt::DisplayRole).toString();
         mGroupingTableModel->setAboutToRename(oldName);
         ipd.setInputText(oldName);
         ipd.addValidator(mGroupingTableModel);
@@ -441,10 +460,8 @@ namespace hal
             if (newName != oldName)
             {
                 ActionRenameObject* act = new ActionRenameObject(newName);
-                u32 grpId = mGroupingTableModel->data(
-                            mGroupingTableModel->index(irow,1),Qt::DisplayRole).toInt();
-                act->setObject(UserActionObject(grpId,
-                                                UserActionObjectType::Grouping));
+                u32 grpId               = mGroupingTableModel->data(mGroupingTableModel->index(irow, 1), Qt::DisplayRole).toInt();
+                act->setObject(UserActionObject(grpId, UserActionObjectType::Grouping));
                 act->exec();
             }
         }
@@ -453,18 +470,18 @@ namespace hal
 
     void GroupingManagerWidget::handleDeleteGroupingClicked()
     {
-        int irow = mProxyModel->mapToSource(mGroupingTableView->currentIndex()).row();
-        u32 grpId = mGroupingTableModel->groupingAt(irow).id();
+        int irow                = mProxyModel->mapToSource(mGroupingTableView->currentIndex()).row();
+        u32 grpId               = mGroupingTableModel->groupingAt(irow).id();
         ActionDeleteObject* act = new ActionDeleteObject;
-        act->setObject(UserActionObject(grpId,UserActionObjectType::Grouping));
+        act->setObject(UserActionObject(grpId, UserActionObjectType::Grouping));
         act->exec();
     }
 
-    void GroupingManagerWidget::handleGraphSelectionChanged(void *sender)
+    void GroupingManagerWidget::handleGraphSelectionChanged(void* sender)
     {
         Q_UNUSED(sender);
 
-        mToolboxAction->setEnabled(gSelectionRelay->numberSelectedNodes()==1);
+        mToolboxAction->setEnabled(gSelectionRelay->numberSelectedNodes() == 1);
     }
 
     void GroupingManagerWidget::handleContextMenuRequest(const QPoint& point)
@@ -515,9 +532,11 @@ namespace hal
 
     void GroupingManagerWidget::handleNewEntryAdded(const QModelIndex& modelIndexName)
     {
-        if (!modelIndexName.isValid()) return;
+        if (!modelIndexName.isValid())
+            return;
         QModelIndex proxyIndex = mProxyModel->mapFromSource(modelIndexName);
-        if (!proxyIndex.isValid()) return;
+        if (!proxyIndex.isValid())
+            return;
         mGroupingTableView->setCurrentIndex(proxyIndex);
         handleCurrentChanged(proxyIndex);
     }
@@ -526,7 +545,7 @@ namespace hal
     {
         if (mProxyModel->rowCount())
         {
-            QModelIndex inx = mProxyModel->index(0,0);
+            QModelIndex inx = mProxyModel->index(0, 0);
             mGroupingTableView->setCurrentIndex(inx);
             handleCurrentChanged(inx);
         }
@@ -538,24 +557,17 @@ namespace hal
     {
         Q_UNUSED(previous);
 
-        bool enable = mGroupingTableModel->rowCount() > 0 && current.isValid();
-        QAction* entryBasedAction[] = { mRenameAction, mColorSelectAction,
-                                        mDeleteAction, mToSelectionAction, nullptr};
+        bool enable                 = mGroupingTableModel->rowCount() > 0 && current.isValid();
+        QAction* entryBasedAction[] = {mRenameAction, mColorSelectAction, mDeleteAction, mToSelectionAction, nullptr};
 
         QStringList iconPath, iconStyle;
-        iconPath << mRenameGroupingIconPath << mColorSelectIconPath
-                             << mDeleteIconPath << mToSelectionIconPath;
-        iconStyle << mRenameGroupingIconStyle << mColorSelectIconStyle
-                              << mDeleteIconStyle << mToSelectionIconStyle;
+        iconPath << mRenameGroupingIconPath << mColorSelectIconPath << mDeleteIconPath << mToSelectionIconPath;
+        iconStyle << mRenameGroupingIconStyle << mColorSelectIconStyle << mDeleteIconStyle << mToSelectionIconStyle;
 
         for (int iacc = 0; entryBasedAction[iacc]; iacc++)
         {
             entryBasedAction[iacc]->setEnabled(enable);
-            entryBasedAction[iacc]->setIcon(
-                        gui_utility::getStyledSvgIcon(enable
-                                                         ? iconStyle.at(iacc)
-                                                         : disabledIconStyle(),
-                                                         iconPath.at(iacc)));
+            entryBasedAction[iacc]->setIcon(gui_utility::getStyledSvgIcon(enable ? iconStyle.at(iacc) : disabledIconStyle(), iconPath.at(iacc)));
         }
         enableSearchbar(mGroupingTableModel->rowCount() > 0);
     }
@@ -579,7 +591,6 @@ namespace hal
 
     void GroupingManagerWidget::filter(const QString& text)
     {
-
         QRegularExpression* regex = new QRegularExpression(text);
         if (regex->isValid())
         {
@@ -768,4 +779,4 @@ namespace hal
     {
         mSearchActiveIconStyle = style;
     }
-}
+}    // namespace hal

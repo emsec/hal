@@ -1,9 +1,6 @@
 #include "gui/selection_details_widget/selection_details_widget.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_proxy.h"
-#include "gui/selection_details_widget/gate_details_widget.h"
-#include "gui/selection_details_widget/net_details_widget.h"
-#include "gui/selection_details_widget/module_details_widget.h"
 #include "gui/module_dialog/module_dialog.h"
 #include "gui/grouping_dialog/grouping_dialog.h"
 #include "gui/grouping/grouping_manager_widget.h"
@@ -15,6 +12,9 @@
 #include "gui/user_action/user_action_compound.h"
 #include "gui/user_action/user_action_object.h"
 #include "gui/settings/settings_items/settings_item_checkbox.h"
+#include "gui/selection_details_widget/gate_details_tab_widget.h"
+#include "gui/selection_details_widget/net_details_tab_widget.h"
+#include "gui/selection_details_widget/module_details_tab_widget.h"
 
 
 #include "gui/gui_globals.h"
@@ -89,17 +89,19 @@ namespace hal
 
         mSelectionDetails = new QWidget(mSplitter);
         QVBoxLayout* selDetailsLayout = new QVBoxLayout(mSelectionDetails);
+        selDetailsLayout->setContentsMargins(0,0,0,0);
+        selDetailsLayout->setSpacing(0);
 
         mStackedWidget = new QStackedWidget(mSelectionDetails);
 
-        mGateDetails = new GateDetailsWidget(mSelectionDetails);
-        mStackedWidget->addWidget(mGateDetails);
+        mGateDetailsTabs = new GateDetailsTabWidget(mSelectionDetails);
+        mStackedWidget->addWidget(mGateDetailsTabs);
 
-        mNetDetails = new NetDetailsWidget(mSelectionDetails);
-        mStackedWidget->addWidget(mNetDetails);
+        mNetDetailsTabs = new NetDetailsTabWidget(mSelectionDetails);
+        mStackedWidget->addWidget(mNetDetailsTabs);
 
-        mModuleDetails = new ModuleDetailsWidget(this);
-        mStackedWidget->addWidget(mModuleDetails);
+        mModuleDetailsTabs = new ModuleDetailsTabWidget();
+        mStackedWidget->addWidget(mModuleDetailsTabs);
 
         mItemDeletedLabel = new QLabel(mSelectionDetails);
         mItemDeletedLabel->setText("Currently selected item has been removed. Please consider relayouting the Graph.");
@@ -138,14 +140,6 @@ namespace hal
         mSelectionToGrouping->setDisabled(true);
         mSelectionToModule->setDisabled(true);
 
-        mGateDetails->hideSectionsWhenEmpty(sSettingHideEmpty->value().toBool());
-        mModuleDetails->hideSectionsWhenEmpty(sSettingHideEmpty->value().toBool());
-        mNetDetails->hideSectionsWhenEmpty(sSettingHideEmpty->value().toBool());
-
-        connect(sSettingHideEmpty, &SettingsItemCheckbox::boolChanged, mGateDetails, &GateDetailsWidget::hideSectionsWhenEmpty);
-        connect(sSettingHideEmpty, &SettingsItemCheckbox::boolChanged, mModuleDetails, &ModuleDetailsWidget::hideSectionsWhenEmpty);
-        connect(sSettingHideEmpty, &SettingsItemCheckbox::boolChanged, mNetDetails, &NetDetailsWidget::hideSectionsWhenEmpty);
-
         gSelectionRelay->registerSender(this, "SelectionDetailsWidget");
         connect(mSelectionToGrouping, &QAction::triggered, this, &SelectionDetailsWidget::selectionToGrouping);
         connect(mSelectionToModule, &QAction::triggered, this, &SelectionDetailsWidget::selectionToModuleMenu);
@@ -162,7 +156,7 @@ namespace hal
     {
         if (gSelectionRelay->numberSelectedNodes() <= 0) return;
 
-        ModuleDialog md = new ModuleDialog(this);
+        ModuleDialog md({},"Move to module",nullptr,this);
         if (md.exec() != QDialog::Accepted) return;
 
         if (md.isNewModule())
@@ -313,7 +307,7 @@ namespace hal
                 ? mToModuleIconStyle
                 : mDisabledIconStyle;
         mSelectionToModule->setIcon(gui_utility::getStyledSvgIcon(iconStyle, mToModuleIconPath));
-        mSelectionToModule->setEnabled(gContentManager->getGraphTabWidget()->selectCursor()==GraphTabWidget::Select
+        mSelectionToModule->setEnabled(gContentManager->getGraphTabWidget()->isSelectMode()
                                        && nodes > 0);
     }
 
@@ -345,7 +339,7 @@ namespace hal
             canMoveToModule(gSelectionRelay->numberSelectedNodes());
             enableSearchbar(true);
 
-            bool toModuleEnabled = gContentManager->getGraphTabWidget()->selectCursor()==GraphTabWidget::Select;
+            bool toModuleEnabled = gContentManager->getGraphTabWidget()->isSelectMode();
             mSelectionToGrouping->setEnabled(true);
             mSelectionToModule->setEnabled(toModuleEnabled);
             mSelectionToGrouping->setIcon(gui_utility::getStyledSvgIcon(mToGroupingIconStyle, mToGroupingIconPath));
@@ -405,25 +399,29 @@ namespace hal
 
         switch (tp) {
         case SelectionTreeItem::NullItem:
-            mModuleDetails->update(0);
+            //mModuleDetails->update(0);
+            if(mStackedWidget->currentWidget() == mModuleDetailsTabs)
+                mModuleDetailsTabs->clear();
             mStackedWidget->setCurrentWidget(mNoSelectionLabel);
 //            set_name("Selection Details");
             break;
         case SelectionTreeItem::ModuleItem:
-            mModuleDetails->update(sti->id());
-            mStackedWidget->setCurrentWidget(mModuleDetails);
+            mModuleDetailsTabs->setModule(gNetlist->get_module_by_id(sti->id()));
+            mStackedWidget->setCurrentWidget(mModuleDetailsTabs);
 //            if (mNumberSelectedItems==1) set_name("Module Details");
             break;
         case SelectionTreeItem::GateItem:
-            mModuleDetails->update(0);
-            mGateDetails->update(sti->id());
-            mStackedWidget->setCurrentWidget(mGateDetails);
+            if(mStackedWidget->currentWidget() == mModuleDetailsTabs)
+                mModuleDetailsTabs->clear();
+            mGateDetailsTabs->setGate(gNetlist->get_gate_by_id(sti->id()));
+            mStackedWidget->setCurrentWidget(mGateDetailsTabs);
 //            if (mNumberSelectedItems==1) set_name("Gate Details");
             break;
         case SelectionTreeItem::NetItem:
-            mModuleDetails->update(0);
-            mNetDetails->update(sti->id());
-            mStackedWidget->setCurrentWidget(mNetDetails);
+            if(mStackedWidget->currentWidget() == mModuleDetailsTabs)
+                mModuleDetailsTabs->clear();
+            mNetDetailsTabs->setNet(gNetlist->get_net_by_id(sti->id()));
+            mStackedWidget->setCurrentWidget(mNetDetailsTabs);
 //            if (mNumberSelectedItems==1) set_name("Net Details");
             break;
         default:

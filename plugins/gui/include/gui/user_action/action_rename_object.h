@@ -31,16 +31,15 @@ namespace hal
      * @ingroup user_action
      * @brief Renames an item.
      *
-     * Assigns a new name to the UserActionObject's object. If the object is a pin type it has to be specified by the
-     * id of the input/output net (configured by calling setInputNetId/setOutputNetId).
+     * Assigns a new name to the UserActionObject's object. If the object is a pin or pingroup type the current
+     * name is used to identify the pin or group (configured by setPinOrPingroupIdentifier)
      *
      * Undo Action: ActionRenameObject
      */
     class ActionRenameObject : public UserAction
     {
         QString mNewName;
-        u32 mNetId;
-        enum PortType { NoPort, Input, Output } mPortType;
+
     public:
         /**
          * Action constructor.
@@ -48,26 +47,13 @@ namespace hal
          * @param name - The new name
          */
         ActionRenameObject(const QString& name=QString())
-            : mNewName(name), mNetId(0), mPortType(NoPort) {;}
+            : mNewName(name) {;}
         bool exec() override;
         QString tagname() const override;
         void writeToXml(QXmlStreamWriter& xmlOut) const override;
         void readFromXml(QXmlStreamReader& xmlIn) override;
         void addToHash(QCryptographicHash& cryptoHash) const override;
 
-        /**
-         * If the object to rename is a port, this function specifies the port by the connected input net.
-         *
-         * @param id - The id of the input net
-         */
-        void setInputNetId(u32 id)  { mPortType=Input;  mNetId=id; }
-
-        /**
-         * If the object to rename is a port, this function specifies the port by the connected output net.
-         *
-         * @param id - The id of the output net
-         */
-        void setOutputNetId(u32 id) { mPortType=Output; mNetId=id; }
     };
 
     /**

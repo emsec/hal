@@ -117,7 +117,7 @@ namespace hal
          *
          * @returns The name of the design.
          */
-        std::string get_design_name() const;
+        const std::string& get_design_name() const;
 
         /**
          * Set the name of the design.
@@ -131,7 +131,7 @@ namespace hal
          *
          * @return The name of the target device.
          */
-        std::string get_device_name() const;
+        const std::string& get_device_name() const;
 
         /**
          * Set the name of the target device.
@@ -146,6 +146,13 @@ namespace hal
          * @returns The gate library.
          */
         const GateLibrary* get_gate_library() const;
+
+        /**
+         * Create a deep copy of the netlist.
+         * 
+         * @returns The copy of the netlist on success, an error otherwise.
+         */
+        Result<std::unique_ptr<Netlist>> copy() const;
 
         /*
          * ################################################################
@@ -420,6 +427,14 @@ namespace hal
          * @returns A vector of nets.
          */
         const std::vector<Net*>& get_global_output_nets() const;
+
+        /**
+         * Enables or disables automatic checks on nets that determine whether a net is an input or output of a module.
+         * \warning{\b WARNING: if disabled, the user is responsible to assign correct input and output nets and create respective module pins. Wrong usage may result in unknown behavior or crashes.}
+         * 
+         * @param[in] enable_checks - Set `true` to enable automatic checks, `false` otherwise.
+         */
+        void enable_automatic_net_checks(bool enable_checks = true);
 
         /*
          * ################################################################

@@ -33,13 +33,15 @@ namespace hal
     namespace core_strings
     {
         /**
-         * Converts one kind of string into another kind of string.
+         * Convert one kind of string into another kind of string.
          * 
-         * @param[in] str - The string to convert.
-         * @returns The converted string.
+         * @tparam S - The output string type.
+         * @tparam T - The input string type.
+         * @param str - The string to convert.
+         * @return The converted string.
          */
         template<class S, class T>
-        inline T convert_string(const S& str)
+        inline S to(const T& str)
         {
             if constexpr (std::is_same<S, T>::value)
             {
@@ -47,7 +49,7 @@ namespace hal
             }
             else
             {
-                return T(str.data());
+                return S(str.data());
             }
         }
 

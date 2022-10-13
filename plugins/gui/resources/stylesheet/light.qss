@@ -803,8 +803,17 @@ hal--RecentFileItem
     padding-bottom       : 6px;
     padding-left         : 10px;
     padding-right        : 10px;
-    qproperty-iconPath  : ":/icons/folder";
     qproperty-iconStyle : "all->#000000";
+}
+
+hal--RecentFileItem[isProject=true]
+{
+    qproperty-iconPath  : ":/icons/folder";
+}
+
+hal--RecentFileItem[isProject=false]
+{
+    qproperty-iconPath  : ":/icons/detach";
 }
 
 hal--RecentFileItem *
@@ -848,17 +857,17 @@ hal--RecentFileItem QToolButton:hover
     color: white;
 }
 
-hal--RecentFileItem[disabled=true]
+hal--RecentFileItem[missing=true]
 {
     qproperty-iconStyle : "all->#888888"
 }
 
-hal--RecentFileItem[disabled=true] #name-label
+hal--RecentFileItem[missing=true] #name-label
 {
     color: #555555;
 }
 
-hal--RecentFileItem[disabled=true] #path-label
+hal--RecentFileItem[missing=true] #path-label
 {
     color: red;
 }
@@ -1127,6 +1136,38 @@ hal--LoggerWidget
     qproperty-searchIconPath: ":/icons/search";
 }
 
+hal--Toolbar hal--ChannelSelector
+{
+    background-color : rgb(32, 43, 63);
+    border-radius: 2px;
+    min-width: 1em;
+    max-width: 1em;
+}
+
+hal--Toolbar hal--ChannelSelector QListView
+{
+    min-width: 12em;
+    max-width: 16em;
+}
+
+hal--Toolbar QPushButton {
+    border : none;
+    background-color : rgb(61, 61, 61);
+}
+
+hal--Toolbar QPushButton:hover {
+    background-color : rgb(90, 90, 90)
+}
+
+hal--Toolbar QPushButton:checked {
+    background-color : rgb(89, 89, 89);
+    color : rgb(204, 204, 204);
+}
+
+hal--Toolbar QPushButton:checked:hover {
+    background-color : rgb(66, 66, 66);
+}
+
 hal--MainWindow
 {
     qproperty-halIconStyle: "";
@@ -1290,4 +1331,31 @@ hal--GraphicsQssAdapter
 QToolBar QToolButton
 {
     color : white;
+}
+
+hal--DetailsFrameWidget QPushButton
+{
+    font: bold "Iosevka";
+    font-size: 12px;
+    background: rgb(200, 200, 200);;
+    border-color: #666666;
+    border-width: 1px;
+    color: #222222;
+    height: 12px;
+}
+
+hal--DetailsFrameWidget QPushButton:checked
+{
+    font: bold "Iosevka";
+    font-size: 12px;
+    background: rgb(200, 200, 200);;
+    border-color: #999999;
+    border-width: 1px;
+    color: black;
+    height: 12px;
+}
+
+hal--DetailsFrameWidget QPushButton:hover
+{
+    background-color : rgba(220, 220, 220, 1);
 }

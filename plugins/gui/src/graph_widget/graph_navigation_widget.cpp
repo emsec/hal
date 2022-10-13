@@ -11,6 +11,8 @@
 #include <QLabel>
 #include <QScrollBar>
 #include <QVBoxLayout>
+#include <QShortcut>
+#include <QDebug>
 
 namespace hal
 {
@@ -134,13 +136,16 @@ namespace hal
                      << "Parent Module";
 
         QGridLayout* layTop = new QGridLayout(this);
-        mNavigateFrame      = new QFrame(this);
-        mNavigateFrame->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-        QVBoxLayout* layNavigateView = new QVBoxLayout(mNavigateFrame);
-        QLabel* labNavigate          = new QLabel("Navigate to …", mNavigateFrame);
-        labNavigate->setFixedHeight(sLabelHeight);
-        layNavigateView->addWidget(labNavigate);
-        mNavigateWidget = new GraphNavigationTableWidget(this, mNavigateFrame);
+        mTabs               = new QTabWidget(this);
+
+//        mNavigateFrame      = new QFrame(this);
+//        mNavigateFrame->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+//        QVBoxLayout* layNavigateView = new QVBoxLayout(mNavigateFrame);
+//        QLabel* labNavigate          = new QLabel("Navigate to …", mNavigateFrame);
+//        labNavigate->setFixedHeight(sLabelHeight);
+//        layNavigateView->addWidget(labNavigate);
+//        mNavigateWidget = new GraphNavigationTableWidget(this, mNavigateFrame);
+        mNavigateWidget = new GraphNavigationTableWidget(this, mTabs);
         mNavigateWidget->setSelectionMode(QAbstractItemView::SingleSelection);
         mNavigateWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
         mNavigateWidget->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
@@ -150,16 +155,18 @@ namespace hal
         mNavigateWidget->setHorizontalHeaderLabels(headerLabels);
         mNavigateWidget->setShowGrid(false);
         connect(mNavigateWidget, &QTableWidget::cellDoubleClicked, this, &GraphNavigationWidget::handleNavigateSelected);
-        layNavigateView->addWidget(mNavigateWidget);
-        layTop->addWidget(mNavigateFrame);
+        mTabs->addTab(mNavigateWidget, "Navigate to …");
+//        layNavigateView->addWidget(mNavigateWidget);
+//        layTop->addWidget(mNavigateFrame);
 
-        mAddToViewFrame = new QFrame(this);
-        mAddToViewFrame->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-        QVBoxLayout* layAddtoView = new QVBoxLayout(mAddToViewFrame);
-        QLabel* labAddToView      = new QLabel("Add to view …", mAddToViewFrame);
-        labAddToView->setFixedHeight(sLabelHeight);
-        layAddtoView->addWidget(labAddToView);
-        mAddToViewWidget = new GraphNavigationTreeWidget(this, mAddToViewFrame);
+//        mAddToViewFrame = new QFrame(this);
+//        mAddToViewFrame->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+//        QVBoxLayout* layAddtoView = new QVBoxLayout(mAddToViewFrame);
+//        QLabel* labAddToView      = new QLabel("Add to view …", mAddToViewFrame);
+//        labAddToView->setFixedHeight(sLabelHeight);
+//        layAddtoView->addWidget(labAddToView);
+//        mAddToViewWidget = new GraphNavigationTreeWidget(this, mAddToViewFrame);
+        mAddToViewWidget = new GraphNavigationTreeWidget(this, mTabs);
         mAddToViewWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
         mAddToViewWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
         mAddToViewWidget->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
@@ -168,9 +175,17 @@ namespace hal
         mAddToViewWidget->setHeaderLabels(headerLabels);
         // mAddToViewWidget->setAllColumnsShowFocus(true);
         connect(mAddToViewWidget, &QTreeWidget::itemDoubleClicked, this, &GraphNavigationWidget::handleAddToViewSelected);
-        layAddtoView->addWidget(mAddToViewWidget);
-        layTop->addWidget(mAddToViewFrame);
+        mTabs->addTab(mAddToViewWidget, "Add to view …");
+        layTop->addWidget(mTabs);
+//        layAddtoView->addWidget(mAddToViewWidget);
+//        layTop->addWidget(mAddToViewFrame);
+
+        QShortcut* tabKey = new QShortcut(QKeySequence(Qt::Key_Tab),this);
+        connect (tabKey,&QShortcut::activated,this,&GraphNavigationWidget::toggleWidget);
+        QShortcut* escKey = new QShortcut(QKeySequence(Qt::Key_Escape),this);
+        connect (escKey,&QShortcut::activated,this,&GraphNavigationWidget::closeRequest);
     }
+
 
     void GraphNavigationWidget::closeRequest()
     {
@@ -210,32 +225,30 @@ namespace hal
 
     QStringList GraphNavigationWidget::moduleEntry(Module* m, Endpoint* ep)
     {
-        Module* pm    = m->get_parent_module();
-        QString parentName = pm
-                ? QString::fromStdString(pm->get_name())
-                : QString("top level");
-        QString mtype = QString::fromStdString(m->get_type());
+        Module* pm         = m->get_parent_module();
+        QString parentName = pm ? QString::fromStdString(pm->get_name()) : QString("top level");
+        QString mtype      = QString::fromStdString(m->get_type());
         if (mtype.isEmpty())
             mtype = "module";
         else
             mtype += " (module)";
 
-        QString pinName = QString::fromStdString(ep->get_pin());
-        Net* epNet = ep->get_net();
+        QString pinName = QString::fromStdString(ep->get_pin()->get_name());
+        Net* epNet      = ep->get_net();
         if (epNet)
         {
-            if (ep->is_source_pin())
-                pinName = QString::fromStdString(m->get_output_port_name(epNet));
-            else
-                pinName = QString::fromStdString(m->get_input_port_name(epNet));
+            if (const auto pin = m->get_pin_by_net(epNet); pin != nullptr)
+            {
+                pinName = QString::fromStdString(pin->get_name());
+            }
         }
         return QStringList() << QString::fromStdString(m->get_name()) << QString::number(m->get_id()) << mtype << pinName << parentName;
     }
 
     QStringList GraphNavigationWidget::gateEntry(Gate* g, Endpoint* ep)
     {
-        return QStringList() << QString::fromStdString(g->get_name()) << QString::number(g->get_id()) << QString::fromStdString(g->get_type()->get_name()) << QString::fromStdString(ep->get_pin())
-                             << QString::fromStdString(g->get_module()->get_name());
+        return QStringList() << QString::fromStdString(g->get_name()) << QString::number(g->get_id()) << QString::fromStdString(g->get_type()->get_name())
+                             << QString::fromStdString(ep->get_pin()->get_name()) << QString::fromStdString(g->get_module()->get_name());
     }
 
     QTreeWidgetItem* GraphNavigationWidget::itemFactory(const QStringList& fields, const Node& nd)
@@ -388,14 +401,17 @@ namespace hal
     {
         if (!hasBothWidgets())
             return;
-        if (mNavigateWidget->hasFocus())
+//        if (mNavigateWidget->hasFocus())
+        if (!mTabs->currentIndex())
         {
+            mTabs->setCurrentIndex(1);
             mAddToViewWidget->setFocus();
             mAddToViewWidget->setCurrentIndex(mAddToViewWidget->firstIndex());
             mNavigateWidget->clearSelection();
         }
         else
         {
+            mTabs->setCurrentIndex(0);
             mNavigateWidget->setFocus();
             mNavigateWidget->setCurrentCell(0, 0);
             mNavigateWidget->selectRow(0);
@@ -435,26 +451,25 @@ namespace hal
 
         QSet<Node> listedTargets;
 
-        for (Endpoint* ep : (mDirection == SelectionRelay::Subfocus::Left)
-             ? mViaNet->get_sources()
-             : mViaNet->get_destinations())
+        for (Endpoint* ep : (mDirection == SelectionRelay::Subfocus::Left) ? mViaNet->get_sources() : mViaNet->get_destinations())
         {
             Gate* g = ep->get_gate();
-            if (!g) continue; // gate not connected
+            if (!g)
+                continue;    // gate not connected
 
             const NodeBoxes& boxes = gContentManager->getContextManagerWidget()->getCurrentContext()->getLayouter()->boxes();
             const NodeBox* nbox    = boxes.boxForGate(g);
             if (nbox)
             {
                 Node targetNode = nbox->getNode();
-                if (targetNode==mOrigin) // net loops back to origin
+                if (targetNode == mOrigin)    // net loops back to origin
                     continue;
 
-                if (listedTargets.contains(targetNode)) // already listed
+                if (listedTargets.contains(targetNode))    // already listed
                     continue;
 
                 listedTargets.insert(targetNode);
-                addNavigateItem(ep,targetNode);
+                addNavigateItem(ep, targetNode);
                 mNavigateVisible = true;
             }
             else
@@ -463,13 +478,16 @@ namespace hal
 
         if (mNavigateVisible)
         {
-            mNavigateFrame->show();
+//            mNavigateFrame->show();
+            mTabs->setTabEnabled(0,true);
+            mTabs->setCurrentIndex(0);
             mNavigateWidget->setCurrentCell(0, 0);
             mNavigateWidget->selectRow(0);
             mNavigateWidget->setFocus();
         }
         else
-            mNavigateFrame->hide();
+            mTabs->setTabEnabled(0,false);
+//            mNavigateFrame->hide();
 
         mAddToViewVisible = false;
         if (!mEndpointNotInView.isEmpty() && !mOnlyNavigate)
@@ -483,14 +501,19 @@ namespace hal
 
         if (mAddToViewVisible)
         {
-            mAddToViewFrame->show();
+//            mAddToViewFrame->show();
+            mTabs->setTabEnabled(1,true);
             mAddToViewWidget->expandAll();
             mAddToViewWidget->setCurrentIndex(mAddToViewWidget->firstIndex());
             if (!mNavigateVisible)
+            {
+                mTabs->setCurrentIndex(1);
                 mAddToViewWidget->setFocus();
+            }
         }
         else
-            mAddToViewFrame->hide();
+            mTabs->setTabEnabled(1,false);
+//            mAddToViewFrame->hide();
 
         resizeToFit();
     }

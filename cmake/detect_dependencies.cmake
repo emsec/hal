@@ -120,7 +120,7 @@ if(${pybind11_FOUND})
     message(VERBOSE "Found pybind11 v${pybind11_VERSION}: ${pybind11_INCLUDE_DIRS}")
     message(VERBOSE "Found pybind11 >= 2.4.3")
 else()
-    message(STATUS "pybind11 >= 2.4.3 not found")
+    message(STATUS "pybind11 >= 2.4.3 not found, will build our provided version")
     add_subdirectory(deps/pybind11)
 endif()
 
@@ -130,30 +130,30 @@ endif()
 
 
 message(STATUS "using spdlog from deps")
-set(spdlog_VERSION 1.5.0)
+set(spdlog_VERSION 1.9.2)
 add_library(spdlog::spdlog INTERFACE IMPORTED)
 set_target_properties(spdlog::spdlog PROPERTIES
-                        INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/spdlog-1.5.0/include"
+                        INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/spdlog-1.9.2/include"
                         )
 
 ################################
 #####   Python support
 ################################
 
-set(Python_ADDITIONAL_VERSIONS 3.5 3.6 3.8)
-find_package(PythonInterp 3.5 REQUIRED)
-if(PythonInterp_FOUND)
-    message(VERBOSE "PYTHON_INCLUDE_DIRS: ${PYTHON_INCLUDE_DIRS}")
-    message(VERBOSE "PYTHON_LIBRARIES: ${PYTHON_LIBRARIES}")
-    message(VERBOSE "PYTHON_MODULE_PREFIX: ${PYTHON_MODULE_PREFIX}")
-    message(VERBOSE "PYTHON_MODULE_EXTENSION: ${PYTHON_MODULE_EXTENSION}")
-elseif(NOT PythonInterp_FOUND)
+#set(Python_ADDITIONAL_VERSIONS 3.5 3.6 3.8)
+find_package (Python3 COMPONENTS Interpreter Development)
+if(Python3_Interpreter_FOUND)
+    message(STATUS "Python3_INCLUDE_DIRS: ${Python3_INCLUDE_DIRS}")
+    message(STATUS "Python3_LIBRARIES: ${Python3_LIBRARIES}")
+    message(STATUS "PYTHON_MODULE_PREFIX: ${PYTHON_MODULE_PREFIX}")
+    message(STATUS "PYTHON_MODULE_EXTENSION: ${PYTHON_MODULE_EXTENSION}")
+elseif(NOT Python3_Interpreter_FOUND)
     set(Missing_package "TRUE")
     if(APPLE AND CMAKE_HOST_APPLE)
         message(STATUS "To install python3 on MacOS using homebrew run following command:")
         message(STATUS "    brew install python3")
     endif(APPLE AND CMAKE_HOST_APPLE)
-endif(PythonInterp_FOUND)
+endif(Python3_Interpreter_FOUND)
 
 ################################
 #####   Graphviz
@@ -174,3 +174,39 @@ if(${graphviz_FOUND})
     #   add_custom_target( ...
     #                      LINK_LIBRARIES ... graphviz::graphviz)
 endif()
+
+################################
+#####   Berkeley ABC
+################################
+
+# abc stuff
+# Download and unpack abc at configure time
+add_library(ABC INTERFACE IMPORTED)
+find_package(ABC)
+if(${ABC_FOUND})
+    message(STATUS "Found ABC:")
+    message(STATUS "    ABC_LIBRARY: ${ABC_LIBRARY}")
+else()
+    message(STATUS "ABC not found")
+    message(STATUS "Will build abc ourselves, check README.md to see how to speed up the process...")
+    
+    add_subdirectory(deps/abc)
+    add_library(abc::libabc-pic INTERFACE IMPORTED)
+    set_target_properties(abc::libabc-pic PROPERTIES INTERFACE_LINK_LIBRARIES libabc-pic)
+    set(ABC_LIBRARY abc::libabc-pic)
+endif()
+
+
+################################
+#####   z3
+################################
+
+find_package(Z3 REQUIRED)
+if(Z3_FOUND)
+    message(STATUS "Found z3")
+    message(STATUS "    Z3_LIBRARIES: ${Z3_LIBRARIES}")
+    message(STATUS "    Z3_INCLUDE_DIRS: ${Z3_INCLUDE_DIRS}")
+else()
+    set(Missing_package "TRUE")
+    message(STATUS "Could not find z3")
+endif(Z3_FOUND)

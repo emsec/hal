@@ -18,7 +18,7 @@ namespace hal
 
     UserActionManager::UserActionManager(QObject *parent)
         : QObject(parent), mStartRecording(-1),
-          mWaitCount(0), mRecordHashAttribute(true),
+          mRecordHashAttribute(true),
           mDumpAction(nullptr)
     {
         mElapsedTime.start();
@@ -96,6 +96,13 @@ namespace hal
                     if (act->compoundOrder() >= 0)
                         xmlOut.writeAttribute("compound",QString::number(act->compoundOrder()));
                     act->object().writeToXml(xmlOut);
+                    //perhaps put this in all actions that need a parentobject? could be redundant though
+//                    if(act->parentObject().type() != UserActionObjectType::None)
+//                    {
+//                        xmlOut.writeStartElement("parentObj");
+//                        act->parentObject().writeToXml(xmlOut);
+//                        xmlOut.writeEndElement();
+//                    }
                     act->writeToXml(xmlOut);
                     xmlOut.writeEndElement();
                 }
@@ -148,14 +155,6 @@ namespace hal
             {
                 log_warning("gui", "failed to execute user action {}", act->tagname().toStdString());
                 break;
-            }
-            if (act->isWaitForReady()) mWaitCount=100;
-            while (mWaitCount > 0)
-            {
-                --mWaitCount;
-                qDebug() << "wait" << mWaitCount;
-                QCoreApplication::processEvents();
-                QThread::msleep(10);
             }
         }
         mStartRecording = -1;

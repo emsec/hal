@@ -28,28 +28,6 @@ QPushButton
     min-width      : 50px;
 }
 
-QPushButton:default
-{
-    background-color : rgba(228, 228, 228, 0.1);
-}
-
-QPushButton:hover
-{
-    background-color : rgba(128, 128, 128, 0.2);
-}
-
-QPushButton:checked
-{
-    color        : rgba(32, 36, 37, 1);
-    background   : rgba(114, 140, 0, 1);
-    border-color : rgba(114, 140, 0, 1);
-}
-
-QPushButton:disabled
-{
-    color : rgba(128, 128, 128, 1);
-}
-
 QMenuBar
 {
     background-color : rgba(60, 63, 65, 1);
@@ -66,6 +44,7 @@ QMenu
 {
     background-color : rgba(60, 63, 65, 1);
     color            : rgba(228, 228, 228, 1);
+    border: 1px solid black;
 }
 
 QDialog
@@ -802,8 +781,17 @@ hal--RecentFileItem
     padding-bottom       : 6px;
     padding-left         : 10px;
     padding-right        : 10px;
-    qproperty-iconPath  : ":/icons/folder";
     qproperty-iconStyle : "all->#3192C5";
+}
+
+hal--RecentFileItem[isProject=true]
+{
+    qproperty-iconPath  : ":/icons/folder";
+}
+
+hal--RecentFileItem[isProject=false]
+{
+    qproperty-iconPath  : ":/icons/detach";
 }
 
 hal--RecentFileItem *
@@ -846,17 +834,17 @@ hal--RecentFileItem QToolButton:hover
     color: white;
 }
 
-hal--RecentFileItem[disabled=true]
+hal--RecentFileItem[missing=true]
 {
     qproperty-iconStyle : "all->#888888"
 }
 
-hal--RecentFileItem[disabled=true] #name-label
+hal--RecentFileItem[missing=true] #name-label
 {
     color: #555555;
 }
 
-hal--RecentFileItem[disabled=true] #path-label
+hal--RecentFileItem[missing=true] #path-label
 {
     color: red;
 }
@@ -894,6 +882,18 @@ hal--OpenFileWidget #text-label
 hal--OpenFileWidget #icon-label
 {
     margin-top : 220px;
+}
+
+hal--ImportNetlistDialog
+{
+    qproperty-saveIconStyle: "all->#3192C5";
+    qproperty-saveIconPath: ":/icons/folder-down";
+}
+
+hal--ImportNetlistDialog QWidget:disabled
+{
+    color: #777777;
+    background: #2a2a2a;
 }
 
 hal--GetInTouchWidget
@@ -1136,6 +1136,38 @@ hal--LoggerWidget
     qproperty-searchIconPath: ":/icons/search";
 }
 
+hal--Toolbar hal--ChannelSelector
+{
+    background-color : rgb(32, 43, 63);
+    border-radius: 2px;
+    min-width: 1em;
+    max-width: 1em;
+}
+
+hal--Toolbar hal--ChannelSelector QListView
+{
+    min-width: 12em;
+    max-width: 16em;
+}
+
+hal--Toolbar QPushButton {
+    border : none;
+    background-color : rgb(26, 26, 26);
+}
+
+hal--Toolbar QPushButton:hover {
+    background-color : rgb(46, 46, 46)
+}
+
+hal--Toolbar QPushButton:checked {
+    background-color : rgb(89, 89, 89);
+    color : rgb(204, 204, 204);
+}
+
+hal--Toolbar QPushButton:checked:hover {
+    background-color : rgb(66, 66, 66);
+}
+
 hal--ModuleWidget
 {
     qproperty-searchActiveIconStyle: "all->#30ac4f";
@@ -1274,6 +1306,55 @@ hal--DockButton
     qproperty-textColor: #FFFFFF;
     qproperty-checkedColor: #808080;
     qproperty-hoverColor: #666769;
+}
+
+QPushButton:default
+{
+    background-color : rgba(228, 228, 228, 0.1);
+}
+
+QPushButton:hover
+{
+    background-color : rgba(128, 128, 128, 0.2);
+}
+
+QPushButton:checked
+{
+    color        : rgba(32, 36, 37, 1);
+    background   : rgba(114, 140, 0, 1);
+    border-color : rgba(114, 140, 0, 1);
+}
+
+QPushButton:disabled
+{
+    color : rgba(128, 128, 128, 1);
+}
+
+hal--DetailsFrameWidget QPushButton
+{
+    font: bold "Iosevka";
+    font-size: 12px;
+    background: #1a1a1a;
+    border-color: #666666;
+    border-width: 1px;
+    color: #bbbbbb;
+    height: 12px;
+}
+
+hal--DetailsFrameWidget QPushButton:checked
+{
+    font: bold "Iosevka";
+    font-size: 12px;
+    background: #1a1a1a;
+    border-color: #999999;
+    border-width: 1px;
+    color: #eeeeee;
+    height: 12px;
+}
+
+hal--DetailsFrameWidget QPushButton:hover
+{
+    background-color : rgba(128, 128, 128, 0.2);
 }
 
 hal--GatelibraryManagementDialog

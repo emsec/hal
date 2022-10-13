@@ -39,18 +39,21 @@ namespace hal
         QSet<u32> mModules;
         QSet<u32> mGates;
         QSet<u32> mNets;
+        QSet<u32> mPins;
     public:
         /**
          * Action Constructor.
          *
          * @param mods - The ids of the Module%s to remove
          * @param gats - The ids of the Gate%s to remove
-         * @param nets - The ifs of the Net%s to remove
+         * @param nets - The ids of the Net%s to remove
+         * @param pins - The ids of the Pin%s to remove
          */
         ActionRemoveItemsFromObject(const QSet<u32>& mods = QSet<u32>(),
                                     const QSet<u32>& gats = QSet<u32>(),
-                                    const QSet<u32>& nets = QSet<u32>())
-            : mModules(mods), mGates(gats), mNets(nets) {;}
+                                    const QSet<u32>& nets = QSet<u32>(),
+                                    const QSet<u32>& pins = QSet<u32>())
+            : mModules(mods), mGates(gats), mNets(nets), mPins(pins) {;}
         bool exec() override;
         QString tagname() const override;
         void writeToXml(QXmlStreamWriter& xmlOut) const override;

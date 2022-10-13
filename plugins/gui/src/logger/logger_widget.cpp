@@ -39,7 +39,6 @@ namespace hal
         mContentLayout->addWidget(mPlainTextEdit);
 
         mPlainTextEdit->setContextMenuPolicy(Qt::CustomContextMenu);
-
         // Get last severity settings
         restoreSettings();
 
@@ -58,61 +57,61 @@ namespace hal
 
     }
 
-    void LoggerWidget::setupToolbar(Toolbar* Toolbar)
+    void LoggerWidget::setupToolbar(Toolbar* toolbar)
     {
         // Action button to activate Searchbar
         mSearchAction = new QAction(this);
         mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
-        Toolbar->addAction(mSearchAction);
+        toolbar->addAction(mSearchAction);
 
         // Show current channel
         mChannelLabel = new QLabel(this);
         mChannelLabel->setText("all");
-        Toolbar->addWidget(mChannelLabel);
+        toolbar->addWidget(mChannelLabel);
 
         // ChannelSelector
         mSelector = new ChannelSelector(this);
         mSelector->setEditable(true);
         connect(mSelector->lineEdit(), SIGNAL(editingFinished()), this, SLOT(handleCustomChannel()));
         connect(mSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(handleCurrentFilterChanged(int)));
-        mSelector->setStyleSheet("QCombobox {background-color : rgb(32, 43, 63); border-radius: 2px;}");
+//        mSelector->setStyleSheet("QCombobox {background-color : rgb(32, 43, 63); border-radius: 2px;}");
         mSelector->setSizeAdjustPolicy(QComboBox::AdjustToContentsOnFirstShow);
-        Toolbar->addWidget(mSelector);
+        toolbar->addWidget(mSelector);
 
         // Severity buttons
         mDebugButton = new QPushButton("Debug", this);
         mDebugButton->setCheckable(true);
         mDebugButton->setChecked(mDebugSeverity);
-        mDebugButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) } QPushButton:checked:hover { background-color : rgb(66, 66, 66) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
-        Toolbar->addWidget(mDebugButton);
+//        mDebugButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) } QPushButton:checked:hover { background-color : rgb(66, 66, 66) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
+        toolbar->addWidget(mDebugButton);
 
         mInfoButton = new QPushButton("Info", this);
         mInfoButton->setCheckable(true);
         mInfoButton->setChecked(mInfoSeverity);
-        mInfoButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) } QPushButton:checked:hover { background-color : rgb(66, 66, 66) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
-        Toolbar->addWidget(mInfoButton);
+//        mInfoButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) } QPushButton:checked:hover { background-color : rgb(66, 66, 66) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
+        toolbar->addWidget(mInfoButton);
 
         mWarningButton = new QPushButton("Warning", this);
         mWarningButton->setCheckable(true);
         mWarningButton->setChecked(mWarningSeverity);
-        mWarningButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) } QPushButton:checked:hover { background-color : rgb(66, 66, 66) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
-        Toolbar->addWidget(mWarningButton);
+//        mWarningButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) } QPushButton:checked:hover { background-color : rgb(66, 66, 66) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
+        toolbar->addWidget(mWarningButton);
 
         mErrorButton = new QPushButton("Error", this);
         mErrorButton->setCheckable(true);
         mErrorButton->setChecked(mErrorSeverity);
-        mErrorButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) } QPushButton:checked:hover { background-color : rgb(66, 66, 66) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
-        Toolbar->addWidget(mErrorButton);
+//        mErrorButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) } QPushButton:checked:hover { background-color : rgb(66, 66, 66) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
+        toolbar->addWidget(mErrorButton);
 
-        Toolbar->addSpacer();
+        toolbar->addSpacer();
 
         mMuteButton = new QPushButton("Mute all", this);
-        mMuteButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) }  QPushButton:pressed { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
-        Toolbar->addWidget(mMuteButton);
+//        mMuteButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) }  QPushButton:pressed { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
+        toolbar->addWidget(mMuteButton);
 
         mVerboseButton = new QPushButton("Show all", this);
-        mVerboseButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) }  QPushButton:pressed { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
-        Toolbar->addWidget(mVerboseButton);
+//        mVerboseButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) }  QPushButton:pressed { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
+        toolbar->addWidget(mVerboseButton);
 
         connect(mSearchAction, SIGNAL(triggered()), this, SLOT(toggleSearchbar()));
         connect(mSearchbar, SIGNAL(textEdited(QString)), this, SLOT(handleSearchChanged(QString)));
@@ -123,6 +122,7 @@ namespace hal
         connect(mMuteButton, SIGNAL(clicked(bool)), this, SLOT(handleSeverityChanged(bool)));
         connect(mVerboseButton, SIGNAL(clicked(bool)), this, SLOT(handleSeverityChanged(bool)));
 
+        toolbar->repolish();
     }
 
     QPlainTextEdit* LoggerWidget::getPlainTextEdit()
@@ -182,6 +182,10 @@ namespace hal
             mCurrentChannelIndex = model->rowCount() - 1;
         }
 
+        if (mCurrentChannelIndex == -2) {
+            return;
+        }
+
         ChannelItem* item   = static_cast<ChannelItem*>((model->index(mCurrentChannelIndex, 0, QModelIndex())).internalPointer());
         mCurrentChannel = item->name().toStdString();
         mChannelLabel->setText(QString::fromStdString(mCurrentChannel));
@@ -194,7 +198,6 @@ namespace hal
         for (ChannelEntry* entry : *(item->getEntries()))
         {
             bool filter = false;
-            std::cout << entry->mMsg << std::endl;
             // If entry msg matches with search string
             QRegularExpression re(mSearchFilter);
             if (re.match(QString::fromStdString(entry->mMsg)).hasMatch())

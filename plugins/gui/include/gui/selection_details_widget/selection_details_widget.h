@@ -44,6 +44,9 @@ namespace hal
     class UserAction;
     class UserActionObject;
     class SettingsItemCheckbox;
+    class GateDetailsTabWidget;
+    class NetDetailsTabWidget;
+    class ModuleDetailsTabWidget;
 
     /**
      * @ingroup utility_widgets-selection_details
@@ -369,5 +372,9 @@ namespace hal
         static const QString sAddToGrouping;
 
         static SettingsItemCheckbox* sSettingHideEmpty;
+
+        GateDetailsTabWidget* mGateDetailsTabs;
+        NetDetailsTabWidget* mNetDetailsTabs;
+        ModuleDetailsTabWidget* mModuleDetailsTabs;
     };
 }

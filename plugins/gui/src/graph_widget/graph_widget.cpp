@@ -1,34 +1,38 @@
 #include "gui/graph_widget/graph_widget.h"
 
 #include "gui/content_manager/content_manager.h"
-#include "gui/user_action/action_unfold_module.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/graph_widget/graph_graphics_view.h"
+#include "gui/user_action/action_unfold_module.h"
 //#include "gui/graph_widget/graph_layout_spinner_widget.h"
-#include "gui/spinner_widget/spinner_widget.h"
+#include "gui/content_manager/content_manager.h"
 #include "gui/graph_widget/graph_navigation_widget.h"
 #include "gui/graph_widget/graphics_scene.h"
-#include "gui/graph_widget/progress_bar.h"
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
 #include "gui/graph_widget/items/nodes/modules/graphics_module.h"
-#include "gui/module_widget/module_widget.h"
+#include "gui/graph_widget/progress_bar.h"
 #include "gui/gui_def.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/netlist.h"
-#include "gui/content_manager/content_manager.h"
+#include "gui/module_widget/module_widget.h"
 #include "gui/overlay/widget_overlay.h"
+#include "gui/settings/settings_items/settings_item_spinbox.h"
+#include "gui/spinner_widget/spinner_widget.h"
 #include "gui/toolbar/toolbar.h"
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/action_remove_items_from_object.h"
 #include "gui/user_action/action_rename_object.h"
-#include "gui/settings/settings_items/settings_item_spinbox.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/utils.h"
+#include "hal_core/plugin_system/plugin_manager.h"
 
+#include <QApplication>
+#include <QDebug>
+#include <QGraphicsRectItem>
 #include <QInputDialog>
 #include <QKeyEvent>
 #include <QMessageBox>
@@ -36,25 +40,21 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QVariantAnimation>
-#include <QGraphicsRectItem>
-#include <QApplication>
-#include <QDebug>
 
 namespace hal
 {
-    SettingsItemSpinbox* GraphWidget::sSettingAnimationDuration = new SettingsItemSpinbox(
-                "Animation Duration [1/10s]",
-                "graph_view/animation_duration",
-                10,
-                "Appearance:Graph View",
-                "Duration of 'fly to gate' animation when viewport is zooming in on new target. Unit is 1/10 second, thus 20=2sec, 10=1sec. Value of zero turns animation off."
-            );
+    SettingsItemSpinbox* GraphWidget::sSettingAnimationDuration =
+        new SettingsItemSpinbox("Animation Duration [1/10s]",
+                                "graph_view/animation_duration",
+                                10,
+                                "Appearance:Graph View",
+                                "Duration of 'fly to gate' animation when viewport is zooming in on new target. Unit is 1/10 second, thus 20=2sec, 10=1sec. Value of zero turns animation off.");
 
+    GraphWidget* GraphWidget::sInstance = nullptr;
 
     GraphWidget::GraphWidget(GraphContext* context, QWidget* parent)
-        : ContentWidget("Graph", parent), mView(new GraphGraphicsView(this)), mContext(context), mOverlay(new WidgetOverlay(this)),
-          mNavigationWidgetV3(new GraphNavigationWidget(false)), mProgressBar(nullptr),
-          mSpinnerWidget(new SpinnerWidget(this)), mCurrentExpansion(0)
+        : ContentWidget("Graph", parent), mView(new GraphGraphicsView(this)), mContext(context), mOverlay(new WidgetOverlay(this)), mNavigationWidgetV3(new GraphNavigationWidget(false)),
+          mProgressBar(nullptr), mSpinnerWidget(new SpinnerWidget(this)), mCurrentExpansion(0)
     {
         connect(mNavigationWidgetV3, &GraphNavigationWidget::navigationRequested, this, &GraphWidget::handleNavigationJumpRequested);
         connect(mNavigationWidgetV3, &GraphNavigationWidget::closeRequested, mOverlay, &WidgetOverlay::hide);
@@ -81,6 +81,19 @@ namespace hal
             mView->setScene(mContext->scene());
             mView->centerOn(0, 0);
         }
+        sInstance = this;
+        for (const std::string& pluginName : plugin_manager::get_plugin_names())
+        {
+            BasePluginInterface* bpif = plugin_manager::get_plugin_instance(pluginName);
+            if (!bpif) continue;
+            bpif->register_progress_indicator(&GraphWidget::pluginProgressIndicator);
+        }
+
+    }
+
+    GraphWidget::~GraphWidget()
+    {
+        sInstance = nullptr;
     }
 
     GraphContext* GraphWidget::getContext() const
@@ -97,9 +110,9 @@ namespace hal
         mOverlay->hide();
         if (mProgressBar)
         {
-            ProgressBar* removeBar = mProgressBar;
-            mProgressBar = nullptr;
-            removeBar->deleteLater();
+            AbstractBusyIndicator* removeBusyIndicator = mProgressBar;
+            mProgressBar           = nullptr;
+            removeBusyIndicator->deleteLater();
         }
         mSpinnerWidget->hide();
         mOverlay->setWidget(mNavigationWidgetV3);
@@ -108,22 +121,39 @@ namespace hal
             mView->setFocus();
         else if (mStoreViewport.mValid)
         {
-            mView->fitInView(restoreViewport(),Qt::KeepAspectRatio);
+            mView->fitInView(restoreViewport(), Qt::KeepAspectRatio);
         }
     }
 
-    void GraphWidget::showProgress(int percent, const QString &text)
+    void GraphWidget::showBusy(int percent, const QString &text)
+    {
+        if (!mProgressBar)
+        {
+            mProgressBar = new BusyIndicator;
+            mProgressBar->setMinimumSize(256,288);
+            mOverlay->setWidget(mProgressBar);
+            mProgressBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+            mOverlay->show();
+        }
+        if (!text.isEmpty())
+            mProgressBar->setText(text);
+        mProgressBar->setValue(percent);
+        qApp->processEvents();
+    }
+
+    void GraphWidget::showProgress(int percent, const QString& text)
     {
         if (!mProgressBar)
         {
             mProgressBar = new ProgressBar(mContext->getLayouter()->canRollback() ? mContext : nullptr);
-            mProgressBar->setMinimumSize(width()/2,height()/4);
+            mProgressBar->setMinimumSize(width() / 2, height() / 4);
             mOverlay->setWidget(mProgressBar);
-            mProgressBar->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
+            mProgressBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
             mOverlay->show();
         }
 
-        if (!text.isEmpty()) mProgressBar->setText(text);
+        if (!text.isEmpty())
+            mProgressBar->setText(text);
         mProgressBar->setValue(percent);
         qApp->processEvents();
     }
@@ -153,23 +183,24 @@ namespace hal
             mStoreViewport.mValid = false;
             return;
         }
-        QRect vg = mView->viewport()->geometry();
+        QRect vg              = mView->viewport()->geometry();
         QPoint viewportCenter = (vg.topLeft() + vg.bottomRight()) / 2;
         mStoreViewport.mValid = true;
         mStoreViewport.mRect  = mView->mapToScene(mView->viewport()->geometry()).boundingRect();
         mStoreViewport.mGrid  = mView->closestLayouterPos(mView->mapToScene(QPoint(viewportCenter)));
-//        qDebug() << "store" << viewportCenter << mStoreViewport.mGrid[0] << mStoreViewport.mGrid[1] << mStoreViewport.mRect;
+        //        qDebug() << "store" << viewportCenter << mStoreViewport.mGrid[0] << mStoreViewport.mGrid[1] << mStoreViewport.mRect;
     }
 
     QRectF GraphWidget::restoreViewport(bool reset)
     {
-        if (!mStoreViewport.mValid) return QRectF();
-        if (reset) mStoreViewport.mValid = false;
+        if (!mStoreViewport.mValid)
+            return QRectF();
+        if (reset)
+            mStoreViewport.mValid = false;
 
-        QPointF centerPos(mContext->getLayouter()->gridXposition(mStoreViewport.mGrid[0].x()),
-                          mContext->getLayouter()->gridYposition(mStoreViewport.mGrid[0].y()));
+        QPointF centerPos(mContext->getLayouter()->gridXposition(mStoreViewport.mGrid[0].x()), mContext->getLayouter()->gridYposition(mStoreViewport.mGrid[0].y()));
         QPointF topLeft = mStoreViewport.mRect.topLeft() - mStoreViewport.mGrid[1] + centerPos;
-        return QRectF(topLeft,mStoreViewport.mRect.size());
+        return QRectF(topLeft, mStoreViewport.mRect.size());
     }
 
     void GraphWidget::keyPressEvent(QKeyEvent* event)
@@ -182,28 +213,23 @@ namespace hal
 
         switch (event->key())
         {
-            case Qt::Key_Left:
-            {
+            case Qt::Key_Left: {
                 handleNavigationLeftRequest();
                 break;
             }
-            case Qt::Key_Right:
-            {
+            case Qt::Key_Right: {
                 handleNavigationRightRequest();
                 break;
             }
-            case Qt::Key_Up:
-            {
+            case Qt::Key_Up: {
                 handleNavigationUpRequest();
                 break;
             }
-            case Qt::Key_Down:
-            {
+            case Qt::Key_Down: {
                 handleNavigationDownRequest();
                 break;
             }
-            case Qt::Key_Z:
-            {
+            case Qt::Key_Z: {
                 if (event->modifiers() & Qt::ControlModifier)    // modifiers are set as bitmasks
                 {
                 }
@@ -219,11 +245,11 @@ namespace hal
     }
 
     void GraphWidget::substituteByVisibleModules(const QSet<u32>& gates,
-                                                    const QSet<u32>& modules,
-                                                    QSet<u32>& target_gates,
-                                                    QSet<u32>& target_modules,
-                                                    QSet<u32>& remove_gates,
-                                                    QSet<u32>& remove_modules) const
+                                                 const QSet<u32>& modules,
+                                                 QSet<u32>& target_gates,
+                                                 QSet<u32>& target_modules,
+                                                 QSet<u32>& remove_gates,
+                                                 QSet<u32>& remove_modules) const
     {
         // EXPAND SELECTION AND CONTEXT UP THE HIERARCHY TREE
 
@@ -322,9 +348,9 @@ namespace hal
         // qDebug() << "remove modules" << remove_modules;
     }
 
-    void GraphWidget::handleNavigationJumpRequested(const Node &origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules)
+    void GraphWidget::handleNavigationJumpRequested(const Node& origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules)
     {
-//        bool bail_animation = false;
+        //        bool bail_animation = false;
 
         setFocus();
         storeViewport();
@@ -360,29 +386,27 @@ namespace hal
             std::vector<Net*> in_nets;
             if (to_gates.empty())
             {
-                in_nets = gNetlist->get_module_by_id(*to_modules.constBegin())->get_input_nets();
+                in_nets = utils::to_vector(gNetlist->get_module_by_id(*to_modules.constBegin())->get_input_nets());
             }
             else
             {
                 in_nets = utils::to_vector(gNetlist->get_gate_by_id(*to_gates.begin())->get_fan_in_nets());
             }
-            bool netIsInput               = std::find(in_nets.begin(), in_nets.end(), n) != in_nets.cend();
-            PlacementHint::PlacementModeType placementMode = netIsInput
-                    ? PlacementHint::PreferRight
-                    : PlacementHint::PreferLeft;
+            bool netIsInput                                = std::find(in_nets.begin(), in_nets.end(), n) != in_nets.cend();
+            PlacementHint::PlacementModeType placementMode = netIsInput ? PlacementHint::PreferRight : PlacementHint::PreferLeft;
 
             // add all new gates and modules
             if (!remove_modules.isEmpty() || !remove_gates.isEmpty())
             {
                 ActionRemoveItemsFromObject* act = new ActionRemoveItemsFromObject(remove_modules, remove_gates);
-                act->setObject(UserActionObject(mContext->id(),UserActionObjectType::Context));
+                act->setObject(UserActionObject(mContext->id(), UserActionObjectType::Context));
                 act->exec();
             }
             if (!nonvisible_modules.isEmpty() || !nonvisible_gates.isEmpty())
             {
                 ActionAddItemsToObject* act = new ActionAddItemsToObject(nonvisible_modules, nonvisible_gates);
-                act->setPlacementHint(PlacementHint(placementMode,origin));
-                act->setObject(UserActionObject(mContext->id(),UserActionObjectType::Context));
+                act->setPlacementHint(PlacementHint(placementMode, origin));
+                act->setObject(UserActionObject(mContext->id(), UserActionObjectType::Context));
                 act->exec();
             }
 
@@ -407,7 +431,7 @@ namespace hal
         // selection is only one module (instead of one gate)
 
         SelectionRelay::Subfocus sfoc = SelectionRelay::Subfocus::None;
-        u32 sfinx = 0;
+        u32 sfinx                     = 0;
 
         if (final_gates.size() == 1 && final_modules.empty())
         {
@@ -441,7 +465,7 @@ namespace hal
                     cnt++;
                 }
             }
-            gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,gid,sfoc,sfinx);
+            gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate, gid, sfoc, sfinx);
         }
         else if (final_modules.size() == 1 && final_gates.empty())
         {
@@ -451,7 +475,7 @@ namespace hal
             Q_ASSERT(m);
 
             // TODO simplify (we do actually know if we're navigating left or right)
-            Node needle(mid,Node::Module);
+            Node needle(mid, Node::Module);
             const NodeBox* nbox = mContext->getLayouter()->boxes().boxForNode(needle);
             Q_ASSERT(nbox);
             const GraphicsNode* gnode = static_cast<const GraphicsNode*>(nbox->item());
@@ -472,7 +496,7 @@ namespace hal
                 sfoc  = SelectionRelay::Subfocus::Left;
                 sfinx = inx;
             }
-            gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,mid,sfoc,sfinx);
+            gSelectionRelay->setFocus(SelectionRelay::ItemType::Module, mid, sfoc, sfinx);
         }
 
         gSelectionRelay->setSelectedModules(final_modules);
@@ -502,10 +526,10 @@ namespace hal
         const SelectionRelay::Subfocus navigateLeft = SelectionRelay::Subfocus::Left;
         switch (gSelectionRelay->focusType())
         {
-        case SelectionRelay::ItemType::None: {
+            case SelectionRelay::ItemType::None: {
                 return;
             }
-        case SelectionRelay::ItemType::Gate: {
+            case SelectionRelay::ItemType::Gate: {
                 Gate* g = gNetlist->get_gate_by_id(gSelectionRelay->focusId());
 
                 if (!g)
@@ -513,8 +537,8 @@ namespace hal
 
                 if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Left)
                 {
-                    std::string pin_type = g->get_type()->get_input_pins()[gSelectionRelay->subfocusIndex()];
-                    Net* n               = g->get_fan_in_net(pin_type);
+                    const GatePin* pin = g->get_type()->get_input_pins().at(gSelectionRelay->subfocusIndex());
+                    Net* n             = g->get_fan_in_net(pin);
 
                     if (!n)
                         return;
@@ -523,12 +547,12 @@ namespace hal
                     {
                         gSelectionRelay->clear();
                         gSelectionRelay->addNet(n->get_id());
-                        gSelectionRelay->setFocus(SelectionRelay::ItemType::Net,n->get_id());
+                        gSelectionRelay->setFocus(SelectionRelay::ItemType::Net, n->get_id());
                         gSelectionRelay->relaySelectionChanged(nullptr);
                     }
                     else if (n->get_num_of_sources() == 1)
                     {
-                        handleNavigationJumpRequested(Node(g->get_id(),Node::Gate), n->get_id(), {n->get_sources().at(0)->get_gate()->get_id()}, {});
+                        handleNavigationJumpRequested(Node(g->get_id(), Node::Gate), n->get_id(), {n->get_sources().at(0)->get_gate()->get_id()}, {});
                     }
                     else
                     {
@@ -539,15 +563,14 @@ namespace hal
                 }
                 else if (g->get_type()->get_input_pins().size())
                 {
-                    gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate, g->get_id(),
-                                              SelectionRelay::Subfocus::Left, 0);
+                    gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate, g->get_id(), SelectionRelay::Subfocus::Left, 0);
                     gSelectionRelay->relaySubfocusChanged(nullptr);
                     gSelectionRelay->relaySelectionChanged(nullptr);
                 }
 
                 return;
             }
-        case SelectionRelay::ItemType::Net: {
+            case SelectionRelay::ItemType::Net: {
                 Net* n = gNetlist->get_net_by_id(gSelectionRelay->focusId());
 
                 if (!n)
@@ -558,8 +581,7 @@ namespace hal
 
                 if (n->get_num_of_sources() == 1)
                 {
-                    handleNavigationJumpRequested(mContext->getNetDestination(n),
-                                                  n->get_id(), {n->get_sources()[0]->get_gate()->get_id()}, {});
+                    handleNavigationJumpRequested(mContext->getNetDestination(n), n->get_id(), {n->get_sources()[0]->get_gate()->get_id()}, {});
                 }
                 else
                 {
@@ -570,7 +592,7 @@ namespace hal
 
                 return;
             }
-        case SelectionRelay::ItemType::Module: {
+            case SelectionRelay::ItemType::Module: {
                 Module* m = gNetlist->get_module_by_id(gSelectionRelay->focusId());
 
                 if (!m)
@@ -578,7 +600,7 @@ namespace hal
 
                 if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Left)
                 {
-                    Node needle(m->get_id(),Node::Module);
+                    Node needle(m->get_id(), Node::Module);
                     const NodeBox* nbox = mContext->getLayouter()->boxes().boxForNode(needle);
                     Q_ASSERT(nbox);
                     const GraphicsNode* gnode = static_cast<const GraphicsNode*>(nbox->item());
@@ -590,12 +612,12 @@ namespace hal
                     {
                         gSelectionRelay->clear();
                         gSelectionRelay->addNet(n->get_id());
-                        gSelectionRelay->setFocus(SelectionRelay::ItemType::Net,n->get_id());
+                        gSelectionRelay->setFocus(SelectionRelay::ItemType::Net, n->get_id());
                         gSelectionRelay->relaySelectionChanged(nullptr);
                     }
                     else if (n->get_num_of_sources() == 1)
                     {
-                        handleNavigationJumpRequested(Node(m->get_id(),Node::Module), n->get_id(), {n->get_sources()[0]->get_gate()->get_id()}, {});
+                        handleNavigationJumpRequested(Node(m->get_id(), Node::Module), n->get_id(), {n->get_sources()[0]->get_gate()->get_id()}, {});
                     }
                     else
                     {
@@ -606,8 +628,7 @@ namespace hal
                 }
                 else if (m->get_input_nets().size())
                 {
-                    gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,m->get_id(),
-                                              SelectionRelay::Subfocus::Left,0);
+                    gSelectionRelay->setFocus(SelectionRelay::ItemType::Module, m->get_id(), SelectionRelay::Subfocus::Left, 0);
                     gSelectionRelay->relaySubfocusChanged(nullptr);
                 }
 
@@ -621,12 +642,10 @@ namespace hal
         const SelectionRelay::Subfocus navigateRight = SelectionRelay::Subfocus::Right;
         switch (gSelectionRelay->focusType())
         {
-        case SelectionRelay::ItemType::None:
-            {
+            case SelectionRelay::ItemType::None: {
                 return;
             }
-        case SelectionRelay::ItemType::Gate:
-            {
+            case SelectionRelay::ItemType::Gate: {
                 Gate* g = gNetlist->get_gate_by_id(gSelectionRelay->focusId());
 
                 if (!g)
@@ -642,12 +661,12 @@ namespace hal
                     {
                         gSelectionRelay->clear();
                         gSelectionRelay->addNet(n->get_id());
-                        gSelectionRelay->setFocus(SelectionRelay::ItemType::Net,n->get_id());
+                        gSelectionRelay->setFocus(SelectionRelay::ItemType::Net, n->get_id());
                         gSelectionRelay->relaySelectionChanged(nullptr);
                     }
                     else if (n->get_num_of_destinations() == 1)
                     {
-                        handleNavigationJumpRequested(Node(g->get_id(),Node::Gate), n->get_id(), {n->get_destinations()[0]->get_gate()->get_id()}, {});
+                        handleNavigationJumpRequested(Node(g->get_id(), Node::Gate), n->get_id(), {n->get_destinations()[0]->get_gate()->get_id()}, {});
                     }
                     else
                     {
@@ -658,15 +677,13 @@ namespace hal
                 }
                 else if (g->get_type()->get_output_pins().size())
                 {
-                    gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,g->get_id(),
-                                              SelectionRelay::Subfocus::Right,0);
+                    gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate, g->get_id(), SelectionRelay::Subfocus::Right, 0);
                     gSelectionRelay->relaySubfocusChanged(nullptr);
                 }
 
                 return;
             }
-        case SelectionRelay::ItemType::Net:
-            {
+            case SelectionRelay::ItemType::Net: {
                 Net* n = gNetlist->get_net_by_id(gSelectionRelay->focusId());
 
                 if (!n)
@@ -677,8 +694,7 @@ namespace hal
 
                 if (n->get_num_of_destinations() == 1)
                 {
-                    handleNavigationJumpRequested(mContext->getNetSource(n),
-                                                  n->get_id(), {n->get_destinations()[0]->get_gate()->get_id()}, {});
+                    handleNavigationJumpRequested(mContext->getNetSource(n), n->get_id(), {n->get_destinations()[0]->get_gate()->get_id()}, {});
                 }
                 else
                 {
@@ -689,7 +705,7 @@ namespace hal
 
                 return;
             }
-        case SelectionRelay::ItemType::Module: {
+            case SelectionRelay::ItemType::Module: {
                 Module* m = gNetlist->get_module_by_id(gSelectionRelay->focusId());
 
                 if (!m)
@@ -697,7 +713,7 @@ namespace hal
 
                 if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Right)
                 {
-                    Node needle(m->get_id(),Node::Module);
+                    Node needle(m->get_id(), Node::Module);
                     const NodeBox* nbox = mContext->getLayouter()->boxes().boxForNode(needle);
                     Q_ASSERT(nbox);
                     const GraphicsNode* gnode = static_cast<const GraphicsNode*>(nbox->item());
@@ -709,12 +725,12 @@ namespace hal
                     {
                         gSelectionRelay->clear();
                         gSelectionRelay->addNet(n->get_id());
-                        gSelectionRelay->setFocus(SelectionRelay::ItemType::Net,n->get_id());
+                        gSelectionRelay->setFocus(SelectionRelay::ItemType::Net, n->get_id());
                         gSelectionRelay->relaySelectionChanged(nullptr);
                     }
                     else if (n->get_num_of_destinations() == 1)
                     {
-                        handleNavigationJumpRequested(Node(m->get_id(),Node::Module), n->get_id(), {n->get_destinations()[0]->get_gate()->get_id()}, {});
+                        handleNavigationJumpRequested(Node(m->get_id(), Node::Module), n->get_id(), {n->get_destinations()[0]->get_gate()->get_id()}, {});
                     }
                     else
                     {
@@ -725,8 +741,7 @@ namespace hal
                 }
                 else if (m->get_output_nets().size())
                 {
-                    gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,m->get_id(),
-                                              SelectionRelay::Subfocus::Right,0);
+                    gSelectionRelay->setFocus(SelectionRelay::ItemType::Module, m->get_id(), SelectionRelay::Subfocus::Right, 0);
                     gSelectionRelay->relaySubfocusChanged(nullptr);
                 }
             }
@@ -771,7 +786,7 @@ namespace hal
             act->exec();
         }
         else
-            gContentManager->getModuleWidget()->openModuleInView(id,true);
+            gContentManager->getModuleWidget()->openModuleInView(id, true);
     }
 
     void GraphWidget::ensureItemsVisible(const QSet<u32>& gates, const QSet<u32>& modules)
@@ -866,14 +881,15 @@ namespace hal
         {
             currentRect = restoreViewport();
             mView->fitInView(currentRect, Qt::KeepAspectRatio);
-/*
+            /*
             QRect vg = mView->viewport()->geometry();
             QPoint viewportCenter = (vg.topLeft() + vg.bottomRight()) / 2;
             QVector<QPoint> qp = mView->closestLayouterPos(mView->mapToScene(QPoint(viewportCenter)));
             qDebug() << "focus" << viewportCenter << qp[0] << qp[1] << currentRect;
             */
         }
-        else {
+        else
+        {
             currentRect = mView->mapToScene(mView->viewport()->geometry()).boundingRect();
         }
 
@@ -882,11 +898,11 @@ namespace hal
         //check prevents jitter bug / resizing bug occuring due to error in 'fitToView'
         //only happens when current and target are the same as on last usage
         //solution -> just disable the focus alltogether if current and target are the same as last time, no need to fire animation again
-        if(!(targetRect == mLastTargetRect && currentRect == mRectAfterFocus))
+        if (!(targetRect == mLastTargetRect && currentRect == mRectAfterFocus))
         {
             mLastTargetRect = targetRect;
 
-            if(applyCenterFix)
+            if (applyCenterFix)
             {
                 auto centerFix = targetRect.center();
                 targetRect.setWidth(std::max(targetRect.width(), currentRect.width()));
@@ -901,13 +917,9 @@ namespace hal
                 anim->setStartValue(currentRect);
                 anim->setEndValue(targetRect);
 
-                connect(anim, &QVariantAnimation::valueChanged, [=](const QVariant& value) {
-                    mView->fitInView(value.toRectF(), Qt::KeepAspectRatio);
-                });
+                connect(anim, &QVariantAnimation::valueChanged, [=](const QVariant& value) { mView->fitInView(value.toRectF(), Qt::KeepAspectRatio); });
 
-                connect(anim, &QVariantAnimation::finished, [this](){
-                    mRectAfterFocus = mView->mapToScene(mView->viewport()->geometry()).boundingRect();
-                });
+                connect(anim, &QVariantAnimation::finished, [this]() { mRectAfterFocus = mView->mapToScene(mView->viewport()->geometry()).boundingRect(); });
 
                 anim->start(QAbstractAnimation::DeleteWhenStopped);
             }
@@ -921,10 +933,10 @@ namespace hal
     void GraphWidget::focusGate(u32 gateId)
     {
         const GraphicsGate* gate = mContext->scene()->getGateItem(gateId);
-            
-        if(gate)
+
+        if (gate)
         {
-            QRectF targetRect = gate->sceneBoundingRect().marginsAdded(QMargins(50,50,50,50));
+            QRectF targetRect = gate->sceneBoundingRect().marginsAdded(QMargins(50, 50, 50, 50));
             focusRect(targetRect, false);
         }
     }
@@ -932,10 +944,10 @@ namespace hal
     void GraphWidget::focusNet(u32 netId)
     {
         const GraphicsNet* net = mContext->scene()->getNetItem(netId);
-            
-        if(net)
+
+        if (net)
         {
-            QRectF targetRect = net->sceneBoundingRect().marginsAdded(QMargins(50,50,50,50));
+            QRectF targetRect = net->sceneBoundingRect().marginsAdded(QMargins(50, 50, 50, 50));
             focusRect(targetRect, false);
         }
     }
@@ -943,10 +955,10 @@ namespace hal
     void GraphWidget::focusModule(u32 moduleId)
     {
         const GraphicsModule* module = mContext->scene()->getModuleItem(moduleId);
-            
-        if(module)
+
+        if (module)
         {
-            QRectF targetRect = module->sceneBoundingRect().marginsAdded(QMargins(50,50,50,50));
+            QRectF targetRect = module->sceneBoundingRect().marginsAdded(QMargins(50, 50, 50, 50));
             focusRect(targetRect, false);
         }
     }
@@ -960,4 +972,14 @@ namespace hal
     {
         return mView;
     }
+
+    void GraphWidget::pluginProgressIndicator(int percent, const std::string& msg)
+    {
+        if (!sInstance) return;
+        if (percent==100)
+            sInstance->handleSceneAvailable();
+        else
+            sInstance->showBusy(percent, QString::fromStdString(msg));
+    }
+
 }    // namespace hal

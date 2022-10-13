@@ -4,8 +4,11 @@
 #include "gui/gui_globals.h"
 
 #include <QKeyEvent>
-
 #include <QDebug>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QTimer>
 
 #include "gui/python/python_console_history.h"
 
@@ -14,8 +17,9 @@
 namespace hal
 {
     PythonConsole::PythonConsole(QWidget* parent)
-        : QTextEdit(parent), mStandardPrompt(">>> "), mCompoundPrompt("... "), mPromptBlockNumber(0), mPromptLength(0), mPromptEndPosition(0), mCompoundPromptEndPosition(0),
-          mInCompoundPrompt(false), mInCompletion(false), mCurrentCompoundInput(""), mCurrentInput(""), mCurrentHistoryIndex(-1), mCurrentCompleterIndex(0),
+        : QTextEdit(parent), mStandardPrompt(">>> "), mCompoundPrompt("... "), mInputPrompt("==> "),
+          mPromptBlockNumber(0), mPromptLength(0), mPromptEndPosition(0), mCompoundPromptEndPosition(0),
+          mPromptType(Standard), mInCompletion(false), mCurrentCompoundInput(""), mCurrentInput(""), mCurrentHistoryIndex(-1), mCurrentCompleterIndex(0),
           mHistory(std::make_shared<PythonConsoleHistory>())
     {
         this->document()->setMaximumBlockCount(1000);
@@ -27,9 +31,35 @@ namespace hal
         mErrorColor = PythonConsoleQssAdapter::instance()->errorColor();
         mPromptColor = PythonConsoleQssAdapter::instance()->promtColor();
         gPythonContext->setConsole(this);
-        gPythonContext->interpret("print(\"Python \" + sys.version)", false);
-        gPythonContext->interpret("print(sys.executable + \" on \" + sys.platform)", false);
+        gPythonContext->interpretForeground("print(\"Python \" + sys.version)");
+        gPythonContext->interpretForeground("print(sys.executable + \" on \" + sys.platform)");
         displayPrompt();
+        mAbortThreadWidget = new PythonConsoleAbortThread(this);
+    }
+
+    void PythonConsole::keyPressEventInputMode(QKeyEvent *e)
+    {
+        mCurrentHistoryIndex = -1;
+        switch (e->key())
+        {
+        case Qt::Key_Return:
+        case Qt::Key_Enter:
+        {
+            moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+            QString input      = getCurrentCommand();
+            QTextCursor cursor = textCursor();
+            cursor.movePosition(QTextCursor::End);
+            cursor.insertText("\n");
+            Q_EMIT inputReceived(input);
+            break;
+        }
+        default:
+            if (textCursor().selectionStart() < mPromptEndPosition)
+            {
+                moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+            }
+            mInCompletion         = false;
+        }
     }
 
     void PythonConsole::keyPressEvent(QKeyEvent* e)
@@ -54,8 +84,14 @@ namespace hal
             }
         }
 
-        switch (e->key())
+        if (isInputMode())
         {
+            keyPressEventInputMode(e);
+        }
+        else
+        {
+            switch (e->key())
+            {
             case Qt::Key_Return:
             case Qt::Key_Enter:
                 moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
@@ -152,6 +188,7 @@ namespace hal
                 }
                 mInCompletion         = false;
                 mCurrentHistoryIndex = -1;
+            }
         }
         QTextEdit::keyPressEvent(e);
     }
@@ -196,6 +233,14 @@ namespace hal
         QTextEdit::clear();
     }
 
+    void PythonConsole::setInputMode(bool state)
+    {
+        if (state)
+            mPromptType = Input;
+        else
+            mPromptType = Standard;
+    }
+
     void PythonConsole::displayPrompt()
     {
         //QTextCursor cursor = textCursor();
@@ -205,18 +250,23 @@ namespace hal
         QTextCharFormat format;
         format.setForeground(mPromptColor);
         cursor.setCharFormat(format);
-        if (mInCompoundPrompt)
+        switch (mPromptType)
         {
+        case Compound:
             cursor.insertText(mCompoundPrompt);
             if (mCompoundPromptEndPosition < 0)
             {
                 mCompoundPromptEndPosition = mPromptEndPosition;
             }
-        }
-        else
-        {
+            break;
+        case Standard:
             cursor.insertText(mStandardPrompt);
             mCompoundPromptEndPosition = -1;
+            break;
+        case Input:
+            cursor.insertText(mInputPrompt);
+            mCompoundPromptEndPosition = -1;
+            break;
         }
         cursor.movePosition(QTextCursor::EndOfLine);
         setTextCursor(cursor);
@@ -224,6 +274,11 @@ namespace hal
         //    mPromptBlockNumber = textCursor().blockNumber();
         mPromptLength       = mStandardPrompt.length();
         mPromptEndPosition = textCursor().position();
+    }
+
+    void PythonConsole::handleThreadFinished()
+    {
+        mAbortThreadWidget->stop();
     }
 
     void PythonConsole::interpretCommand()
@@ -237,25 +292,25 @@ namespace hal
             //        gPythonContext->addHistory(input);
             mHistory->addHistory(input.toStdString());
         }
-        if ((!mInCompoundPrompt && gPythonContext->checkCompleteStatement(input) != 0) || (mInCompoundPrompt && input.isEmpty() && gPythonContext->checkCompleteStatement(input) != 0))
+        if ((!isCompound() && gPythonContext->checkCompleteStatement(input) != 0) || (isCompound() && input.isEmpty() && gPythonContext->checkCompleteStatement(input) != 0))
         {
             mCurrentCompoundInput += input;
-            if (mInCompoundPrompt)
+            if (isCompound())
             {
-                gPythonContext->interpret(mCurrentCompoundInput, true);
+                gPythonContext->interpretBackground(this, mCurrentCompoundInput, true);
             }
             else
             {
-                gPythonContext->interpret(input, false);
+                gPythonContext->interpretBackground(this, input, false);
             }
-            mInCompoundPrompt     = false;
+            mPromptType     = Standard;
             mCurrentCompoundInput = "";
-            displayPrompt();
+            mAbortThreadWidget->start();
         }
         else
         {
             mCurrentCompoundInput += input + "\n";
-            mInCompoundPrompt = true;
+            mPromptType     = Compound;
             displayPrompt();
         }
         mHistory->updateFromFile();
@@ -346,14 +401,20 @@ namespace hal
 
     void PythonConsole::handleTabKeyPressed()
     {
-        if (mInCompoundPrompt)
+        switch (mPromptType)
         {
+        case Compound:
             mCurrentInput = mCurrentCompoundInput + getCurrentCommand();
-        }
-        else
-        {
+            break;
+        case Standard:
             mCurrentInput = getCurrentCommand();
+            break;
+        case Input:
+            mCurrentInput += "\t";
+            insertPlainText("\t");
+            return;
         }
+
         QString current_line = getCurrentCommand();
         if (current_line.isEmpty())
         {
@@ -392,4 +453,67 @@ namespace hal
             }
         }
     }
+
+    PythonConsoleAbortThread* PythonConsole::abortThreadWidget()
+    {
+        return mAbortThreadWidget;
+    }
+
+    //------------------------------
+    PythonConsoleAbortThread::PythonConsoleAbortThread(QWidget* parent)
+        : QFrame(parent), mCount(0)
+    {
+        setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+        setLineWidth(2);
+        QHBoxLayout* layout = new QHBoxLayout(this);
+        layout->setMargin(2);
+        mLabel = new QLabel(this);
+        layout->addWidget(mLabel);
+        mAbortButton = new QPushButton("Abort", this);
+        mAbortButton->setDisabled(true);
+        mAbortButton->setMaximumWidth(270);
+        connect(mAbortButton,&QPushButton::clicked,this,&PythonConsoleAbortThread::handleAbortButton);
+        layout->addWidget(mAbortButton);
+        mTimer = new QTimer(this);
+        connect(mTimer,&QTimer::timeout,this,&PythonConsoleAbortThread::handleTimeout);
+    }
+
+    void  PythonConsoleAbortThread::handleAbortButton()
+    {
+        qDebug() << "abort";
+        gPythonContext->abortThread();
+    }
+
+
+    void PythonConsoleAbortThread::handleTimeout()
+    {
+        if (isVisible() && !gPythonContext->isThreadRunning())
+        {
+            stop();
+            return;
+        }
+        ++mCount;
+        mLabel->setText(QString("Python interpreter running for %1 seconds").arg(mCount));
+        if (mCount > 5)
+        {
+            mAbortButton->setEnabled(true);
+            show();
+        }
+    }
+
+    void PythonConsoleAbortThread::start()
+    {
+        mCount = 0;
+        mTimer->start(1000);
+        mAbortButton->setDisabled(true);
+        hide();
+    }
+
+    void PythonConsoleAbortThread::stop()
+    {
+        mTimer->stop();
+        mAbortButton->setDisabled(true);
+        hide();
+    }
+
 }

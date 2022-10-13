@@ -14,6 +14,7 @@
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
 #include "gui/gui_globals.h"
+#include "gui/settings/settings_items/settings_item_checkbox.h"
 
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
@@ -117,6 +118,7 @@ namespace hal
         connectAll();
 
         QGraphicsScene::addItem(mDragShadowGate);
+        connect(gGraphContextManager->sSettingNetGroupingToPins,&SettingsItem::valueChanged,this,&GraphicsScene::updateAllItems);
     }
 
     GraphicsScene::~GraphicsScene()
@@ -168,12 +170,12 @@ namespace hal
             int i = 0;
             while (i < mGateItems.size())
             {
-                if (g->id() < mGateItems.at(i).mId)
+                if (g->id() < mGateItems.at(i)->id())
                     break;
 
                 i++;
             }
-            mGateItems.insert(i, GateData{g->id(), g});
+            mGateItems.insert(i, g);
             return;
         }
         case ItemType::Net:
@@ -182,12 +184,12 @@ namespace hal
             int i = 0;
             while (i < mNetItems.size())
             {
-                if (n->id() < mNetItems.at(i).mId)
+                if (n->id() < mNetItems.at(i)->id())
                     break;
 
                 i++;
             }
-            mNetItems.insert(i, NetData{n->id(), n});
+            mNetItems.insert(i, n);
             return;
         }
         case ItemType::Module:
@@ -196,12 +198,12 @@ namespace hal
             int i = 0;
             while (i < mModuleItems.size())
             {
-                if (m->id() < mModuleItems.at(i).mId)
+                if (m->id() < mModuleItems.at(i)->id())
                     break;
 
                 i++;
             }
-            mModuleItems.insert(i, ModuleData{m->id(), m});
+            mModuleItems.insert(i, m);
             return;
         }
         default:
@@ -228,7 +230,7 @@ namespace hal
             int i = 0;
             while (i < mGateItems.size())
             {
-                if (mGateItems[i].mId == id)
+                if (mGateItems.at(i)->id() == id)
                 {
                     mGateItems.remove(i);
                     delete g;
@@ -248,7 +250,7 @@ namespace hal
             int i = 0;
             while (i < mNetItems.size())
             {
-                if (mNetItems[i].mId == id)
+                if (mNetItems.at(i)->id() == id)
                 {
                     mNetItems.remove(i);
                     delete n;
@@ -268,7 +270,7 @@ namespace hal
             int i = 0;
             while (i < mModuleItems.size())
             {
-                if (mModuleItems[i].mId == id)
+                if (mModuleItems.at(i)->id() == id)
                 {
                     mModuleItems.remove(i);
                     delete m;
@@ -287,13 +289,13 @@ namespace hal
 
     const GraphicsGate* GraphicsScene::getGateItem(const u32 id) const
     {
-        for (const GateData& d : mGateItems)
+        for (const GraphicsGate* gg : mGateItems)
         {
-            if (d.mId > id)
+            if (gg->id() > id)
                 break;
 
-            if (d.mId == id)
-                return d.mItem;
+            if (gg->id() == id)
+                return gg;
         }
 
         return nullptr;
@@ -301,13 +303,13 @@ namespace hal
 
     const GraphicsNet* GraphicsScene::getNetItem(const u32 id) const
     {
-        for (const NetData& d : mNetItems)
+        for (const GraphicsNet* gn : mNetItems)
         {
-            if (d.mId > id)
+            if (gn->id() > id)
                 break;
 
-            if (d.mId == id)
-                return d.mItem;
+            if (gn->id() == id)
+                return gn;
         }
 
         return nullptr;
@@ -315,13 +317,13 @@ namespace hal
 
     const GraphicsModule* GraphicsScene::getModuleItem(const u32 id) const
     {
-        for (const ModuleData& d : mModuleItems)
+        for (const GraphicsModule* gm : mModuleItems)
         {
-            if (d.mId > id)
+            if (gm->id() > id)
                 break;
 
-            if (d.mId == id)
-                return d.mItem;
+            if (gm->id() == id)
+                return gm;
         }
 
         return nullptr;
@@ -380,26 +382,26 @@ namespace hal
 
     void GraphicsScene::updateVisuals(const GraphShader::Shading &s)
     {
-        for (ModuleData& m : mModuleItems)
+        for (GraphicsModule* gm : mModuleItems)
         {
-            m.mItem->setVisuals(s.mOduleVisuals.value(m.mId));
+            gm->setVisuals(s.mOduleVisuals.value(gm->id()));
         }
 
-        for (GateData& g : mGateItems)
+        for (GraphicsGate* gg : mGateItems)
         {
-            g.mItem->setVisuals(s.mGateVisuals.value(g.mId));
+            gg->setVisuals(s.mGateVisuals.value(gg->id()));
         }
 
-        for (NetData& n : mNetItems)
+        for (GraphicsNet* gn : mNetItems)
         {
-            n.mItem->setVisuals(s.mNetVisuals.value(n.mId));
+            gn->setVisuals(s.mNetVisuals.value(gn->id()));
         }
     }
 
     void GraphicsScene::moveNetsToBackground()
     {
-        for (NetData d : mNetItems)
-            d.mItem->setZValue(-1);
+        for (GraphicsNet* gn : mNetItems)
+            gn->setZValue(-1);
     }
 
     void GraphicsScene::handleInternSelectionChanged()
@@ -492,15 +494,19 @@ namespace hal
 
     void GraphicsScene::handleGroupingColorChanged(Grouping *grp)
     {
-        for (const ModuleData& md : mModuleItems)
-            if (grp->contains_module_by_id(md.mId))
-                md.mItem->update();
-        for (const GateData& gd : mGateItems)
-            if (grp->contains_gate_by_id(gd.mId))
-                gd.mItem->update();
-        for (const NetData& nd : mNetItems)
-            if (grp->contains_net_by_id(nd.mId))
-                nd.mItem->update();
+        Q_UNUSED(grp);
+
+        updateAllItems();
+    }
+
+    void GraphicsScene::updateAllItems()
+    {
+        for (GraphicsModule* gm : mModuleItems)
+            gm->update();
+        for (GraphicsGate* gg : mGateItems)
+            gg->update();
+        for (GraphicsNet* gn : mNetItems)
+            gn->update();
     }
 
     void GraphicsScene::handleHighlight(const QVector<const SelectionTreeItem*>& highlightItems)
@@ -511,12 +517,12 @@ namespace hal
             if (sti) highlightSet[sti->itemType()].insert(sti->id());
         }
 
-        for (const ModuleData& mdata :  mModuleItems)
-            mdata.mItem->setHightlight(highlightSet[SelectionTreeItem::ModuleItem].contains(mdata.mId));
-        for (const GateData& gdata :  mGateItems)
-            gdata.mItem->setHightlight(highlightSet[SelectionTreeItem::GateItem].contains(gdata.mId));
-        for (const NetData& ndata :  mNetItems)
-            ndata.mItem->setHightlight(highlightSet[SelectionTreeItem::NetItem].contains(ndata.mId));
+        for (GraphicsModule* gm :  mModuleItems)
+            gm->setHightlight(highlightSet[SelectionTreeItem::ModuleItem].contains(gm->id()));
+        for (GraphicsGate* gg :  mGateItems)
+            gg->setHightlight(highlightSet[SelectionTreeItem::GateItem].contains(gg->id()));
+        for (GraphicsNet* gn :  mNetItems)
+            gn->setHightlight(highlightSet[SelectionTreeItem::NetItem].contains(gn->id()));
     }
 
     void GraphicsScene::handleExternSelectionChanged(void* sender)
@@ -533,36 +539,36 @@ namespace hal
 
         if (gSelectionRelay->numberSelectedModules())
         {
-            for (auto& element : mModuleItems)
+            for (GraphicsModule* gm : mModuleItems)
             {
-                if (gSelectionRelay->isModuleSelected(element.mId))
+                if (gSelectionRelay->isModuleSelected(gm->id()))
                 {
-                    element.mItem->setSelected(true);
-                    element.mItem->update();
+                    gm->setSelected(true);
+                    gm->update();
                 }
             }
         }
 
         if (gSelectionRelay->numberSelectedGates())
         {
-            for (auto& element : mGateItems)
+            for (GraphicsGate* gg : mGateItems)
             {
-                if (gSelectionRelay->isGateSelected(element.mId))
+                if (gSelectionRelay->isGateSelected(gg->id()))
                 {
-                    element.mItem->setSelected(true);
-                    element.mItem->update();
+                    gg->setSelected(true);
+                    gg->update();
                 }
             }
         }
 
         if (gSelectionRelay->numberSelectedNets())
         {
-            for (auto& element : mNetItems)
+            for (GraphicsNet* gn : mNetItems)
             {
-                if (gSelectionRelay->isNetSelected(element.mId))
+                if (gSelectionRelay->isNetSelected(gn->id()))
                 {
-                    element.mItem->setSelected(true);
-                    element.mItem->update();
+                    gn->setSelected(true);
+                    gn->update();
                 }
             }
         }

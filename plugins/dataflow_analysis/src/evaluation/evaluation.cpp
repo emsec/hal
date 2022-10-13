@@ -238,7 +238,7 @@ namespace hal
                     measure_block_time("majority voting");
                     auto& netlist_abstr = initial_grouping->netlist_abstr;
 
-                    const u32 bad_group_size = 7;
+                    const u32 bad_group_size = config.bad_group_size;
 
                     struct candidate
                     {
@@ -324,7 +324,7 @@ namespace hal
 
                     // scan groups until all or done
                     float original_size = sorted_results.size();
-                    progress_printer progress_bar;
+                    ProgressPrinter progress_bar;
                     while (!sorted_results.empty())
                     {
                         progress_bar.print_progress((original_size - sorted_results.size()) / original_size);

@@ -1,85 +1,156 @@
-#include  "hal_core/netlist/boolean_function/translator.h"
+#include "hal_core/netlist/boolean_function/translator.h"
 
-namespace hal 
+#include "hal_core/utilities/log.h"
+#include "hal_core/utilities/utils.h"
+
+#include <boost/multiprecision/cpp_int.hpp>
+
+namespace hal
 {
-namespace SMT
-{
-namespace Translator
-{
-	/**
-	 * Helper function to reduce a view into the abstract syntax tree of a node
-	 * and its parameter leaf nodes to an SMT-LIB string.
-	 *
-	 * @param[in] node - Node.
-	 * @param[in] operands - Operands of node.
-	 * @returns (1) status (true on success, false otherwise),
-	 *          (2) SMT-LIB string representation of node and operands.
-	 */
- 	std::tuple<bool, std::string> reduce_to_smt2(const BooleanFunction::Node* node, std::vector<std::string>&& operands) 
- 	{
- 		if (node->get_arity() != operands.size()) {
- 			return std::make_tuple(false, "");
- 		}
+    namespace SMT
+    {
+        namespace Translator
+        {
+            /**
+             * Helper function to translate arbitrary-long constant values into 
+             * an decimal string for SMT-LIB v2 translation compatibility.
+             * 
+             * @param[in] number - Boolean function constant node values.
+             * @returns OK() and constant on success, Err() otherwise.
+             */
+            Result<std::string> const2str(const std::vector<BooleanFunction::Value>& number)
+            {
+                boost::multiprecision::cpp_int value = 0;
 
- 		switch (node->type) 
- 		{
- 			case BooleanFunction::NodeType::Constant: 
- 				return {true, "(_ bv" + enum_to_string(node->get_as<BooleanFunction::OperandNode>()->constant) + " " + std::to_string(node->size) + ")"};
- 			case BooleanFunction::NodeType::Index:
- 				return {true, std::to_string(node->get_as<BooleanFunction::OperandNode>()->index)};
- 			case BooleanFunction::NodeType::Variable: 
- 				return {true, node->get_as<BooleanFunction::OperandNode>()->variable};
+                for (auto i = 0u; i < number.size(); i++)
+                {
+                    if ((number[i] == BooleanFunction::Value::X) || (number[i] == BooleanFunction::Value::Z))
+                    {
+                        return ERR("Cannot translate the number to a constant value as it is undefined.");
+                    }
 
- 			case BooleanFunction::NodeType::And: 
- 				return {true, "(bvand " + operands[0] + " " + operands[1] + ")"};
- 			case BooleanFunction::NodeType::Or:
- 				return {true, "(bvor " + operands[0] + " " + operands[1] + ")"};
- 			case BooleanFunction::NodeType::Not:
- 				return {true, "(bvnot " + operands[0] + ")"};	
- 			case BooleanFunction::NodeType::Xor:
- 				return {true, "(bvxor " + operands[0] + " " + operands[1] + ")"};
+                    if (number[i] == BooleanFunction::Value::ONE)
+                    {
+                        boost::multiprecision::bit_set(value, i);
+                    }
+                }
 
-			case BooleanFunction::NodeType::Add:
- 				return {true, "(bvadd " + operands[0] + " " + operands[1] + ")"};
+                std::stringstream ss;
+                ss << value;
+                return OK(ss.str());
+            }
 
- 			case BooleanFunction::NodeType::Concat:
- 				return {true, "(concat " + operands[0] + " " + operands[1] + ")"};
+            /**
+             * Helper function to reduce a view into the abstract syntax tree of a node
+             * and its parameter leaf nodes to an SMT-LIB string.
+             *
+             * @param[in] node - Boolean function node.
+             * @param[in] p - Boolean function node parameters.
+             * @param[in] index - Index of node in function.
+             * @param[in] function - Boolean function to be translated to SMT-LIB string.
+             * @returns OK() and SMT-LIB v2 string representation of node and operands on success, Err() otherwise.
+             */
+            Result<std::string> reduce_to_smt2(const BooleanFunction::Node& node, std::vector<std::string>&& p, size_t index, const BooleanFunction& function)
+            {
+                if (node.get_arity() != p.size())
+                {
+                    return ERR("could not reduce into SMT-Lib v2 string: arity of node '" + node.to_string() + "' does not match number of parameters");
+                }
 
- 			// TODO: check correctness of the extract/extension operations once
- 			//       the BooleanFunction uses the new data structure / interface
+                switch (node.type)
+                {
+                    case BooleanFunction::NodeType::Constant: {
+                        if (auto str = const2str(node.constant); str.is_ok())
+                        {
+                            return OK(std::string("(_ bv") + str.get() + " " + std::to_string(node.size) + ")");
+                        }
 
- 			/*
- 			case BooleanFunction::NodeType::Slice:
- 				return {true, "((_ extract " + operands[2] + " " + operands[1] + ") " + operands[0] + ")"};
- 			case BooleanFunction::NodeType::Zext: 
- 				return {true, "((_ zero_extend " + operands[1] + ") " + operands[0] +  ")"};
-			*/
+                        return ERR("could not reduce into SMT-Lib v2 string: unable to translate constant '" + node.to_string() + "'");
+                    }
+                    case BooleanFunction::NodeType::Index:
+                        return OK(std::to_string(node.index));
+                    case BooleanFunction::NodeType::Variable:
+                        return OK(node.variable);
 
- 			default: {
- 				std::cerr << "[!] cannot generate SMT-LIB for node-type '" << std::to_string(node->type) << "' (not implemented reached)." << std::endl;
- 				return {false, ""};
- 			}
- 		}
- 	}
+                    case BooleanFunction::NodeType::And:
+                        return OK("(bvand " + p[0] + " " + p[1] + ")");
+                    case BooleanFunction::NodeType::Or:
+                        return OK("(bvor " + p[0] + " " + p[1] + ")");
+                    case BooleanFunction::NodeType::Not:
+                        return OK("(bvnot " + p[0] + ")");
+                    case BooleanFunction::NodeType::Xor:
+                        return OK("(bvxor " + p[0] + " " + p[1] + ")");
 
- 	std::tuple<bool, std::string> translate_to_smt2(const BooleanFunction& function) {
-		std::vector<std::string> stack;
-		for (const auto& node : function.get_reverse_polish_notation()) {
-			std::vector<std::string> operands;
-			std::move(stack.end() - static_cast<i64>(node->get_arity()), stack.end(), std::back_inserter(operands));
-        	stack.erase(stack.end() - static_cast<i64>(node->get_arity()), stack.end());
-        	
-        	switch (auto [ok, reduction] = reduce_to_smt2(node.get(), std::move(operands)); ok) {
-        		case true: stack.emplace_back(reduction); break;
-        		default:   return {false, ""};
-        	}
-		}
+                    case BooleanFunction::NodeType::Add:
+                        return OK("(bvadd " + p[0] + " " + p[1] + ")");
+                    case BooleanFunction::NodeType::Sub:
+                        return OK("(bvsub " + p[0] + " " + p[1] + ")");
+                    case BooleanFunction::NodeType::Mul:
+                        return OK("(bvmul " + p[0] + " " + p[1] + ")");
+                    case BooleanFunction::NodeType::Sdiv:
+                        return OK("(bvsdiv " + p[0] + " " + p[1] + ")");
+                    case BooleanFunction::NodeType::Udiv:
+                        return OK("(bvudiv " + p[0] + " " + p[1] + ")");
+                    case BooleanFunction::NodeType::Srem:
+                        return OK("(bvsrem " + p[0] + " " + p[1] + ")");
+                    case BooleanFunction::NodeType::Urem:
+                        return OK("(bvurem " + p[0] + " " + p[1] + ")");
 
-		switch (stack.size() == 1) {
-			case true: return {true, stack.back()};
-			default:   return {false, ""};
-		}	
-	}
-}  // namespace Translator
-}  // namespace SMT
-}  // namespace hal
+                    case BooleanFunction::NodeType::Concat:
+                        return OK("(concat " + p[0] + " " + p[1] + ")");
+                    case BooleanFunction::NodeType::Slice:
+                        return OK("((_ extract " + p[1] + " " + p[2] + ") " + p[0] + ")");
+                    case BooleanFunction::NodeType::Zext:
+                        return OK("((_ zero_extend " + std::to_string(node.size - function.get_nodes().at(index - 2).index) + ") " + p[0] + ")");
+                    case BooleanFunction::NodeType::Sext:
+                        return OK("((_ sign_extend " + std::to_string(node.size - function.get_nodes().at(index - 2).index) + ") " + p[0] + ")");
+
+                    case BooleanFunction::NodeType::Eq:
+                        return OK("(ite (= " + p[0] + " " + p[1] + ") (_ bv1 " + std::to_string(node.size) + ") (_ bv0 " + std::to_string(node.size) + "))");
+                    case BooleanFunction::NodeType::Slt:
+                        return OK("(ite (bvslt " + p[0] + " " + p[1] + ") (_ bv1 " + std::to_string(node.size) + ") (_ bv0 " + std::to_string(node.size) + "))");
+                    case BooleanFunction::NodeType::Sle:
+                        return OK("(ite (bvsle " + p[0] + " " + p[1] + ") (_ bv1 " + std::to_string(node.size) + ") (_ bv0 " + std::to_string(node.size) + "))");
+                    case BooleanFunction::NodeType::Ule:
+                        return OK("(ite (bvule " + p[0] + " " + p[1] + ") (_ bv1 " + std::to_string(node.size) + ") (_ bv0 " + std::to_string(node.size) + "))");
+                    case BooleanFunction::NodeType::Ult:
+                        return OK("(ite (bvult " + p[0] + " " + p[1] + ") (_ bv1 " + std::to_string(node.size) + ") (_ bv0 " + std::to_string(node.size) + "))");
+                    case BooleanFunction::NodeType::Ite:
+                        return OK("(ite (= " + p[0] + " (_ bv1 1)) " + p[1] + " " + p[2] + ")");
+
+                    default:
+                        return ERR("could not reduce into SMT-Lib v2 string: not implemented for given node type");
+                }
+            }
+
+            Result<std::string> translate_to_smt2(const BooleanFunction& function)
+            {
+                std::vector<std::string> stack;
+                for (auto index = 0ul; index < function.length(); index++)
+                {
+                    const auto& node = function.get_nodes().at(index);
+                    std::vector<std::string> operands;
+                    std::move(stack.end() - static_cast<i64>(node.get_arity()), stack.end(), std::back_inserter(operands));
+                    stack.erase(stack.end() - static_cast<i64>(node.get_arity()), stack.end());
+
+                    if (auto reduction = reduce_to_smt2(node, std::move(operands), index, function); reduction.is_ok())
+                    {
+                        stack.emplace_back(reduction.get());
+                    }
+                    else
+                    {
+                        return ERR_APPEND(reduction.get_error(), "could not translate Boolean function to SMT-Lib v2 string: reduction to SMT-Lib v2 string failed");
+                    }
+                }
+
+                switch (stack.size())
+                {
+                    case 1:
+                        return OK(stack.back());
+                    default:
+                        return ERR("could not translate Boolean function to SMT-Lib v2 string: stack is imbalanced");
+                }
+            }
+        }    // namespace Translator
+    }        // namespace SMT
+}    // namespace hal

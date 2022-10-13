@@ -5,9 +5,12 @@
 #include "hal_core/utilities/log.h"
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/utilities/project_directory.h"
+#include "hal_core/netlist/project_manager.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "netlist_test_utils.h"
+#include "gate_library_test_utils.h"
 
 #include <experimental/filesystem>
 
@@ -79,8 +82,8 @@ namespace hal {
         TEST_START
             if (gate_library_exists(test_utils::g_lib_name)) {
                 {
-                    auto nl = netlist_factory::create_netlist(test_utils::get_testing_gate_library());
-                    EXPECT_EQ(nl->get_gate_library()->get_name(), test_utils::get_testing_gate_library()->get_name());
+                    auto nl = netlist_factory::create_netlist(test_utils::get_gate_library());
+                    EXPECT_EQ(nl->get_gate_library()->get_name(), test_utils::get_gate_library()->get_name());
                 }
             }
             // NEGATIVE
@@ -204,9 +207,11 @@ namespace hal {
                 netlist_serializer::serialize_to_file(empty_nl.get(), tmp_hal_file_path);                                                           // create the .hal file
 
                 ProgramArguments p_args;
-                p_args.set_option("--input-file", std::vector<std::string>({tmp_hal_file_path}));
+                p_args.set_option("--import-netlist", std::vector<std::string>({tmp_hal_file_path}));
+                ProjectManager* pm = ProjectManager::instance();
+                pm->create_project_directory("import_hal");
 
-                auto nl = netlist_factory::load_netlist(p_args);
+                auto nl = netlist_factory::load_netlist(pm->get_project_directory(), p_args);
 
                 EXPECT_NE(nl, nullptr);
             }
@@ -230,12 +235,14 @@ namespace hal {
                                                                                           "end STRUCTURE;");
 
                 ProgramArguments p_args;
-                p_args.set_option("--input-file", std::vector<std::string>({tmp_hdl_file_path}));
+                p_args.set_option("--import-netlist", std::vector<std::string>({tmp_hdl_file_path}));
                 p_args.set_option("--language", std::vector<std::string>({"vhdl"}));
                 p_args.set_option("--gate-library", std::vector<std::string>({m_g_lib_path}));
+                ProjectManager* pm = ProjectManager::instance();
+                pm->create_project_directory("import_vhdl");
 
                 // NO_COUT_TEST_BLOCK;
-                auto nl = netlist_factory::load_netlist(p_args);
+                auto nl = netlist_factory::load_netlist(pm->get_project_directory(), p_args);
 
                 EXPECT_NE(nl, nullptr);
             }
@@ -243,15 +250,17 @@ namespace hal {
                 // Create a netlist but leaving out the input path
                 NO_COUT_TEST_BLOCK;
                 ProgramArguments p_args;
-                auto nl = netlist_factory::load_netlist(p_args);
+                auto nl = netlist_factory::load_netlist(ProjectDirectory(), p_args);
                 EXPECT_EQ(nl, nullptr);
             }
             {
                 // Create a netlist but with an invalid (non-existing) input file path
                 NO_COUT_TEST_BLOCK;
                 ProgramArguments p_args;
-                p_args.set_option("--input-file", std::vector<std::string>({"/this/file/does/not/exist"}));
-                auto nl = netlist_factory::load_netlist(p_args);
+                p_args.set_option("--import-netlist", std::vector<std::string>({"/this/file/does/not/exist"}));
+                ProjectManager* pm = ProjectManager::instance();
+                pm->create_project_directory("non_existing_file");
+                auto nl = netlist_factory::load_netlist(pm->get_project_directory(), p_args);
                 EXPECT_EQ(nl, nullptr);
             }
             {
@@ -262,10 +271,12 @@ namespace hal {
                     test_utils::create_sandbox_file("tmp_2.vhdl", "This file does not contain a valid vdl format...");
 
                 ProgramArguments p_args;
-                p_args.set_option("--input-file", std::vector<std::string>({tmp_hdl_file_path}));
+                p_args.set_option("--import-netlist", std::vector<std::string>({tmp_hdl_file_path}));
                 p_args.set_option("--language", std::vector<std::string>({"vhdl"}));
                 p_args.set_option("--gate-library", std::vector<std::string>({test_utils::g_lib_name}));
-                auto nl = netlist_factory::load_netlist(p_args);
+                ProjectManager* pm = ProjectManager::instance();
+                pm->create_project_directory("invalid_vhdl");
+                auto nl = netlist_factory::load_netlist(pm->get_project_directory(), p_args);
 
                 EXPECT_EQ(nl, nullptr);
             }

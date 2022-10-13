@@ -41,8 +41,8 @@ namespace hal
     class GraphContext;
 
     class ContextTableModel;
-
     class SettingsItemCheckbox;
+
     /**
      * @ingroup graph-contexts
      * @brief User interface to manage all GraphContext%s.
@@ -186,22 +186,12 @@ namespace hal
         void handleModuleGateRemoved(Module* m, const u32 removed_gate);
 
         /**
-         * Handler to be called after an input port of a module has been renamed. <br>
+         * Handler to be called after a port of a module has been changed. <br>
          * Used to apply the changes in the affected contexts.
          *
-         * @param m - The module with the renamed input port
-         * @param net - The net that is connected to the renamed input port
+         * @param m - The module with the changed port
          */
-        void handleModuleInputPortNameChanged(Module* m, const u32 net);
-
-        /**
-         * Handler to be called after an output port of a module has been renamed. <br>
-         * Used to apply the changes in the affected contexts.
-         *
-         * @param m - The module with the renamed output port
-         * @param net - The net that is connected to the renamed output port
-         */
-        void handleModuleOutputPortNameChanged(Module* m, const u32 net);
+        void handleModulePortsChanged(Module* m);
 
         /**
          * Handler to be called after a gate has been removed. <br>
@@ -349,10 +339,22 @@ namespace hal
          * Deletes all contexts.
          */
         void clear();
-        void handleSaveTriggered();
-        void restoreFromFile();
 
-        QString nextDefaultName() const { return QString("view %1").arg(mMaxContextId+1);}
+        bool handleSaveTriggered(const QString& filename);
+
+        /**
+         * Restores all persisted context from .json file and returns selected one.
+         * @param filename The .json file with persisted context data.
+         * @return Selected restored context or nullptr if restore failed.
+         */
+        GraphContext* restoreFromFile(const QString &filename);
+
+        QString nextDefaultName() const
+        {
+            return QString("view %1").arg(mMaxContextId + 1);
+        }
+
+        static SettingsItemCheckbox* sSettingNetGroupingToPins;
     Q_SIGNALS:
         /**
          * Q_SIGNAL that notifies about the creation of a new context by the context manager.
@@ -377,7 +379,7 @@ namespace hal
         void deletingContext(GraphContext* context);
 
     private:
-//        QVector<GraphContext*> mGraphContexts;
+        //        QVector<GraphContext*> mGraphContexts;
 
         ContextTableModel* mContextTableModel;
         u32 mMaxContextId;
@@ -387,4 +389,4 @@ namespace hal
         SettingsItemCheckbox* mSettingParseLayout;
         SettingsItemCheckbox* mSettingLayoutBoxes;
     };
-}
+}    // namespace hal

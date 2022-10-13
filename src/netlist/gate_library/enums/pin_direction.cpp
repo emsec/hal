@@ -3,5 +3,9 @@
 namespace hal
 {
     template<>
-    std::vector<std::string> EnumStrings<PinDirection>::data = {"none", "input", "output", "inout", "internal"};
+    std::map<PinDirection, std::string> EnumStrings<PinDirection>::data = {{PinDirection::none, "none"},
+                                                                           {PinDirection::input, "input"},
+                                                                           {PinDirection::output, "output"},
+                                                                           {PinDirection::inout, "inout"},
+                                                                           {PinDirection::internal, "internal"}};
 }

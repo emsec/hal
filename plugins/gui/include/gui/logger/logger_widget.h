@@ -71,7 +71,7 @@ namespace hal
          *
          * @param Toolbar - The toolbar to initialize
          */
-        virtual void setupToolbar(Toolbar* Toolbar) override;
+        virtual void setupToolbar(Toolbar* toolbar) override;
 
         /**
          * Gets the underlying (read only) QPlainTextEdit object this LoggerWidget uses to display the log.
@@ -206,7 +206,7 @@ namespace hal
         QString mSearchFilter;
 
         LoggerMarshall* mLogMarshall;
-        int mCurrentChannelIndex;
+        int mCurrentChannelIndex = -2;
         std::string mCurrentChannel;
         QReadWriteLock mLock;
         QScrollBar* mPlainTextEditScrollbar;

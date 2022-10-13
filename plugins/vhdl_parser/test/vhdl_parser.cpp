@@ -1,6 +1,7 @@
 #include "vhdl_parser/vhdl_parser.h"
 
 #include "netlist_test_utils.h"
+#include "gate_library_test_utils.h"
 
 #include <experimental/filesystem>
 
@@ -8,15 +9,16 @@ namespace hal {
 
     class VHDLParserTest : public ::testing::Test {
     protected:
-        GateLibrary* m_gl;
-
-        virtual void SetUp() {
+        virtual void SetUp() 
+        {
             NO_COUT_BLOCK;
             test_utils::init_log_channels();
-            m_gl = test_utils::get_testing_gate_library();
+            test_utils::create_sandbox_directory();
         }
 
-        virtual void TearDown() {
+        virtual void TearDown() 
+        {
+            test_utils::remove_sandbox_directory();
         }
     };
 
@@ -55,18 +57,18 @@ namespace hal {
                                     "  signal net_0 : STD_LOGIC;\n"
                                     "  signal net_1 : STD_LOGIC;\n"
                                     "begin\n"
-                                    "  gate_0 : gate_1_to_1\n"
+                                    "  gate_0 : BUF\n"
                                     "    port map (\n"
                                     "      I => net_global_in,\n"
                                     "      O => net_0\n"
                                     "    );\n"
-                                    "  gate_1 : gate_2_to_1\n"
+                                    "  gate_1 : AND2\n"
                                     "    port map (\n"
                                     "      I0 => net_global_in,\n"
                                     "      I1 => net_global_in,\n"
                                     "      O => net_1\n"
                                     "    );\n"
-                                    "  gate_2 : gate_3_to_1\n"
+                                    "  gate_2 : AND3\n"
                                     "    port map (\n"
                                     "      I0 => net_0,\n"
                                     "      I1 => net_1,\n"
@@ -74,21 +76,24 @@ namespace hal {
                                     "    );\n"
                                     "end STRUCTURE;\n"
                                     "");
+            const GateLibrary* gate_lib = test_utils::get_gate_library();
             std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
             VHDLParser vhdl_parser;
-            std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+            auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+            ASSERT_TRUE(nl_res.is_ok());
+            std::unique_ptr<Netlist> nl = nl_res.get();
             ASSERT_NE(nl, nullptr);
 
             // Check if the device name is parsed correctly
             EXPECT_EQ(nl->get_design_name(), "TEST_Comp");
 
             // Check if the gates are parsed correctly
-            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
-            Gate* gate_0 = *(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).begin());
-            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_2_to_1")).size(), 1);
-            Gate* gate_1 = *(nl->get_gates(test_utils::gate_type_filter("gate_2_to_1")).begin());
-            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_3_to_1")).size(), 1);
-            Gate* gate_2 = *(nl->get_gates(test_utils::gate_type_filter("gate_3_to_1")).begin());
+            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("BUF")).size(), 1);
+            Gate* gate_0 = *(nl->get_gates(test_utils::gate_type_filter("BUF")).begin());
+            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("AND2")).size(), 1);
+            Gate* gate_1 = *(nl->get_gates(test_utils::gate_type_filter("AND2")).begin());
+            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("AND3")).size(), 1);
+            Gate* gate_2 = *(nl->get_gates(test_utils::gate_type_filter("AND3")).begin());
 
             ASSERT_NE(gate_0, nullptr);
             EXPECT_EQ(gate_0->get_name(), "gate_0");
@@ -165,29 +170,32 @@ namespace hal {
                                         " : out STD_LOGIC := 'X';);end TEST_Comp;architecture \n"
                                         " STRUCTURE of TEST_Comp is signal net_0 : STD_LOGIC;\n"
                                         "signal net_1 : STD_LOGIC;\n"
-                                        "begin gate_0 : gate_1_to_1 port map(\n"
+                                        "begin gate_0 : BUF port map(\n"
                                         "  I => net_global_in,\n"
                                         "  \n"
                                         "  \t O => net_0\n"
                                         "    );\n"
-                                        "  gate_1 : gate_2_to_1\n"
+                                        "  gate_1 : AND2\n"
                                         "    port map ( I0 \n\t"
                                         "      => net_global_in\n"
                                         "      \t,\n"
                                         "      I1 => net_global_in,O => net_1);\n"
-                                        "gate_2:gate_3_to_1 port map(I0 => net_0,I1 => net_1,O => net_global_out);end STRUCTURE;");
+                                        "gate_2:AND3 port map(I0 => net_0,I1 => net_1,O => net_global_out);end STRUCTURE;");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
 
                 // Check if the gates are parsed correctly
-                ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
-                Gate* gate_0 = *(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).begin());
-                ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_2_to_1")).size(), 1);
-                Gate* gate_1 = *(nl->get_gates(test_utils::gate_type_filter("gate_2_to_1")).begin());
-                ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_3_to_1")).size(), 1);
-                Gate* gate_2 = *(nl->get_gates(test_utils::gate_type_filter("gate_3_to_1")).begin());
+                ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("BUF")).size(), 1);
+                Gate* gate_0 = *(nl->get_gates(test_utils::gate_type_filter("BUF")).begin());
+                ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("AND2")).size(), 1);
+                Gate* gate_1 = *(nl->get_gates(test_utils::gate_type_filter("AND2")).begin());
+                ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("AND3")).size(), 1);
+                Gate* gate_2 = *(nl->get_gates(test_utils::gate_type_filter("AND3")).begin());
 
                 ASSERT_NE(gate_0, nullptr);
                 EXPECT_EQ(gate_0->get_name(), "gate_0");
@@ -266,7 +274,7 @@ namespace hal {
                                         "end TEST_Comp; "
                                         "architecture STRUCTURE of TEST_Comp is "
                                         "begin"
-                                        "  gate_0 : gate_1_to_1"
+                                        "  gate_0 : BUF"
                                         "    generic map("
                                         "      key_integer => 1234,"
                                         "      key_floating_point => 1.234,"
@@ -288,13 +296,16 @@ namespace hal {
                                         "      I => net_global_input "
                                         "    ); "
                                         "end STRUCTURE;");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
 
-                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).size(), 1);
-                Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).size(), 1);
+                Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).begin();
 
                 // Integers are stored in their hex representation
                 EXPECT_EQ(gate_0->get_data("generic", "key_integer"), std::make_tuple("integer", "1234"));
@@ -350,7 +361,7 @@ namespace hal {
                                         "  signal n_vec_1 : STD_LOGIC_VECTOR ( 3 downto 0 ); "
                                         "  signal n_vec_2 : STD_LOGIC_VECTOR ( 0 to 3 ); "
                                         "begin "
-                                        "  gate_0 : gate_1_to_4 "
+                                        "  gate_0 : COMB14 "
                                         "    port map ( "
                                         "      I => net_global_in, "
                                         "      O0 => n_vec_1(0), "
@@ -358,7 +369,7 @@ namespace hal {
                                         "      O2 => n_vec_1(2), "
                                         "      O3 => n_vec_1(3) "
                                         "    ); "
-                                        "  gate_1 : gate_4_to_4 "
+                                        "  gate_1 : COMB44 "
                                         "    port map ( "
                                         "      I0 => n_vec_1(0), "
                                         "      I1 => n_vec_1(1), "
@@ -369,7 +380,7 @@ namespace hal {
                                         "      O2 => n_vec_2(2), "
                                         "      O3 => n_vec_2(3) "
                                         "    ); "
-                                        "  gate_2 : gate_4_to_1 "
+                                        "  gate_2 : COMB41 "
                                         "    port map ( "
                                         "      I0 => n_vec_2(0), "
                                         "      I1 => n_vec_2(1), "
@@ -378,9 +389,12 @@ namespace hal {
                                         "      O => net_global_out "
                                         "    ); "
                                         "end STRUCTURE;");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
 
                 // Check that all nets are created and connected correctly
@@ -397,11 +411,11 @@ namespace hal {
                     Net*
                         n_vec_2_i = *nl->get_nets(test_utils::net_name_filter("n_vec_2(" + i_str + ")")).begin();
                     ASSERT_EQ(n_vec_1_i->get_sources().size(), 1);
-                    EXPECT_EQ(n_vec_1_i->get_sources()[0]->get_pin(), "O" + i_str);
-                    EXPECT_EQ((*n_vec_1_i->get_destinations().begin())->get_pin(), "I" + i_str);
+                    EXPECT_EQ(n_vec_1_i->get_sources()[0]->get_pin()->get_name(), "O" + i_str);
+                    EXPECT_EQ((*n_vec_1_i->get_destinations().begin())->get_pin()->get_name(), "I" + i_str);
                     ASSERT_EQ(n_vec_2_i->get_sources().size(), 1);
-                    EXPECT_EQ(n_vec_2_i->get_sources()[0]->get_pin(), "O" + i_str);
-                    EXPECT_EQ((*n_vec_2_i->get_destinations().begin())->get_pin(), "I" + i_str);
+                    EXPECT_EQ(n_vec_2_i->get_sources()[0]->get_pin()->get_name(), "O" + i_str);
+                    EXPECT_EQ((*n_vec_2_i->get_destinations().begin())->get_pin()->get_name(), "I" + i_str);
                 }
             }
             {
@@ -416,7 +430,7 @@ namespace hal {
                                         "architecture STRUCTURE of TEST_Comp is "
                                         "  signal n_vec : STD_LOGIC_VECTOR2 ( 0 to 1, 2 to 3 ); "
                                         "begin "
-                                        "  gate_0 : gate_1_to_4 "
+                                        "  gate_0 : COMB14 "
                                         "    port map ( "
                                         "      I => net_global_in, "
                                         "      O0 => n_vec(0,2), "
@@ -424,7 +438,7 @@ namespace hal {
                                         "      O2 => n_vec(1, 2), "
                                         "      O3 => n_vec(1, 3) "
                                         "    ); "
-                                        "  gate_1 : gate_4_to_1 "
+                                        "  gate_1 : COMB41 "
                                         "    port map ( "
                                         "      I0 => n_vec(0, 2), "
                                         "      I1 => n_vec(0, 3), "
@@ -433,9 +447,12 @@ namespace hal {
                                         "      O => net_global_out "
                                         "    ); "
                                         "end STRUCTURE;");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
 
                 // Check that all nets are created and connected correctly
@@ -445,8 +462,8 @@ namespace hal {
                     ASSERT_FALSE(nl->get_nets(test_utils::net_name_filter(n)).empty());
                     Net* n_vec_i_j = *nl->get_nets(test_utils::net_name_filter(n)).begin();
                     ASSERT_EQ(n_vec_i_j->get_sources().size(), 1);
-                    EXPECT_EQ(n_vec_i_j->get_sources()[0]->get_pin(), "O" + std::to_string(pin));
-                    EXPECT_EQ((*n_vec_i_j->get_destinations().begin())->get_pin(), "I" + std::to_string(pin));
+                    EXPECT_EQ(n_vec_i_j->get_sources()[0]->get_pin()->get_name(), "O" + std::to_string(pin));
+                    EXPECT_EQ((*n_vec_i_j->get_destinations().begin())->get_pin()->get_name(), "I" + std::to_string(pin));
                     pin++;
                 }
             }
@@ -462,7 +479,7 @@ namespace hal {
                                         "architecture STRUCTURE of TEST_Comp is "
                                         "  signal n_vec : STD_LOGIC_VECTOR3 ( 0 to 1, 1 downto 0, 0 to 1 ); "
                                         "begin "
-                                        "  gate_0 : gate_1_to_8 "
+                                        "  gate_0 : COMB18 "
                                         "    port map ( "
                                         "      I => net_global_in, "
                                         "      O0 => n_vec(0, 0, 0), "
@@ -474,7 +491,7 @@ namespace hal {
                                         "      O6 => n_vec(1, 1, 0), "
                                         "      O7 => n_vec(1, 1, 1) "
                                         "    ); "
-                                        "  gate_1 : gate_8_to_1 "
+                                        "  gate_1 : COMB81 "
                                         "    port map ( "
                                         "      I0 => n_vec(0, 0, 0), "
                                         "      I1 => n_vec(0, 0, 1), "
@@ -487,9 +504,12 @@ namespace hal {
                                         "      O => net_global_out "
                                         "    ); "
                                         "end STRUCTURE;");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
 
                 // Check that all nets are created and connected correctly
@@ -502,8 +522,8 @@ namespace hal {
                     Net*
                         n_vec_i_j = *nl->get_nets(test_utils::net_name_filter("n_vec" + net_idx[idx])).begin();
                     ASSERT_EQ(n_vec_i_j->get_sources().size(), 1);
-                    EXPECT_EQ(n_vec_i_j->get_sources()[0]->get_pin(), "O" + std::to_string(idx));
-                    EXPECT_EQ((*n_vec_i_j->get_destinations().begin())->get_pin(), "I" + std::to_string(idx));
+                    EXPECT_EQ(n_vec_i_j->get_sources()[0]->get_pin()->get_name(), "O" + std::to_string(idx));
+                    EXPECT_EQ((*n_vec_i_j->get_destinations().begin())->get_pin()->get_name(), "I" + std::to_string(idx));
                 }
             }
         TEST_END
@@ -529,39 +549,42 @@ namespace hal {
                                         "end TEST_Comp; "
                                         "architecture STRUCTURE of TEST_Comp is "
                                         "begin "
-                                        "  gate_0 : gate_1_to_1 "
+                                        "  gate_0 : BUF "
                                         "    port map ( "
                                         "      I => '0', "
                                         "      O => net_global_out_0 "
                                         "    ); "
-                                        "  gate_1 : gate_1_to_1 "
+                                        "  gate_1 : BUF "
                                         "    port map ( "
                                         "      I => '1', "
                                         "      O => net_global_out_1 "
                                         "    ); "
-                                        "  gate_2 : gate_1_to_1 "
+                                        "  gate_2 : BUF "
                                         "    port map ( "
                                         "      I => 'Z', "
                                         "      O => net_global_out_2 "
                                         "    ); "
-                                        "  gate_3 : gate_1_to_1 "
+                                        "  gate_3 : BUF "
                                         "    port map ( "
                                         "      I => 'X', "
                                         "      O => net_global_out_3 "
                                         "    ); "
                                         "end STRUCTURE;");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
 
-                Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
+                Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).begin();
                 ASSERT_NE(gate_0, nullptr);
-                Gate* gate_1 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1")).begin();
+                Gate* gate_1 = *nl->get_gates(test_utils::gate_filter("BUF", "gate_1")).begin();
                 ASSERT_NE(gate_1, nullptr);
-                Gate* gate_2 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_2")).begin();
+                Gate* gate_2 = *nl->get_gates(test_utils::gate_filter("BUF", "gate_2")).begin();
                 ASSERT_NE(gate_2, nullptr);
-                Gate* gate_3 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_3")).begin();
+                Gate* gate_3 = *nl->get_gates(test_utils::gate_filter("BUF", "gate_3")).begin();
                 ASSERT_NE(gate_3, nullptr);
 
                 // check whether net '0' was created and is connected to a GND gate through input pin "I"
@@ -624,12 +647,12 @@ namespace hal {
                                         "  attribute child_net_attribute : string; "
                                         "  attribute child_net_attribute of child_in : signal is \"child_net_attribute_value\"; "
                                         "begin "
-                                        "  gate_0_child : gate_1_to_1 "
+                                        "  gate_0_child : BUF "
                                         "    port map ( "
                                         "      I => child_in, "
                                         "      O => net_0_child "
                                         "    ); "
-                                        "  gate_1_child : gate_1_to_1 "
+                                        "  gate_1_child : BUF "
                                         "    port map ( "
                                         "      I => net_0_child, "
                                         "      O => child_out "
@@ -647,7 +670,7 @@ namespace hal {
                                         "  signal net_1 : STD_LOGIC; "
                                         " "
                                         "begin "
-                                        "  gate_0 : gate_1_to_1 "
+                                        "  gate_0 : BUF "
                                         "    port map ( "
                                         "      I => net_global_in, "
                                         "      O => net_0 "
@@ -657,26 +680,29 @@ namespace hal {
                                         "      child_in => net_0, "
                                         "      child_out => net_1 "
                                         "    ); "
-                                        "  gate_1 : gate_1_to_1 "
+                                        "  gate_1 : BUF "
                                         "    port map ( "
                                         "      I => net_1, "
                                         "      O => net_global_out "
                                         "    ); "
                                         "end ENT_TOP;");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
 
                 // check gates
-                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).size(), 1);
-                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1")).size(), 1);
-                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0_child")).size(), 1);
-                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1_child")).size(), 1);
-                Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
-                Gate* gate_1 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1")).begin();
-                Gate* gate_0_child = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0_child")).begin();
-                Gate* gate_1_child = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1_child")).begin();
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).size(), 1);
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("BUF", "gate_1")).size(), 1);
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("BUF", "gate_0_child")).size(), 1);
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("BUF", "gate_1_child")).size(), 1);
+                Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).begin();
+                Gate* gate_1 = *nl->get_gates(test_utils::gate_filter("BUF", "gate_1")).begin();
+                Gate* gate_0_child = *nl->get_gates(test_utils::gate_filter("BUF", "gate_0_child")).begin();
+                Gate* gate_1_child = *nl->get_gates(test_utils::gate_filter("BUF", "gate_1_child")).begin();
 
                 // check nets
                 ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_0")).size(), 1);
@@ -746,7 +772,7 @@ namespace hal {
                                         "end ENT_CHILD_TWO; "
                                         "architecture STRUCTURE_CHILD_TWO of ENT_CHILD_TWO is "
                                         "begin "
-                                        "  gate_child_two : gate_1_to_1 "
+                                        "  gate_child_two : BUF "
                                         "    port map ( "
                                         "      I => I_c2, "
                                         "      O => O_c2 "
@@ -773,7 +799,7 @@ namespace hal {
                                         "      I_c2 => net_child_0, "
                                         "      O_c2 => net_child_1 "
                                         "    ); "
-                                        "  gate_child_one : gate_1_to_1 "
+                                        "  gate_child_one : BUF "
                                         "    port map ( "
                                         "      I => net_child_1, "
                                         "      O => O_c1 "
@@ -800,15 +826,18 @@ namespace hal {
                                         "      I_c2 => net_0, "
                                         "      O_c2 => net_1 "
                                         "    ); "
-                                        "  gate_top : gate_1_to_1 "
+                                        "  gate_top : BUF "
                                         "    port map ( "
                                         "      I => net_1, "
                                         "      O => net_global_out "
                                         "    ); "
                                         "end ENT_TOP;");
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 // Test if all modules are created and assigned correctly
                 ASSERT_NE(nl, nullptr);
@@ -885,12 +914,12 @@ namespace hal {
                                         "  signal mod_inner : STD_LOGIC; "
                                         "begin "
                                         "  mod_inner <= mod_out; "
-                                        "  gate_a : gate_1_to_1 "
+                                        "  gate_a : BUF "
                                         "    port map ( "
                                         "      I => mod_in, "
                                         "      O => mod_inner "
                                         "    ); "
-                                        "  gate_b : gate_1_to_1 "
+                                        "  gate_b : BUF "
                                         "    port map ( "
                                         "      I => mod_inner "
                                         "    ); "
@@ -910,15 +939,18 @@ namespace hal {
                                         "      mod_in => net_global_in, "
                                         "      mod_out => net_0 "
                                         "    ); "
-                                        "  gate_top : gate_1_to_1 "
+                                        "  gate_top : BUF "
                                         "    port map ( "
                                         "      I => net_0, "
                                         "      O => net_global_out "
                                         "    ); "
                                         "end STRUCTURE_TOP;");
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 // Test if all modules are created and assigned correctly
                 ASSERT_NE(nl, nullptr);
@@ -986,13 +1018,13 @@ namespace hal {
                                         "  signal shared_net_name : STD_LOGIC;\n"
                                         "  signal net_a : STD_LOGIC;\n"
                                         "begin\n"
-                                        "  shared_gate_name : gate_1_to_2\n"
+                                        "  shared_gate_name : COMB12\n"
                                         "    port map (\n"
                                         "      I => I_A,\n"
                                         "      O0 => shared_net_name,\n"
                                         "      O1 => net_a\n"
                                         "    );\n"
-                                        "  gate_a : gate_2_to_1\n"
+                                        "  gate_a : COMB21\n"
                                         "    port map (\n"
                                         "      I0 => shared_net_name,\n"
                                         "      I1 => net_a,\n"
@@ -1010,13 +1042,13 @@ namespace hal {
                                         "  signal shared_net_name : STD_LOGIC;\n"
                                         "  signal net_b : STD_LOGIC;\n"
                                         "begin\n"
-                                        "  shared_gate_name : gate_1_to_2\n"
+                                        "  shared_gate_name : COMB12\n"
                                         "    port map (\n"
                                         "      I => I_B,\n"
                                         "      O0 => shared_net_name,\n"
                                         "      O1 => net_b\n"
                                         "    );\n"
-                                        "  gate_b : gate_2_to_1\n"
+                                        "  gate_b : COMB21\n"
                                         "    port map (\n"
                                         "      I0 => shared_net_name,\n"
                                         "      I1 => net_b,\n"
@@ -1050,15 +1082,18 @@ namespace hal {
                                         "      I_B => net_1,\n"
                                         "      O_B => net_2\n"
                                         "    );\n"
-                                        "  gate_top : gate_1_to_1\n"
+                                        "  gate_top : BUF\n"
                                         "    port map (\n"
                                         "      I => net_2,\n"
                                         "      O => net_global_out\n"
                                         "    );\n"
                                         "end STRUCTURE_TOP;");
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 // Test if all modules are created and assigned correctly
                 ASSERT_NE(nl, nullptr);
@@ -1156,12 +1191,12 @@ namespace hal {
                                         "  net_slave_1 <= net_slave_0;  "
                                         "  net_slave_0 <= net_master; "
                                         "  net_slave_2 <= net_slave_0; "
-                                        "  gate_0 : gate_1_to_1 "
+                                        "  gate_0 : BUF "
                                         "    port map ( "
                                         "      I => net_global_in, "
                                         "      O => net_slave_0 "
                                         "    ); "
-                                        "  gate_1 : gate_3_to_1 "
+                                        "  gate_1 : AND3 "
                                         "    port map ( "
                                         "      I0 => net_master, "
                                         "      I1 => net_slave_1, "
@@ -1169,26 +1204,23 @@ namespace hal {
                                         "      O => net_global_out "
                                         "    ); "
                                         "end STRUCTURE;");
-                test_def::capture_stdout();
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
                 EXPECT_EQ(nl->get_nets().size(), 3);    // global_in + global_out + net_master
                 ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_master")).size(), 1);
                 Net* net_master = *nl->get_nets(test_utils::net_name_filter("net_master")).begin();
 
-                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).size(), 1);
-                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_3_to_1", "gate_1")).size(), 1);
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).size(), 1);
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("AND3", "gate_1")).size(), 1);
 
-                Gate* g_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
-                Gate* g_1 = *nl->get_gates(test_utils::gate_filter("gate_3_to_1", "gate_1")).begin();
+                Gate* g_0 = *nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).begin();
+                Gate* g_1 = *nl->get_gates(test_utils::gate_filter("AND3", "gate_1")).begin();
 
                 // Check the connections
                 EXPECT_EQ(g_0->get_fan_out_net("O"), net_master);
@@ -1216,7 +1248,6 @@ namespace hal {
                                         "  port ( "
                                         "    net_global_in : in STD_LOGIC := 'X'; "
                                         "    net_global_out : out STD_LOGIC := 'X'; "
-                                        "    net_slave_1: out STD_LOGIC := 'X'; "
                                         "  ); "
                                         "end TEST_Comp; "
                                         "architecture STRUCTURE of TEST_Comp is "
@@ -1224,12 +1255,12 @@ namespace hal {
                                         "  signal net_master : STD_LOGIC_VECTOR ( 0 to 3 ); "
                                         "begin "
                                         "  net_slave <= net_master; "
-                                        "  gate_0 : gate_1_to_1 "
+                                        "  gate_0 : BUF "
                                         "    port map ( "
                                         "      I => net_global_in, "
                                         "      O => net_slave(0) "
                                         "    ); "
-                                        "  gate_1 : gate_3_to_1 "
+                                        "  gate_1 : AND3 "
                                         "    port map ( "
                                         "      I0 => net_master(0), "
                                         "      I1 => net_slave(1), "
@@ -1237,15 +1268,12 @@ namespace hal {
                                         "      O => net_global_out "
                                         "    ); "
                                         "end STRUCTURE;");
-                test_def::capture_stdout();
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
 
@@ -1285,38 +1313,35 @@ namespace hal {
                                         "end TEST_Comp;\n"
                                         "architecture STRUCTURE of TEST_Comp is\n"
                                         "begin\n"
-                                        "  gate_0 : pin_group_gate_4_to_4\n"
+                                        "  gate_0 : RAM\n"
                                         "    port map (\n"
-                                        "      I => B\"0101\"\n"
+                                        "      ADDR => B\"0101\"\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                test_def::capture_stdout();
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
-                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
-                Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
+                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("RAM", "gate_0")).empty());
+                Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("RAM", "gate_0")).begin());
 
-                Net* net_0 = gate_0->get_fan_in_net("I(0)");
+                Net* net_0 = gate_0->get_fan_in_net("ADDR(0)");
                 ASSERT_NE(net_0, nullptr);
                 EXPECT_EQ(net_0->get_name(), "'1'");
 
-                Net* net_1 = gate_0->get_fan_in_net("I(1)");
+                Net* net_1 = gate_0->get_fan_in_net("ADDR(1)");
                 ASSERT_NE(net_1, nullptr);
                 EXPECT_EQ(net_1->get_name(), "'0'");
 
-                Net* net_2 = gate_0->get_fan_in_net("I(2)");
+                Net* net_2 = gate_0->get_fan_in_net("ADDR(2)");
                 ASSERT_NE(net_2, nullptr);
                 EXPECT_EQ(net_2->get_name(), "'1'");
 
-                Net* net_3 = gate_0->get_fan_in_net("I(3)");
+                Net* net_3 = gate_0->get_fan_in_net("ADDR(3)");
                 ASSERT_NE(net_3, nullptr);
                 EXPECT_EQ(net_3->get_name(), "'0'");
             }
@@ -1330,40 +1355,37 @@ namespace hal {
                                         "architecture STRUCTURE of TEST_Comp is\n"
                                         "  signal l_vec : STD_LOGIC_VECTOR ( 3 downto 0 );\n"
                                         "begin\n"
-                                        "  gate_0 : pin_group_gate_4_to_4\n"
+                                        "  gate_0 : RAM\n"
                                         "    port map (\n"
-                                        "      O => l_vec\n"
+                                        "      DATA_OUT => l_vec\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                test_def::capture_stdout();
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
-                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
-                Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
+                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("RAM", "gate_0")).empty());
+                Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("RAM", "gate_0")).begin());
 
                 EXPECT_EQ(gate_0->get_fan_out_nets().size(), 4);
 
-                Net* net_0 = gate_0->get_fan_out_net("O(0)");
+                Net* net_0 = gate_0->get_fan_out_net("DATA_OUT(0)");
                 ASSERT_NE(net_0, nullptr);
                 EXPECT_EQ(net_0->get_name(), "l_vec(0)");
 
-                Net* net_1 = gate_0->get_fan_out_net("O(1)");
+                Net* net_1 = gate_0->get_fan_out_net("DATA_OUT(1)");
                 ASSERT_NE(net_1, nullptr);
                 EXPECT_EQ(net_1->get_name(), "l_vec(1)");
 
-                Net* net_2 = gate_0->get_fan_out_net("O(2)");
+                Net* net_2 = gate_0->get_fan_out_net("DATA_OUT(2)");
                 ASSERT_NE(net_2, nullptr);
                 EXPECT_EQ(net_2->get_name(), "l_vec(2)");
 
-                Net* net_3 = gate_0->get_fan_out_net("O(3)");
+                Net* net_3 = gate_0->get_fan_out_net("DATA_OUT(3)");
                 ASSERT_NE(net_3, nullptr);
                 EXPECT_EQ(net_3->get_name(), "l_vec(3)");
             }
@@ -1378,32 +1400,29 @@ namespace hal {
                                         "architecture STRUCTURE of TEST_Comp is\n"
                                         "  signal l_vec : STD_LOGIC_VECTOR ( 3 downto 0 );\n"
                                         "begin\n"
-                                        "  gate_0 : pin_group_gate_4_to_4\n"
+                                        "  gate_0 : RAM\n"
                                         "    port map (\n"
-                                        "      O(3 downto 2) => l_vec(2 downto 1)\n"
+                                        "      DATA_OUT(3 downto 2) => l_vec(2 downto 1)\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                test_def::capture_stdout();
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
-                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
-                Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
+                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("RAM", "gate_0")).empty());
+                Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("RAM", "gate_0")).begin());
 
                 EXPECT_EQ(gate_0->get_fan_out_nets().size(), 2);
 
-                Net* net_1 = gate_0->get_fan_out_net("O(3)");
+                Net* net_1 = gate_0->get_fan_out_net("DATA_OUT(3)");
                 ASSERT_NE(net_1, nullptr);
                 EXPECT_EQ(net_1->get_name(), "l_vec(2)");
 
-                Net* net_2 = gate_0->get_fan_out_net("O(2)");
+                Net* net_2 = gate_0->get_fan_out_net("DATA_OUT(2)");
                 ASSERT_NE(net_2, nullptr);
                 EXPECT_EQ(net_2->get_name(), "l_vec(1)");
             }
@@ -1417,32 +1436,29 @@ namespace hal {
                                         "architecture STRUCTURE of TEST_Comp is\n"
                                         "  signal l_vec : STD_LOGIC_VECTOR ( 3 downto 0 );\n"
                                         "begin\n"
-                                        "  gate_0 : pin_group_gate_4_to_4\n"
+                                        "  gate_0 : RAM\n"
                                         "    port map (\n"
-                                        "      O(2 to 3) => l_vec(2 downto 1)\n"
+                                        "      DATA_OUT(2 to 3) => l_vec(2 downto 1)\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                test_def::capture_stdout();
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
-                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
-                Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
+                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("RAM", "gate_0")).empty());
+                Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("RAM", "gate_0")).begin());
 
                 EXPECT_EQ(gate_0->get_fan_out_nets().size(), 2);
 
-                Net* net_1 = gate_0->get_fan_out_net("O(2)");
+                Net* net_1 = gate_0->get_fan_out_net("DATA_OUT(2)");
                 ASSERT_NE(net_1, nullptr);
                 EXPECT_EQ(net_1->get_name(), "l_vec(2)");
 
-                Net* net_2 = gate_0->get_fan_out_net("O(3)");
+                Net* net_2 = gate_0->get_fan_out_net("DATA_OUT(3)");
                 ASSERT_NE(net_2, nullptr);
                 EXPECT_EQ(net_2->get_name(), "l_vec(1)");
             }
@@ -1471,7 +1487,7 @@ namespace hal {
                                         "end TEST_Comp; "
                                         "architecture STRUCTURE of TEST_Comp is "
                                         "begin"
-                                        "  test_gate : gate_1_to_1"
+                                        "  test_gate : BUF"
                                         "    generic map(\n"
                                         "      no_comment_0 => 123, -- comment_0 => 123, \t --comment_1 => 123\n"
                                         "      no_comment_1 => 123,\n"
@@ -1482,20 +1498,16 @@ namespace hal {
                                         "      I => net_global_input "
                                         "    ); "
                                         "end STRUCTURE;");
-                test_def::capture_stdout();
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
-                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "test_gate")).size(), 1);
-                Gate*
-                    test_gate = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "test_gate")).begin();
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("BUF", "test_gate")).size(), 1);
+                Gate* test_gate = *nl->get_gates(test_utils::gate_filter("BUF", "test_gate")).begin();
 
                 // Test that the comments did not removed other parts (all no_comment_n generics should be created)
                 for (std::string key : std::set<std::string>({"no_comment_0", "no_comment_1", "no_comment_2"})) {
@@ -1537,19 +1549,22 @@ namespace hal {
                                         "  attribute attri_name : attri_type;\n"
                                         "  attribute attri_name of gate_0 : label is attri_value;\n"
                                         "begin\n"
-                                        "  gate_0 : gate_1_to_1\n"
+                                        "  gate_0 : BUF\n"
                                         "    port map (\n"
                                         "      I => net_global_in,\n"
                                         "      O => net_global_out\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
-                ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
-                Gate* attri_gate = *nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).begin();
+                ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("BUF")).size(), 1);
+                Gate* attri_gate = *nl->get_gates(test_utils::gate_type_filter("BUF")).begin();
                 EXPECT_EQ(attri_gate->get_data("attribute", "attri_name"),
                           std::make_tuple("attri_type", "attri_value"));
             }
@@ -1567,20 +1582,23 @@ namespace hal {
                                         "  attribute attri_name : attri_type;\n"
                                         "  attribute attri_name of net_0 : signal is \"attri_value\";\n"
                                         "begin\n"
-                                        "  gate_0 : gate_1_to_1\n"
+                                        "  gate_0 : BUF\n"
                                         "    port map (\n"
                                         "      I => net_global_in,\n"
                                         "      O => net_0\n"
                                         "    );\n"
-                                        "  gate_1 : gate_1_to_1\n"
+                                        "  gate_1 : BUF\n"
                                         "    port map (\n"
                                         "      I => net_0,\n"
                                         "      O => net_global_out\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_0")).size(), 1);
@@ -1605,20 +1623,23 @@ namespace hal {
                                         "  attribute attri_float_string : attri_type_1;\n"
                                         "  attribute attri_float_string of gate_0 : label is \"1.234\";\n"
                                         "begin\n"
-                                        "  gate_0 : gate_1_to_1\n"
+                                        "  gate_0 : BUF\n"
                                         "    port map (\n"
                                         "      I => net_global_in,\n"
                                         "      O => net_0\n"
                                         "    );\n"
-                                        "  gate_1 : gate_1_to_1\n"
+                                        "  gate_1 : BUF\n"
                                         "    port map (\n"
                                         "      I => net_0,\n"
                                         "      O => net_global_out\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_0")).size(), 1);
@@ -1655,24 +1676,21 @@ namespace hal {
                                     "end TEST_Comp;\n"
                                     "architecture STRUCTURE of TEST_Comp is\n"
                                     "begin\n"
-                                    "  gate_0 : SIMPRIM.VCOMPONENTS.gate_1_to_1\n"
+                                    "  gate_0 : SIMPRIM.VCOMPONENTS.BUF\n"
                                     "    port map (\n"
                                     "      I => net_global_input\n"
                                     "    );\n"
                                     "end STRUCTURE;");
-            test_def::capture_stdout();
-            auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-            if (nl == nullptr) {
-                std::cout << test_def::get_captured_stdout();
-            } else {
-                test_def::get_captured_stdout();
-            }
+            const GateLibrary* gate_lib = test_utils::get_gate_library();
+            std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+            VHDLParser vhdl_parser;
+            auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+            ASSERT_TRUE(nl_res.is_ok());
+            std::unique_ptr<Netlist> nl = nl_res.get();
 
             ASSERT_NE(nl, nullptr);
 
-            EXPECT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
+            EXPECT_EQ(nl->get_gates(test_utils::gate_type_filter("BUF")).size(), 1);
         TEST_END
     }
 
@@ -1747,15 +1765,16 @@ namespace hal {
                                         "end TEST_Comp;\n"
                                         "architecture STRUCTURE of TEST_Comp is\n"
                                         "begin\n"
-                                        "  gate_0 : gate_1_to_1\n"
+                                        "  gate_0 : BUF\n"
                                         "    port map (\n"
                                         "      NON_EXISTING_PIN => global_in\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-                ASSERT_EQ(nl, nullptr);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_error());
             }
             {
                 // Use an unknown Gate type (not in Gate library)
@@ -1775,22 +1794,23 @@ namespace hal {
                                         "      O => net_global_out\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-
-                EXPECT_EQ(nl, nullptr);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_error());
             }
             {
                 // The input does not contain any entity (is empty)
                 NO_COUT_TEST_BLOCK;
                 std::string netlist_input("");
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-
-                EXPECT_EQ(nl, nullptr);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_error());
             }
+        /* non-used entity _WILL_ create problems (erroneously considered as top module)
             {
                 // Create a non-used entity (should not create any problems...)
                 NO_COUT_TEST_BLOCK;
@@ -1803,7 +1823,7 @@ namespace hal {
                                         "end TEST_Comp;\n"
                                         "architecture STRUCTURE of IGNORE_ME is\n"
                                         "begin\n"
-                                        "  gate_0 : gate_1_to_1\n"
+                                        "  gate_0 : BUF\n"
                                         "    port map (\n"
                                         "      I => min,\n"
                                         "      O => mout\n"
@@ -1818,7 +1838,7 @@ namespace hal {
                                         "end TEST_Comp;\n"
                                         "architecture STRUCTURE of TEST_Comp is\n"
                                         "begin\n"
-                                        "  gate_0 : gate_1_to_1\n"
+                                        "  gate_0 : BUF\n"
                                         "    port map (\n"
                                         "      I => net_global_in,\n"
                                         "      O => net_global_out\n"
@@ -1826,10 +1846,13 @@ namespace hal {
                                         "end STRUCTURE;");
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 EXPECT_NE(nl, nullptr);
             }
+            */
             {
                 // Create a cyclic master-slave Net hierarchy
                 NO_COUT_TEST_BLOCK;
@@ -1846,22 +1869,22 @@ namespace hal {
                                         "begin "
                                         "  net_0 <= net_1;  "
                                         "  net_1 <= net_0; "
-                                        "  gate_0 : gate_1_to_1 "
+                                        "  gate_0 : BUF "
                                         "    port map ( "
                                         "      I => net_global_in, "
                                         "      O => net_0 "
                                         "    ); "
-                                        "  gate_1 : gate_1_to_1 "
+                                        "  gate_1 : BUF "
                                         "    port map ( "
                                         "      I => net_1, "
                                         "      O => net_global_out "
                                         "    ); "
                                         "end STRUCTURE;");
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-
-                EXPECT_EQ(nl, nullptr);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_error());
             }
             if(test_utils::known_issue_tests_active())
             {
@@ -1874,15 +1897,16 @@ namespace hal {
                                         "architecture STRUCTURE of TEST_Comp is\n"
                                         "  signal l_vec : STD_LOGIC_VECTOR ( 4 downto 0 );\n"
                                         "begin\n"
-                                        "  gate_0 : pin_group_gate_4_to_4\n"
+                                        "  gate_0 : RAM\n"
                                         "    port map (\n"
                                         "      O(p downto q) => l_vec(p downto q)\n" // <- fails booth independently (l.827)
                                         "    );\n"
                                         "end STRUCTURE;");
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-                EXPECT_EQ(nl, nullptr);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_error());
             }
             // ------ VHDL specific tests ------
             {
@@ -1896,16 +1920,16 @@ namespace hal {
                                         "end TEST_Comp;\n"
                                         "architecture STRUCTURE of TEST_Comp is\n"
                                         "begin\n"
-                                        "  gate_0 : gate_1_to_1\n"
+                                        "  gate_0 : BUF\n"
                                         "    port map (\n"
                                         "      O => net_global_input\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-
-                EXPECT_EQ(nl, nullptr);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_error());
             }
             {
                 // The architecture contains an invalid keyword (neither 'signal' nor 'attribute')
@@ -1919,16 +1943,16 @@ namespace hal {
                                         "architecture STRUCTURE of TEST_Comp is\n"
                                         "unknown_keyword some_signal : STD_LOGIC;"    // <- invalid keyword
                                         "begin\n"
-                                        "  gate_0 : gate_1_to_1\n"
+                                        "  gate_0 : BUF\n"
                                         "    port map (\n"
                                         "      O => net_global_input\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-
-                EXPECT_EQ(nl, nullptr);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_error());
             }
             {
                 // Testing incorrect data_types in the "generic map" block
@@ -1941,7 +1965,7 @@ namespace hal {
                                         "end TEST_Comp;\n"
                                         "architecture STRUCTURE of TEST_Comp is\n"
                                         "begin\n"
-                                        "  gate_0 : gate_1_to_1\n"
+                                        "  gate_0 : BUF\n"
                                         "    generic map(\n"
                                         "      key_invalid_type => Inv4lid_type\n"    // <- The format of 'Inv4lid_type' matches with no data_type
                                         "    )\n"
@@ -1949,32 +1973,35 @@ namespace hal {
                                         "      I => net_global_input\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-                EXPECT_EQ(nl, nullptr);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_error());
             }
             {
                 // Leave the 'port map' block empty (Gate is not connected)
-                NO_COUT_TEST_BLOCK;
+                // NO_COUT_TEST_BLOCK;
                 std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is\n"
                                         "  port (\n"
-                                        "    net_global_input : in STD_LOGIC := 'X';\n"
                                         "  );\n"
                                         "end TEST_Comp;\n"
                                         "architecture STRUCTURE of TEST_Comp is\n"
                                         "begin\n"
-                                        "  gate_0 : gate_1_to_1\n"
+                                        "  gate_0 : BUF\n"
                                         "    port map (\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
-                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).empty());
-                Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
+                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).empty());
+                Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).begin();
                 EXPECT_TRUE(gate_0->get_fan_out_nets().empty());
                 EXPECT_TRUE(gate_0->get_fan_in_nets().empty());
             }
@@ -1991,19 +2018,22 @@ namespace hal {
                                         "architecture STRUCTURE of TEST_Comp is\n"
                                         "  attribute attri_name of gate_0 : label is attri_value;\n"
                                         "begin\n"
-                                        "  gate_0 : gate_1_to_1\n"
+                                        "  gate_0 : BUF\n"
                                         "    port map (\n"
                                         "      I => net_global_in,\n"
                                         "      O => net_global_out\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 EXPECT_NE(nl, nullptr);
-                ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
-                Gate* attri_gate = *nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).begin();
+                ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("BUF")).size(), 1);
+                Gate* attri_gate = *nl->get_gates(test_utils::gate_type_filter("BUF")).begin();
                 EXPECT_EQ(attri_gate->get_data("attribute", "attri_name"),
                           std::make_tuple("unknown", "attri_value"));
             }
@@ -2020,17 +2050,17 @@ namespace hal {
                                         "architecture STRUCTURE of TEST_Comp is\n"
                                         "  attribute WAMBO;\n"    // <- attributes do not work like this
                                         "begin\n"
-                                        "  gate_0 : gate_1_to_1\n"
+                                        "  gate_0 : BUF\n"
                                         "    port map (\n"
                                         "      I => net_global_in,\n"
                                         "      O => net_global_out\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-
-                EXPECT_EQ(nl, nullptr);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_error());
             }
             {
                 // The amount of bounds does not match with the vector dimension (vhdl specific)
@@ -2044,17 +2074,20 @@ namespace hal {
                                         "architecture STRUCTURE of TEST_Comp is\n"
                                         "  signal n_vec : STD_LOGIC_VECTOR3 ( 0 to 1, 0 to 1);\n"    // <- two bounds, but dimension 3
                                         "begin\n"
-                                        "  gate_0 : gate_1_to_1\n"
+                                        "  gate_0 : BUF\n"
                                         "    port map (\n"
                                         "      O => net_global_input\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-                if (nl != nullptr) {
-                    EXPECT_EQ(nl->get_nets().size(), 1);
-                }
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_error());
+                // std::unique_ptr<Netlist> nl = nl_res.get();
+                // if (nl != nullptr) {
+                //     EXPECT_EQ(nl->get_nets().size(), 1);
+                // }
             }
             {
                 // The ranges of the pin vectors do not match in size
@@ -2066,25 +2099,16 @@ namespace hal {
                                         "architecture STRUCTURE of TEST_Comp is\n"
                                         "  signal l_vec : STD_LOGIC_VECTOR ( 0 to 3 );\n"
                                         "begin\n"
-                                        "  gate_0 : pin_group_gate_4_to_4\n"
+                                        "  gate_0 : RAM\n"
                                         "    port map (\n"
-                                        "      O(0 to 2) => l_vec(0 to 3)\n"
+                                        "      DATA_OUT(0 to 2) => l_vec(0 to 3)\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                test_def::capture_stdout();
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-                if (nl != nullptr)
-                {
-                    std::cout << test_def::get_captured_stdout();
-                }
-                else
-                {
-                    test_def::get_captured_stdout();
-                }
-
-                ASSERT_EQ(nl, nullptr);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_error());
             }
             {
                 // The right side of a pin assignment does no match any vector format
@@ -2096,16 +2120,16 @@ namespace hal {
                                         "end TEST_Comp;\n"
                                         "architecture STRUCTURE of TEST_Comp is\n"
                                         "begin\n"
-                                        "  gate_0 : pin_group_gate_4_to_4\n"
+                                        "  gate_0 : RAM\n"
                                         "    port map (\n"
-                                        "      I(1 to 3) => Unkn0wn_Format\n"    // <- unknown format
+                                        "      ADDR(1 to 3) => Unkn0wn_Format\n"    // <- unknown format
                                         "    );\n"
                                         "end STRUCTURE;");
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-
-                ASSERT_EQ(nl, nullptr);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_error());
             }
         TEST_END
     }

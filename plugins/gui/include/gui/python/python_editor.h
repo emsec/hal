@@ -23,19 +23,22 @@
 
 #pragma once
 
+#include "gui/action/action.h"
 #include "gui/code_editor/code_editor.h"
 #include "gui/content_widget/content_widget.h"
-#include "hal_core/utilities/hal_file_manager.h"
 #include "gui/file_modified_bar/file_modified_bar.h"
-#include "gui/action/action.h"
 #include "gui/python/python_context_subscriber.h"
+
+#include "hal_core/netlist/project_serializer.h"
+#include "hal_core/utilities/json_write_document.h"
 
 #include <QEvent>
 #include <QFileSystemWatcher>
 #include <QMap>
+#include <QMessageBox>
 #include <QPushButton>
 #include <QtCore/QFileInfo>
-#include <QMessageBox>
+#include <filesystem>
 
 class QVBoxLayout;
 class QTabWidget;
@@ -52,7 +55,26 @@ namespace hal
     class SettingsItemCheckbox;
     class SettingsItemKeybind;
     class SettingsItemSpinbox;
- 
+
+    class PythonSerializer : public ProjectSerializer
+    {
+        QString mSaveDir;
+
+        static QString sPythonRelDir;
+
+        void restoreTabs(const std::filesystem::path& loaddir, const std::string& jsonfile);
+    public:
+        PythonSerializer();
+
+        std::string serialize(Netlist* netlist, const std::filesystem::path& savedir, bool isAutosave);
+
+        void deserialize(Netlist* netlist, const std::filesystem::path& loaddir);
+
+        QString getDirectory() const;
+
+        std::string serialize_control(const std::filesystem::path& savedir = std::filesystem::path(), bool isAutosave = false);
+    };
+
     /**
      * @ingroup python-editor
      * @brief Main widget that combines all neccessary functionality to develop in python (for hal).
@@ -83,6 +105,11 @@ namespace hal
     public:
         explicit PythonEditor(QWidget* parent = nullptr);
         ~PythonEditor();
+
+        /**
+         * Query filename policy
+         */
+        enum QueryFilenamePolicy { GenericName, QueryIfEmpty, QueryAlways };
 
         /**
          * Setups the toolbar of this content widget. Overwrites the function ContentWidget::setupToolbar.
@@ -201,13 +228,40 @@ namespace hal
         QTabWidget* getTabWidget();
 
         /**
-         * Saves a tab given by its index. If ask_path is true, the user is ask for a new save location.
+         * Saves a tab given by its index. File dialog for filename will be shown upon QueryAlways or upon
+         * QueryIfEmpty no name was given before
          *
-         * @param ask_path - Ask the user for a new save location
+         * @param queryPolicy one of  GenericName, QueryIfEmpty, QueryAlways
+         * @param isAutosave True if save request was issued from autosave, false otherwise
          * @param index - The tab index
-         * @returns true if the tab was saved
+         * @returns true if the tab was saved, false otherwise
          */
-        bool saveFile(const bool ask_path, int index = -1);
+        bool saveFile(bool isAutosave, QueryFilenamePolicy queryPolicy, int index = -1);
+
+        /**
+         * Saves all open tabs. Will use generic filenames if no name was given so far.
+         * @param isAutosave True if save request was issued from autosave, false otherwise
+         */
+        void saveAllTabs(const QString& genericPath, bool isAutosave);
+
+        /**
+         * Saves state of tabs to pythoneditor.json
+         */
+        void saveControl();
+
+        /**
+         * Generate a generic filename for tabs that have not been saved to file yet
+         * @param index - The tab index
+         * @return Generated file name
+         */
+        QString unnamedFilename(int index) const;
+
+        /**
+         * Generate a generic filename when called by autosave (given filename might be located in external directory)
+         * @param index - The tab index
+         * @return Generated file name
+         */
+        QString autosaveFilename(int index);
 
         /**
          * Close the tab given by its index. It will discard all unsaved changes of this tab without asking.
@@ -454,21 +508,21 @@ namespace hal
          *
          * @param path - the new path
          */
-        void setSearchIconPath(const QString &path);
+        void setSearchIconPath(const QString& path);
 
         /**
          * Q_PROPERTY WRITE function for the 'search'-icon style.
          *
          * @param style - the new style
          */
-        void setSearchIconStyle(const QString &style);
+        void setSearchIconStyle(const QString& style);
 
         /**
          * Q_PROPERTY WRITE function for the 'active search'-icon style.
          *
          * @param style - the new style
          */
-        void setSearchActiveIconStyle(const QString &style);
+        void setSearchActiveIconStyle(const QString& style);
         ///@}
 
         /**
@@ -480,7 +534,7 @@ namespace hal
          * @param document - The json document of the .hal file
          * @returns true on success
          */
-        bool handleSerializationToHalFile(const std::filesystem::path& path, Netlist* netlist, rapidjson::Document& document);
+        bool handleSerializationToHalFile(const std::filesystem::path& path, const Netlist* netlist, rapidjson::Document& document);
 
         /**
          * Deserialize the necessary information from the .hal file that is loaded.
@@ -505,6 +559,8 @@ namespace hal
          */
         void toggleSearchbar();
 
+        void handleThreadFinished();
+
         /**
          * Q_SLOT to close the tab given by its index. If there are unsaved changes the user is ask whether to save
          * the changes, discard the changes or cancel the closing.
@@ -516,13 +572,6 @@ namespace hal
          * Q_SLOT to open/close the minimap (code outline).
          */
         void handleActionToggleMinimap();
-
-        /**
-         *  Unused Q_SLOT?
-         *
-         * @param changed
-         */
-        void handleModificationChanged(bool changed);
 
         /**
          * Q_SLOT to handle key presses within any PythonCodeEditor
@@ -545,6 +594,13 @@ namespace hal
          * @param index - The index of the newly selected tab
          */
         void handleCurrentTabChanged(int index);
+
+        /**
+         * Get python editor from tab no
+         * @param tabIndex The tab index of requested python editor
+         * @return The python code editor
+         */
+        PythonCodeEditor* getPythonEditor(int tabIndex);
 
         /**
          * Q_SLOT to handle that the original file of an opened tab was modified (outside from hal). <br>
@@ -641,7 +697,7 @@ namespace hal
          * @param content - The content to write
          * @returns true on success
          */
-        bool writeSnapshotFile(QFileInfo snapshot_file_path, QString original_file_path , QString content) const;
+        bool writeSnapshotFile(QFileInfo snapshot_file_path, QString original_file_path, QString content) const;
 
         /**
          * Get the path to the directory where the snapshots for this netlist are stored.
@@ -711,6 +767,15 @@ namespace hal
          */
         void removeSnapshotFile(PythonCodeEditor* editor) const;
 
+        /**
+         * Suggest path name for file dialog:
+         *   1. Path from file recently saved
+         *   2. Project dir + "/py"
+         *   3. Current directory
+         * @return the default path
+         */
+        QString getDefaultPath() const;
+
         QVBoxLayout* mLayout;
         Toolbar* mToolbar;
         Splitter* mSplitter;
@@ -760,7 +825,9 @@ namespace hal
 
         long mLastClickTime;
 
-        QString mLastOpenedPath;
+        PythonSerializer mSerializer;
+        QString mDefaultPath;
+        QString mGenericPath;
 
         /**
          * Stores where the snapshots for the tabs are located
@@ -781,4 +848,4 @@ namespace hal
         SettingsItemKeybind* mSettingRunFile;
         SettingsItemKeybind* mSettingCreateFile;
     };
-}
+}    // namespace hal

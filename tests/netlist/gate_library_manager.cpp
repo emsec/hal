@@ -143,7 +143,7 @@ namespace hal
             EXPECT_TRUE(gnd_types.at("GND")->has_property(GateTypeProperty::ground));
             auto gnd_bf = gnd_types.at("GND")->get_boolean_functions();
             ASSERT_TRUE(gnd_bf.find("O") != gnd_bf.end());
-            EXPECT_TRUE(gnd_bf.at("O").is_constant_zero());
+            EXPECT_TRUE(gnd_bf.at("O").has_constant_value(0));
 
             // check VCC gate type
             auto vcc_types = test_lib->get_vcc_gate_types();
@@ -152,7 +152,7 @@ namespace hal
             EXPECT_TRUE(vcc_types.at("VCC")->has_property(GateTypeProperty::power));
             auto vcc_bf = vcc_types.at("VCC")->get_boolean_functions();
             ASSERT_TRUE(vcc_bf.find("O") != vcc_bf.end());
-            EXPECT_TRUE(vcc_bf.at("O").is_constant_one());
+            EXPECT_TRUE(vcc_bf.at("O").has_constant_value(1));
         }
         {
             // Parse a file that does not contain a GND or VCC Gate type (constant 0 / constant 1)
@@ -175,7 +175,7 @@ namespace hal
             EXPECT_TRUE(gnd_types.at("HAL_GND")->has_property(GateTypeProperty::ground));
             auto gnd_bf = gnd_types.at("HAL_GND")->get_boolean_functions();
             ASSERT_TRUE(gnd_bf.find("O") != gnd_bf.end());
-            EXPECT_TRUE(gnd_bf.at("O").is_constant_zero());
+            EXPECT_TRUE(gnd_bf.at("O").has_constant_value(0));
 
             // check VCC gate type
             auto vcc_types = empty_lib->get_vcc_gate_types();
@@ -184,7 +184,7 @@ namespace hal
             EXPECT_TRUE(vcc_types.at("HAL_VDD")->has_property(GateTypeProperty::power));
             auto vcc_bf = vcc_types.at("HAL_VDD")->get_boolean_functions();
             ASSERT_TRUE(vcc_bf.find("O") != vcc_bf.end());
-            EXPECT_TRUE(vcc_bf.at("O").is_constant_one());
+            EXPECT_TRUE(vcc_bf.at("O").has_constant_value(1));
         }
         std::filesystem::remove(m_test_lib_path);
         TEST_END

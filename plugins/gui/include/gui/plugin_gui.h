@@ -24,8 +24,15 @@
 #pragma once
 
 #include "hal_core/plugin_system/plugin_interface_ui.h"
+#include <QList>
+#include <QObject>
+
+Q_DECLARE_METATYPE(u32)
+
 namespace hal
 {
+    class LayoutLocker;
+
     /**
      * @ingroup gui
      * PluginGui is a huge plugin that provides a graphical user interface to load and work with netlists. If compiled
@@ -33,6 +40,8 @@ namespace hal
      */
     class PluginGui : public UIPluginInterface
     {
+        QList<LayoutLocker*> mLayoutLockerList;
+
     public:
         /**
          * Returns the plugin name: 'hal_gui'
@@ -67,5 +76,13 @@ namespace hal
          * @return True on success, False otherwise.
          */
         bool exec(ProgramArguments& args) override;
+
+        /**
+         * Call to block layouter.
+         *
+         * Can be enabled multiple times, but each enable must be match by disable to remove the lock.
+         * @param[in] enable Enable lock on true, disable on false
+         */
+        void set_layout_locker(bool enable) override;
     };
 }    // namespace hal

@@ -82,8 +82,7 @@ namespace hal
             // Z3 grammar to parse a model for a satisfiable formula.
             //
             // Example: "((define-fun A () (_ BitVec 1) #b0))"
-            const auto Z3_MODEL_GRAMMAR = (x3::lit("(") >> (+SignalAssignmentRule) >> x3::lit(")"))
-                | +(x3::lit("(model") >> +SignalAssignmentRule >> x3::lit(")"));
+            const auto Z3_MODEL_GRAMMAR = (x3::lit("(") >> (+SignalAssignmentRule) >> x3::lit(")")) | +(x3::lit("(model") >> +SignalAssignmentRule >> x3::lit(")"));
         }    // namespace ModelParser
 
         QueryConfig& QueryConfig::with_solver(SolverType _solver)
@@ -133,17 +132,60 @@ namespace hal
             return out;
         }
 
-        Constraint::Constraint(BooleanFunction _lhs, BooleanFunction _rhs) : lhs(_lhs), rhs(_rhs)
+        Constraint::Constraint(BooleanFunction&& _constraint) : constraint(std::move(_constraint))
+        {
+        }
+
+        Constraint::Constraint(BooleanFunction&& _lhs, BooleanFunction&& _rhs) : constraint(std::make_pair(std::move(_lhs), std::move(_rhs)))
         {
         }
 
         std::ostream& operator<<(std::ostream& out, const Constraint& constraint)
         {
-            out << constraint.lhs << " = " << constraint.rhs;
+            if (constraint.is_assignment())
+            {
+                const auto assignment = constraint.get_assignment().get();
+                out << assignment->first << " = " << assignment->second;
+            }
+            else
+            {
+                out << *constraint.get_function().get();
+            }
+
             return out;
         }
 
-        Model::Model(std::map<std::string, std::tuple<u64, u16>> _model) : model(_model)
+        std::string Constraint::to_string() const
+        {
+            std::stringstream ss;
+            ss << *this;
+            return ss.str();
+        }
+
+        bool Constraint::is_assignment() const
+        {
+            return std::get_if<std::pair<BooleanFunction, BooleanFunction>>(&constraint);
+        }
+
+        Result<const std::pair<BooleanFunction, BooleanFunction>*> Constraint::get_assignment() const
+        {
+            if (this->is_assignment())
+            {
+                return OK(&std::get<std::pair<BooleanFunction, BooleanFunction>>(constraint));
+            }
+            return ERR("constraint is not an assignment");
+        }
+
+        Result<const BooleanFunction*> Constraint::get_function() const
+        {
+            if (!this->is_assignment())
+            {
+                return OK(&std::get<BooleanFunction>(constraint));
+            }
+            return ERR("constraint is not a function");
+        }
+
+        Model::Model(const std::map<std::string, std::tuple<u64, u16>>& _model) : model(_model)
         {
         }
 
@@ -167,7 +209,7 @@ namespace hal
             return out;
         }
 
-        std::tuple<bool, Model> Model::parse(std::string s, const SolverType& type)
+        Result<Model> Model::parse(const std::string& s, const SolverType& type)
         {
             // TODO:
             // check how to attach a local parser context variable to the x3 parser
@@ -193,57 +235,58 @@ namespace hal
                     case SolverType::Boolector:
                         return boost::spirit::x3::phrase_parse(iter, s.end(), ModelParser::BOOLECTOR_MODEL_GRAMMAR, boost::spirit::x3::space);
 
-                    default: return false;
+                    default:
+                        return false;
                 }
             }();
 
-            switch (ok && (iter == s.end()))
+            if (ok && (iter == s.end()))
             {
-                case true: return {true, Model(ModelParser::parser_context.model)};
-                default:   return {false, Model()};
+                return OK(Model(ModelParser::parser_context.model));
             }
+            return ERR("could not parse SMT-Lib model");
         }
 
-        Result::Result(ResultType _type, std::optional<Model> _model) : type(_type), model(_model)
+        SolverResult::SolverResult(SolverResultType _type, std::optional<Model> _model) : type(_type), model(_model)
         {
         }
 
-        Result Result::Sat(const std::optional<Model>& model)
+        SolverResult SolverResult::Sat(const std::optional<Model>& model)
         {
-            return Result(ResultType::Sat, model);
+            return SolverResult(SolverResultType::Sat, model);
         }
 
-        Result Result::UnSat()
+        SolverResult SolverResult::UnSat()
         {
-            return Result(ResultType::UnSat, {});
+            return SolverResult(SolverResultType::UnSat, {});
         }
 
-        Result Result::Unknown()
+        SolverResult SolverResult::Unknown()
         {
-            return Result(ResultType::Unknown, {});
+            return SolverResult(SolverResultType::Unknown, {});
         }
 
-        bool Result::is(const ResultType& _type) const
+        bool SolverResult::is(const SolverResultType& _type) const
         {
             return this->type == _type;
         }
 
-        bool Result::is_sat() const
+        bool SolverResult::is_sat() const
         {
-            return this->is(ResultType::Sat);
+            return this->is(SolverResultType::Sat);
         }
 
-        bool Result::is_unsat() const
+        bool SolverResult::is_unsat() const
         {
-            return this->is(ResultType::UnSat);
+            return this->is(SolverResultType::UnSat);
         }
 
-        bool Result::is_unknown() const
+        bool SolverResult::is_unknown() const
         {
-            return this->is(ResultType::Unknown);
+            return this->is(SolverResultType::Unknown);
         }
 
-        std::ostream& operator<<(std::ostream& out, const Result& result)
+        std::ostream& operator<<(std::ostream& out, const SolverResult& result)
         {
             out << "{";
             out << "type : " << enum_to_string(result.type) << ", ";
@@ -262,8 +305,10 @@ namespace hal
     }    // namespace SMT
 
     template<>
-    std::vector<std::string> EnumStrings<SMT::SolverType>::data = {"Z3", "Boolector", "Unknown"};
+    std::map<SMT::SolverType, std::string> EnumStrings<SMT::SolverType>::data = {{SMT::SolverType::Z3, "Z3"}, {SMT::SolverType::Boolector, "Boolector"}, {SMT::SolverType::Unknown, "Unknown"}};
 
     template<>
-    std::vector<std::string> EnumStrings<SMT::ResultType>::data = {"sat", "unsat", "unknown"};
+    std::map<SMT::SolverResultType, std::string> EnumStrings<SMT::SolverResultType>::data = {{SMT::SolverResultType::Sat, "sat"},
+                                                                                             {SMT::SolverResultType::UnSat, "unsat"},
+                                                                                             {SMT::SolverResultType::Unknown, "unknown"}};
 }    // namespace hal

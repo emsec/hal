@@ -226,21 +226,21 @@ namespace hal
             // Boolean functions
             Gate* nl1_g12 = nl_1->create_gate(12, gl->get_gate_type_by_name("AND2"), "gate_12");
             ASSERT_NE(nl1_g12, nullptr);
-            nl1_g12->add_boolean_function("test", BooleanFunction::from_string("A & B"));
+            nl1_g12->add_boolean_function("test", BooleanFunction::from_string("A & B").get());
             Gate* nl2_g12 = nl_2->create_gate(12, gl->get_gate_type_by_name("AND2"), "gate_12");
             ASSERT_NE(nl2_g12, nullptr);
-            nl2_g12->add_boolean_function("test", BooleanFunction::from_string("A & B"));
+            nl2_g12->add_boolean_function("test", BooleanFunction::from_string("A & B").get());
             Gate* nl1_g13 = nl_1->create_gate(13, gl->get_gate_type_by_name("AND2"), "gate_13");
             ASSERT_NE(nl1_g13, nullptr);
-            nl1_g13->add_boolean_function("test", BooleanFunction::from_string("A & B"));
+            nl1_g13->add_boolean_function("test", BooleanFunction::from_string("A & B").get());
             Gate* nl2_g13 = nl_2->create_gate(13, gl->get_gate_type_by_name("AND2"), "gate_13");
             ASSERT_NE(nl2_g13, nullptr);
             Gate* nl1_g14 = nl_1->create_gate(14, gl->get_gate_type_by_name("AND2"), "gate_14");
             ASSERT_NE(nl1_g14, nullptr);
-            nl1_g14->add_boolean_function("test", BooleanFunction::from_string("A & B"));
+            nl1_g14->add_boolean_function("test", BooleanFunction::from_string("A & B").get());
             Gate* nl2_g14 = nl_2->create_gate(14, gl->get_gate_type_by_name("AND2"), "gate_14");
             ASSERT_NE(nl2_g14, nullptr);
-            nl2_g14->add_boolean_function("test", BooleanFunction::from_string("A | B"));
+            nl2_g14->add_boolean_function("test", BooleanFunction::from_string("A | B").get());
 
             EXPECT_TRUE(*nl1_g1 == *nl1_g1);        // identical gate pointer
             EXPECT_TRUE(*nl2_g1 == *nl2_g1); 
@@ -360,8 +360,8 @@ namespace hal
         auto nl         = test_utils::create_empty_netlist();
         Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("AND2"), "gate_name");
 
-        EXPECT_EQ(test_gate->get_input_pins(), std::vector<std::string>({"I0", "I1"}));
-        EXPECT_EQ(test_gate->get_output_pins(), std::vector<std::string>({"O"}));
+        EXPECT_EQ(test_gate->get_type()->get_input_pin_names(), std::vector<std::string>({"I0", "I1"}));
+        EXPECT_EQ(test_gate->get_type()->get_output_pin_names(), std::vector<std::string>({"O"}));
 
         TEST_END
     }
@@ -621,8 +621,8 @@ namespace hal
             // Get predecessors for a given (existing) Gate type
             Gate* gate_0                = nl_1->get_gate_by_id(MIN_GATE_ID + 0);
             std::vector<Endpoint*> pred = {test_utils::get_endpoint(nl_1.get(), MIN_GATE_ID + 3, "O", false)};
-            EXPECT_TRUE(test_utils::vectors_have_same_content(gate_0->get_predecessors(test_utils::adjacent_gate_type_filter("gate_1_to_1")), pred));
-            EXPECT_EQ(gate_0->get_predecessors(test_utils::adjacent_gate_type_filter("gate_1_to_1")).size(), (size_t)1);
+            EXPECT_TRUE(test_utils::vectors_have_same_content(gate_0->get_predecessors(test_utils::adjacent_gate_type_filter("BUF")), pred));
+            EXPECT_EQ(gate_0->get_predecessors(test_utils::adjacent_gate_type_filter("BUF")).size(), (size_t)1);
         }
         {
             // Get predecessors for a given (non-existing) Gate type
@@ -716,8 +716,8 @@ namespace hal
             // Get successors for a given (existing) Gate type
             Gate* gate_0                = nl_1->get_gate_by_id(MIN_GATE_ID + 0);
             std::vector<Endpoint*> succ = {test_utils::get_endpoint(nl_1.get(), MIN_GATE_ID + 4, "I", true)};
-            EXPECT_TRUE(test_utils::vectors_have_same_content(gate_0->get_successors(test_utils::adjacent_gate_type_filter("gate_1_to_1")), succ));
-            EXPECT_EQ(gate_0->get_successors(test_utils::adjacent_gate_type_filter("gate_1_to_1")).size(), (size_t)1);
+            EXPECT_TRUE(test_utils::vectors_have_same_content(gate_0->get_successors(test_utils::adjacent_gate_type_filter("BUF")), succ));
+            EXPECT_EQ(gate_0->get_successors(test_utils::adjacent_gate_type_filter("BUF")).size(), (size_t)1);
         }
         {
             // Get successors for a given (non-existing) Gate type
@@ -950,19 +950,19 @@ namespace hal
             auto nl = test_utils::create_empty_netlist();
             Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("INV"), "test_gate");
             std::unordered_map<std::string, BooleanFunction> functions = test_gate->get_boolean_functions();
-            EXPECT_EQ(functions, (std::unordered_map<std::string, BooleanFunction>({{"O", BooleanFunction::from_string("!I")}})));
+            EXPECT_EQ(functions, (std::unordered_map<std::string, BooleanFunction>({{"O", BooleanFunction::from_string("!I").get()}})));
 
-            test_gate->add_boolean_function("new_bf", BooleanFunction::from_string("I"));
+            test_gate->add_boolean_function("new_bf", BooleanFunction::Var("I"));
 
             functions = test_gate->get_boolean_functions();
-            EXPECT_EQ(functions, (std::unordered_map<std::string, BooleanFunction>({{"O", BooleanFunction::from_string("!I")}, {"new_bf", BooleanFunction::from_string("I")}})));
+            EXPECT_EQ(functions, (std::unordered_map<std::string, BooleanFunction>({{"O", ~BooleanFunction::Var("I")}, {"new_bf", BooleanFunction::Var("I")}})));
 
-            EXPECT_EQ(test_gate->get_boolean_function("O"), BooleanFunction::from_string("!I"));
+            EXPECT_EQ(test_gate->get_boolean_function("O"), ~BooleanFunction::Var("I"));
 
-            EXPECT_EQ(test_gate->get_boolean_function("new_bf"), BooleanFunction::from_string("I"));
+            EXPECT_EQ(test_gate->get_boolean_function("new_bf"), BooleanFunction::Var("I"));
 
             // should be function of first output pin
-            EXPECT_EQ(test_gate->get_boolean_function(), BooleanFunction::from_string("!I"));
+            EXPECT_EQ(test_gate->get_boolean_function(), ~BooleanFunction::Var("I"));
         }
         // NEGATIVE
         {
@@ -1002,13 +1002,14 @@ namespace hal
             lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifiers().front(), "bit_vector", i_to_hex_string(i, 2));
 
             // Testing the access via the function get_boolean_function
-            EXPECT_EQ(lut_gate->get_boolean_function("O").get_truth_table(lut_type->get_input_pins()), get_truth_table_from_i(i, 8));
+            EXPECT_EQ(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pin_names()).get()[0], get_truth_table_from_i(i, 8));
 
             // Test the access via the get_boolean_functions map
             std::unordered_map<std::string, BooleanFunction> functions = lut_gate->get_boolean_functions();
             ASSERT_TRUE(functions.find("O") != functions.end());
-            EXPECT_EQ(functions["O"].get_truth_table(lut_type->get_input_pins()), get_truth_table_from_i(i, 8));
+            EXPECT_EQ(functions["O"].compute_truth_table(lut_type->get_input_pin_names()).get()[0], get_truth_table_from_i(i, 8));
         }
+        
         {
             // Access the boolean function of a lut, that is stored in ascending order
             auto nl = test_utils::create_empty_netlist();
@@ -1021,7 +1022,7 @@ namespace hal
             for (int i = 0x0; i <= 0xff; i++) 
             {
                 lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifiers().front(), "bit_vector", i_to_hex_string(i));
-                EXPECT_EQ(lut_gate->get_boolean_function("O").get_truth_table(lut_type->get_input_pins()),
+                EXPECT_EQ(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pin_names()).get()[0],
                         get_truth_table_from_hex_string(i_to_hex_string(i), 8, false));
             }
         }
@@ -1040,7 +1041,7 @@ namespace hal
 
             for (int i = 0x0; i <= 0xff; i++) {
                 lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifiers().front(), "bit_vector", i_to_hex_string(i));
-                EXPECT_EQ(lut_gate->get_boolean_function("O").get_truth_table(lut_type->get_input_pins()),
+                EXPECT_EQ(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pin_names()).get()[0],
                         get_truth_table_from_hex_string(i_to_hex_string(i), 8, true));
             }
 
@@ -1055,7 +1056,7 @@ namespace hal
             const InitComponent* init_component = lut_type->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
             ASSERT_NE(init_component, nullptr);
 
-            BooleanFunction lut_bf = BooleanFunction::from_string("I0 & I1 & I2");
+            BooleanFunction lut_bf = BooleanFunction::from_string("(I2 & (I0 & I1))").get();
             lut_gate->add_boolean_function("O", lut_bf);
             EXPECT_EQ(lut_gate->get_boolean_functions().size(), 1);
             EXPECT_EQ(lut_gate->get_boolean_function("O"), lut_bf);
@@ -1072,7 +1073,7 @@ namespace hal
             ASSERT_NE(init_component, nullptr);
 
             lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifiers().front(), "bit_vector", "");
-            EXPECT_EQ(lut_gate->get_boolean_function("O").get_truth_table(lut_type->get_input_pins()), get_truth_table_from_i(0, 8));
+            EXPECT_EQ(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pin_names()).get()[0], get_truth_table_from_i(0, 8));
         }
         {
             // There is invalid data at the config data path
@@ -1085,7 +1086,7 @@ namespace hal
             ASSERT_NE(init_component, nullptr);
 
             lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifiers().front(), "bit_vector", "NOHx");
-            EXPECT_EQ(lut_gate->get_boolean_function("O").get_truth_table(lut_type->get_input_pins()), std::vector<BooleanFunction::Value>(8, BooleanFunction::X));
+            EXPECT_EQ(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pin_names()).get()[0], std::vector<BooleanFunction::Value>(8, BooleanFunction::X));
 
         }
         TEST_END

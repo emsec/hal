@@ -8,30 +8,268 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
+#include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/utilities/log.h"
-
 
 namespace hal
 {
     NetlistInternalManager::NetlistInternalManager(Netlist* nl, EventHandler* eh)
     {
-        m_netlist = nl;
+        m_netlist       = nl;
         m_event_handler = eh;
         assert(nl != nullptr);
         assert(eh != nullptr);
     }
 
-    template<typename T>
-    static bool unordered_vector_erase(std::vector<T>& vec, T element)
+    //######################################################################
+    //###                      netlist                                   ###
+    //######################################################################
+
+    Result<std::unique_ptr<Netlist>> NetlistInternalManager::copy_netlist(const Netlist* nl) const
     {
-        auto it = std::find(vec.begin(), vec.end(), element);
-        if (it == vec.end())
+        std::unique_ptr<Netlist> c_netlist = netlist_factory::create_netlist(nl->m_gate_library);
+        if (c_netlist == nullptr)
         {
-            return false;
+            return ERR("could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to create netlist");
         }
-        *it = vec.back();
-        vec.pop_back();
-        return true;
+
+        c_netlist->enable_automatic_net_checks(false);
+
+        // manager, netlist_id, and top_module are set in the constructor
+
+        // copy design name, device name, input filename
+        c_netlist->set_design_name(nl->get_design_name());
+        c_netlist->set_device_name(nl->get_device_name());
+        c_netlist->set_input_filename(nl->get_input_filename());
+
+        // copy nets
+        for (const Net* net : nl->m_nets)
+        {
+            Net* c_net = c_netlist->create_net(net->m_id, net->m_name);
+            if (c_net == nullptr)
+            {
+                return ERR("could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to create copied net '" + net->m_name + "' with ID " + std::to_string(net->m_id));
+            }
+            c_net->m_data = net->m_data;
+        }
+
+        // copy gates
+        for (const Gate* gate : nl->m_gates)
+        {
+            Gate* c_gate = c_netlist->create_gate(gate->m_id, gate->m_type, gate->m_name, gate->m_x, gate->m_y);
+            if (c_gate == nullptr)
+            {
+                return ERR("could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to create copied gate '" + gate->m_name + "' with ID " + std::to_string(gate->m_id));
+            }
+
+            for (const auto& [name, func] : gate->get_boolean_functions(true))
+            {
+                c_gate->add_boolean_function(name, func);
+            }
+
+            for (const Endpoint* in_point : gate->get_fan_in_endpoints())
+            {
+                const auto net_id = in_point->get_net()->m_id;
+                auto c_net        = c_netlist->get_net_by_id(net_id);
+                if (c_net == nullptr)
+                {
+                    return ERR("could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to get copied net by ID " + std::to_string(net_id));
+                }
+
+                if (!c_net->add_destination(c_gate, in_point->get_pin()))
+                {
+                    return ERR("could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to add destination to copied net '" + c_net->m_name + "' with ID "
+                               + std::to_string(c_net->m_id));
+                }
+            }
+
+            for (const Endpoint* out_point : gate->get_fan_out_endpoints())
+            {
+                const auto net_id = out_point->get_net()->m_id;
+                auto c_net        = c_netlist->get_net_by_id(net_id);
+                if (c_net == nullptr)
+                {
+                    return ERR("could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to get copied net by ID " + std::to_string(net_id));
+                }
+
+                if (!c_net->add_source(c_gate, out_point->get_pin()))
+                {
+                    return ERR("could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to add source to copied net '" + c_net->m_name + "' with ID "
+                               + std::to_string(c_net->m_id));
+                }
+            }
+
+            c_gate->m_data = gate->m_data;
+        }
+
+        // copy modules
+        for (const Module* module : nl->m_modules)
+        {
+            // ignore top module, since this is already created by the constructor
+            if (module->m_id == 1)
+            {
+                c_netlist->m_top_module->m_data = module->get_data_map();
+                c_netlist->m_top_module->m_type = module->m_type;
+                continue;
+            }
+
+            std::vector<Gate*> c_gates;
+            for (const Gate* gate : module->m_gates)
+            {
+                // find gates of module in the copied netlist by id
+                Gate* c_gate = c_netlist->get_gate_by_id(gate->m_id);
+                if (c_gate == nullptr)
+                {
+                    return ERR("could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to get copied gate by ID " + std::to_string(gate->m_id));
+                }
+                c_gates.push_back(c_gate);
+            }
+
+            // create all modules with the top module as parent module and update later
+            Module* c_module = c_netlist->create_module(module->m_id, module->m_name, c_netlist->m_top_module, c_gates);
+            if (c_module == nullptr)
+            {
+                return ERR("could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to create copied module '" + module->m_name + "' with ID " + std::to_string(module->m_id));
+            }
+
+            c_module->m_data = module->m_data;
+            c_module->m_type = module->m_type;
+        }
+
+        // update parent_module in modules
+        for (const Module* module : nl->m_modules)
+        {
+            // ignore top_module
+            if (module->m_parent == nullptr)
+            {
+                continue;
+            }
+
+            // find parent and child module in the copied netlist by id
+            const u32 module_id = module->m_id;
+            const u32 parent_id = module->m_parent->m_id;
+            Module* c_module    = c_netlist->get_module_by_id(module_id);
+            Module* c_parent    = c_netlist->get_module_by_id(parent_id);
+
+            if (!c_module->set_parent_module(c_parent))
+            {
+                return ERR("could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to set copied module '" + c_parent->m_name + "' with ID " + std::to_string(module->m_id)
+                           + " as parent module of '" + c_module->m_name + "' with ID " + std::to_string(c_module->m_id));
+            }
+        }
+
+        // copy groupings
+        for (const Grouping* grouping : nl->m_groupings)
+        {
+            Grouping* c_grouping = c_netlist->create_grouping(grouping->m_id, grouping->m_name);
+            if (c_grouping == nullptr)
+            {
+                return ERR("could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to create copied grouping '" + grouping->m_name + "' with ID "
+                           + std::to_string(grouping->m_id));
+            }
+
+            for (const Module* module : grouping->m_modules)
+            {
+                const u32 module_id = module->m_id;
+                c_grouping->assign_module_by_id(module_id);
+            }
+
+            for (const Net* net : grouping->m_nets)
+            {
+                const u32 net_id = net->m_id;
+                c_grouping->assign_net_by_id(net_id);
+            }
+
+            for (const Gate* gate : grouping->m_gates)
+            {
+                const u32 gate_id = gate->m_id;
+                c_grouping->assign_gate_by_id(gate_id);
+            }
+        }
+
+        // mark globals
+        for (const Net* global_input_net : nl->m_global_input_nets)
+        {
+            Net* c_global_input_net = c_netlist->get_net_by_id(global_input_net->m_id);
+            c_netlist->mark_global_input_net(c_global_input_net);
+        }
+        for (const Net* global_output_net : nl->m_global_output_nets)
+        {
+            Net* c_global_output_net = c_netlist->get_net_by_id(global_output_net->m_id);
+            c_netlist->mark_global_output_net(c_global_output_net);
+        }
+        for (const Gate* gnd_gate : nl->m_gnd_gates)
+        {
+            Gate* c_gnd_gate = c_netlist->get_gate_by_id(gnd_gate->m_id);
+            c_netlist->mark_gnd_gate(c_gnd_gate);
+        }
+        for (const Gate* vcc_gate : nl->m_vcc_gates)
+        {
+            Gate* c_vcc_gate = c_netlist->get_gate_by_id(vcc_gate->m_id);
+            c_netlist->mark_vcc_gate(c_vcc_gate);
+        }
+
+        c_netlist->m_design_name = nl->m_design_name;
+        c_netlist->m_device_name = nl->m_device_name;
+        c_netlist->m_file_name   = nl->m_file_name;
+
+        // update ids last, after all the creation
+        c_netlist->m_next_gate_id  = nl->m_next_gate_id;
+        c_netlist->m_used_gate_ids = nl->m_used_gate_ids;
+        c_netlist->m_free_gate_ids = nl->m_free_gate_ids;
+
+        c_netlist->m_next_net_id  = nl->m_next_net_id;
+        c_netlist->m_used_net_ids = nl->m_used_net_ids;
+        c_netlist->m_free_net_ids = nl->m_free_net_ids;
+
+        c_netlist->m_next_module_id  = nl->m_next_module_id;
+        c_netlist->m_used_module_ids = nl->m_used_module_ids;
+        c_netlist->m_free_module_ids = nl->m_free_module_ids;
+
+        c_netlist->m_next_grouping_id  = nl->m_next_grouping_id;
+        c_netlist->m_used_grouping_ids = nl->m_used_grouping_ids;
+        c_netlist->m_free_grouping_ids = nl->m_free_grouping_ids;
+
+        // copy module port names
+        for (Module* module : nl->m_modules)
+        {
+            Module* c_module = c_netlist->get_module_by_id(module->m_id);
+            c_module->update_nets();
+
+            for (const std::unique_ptr<PinGroup<ModulePin>>& pin_group : module->m_pin_groups)
+            {
+                std::vector<ModulePin*> c_pins;
+                for (ModulePin* pin : pin_group->get_pins())
+                {
+                    if (const auto res = c_module->create_pin(pin->get_id(), pin->get_name(), c_netlist->get_net_by_id(pin->get_net()->m_id), PinType::none, false); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(),
+                                          "could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to create copied module pin '" + pin->get_name() + "' of module '"
+                                              + c_module->m_name + "' with ID " + std::to_string(c_module->m_id));
+                    }
+                    else
+                    {
+                        c_pins.push_back(res.get());
+                    }
+                }
+
+                if (const auto res = c_module->create_pin_group(
+                        pin_group->get_id(), pin_group->get_name(), c_pins, pin_group->get_direction(), pin_group->get_type(), pin_group->is_ascending(), pin_group->get_start_index());
+                    res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(),
+                                      "could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to create copied module pin group '" + pin_group->get_name() + "' of module '"
+                                          + c_module->m_name + "' with ID " + std::to_string(c_module->m_id));
+                }
+            }
+
+            c_module->m_next_input_index  = module->m_next_input_index;
+            c_module->m_next_inout_index  = module->m_next_inout_index;
+            c_module->m_next_output_index = module->m_next_output_index;
+        }
+
+        c_netlist->enable_automatic_net_checks(true);
+        return OK(std::move(c_netlist));
     }
 
     //######################################################################
@@ -130,13 +368,13 @@ namespace hal
 
         // remove gate from modules
         gate->m_module->m_gates_map.erase(gate->m_module->m_gates_map.find(gate->get_id()));
-        unordered_vector_erase(gate->m_module->m_gates, gate);
+        utils::unordered_vector_erase(gate->m_module->m_gates, gate);
 
         auto it  = m_netlist->m_gates_map.find(gate->get_id());
         auto ptr = std::move(it->second);
         m_netlist->m_gates_map.erase(it);
         m_netlist->m_gates_set.erase(gate);
-        unordered_vector_erase(m_netlist->m_gates, gate);
+        utils::unordered_vector_erase(m_netlist->m_gates, gate);
 
         // free ids
         m_netlist->m_free_gate_ids.insert(gate->get_id());
@@ -237,7 +475,7 @@ namespace hal
         auto ptr = std::move(it->second);
         m_netlist->m_nets_map.erase(it);
         m_netlist->m_nets_set.erase(net);
-        unordered_vector_erase(m_netlist->m_nets, net);
+        utils::unordered_vector_erase(m_netlist->m_nets, net);
 
         m_netlist->m_free_net_ids.insert(net->get_id());
         m_netlist->m_used_net_ids.erase(net->get_id());
@@ -247,9 +485,9 @@ namespace hal
         return true;
     }
 
-    Endpoint* NetlistInternalManager::net_add_source(Net* net, Gate* gate, const std::string& pin)
+    Endpoint* NetlistInternalManager::net_add_source(Net* net, Gate* gate, GatePin* pin)
     {
-        if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(gate))
+        if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(gate) || pin == nullptr)
         {
             return nullptr;
         }
@@ -258,7 +496,7 @@ namespace hal
         {
             log_error("net",
                       "pin '{}' of gate '{}' with ID {} is already a source of net '{}' with ID {} in netlist with ID {}.",
-                      pin,
+                      pin->get_name(),
                       gate->get_name(),
                       gate->get_id(),
                       net->get_name(),
@@ -267,42 +505,29 @@ namespace hal
             return nullptr;
         }
 
-        // check whether pin id is valid for this gate
+        // check whether pin is valid for this gate
         auto output_pins = gate->get_type()->get_output_pins();
 
         if ((std::find(output_pins.begin(), output_pins.end(), pin) == output_pins.end()))
         {
-            log_error("net", "gate '{}' with ID {} has no output pin called '{}' in netlist with ID {}.", gate->get_name(), gate->get_id(), pin, m_netlist->m_netlist_id);
+            log_error("net", "gate '{}' with ID {} has no output pin called '{}' in netlist with ID {}.", gate->get_name(), gate->get_id(), pin->get_name(), m_netlist->m_netlist_id);
             return nullptr;
         }
 
         // check whether src has already an assigned net
-        if (gate->get_fan_out_net(pin) != nullptr)
+        if (auto fan_out_net = gate->get_fan_out_net(pin); fan_out_net != nullptr)
         {
             log_error("net",
                       "gate '{}' with ID {} is already connected to net '{}' with ID {} at output pin '{}', cannot assign new net '{}' with ID {} in netlist with ID {}.",
                       gate->get_name(),
                       gate->get_id(),
-                      gate->get_fan_out_net(pin)->get_name(),
-                      gate->get_fan_out_net(pin)->get_id(),
-                      pin,
+                      fan_out_net->get_name(),
+                      fan_out_net->get_id(),
+                      pin->get_name(),
                       net->get_name(),
                       net->get_id(),
                       m_netlist->m_netlist_id);
             return nullptr;
-        }
-
-        // mark module caches as dirty
-        std::unordered_set<Module*> affected_modules;
-        affected_modules.insert(gate->get_module());
-        for (Endpoint* ep : net->get_destinations())
-        {
-            affected_modules.insert(ep->get_gate()->get_module());
-        }
-
-        for (Module* m : affected_modules)
-        {
-            m->set_cache_dirty();
         }
 
         auto new_endpoint     = std::unique_ptr<Endpoint>(new Endpoint(gate, pin, net, false));
@@ -311,6 +536,25 @@ namespace hal
         net->m_sources_raw.push_back(new_endpoint_raw);
         gate->m_out_endpoints.push_back(new_endpoint_raw);
         gate->m_out_nets.push_back(net);
+
+        // update internal nets and port nets
+        if (m_net_checks_enabled)
+        {
+            if (const auto res = gate->get_module()->check_net(net, true); res.is_error())
+            {
+                log_error("net", "{}", res.get_error().get());
+                return nullptr;
+            }
+
+            for (Endpoint* ep : net->get_destinations())
+            {
+                if (const auto res = ep->get_gate()->get_module()->check_net(net, true); res.is_error())
+                {
+                    log_error("net", "{}", res.get_error().get());
+                    return nullptr;
+                }
+            }
+        }
 
         m_event_handler->notify(NetEvent::event::src_added, net, gate->get_id());
 
@@ -326,26 +570,13 @@ namespace hal
             return false;
         }
 
-        // mark module caches as dirty
-        std::unordered_set<Module*> affected_modules;
-        affected_modules.insert(ep->get_gate()->get_module());
-        for (Endpoint* e : net->get_destinations())
-        {
-            affected_modules.insert(e->get_gate()->get_module());
-        }
-
-        for (Module* m : affected_modules)
-        {
-            m->set_cache_dirty();
-        }
-
         bool removed = false;
         for (u32 i = 0; i < net->m_sources.size(); ++i)
         {
             if (net->m_sources_raw[i] == ep)
             {
-                unordered_vector_erase(gate->m_out_endpoints, ep);
-                unordered_vector_erase(gate->m_out_nets, net);
+                utils::unordered_vector_erase(gate->m_out_endpoints, ep);
+                utils::unordered_vector_erase(gate->m_out_nets, net);
                 net->m_sources[i] = std::move(net->m_sources.back());
                 net->m_sources.pop_back();
                 net->m_sources_raw[i] = net->m_sources_raw.back();
@@ -360,20 +591,41 @@ namespace hal
         {
             log_warning("net",
                         "output pin '{}' of gate '{}' with ID {} is not a source of net '{}' with ID {} in netlist with ID {}",
-                        ep->get_pin(),
+                        ep->get_pin()->get_name(),
                         gate->get_name(),
                         gate->get_id(),
                         net->get_name(),
                         net->get_id(),
                         m_netlist->m_netlist_id);
         }
+        else
+        {
+            // update internal nets and port nets
+            if (m_net_checks_enabled)
+            {
+                if (const auto res = gate->get_module()->check_net(net, true); res.is_error())
+                {
+                    log_error("net", "{}", res.get_error().get());
+                    return false;
+                }
+
+                for (Endpoint* dst : net->get_destinations())
+                {
+                    if (const auto res = dst->get_gate()->get_module()->check_net(net, true); res.is_error())
+                    {
+                        log_error("net", "{}", res.get_error().get());
+                        return false;
+                    }
+                }
+            }
+        }
 
         return true;
     }
 
-    Endpoint* NetlistInternalManager::net_add_destination(Net* net, Gate* gate, const std::string& pin)
+    Endpoint* NetlistInternalManager::net_add_destination(Net* net, Gate* gate, GatePin* pin)
     {
-        if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(gate))
+        if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(gate) || pin == nullptr)
         {
             return nullptr;
         }
@@ -382,7 +634,7 @@ namespace hal
         {
             log_error("net",
                       "pin '{}' of gate '{}' with ID {} is already a destination of net '{}' with ID {} in netlist with ID {}.",
-                      pin,
+                      pin->get_name(),
                       gate->get_name(),
                       gate->get_id(),
                       net->get_name(),
@@ -391,50 +643,56 @@ namespace hal
             return nullptr;
         }
 
-        // check whether pin id is valid for this gate
+        // check whether pin is valid for this gate
         auto input_pins = gate->get_type()->get_input_pins();
 
         if ((std::find(input_pins.begin(), input_pins.end(), pin) == input_pins.end()))
         {
-            log_error("net", "gate '{}' with ID {} has no input pin called '{}' in netlist with ID {}.", gate->get_name(), gate->get_id(), pin, m_netlist->m_netlist_id);
+            log_error("net", "gate '{}' with ID {} has no input pin called '{}' in netlist with ID {}.", gate->get_name(), gate->get_id(), pin->get_name(), m_netlist->m_netlist_id);
             return nullptr;
         }
 
         // check whether dst has already an assigned net
-        if (gate->get_fan_in_net(pin) != nullptr)
+        if (auto fan_in_net = gate->get_fan_in_net(pin); fan_in_net != nullptr)
         {
             log_error("net",
                       "gate '{}' with ID {} is already connected to net '{}' with ID {} at input pin '{}', cannot assign new net '{}' with ID {} in netlist with ID {}.",
                       gate->get_name(),
                       gate->get_id(),
-                      gate->get_fan_in_net(pin)->get_name(),
-                      gate->get_fan_in_net(pin)->get_id(),
-                      pin,
+                      fan_in_net->get_name(),
+                      fan_in_net->get_id(),
+                      pin->get_name(),
                       net->get_name(),
                       net->get_id(),
                       m_netlist->m_netlist_id);
             return nullptr;
         }
 
-        // mark module caches as dirty
-        std::unordered_set<Module*> affected_modules;
-        affected_modules.insert(gate->get_module());
-        for (Endpoint* ep : net->get_sources())
-        {
-            affected_modules.insert(ep->get_gate()->get_module());
-        }
-
-        for (Module* m : affected_modules)
-        {
-            m->set_cache_dirty();
-        }
-
-        auto new_endpoint     = std::unique_ptr<Endpoint>(new Endpoint(gate, pin, net, true));
-        auto new_endpoint_raw = new_endpoint.get();
+        std::unique_ptr<Endpoint> new_endpoint = std::unique_ptr<Endpoint>(new Endpoint(gate, pin, net, true));
+        Endpoint* new_endpoint_raw             = new_endpoint.get();
         net->m_destinations.push_back(std::move(new_endpoint));
         net->m_destinations_raw.push_back(new_endpoint_raw);
         gate->m_in_endpoints.push_back(new_endpoint_raw);
         gate->m_in_nets.push_back(net);
+
+        // update internal nets and port nets
+        if (m_net_checks_enabled)
+        {
+            if (const auto res = gate->get_module()->check_net(net, true); res.is_error())
+            {
+                log_error("net", "{}", res.get_error().get());
+                return nullptr;
+            }
+
+            for (Endpoint* ep : net->get_sources())
+            {
+                if (const auto res = ep->get_gate()->get_module()->check_net(net, true); res.is_error())
+                {
+                    log_error("net", "{}", res.get_error().get());
+                    return nullptr;
+                }
+            }
+        }
 
         m_event_handler->notify(NetEvent::event::dst_added, net, gate->get_id());
 
@@ -449,26 +707,13 @@ namespace hal
             return false;
         }
 
-        // mark module caches as dirty
-        std::unordered_set<Module*> affected_modules;
-        affected_modules.insert(ep->get_gate()->get_module());
-        for (Endpoint* e : net->get_sources())
-        {
-            affected_modules.insert(e->get_gate()->get_module());
-        }
-
-        for (Module* m : affected_modules)
-        {
-            m->set_cache_dirty();
-        }
-
         bool removed = false;
         for (u32 i = 0; i < net->m_destinations.size(); ++i)
         {
             if (net->m_destinations_raw[i] == ep)
             {
-                unordered_vector_erase(gate->m_in_endpoints, ep);
-                unordered_vector_erase(gate->m_in_nets, net);
+                utils::unordered_vector_erase(gate->m_in_endpoints, ep);
+                utils::unordered_vector_erase(gate->m_in_nets, net);
                 net->m_destinations[i] = std::move(net->m_destinations.back());
                 net->m_destinations.pop_back();
                 net->m_destinations_raw[i] = net->m_destinations_raw.back();
@@ -483,12 +728,32 @@ namespace hal
         {
             log_warning("net",
                         "input pin '{}' of gate '{}' with ID {} is not a destination of net '{}' with ID {} in netlist with ID {}",
-                        ep->get_pin(),
+                        ep->get_pin()->get_name(),
                         gate->get_name(),
                         gate->get_id(),
                         net->get_name(),
                         net->get_id(),
                         m_netlist->m_netlist_id);
+        }
+        else
+        {    // update internal nets and port nets
+            if (m_net_checks_enabled)
+            {
+                if (const auto res = gate->get_module()->check_net(net, true); res.is_error())
+                {
+                    log_error("net", "{}", res.get_error().get());
+                    return false;
+                }
+
+                for (Endpoint* src : net->get_sources())
+                {
+                    if (const auto res = src->get_gate()->get_module()->check_net(net, true); res.is_error())
+                    {
+                        log_error("net", "{}", res.get_error().get());
+                        return false;
+                    }
+                }
+            }
         }
 
         return true;
@@ -545,7 +810,6 @@ namespace hal
         {
             parent->m_submodules_map[id] = raw;
             parent->m_submodules.push_back(raw);
-            parent->set_cache_dirty();
         }
 
         m_event_handler->notify(ModuleEvent::event::created, raw);
@@ -579,11 +843,8 @@ namespace hal
         }
 
         // move gates and nets to parent, work on a copy since assign_gate will modify m_gates
-        auto gates_copy = to_remove->m_gates;
-        for (auto gate : gates_copy)
-        {
-            to_remove->m_parent->assign_gate(gate);
-        }
+        std::vector<Gate*> gates_copy = to_remove->m_gates;
+        to_remove->m_parent->assign_gates(gates_copy);
 
         // move all submodules to parent
         for (auto sm : to_remove->m_submodules)
@@ -601,14 +862,14 @@ namespace hal
 
         // remove module from parent
         to_remove->m_parent->m_submodules_map.erase(to_remove->get_id());
-        unordered_vector_erase(to_remove->m_parent->m_submodules, to_remove);
+        utils::unordered_vector_erase(to_remove->m_parent->m_submodules, to_remove);
         m_event_handler->notify(ModuleEvent::event::submodule_removed, to_remove->m_parent, to_remove->get_id());
 
         auto it  = m_netlist->m_modules_map.find(to_remove->get_id());
         auto ptr = std::move(it->second);
         m_netlist->m_modules_map.erase(it);
         m_netlist->m_modules_set.erase(to_remove);
-        unordered_vector_erase(m_netlist->m_modules, to_remove);
+        utils::unordered_vector_erase(m_netlist->m_modules, to_remove);
 
         m_netlist->m_free_module_ids.insert(to_remove->get_id());
         m_netlist->m_used_module_ids.erase(to_remove->get_id());
@@ -619,60 +880,127 @@ namespace hal
 
     bool NetlistInternalManager::module_assign_gate(Module* m, Gate* g)
     {
-        if (g == nullptr)
-        {
-            log_error("module", "gate cannot be a nullptr.");
-            return false;
-        }
+        return module_assign_gates(m, {g});
+    }
 
-        if (m == nullptr)
+    bool NetlistInternalManager::module_assign_gates(Module* module, const std::vector<Gate*>& gates)
+    {
+        // check all gates for validity
+        if (module == nullptr)
         {
             log_error("module", "module cannot be a nullptr.");
             return false;
         }
 
-        auto prev_module = g->m_module;
-        if (prev_module == m)
+        std::map<Module*, u32> prev_modules;
+
+        for (const Gate* g : gates)
         {
-            log_error("module",
-                      "gate '{}' with ID {} is already contained in module '{}' with ID {} in netlist with ID {}.",
-                      g->get_name(),
-                      g->get_id(),
-                      m->get_name(),
-                      m->get_id(),
-                      m_netlist->m_netlist_id);
-            return false;
+            if (g == nullptr)
+            {
+                log_error("module", "gate cannot be a nullptr.");
+                return false;
+            }
+
+            Module* prev_mod = g->m_module;
+
+            if (prev_mod == module)
+            {
+                log_error("module",
+                          "gate '{}' with ID {} is already contained in module '{}' with ID {} in netlist with ID {}.",
+                          g->get_name(),
+                          g->get_id(),
+                          module->get_name(),
+                          module->get_id(),
+                          m_netlist->m_netlist_id);
+                return false;
+            }
+
+            if (auto it = prev_modules.find(prev_mod); it == prev_modules.end())
+            {
+                prev_modules[prev_mod] = 1;
+            }
+            else
+            {
+                std::get<1>(*it)++;
+            }
         }
 
-        // mark caches as dirty
-        m->set_cache_dirty();
-        prev_module->set_cache_dirty();
-
-        // remove gate from old module
-        auto it = prev_module->m_gates_map.find(g->get_id());
-        if (it == m->m_gates_map.end())
+        m_event_handler->notify(ModuleEvent::event::gates_assign_begin, module, gates.size());
+        for (const auto& [prev_mod, num_gates] : prev_modules)
         {
-            log_error("module",
-                      "gate '{}' with ID {} does not belong to module '{}' with ID {} in netlist with ID {}.",
-                      g->get_name(),
-                      g->get_id(),
-                      prev_module->get_name(),
-                      prev_module->get_id(),
-                      m_netlist->m_netlist_id);
-            return false;
+            m_event_handler->notify(ModuleEvent::event::gates_remove_begin, prev_mod, num_gates);
+        }
+        prev_modules.clear();
+
+        // re-assign gates
+        std::unordered_map<Module*, std::unordered_set<Net*>> nets_to_check;
+        for (Gate* g : gates)
+        {
+            // remove gate from old module
+            Module* prev_mod = g->m_module;
+            const auto it    = prev_mod->m_gates_map.find(g->get_id());
+            assert(it != prev_mod->m_gates_map.end());
+            prev_mod->m_gates_map.erase(it);
+
+            utils::unordered_vector_erase(prev_mod->m_gates, g);
+
+            // move gate to new module
+            module->m_gates_map[g->get_id()] = g;
+            module->m_gates.push_back(g);
+            g->m_module = module;
+
+            // collect affected nets
+            std::vector<Net*> fan_in = g->get_fan_in_nets();
+            nets_to_check[prev_mod].insert(fan_in.begin(), fan_in.end());
+            nets_to_check[module].insert(fan_in.begin(), fan_in.end());
+
+            std::vector<Net*> fan_out = g->get_fan_out_nets();
+            nets_to_check[prev_mod].insert(fan_out.begin(), fan_out.end());
+            nets_to_check[module].insert(fan_out.begin(), fan_out.end());
+            m_event_handler->notify(ModuleEvent::event::gate_removed, prev_mod, g->get_id());
+            m_event_handler->notify(ModuleEvent::event::gate_assigned, module, g->get_id());
+
+            if (auto prev_mod_it = prev_modules.find(prev_mod); prev_mod_it == prev_modules.end())
+            {
+                prev_modules[prev_mod] = 1;
+            }
+            else
+            {
+                std::get<1>(*prev_mod_it)++;
+            }
         }
 
-        prev_module->m_gates_map.erase(it);
-        unordered_vector_erase(prev_module->m_gates, g);
+        if (m_net_checks_enabled)
+        {
+            for (const auto& [affected_module, nets] : nets_to_check)
+            {
+                for (Net* net : nets)
+                {
+                    if (const auto res = affected_module->check_net(net, true); res.is_error())
+                    {
+                        log_error("module", "{}", res.get_error().get());
+                        return false;
+                    }
+                }
+            }
+        }
 
-        // move gate to new module
-        m->m_gates_map[g->get_id()] = g;
-        m->m_gates.push_back(g);
-        g->m_module = m;
+        m_event_handler->notify(ModuleEvent::event::gates_assign_end, module, gates.size());
+        for (const auto& [prev_mod, num_gates] : prev_modules)
+        {
+            m_event_handler->notify(ModuleEvent::event::gates_remove_end, prev_mod, num_gates);
+        }
 
-        // notify event handlers
-        m_event_handler->notify(ModuleEvent::event::gate_removed,prev_module,g->get_id());
-        m_event_handler->notify(ModuleEvent::event::gate_assigned,m,g->get_id());
+        return true;
+    }
+
+    bool NetlistInternalManager::module_check_net(Module* module, Net* net, bool recursive)
+    {
+        if (const auto res = module->check_net(net, recursive); res.is_error())
+        {
+            return false;
+        }
         return true;
     }
 
@@ -746,7 +1074,7 @@ namespace hal
         auto ptr = std::move(it->second);
         m_netlist->m_groupings_map.erase(it);
         m_netlist->m_groupings_set.erase(grouping);
-        unordered_vector_erase(m_netlist->m_groupings, grouping);
+        utils::unordered_vector_erase(m_netlist->m_groupings, grouping);
 
         // free ids
         m_netlist->m_free_grouping_ids.insert(grouping->get_id());

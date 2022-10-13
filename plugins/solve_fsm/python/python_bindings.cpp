@@ -38,7 +38,7 @@ namespace hal
             :param list[halPy.Gate] state_reg: A list containing all the gates of the fsm representing the state register.
             :param list[halPy.Gate] transition_logic: A list containing all the gates of the fsm representing the transition_logic.
             :param str graph_path: Path to the location where the state graph is saved in dot format.
-            :returns: The transition state graph in dot format.
+            :returns: A mapping from each state to all its possible transitions. The transitions are a map from the successor state to all the possible input mappings that lead to it.
             :rtype: dict()
         )")
             .def("solve_fsm", &SolveFsmPlugin::solve_fsm, py::arg("nl"), py::arg("state_reg"), py::arg("transition_logic"), py::arg("intial_state"), py::arg("graph_path"), py::arg("timeout"), R"(
@@ -50,7 +50,7 @@ namespace hal
             :param dict{halPy.Gate, bool} initial_state - A mapping from the state registers to their initial value. If omitted the intial state will be set to 0.
             :param str graph_path: Path to the location where the state graph is saved in dot format.
             :param int timeout - Timeout value for the sat solvers. Defaults to 600 (unit unkown).
-            :returns: The transition state graph in dot format.
+            :returns: A mapping from each state to all its possible successors states
             :rtype: dict()
         )");
 

@@ -98,13 +98,45 @@ This also builds all tests of plugins that are built.
 - `PL_<plugin name>`: enable (or disable) building a specific plugin
 - `BUILD_ALL_PLUGINS`: all-in-one option to build all available plugins, overrides the options for individual plugins
 - `SANITIZE_ADDRESS`, `SANITIZE_MEMORY`, `SANITIZE_THREAD`, `SANITIZE_UNDEFINED `: builds with the respective sanitizers (recommended only for debug builds)
+- `ABC_PATH`: You have the option to provide your own path to the shared library of Berkeley ABC to avoid building it everytime. Look at the `Notes on ABC` section below.
 
 If you do not specify `CMAKE_BUILD_TYPE`, it defaults to `Release`.
 
-### Troubleshooting
+### Speed up the building process - Notes on ABC (Mandatory on M1 Macs)
+To speed up the building process of a clean build, you have the option to install ABC at a path of your choice and provide the path to CMake or put in a standard path like (`/usr/local/lib/`).
+**Important:** To ensure correct execution of ABC from within HAL, we had to modify some buffer size since Boolean functions generated in HAL can be quite large. Hence, make sure to adjust the buffer in `abc/src/base/ver/verStream.c` as shown below:
 
-#### pybind11 Trouble
 
+```git
+-#define VER_BUFFER_SIZE          1048576
+-#define VER_OFFSET_SIZE            65536 
+-#define VER_WORD_SIZE              65536
++#define VER_BUFFER_SIZE        104857600 
++#define VER_OFFSET_SIZE          6553600
++#define VER_WORD_SIZE            6553600
+```
+
+We also adjusted the file `abc/src/base/abc/abcFunc.c` as follows:
+
+
+```git
+-#define ABC_MAX_CUBES   100000
++#define ABC_MAX_CUBES   2000000
+```
+
+
+Installation instructions:
+
+```bash
+cd deps/abc
+make ABC_USE_PIC=1 libabc.so
+sudo cp libabc.so /usr/local/lib/
+```
+(See [abc troubleshooting](https://github.com/berkeley-abc/abc#troubleshooting) on failure)
+
+## Troubleshooting
+
+### pybind11
 ```
 CMake Error in src/python_bindings/CMakeLists.txt:
   Imported target "pybind11::module" includes non-existent path
@@ -116,9 +148,9 @@ CMake Error in src/python_bindings/CMakeLists.txt:
   provide.
 ```
 
- 
-- Tip 1: Make sure you have the most recent `pybind11-dev` version installed.
-- Tip 2: `-DCMAKE_PREFIX_PATH=<root_of_pybind>` can be provided as additional flag to `cmake`. For some reason this variable sometimes remains empty in the pybind11 CMakeLists and results in faulty paths.
+Try the following:
+-  Make sure you have the most recent `pybind11-dev` version installed.
+-  `-DCMAKE_PREFIX_PATH=<root_of_pybind>` can be provided as additional flag to `cmake`. For some reason this variable sometimes remains empty in the pybind11 CMakeLists and results in faulty paths.
 
 
 <a name="quickstart"></a>

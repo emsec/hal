@@ -27,6 +27,7 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QDir>
 
 class QFileSystemWatcher;
 
@@ -54,13 +55,6 @@ namespace hal
         static FileManager* get_instance();
 
         /**
-         * Checks if the option 'input-file' was passed via the command line so that the given file can be opened.
-         *
-         * @param args - The program arguments that were passed to hal.
-         */
-        void handleProgramArguments(const ProgramArguments& args);
-
-        /**
          * Get the filename of the currently opened file. When no file is open an empty string is returned.
          *
          * @return The filename.
@@ -83,7 +77,25 @@ namespace hal
          */
         void watchFile(const QString& fileName);
 
+        /**
+         * This function is called by openDirectory when the hal was saved.
+         *
+         * @param projectDir - the project directory
+         * @param file - the file name
+         */
+        void emitProjectSaved(QString& projectDir, QString& file);
 
+        /**
+         * Return values for static method directoryStatus
+         */
+        enum DirectoryStatus { ProjectDirectory=2, OtherDirectory=1, IsFile=0, NotSelectable=-1, NotExisting=-2 };
+
+        /**
+         * This function checks whether a given path name is a hal directory (contains .project.json)
+         * @param pathname - the path name to be tested
+         * @return DirectoryStatus enum (see above)
+         */
+        static DirectoryStatus directoryStatus(const QString& pathname);
     Q_SIGNALS:
         /**
          * Q_SIGNAL that is emitted when a file is successfully opened.
@@ -91,6 +103,22 @@ namespace hal
          * @param fileName - The filename.
          */
         void fileOpened(const QString& fileName);
+
+        /**
+         * Q_SIGNAL that is emitted when a project is successfully opened.
+         *
+         * @param projectDir - The project directory
+         * @param fileName - The filename.
+         */
+        void projectOpened(QString projectDir, QString fileName);
+
+        /**
+         * Q_SIGNAL that is emitted when a project gets saved.
+         *
+         * @param projectDir - The project directory
+         * @param fileName - The filename.
+         */
+        void projectSaved(QString projectDir, QString fileName);
 
         /**
          * Q_SIGNAL that is emitted when the file changed.
@@ -125,8 +153,25 @@ namespace hal
          * as the shadowfile logic in an automated fashion.
          *
          * @param fileName - The file to be opened.
+         * @param gatelibraryPath - Path to gate library, auto detection if empty
          */
-        void openFile(QString fileName);
+        bool deprecatedOpenFile(QString filename, QString gatelibraryPath);
+
+
+        /**
+         * Imports the netlist file into a new hal project. User will be queried for project directory.
+         *
+         * @param filename - The netlist file to be imported.
+         */
+        void importFile(QString filename);
+
+
+        /**
+         * Opens the given project.
+         *
+         * @param projPath - The directory path of the project to be opened
+         */
+        void openProject(QString projPath);
 
         /**
          * Closes the file and resets all information regarding the closed file.
@@ -153,9 +198,17 @@ namespace hal
         /**
          * This function is called by openFile when the netlist could be serialized successfully.
          *
-         * @param fileName - the file's name.
+         * @param file - the file's name.
          */
-        void fileSuccessfullyLoaded(QString fileName);
+        void fileSuccessfullyLoaded(QString file);
+
+        /**
+         * This function is called by openDirectory when the hal project could be loaded successfully.
+         *
+         * @param projectDir - the project directory
+         * @param file - the file name
+         */
+        void projectSuccessfullyLoaded(QString& projectDir, QString& file);
 
         /**
          * Sets the opened file at the top of the recently used files in the welcome screen through a setting file
@@ -173,21 +226,17 @@ namespace hal
         void displayErrorMessage(QString error_message);
 
         /**
-         * Constructs the shadowfile's name and path based on a given file. It is the same path and name as the
-         * 'original' file, but with a '~' prepended to its name.
-         *
-         * @param file - The 'original' file.
-         * @return The complete path with the name of the shadowfile.
+         * Deletes shadow (=autosave) project directory if existing.
          */
-        QString getShadowFile(QString file);
+        void removeShadowDirectory();
 
         /**
-         * Deletes a shadowfile if one exists.
+         * Crash repair: recursively move shadow (=autosave) files into project directory.
+         * @param shDir - The shadow directory
          */
-        void removeShadowFile();
+        void moveShadowToProject(const QDir& shDir) const;
 
         QString mFileName;
-        QString mShadowFileName;
         QFileSystemWatcher* mFileWatcher;
         bool mFileOpen;
         QTimer* mTimer;

@@ -62,7 +62,7 @@ namespace hal
         };
 
         Q_ENUM_NS(mSortMechanism)
-
+		
         /**
          * Compares two strings by the natural order critera (e.g. z2 < z11).
          *

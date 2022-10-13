@@ -55,29 +55,29 @@ namespace hal
          * @param[in] file_path - The output path.
          * @returns True on success, false otherwise.
          */
-        bool write(Netlist* netlist, const std::filesystem::path& file_path) override;
+        Result<std::monostate> write(Netlist* netlist, const std::filesystem::path& file_path) override;
 
     private:
         static const std::set<std::string> valid_types;
 
-        bool write_module_declaration(std::stringstream& res_stream,
+        Result<std::monostate> write_module_declaration(std::stringstream& res_stream,
                                       const Module* module,
                                       std::unordered_map<const Module*, std::string>& module_type_aliases,
                                       std::unordered_map<std::string, u32>& module_type_occurrences) const;
-        bool write_gate_instance(std::stringstream& res_stream,
+        Result<std::monostate> write_gate_instance(std::stringstream& res_stream,
                                  const Gate* gate,
                                  std::unordered_map<const DataContainer*, std::string>& aliases,
                                  std::unordered_map<std::string, u32>& identifier_occurrences) const;
-        bool write_module_instance(std::stringstream& res_stream,
+        Result<std::monostate> write_module_instance(std::stringstream& res_stream,
                                    const Module* module,
                                    std::unordered_map<const DataContainer*, std::string>& aliases,
                                    std::unordered_map<std::string, u32>& identifier_occurrences,
                                    std::unordered_map<const Module*, std::string>& module_type_aliases) const;
-        bool write_parameter_assignments(std::stringstream& res_stream, const DataContainer* container) const;
-        bool write_pin_assignments(std::stringstream& res_stream,
+        Result<std::monostate> write_parameter_assignments(std::stringstream& res_stream, const DataContainer* container) const;
+        Result<std::monostate> write_pin_assignments(std::stringstream& res_stream,
                                    const std::vector<std::pair<std::string, std::vector<const Net*>>>& pin_assignments,
                                    std::unordered_map<const DataContainer*, std::string>& aliases) const;
-        bool write_parameter_value(std::stringstream& res_stream, const std::string& type, const std::string& value) const;
+        Result<std::monostate> write_parameter_value(std::stringstream& res_stream, const std::string& type, const std::string& value) const;
         std::string get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const;
         std::string escape(const std::string& s) const;
     };

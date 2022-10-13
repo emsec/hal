@@ -157,16 +157,14 @@ namespace hal
     }
 
     //---------------- PICKER -----------------------------------------
-    GateSelectPicker* GateSelectPicker::sCurrentPicker = nullptr;
-
-    GateSelectPicker::GateSelectPicker(u32 orig, bool succ, const QSet<u32> &selectable)
-        : mOrigin(orig), mPickSuccessor(succ), mSelectableGates(selectable)
+    GateSelectPicker::GateSelectPicker(const QSet<u32> &selectable, GateSelectReceiver *receiver)
+        : mSelectableGates(selectable)
     {
-        if (sCurrentPicker)
-            sCurrentPicker->deleteLater();
         connect(this, &GateSelectPicker::triggerCursor, gContentManager->getGraphTabWidget(), &GraphTabWidget::setSelectCursor);
-        sCurrentPicker = this;
-        Q_EMIT(triggerCursor(GraphTabWidget::PickGate));
+        connect(this, &GateSelectPicker::gatesPicked, receiver, &GateSelectReceiver::handleGatesPicked);
+        connect(gContentManager->getGraphTabWidget(), &GraphTabWidget::triggerTerminatePicker, this, &GateSelectPicker::terminatePicker);
+        connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &GateSelectPicker::handleSelectionChanged);
+        Q_EMIT triggerCursor(GraphTabWidget::PickGate);
     }
 
     void GateSelectPicker::handleSelectionChanged(void* sender)
@@ -197,38 +195,32 @@ namespace hal
 
         if (firstAccepted)
         {
-            if (mPickSuccessor)
-                Q_EMIT(gatesPicked(mOrigin,firstAccepted->get_id()));
-            else
-                Q_EMIT(gatesPicked(firstAccepted->get_id(),mOrigin));
+            mGatesSelected.insert(firstAccepted->get_id());
         }
         else if (notAccepted)
         {
             Gate* g = gNetlist->get_gate_by_id(notAccepted);
             if (g)
-                QMessageBox::warning(qApp->activeWindow(), "Warning", QString("Gate %1[%2] is no %3")
+                QMessageBox::warning(qApp->activeWindow(), "Warning", QString("Gate %1[%2] is no valid selection")
                                      .arg(QString::fromStdString(g->get_name()))
-                                     .arg(notAccepted)
-                                     .arg(mPickSuccessor ? "successor" : "predecessor"));
+                                     .arg(notAccepted));
             else
                 QMessageBox::warning(qApp->activeWindow(), "Warning", QString("Cannot select gate [%1]").arg(notAccepted));
         }
         else
-            terminate = false;
+            terminate = gSelectionRelay->numberSelectedItems() > 0;
 
         if (terminate)
-            terminateCurrentPicker();
+            terminatePicker();
     }
 
-    void GateSelectPicker::terminateCurrentPicker()
+    void GateSelectPicker::terminatePicker()
     {
-        if (!sCurrentPicker)
-            return;
-        GateSelectPicker* toDelete = sCurrentPicker;
-        sCurrentPicker               = nullptr;
-        toDelete->triggerCursor(false);
-        disconnect(gSelectionRelay, &SelectionRelay::selectionChanged, toDelete, &GateSelectPicker::handleSelectionChanged);
-        toDelete->deleteLater();
+        disconnect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &GateSelectPicker::handleSelectionChanged);
+        disconnect(gContentManager->getGraphTabWidget(), &GraphTabWidget::triggerTerminatePicker, this, &GateSelectPicker::terminatePicker);
+        Q_EMIT gatesPicked(mGatesSelected);
+        Q_EMIT triggerCursor(GraphTabWidget::Select);
+        deleteLater();
     }
 
     //---------------- VIEW -------------------------------------------

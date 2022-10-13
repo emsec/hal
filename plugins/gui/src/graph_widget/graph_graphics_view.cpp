@@ -34,9 +34,7 @@
 #include "gui/user_action/action_unfold_module.h"
 #include "gui/user_action/user_action_compound.h"
 #include "gui/module_dialog/module_dialog.h"
-#include "gui/module_dialog/custom_module_dialog.h"
 #include "gui/module_dialog/gate_dialog.h"
-#include "gui/module_dialog/custom_gate_dialog.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
@@ -763,7 +761,7 @@ namespace hal
                 Module* m = isModule ? gNetlist->get_module_by_id(mItem->id()) : nullptr;
 
                 // only allow move actions on anything that is not the top module
-                if (gContentManager->getGraphTabWidget()->selectCursor() != GraphTabWidget::Select)
+                if (!gContentManager->getGraphTabWidget()->isSelectMode())
                 {
                     action = context_menu.addAction("  Cancel pick-item mode");
                     connect(action, &QAction::triggered, this, &GraphGraphicsView::handleCancelPickMode);
@@ -871,8 +869,7 @@ namespace hal
 
     void GraphGraphicsView::handleCancelPickMode()
     {
-        ModuleSelectPicker::terminateCurrentPicker();
-        GateSelectPicker::terminateCurrentPicker();
+        gContentManager->getGraphTabWidget()->emitTerminatePicker();
     }
 
     namespace ShortestPath
@@ -972,7 +969,7 @@ namespace hal
             }
         }
 
-        CustomModuleDialog module_dialog(not_selectable_modules, this);
+        ModuleDialog module_dialog(not_selectable_modules,"Add module to view", nullptr, this);
         if (module_dialog.exec() == QDialog::Accepted)
         {
             QSet<u32> module_to_add;
@@ -1008,7 +1005,7 @@ namespace hal
             }
         }
 
-        CustomGateDialog gate_dialog(0, true, selectable_gates, this);
+        GateDialog gate_dialog(selectable_gates, "Add gate to view", nullptr, this);
         if (gate_dialog.exec() == QDialog::Accepted)
         {
             QSet<u32> gate_to_add;
@@ -1193,8 +1190,8 @@ namespace hal
             selectableGates.insert(g->get_id());
         }
 
-        GateDialog gd(mItem->id(),succ,selectableGates,this);
-        gd.hidePicker();
+//        GraphGraphicsViewNeighborSelector* ggvns = new GraphGraphicsViewNeighborSelector(mItem->id(), succ, this);
+        GateDialog gd(selectableGates, QString("Shortest path %1 gate").arg(succ?"to":"from"), nullptr, this);
 
         if (gd.exec() != QDialog::Accepted) return;
 
@@ -1252,7 +1249,8 @@ namespace hal
         for (Gate* g : netlist_utils::get_next_gates(gNetlist->get_gate_by_id(mItem->id()),succ))
             selectableGates.insert(g->get_id());
 
-        GateDialog gd(mItem->id(),succ,selectableGates,this);
+        GraphGraphicsViewNeighborSelector* ggvns = new GraphGraphicsViewNeighborSelector(mItem->id(), succ, this);
+        GateDialog gd(selectableGates,QString("Shortest path %1 gate").arg(succ?"to":"from"),ggvns,this);
 
         if (gd.exec() != QDialog::Accepted) return;
 
@@ -1304,7 +1302,33 @@ namespace hal
 
     void GraphGraphicsView::handleModuleDialog()
     {
-        ModuleDialog md(this);
+        QSet<u32> exclude_ids;
+        QList<u32> modules = gSelectionRelay->selectedModulesList();
+        QList<u32> gates   = gSelectionRelay->selectedGatesList();
+
+        for (u32 gid : gates)
+        {
+            Gate* g = gNetlist->get_gate_by_id(gid);
+            if (!g)
+                continue;
+            exclude_ids.insert(g->get_module()->get_id());
+        }
+
+        for (u32 mid : modules)
+        {
+            exclude_ids.insert(mid);
+            Module* m = gNetlist->get_module_by_id(mid);
+            if (!m)
+                continue;
+            Module* pm = m->get_parent_module();
+            if (pm)
+                exclude_ids.insert(pm->get_id());
+            for (Module* sm : m->get_submodules(nullptr, true))
+                exclude_ids.insert(sm->get_id());
+        }
+
+        AddToModuleReceiver* receiver = new AddToModuleReceiver(this);
+        ModuleDialog md(exclude_ids, "Move to module", receiver, this);
         if (md.exec() != QDialog::Accepted) return;
         if (md.isNewModule())
         {
@@ -1734,4 +1758,20 @@ namespace hal
         mPanModifier = panModifier;
     }
 
+    void GraphGraphicsViewNeighborSelector::handleGatesPicked(const QSet<u32>& gats)
+    {
+        if (!gats.empty())
+        {
+            u32 pickedGate = *gats.constBegin();
+            GraphGraphicsView* ggv = dynamic_cast<GraphGraphicsView*>(parent());
+            if (ggv)
+            {
+                if (mPickSuccessor)
+                    ggv->handleShortestPath(mOrigin,pickedGate);
+                else
+                    ggv->handleShortestPath(pickedGate,mOrigin);
+            }
+        }
+        this->deleteLater();
+    }
 }    // namespace hal

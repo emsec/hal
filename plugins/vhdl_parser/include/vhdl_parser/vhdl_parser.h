@@ -28,11 +28,13 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist_parser/netlist_parser.h"
+#include "hal_core/utilities/result.h"
 #include "hal_core/utilities/special_strings.h"
 #include "hal_core/utilities/token_stream.h"
 #include "vhdl_parser/vhdl_entity.h"
 
 #include <optional>
+#include <sstream>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
@@ -54,7 +56,7 @@ namespace hal
          * @param[in] file_path - Path to the VHDL netlist file.
          * @returns True on success, false otherwise.
          */
-        bool parse(const std::filesystem::path& file_path) override;
+        Result<std::monostate> parse(const std::filesystem::path& file_path) override;
 
         /**
          * Instantiate the parsed VHDL netlist using the specified gate library.
@@ -62,7 +64,7 @@ namespace hal
          * @param[in] gate_library - The gate library.
          * @returns A pointer to the resulting netlist.
          */
-        std::unique_ptr<Netlist> instantiate(const GateLibrary* gate_library) override;
+        Result<std::unique_ptr<Netlist>> instantiate(const GateLibrary* gate_library) override;
 
     private:
         enum class AttributeTarget
@@ -76,6 +78,7 @@ namespace hal
         using attribute_buffer_t = std::map<AttributeTarget, std::map<ci_string, std::tuple<u32, std::string, std::string, std::string>>>;
 
         std::stringstream m_fs;
+        std::filesystem::path m_path;
 
         // temporary netlist
         Netlist* m_netlist = nullptr;
@@ -91,7 +94,7 @@ namespace hal
         std::unordered_map<ci_string, GateType*> m_gate_types;
         std::unordered_map<ci_string, GateType*> m_vcc_gate_types;
         std::unordered_map<ci_string, GateType*> m_gnd_gate_types;
-        std::unordered_map<Net*, std::tuple<PinDirection, std::string, Module*>> m_module_ports;
+        std::unordered_map<Net*, std::vector<std::tuple<PinDirection, std::string, Module*>>> m_module_ports;
         attribute_buffer_t m_attribute_buffer;
         std::unordered_map<ci_string, ci_string> m_attribute_types;
 
@@ -109,34 +112,33 @@ namespace hal
         std::unordered_map<ci_string, std::vector<ci_string>> m_nets_to_merge;
 
         // parse HDL into intermediate format
-        bool tokenize();
-        bool parse_tokens();
-        bool parse_library();
-        bool parse_entity();
-        bool parse_port_definitons(VHDLEntity& entity);
-        bool parse_attribute();
-        bool parse_architecture();
-        bool parse_architecture_header(VHDLEntity& entity);
-        bool parse_signal_definition(VHDLEntity& entity);
-        bool parse_architecture_body(VHDLEntity& entity);
-        bool parse_assignment(VHDLEntity& entity);
-        bool parse_instance(VHDLEntity& entity);
-        bool parse_port_assign(VHDLEntity& entity, const ci_string& instance_name);
-        bool parse_generic_assign(VHDLEntity& entity, const ci_string& instance_name);
-        bool assign_attributes(VHDLEntity& entity);
+        void tokenize();
+        Result<std::monostate> parse_tokens();
+        void parse_library();
+        Result<std::monostate> parse_entity();
+        Result<std::monostate> parse_port_definitons(VHDLEntity& entity);
+        Result<std::monostate> parse_attribute();
+        Result<std::monostate> parse_architecture();
+        Result<std::monostate> parse_architecture_header(VHDLEntity& entity);
+        Result<std::monostate> parse_signal_definition(VHDLEntity& entity);
+        Result<std::monostate> parse_architecture_body(VHDLEntity& entity);
+        void parse_assignment(VHDLEntity& entity);
+        Result<std::monostate> parse_instance(VHDLEntity& entity);
+        void parse_port_assign(VHDLEntity& entity, const ci_string& instance_name);
+        Result<std::monostate> parse_generic_assign(VHDLEntity& entity, const ci_string& instance_name);
+        Result<std::monostate> assign_attributes(VHDLEntity& entity);
 
         // construct netlist from intermediate format
-        bool construct_netlist(VHDLEntity& top_entity);
-        Module* instantiate_entity(const ci_string& instance_name, VHDLEntity& vhdl_entity, Module* parent, const std::unordered_map<ci_string, ci_string>& parent_module_assignments);
+        Result<std::monostate> construct_netlist(VHDLEntity& top_entity);
+        Result<Module*> instantiate_entity(const ci_string& instance_name, VHDLEntity& vhdl_entity, Module* parent, const std::unordered_map<ci_string, ci_string>& parent_module_assignments);
 
         // helper functions
         std::vector<u32> parse_range(TokenStream<ci_string>& range_stream) const;
-        std::optional<std::vector<std::vector<u32>>> parse_signal_ranges(TokenStream<ci_string>& signal_stream) const;
+        Result<std::vector<std::vector<u32>>> parse_signal_ranges(TokenStream<ci_string>& signal_stream) const;
 
-        std::vector<ci_string> get_bin_from_literal(const Token<ci_string>& value_token) const;
-        ci_string get_hex_from_literal(const Token<ci_string>& value_token) const;
-        bool is_in_bounds(const std::vector<std::pair<i32, i32>>& bounds, const std::vector<std::pair<i32, i32>>& reference_bounds) const;
-        std::vector<ci_string> expand_assignment_signal(VHDLEntity& entity, TokenStream<ci_string>& signal_stream, bool is_left);
+        Result<std::vector<ci_string>> get_bin_from_literal(const Token<ci_string>& value_token) const;
+        Result<ci_string> get_hex_from_literal(const Token<ci_string>& value_token) const;
+        Result<std::vector<ci_string>> expand_assignment_signal(VHDLEntity& entity, TokenStream<ci_string>& signal_stream, bool is_left);
         std::vector<ci_string> expand_ranges(const ci_string& name, const std::vector<std::vector<u32>>& ranges) const;
         void expand_ranges_recursively(std::vector<ci_string>& expanded_names, const ci_string& current_name, const std::vector<std::vector<u32>>& ranges, u32 dimension) const;
         ci_string get_unique_alias(std::unordered_map<ci_string, u32>& name_occurrences, const ci_string& name) const;

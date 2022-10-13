@@ -42,6 +42,7 @@ namespace hal
             addGridPosition(modules, gates, nets, placement.gridPosition());
             break;
         }
+//        qDebug() << "StandardGraphLayouter::add (box mod gat)" << boxes().size() << modules.size() << gates.size();
     }
 
     void StandardGraphLayouter::addWaitToBeSeated(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets)

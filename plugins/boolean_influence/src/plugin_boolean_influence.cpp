@@ -64,7 +64,7 @@ namespace hal
             {
                 boolean_influence_for_gate = get_boolean_influences_of_gate(gate);
             }
-            
+
             for (u32 i = 0; i < matrix_gates; i++)
             {
                 if (gates_to_add.find(i) != gates_to_add.end())
@@ -110,14 +110,14 @@ namespace hal
         }
 
         // Check for the data port pin
-        std::unordered_set<std::string> d_ports = gate->get_type()->get_pins_of_type(PinType::data);
-        if (d_ports.size() != 1)
+        auto d_pins = gate->get_type()->get_pins([](const GatePin* p) { return p->get_direction() == PinDirection::input && p->get_type() == PinType::data; });
+        if (d_pins.size() != 1)
         {
-            log_error("boolean_influence", "Can only handle flip flops with exactly 1 data port, but found {}.", d_ports.size());
+            log_error("boolean_influence", "Can only handle flip flops with exactly 1 data port, but found {}.", d_pins.size());
             return {};
         }
-        std::string data_pin = *d_ports.begin();
-        log_debug("boolean_influence", "Data pin: {}", data_pin);
+        const GatePin* data_pin = d_pins.front();
+        log_debug("boolean_influence", "Data pin: {}", data_pin->get_name());
 
         // Extract all gates in front of the data port and iterate backwards until another flip flop is found.
         std::vector<Gate*> function_gates = extract_function_gates(gate, data_pin);
@@ -128,7 +128,6 @@ namespace hal
 
         std::unique_ptr ctx  = std::make_unique<z3::context>();
         std::unique_ptr func = std::make_unique<z3::expr>(*ctx);
-        // std::unordered_set<u32> net_ids;
 
         z3_utils::RecursiveSubgraphFunctionGenerator g = {*ctx, function_gates};
 
@@ -136,7 +135,6 @@ namespace hal
 
         if (!function_gates.empty())
         {
-            // g.get_subgraph_z3_function(gate->get_fan_in_net(data_pin), function_gates, *ctx, *func, net_ids);
             g.get_subgraph_z3_function_recursive(gate->get_fan_in_net(data_pin), *func);
         }
         // edge case if the function gates are empty
@@ -144,7 +142,6 @@ namespace hal
         {
             Net* in_net = gate->get_fan_in_net(data_pin);
             *func       = ctx->bv_const(std::to_string(in_net->get_id()).c_str(), 1);
-            // net_ids.insert(in_net->get_id());
         }
 
         z3_utils::z3Wrapper func_wrapper = z3_utils::z3Wrapper(std::move(ctx), std::move(func));
@@ -174,7 +171,63 @@ namespace hal
         return nets_to_inf;
     }
 
-    std::vector<Gate*> BooleanInfluencePlugin::extract_function_gates(const Gate* start, const std::string& pin)
+    std::map<Net*, double> BooleanInfluencePlugin::get_boolean_influences_of_subcircuit(const std::vector<Gate*> gates, const Net* start_net)
+    {
+        for (const auto* gate : gates)
+        {
+            if (!gate->get_type()->has_property(GateTypeProperty::combinational) || gate->is_vcc_gate() || gate->is_gnd_gate())
+            {
+                log_error("boolean_influence", "gate '{}' with ID {} is either not a combinational gate or is a VCC or GND gate.", gate->get_name(), gate->get_id());
+                return {};
+            }
+        }
+
+        // Generate function for the data port
+        std::unique_ptr ctx  = std::make_unique<z3::context>();
+        std::unique_ptr func = std::make_unique<z3::expr>(*ctx);
+
+        z3_utils::RecursiveSubgraphFunctionGenerator g = {*ctx, gates};
+
+        log_debug("boolean_influence", "Created context, function and generator. Trying to generator function now: ");
+
+        if (!gates.empty())
+        {
+            g.get_subgraph_z3_function_recursive(start_net, *func);
+        }
+        // edge case if the gates are empty
+        else
+        {
+            *func = ctx->bv_const(std::to_string(start_net->get_id()).c_str(), 1);
+        }
+
+        z3_utils::z3Wrapper func_wrapper = z3_utils::z3Wrapper(std::move(ctx), std::move(func));
+
+        log_debug("boolean_influence", "Built subgraph function, now trying to extract boolean influence.");
+
+        // Generate boolean influence
+        std::unordered_map<u32, double> net_ids_to_inf = func_wrapper.get_boolean_influence();
+
+        // translate net_ids back to nets
+        std::map<Net*, double> nets_to_inf;
+
+        Netlist* nl = gates.front()->get_netlist();
+        for (const auto& [net_id, inf] : net_ids_to_inf)
+        {
+            Net* net = nl->get_net_by_id(net_id);
+
+            if (net->get_sources().size() > 1)
+            {
+                log_error("boolean_influence", "Net ({}) has multiple sources ({})", net->get_id(), net->get_sources().size());
+                return {};
+            }
+
+            nets_to_inf.insert({net, inf});
+        }
+
+        return nets_to_inf;
+    }
+
+    std::vector<Gate*> BooleanInfluencePlugin::extract_function_gates(const Gate* start, const GatePin* pin)
     {
         std::unordered_set<Gate*> function_gates;
 
@@ -189,7 +242,7 @@ namespace hal
 
     void BooleanInfluencePlugin::add_inputs(Gate* gate, std::unordered_set<Gate*>& gates)
     {
-        if (gate->is_vcc_gate() || gate->is_gnd_gate() || gate->get_type()->has_property(GateTypeProperty::ff) || gate->get_type()->get_name().find("RAM") != std::string::npos)
+        if (!gate->get_type()->has_property(GateTypeProperty::combinational) || gate->is_vcc_gate() || gate->is_gnd_gate())
         {
             return;
         }

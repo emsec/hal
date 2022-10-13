@@ -90,16 +90,19 @@ namespace hal
          */
         void handleFileChanged(QString path);
 
+        void handleScriptExecute(QString path);
     private:
         QHBoxLayout* mLayout;
         QLabel* mMessageLabel;
         QPushButton* mReloadButton;
         QPushButton* mIgnoreButton;
         QPushButton* mOkButton;
+        QPushButton* mAbortButton;
 
         void handleReloadClicked();
         void handleIgnoreClicked();
         void handleOkClicked();
+        void handleAbortClicked();
 
         void handleFileContentModified(QString path);
         void handleFileMovOrDel(QString path);

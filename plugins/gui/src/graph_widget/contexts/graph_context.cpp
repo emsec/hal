@@ -2,10 +2,11 @@
 #include "gui/graph_widget/layout_locker.h"
 
 #include "hal_core/netlist/module.h"
-
+#include "hal_core/utilities/log.h"
 #include "gui/graph_widget/layout_locker.h"
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/graph_widget.h"
+#include "gui/context_manager_widget/context_manager_widget.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_def.h"
 #include "gui/implementations/qpoint_extension.h"
@@ -36,7 +37,6 @@ namespace hal
           mExclusiveModuleId(0)
     {
         mTimestamp = QDateTime::currentDateTime();
-        UserActionManager::instance()->clearWaitCount();
         connect(MainWindow::sSettingStyle,&SettingsItemDropdown::intChanged,this,&GraphContext::handleStyleChanged);
         connect(gNetlistRelay, &NetlistRelay::moduleNameChanged, this, &GraphContext::handleModuleNameChanged);
         connect(this, &GraphContext::exclusiveModuleLost, this, &GraphContext::handleExclusiveModuleLost);
@@ -243,6 +243,13 @@ namespace hal
     bool GraphContext::empty() const
     {
         return mGates.empty() && mModules.empty();
+    }
+
+    bool GraphContext::willBeEmptied() const
+    {
+        QSet<u32> tempMod = mModules + mAddedModules - mRemovedModules;
+        QSet<u32> tempGat = mGates   + mAddedGates   - mRemovedGates;
+        return tempMod.isEmpty() && tempGat.isEmpty();
     }
 
     void GraphContext::testIfAffected(const u32 id, const u32* moduleId, const u32* gateId)
@@ -569,6 +576,16 @@ namespace hal
 
     void GraphContext::applyChanges()
     {
+        // since changes are only applied once in a while added module might not exist any more
+        auto it = mAddedModules.begin();
+        while (it != mAddedModules.end())
+        {
+            if (gNetlist->get_module_by_id(*it))
+                ++it;
+            else
+                it = mAddedModules.erase(it);
+        }
+
         mModules -= mRemovedModules;
         mGates -= mRemovedGates;
 
@@ -715,6 +732,8 @@ namespace hal
         if (json.contains("timestamp") && json["timestamp"].isString())
             mTimestamp = QDateTime::fromString(json["timestamp"].toString());
 
+        QList<QPair<Node,QPoint>> nodesToPlace;
+
         if (json.contains("modules") && json["modules"].isArray())
         {
             QJsonArray jsonMods = json["modules"].toArray();
@@ -724,14 +743,17 @@ namespace hal
                 QJsonObject jsonMod = jsonMods.at(imod).toObject();
                 if (!jsonMod.contains("id") || !jsonMod["id"].isDouble()) continue;
                 u32 id = jsonMod["id"].toInt();
-                if (!gNetlist->get_module_by_id(id)) return false;
-                mModules.insert(id);
+                if (!gNetlist->get_module_by_id(id))
+                {
+                    log_warning("gui", "Module id={} not found in netlist, view id={} not restored.", id, mId);
+                    return false;
+                }
                 if (!jsonMod.contains("x") || !jsonMod["x"].isDouble()) continue;
                 int x = jsonMod["x"].toInt();
                 if (!jsonMod.contains("y") || !jsonMod["y"].isDouble()) continue;
                 int y = jsonMod["y"].toInt();
                 Node nd(id,Node::Module);
-                mLayouter->setNodePosition(nd,QPoint(x,y));
+                nodesToPlace.append(QPair<Node,QPoint>(nd,QPoint(x,y)));
             }
         }
 
@@ -744,16 +766,32 @@ namespace hal
                 QJsonObject jsonGat = jsonGats.at(igat).toObject();
                 if (!jsonGat.contains("id") || !jsonGat["id"].isDouble()) continue;
                 u32 id = jsonGat["id"].toInt();
-                if (!gNetlist->get_gate_by_id(id)) return false;
-                mGates.insert(id);
+                if (!gNetlist->get_gate_by_id(id))
+                {
+                    log_warning("gui", "Gate id={} not found in netlist, view id={} not restored.", id, mId);
+                    return false;
+                }
                 if (!jsonGat.contains("x") || !jsonGat["x"].isDouble()) continue;
                 int x = jsonGat["x"].toInt();
                 if (!jsonGat.contains("y") || !jsonGat["y"].isDouble()) continue;
                 int y = jsonGat["y"].toInt();
                 Node nd(id,Node::Gate);
-                mLayouter->setNodePosition(nd,QPoint(x,y));
+                nodesToPlace.append(QPair<Node,QPoint>(nd,QPoint(x,y)));
             }
         }
+
+        mModules.clear();
+        mGates.clear();
+        for (const QPair<Node,QPoint>& box : nodesToPlace)
+        {
+            if (box.first.type() == Node::Module)
+                mModules.insert(box.first.id());
+            else
+                mGates.insert(box.first.id());
+            mLayouter->setNodePosition(box.first,box.second);
+        }
+        if (mModules.size()==1 && mGates.isEmpty())
+            setExclusiveModuleId(*(mModules.begin()),false);
 
         if (json.contains("nets") && json["nets"].isArray())
         {
@@ -780,6 +818,8 @@ namespace hal
         json["name"] = mName;
         json["timestamp"] = mTimestamp.toString();
         json["exclusiveModuleId"] = (int) mExclusiveModuleId;
+        if (gContentManager->getContextManagerWidget()->getCurrentContext()==this)
+            json["selected"] = true;
 
         /// modules
         QJsonArray jsonMods;

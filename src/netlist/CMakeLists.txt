@@ -5,12 +5,6 @@ add_library(netlist SHARED ${NETLIST_LIB_INCLUDE} ${NETLIST_LIB_SOURCE} ${CMAKE_
 set_target_properties(netlist PROPERTIES OUTPUT_NAME "hal_netlist")
 add_library(hal::netlist ALIAS netlist)
 
-find_package(Z3 REQUIRED)
-if(Z3_FOUND)
-    message(STATUS "Found z3")
-else()
-    message(STATUS "Could not find z3")
-endif(Z3_FOUND)
 
 target_include_directories(netlist
                            PUBLIC
@@ -19,11 +13,13 @@ target_include_directories(netlist
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
                            ${Z3_INCLUDE_DIRS}
                            )
+
 target_compile_options(netlist
                        PUBLIC ${COMPILE_OPTIONS_PUBLIC}
                        PRIVATE ${COMPILE_OPTIONS_PRIVATE}
                        INTERFACE ${COMPILE_OPTIONS_INTERFACE})
 set_target_properties(PROPERTIES DEFINE_SYMBOL BUILDING_CORE)
+
 target_link_libraries(netlist
                       PUBLIC
                         hal::utilities
@@ -32,7 +28,9 @@ target_link_libraries(netlist
                         ${CMAKE_DL_LIBS}
                         RapidJSON::RapidJSON
                         ${Z3_LIBRARIES}
+                        ${ABC_LIBRARY}
                       )
+
 install(TARGETS netlist
         EXPORT hal
         LIBRARY DESTINATION ${LIBRARY_INSTALL_DIRECTORY}
@@ -48,5 +46,4 @@ install(TARGETS netlist
 if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     add_sanitizers(netlist)
 endif()
-
 

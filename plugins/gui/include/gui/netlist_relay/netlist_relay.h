@@ -24,7 +24,7 @@
 #pragma once
 
 #include "hal_core/netlist/event_system/event_handler.h"
-
+#include "gui/grouping/grouping_color_serializer.h"
 #include <QMap>
 #include <QObject>
 
@@ -140,6 +140,8 @@ namespace hal
         /*=======================================
            Netlist Event Signals
          ========================================*/
+
+        void signalThreadEvent(int type, int evt, void* object, u32 associated_data);
 
         /**
          * Q_SIGNAL to notify that the netlists id has been changed. <br>
@@ -322,22 +324,13 @@ namespace hal
         void moduleGateRemoved(Module* m, const u32 removed_gate) const;
 
         /**
-         * Q_SIGNAL to notify that an input port name of a module has been changed. <br>
-         * Relays the following hal-core event: <i>ModuleEvent::event::input_port_name_changed</i>
+         * Q_SIGNAL to notify that a port of a module has been changed. <br>
+         * Relays the following hal-core event: <i>ModuleEvent::event::pin_changed</i>
          *
-         * @param m - The module with the renamed input port
+         * @param m - The module with the changed port
          * @param respective_net - The id of the net of the renamed input port
          */
-        void moduleInputPortNameChanged(Module* m, const u32 respective_net) const;
-
-        /**
-         * Q_SIGNAL to notify that an output port name of a module has been changed. <br>
-         * Relays the following hal-core event: <i>ModuleEvent::event::output_port_name_changed</i>
-         *
-         * @param m - The module with the renamed output port
-         * @param respective_net - The id of the net of the renamed output port
-         */
-        void moduleOutputPortNameChanged(Module* m, const u32 respective_net) const;
+        void modulePortsChanged(Module* m) const;
 
         /**
          * Q_SIGNAL to notify that the type of a module has been changed. <br>
@@ -346,6 +339,41 @@ namespace hal
          * @param m - The module with a new type
          */
         void moduleTypeChanged(Module* m) const;
+
+        /**
+         * Q_SIGNAL to notify that a certain amount of gates will be assigned to a module. <br>
+         * Relays the following hal-core event: <i>ModuleEvent::event::gates_assign_begin</i>
+         *
+         * @param m - The module to which gates will be assigned.
+         * @param number_gates - The amount of gates to be assigned.
+         */
+        void moduleGatesAssignBegin(Module* m, u32 number_gates) const;
+
+        /**
+         * Q_SIGNAL to notify that a certain amount of gates has been assigned to a module. <br>
+         * Relays the following hal-core event: <i>ModuleEvent::event::gates_assign_end</i>
+         *
+         * @param m - The module to which gates has been assigned.
+         * @param number_gates - The number of gates that has been assigned.
+         */
+        void moduleGatesAssignEnd(Module* m, u32 number_gates) const;
+
+        /**
+         * Q_SIGNAL to notify that a certain amount of gates will be removed from a module. <br>
+         * Relays the following hal-core event: <i>ModuleEvent::event::gates_remove_begin</i>
+         *
+         * @param m - The module from which gates will be removed.
+         * @param number_gates - The amount of gates to be removed.
+         */
+        void moduleGatesRemoveBegin(Module* m, u32 number_gates) const;
+
+        /**
+         * Q_SIGNAL to notify that a certain amount of gates has been removed from a module. <br>
+         * Relays the following hal-core event: <i>ModuleEvent::event::gates_remove_end</i>
+         * @param m
+         * @param number_gates
+         */
+        void moduleGatesRemoveEnd(Module* m, u32 number_gates) const;
 
         /*=======================================
            Gate Event Signals
@@ -377,6 +405,22 @@ namespace hal
          * @param g - The renamed gate
          */
         void gateNameChanged(Gate* g) const;
+
+        /**
+         * Q_SIGNAL to notify that the set of boolean functions of a gate has been changed. <br>
+         * Relays the following hal-core event: <i>GateEvent::event::boolean_function_changed</i>
+         *
+         * @param g - The gate which boolean functions haven been changed
+         */
+        void gateBooleanFunctionChanged(Gate* g) const;
+
+        /**
+         * Q_SIGNAL to notify that the location of a gate has been changed. <br>
+         * Relays the following hal-core event: <i>GateEvent::event::location_changed</i>
+         *
+         * @param g - The gate which position has been changed
+         */
+        void gateLocationChanged(Gate* g) const;
 
         /*=======================================
            Net Event Signals
@@ -561,6 +605,8 @@ namespace hal
          */
         void debugHandleFileClosed();
 
+        void handleThreadEvent(int type, int evt, void* object, u32 associated_data);
+
     private:
         void relayNetlistEvent(NetlistEvent::event ev, Netlist* object, u32 associated_data);
         void relayModuleEvent(ModuleEvent::event ev, Module* mod, u32 associated_data);
@@ -573,5 +619,7 @@ namespace hal
 
         QMap<u32, QColor> mModuleColors;
         ModuleModel* mModuleModel;
+        ModuleColorSerializer mColorSerializer;
+        enum ThreadEventType { TetNetlist, TetModule, TetGate, TetNet, TetGrouping };
     };
-}
+}    // namespace hal

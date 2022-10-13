@@ -1,39 +1,205 @@
 #include "hal_core/netlist/boolean_function.h"
 
+#include "hal_core/netlist/boolean_function/parser.h"
+#include "hal_core/netlist/boolean_function/simplification.h"
+#include "hal_core/netlist/boolean_function/symbolic_execution.h"
+#include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
 
 #include <algorithm>
 #include <bitset>
+#include <boost/spirit/home/x3.hpp>
+#include <chrono>
 #include <map>
 
 namespace hal
 {
     template<>
-    std::vector<std::string> EnumStrings<BooleanFunction::Value>::data = {"0", "1", "Z", "X"};
-
-    std::string BooleanFunction::to_string(const operation& op)
-    {
-        switch (op)
-        {
-            case operation::AND:
-                return "&";
-            case operation::OR:
-                return "|";
-            case operation::XOR:
-                return "^";
-            default:
-                return "?";
-        }
-    }
-
-    std::ostream& operator<<(std::ostream& os, const BooleanFunction::operation& op)
-    {
-        return os << BooleanFunction::to_string(op);
-    }
+    std::map<BooleanFunction::Value, std::string> EnumStrings<BooleanFunction::Value>::data = {{BooleanFunction::Value::ZERO, "0"},
+                                                                                               {BooleanFunction::Value::ONE, "1"},
+                                                                                               {BooleanFunction::Value::X, "X"},
+                                                                                               {BooleanFunction::Value::Z, "Z"}};
 
     std::string BooleanFunction::to_string(Value v)
     {
-        return enum_to_string<Value>(v);
+        switch (v)
+        {
+            case ZERO:
+                return std::string("0");
+            case ONE:
+                return std::string("1");
+            case X:
+                return std::string("X");
+            case Z:
+                return std::string("Z");
+        }
+
+        return std::string("X");
+    }
+
+    namespace
+    {
+        static std::vector<char> char_map = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+        // namespace
+
+        static Result<std::string> to_bin(const std::vector<BooleanFunction::Value>& value)
+        {
+            if (value.size() == 0)
+            {
+                return ERR("could not convert bit-vector to binary string: bit-vector is empty");
+            }
+
+            std::string res = "";
+            res.reserve(value.size());
+
+            for (auto v : value)
+            {
+                res += enum_to_string<BooleanFunction::Value>(v);
+            }
+
+            return OK(res);
+        }
+
+        static Result<std::string> to_oct(const std::vector<BooleanFunction::Value>& value)
+        {
+            int bitsize = value.size();
+            if (bitsize == 0)
+            {
+                return ERR("could not convert bit-vector to octal string: bit-vector is empty");
+            }
+
+            u8 first_bits = bitsize % 3;
+
+            u8 index = 0;
+            u8 mask  = 0;
+
+            u8 v1, v2, v3;
+
+            // result string prep
+            std::string res = "";
+            res.reserve((bitsize + 2) / 3);
+
+            // deal with 0-3 leading bits
+            for (u8 i = 0; i < first_bits; i++)
+            {
+                v1    = value.at(i);
+                index = (index << 1) | v1;
+                mask |= v1;
+            }
+            mask = -((mask >> 1) & 0x1);
+            if (first_bits)
+            {
+                res += (char_map[index] & ~mask) | ('X' & mask);
+            }
+
+            // deal with 4-bit blocks (left to right)
+            for (int i = bitsize % 3; i < bitsize; i += 3)
+            {
+                v1 = value[i];
+                v2 = value[i + 1];
+                v3 = value[i + 2];
+
+                index = (v1 << 2) | (v2 << 1) | v3;    // cannot exceed char_map range as index always < 16, no further check required
+                mask  = -(((v1 | v2 | v3) >> 1) & 0x1);
+
+                res += (char_map[index] & ~mask) | ('X' & mask);
+            }
+            return OK(res);
+        }
+
+        static Result<std::string> to_dec(const std::vector<BooleanFunction::Value>& value)
+        {
+            int bitsize = value.size();
+            if (bitsize == 0)
+            {
+                return ERR("could not convert bit-vector to decimal string: bit-vector is empty");
+            }
+
+            if (bitsize > 64)
+            {
+                return ERR("could not convert bit-vector to decimal string: bit-vector has length " + std::to_string(bitsize) + ", but only up to 64 bits are supported for decimal conversion");
+            }
+
+            u64 tmp   = 0;
+            u8 x_flag = 0;
+            for (auto v : value)
+            {
+                x_flag |= v >> 1;
+                tmp = (tmp << 1) | v;
+            }
+
+            if (x_flag)
+            {
+                return OK(std::string("X"));
+            }
+            return OK(std::to_string(tmp));
+        }
+
+        static Result<std::string> to_hex(const std::vector<BooleanFunction::Value>& value)
+        {
+            int bitsize = value.size();
+            if (bitsize == 0)
+            {
+                return ERR("could not convert bit-vector to hexadecimal string: bit-vector is empty");
+            }
+
+            u8 first_bits = bitsize & 0x3;
+
+            u8 index = 0;
+            u8 mask  = 0;
+
+            u8 v1, v2, v3, v4;
+
+            // result string prep
+            std::string res = "";
+            res.reserve((bitsize + 3) / 4);
+
+            // deal with 0-3 leading bits
+            for (u8 i = 0; i < first_bits; i++)
+            {
+                v1    = value.at(i);
+                index = (index << 1) | v1;
+                mask |= v1;
+            }
+            mask = -((mask >> 1) & 0x1);
+            if (first_bits)
+            {
+                res += (char_map[index] & ~mask) | ('X' & mask);
+            }
+
+            // deal with 4-bit blocks (left to right)
+            for (int i = bitsize & 0x3; i < bitsize; i += 4)
+            {
+                v1 = value[i];
+                v2 = value[i + 1];
+                v3 = value[i + 2];
+                v4 = value[i + 3];
+
+                index = ((v1 << 3) | (v2 << 2) | (v3 << 1) | v4) & 0xF;
+                mask  = -(((v1 | v2 | v3 | v4) >> 1) & 0x1);
+
+                res += (char_map[index] & ~mask) | ('X' & mask);
+            }
+
+            return OK(res);
+        }
+    }    // namespace
+
+    Result<std::string> BooleanFunction::to_string(const std::vector<BooleanFunction::Value>& value, u8 base)
+    {
+        switch (base)
+        {
+            case 2:
+                return to_bin(value);
+            case 8:
+                return to_oct(value);
+            case 10:
+                return to_dec(value);
+            case 16:
+                return to_hex(value);
+            default:
+                return ERR("could not convert bit-vector to string: invalid value '" + std::to_string(base) + "' given for base");
+        }
     }
 
     std::ostream& operator<<(std::ostream& os, BooleanFunction::Value v)
@@ -43,1677 +209,1347 @@ namespace hal
 
     BooleanFunction::BooleanFunction()
     {
-        m_content = content_type::TERMS;
-        m_invert  = false;
     }
 
-    BooleanFunction::BooleanFunction(operation op, const std::vector<BooleanFunction>& operands, bool invert_result) : BooleanFunction()
+    Result<BooleanFunction> BooleanFunction::build(std::vector<BooleanFunction::Node>&& nodes)
     {
-        if (operands.empty())
+        if (auto res = BooleanFunction::validate(BooleanFunction(std::move(nodes))); res.is_error())
         {
-            m_content  = content_type::CONSTANT;
-            m_constant = Value::X;
-        }
-        else if (operands.size() == 1)
-        {
-            *this = operands[0];
+            return ERR_APPEND(res.get_error(), "could not build Boolean function from vector of nodes: failed to validate Boolean function");
         }
         else
         {
-            m_content = content_type::TERMS;
-            m_invert  = invert_result;
-
-            m_op = op;
-            std::copy_if(operands.begin(), operands.end(), std::back_inserter(m_operands), [](auto op2) { return !op2.is_empty(); });
+            return res;
         }
     }
 
-    BooleanFunction::BooleanFunction(const std::string& variable_name) : BooleanFunction()
+    BooleanFunction BooleanFunction::Var(const std::string& name, u16 size)
     {
-        m_content  = content_type::VARIABLE;
-        m_variable = utils::trim(variable_name);
-        assert(!m_variable.empty());
+        return BooleanFunction(Node::Variable(name, size));
     }
 
-    BooleanFunction::BooleanFunction(Value constant) : BooleanFunction()
+    BooleanFunction BooleanFunction::Const(const BooleanFunction::Value& value)
     {
-        m_content  = content_type::CONSTANT;
-        m_constant = constant;
+        return BooleanFunction(Node::Constant({value}));
     }
 
-    BooleanFunction::content_type BooleanFunction::get_type() const {
-        return m_content;
-    }
-
-    BooleanFunction::operation BooleanFunction::get_operation() const {
-        return m_op;
-    }
-
-    bool BooleanFunction::is_neg() const {
-        return m_invert;
-    }
-
-    const std::vector<BooleanFunction>& BooleanFunction::get_operands() const {
-        return m_operands;
-    }
-
-    BooleanFunction BooleanFunction::substitute(const std::string& old_variable_name, const std::string& new_variable_name) const
+    BooleanFunction BooleanFunction::Const(const std::vector<BooleanFunction::Value>& values)
     {
-        return substitute(old_variable_name, BooleanFunction(new_variable_name));
+        return BooleanFunction(Node::Constant(values));
     }
 
-    void BooleanFunction::substitute_helper(BooleanFunction& f, const std::string& v, const BooleanFunction& s)
+    BooleanFunction BooleanFunction::Const(u64 value, u16 size)
     {
-        if (f.m_content == content_type::VARIABLE && f.m_variable == v)
+        auto values = std::vector<BooleanFunction::Value>();
+        values.reserve(size);
+        for (auto i = 0; i < size; i++)
         {
-            if (f.m_invert)
-            {
-                f = ~s;
-            }
-            else
-            {
-                f = s;
-            }
+            values.emplace_back((value & (1 << i)) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO);
         }
-        else if (f.m_content == content_type::TERMS)
-        {
-            for (u32 i = 0; i < f.m_operands.size(); ++i)
-            {
-                if (f.m_operands[i].m_content == content_type::VARIABLE && f.m_operands[i].m_variable == v)
-                {
-                    if (f.m_operands[i].m_invert)
-                    {
-                        f.m_operands[i] = ~s;
-                    }
-                    else
-                    {
-                        f.m_operands[i] = s;
-                    }
-                }
-                else if (f.m_operands[i].m_content == content_type::TERMS)
-                {
-                    substitute_helper(f.m_operands[i], v, s);
-                }
-            }
-        }
+
+        return BooleanFunction::Const(values);
     }
 
-    BooleanFunction BooleanFunction::substitute(const std::string& variable_name, const BooleanFunction& function) const
+    BooleanFunction BooleanFunction::Index(u16 index, u16 size)
     {
-        auto result = *this;
-        substitute_helper(result, variable_name, function);
-        return result;
+        return BooleanFunction(Node::Index(index, size));
     }
 
-    BooleanFunction::Value BooleanFunction::evaluate(const std::unordered_map<std::string, Value>& inputs) const
+    Result<BooleanFunction> BooleanFunction::And(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
     {
-        Value result = X;
-        if (m_content == content_type::VARIABLE)
+        if ((p0.size() != p1.size()) || (p0.size() != size))
         {
-            auto it = inputs.find(m_variable);
-            if (it != inputs.end())
-            {
-                result = it->second;
-            }
-        }
-        else if (m_content == content_type::CONSTANT)
-        {
-            result = m_constant;
-        }
-        else if (!m_operands.empty())
-        {
-            result = m_operands[0].evaluate(inputs);
-
-            for (u32 i = 1; i < m_operands.size(); ++i)
-            {
-                // early exit
-                if ((m_op == operation::AND && result == ZERO) || (m_op == operation::OR && result == ONE) || (m_op == operation::XOR && result == X))
-                {
-                    break;
-                }
-
-                auto next = m_operands[i].evaluate(inputs);
-                if (m_op == operation::AND)
-                {
-                    if (next == ZERO || result == ZERO)
-                    {
-                        result = ZERO;
-                    }
-                    else if ((next == X || next == Z) && result == ONE)
-                    {
-                        result = X;
-                    }
-                }
-                else if (m_op == operation::OR)
-                {
-                    if (next == ONE || result == ONE)
-                    {
-                        result = ONE;
-                    }
-                    else if ((next == X || next == Z) && result == ZERO)
-                    {
-                        result = X;
-                    }
-                }
-                else if (m_op == operation::XOR)
-                {
-                    if (next == ONE)
-                    {
-                        result = (Value)(1 - result);
-                    }
-                    else if (next == X || next == Z)
-                    {
-                        result = X;
-                    }
-                }
-            }
+            return ERR("could not join Boolean functions using AND operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size())
+                       + ", size = " + std::to_string(size) + ")");
         }
 
-        if (m_invert)
-        {
-            if (result == ONE)
-            {
-                return ZERO;
-            }
-            else if (result == ZERO)
-            {
-                return ONE;
-            }
-            else if (result == Z)
-            {
-                result = X;
-            }
-        }
-        return result;
+        return OK(BooleanFunction(Node::Operation(NodeType::And, size), std::move(p0), std::move(p1)));
     }
 
-    BooleanFunction::Value BooleanFunction::operator()(const std::unordered_map<std::string, BooleanFunction::Value>& inputs) const
+    Result<BooleanFunction> BooleanFunction::Or(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
     {
-        return evaluate(inputs);
+        if ((p0.size() != p1.size()) || (p0.size() != size))
+        {
+            return ERR("could not join Boolean functions using OR operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size())
+                       + ", size = " + std::to_string(size) + ").");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Or, size), std::move(p0), std::move(p1)));
     }
 
-    bool BooleanFunction::is_constant_one() const
+    Result<BooleanFunction> BooleanFunction::Not(BooleanFunction&& p0, u16 size)
     {
-        if (m_content == content_type::CONSTANT)
+        if (p0.size() != size)
         {
-            return m_constant == ONE;
+            return ERR("could not invert Boolean function using NOT operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", size = " + std::to_string(size) + ").");
         }
-        auto tmp = optimize();
-        return tmp.m_content == content_type::CONSTANT && tmp.m_constant == ONE;
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Not, size), std::move(p0)));
     }
 
-    bool BooleanFunction::is_constant_zero() const
+    Result<BooleanFunction> BooleanFunction::Xor(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
     {
-        if (m_content == content_type::CONSTANT)
+        if ((p0.size() != p1.size()) || (p0.size() != size))
         {
-            return m_constant == ZERO;
+            return ERR("could not join Boolean functions using XOR operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size())
+                       + ", size = " + std::to_string(size) + ").");
         }
-        auto tmp = optimize();
-        return tmp.m_content == content_type::CONSTANT && tmp.m_constant == ZERO;
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Xor, size), std::move(p0), std::move(p1)));
     }
 
-    bool BooleanFunction::is_empty() const
+    Result<BooleanFunction> BooleanFunction::Add(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
     {
-        return m_content == content_type::TERMS && m_operands.empty();
+        if ((p0.size() != p1.size()) || (p0.size() != size))
+        {
+            return ERR("could not join Boolean functions using ADD operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size())
+                       + ", size = " + std::to_string(size) + ").");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Add, size), std::move(p0), std::move(p1)));
     }
 
-    std::vector<std::string> BooleanFunction::get_variables() const
+    Result<BooleanFunction> BooleanFunction::Sub(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
     {
-        if (m_content == content_type::VARIABLE)
+        if ((p0.size() != p1.size()) || (p0.size() != size))
         {
-            return {m_variable};
+            return ERR("could not join Boolean functions using SUB operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size())
+                       + ", size = " + std::to_string(size) + ").");
         }
-        else if (m_content == content_type::TERMS)
-        {
-            std::vector<std::string> result;
-            for (const auto& f : m_operands)
-            {
-                auto tmp = f.get_variables();
-                result.insert(result.end(), tmp.begin(), tmp.end());
-            }
-            std::sort(result.begin(), result.end());
-            result.erase(std::unique(result.begin(), result.end()), result.end());
-            return result;
-        }
-        return {};
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Sub, size), std::move(p0), std::move(p1)));
     }
 
-    BooleanFunction BooleanFunction::from_string(std::string expression, const std::vector<std::string>& variable_names)
+    Result<BooleanFunction> BooleanFunction::Mul(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
     {
-        auto sorted_variable_names = variable_names;
-        std::sort(sorted_variable_names.begin(), sorted_variable_names.end(), [](const auto& a, const auto& b) { return a.size() > b.size(); });
-
-        for (u32 i = 0; i < sorted_variable_names.size(); ++i)
+        if ((p0.size() != p1.size()) || (p0.size() != size))
         {
-            auto pos = expression.find(sorted_variable_names[i]);
-            while (pos != std::string::npos)
-            {
-                expression.replace(pos, sorted_variable_names[i].size(), "__v_" + std::to_string(i) + " ");
-                pos = expression.find(sorted_variable_names[i], pos + sorted_variable_names[i].size());
-            }
+            return ERR("could not join Boolean functions using MUL operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size())
+                       + ", size = " + std::to_string(size) + ").");
         }
 
-        return from_string_internal(expression, sorted_variable_names);
+        return OK(BooleanFunction(Node::Operation(NodeType::Mul, size), std::move(p0), std::move(p1)));
     }
 
-    BooleanFunction BooleanFunction::from_string_internal(std::string expression, const std::vector<std::string>& variable_names)
+    Result<BooleanFunction> BooleanFunction::Sdiv(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
     {
-        expression = utils::trim(expression);
-
-        if (expression.empty())
+        if ((p0.size() != p1.size()) || (p0.size() != size))
         {
-            return BooleanFunction();
+            return ERR("could not join Boolean functions using SDIV operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size())
+                       + ", size = " + std::to_string(size) + ").");
         }
 
-        const std::string delimiters = "!~^&|'+* ";
-
-        // check for constants
-        if (expression == "0")
-        {
-            return BooleanFunction(ZERO);
-        }
-        else if (expression == "1")
-        {
-            return BooleanFunction(ONE);
-        }
-        else if (expression == "X")
-        {
-            return BooleanFunction(X);
-        }
-        else if (expression == "Z")
-        {
-            return BooleanFunction(Z);
-        }
-        else
-        {
-            // check for variable
-            bool is_term = false;
-            for (const auto& d : delimiters + "()")
-            {
-                if (expression.find(d) != std::string::npos)
-                {
-                    is_term = true;
-                    break;
-                }
-            }
-            if (!is_term)
-            {
-                if (utils::starts_with(expression, std::string("__v_")))
-                {
-                    u32 idx    = std::stoul(expression.substr(4));
-                    expression = variable_names[idx];
-                }
-
-                return BooleanFunction(expression);
-            }
-        }
-
-        // simple bracket check
-        i32 level = 0;
-        for (const auto& c : expression)
-        {
-            if (c == '(')
-            {
-                level += 1;
-            }
-            else if (c == ')')
-            {
-                level -= 1;
-                if (level < 0)
-                {
-                    return Value::X;
-                }
-            }
-        }
-        if (level != 0)
-        {
-            return Value::X;
-        }
-
-        // parse expression
-        std::vector<std::string> terms;
-        {
-            std::string current_term;
-            u32 bracket_level = 0;
-            for (u32 i = 0; i < expression.size(); i++)
-            {
-                if (expression[i] == '(')
-                {
-                    // if this is a top-level term, store everything before the bracket
-                    if (bracket_level == 0)
-                    {
-                        current_term = utils::trim(current_term);
-                        if (!current_term.empty())
-                        {
-                            terms.push_back(current_term);
-                            current_term.clear();
-                        }
-                    }
-
-                    bracket_level++;
-                }
-
-                if (bracket_level == 0 && delimiters.find(expression[i]) != std::string::npos)
-                {
-                    // not in brackets and there was a delimiter -> save term and operation
-                    current_term = utils::trim(current_term);
-                    if (!current_term.empty())
-                    {
-                        terms.push_back(current_term);
-                        current_term.clear();
-                    }
-                    if (expression[i] != ' ')
-                    {
-                        terms.push_back(std::string(1, expression[i]));
-                    }
-                }
-                else
-                {
-                    // no special conditions -> char is term of current term
-                    current_term += expression[i];
-                }
-
-                if (expression[i] == ')')
-                {
-                    bracket_level--;
-
-                    if (bracket_level == 0)
-                    {
-                        // if we are back at top-level, store everything that was in the brackets
-                        current_term = utils::trim(current_term);
-                        if (!current_term.empty())
-                        {
-                            terms.push_back(current_term);
-                            current_term.clear();
-                        }
-                    }
-                }
-            }
-            current_term = utils::trim(current_term);
-            if (!current_term.empty())
-            {
-                terms.push_back(current_term);
-            }
-        }
-
-        // process terms
-        if (terms.size() == 1)
-        {
-            // only a single term but not filtered before?
-            // -> was of the form "(...)" so remove the outer brackets and repeat
-            return from_string_internal(terms[0].substr(1, terms[0].size() - 2), variable_names);
-        }
-
-        // small mutable datastructure for parsing
-        struct op_term
-        {
-            operation op;
-            BooleanFunction term;
-        };
-        std::vector<op_term> parsed_terms;
-
-        bool negate_next  = false;
-        operation next_op = operation::AND;
-
-        {
-            // multiple terms available -> initialize return Value with first term
-            u32 i = 0;
-            while (terms[i] == "!" || terms[i] == "~")
-            {
-                negate_next = !negate_next;
-                ++i;
-            }
-            BooleanFunction first_term = from_string_internal(terms[i], variable_names);
-            while (i + 1 < terms.size() && terms[i + 1] == "'")
-            {
-                negate_next = !negate_next;
-                ++i;
-            }
-            if (negate_next)
-            {
-                first_term  = ~first_term;
-                negate_next = false;
-            }
-
-            parsed_terms.push_back({operation::AND, first_term});
-
-            // process the remaining terms
-            while (++i < terms.size())
-            {
-                if (terms[i] == "!" || terms[i] == "~")
-                {
-                    negate_next = !negate_next;
-                }
-                else if (terms[i] == "&" || terms[i] == "*")
-                {
-                    next_op = operation::AND;
-                }
-                else if (terms[i] == "|" || terms[i] == "+")
-                {
-                    next_op = operation::OR;
-                }
-                else if (terms[i] == "^")
-                {
-                    next_op = operation::XOR;
-                }
-                else
-                {
-                    auto next_term = from_string_internal(terms[i], variable_names);
-                    while (i + 1 < terms.size() && terms[i + 1] == "'")
-                    {
-                        negate_next = !negate_next;
-                        ++i;
-                    }
-                    if (negate_next)
-                    {
-                        next_term = ~next_term;
-                    }
-
-                    parsed_terms.push_back({next_op, next_term});
-
-                    negate_next = false;
-                    next_op     = operation::AND;
-                }
-            }
-        }
-
-        // assemble terms in order of operator precedence
-
-        for (u32 i = 1; i < parsed_terms.size(); ++i)
-        {
-            if (parsed_terms[i].op == operation::AND)
-            {
-                parsed_terms[i - 1].term = parsed_terms[i - 1].term & parsed_terms[i].term;
-                parsed_terms.erase(parsed_terms.begin() + i);
-                --i;
-            }
-        }
-
-        for (u32 i = 1; i < parsed_terms.size(); ++i)
-        {
-            if (parsed_terms[i].op == operation::XOR)
-            {
-                parsed_terms[i - 1].term = parsed_terms[i - 1].term ^ parsed_terms[i].term;
-                parsed_terms.erase(parsed_terms.begin() + i);
-                --i;
-            }
-        }
-
-        for (u32 i = 1; i < parsed_terms.size(); ++i)
-        {
-            if (parsed_terms[i].op == operation::OR)
-            {
-                parsed_terms[i - 1].term = parsed_terms[i - 1].term | parsed_terms[i].term;
-                parsed_terms.erase(parsed_terms.begin() + i);
-                --i;
-            }
-        }
-
-        return parsed_terms[0].term;
+        return OK(BooleanFunction(Node::Operation(NodeType::Sdiv, size), std::move(p0), std::move(p1)));
     }
 
-    std::string BooleanFunction::to_string() const
+    Result<BooleanFunction> BooleanFunction::Udiv(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
     {
-        if (is_empty())
+        if ((p0.size() != p1.size()) || (p0.size() != size))
         {
-            return "<empty>";
-        }
-        auto s = to_string_internal();
-
-        // remove outer parantheses
-        if (s[0] == '(')
-        {
-            u32 lvl = 0;
-            u32 i   = 0;
-            for (; i < s.size(); ++i)
-            {
-                if (s[i] == '(')
-                {
-                    lvl++;
-                }
-                else if (s[i] == ')')
-                {
-                    lvl--;
-                    if (lvl == 0)
-                    {
-                        break;
-                    }
-                }
-            }
-            if (i >= s.size() - 1)
-            {
-                s = s.substr(1, s.size() - 2);
-            }
+            return ERR("could not join Boolean functions using UDIV operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size())
+                       + ", size = " + std::to_string(size) + ").");
         }
 
-        return s;
+        return OK(BooleanFunction(Node::Operation(NodeType::Udiv, size), std::move(p0), std::move(p1)));
     }
 
-    std::string BooleanFunction::to_string_internal() const
+    Result<BooleanFunction> BooleanFunction::Srem(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
     {
-        std::string result = to_string(Value::X);
-        if (m_content == content_type::VARIABLE)
+        if ((p0.size() != p1.size()) || (p0.size() != size))
         {
-            result = m_variable;
-        }
-        else if (m_content == content_type::CONSTANT)
-        {
-            result = to_string(m_constant);
-        }
-        else if (!m_operands.empty())
-        {
-            std::string op_str = " " + to_string(m_op) + " ";
-
-            std::vector<std::string> terms;
-            for (const auto& f : m_operands)
-            {
-                terms.push_back(f.to_string_internal());
-            }
-
-            result = "(" + utils::join(op_str, terms) + ")";
+            return ERR("could not join Boolean functions using SREM operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size())
+                       + ", size = " + std::to_string(size) + ").");
         }
 
-        if (m_invert)
-        {
-            result = "!" + result;
-        }
-        return result;
+        return OK(BooleanFunction(Node::Operation(NodeType::Srem, size), std::move(p0), std::move(p1)));
     }
 
-    std::ostream& operator<<(std::ostream& os, const BooleanFunction& f)
+    Result<BooleanFunction> BooleanFunction::Urem(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
     {
-        return os << f.to_string();
+        if ((p0.size() != p1.size()) || (p0.size() != size))
+        {
+            return ERR("could not join Boolean functions using UREM operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size())
+                       + ", size = " + std::to_string(size) + ").");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Urem, size), std::move(p0), std::move(p1)));
     }
 
-    BooleanFunction BooleanFunction::combine(operation op, const BooleanFunction& other) const
+    Result<BooleanFunction> BooleanFunction::Slice(BooleanFunction&& p0, BooleanFunction&& p1, BooleanFunction&& p2, u16 size)
     {
-        if (is_empty())
+        if (!p1.is_index() || !p2.is_index())
         {
-            return other;
+            return ERR("could not apply slice operation: function types do not match (p1 and p2 must be of type 'BooleanFunction::Index')");
         }
-        else if (other.is_empty())
+        if ((p0.size() != p1.size()) || (p1.size() != p2.size()))
         {
-            return *this;
+            return ERR("could not apply slice operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size()) + ", p2 = " + std::to_string(p2.size())
+                       + " - sizes must be equal)");
         }
-        else if (m_content == content_type::TERMS && other.m_content == content_type::TERMS && m_op == op && m_op == other.m_op && !m_invert && !other.m_invert)
+
+        auto start = p1.get_index_value().get();
+        auto end   = p2.get_index_value().get();
+        if ((start > end) || (start >= p0.size()) || (end >= p0.size()) || (end - start + 1) != size)
         {
-            auto joint_operands = m_operands;
-            joint_operands.insert(joint_operands.end(), other.m_operands.begin(), other.m_operands.end());
-            BooleanFunction result(op, joint_operands);
-            return result;
+            return ERR("could not apply SLICE operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(start) + ", p2 = " + std::to_string(end) + ")");
         }
-        else if (m_content == content_type::TERMS && m_op == op && !m_invert)
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Slice, size), std::move(p0), std::move(p1), std::move(p2)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Concat(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if ((p0.size() + p1.size()) != size)
         {
-            BooleanFunction result = *this;
-            result.m_operands.push_back(other);
-            return result;
+            return ERR("could not apply CONCAT operation: function input widths do not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, size = " + std::to_string(size) + ").");
         }
-        else if (other.m_content == content_type::TERMS && other.m_op == op && !other.m_invert)
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Concat, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Zext(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if (p0.size() > size || p1.size() != size)
         {
-            BooleanFunction result = other;
-            result.m_operands.insert(result.m_operands.begin(), *this);
-            return result;
+            return ERR("could not apply ZEXT operation: function input width does not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, size = " + std::to_string(size) + ").");
         }
-        return BooleanFunction(op, {*this, other});
+
+        if (!p1.has_index_value(size))
+        {
+            return ERR("could not apply ZEXT operation: p1 does not encode size (p1 = " + p1.to_string() + ", size = " + std::to_string(size) + ").");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Zext, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Sext(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if (p0.size() > size || p1.size() != size)
+        {
+            return ERR("could not apply SEXT operation: function input width does not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, size = " + std::to_string(size) + ").");
+        }
+
+        if (!p1.has_index_value(size))
+        {
+            return ERR("could not apply SEXT operation: p1 does not encode size (p1 = " + p1.to_string() + ", size = " + std::to_string(size) + ").");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Sext, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Eq(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if (p0.size() != p1.size() || size != 1)
+        {
+            return ERR("could not apply EQ operation: function input width does not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, size = " + std::to_string(size) + ").");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Eq, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Sle(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if (p0.size() != p1.size() || size != 1)
+        {
+            return ERR("could not apply SLE operation: function input width does not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, size = " + std::to_string(size) + ").");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Sle, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Slt(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if (p0.size() != p1.size() || size != 1)
+        {
+            return ERR("could not apply SLT operation: function input width does not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, size = " + std::to_string(size) + ").");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Slt, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Ule(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if (p0.size() != p1.size() || size != 1)
+        {
+            return ERR("could not apply ULE operation: function input width does not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, size = " + std::to_string(size) + ").");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Ule, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Ult(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if (p0.size() != p1.size() || size != 1)
+        {
+            return ERR("could not apply ULT operation: function input width does not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, size = " + std::to_string(size) + ").");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Ult, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Ite(BooleanFunction&& p0, BooleanFunction&& p1, BooleanFunction&& p2, u16 size)
+    {
+        if (p0.size() != 1 || p1.size() != size || p2.size() != size)
+        {
+            return ERR("could not apply ITE operation: function input width does not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, p2 = " + std::to_string(p2.size()) + "-bit, size = " + std::to_string(size) + ").");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Ite, size), std::move(p0), std::move(p1), std::move(p2)));
+    }
+
+    std::ostream& operator<<(std::ostream& os, const BooleanFunction& function)
+    {
+        return os << function.to_string();
     }
 
     BooleanFunction BooleanFunction::operator&(const BooleanFunction& other) const
     {
-        return combine(operation::AND, other);
-    }
-
-    BooleanFunction BooleanFunction::operator|(const BooleanFunction& other) const
-    {
-        return combine(operation::OR, other);
-    }
-
-    BooleanFunction BooleanFunction::operator^(const BooleanFunction& other) const
-    {
-        return combine(operation::XOR, other);
+        return BooleanFunction::And(this->clone(), other.clone(), this->size()).get();
     }
 
     BooleanFunction& BooleanFunction::operator&=(const BooleanFunction& other)
     {
-        *this = combine(operation::AND, other);
+        *this = BooleanFunction::And(this->clone(), other.clone(), this->size()).get();
         return *this;
-    }
-    BooleanFunction& BooleanFunction::operator|=(const BooleanFunction& other)
-    {
-        *this = combine(operation::OR, other);
-        return *this;
-    }
-    BooleanFunction& BooleanFunction::operator^=(const BooleanFunction& other)
-    {
-        *this = combine(operation::XOR, other);
-        return *this;
-    }
-
-    BooleanFunction BooleanFunction::operator!() const
-    {
-        return this->operator~();
     }
 
     BooleanFunction BooleanFunction::operator~() const
     {
-        auto result = *this;
-        if ((m_content == content_type::TERMS && !m_operands.empty()) || m_content == content_type::VARIABLE)
-        {
-            result.m_invert = !result.m_invert;
-        }
-        else if (m_content == content_type::CONSTANT)
-        {
-            if (m_constant == ZERO)
-                result.m_constant = ONE;
-            else if (m_constant == ONE)
-                result.m_constant = ZERO;
-        }
-        return result;
+        return BooleanFunction::Not(this->clone(), this->size()).get();
+    }
+
+    BooleanFunction BooleanFunction::operator|(const BooleanFunction& other) const
+    {
+        return BooleanFunction::Or(this->clone(), other.clone(), this->size()).get();
+    }
+
+    BooleanFunction& BooleanFunction::operator|=(const BooleanFunction& other)
+    {
+        *this = BooleanFunction::Or(this->clone(), other.clone(), this->size()).get();
+        return *this;
+    }
+
+    BooleanFunction BooleanFunction::operator^(const BooleanFunction& other) const
+    {
+        return BooleanFunction::Xor(this->clone(), other.clone(), this->size()).get();
+    }
+
+    BooleanFunction& BooleanFunction::operator^=(const BooleanFunction& other)
+    {
+        *this = BooleanFunction::Xor(this->clone(), other.clone(), this->size()).get();
+        return *this;
+    }
+
+    BooleanFunction BooleanFunction::operator+(const BooleanFunction& other) const
+    {
+        return BooleanFunction::Add(this->clone(), other.clone(), this->size()).get();
+    }
+
+    BooleanFunction& BooleanFunction::operator+=(const BooleanFunction& other)
+    {
+        *this = BooleanFunction::Add(this->clone(), other.clone(), this->size()).get();
+        return *this;
+    }
+
+    BooleanFunction BooleanFunction::operator-(const BooleanFunction& other) const
+    {
+        return BooleanFunction::Sub(this->clone(), other.clone(), this->size()).get();
+    }
+
+    BooleanFunction& BooleanFunction::operator-=(const BooleanFunction& other)
+    {
+        *this = BooleanFunction::Sub(this->clone(), other.clone(), this->size()).get();
+        return *this;
+    }
+
+    BooleanFunction BooleanFunction::operator*(const BooleanFunction& other) const
+    {
+        return BooleanFunction::Mul(this->clone(), other.clone(), this->size()).get();
+    }
+
+    BooleanFunction& BooleanFunction::operator*=(const BooleanFunction& other)
+    {
+        *this = BooleanFunction::Mul(this->clone(), other.clone(), this->size()).get();
+        return *this;
     }
 
     bool BooleanFunction::operator==(const BooleanFunction& other) const
     {
-        if (is_empty() && other.is_empty())
-        {
-            return true;
-        }
-        if (m_content != other.m_content)
-            return false;
-        if (m_invert != other.m_invert)
-            return false;
-        return (m_content == content_type::VARIABLE && m_variable == other.m_variable) || (m_content == content_type::CONSTANT && m_constant == other.m_constant)
-               || (m_content == content_type::TERMS && m_op == other.m_op && m_operands == other.m_operands);
-    }
-    bool BooleanFunction::operator!=(const BooleanFunction& other) const
-    {
-        return !(*this == other);
-    }
-
-    BooleanFunction BooleanFunction::replace_xors() const
-    {
-        if (m_content != content_type::TERMS)
-        {
-            return *this;
-        }
-        std::vector<BooleanFunction> terms;
-        for (const auto& operand : m_operands)
-        {
-            terms.push_back(operand.replace_xors());
-        }
-        if (m_op != operation::XOR)
-        {
-            return BooleanFunction(m_op, terms, m_invert);
-        }
-
-        // actually replace the current xors
-        auto result = (terms[0] & (~terms[1])) | ((~terms[0]) & terms[1]);
-        for (u32 i = 2; i < terms.size(); ++i)
-        {
-            result = (result & (~terms[i])) | ((~result) & terms[i]);
-        }
-
-        if (m_invert)
-        {
-            result = ~result;
-        }
-        return result;
-    }
-
-    std::vector<BooleanFunction> BooleanFunction::expand_AND_of_functions(const std::vector<std::vector<BooleanFunction>>& AND_terms_to_expand) const
-    {
-        /*
-        This helper function expands a list of AND terms
-        Example: we started with ((e | f) & cd & (g | h), so this function is called with [[e, f], [cd], [g, h]]
-        Strategy:
-            1. initialize the output list with first set of AND terms --> [e, f]
-            2. iterate over the remaining AND term sets --> [cd], [g, h]
-                a. for each member of the current set, AND it to all terms in the current output and add each result to a new output list
-                   reduce the output to only these new functions
-                b. replace the old output list with the new output list
-
-        Rundown:
-            1: init output = [e,f]
-            2: process [cd] --> output = [ecd, fcd]
-            2: process [g, h] --> output = [ecdg, ecdh, fcdg, fcdh]
-        */
-
-        std::vector<BooleanFunction> result = AND_terms_to_expand[0];
-
-        auto simple_hash = [](const BooleanFunction& f) -> std::string {
-            std::string hash = f.m_invert ? "!#" : "#";
-            for (const auto& var : f.m_operands)
-            {
-                if (var.m_invert)
-                {
-                    hash += "!";
-                }
-                if (var.m_content == content_type::CONSTANT)
-                {
-                    hash += "c" + std::to_string(static_cast<int>(var.m_constant) + 1);
-                }
-                else
-                {
-                    hash += "v" + var.m_variable;
-                }
-                hash += " ";
-            }
-            return hash;
-        };
-
-        for (u32 i = 1; i < AND_terms_to_expand.size(); ++i)
-        {
-            std::unordered_set<std::string> seen;
-            std::vector<BooleanFunction> tmp;
-            tmp.reserve(AND_terms_to_expand[i].size() * result.size());
-            for (const auto& bf : AND_terms_to_expand[i])
-            {
-                for (const auto& bf2 : result)
-                {
-                    auto combined = (bf2 & bf).optimize_constants();
-                    if (!(combined.m_content == content_type::CONSTANT && combined.m_constant == Value::ZERO))
-                    {
-                        if (combined.m_content == content_type::TERMS)
-                        {
-                            std::sort(combined.m_operands.begin(), combined.m_operands.end(), [](const auto& f1, const auto& f2) { return f1.m_variable < f2.m_variable; });
-                        }
-                        auto s = simple_hash(combined);
-                        if (seen.find(s) == seen.end())
-                        {
-                            seen.insert(s);
-                            tmp.push_back(combined);
-                        }
-                    }
-                }
-            }
-            result = tmp;
-        }
-
-        return result;
-    }
-
-    std::vector<BooleanFunction> BooleanFunction::get_AND_terms() const
-    {
-        /*
-        This helper function transforms the BF into a vector of terms that solely consist of the AND op
-        Example: ab | (cd & (e | f)) | g --> [ad, cde, cdf, g]
-        */
-
-        if (m_content != content_type::TERMS)
-        {
-            return {*this};
-        }
-
-        if (m_op == operation::OR)
-        {
-            std::vector<BooleanFunction> AND_terms;
-            for (const auto& operand : m_operands)
-            {
-                auto tmp = operand.get_AND_terms();
-                AND_terms.insert(AND_terms.end(), tmp.begin(), tmp.end());
-            }
-            return AND_terms;
-        }
-        else    // m_op == AND
-        {
-            // at this point we potentially face a nested computation like "cd & (e | f)"
-            // we have to expand the terms, i.e., AND every outer term with every inner term
-            // for the example, we would output  (cd & (e | f)) --> [cde, cdf]
-            std::vector<std::vector<BooleanFunction>> ANDed_functions;
-            for (const auto& operand : m_operands)
-            {
-                ANDed_functions.push_back(operand.get_AND_terms());
-            }
-            return expand_AND_of_functions(ANDed_functions);
-        }
-    }
-
-    BooleanFunction BooleanFunction::expand_ands() const
-    {
-        /*
-        Strategy: expand all AND-multiplied terms
-        Example: (a | b | c) & d --> ad | bd | cd
-        Output: a flat OR-chain of AND terms
-        */
-
-        std::vector<BooleanFunction> primitives = get_AND_terms();
-        if (primitives.empty())
-        {
-            return Value::ZERO;
-        }
-        return BooleanFunction(operation::OR, primitives);
-    }
-
-    BooleanFunction BooleanFunction::optimize_constants() const
-    {
-        if (is_empty() || m_content == content_type::VARIABLE || m_content == content_type::CONSTANT)
-        {
-            return *this;
-        }
-
-        std::vector<BooleanFunction> terms;
-        for (const auto& operand : m_operands)
-        {
-            auto term = operand.optimize_constants();
-            if (m_op == operation::OR)
-            {
-                if (term.is_constant_one())
-                {
-                    return BooleanFunction::ONE;
-                }
-                else if (term.is_constant_zero())
-                {
-                    continue;
-                }
-            }
-            else if (m_op == operation::AND)
-            {
-                if (term.is_constant_one())
-                {
-                    continue;
-                }
-                else if (term.is_constant_zero())
-                {
-                    return BooleanFunction::ZERO;
-                }
-            }
-            terms.push_back(term);
-        }
-
-        if (terms.empty())
-        {
-            if (m_op == operation::OR)
-            {
-                return BooleanFunction::ZERO;
-            }
-            else if (m_op == operation::AND)
-            {
-                return BooleanFunction::ONE;
-            }
-        }
-
-        // remove contradictions etc
-        for (u32 i = 0; i < terms.size(); ++i)
-        {
-            for (u32 j = i + 1; j < terms.size(); ++j)
-            {
-                if (terms[i].m_content == content_type::VARIABLE && terms[j].m_content == content_type::VARIABLE && terms[i].m_variable == terms[j].m_variable)
-                {
-                    if (terms[i].m_invert != terms[j].m_invert)
-                    {
-                        if (m_op == operation::AND)
-                        {
-                            return BooleanFunction::ZERO;
-                        }
-                        else if (m_op == operation::OR)
-                        {
-                            return BooleanFunction::ONE;
-                        }
-                    }
-                    else
-                    {
-                        if (m_op == operation::AND || m_op == operation::OR)
-                        {
-                            terms.erase(terms.begin() + j);
-                            j--;
-                            continue;
-                        }
-                    }
-                }
-            }
-        }
-
-        return BooleanFunction(m_op, terms);
-    }
-
-    BooleanFunction BooleanFunction::propagate_negations(bool negate_term) const
-    {
-        if (m_content != content_type::TERMS)
-        {
-            if (negate_term)
-            {
-                return ~(*this);
-            }
-            return *this;
-        }
-
-        bool use_de_morgan = m_invert ^ negate_term;
-
-        if (!use_de_morgan)
-        {
-            std::vector<BooleanFunction> terms;
-            for (const auto& operand : m_operands)
-            {
-                terms.push_back(operand.propagate_negations(false));
-            }
-            return BooleanFunction(m_op, terms);
-        }
-        else
-        {
-            std::vector<BooleanFunction> terms;
-            for (const auto& operand : m_operands)
-            {
-                terms.push_back(operand.propagate_negations(true));
-            }
-            if (m_op == operation::AND)
-            {
-                return BooleanFunction(operation::OR, terms);
-            }
-            else
-            {
-                return BooleanFunction(operation::AND, terms);
-            }
-        }
-    }
-
-    bool BooleanFunction::is_dnf() const
-    {
-        if (m_content != content_type::TERMS)
-        {
-            return true;
-        }
-        if (m_op == operation::AND)
-        {
-            for (const auto& subterm : m_operands)
-            {
-                if (subterm.m_content == content_type::TERMS || subterm.m_content == content_type::CONSTANT)
-                {
-                    return false;
-                }
-            }
-        }
-        else if (m_op != operation::OR)
+        if (this->m_nodes.size() != other.m_nodes.size())
         {
             return false;
         }
-        for (const auto& term : m_operands)
+
+        for (auto i = 0ul; i < this->m_nodes.size(); i++)
         {
-            if (term.m_content == content_type::TERMS)
+            if (this->m_nodes[i] != other.m_nodes[i])
             {
-                if (term.m_op == operation::AND)
-                {
-                    for (const auto& subterm : term.m_operands)
-                    {
-                        if (subterm.m_content == content_type::TERMS || subterm.m_content == content_type::CONSTANT)
-                        {
-                            return false;
-                        }
-                    }
-                }
-                else
-                {
-                    return false;
-                }
+                return false;
             }
         }
         return true;
     }
 
-    BooleanFunction BooleanFunction::to_dnf() const
+    bool BooleanFunction::operator!=(const BooleanFunction& other) const
     {
-        if (is_dnf())
-        {
-            return *this;
-        }
-
-        // debug progress prints
-        // auto tmp_vars = get_variables();
-        // std::vector<std::string> init_vars(tmp_vars.begin(), tmp_vars.end());
-        // auto init_tt = get_truth_table(init_vars);
-        // std::cout << "transforming " << *this << std::endl;
-        // auto x = replace_xors();
-        // std::cout << "  replace_xors " << x << std::endl;
-        // if (x.get_truth_table(init_vars) != init_tt)
-        //     std::cout << "FUNCTIONS DONT MATCH" << std::endl;
-        // x = x.propagate_negations();
-        // std::cout << "  propagate_negations " << x << std::endl;
-        // if (x.get_truth_table(init_vars) != init_tt)
-        //     std::cout << "FUNCTIONS DONT MATCH" << std::endl;
-        // x = x.expand_ands();
-        // std::cout << "  expand_ands " << x << std::endl;
-        // if (x.get_truth_table(init_vars) != init_tt)
-        //     std::cout << "FUNCTIONS DONT MATCH" << std::endl;
-        // x = x.optimize_constants();
-        // std::cout << "  optimize_constants " << x << std::endl;
-        // if (x.get_truth_table(init_vars) != init_tt)
-        //     std::cout << "FUNCTIONS DONT MATCH" << std::endl;
-        // return x;
-
-        // the order of the passes is important!
-        // every pass after replace_xors expects that there are no more xor operations
-        return replace_xors().propagate_negations().expand_ands().optimize_constants();
+        return !(*this == other);
     }
 
-    std::vector<std::vector<std::pair<std::string, bool>>> BooleanFunction::get_dnf_clauses() const
+    bool BooleanFunction::operator<(const BooleanFunction& other) const
     {
-        std::vector<std::vector<std::pair<std::string, bool>>> result;
-        if (is_empty())
+        if (this->m_nodes.size() < other.m_nodes.size())
         {
-            return result;
+            return true;
+        }
+        if (this->m_nodes.size() > other.m_nodes.size())
+        {
+            return false;
         }
 
-        auto dnf = to_dnf();
-
-        if (dnf.m_content == content_type::VARIABLE)
-        {
-            result.push_back({std::make_pair(dnf.m_variable, !dnf.m_invert)});
-            return result;
-        }
-        else if (dnf.m_content == content_type::CONSTANT)
-        {
-            result.push_back({std::make_pair(to_string(dnf.m_constant), true)});
-            return result;
-        }
-        if (dnf.m_op == operation::OR)
-        {
-            for (const auto& term : dnf.m_operands)
-            {
-                std::vector<std::pair<std::string, bool>> clause;
-                if (term.m_content == content_type::TERMS)
-                {
-                    for (const auto& v : term.m_operands)
-                    {
-                        clause.push_back(std::make_pair(v.m_variable, !v.m_invert));
-                    }
-                }
-                else
-                {
-                    clause.push_back(std::make_pair(term.m_variable, !term.m_invert));
-                }
-                result.push_back(clause);
-            }
-        }
-        else
-        {
-            std::vector<std::pair<std::string, bool>> clause;
-            for (const auto& v : dnf.m_operands)
-            {
-                clause.push_back(std::make_pair(v.m_variable, !v.m_invert));
-            }
-            result.push_back(clause);
-        }
-        return result;
+        return this->to_string_in_reverse_polish_notation() < other.to_string_in_reverse_polish_notation();
     }
 
-    std::vector<BooleanFunction::Value> BooleanFunction::get_truth_table(std::vector<std::string> variables, bool remove_unknown_variables) const
+    bool BooleanFunction::is_empty() const
     {
-        std::vector<Value> result;
-
-        {
-            auto unique_vars = get_variables();
-            if (variables.empty())
-            {
-                variables = std::move(unique_vars);
-            }
-            else if (remove_unknown_variables)
-            {
-                variables.erase(std::remove_if(variables.begin(), variables.end(), [&unique_vars](auto& s) { return std::find(unique_vars.begin(), unique_vars.end(), s) == unique_vars.end(); }),
-                                variables.end());
-            }
-        }
-
-        for (u32 Values = 0; Values < (u32)(1 << variables.size()); ++Values)
-        {
-            std::unordered_map<std::string, Value> inputs;
-            u32 tmp = Values;
-            for (const auto& var : variables)
-            {
-                inputs[var] = (Value)(tmp & 1);
-                tmp >>= 1;
-            }
-            result.push_back(evaluate(inputs));
-        }
-        return result;
+        return this->m_nodes.empty();
     }
 
-    BooleanFunction BooleanFunction::optimize() const
+    BooleanFunction BooleanFunction::clone() const
     {
-        if (m_content != content_type::TERMS)
+        auto function = BooleanFunction();
+        function.m_nodes.reserve(this->m_nodes.size());
+
+        for (const auto& node : this->m_nodes)
         {
-            return *this;
+            function.m_nodes.emplace_back(node);
         }
 
-        BooleanFunction result = to_dnf().propagate_negations().optimize_constants();
+        return function;
+    }
 
-        if (result.m_content != content_type::TERMS || result.m_op == operation::AND)
+    u16 BooleanFunction::size() const
+    {
+        return this->m_nodes.back().size;
+    }
+
+    bool BooleanFunction::is(u16 type) const
+    {
+        return (this->is_empty()) ? false : this->get_top_level_node().is(type);
+    }
+
+    bool BooleanFunction::is_variable() const
+    {
+        return (this->is_empty()) ? false : this->get_top_level_node().is_variable();
+    }
+
+    bool BooleanFunction::has_variable_name(const std::string& variable_name) const
+    {
+        return (this->is_empty()) ? false : this->get_top_level_node().has_variable_name(variable_name);
+    }
+
+    Result<std::string> BooleanFunction::get_variable_name() const
+    {
+        if (!this->is_variable())
         {
-            return result;
+            return ERR("Boolean function is not a variable");
         }
 
-        // result is an OR-chain of *multiple* AND-chains of *only variables*
-        std::vector<std::vector<Value>> terms;
-        std::vector<std::string> vars = get_variables();
+        return OK(this->m_nodes[0].variable);
+    }
 
-        for (const auto& or_term : result.m_operands)
+    bool BooleanFunction::is_constant() const
+    {
+        return (this->is_empty()) ? false : this->get_top_level_node().is_constant();
+    }
+
+    bool BooleanFunction::has_constant_value(u64 value) const
+    {
+        return (this->is_empty()) ? false : this->get_top_level_node().has_constant_value(value);
+    }
+
+    Result<u64> BooleanFunction::get_constant_value() const
+    {
+        if (!this->is_constant())
         {
-            std::vector<Value> term(vars.size(), Value::X);
-            if (or_term.m_content == content_type::TERMS)
+            return ERR("Boolean function is not a constant");
+        }
+
+        if (this->size() > 64)
+        {
+            return ERR("Boolean function constant has size > 64");
+        }
+
+        if (std::any_of(this->m_nodes[0].constant.begin(), this->m_nodes[0].constant.end(), [](auto v) { return v != BooleanFunction::Value::ONE && v != BooleanFunction::Value::ZERO; }))
+        {
+            return ERR("Boolean function constant is undefined or high-impedance");
+        }
+
+        u64 val = 0;
+        for (auto it = this->m_nodes[0].constant.rbegin(); it != this->m_nodes[0].constant.rend(); it++)
+        {
+            val <<= 1;
+            val |= *it;
+        }
+
+        return OK(val);
+    }
+
+    bool BooleanFunction::is_index() const
+    {
+        return (this->is_empty()) ? false : this->get_top_level_node().is_index();
+    }
+
+    bool BooleanFunction::has_index_value(u16 value) const
+    {
+        return (this->is_empty()) ? false : this->get_top_level_node().has_index_value(value);
+    }
+
+    Result<u16> BooleanFunction::get_index_value() const
+    {
+        if (!this->is_index())
+        {
+            return ERR("Boolean function is not an index");
+        }
+
+        return OK(this->m_nodes[0].index);
+    }
+
+    const BooleanFunction::Node& BooleanFunction::get_top_level_node() const
+    {
+        return this->m_nodes.back();
+    }
+
+    u32 BooleanFunction::length() const
+    {
+        return this->m_nodes.size();
+    }
+
+    const std::vector<BooleanFunction::Node>& BooleanFunction::get_nodes() const
+    {
+        return this->m_nodes;
+    }
+
+    std::vector<BooleanFunction> BooleanFunction::get_parameters() const
+    {
+        /// # Developer Note
+        /// Instead of iterating the whole Boolean function and decomposing the
+        /// abstract syntax tree, we simple iterate the Boolean function once
+        /// and compute the coverage, i.e. how many nodes are covered below the
+        /// node in the tree, and based on these indices assemble the Boolean
+        /// function node vector.
+
+        auto coverage = this->compute_node_coverage();
+        switch (this->get_top_level_node().get_arity())
+        {
+            case 0: {
+                return {};
+            }
+            case 1: {
+                return {BooleanFunction(std::vector<Node>({this->m_nodes.begin(), this->m_nodes.end() - 1}))};
+            }
+            case 2: {
+                auto index = this->length() - coverage[this->length() - 2] - 1;
+
+                return {BooleanFunction(std::vector<Node>({this->m_nodes.begin(), this->m_nodes.begin() + index})),
+                        BooleanFunction(std::vector<Node>({this->m_nodes.begin() + index, this->m_nodes.end() - 1}))};
+            }
+            case 3: {
+                auto index0 = this->length() - coverage[this->length() - 3] - coverage[this->length() - 2] - 1;
+                auto index1 = this->length() - coverage[this->length() - 2] - 1;
+
+                return {BooleanFunction(std::vector<Node>({this->m_nodes.begin(), this->m_nodes.begin() + index0})),
+                        BooleanFunction(std::vector<Node>({this->m_nodes.begin() + index0, this->m_nodes.begin() + index1})),
+                        BooleanFunction(std::vector<Node>({this->m_nodes.begin() + index1, this->m_nodes.end() - 1}))};
+            }
+
+            default:
+                assert(false && "not implemented reached.");
+        }
+
+        return {};
+    }
+
+    std::set<std::string> BooleanFunction::get_variable_names() const
+    {
+        auto variable_names = std::set<std::string>();
+        for (const auto& node : this->m_nodes)
+        {
+            if (node.is_variable())
             {
-                for (const auto& and_term : or_term.m_operands)
-                {
-                    int index   = std::distance(vars.begin(), std::find(vars.begin(), vars.end(), and_term.m_variable));
-                    term[index] = and_term.m_invert ? Value::ZERO : Value::ONE;
-                }
+                variable_names.insert(node.variable);
+            }
+        }
+        return variable_names;
+    }
+
+    Result<std::string> BooleanFunction::default_printer(const BooleanFunction::Node& node, std::vector<std::string>&& operands)
+    {
+        if (node.get_arity() != operands.size())
+        {
+            return ERR("could not print Boolean function: node arity of " + std::to_string(node.get_arity()) + " does not match number of operands of " + std::to_string(operands.size()));
+        }
+
+        switch (node.type)
+        {
+            case BooleanFunction::NodeType::Constant:
+            case BooleanFunction::NodeType::Index:
+            case BooleanFunction::NodeType::Variable:
+                return OK(node.to_string());
+
+            case BooleanFunction::NodeType::And:
+                return OK("(" + operands[0] + " & " + operands[1] + ")");
+            case BooleanFunction::NodeType::Not:
+                return OK("(! " + operands[0] + ")");
+            case BooleanFunction::NodeType::Or:
+                return OK("(" + operands[0] + " | " + operands[1] + ")");
+            case BooleanFunction::NodeType::Xor:
+                return OK("(" + operands[0] + " ^ " + operands[1] + ")");
+
+            case BooleanFunction::NodeType::Add:
+                return OK("(" + operands[0] + " + " + operands[1] + ")");
+            case BooleanFunction::NodeType::Sub:
+                return OK("(" + operands[0] + " - " + operands[1] + ")");
+            case BooleanFunction::NodeType::Mul:
+                return OK("(" + operands[0] + " * " + operands[1] + ")");
+            case BooleanFunction::NodeType::Sdiv:
+                return OK("(" + operands[0] + " /s " + operands[1] + ")");
+            case BooleanFunction::NodeType::Udiv:
+                return OK("(" + operands[0] + " / " + operands[1] + ")");
+            case BooleanFunction::NodeType::Srem:
+                return OK("(" + operands[0] + " \%s " + operands[1] + ")");
+            case BooleanFunction::NodeType::Urem:
+                return OK("(" + operands[0] + " \% " + operands[1] + ")");
+
+            case BooleanFunction::NodeType::Concat:
+                return OK("(" + operands[0] + " ++ " + operands[1] + ")");
+            case BooleanFunction::NodeType::Slice:
+                return OK("Slice(" + operands[0] + ", " + operands[1] + ", " + operands[2] + ")");
+            case BooleanFunction::NodeType::Zext:
+                return OK("Zext(" + operands[0] + ", " + operands[1] + ")");
+            case BooleanFunction::NodeType::Sext:
+                return OK("Sext(" + operands[0] + ", " + operands[1] + ")");
+
+            case BooleanFunction::NodeType::Eq:
+                return OK("(" + operands[0] + " == " + operands[1] + ")");
+            case BooleanFunction::NodeType::Slt:
+                return OK("(" + operands[0] + " <s " + operands[1] + ")");
+            case BooleanFunction::NodeType::Sle:
+                return OK("(" + operands[0] + " <=s " + operands[1] + ")");
+            case BooleanFunction::NodeType::Ult:
+                return OK("(" + operands[0] + " < " + operands[1] + ")");
+            case BooleanFunction::NodeType::Ule:
+                return OK("(" + operands[0] + " <= " + operands[1] + ")");
+            case BooleanFunction::NodeType::Ite:
+                return OK("Ite(" + operands[0] + ", " + operands[1] + ", " + operands[2] + ")");
+
+            default:
+                return ERR("could not print Boolean function: unsupported node type '" + std::to_string(node.type) + "'");
+        }
+    }
+
+    std::string BooleanFunction::to_string(std::function<Result<std::string>(const BooleanFunction::Node& node, std::vector<std::string>&& operands)>&& printer) const
+    {
+        // (1) early termination in case the Boolean function is empty
+        if (this->m_nodes.empty())
+        {
+            return "<empty>";
+        }
+
+        // (2) iterate the list of nodes and setup string from leafs to root
+        std::vector<std::string> stack;
+        for (const auto& node : this->m_nodes)
+        {
+            std::vector<std::string> operands;
+
+            if (stack.size() < node.get_arity())
+            {
+                // log_error("netlist", "Cannot fetch {} nodes from the stack (= imbalanced stack with {} parts - {}).", node->get_arity(), stack.size(), this->to_string_in_reverse_polish_notation());
+                return "";
+            }
+
+            std::move(stack.end() - static_cast<u64>(node.get_arity()), stack.end(), std::back_inserter(operands));
+            stack.erase(stack.end() - static_cast<u64>(node.get_arity()), stack.end());
+
+            if (auto res = printer(node, std::move(operands)); res.is_ok())
+            {
+                stack.emplace_back(res.get());
             }
             else
             {
-                int index   = std::distance(vars.begin(), std::find(vars.begin(), vars.end(), or_term.m_variable));
-                term[index] = or_term.m_invert ? Value::ZERO : Value::ONE;
+                log_error("netlist", "Cannot translate BooleanFunction::Node '{}' to a string: {}.", node.to_string(), res.get_error().get());
+                return "";
             }
-            terms.emplace_back(term);
         }
 
-        terms = qmc(terms);
-
-        result = BooleanFunction();
-
-        for (auto it = terms.begin(); it != terms.end(); ++it)
+        switch (stack.size())
         {
-            auto& term = (*it);
-            BooleanFunction tmp;
-            for (u32 i = 0; i < term.size(); ++i)
-            {
-                if (term[i] == Value::ONE)
-                {
-                    tmp &= BooleanFunction(vars[i]);
-                }
-                else if (term[i] == Value::ZERO)
-                {
-                    tmp &= ~BooleanFunction(vars[i]);
-                }
+            case 1:
+                return stack.back();
+            default: {
+                // log_error("netlist", "Cannot translate BooleanFunction (= imbalanced stack with {} remaining parts).", stack.size());
+                return "";
             }
-            if (tmp.is_empty())    // all variables are "dont care"
-            {
-                tmp = Value::ONE;
-            }
-            result |= tmp;
         }
-
-        return result;
     }
 
-    std::vector<std::vector<BooleanFunction::Value>> BooleanFunction::qmc(std::vector<std::vector<Value>> terms)
+    Result<BooleanFunction> BooleanFunction::from_string(const std::string& expression)
     {
-        if (terms.empty())
+        using BooleanFunctionParser::ParserType;
+        using BooleanFunctionParser::Token;
+
+        static const std::vector<std::tuple<ParserType, std::function<Result<std::vector<Token>>(const std::string&)>>> parsers = {
+            {ParserType::Standard, BooleanFunctionParser::parse_with_standard_grammar},
+            {ParserType::Liberty, BooleanFunctionParser::parse_with_liberty_grammar},
+        };
+
+        for (const auto& [parser_type, parser] : parsers)
         {
-            return {};
+            auto tokens = parser(expression);
+            // (1) skip if parser cannot translate to tokens
+            if (tokens.is_error())
+            {
+                continue;
+            }
+
+            // (2) skip if cannot translate to valid reverse-polish notation
+            tokens = BooleanFunctionParser::reverse_polish_notation(tokens.get(), expression, parser_type);
+            if (tokens.is_error())
+            {
+                continue;
+            }
+            // (3) skip if reverse-polish notation tokens are no valid Boolean function
+            auto function = BooleanFunctionParser::translate(tokens.get(), expression);
+            if (function.is_error())
+            {
+                continue;
+            }
+            return function;
         }
+        return ERR("could not parse Boolean function from string: no parser available for '" + expression + "'");
+    }
 
-        u32 num_variables = terms[0].size();
+    BooleanFunction BooleanFunction::simplify() const
+    {
+        auto simplified = Simplification::local_simplification(*this).map<BooleanFunction>([](const auto& s) { return Simplification::abc_simplification(s); }).map<BooleanFunction>([](const auto& s) {
+            return Simplification::local_simplification(s);
+        });
 
-        // repeatedly merge all groups that only differ in a single value
-        while (true)
+        return (simplified.is_ok()) ? simplified.get() : this->clone();
+    }
+
+    BooleanFunction BooleanFunction::substitute(const std::string& old_variable_name, const std::string& new_variable_name) const
+    {
+        auto function = this->clone();
+        for (auto i = 0u; i < this->m_nodes.size(); i++)
         {
-            bool any_changes = false;
-            std::vector<std::vector<Value>> new_merged_terms;
-            std::vector<bool> removed_by_merge(terms.size(), false);
-            // pairwise compare all terms...
-            for (u32 i = 0; i < terms.size(); ++i)
+            if (this->m_nodes[i].has_variable_name(old_variable_name))
             {
-                for (u32 j = i + 1; j < terms.size(); ++j)
-                {
-                    // ...merge their values and count differences...
-                    std::vector<Value> merged(num_variables, Value::X);
-                    u32 cnt = 0;
-                    for (u32 k = 0; k < num_variables; ++k)
-                    {
-                        if (terms[i][k] == terms[j][k])
-                        {
-                            merged[k] = terms[i][k];
-                        }
-                        else
-                        {
-                            ++cnt;
-                        }
-                    }
-                    // ...and if they differ only in a single value, replace them with the merged term
-                    if (cnt == 1)
-                    {
-                        removed_by_merge[i] = removed_by_merge[j] = true;
-                        new_merged_terms.push_back(merged);
-                        any_changes = true;
-                    }
-                }
-            }
-            if (!any_changes)
-            {
-                break;
-            }
-            for (u32 i = 0; i < terms.size(); ++i)
-            {
-                if (!removed_by_merge[i])
-                {
-                    new_merged_terms.push_back(terms[i]);
-                }
-            }
-            std::sort(new_merged_terms.begin(), new_merged_terms.end());
-            new_merged_terms.erase(std::unique(new_merged_terms.begin(), new_merged_terms.end()), new_merged_terms.end());
-            terms = new_merged_terms;
-        }
-
-        std::vector<std::vector<Value>> output;
-
-        // build ON-set minterms to later identify essential implicants
-        std::map<u32, std::vector<u32>> table;
-        for (u32 i = 0; i < terms.size(); ++i)
-        {
-            // find all inputs that are covered by term i
-            // Example: term=01-1 --> all inputs covered are 0101 and 0111
-            std::vector<u32> covered_inputs;
-            for (u32 j = 0; j < num_variables; ++j)
-            {
-                if (terms[i][j] != Value::X)
-                {
-                    if (covered_inputs.empty())
-                    {
-                        covered_inputs.push_back(terms[i][j]);
-                    }
-                    else
-                    {
-                        for (auto& v : covered_inputs)
-                        {
-                            v = (v << 1) | terms[i][j];
-                        }
-                    }
-                }
-                else
-                {
-                    if (covered_inputs.empty())
-                    {
-                        covered_inputs.push_back(0);
-                        covered_inputs.push_back(1);
-                    }
-                    else
-                    {
-                        std::vector<u32> tmp;
-                        for (auto v : covered_inputs)
-                        {
-                            tmp.push_back((v << 1) | 0);
-                            tmp.push_back((v << 1) | 1);
-                        }
-                        covered_inputs = tmp;
-                    }
-                }
-            }
-
-            std::sort(covered_inputs.begin(), covered_inputs.end());
-            covered_inputs.erase(std::unique(covered_inputs.begin(), covered_inputs.end()), covered_inputs.end());
-
-            // now memorize that all these inputs are covered by term i
-            for (auto v : covered_inputs)
-            {
-                table[v].push_back(i);
+                function.m_nodes[i] = Node::Variable(new_variable_name, this->m_nodes[i].size);
             }
         }
 
-        // helper function to add a term to the output and remove it from the table
-        auto add_to_output = [&](u32 term_index) {
-            output.push_back(terms[term_index]);
-            for (auto it2 = table.cbegin(); it2 != table.cend();)
+        return function;
+    }
+
+    Result<BooleanFunction> BooleanFunction::substitute(const std::string& name, const BooleanFunction& replacement) const
+    {
+        /// Helper function to substitute a variable with a Boolean function.
+        ///
+        /// @param[in] node - Node.
+        /// @param[in] operands - Operands of node.
+        /// @param[in] var_name - Variable name to check for replacement.
+        /// @param[in] repl - Replacement Boolean function.
+        /// @returns AST replacement.
+        auto substitute_variable = [](const auto& node, auto&& operands, auto var_name, auto repl) -> BooleanFunction {
+            if (node.has_variable_name(var_name))
             {
-                if (std::find(it2->second.begin(), it2->second.end(), term_index) != it2->second.end())
+                return repl.clone();
+            }
+            return BooleanFunction(node.clone(), std::move(operands));
+        };
+
+        std::vector<BooleanFunction> stack;
+        for (const auto& node : this->m_nodes)
+        {
+            std::vector<BooleanFunction> operands;
+            std::move(stack.end() - static_cast<i64>(node.get_arity()), stack.end(), std::back_inserter(operands));
+            stack.erase(stack.end() - static_cast<i64>(node.get_arity()), stack.end());
+
+            stack.emplace_back(substitute_variable(node, std::move(operands), name, replacement));
+        }
+
+        switch (stack.size())
+        {
+            case 1:
+                return OK(stack.back());
+            default:
+                return ERR("could not replace variable '" + name + "' with Boolean function '" + replacement.to_string() + "': validation failed, the operations may be imbalanced");
+        }
+    }
+
+    Result<BooleanFunction> BooleanFunction::substitute(const std::map<std::string, BooleanFunction>& substitutions) const
+    {
+        /// Helper function to find the replacement for a variable and substitute it with a Boolean function.
+        ///
+        /// @param[in] node - Node.
+        /// @param[in] operands - Operands of node.
+        /// @returns AST replacement.
+        auto substitute_variable = [substitutions](const auto& node, auto&& operands) -> BooleanFunction {
+            if (node.is_variable())
+            {
+                if (auto repl_it = substitutions.find(node.variable); repl_it != substitutions.end())
                 {
-                    it2 = table.erase(it2);
+                    return repl_it->second.clone();
                 }
-                else
+            }
+            return BooleanFunction(node.clone(), std::move(operands));
+        };
+
+        std::vector<BooleanFunction> stack;
+        for (const auto& node : this->m_nodes)
+        {
+            std::vector<BooleanFunction> operands;
+            std::move(stack.end() - static_cast<i64>(node.get_arity()), stack.end(), std::back_inserter(operands));
+            stack.erase(stack.end() - static_cast<i64>(node.get_arity()), stack.end());
+
+            stack.emplace_back(substitute_variable(node, std::move(operands)));
+        }
+
+        switch (stack.size())
+        {
+            case 1:
+                return OK(stack.back());
+            default:
+                return ERR("could not carry out multiple substitutions: validation failed, the operations may be imbalanced");
+        }
+    }
+
+    Result<BooleanFunction::Value> BooleanFunction::evaluate(const std::unordered_map<std::string, Value>& inputs) const
+    {
+        // (0) workaround to preserve the API functionality
+        if (this->m_nodes.empty())
+        {
+            return OK(BooleanFunction::Value::X);
+        }
+
+        // (1) validate whether the input sizes match the boolean function
+        if (this->size() != 1)
+        {
+            return ERR("could not evaluate Boolean function '" + this->to_string() + "': using single-bit evaluation on a Boolean function of size " + std::to_string(this->size()) + " is illegal");
+        }
+
+        // (2) translate the input to n-bit to use the generic function
+        auto generic_inputs = std::unordered_map<std::string, std::vector<Value>>();
+        for (const auto& [name, value] : inputs)
+        {
+            generic_inputs.emplace(name, std::vector<Value>({value}));
+        }
+
+        auto value = this->evaluate(generic_inputs);
+        if (value.is_ok())
+        {
+            return OK(value.get()[0]);
+        }
+
+        return ERR(value.get_error());
+    }
+
+    Result<std::vector<BooleanFunction::Value>> BooleanFunction::evaluate(const std::unordered_map<std::string, std::vector<Value>>& inputs) const
+    {
+        // (0) workaround to preserve the API functionality
+        if (this->m_nodes.empty())
+        {
+            return OK(std::vector<BooleanFunction::Value>({BooleanFunction::Value::X}));
+        }
+
+        // (1) validate whether the input sizes match the boolean function
+        for (const auto& [name, value] : inputs)
+        {
+            for (const auto& node : this->m_nodes)
+            {
+                if (node.has_variable_name(name) && node.size != value.size())
                 {
-                    ++it2;
+                    return ERR("could not evaluate Boolean function '" + this->to_string() + "': as the number of variables (" + std::to_string(node.size)
+                               + ") does not match the number of provided inputs (" + std::to_string(value.size()) + ")");
                 }
+            }
+        }
+
+        // (2) initialize the symbolic state using the input variables
+        auto symbolic_execution = SMT::SymbolicExecution();
+        for (const auto& [name, value] : inputs)
+        {
+            symbolic_execution.state.set(BooleanFunction::Var(name, value.size()), BooleanFunction::Const(value));
+        }
+
+        // (3) analyze the evaluation result and check whether the result is a
+        //     constant boolean function
+        auto result = symbolic_execution.evaluate(*this);
+        if (result.is_ok())
+        {
+            if (auto value = result.get(); value.is_constant())
+            {
+                return OK(value.get_top_level_node().constant);
+            }
+            return OK(std::vector<BooleanFunction::Value>(this->size(), BooleanFunction::Value::X));
+        }
+        return ERR(result.get_error());
+    }
+
+    Result<std::vector<std::vector<BooleanFunction::Value>>> BooleanFunction::compute_truth_table(const std::vector<std::string>& ordered_variables, bool remove_unknown_variables) const
+    {
+        auto variable_names_in_function = this->get_variable_names();
+
+        // (1) check that each variable is just a single bit, otherwise we do
+        //     not generate a truth-table
+        for (const auto& node : this->m_nodes)
+        {
+            if (node.is_variable() && node.size != 1)
+            {
+                return ERR("could not compute truth table for Boolean function '" + this->to_string() + "': unable to generate a truth-table for Boolean function with variables of > 1-bit");
+            }
+        }
+
+        // (2) select either parameter or the Boolean function variables
+        auto variables = ordered_variables;
+        if (variables.empty())
+        {
+            variables = std::vector<std::string>(variable_names_in_function.begin(), variable_names_in_function.end());
+        }
+
+        // (3) remove any unknown variables from the truth table
+        if (remove_unknown_variables)
+        {
+            variables.erase(
+                std::remove_if(variables.begin(), variables.end(), [&variable_names_in_function](const auto& s) { return variable_names_in_function.find(s) == variable_names_in_function.end(); }),
+                variables.end());
+        }
+
+        // (4.1) check that the function is not empty, otherwise we return a
+        //       Boolean function with a truth-table with 'X' values
+        if (this->m_nodes.empty())
+        {
+            return OK(std::vector<std::vector<Value>>(1, std::vector<Value>(1 << variables.size(), Value::X)));
+        }
+
+        // (4.2) safety-check in case the number of variables is too large to process
+        if (variables.size() > 10)
+        {
+            return ERR("could not compute truth table for Boolean function '" + this->to_string() + "': unable to generate truth-table with more than 10 variables");
+        }
+
+        std::vector<std::vector<Value>> truth_table(this->size(), std::vector<Value>(1 << variables.size(), Value::ZERO));
+
+        // (5) iterate the truth-table rows and set each column accordingly
+        for (auto value = 0u; value < ((u32)1 << variables.size()); value++)
+        {
+            std::unordered_map<std::string, std::vector<Value>> input;
+            auto tmp = value;
+            for (const auto& variable : variables)
+            {
+                input[variable] = ((tmp & 1) == 0) ? std::vector<Value>({Value::ZERO}) : std::vector<Value>({Value::ONE});
+                tmp >>= 1;
+            }
+            auto result = this->evaluate(input);
+            if (result.is_error())
+            {
+                return ERR(result.get_error());
+            }
+            auto output = result.get();
+            for (auto index = 0u; index < truth_table.size(); index++)
+            {
+                truth_table[index][value] = output[index];
+            }
+        }
+
+        return OK(truth_table);
+    }
+
+    z3::expr BooleanFunction::to_z3(z3::context& context, const std::map<std::string, z3::expr>& var2expr) const
+    {
+        /// Helper function to reduce a abstract syntax subtree to z3 expressions
+        ///
+        /// @param[in] node - Boolean function node.
+        /// @param[in] p - Boolean function node parameters.
+        /// @returns (1) status (true on success, false otherwise),
+        ///          (2) SMT-LIB string representation of node and operands.
+        auto reduce_to_z3 = [&context, &var2expr](const auto& node, auto&& p) -> std::tuple<bool, z3::expr> {
+            if (node.get_arity() != p.size())
+            {
+                return {false, z3::expr(context)};
+            }
+
+            switch (node.type)
+            {
+                case BooleanFunction::NodeType::Index:
+                    return {true, context.bv_val(node.index, node.size)};
+                case BooleanFunction::NodeType::Constant: {
+                    // since our constants are defined as arbitrary bit-vectors,
+                    // we have to concat each bit just to be on the safe side
+                    auto constant = context.bv_val(node.constant.front(), 1);
+                    for (u32 i = 1; i < node.constant.size(); i++)
+                    {
+                        const auto bit = node.constant.at(i);
+                        constant       = z3::concat(context.bv_val(bit, 1), constant);
+                    }
+                    return {true, constant};
+                }
+                case BooleanFunction::NodeType::Variable: {
+                    if (auto it = var2expr.find(node.variable); it != var2expr.end())
+                    {
+                        return {true, it->second};
+                    }
+                    return {true, context.bv_const(node.variable.c_str(), node.size)};
+                }
+
+                case BooleanFunction::NodeType::And:
+                    return {true, p[0] & p[1]};
+                case BooleanFunction::NodeType::Or:
+                    return {true, p[0] | p[1]};
+                case BooleanFunction::NodeType::Not:
+                    return {true, ~p[0]};
+                case BooleanFunction::NodeType::Xor:
+                    return {true, p[0] ^ p[1]};
+                case BooleanFunction::NodeType::Slice:
+                    return {true, p[0].extract( p[2].get_numeral_uint(), p[1].get_numeral_uint())};
+                case BooleanFunction::NodeType::Concat:
+                    return {true, z3::concat(p[0], p[1])};
+                case BooleanFunction::NodeType::Sext:
+                    return {true, z3::sext(p[0], p[1].get_numeral_uint())};
+
+                default:
+                    log_error("netlist", "Not implemented reached for nodetype {} in z3 conversion", node.type);
+                    return {false, z3::expr(context)};
             }
         };
 
-        // finally, identify essential implicants and add them to the output
-        while (!table.empty())
+        std::vector<z3::expr> stack;
+        for (const auto& node : this->m_nodes)
         {
-            bool no_change = true;
+            std::vector<z3::expr> operands;
+            std::move(stack.end() - static_cast<i64>(node.get_arity()), stack.end(), std::back_inserter(operands));
+            stack.erase(stack.end() - static_cast<i64>(node.get_arity()), stack.end());
 
-            for (auto& it : table)
+            if (auto [ok, reduction] = reduce_to_z3(node, std::move(operands)); ok)
             {
-                if (it.second.size() == 1)
-                {
-                    no_change = false;
-                    add_to_output(it.second[0]);
-                    break;    // 'add_to_output' invalidates table iterator, so break and restart in next iteration
-                }
-            }
-
-            if (no_change)
-            {
-                // none of the remaining terms is essential, just pick the one that covers most input values
-                std::unordered_map<u32, u32> counter;
-                for (auto it : table)
-                {
-                    for (auto term_index : it.second)
-                    {
-                        counter[term_index]++;
-                    }
-                }
-
-                u32 index = std::max_element(counter.begin(), counter.end(), [](const auto& p1, const auto& p2) { return p1.second < p2.second; })->first;
-                add_to_output(index);
-            }
-        }
-
-        // sort output terms for deterministic output order (no impact on functionality)
-        std::sort(output.begin(), output.end());
-
-        return output;
-    }
-
-    z3::expr BooleanFunction::to_z3(z3::context& context, const std::map<std::string, z3::expr>& var_to_expr) const
-    {
-        // convert bf variables to z3::expr
-        std::unordered_map<std::string, z3::expr> input2expr;
-
-        for (const std::string& var : get_variables())
-        {
-            if (var_to_expr.find(var) == var_to_expr.end()) {
-                input2expr.emplace(var, context.bv_const(var.c_str(), 1));
-            }
-            else {
-                input2expr.insert({var, var_to_expr.at(var)});
-            }
-        }
-
-        z3::expr expr = to_z3_internal(context, input2expr);
-
-        return expr;
-    }
-
-    z3::expr BooleanFunction::to_z3_internal(z3::context& context, const std::unordered_map<std::string, z3::expr>& input2expr) const
-    {
-        z3::expr result(context);
-
-        if (is_empty())
-        {
-            return result;
-        }
-
-        if (m_content == content_type::VARIABLE)
-        {
-            result = input2expr.at(m_variable);
-        }
-        else if (m_content == content_type::CONSTANT)
-        {
-            if (m_constant == Value::ZERO)
-            {
-                result = context.bv_val(0, 1);
-            }
-            else if (m_constant == Value::ONE)
-            {
-                result = context.bv_val(1, 1);
+                stack.emplace_back(reduction);
             }
             else
             {
-                // TODO log error
-            }
-        }
-        else
-        {
-            std::vector<z3::expr> terms;
-
-            for (const BooleanFunction& x : m_operands)
-            {
-                terms.push_back(x.to_z3_internal(context, input2expr));
-            }
-
-            result = terms[0];
-
-            for (u32 i = 1; i < terms.size(); ++i)
-            {
-                if (m_op == operation::OR)
-                {
-                    result = result | terms[i];
-                }
-                else if (m_op == operation::XOR)
-                {
-                    result = result ^ terms[i];
-                }
-                else if (m_op == operation::AND)
-                {
-                    result = result & terms[i];
-                }
+                return z3::expr(context);
             }
         }
 
-        if (m_invert)
+        switch (stack.size())
         {
-            result = ~result;
-        }
-
-        return result;
-    }
-
-    std::vector<std::unique_ptr<BooleanFunction::Node>> BooleanFunction::get_reverse_polish_notation() const {
-        switch (this->m_content)
-        {
-            case BooleanFunction::content_type::CONSTANT:
-            {
-                std::vector<std::unique_ptr<BooleanFunction::Node>> nodes = {};
-                nodes.emplace_back(BooleanFunction::OperandNode::make(m_constant, 1));
-                if (this->m_invert) 
-                {
-                    nodes.emplace_back(BooleanFunction::OperationNode::make(BooleanFunction::NodeType::Not, 1));
-                }
-                return nodes;
-            }
-            case BooleanFunction::content_type::VARIABLE:
-            {
-                std::vector<std::unique_ptr<BooleanFunction::Node>> nodes = {};
-                nodes.emplace_back(BooleanFunction::OperandNode::make(m_variable, 1));
-                if (this->m_invert) 
-                {
-                    nodes.emplace_back(BooleanFunction::OperationNode::make(BooleanFunction::NodeType::Not, 1));
-                }
-                return nodes;
-            } 
-            case BooleanFunction::content_type::TERMS: 
-            {
-                std::vector<std::unique_ptr<BooleanFunction::Node>> nodes = {};
-                for (const auto& operand : this->m_operands) {
-                    for (auto&& node : operand.get_reverse_polish_notation()) {
-                        nodes.emplace_back(std::move(node));
-                    }
-                }
-
-                switch (this->m_op) 
-                {
-                    case BooleanFunction::operation::AND: nodes.emplace_back(BooleanFunction::OperationNode::make(BooleanFunction::NodeType::And, 1)); break;
-                    case BooleanFunction::operation::OR:  nodes.emplace_back(BooleanFunction::OperationNode::make(BooleanFunction::NodeType::Or, 1)); break;
-                    case BooleanFunction::operation::XOR: nodes.emplace_back(BooleanFunction::OperationNode::make(BooleanFunction::NodeType::Xor, 1)); break;
-                }
-
-                if (this->m_invert) 
-                {
-                    nodes.emplace_back(BooleanFunction::OperationNode::make(BooleanFunction::NodeType::Not, 1));
-                }
-
-                return nodes;
-            }
-
-            // this statement should never be reached
-            default: return {};
+            case 1:
+                return stack.back();
+            default:
+                return z3::expr(context);
         }
     }
 
-    BooleanFunction::Node::Node(u16 _type, u16 _size) : 
-        type(_type), size(_size) {}
+    BooleanFunction::BooleanFunction(std::vector<BooleanFunction::Node>&& nodes) : m_nodes(nodes)
+    {
+    }
+
+    BooleanFunction::BooleanFunction(BooleanFunction::Node&& node, std::vector<BooleanFunction>&& p) : BooleanFunction()
+    {
+        auto size = 1;
+        for (const auto& parameter : p)
+        {
+            size += parameter.size();
+        }
+        this->m_nodes.reserve(size);
+
+        for (auto&& parameter : p)
+        {
+            this->m_nodes.insert(this->m_nodes.end(), parameter.m_nodes.begin(), parameter.m_nodes.end());
+        }
+        this->m_nodes.emplace_back(node);
+    }
+
+    std::string BooleanFunction::to_string_in_reverse_polish_notation() const
+    {
+        std::string s;
+        for (const auto& node : this->m_nodes)
+        {
+            s += node.to_string() + " ";
+        }
+        return s;
+    }
+
+    Result<BooleanFunction> BooleanFunction::validate(BooleanFunction&& function)
+    {
+        /// # Note
+        /// In order to validate correctness of a Boolean function, we analyze
+        /// the arity of each node and whether its value matches the number of
+        /// parameters and covered nodes in the abstract syntax tree.
+        if (auto coverage = function.compute_node_coverage(); coverage.back() != function.length())
+        {
+            auto str = function.to_string_in_reverse_polish_notation();
+            return ERR("could not validate '" + str + "': imbalanced function with coverage '" + std::to_string(coverage.back()) + " != " + std::to_string(function.length()));
+        }
+
+        return OK(std::move(function));
+    }
+
+    std::vector<u32> BooleanFunction::compute_node_coverage() const
+    {
+        auto coverage = std::vector<u32>(this->m_nodes.size(), (u32)-1);
+
+        /// Short-hand function to safely access a coverage value from a vector
+        ///
+        /// @param[in] cov - Coverage vector.
+        /// @param[in] index - Index into coverage vector.
+        /// @returns Value at coverage[index] or -1 in case index is invalid.
+        auto get = [](const auto& cov, size_t index) -> u32 { return (index < cov.size()) ? cov[index] : -1; };
+
+        /// Short-hand function to safely set a coverage value at an index.
+        ///
+        /// @param[in,out] cov - Coverage vector to be modified.
+        /// @param[in] index - Valid index into coverage vector.
+        /// @param[in] x - 1st part of coverage value (= 0 on default)
+        /// @param[in] y - 2nc part of coverage value (= 0 on default)
+        /// @param[in] z - 3rd part of coverage value (= 0 on default)
+        auto set = [](auto& cov, size_t index, u32 x = 0, u32 y = 0, u32 z = 0) { cov[index] = ((x != (u32)-1) && (y != (u32)-1) && (z != (u32)-1)) ? (x + y + z + 1) : (u32)-1; };
+
+        for (auto i = 0ul; i < this->m_nodes.size(); i++)
+        {
+            auto arity = this->m_nodes[i].get_arity();
+
+            switch (arity)
+            {
+                case 0: {
+                    set(coverage, i);
+                    break;
+                }
+                case 1: {
+                    auto x = get(coverage, i - 1);
+                    set(coverage, i, x);
+                    break;
+                }
+                case 2: {
+                    auto x = get(coverage, i - 1);
+                    auto y = get(coverage, i - 1 - x);
+                    set(coverage, i, x, y);
+                    break;
+                }
+                case 3: {
+                    auto x = get(coverage, i - 1);
+                    auto y = get(coverage, i - 1 - x);
+                    auto z = get(coverage, i - 1 - x - y);
+                    set(coverage, i, x, y, z);
+                    break;
+                }
+            }
+        }
+
+        return coverage;
+    }
+
+    BooleanFunction::Node BooleanFunction::Node::Operation(u16 _type, u16 _size)
+    {
+        return Node(_type, _size, {}, {}, {});
+    }
+
+    BooleanFunction::Node BooleanFunction::Node::Constant(const std::vector<BooleanFunction::Value> _constant)
+    {
+        return Node(NodeType::Constant, _constant.size(), _constant, {}, {});
+    }
+
+    BooleanFunction::Node BooleanFunction::Node::Index(u16 _index, u16 _size)
+    {
+        return Node(NodeType::Index, _size, {}, _index, {});
+    }
+
+    BooleanFunction::Node BooleanFunction::Node::Variable(const std::string _variable, u16 _size)
+    {
+        return Node(NodeType::Variable, _size, {}, {}, _variable);
+    }
 
     bool BooleanFunction::Node::operator==(const Node& other) const
     {
-        if (this->is_operation() && other.is_operation()) {
-        return static_cast<const OperationNode&>(*this) == static_cast<const OperationNode&>(other);
-        }
-        if (this->is_operand() && other.is_operand()) {
-            return static_cast<const OperandNode&>(*this) == static_cast<const OperandNode&>(other);
-        }
-
-        return false;
+        return std::tie(this->type, this->size, this->constant, this->index, this->variable) == std::tie(other.type, other.size, other.constant, other.index, other.variable);
     }
-    
+
     bool BooleanFunction::Node::operator!=(const Node& other) const
     {
         return !(*this == other);
     }
-    
-    bool BooleanFunction::Node::operator <(const Node& other) const
+
+    bool BooleanFunction::Node::operator<(const Node& other) const
     {
-        if (this->is_operation() && other.is_operation()) {
-            return static_cast<const OperationNode&>(*this) < static_cast<const OperationNode&>(other);
-        }
-        if (this->is_operand() && other.is_operand()) {
-            return static_cast<const OperandNode&>(*this) < static_cast<const OperandNode&>(other);
-        }
-        return std::tie(type, size) < std::tie(other.type, other.size);
+        return std::tie(this->type, this->size, this->constant, this->index, this->variable) < std::tie(other.type, other.size, other.constant, other.index, other.variable);
     }
 
-    u16 BooleanFunction::Node::get_arity() const {
-        return BooleanFunction::Node::get_arity(this->type);
+    BooleanFunction::Node BooleanFunction::Node::clone() const
+    {
+        return Node(this->type, this->size, this->constant, this->index, this->variable);
     }
 
-    u16 BooleanFunction::Node::get_arity(u16 type) {
+    std::string BooleanFunction::Node::to_string() const
+    {
+        switch (this->type)
+        {
+            case NodeType::Constant: {
+                std::string str;
+                for (const auto& value : this->constant)
+                {
+                    str = enum_to_string(value) + str;
+                }
+                return "0b" + str;
+            }
+
+            case NodeType::Index:
+                return std::to_string(this->index);
+            case NodeType::Variable:
+                return this->variable;
+
+            case NodeType::And:
+                return "&";
+            case NodeType::Or:
+                return "|";
+            case NodeType::Not:
+                return "~";
+            case NodeType::Xor:
+                return "^";
+
+            case NodeType::Add:
+                return "+";
+            case NodeType::Sub:
+                return "-";
+            case NodeType::Mul:
+                return "*";
+            case NodeType::Sdiv:
+                return "/s";
+            case NodeType::Udiv:
+                return "/";
+            case NodeType::Srem:
+                return "\%s";
+            case NodeType::Urem:
+                return "\%";
+
+            case NodeType::Concat:
+                return "++";
+            case NodeType::Slice:
+                return "Slice";
+            case NodeType::Zext:
+                return "Zext";
+            case NodeType::Sext:
+                return "Sext";
+
+            case NodeType::Eq:
+                return "==";
+            case NodeType::Sle:
+                return "<=s";
+            case NodeType::Slt:
+                return "<s";
+            case NodeType::Ule:
+                return "<=";
+            case NodeType::Ult:
+                return "<";
+            case NodeType::Ite:
+                return "Ite";
+
+            default:
+                return "unsupported node type '" + std::to_string(this->type) + "'.";
+        }
+    }
+
+    u16 BooleanFunction::Node::get_arity() const
+    {
+        return BooleanFunction::Node::get_arity_of_type(this->type);
+    }
+
+    u16 BooleanFunction::Node::get_arity_of_type(u16 type)
+    {
         static const std::map<u16, u16> type2arity = {
-            {BooleanFunction::NodeType::And, 2},
-            {BooleanFunction::NodeType::Or,  2},
-            {BooleanFunction::NodeType::Not, 1},
-            {BooleanFunction::NodeType::Xor, 2},
-
-            {BooleanFunction::NodeType::Add, 2},
-
-            {BooleanFunction::NodeType::Concat, 2},
-            {BooleanFunction::NodeType::Zext, 2},
-            {BooleanFunction::NodeType::Slice, 3},
-
-            {BooleanFunction::NodeType::Constant, 0},
-            {BooleanFunction::NodeType::Index, 0},
-            {BooleanFunction::NodeType::Variable, 0},
+            {BooleanFunction::NodeType::And, 2},   {BooleanFunction::NodeType::Or, 2},       {BooleanFunction::NodeType::Not, 1},   {BooleanFunction::NodeType::Xor, 2},
+            {BooleanFunction::NodeType::Add, 2},   {BooleanFunction::NodeType::Sub, 2},      {BooleanFunction::NodeType::Mul, 2},   {BooleanFunction::NodeType::Sdiv, 2},
+            {BooleanFunction::NodeType::Udiv, 2},  {BooleanFunction::NodeType::Srem, 2},     {BooleanFunction::NodeType::Urem, 2},  {BooleanFunction::NodeType::Concat, 2},
+            {BooleanFunction::NodeType::Slice, 3}, {BooleanFunction::NodeType::Zext, 2},     {BooleanFunction::NodeType::Sext, 2},  {BooleanFunction::NodeType::Eq, 2},
+            {BooleanFunction::NodeType::Sle, 2},   {BooleanFunction::NodeType::Slt, 2},      {BooleanFunction::NodeType::Ule, 2},   {BooleanFunction::NodeType::Ult, 2},
+            {BooleanFunction::NodeType::Ite, 3},   {BooleanFunction::NodeType::Constant, 0}, {BooleanFunction::NodeType::Index, 0}, {BooleanFunction::NodeType::Variable, 0},
         };
 
         return type2arity.at(type);
     }
 
-    bool BooleanFunction::Node::is(u16 _type) const 
+    bool BooleanFunction::Node::is(u16 _type) const
     {
-        return this->type == _type;   
+        return this->type == _type;
     }
 
-    bool BooleanFunction::Node::is_constant() const 
+    bool BooleanFunction::Node::is_constant() const
     {
         return this->is(BooleanFunction::NodeType::Constant);
     }
 
-    bool BooleanFunction::Node::is_index() const 
+    bool BooleanFunction::Node::has_constant_value(u64 value) const
+    {
+        if (!this->is_constant())
+        {
+            return false;
+        }
+
+        auto bv_value = std::vector<BooleanFunction::Value>({});
+        bv_value.reserve(this->size);
+        for (auto i = 0u; i < this->constant.size(); i++)
+        {
+            bv_value.emplace_back((value & (1 << i)) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO);
+        }
+        return this->constant == bv_value;
+    }
+
+    bool BooleanFunction::Node::is_index() const
     {
         return this->is(BooleanFunction::NodeType::Index);
     }
 
-    bool BooleanFunction::Node::is_variable() const 
-    { 
-        return this->is(BooleanFunction::NodeType::Variable); 
-    }
-
-    bool BooleanFunction::Node::is_operation() const 
+    bool BooleanFunction::Node::has_index_value(u16 value) const
     {
-        return !this->is_constant() && !this->is_variable(); 
+        return this->is_index() && (this->index == value);
     }
-    
-    bool BooleanFunction::Node::is_operand() const 
+
+    bool BooleanFunction::Node::is_variable() const
     {
-        return !this->is_operation(); 
+        return this->is(BooleanFunction::NodeType::Variable);
     }
 
-    std::unique_ptr<BooleanFunction::Node> BooleanFunction::OperationNode::make(u16 type, u16 size)
+    bool BooleanFunction::Node::has_variable_name(const std::string& value) const
     {
-        return std::unique_ptr<BooleanFunction::Node>(new OperationNode(type, size));
+        return this->is_variable() && (this->variable == value);
     }
 
-    bool BooleanFunction::OperationNode::operator==(const BooleanFunction::OperationNode& other) const 
+    bool BooleanFunction::Node::is_operation() const
     {
-        return std::tie(this->type, this->size) == std::tie(other.type, other.size);
+        return !this->is_operand();
     }
 
-    bool BooleanFunction::OperationNode::operator!=(const BooleanFunction::OperationNode& other) const 
+    bool BooleanFunction::Node::is_operand() const
     {
-        return !(*this == other);
+        return this->is_constant() || this->is_variable() || this->is_index();
     }
 
-    bool BooleanFunction::OperationNode::operator <(const BooleanFunction::OperationNode& other) const 
+    bool BooleanFunction::Node::is_commutative() const
     {
-        return std::tie(this->type, this->size) < std::tie(other.type, other.size);
+        return (this->type == NodeType::And) || (this->type == NodeType::Or) || (this->type == NodeType::Xor) || (this->type == NodeType::Add) || (this->type == NodeType::Mul)
+               || (this->type == NodeType::Eq);
     }
 
-    std::unique_ptr<BooleanFunction::Node> BooleanFunction::OperationNode::clone() const 
+    BooleanFunction::Node::Node(u16 _type, u16 _size, std::vector<BooleanFunction::Value> _constant, u16 _index, std::string _variable)
+        : type(_type), size(_size), constant(_constant), index(_index), variable(_variable)
     {
-        return std::unique_ptr<BooleanFunction::Node>(new OperationNode(*this));
     }
-
-    std::string BooleanFunction::OperationNode::to_string() const 
-    {
-        static const std::map<u16, std::string>& operation2name = {
-            {BooleanFunction::NodeType::And, "&"},
-            {BooleanFunction::NodeType::Or, "|"},
-            {BooleanFunction::NodeType::Not, "~"},
-            {BooleanFunction::NodeType::Xor, "^"},
-
-            {BooleanFunction::NodeType::Add, "+"},
-
-            {BooleanFunction::NodeType::Concat, "++"},
-            {BooleanFunction::NodeType::Slice, "Slice"},
-            {BooleanFunction::NodeType::Zext, "Zext"},
-        };
-
-        return operation2name.at(this->type);
-    }
-
-    BooleanFunction::OperationNode::OperationNode(u16 _type, u16 _size) :
-        BooleanFunction::Node(_type, _size) {}
-
-    std::unique_ptr<BooleanFunction::Node> BooleanFunction::OperandNode::make(BooleanFunction::Value _constant, u16 _size)
-    {
-        return std::unique_ptr<BooleanFunction::Node>(new OperandNode(NodeType::Constant, _size, _constant, 0, ""));
-    }
- 
-    std::unique_ptr<BooleanFunction::Node> BooleanFunction::OperandNode::make(u16 _index, u16 _size) 
-    {
-        return std::unique_ptr<BooleanFunction::Node>(new OperandNode(NodeType::Index, _size, BooleanFunction::Value::X, _index, ""));
-    }
-
-    std::unique_ptr<BooleanFunction::Node> BooleanFunction::OperandNode::make(const std::string& _name, u16 _size) 
-    {
-        return std::unique_ptr<BooleanFunction::Node>(new OperandNode(NodeType::Variable, _size, BooleanFunction::Value::X, 0, _name));
-    }
-
-    bool BooleanFunction::OperandNode::operator==(const BooleanFunction::OperandNode& other) const 
-    {
-        return std::tie(this->type, this->size, this->constant, this->index, this->variable) == std::tie(other.type, other.size, other.constant, other.index, other.variable);
-    }
-
-    bool BooleanFunction::OperandNode::operator!=(const BooleanFunction::OperandNode& other) const 
-    {
-        return !(*this == other);
-    }
-
-    bool BooleanFunction::OperandNode::operator <(const BooleanFunction::OperandNode& other) const 
-    {
-        return std::tie(this->type, this->size, this->constant, this->index, this->variable) < std::tie(other.type, other.size, other.constant, other.index, other.variable);
-    }
-
-    std::unique_ptr<BooleanFunction::Node> BooleanFunction::OperandNode::clone() const 
-    {
-        return std::unique_ptr<BooleanFunction::Node>(new OperandNode(*this));
-    }
-
-    std::string BooleanFunction::OperandNode::to_string() const 
-    {
-        static const std::map<u16, std::function<std::string(const OperandNode*)>> operand2name = 
-        {
-            {BooleanFunction::NodeType::Constant, [] (const OperandNode* node) { return enum_to_string(node->constant); }},
-            {BooleanFunction::NodeType::Index, [] (const OperandNode* node) { return std::to_string(node->index); }},
-            {BooleanFunction::NodeType::Variable, [] (const OperandNode* node) { return node->variable; }},
-        };
-
-        return operand2name.at(this->type)(this);
-    }
-
-    BooleanFunction::OperandNode::OperandNode(u16 _type, u16 _size, BooleanFunction::Value _constant, u16 _index, const std::string& _variable) :
-        BooleanFunction::Node(_type, _size), constant(_constant), index(_index), variable(_variable) {}
 
 }    // namespace hal

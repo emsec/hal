@@ -40,6 +40,16 @@ namespace hal {
     class ModuleProxyModel;
     class Searchbar;
 
+    class AddToModuleReceiver : public ModuleSelectReceiver
+    {
+        Q_OBJECT
+        ModuleSelectExclude mSelectExclude;
+    public:
+        AddToModuleReceiver(QObject* parent=nullptr) : ModuleSelectReceiver(parent) {;}
+    public Q_SLOTS:
+        void handleModulesPicked(const QSet<u32>& mods) override;
+    };
+
     /**
      * @brief The ModuleDialog class opens a popup window for module selection.
      *
@@ -54,9 +64,11 @@ namespace hal {
         /**
          * The constructor.
          *
+         * @param receiver - The receiver for graphical picker, picker will be hidden if nullptr
          * @param parent - The dialog's parent.
          */
-        ModuleDialog(QWidget* parent=nullptr);
+        ModuleDialog(const QSet<u32>& excludeIds = {}, const QString& title=QString("Select module"),
+                     ModuleSelectReceiver* receiver=nullptr, QWidget* parent=nullptr);
 
         /**
          * Get the through this dialog selected id.
@@ -72,6 +84,11 @@ namespace hal {
          */
         bool isNewModule() const { return mNewModule; }
 
+        /**
+         * Indicates that user has activated graphical gate picker mode.
+         * @return true if picker mode activated, false otherwise.
+         */
+        bool pickerModeActivated() const { return mPickerModeActivated; }
     private Q_SLOTS:
         void handlePickFromGraph();
         void handleCreateNewModule();
@@ -113,6 +130,7 @@ namespace hal {
 
     private:
         u32 mSelectedId;
+        QSet<u32> mExcludeIds;
         QDialogButtonBox* mButtonBox;
         ModuleSelectView* mTableView;
         QTreeView* mTreeView;
@@ -129,6 +147,10 @@ namespace hal {
 
         QPushButton* mButtonPick;
         bool mNewModule;
+        ModuleSelectReceiver* mReceiver;
+        bool mPickerModeActivated;
+
+        QString mWindowTitle;
 
         void enableButtons();
         u32 treeModuleId(const QModelIndex& index);

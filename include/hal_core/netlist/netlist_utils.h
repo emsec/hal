@@ -41,37 +41,37 @@ namespace hal
     namespace netlist_utils
     {
         /**
-         * Get the combined Boolean function of a specific net, considering an entire subgraph.<br>
-         * In other words, the Boolean functions of the subgraph gates that influence the target net are combined to one function.<br>
-         * The variables of the resulting Boolean function are the net IDs of the nets that influence the output.
-         * For high performance when used extensively, a cache is employed.
+         * TODO test
+         * Get the combined Boolean function of a subgraph of combinational gates starting at the source of the given net.
+         * The variables of the resulting Boolean function are made up of the IDs of the nets that influence the output ('net_[ID]').
+         * Utilizes a cache for speedup on consecutive calls.
          *
          * @param[in] net - The net for which to generate the Boolean function.
          * @param[in] subgraph_gates - The gates making up the subgraph to consider.
          * @param[inout] cache - Cache to speed up computations. The cache is filled by this function.
-         * @returns The combined Boolean function of the subgraph.
+         * @returns The combined Boolean function of the subgraph on success, an error otherwise.
          */
-        CORE_API BooleanFunction get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates, std::unordered_map<u32, BooleanFunction>& cache);
+        CORE_API Result<BooleanFunction> get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates, std::map<std::pair<u32, const GatePin*>, BooleanFunction>& cache);
 
         /**
-         * Get the combined Boolean function of a specific net, considering an entire subgraph.<br>
-         * In other words, the Boolean functions of the subgraph gates that influence the target net are combined to one function.<br>
-         * The variables of the resulting Boolean function are the net IDs of the nets that influence the output.
-         * If this function is used extensively, consider using the above variant with a cache.
+         * TODO pybind, test
+         * Get the combined Boolean function of a subgraph of combinational gates starting at the source of the given net.
+         * The variables of the resulting Boolean function are made up of the IDs of the nets that influence the output ('net_[ID]').
          *
          * @param[in] net - The net for which to generate the Boolean function.
          * @param[in] subgraph_gates - The gates making up the subgraph to consider.
-         * @returns The combined Boolean function of the subgraph.
+         * @returns The combined Boolean function of the subgraph on success, an error otherwise.
          */
-        CORE_API BooleanFunction get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates);
+        CORE_API Result<BooleanFunction> get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates);
 
         /**
+         * \deprecated
          * Get a deep copy of an entire netlist including all of its gates, nets, modules, and groupings.
          *
          * @param[in] nl - The netlist to copy.
          * @returns The deep copy of the netlist.
          */
-        CORE_API std::unique_ptr<Netlist> copy_netlist(const Netlist* nl);
+        [[deprecated("Will be removed in a future version, use Netlist::copy instead.")]] CORE_API std::unique_ptr<Netlist> copy_netlist(const Netlist* nl);
 
         /**
          * Get the FF dependency matrix of a netlist.
@@ -89,13 +89,13 @@ namespace hal
          * @param[in] subgraph_gates - The gates the subgraph is supposed to consist of.
          * @returns The deep copy of the netlist.
          */
-        CORE_API std::unique_ptr<Netlist> get_partial_netlist(const Netlist* nl, const std::vector<Gate*>& subgraph_gates);
+        CORE_API std::unique_ptr<Netlist> get_partial_netlist(const Netlist* nl, const std::vector<const Gate*>& subgraph_gates);
 
         /**
          * TODO test
-         * Find predecessors or successors of a gate. If depth is set to 1 only direct predecessors/successors
-         * will be returned. Higher number of depth causes as many steps of recursive calls. If depth is set to 0
-         * there is no limitation and the loop continues until no more predecessors/succesors are found.
+         * Find predecessors or successors of a gate. If depth is set to 1 only direct predecessors/successors will be returned. 
+         * Higher number of depth causes as many steps of recursive calls. 
+         * If depth is set to 0 there is no limitation and the loop continues until no more predecessors/succesors are found.
          * If a filter function is given only gates matching the filter will be added to the result vector.
          * The result will not include the provided gate itself.
          *
@@ -106,6 +106,22 @@ namespace hal
          * @return Vector of predecessor/successor gates.
          */
         CORE_API std::vector<Gate*> get_next_gates(const Gate* gate, bool get_successors, int depth = 0, const std::function<bool(const Gate*)>& filter = nullptr);
+
+        /**
+         * TODO test
+         * Find predecessors or successors of a net. If depth is set to 1 only direct predecessors/successors will be returned. 
+         * Higher number of depth causes as many steps of recursive calls. 
+         * If depth is set to 0  there is no limitation and the loop continues until no more predecessors/succesors are found.
+         * If a filter function is given, the recursion stops whenever the filter function evaluates to False. 
+         * Only gates matching the filter will be added to the result vector.
+         *
+         * @param net[in] - The initial net.
+         * @param get_successors[in] - True to return successors, false for Predecessors.
+         * @param depth[in] - Depth of recursion.
+         * @param filter[in] - User-defined filter function.
+         * @return Vector of predecessor/successor gates.
+         */
+        CORE_API std::vector<Gate*> get_next_gates(const Net* net, bool get_successors, int depth = 0, const std::function<bool(const Gate*)>& filter = nullptr);
 
         /**
          * Find all sequential predecessors or successors of a gate.
@@ -212,39 +228,34 @@ namespace hal
         CORE_API std::vector<Gate*> get_path(const Net* net, bool get_successors, std::set<GateTypeProperty> stop_properties);
 
         /**
+         * TODO test
          * Get the nets that are connected to a subset of pins of the specified gate.
          * 
          * @param[in] gate - The gate.
          * @param[in] pins - The targeted pins.
-         * @param[in] is_input - True to look for fan-in nets, false for fan-out.
-         * @returns The set of nets connected to the pins.
+         * @returns A vector of nets connected to the pins.
          */
-        std::unordered_set<Net*> get_nets_at_pins(Gate* gate, std::unordered_set<std::string> pins, bool is_input);
+        CORE_API std::vector<Net*> get_nets_at_pins(Gate* gate, std::vector<GatePin*> pins);
 
         /**
+         * TODO test
          * Remove all buffer gates from the netlist and connect their fan-in to their fan-out nets.
          * If enabled, analyzes every gate's inputs and removes fixed '0' or '1' inputs from the Boolean function.
          * 
          * @param[in] netlist - The target netlist.
-         * @param[in] analyze_inputs - Set true to dynamically analyze the inputs, false otherwise.
+         * @param[in] analyze_inputs - Set `true` to dynamically analyze the inputs, `false` otherwise.
+         * @returns The number of removed buffers on success, an error otherwise.
          */
-        void remove_buffers(Netlist* netlist, bool analyze_inputs = false);
+        CORE_API Result<u32> remove_buffers(Netlist* netlist, bool analyze_inputs = false);
 
         /**
+         * TODO test
          * Remove all LUT fan-in endpoints that are not present within the Boolean function of the output of a gate.
          * 
          * @param[in] netlist - The target netlist.
+         * @returns The number of removed endpoints on success, an error otherwise.
          */
-        void remove_unused_lut_endpoints(Netlist* netlist);
-
-        /**
-         * \deprecated
-         * DEPRECATED <br>
-         * Rename LUTs that implement simple functions to better reflect their functionality.
-         * 
-         * @param[in] netlist - The target netlist.
-         */
-        [[deprecated("Will be removed in a future version.")]] void rename_luts_according_to_function(Netlist* netlist);
+        CORE_API Result<u32> remove_unused_lut_endpoints(Netlist* netlist);
 
         /**
          * Returns all nets that are considered to be common inputs to the provided gates.
@@ -255,7 +266,7 @@ namespace hal
          * @param[in] threshold - The threshold value, defaults to 0.
          * @returns The common input nets.
          */
-        std::vector<Net*> get_common_inputs(const std::vector<Gate*>& gates, u32 threshold = 0);
+        CORE_API std::vector<Net*> get_common_inputs(const std::vector<Gate*>& gates, u32 threshold = 0);
 
         /**
          * TODO test
@@ -265,49 +276,48 @@ namespace hal
          * 
          * @param[in] gate - The gate to be replaced.
          * @param[in] target_type - The gate type of the replacement gate.
-         * @param[in] pin_map - A map from old to new pin names.
-         * @returns True on success, false otherwise.
+         * @param[in] pin_map - A map from old to new pins.
+         * @returns Ok on success, an error otherwise.
          */
-        bool replace_gate(Gate* gate, GateType* target_type, std::map<std::string, std::string> pin_map);
+        CORE_API Result<std::monostate> replace_gate(Gate* gate, GateType* target_type, std::map<GatePin*, GatePin*> pin_map);
 
         /**
-         * Find a repeating sequence of identical gates that connect through the specified pins.
-         * The start gate may be any gate within a chain of such sequences, it is not required to be the first or the last gate.
-         * A pair of input and output pins can be specified through which the gates are interconnected.
-         * If the connection pins are irrelevant, an empty string may be passed to the function.
-         * Before adding a gate to the chain, an optional user-defined filter is evaluated on every candidate gate.
+         * Find a sequence of identical gates that are connected via the specified input and output pins.
+         * The start gate may be any gate within a such a sequence, it is not required to be the first or the last gate.
+         * If input and/or output pins are specified, the gates must be connected through one of the input pins and/or one of the output pins.
+         * The optional filter is evaluated on every gate such that the result only contains gates matching the specified condition.
          * 
          * @param[in] start_gate - The gate at which to start the chain detection.
-         * @param[in] input_pins - The input pins through which the gates are allowed to be connected.
-         * @param[in] output_pins - The output pins through which the gates are allowed to be connected.
-         * @param[in] filter - A filter that is evaluated on all candidates.
-         * @returns A vector of gates that form a chain.
+         * @param[in] input_pins - The input pins through which the gates must be connected. Defaults to an empty vector.
+         * @param[in] output_pins - The output pins through which the gates must be connected. Defaults to an empty vector.
+         * @param[in] filter - An optional filter function to be evaluated on each gate.
+         * @returns A vector of gates that form a chain on success, an error otherwise.
          */
-        std::vector<Gate*>
-            get_gate_chain(Gate* start_gate, const std::set<std::string>& input_pins = {}, const std::set<std::string>& output_pins = {}, const std::function<bool(const Gate*)>& filter = nullptr);
+        CORE_API Result<std::vector<Gate*>> get_gate_chain(Gate* start_gate,
+                                                           const std::vector<const GatePin*>& input_pins  = {},
+                                                           const std::vector<const GatePin*>& output_pins = {},
+                                                           const std::function<bool(const Gate*)>& filter = nullptr);
 
         /**
          * TODO test
-         * Find a repeating sequence of gates that are of the specified gate types and connect through the specified pins.
-         * The start gate may be any gate within a chain of such sequences, it is not required to be the first or the last gate.
-         * However, the start gate must be of the first gate type of the repeating sequence.
-         * For every gate type, a pair of input and output pins can be specified through which the gates are interconnected.
-         * If a nullptr is given for a gate type, any gate fulfilling the other properties will be considered.
-         * If an empty set is given for input or output pins, every pin of the respective gate will be considered.
-         * Before adding a gate to the chain, an optional user-defined filter is evaluated on every candidate gate.
+         * Find a sequence of gates (of the specified sequence of gate types) that are connected via the specified input and output pins.
+         * The start gate may be any gate within a such a sequence, it is not required to be the first or the last gate.
+         * However, the start gate must be of the first gate type within the repeating sequence.
+         * If input and/or output pins are specified for a gate type, the gates must be connected through one of the input pins and/or one of the output pins.
+         * The optional filter is evaluated on every gate such that the result only contains gates matching the specified condition.
          * 
          * @param[in] start_gate - The gate at which to start the chain detection.
          * @param[in] chain_types - The sequence of gate types that is expected to make up the gate chain.
-         * @param[in] input_pins - The input pins through which the gates are allowed to be connected.
-         * @param[in] output_pins - The output pins through which the gates are allowed to be connected.
-         * @param[in] filter - A filter that is evaluated on all candidates.
-         * @returns A vector of gates that form a chain.
+         * @param[in] input_pins - The input pins (of every gate type of the sequence) through which the gates must be connected.
+         * @param[in] output_pins - The output pins (of every gate type of the sequence) through which the gates must be connected.
+         * @param[in] filter - An optional filter function to be evaluated on each gate.
+         * @returns A vector of gates that form a chain on success, an error otherwise.
          */
-        std::vector<Gate*> get_complex_gate_chain(Gate* start_gate,
-                                                  const std::vector<GateType*>& chain_types,
-                                                  const std::map<GateType*, std::set<std::string>>& input_pins  = {},
-                                                  const std::map<GateType*, std::set<std::string>>& output_pins = {},
-                                                  const std::function<bool(const Gate*)>& filter                = nullptr);
+        CORE_API Result<std::vector<Gate*>> get_complex_gate_chain(Gate* start_gate,
+                                                                   const std::vector<GateType*>& chain_types,
+                                                                   const std::map<GateType*, std::vector<const GatePin*>>& input_pins,
+                                                                   const std::map<GateType*, std::vector<const GatePin*>>& output_pins,
+                                                                   const std::function<bool(const Gate*)>& filter = nullptr);
 
         /**
          * TODO test
@@ -320,6 +330,6 @@ namespace hal
          * @param[in] search_both_directions - True to additionally check whether a shorter path from end to start exists, false otherwise.
          * @return A vector of gates that connect the start with end gate (possibly in reverse order).
          */
-        std::vector<Gate*> get_shortest_path(Gate* start_gate, Gate* end_gate, bool search_both_directions = false);
+        CORE_API std::vector<Gate*> get_shortest_path(Gate* start_gate, Gate* end_gate, bool search_both_directions = false);
     }    // namespace netlist_utils
 }    // namespace hal

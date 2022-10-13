@@ -40,7 +40,9 @@ namespace hal
      * supposed to take the ownership of an user action object.
      *
      * While derived classes might contain additional arguments the member variable
-     * mObject holds a standard argument like a single gate or module.
+     * mObject holds a standard argument like a single gate or module. Aditionally a parent
+     * object can be given so that special types like pingroups can be associated and/or
+     * identified with the corresponding module.
      *
      * If pointer to mUndoAction is set the interaction might be reversed using
      * Ctrl-Z in a future version of hal
@@ -48,10 +50,6 @@ namespace hal
      * The mCompoundOrder number is the index of this action if part of an action
      * compound. It can be used to identify actions which belong together and might
      * be undone in a single step.
-     *
-     * The mWaitForReady flag causes the execution of a macro to be paused until
-     * a handle (e.g. timer handle) resets the flag. It is considered to be a dirty hack and
-     * should only be used in the case of extreme desperation.
      */
     class UserAction
     {
@@ -109,11 +107,20 @@ namespace hal
         virtual void setObject(const UserActionObject& obj);
 
         /**
-         * Pause macro execution until flag gets cleared by handler.
+         * Setter for parent object argument. Used to identify pins and
+         * pingroups in which case the parent obj must be the corresponding
+         * module.
          *
-         * @return The WaitForReady flag.
+         * @param obj - The parent object.
          */
-        bool isWaitForReady() const { return mWaitForReady; }
+        virtual void setParentObject(const UserActionObject& obj);
+
+        /**
+         * Getter for parent object argument.
+         *
+         * @return The parent object argument.
+         */
+        virtual UserActionObject parentObject() const {return mParentObject;}
 
         /**
          * Get the order number in action compound, -1 if not in compound.
@@ -172,17 +179,48 @@ namespace hal
          */
         void setObjectLock(bool lock) { mObjectLock = lock; }
 
+        /**
+         * Refuse set parent object requests (in case if needed)
+         *
+         * @param lock - Param to set parent lock.
+         */
+        void setParentObjectLock(bool lock) {mParentObjectLock = lock;}
+
+        /**
+         * Executing this action will modify the project thus a warning pops up when leaving hal without saving.
+         * @return True if executing the action will modify the project, false otherwise.
+         */
+        bool hasProjectModified() const { return mProjectModified; }
+
     protected:
         UserAction();
         UserActionObject mObject;
-        bool mWaitForReady;
+        UserActionObject mParentObject;
         int mCompoundOrder;
         UserAction *mUndoAction;
         qint64 mTimeStamp;
         bool mObjectLock;
+        bool mParentObjectLock;
+        bool mProjectModified;
 
         static QString setToText(const QSet<u32>& set);
         static QSet<u32> setFromText(const QString& s);
+
+        /**
+         * Utility function to write the parent object.
+         * (Also checks if it is even necessary)
+         *
+         * @param xmlOut - The writer.
+         */
+        void writeParentObjectToXml(QXmlStreamWriter& xmlOut) const;
+
+        /**
+         * Utility function that can be used to read the parent object
+         * if necessary. (Also does the checking)
+         *
+         * @param xmlIn - The reader.
+         */
+        void readParentObjectFromXml(QXmlStreamReader& xmlIn);
     };
 
     /**

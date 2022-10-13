@@ -52,7 +52,7 @@ namespace hal
         void writeToXml(QXmlStreamWriter& xmlOut) const override;
         void readFromXml(QXmlStreamReader& xmlIn) override;
         void addToHash(QCryptographicHash& cryptoHash) const override;
-        void setParentId(u32 pid) {mParentId = pid;}
+        void setParentId(u32 pid) {mParentId = pid;}//todo: remove this, use setParentObject instead
     };
 
     /**

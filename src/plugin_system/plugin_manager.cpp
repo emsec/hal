@@ -67,8 +67,19 @@ namespace hal
                     std::filesystem::path file_path = utils::get_file(dep_file_name_with_ext, m_plugin_folders);
                     if (file_path == "" || !load(dep_plugin_name, file_path))
                     {
-                        log_error("core", "cannot solve dependency '{}' for plugin '{}'", dep_plugin_name, plugin_name);
-                        return false;
+                        bool lib_load_failed = true;
+                        if (strlen(ALTERNATE_LIBRARY_FILE_EXTENSION))
+                        {
+                            dep_file_name_with_ext = file_name + "." + ALTERNATE_LIBRARY_FILE_EXTENSION;
+                            file_path = utils::get_file(dep_file_name_with_ext, m_plugin_folders);
+                            if (file_path != "" && load(dep_plugin_name, file_path))
+                                lib_load_failed  = false;
+                        }
+                        if (lib_load_failed)
+                        {
+                            log_error("core", "cannot solve dependency '{}' for plugin '{}'", dep_plugin_name, plugin_name);
+                            return false;
+                        }
                     }
 
                     log_debug("core", "solved dependency '{}' for plugin '{}'", dep_plugin_name, plugin_name);
