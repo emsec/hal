@@ -562,7 +562,9 @@ namespace hal
         if (mTriggerReset)
         {
             closePython();
+            PyGILState_STATE state = PyGILState_Ensure();
             initPython();
+            PyGILState_Release(state);
             forwardClear();
             mTriggerReset = false;
         }
