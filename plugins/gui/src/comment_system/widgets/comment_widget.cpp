@@ -19,14 +19,13 @@ namespace hal
 {
     CommentWidget::CommentWidget(QWidget *parent) : QWidget(parent)
     {
-//        QVBoxLayout* layout = new QVBoxLayout(this);
-//        _mTemporaryTextOutputForDebuggingOnly_ = new QLabel(this);
-//        layout->addWidget(_mTemporaryTextOutputForDebuggingOnly_);
-
-        mTopLayout = new QVBoxLayout(this);
+        //mTopLayout = new QVBoxLayout(this);
+        mTopLayout = new QGridLayout(this);
         mTopLayout->setMargin(0);
         mTopLayout->setSpacing(0);
         mSearchbar = new Searchbar();
+        mSearchbar->hide();
+
         // top bar
         // 1. Option
         mHeaderLayout = new QHBoxLayout();
@@ -40,7 +39,7 @@ namespace hal
         mHeaderLayout->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Preferred));
         mHeaderLayout->addWidget(mSearchButton);// alignright without spacer
         mHeaderLayout->addWidget(mSearchbar);
-        mTopLayout->addLayout(mHeaderLayout);
+
 
 //        mToolbar = new QToolBar("Title?");
 //        //mToolbar = new Toolbar();
@@ -59,6 +58,8 @@ namespace hal
 
         // comment part
         mCommentsLayout = new QVBoxLayout();
+        mCommentsLayout->setSpacing(0);
+        mCommentsLayout->setMargin(0);
         mScrollArea = new QScrollArea();
         mScrollArea->setWidgetResizable(true);//important as it seems so that the child widget will expandd if possible
         mCommentsContainer = new QWidget();
@@ -77,7 +78,11 @@ namespace hal
 //        //mScrollArea->setWidget(commentImposter);
 //        mCommentsLayout->addWidget(commentImposter);
 //        mCommentsLayout->addWidget(new QLabel("II will be another Comment (hopefully)"));
-        mTopLayout->addWidget(mScrollArea);
+        mTopLayout->addLayout(mHeaderLayout,0,0);
+        mTopLayout->addWidget(mScrollArea, 1, 0);
+        //mTopLayout->addItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Expanding),2,0);
+        mTopLayout->setRowStretch(1, 0);
+
 
         // testing, remove later
         setMinimumWidth(350);
@@ -85,7 +90,7 @@ namespace hal
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
         // connections / logic
         connect(mSearchButton, &QAbstractButton::clicked, this, &CommentWidget::handleSearchbarTriggered);
-
+        connect(mSearchbar, &Searchbar::searchIconClicked, this, &CommentWidget::handleSearchbarTriggered);
     }
 
     CommentWidget::~CommentWidget()
@@ -95,62 +100,61 @@ namespace hal
 
     void CommentWidget::setItem(CommentItem *item)
     {
-        mCommentsLayout->addWidget(item);
+        mCommentsLayout->addWidget(item, 0, Qt::AlignTop);
+    }
+
+    void CommentWidget::addHackySpacer()
+    {
+                QWidget* hackySpacerItem = new QWidget();
+                hackySpacerItem->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+                mCommentsLayout->addWidget(hackySpacerItem);
     }
 
     void CommentWidget::nodeChanged(const Node& nd)
     {
-//        QString txt;
-//        QList<CommentEntry*> ceList = gCommentManager->getEntriesForNode(nd);
-//        for (const CommentEntry* ce : ceList)
-//           txt += ce->getHeader() + "\n  created: " +
-//                   ce->getCreationTime().toString("dd.MM.yyyy hh:mm:ss\n") +
-//                   ce->getText() + "\n-----------\n";
-        //        _mTemporaryTextOutputForDebuggingOnly_->setText(txt);
+        mScrollArea->setWidget(createAndFillCommentContainerFactory(nd));
+    }
 
-
+    QWidget *CommentWidget::createAndFillCommentContainerFactory(const Node &nd)
+    {
+        QWidget* container = new QWidget();
+        QVBoxLayout* containerLayout = new QVBoxLayout(container);
+        containerLayout->setSpacing(0);
+        containerLayout->setMargin(0);
 
         auto commentList = gCommentManager->getEntriesForNode(nd);
-
-        // remove old items (only delete widgets, not actual CommentEntries
-        QLayoutItem* firstItem = nullptr;
-        while((firstItem = mCommentsLayout->takeAt(0)) != nullptr){
-            delete firstItem->widget();
-            delete firstItem;
-        }
-
 
         // create new items
         for(const auto& entry : commentList)
         {
-            qDebug() << "im in this loop!";
-            CommentItem* item = new CommentItem(entry);
-            mCommentsLayout->addWidget(item);
+            CommentItem* item = new CommentItem(entry, container);
+            //item->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
+            containerLayout->addWidget(item);
             item->show();
         }
-        qDebug() << "Count of items: " << mCommentsLayout->count();
-        for(int i = 0; i < mCommentsLayout->count(); i++)
-            qDebug() << "creation: " << dynamic_cast<CommentItem*>(mCommentsLayout->itemAt(i)->widget())->getCreatedDate()->text();
-    }
 
-    void CommentWidget::init_style1()
-    {
-
-    }
-
-    void CommentWidget::init_style2()
-    {
-
+        containerLayout->addStretch();
+        return container;
     }
 
     void CommentWidget::handleSearchbarTriggered()
     {
-        mSearchbar->isHidden() ? mSearchbar->show() : mSearchbar->hide();
+        if(mSearchbar->isHidden())
+        {
+            mSearchButton->hide();
+            mSearchbar->show();
+        }
+        else
+        {
+            mSearchbar->hide();;
+            mSearchButton->show();
+        }
+        //mSearchbar->isHidden() ? mSearchbar->show() : mSearchbar->hide();
     }
 
     void CommentWidget::handleNewCommentTriggered()
     {
-
+        qDebug() << "A new comment wants to be created!";
     }
 
 }

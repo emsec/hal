@@ -29,6 +29,7 @@ namespace hal
         mText = jsonObj["text"].toString();
         qDebug() << "Entry created with date: " << mCreated.toString();
         qDebug() << "In field: " << jsonObj["created"].toString();
+        qDebug() << "Is valid: " << mCreated.isValid();
     }
 
     void CommentEntry::setHeader(QString newHeader)

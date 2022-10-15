@@ -156,6 +156,8 @@ namespace hal
 
         bool getEmitTextWithFlags();
 
+        bool eventFilter(QObject *object, QEvent *event);
+
     Q_SIGNALS:
         /**
          * Q_SIGNAL that is emitted whenever the search string (i.e. the string withing the Searchbar's QLineEdit)
@@ -169,6 +171,9 @@ namespace hal
          * Q_SIGNAL that is emitted whenever the Return/Enter key has been pressed.
          */
         void returnPressed();
+
+        // testing, might be removed
+        void searchIconClicked();
 
     public Q_SLOTS:
         /**

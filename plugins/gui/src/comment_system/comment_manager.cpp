@@ -106,15 +106,16 @@ namespace hal
 
     QList<CommentEntry*> CommentManager::getEntriesForNode(const Node& nd) const
     {
-        QDateTime now = QDateTime::currentDateTime();
-        QMap<qint64,CommentEntry*> entriesFound;
-        auto it = mEntries.find(nd);
-        while (it != mEntries.end() && it.key() == nd)
-        {
-            entriesFound.insert(it.value()->getCreationTime().msecsTo(now),it.value());
-            ++it;
-        }
-        return entriesFound.values();
+//        QDateTime now = QDateTime::currentDateTime();
+//        QMap<qint64,CommentEntry*> entriesFound;
+//        auto it = mEntries.find(nd);
+//        while (it != mEntries.end() && it.key() == nd)
+//        {
+//            entriesFound.insert(it.value()->getCreationTime().msecsTo(now),it.value());
+//            ++it;
+//        }
+//        return entriesFound.values();
+        return mEntries.values(nd);
     }
 
     bool CommentManager::contains(const Node& nd) const

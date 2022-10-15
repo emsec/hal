@@ -32,6 +32,7 @@ class QToolBar;
 class QLabel;
 class QAction;
 class QToolButton;
+class QTextEdit;
 
 namespace hal
 {
@@ -49,8 +50,6 @@ namespace hal
         void updateCurrentEntry();
 
         CommentEntry* getEntry();
-        // temporary debug func
-        QLabel* getCreatedDate(){return mCreationDate;};
 
     Q_SIGNALS:
 
@@ -75,11 +74,9 @@ namespace hal
         QToolButton* mModifyButton;
         QToolButton* mDeleteButton;
 
-        //This can either be an QLabel or an QTextEdit / QPlainTextEdit (TODO: decide...)
-        QLabel* mText;
+        QTextEdit* mTextEdit;
 
         void init();
-        void initV2();
 
         void handleDeleteButtonTriggered();
         void handleModifyButtonTriggered();

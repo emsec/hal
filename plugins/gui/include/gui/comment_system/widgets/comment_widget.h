@@ -28,6 +28,7 @@
 #include <QLabel>
 //#include <QVBoxLayout>
 //#include <QHBoxLayout>
+#include <QGridLayout>
 
 class QVBoxLayout;
 class QHBoxLayout;
@@ -50,14 +51,15 @@ namespace hal
 
         // temporary debug helper function
         void setItem(CommentItem* item);
+        void addHackySpacer();
 
     public Q_SLOTS:
         void nodeChanged(const Node& nd);
 
     private:
         QList<CommentItem*> mEntryItems;
-        QLabel* _mTemporaryTextOutputForDebuggingOnly_;
-        QVBoxLayout* mTopLayout;
+        //QVBoxLayout* mTopLayout;
+        QGridLayout* mTopLayout;
 
         // header part
         QHBoxLayout* mHeaderLayout; //perhaps put in a container?
@@ -74,13 +76,11 @@ namespace hal
 
         // comment part
         QScrollArea* mScrollArea;
+
         QWidget* mCommentsContainer;
         QVBoxLayout* mCommentsLayout;
 
-
-        // temp helper function to test different ways
-        void init_style1();
-        void init_style2();
+        QWidget* createAndFillCommentContainerFactory(const Node& nd);
 
         void handleSearchbarTriggered();
         void handleNewCommentTriggered();

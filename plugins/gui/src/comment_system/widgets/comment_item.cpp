@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <QAction>
 #include <QToolButton>
+#include <QTextEdit>
 #include <QDebug>
 
 
@@ -19,7 +20,7 @@ namespace hal
 
     CommentItem::CommentItem(CommentEntry *entry, QWidget *parent) : QFrame(parent)
     {
-        initV2();
+        init();
         mEntry = entry;
         updateCurrentEntry();
     }
@@ -39,7 +40,8 @@ namespace hal
         if(!mEntry) return;
         mHeader->setText(mEntry->getHeader());
         mCreationDate->setText("  " + mEntry->getCreationTime().toString("dd.MM.yy hh:mm"));
-        mText->setText(mEntry->getText());
+        mTextEdit->setHtml(mEntry->getText());
+        //setFixedHeight(mTopWidget->height()+mText->height());
     }
 
     CommentEntry *CommentItem::getEntry()
@@ -50,54 +52,6 @@ namespace hal
     void CommentItem::init()
     {
         mEntry = nullptr;
-        mLayout = new QVBoxLayout(this);
-        mLayout->setSpacing(0);
-        mLayout->setMargin(0);
-
-        // top part
-        mTopToolbar = new QToolBar(this);
-
-        mHeader = new QLabel(this);
-        mHeader->setStyleSheet("font-weight: bold;");
-        mCreationDate = new QLabel(this);
-        mCreationDate->setStyleSheet("font-size: 12px;");
-
-        mModifyAction = new QAction(this); //icon, text, parent
-        mDeleteAction = new QAction(this);
-
-        // actual comment
-        mText = new QLabel(this);
-        mText->setWordWrap(true);
-
-        // setting up actions
-        mModifyAction->setIcon(QIcon(":/icons/pen"));
-        mDeleteAction->setIcon(QIcon(":/icons/trashcan"));
-
-        //addwidget on a toolbar returns an action -> must this action be saved so it can be deleted later?
-        mTopToolbar->addWidget(mHeader);
-        QWidget* spacer = new QWidget();
-        spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Ignored);
-        //mTopToolbar->addSeparator();
-        mTopToolbar->addWidget(spacer);
-        mTopToolbar->addWidget(mCreationDate);
-        QWidget* spacer2 = new QWidget();
-        spacer2->setFixedWidth(20);
-        //spacer->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Ignored);
-        mTopToolbar->addWidget(spacer2);
-        mTopToolbar->addAction(mModifyAction);
-        mTopToolbar->addAction(mDeleteAction);
-
-        mLayout->addWidget(mTopToolbar);
-        mLayout->addWidget(mText);
-
-        setLayout(mLayout);
-
-        //set max widthh?
-    }
-
-    void CommentItem::initV2()
-    {
-        mEntry = nullptr;
         // TODO: replace fixed sizes (put them in stylesheet / compute them?)
         mLayout = new QVBoxLayout(this);
         mLayout->setSpacing(0);
@@ -106,10 +60,10 @@ namespace hal
         // top part
         mTopWidget = new QWidget(this);
         mTopWidget->setFixedHeight(30);
-        mTopLayout = new QHBoxLayout(this);
+        mTopLayout = new QHBoxLayout(mTopWidget);
         mTopLayout->setSpacing(0);
         mTopLayout->setMargin(0);
-        mTopWidget->setLayout(mTopLayout);
+        //mTopWidget->setLayout(mTopLayout);
 
         mHeader = new QLabel(this);
         mHeader->setStyleSheet("font-weight: bold;");
@@ -129,16 +83,22 @@ namespace hal
         mTopLayout->addWidget(mCreationDate);
         mTopLayout->addWidget(mModifyButton);
         mTopLayout->addWidget(mDeleteButton);
-
+        mTopWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
         // actual comment
-        mText = new QLabel(this);
-        mText->setWordWrap(true);
+        mTextEdit = new QTextEdit(this);
+        mTextEdit->setReadOnly(true);
 
         mLayout->addWidget(mTopWidget);
-        mLayout->addWidget(mText);
+        //mLayout->addWidget(mText);
+        mLayout->addWidget(mTextEdit);
+        mLayout->addStretch();
 
-        setLayout(mLayout);
+//        QWidget* hackySpacer = new QWidget();
+//        hackySpacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+//        mLayout->addWidget(hackySpacer);
+
+        //setLayout(mLayout);
 
         // connections / logic
         connect(mDeleteButton, &QAbstractButton::clicked, this, &CommentItem::handleDeleteButtonTriggered);
