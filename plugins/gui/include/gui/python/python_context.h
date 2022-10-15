@@ -135,12 +135,12 @@ namespace hal
          * Clears the python console.
          *
          */
-        void forwardClear();
+        void scheduleClear();
 
         /**
          * Resets the python console.
          */
-        void forwardReset();
+        void scheduleReset();
 
         /**
          * Assign this object the python console to work with.
@@ -205,6 +205,7 @@ namespace hal
     private:
 
         void handleReset();
+        void handleClear();
 
         // these have to be pointers, otherwise they are destructed after py::finalize_interpreter and segfault
         // only one object for global and local is needed, as for the console we run it always in global scope wher globals() == locals()
@@ -216,6 +217,7 @@ namespace hal
 
         PythonConsole* mConsole;
         bool mTriggerReset;
+        bool mTriggerClear;
         LayoutLocker* mLayoutLocker;
         PythonThread* mThread;
         bool mThreadAborted;

@@ -124,7 +124,7 @@ namespace hal {
         }
         else if (nThreads > 1)
         {
-            // apparently this can acRetually happen if you mess up the C<->Python bindings
+            // apparently this can actually happen if you mess up the C<->Python bindings
             qDebug() << "Oh no! There seem to be multiple threads with the same ID!";
         }
         PyGILState_Release(state);
