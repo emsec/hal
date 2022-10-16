@@ -504,6 +504,11 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
                 }
                 SaleaeInputFile *sf = new SaleaeInputFile(bin_path);
                 SaleaeDataBuffer *db = sf->get_buffered_data(sf->header()->mNumTransitions);
+                if (!db)
+                {
+                    std::cout << "db nullptr: <" << bin_path << ">" << std::endl;
+                    continue;
+                }
                 // save first net_data times in map
                 for (int i = 0; i < db->mCount; i++)
                 {

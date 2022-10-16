@@ -274,6 +274,7 @@ namespace hal {
     void GroupingTableModel::groupingColorChangedEvent(Grouping *grp)
     {
         if (mDisableEvents) return;
+        mDisableEvents = true;
         int irow = 0;
         for (auto it = mGroupings.begin(); it != mGroupings.end(); ++it)
         {
@@ -285,6 +286,7 @@ namespace hal {
             }
             ++irow;
         }
+        mDisableEvents = false;
     }
 
     QString GroupingTableModel::renameGrouping(u32 id, const QString& groupingName)

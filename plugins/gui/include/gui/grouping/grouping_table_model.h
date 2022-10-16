@@ -131,6 +131,7 @@ namespace hal {
 
         QList<GroupingTableEntry> mGroupings;
         QString mAboutToRename;
+        bool mIsHistory = false;
 
         static QString generateUniqueName(const QString& suggestion, const QSet<QString>& existingNames);
     public:
@@ -331,8 +332,6 @@ namespace hal {
          */
         void newEntryAdded(QModelIndex& index);
 
-    private:
-        bool mIsHistory = false;
     };
 
     class GroupingTableHistory : public QList<u32>
