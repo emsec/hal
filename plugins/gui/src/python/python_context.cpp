@@ -425,10 +425,23 @@ namespace hal
             forwardError(errmsg);
 
         if (calledFromEditor)
+        {
             calledFromEditor->handleThreadFinished();
+            if (mTriggerReset)
+            {
+                forwardError("\nreset() can only be used in the Python console!\n");
+                mTriggerReset = false;
+            }
+            if (mTriggerClear)
+            {
+                forwardError("\nclear() can only be used in the Python console!\n");
+                mTriggerClear = false;
+            }
+        }
         else if (mConsole)
         {
             handleReset();
+            handleClear();
             mConsole->handleThreadFinished();
         }
 
@@ -457,14 +470,6 @@ namespace hal
         if (mConsole)
         {
             mConsole->handleError(output);
-        }
-    }
-
-    void PythonContext::forwardClear()
-    {
-        if (mConsole)
-        {
-            mConsole->clear();
         }
     }
 
@@ -562,15 +567,34 @@ namespace hal
         if (mTriggerReset)
         {
             closePython();
+            PyGILState_STATE state = PyGILState_Ensure();
             initPython();
-            forwardClear();
+            PyGILState_Release(state);
+            scheduleClear();
             mTriggerReset = false;
         }
     }
 
-    void PythonContext::forwardReset()
+    void PythonContext::handleClear()
+    {
+        if (mTriggerClear)
+        {
+            if (mConsole)
+            {
+                mConsole->clear();
+            }
+            mTriggerClear = false;
+        }
+    }
+
+    void PythonContext::scheduleReset()
     {
         mTriggerReset = true;
+    }
+
+    void PythonContext::scheduleClear()
+    {
+        mTriggerClear = true;
     }
 
     void PythonContext::updateNetlist()

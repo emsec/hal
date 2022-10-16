@@ -36,8 +36,8 @@ PYBIND11_PLUGIN(hal_gui)
         GUI Console
     )");
 
-    py_console.def("clear", []() -> void { gPythonContext->forwardClear(); });
-    py_console.def("reset", []() -> void { gPythonContext->forwardReset(); });
+    py_console.def("clear", []() -> void { gPythonContext->scheduleClear(); });
+    py_console.def("reset", []() -> void { gPythonContext->scheduleReset(); });
 
     //m.def("history", []() -> void { g_console->printHistory(g_console->m_cmdColor); });
 
