@@ -502,8 +502,8 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
                     std::cout << "Error in database: " << path_1 << "\nCannot open file: " << bin_path << std::endl;
                     exit (1);
                 }
-                SaleaeInputFile *sf = new SaleaeInputFile(bin_path);
-                SaleaeDataBuffer *db = sf->get_buffered_data(sf->header()->mNumTransitions);
+                SaleaeInputFile sf(bin_path);
+                SaleaeDataBuffer *db = sf.get_buffered_data(sf.header()->mNumTransitions);
                 if (!db)
                 {
                     std::cout << "db nullptr: <" << bin_path << ">" << std::endl;
@@ -520,6 +520,7 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
                     cur_net.format_length[1] = (cur_net.format_length[1] < std::to_string(t).length()) ? std::to_string(t).length() : cur_net.format_length[1];
                     cur_net.format_length[2] = (cur_net.format_length[2] < std::to_string(net_data[t].val_1).length()) ? std::to_string(net_data[t].val_1).length() : cur_net.format_length[2];
                 }
+                delete db;
             }
 
             for (const SaleaeDirectoryFileIndex& sdfi : sdne_2.indexes())
@@ -530,9 +531,13 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
                     std::cout << "Error in database: " << path_2 << "\nCannot open file: " << bin_path << std::endl;
                     exit (1);
                 }
-                SaleaeInputFile *sf = new SaleaeInputFile(bin_path);
-                SaleaeDataBuffer *db = sf->get_buffered_data(sf->header()->mNumTransitions);
-
+                SaleaeInputFile sf(bin_path);
+                SaleaeDataBuffer *db = sf.get_buffered_data(sf.header()->mNumTransitions);
+                if (!db)
+                {
+                    std::cout << "db nullptr: <" << bin_path << ">" << std::endl;
+                    continue;
+                }
                 // save second net_data times in map
                 for (int i = 0; i < db->mCount; i++) 
                 {
@@ -570,6 +575,7 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
                     diff_vec.push_back(cur_net);
                     diff_found = true;
                 }
+                delete db;
             }
 
         }
