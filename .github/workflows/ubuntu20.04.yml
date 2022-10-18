@@ -6,6 +6,8 @@ on:
 #    tags:
 #      - v*
 
+timeout-minutes: 120
+
 jobs:
   release-doc:
     name: release-doc
@@ -108,7 +110,7 @@ jobs:
 
       - name: Test
         shell: bash
-        timeout-minutes: 90
+        timeout-minutes: 120
         # Execute tests defined by the CMake configuration.
         # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
         run: |
