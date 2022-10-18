@@ -193,6 +193,7 @@ namespace hal
         static void initializeScript(py::dict* context);
 
         void abortThread();
+        void abortThreadAndWait();
         bool isThreadRunning() const { return mThread != nullptr; }
 
     private Q_SLOTS:

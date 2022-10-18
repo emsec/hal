@@ -70,8 +70,11 @@ namespace hal
 
     void PythonContext::setConsole(PythonConsole* c)
     {
-        mConsole = c;
-        connect(mConsole,&PythonConsole::inputReceived,this,&PythonContext::handleConsoleInputReceived);
+        mConsole = c; // may be nullptr
+        if (c)
+        {
+            connect(mConsole,&PythonConsole::inputReceived,this,&PythonContext::handleConsoleInputReceived);
+        }
     }
 
     PythonThread* PythonContext::currentThread() const
@@ -83,9 +86,14 @@ namespace hal
     {
         if (!mThread) return;
         mThreadAborted = true;
-        qDebug() << "Issue interrupt ...";
         mThread->interrupt();
-        qDebug() << "Done interrupt";
+    }
+
+    void PythonContext::abortThreadAndWait()
+    {
+        if (!mThread) return;
+        abortThread();
+        mThread->wait();
     }
 
     void PythonContext::initializeContext(py::dict* context)
@@ -175,6 +183,7 @@ namespace hal
 
     void PythonContext::closePython()
     {
+        // GIL must be held
         delete mContext;
         mContext = nullptr;
     }
@@ -566,8 +575,8 @@ namespace hal
     {
         if (mTriggerReset)
         {
-            closePython();
             PyGILState_STATE state = PyGILState_Ensure();
+            closePython();
             initPython();
             PyGILState_Release(state);
             scheduleClear();
@@ -599,7 +608,9 @@ namespace hal
 
     void PythonContext::updateNetlist()
     {
+        PyGILState_STATE state = PyGILState_Ensure();
         (*mContext)["netlist"] = gNetlistOwner;    // assign the shared_ptr here, not the raw ptr
+        PyGILState_Release(state);
     }
 
 }    // namespace hal
