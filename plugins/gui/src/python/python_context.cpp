@@ -175,6 +175,7 @@ namespace hal
 
     void PythonContext::closePython()
     {
+        // GIL must be held
         delete mContext;
         mContext = nullptr;
     }
@@ -566,8 +567,8 @@ namespace hal
     {
         if (mTriggerReset)
         {
-            closePython();
             PyGILState_STATE state = PyGILState_Ensure();
+            closePython();
             initPython();
             PyGILState_Release(state);
             scheduleClear();
@@ -599,7 +600,9 @@ namespace hal
 
     void PythonContext::updateNetlist()
     {
+        PyGILState_STATE state = PyGILState_Ensure();
         (*mContext)["netlist"] = gNetlistOwner;    // assign the shared_ptr here, not the raw ptr
+        PyGILState_Release(state);
     }
 
 }    // namespace hal
