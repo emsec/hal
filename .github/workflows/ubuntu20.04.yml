@@ -6,8 +6,6 @@ on:
 #    tags:
 #      - v*
 
-timeout-minutes: 120
-
 jobs:
   release-doc:
     name: release-doc
@@ -19,6 +17,8 @@ jobs:
       fail-fast: false
 
     runs-on: ${{ matrix.runs-on }}
+
+    timeout-minutes: 120
 
     steps:
       - uses: actions/checkout@v2
