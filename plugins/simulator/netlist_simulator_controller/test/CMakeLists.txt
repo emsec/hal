@@ -48,7 +48,7 @@ if(BUILD_TESTS)
     target_link_libraries(runTest-netlist_simulator_controller netlist_simulator_controller test_utils gtest ${LINK_LIBS})
 
     add_test(runTest-netlist_simulator_controller ${CMAKE_BINARY_DIR}/bin/hal_plugins/runTest-netlist_simulator_controller --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runTest-netlist_simulator_controller.xml)
-    set_tests_properties(runTest-netlist_simulator_controller PROPERTIES TIMEOUT 2500)
+    set_tests_properties(runTest-netlist_simulator_controller PROPERTIES TIMEOUT 3600)
 
     if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
         add_sanitizers(runTest-netlist_simulator_controller)
