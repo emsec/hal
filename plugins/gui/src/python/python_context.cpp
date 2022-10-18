@@ -70,8 +70,11 @@ namespace hal
 
     void PythonContext::setConsole(PythonConsole* c)
     {
-        mConsole = c;
-        connect(mConsole,&PythonConsole::inputReceived,this,&PythonContext::handleConsoleInputReceived);
+        mConsole = c; // may be nullptr
+        if (c)
+        {
+            connect(mConsole,&PythonConsole::inputReceived,this,&PythonContext::handleConsoleInputReceived);
+        }
     }
 
     PythonThread* PythonContext::currentThread() const
