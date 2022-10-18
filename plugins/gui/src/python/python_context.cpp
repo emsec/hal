@@ -86,9 +86,14 @@ namespace hal
     {
         if (!mThread) return;
         mThreadAborted = true;
-        qDebug() << "Issue interrupt ...";
         mThread->interrupt();
-        qDebug() << "Done interrupt";
+    }
+
+    void PythonContext::abortThreadAndWait()
+    {
+        if (!mThread) return;
+        abortThread();
+        mThread->wait();
     }
 
     void PythonContext::initializeContext(py::dict* context)
