@@ -44,7 +44,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   * using PEG instead of PyParser to parse whether statement is complete if python version >= 3.9
   * saving all tabs when persisting entire project, even unnamed tabs
   * timer to display abort button if console command runs for more than 5 seconds
-* TODO: call plugins from GUI
 * added context menu entry to add any module or gate to cone view
 * added link feature between entry in module tree view and graphical view, e.g. renaming the module will also rename the view
 * added GUI API for plugins so that plugins can query for input parameter and execution can be triggered by push button
