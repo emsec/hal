@@ -1,28 +1,24 @@
 option(PL_GRAPH_ALGORITHM "PL_GRAPH_ALGORITHM" ON)
 
 if(PL_GRAPH_ALGORITHM OR BUILD_ALL_PLUGINS)
-
     file(GLOB_RECURSE GRAPH_ALGORITHM_INC ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
     file(GLOB_RECURSE GRAPH_ALGORITHM_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
     file(GLOB_RECURSE GRAPH_ALGORITHM_PYTHON_SRC ${CMAKE_CURRENT_SOURCE_DIR}/python/*.cpp)
 
     find_package(IGraph REQUIRED)
+
     if(HAVE_IGRAPH)
         message(STATUS "Found following IGRAPH Libraries")
         message(STATUS "    IGRAPH_INCLUDE_DIRS: ${IGRAPH_INCLUDES}")
         message(STATUS "    IGRAPH_LIBRARIES: ${IGRAPH_LIBRARIES}")
     endif(HAVE_IGRAPH)
 
-    #find_package(LAPACK)
-    #find_package(BLAS)
-    #find_package(SuiteSparse)
-
     hal_add_plugin(graph_algorithm
-                   SHARED
-                   PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/graph_algorithm.rst
-                   HEADER ${GRAPH_ALGORITHM_INC}
-                   SOURCES ${GRAPH_ALGORITHM_SRC} ${GRAPH_ALGORITHM_PYTHON_SRC}
-                   INCLUDES PUBLIC $<BUILD_INTERFACE:${IGRAPH_INCLUDES}>
-                   LINK_LIBRARIES PUBLIC ${IGRAPH_LIBRARIES} 
-                   )
+        SHARED
+        PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/graph_algorithm.rst
+        HEADER ${GRAPH_ALGORITHM_INC}
+        SOURCES ${GRAPH_ALGORITHM_SRC} ${GRAPH_ALGORITHM_PYTHON_SRC}
+        INCLUDES PUBLIC $<BUILD_INTERFACE:${IGRAPH_INCLUDES}>
+        LINK_LIBRARIES PUBLIC ${IGRAPH_LIBRARIES}
+    )
 endif()

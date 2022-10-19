@@ -53,13 +53,13 @@ namespace hal
     {
         ProgramOptions description;
 
-        description.add("--dataflow", "executes the plugin dataflow");
+        description.add("--dataflow", "execute the dataflow plugin");
 
-        description.add("--path", "provide path where results should be stored", {""});
+        description.add("--path", "specify result path", {""});
 
-        description.add("--sizes", "(optional) sizes which should be prioritized", {""});
+        description.add("--sizes", "(optional) specify sizes to be prioritized", {""});
 
-        description.add("--bad_group_size", "(optional) defines the bad group size", {""});
+        description.add("--bad_group_size", "(optional) specify the bad group size", {""});
 
         return description;
     }
