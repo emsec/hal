@@ -1,5 +1,6 @@
-#include "gate_library_test_utils.h"
 #include "hgl_parser/hgl_parser.h"
+
+#include "gate_library_test_utils.h"
 #include "netlist_test_utils.h"
 
 namespace hal
@@ -22,7 +23,7 @@ namespace hal
      *
      * Functions: parse
      */
-    TEST_F(HGLParserTest, check_library) 
+    TEST_F(HGLParserTest, check_library)
     {
         TEST_START
         {
@@ -32,7 +33,7 @@ namespace hal
             auto gl_res = parser.parse(path_lib);
             ASSERT_TRUE(gl_res.is_ok());
             std::unique_ptr<GateLibrary> gl_parsed = gl_res.get();
-            const GateLibrary* gl_original = test_utils::get_gate_library();
+            const GateLibrary* gl_original         = test_utils::get_gate_library();
             ASSERT_NE(gl_parsed.get(), nullptr);
             ASSERT_NE(gl_original, nullptr);
 
