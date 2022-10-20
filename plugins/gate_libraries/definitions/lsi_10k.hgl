@@ -1,5 +1,5 @@
 {
-    "version": 2,
+    "version": 3,
     "library": "lsi_10k",
     "gate_locations": {
         "data_category": "generic",
@@ -10,7 +10,8 @@
         {
             "name": "AN2",
             "types": [
-                "combinational"
+                "combinational",
+                "c_and"
             ],
             "pin_groups": [
                 {
@@ -61,7 +62,8 @@
         {
             "name": "OR2",
             "types": [
-                "combinational"
+                "combinational",
+                "c_or"
             ],
             "pin_groups": [
                 {
@@ -112,7 +114,8 @@
         {
             "name": "IV",
             "types": [
-                "combinational"
+                "combinational",
+                "c_inverter"
             ],
             "pin_groups": [
                 {
@@ -149,7 +152,8 @@
         {
             "name": "IVP",
             "types": [
-                "combinational"
+                "combinational",
+                "c_inverter"
             ],
             "pin_groups": [
                 {
@@ -186,7 +190,8 @@
         {
             "name": "IVA",
             "types": [
-                "combinational"
+                "combinational",
+                "c_inverter"
             ],
             "pin_groups": [
                 {
@@ -223,7 +228,8 @@
         {
             "name": "IVAP",
             "types": [
-                "combinational"
+                "combinational",
+                "c_inverter"
             ],
             "pin_groups": [
                 {
@@ -260,7 +266,9 @@
         {
             "name": "IVDA",
             "types": [
-                "combinational"
+                "combinational",
+                "c_inverter",
+                "c_buffer"
             ],
             "pin_groups": [
                 {
@@ -312,7 +320,9 @@
         {
             "name": "IVDAP",
             "types": [
-                "combinational"
+                "combinational",
+                "c_inverter",
+                "c_buffer"
             ],
             "pin_groups": [
                 {
@@ -364,7 +374,8 @@
         {
             "name": "B5I",
             "types": [
-                "combinational"
+                "combinational",
+                "c_inverter"
             ],
             "pin_groups": [
                 {
@@ -401,7 +412,8 @@
         {
             "name": "B5IP",
             "types": [
-                "combinational"
+                "combinational",
+                "c_inverter"
             ],
             "pin_groups": [
                 {
@@ -438,7 +450,8 @@
         {
             "name": "B4I",
             "types": [
-                "combinational"
+                "combinational",
+                "c_inverter"
             ],
             "pin_groups": [
                 {
@@ -475,7 +488,8 @@
         {
             "name": "B4IP",
             "types": [
-                "combinational"
+                "combinational",
+                "c_inverter"
             ],
             "pin_groups": [
                 {
@@ -512,7 +526,8 @@
         {
             "name": "ND2",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nand"
             ],
             "pin_groups": [
                 {
@@ -563,7 +578,8 @@
         {
             "name": "ND2P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nand"
             ],
             "pin_groups": [
                 {
@@ -614,7 +630,8 @@
         {
             "name": "NR2",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nor"
             ],
             "pin_groups": [
                 {
@@ -665,7 +682,8 @@
         {
             "name": "NR2P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nor"
             ],
             "pin_groups": [
                 {
@@ -716,7 +734,8 @@
         {
             "name": "EN",
             "types": [
-                "combinational"
+                "combinational",
+                "c_xnor"
             ],
             "pin_groups": [
                 {
@@ -767,7 +786,8 @@
         {
             "name": "EO",
             "types": [
-                "combinational"
+                "combinational",
+                "c_xor"
             ],
             "pin_groups": [
                 {
@@ -818,7 +838,8 @@
         {
             "name": "ND3",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nand"
             ],
             "pin_groups": [
                 {
@@ -883,7 +904,8 @@
         {
             "name": "ND3P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nand"
             ],
             "pin_groups": [
                 {
@@ -948,7 +970,8 @@
         {
             "name": "NR3",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nor"
             ],
             "pin_groups": [
                 {
@@ -1013,7 +1036,8 @@
         {
             "name": "NR3P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nor"
             ],
             "pin_groups": [
                 {
@@ -1078,7 +1102,8 @@
         {
             "name": "AN3",
             "types": [
-                "combinational"
+                "combinational",
+                "c_and"
             ],
             "pin_groups": [
                 {
@@ -1143,7 +1168,8 @@
         {
             "name": "OR3",
             "types": [
-                "combinational"
+                "combinational",
+                "c_or"
             ],
             "pin_groups": [
                 {
@@ -1208,7 +1234,8 @@
         {
             "name": "ND4",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nand"
             ],
             "pin_groups": [
                 {
@@ -1287,7 +1314,8 @@
         {
             "name": "ND4P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nand"
             ],
             "pin_groups": [
                 {
@@ -1366,7 +1394,8 @@
         {
             "name": "NR4",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nor"
             ],
             "pin_groups": [
                 {
@@ -1445,7 +1474,8 @@
         {
             "name": "ND5",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nand"
             ],
             "pin_groups": [
                 {
@@ -1538,7 +1568,8 @@
         {
             "name": "AO6",
             "types": [
-                "combinational"
+                "combinational",
+                "c_aoi"
             ],
             "pin_groups": [
                 {
@@ -1603,7 +1634,8 @@
         {
             "name": "AO6P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_aoi"
             ],
             "pin_groups": [
                 {
@@ -1668,7 +1700,8 @@
         {
             "name": "AO7",
             "types": [
-                "combinational"
+                "combinational",
+                "c_oai"
             ],
             "pin_groups": [
                 {
@@ -1733,7 +1766,8 @@
         {
             "name": "AO7P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_oai"
             ],
             "pin_groups": [
                 {
@@ -1798,7 +1832,8 @@
         {
             "name": "AO2",
             "types": [
-                "combinational"
+                "combinational",
+                "c_aoi"
             ],
             "pin_groups": [
                 {
@@ -1877,7 +1912,8 @@
         {
             "name": "AO2P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_aoi"
             ],
             "pin_groups": [
                 {
@@ -1956,7 +1992,8 @@
         {
             "name": "AO4",
             "types": [
-                "combinational"
+                "combinational",
+                "c_oai"
             ],
             "pin_groups": [
                 {
@@ -2035,7 +2072,8 @@
         {
             "name": "AO4P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_oai"
             ],
             "pin_groups": [
                 {
@@ -2114,7 +2152,8 @@
         {
             "name": "AO1",
             "types": [
-                "combinational"
+                "combinational",
+                "c_aoi"
             ],
             "pin_groups": [
                 {
@@ -2193,7 +2232,8 @@
         {
             "name": "AO3",
             "types": [
-                "combinational"
+                "combinational",
+                "c_oai"
             ],
             "pin_groups": [
                 {
@@ -2272,7 +2312,8 @@
         {
             "name": "AO11",
             "types": [
-                "combinational"
+                "combinational",
+                "c_aoi"
             ],
             "pin_groups": [
                 {
@@ -2380,6 +2421,8 @@
             "name": "AN2P",
             "types": [
                 "combinational"
+                ,
+                "c_and"
             ],
             "pin_groups": [
                 {
@@ -2430,7 +2473,8 @@
         {
             "name": "AN3P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_and"
             ],
             "pin_groups": [
                 {
@@ -2495,7 +2539,8 @@
         {
             "name": "AN4",
             "types": [
-                "combinational"
+                "combinational",
+                "c_and"
             ],
             "pin_groups": [
                 {
@@ -2574,7 +2619,8 @@
         {
             "name": "AN4P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_and"
             ],
             "pin_groups": [
                 {
@@ -2653,7 +2699,8 @@
         {
             "name": "OR2P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_or"
             ],
             "pin_groups": [
                 {
@@ -2704,7 +2751,8 @@
         {
             "name": "OR3P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_or"
             ],
             "pin_groups": [
                 {
@@ -2769,7 +2817,8 @@
         {
             "name": "OR4",
             "types": [
-                "combinational"
+                "combinational",
+                "c_or"
             ],
             "pin_groups": [
                 {
@@ -2848,7 +2897,8 @@
         {
             "name": "OR4P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_or"
             ],
             "pin_groups": [
                 {
@@ -2927,48 +2977,49 @@
         {
             "name": "MUX21H",
             "types": [
-                "combinational"
+                "combinational",
+                "c_mux"
             ],
             "pin_groups": [
                 {
                     "name": "A",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "A",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "B",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "B",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "S",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "S",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
@@ -2992,90 +3043,91 @@
         {
             "name": "MUX41",
             "types": [
-                "combinational"
+                "combinational",
+                "c_mux"
             ],
             "pin_groups": [
                 {
                     "name": "D0",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D0",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D1",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D1",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D2",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D2",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D3",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D3",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "A",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "A",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
                 {
                     "name": "B",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "B",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
@@ -3099,7 +3151,8 @@
         {
             "name": "NR5",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nor"
             ],
             "pin_groups": [
                 {
@@ -3192,7 +3245,8 @@
         {
             "name": "ND6",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nand"
             ],
             "pin_groups": [
                 {
@@ -3299,7 +3353,8 @@
         {
             "name": "NR6",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nor"
             ],
             "pin_groups": [
                 {
@@ -3406,7 +3461,8 @@
         {
             "name": "ND8",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nand"
             ],
             "pin_groups": [
                 {
@@ -3541,7 +3597,8 @@
         {
             "name": "NR8",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nor"
             ],
             "pin_groups": [
                 {
@@ -3834,7 +3891,8 @@
         {
             "name": "ND5P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nand"
             ],
             "pin_groups": [
                 {
@@ -3927,7 +3985,8 @@
         {
             "name": "NR5P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nor"
             ],
             "pin_groups": [
                 {
@@ -4020,7 +4079,8 @@
         {
             "name": "ND6P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nand"
             ],
             "pin_groups": [
                 {
@@ -4127,7 +4187,8 @@
         {
             "name": "NR6P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nor"
             ],
             "pin_groups": [
                 {
@@ -4234,7 +4295,8 @@
         {
             "name": "ND8P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nand"
             ],
             "pin_groups": [
                 {
@@ -4369,7 +4431,8 @@
         {
             "name": "NR8P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nor"
             ],
             "pin_groups": [
                 {
@@ -4504,7 +4567,8 @@
         {
             "name": "NR16",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nor"
             ],
             "pin_groups": [
                 {
@@ -4751,7 +4815,8 @@
         {
             "name": "NR16P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nor"
             ],
             "pin_groups": [
                 {
@@ -4998,7 +5063,8 @@
         {
             "name": "ENP",
             "types": [
-                "combinational"
+                "combinational",
+                "c_xnor"
             ],
             "pin_groups": [
                 {
@@ -5049,7 +5115,8 @@
         {
             "name": "EOP",
             "types": [
-                "combinational"
+                "combinational",
+                "c_xor"
             ],
             "pin_groups": [
                 {
@@ -5258,7 +5325,8 @@
         {
             "name": "AO1P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_aoi"
             ],
             "pin_groups": [
                 {
@@ -5337,7 +5405,8 @@
         {
             "name": "AO3P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_oai"
             ],
             "pin_groups": [
                 {
@@ -5416,7 +5485,8 @@
         {
             "name": "AO11P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_aoi"
             ],
             "pin_groups": [
                 {
@@ -5523,48 +5593,49 @@
         {
             "name": "MUX21HP",
             "types": [
-                "combinational"
+                "combinational",
+                "c_mux"
             ],
             "pin_groups": [
                 {
                     "name": "A",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "A",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "B",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "B",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "S",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "S",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
@@ -5588,48 +5659,49 @@
         {
             "name": "MUX21L",
             "types": [
-                "combinational"
+                "combinational",
+                "c_mux"
             ],
             "pin_groups": [
                 {
                     "name": "A",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "A",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "B",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "B",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "S",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "S",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
@@ -5653,48 +5725,49 @@
         {
             "name": "MUX21LP",
             "types": [
-                "combinational"
+                "combinational",
+                "c_mux"
             ],
             "pin_groups": [
                 {
                     "name": "A",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "A",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "B",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "B",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "S",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "S",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
@@ -5718,76 +5791,77 @@
         {
             "name": "MUX31L",
             "types": [
-                "combinational"
+                "combinational",
+                "c_mux"
             ],
             "pin_groups": [
                 {
                     "name": "D0",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D0",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D1",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D1",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D2",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D2",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "A",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "A",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
                 {
                     "name": "B",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "B",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
@@ -5811,76 +5885,77 @@
         {
             "name": "MUX31LP",
             "types": [
-                "combinational"
+                "combinational",
+                "c_mux"
             ],
             "pin_groups": [
                 {
                     "name": "D0",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D0",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D1",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D1",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D2",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D2",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "A",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "A",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
                 {
                     "name": "B",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "B",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
@@ -5904,90 +5979,91 @@
         {
             "name": "MUX41P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_mux"
             ],
             "pin_groups": [
                 {
                     "name": "D0",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D0",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D1",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D1",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D2",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D2",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D3",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D3",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "A",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "A",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
                 {
                     "name": "B",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "B",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
@@ -6011,62 +6087,63 @@
         {
             "name": "MUX21LA",
             "types": [
-                "combinational"
+                "combinational",
+                "c_mux"
             ],
             "pin_groups": [
                 {
                     "name": "SN",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "SN",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
                 {
                     "name": "A",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "A",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "S",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "S",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
                 {
                     "name": "B",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "B",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
@@ -6090,118 +6167,119 @@
         {
             "name": "MUX51H",
             "types": [
-                "combinational"
+                "combinational",
+                "c_mux"
             ],
             "pin_groups": [
                 {
                     "name": "D0",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D0",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D1",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D1",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D2",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D2",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D3",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D3",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D4",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D4",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "A",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "A",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
                 {
                     "name": "B",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "B",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
                 {
                     "name": "C",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "C",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
@@ -6225,118 +6303,119 @@
         {
             "name": "MUX51HP",
             "types": [
-                "combinational"
+                "combinational",
+                "c_mux"
             ],
             "pin_groups": [
                 {
                     "name": "D0",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D0",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D1",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D1",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D2",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D2",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D3",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D3",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D4",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D4",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "A",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "A",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
                 {
                     "name": "B",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "B",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
                 {
                     "name": "C",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "C",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
@@ -6360,160 +6439,161 @@
         {
             "name": "MUX81",
             "types": [
-                "combinational"
+                "combinational",
+                "c_mux"
             ],
             "pin_groups": [
                 {
                     "name": "D0",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D0",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D1",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D1",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D2",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D2",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D3",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D3",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D4",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D4",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D5",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D5",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D6",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D6",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D7",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D7",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "A",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "A",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
                 {
                     "name": "B",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "B",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
                 {
                     "name": "C",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "C",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
@@ -6537,160 +6617,161 @@
         {
             "name": "MUX81P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_mux"
             ],
             "pin_groups": [
                 {
                     "name": "D0",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D0",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D1",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D1",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D2",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D2",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D3",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D3",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D4",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D4",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D5",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D5",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D6",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D6",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "D7",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "D7",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "A",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "A",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
                 {
                     "name": "B",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "B",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
                 {
                     "name": "C",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "C",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
@@ -6714,7 +6795,8 @@
         {
             "name": "AO5",
             "types": [
-                "combinational"
+                "combinational",
+                "c_aoi"
             ],
             "pin_groups": [
                 {
@@ -6779,7 +6861,8 @@
         {
             "name": "AO5P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_aoi"
             ],
             "pin_groups": [
                 {
@@ -6974,7 +7057,8 @@
         {
             "name": "EO3",
             "types": [
-                "combinational"
+                "combinational",
+                "c_xor"
             ],
             "pin_groups": [
                 {
@@ -7039,7 +7123,8 @@
         {
             "name": "EO3P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_xor"
             ],
             "pin_groups": [
                 {
@@ -7104,7 +7189,8 @@
         {
             "name": "AO12",
             "types": [
-                "combinational"
+                "combinational",
+                "c_oai"
             ],
             "pin_groups": [
                 {
@@ -7239,7 +7325,8 @@
         {
             "name": "AO12P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_oai"
             ],
             "pin_groups": [
                 {
@@ -7374,7 +7461,8 @@
         {
             "name": "B1I",
             "types": [
-                "combinational"
+                "combinational",
+                "c_buffer"
             ],
             "pin_groups": [
                 {
@@ -7411,62 +7499,63 @@
         {
             "name": "MUX21LAP",
             "types": [
-                "combinational"
+                "combinational",
+                "c_mux"
             ],
             "pin_groups": [
                 {
                     "name": "SN",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "SN",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
                 {
                     "name": "A",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "A",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "S",
                     "direction": "input",
-                    "type": "none",
+                    "type": "select",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "S",
                             "direction": "input",
-                            "type": "none"
+                            "type": "select"
                         }
                     ]
                 },
                 {
                     "name": "B",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "B",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
@@ -7490,7 +7579,8 @@
         {
             "name": "NR4P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nor"
             ],
             "pin_groups": [
                 {
@@ -11253,7 +11343,9 @@
         {
             "name": "B2I",
             "types": [
-                "combinational"
+                "combinational",
+                "c_buffer",
+                "c_inverter"
             ],
             "pin_groups": [
                 {
@@ -11305,7 +11397,9 @@
         {
             "name": "B2IP",
             "types": [
-                "combinational"
+                "combinational",
+                "c_buffer",
+                "c_inverter"
             ],
             "pin_groups": [
                 {
@@ -11357,7 +11451,9 @@
         {
             "name": "B3I",
             "types": [
-                "combinational"
+                "combinational",
+                "c_buffer",
+                "c_inverter"
             ],
             "pin_groups": [
                 {
@@ -11409,7 +11505,9 @@
         {
             "name": "B3IP",
             "types": [
-                "combinational"
+                "combinational",
+                "c_buffer",
+                "c_inverter"
             ],
             "pin_groups": [
                 {
@@ -11653,20 +11751,21 @@
         {
             "name": "FA1",
             "types": [
-                "combinational"
+                "combinational",
+                "c_full_adder"
             ],
             "pin_groups": [
                 {
                     "name": "CI",
                     "direction": "input",
-                    "type": "none",
+                    "type": "carry",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "CI",
                             "direction": "input",
-                            "type": "none"
+                            "type": "carry"
                         }
                     ]
                 },
@@ -11701,14 +11800,14 @@
                 {
                     "name": "S",
                     "direction": "output",
-                    "type": "none",
+                    "type": "sum",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "S",
                             "direction": "output",
-                            "type": "none",
+                            "type": "sum",
                             "function": "((CI & ((! A) & (! B))) | (((! CI) & (A & (! B))) | (((! CI) & ((! A) & B)) | (CI & (A & B)))))"
                         }
                     ]
@@ -11716,14 +11815,14 @@
                 {
                     "name": "CO",
                     "direction": "output",
-                    "type": "none",
+                    "type": "carry",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "CO",
                             "direction": "output",
-                            "type": "none",
+                            "type": "carry",
                             "function": "((CI & (A & (! B))) | ((CI & ((! A) & B)) | (((! CI) & (A & B)) | (CI & (A & B)))))"
                         }
                     ]
@@ -11733,20 +11832,21 @@
         {
             "name": "FA1A",
             "types": [
-                "combinational"
+                "combinational",
+                "c_full_adder"
             ],
             "pin_groups": [
                 {
                     "name": "CI",
                     "direction": "input",
-                    "type": "none",
+                    "type": "carry",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "CI",
                             "direction": "input",
-                            "type": "none"
+                            "type": "carry"
                         }
                     ]
                 },
@@ -11781,14 +11881,14 @@
                 {
                     "name": "S",
                     "direction": "output",
-                    "type": "none",
+                    "type": "sum",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "S",
                             "direction": "output",
-                            "type": "none",
+                            "type": "sum",
                             "function": "((CI & ((! A) & (! B))) | (((! CI) & (A & (! B))) | (((! CI) & ((! A) & B)) | (CI & (A & B)))))"
                         }
                     ]
@@ -11796,14 +11896,14 @@
                 {
                     "name": "CO",
                     "direction": "output",
-                    "type": "none",
+                    "type": "carry",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "CO",
                             "direction": "output",
-                            "type": "none",
+                            "type": "carry",
                             "function": "((CI & (A & (! B))) | ((CI & ((! A) & B)) | (((! CI) & (A & B)) | (CI & (A & B)))))"
                         }
                     ]
@@ -11813,20 +11913,21 @@
         {
             "name": "FA1AP",
             "types": [
-                "combinational"
+                "combinational",
+                "c_full_adder"
             ],
             "pin_groups": [
                 {
                     "name": "CI",
                     "direction": "input",
-                    "type": "none",
+                    "type": "carry",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "CI",
                             "direction": "input",
-                            "type": "none"
+                            "type": "carry"
                         }
                     ]
                 },
@@ -11861,14 +11962,14 @@
                 {
                     "name": "S",
                     "direction": "output",
-                    "type": "none",
+                    "type": "sum",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "S",
                             "direction": "output",
-                            "type": "none",
+                            "type": "sum",
                             "function": "((CI & ((! A) & (! B))) | (((! CI) & (A & (! B))) | (((! CI) & ((! A) & B)) | (CI & (A & B)))))"
                         }
                     ]
@@ -11876,14 +11977,14 @@
                 {
                     "name": "CO",
                     "direction": "output",
-                    "type": "none",
+                    "type": "carry",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "CO",
                             "direction": "output",
-                            "type": "none",
+                            "type": "carry",
                             "function": "((CI & (A & (! B))) | ((CI & ((! A) & B)) | (((! CI) & (A & B)) | (CI & (A & B)))))"
                         }
                     ]
@@ -11893,20 +11994,21 @@
         {
             "name": "FA1P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_full_adder"
             ],
             "pin_groups": [
                 {
                     "name": "CI",
                     "direction": "input",
-                    "type": "none",
+                    "type": "carry",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "CI",
                             "direction": "input",
-                            "type": "none"
+                            "type": "carry"
                         }
                     ]
                 },
@@ -11941,14 +12043,14 @@
                 {
                     "name": "S",
                     "direction": "output",
-                    "type": "none",
+                    "type": "sum",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "S",
                             "direction": "output",
-                            "type": "none",
+                            "type": "sum",
                             "function": "((CI & ((! A) & (! B))) | (((! CI) & (A & (! B))) | (((! CI) & ((! A) & B)) | (CI & (A & B)))))"
                         }
                     ]
@@ -11956,14 +12058,14 @@
                 {
                     "name": "CO",
                     "direction": "output",
-                    "type": "none",
+                    "type": "carry",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "CO",
                             "direction": "output",
-                            "type": "none",
+                            "type": "carry",
                             "function": "((CI & (A & (! B))) | ((CI & ((! A) & B)) | (((! CI) & (A & B)) | (CI & (A & B)))))"
                         }
                     ]
@@ -11973,7 +12075,8 @@
         {
             "name": "HA1",
             "types": [
-                "combinational"
+                "combinational",
+                "c_half_adder"
             ],
             "pin_groups": [
                 {
@@ -12007,14 +12110,14 @@
                 {
                     "name": "S",
                     "direction": "output",
-                    "type": "none",
+                    "type": "sum",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "S",
                             "direction": "output",
-                            "type": "none",
+                            "type": "sum",
                             "function": "(((! A) & B) | (A & (! B)))"
                         }
                     ]
@@ -12022,14 +12125,14 @@
                 {
                     "name": "CO",
                     "direction": "output",
-                    "type": "none",
+                    "type": "carry",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "CO",
                             "direction": "output",
-                            "type": "none",
+                            "type": "carry",
                             "function": "(A & B)"
                         }
                     ]
@@ -12039,7 +12142,8 @@
         {
             "name": "HA1P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_half_adder"
             ],
             "pin_groups": [
                 {
@@ -12073,14 +12177,14 @@
                 {
                     "name": "S",
                     "direction": "output",
-                    "type": "none",
+                    "type": "sum",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "S",
                             "direction": "output",
-                            "type": "none",
+                            "type": "sum",
                             "function": "(((! A) & B) | (A & (! B)))"
                         }
                     ]
@@ -12088,14 +12192,14 @@
                 {
                     "name": "CO",
                     "direction": "output",
-                    "type": "none",
+                    "type": "carry",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "CO",
                             "direction": "output",
-                            "type": "none",
+                            "type": "carry",
                             "function": "(A & B)"
                         }
                     ]
@@ -13020,28 +13124,28 @@
                 {
                     "name": "S",
                     "direction": "input",
-                    "type": "none",
+                    "type": "set",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "S",
                             "direction": "input",
-                            "type": "none"
+                            "type": "set"
                         }
                     ]
                 },
                 {
                     "name": "R",
                     "direction": "input",
-                    "type": "none",
+                    "type": "reset",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "R",
                             "direction": "input",
-                            "type": "none"
+                            "type": "reset"
                         }
                     ]
                 },
@@ -13095,28 +13199,28 @@
                 {
                     "name": "S",
                     "direction": "input",
-                    "type": "none",
+                    "type": "set",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "S",
                             "direction": "input",
-                            "type": "none"
+                            "type": "set"
                         }
                     ]
                 },
                 {
                     "name": "R",
                     "direction": "input",
-                    "type": "none",
+                    "type": "reset",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "R",
                             "direction": "input",
-                            "type": "none"
+                            "type": "reset"
                         }
                     ]
                 },
@@ -13170,28 +13274,28 @@
                 {
                     "name": "S",
                     "direction": "input",
-                    "type": "none",
+                    "type": "set",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "S",
                             "direction": "input",
-                            "type": "none"
+                            "type": "set"
                         }
                     ]
                 },
                 {
                     "name": "R",
                     "direction": "input",
-                    "type": "none",
+                    "type": "reset",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "R",
                             "direction": "input",
-                            "type": "none"
+                            "type": "reset"
                         }
                     ]
                 },
@@ -13272,7 +13376,9 @@
         {
             "name": "BTS4",
             "types": [
-                "combinational"
+                "combinational",
+                "c_buffer",
+                "tristate"
             ],
             "pin_groups": [
                 {
@@ -13324,7 +13430,9 @@
         {
             "name": "BTS4P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_buffer",
+                "tristate"
             ],
             "pin_groups": [
                 {
@@ -13376,7 +13484,9 @@
         {
             "name": "BTS5",
             "types": [
-                "combinational"
+                "combinational",
+                "c_inverter",
+                "tristate"
             ],
             "pin_groups": [
                 {
@@ -13428,7 +13538,9 @@
         {
             "name": "BTS5P",
             "types": [
-                "combinational"
+                "combinational",
+                "c_inverter",
+                "tristate"
             ],
             "pin_groups": [
                 {
