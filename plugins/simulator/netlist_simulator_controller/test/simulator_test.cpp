@@ -736,7 +736,7 @@ namespace hal
         EXPECT_TRUE(equal);
         TEST_END
     }
-
+/*
     TEST_F(SimulatorTest, sha256)
     {
         // return;
@@ -893,7 +893,7 @@ namespace hal
         EXPECT_TRUE(cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get()));
         TEST_END
     }
-
+*/
     TEST_F(SimulatorTest, bram_lattice)
     {
         // return;

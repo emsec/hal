@@ -4,6 +4,7 @@
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
 #include "gui/gui_globals.h"
+
 #include <QDebug>
 
 namespace hal
@@ -72,7 +73,9 @@ namespace hal
                     gat->set_name(mNewName.toStdString());
                 }
                 else
+                {
                     return false;
+                }
                 break;
             case UserActionObjectType::Net:
                 net = gNetlist->get_net_by_id(mObject.id());
@@ -82,7 +85,9 @@ namespace hal
                     net->set_name(mNewName.toStdString());
                 }
                 else
+                {
                     return false;
+                }
                 break;
             case UserActionObjectType::Grouping:
                 oldName = gContentManager->getGroupingManagerWidget()->getModel()->renameGrouping(mObject.id(), mNewName);
@@ -95,32 +100,44 @@ namespace hal
                     gGraphContextManager->renameGraphContextAction(ctx, mNewName);
                 }
                 else
+                {
                     return false;
+                }
                 break;
-            case UserActionObjectType::Pin:{
+            case UserActionObjectType::Pin: {
                 mod = gNetlist->get_module_by_id(mParentObject.id());
-                if(!mod) return false;
+                if (!mod)
+                {
+                    return false;
+                }
 
-                auto pinResult = mod->get_pin_by_id(mObject.id());
-                if(pinResult.is_error()) return false;
+                auto pin = mod->get_pin_by_id(mObject.id());
+                if (pin == nullptr)
+                {
+                    return false;
+                }
 
-                oldName = QString::fromStdString(pinResult.get()->get_name());
-                auto ret = mod->set_pin_name(pinResult.get(), mNewName.toStdString());
-                if(ret.is_error()) return false;
+                oldName = QString::fromStdString(pin->get_name());
+                mod->set_pin_name(pin, mNewName.toStdString());
             }
-                break;
-        case UserActionObjectType::PinGroup:{
+            break;
+            case UserActionObjectType::PinGroup: {
                 mod = gNetlist->get_module_by_id(mParentObject.id());
-                if(!mod) return false;
+                if (!mod)
+                {
+                    return false;
+                }
 
-                auto pinGroupResult = mod->get_pin_group_by_id(mObject.id());
-                if(pinGroupResult.is_error()) return false;
+                auto pinGroup = mod->get_pin_group_by_id(mObject.id());
+                if (pinGroup == nullptr)
+                {
+                    return false;
+                }
 
-                oldName = QString::fromStdString(pinGroupResult.get()->get_name());
-                auto ret = mod->set_pin_group_name(pinGroupResult.get(), mNewName.toStdString());
-                if(ret.is_error()) return false;
+                oldName = QString::fromStdString(pinGroup->get_name());
+                mod->set_pin_group_name(pinGroup, mNewName.toStdString());
             }
-                break;
+            break;
             default:
                 return false;
         }

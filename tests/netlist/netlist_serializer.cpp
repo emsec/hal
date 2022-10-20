@@ -25,7 +25,6 @@ namespace hal {
 
         virtual void SetUp() 
         {
-            NO_COUT_BLOCK;
             test_utils::init_log_channels();
             plugin_manager::load_all_plugins();
             test_utils::create_sandbox_directory();
@@ -38,7 +37,6 @@ namespace hal {
 
         virtual void TearDown() 
         {
-            NO_COUT_BLOCK;
             plugin_manager::unload_all_plugins();
             test_utils::remove_sandbox_directory();
         }
@@ -129,23 +127,19 @@ namespace hal {
 
             // Set some input/output port names of module 0
             
-            auto res_1 = test_m_0->get_pin_by_net(net_1_3);
-            assert(res_1.is_ok());
-            ModulePin* pin_1 = res_1.get();
-            assert(test_m_0->set_pin_name(pin_1, "test_m_0_net_1_3_in").is_ok());
-            auto res_2 = test_m_0->get_pin_by_net(net_2_0);
-            assert(res_2.is_ok());
-            ModulePin* pin_2 = res_2.get();
-            assert(test_m_0->set_pin_name(pin_2, "test_m_0_net_2_0_in").is_ok());
+            ModulePin* pin_1 = test_m_0->get_pin_by_net(net_1_3);
+            assert(pin_1 != nullptr);
+            assert(test_m_0->set_pin_name(pin_1, "test_m_0_net_1_3_in"));
+            ModulePin* pin_2 = test_m_0->get_pin_by_net(net_2_0);
+            assert(pin_2 != nullptr);
+            assert(test_m_0->set_pin_name(pin_2, "test_m_0_net_2_0_in"));
             assert(test_m_0->create_pin_group("great_group", {pin_1, pin_2}).is_ok());
-            auto res_3 = test_m_0->get_pin_by_net(net_0_4_5);
-            assert(res_3.is_ok());
-            ModulePin* pin_3 = res_3.get();
-            assert(test_m_0->set_pin_name(pin_3, "test_m_0_net_0_4_5_out").is_ok());
-            auto res_4 = test_m_1->get_pin_by_net(net_1_3);
-            assert(res_4.is_ok());
-            ModulePin* pin_4 = res_4.get();
-            assert(test_m_1->set_pin_name(pin_4, "test_m_1_net_1_3_out").is_ok());
+            ModulePin* pin_3 = test_m_0->get_pin_by_net(net_0_4_5);
+            assert(pin_3 != nullptr);
+            assert(test_m_0->set_pin_name(pin_3, "test_m_0_net_0_4_5_out"));
+            ModulePin* pin_4 = test_m_1->get_pin_by_net(net_1_3);
+            assert(pin_4 != nullptr);
+            assert(test_m_1->set_pin_name(pin_4, "test_m_1_net_1_3_out"));
 
             // Store some boolean functions in some gates
             gate_0->add_boolean_function("O_and", BooleanFunction::from_string("I0 & I1").get());
@@ -183,6 +177,8 @@ namespace hal {
              {// Serialize and deserialize the example netlist (with some additions) and compare the result with the original netlist
                  auto nl = create_example_serializer_netlist();
 
+
+
                  // Serialize and deserialize the netlist now
                  std::filesystem::path test_hal_file_path = test_utils::create_sandbox_path("test_hal_file.hal");
                  ASSERT_TRUE(netlist_serializer::serialize_to_file(nl.get(), test_hal_file_path));
@@ -209,22 +205,18 @@ namespace hal {
                  test_m_0_flipped->set_data("category", "key_3", "data_type", "test_value");
 
                  // Set some input/output port names of module 0
-                 auto res_1 = test_m_0_flipped->get_pin_by_net((nl->get_net_by_id(13)));
-                 ASSERT_TRUE(res_1.is_ok());
-                 ModulePin* pin_1 = res_1.get();
-                 ASSERT_TRUE(test_m_0_flipped->set_pin_name(pin_1, "test_m_0_flipped_net_1_3_in").is_ok());
-                 auto res_2 = test_m_0_flipped->get_pin_by_net((nl->get_net_by_id(20)));
-                 ASSERT_TRUE(res_2.is_ok());
-                 ModulePin* pin_2 = res_2.get();
-                 ASSERT_TRUE(test_m_0_flipped->set_pin_name(pin_2, "test_m_0_flipped_net_2_0_in").is_ok());
-                 auto res_3 = test_m_0_flipped->get_pin_by_net((nl->get_net_by_id(45)));
-                 ASSERT_TRUE(res_3.is_ok());
-                 ModulePin* pin_3 = res_3.get();
-                 ASSERT_TRUE(test_m_0_flipped->set_pin_name(pin_3, "test_m_0_flipped_net_0_4_5_out").is_ok());
-                 auto res_4 = test_m_1_flipped->get_pin_by_net((nl->get_net_by_id(13)));
-                 ASSERT_TRUE(res_4.is_ok());
-                 ModulePin* pin_4 = res_4.get();
-                 ASSERT_TRUE(test_m_1_flipped->set_pin_name(pin_4, "test_m_1_flipped_net_1_3_out").is_ok());
+                 ModulePin* pin_1 = test_m_0_flipped->get_pin_by_net((nl->get_net_by_id(13)));
+                 ASSERT_NE(pin_1, nullptr);
+                 ASSERT_TRUE(test_m_0_flipped->set_pin_name(pin_1, "test_m_0_flipped_net_1_3_in"));
+                 ModulePin* pin_2 = test_m_0_flipped->get_pin_by_net((nl->get_net_by_id(20)));
+                 ASSERT_NE(pin_2, nullptr);
+                 ASSERT_TRUE(test_m_0_flipped->set_pin_name(pin_2, "test_m_0_flipped_net_2_0_in"));
+                 ModulePin* pin_3 = test_m_0_flipped->get_pin_by_net((nl->get_net_by_id(45)));
+                 ASSERT_NE(pin_3, nullptr);
+                 ASSERT_TRUE(test_m_0_flipped->set_pin_name(pin_3, "test_m_0_flipped_net_0_4_5_out"));
+                 ModulePin* pin_4 = test_m_1_flipped->get_pin_by_net((nl->get_net_by_id(13)));
+                 ASSERT_NE(pin_4, nullptr);
+                 ASSERT_TRUE(test_m_1_flipped->set_pin_name(pin_4, "test_m_1_flipped_net_1_3_out"));
 
                  // Serialize and deserialize the netlist now
                  std::filesystem::path test_hal_file_path = test_utils::create_sandbox_path("test_hal_file.hal");

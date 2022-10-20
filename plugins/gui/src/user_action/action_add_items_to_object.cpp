@@ -3,8 +3,8 @@
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/layout_locker.h"
 #include "gui/gui_globals.h"
-#include "gui/user_action/action_remove_items_from_object.h"
 #include "gui/user_action/action_create_object.h"
+#include "gui/user_action/action_remove_items_from_object.h"
 #include "gui/user_action/user_action_compound.h"
 #include "hal_core/netlist/grouping.h"
 
@@ -173,58 +173,85 @@ namespace hal
                 else
                     return false;
                 break;
-            case UserActionObjectType::PinGroup:
-            {
-                if(mPins.empty())
+            case UserActionObjectType::PinGroup: {
+                if (mPins.empty())
                     return true;
 
                 auto mod = gNetlist->get_module_by_id(mParentObject.id());
-                if(mod)
+                if (mod)
                 {
-                    auto pinGrpRes = mod->get_pin_group_by_id(mObject.id());
+                    auto* pinGrp = mod->get_pin_group_by_id(mObject.id());
                     QHash<u32, QSet<u32>> sourceGroups;
-                    if(pinGrpRes.is_error())
+                    if (pinGrp == nullptr)
+                    {
                         return false;
-                    for(auto id : mPins)
-                        if(auto res = mod->get_pin_by_id(id); res.is_ok())
-                            sourceGroups[res.get()->get_group().first->get_id()].insert(id);
+                    }
+                    for (auto id : mPins)
+                    {
+                        if (auto* pin = mod->get_pin_by_id(id); pin != nullptr)
+                        {
+                            sourceGroups[pin->get_group().first->get_id()].insert(id);
+                        }
                         else
+                        {
                             return false;
+                        }
+                    }
 
-                    for(auto id : mPins)
-                        mod->assign_pin_to_group(pinGrpRes.get(), mod->get_pin_by_id(id).get(), false);
+                    for (auto id : mPins)
+                    {
+                        if (mod->assign_pin_to_group(pinGrp, mod->get_pin_by_id(id), false).is_error())
+                        {
+                            return false;
+                        }
+                    }
 
                     UserActionCompound* undo = new UserActionCompound;
-                    for(auto it = sourceGroups.constBegin(); it != sourceGroups.constEnd(); it++)
+                    for (auto it = sourceGroups.constBegin(); it != sourceGroups.constEnd(); it++)
                     {
-                        auto group = mod->get_pin_group_by_id(it.key()).get();
-                        if(group->empty())
+                        auto* group = mod->get_pin_group_by_id(it.key());
+                        if (group == nullptr)
+                        {
+                            return false;
+                        }
+                        if (group->empty())
                         {
                             UserActionCompound* act = new UserActionCompound;
                             act->setUseCreatedObject();
                             ActionCreateObject* crtAct = new ActionCreateObject(UserActionObjectType::PinGroup, QString::fromStdString(group->get_name()));
                             crtAct->setParentObject(mParentObject);
                             ActionAddItemsToObject* addAction = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), it.value());
-                            if(mUsedInCreateContext) addAction->mDeleteSource = false;
+                            if (mUsedInCreateContext)
+                            {
+                                addAction->mDeleteSource = false;
+                            }
                             act->addAction(crtAct);
                             act->addAction(addAction);
                             undo->addAction(act);
-                            if(mDeleteSource)
-                                mod->delete_pin_group(group);
+                            if (mDeleteSource)
+                            {
+                                if (mod->delete_pin_group(group).is_error())
+                                {
+                                    return false;
+                                }
+                            }
                         }
                         else
                         {
                             ActionAddItemsToObject* act = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), it.value());
                             act->setObject(UserActionObject(it.key(), UserActionObjectType::PinGroup));
                             act->setParentObject(mParentObject);
-                            if(mUsedInCreateContext) act->mDeleteSource = false;
+                            if (mUsedInCreateContext)
+                            {
+                                act->mDeleteSource = false;
+                            }
                             undo->addAction(act);
                         }
                     }
                     mUndoAction = undo;
                 }
             }
-                break;
+            break;
             default:
                 return false;
         }

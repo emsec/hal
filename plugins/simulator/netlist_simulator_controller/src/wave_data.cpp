@@ -1,11 +1,9 @@
 #include "netlist_simulator_controller/wave_data.h"
 #include "netlist_simulator_controller/saleae_file.h"
-#include "netlist_simulator_controller/wave_event.h"
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
 #include "netlist_simulator_controller/simulation_settings.h"
 #include "netlist_simulator_controller/wave_data_provider.h"
 #include "hal_core/netlist/net.h"
-#include "hal_core/utilities/log.h"
 #include <math.h>
 #include <vector>
 #include <QString>
@@ -1292,17 +1290,20 @@ namespace hal {
 
         mTimeframe.setSceneMaxTime(tmax);
         if (mustUpdateClocks) updateClocks();
+        qDebug() << "setMaxTime-Tfc" << mTimeframe.sceneMaxTime();
         Q_EMIT timeframeChanged(&mTimeframe);
     }
 
     void WaveDataList::emitTimeframeChanged()
     {
+        qDebug() << "emitTimeframeChanged-Tfc" << mTimeframe.sceneMaxTime();
         Q_EMIT timeframeChanged(&mTimeframe);
     }
 
     void WaveDataList::incrementSimulTime(u64 deltaT)
     {
         mTimeframe.mSimulateMaxTime += deltaT;
+        qDebug() << "incrementSimulTime-Tfc" << mTimeframe.mSimulateMaxTime << ">" << mTimeframe.mSceneMaxTime;
         if (mTimeframe.mSimulateMaxTime > mTimeframe.mSceneMaxTime)
             setMaxTime(mTimeframe.mSimulateMaxTime);
     }
@@ -1322,6 +1323,7 @@ namespace hal {
                 wd->clear();
             }
         }
+        qDebug() << "setUserTimeframe-Tfc" << mTimeframe.sceneMaxTime();
         Q_EMIT timeframeChanged(&mTimeframe);
     }
 
@@ -1333,8 +1335,9 @@ namespace hal {
             Q_EMIT waveRemoved(-1);
         setMaxTime(0);
         for (auto it=begin(); it!=end(); ++it)
-            delete *it;
+            mTrashCan.append(*it);
         clear();
+        emptyTrash();
     }
 
     void WaveDataList::dump() const
@@ -1397,6 +1400,21 @@ namespace hal {
         Q_EMIT groupUpdated(grpId);
     }
 
+    void WaveDataList::emptyTrash()
+    {
+        auto it = mTrashCan.begin();
+        while (it != mTrashCan.end())
+        {
+            if ((*it)->hasSubscriber())
+                ++it;
+            else
+            {
+                delete (*it);
+                it = mTrashCan.erase(it);
+            }
+        }
+    }
+
     void WaveDataList::updateWaveData(int inx)
     {
         WaveData* wd = at(inx);
@@ -1450,7 +1468,8 @@ namespace hal {
     {
         int iwave = waveIndexByNetId(id);
         if (iwave<0) return;
-        Q_EMIT waveAdded(iwave);
+        // ugly but save. While emit is not const because of Q_SIGNAL syntax it will not modify object
+        const_cast<WaveDataList*>(this)->emitWaveAdded(iwave);
     }
 
     void WaveDataList::registerTrigger(WaveDataTrigger *wdTrig)
@@ -1506,6 +1525,7 @@ namespace hal {
     void WaveDataList::registerGroup(WaveDataGroup *grp)
     {
         u32 grpId = grp->id();
+        if (!grpId) return;
         Q_ASSERT(!mDataGroups.contains(grpId));
         mDataGroups.insert(grpId,grp);
         if (grpId)
@@ -1546,7 +1566,7 @@ namespace hal {
         if (!grp) return;
         Q_EMIT groupAboutToBeRemoved(grp);
         mSaleaeDirectory.remove_composed(grpId,SaleaeDirectoryNetEntry::Group);
-        delete grp;
+        mTrashCan.append(grp);
     }
 
     void WaveDataList::replaceWaveData(int inx, WaveData* wdNew)
@@ -1569,7 +1589,7 @@ namespace hal {
 
 
         emitWaveUpdated(inx);
-        delete wdOld;
+        mTrashCan.append(wdOld);
         triggerEndResetModel();
     }
 
@@ -1601,7 +1621,7 @@ namespace hal {
             if (wd->loadPolicy() == WaveData::LoadAllData)
                 wd->loadSaleae(mTimeframe);
             emitWaveUpdated(i);
-            delete it.value();
+            mTrashCan.append(it.value());
             saleaeWaves.erase(it);
         }
 
@@ -1706,7 +1726,7 @@ namespace hal {
         removeAt(inx);
         restoreIndex();
         Q_EMIT waveRemoved(inx);
-        delete toDelete;
+        mTrashCan.append(toDelete);
     }
 
     void WaveDataList::setValueForEmpty(int val)

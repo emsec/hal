@@ -1,9 +1,7 @@
 #include "gui/selection_details_widget/net_details_widget/endpoint_table_model.h"
 
-#include "hal_core/netlist/net.h"
-
 #include "gui/gui_globals.h"
-
+#include "hal_core/netlist/net.h"
 
 namespace hal
 {
@@ -35,16 +33,20 @@ namespace hal
 
     QVariant EndpointTableModel::data(const QModelIndex& index, int role) const
     {
-        if(index.row() < mEntries.size() && index.column() < 4)
+        if (index.row() < mEntries.size() && index.column() < 4)
         {
             if (role == Qt::DisplayRole)
             {
                 switch (index.column())
                 {
-                case 0: return mEntries[index.row()].name;
-                case 1: return mEntries[index.row()].id;
-                case 2: return mEntries[index.row()].type;
-                case 3: return mEntries[index.row()].pin;
+                    case 0:
+                        return mEntries[index.row()].name;
+                    case 1:
+                        return mEntries[index.row()].id;
+                    case 2:
+                        return mEntries[index.row()].type;
+                    case 3:
+                        return mEntries[index.row()].pin;
                 }
             }
         }
@@ -54,18 +56,23 @@ namespace hal
 
     QVariant EndpointTableModel::headerData(int section, Qt::Orientation orientation, int role) const
     {
-        if(role != Qt::DisplayRole)
+        if (role != Qt::DisplayRole)
             return QVariant();
 
-        if(orientation == Qt::Horizontal)
+        if (orientation == Qt::Horizontal)
         {
-            switch(section)
+            switch (section)
             {
-            case 0: return "Name";
-            case 1: return "ID";
-            case 2: return "Type";
-            case 3: return "Pin";
-            default: return QVariant();
+                case 0:
+                    return "Name";
+                case 1:
+                    return "ID";
+                case 2:
+                    return "Type";
+                case 3:
+                    return "Pin";
+                default:
+                    return QVariant();
             }
         }
 
@@ -74,7 +81,7 @@ namespace hal
 
     void EndpointTableModel::setNet(Net* net)
     {
-        if(net == nullptr)
+        if (net == nullptr)
             return;
 
         mNetId = net->get_id();
@@ -93,9 +100,9 @@ namespace hal
             Entry newEntry;
 
             newEntry.name = QString::fromStdString(e->get_gate()->get_name());
-            newEntry.id = e->get_gate()->get_id();
+            newEntry.id   = e->get_gate()->get_id();
             newEntry.type = QString::fromStdString(e->get_gate()->get_type()->get_name());
-            newEntry.pin = QString::fromStdString(e->get_pin());
+            newEntry.pin  = QString::fromStdString(e->get_pin()->get_name());
 
             newEntryList.append(newEntry);
         }
@@ -115,7 +122,7 @@ namespace hal
         return mEntries[index.row()].id;
     }
 
-    QString EndpointTableModel::getPinNameFromIndex(const QModelIndex &index)
+    QString EndpointTableModel::getPinNameFromIndex(const QModelIndex& index)
     {
         return mEntries.at(index.row()).pin;
     }
@@ -132,4 +139,4 @@ namespace hal
     {
         return mType;
     }
-}
+}    // namespace hal

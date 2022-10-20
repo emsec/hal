@@ -407,6 +407,7 @@ namespace hal {
     void WaveTreeView::reorder()
     {
         mItemOrder.clear();
+        mWaveDataList->emptyTrash();
         orderRecursion(QModelIndex());
 
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());

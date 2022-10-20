@@ -350,7 +350,10 @@ namespace hal
     {
         for (GraphContext* context : mContextTableModel->list())
             if (context->modules().contains(m->get_id()))
+            {
+                context->updateNets();
                 context->scheduleSceneUpdate();
+            }
     }
 
     void GraphContextManager::handleGateRemoved(Gate* g) const

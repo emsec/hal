@@ -1,9 +1,7 @@
 #include "netlist_simulator_controller/netlist_simulator_controller.h"
 #include "netlist_simulator_controller/simulation_input.h"
 #include "netlist_simulator_controller/simulation_engine.h"
-#include "netlist_simulator_controller/dummy_engine.h"
 #include "netlist_simulator_controller/saleae_directory.h"
-#include "netlist_simulator_controller/saleae_file.h"
 #include "netlist_simulator_controller/saleae_parser.h"
 
 #include "netlist_simulator_controller/wave_data.h"
@@ -11,26 +9,21 @@
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
 #include "netlist_simulator_controller/simulation_settings.h"
 #include "hal_core/netlist/project_manager.h"
-#include "hal_core/netlist/module.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/json_write_document.h"
-#include "hal_core/plugin_system/plugin_manager.h"
-#include "hal_version.h"
 
 #include <QFile>
+#include <QCoreApplication>
 #include <QDate>
 #include <QVector>
 #include <QTemporaryDir>
 #include <QDebug>
-#include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/log.h"
-#include "hal_core/netlist/netlist_utils.h"
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
 #include "rapidjson/document.h"
-#include "rapidjson/reader.h"
 #include "rapidjson/filereadstream.h"
 
 namespace hal
@@ -376,6 +369,8 @@ namespace hal
         }
 
         mWaveDataList->setValueForEmpty(0);
+        mWaveDataList->emitTimeframeChanged();
+        qApp->processEvents();
 
         for (auto it = mBadAssignInputWarnings.constBegin(); it != mBadAssignInputWarnings.constEnd(); ++it)
             if (it.value() > 3)
@@ -387,8 +382,6 @@ namespace hal
             const WaveData* wd;
             QMap<u64,int>::const_iterator it;
         };
-
-        QMultiMap<u64,WaveIterator> nextInTimeLine;
 
         // generate clock events if required
         if (mSimulationEngine->clock_events_required())
@@ -410,6 +403,7 @@ namespace hal
             }
         }
 
+        qApp->processEvents();
         persist();
 
         if (!mSimulationEngine->setSimulationInput(mSimulationInput))
@@ -766,6 +760,11 @@ namespace hal
 
     void NetlistSimulatorController::add_clock_period(const Net* clock_net, u64 period, bool start_at_zero, u64 duration)
     {
+        if (!period)
+        {
+            log_warning(get_name(), "Generating clock failed, period must not be zero!");
+            return;
+        }
         SimulationInput::Clock clk;
         clk.clock_net     = clock_net;
         clk.switch_time   = period / 2;

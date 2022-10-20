@@ -22,7 +22,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_gate.def ("__hash__", &Gate::get_hash, R"(
+        py_gate.def("__hash__", &Gate::get_hash, R"(
             Python requires hash for set and dict container.
 
             :returns: The hash.
@@ -182,24 +182,33 @@ namespace hal
             :rtype: hal_py.Grouping
         )");
 
-        py_gate.def("get_boolean_function", &Gate::get_boolean_function, py::arg("name") = "", R"(
-            Get the boolean function associated with a specific name. This name can for example be an output pin of the gate or a defined functionality like "reset".
-            If name is empty, the function of the first output pin is returned. If there is no function for the given name, the constant 'X' is returned.
+        py_gate.def("get_boolean_function", py::overload_cast<const std::string&>(&Gate::get_boolean_function, py::const_), py::arg("name"), R"(
+            Get the Boolean function specified by the given name.
+            This name can for example be an output pin of the gate or any other user-defined function name.
 
-            :param str name: The function name.
-            :returns: The boolean function.
+            :param str name: The name.
+            :returns: The Boolean function on success, an empty Boolean function otherwise.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_gate.def("get_boolean_function", py::overload_cast<const GatePin*>(&Gate::get_boolean_function, py::const_), py::arg("pin") = nullptr, R"(
+            Get the Boolean function corresponding to the given output pin.
+            If pin is None, the Boolean function of the first output pin is returned.
+
+            :param hal_py.GatePin pin: The pin.
+            :returns: The Boolean function on success, an empty Boolean function otherwise.
             :rtype: hal_py.BooleanFunction
         )");
 
         py_gate.def_property_readonly(
             "boolean_functions", [](Gate* g) { return g->get_boolean_functions(); }, R"(
-            A dictionary from function name to boolean function for all boolean functions associated with this gate.
+            A dictionary from function name to Boolean function for all boolean functions associated with this gate.
 
             :rtype: dict[str,hal_py.BooleanFunction]
         )");
 
         py_gate.def("get_boolean_functions", &Gate::get_boolean_functions, py::arg("only_custom_functions") = false, R"(
-            Get a dictionary from function name to boolean function for all boolean functions associated with this gate.
+            Get a dictionary from function name to Boolean function for all boolean functions associated with this gate.
 
             :param bool only_custom_functions: If true, this returns only the functions which were set via :func:`add_boolean_function`.
             :returns: A map from function name to function.
@@ -207,9 +216,9 @@ namespace hal
         )");
 
         py_gate.def("add_boolean_function", &Gate::add_boolean_function, py::arg("name"), py::arg("func"), R"(
-            Add the boolean function with the specified name only for this gate.
+            Add a Boolean function with the given name to the gate.
 
-            :param str name:  The function name, usually an output port.
+            :param str name: The name.
             :param hal_py.BooleanFunction func:  The function.
             :returns: True on success, False otherwise.
             :rtype: bool
@@ -257,109 +266,120 @@ namespace hal
             :rtype: bool
         )");
 
-        py_gate.def_property_readonly("input_pins", &Gate::get_input_pins, R"(
-            A list of all input pin types of the gate.
-
-            :type: list[str]
-        )");
-
-        py_gate.def("get_input_pins", &Gate::get_input_pins, R"(
-            Get a list of all input pin types of the gate.
-
-            :returns: A list of input pin types.
-            :rtype: list[str]
-        )");
-
-        py_gate.def_property_readonly("output_pins", &Gate::get_output_pins, R"(
-            A list of all output pin types of the gate.
-
-            :type: list[str]
-        )");
-
-        py_gate.def("get_output_pins", &Gate::get_output_pins, R"(
-            Get a list of all output pin types of the gate.
-
-            :returns: A list of output pin types.
-            :rtype: list[str]
-        )");
-
         py_gate.def_property_readonly("fan_in_nets", &Gate::get_fan_in_nets, R"(
-            A list of all fan-in nets of the gate, i.e. all nets that are connected to one of the input pins.
+            A list of all fan-in nets of the gate, i.e., all nets that are connected to one of the input pins.
 
             :type: list[hal_py.Net]
         )");
 
         py_gate.def("get_fan_in_nets", &Gate::get_fan_in_nets, R"(
-            Get a list of all fan-in nets of the gate, i.e. all nets that are connected to one of the input pins.
+            Get a list of all fan-in nets of the gate, i.e., all nets that are connected to one of the input pins.
 
-            :returns: A list of all connected input nets.
+            :returns: A list of all fan-in endpoints.
             :rtype: list[hal_py.Net]
         )");
 
-        py_gate.def("get_fan_out_endpoints", &Gate::get_fan_out_endpoints, R"(
-            Get a list of all fan-out endpoints of the gate,
-            i.e. all connected endpoints that represent an output pin of this gate.
+        py_gate.def_property_readonly("fan_in_endpoints", &Gate::get_fan_in_endpoints, R"(
+            A list of all fan-in endpoints of the gate, i.e., all endpoints associated with an input pin of the gate.
 
-            :returns: A list of all output endpoints.
-            :rtype: list[hal_py.Endpoint]
-        )");
-
-        py_gate.def("get_fan_in_net", &Gate::get_fan_in_net, py::arg("pin"), R"(
-            Get the fan-in net which is connected to a specific input pin.
-            If the input pin type is unknown or no net is connected, *None* is returned.
-
-            :param str pin: The input pin type.
-            :returns: The connected input net.
-            :rtype: hal_py.Net
-        )");
-
-        py_gate.def("get_fan_in_endpoint", &Gate::get_fan_in_endpoint, py::arg("pin"), R"(
-            Get the fan-out endpoint which represents a specific input pin.
-            If the input pin type is unknown or no net is connected, *None* is returned.
-
-            :param str pin: The output pin type.
-            :returns: The output endpoint.
-            :rtype: hal_py.Endpoint
-        )");
-
-        py_gate.def_property_readonly("fan_out_nets", &Gate::get_fan_out_nets, R"(
-            A list of all fan-out nets of the gate, i.e. all nets that are connected to one of the output pins.
-
-            :returns: A list of all connected output nets.
-            :rtype: list[hal_py.Net]
-        )");
-
-        py_gate.def("get_fan_out_nets", &Gate::get_fan_out_nets, R"(
-            Get a list of all fan-out nets of the gate, i.e. all nets that are connected to one of the output pins.
-
-            :returns: A list of all connected output nets.
-            :rtype: list[hal_py.Net]
+            :type: list[hal_py.Endpoint]
         )");
 
         py_gate.def("get_fan_in_endpoints", &Gate::get_fan_in_endpoints, R"(
-            Get a list of all fan-in endpoints of the gate,
-            i.e. all connected endpoints that represent an input pin of this gate.
+            Get a list of all fan-in endpoints of the gate, i.e., all endpoints associated with an input pin of the gate.
 
-            :returns: A list of all connected input endpoints.
+            :returns: A list of all fan-in endpoints.
             :rtype: list[hal_py.Endpoint]
         )");
 
-        py_gate.def("get_fan_out_net", &Gate::get_fan_out_net, py::arg("pin"), R"(
-            Get the fan-out net which is connected to a specific output pin.
-            If the output pin type is unknown or no net is connected, *None* is returned.
+        py_gate.def("get_fan_in_net", py::overload_cast<const std::string&>(&Gate::get_fan_in_net, py::const_), py::arg("pin_name"), R"(
+            Get the fan-in endpoint corresponding to the input pin specified by name.
 
-            :param str pin: The output pin type.
-            :returns: The connected output net.
-            :rtype: hal_py.Net
+            :param str pin_name: The input pin name.
+            :returns: The fan-in net on success, None otherwise.
+            :rtype: hal_py.Net or None
         )");
 
-        py_gate.def("get_fan_out_endpoint", &Gate::get_fan_out_endpoint, py::arg("pin"), R"(
-            Get the fan-out endpoint which represents a specific output pin.
-            If the input pin type is unknown or no net is connected to the respective pin, *None* is returned.
+        py_gate.def("get_fan_in_net", py::overload_cast<const GatePin*>(&Gate::get_fan_in_net, py::const_), py::arg("pin"), R"(
+            Get the fan-in endpoint corresponding to the specified input pin.
 
-            :param str pin: The output pin type.
-            :returns: The connected output endpoint.
-            :rtype: hal_py.Endpoint
+            :param hal_py.GatePin pin: The input pin.
+            :returns: The fan-in net on success, None otherwise.
+            :rtype: hal_py.Net or None
+        )");
+
+        py_gate.def("get_fan_in_endpoint", py::overload_cast<const std::string&>(&Gate::get_fan_in_endpoint, py::const_), py::arg("pin_name"), R"(
+            Get the fan-in endpoint corresponding to the input pin specified by name.
+
+            :param str pin_name: The input pin name.
+            :returns: The endpoint on success, None otherwise.
+            :rtype: hal_py.Endpoint or None
+        )");
+
+        py_gate.def("get_fan_in_endpoint", py::overload_cast<const GatePin*>(&Gate::get_fan_in_endpoint, py::const_), py::arg("pin"), R"(
+            Get the fan-in endpoint corresponding to the specified input pin.
+
+            :param str pin_name: The input pin.
+            :returns: The endpoint on success, None otherwise.
+            :rtype: hal_py.Endpoint or None
+        )");
+
+        py_gate.def_property_readonly("fan_out_nets", &Gate::get_fan_out_nets, R"(
+            A list of all fan-out nets of the gate, i.e., all nets that are connected to one of the output pins.
+
+            :type: list[hal_py.Net]
+        )");
+
+        py_gate.def("get_fan_out_nets", &Gate::get_fan_out_nets, R"(
+            Get a list of all fan-out nets of the gate, i.e., all nets that are connected to one of the output pins.
+
+            :returns: A list of all fan-out endpoints.
+            :rtype: list[hal_py.Net]
+        )");
+
+        py_gate.def_property_readonly("fan_out_endpoints", &Gate::get_fan_out_endpoints, R"(
+            A list of all fan-out endpoints of the gate, i.e., all endpoints associated with an output pin of the gate.
+
+            :type: list[hal_py.Endpoint]
+        )");
+
+        py_gate.def("get_fan_out_endpoints", &Gate::get_fan_out_endpoints, R"(
+            Get a list of all fan-out endpoints of the gate, i.e., all endpoints associated with an output pin of the gate.
+
+            :returns: A list of all fan-out endpoints.
+            :rtype: list[hal_py.Endpoint]
+        )");
+
+        py_gate.def("get_fan_out_net", py::overload_cast<const std::string&>(&Gate::get_fan_out_net, py::const_), py::arg("pin_name"), R"(
+            Get the fan-out endpoint corresponding to the output pin specified by name.
+
+            :param str pin_name: The output pin name.
+            :returns: The fan-out net on success, None otherwise.
+            :rtype: hal_py.Net or None
+        )");
+
+        py_gate.def("get_fan_out_net", py::overload_cast<const GatePin*>(&Gate::get_fan_out_net, py::const_), py::arg("pin"), R"(
+            Get the fan-out endpoint corresponding to the specified output pin.
+
+            :param hal_py.GatePin pin: The output pin.
+            :returns: The fan-out net on success, None otherwise.
+            :rtype: hal_py.Net or None
+        )");
+
+        py_gate.def("get_fan_out_endpoint", py::overload_cast<const std::string&>(&Gate::get_fan_out_endpoint, py::const_), py::arg("pin_name"), R"(
+            Get the fan-out endpoint corresponding to the output pin specified by name.
+
+            :param str pin_name: The output pin name.
+            :returns: The endpoint on success, None otherwise.
+            :rtype: hal_py.Endpoint or None
+        )");
+
+        py_gate.def("get_fan_out_endpoint", py::overload_cast<const GatePin*>(&Gate::get_fan_out_endpoint, py::const_), py::arg("pin"), R"(
+            Get the fan-out endpoint corresponding to the specified output pin.
+
+            :param str pin_name: The output pin.
+            :returns: The endpoint on success, None otherwise.
+            :rtype: hal_py.Endpoint or None
         )");
 
         py_gate.def_property_readonly(
@@ -371,36 +391,45 @@ namespace hal
 
         py_gate.def("get_unique_predecessors", &Gate::get_unique_predecessors, py::arg("filter") = nullptr, R"(
             Get a list of all unique predecessor gates of the gate.
-            A filter can be supplied which filters out all potential values that return false.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
-            :param lambda filter: A function to filter the output, using the input pin type of the gate (1st param) and a connected predecessor endpoint (2nd param). Leave empty for no filtering.
+            :param lambda filter: An optional filter being evaluated on the gate's input pin as well as the predecessor endpoint.
             :returns: A list of unique predecessors endpoints.
             :rtype: list[hal_py.Gate]
         )");
 
         py_gate.def_property_readonly(
             "predecessors", [](Gate* g) { return g->get_predecessors(); }, R"(
-            A list of all all direct predecessor endpoints of the gate.
+            A list of all direct predecessor endpoints of the gate, i.e., all predecessor endpoints that are connected to an input pin of the gate. 
 
             :type: list[hal_py.Endpoint]
         )");
 
         py_gate.def("get_predecessors", &Gate::get_predecessors, py::arg("filter") = nullptr, R"(
-            Get a list of all direct predecessor endpoints of the gate filterable by the gate's input pin and a specific gate type.
+            Get a list of all direct predecessor endpoints of the gate, i.e., all predecessor endpoints that are connected to an input pin of the gate. 
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
-            :param lambda filter: The function used for filtering. Leave empty for no filtering.
+            :param lambda filter: An optional filter being evaluated on the gate's input pin as well as the predecessor endpoint.
             :returns: A list of predecessors endpoints.
             :rtype: list[hal_py.Endpoint]
         )");
 
-        py_gate.def("get_predecessor", &Gate::get_predecessor, py::arg("which_pin"), R"(
-            Get the direct predecessor endpoint of the gate connected to a specific input pin.
-            If the input pin type is unknown or there is no predecessor endpoint or there are multiple predecessor
-            endpoints, *None* is returned.
+        py_gate.def("get_predecessor", py::overload_cast<const std::string&>(&Gate::get_predecessor, py::const_), py::arg("pin_name"), R"(
+            Get a single direct predecessor endpoint that is connected to the input pin specified by name.
+            Fails if there are no or more than one predecessors.
 
-            :param str which_pin: The input pin type of the this gate.
-            :returns: The predecessor endpoint.
-            :rtype: hal_py.Endpoint
+            :param str pin_name: The input pin name.
+            :returns: The predecessor endpoint on success, None otherwise.
+            :rtype: hal_py.Endpoint or None
+        )");
+
+        py_gate.def("get_predecessor", py::overload_cast<const GatePin*>(&Gate::get_predecessor, py::const_), py::arg("pin"), R"(
+            Get a single direct predecessor endpoint that is connected to the specified input pin.
+            Fails if there are no or more than one predecessors.
+
+            :param hal_py.GatePin pin: The input pin.
+            :returns: The predecessor endpoint on success, None otherwise.
+            :rtype: hal_py.Endpoint or None
         )");
 
         py_gate.def_property_readonly(
@@ -412,37 +441,45 @@ namespace hal
 
         py_gate.def("get_unique_successors", &Gate::get_unique_successors, py::arg("filter") = nullptr, R"(
             Get a list of all unique successor gates of the gate.
-            A filter can be supplied which filters out all potential values that return false.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
-            :param lambda filter: A function to filter the output, using the output pin type of the gate (1st param) and a connected successor endpoint (2nd param). Leave empty for no filtering.
+            :param lambda filter: An optional filter being evaluated on the gate's output pin as well as the successor endpoint.
             :returns: A list of unique successor endpoints.
             :rtype: list[hal_py.Gate]
         )");
 
         py_gate.def_property_readonly(
             "successors", [](Gate* g) { return g->get_successors(); }, R"(
-            A list of all direct successor endpoints of the gate.
+            A list of all direct successor endpoints of the gate, i.e., all successor endpoints that are connected to an output pin of the gate. 
 
             :type: list[hal_py.Endpoint]
         )");
 
         py_gate.def("get_successors", &Gate::get_successors, py::arg("filter") = nullptr, R"(
-            Get a list of all direct successor endpoints of the gate.
-            A filter can be supplied which filters out all potential values that return false.
+            Get a list of all direct successor endpoints of the gate, i.e., all successor endpoints that are connected to an output pin of the gate. 
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
-            :param lambda filter: A function to filter the output, using the output pin type of the gate (1st param) and a connected successor endpoint (2nd param). Leave empty for no filtering.
+            :param lambda filter: An optional filter being evaluated on the gate's output pin as well as the successor endpoint.
             :returns: A list of successor endpoints.
             :rtype: list[hal_py.Endpoint]
         )");
 
-        py_gate.def("get_successor", &Gate::get_successor, py::arg("which_pin"), R"(
-            Get the direct successor endpoint of the gate connected to a specific input pin.
-            If the input pin type is unknown or there is no successor endpoint or there are multiple successor
-            endpoints, *None* is returned.
+        py_gate.def("get_successor", py::overload_cast<const std::string&>(&Gate::get_successor, py::const_), py::arg("pin_name"), R"(
+            Get a single direct successor endpoint that is connected to the output pin specified by name.
+            Fails if there are no or more than one successors.
 
-            :param str which_pin: The output pin type of this gate to get the successor from.
-            :returns: The successor endpoint.
-            :rtype: hal_py.Endpoint
+            :param str pin_name: The output pin name.
+            :returns: The successor endpoint on success, None otherwise.
+            :rtype: hal_py.Endpoint or None
+        )");
+
+        py_gate.def("get_successor", py::overload_cast<const GatePin*>(&Gate::get_successor, py::const_), py::arg("pin"), R"(
+            Get a single direct successor endpoint that is connected to the output pin specified by name.
+            Fails if there are no or more than one successors.
+
+            :param hal_py.GatePin pin: The output pin.
+            :returns: The successor endpoint on success, None otherwise.
+            :rtype: hal_py.Endpoint or None
         )");
     }
 }    // namespace hal

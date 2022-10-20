@@ -110,14 +110,14 @@ namespace hal
         }
 
         // Check for the data port pin
-        std::unordered_set<std::string> d_ports = gate->get_type()->get_pins_of_type(PinType::data);
-        if (d_ports.size() != 1)
+        auto d_pins = gate->get_type()->get_pins([](const GatePin* p) { return p->get_direction() == PinDirection::input && p->get_type() == PinType::data; });
+        if (d_pins.size() != 1)
         {
-            log_error("boolean_influence", "Can only handle flip flops with exactly 1 data port, but found {}.", d_ports.size());
+            log_error("boolean_influence", "Can only handle flip flops with exactly 1 data port, but found {}.", d_pins.size());
             return {};
         }
-        std::string data_pin = *d_ports.begin();
-        log_debug("boolean_influence", "Data pin: {}", data_pin);
+        const GatePin* data_pin = d_pins.front();
+        log_debug("boolean_influence", "Data pin: {}", data_pin->get_name());
 
         // Extract all gates in front of the data port and iterate backwards until another flip flop is found.
         std::vector<Gate*> function_gates = extract_function_gates(gate, data_pin);
@@ -227,7 +227,7 @@ namespace hal
         return nets_to_inf;
     }
 
-    std::vector<Gate*> BooleanInfluencePlugin::extract_function_gates(const Gate* start, const std::string& pin)
+    std::vector<Gate*> BooleanInfluencePlugin::extract_function_gates(const Gate* start, const GatePin* pin)
     {
         std::unordered_set<Gate*> function_gates;
 

@@ -37,7 +37,6 @@ namespace hal
           mExclusiveModuleId(0)
     {
         mTimestamp = QDateTime::currentDateTime();
-        UserActionManager::instance()->clearWaitCount();
         connect(MainWindow::sSettingStyle,&SettingsItemDropdown::intChanged,this,&GraphContext::handleStyleChanged);
         connect(gNetlistRelay, &NetlistRelay::moduleNameChanged, this, &GraphContext::handleModuleNameChanged);
         connect(this, &GraphContext::exclusiveModuleLost, this, &GraphContext::handleExclusiveModuleLost);
@@ -596,33 +595,7 @@ namespace hal
         mLayouter->remove(mRemovedModules, mRemovedGates, mNets);
         mShader->remove(mRemovedModules, mRemovedGates, mNets);
 
-        mNets.clear();
-        for (const auto& id : mGates)
-        {
-            auto g = gNetlist->get_gate_by_id(id);
-            for (auto net : g->get_fan_in_nets())
-            {
-                //if(!net->is_unrouted() || net->is_global_input_net() || net->is_global_output_net())
-                    mNets.insert(net->get_id());
-            }
-            for (auto net : g->get_fan_out_nets())
-            {
-                //if(!net->is_unrouted() || net->is_global_input_net() || net->is_global_output_net())
-                    mNets.insert(net->get_id());
-            }
-        }
-        for (const auto& id : mModules)
-        {
-            auto m = gNetlist->get_module_by_id(id);
-            for (auto net : m->get_input_nets())
-            {
-                mNets.insert(net->get_id());
-            }
-            for (auto net : m->get_output_nets())
-            {
-                mNets.insert(net->get_id());
-            }
-        }
+        updateNets();
 
         int placementOrder[4] = { PlacementHint::GridPosition,
                                   PlacementHint::PreferLeft,
@@ -654,6 +627,37 @@ namespace hal
 
         mUnappliedChanges     = false;
         mSceneUpdateRequired = true;
+    }
+
+    void GraphContext::updateNets()
+    {
+        mNets.clear();
+        for (const auto& id : mGates)
+        {
+            auto g = gNetlist->get_gate_by_id(id);
+            for (auto net : g->get_fan_in_nets())
+            {
+                //if(!net->is_unrouted() || net->is_global_input_net() || net->is_global_output_net())
+                    mNets.insert(net->get_id());
+            }
+            for (auto net : g->get_fan_out_nets())
+            {
+                //if(!net->is_unrouted() || net->is_global_input_net() || net->is_global_output_net())
+                    mNets.insert(net->get_id());
+            }
+        }
+        for (const auto& id : mModules)
+        {
+            auto m = gNetlist->get_module_by_id(id);
+            for (auto net : m->get_input_nets())
+            {
+                mNets.insert(net->get_id());
+            }
+            for (auto net : m->get_output_nets())
+            {
+                mNets.insert(net->get_id());
+            }
+        }
     }
 
     void GraphContext::requireSceneUpdate()

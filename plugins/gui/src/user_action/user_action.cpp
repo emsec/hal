@@ -11,7 +11,7 @@ namespace hal
 
     UserAction::UserAction()
         : mParentObject(UserActionObject(0, UserActionObjectType::None)),
-          mWaitForReady(false), mCompoundOrder(-1), mUndoAction(nullptr),
+          mCompoundOrder(-1), mUndoAction(nullptr),
           mTimeStamp(0), mObjectLock(false), mParentObjectLock(false),
           mProjectModified(true)
     {;}

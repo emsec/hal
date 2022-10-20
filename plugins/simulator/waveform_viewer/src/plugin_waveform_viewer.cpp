@@ -34,6 +34,8 @@ namespace hal
 
     void WaveformViewerPlugin::on_load()
     {
+        qRegisterMetaType<std::string>();
+        qRegisterMetaType<hal::NetlistSimulatorController::SimulationState>();
         ExternalContent::instance()->append(new VcdViewerFactory);
     }
 

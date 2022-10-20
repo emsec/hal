@@ -10,6 +10,7 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "netlist_test_utils.h"
+#include "gate_library_test_utils.h"
 
 #include <experimental/filesystem>
 
@@ -81,8 +82,8 @@ namespace hal {
         TEST_START
             if (gate_library_exists(test_utils::g_lib_name)) {
                 {
-                    auto nl = netlist_factory::create_netlist(test_utils::get_testing_gate_library());
-                    EXPECT_EQ(nl->get_gate_library()->get_name(), test_utils::get_testing_gate_library()->get_name());
+                    auto nl = netlist_factory::create_netlist(test_utils::get_gate_library());
+                    EXPECT_EQ(nl->get_gate_library()->get_name(), test_utils::get_gate_library()->get_name());
                 }
             }
             // NEGATIVE

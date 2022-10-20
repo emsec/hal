@@ -58,6 +58,8 @@ namespace hal
         bool write(const GateLibrary* gate_lib, const std::filesystem::path& file_path) override;
 
     private:
+        const u32 HGL_FORMAT_VERSION = 2;
+
         struct PinCtx
         {
             std::string name;

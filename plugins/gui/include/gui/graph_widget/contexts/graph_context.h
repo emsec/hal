@@ -427,6 +427,11 @@ namespace hal
          */
         void showComments(const Node& nd);
 
+        /**
+         * Update set of nets so that all connections to gates or modules within view are shown
+         */
+        void updateNets();
+
     Q_SIGNALS:
         void dataChanged();
         void exclusiveModuleLost(u32 old_id);

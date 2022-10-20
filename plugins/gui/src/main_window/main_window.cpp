@@ -880,6 +880,8 @@ namespace hal
                 return false;
         }
 
+        gPythonContext->abortThreadAndWait();
+
         gGraphContextManager->clear();
 
         clear();

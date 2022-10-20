@@ -4,33 +4,57 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
-* **WARNING:** this release partially breaks the `BooleanFunction` and `Module` API, please make sure to adjust your code accordingly.
+* **WARNING:** this release breaks multiple APIs, please make sure to adjust your code accordingly.
+* project manager
+  * saving all data to and restore current project from project directory
+  * for backward compatibility files created using a previous HAL version can be imported as projects
+  * additional information saved together with netlist: grouping, grouping color, module color, views and their layout, simulation results
+  * when possible referencing all project files with relative filenames so that project can be ported to different location
+  * new CLI option -p to open existing project
+  * CLI option -i reassigned, will now trigger import to new project
 * netlist simulation
   * added interactive waveform viewer to the HAL GUI
   * added new netlist simulation backend with out-of-the-box support for Verilator
   * added easy integration of additional simulation engines by writing respective wrapper functionality
   * added support for reading Saleae traces as simulation input to allow simulation on real-world inputs
+  * added tools to list, dump, compare, and export simulation results directly from disk
+  * added interaction between waveform viewer and GUI so that simulated net states can be visualized in netlist
   * deprecated custom HAL simulator, which is now only available for debugging purposes
 * Boolean functions
   * added entirely new Boolean function architecture based on reverse Polish notation
   * added new SMT solver interface with out-of-the-box support for both z3 and Boolector
   * added custom symbolic execution engine
   * added improved Boolean function optimization based on ABC
-* modules
-  * added `ModulePin` class to keep properties of module pins
+* module and gate pins
+  * gates and modules now use a new system for pins, breaking all previously used APIs
+  * added `GatePin` class to keep properties of gate pins stored within gate types
+  * added `ModulePin` class to keep properties of module pins stored within modules
   * added `PinGroup` class to collect related pins in a dedicated container
-  * removed cache system used to keep internal, input, and output nets and replaced it with on-the-fly computations
+  * gate pin related interactions integrated in GUI-actions (undo and macro feature, log in crash dump)
 * selection details widget
   * added tabs to unclutter the presented information
   * added more details on gate/module pins
   * added more details on LUT functionality
   * added options to edit properties such as names, types etc. whereever applicable
-* fixed gate locations not being properly loaded from a gate's data fields
-* fixed multiple memory leaks
-* fixed rare segfault when adding gates to a module
-* fixed segfault when removing the last item from a view
-* fixed parsing of Liberty gate library attribute `clock`
-* fixed description of flip-flops and latches in all FPGA gate libraries
+* running python interpreter in background thread
+  * long lasting scripts or scripts with infinite loops can be aborted from GUI
+  * scripts can demand input from console using the input() or raw_input() statement
+  * scripts can invoke GUI widgets to query for strings, numbers, file names, modules, or gates
+* python console and editor features
+  * using PEG instead of PyParser to parse whether statement is complete if python version >= 3.9
+  * saving all tabs when persisting entire project, even unnamed tabs
+  * timer to display abort button if console command runs for more than 5 seconds
+* added context menu entry to add any module or gate to cone view
+* added link feature between entry in module tree view and graphical view, e.g. renaming the module will also rename the view
+* added GUI API for plugins so that plugins can query for input parameter and execution can be triggered by push button
+* changed HGL gate library format to better support new gate pin features (backward compatible)
+* bugfixes
+  * fixed gate locations not being properly loaded from a gate's data fields
+  * fixed multiple memory leaks
+  * fixed rare segfault when adding gates to a module
+  * fixed segfault when removing the last item from a view
+  * fixed parsing of Liberty gate library attribute `clock`
+  * fixed description of flip-flops and latches in all FPGA gate libraries
 
 ## [3.3.0] - 2021-10-13 16:20:00+02:00 (urgency: medium)
   * Layouts from all views are saved and restored

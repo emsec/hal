@@ -141,6 +141,8 @@ namespace hal
            Netlist Event Signals
          ========================================*/
 
+        void signalThreadEvent(int type, int evt, void* object, u32 associated_data);
+
         /**
          * Q_SIGNAL to notify that the netlists id has been changed. <br>
          * Relays the following hal-core event: <i>NetlistEvent::event::id_changed</i>
@@ -603,6 +605,8 @@ namespace hal
          */
         void debugHandleFileClosed();
 
+        void handleThreadEvent(int type, int evt, void* object, u32 associated_data);
+
     private:
         void relayNetlistEvent(NetlistEvent::event ev, Netlist* object, u32 associated_data);
         void relayModuleEvent(ModuleEvent::event ev, Module* mod, u32 associated_data);
@@ -616,5 +620,6 @@ namespace hal
         QMap<u32, QColor> mModuleColors;
         ModuleModel* mModuleModel;
         ModuleColorSerializer mColorSerializer;
+        enum ThreadEventType { TetNetlist, TetModule, TetGate, TetNet, TetGrouping };
     };
 }    // namespace hal

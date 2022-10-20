@@ -25,6 +25,9 @@
 
 #include "hal_core/plugin_system/plugin_interface_ui.h"
 #include <QList>
+#include <QObject>
+
+Q_DECLARE_METATYPE(u32)
 
 namespace hal
 {

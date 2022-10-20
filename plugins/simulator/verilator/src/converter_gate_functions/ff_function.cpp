@@ -33,9 +33,9 @@ namespace hal
                         return std::string();
                     }
 
-                    std::vector<std::string> output_pins = gt->get_output_pins();
-                    std::string internal_state           = state_component->get_state_identifier();
-                    std::string internal_negated_state   = state_component->get_neg_state_identifier();
+                    std::vector<GatePin*> output_pins  = gt->get_output_pins();
+                    std::string internal_state         = state_component->get_state_identifier();
+                    std::string internal_negated_state = state_component->get_neg_state_identifier();
 
                     function << "reg " << internal_state << ";" << std::endl;
                     function << "reg " << internal_negated_state << ";" << std::endl;
@@ -54,7 +54,7 @@ namespace hal
 
                     function << std::endl;
 
-                    std::unordered_set<std::string> clock_pins = gt->get_pins_of_type(hal::PinType::clock);
+                    std::vector<GatePin*> clock_pins = gt->get_pins([](const GatePin* p) { return p->get_type() == PinType::clock; });
                     if (clock_pins.size() != 1)
                     {
                         log_error("verilator", "unsupported reached: currently only supporting FFs with one clock! aborting...");
@@ -191,21 +191,20 @@ namespace hal
                     function << "end" << std::endl;
 
                     // set output wires
-                    for (const auto& output_pin : output_pins)
+                    for (const GatePin* output_pin : output_pins)
                     {
-                        function << "assign " << output_pin << " = ";
-                        if (gt->get_pin_type(output_pin) == hal::PinType::state)
+                        function << "assign " << output_pin->get_name() << " = ";
+                        switch (output_pin->get_type())
                         {
-                            function << internal_state;
-                        }
-                        else if (gt->get_pin_type(output_pin) == hal::PinType::neg_state)
-                        {
-                            function << internal_negated_state;
-                        }
-                        else
-                        {
-                            log_error("verilator", "unsupported reached: FF has weird outpin '{}' for gate '{}', aborting...", output_pin, gt->get_name());
-                            return std::string();
+                            case PinType::state:
+                                function << internal_state;
+                                break;
+                            case PinType::neg_state:
+                                function << internal_negated_state;
+                                break;
+                            default:
+                                log_error("verilator", "unsupported reached: FF has weird outpin '{}' for gate '{}', aborting...", output_pin->get_name(), gt->get_name());
+                                return std::string();
                         }
                         function << ";" << std::endl;
                     }

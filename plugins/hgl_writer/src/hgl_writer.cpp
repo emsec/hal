@@ -56,6 +56,9 @@ namespace hal
     {
         rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
 
+        // file format version
+        document.AddMember("version", HGL_FORMAT_VERSION, allocator);
+
         // library name
         document.AddMember("library", gate_lib->get_name(), allocator);
 
@@ -264,67 +267,53 @@ namespace hal
             }
 
             // pins
-            std::vector<PinCtx> pin_data = get_pins(gt, functions);
-            rapidjson::Value pins(rapidjson::kArrayType);
-
-            for (const auto& pin_ctx : pin_data)
+            const auto pin_groups = gt->get_pin_groups();
+            rapidjson::Value pg_array(rapidjson::kArrayType);
+            for (const auto* group : pin_groups)
             {
-                rapidjson::Value pin(rapidjson::kObjectType);
+                rapidjson::Value pg_val(rapidjson::kObjectType);
+                pg_val.AddMember("name", group->get_name(), allocator);
+                pg_val.AddMember("direction", enum_to_string(group->get_direction()), allocator);
+                pg_val.AddMember("type", enum_to_string(group->get_type()), allocator);
+                pg_val.AddMember("ascending", group->is_ascending(), allocator);
+                pg_val.AddMember("start_index", group->get_start_index(), allocator);
 
-                pin.AddMember("name", pin_ctx.name, allocator);
-                pin.AddMember("direction", pin_ctx.direction, allocator);
-                if (pin_ctx.type != "")
+                // pins of group
+                rapidjson::Value p_array(rapidjson::kArrayType);
+                for (const auto* pin : group->get_pins())
                 {
-                    pin.AddMember("type", pin_ctx.type, allocator);
-                }
-                if (pin_ctx.function != "")
-                {
-                    pin.AddMember("function", pin_ctx.function, allocator);
-                }
-                if (pin_ctx.x_function != "")
-                {
-                    pin.AddMember("x_function", pin_ctx.x_function, allocator);
-                }
-                if (pin_ctx.z_function != "")
-                {
-                    pin.AddMember("z_function", pin_ctx.z_function, allocator);
-                }
+                    rapidjson::Value p_val(rapidjson::kObjectType);
+                    p_val.AddMember("name", pin->get_name(), allocator);
+                    p_val.AddMember("direction", enum_to_string(pin->get_direction()), allocator);
+                    p_val.AddMember("type", enum_to_string(pin->get_type()), allocator);
 
-                pins.PushBack(pin, allocator);
-            }
-
-            cell.AddMember("pins", pins, allocator);
-
-            // groups
-            std::unordered_map<std::string, std::vector<std::pair<u32, std::string>>> pin_groups = gt->get_pin_groups();
-            if (!pin_groups.empty())
-            {
-                rapidjson::Value groups(rapidjson::kArrayType);
-
-                for (const auto& [name, group_pins] : pin_groups)
-                {
-                    rapidjson::Value group(rapidjson::kObjectType);
-
-                    group.AddMember("name", name, allocator);
-
-                    rapidjson::Value group_pin_array(rapidjson::kArrayType);
-                    for (const auto& [index, pin] : group_pins)
+                    // check pin function
+                    if (pin->get_direction() == PinDirection::output || pin->get_direction() == PinDirection::inout)
                     {
-                        rapidjson::Value group_pin(rapidjson::kObjectType);
-                        std::string s = std::to_string(index);
-                        rapidjson::Value v_index(s.c_str(), s.size(), allocator);
-                        rapidjson::Value v_pin(pin.c_str(), pin.size(), allocator);
-                        group_pin.AddMember(v_index, v_pin, allocator);
-                        group_pin_array.PushBack(group_pin, allocator);
-                    }
-                    group.AddMember("pins", group_pin_array, allocator);
+                        if (const auto it = functions.find(pin->get_name()); it != functions.end())
+                        {
+                            p_val.AddMember("function", it->second.to_string(), allocator);
+                        }
 
-                    groups.PushBack(group, allocator);
+                        if (const auto it = functions.find(pin->get_name() + "_undefined"); it != functions.end())
+                        {
+                            p_val.AddMember("x_function", it->second.to_string(), allocator);
+                        }
+
+                        if (const auto it = functions.find(pin->get_name() + "_tristate"); it != functions.end())
+                        {
+                            p_val.AddMember("z_function", it->second.to_string(), allocator);
+                        }
+                    }
+
+                    p_array.PushBack(p_val, allocator);
                 }
 
-                cell.AddMember("groups", groups, allocator);
+                pg_val.AddMember("pins", p_array, allocator);
+                pg_array.PushBack(pg_val, allocator);
             }
 
+            cell.AddMember("pin_groups", pg_array, allocator);
             cells.PushBack(cell, allocator);
         }
 
@@ -336,41 +325,26 @@ namespace hal
     std::vector<HGLWriter::PinCtx> HGLWriter::get_pins(GateType* gt, const std::unordered_map<std::string, BooleanFunction>& functions)
     {
         std::vector<PinCtx> res;
-        const std::vector<std::string>& pins                                  = gt->get_pins();
-        const std::unordered_map<std::string, PinDirection>& pin_to_direction = gt->get_pin_directions();
-        const std::unordered_map<std::string, PinType>& pin_to_type           = gt->get_pin_types();
-
-        for (const auto& pin : pins)
+        for (const auto* pin : gt->get_pins())
         {
             PinCtx res_pin;
-            res_pin.name = pin;
-            if (pin_to_type.at(pin) != PinType::none)
-            {
-                res_pin.type = enum_to_string<PinType>(pin_to_type.at(pin));
-            }
+            res_pin.name      = pin->get_name();
+            res_pin.direction = enum_to_string(pin->get_direction());
+            res_pin.type      = enum_to_string(pin->get_type());
 
-            if (pin_to_direction.at(pin) != PinDirection::none)
+            if (pin->get_direction() == PinDirection::output || pin->get_direction() == PinDirection::inout)
             {
-                res_pin.direction = enum_to_string<PinDirection>(pin_to_direction.at(pin));
-            }
-            else
-            {
-                log_error("hgl_writer", "invalid pin type 'none' for pin '{}' of gate type '{}' with ID {}.", pin, gt->get_name(), gt->get_id());
-            }
-
-            if (pin_to_direction.at(pin) == PinDirection::output || pin_to_direction.at(pin) == PinDirection::inout)
-            {
-                if (const auto it = functions.find(pin); it != functions.end())
+                if (const auto it = functions.find(pin->get_name()); it != functions.end())
                 {
                     res_pin.function = it->second.to_string();
                 }
 
-                if (const auto it = functions.find(pin + "_undefined"); it != functions.end())
+                if (const auto it = functions.find(pin->get_name() + "_undefined"); it != functions.end())
                 {
                     res_pin.x_function = it->second.to_string();
                 }
 
-                if (const auto it = functions.find(pin + "_tristate"); it != functions.end())
+                if (const auto it = functions.find(pin->get_name() + "_tristate"); it != functions.end())
                 {
                     res_pin.z_function = it->second.to_string();
                 }

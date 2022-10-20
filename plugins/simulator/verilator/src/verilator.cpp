@@ -184,6 +184,8 @@ namespace hal
                                                        "-DSIM_VERILATOR",
                                                        "--trace-depth",
                                                        "2",
+                                                       "--trace-underscore",
+                                                       "--coverage-underscore",
                                                        "testbench.cpp",
                                                        "saleae_directory.cpp",
                                                        "saleae_parser.cpp",

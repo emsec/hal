@@ -37,6 +37,11 @@ namespace hal
         mAbortThreadWidget = new PythonConsoleAbortThread(this);
     }
 
+    PythonConsole::~PythonConsole()
+    {
+        gPythonContext->setConsole(nullptr);
+    }
+
     void PythonConsole::keyPressEventInputMode(QKeyEvent *e)
     {
         mCurrentHistoryIndex = -1;

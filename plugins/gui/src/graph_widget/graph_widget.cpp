@@ -558,8 +558,8 @@ namespace hal
 
                 if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Left)
                 {
-                    std::string pin_type = g->get_type()->get_input_pins()[gSelectionRelay->subfocusIndex()];
-                    Net* n               = g->get_fan_in_net(pin_type);
+                    const GatePin* pin = g->get_type()->get_input_pins().at(gSelectionRelay->subfocusIndex());
+                    Net* n             = g->get_fan_in_net(pin);
 
                     if (!n)
                         return;

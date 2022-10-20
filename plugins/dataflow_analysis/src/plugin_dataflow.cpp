@@ -14,8 +14,8 @@
 #include "dataflow_analysis/pre_processing/pre_processing.h"
 #include "dataflow_analysis/processing/passes/group_by_control_signals.h"
 #include "dataflow_analysis/processing/processing.h"
-#include "dataflow_analysis/utils/timing_utils.h"
 #include "dataflow_analysis/utils/gui_layout_locker.h"
+#include "dataflow_analysis/utils/timing_utils.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/netlist.h"
@@ -53,13 +53,13 @@ namespace hal
     {
         ProgramOptions description;
 
-        description.add("--dataflow", "executes the plugin dataflow");
+        description.add("--dataflow", "execute the dataflow plugin");
 
-        description.add("--path", "provide path where results should be stored", {""});
+        description.add("--path", "specify result path", {""});
 
-        description.add("--sizes", "(optional) sizes which should be prioritized", {""});
+        description.add("--sizes", "(optional) specify sizes to be prioritized", {""});
 
-        description.add("--bad_group_size", "(optional) defines the bad group size", {""});
+        description.add("--bad_group_size", "(optional) specify the bad group size", {""});
 
         return description;
     }
@@ -273,7 +273,13 @@ namespace hal
             log_info("dataflow", "");
         }
 
-        auto nl_copy       = nl->copy();
+        auto copy_res = nl->copy();
+        if (copy_res.is_error())
+        {
+            log_error("dataflow", "failed to create copy of netlist");
+            return std::vector<std::vector<Gate*>>();
+        }
+        auto nl_copy       = copy_res.get();
         auto netlist_abstr = dataflow::pre_processing::run(nl_copy.get(), register_stage_identification);
 
         auto initial_grouping = netlist_abstr.create_initial_grouping(known_groups);

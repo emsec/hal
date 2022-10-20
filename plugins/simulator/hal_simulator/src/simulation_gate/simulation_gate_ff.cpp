@@ -14,24 +14,30 @@ namespace hal
         m_next_state_func = ff_component->get_next_state_function();
         m_preset_func     = ff_component->get_async_set_function();
         m_clear_func      = ff_component->get_async_reset_function();
-        for (const std::string& pin : gate_type->get_pins_of_type(PinType::state))
+        for (const GatePin* pin : gate_type->get_pins())
         {
-            if (const Net* net = gate->get_fan_out_net(pin); net != nullptr)
+            switch (pin->get_type())
             {
-                m_state_output_nets.push_back(gate->get_fan_out_net(pin));
+                case PinType::state:
+                    if (const Net* net = gate->get_fan_out_net(pin); net != nullptr)
+                    {
+                        m_state_output_nets.push_back(gate->get_fan_out_net(pin));
+                    }
+                    break;
+                case PinType::neg_state:
+                    if (const Net* net = gate->get_fan_out_net(pin); net != nullptr)
+                    {
+                        m_state_inverted_output_nets.push_back(gate->get_fan_out_net(pin));
+                    }
+                    break;
+                case PinType::clock:
+                    m_clock_nets.push_back(gate->get_fan_in_net(pin));
+                    break;
+                default:
+                    break;
             }
         }
-        for (const std::string& pin : gate_type->get_pins_of_type(PinType::neg_state))
-        {
-            if (const Net* net = gate->get_fan_out_net(pin); net != nullptr)
-            {
-                m_state_inverted_output_nets.push_back(gate->get_fan_out_net(pin));
-            }
-        }
-        for (const std::string& pin : gate_type->get_pins_of_type(PinType::clock))
-        {
-            m_clock_nets.push_back(gate->get_fan_in_net(pin));
-        }
+
         auto behavior              = ff_component->get_async_set_reset_behavior();
         m_sr_behavior_out          = behavior.first;
         m_sr_behavior_out_inverted = behavior.second;
@@ -39,8 +45,7 @@ namespace hal
 
     void NetlistSimulator::SimulationGateFF::initialize(std::map<const Net*, BooleanFunction::Value>& new_events, bool from_netlist, BooleanFunction::Value value = BooleanFunction::Value::X)
     {
-        GateType* gate_type                                       = m_gate->get_type();
-        const std::unordered_map<std::string, PinType>& pin_types = gate_type->get_pin_types();
+        GateType* gate_type = m_gate->get_type();
 
         BooleanFunction::Value inv_value = simulation_utils::toggle(value);
 
@@ -79,18 +84,18 @@ namespace hal
         // generate events
         for (Endpoint* ep : m_gate->get_fan_out_endpoints())
         {
-            if (pin_types.at(ep->get_pin()) == PinType::state)
+            if (ep->get_pin()->get_type() == PinType::state)
             {
                 new_events[ep->get_net()] = value;
             }
-            else if (pin_types.at(ep->get_pin()) == PinType::neg_state)
+            else if (ep->get_pin()->get_type() == PinType::neg_state)
             {
                 new_events[ep->get_net()] = inv_value;
             }
         }
     }
 
-    bool NetlistSimulator::SimulationGateFF::simulate(const Simulation& simulation, const WaveEvent &event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events)
+    bool NetlistSimulator::SimulationGateFF::simulate(const Simulation& simulation, const WaveEvent& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events)
     {
         // compute delay, currently just a placeholder
         u64 delay = 0;

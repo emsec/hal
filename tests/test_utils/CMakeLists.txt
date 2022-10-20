@@ -11,6 +11,8 @@ add_library(
         src/test_main.cpp
 )
 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/gate_libraries/test.hgl ${CMAKE_BINARY_DIR}/bin/hal_plugins/test-files/test.hgl COPYONLY)
+
 target_include_directories(test_utils PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
 target_link_libraries(test_utils  pthread gtest hal::core hal::netlist)

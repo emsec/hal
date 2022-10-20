@@ -50,10 +50,6 @@ namespace hal
      * The mCompoundOrder number is the index of this action if part of an action
      * compound. It can be used to identify actions which belong together and might
      * be undone in a single step.
-     *
-     * The mWaitForReady flag causes the execution of a macro to be paused until
-     * a handle (e.g. timer handle) resets the flag. It is considered to be a dirty hack and
-     * should only be used in the case of extreme desperation.
      */
     class UserAction
     {
@@ -125,13 +121,6 @@ namespace hal
          * @return The parent object argument.
          */
         virtual UserActionObject parentObject() const {return mParentObject;}
-
-        /**
-         * Pause macro execution until flag gets cleared by handler.
-         *
-         * @return The WaitForReady flag.
-         */
-        bool isWaitForReady() const { return mWaitForReady; }
 
         /**
          * Get the order number in action compound, -1 if not in compound.
@@ -207,7 +196,6 @@ namespace hal
         UserAction();
         UserActionObject mObject;
         UserActionObject mParentObject;
-        bool mWaitForReady;
         int mCompoundOrder;
         UserAction *mUndoAction;
         qint64 mTimeStamp;

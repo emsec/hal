@@ -20,7 +20,7 @@ namespace hal
         connect(gNetlistRelay, &NetlistRelay::netRemoved, this, &NetlistElementsTreeModel::netRemoved);
         connect(gNetlistRelay, &NetlistRelay::moduleNameChanged, this, &NetlistElementsTreeModel::moduleNameChanged);
         connect(gNetlistRelay, &NetlistRelay::moduleTypeChanged, this, &NetlistElementsTreeModel::moduleTypeChanged);
-        connect(gNetlistRelay, &NetlistRelay::moduleGateRemoved, this, &NetlistElementsTreeModel::moduleGateRemoved);
+        connect(gNetlistRelay, &NetlistRelay::moduleGateRemoved, this, &NetlistElementsTreeModel::moduleGateRemoved, Qt::QueuedConnection);
         connect(gNetlistRelay, &NetlistRelay::moduleGateAssigned, this, &NetlistElementsTreeModel::moduleGateAssigned);
         connect(gNetlistRelay, &NetlistRelay::moduleSubmoduleRemoved, this, &NetlistElementsTreeModel::moduleSubmoduleRemoved);
         connect(gNetlistRelay, &NetlistRelay::moduleSubmoduleAdded, this, &NetlistElementsTreeModel::moduleSubmoduleAdded);

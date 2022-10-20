@@ -2,17 +2,18 @@
 
 #include "gui/basic_tree_model/tree_item.h"
 #include "gui/gui_globals.h"
+#include "gui/user_action/action_add_items_to_object.h"
+#include "gui/user_action/action_reorder_object.h"
+#include "gui/user_action/user_action_compound.h"
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/enums.h"
-#include "gui/user_action/action_reorder_object.h"
-#include "gui/user_action/action_add_items_to_object.h"
-#include "gui/user_action/user_action_compound.h"
-#include <QMimeData>
+
 #include <QDebug>
+#include <QMimeData>
 
 namespace hal
 {
@@ -33,20 +34,20 @@ namespace hal
         delete mRootItem;
     }
 
-    Qt::ItemFlags ModulePinsTreeModel::flags(const QModelIndex &index) const
+    Qt::ItemFlags ModulePinsTreeModel::flags(const QModelIndex& index) const
     {
         Qt::ItemFlags defaultFlags = BaseTreeModel::flags(index);
-        TreeItem* item = index.isValid() ? getItemFromIndex(index) : nullptr;
-        if(item)
+        TreeItem* item             = index.isValid() ? getItemFromIndex(index) : nullptr;
+        if (item)
         {
             //get parent, must be a pingroup item and not the root (not allowed to drag from external group, but maybe later)
             TreeItem* parentItem = item->getParent();
-            itemType type = getTypeOfItem(item);
-            if(type == itemType::portMultiBit)
+            itemType type        = getTypeOfItem(item);
+            if (type == itemType::portMultiBit)
                 return defaultFlags | Qt::ItemIsDropEnabled;
-            else if(type == itemType::pin)// && parentItem != mRootItem)//only case that should be possible
-                return defaultFlags | Qt::ItemIsDragEnabled;// | Qt::ItemIsDropEnabled;
-            if(parentItem == mRootItem && type == itemType::pin)
+            else if (type == itemType::pin)                     // && parentItem != mRootItem)//only case that should be possible
+                return defaultFlags | Qt::ItemIsDragEnabled;    // | Qt::ItemIsDropEnabled;
+            if (parentItem == mRootItem && type == itemType::pin)
                 return defaultFlags;
         }
         return defaultFlags;
@@ -56,16 +57,16 @@ namespace hal
     {
         QStringList types;
         types << "pintreemodel/item";
-        return  types;
+        return types;
     }
 
-    QMimeData *ModulePinsTreeModel::mimeData(const QModelIndexList &indexes) const
+    QMimeData* ModulePinsTreeModel::mimeData(const QModelIndexList& indexes) const
     {
-        if(indexes.size() != 4) //columncount, only 1 item is allowed
+        if (indexes.size() != 4)    //columncount, only 1 item is allowed
             return new QMimeData();
 
         QMimeData* data = new QMimeData();
-        auto item = getItemFromIndex(indexes.at(0));
+        auto item       = getItemFromIndex(indexes.at(0));
         QByteArray encodedData;
         QDataStream stream(&encodedData, QIODevice::WriteOnly);
         stream << QString("pin") << getIdOfItem(item);
@@ -74,7 +75,7 @@ namespace hal
         return data;
     }
 
-    bool ModulePinsTreeModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
+    bool ModulePinsTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent)
     {
         Q_UNUSED(action)
         Q_UNUSED(column)
@@ -86,38 +87,37 @@ namespace hal
         dataStream >> type;
         dataStream >> id;
 
-        auto droppedItem = mIdToPinItem.value(id);
+        auto droppedItem       = mIdToPinItem.value(id);
         auto droppedParentItem = droppedItem->getParent();
-        auto mod = gNetlist->get_module_by_id(mModuleId);
-        auto droppedPinRes = mod->get_pin_by_id(id);
-        if(droppedPinRes.is_error()) return false;
-        auto droppedPin = droppedPinRes.get();
+        auto mod               = gNetlist->get_module_by_id(mModuleId);
+        auto droppedPin        = mod->get_pin_by_id(id);
+        if (droppedPin == nullptr)
+            return false;
         auto ownRow = droppedItem->getOwnRow();
-        TreeItem* newItem = new TreeItem(QList<QVariant>() << droppedItem->getData(sNameColumn) << droppedItem->getData(sDirectionColumn)
-                                         << droppedItem->getData(sTypeColumn) << droppedItem->getData(sNetColumn));
-        newItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));//currently only pins can be dragged, so its a pin
+        TreeItem* newItem =
+            new TreeItem(QList<QVariant>() << droppedItem->getData(sNameColumn) << droppedItem->getData(sDirectionColumn) << droppedItem->getData(sTypeColumn) << droppedItem->getData(sNetColumn));
+        newItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));    //currently only pins can be dragged, so its a pin
         newItem->setAdditionalData(keyId, id);
 
-        if(row != -1)//between items
+        if (row != -1)    //between items
         {
             auto onDroppedParentItem = parent.isValid() ? getItemFromIndex(parent) : mRootItem;
-            bool bottomEdge = row == onDroppedParentItem->getChildCount();
-            auto onDroppedItem = bottomEdge ? onDroppedParentItem->getChild(row-1) : onDroppedParentItem->getChild(row);
-            auto onDroppedPinRes = mod->get_pin_by_id(getIdOfItem(onDroppedItem));
-            auto onDroppedPin = onDroppedPinRes.get();
-            auto desiredIndex = onDroppedPin->get_group().second;
+            bool bottomEdge          = row == onDroppedParentItem->getChildCount();
+            auto onDroppedItem       = bottomEdge ? onDroppedParentItem->getChild(row - 1) : onDroppedParentItem->getChild(row);
+            auto* onDroppedPin       = mod->get_pin_by_id(getIdOfItem(onDroppedItem));
+            auto desiredIndex        = onDroppedPin->get_group().second;
 
             //same-parent (parent != root): move withing same group
-            if(onDroppedParentItem == droppedParentItem && onDroppedParentItem != mRootItem)
+            if (onDroppedParentItem == droppedParentItem && onDroppedParentItem != mRootItem)
             {
-                if(ownRow == row || ownRow+1 == row)
+                if (ownRow == row || ownRow + 1 == row)
                     return false;
 
                 removeItem(droppedItem);
                 mIgnoreEventsFlag = true;
-                if(bottomEdge)
+                if (bottomEdge)
                 {
-                    insertItem(newItem, droppedParentItem, row-1);
+                    insertItem(newItem, droppedParentItem, row - 1);
                     ActionReorderObject* reorderObj = new ActionReorderObject(desiredIndex);
                     reorderObj->setObject(UserActionObject(droppedPin->get_id(), UserActionObjectType::Pin));
                     reorderObj->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
@@ -125,8 +125,9 @@ namespace hal
                 }
                 else
                 {
-                    if(ownRow < row){
-                        insertItem(newItem, droppedParentItem, row-1);
+                    if (ownRow < row)
+                    {
+                        insertItem(newItem, droppedParentItem, row - 1);
                         desiredIndex--;
                     }
                     else
@@ -142,17 +143,16 @@ namespace hal
 
             //different parents v1 (dropped's parent = mRoot, onDropped's parent=group)
             //+ different parents v2(droppedItem's parent != root, ondropped's != root)
-            if((droppedParentItem == mRootItem && onDroppedParentItem != mRootItem) ||
-                    (droppedParentItem != mRootItem && onDroppedParentItem != mRootItem))
+            if ((droppedParentItem == mRootItem && onDroppedParentItem != mRootItem) || (droppedParentItem != mRootItem && onDroppedParentItem != mRootItem))
             {
-                auto pinGroupRes = mod->get_pin_group_by_id(getIdOfItem(onDroppedParentItem));
-                if(pinGroupRes.is_error()) return false;
-                auto pinGroup = pinGroupRes.get();
+                auto* pinGroup = mod->get_pin_group_by_id(getIdOfItem(onDroppedParentItem));
+                if (pinGroup == nullptr)
+                    return false;
 
-                mIgnoreEventsFlag = true;
+                mIgnoreEventsFlag        = true;
                 UserActionCompound* comp = new UserActionCompound;
 
-                if(droppedParentItem != mRootItem && onDroppedParentItem != mRootItem)
+                if (droppedParentItem != mRootItem && onDroppedParentItem != mRootItem)
                 {
                     //for undo action, reordering can only be performed when not dragging from the top level
                     ActionReorderObject* reordActHack = new ActionReorderObject(droppedPin->get_group().second);
@@ -163,14 +163,14 @@ namespace hal
                 ActionAddItemsToObject* addAct = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), QSet<u32>() << droppedPin->get_id());
                 addAct->setObject(UserActionObject(pinGroup->get_id(), UserActionObjectType::PinGroup));
                 addAct->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
-                ActionReorderObject* reordAct = new ActionReorderObject(bottomEdge ? desiredIndex+1 : desiredIndex);
+                ActionReorderObject* reordAct = new ActionReorderObject(bottomEdge ? desiredIndex + 1 : desiredIndex);
                 reordAct->setObject(UserActionObject(droppedPin->get_id(), UserActionObjectType::Pin));
                 reordAct->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
                 comp->addAction(addAct);
                 comp->addAction(reordAct);
-                bool ret = comp->exec();
+                bool ret          = comp->exec();
                 mIgnoreEventsFlag = false;
-                if(ret)
+                if (ret)
                 {
                     removeItem(droppedItem);
                     insertItem(newItem, onDroppedParentItem, row);
@@ -179,15 +179,15 @@ namespace hal
                     setModule(gNetlist->get_module_by_id(mModuleId));
             }
         }
-        else// on item
+        else    // on item
         {
-            auto onDroppedItem = getItemFromIndex(parent);
-            auto onDroppedGroupRes = mod->get_pin_group_by_id(getIdOfItem(onDroppedItem));
-            if(onDroppedGroupRes.is_error()) return false;
-            auto onDroppedGroup = onDroppedGroupRes.get();
+            auto onDroppedItem   = getItemFromIndex(parent);
+            auto* onDroppedGroup = mod->get_pin_group_by_id(getIdOfItem(onDroppedItem));
+            if (onDroppedGroup == nullptr)
+                return false;
             //on group (dropped parent = mRoot)
             //if(droppedParentItem == mRootItem)//item which is dropped
-            if(droppedParentItem != onDroppedItem)
+            if (droppedParentItem != onDroppedItem)
             {
                 mIgnoreEventsFlag = true;
                 //int ret = mod->assign_pin_to_group(onDroppedGroup, droppedPin).is_ok();
@@ -195,7 +195,7 @@ namespace hal
                 addAct->setObject(UserActionObject(onDroppedGroup->get_id(), UserActionObjectType::PinGroup));
                 addAct->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
                 bool ret = addAct->exec();
-                if(ret)
+                if (ret)
                 {
                     removeItem(droppedItem);
                     insertItem(newItem, onDroppedItem, onDroppedItem->getChildCount());
@@ -225,7 +225,7 @@ namespace hal
         for (PinGroup<ModulePin>* pinGroup : m->get_pin_groups())
         {
             //ignore empty pingroups
-            if(pinGroup->empty())
+            if (pinGroup->empty())
                 continue;
 
             ModulePin* firstPin = pinGroup->get_pins().front();
@@ -258,7 +258,8 @@ namespace hal
                 mIdToGroupItem.insert(pinGroup->get_id(), pinGroupItem);
                 for (ModulePin* pin : pinGroup->get_pins())
                 {
-                    TreeItem* pinItem = new TreeItem(QList<QVariant>() << QString::fromStdString(pin->get_name()) << pinGroupDirection << pinGroupType << QString::fromStdString(pin->get_net()->get_name()));
+                    TreeItem* pinItem =
+                        new TreeItem(QList<QVariant>() << QString::fromStdString(pin->get_name()) << pinGroupDirection << pinGroupType << QString::fromStdString(pin->get_net()->get_name()));
                     pinItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));
                     pinItem->setAdditionalData(keyId, pin->get_id());
                     pinGroupItem->appendChild(pinItem);
@@ -288,9 +289,9 @@ namespace hal
             return nullptr;
 
         //std::string name = item->getData(sNameColumn).toString().toStdString();
-        if (auto pinResult = m->get_pin_by_id(getIdOfItem(item)); pinResult.is_ok())
+        if (auto* pin = m->get_pin_by_id(getIdOfItem(item)); pin != nullptr)
         {
-            return pinResult.get()->get_net();
+            return pin->get_net();
         }
 
         return nullptr;
@@ -306,21 +307,21 @@ namespace hal
         return item->getAdditionalData(keyType).value<itemType>();
     }
 
-    int ModulePinsTreeModel::getIdOfItem(TreeItem *item) const
+    int ModulePinsTreeModel::getIdOfItem(TreeItem* item) const
     {
         return item->getAdditionalData(keyId).toInt();
     }
 
-    void ModulePinsTreeModel::handleModulePortsChanged(Module *m)
+    void ModulePinsTreeModel::handleModulePortsChanged(Module* m)
     {
         if ((int)m->get_id() == mModuleId)
         {
-            if(!mIgnoreEventsFlag)
+            if (!mIgnoreEventsFlag)
                 setModule(m);
         }
     }
 
-    void ModulePinsTreeModel::removeItem(TreeItem *item)
+    void ModulePinsTreeModel::removeItem(TreeItem* item)
     {
         beginRemoveRows(parent(getIndexFromItem(item)), item->getOwnRow(), item->getOwnRow());
         item->getParent()->removeChild(item);
@@ -331,7 +332,7 @@ namespace hal
         delete item;
     }
 
-    void ModulePinsTreeModel::insertItem(TreeItem *item, TreeItem* parent, int index)
+    void ModulePinsTreeModel::insertItem(TreeItem* item, TreeItem* parent, int index)
     {
         beginInsertRows(getIndexFromItem(parent), index, index);
         parent->insertChild(index, item);

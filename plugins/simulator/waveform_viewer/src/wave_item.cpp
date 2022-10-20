@@ -21,11 +21,13 @@ namespace hal {
           mYposition(-1), mRequest(0), mMinTime(0),
           mMaxTime(1000), mMaxTransition(0),
           mVisibile(true), mSelected(false)
-    {;}
+    {
+        if (mData) mData->addSubscriber();
+    }
 
     WaveItem::~WaveItem()
     {
-//        qDebug() << "delete wave item" << hex << (quintptr) this;
+        if (mData) mData->removeSubscriber();
     }
 
     void WaveItem::setYposition(int pos)

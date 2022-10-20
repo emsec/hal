@@ -50,9 +50,12 @@ namespace hal
          * @param[in] file_path - Path to the file containing the gate library definition.
          * @returns The gate library or a nullptr on failure.
          */
-        std::unique_ptr<GateLibrary> parse(const std::filesystem::path& file_path) override;
+        Result<std::unique_ptr<GateLibrary>> parse(const std::filesystem::path& file_path) override;
 
     private:
+        const u32 HGL_FORMAT_VERSION = 2;
+        u32 file_version             = 1;
+
         struct PinCtx
         {
             std::vector<std::string> pins;
@@ -61,18 +64,24 @@ namespace hal
             std::unordered_map<std::string, std::string> boolean_functions;
         };
 
+        struct GroupCtx
+        {
+            std::vector<std::string> pins;
+            bool ascending;
+            u32 start_index;
+        };
+
         std::unique_ptr<GateLibrary> m_gate_lib;
         std::filesystem::path m_path;
 
         std::set<std::string> m_cell_names;
 
-        bool parse_gate_library(const rapidjson::Document& document);
-        bool parse_gate_type(const rapidjson::Value& gate_type);
-        bool parse_pin(PinCtx& pin_ctx, const rapidjson::Value& pin, const std::string& gt_name);
-        bool parse_group(GateType* gt, const rapidjson::Value& group, const std::string& gt_name);
-        std::unique_ptr<GateTypeComponent> parse_lut_config(const rapidjson::Value& lut_config, const std::string& gt_name);
-        std::unique_ptr<GateTypeComponent> parse_ff_config(const rapidjson::Value& ff_config, const std::string& gt_name, std::vector<std::string>& bf_vars);
-        std::unique_ptr<GateTypeComponent> parse_latch_config(const rapidjson::Value& latch_config, const std::string& gt_name, std::vector<std::string>& bf_vars);
-        std::unique_ptr<GateTypeComponent> parse_ram_config(const rapidjson::Value& ram_config, const std::string& gt_name, const std::vector<std::string>& bf_vars);
+        Result<std::monostate> parse_gate_library(const rapidjson::Document& document);
+        Result<std::monostate> parse_gate_type(const rapidjson::Value& gate_type);
+        Result<std::monostate> parse_pin(PinCtx& pin_ctx, const rapidjson::Value& pin);
+        Result<std::unique_ptr<GateTypeComponent>> parse_lut_config(const rapidjson::Value& lut_config);
+        Result<std::unique_ptr<GateTypeComponent>> parse_ff_config(const rapidjson::Value& ff_config);
+        Result<std::unique_ptr<GateTypeComponent>> parse_latch_config(const rapidjson::Value& latch_config);
+        Result<std::unique_ptr<GateTypeComponent>> parse_ram_config(const rapidjson::Value& ram_config);
     };
 }    // namespace hal

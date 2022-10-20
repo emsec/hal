@@ -68,6 +68,7 @@ namespace hal
          * Constructor.
          */
         PythonConsole(QWidget* parent = nullptr);
+        ~PythonConsole();
 
         enum PromptType { Standard, Compound, Input };
 

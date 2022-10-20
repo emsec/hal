@@ -46,6 +46,7 @@ namespace hal
     class PythonContextSubscriber;
     class PythonEditor;
     class PythonThread;
+    class LayoutLocker;
 
     class PythonGateSelectionReceiver : public GateSelectReceiver
     {
@@ -134,12 +135,12 @@ namespace hal
          * Clears the python console.
          *
          */
-        void forwardClear();
+        void scheduleClear();
 
         /**
          * Resets the python console.
          */
-        void forwardReset();
+        void scheduleReset();
 
         /**
          * Assign this object the python console to work with.
@@ -186,12 +187,13 @@ namespace hal
          */
         void updateNetlist();
 
-        PythonThread* currentThread() { return mThread; }
+        PythonThread* currentThread() const;
 
         static void initializeContext(py::dict* context);
         static void initializeScript(py::dict* context);
 
         void abortThread();
+        void abortThreadAndWait();
         bool isThreadRunning() const { return mThread != nullptr; }
 
     private Q_SLOTS:
@@ -204,6 +206,7 @@ namespace hal
     private:
 
         void handleReset();
+        void handleClear();
 
         // these have to be pointers, otherwise they are destructed after py::finalize_interpreter and segfault
         // only one object for global and local is needed, as for the console we run it always in global scope wher globals() == locals()
@@ -215,6 +218,8 @@ namespace hal
 
         PythonConsole* mConsole;
         bool mTriggerReset;
+        bool mTriggerClear;
+        LayoutLocker* mLayoutLocker;
         PythonThread* mThread;
         bool mThreadAborted;
         PyThreadState* mMainThreadState;
