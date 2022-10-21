@@ -4,14 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+
+## [4.0.1] - 2022-10-21 08:10:00+02:00 (urgency: medium)
 * **WARNING:** this release breaks multiple APIs, please make sure to adjust your code accordingly.
 * project manager
-  * saving all data to and restore current project from project directory
-  * for backward compatibility files created using a previous HAL version can be imported as projects
-  * additional information saved together with netlist: grouping, grouping color, module color, views and their layout, simulation results
-  * when possible referencing all project files with relative filenames so that project can be ported to different location
-  * new CLI option -p to open existing project
-  * CLI option -i reassigned, will now trigger import to new project
+  * added keeping all data belonging to a netlist in a single project directory
+  * added import of Verilog and VHDL netlists as well as existing .hal files into new projects
+  * added referencing all project files with relative filenames so that project can be ported to different location (whenever possible)
+  * added CLI option `-p` to open existing project
+  * changed CLI option `-i` import netlist to new project
 * netlist simulation
   * added interactive waveform viewer to the HAL GUI
   * added new netlist simulation backend with out-of-the-box support for Verilator
@@ -26,28 +27,35 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   * added custom symbolic execution engine
   * added improved Boolean function optimization based on ABC
 * module and gate pins
-  * gates and modules now use a new system for pins, breaking all previously used APIs
+  * added a new system for  gate and module pins, breaking all previously used APIs
   * added `GatePin` class to keep properties of gate pins stored within gate types
   * added `ModulePin` class to keep properties of module pins stored within modules
   * added `PinGroup` class to collect related pins in a dedicated container
-  * gate pin related interactions integrated in GUI-actions (undo and macro feature, log in crash dump)
+  * added pin related interactions to GUI actions (undo and macro feature, log in crash dump)
 * selection details widget
   * added tabs to unclutter the presented information
   * added more details on gate/module pins
   * added more details on LUT functionality
   * added options to edit properties such as names, types etc. whereever applicable
-* running python interpreter in background thread
-  * long lasting scripts or scripts with infinite loops can be aborted from GUI
-  * scripts can demand input from console using the input() or raw_input() statement
-  * scripts can invoke GUI widgets to query for strings, numbers, file names, modules, or gates
+* running Python interpreter in background thread
+  * added option to abort Python script execution from within the GUI
+  * added support for `input` and `raw_input` functions for Python scripts to take input from the HAL Python console
+  * added GUI widgets to query for strings, numbers, file names, modules, or gates from Python scripts
 * python console and editor features
-  * using PEG instead of PyParser to parse whether statement is complete if python version >= 3.9
-  * saving all tabs when persisting entire project, even unnamed tabs
-  * timer to display abort button if console command runs for more than 5 seconds
-* added context menu entry to add any module or gate to cone view
-* added link feature between entry in module tree view and graphical view, e.g. renaming the module will also rename the view
-* added GUI API for plugins so that plugins can query for input parameter and execution can be triggered by push button
-* changed HGL gate library format to better support new gate pin features (backward compatible)
+  * changed to using PEG instead of PyParser to parse whether statement is complete if python version >= 3.9
+  * added automatically saving all Python editor tabs upon saving the entire project (even un-named tabs)
+  * added timer to display abort button if Python console command runs for more than 5 seconds
+* GateTypeProperty additions
+  * changed gate type properties `carry`, `buffer`, `lut`, and `mux` to `c_carry`, `c_buffer`, `c_lut`, and `c_mux`
+  * added new gate type properties such as `c_and`, `c_or`, ... to better represent combinational logic
+  * added pin types `carry` and `sum` to better annotate pins of gate types with property `c_carry`, `c_half_adder`, or `c_full_adder`
+  * added respective annotations to gate libraries shipped with HAL
+* miscellaneous
+  * added context menu entry to add any module or gate to cone view
+  * added link feature between entry in module tree view and graphical view, e.g. renaming the module will also rename the view
+  * added GUI API for plugins so that plugins can query for input parameter and execution can be triggered by push button
+  * added `Gate::get_init_data` and `Gate::set_init_data` for simplified access to the INIT data of, e.g., LUT type gates
+  * changed HGL gate library format to better support new gate pin features (backward compatible)
 * bugfixes
   * fixed gate locations not being properly loaded from a gate's data fields
   * fixed multiple memory leaks
