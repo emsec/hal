@@ -1,5 +1,7 @@
 var NAVTREEINDEX7 =
 {
+"classhal_1_1_grouping.html#ad253f42f616ed52a57d9384385e1155f":[4,1,0,16,5],
+"classhal_1_1_grouping.html#ad5c72278b32c6120733fc82c78be5fbe":[4,1,0,16,22],
 "classhal_1_1_grouping.html#ad71395c6a5fec7d319237a6803c5dfa2":[4,1,0,16,1],
 "classhal_1_1_grouping.html#ae987f8404ba96b884090f63966827fa6":[4,1,0,16,4],
 "classhal_1_1_grouping_color_delegate.html":[4,0,7,2,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX7 =
 "classhal_1_1_hexadecimal_validator.html#ad39a6acf9796d1e89f04b38b5f2cbd37":[6,0,0,173,0],
 "classhal_1_1_import_netlist_dialog.html":[6,0,0,180],
 "classhal_1_1_import_netlist_dialog.html#a03ccc05d90f9e684e2b636205ad39c99":[6,0,0,180,8],
-"classhal_1_1_import_netlist_dialog.html#a0fb74898dbdd697b50b636d4888d192c":[6,0,0,180,6],
-"classhal_1_1_import_netlist_dialog.html#a111975aef8391e7bb73195b420deb052":[6,0,0,180,2],
-"classhal_1_1_import_netlist_dialog.html#a20cdcc058f56d14dc6c1697cd45b7c29":[6,0,0,180,7]
+"classhal_1_1_import_netlist_dialog.html#a0fb74898dbdd697b50b636d4888d192c":[6,0,0,180,6]
 };

@@ -517,7 +517,7 @@ $(document).ready(function(){initNavTree('process_8h_source.html',''); initResiz
 <div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160; </div>
 <div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;  <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">int</span> read_all(FILE* fp, std::vector&lt;char&gt;&amp; buf)</div>
 <div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;  {</div>
-<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;    <span class="keyword">auto</span> <a class="code" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87">buffer</a> = buf.data();</div>
+<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;    <span class="keyword">auto</span> buffer = buf.data();</div>
 <div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;    <span class="keywordtype">int</span> total_bytes_read = 0;</div>
 <div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;    <span class="keywordtype">int</span> fill_sz = buf.size();</div>
 <div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160; </div>
@@ -535,9 +535,9 @@ $(document).ready(function(){initNavTree('process_8h_source.html',''); initResiz
 <div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;        fill_sz = new_sz - orig_sz;</div>
 <div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160; </div>
 <div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;        <span class="comment">//update the buffer pointer</span></div>
-<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;        <a class="code" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87">buffer</a> = buf.data();</div>
+<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;        buffer = buf.data();</div>
 <div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;        total_bytes_read += rd_bytes;</div>
-<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;        <a class="code" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87">buffer</a> += total_bytes_read;</div>
+<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;        buffer += total_bytes_read;</div>
 <div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160; </div>
 <div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160;      } <span class="keywordflow">else</span> { <span class="comment">// Partial data ? Continue reading</span></div>
 <div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;        total_bytes_read += rd_bytes;</div>
@@ -2013,12 +2013,11 @@ $(document).ready(function(){initNavTree('process_8h_source.html',''); initResiz
 <div class="ttc" id="aclasssubprocess_1_1detail_1_1_streams_html_a2e454392653a7e9c65d476fab5e52318"><div class="ttname"><a href="classsubprocess_1_1detail_1_1_streams.html#a2e454392653a7e9c65d476fab5e52318">subprocess::detail::Streams::close_child_fds</a></div><div class="ttdeci">void close_child_fds()</div><div class="ttdef"><b>Definition:</b> <a href="process_8h_source.html#l01118">process.h:1118</a></div></div>
 <div class="ttc" id="aclasssubprocess_1_1_popen_html_ae711851250d87fe74a21cab8f45f877e"><div class="ttname"><a href="classsubprocess_1_1_popen.html#ae711851250d87fe74a21cab8f45f877e">subprocess::Popen::Popen</a></div><div class="ttdeci">Popen(const std::string &amp;cmd_args, Args &amp;&amp;...args)</div><div class="ttdef"><b>Definition:</b> <a href="process_8h_source.html#l01225">process.h:1225</a></div></div>
 <div class="ttc" id="anamespacesubprocess_html_a8c21131feb99bed9ffa644851ff499eda5e3e1175bb6163c116ba70bf87cb8c1e"><div class="ttname"><a href="namespacesubprocess.html#a8c21131feb99bed9ffa644851ff499eda5e3e1175bb6163c116ba70bf87cb8c1e">subprocess::STDOUT</a></div><div class="ttdeci">@ STDOUT</div><div class="ttdef"><b>Definition:</b> <a href="process_8h_source.html#l00755">process.h:755</a></div></div>
-<div class="ttc" id="anamespacehal_html_adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87"><div class="ttname"><a href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87">hal::GateTypeProperty::buffer</a></div><div class="ttdeci">@ buffer</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_8cff0e4740b4a22580dd05764b73d449.html">utilities</a></li><li class="navelem"><a class="el" href="process_8h.html">process.h</a></li>
-    <li class="footer">Generated on Fri Oct 21 2022 13:45:52 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 14:20:49 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

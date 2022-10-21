@@ -1,9 +1,9 @@
 var structhal_1_1_enum_strings =
 [
     [ "data", "structhal_1_1_enum_strings.html#add991d59bc7851695be21452f5b639fb", null ],
+    [ "data", "structhal_1_1_enum_strings.html#a8d0777845c66606744b9982e94103cba", null ],
     [ "data", "structhal_1_1_enum_strings.html#a9182fc77a55b52db0407961d739e1bfc", null ],
     [ "data", "structhal_1_1_enum_strings.html#a28901a293a7c1966a2e8d53f7af02f5e", null ],
-    [ "data", "structhal_1_1_enum_strings.html#a8d0777845c66606744b9982e94103cba", null ],
     [ "data", "structhal_1_1_enum_strings.html#a44cbc4bfbd928916eea91a0a5a0b3225", null ],
     [ "data", "structhal_1_1_enum_strings.html#aee875702a9d377079d6c923a3eae8386", null ],
     [ "data", "structhal_1_1_enum_strings.html#a870dd48f045a6eafdacb1599fa0117ae", null ],

@@ -168,8 +168,8 @@ $(document).ready(function(){initNavTree('grouping__serializer_8cpp_source.html'
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;            <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        }</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keywordtype">char</span> <a class="code" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87">buffer</a>[65536];</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        rapidjson::FileReadStream frs(grpFile, <a class="code" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87">buffer</a>, <span class="keyword">sizeof</span>(<a class="code" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87">buffer</a>));</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keywordtype">char</span> buffer[65536];</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        rapidjson::FileReadStream frs(grpFile, buffer, <span class="keyword">sizeof</span>(buffer));</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        rapidjson::Document document;</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        document.ParseStream&lt;0, rapidjson::UTF8&lt;&gt;, rapidjson::FileReadStream&gt;(frs);</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
@@ -248,12 +248,11 @@ $(document).ready(function(){initNavTree('grouping__serializer_8cpp_source.html'
 <div class="ttc" id="aclasshal_1_1_json_write_object_html"><div class="ttname"><a href="classhal_1_1_json_write_object.html">hal::JsonWriteObject</a></div><div class="ttdef"><b>Definition:</b> <a href="json__write__document_8h_source.html#l00135">json_write_document.h:135</a></div></div>
 <div class="ttc" id="aclasshal_1_1_project_manager_html_ad2fde690729533afdf4915d199ffd847"><div class="ttname"><a href="classhal_1_1_project_manager.html#ad2fde690729533afdf4915d199ffd847">hal::ProjectManager::get_filename</a></div><div class="ttdeci">std::string get_filename(const std::string &amp;tagname)</div><div class="ttdef"><b>Definition:</b> <a href="project__manager_8cpp_source.html#l00057">project_manager.cpp:57</a></div></div>
 <div class="ttc" id="aclasshal_1_1_project_manager_html_a07a891ec8dc22c3657274aefcd0248ca"><div class="ttname"><a href="classhal_1_1_project_manager.html#a07a891ec8dc22c3657274aefcd0248ca">hal::ProjectManager::instance</a></div><div class="ttdeci">static ProjectManager * instance()</div><div class="ttdef"><b>Definition:</b> <a href="project__manager_8cpp_source.html#l00034">project_manager.cpp:34</a></div></div>
-<div class="ttc" id="anamespacehal_html_adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87"><div class="ttname"><a href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87">hal::GateTypeProperty::buffer</a></div><div class="ttdeci">@ buffer</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="dir_f6f96dce44487d3d8542a38135ce2374.html">persistent</a></li><li class="navelem"><a class="el" href="grouping__serializer_8cpp.html">grouping_serializer.cpp</a></li>
-    <li class="footer">Generated on Fri Oct 21 2022 13:45:55 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 14:20:52 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

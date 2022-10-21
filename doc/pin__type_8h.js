@@ -14,6 +14,8 @@ var pin__type_8h =
       [ "data", "pin__type_8h.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc", null ],
       [ "address", "pin__type_8h.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba884d9804999fc47a3c2694e49ad2536a", null ],
       [ "io_pad", "pin__type_8h.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba1822c0e3720259c5b1054f25fc266cac", null ],
-      [ "select", "pin__type_8h.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba99938282f04071859941e18f16efcf42", null ]
+      [ "select", "pin__type_8h.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba99938282f04071859941e18f16efcf42", null ],
+      [ "carry", "pin__type_8h.html#ae062cd9848a7ac51bd0bb4d76f1fb94baf9c05403344bba5b3993d54797b56820", null ],
+      [ "sum", "pin__type_8h.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba1d623b89683f9ce4e074de1676d12416", null ]
     ] ]
 ];

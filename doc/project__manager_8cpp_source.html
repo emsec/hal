@@ -243,8 +243,8 @@ $(document).ready(function(){initNavTree('project__manager_8cpp_source.html','')
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        FILE* fp = fopen(projFilePath.string().c_str(), <span class="stringliteral">&quot;r&quot;</span>);</div>
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        <span class="keywordflow">if</span> (fp == NULL) <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; </div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        <span class="keywordtype">char</span> <a class="code" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87">buffer</a>[65536];</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        rapidjson::FileReadStream frs(fp, <a class="code" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87">buffer</a>, <span class="keyword">sizeof</span>(<a class="code" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87">buffer</a>));</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        <span class="keywordtype">char</span> buffer[65536];</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        rapidjson::FileReadStream frs(fp, buffer, <span class="keyword">sizeof</span>(buffer));</div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        rapidjson::Document doc;</div>
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        doc.ParseStream&lt;0, rapidjson::UTF8&lt;&gt;, rapidjson::FileReadStream&gt;(frs);</div>
 <div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        fclose(fp);</div>
@@ -430,12 +430,11 @@ $(document).ready(function(){initNavTree('project__manager_8cpp_source.html','')
 <div class="ttc" id="aclasshal_1_1_project_manager_html_ad2fde690729533afdf4915d199ffd847"><div class="ttname"><a href="classhal_1_1_project_manager.html#ad2fde690729533afdf4915d199ffd847">hal::ProjectManager::get_filename</a></div><div class="ttdeci">std::string get_filename(const std::string &amp;tagname)</div><div class="ttdef"><b>Definition:</b> <a href="project__manager_8cpp_source.html#l00057">project_manager.cpp:57</a></div></div>
 <div class="ttc" id="aclasshal_1_1_project_manager_html_a07a891ec8dc22c3657274aefcd0248ca"><div class="ttname"><a href="classhal_1_1_project_manager.html#a07a891ec8dc22c3657274aefcd0248ca">hal::ProjectManager::instance</a></div><div class="ttdeci">static ProjectManager * instance()</div><div class="ttdef"><b>Definition:</b> <a href="project__manager_8cpp_source.html#l00034">project_manager.cpp:34</a></div></div>
 <div class="ttc" id="aclasshal_1_1_project_manager_html_a2f20511e4a9dd1ff2c5fda551db6265d"><div class="ttname"><a href="classhal_1_1_project_manager.html#a2f20511e4a9dd1ff2c5fda551db6265d">hal::ProjectManager::get_netlist</a></div><div class="ttdeci">std::unique_ptr&lt; Netlist &gt; &amp; get_netlist()</div><div class="ttdef"><b>Definition:</b> <a href="project__manager_8cpp_source.html#l00145">project_manager.cpp:145</a></div></div>
-<div class="ttc" id="anamespacehal_html_adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87"><div class="ttname"><a href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87">hal::GateTypeProperty::buffer</a></div><div class="ttdeci">@ buffer</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="project__manager_8cpp.html">project_manager.cpp</a></li>
-    <li class="footer">Generated on Fri Oct 21 2022 13:45:55 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 14:20:52 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

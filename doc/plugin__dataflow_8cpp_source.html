@@ -314,9 +314,9 @@ $(document).ready(function(){initNavTree('plugin__dataflow_8cpp_source.html','')
 <div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;                output_path += <span class="stringliteral">&quot;/&quot;</span>;</div>
 <div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;            }</div>
 <div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160; </div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;            <span class="keyword">struct </span>stat <a class="code" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87">buffer</a>;</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;            <span class="keyword">struct </span>stat buffer;</div>
 <div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160; </div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;            <span class="keywordflow">if</span> (stat(output_path.c_str(), &amp;<a class="code" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87">buffer</a>) != 0)</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;            <span class="keywordflow">if</span> (stat(output_path.c_str(), &amp;buffer) != 0)</div>
 <div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;            {</div>
 <div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;                <span class="keywordtype">int</span> return_value = system((<span class="stringliteral">&quot;exec mkdir -p &quot;</span> + output_path).c_str());</div>
 <div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;                <span class="keywordflow">if</span> (return_value != 0)</div>
@@ -524,12 +524,11 @@ $(document).ready(function(){initNavTree('plugin__dataflow_8cpp_source.html','')
 <div class="ttc" id="aplugin__dataflow_8h_html"><div class="ttname"><a href="plugin__dataflow_8h.html">plugin_dataflow.h</a></div></div>
 <div class="ttc" id="adot__graph_8h_html"><div class="ttname"><a href="dot__graph_8h.html">dot_graph.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1_program_options_html_a9dd3cc27b3d0a9bfaa87999390594fa5"><div class="ttname"><a href="classhal_1_1_program_options.html#a9dd3cc27b3d0a9bfaa87999390594fa5">hal::ProgramOptions::add</a></div><div class="ttdeci">bool add(const std::string &amp;flag, const std::string &amp;description, const std::initializer_list&lt; std::string &gt; &amp;parameters={})</div><div class="ttdef"><b>Definition:</b> <a href="program__options_8cpp_source.html#l00129">program_options.cpp:129</a></div></div>
-<div class="ttc" id="anamespacehal_html_adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87"><div class="ttname"><a href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87">hal::GateTypeProperty::buffer</a></div><div class="ttdeci">@ buffer</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_161c827992f16c517fae38e8eb03f5dd.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dir_383eef8607738589c737c0b430bde182.html">src</a></li><li class="navelem"><a class="el" href="plugin__dataflow_8cpp.html">plugin_dataflow.cpp</a></li>
-    <li class="footer">Generated on Fri Oct 21 2022 13:45:53 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 14:20:49 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

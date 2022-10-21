@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Gate &mdash; hal_py v3.3.0-988-g9c19483ab documentation</title>
+  <title>Gate &mdash; hal_py v3.3.0-992-gd18d4c21e documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.3.0-988-g9c19483ab
+                v3.3.0-992-gd18d4c21e
               </div>
             
           
@@ -701,6 +701,23 @@ If no grouping contains this gate, <em>None</em> is returned.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="hal_py.Gate.get_init_data">
+<code class="descname">get_init_data</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#hal_py.Gate.get_init_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the INIT data of the gate, if available. 
+An error is returned in case the gate does not hold any INIT data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The INIT data as a list on success, an empty list otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="hal_py.Gate.get_location">
 <code class="descname">get_location</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; Tuple[int, int]<a class="headerlink" href="#hal_py.Gate.get_location" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the physical location of the gate in the layout.
@@ -1224,6 +1241,25 @@ May overwrite an existing entry.</p>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
 </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Gate.set_init_data">
+<code class="descname">set_init_data</code><span class="sig-paren">(</span><em>self: hal_py.Gate, init_data: List[str]</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Gate.set_init_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the INIT data of the gate, if available.
+An error is returned in case the gate does not hold any INIT data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>init_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) – The INIT data as a list.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success, False otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
 </tr>
 </tbody>
 </table>
