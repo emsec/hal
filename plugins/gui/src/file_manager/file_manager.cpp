@@ -5,13 +5,14 @@
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/netlist/netlist_parser/netlist_parser_manager.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/netlist/project_manager.h"
 #include "hal_core/utilities/project_directory.h"
-
 #include "gui/settings/settings_items/settings_item_checkbox.h"
 #include "gui/settings/settings_items/settings_item_spinbox.h"
 #include "gui/file_manager/import_netlist_dialog.h"
+#include "gui/file_manager/new_project_dialog.h"
 
 #include <QDateTime>
 #include <QFile>
@@ -189,6 +190,63 @@ namespace hal
             QDir().mkpath(shDir.absolutePath());
         }
 
+    }
+
+    void FileManager::newProject()
+    {
+        NewProjectDialog npr(qApp->activeWindow());
+        if (npr.exec() != QDialog::Accepted) return;
+
+        QString projdir = npr.projectDirectory();
+        if (projdir.isEmpty()) return;
+
+        QString gatelib = npr.gateLibraryPath();
+        if (gatelib.isEmpty())
+        {
+            QMessageBox::warning(qApp->activeWindow(),"Aborted", "Cannot create project <" + projdir + ">, no gate library selected");
+            return;
+        }
+        GateLibrary* glib = gate_library_manager::load(gatelib.toStdString());
+        if (!glib)
+        {
+            QMessageBox::warning(qApp->activeWindow(),"Aborted", "Cannot create project <" + projdir + ">, cannot load gate library <" + gatelib + ">");
+            return;
+        }
+
+        ProjectManager* pm = ProjectManager::instance();
+        if (!pm->create_project_directory(projdir.toStdString()))
+        {
+            QMessageBox::warning(qApp->activeWindow(),"Aborted", "Error creating project directory <" + projdir + ">");
+            return;
+        }
+
+        QDir projectDir(projdir);
+        QString netlistFilename = QString::fromStdString(pm->get_netlist_filename());
+        if (npr.isCopyGatelibChecked())
+        {
+            QFileInfo glInfo(gatelib);
+            QString targetGateLib = projectDir.absoluteFilePath(glInfo.fileName());
+            if (QFile::copy(gatelib,targetGateLib))
+                gatelib = targetGateLib;
+        }
+
+        std::filesystem::path lpath = pm->get_project_directory().get_default_filename(".log");
+        LogManager::get_instance()->set_file_name(lpath);
+
+        gNetlistOwner = netlist_factory::create_netlist(glib);
+        gNetlist = gNetlistOwner.get();
+
+        if (!gNetlist)
+        {
+            QMessageBox::warning(qApp->activeWindow(),"Aborted", "Failed to create <" + projdir + "> with gate library <" + gatelib + ">");
+            return;
+        }
+        gNetlistRelay->registerNetlistCallbacks();
+        gFileStatusManager->netlistChanged();
+        if (pm->serialize_project(gNetlist))
+            gFileStatusManager->netlistSaved();
+        projectSuccessfullyLoaded(projdir,netlistFilename);
+        log_info("gui", "Created empty project '{}' with gate library '{}'.", projdir.toStdString(), gatelib.toStdString());
     }
 
     void FileManager::importFile(QString filename)

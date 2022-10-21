@@ -18,7 +18,8 @@ namespace hal
 {
     RecentFileItem::RecentFileItem(const QString& file, QWidget* parent)
         : QFrame(parent), mWidget(new QWidget()), mHorizontalLayout(new QHBoxLayout()), mIconLabel(new QLabel()), mVerticalLayout(new QVBoxLayout()), mNameLabel(new QLabel()),
-          mPathLabel(new QLabel()), mAnimation(new QPropertyAnimation()), mRemoveButton(new QToolButton(this)), mHover(false), mMissing(false), mProject(true)
+          mPathLabel(new QLabel()), mAnimation(new QPropertyAnimation()), mRemoveButton(new QToolButton(this)), mHover(false), mMissing(false),
+          mMethod(ActionOpenNetlistFile::Undefined)
     {
         mHorizontalLayout->setContentsMargins(0, 0, 0, 0);
         mHorizontalLayout->setSpacing(0);
@@ -46,7 +47,7 @@ namespace hal
 
         mFile = file;
         QFileInfo info(file);
-        mProject = info.isDir();
+        mMethod = info.isDir() ? ActionOpenNetlistFile::OpenProject : ActionOpenNetlistFile::ImportFile;
         mNameLabel->setText(info.fileName());
         //mPath = info.canonicalPath();
         mPath = info.absolutePath();
@@ -91,7 +92,7 @@ namespace hal
 
         if(event->button() == Qt::MouseButton::LeftButton)
         {
-            ActionOpenNetlistFile* actOpenfile = new ActionOpenNetlistFile(mFile,mProject);
+            ActionOpenNetlistFile* actOpenfile = new ActionOpenNetlistFile(mMethod,mFile);
             actOpenfile->exec();
             event->accept();
         }
@@ -154,7 +155,7 @@ namespace hal
 
     bool RecentFileItem::isProject() const
     {
-        return mProject;
+        return mMethod == ActionOpenNetlistFile::OpenProject;
     }
 
     QString RecentFileItem::iconPath()

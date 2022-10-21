@@ -22,46 +22,43 @@
 //  SOFTWARE.
 
 #pragma once
-#include "user_action.h"
 
-namespace hal
-{
-    /**
-     * @ingroup user_action
-     * @brief Loads a netlist.
-     *
-     * This UserAction can not be undone.
-     */
-    class ActionOpenNetlistFile : public UserAction
-    {
-    public:
-        enum OpenMethod { Undefined, CreateNew, ImportFile, OpenProject };
-    private:
-        QString mFilename;
-        OpenMethod mMethod;
-    public:
-        /**
-         * Action constructor.
-         *
-         * @param filename_ - The path of the netlist file to open.
-         */
-        ActionOpenNetlistFile(OpenMethod method = Undefined, const QString& filename_ = QString());
-        QString tagname() const override;
-        bool exec() override;
-        void writeToXml(QXmlStreamWriter& xmlOut) const override;
-        void readFromXml(QXmlStreamReader& xmlIn) override;
-        void addToHash(QCryptographicHash& cryptoHash) const override;
-    };
+#include <QDialog>
+#include <QString>
+#include <QList>
+#include <QMap>
 
-    /**
-     * @ingroup user_action
-     * @brief UserActionFactory for ActionOpenNetlistFile
-     */
-    class ActionOpenNetlistFileFactory : public UserActionFactory
+class QComboBox;
+class QCheckBox;
+class QLineEdit;
+
+namespace hal {
+
+    class NewProjectDialog : public QDialog
     {
+        Q_OBJECT
+        Q_PROPERTY(QString saveIconPath READ saveIconPath WRITE setSaveIconPath)
+        Q_PROPERTY(QString saveIconStyle READ saveIconStyle WRITE setSaveIconStyle)
+        QString mProjectdir;
+        QLineEdit* mEditProjectdir;
+        QComboBox* mComboGatelib;
+        QCheckBox* mCheckCopyGatelib;
+
+        QStringList mGateLibraryPath;
+        QMap<QString,int> mGateLibraryMap;
+        QString mSaveIconPath;
+        QString mSaveIconStyle;
+    private Q_SLOTS:
+        void handleGateLibraryPathChanged(const QString& txt);
+        void handleFileDialogTriggered();
     public:
-        ActionOpenNetlistFileFactory();
-        UserAction* newAction() const;
-        static ActionOpenNetlistFileFactory* sFactory;
+        NewProjectDialog(QWidget* parent = nullptr);
+        QString projectDirectory() const;
+        QString gateLibraryPath() const;
+        bool isCopyGatelibChecked() const;
+        QString saveIconPath() const { return mSaveIconPath; }
+        QString saveIconStyle() const { return mSaveIconStyle; }
+        void setSaveIconPath(const QString& path) { mSaveIconPath = path; }
+        void setSaveIconStyle(const QString& sty) { mSaveIconStyle = sty; }
     };
 }

@@ -24,6 +24,7 @@
 #pragma once
 
 #include <QFrame>
+#include "gui/user_action/action_open_netlist_file.h"
 
 class QHBoxLayout;
 class QLabel;
@@ -149,7 +150,7 @@ namespace hal
 
         bool mHover;
         bool mMissing;
-        bool mProject;
+        ActionOpenNetlistFile::OpenMethod mMethod;
 
         QString mIconPath;
         QString mIconStyle;

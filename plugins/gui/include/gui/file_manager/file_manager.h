@@ -165,6 +165,10 @@ namespace hal
          */
         void importFile(QString filename);
 
+        /**
+         * Creates a new empty hal project
+         */
+        void newProject();
 
         /**
          * Opens the given project.
