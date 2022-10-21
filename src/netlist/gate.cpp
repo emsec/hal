@@ -766,4 +766,53 @@ namespace hal
         }
         return get_successor(pin);
     }
+
+    Result<std::vector<std::string>> Gate::get_init_data() const
+    {
+        InitComponent* init_component = m_type->get_component_as<InitComponent>([](const GateTypeComponent* c) { return c->get_type() == GateTypeComponent::ComponentType::init; });
+        if (init_component == nullptr)
+        {
+            return ERR("could not get INIT data for gate '" + m_name + "' with ID '" + std::to_string(m_id) + "': type '" + m_type->get_name() + "' with ID " + std::to_string(m_type->get_id())
+                       + "' cannot hold INIT data");
+        }
+
+        const std::string& category                 = init_component->get_init_category();
+        const std::vector<std::string>& identifiers = init_component->get_init_identifiers();
+
+        std::vector<std::string> init_data;
+        for (const std::string& id : identifiers)
+        {
+            init_data.push_back(std::get<1>(get_data(category, id)));
+        }
+
+        return OK(init_data);
+    }
+
+    Result<std::monostate> Gate::set_init_data(const std::vector<std::string>& init_data)
+    {
+        InitComponent* init_component = m_type->get_component_as<InitComponent>([](const GateTypeComponent* c) { return c->get_type() == GateTypeComponent::ComponentType::init; });
+        if (init_component == nullptr)
+        {
+            return ERR("could not set INIT data for gate '" + m_name + "' with ID '" + std::to_string(m_id) + "': type '" + m_type->get_name() + "' with ID " + std::to_string(m_type->get_id())
+                       + "' cannot hold INIT data");
+        }
+
+        const std::string& category                 = init_component->get_init_category();
+        const std::vector<std::string>& identifiers = init_component->get_init_identifiers();
+
+        if (identifiers.size() != init_data.size())
+        {
+            return ERR("could not set INIT data for gate '" + m_name + "' with ID '" + std::to_string(m_id) + "': provided INIT data has size " + std::to_string(init_data.size())
+                       + " and must be of size " + std::to_string(identifiers.size()));
+        }
+
+        u32 i = 0;
+        for (const std::string& id : identifiers)
+        {
+            set_data(category, id, "bit_vector", init_data.at(i));
+            i++;
+        }
+
+        return OK({});
+    }
 }    // namespace hal

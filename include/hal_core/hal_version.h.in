@@ -35,28 +35,28 @@ namespace hal
         const std::string version = "@HAL_VERSION_RETURN@";
 
         // Major Version Number
-        const int major = @HAL_VERSION_MAJOR @;
+        const int major = @HAL_VERSION_MAJOR@;
 
         // Minor Version Number
-        const int minor = @HAL_VERSION_MINOR @;
+        const int minor = @HAL_VERSION_MINOR@;
 
         // Patch Version Number
-        const int patch = @HAL_VERSION_PATCH @;
+        const int patch = @HAL_VERSION_PATCH@;
 
         // Tweak Version Number
-        const int tweak = @HAL_VERSION_TWEAK @;
+        const int tweak = @HAL_VERSION_TWEAK@;
 
         // Additional number of commits since last assigned version number
-        const int additional_commits = @HAL_VERSION_ADDITIONAL_COMMITS @;
+        const int additional_commits = @HAL_VERSION_ADDITIONAL_COMMITS@;
 
         // Git Hash used for the current build
         const std::string git_hash = "@HAL_VERSION_HASH@";
 
         // Is it build from a dirty source directory?
-        const bool is_dirty = @HAL_VERSION_DIRTY @;
+        const bool is_dirty = @HAL_VERSION_DIRTY@;
 
         // Is the git repository broken on the development machine?
-        const bool is_broken = @HAL_VERSION_BROKEN @;
+        const bool is_broken = @HAL_VERSION_BROKEN@;
 
         // Build Timestamp.
         const std::string build_timestamp = "@BUILD_TIMESTAMP@";

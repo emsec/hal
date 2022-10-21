@@ -26,6 +26,7 @@
 #pragma once
 
 #include "hal_core/netlist/boolean_function.h"
+#include "hal_core/netlist/gate_library/enums/gate_type_property.h"
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 #include "hal_core/netlist/pins/gate_pin.h"
 #include "hal_core/netlist/pins/pin_group.h"
@@ -40,31 +41,6 @@
 namespace hal
 {
     class GateLibrary;
-
-    /**
-     * A set of available properties for a gate type.
-     */
-    enum class GateTypeProperty
-    {
-        combinational, /**< Combinational gate type. **/
-        sequential,    /**< Sequential gate type. **/
-        power,         /**< Power gate type. **/
-        ground,        /**< Ground gate type. **/
-        lut,           /**< LUT gate type. **/
-        ff,            /**< Flip-flop gate type. **/
-        latch,         /**< Latch gate type. **/
-        ram,           /**< RAM gate type. **/
-        io,            /**< IO gate type. **/
-        dsp,           /**< DSP gate type. **/
-        mux,           /**< MUX gate type. **/
-        buffer,        /**< Buffer gate type. **/
-        carry,         /**< Carry gate type. **/
-        pll,           /**< PLL gate type. **/
-        oscillator,    /**< Oscillator gate type. **/
-    };
-
-    template<>
-    std::map<GateTypeProperty, std::string> EnumStrings<GateTypeProperty>::data;
 
     /**
      * A gate type contains information about its internals such as input and output pins as well as its Boolean functions.

@@ -1,5 +1,5 @@
 {
-    "version": 2,
+    "version": 3,
     "library": "TESTING_GATE_LIBRARY",
     "gate_locations": {
         "data_category": "generic",
@@ -59,7 +59,7 @@
             "name": "BUF",
             "types": [
                 "combinational",
-                "buffer"
+                "c_buffer"
             ],
             "pin_groups": [
                 {
@@ -96,7 +96,8 @@
         {
             "name": "INV",
             "types": [
-                "combinational"
+                "combinational",
+                "c_inverter"
             ],
             "pin_groups": [
                 {
@@ -133,7 +134,8 @@
         {
             "name": "AND2",
             "types": [
-                "combinational"
+                "combinational",
+                "c_and"
             ],
             "pin_groups": [
                 {
@@ -184,7 +186,8 @@
         {
             "name": "AND3",
             "types": [
-                "combinational"
+                "combinational",
+                "c_and"
             ],
             "pin_groups": [
                 {
@@ -249,7 +252,8 @@
         {
             "name": "AND4",
             "types": [
-                "combinational"
+                "combinational",
+                "c_and"
             ],
             "pin_groups": [
                 {
@@ -328,7 +332,8 @@
         {
             "name": "OR2",
             "types": [
-                "combinational"
+                "combinational",
+                "c_or"
             ],
             "pin_groups": [
                 {
@@ -379,7 +384,8 @@
         {
             "name": "OR3",
             "types": [
-                "combinational"
+                "combinational",
+                "c_or"
             ],
             "pin_groups": [
                 {
@@ -444,7 +450,8 @@
         {
             "name": "OR4",
             "types": [
-                "combinational"
+                "combinational",
+                "c_or"
             ],
             "pin_groups": [
                 {
@@ -523,7 +530,8 @@
         {
             "name": "XOR2",
             "types": [
-                "combinational"
+                "combinational",
+                "c_xor"
             ],
             "pin_groups": [
                 {
@@ -574,7 +582,8 @@
         {
             "name": "XOR3",
             "types": [
-                "combinational"
+                "combinational",
+                "c_xor"
             ],
             "pin_groups": [
                 {
@@ -639,7 +648,8 @@
         {
             "name": "XOR4",
             "types": [
-                "combinational"
+                "combinational",
+                "c_xor"
             ],
             "pin_groups": [
                 {
@@ -719,7 +729,7 @@
             "name": "LUT2",
             "types": [
                 "combinational",
-                "lut"
+                "c_lut"
             ],
             "lut_config": {
                 "bit_order": "ascending",
@@ -775,7 +785,7 @@
             "name": "LUT3",
             "types": [
                 "combinational",
-                "lut"
+                "c_lut"
             ],
             "lut_config": {
                 "bit_order": "ascending",
@@ -845,7 +855,7 @@
             "name": "LUT4",
             "types": [
                 "combinational",
-                "lut"
+                "c_lut"
             ],
             "lut_config": {
                 "bit_order": "ascending",
@@ -929,7 +939,7 @@
             "name": "LUT5",
             "types": [
                 "combinational",
-                "lut"
+                "c_lut"
             ],
             "lut_config": {
                 "bit_order": "ascending",
@@ -1027,7 +1037,7 @@
             "name": "LUT6",
             "types": [
                 "combinational",
-                "lut"
+                "c_lut"
             ],
             "lut_config": {
                 "bit_order": "ascending",
@@ -1139,7 +1149,7 @@
             "name": "MUX",
             "types": [
                 "combinational",
-                "mux"
+                "c_mux"
             ],
             "pin_groups": [
                 {
@@ -1205,7 +1215,7 @@
             "name": "CARRY",
             "types": [
                 "combinational",
-                "carry"
+                "c_carry"
             ],
             "pin_groups": [
                 {
@@ -3021,7 +3031,8 @@
         {
             "name": "RAM",
             "types": [
-                "sequential"
+                "sequential",
+                "ram"
             ],
             "pin_groups": [
                 {

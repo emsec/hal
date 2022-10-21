@@ -47,7 +47,9 @@ namespace hal
         data,      /**< Data pin. **/
         address,   /**< Address pin. **/
         io_pad,    /**< IO pad pin. **/
-        select     /**< Select pin. **/
+        select,    /**< Select pin. **/
+        carry,     /**< Carry pin. **/
+        sum        /**< Sum pin. **/
     };
 
     template<>

@@ -1,5 +1,5 @@
 {
-    "version": 2,
+    "version": 3,
     "library": "EXAMPLE_GATE_LIBRARY",
     "gate_locations": {
         "data_category": "generic",
@@ -11,7 +11,7 @@
             "name": "BUF",
             "types": [
                 "combinational",
-                "buffer"
+                "c_buffer"
             ],
             "pin_groups": [
                 {
@@ -49,7 +49,7 @@
             "name": "TBUF",
             "types": [
                 "combinational",
-                "buffer"
+                "c_buffer"
             ],
             "pin_groups": [
                 {
@@ -114,7 +114,8 @@
         {
             "name": "INV",
             "types": [
-                "combinational"
+                "combinational",
+                "c_inverter"
             ],
             "pin_groups": [
                 {
@@ -152,7 +153,7 @@
             "name": "MUX",
             "types": [
                 "combinational",
-                "mux"
+                "c_mux"
             ],
             "pin_groups": [
                 {
@@ -217,7 +218,8 @@
         {
             "name": "XOR",
             "types": [
-                "combinational"
+                "combinational",
+                "c_xor"
             ],
             "pin_groups": [
                 {
@@ -268,7 +270,8 @@
         {
             "name": "AND2",
             "types": [
-                "combinational"
+                "combinational",
+                "c_and"
             ],
             "pin_groups": [
                 {
@@ -319,7 +322,8 @@
         {
             "name": "AND3",
             "types": [
-                "combinational"
+                "combinational",
+                "c_and"
             ],
             "pin_groups": [
                 {
@@ -384,7 +388,8 @@
         {
             "name": "AND4",
             "types": [
-                "combinational"
+                "combinational",
+                "c_and"
             ],
             "pin_groups": [
                 {
@@ -463,7 +468,8 @@
         {
             "name": "AND5",
             "types": [
-                "combinational"
+                "combinational",
+                "c_and"
             ],
             "pin_groups": [
                 {
@@ -556,7 +562,8 @@
         {
             "name": "AND6",
             "types": [
-                "combinational"
+                "combinational",
+                "c_and"
             ],
             "pin_groups": [
                 {
@@ -663,7 +670,8 @@
         {
             "name": "AND7",
             "types": [
-                "combinational"
+                "combinational",
+                "c_and"
             ],
             "pin_groups": [
                 {
@@ -784,7 +792,8 @@
         {
             "name": "AND8",
             "types": [
-                "combinational"
+                "combinational",
+                "c_and"
             ],
             "pin_groups": [
                 {
@@ -919,7 +928,8 @@
         {
             "name": "OR2",
             "types": [
-                "combinational"
+                "combinational",
+                "c_or"
             ],
             "pin_groups": [
                 {
@@ -970,7 +980,8 @@
         {
             "name": "OR3",
             "types": [
-                "combinational"
+                "combinational",
+                "c_or"
             ],
             "pin_groups": [
                 {
@@ -1035,7 +1046,8 @@
         {
             "name": "OR4",
             "types": [
-                "combinational"
+                "combinational",
+                "c_or"
             ],
             "pin_groups": [
                 {
@@ -1114,7 +1126,8 @@
         {
             "name": "OR5",
             "types": [
-                "combinational"
+                "combinational",
+                "c_or"
             ],
             "pin_groups": [
                 {
@@ -1207,7 +1220,8 @@
         {
             "name": "OR6",
             "types": [
-                "combinational"
+                "combinational",
+                "c_or"
             ],
             "pin_groups": [
                 {
@@ -1314,7 +1328,8 @@
         {
             "name": "OR7",
             "types": [
-                "combinational"
+                "combinational",
+                "c_or"
             ],
             "pin_groups": [
                 {
@@ -1435,7 +1450,8 @@
         {
             "name": "OR8",
             "types": [
-                "combinational"
+                "combinational",
+                "c_or"
             ],
             "pin_groups": [
                 {
@@ -1571,7 +1587,7 @@
             "name": "LUT1",
             "types": [
                 "combinational",
-                "lut"
+                "c_lut"
             ],
             "lut_config": {
                 "bit_order": "ascending",
@@ -1613,7 +1629,7 @@
             "name": "LUT2",
             "types": [
                 "combinational",
-                "lut"
+                "c_lut"
             ],
             "lut_config": {
                 "bit_order": "ascending",
@@ -1669,7 +1685,7 @@
             "name": "LUT3",
             "types": [
                 "combinational",
-                "lut"
+                "c_lut"
             ],
             "lut_config": {
                 "bit_order": "ascending",
@@ -1739,7 +1755,7 @@
             "name": "LUT4",
             "types": [
                 "combinational",
-                "lut"
+                "c_lut"
             ],
             "lut_config": {
                 "bit_order": "ascending",
@@ -1823,7 +1839,7 @@
             "name": "LUT5",
             "types": [
                 "combinational",
-                "lut"
+                "c_lut"
             ],
             "lut_config": {
                 "bit_order": "ascending",
@@ -1921,7 +1937,7 @@
             "name": "LUT6",
             "types": [
                 "combinational",
-                "lut"
+                "c_lut"
             ],
             "lut_config": {
                 "bit_order": "ascending",

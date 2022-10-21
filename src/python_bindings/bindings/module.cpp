@@ -441,7 +441,7 @@ namespace hal
             :param hal_py.Net net: The net that the pin is being assigned to.
             :param hal_py.PinType type: The type of the pin. Defaults to hal_py.PinType.none.
             :param bool create_group: Set True to automatically create a pin group and assign the pin, False otherwise.
-            :returns: The module pin on success, a None on failure.
+            :returns: The module pin on success, None otherwise.
             :rtype: hal_py.ModulePin or None
         )");
 
