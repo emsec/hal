@@ -1,25 +1,27 @@
-//  MIT License
+// MIT License
 //
-//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
+// Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+// Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+// Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
+// Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix ("ORIGINAL AUTHORS"). All Rights reserved.
 //
-//  Permission is hereby granted, free of charge, to any person obtaining a copy
-//  of this software and associated documentation files (the "Software"), to deal
-//  in the Software without restriction, including without limitation the rights
-//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//  copies of the Software, and to permit persons to whom the Software is
-//  furnished to do so, subject to the following conditions:
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
 //
-//  The above copyright notice and this permission notice shall be included in all
-//  copies or substantial portions of the Software.
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
 //
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-//  SOFTWARE.
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
 
 #pragma once
 
@@ -56,7 +58,6 @@ namespace hal
              */
             z3Wrapper(std::unique_ptr<z3::context> ctx, std::unique_ptr<z3::expr> expr);
 
-
             /**
              * Specifc Function used to optimize z3 epxr with the help of the logic synthesis tool ABC - CURRENTLY NOT IMPLEMENTED
              */
@@ -72,7 +73,7 @@ namespace hal
              * 
              * @returns A mapping of the net_ids in the wrapped expr to their estimated boolean influence.
              */
-            std::unordered_map<u32, double> get_boolean_influence(const u32 num_evaluations=32000) const;
+            std::unordered_map<u32, double> get_boolean_influence(const u32 num_evaluations = 32000) const;
 
             /**
              * Generates smt2 representation of the wrapped expression.
@@ -130,7 +131,7 @@ namespace hal
              * @param[in] path - Path where the file is written to.
              * @returns True in case of success, false otherwise.
              */
-            bool write_verilog_file(const std::filesystem::path& path, const std::map<u32, bool>& control_mapping={}) const;
+            bool write_verilog_file(const std::filesystem::path& path, const std::map<u32, bool>& control_mapping = {}) const;
 
             /**
              * Transforms the wrapped z3 expression into efficent c code and writes it to a file.
