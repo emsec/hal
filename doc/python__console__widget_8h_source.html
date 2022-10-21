@@ -86,61 +86,63 @@ $(document).ready(function(){initNavTree('python__console__widget_8h_source.html
 <div class="title">python_console_widget.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="python__console__widget_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//  MIT License</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//  Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//  of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//  in the Software without restriction, including without limitation the rights</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//  copies of the Software, and to permit persons to whom the Software is</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//  furnished to do so, subject to the following conditions:</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">//  The above copyright notice and this permission notice shall be included in all</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">//  copies or substantial portions of the Software.</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">//  THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">//  SOFTWARE.</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<a href="python__console__widget_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// MIT License</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">// Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">// Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann (&quot;ORIGINAL AUTHORS&quot;). All rights reserved.</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">// Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">// Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix (&quot;ORIGINAL AUTHORS&quot;). All Rights reserved.</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">// of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">// in the Software without restriction, including without limitation the rights</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">// copies of the Software, and to permit persons to whom the Software is</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">// furnished to do so, subject to the following conditions:</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">// The above copyright notice and this permission notice shall be included in all</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">// copies or substantial portions of the Software.</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">// SOFTWARE.</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="content__widget_8h.html">gui/content_widget/content_widget.h</a>&quot;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;{</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keyword">class </span>PythonConsole;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="classhal_1_1_python_console_widget.html">   38</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_python_console_widget.html">PythonConsoleWidget</a> : <span class="keyword">public</span> <a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    {</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <a class="code" href="classhal_1_1_python_console_widget.html#a6f0e60836fbf9532f3d231aa966c20ce">PythonConsoleWidget</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_python_console_widget.html#ae3dd67a328353a6247319741346741ab">setupToolbar</a>(<a class="code" href="classhal_1_1_toolbar.html">Toolbar</a>* <a class="code" href="classhal_1_1_toolbar.html">Toolbar</a>) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keyword">virtual</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;QShortcut*&gt;</a> <a class="code" href="classhal_1_1_python_console_widget.html#a9b2dfe3a99a9ad14e7c41cb4fca79ff9">createShortcuts</a>() <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <a class="code" href="classhal_1_1_python_console.html">PythonConsole</a>* mConsole;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    };</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;}</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="content__widget_8h.html">gui/content_widget/content_widget.h</a>&quot;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;{</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keyword">class </span>PythonConsole;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classhal_1_1_python_console_widget.html">   40</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_python_console_widget.html">PythonConsoleWidget</a> : <span class="keyword">public</span> <a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    {</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <a class="code" href="classhal_1_1_python_console_widget.html#a6f0e60836fbf9532f3d231aa966c20ce">PythonConsoleWidget</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_python_console_widget.html#ae3dd67a328353a6247319741346741ab">setupToolbar</a>(<a class="code" href="classhal_1_1_toolbar.html">Toolbar</a>* <a class="code" href="classhal_1_1_toolbar.html">Toolbar</a>) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keyword">virtual</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;QShortcut*&gt;</a> <a class="code" href="classhal_1_1_python_console_widget.html#a9b2dfe3a99a9ad14e7c41cb4fca79ff9">createShortcuts</a>() <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <a class="code" href="classhal_1_1_python_console.html">PythonConsole</a>* mConsole;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    };</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclasshal_1_1_python_console_widget_html_a9b2dfe3a99a9ad14e7c41cb4fca79ff9"><div class="ttname"><a href="classhal_1_1_python_console_widget.html#a9b2dfe3a99a9ad14e7c41cb4fca79ff9">hal::PythonConsoleWidget::createShortcuts</a></div><div class="ttdeci">virtual QList&lt; QShortcut * &gt; createShortcuts() override</div><div class="ttdef"><b>Definition:</b> <a href="python__console__widget_8cpp_source.html#l00023">python_console_widget.cpp:23</a></div></div>
-<div class="ttc" id="aclasshal_1_1_python_console_html"><div class="ttname"><a href="classhal_1_1_python_console.html">hal::PythonConsole</a></div><div class="ttdoc">An interactable python console.</div><div class="ttdef"><b>Definition:</b> <a href="python__console_8h_source.html#l00062">python_console.h:62</a></div></div>
+<div class="ttc" id="aclasshal_1_1_python_console_html"><div class="ttname"><a href="classhal_1_1_python_console.html">hal::PythonConsole</a></div><div class="ttdoc">An interactable python console.</div><div class="ttdef"><b>Definition:</b> <a href="python__console_8h_source.html#l00064">python_console.h:64</a></div></div>
 <div class="ttc" id="aqwidget_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></div></div>
-<div class="ttc" id="aclasshal_1_1_toolbar_html"><div class="ttname"><a href="classhal_1_1_toolbar.html">hal::Toolbar</a></div><div class="ttdoc">Toolbar for all ContentFrames and ContentWidgets.</div><div class="ttdef"><b>Definition:</b> <a href="toolbar_8h_source.html#l00036">toolbar.h:36</a></div></div>
+<div class="ttc" id="aclasshal_1_1_toolbar_html"><div class="ttname"><a href="classhal_1_1_toolbar.html">hal::Toolbar</a></div><div class="ttdoc">Toolbar for all ContentFrames and ContentWidgets.</div><div class="ttdef"><b>Definition:</b> <a href="toolbar_8h_source.html#l00038">toolbar.h:38</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
-<div class="ttc" id="aclasshal_1_1_python_console_widget_html"><div class="ttname"><a href="classhal_1_1_python_console_widget.html">hal::PythonConsoleWidget</a></div><div class="ttdoc">Wraps the PythonConsole.</div><div class="ttdef"><b>Definition:</b> <a href="python__console__widget_8h_source.html#l00038">python_console_widget.h:38</a></div></div>
+<div class="ttc" id="aclasshal_1_1_python_console_widget_html"><div class="ttname"><a href="classhal_1_1_python_console_widget.html">hal::PythonConsoleWidget</a></div><div class="ttdoc">Wraps the PythonConsole.</div><div class="ttdef"><b>Definition:</b> <a href="python__console__widget_8h_source.html#l00040">python_console_widget.h:40</a></div></div>
 <div class="ttc" id="aqlist_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html">QList&lt; QShortcut * &gt;</a></div></div>
 <div class="ttc" id="aclasshal_1_1_python_console_widget_html_ae3dd67a328353a6247319741346741ab"><div class="ttname"><a href="classhal_1_1_python_console_widget.html#ae3dd67a328353a6247319741346741ab">hal::PythonConsoleWidget::setupToolbar</a></div><div class="ttdeci">virtual void setupToolbar(Toolbar *Toolbar) override</div><div class="ttdef"><b>Definition:</b> <a href="python__console__widget_8cpp_source.html#l00018">python_console_widget.cpp:18</a></div></div>
-<div class="ttc" id="aclasshal_1_1_content_widget_html"><div class="ttname"><a href="classhal_1_1_content_widget.html">hal::ContentWidget</a></div><div class="ttdoc">Abstract class for Widgets within HAL's ContentArea.</div><div class="ttdef"><b>Definition:</b> <a href="content__widget_8h_source.html#l00047">content_widget.h:47</a></div></div>
+<div class="ttc" id="aclasshal_1_1_content_widget_html"><div class="ttname"><a href="classhal_1_1_content_widget.html">hal::ContentWidget</a></div><div class="ttdoc">Abstract class for Widgets within HAL's ContentArea.</div><div class="ttdef"><b>Definition:</b> <a href="content__widget_8h_source.html#l00049">content_widget.h:49</a></div></div>
 <div class="ttc" id="acontent__widget_8h_html"><div class="ttname"><a href="content__widget_8h.html">content_widget.h</a></div></div>
 <div class="ttc" id="aqobject_html_parent"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent</a></div><div class="ttdeci">QObject * parent() const const</div></div>
 <div class="ttc" id="aclasshal_1_1_python_console_widget_html_a6f0e60836fbf9532f3d231aa966c20ce"><div class="ttname"><a href="classhal_1_1_python_console_widget.html#a6f0e60836fbf9532f3d231aa966c20ce">hal::PythonConsoleWidget::PythonConsoleWidget</a></div><div class="ttdeci">PythonConsoleWidget(QWidget *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="python__console__widget_8cpp_source.html#l00009">python_console_widget.cpp:9</a></div></div>
@@ -148,7 +150,7 @@ $(document).ready(function(){initNavTree('python__console__widget_8h_source.html
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_7c750ac7d7398768b8029f5632912b7a.html">python</a></li><li class="navelem"><a class="el" href="python__console__widget_8h.html">python_console_widget.h</a></li>
-    <li class="footer">Generated on Fri Oct 21 2022 13:08:33 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:45:53 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

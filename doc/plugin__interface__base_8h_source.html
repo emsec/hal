@@ -86,121 +86,123 @@ $(document).ready(function(){initNavTree('plugin__interface__base_8h_source.html
 <div class="title">plugin_interface_base.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="plugin__interface__base_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//  MIT License</span></div>
+<a href="plugin__interface__base_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// MIT License</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//  Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//  of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//  in the Software without restriction, including without limitation the rights</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//  copies of the Software, and to permit persons to whom the Software is</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//  furnished to do so, subject to the following conditions:</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">//  The above copyright notice and this permission notice shall be included in all</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">//  copies or substantial portions of the Software.</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">//  THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">//  SOFTWARE.</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">// Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">// Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann (&quot;ORIGINAL AUTHORS&quot;). All rights reserved.</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">// Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">// Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix (&quot;ORIGINAL AUTHORS&quot;). All Rights reserved.</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">// of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">// in the Software without restriction, including without limitation the rights</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">// copies of the Software, and to permit persons to whom the Software is</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">// furnished to do so, subject to the following conditions:</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">// The above copyright notice and this permission notice shall be included in all</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">// copies or substantial portions of the Software.</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">// SOFTWARE.</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="defines_8h.html">hal_core/defines.h</a>&quot;</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="log_8h.html">hal_core/utilities/log.h</a>&quot;</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="plugin__parameter_8h.html">hal_core/plugin_system/plugin_parameter.h</a>&quot;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="defines_8h.html">hal_core/defines.h</a>&quot;</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="include_2hal__core_2netlist_2netlist_8h.html">hal_core/netlist/netlist.h</a>&quot;</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;set&gt;</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;{</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="preprocessor">#ifdef COMPILER_CLANG</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor">#pragma clang diagnostic push</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="preprocessor">#pragma clang diagnostic ignored &quot;-Wreturn-type-c-linkage&quot;</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">class </span>BasePluginInterface;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span> <a class="code" href="arch__linux_8h.html#afcb1b0bf7320fa3ebfc13fd896ebca4d">PLUGIN_API</a> std::unique_ptr&lt;BasePluginInterface&gt; <a class="code" href="namespacehal.html#aa8127688230d54c42984bdd3c2bb1f72">create_plugin_instance</a>();</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor">#ifdef COMPILER_CLANG</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#pragma clang diagnostic pop</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keyword">enum class</span> <a class="code" href="arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> PluginInterfaceType</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    {</div>
-<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="plugin__interface__base_8h.html#a42221ae13c427234b08a21d229eb2ad9">   57</a></span>&#160;        <a class="code" href="plugin__interface__base_8h.html#a42221ae13c427234b08a21d229eb2ad9">base</a>,</div>
-<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="plugin__interface__base_8h.html#a9280bc62af1b57e6460d0b1c251908bd">   58</a></span>&#160;        <a class="code" href="plugin__interface__base_8h.html#a9280bc62af1b57e6460d0b1c251908bd">cli</a>,</div>
-<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="plugin__interface__base_8h.html#a10e7df18d8a816af76f947453883ff42">   59</a></span>&#160;        <a class="code" href="plugin__interface__base_8h.html#a10e7df18d8a816af76f947453883ff42">interactive_ui</a>,</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        gui</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    };</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="classhal_1_1_base_plugin_interface.html">   66</a></span>&#160;    <span class="keyword">class </span><a class="code" href="arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="code" href="classhal_1_1_base_plugin_interface.html">BasePluginInterface</a></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    {</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <a class="code" href="classhal_1_1_base_plugin_interface.html">BasePluginInterface</a>()          = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keyword">virtual</span> ~<a class="code" href="classhal_1_1_base_plugin_interface.html">BasePluginInterface</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="namespacehal.html#a45f4052286462e64763c142a3e26ab93">initialize</a>();</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <span class="keyword">virtual</span> std::string get_name() <span class="keyword">const</span> = 0;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="keyword">virtual</span> std::string get_version() <span class="keyword">const</span> = 0;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <span class="keywordtype">bool</span> has_type(PluginInterfaceType t) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</div>
-<div class="line"><a name="l00107"></a><span class="lineno"><a class="line" href="classhal_1_1_base_plugin_interface.html#a05a8364dad5101585d352f97c98ff527">  107</a></span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_base_plugin_interface.html#a05a8364dad5101585d352f97c98ff527">log</a>(<span class="keyword">const</span> Args&amp;... <a class="code" href="namespacecontrol.html#a3cdfe36ea256f5d4c35f5d89c9f22d46">args</a>)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;            <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(get_name(), <a class="code" href="namespacecontrol.html#a3cdfe36ea256f5d4c35f5d89c9f22d46">args</a>...);</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        }</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <span class="keyword">virtual</span> std::set&lt;std::string&gt; get_dependencies() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> on_load();</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> on_unload();</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> initialize_logging();</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160; </div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;        <span class="keyword">virtual</span> std::vector&lt;PluginParameter&gt; get_parameter() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160; </div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> set_parameter(<a class="code" href="classhal_1_1_netlist.html">Netlist</a>* nl, <span class="keyword">const</span> std::vector&lt;PluginParameter&gt;&amp; params);</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160; </div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> register_progress_indicator(std::function&lt;<span class="keywordtype">void</span>(<span class="keywordtype">int</span>,<span class="keyword">const</span> std::string&amp;)&gt; pif);</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    };</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160; </div>
-<div class="line"><a name="l00155"></a><span class="lineno"><a class="line" href="namespacehal.html#af1388a5c4377a81f3215cac5d274fd60">  155</a></span>&#160;    <span class="keyword">using</span> <a class="code" href="namespacehal.html#af1388a5c4377a81f3215cac5d274fd60">instantiate_plugin_function</a> = std::unique_ptr&lt;BasePluginInterface&gt; (*)();</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="plugin__parameter_8h.html">hal_core/plugin_system/plugin_parameter.h</a>&quot;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="log_8h.html">hal_core/utilities/log.h</a>&quot;</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &lt;set&gt;</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;{</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="preprocessor">#ifdef COMPILER_CLANG</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="preprocessor">#pragma clang diagnostic push</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="preprocessor">#pragma clang diagnostic ignored &quot;-Wreturn-type-c-linkage&quot;</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">class </span>BasePluginInterface;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span> <a class="code" href="arch__linux_8h.html#afcb1b0bf7320fa3ebfc13fd896ebca4d">PLUGIN_API</a> std::unique_ptr&lt;BasePluginInterface&gt; <a class="code" href="namespacehal.html#aa8127688230d54c42984bdd3c2bb1f72">create_plugin_instance</a>();</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor">#ifdef COMPILER_CLANG</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="preprocessor">#pragma clang diagnostic pop</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keyword">enum class</span> <a class="code" href="arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> PluginInterfaceType</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    {</div>
+<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="plugin__interface__base_8h.html#a42221ae13c427234b08a21d229eb2ad9">   59</a></span>&#160;        <a class="code" href="plugin__interface__base_8h.html#a42221ae13c427234b08a21d229eb2ad9">base</a>,</div>
+<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="plugin__interface__base_8h.html#a9280bc62af1b57e6460d0b1c251908bd">   60</a></span>&#160;        <a class="code" href="plugin__interface__base_8h.html#a9280bc62af1b57e6460d0b1c251908bd">cli</a>,</div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="plugin__interface__base_8h.html#a10e7df18d8a816af76f947453883ff42">   61</a></span>&#160;        <a class="code" href="plugin__interface__base_8h.html#a10e7df18d8a816af76f947453883ff42">interactive_ui</a>,</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        gui</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    };</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="classhal_1_1_base_plugin_interface.html">   68</a></span>&#160;    <span class="keyword">class </span><a class="code" href="arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="code" href="classhal_1_1_base_plugin_interface.html">BasePluginInterface</a></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    {</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <a class="code" href="classhal_1_1_base_plugin_interface.html">BasePluginInterface</a>()          = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keyword">virtual</span> ~<a class="code" href="classhal_1_1_base_plugin_interface.html">BasePluginInterface</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="namespacehal.html#a45f4052286462e64763c142a3e26ab93">initialize</a>();</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="keyword">virtual</span> std::string get_name() <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="keyword">virtual</span> std::string get_version() <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <span class="keywordtype">bool</span> has_type(PluginInterfaceType t) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</div>
+<div class="line"><a name="l00109"></a><span class="lineno"><a class="line" href="classhal_1_1_base_plugin_interface.html#a05a8364dad5101585d352f97c98ff527">  109</a></span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_base_plugin_interface.html#a05a8364dad5101585d352f97c98ff527">log</a>(<span class="keyword">const</span> Args&amp;... <a class="code" href="namespacecontrol.html#a3cdfe36ea256f5d4c35f5d89c9f22d46">args</a>)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;            <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(get_name(), <a class="code" href="namespacecontrol.html#a3cdfe36ea256f5d4c35f5d89c9f22d46">args</a>...);</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        }</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        <span class="keyword">virtual</span> std::set&lt;std::string&gt; get_dependencies() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> on_load();</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> on_unload();</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> initialize_logging();</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160; </div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        <span class="keyword">virtual</span> std::vector&lt;PluginParameter&gt; get_parameter() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160; </div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> set_parameter(<a class="code" href="classhal_1_1_netlist.html">Netlist</a>* nl, <span class="keyword">const</span> std::vector&lt;PluginParameter&gt;&amp; params);</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> register_progress_indicator(std::function&lt;<span class="keywordtype">void</span>(<span class="keywordtype">int</span>, <span class="keyword">const</span> std::string&amp;)&gt; pif);</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    };</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
+<div class="line"><a name="l00157"></a><span class="lineno"><a class="line" href="namespacehal.html#af1388a5c4377a81f3215cac5d274fd60">  157</a></span>&#160;    <span class="keyword">using</span> <a class="code" href="namespacehal.html#af1388a5c4377a81f3215cac5d274fd60">instantiate_plugin_function</a> = std::unique_ptr&lt;BasePluginInterface&gt; (*)();</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aclasshal_1_1_base_plugin_interface_html_a05a8364dad5101585d352f97c98ff527"><div class="ttname"><a href="classhal_1_1_base_plugin_interface.html#a05a8364dad5101585d352f97c98ff527">hal::BasePluginInterface::log</a></div><div class="ttdeci">void log(const Args &amp;... args) const</div><div class="ttdef"><b>Definition:</b> <a href="plugin__interface__base_8h_source.html#l00107">plugin_interface_base.h:107</a></div></div>
-<div class="ttc" id="aplugin__interface__base_8h_html_a10e7df18d8a816af76f947453883ff42"><div class="ttname"><a href="plugin__interface__base_8h.html#a10e7df18d8a816af76f947453883ff42">interactive_ui</a></div><div class="ttdeci">interactive_ui</div><div class="ttdef"><b>Definition:</b> <a href="plugin__interface__base_8h_source.html#l00059">plugin_interface_base.h:59</a></div></div>
-<div class="ttc" id="anamespacehal_html_af1388a5c4377a81f3215cac5d274fd60"><div class="ttname"><a href="namespacehal.html#af1388a5c4377a81f3215cac5d274fd60">hal::instantiate_plugin_function</a></div><div class="ttdeci">std::unique_ptr&lt; BasePluginInterface &gt;(*)() instantiate_plugin_function</div><div class="ttdef"><b>Definition:</b> <a href="plugin__interface__base_8h_source.html#l00155">plugin_interface_base.h:155</a></div></div>
+<div class="ttc" id="aclasshal_1_1_base_plugin_interface_html_a05a8364dad5101585d352f97c98ff527"><div class="ttname"><a href="classhal_1_1_base_plugin_interface.html#a05a8364dad5101585d352f97c98ff527">hal::BasePluginInterface::log</a></div><div class="ttdeci">void log(const Args &amp;... args) const</div><div class="ttdef"><b>Definition:</b> <a href="plugin__interface__base_8h_source.html#l00109">plugin_interface_base.h:109</a></div></div>
+<div class="ttc" id="aplugin__interface__base_8h_html_a10e7df18d8a816af76f947453883ff42"><div class="ttname"><a href="plugin__interface__base_8h.html#a10e7df18d8a816af76f947453883ff42">interactive_ui</a></div><div class="ttdeci">interactive_ui</div><div class="ttdef"><b>Definition:</b> <a href="plugin__interface__base_8h_source.html#l00061">plugin_interface_base.h:61</a></div></div>
+<div class="ttc" id="anamespacehal_html_af1388a5c4377a81f3215cac5d274fd60"><div class="ttname"><a href="namespacehal.html#af1388a5c4377a81f3215cac5d274fd60">hal::instantiate_plugin_function</a></div><div class="ttdeci">std::unique_ptr&lt; BasePluginInterface &gt;(*)() instantiate_plugin_function</div><div class="ttdef"><b>Definition:</b> <a href="plugin__interface__base_8h_source.html#l00157">plugin_interface_base.h:157</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
 <div class="ttc" id="anamespacehal_html_aa8127688230d54c42984bdd3c2bb1f72"><div class="ttname"><a href="namespacehal.html#aa8127688230d54c42984bdd3c2bb1f72">hal::create_plugin_instance</a></div><div class="ttdeci">std::unique_ptr&lt; BasePluginInterface &gt; create_plugin_instance()</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00042">plugin_gui.cpp:42</a></div></div>
-<div class="ttc" id="aplugin__interface__base_8h_html_a9280bc62af1b57e6460d0b1c251908bd"><div class="ttname"><a href="plugin__interface__base_8h.html#a9280bc62af1b57e6460d0b1c251908bd">cli</a></div><div class="ttdeci">cli</div><div class="ttdef"><b>Definition:</b> <a href="plugin__interface__base_8h_source.html#l00058">plugin_interface_base.h:58</a></div></div>
+<div class="ttc" id="aplugin__interface__base_8h_html_a9280bc62af1b57e6460d0b1c251908bd"><div class="ttname"><a href="plugin__interface__base_8h.html#a9280bc62af1b57e6460d0b1c251908bd">cli</a></div><div class="ttdeci">cli</div><div class="ttdef"><b>Definition:</b> <a href="plugin__interface__base_8h_source.html#l00060">plugin_interface_base.h:60</a></div></div>
 <div class="ttc" id="ainclude_2hal__core_2netlist_2netlist_8h_html"><div class="ttname"><a href="include_2hal__core_2netlist_2netlist_8h.html">netlist.h</a></div></div>
 <div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="defines_8h.html">defines.h</a></div></div>
-<div class="ttc" id="aarch__linux_8h_html_afea66f9a6812c2354b544f31910fd72f"><div class="ttname"><a href="arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a></div><div class="ttdeci">#define CORE_API</div><div class="ttdef"><b>Definition:</b> <a href="arch__linux_8h_source.html#l00026">arch_linux.h:26</a></div></div>
-<div class="ttc" id="agroup__utilities_html_ga5a10e8bbe0ebf932e114b116b32d7ed2"><div class="ttname"><a href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a></div><div class="ttdeci">#define log_info(channel,...)</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00068">log.h:68</a></div></div>
-<div class="ttc" id="aclasshal_1_1_base_plugin_interface_html"><div class="ttname"><a href="classhal_1_1_base_plugin_interface.html">hal::BasePluginInterface</a></div><div class="ttdef"><b>Definition:</b> <a href="plugin__interface__base_8h_source.html#l00066">plugin_interface_base.h:66</a></div></div>
+<div class="ttc" id="aarch__linux_8h_html_afea66f9a6812c2354b544f31910fd72f"><div class="ttname"><a href="arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a></div><div class="ttdeci">#define CORE_API</div><div class="ttdef"><b>Definition:</b> <a href="arch__linux_8h_source.html#l00028">arch_linux.h:28</a></div></div>
+<div class="ttc" id="agroup__utilities_html_ga5a10e8bbe0ebf932e114b116b32d7ed2"><div class="ttname"><a href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a></div><div class="ttdeci">#define log_info(channel,...)</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00070">log.h:70</a></div></div>
+<div class="ttc" id="aclasshal_1_1_base_plugin_interface_html"><div class="ttname"><a href="classhal_1_1_base_plugin_interface.html">hal::BasePluginInterface</a></div><div class="ttdef"><b>Definition:</b> <a href="plugin__interface__base_8h_source.html#l00068">plugin_interface_base.h:68</a></div></div>
 <div class="ttc" id="anamespacehal_html_a45f4052286462e64763c142a3e26ab93"><div class="ttname"><a href="namespacehal.html#a45f4052286462e64763c142a3e26ab93">hal::initialize</a></div><div class="ttdeci">void initialize()</div><div class="ttdef"><b>Definition:</b> <a href="event__log_8cpp_source.html#l00299">event_log.cpp:299</a></div></div>
 <div class="ttc" id="alog_8h_html"><div class="ttname"><a href="log_8h.html">log.h</a></div></div>
-<div class="ttc" id="aarch__linux_8h_html_afcb1b0bf7320fa3ebfc13fd896ebca4d"><div class="ttname"><a href="arch__linux_8h.html#afcb1b0bf7320fa3ebfc13fd896ebca4d">PLUGIN_API</a></div><div class="ttdeci">#define PLUGIN_API</div><div class="ttdef"><b>Definition:</b> <a href="arch__linux_8h_source.html#l00030">arch_linux.h:30</a></div></div>
+<div class="ttc" id="aarch__linux_8h_html_afcb1b0bf7320fa3ebfc13fd896ebca4d"><div class="ttname"><a href="arch__linux_8h.html#afcb1b0bf7320fa3ebfc13fd896ebca4d">PLUGIN_API</a></div><div class="ttdeci">#define PLUGIN_API</div><div class="ttdef"><b>Definition:</b> <a href="arch__linux_8h_source.html#l00032">arch_linux.h:32</a></div></div>
 <div class="ttc" id="aplugin__parameter_8h_html"><div class="ttname"><a href="plugin__parameter_8h.html">plugin_parameter.h</a></div></div>
 <div class="ttc" id="anamespacecontrol_html_a3cdfe36ea256f5d4c35f5d89c9f22d46"><div class="ttname"><a href="namespacecontrol.html#a3cdfe36ea256f5d4c35f5d89c9f22d46">control.args</a></div><div class="ttdeci">args</div><div class="ttdef"><b>Definition:</b> <a href="control_8py_source.html#l00033">control.py:33</a></div></div>
-<div class="ttc" id="aclasshal_1_1_netlist_html"><div class="ttname"><a href="classhal_1_1_netlist.html">hal::Netlist</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2netlist_2netlist_8h_source.html#l00053">netlist.h:53</a></div></div>
-<div class="ttc" id="aplugin__interface__base_8h_html_a42221ae13c427234b08a21d229eb2ad9"><div class="ttname"><a href="plugin__interface__base_8h.html#a42221ae13c427234b08a21d229eb2ad9">base</a></div><div class="ttdeci">base</div><div class="ttdef"><b>Definition:</b> <a href="plugin__interface__base_8h_source.html#l00057">plugin_interface_base.h:57</a></div></div>
+<div class="ttc" id="aclasshal_1_1_netlist_html"><div class="ttname"><a href="classhal_1_1_netlist.html">hal::Netlist</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2netlist_2netlist_8h_source.html#l00055">netlist.h:55</a></div></div>
+<div class="ttc" id="aplugin__interface__base_8h_html_a42221ae13c427234b08a21d229eb2ad9"><div class="ttname"><a href="plugin__interface__base_8h.html#a42221ae13c427234b08a21d229eb2ad9">base</a></div><div class="ttdeci">base</div><div class="ttdef"><b>Definition:</b> <a href="plugin__interface__base_8h_source.html#l00059">plugin_interface_base.h:59</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_6df68e7c4858c229578de4afea200fae.html">plugin_system</a></li><li class="navelem"><a class="el" href="plugin__interface__base_8h.html">plugin_interface_base.h</a></li>
-    <li class="footer">Generated on Fri Oct 21 2022 13:08:32 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:45:52 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

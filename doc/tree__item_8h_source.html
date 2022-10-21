@@ -86,96 +86,98 @@ $(document).ready(function(){initNavTree('tree__item_8h_source.html',''); initRe
 <div class="title">tree_item.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="tree__item_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//  MIT License</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//  Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//  of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//  in the Software without restriction, including without limitation the rights</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//  copies of the Software, and to permit persons to whom the Software is</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//  furnished to do so, subject to the following conditions:</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">//  The above copyright notice and this permission notice shall be included in all</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">//  copies or substantial portions of the Software.</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">//  THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">//  SOFTWARE.</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<a href="tree__item_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// MIT License</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">// Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">// Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann (&quot;ORIGINAL AUTHORS&quot;). All rights reserved.</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">// Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">// Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix (&quot;ORIGINAL AUTHORS&quot;). All Rights reserved.</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">// of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">// in the Software without restriction, including without limitation the rights</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">// copies of the Software, and to permit persons to whom the Software is</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">// furnished to do so, subject to the following conditions:</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">// The above copyright notice and this permission notice shall be included in all</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">// copies or substantial portions of the Software.</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">// SOFTWARE.</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &lt;QList&gt;</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &lt;QVariant&gt;</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;{</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classhal_1_1_tree_item.html">   40</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_tree_item.html">TreeItem</a></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    {</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="comment">// maybe add enum type for all possible scenarios? or use additional data with key to access type</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="comment">// and handle type handling in model...e.g.: item-&gt;getAddData(&quot;type&quot;)(structure, more generalization,...)</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <a class="code" href="classhal_1_1_tree_item.html#a78b873979502baaf7076200d55da8008">TreeItem</a>();</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <a class="code" href="classhal_1_1_tree_item.html#a78b873979502baaf7076200d55da8008">TreeItem</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;QVariant&gt;</a> columnData);</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <a class="code" href="classhal_1_1_tree_item.html#a5e1d31a582ce784c0621e942a3baf4d1">~TreeItem</a>();</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> <a class="code" href="classhal_1_1_tree_item.html#a594f73a1224b90deb6b57a140a67108e">getData</a>(<span class="keywordtype">int</span> column);</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tree_item.html#ac2383934273ca4d77f1c67e36cc784a8">setData</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;QVariant&gt;</a> <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>);</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tree_item.html#a891a8355fbbe7f8874cfdcea98a608d1">setDataAtIndex</a>(<span class="keywordtype">int</span> index, <a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>);</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tree_item.html#af1b2ccbdbf1b61479c8ef045194b1104">appendData</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>);</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <a class="code" href="classhal_1_1_tree_item.html">TreeItem</a>* <a class="code" href="classhal_1_1_tree_item.html#ab0d556f009d08e7a197532e8b1968db8">getParent</a>();</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tree_item.html#adcc11e16b8b266f2a4f51b808cc1ac80">setParent</a>(<a class="code" href="classhal_1_1_tree_item.html">TreeItem</a>* parent);</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <a class="code" href="classhal_1_1_tree_item.html">TreeItem</a>* <a class="code" href="classhal_1_1_tree_item.html#ad62ea3937ffd1a65c2bba2a8047fef73">getChild</a>(<span class="keywordtype">int</span> row);</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;TreeItem*&gt;</a> <a class="code" href="classhal_1_1_tree_item.html#a4bb29bed318ae2f584567994b2d9c68d">getChildren</a>();</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tree_item.html#a50a9051c320801209001f2fb4b3523b5">appendChild</a>(<a class="code" href="classhal_1_1_tree_item.html">TreeItem</a>* child);</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tree_item.html#a9aa5af895a0b102b7525fb632d9f437d">insertChild</a>(<span class="keywordtype">int</span> index, <a class="code" href="classhal_1_1_tree_item.html">TreeItem</a>* child);</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160; </div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        <a class="code" href="classhal_1_1_tree_item.html">TreeItem</a>* <a class="code" href="classhal_1_1_tree_item.html#ad91c45b7bb686dfdce5f8426f3165988">removeChildAtPos</a>(<span class="keywordtype">int</span> row);</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160; </div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_tree_item.html#ab7a065a5bd045de16bacf6fca0be10d2">removeChild</a>(<a class="code" href="classhal_1_1_tree_item.html">TreeItem</a>* child);</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160; </div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classhal_1_1_tree_item.html#a7b95172b6276f9ab447ece20854171e5">getChildCount</a>();</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160; </div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classhal_1_1_tree_item.html#a625be35ecaa8ed0f2e10f747aec4a0e7">getColumnCount</a>();</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classhal_1_1_tree_item.html#a2c17330c73d141cb82a6bce54a647819">getRowForChild</a>(<a class="code" href="classhal_1_1_tree_item.html">TreeItem</a>* child);</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160; </div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classhal_1_1_tree_item.html#abc0beae8fa878529cc92eb10ae00ab4a">getOwnRow</a>();</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160; </div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tree_item.html#a1246f32fc11815622bac1ea93423f501">setAdditionalData</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> key, <a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>);</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160; </div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> <a class="code" href="classhal_1_1_tree_item.html#ae11e71000c9c4df105d1987466bcce0a">getAdditionalData</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> key);</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160; </div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        <a class="code" href="classhal_1_1_tree_item.html">TreeItem</a>* mParent;</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;TreeItem*&gt;</a> mChildren;</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;QVariant&gt;</a> mData;</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160; </div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;        <span class="comment">// experimental, additional data (for anything)</span></div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html">QMap&lt;QString, QVariant&gt;</a> mAdditionalData;</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        <span class="comment">//QList&lt;QVariant&gt; mAdditionalData;</span></div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160; </div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;    };</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;}</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &lt;QList&gt;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &lt;QVariant&gt;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;{</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="classhal_1_1_tree_item.html">   42</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_tree_item.html">TreeItem</a></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    {</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="comment">// maybe add enum type for all possible scenarios? or use additional data with key to access type</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="comment">// and handle type handling in model...e.g.: item-&gt;getAddData(&quot;type&quot;)(structure, more generalization,...)</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <a class="code" href="classhal_1_1_tree_item.html#a78b873979502baaf7076200d55da8008">TreeItem</a>();</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <a class="code" href="classhal_1_1_tree_item.html#a78b873979502baaf7076200d55da8008">TreeItem</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;QVariant&gt;</a> columnData);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <a class="code" href="classhal_1_1_tree_item.html#a5e1d31a582ce784c0621e942a3baf4d1">~TreeItem</a>();</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> <a class="code" href="classhal_1_1_tree_item.html#a594f73a1224b90deb6b57a140a67108e">getData</a>(<span class="keywordtype">int</span> column);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tree_item.html#ac2383934273ca4d77f1c67e36cc784a8">setData</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;QVariant&gt;</a> <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>);</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tree_item.html#a891a8355fbbe7f8874cfdcea98a608d1">setDataAtIndex</a>(<span class="keywordtype">int</span> index, <a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>);</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tree_item.html#af1b2ccbdbf1b61479c8ef045194b1104">appendData</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>);</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <a class="code" href="classhal_1_1_tree_item.html">TreeItem</a>* <a class="code" href="classhal_1_1_tree_item.html#ab0d556f009d08e7a197532e8b1968db8">getParent</a>();</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tree_item.html#adcc11e16b8b266f2a4f51b808cc1ac80">setParent</a>(<a class="code" href="classhal_1_1_tree_item.html">TreeItem</a>* parent);</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        <a class="code" href="classhal_1_1_tree_item.html">TreeItem</a>* <a class="code" href="classhal_1_1_tree_item.html#ad62ea3937ffd1a65c2bba2a8047fef73">getChild</a>(<span class="keywordtype">int</span> row);</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;TreeItem*&gt;</a> <a class="code" href="classhal_1_1_tree_item.html#a4bb29bed318ae2f584567994b2d9c68d">getChildren</a>();</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tree_item.html#a50a9051c320801209001f2fb4b3523b5">appendChild</a>(<a class="code" href="classhal_1_1_tree_item.html">TreeItem</a>* child);</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tree_item.html#a9aa5af895a0b102b7525fb632d9f437d">insertChild</a>(<span class="keywordtype">int</span> index, <a class="code" href="classhal_1_1_tree_item.html">TreeItem</a>* child);</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160; </div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        <a class="code" href="classhal_1_1_tree_item.html">TreeItem</a>* <a class="code" href="classhal_1_1_tree_item.html#ad91c45b7bb686dfdce5f8426f3165988">removeChildAtPos</a>(<span class="keywordtype">int</span> row);</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160; </div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_tree_item.html#ab7a065a5bd045de16bacf6fca0be10d2">removeChild</a>(<a class="code" href="classhal_1_1_tree_item.html">TreeItem</a>* child);</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classhal_1_1_tree_item.html#a7b95172b6276f9ab447ece20854171e5">getChildCount</a>();</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160; </div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classhal_1_1_tree_item.html#a625be35ecaa8ed0f2e10f747aec4a0e7">getColumnCount</a>();</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160; </div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classhal_1_1_tree_item.html#a2c17330c73d141cb82a6bce54a647819">getRowForChild</a>(<a class="code" href="classhal_1_1_tree_item.html">TreeItem</a>* child);</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160; </div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classhal_1_1_tree_item.html#abc0beae8fa878529cc92eb10ae00ab4a">getOwnRow</a>();</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160; </div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tree_item.html#a1246f32fc11815622bac1ea93423f501">setAdditionalData</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> key, <a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>);</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160; </div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> <a class="code" href="classhal_1_1_tree_item.html#ae11e71000c9c4df105d1987466bcce0a">getAdditionalData</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> key);</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160; </div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        <a class="code" href="classhal_1_1_tree_item.html">TreeItem</a>* mParent;</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;TreeItem*&gt;</a> mChildren;</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;QVariant&gt;</a> mData;</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160; </div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        <span class="comment">// experimental, additional data (for anything)</span></div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html">QMap&lt;QString, QVariant&gt;</a> mAdditionalData;</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;        <span class="comment">//QList&lt;QVariant&gt; mAdditionalData;</span></div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160; </div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;    };</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclasshal_1_1_tree_item_html_ad91c45b7bb686dfdce5f8426f3165988"><div class="ttname"><a href="classhal_1_1_tree_item.html#ad91c45b7bb686dfdce5f8426f3165988">hal::TreeItem::removeChildAtPos</a></div><div class="ttdeci">TreeItem * removeChildAtPos(int row)</div><div class="ttdef"><b>Definition:</b> <a href="tree__item_8cpp_source.html#l00075">tree_item.cpp:75</a></div></div>
@@ -184,7 +186,7 @@ $(document).ready(function(){initNavTree('tree__item_8h_source.html',''); initRe
 <div class="ttc" id="aclasshal_1_1_tree_item_html_a594f73a1224b90deb6b57a140a67108e"><div class="ttname"><a href="classhal_1_1_tree_item.html#a594f73a1224b90deb6b57a140a67108e">hal::TreeItem::getData</a></div><div class="ttdeci">QVariant getData(int column)</div><div class="ttdef"><b>Definition:</b> <a href="tree__item_8cpp_source.html#l00022">tree_item.cpp:22</a></div></div>
 <div class="ttc" id="aclasshal_1_1_tree_item_html_a50a9051c320801209001f2fb4b3523b5"><div class="ttname"><a href="classhal_1_1_tree_item.html#a50a9051c320801209001f2fb4b3523b5">hal::TreeItem::appendChild</a></div><div class="ttdeci">void appendChild(TreeItem *child)</div><div class="ttdef"><b>Definition:</b> <a href="tree__item_8cpp_source.html#l00063">tree_item.cpp:63</a></div></div>
 <div class="ttc" id="anamespacehal_html_ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc"><div class="ttname"><a href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">hal::PinType::data</a></div><div class="ttdeci">@ data</div></div>
-<div class="ttc" id="aclasshal_1_1_tree_item_html"><div class="ttname"><a href="classhal_1_1_tree_item.html">hal::TreeItem</a></div><div class="ttdoc">(Future) Base class for all tree models related to the details widget.</div><div class="ttdef"><b>Definition:</b> <a href="tree__item_8h_source.html#l00040">tree_item.h:40</a></div></div>
+<div class="ttc" id="aclasshal_1_1_tree_item_html"><div class="ttname"><a href="classhal_1_1_tree_item.html">hal::TreeItem</a></div><div class="ttdoc">(Future) Base class for all tree models related to the details widget.</div><div class="ttdef"><b>Definition:</b> <a href="tree__item_8h_source.html#l00042">tree_item.h:42</a></div></div>
 <div class="ttc" id="aclasshal_1_1_tree_item_html_a2c17330c73d141cb82a6bce54a647819"><div class="ttname"><a href="classhal_1_1_tree_item.html#a2c17330c73d141cb82a6bce54a647819">hal::TreeItem::getRowForChild</a></div><div class="ttdeci">int getRowForChild(TreeItem *child)</div><div class="ttdef"><b>Definition:</b> <a href="tree__item_8cpp_source.html#l00109">tree_item.cpp:109</a></div></div>
 <div class="ttc" id="aclasshal_1_1_tree_item_html_ae11e71000c9c4df105d1987466bcce0a"><div class="ttname"><a href="classhal_1_1_tree_item.html#ae11e71000c9c4df105d1987466bcce0a">hal::TreeItem::getAdditionalData</a></div><div class="ttdeci">QVariant getAdditionalData(QString key)</div><div class="ttdef"><b>Definition:</b> <a href="tree__item_8cpp_source.html#l00136">tree_item.cpp:136</a></div></div>
 <div class="ttc" id="aclasshal_1_1_tree_item_html_ac2383934273ca4d77f1c67e36cc784a8"><div class="ttname"><a href="classhal_1_1_tree_item.html#ac2383934273ca4d77f1c67e36cc784a8">hal::TreeItem::setData</a></div><div class="ttdeci">void setData(QList&lt; QVariant &gt; data)</div><div class="ttdef"><b>Definition:</b> <a href="tree__item_8cpp_source.html#l00027">tree_item.cpp:27</a></div></div>
@@ -209,7 +211,7 @@ $(document).ready(function(){initNavTree('tree__item_8h_source.html',''); initRe
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_850997899edfcaa3cc8b263edbaceb41.html">basic_tree_model</a></li><li class="navelem"><a class="el" href="tree__item_8h.html">tree_item.h</a></li>
-    <li class="footer">Generated on Fri Oct 21 2022 13:08:32 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:45:53 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

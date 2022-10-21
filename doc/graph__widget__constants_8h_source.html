@@ -86,77 +86,79 @@ $(document).ready(function(){initNavTree('graph__widget__constants_8h_source.htm
 <div class="title">graph_widget_constants.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="graph__widget__constants_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//  MIT License</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//  Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//  of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//  in the Software without restriction, including without limitation the rights</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//  copies of the Software, and to permit persons to whom the Software is</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//  furnished to do so, subject to the following conditions:</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">//  The above copyright notice and this permission notice shall be included in all</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">//  copies or substantial portions of the Software.</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">//  THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">//  SOFTWARE.</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<a href="graph__widget__constants_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// MIT License</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">// Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">// Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann (&quot;ORIGINAL AUTHORS&quot;). All rights reserved.</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">// Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">// Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix (&quot;ORIGINAL AUTHORS&quot;). All Rights reserved.</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">// of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">// in the Software without restriction, including without limitation the rights</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">// copies of the Software, and to permit persons to whom the Software is</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">// furnished to do so, subject to the following conditions:</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">// The above copyright notice and this permission notice shall be included in all</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">// copies or substantial portions of the Software.</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">// SOFTWARE.</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &lt;QtGlobal&gt;</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &lt;QObject&gt;</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;{</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">namespace </span>graph_widget_constants</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    {</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        Q_NAMESPACE</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> sFontSize = 12;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> sGridSize = 14;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> sClusterSize = 8;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> qreal sGateMinLod = 0.2; <span class="comment">// if current lod &lt; than this use lowest level of detail</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> qreal sGateMaxLod = 0.4; <span class="comment">// if current lod &gt; than this use highest level of detail</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> qreal sNetMinLod = 0.1; <span class="comment">// if current lod &lt; than this use lowest level of detail</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> qreal sNetMaxLod = 0.4; <span class="comment">// if current lod &gt; than this use highest level of detail</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> qreal sEparatedNetMinLod = 0.1; <span class="comment">// if current lod &lt; than this use lowest level of detail</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> qreal sEparatedNetMaxLod = 0.4; <span class="comment">// if current lod &gt; than this use highest level of detail</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> qreal sGlobalNetMinLod = 0.1; <span class="comment">// if current lod &lt; than this use lowest level of detail</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> qreal sGlobalNetMaxLod = 0.4; <span class="comment">// if current lod &gt; than this use highest level of detail</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> qreal sNetFadeInLod = 0.1;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> qreal sNetFadeOutLod = 0.4;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> qreal sGridFadeStartLod = 0.4;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> qreal sGridFadeEndLod = 1.0;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> mDragSwapSensitivityDistance = 100;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &lt;QtGlobal&gt;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &lt;QObject&gt;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;{</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">namespace </span>graph_widget_constants</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        Q_NAMESPACE</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> sFontSize = 12;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> sGridSize = 14;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> sClusterSize = 8;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> qreal sGateMinLod = 0.2; <span class="comment">// if current lod &lt; than this use lowest level of detail</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> qreal sGateMaxLod = 0.4; <span class="comment">// if current lod &gt; than this use highest level of detail</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> qreal sNetMinLod = 0.1; <span class="comment">// if current lod &lt; than this use lowest level of detail</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> qreal sNetMaxLod = 0.4; <span class="comment">// if current lod &gt; than this use highest level of detail</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> qreal sEparatedNetMinLod = 0.1; <span class="comment">// if current lod &lt; than this use lowest level of detail</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> qreal sEparatedNetMaxLod = 0.4; <span class="comment">// if current lod &gt; than this use highest level of detail</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> qreal sGlobalNetMinLod = 0.1; <span class="comment">// if current lod &lt; than this use lowest level of detail</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> qreal sGlobalNetMaxLod = 0.4; <span class="comment">// if current lod &gt; than this use highest level of detail</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> qreal sNetFadeInLod = 0.1;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> qreal sNetFadeOutLod = 0.4;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> qreal sGridFadeStartLod = 0.4;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> qreal sGridFadeEndLod = 1.0;</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="namespacehal_1_1graph__widget__constants.html#aa49af72ecf7fb11de1d671177803ce79">   62</a></span>&#160;        <span class="keyword">enum class</span> <a class="code" href="namespacehal_1_1graph__widget__constants.html#aa49af72ecf7fb11de1d671177803ce79">grid_type</a></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        {</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            <a class="code" href="namespacehal_1_1graph__widget__constants.html#aa49af72ecf7fb11de1d671177803ce79aa0b0293a2db49f5f93c15a62e095c819">Lines</a> = 0,</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            <a class="code" href="namespacehal_1_1graph__widget__constants.html#aa49af72ecf7fb11de1d671177803ce79a4c72d232d1a1406e6c26251bbf6c3b25">Dots</a> = 1,</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            <a class="code" href="namespacehal_1_1graph__widget__constants.html#aa49af72ecf7fb11de1d671177803ce79a6adf97f83acf6453d4a6a4b1070f3754">None</a> = 2</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        };</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <a class="code" href="namespacehal_1_1gui__utility.html#a0c78df8ac7ca41f8928e0bbd3d5e3b3c">Q_ENUM_NS</a>(<a class="code" href="namespacehal_1_1graph__widget__constants.html#aa49af72ecf7fb11de1d671177803ce79">grid_type</a>)</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    }</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;}</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> mDragSwapSensitivityDistance = 100;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="namespacehal_1_1graph__widget__constants.html#aa49af72ecf7fb11de1d671177803ce79">   64</a></span>&#160;        <span class="keyword">enum class</span> <a class="code" href="namespacehal_1_1graph__widget__constants.html#aa49af72ecf7fb11de1d671177803ce79">grid_type</a></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        {</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            <a class="code" href="namespacehal_1_1graph__widget__constants.html#aa49af72ecf7fb11de1d671177803ce79aa0b0293a2db49f5f93c15a62e095c819">Lines</a> = 0,</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            <a class="code" href="namespacehal_1_1graph__widget__constants.html#aa49af72ecf7fb11de1d671177803ce79a4c72d232d1a1406e6c26251bbf6c3b25">Dots</a> = 1,</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;            <a class="code" href="namespacehal_1_1graph__widget__constants.html#aa49af72ecf7fb11de1d671177803ce79a6adf97f83acf6453d4a6a4b1070f3754">None</a> = 2</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        };</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <a class="code" href="namespacehal_1_1gui__utility.html#a0c78df8ac7ca41f8928e0bbd3d5e3b3c">Q_ENUM_NS</a>(<a class="code" href="namespacehal_1_1graph__widget__constants.html#aa49af72ecf7fb11de1d671177803ce79">grid_type</a>)</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    }</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="anamespacehal_1_1graph__widget__constants_html_aa49af72ecf7fb11de1d671177803ce79"><div class="ttname"><a href="namespacehal_1_1graph__widget__constants.html#aa49af72ecf7fb11de1d671177803ce79">hal::graph_widget_constants::grid_type</a></div><div class="ttdeci">grid_type</div><div class="ttdef"><b>Definition:</b> <a href="graph__widget__constants_8h_source.html#l00062">graph_widget_constants.h:62</a></div></div>
+<div class="ttc" id="anamespacehal_1_1graph__widget__constants_html_aa49af72ecf7fb11de1d671177803ce79"><div class="ttname"><a href="namespacehal_1_1graph__widget__constants.html#aa49af72ecf7fb11de1d671177803ce79">hal::graph_widget_constants::grid_type</a></div><div class="ttdeci">grid_type</div><div class="ttdef"><b>Definition:</b> <a href="graph__widget__constants_8h_source.html#l00064">graph_widget_constants.h:64</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
 <div class="ttc" id="anamespacehal_1_1graph__widget__constants_html_aa49af72ecf7fb11de1d671177803ce79a4c72d232d1a1406e6c26251bbf6c3b25"><div class="ttname"><a href="namespacehal_1_1graph__widget__constants.html#aa49af72ecf7fb11de1d671177803ce79a4c72d232d1a1406e6c26251bbf6c3b25">hal::graph_widget_constants::grid_type::Dots</a></div><div class="ttdeci">@ Dots</div></div>
 <div class="ttc" id="anamespacehal_1_1graph__widget__constants_html_aa49af72ecf7fb11de1d671177803ce79aa0b0293a2db49f5f93c15a62e095c819"><div class="ttname"><a href="namespacehal_1_1graph__widget__constants.html#aa49af72ecf7fb11de1d671177803ce79aa0b0293a2db49f5f93c15a62e095c819">hal::graph_widget_constants::grid_type::Lines</a></div><div class="ttdeci">@ Lines</div></div>
@@ -166,7 +168,7 @@ $(document).ready(function(){initNavTree('graph__widget__constants_8h_source.htm
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_e6f210bccc64e8ff5ef57a64ae71bbf6.html">graph_widget</a></li><li class="navelem"><a class="el" href="graph__widget__constants_8h.html">graph_widget_constants.h</a></li>
-    <li class="footer">Generated on Fri Oct 21 2022 13:08:32 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:45:53 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

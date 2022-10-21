@@ -86,91 +86,93 @@ $(document).ready(function(){initNavTree('input__dialog_8h_source.html',''); ini
 <div class="title">input_dialog.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="input__dialog_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//  MIT License</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//  Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//  of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//  in the Software without restriction, including without limitation the rights</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//  copies of the Software, and to permit persons to whom the Software is</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//  furnished to do so, subject to the following conditions:</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">//  The above copyright notice and this permission notice shall be included in all</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">//  copies or substantial portions of the Software.</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">//  THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">//  SOFTWARE.</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<a href="input__dialog_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// MIT License</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">// Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">// Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann (&quot;ORIGINAL AUTHORS&quot;). All rights reserved.</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">// Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">// Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix (&quot;ORIGINAL AUTHORS&quot;). All Rights reserved.</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">// of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">// in the Software without restriction, including without limitation the rights</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">// copies of the Software, and to permit persons to whom the Software is</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">// furnished to do so, subject to the following conditions:</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">// The above copyright notice and this permission notice shall be included in all</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">// copies or substantial portions of the Software.</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">// SOFTWARE.</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="stacked__validator_8h.html">gui/validator/stacked_validator.h</a>&quot;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &lt;QDialog&gt;</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &lt;QVBoxLayout&gt;</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;QLabel&gt;</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;QLineEdit&gt;</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &lt;QPushButton&gt;</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;{</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="classhal_1_1_input_dialog.html">   48</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_input_dialog.html">InputDialog</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qdialog.html">QDialog</a></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    {</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;            <a class="code" href="classhal_1_1_input_dialog.html#ab371de37ad0d8a1d516b0e6b9ff40aa9">InputDialog</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>, <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#WindowType-enum">Qt::WindowFlags</a> f = <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#WindowType-enum">Qt::WindowFlags</a>());</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;            <a class="code" href="classhal_1_1_input_dialog.html#ab371de37ad0d8a1d516b0e6b9ff40aa9">InputDialog</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; window_title, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; info_text, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; input_text, <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>, <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#WindowType-enum">Qt::WindowFlags</a> f = <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#WindowType-enum">Qt::WindowFlags</a>());</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_input_dialog.html#a13d3b77966122ea648956fe1b0cc73c8">setInfoText</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; text);</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_input_dialog.html#a28372101207671e93e25c9402cce954d">setInputText</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; text);</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_input_dialog.html#ad373ed5f7765a8db070a2e0ff32fad25">setWarningText</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; text);</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_input_dialog.html#a3594898589f47aecddcc8651d381061a">addValidator</a>(<a class="code" href="classhal_1_1_validator.html">Validator</a>* <a class="code" href="classhal_1_1_validator.html">Validator</a>);</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_input_dialog.html#afc5b8211366de40bd55618fb7b80c19d">removeValidator</a>(<a class="code" href="classhal_1_1_validator.html">Validator</a>* <a class="code" href="classhal_1_1_validator.html">Validator</a>);</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_input_dialog.html#a863ce5e4b6afc545ad38b7b5c4bd1160">clearValidators</a>();</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> <a class="code" href="classhal_1_1_input_dialog.html#a99c4f01bd697915542ebb4e116b4f896">textValue</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qvboxlayout.html">QVBoxLayout</a>* mLayout;</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a>* mLabelInfoText;</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a>* mLabelWarningText;</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qlineedit.html">QLineEdit</a>* mInputTextEdit;</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>* mOkButton;</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> mWarningText = <span class="stringliteral">&quot;&quot;</span>;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="stacked__validator_8h.html">gui/validator/stacked_validator.h</a>&quot;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;QDialog&gt;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;QVBoxLayout&gt;</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &lt;QLabel&gt;</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &lt;QLineEdit&gt;</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &lt;QPushButton&gt;</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;{</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="classhal_1_1_input_dialog.html">   50</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_input_dialog.html">InputDialog</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qdialog.html">QDialog</a></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    {</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            <a class="code" href="classhal_1_1_input_dialog.html#ab371de37ad0d8a1d516b0e6b9ff40aa9">InputDialog</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>, <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#WindowType-enum">Qt::WindowFlags</a> f = <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#WindowType-enum">Qt::WindowFlags</a>());</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            <a class="code" href="classhal_1_1_input_dialog.html#ab371de37ad0d8a1d516b0e6b9ff40aa9">InputDialog</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; window_title, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; info_text, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; input_text, <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>, <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#WindowType-enum">Qt::WindowFlags</a> f = <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#WindowType-enum">Qt::WindowFlags</a>());</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_input_dialog.html#a13d3b77966122ea648956fe1b0cc73c8">setInfoText</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; text);</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_input_dialog.html#a28372101207671e93e25c9402cce954d">setInputText</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; text);</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_input_dialog.html#ad373ed5f7765a8db070a2e0ff32fad25">setWarningText</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; text);</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_input_dialog.html#a3594898589f47aecddcc8651d381061a">addValidator</a>(<a class="code" href="classhal_1_1_validator.html">Validator</a>* <a class="code" href="classhal_1_1_validator.html">Validator</a>);</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_input_dialog.html#afc5b8211366de40bd55618fb7b80c19d">removeValidator</a>(<a class="code" href="classhal_1_1_validator.html">Validator</a>* <a class="code" href="classhal_1_1_validator.html">Validator</a>);</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_input_dialog.html#a863ce5e4b6afc545ad38b7b5c4bd1160">clearValidators</a>();</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> <a class="code" href="classhal_1_1_input_dialog.html#a99c4f01bd697915542ebb4e116b4f896">textValue</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qvboxlayout.html">QVBoxLayout</a>* mLayout;</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a>* mLabelInfoText;</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a>* mLabelWarningText;</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qlineedit.html">QLineEdit</a>* mInputTextEdit;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>* mOkButton;</div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;            <a class="code" href="classhal_1_1_stacked_validator.html">StackedValidator</a> mValidator;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> mWarningText = <span class="stringliteral">&quot;&quot;</span>;</div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;            <span class="keywordtype">void</span> init();</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;            <a class="code" href="classhal_1_1_stacked_validator.html">StackedValidator</a> mValidator;</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;            <span class="keywordtype">void</span> showWarningText();</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;            <span class="keywordtype">void</span> hideWarningText();</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;            <span class="keywordtype">void</span> enableOkButton();</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;            <span class="keywordtype">void</span> disableOkButton();</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160; </div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;            <span class="keywordtype">void</span> enableProgression();</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;            <span class="keywordtype">void</span> disableProgression();</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160; </div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;            <span class="keywordtype">void</span> handleOkClicked();</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;            <span class="keywordtype">void</span> handleCancelClicked();</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160; </div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;            <span class="keywordtype">void</span> handleTextChanged(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;text);</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    };</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;}</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;            <span class="keywordtype">void</span> init();</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;            <span class="keywordtype">void</span> showWarningText();</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;            <span class="keywordtype">void</span> hideWarningText();</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;            <span class="keywordtype">void</span> enableOkButton();</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;            <span class="keywordtype">void</span> disableOkButton();</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160; </div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;            <span class="keywordtype">void</span> enableProgression();</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;            <span class="keywordtype">void</span> disableProgression();</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160; </div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;            <span class="keywordtype">void</span> handleOkClicked();</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;            <span class="keywordtype">void</span> handleCancelClicked();</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160; </div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;            <span class="keywordtype">void</span> handleTextChanged(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;text);</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    };</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aqvboxlayout_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qvboxlayout.html">QVBoxLayout</a></div></div>
@@ -184,8 +186,8 @@ $(document).ready(function(){initNavTree('input__dialog_8h_source.html',''); ini
 <div class="ttc" id="aqpushbutton_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a></div></div>
 <div class="ttc" id="aclasshal_1_1_input_dialog_html_a99c4f01bd697915542ebb4e116b4f896"><div class="ttname"><a href="classhal_1_1_input_dialog.html#a99c4f01bd697915542ebb4e116b4f896">hal::InputDialog::textValue</a></div><div class="ttdeci">QString textValue() const</div><div class="ttdef"><b>Definition:</b> <a href="input__dialog_8cpp_source.html#l00112">input_dialog.cpp:112</a></div></div>
 <div class="ttc" id="aqstring_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstring.html">QString</a></div></div>
-<div class="ttc" id="aclasshal_1_1_input_dialog_html"><div class="ttname"><a href="classhal_1_1_input_dialog.html">hal::InputDialog</a></div><div class="ttdoc">Generic input dialog for user input.</div><div class="ttdef"><b>Definition:</b> <a href="input__dialog_8h_source.html#l00048">input_dialog.h:48</a></div></div>
-<div class="ttc" id="aclasshal_1_1_stacked_validator_html"><div class="ttname"><a href="classhal_1_1_stacked_validator.html">hal::StackedValidator</a></div><div class="ttdoc">Combines different validators into one.</div><div class="ttdef"><b>Definition:</b> <a href="stacked__validator_8h_source.html#l00040">stacked_validator.h:40</a></div></div>
+<div class="ttc" id="aclasshal_1_1_input_dialog_html"><div class="ttname"><a href="classhal_1_1_input_dialog.html">hal::InputDialog</a></div><div class="ttdoc">Generic input dialog for user input.</div><div class="ttdef"><b>Definition:</b> <a href="input__dialog_8h_source.html#l00050">input_dialog.h:50</a></div></div>
+<div class="ttc" id="aclasshal_1_1_stacked_validator_html"><div class="ttname"><a href="classhal_1_1_stacked_validator.html">hal::StackedValidator</a></div><div class="ttdoc">Combines different validators into one.</div><div class="ttdef"><b>Definition:</b> <a href="stacked__validator_8h_source.html#l00042">stacked_validator.h:42</a></div></div>
 <div class="ttc" id="aclasshal_1_1_input_dialog_html_afc5b8211366de40bd55618fb7b80c19d"><div class="ttname"><a href="classhal_1_1_input_dialog.html#afc5b8211366de40bd55618fb7b80c19d">hal::InputDialog::removeValidator</a></div><div class="ttdeci">void removeValidator(Validator *Validator)</div><div class="ttdef"><b>Definition:</b> <a href="input__dialog_8cpp_source.html#l00102">input_dialog.cpp:102</a></div></div>
 <div class="ttc" id="aclasshal_1_1_input_dialog_html_a3594898589f47aecddcc8651d381061a"><div class="ttname"><a href="classhal_1_1_input_dialog.html#a3594898589f47aecddcc8651d381061a">hal::InputDialog::addValidator</a></div><div class="ttdeci">void addValidator(Validator *Validator)</div><div class="ttdef"><b>Definition:</b> <a href="input__dialog_8cpp_source.html#l00097">input_dialog.cpp:97</a></div></div>
 <div class="ttc" id="aclasshal_1_1_input_dialog_html_a863ce5e4b6afc545ad38b7b5c4bd1160"><div class="ttname"><a href="classhal_1_1_input_dialog.html#a863ce5e4b6afc545ad38b7b5c4bd1160">hal::InputDialog::clearValidators</a></div><div class="ttdeci">void clearValidators()</div><div class="ttdef"><b>Definition:</b> <a href="input__dialog_8cpp_source.html#l00107">input_dialog.cpp:107</a></div></div>
@@ -193,13 +195,13 @@ $(document).ready(function(){initNavTree('input__dialog_8h_source.html',''); ini
 <div class="ttc" id="aqdialog_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qdialog.html">QDialog</a></div></div>
 <div class="ttc" id="aclasshal_1_1_input_dialog_html_a13d3b77966122ea648956fe1b0cc73c8"><div class="ttname"><a href="classhal_1_1_input_dialog.html#a13d3b77966122ea648956fe1b0cc73c8">hal::InputDialog::setInfoText</a></div><div class="ttdeci">void setInfoText(const QString &amp;text)</div><div class="ttdef"><b>Definition:</b> <a href="input__dialog_8cpp_source.html#l00058">input_dialog.cpp:58</a></div></div>
 <div class="ttc" id="aqobject_html_parent"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent</a></div><div class="ttdeci">QObject * parent() const const</div></div>
-<div class="ttc" id="aclasshal_1_1_validator_html"><div class="ttname"><a href="classhal_1_1_validator.html">hal::Validator</a></div><div class="ttdoc">Base class for any string validator.</div><div class="ttdef"><b>Definition:</b> <a href="validator_8h_source.html#l00038">validator.h:38</a></div></div>
+<div class="ttc" id="aclasshal_1_1_validator_html"><div class="ttname"><a href="classhal_1_1_validator.html">hal::Validator</a></div><div class="ttdoc">Base class for any string validator.</div><div class="ttdef"><b>Definition:</b> <a href="validator_8h_source.html#l00040">validator.h:40</a></div></div>
 <div class="ttc" id="astacked__validator_8h_html"><div class="ttname"><a href="stacked__validator_8h.html">stacked_validator.h</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_bffddff9b80a154c8bde275883b2a740.html">input_dialog</a></li><li class="navelem"><a class="el" href="input__dialog_8h.html">input_dialog.h</a></li>
-    <li class="footer">Generated on Fri Oct 21 2022 13:08:32 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:45:53 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

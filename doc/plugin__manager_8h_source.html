@@ -86,77 +86,79 @@ $(document).ready(function(){initNavTree('plugin__manager_8h_source.html',''); i
 <div class="title">plugin_manager.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="plugin__manager_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//  MIT License</span></div>
+<a href="plugin__manager_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// MIT License</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//  Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//  of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//  in the Software without restriction, including without limitation the rights</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//  copies of the Software, and to permit persons to whom the Software is</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//  furnished to do so, subject to the following conditions:</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">//  The above copyright notice and this permission notice shall be included in all</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">//  copies or substantial portions of the Software.</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">//  THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">//  SOFTWARE.</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">// Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">// Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann (&quot;ORIGINAL AUTHORS&quot;). All rights reserved.</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">// Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">// Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix (&quot;ORIGINAL AUTHORS&quot;). All Rights reserved.</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">// of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">// in the Software without restriction, including without limitation the rights</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">// copies of the Software, and to permit persons to whom the Software is</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">// furnished to do so, subject to the following conditions:</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">// The above copyright notice and this permission notice shall be included in all</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">// copies or substantial portions of the Software.</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">// SOFTWARE.</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="defines_8h.html">hal_core/defines.h</a>&quot;</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="plugin__interface__base_8h.html">hal_core/plugin_system/plugin_interface_base.h</a>&quot;</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="callback__hook_8h.html">hal_core/utilities/callback_hook.h</a>&quot;</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="program__options_8h.html">hal_core/utilities/program_options.h</a>&quot;</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;functional&gt;</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &lt;map&gt;</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#include &lt;tuple&gt;</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;{</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">namespace </span>plugin_manager</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    {</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="namespacehal_1_1plugin__manager.html#a01b664fe781926cb67034f778e5242b1">add_existing_options_description</a>(<span class="keyword">const</span> ProgramOptions&amp; existing_options);</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        std::set&lt;std::string&gt; <a class="code" href="namespacehal_1_1plugin__manager.html#aacd4893d3d32447c4ed1f27b21a827cf">get_plugin_names</a>();</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        std::unordered_map&lt;std::string, std::string&gt; <a class="code" href="namespacehal_1_1plugin__manager.html#ac3ea4574499d7a7ec9a879f1a1a5b685">get_cli_plugin_flags</a>();</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        std::unordered_map&lt;std::string, std::string&gt; <a class="code" href="namespacehal_1_1plugin__manager.html#ac7195b40f8ac66e68cfe5f8e6cf6f074">get_ui_plugin_flags</a>();</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        ProgramOptions <a class="code" href="namespacehal_1_1plugin__manager.html#ad34e384af419d40a22d5486356772c24">get_cli_plugin_options</a>();</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="namespacehal_1_1plugin__manager.html#af13862a2a5565fb995d7cc93c0bfd980">load_all_plugins</a>(<span class="keyword">const</span> std::vector&lt;std::filesystem::path&gt;&amp; directory_names = {});</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="namespacehal_1_1plugin__manager.html#a5d5a62ed3f2759dda79dced8902aa376">load</a>(<span class="keyword">const</span> std::string&amp; plugin_name, <span class="keyword">const</span> std::filesystem::path&amp; file_path);</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="namespacehal_1_1plugin__manager.html#acb6d1f3c164b832fb19257b1df06aa53">unload_all_plugins</a>();</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="namespacehal_1_1plugin__manager.html#a54caf767ba2c2f754875e9aad4849767">unload</a>(<span class="keyword">const</span> std::string&amp; plugin_name);</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        BasePluginInterface* <a class="code" href="namespacehal_1_1plugin__manager.html#a6994c89986fbfb4dff006887d1aa5e12">get_plugin_instance</a>(<span class="keyword">const</span> std::string&amp; plugin_name, <span class="keywordtype">bool</span> <a class="code" href="namespacehal.html#a45f4052286462e64763c142a3e26ab93">initialize</a> = <span class="keyword">true</span>);</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        <a class="code" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">T</a>* <a class="code" href="namespacehal_1_1plugin__manager.html#a6994c89986fbfb4dff006887d1aa5e12">get_plugin_instance</a>(<span class="keyword">const</span> std::string&amp; plugin_name, <span class="keywordtype">bool</span> <a class="code" href="namespacehal.html#a45f4052286462e64763c142a3e26ab93">initialize</a> = <span class="keyword">true</span>)</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        {</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">dynamic_cast&lt;</span><a class="code" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">T</a>*<span class="keyword">&gt;</span>(<a class="code" href="namespacehal_1_1plugin__manager.html#a6994c89986fbfb4dff006887d1aa5e12">get_plugin_instance</a>(plugin_name, <a class="code" href="namespacehal.html#a45f4052286462e64763c142a3e26ab93">initialize</a>));</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        }</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160; </div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        <a class="code" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> <a class="code" href="namespacehal_1_1plugin__manager.html#a09fe50a3d6651ef3eebbfcfb2f36cea8">add_model_changed_callback</a>(std::function&lt;<span class="keywordtype">void</span>(<span class="keywordtype">bool</span>, std::string <span class="keyword">const</span>&amp;, std::string <span class="keyword">const</span>&amp;)&gt; callback);</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160; </div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="namespacehal_1_1plugin__manager.html#ad66fea3d4017a3c7b058436924d3dda3">remove_model_changed_callback</a>(<a class="code" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> <span class="keywordtype">id</span>);</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    }    <span class="comment">// namespace plugin_manager</span></div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="defines_8h.html">hal_core/defines.h</a>&quot;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="plugin__interface__base_8h.html">hal_core/plugin_system/plugin_interface_base.h</a>&quot;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="callback__hook_8h.html">hal_core/utilities/callback_hook.h</a>&quot;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="program__options_8h.html">hal_core/utilities/program_options.h</a>&quot;</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &lt;functional&gt;</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &lt;map&gt;</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#include &lt;tuple&gt;</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;{</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">namespace </span>plugin_manager</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    {</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="namespacehal_1_1plugin__manager.html#a01b664fe781926cb67034f778e5242b1">add_existing_options_description</a>(<span class="keyword">const</span> ProgramOptions&amp; existing_options);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        std::set&lt;std::string&gt; <a class="code" href="namespacehal_1_1plugin__manager.html#aacd4893d3d32447c4ed1f27b21a827cf">get_plugin_names</a>();</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        std::unordered_map&lt;std::string, std::string&gt; <a class="code" href="namespacehal_1_1plugin__manager.html#ac3ea4574499d7a7ec9a879f1a1a5b685">get_cli_plugin_flags</a>();</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        std::unordered_map&lt;std::string, std::string&gt; <a class="code" href="namespacehal_1_1plugin__manager.html#ac7195b40f8ac66e68cfe5f8e6cf6f074">get_ui_plugin_flags</a>();</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        ProgramOptions <a class="code" href="namespacehal_1_1plugin__manager.html#ad34e384af419d40a22d5486356772c24">get_cli_plugin_options</a>();</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="namespacehal_1_1plugin__manager.html#af13862a2a5565fb995d7cc93c0bfd980">load_all_plugins</a>(<span class="keyword">const</span> std::vector&lt;std::filesystem::path&gt;&amp; directory_names = {});</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="namespacehal_1_1plugin__manager.html#a5d5a62ed3f2759dda79dced8902aa376">load</a>(<span class="keyword">const</span> std::string&amp; plugin_name, <span class="keyword">const</span> std::filesystem::path&amp; file_path);</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="namespacehal_1_1plugin__manager.html#acb6d1f3c164b832fb19257b1df06aa53">unload_all_plugins</a>();</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="namespacehal_1_1plugin__manager.html#a54caf767ba2c2f754875e9aad4849767">unload</a>(<span class="keyword">const</span> std::string&amp; plugin_name);</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        BasePluginInterface* <a class="code" href="namespacehal_1_1plugin__manager.html#a6994c89986fbfb4dff006887d1aa5e12">get_plugin_instance</a>(<span class="keyword">const</span> std::string&amp; plugin_name, <span class="keywordtype">bool</span> <a class="code" href="namespacehal.html#a45f4052286462e64763c142a3e26ab93">initialize</a> = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        <a class="code" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">T</a>* <a class="code" href="namespacehal_1_1plugin__manager.html#a6994c89986fbfb4dff006887d1aa5e12">get_plugin_instance</a>(<span class="keyword">const</span> std::string&amp; plugin_name, <span class="keywordtype">bool</span> <a class="code" href="namespacehal.html#a45f4052286462e64763c142a3e26ab93">initialize</a> = <span class="keyword">true</span>)</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        {</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">dynamic_cast&lt;</span><a class="code" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">T</a>*<span class="keyword">&gt;</span>(<a class="code" href="namespacehal_1_1plugin__manager.html#a6994c89986fbfb4dff006887d1aa5e12">get_plugin_instance</a>(plugin_name, <a class="code" href="namespacehal.html#a45f4052286462e64763c142a3e26ab93">initialize</a>));</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        }</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        <a class="code" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> <a class="code" href="namespacehal_1_1plugin__manager.html#a09fe50a3d6651ef3eebbfcfb2f36cea8">add_model_changed_callback</a>(std::function&lt;<span class="keywordtype">void</span>(<span class="keywordtype">bool</span>, std::string <span class="keyword">const</span>&amp;, std::string <span class="keyword">const</span>&amp;)&gt; callback);</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160; </div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="namespacehal_1_1plugin__manager.html#ad66fea3d4017a3c7b058436924d3dda3">remove_model_changed_callback</a>(<a class="code" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> <span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    }    <span class="comment">// namespace plugin_manager</span></div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="anamespacehal_1_1plugin__manager_html_ad34e384af419d40a22d5486356772c24"><div class="ttname"><a href="namespacehal_1_1plugin__manager.html#ad34e384af419d40a22d5486356772c24">hal::plugin_manager::get_cli_plugin_options</a></div><div class="ttdeci">ProgramOptions get_cli_plugin_options()</div><div class="ttdef"><b>Definition:</b> <a href="plugin__system_2plugin__manager_8cpp_source.html#l00125">plugin_manager.cpp:125</a></div></div>
@@ -176,14 +178,14 @@ $(document).ready(function(){initNavTree('plugin__manager_8h_source.html',''); i
 <div class="ttc" id="anamespacehal_1_1plugin__manager_html_a01b664fe781926cb67034f778e5242b1"><div class="ttname"><a href="namespacehal_1_1plugin__manager.html#a01b664fe781926cb67034f778e5242b1">hal::plugin_manager::add_existing_options_description</a></div><div class="ttdeci">void add_existing_options_description(const ProgramOptions &amp;existing_options)</div><div class="ttdef"><b>Definition:</b> <a href="plugin__system_2plugin__manager_8cpp_source.html#l00390">plugin_manager.cpp:390</a></div></div>
 <div class="ttc" id="aplugin__interface__base_8h_html"><div class="ttname"><a href="plugin__interface__base_8h.html">plugin_interface_base.h</a></div></div>
 <div class="ttc" id="anamespacehal_1_1plugin__manager_html_a09fe50a3d6651ef3eebbfcfb2f36cea8"><div class="ttname"><a href="namespacehal_1_1plugin__manager.html#a09fe50a3d6651ef3eebbfcfb2f36cea8">hal::plugin_manager::add_model_changed_callback</a></div><div class="ttdeci">u64 add_model_changed_callback(std::function&lt; void(bool, std::string const &amp;, std::string const &amp;)&gt; callback)</div><div class="ttdef"><b>Definition:</b> <a href="plugin__system_2plugin__manager_8cpp_source.html#l00375">plugin_manager.cpp:375</a></div></div>
-<div class="ttc" id="adefines_8h_html_a1af9f95651e921615e75917a6dd1b574"><div class="ttname"><a href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a></div><div class="ttdeci">uint64_t u64</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:44</a></div></div>
+<div class="ttc" id="adefines_8h_html_a1af9f95651e921615e75917a6dd1b574"><div class="ttname"><a href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a></div><div class="ttdeci">uint64_t u64</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00046">defines.h:46</a></div></div>
 <div class="ttc" id="acallback__hook_8h_html"><div class="ttname"><a href="callback__hook_8h.html">callback_hook.h</a></div></div>
 <div class="ttc" id="anamespacehal_1_1plugin__manager_html_a54caf767ba2c2f754875e9aad4849767"><div class="ttname"><a href="namespacehal_1_1plugin__manager.html#a54caf767ba2c2f754875e9aad4849767">hal::plugin_manager::unload</a></div><div class="ttdeci">bool unload(const std::string &amp;plugin_name)</div><div class="ttdef"><b>Definition:</b> <a href="plugin__system_2plugin__manager_8cpp_source.html#l00304">plugin_manager.cpp:304</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_6df68e7c4858c229578de4afea200fae.html">plugin_system</a></li><li class="navelem"><a class="el" href="plugin__manager_8h.html">plugin_manager.h</a></li>
-    <li class="footer">Generated on Fri Oct 21 2022 13:08:32 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:45:52 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

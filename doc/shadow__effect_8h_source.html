@@ -86,85 +86,87 @@ $(document).ready(function(){initNavTree('shadow__effect_8h_source.html',''); in
 <div class="title">shadow_effect.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="shadow__effect_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//  MIT License</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//  Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//  of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//  in the Software without restriction, including without limitation the rights</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//  copies of the Software, and to permit persons to whom the Software is</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//  furnished to do so, subject to the following conditions:</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">//  The above copyright notice and this permission notice shall be included in all</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">//  copies or substantial portions of the Software.</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">//  THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">//  SOFTWARE.</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<a href="shadow__effect_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// MIT License</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">// Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">// Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann (&quot;ORIGINAL AUTHORS&quot;). All rights reserved.</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">// Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">// Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix (&quot;ORIGINAL AUTHORS&quot;). All Rights reserved.</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">// of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">// in the Software without restriction, including without limitation the rights</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">// copies of the Software, and to permit persons to whom the Software is</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">// furnished to do so, subject to the following conditions:</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">// The above copyright notice and this permission notice shall be included in all</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">// copies or substantial portions of the Software.</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">// SOFTWARE.</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &lt;QGraphicsEffect&gt;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;{</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="classhal_1_1_shadow_effect.html">   38</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_shadow_effect.html">ShadowEffect</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicseffect.html">QGraphicsEffect</a></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    {</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classhal_1_1_shadow_effect.html#ac4cf429d5a94626282d6a7600ffa68c8">ShadowEffect</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_shadow_effect.html#aa23d0389502839de2df23e346decc736">draw</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html">QPainter</a>* painter);</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qrectf.html">QRectF</a> <a class="code" href="classhal_1_1_shadow_effect.html#ae7836fc49f93093a206297c10f051a81">boundingRectFor</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qrectf.html">QRectF</a>&amp; rect) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="classhal_1_1_shadow_effect.html#ad767ba8f7c7d7d525f8d740ec2a1e64d">   71</a></span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_shadow_effect.html#ad767ba8f7c7d7d525f8d740ec2a1e64d">setDistance</a>(qreal <a class="code" href="classhal_1_1_shadow_effect.html#ab56f5f6b7db4514690eee7a2031203e9">distance</a>)</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        {</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            mDistance = <a class="code" href="classhal_1_1_shadow_effect.html#ab56f5f6b7db4514690eee7a2031203e9">distance</a>;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicseffect.html#updateBoundingRect">updateBoundingRect</a>();</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        }</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00082"></a><span class="lineno"><a class="line" href="classhal_1_1_shadow_effect.html#ab56f5f6b7db4514690eee7a2031203e9">   82</a></span>&#160;        <span class="keyword">inline</span> qreal <a class="code" href="classhal_1_1_shadow_effect.html#ab56f5f6b7db4514690eee7a2031203e9">distance</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            <span class="keywordflow">return</span> mDistance;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        }</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="classhal_1_1_shadow_effect.html#af32fd844356a0667ef18b78e504fcf99">   92</a></span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_shadow_effect.html#af32fd844356a0667ef18b78e504fcf99">setBlurRadius</a>(qreal <a class="code" href="classhal_1_1_shadow_effect.html#ae198b38b93373cc2b69456fd05b1caf1">blurRadius</a>)</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        {</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            mBlurRadius = <a class="code" href="classhal_1_1_shadow_effect.html#ae198b38b93373cc2b69456fd05b1caf1">blurRadius</a>;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicseffect.html#updateBoundingRect">updateBoundingRect</a>();</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        }</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
-<div class="line"><a name="l00103"></a><span class="lineno"><a class="line" href="classhal_1_1_shadow_effect.html#ae198b38b93373cc2b69456fd05b1caf1">  103</a></span>&#160;        <span class="keyword">inline</span> qreal <a class="code" href="classhal_1_1_shadow_effect.html#ae198b38b93373cc2b69456fd05b1caf1">blurRadius</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            <span class="keywordflow">return</span> mBlurRadius;</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        }</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
-<div class="line"><a name="l00113"></a><span class="lineno"><a class="line" href="classhal_1_1_shadow_effect.html#a159a044a703394febde1e06c568c584e">  113</a></span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_shadow_effect.html#a159a044a703394febde1e06c568c584e">setColor</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>&amp; <a class="code" href="classhal_1_1_shadow_effect.html#a8bec8c182fc573c7223d509ca8e9af21">color</a>)</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        {</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;            mColor = <a class="code" href="classhal_1_1_shadow_effect.html#a8bec8c182fc573c7223d509ca8e9af21">color</a>;</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        }</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
-<div class="line"><a name="l00123"></a><span class="lineno"><a class="line" href="classhal_1_1_shadow_effect.html#a8bec8c182fc573c7223d509ca8e9af21">  123</a></span>&#160;        <span class="keyword">inline</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a> <a class="code" href="classhal_1_1_shadow_effect.html#a8bec8c182fc573c7223d509ca8e9af21">color</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;            <span class="keywordflow">return</span> mColor;</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        }</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        qreal mDistance;</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        qreal mBlurRadius;</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a> mColor;</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    };</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;}</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &lt;QGraphicsEffect&gt;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;{</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classhal_1_1_shadow_effect.html">   40</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_shadow_effect.html">ShadowEffect</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicseffect.html">QGraphicsEffect</a></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    {</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classhal_1_1_shadow_effect.html#ac4cf429d5a94626282d6a7600ffa68c8">ShadowEffect</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_shadow_effect.html#aa23d0389502839de2df23e346decc736">draw</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html">QPainter</a>* painter);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qrectf.html">QRectF</a> <a class="code" href="classhal_1_1_shadow_effect.html#ae7836fc49f93093a206297c10f051a81">boundingRectFor</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qrectf.html">QRectF</a>&amp; rect) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="classhal_1_1_shadow_effect.html#ad767ba8f7c7d7d525f8d740ec2a1e64d">   73</a></span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_shadow_effect.html#ad767ba8f7c7d7d525f8d740ec2a1e64d">setDistance</a>(qreal <a class="code" href="classhal_1_1_shadow_effect.html#ab56f5f6b7db4514690eee7a2031203e9">distance</a>)</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        {</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            mDistance = <a class="code" href="classhal_1_1_shadow_effect.html#ab56f5f6b7db4514690eee7a2031203e9">distance</a>;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicseffect.html#updateBoundingRect">updateBoundingRect</a>();</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        }</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="classhal_1_1_shadow_effect.html#ab56f5f6b7db4514690eee7a2031203e9">   84</a></span>&#160;        <span class="keyword">inline</span> qreal <a class="code" href="classhal_1_1_shadow_effect.html#ab56f5f6b7db4514690eee7a2031203e9">distance</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            <span class="keywordflow">return</span> mDistance;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        }</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
+<div class="line"><a name="l00094"></a><span class="lineno"><a class="line" href="classhal_1_1_shadow_effect.html#af32fd844356a0667ef18b78e504fcf99">   94</a></span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_shadow_effect.html#af32fd844356a0667ef18b78e504fcf99">setBlurRadius</a>(qreal <a class="code" href="classhal_1_1_shadow_effect.html#ae198b38b93373cc2b69456fd05b1caf1">blurRadius</a>)</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        {</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            mBlurRadius = <a class="code" href="classhal_1_1_shadow_effect.html#ae198b38b93373cc2b69456fd05b1caf1">blurRadius</a>;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicseffect.html#updateBoundingRect">updateBoundingRect</a>();</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        }</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
+<div class="line"><a name="l00105"></a><span class="lineno"><a class="line" href="classhal_1_1_shadow_effect.html#ae198b38b93373cc2b69456fd05b1caf1">  105</a></span>&#160;        <span class="keyword">inline</span> qreal <a class="code" href="classhal_1_1_shadow_effect.html#ae198b38b93373cc2b69456fd05b1caf1">blurRadius</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            <span class="keywordflow">return</span> mBlurRadius;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        }</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
+<div class="line"><a name="l00115"></a><span class="lineno"><a class="line" href="classhal_1_1_shadow_effect.html#a159a044a703394febde1e06c568c584e">  115</a></span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_shadow_effect.html#a159a044a703394febde1e06c568c584e">setColor</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>&amp; <a class="code" href="classhal_1_1_shadow_effect.html#a8bec8c182fc573c7223d509ca8e9af21">color</a>)</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        {</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;            mColor = <a class="code" href="classhal_1_1_shadow_effect.html#a8bec8c182fc573c7223d509ca8e9af21">color</a>;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        }</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
+<div class="line"><a name="l00125"></a><span class="lineno"><a class="line" href="classhal_1_1_shadow_effect.html#a8bec8c182fc573c7223d509ca8e9af21">  125</a></span>&#160;        <span class="keyword">inline</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a> <a class="code" href="classhal_1_1_shadow_effect.html#a8bec8c182fc573c7223d509ca8e9af21">color</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;            <span class="keywordflow">return</span> mColor;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        }</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        qreal mDistance;</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        qreal mBlurRadius;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a> mColor;</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    };</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aqobject_html_Q_OBJECT"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">QObject::Q_OBJECT</a></div><div class="ttdeci">Q_OBJECTQ_OBJECT</div></div>
@@ -172,25 +174,25 @@ $(document).ready(function(){initNavTree('shadow__effect_8h_source.html',''); in
 <div class="ttc" id="aqcolor_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qcolor.html">QColor</a></div></div>
 <div class="ttc" id="aqgraphicseffect_html_updateBoundingRect"><div class="ttname"><a href="https://doc.qt.io/qt-5/qgraphicseffect.html#updateBoundingRect">QGraphicsEffect::updateBoundingRect</a></div><div class="ttdeci">void updateBoundingRect()</div></div>
 <div class="ttc" id="aclasshal_1_1_shadow_effect_html_ac4cf429d5a94626282d6a7600ffa68c8"><div class="ttname"><a href="classhal_1_1_shadow_effect.html#ac4cf429d5a94626282d6a7600ffa68c8">hal::ShadowEffect::ShadowEffect</a></div><div class="ttdeci">ShadowEffect(QObject *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="shadow__effect_8cpp_source.html#l00011">shadow_effect.cpp:11</a></div></div>
-<div class="ttc" id="aclasshal_1_1_shadow_effect_html"><div class="ttname"><a href="classhal_1_1_shadow_effect.html">hal::ShadowEffect</a></div><div class="ttdoc">Creates a shadow effect around QObjects.</div><div class="ttdef"><b>Definition:</b> <a href="shadow__effect_8h_source.html#l00038">shadow_effect.h:38</a></div></div>
-<div class="ttc" id="aclasshal_1_1_shadow_effect_html_ab56f5f6b7db4514690eee7a2031203e9"><div class="ttname"><a href="classhal_1_1_shadow_effect.html#ab56f5f6b7db4514690eee7a2031203e9">hal::ShadowEffect::distance</a></div><div class="ttdeci">qreal distance() const</div><div class="ttdef"><b>Definition:</b> <a href="shadow__effect_8h_source.html#l00082">shadow_effect.h:82</a></div></div>
-<div class="ttc" id="aclasshal_1_1_shadow_effect_html_ae198b38b93373cc2b69456fd05b1caf1"><div class="ttname"><a href="classhal_1_1_shadow_effect.html#ae198b38b93373cc2b69456fd05b1caf1">hal::ShadowEffect::blurRadius</a></div><div class="ttdeci">qreal blurRadius() const</div><div class="ttdef"><b>Definition:</b> <a href="shadow__effect_8h_source.html#l00103">shadow_effect.h:103</a></div></div>
+<div class="ttc" id="aclasshal_1_1_shadow_effect_html"><div class="ttname"><a href="classhal_1_1_shadow_effect.html">hal::ShadowEffect</a></div><div class="ttdoc">Creates a shadow effect around QObjects.</div><div class="ttdef"><b>Definition:</b> <a href="shadow__effect_8h_source.html#l00040">shadow_effect.h:40</a></div></div>
+<div class="ttc" id="aclasshal_1_1_shadow_effect_html_ab56f5f6b7db4514690eee7a2031203e9"><div class="ttname"><a href="classhal_1_1_shadow_effect.html#ab56f5f6b7db4514690eee7a2031203e9">hal::ShadowEffect::distance</a></div><div class="ttdeci">qreal distance() const</div><div class="ttdef"><b>Definition:</b> <a href="shadow__effect_8h_source.html#l00084">shadow_effect.h:84</a></div></div>
+<div class="ttc" id="aclasshal_1_1_shadow_effect_html_ae198b38b93373cc2b69456fd05b1caf1"><div class="ttname"><a href="classhal_1_1_shadow_effect.html#ae198b38b93373cc2b69456fd05b1caf1">hal::ShadowEffect::blurRadius</a></div><div class="ttdeci">qreal blurRadius() const</div><div class="ttdef"><b>Definition:</b> <a href="shadow__effect_8h_source.html#l00105">shadow_effect.h:105</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
-<div class="ttc" id="aclasshal_1_1_shadow_effect_html_a8bec8c182fc573c7223d509ca8e9af21"><div class="ttname"><a href="classhal_1_1_shadow_effect.html#a8bec8c182fc573c7223d509ca8e9af21">hal::ShadowEffect::color</a></div><div class="ttdeci">QColor color() const</div><div class="ttdef"><b>Definition:</b> <a href="shadow__effect_8h_source.html#l00123">shadow_effect.h:123</a></div></div>
+<div class="ttc" id="aclasshal_1_1_shadow_effect_html_a8bec8c182fc573c7223d509ca8e9af21"><div class="ttname"><a href="classhal_1_1_shadow_effect.html#a8bec8c182fc573c7223d509ca8e9af21">hal::ShadowEffect::color</a></div><div class="ttdeci">QColor color() const</div><div class="ttdef"><b>Definition:</b> <a href="shadow__effect_8h_source.html#l00125">shadow_effect.h:125</a></div></div>
 <div class="ttc" id="aqgraphicseffect_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qgraphicseffect.html">QGraphicsEffect</a></div></div>
 <div class="ttc" id="aqpainter_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qpainter.html">QPainter</a></div></div>
-<div class="ttc" id="aclasshal_1_1_shadow_effect_html_af32fd844356a0667ef18b78e504fcf99"><div class="ttname"><a href="classhal_1_1_shadow_effect.html#af32fd844356a0667ef18b78e504fcf99">hal::ShadowEffect::setBlurRadius</a></div><div class="ttdeci">void setBlurRadius(qreal blurRadius)</div><div class="ttdef"><b>Definition:</b> <a href="shadow__effect_8h_source.html#l00092">shadow_effect.h:92</a></div></div>
+<div class="ttc" id="aclasshal_1_1_shadow_effect_html_af32fd844356a0667ef18b78e504fcf99"><div class="ttname"><a href="classhal_1_1_shadow_effect.html#af32fd844356a0667ef18b78e504fcf99">hal::ShadowEffect::setBlurRadius</a></div><div class="ttdeci">void setBlurRadius(qreal blurRadius)</div><div class="ttdef"><b>Definition:</b> <a href="shadow__effect_8h_source.html#l00094">shadow_effect.h:94</a></div></div>
 <div class="ttc" id="aqobject_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html">QObject</a></div></div>
 <div class="ttc" id="aqrectf_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qrectf.html">QRectF</a></div></div>
 <div class="ttc" id="aclasshal_1_1_shadow_effect_html_aa23d0389502839de2df23e346decc736"><div class="ttname"><a href="classhal_1_1_shadow_effect.html#aa23d0389502839de2df23e346decc736">hal::ShadowEffect::draw</a></div><div class="ttdeci">void draw(QPainter *painter)</div><div class="ttdef"><b>Definition:</b> <a href="shadow__effect_8cpp_source.html#l00015">shadow_effect.cpp:15</a></div></div>
-<div class="ttc" id="aclasshal_1_1_shadow_effect_html_a159a044a703394febde1e06c568c584e"><div class="ttname"><a href="classhal_1_1_shadow_effect.html#a159a044a703394febde1e06c568c584e">hal::ShadowEffect::setColor</a></div><div class="ttdeci">void setColor(const QColor &amp;color)</div><div class="ttdef"><b>Definition:</b> <a href="shadow__effect_8h_source.html#l00113">shadow_effect.h:113</a></div></div>
+<div class="ttc" id="aclasshal_1_1_shadow_effect_html_a159a044a703394febde1e06c568c584e"><div class="ttname"><a href="classhal_1_1_shadow_effect.html#a159a044a703394febde1e06c568c584e">hal::ShadowEffect::setColor</a></div><div class="ttdeci">void setColor(const QColor &amp;color)</div><div class="ttdef"><b>Definition:</b> <a href="shadow__effect_8h_source.html#l00115">shadow_effect.h:115</a></div></div>
 <div class="ttc" id="aqobject_html_parent"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent</a></div><div class="ttdeci">QObject * parent() const const</div></div>
-<div class="ttc" id="aclasshal_1_1_shadow_effect_html_ad767ba8f7c7d7d525f8d740ec2a1e64d"><div class="ttname"><a href="classhal_1_1_shadow_effect.html#ad767ba8f7c7d7d525f8d740ec2a1e64d">hal::ShadowEffect::setDistance</a></div><div class="ttdeci">void setDistance(qreal distance)</div><div class="ttdef"><b>Definition:</b> <a href="shadow__effect_8h_source.html#l00071">shadow_effect.h:71</a></div></div>
+<div class="ttc" id="aclasshal_1_1_shadow_effect_html_ad767ba8f7c7d7d525f8d740ec2a1e64d"><div class="ttname"><a href="classhal_1_1_shadow_effect.html#ad767ba8f7c7d7d525f8d740ec2a1e64d">hal::ShadowEffect::setDistance</a></div><div class="ttdeci">void setDistance(qreal distance)</div><div class="ttdef"><b>Definition:</b> <a href="shadow__effect_8h_source.html#l00073">shadow_effect.h:73</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_47a583ce1cbc1c7cb0dd54b34c740ef0.html">graphics_effects</a></li><li class="navelem"><a class="el" href="shadow__effect_8h.html">shadow_effect.h</a></li>
-    <li class="footer">Generated on Fri Oct 21 2022 13:08:32 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:45:53 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

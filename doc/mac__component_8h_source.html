@@ -86,67 +86,69 @@ $(document).ready(function(){initNavTree('mac__component_8h_source.html',''); in
 <div class="title">mac_component.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="mac__component_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//  MIT License</span></div>
+<a href="mac__component_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// MIT License</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//  Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//  of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//  in the Software without restriction, including without limitation the rights</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//  copies of the Software, and to permit persons to whom the Software is</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//  furnished to do so, subject to the following conditions:</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">//  The above copyright notice and this permission notice shall be included in all</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">//  copies or substantial portions of the Software.</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">//  THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">//  SOFTWARE.</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">// Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">// Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann (&quot;ORIGINAL AUTHORS&quot;). All rights reserved.</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">// Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">// Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix (&quot;ORIGINAL AUTHORS&quot;). All Rights reserved.</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">// of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">// in the Software without restriction, including without limitation the rights</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">// copies of the Software, and to permit persons to whom the Software is</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">// furnished to do so, subject to the following conditions:</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">// The above copyright notice and this permission notice shall be included in all</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">// copies or substantial portions of the Software.</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">// SOFTWARE.</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="gate__type__component_8h.html">hal_core/netlist/gate_library/gate_type_component/gate_type_component.h</a>&quot;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;{</div>
-<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="classhal_1_1_m_a_c_component.html">   30</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_m_a_c_component.html">MACComponent</a> : <span class="keyword">public</span> <a class="code" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    {</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <a class="code" href="classhal_1_1_m_a_c_component.html#afa960be2f9f1c04d2a4e199eab6557e0">MACComponent</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <a class="code" href="classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017">ComponentType</a> <a class="code" href="classhal_1_1_m_a_c_component.html#ad045c3b171382cf947ab12e19a6f5803">get_type</a>() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_m_a_c_component.html#a1cad294cc44811fb44f0a49b53719463">is_class_of</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a>* component);</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        std::vector&lt;GateTypeComponent*&gt; <a class="code" href="classhal_1_1_m_a_c_component.html#a55a877db2c7b6e38d9fdabc22d64bac4">get_components</a>(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a>*)&gt;&amp; filter = <span class="keyword">nullptr</span>) <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keyword">static</span> constexpr <a class="code" href="classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017">ComponentType</a> m_type = <a class="code" href="classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017a140c1f12feeb2c52dfbeb2da6066a73a">ComponentType::mac</a>;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    };</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="gate__type__component_8h.html">hal_core/netlist/gate_library/gate_type_component/gate_type_component.h</a>&quot;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;{</div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="classhal_1_1_m_a_c_component.html">   32</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_m_a_c_component.html">MACComponent</a> : <span class="keyword">public</span> <a class="code" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    {</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <a class="code" href="classhal_1_1_m_a_c_component.html#afa960be2f9f1c04d2a4e199eab6557e0">MACComponent</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <a class="code" href="classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017">ComponentType</a> <a class="code" href="classhal_1_1_m_a_c_component.html#ad045c3b171382cf947ab12e19a6f5803">get_type</a>() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_m_a_c_component.html#a1cad294cc44811fb44f0a49b53719463">is_class_of</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a>* component);</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        std::vector&lt;GateTypeComponent*&gt; <a class="code" href="classhal_1_1_m_a_c_component.html#a55a877db2c7b6e38d9fdabc22d64bac4">get_components</a>(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a>*)&gt;&amp; filter = <span class="keyword">nullptr</span>) <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keyword">static</span> constexpr <a class="code" href="classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017">ComponentType</a> m_type = <a class="code" href="classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017a140c1f12feeb2c52dfbeb2da6066a73a">ComponentType::mac</a>;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    };</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
-<div class="ttc" id="aclasshal_1_1_m_a_c_component_html"><div class="ttname"><a href="classhal_1_1_m_a_c_component.html">hal::MACComponent</a></div><div class="ttdef"><b>Definition:</b> <a href="mac__component_8h_source.html#l00030">mac_component.h:30</a></div></div>
+<div class="ttc" id="aclasshal_1_1_m_a_c_component_html"><div class="ttname"><a href="classhal_1_1_m_a_c_component.html">hal::MACComponent</a></div><div class="ttdef"><b>Definition:</b> <a href="mac__component_8h_source.html#l00032">mac_component.h:32</a></div></div>
 <div class="ttc" id="aclasshal_1_1_m_a_c_component_html_ad045c3b171382cf947ab12e19a6f5803"><div class="ttname"><a href="classhal_1_1_m_a_c_component.html#ad045c3b171382cf947ab12e19a6f5803">hal::MACComponent::get_type</a></div><div class="ttdeci">ComponentType get_type() const override</div><div class="ttdef"><b>Definition:</b> <a href="mac__component_8cpp_source.html#l00005">mac_component.cpp:5</a></div></div>
 <div class="ttc" id="aclasshal_1_1_m_a_c_component_html_a1cad294cc44811fb44f0a49b53719463"><div class="ttname"><a href="classhal_1_1_m_a_c_component.html#a1cad294cc44811fb44f0a49b53719463">hal::MACComponent::is_class_of</a></div><div class="ttdeci">static bool is_class_of(const GateTypeComponent *component)</div><div class="ttdef"><b>Definition:</b> <a href="mac__component_8cpp_source.html#l00010">mac_component.cpp:10</a></div></div>
 <div class="ttc" id="aclasshal_1_1_m_a_c_component_html_a55a877db2c7b6e38d9fdabc22d64bac4"><div class="ttname"><a href="classhal_1_1_m_a_c_component.html#a55a877db2c7b6e38d9fdabc22d64bac4">hal::MACComponent::get_components</a></div><div class="ttdeci">std::vector&lt; GateTypeComponent * &gt; get_components(const std::function&lt; bool(const GateTypeComponent *)&gt; &amp;filter=nullptr) const override</div><div class="ttdef"><b>Definition:</b> <a href="mac__component_8cpp_source.html#l00015">mac_component.cpp:15</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_type_component_html_a1ee2af2d1a1dba836136b2a9fce0f017a140c1f12feeb2c52dfbeb2da6066a73a"><div class="ttname"><a href="classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017a140c1f12feeb2c52dfbeb2da6066a73a">hal::GateTypeComponent::ComponentType::mac</a></div><div class="ttdeci">@ mac</div></div>
-<div class="ttc" id="aclasshal_1_1_gate_type_component_html_a1ee2af2d1a1dba836136b2a9fce0f017"><div class="ttname"><a href="classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017">hal::GateTypeComponent::ComponentType</a></div><div class="ttdeci">ComponentType</div><div class="ttdef"><b>Definition:</b> <a href="gate__type__component_8h_source.html#l00045">gate_type_component.h:45</a></div></div>
+<div class="ttc" id="aclasshal_1_1_gate_type_component_html_a1ee2af2d1a1dba836136b2a9fce0f017"><div class="ttname"><a href="classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017">hal::GateTypeComponent::ComponentType</a></div><div class="ttdeci">ComponentType</div><div class="ttdef"><b>Definition:</b> <a href="gate__type__component_8h_source.html#l00047">gate_type_component.h:47</a></div></div>
 <div class="ttc" id="agate__type__component_8h_html"><div class="ttname"><a href="gate__type__component_8h.html">gate_type_component.h</a></div></div>
-<div class="ttc" id="aclasshal_1_1_gate_type_component_html"><div class="ttname"><a href="classhal_1_1_gate_type_component.html">hal::GateTypeComponent</a></div><div class="ttdef"><b>Definition:</b> <a href="gate__type__component_8h_source.html#l00037">gate_type_component.h:37</a></div></div>
+<div class="ttc" id="aclasshal_1_1_gate_type_component_html"><div class="ttname"><a href="classhal_1_1_gate_type_component.html">hal::GateTypeComponent</a></div><div class="ttdef"><b>Definition:</b> <a href="gate__type__component_8h_source.html#l00039">gate_type_component.h:39</a></div></div>
 <div class="ttc" id="aclasshal_1_1_m_a_c_component_html_afa960be2f9f1c04d2a4e199eab6557e0"><div class="ttname"><a href="classhal_1_1_m_a_c_component.html#afa960be2f9f1c04d2a4e199eab6557e0">hal::MACComponent::MACComponent</a></div><div class="ttdeci">MACComponent()=default</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_ef96d94451875f81e56c678363187add.html">netlist</a></li><li class="navelem"><a class="el" href="dir_99c48257bccc675a80b3dd868bdc8162.html">gate_library</a></li><li class="navelem"><a class="el" href="dir_527facc1459bfa3f362f8599485e2a7b.html">gate_type_component</a></li><li class="navelem"><a class="el" href="mac__component_8h.html">mac_component.h</a></li>
-    <li class="footer">Generated on Fri Oct 21 2022 13:08:31 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:45:52 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

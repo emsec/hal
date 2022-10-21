@@ -86,68 +86,69 @@ $(document).ready(function(){initNavTree('action_8h_source.html',''); initResiza
 <div class="title">action.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="action_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//  MIT License</span></div>
+<a href="action_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// MIT License</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//  Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//  of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//  in the Software without restriction, including without limitation the rights</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//  copies of the Software, and to permit persons to whom the Software is</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//  furnished to do so, subject to the following conditions:</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">//  The above copyright notice and this permission notice shall be included in all</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">//  copies or substantial portions of the Software.</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">//  THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">//  SOFTWARE.</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">// Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">// Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann (&quot;ORIGINAL AUTHORS&quot;). All rights reserved.</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">// Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">// Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix (&quot;ORIGINAL AUTHORS&quot;). All Rights reserved.</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">// of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">// in the Software without restriction, including without limitation the rights</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">// copies of the Software, and to permit persons to whom the Software is</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">// furnished to do so, subject to the following conditions:</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">// The above copyright notice and this permission notice shall be included in all</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">// copies or substantial portions of the Software.</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">// SOFTWARE.</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &lt;QAction&gt;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;{</div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classhal_1_1_action.html">   39</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_action.html">Action</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qaction.html">QAction</a></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    {</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classhal_1_1_action.html#a89639cf253f1421c07ad26d47754f994">Action</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classhal_1_1_action.html#a89639cf253f1421c07ad26d47754f994">Action</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="codeRef" href="https://doc.qt.io/qt-5/qaction.html#text-prop">text</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classhal_1_1_action.html#a89639cf253f1421c07ad26d47754f994">Action</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qicon.html">QIcon</a> &amp;<a class="codeRef" href="https://doc.qt.io/qt-5/qaction.html#icon-prop">icon</a>, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="codeRef" href="https://doc.qt.io/qt-5/qaction.html#text-prop">text</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="comment">// hides non-virtual methods in QAction</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="comment"></span>        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_action.html#aa1605d515378031d036a24f9906706a0">setText</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; <a class="codeRef" href="https://doc.qt.io/qt-5/qaction.html#text-prop">text</a>);</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_action.html#afd1b9d7e9ef96e5ed95cf3a87ff225ae">setToolTip</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; tooltip);</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &lt;QAction&gt;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;{</div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="classhal_1_1_action.html">   41</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_action.html">Action</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qaction.html">QAction</a></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    {</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classhal_1_1_action.html#a89639cf253f1421c07ad26d47754f994">Action</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classhal_1_1_action.html#a89639cf253f1421c07ad26d47754f994">Action</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; <a class="codeRef" href="https://doc.qt.io/qt-5/qaction.html#text-prop">text</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classhal_1_1_action.html#a89639cf253f1421c07ad26d47754f994">Action</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qicon.html">QIcon</a>&amp; <a class="codeRef" href="https://doc.qt.io/qt-5/qaction.html#icon-prop">icon</a>, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; <a class="codeRef" href="https://doc.qt.io/qt-5/qaction.html#text-prop">text</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="comment">// hides non-virtual methods in QAction</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="comment"></span>        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_action.html#aa1605d515378031d036a24f9906706a0">setText</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; <a class="codeRef" href="https://doc.qt.io/qt-5/qaction.html#text-prop">text</a>);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_action.html#afd1b9d7e9ef96e5ed95cf3a87ff225ae">setToolTip</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; tooltip);</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_action.html#a6c013d807449aff463910510494ef6f2">setShortcut</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qkeysequence.html">QKeySequence</a> &amp;<a class="codeRef" href="https://doc.qt.io/qt-5/qaction.html#shortcut-prop">shortcut</a>);</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keywordtype">void</span> updateTooltip(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qkeysequence.html">QKeySequence</a>&amp; seq);</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> mDescriptionText;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="keywordtype">bool</span> mTooltipModified;</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    };</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;}</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_action.html#a6c013d807449aff463910510494ef6f2">setShortcut</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qkeysequence.html">QKeySequence</a>&amp; <a class="codeRef" href="https://doc.qt.io/qt-5/qaction.html#shortcut-prop">shortcut</a>);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <span class="keywordtype">void</span> updateTooltip(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qkeysequence.html">QKeySequence</a>&amp; seq);</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> mDescriptionText;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <span class="keywordtype">bool</span> mTooltipModified;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    };</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aqobject_html_Q_OBJECT"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">QObject::Q_OBJECT</a></div><div class="ttdeci">Q_OBJECTQ_OBJECT</div></div>
 <div class="ttc" id="aqobject_html_Q_SLOTS"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">QObject::Q_SLOTS</a></div><div class="ttdeci">Q_SLOTSQ_SLOTS</div></div>
-<div class="ttc" id="aclasshal_1_1_action_html"><div class="ttname"><a href="classhal_1_1_action.html">hal::Action</a></div><div class="ttdoc">Provides an interface for triggerable functionality that can be inserted into widgets and also connec...</div><div class="ttdef"><b>Definition:</b> <a href="action_8h_source.html#l00039">action.h:39</a></div></div>
+<div class="ttc" id="aclasshal_1_1_action_html"><div class="ttname"><a href="classhal_1_1_action.html">hal::Action</a></div><div class="ttdoc">Provides an interface for triggerable functionality that can be inserted into widgets and also connec...</div><div class="ttdef"><b>Definition:</b> <a href="action_8h_source.html#l00041">action.h:41</a></div></div>
 <div class="ttc" id="aqkeysequence_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qkeysequence.html">QKeySequence</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
 <div class="ttc" id="aclasshal_1_1_action_html_a89639cf253f1421c07ad26d47754f994"><div class="ttname"><a href="classhal_1_1_action.html#a89639cf253f1421c07ad26d47754f994">hal::Action::Action</a></div><div class="ttdeci">Action(QObject *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="action_8cpp_source.html#l00005">action.cpp:5</a></div></div>
@@ -166,7 +167,7 @@ $(document).ready(function(){initNavTree('action_8h_source.html',''); initResiza
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_7b8680038fe815bf46a10a8a86ec7bf9.html">action</a></li><li class="navelem"><a class="el" href="action_8h.html">action.h</a></li>
-    <li class="footer">Generated on Fri Oct 21 2022 13:08:32 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:45:53 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

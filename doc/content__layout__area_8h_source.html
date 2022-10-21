@@ -86,112 +86,114 @@ $(document).ready(function(){initNavTree('content__layout__area_8h_source.html',
 <div class="title">content_layout_area.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="content__layout__area_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//  MIT License</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//  Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//  of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//  in the Software without restriction, including without limitation the rights</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//  copies of the Software, and to permit persons to whom the Software is</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//  furnished to do so, subject to the following conditions:</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">//  The above copyright notice and this permission notice shall be included in all</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">//  copies or substantial portions of the Software.</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">//  THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">//  SOFTWARE.</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<a href="content__layout__area_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// MIT License</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">// Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">// Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann (&quot;ORIGINAL AUTHORS&quot;). All rights reserved.</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">// Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">// Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix (&quot;ORIGINAL AUTHORS&quot;). All Rights reserved.</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">// of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">// in the Software without restriction, including without limitation the rights</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">// copies of the Software, and to permit persons to whom the Software is</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">// furnished to do so, subject to the following conditions:</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">// The above copyright notice and this permission notice shall be included in all</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">// copies or substantial portions of the Software.</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">// SOFTWARE.</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="content__widget_8h.html">gui/content_widget/content_widget.h</a>&quot;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &lt;QWidget&gt;</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="content__widget_8h.html">gui/content_widget/content_widget.h</a>&quot;</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">class </span><a class="codeRef" href="https://doc.qt.io/qt-5/qframe.html">QFrame</a>;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">class </span><a class="codeRef" href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a>;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">class </span><a class="codeRef" href="https://doc.qt.io/qt-5/qvboxlayout.html">QVBoxLayout</a>;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;{</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">class </span>DockBar;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keyword">class </span>Splitter;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">class </span>SplitterAnchor;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">class </span>TabWidget;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="namespacehal.html#a5183c9d870930c09f0bff0a061797b45">   41</a></span>&#160;    <span class="keyword">enum class</span> <a class="code" href="namespacehal.html#a5183c9d870930c09f0bff0a061797b45">content_anchor</a></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    {</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <a class="code" href="namespacehal.html#a5183c9d870930c09f0bff0a061797b45aadb115059e28d960fa8badfac5516667">center</a> = 0,</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <a class="code" href="namespacehal.html#a5183c9d870930c09f0bff0a061797b45a811882fecd5c7618d7099ebbd39ea254">left</a>   = 1,</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <a class="code" href="namespacehal.html#a5183c9d870930c09f0bff0a061797b45a7c4f29407893c334a6cb7a87bf045c0d">right</a>  = 2,</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <a class="code" href="namespacehal.html#a5183c9d870930c09f0bff0a061797b45a71f262d796bed1ab30e8a2d5a8ddee6f">bottom</a> = 3</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    };</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="classhal_1_1_content_layout_area.html">   77</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_content_layout_area.html">ContentLayoutArea</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    {</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classhal_1_1_content_layout_area.html#a50fe3e390dcf3c061f6ad53e6afd0bcc">ContentLayoutArea</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_content_layout_area.html#a0ccb12440d31886fbb9975dbe6cbda03">addContent</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget, <span class="keywordtype">int</span> index, <a class="code" href="namespacehal.html#a5183c9d870930c09f0bff0a061797b45">content_anchor</a> anchor);</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_content_layout_area.html#a70f4c9024775591824ec79175e5fa1f7">removeContent</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget);</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_content_layout_area.html#a70fd4c6fdd1d634e8e4b6d9d5e7b1882">clear</a>();</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_content_layout_area.html#aa9ecdd246e095f51f64e9e7ddfd7e9fe">initSplitterSize</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qsize.html">QSize</a>&amp; <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#size-prop">size</a>);</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_content_layout_area.html#a79e2d98b43683f2bff0d8a7a6efe28f4">updateLeftDockBar</a>();</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_content_layout_area.html#ab5a46be9ba7bb42cccdad98404c780d4">updateRightDockBar</a>();</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_content_layout_area.html#a97bd4f28826308cfb70c7603300219a0">updateBottomDockBar</a>();</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160; </div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_content_layout_area.html#a5b38adfb4c8f15b5281c5b7ceff484b5">handleDragStart</a>();</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160; </div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_content_layout_area.html#a1e754d379448f0b0db84f31041b1feb7">handleDragEnd</a>();</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160; </div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qvboxlayout.html">QVBoxLayout</a>* mTopLevelLayout;</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a>* mSecondLevelLayout;</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qvboxlayout.html">QVBoxLayout</a>* mThirdLevelLayout;</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a>* mFourthLevelLayout;</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qvboxlayout.html">QVBoxLayout</a>* mSplitterLayout;</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a>* mCentralLayout;</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a>* mSpacerLayout;</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; </div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        <a class="code" href="classhal_1_1_splitter.html">Splitter</a>* mVerticalSplitter;</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        <a class="code" href="classhal_1_1_splitter.html">Splitter</a>* mHorizontalSplitter;</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        <a class="code" href="classhal_1_1_splitter.html">Splitter</a>* mLeftSplitter;</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        <a class="code" href="classhal_1_1_splitter.html">Splitter</a>* mRightSplitter;</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        <a class="code" href="classhal_1_1_splitter.html">Splitter</a>* mBottomSplitter;</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160; </div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        <a class="code" href="classhal_1_1_dock_bar.html">DockBar</a>* mLeftDock;</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        <a class="code" href="classhal_1_1_dock_bar.html">DockBar</a>* mRightDock;</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;        <a class="code" href="classhal_1_1_dock_bar.html">DockBar</a>* mBottomDock;</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160; </div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* mBottomContainer;</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qframe.html">QFrame</a>* mLeftSpacer;</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qframe.html">QFrame</a>* mRightSpacer;</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160; </div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;        <a class="code" href="classhal_1_1_splitter_anchor.html">SplitterAnchor</a>* mLeftAnchor;</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        <a class="code" href="classhal_1_1_splitter_anchor.html">SplitterAnchor</a>* mRightAnchor;</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;        <a class="code" href="classhal_1_1_splitter_anchor.html">SplitterAnchor</a>* mBottomAnchor;</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160; </div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;        <a class="code" href="classhal_1_1_tab_widget.html">TabWidget</a>* mTabWidget;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;QWidget&gt;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">class </span><a class="codeRef" href="https://doc.qt.io/qt-5/qframe.html">QFrame</a>;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">class </span><a class="codeRef" href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a>;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">class </span><a class="codeRef" href="https://doc.qt.io/qt-5/qvboxlayout.html">QVBoxLayout</a>;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;{</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">class </span>DockBar;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">class </span>Splitter;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">class </span>SplitterAnchor;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keyword">class </span>TabWidget;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="namespacehal.html#a5183c9d870930c09f0bff0a061797b45">   43</a></span>&#160;    <span class="keyword">enum class</span> <a class="code" href="namespacehal.html#a5183c9d870930c09f0bff0a061797b45">content_anchor</a></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    {</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <a class="code" href="namespacehal.html#a5183c9d870930c09f0bff0a061797b45aadb115059e28d960fa8badfac5516667">center</a> = 0,</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <a class="code" href="namespacehal.html#a5183c9d870930c09f0bff0a061797b45a811882fecd5c7618d7099ebbd39ea254">left</a>   = 1,</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <a class="code" href="namespacehal.html#a5183c9d870930c09f0bff0a061797b45a7c4f29407893c334a6cb7a87bf045c0d">right</a>  = 2,</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <a class="code" href="namespacehal.html#a5183c9d870930c09f0bff0a061797b45a71f262d796bed1ab30e8a2d5a8ddee6f">bottom</a> = 3</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    };</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno"><a class="line" href="classhal_1_1_content_layout_area.html">   79</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_content_layout_area.html">ContentLayoutArea</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    {</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classhal_1_1_content_layout_area.html#a50fe3e390dcf3c061f6ad53e6afd0bcc">ContentLayoutArea</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_content_layout_area.html#a0ccb12440d31886fbb9975dbe6cbda03">addContent</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget, <span class="keywordtype">int</span> index, <a class="code" href="namespacehal.html#a5183c9d870930c09f0bff0a061797b45">content_anchor</a> anchor);</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_content_layout_area.html#a70f4c9024775591824ec79175e5fa1f7">removeContent</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget);</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_content_layout_area.html#a70fd4c6fdd1d634e8e4b6d9d5e7b1882">clear</a>();</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_content_layout_area.html#aa9ecdd246e095f51f64e9e7ddfd7e9fe">initSplitterSize</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qsize.html">QSize</a>&amp; <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#size-prop">size</a>);</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_content_layout_area.html#a79e2d98b43683f2bff0d8a7a6efe28f4">updateLeftDockBar</a>();</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_content_layout_area.html#ab5a46be9ba7bb42cccdad98404c780d4">updateRightDockBar</a>();</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_content_layout_area.html#a97bd4f28826308cfb70c7603300219a0">updateBottomDockBar</a>();</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160; </div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_content_layout_area.html#a5b38adfb4c8f15b5281c5b7ceff484b5">handleDragStart</a>();</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160; </div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_content_layout_area.html#a1e754d379448f0b0db84f31041b1feb7">handleDragEnd</a>();</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160; </div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qvboxlayout.html">QVBoxLayout</a>* mTopLevelLayout;</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a>* mSecondLevelLayout;</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qvboxlayout.html">QVBoxLayout</a>* mThirdLevelLayout;</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a>* mFourthLevelLayout;</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qvboxlayout.html">QVBoxLayout</a>* mSplitterLayout;</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a>* mCentralLayout;</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a>* mSpacerLayout;</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160; </div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        <a class="code" href="classhal_1_1_splitter.html">Splitter</a>* mVerticalSplitter;</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        <a class="code" href="classhal_1_1_splitter.html">Splitter</a>* mHorizontalSplitter;</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        <a class="code" href="classhal_1_1_splitter.html">Splitter</a>* mLeftSplitter;</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;        <a class="code" href="classhal_1_1_splitter.html">Splitter</a>* mRightSplitter;</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        <a class="code" href="classhal_1_1_splitter.html">Splitter</a>* mBottomSplitter;</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160; </div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;        <a class="code" href="classhal_1_1_dock_bar.html">DockBar</a>* mLeftDock;</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        <a class="code" href="classhal_1_1_dock_bar.html">DockBar</a>* mRightDock;</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        <a class="code" href="classhal_1_1_dock_bar.html">DockBar</a>* mBottomDock;</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160; </div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* mBottomContainer;</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qframe.html">QFrame</a>* mLeftSpacer;</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qframe.html">QFrame</a>* mRightSpacer;</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160; </div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;        <a class="code" href="classhal_1_1_splitter_anchor.html">SplitterAnchor</a>* mLeftAnchor;</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;        <a class="code" href="classhal_1_1_splitter_anchor.html">SplitterAnchor</a>* mRightAnchor;</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;        <a class="code" href="classhal_1_1_splitter_anchor.html">SplitterAnchor</a>* mBottomAnchor;</div>
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160; </div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        <span class="keywordtype">bool</span> mWasBottomContainerHidden;</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;    };</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;}</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        <a class="code" href="classhal_1_1_tab_widget.html">TabWidget</a>* mTabWidget;</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160; </div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        <span class="keywordtype">bool</span> mWasBottomContainerHidden;</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;    };</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aqobject_html_Q_OBJECT"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">QObject::Q_OBJECT</a></div><div class="ttdeci">Q_OBJECTQ_OBJECT</div></div>
@@ -199,22 +201,22 @@ $(document).ready(function(){initNavTree('content__layout__area_8h_source.html',
 <div class="ttc" id="aqvboxlayout_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qvboxlayout.html">QVBoxLayout</a></div></div>
 <div class="ttc" id="aqframe_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qframe.html">QFrame</a></div></div>
 <div class="ttc" id="aqobject_html_Q_SLOTS"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">QObject::Q_SLOTS</a></div><div class="ttdeci">Q_SLOTSQ_SLOTS</div></div>
-<div class="ttc" id="aclasshal_1_1_splitter_html"><div class="ttname"><a href="classhal_1_1_splitter.html">hal::Splitter</a></div><div class="ttdoc">A QSplitter that can be checked if it is unused or not.</div><div class="ttdef"><b>Definition:</b> <a href="splitter_8h_source.html#l00036">splitter.h:36</a></div></div>
+<div class="ttc" id="aclasshal_1_1_splitter_html"><div class="ttname"><a href="classhal_1_1_splitter.html">hal::Splitter</a></div><div class="ttdoc">A QSplitter that can be checked if it is unused or not.</div><div class="ttdef"><b>Definition:</b> <a href="splitter_8h_source.html#l00038">splitter.h:38</a></div></div>
 <div class="ttc" id="aqwidget_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></div></div>
 <div class="ttc" id="aqsize_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qsize.html">QSize</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
-<div class="ttc" id="aclasshal_1_1_splitter_anchor_html"><div class="ttname"><a href="classhal_1_1_splitter_anchor.html">hal::SplitterAnchor</a></div><div class="ttdoc">Adds specific ContentWidgets to HALs main content area.</div><div class="ttdef"><b>Definition:</b> <a href="splitter__anchor_8h_source.html#l00046">splitter_anchor.h:46</a></div></div>
+<div class="ttc" id="aclasshal_1_1_splitter_anchor_html"><div class="ttname"><a href="classhal_1_1_splitter_anchor.html">hal::SplitterAnchor</a></div><div class="ttdoc">Adds specific ContentWidgets to HALs main content area.</div><div class="ttdef"><b>Definition:</b> <a href="splitter__anchor_8h_source.html#l00048">splitter_anchor.h:48</a></div></div>
 <div class="ttc" id="aclasshal_1_1_content_layout_area_html_a70fd4c6fdd1d634e8e4b6d9d5e7b1882"><div class="ttname"><a href="classhal_1_1_content_layout_area.html#a70fd4c6fdd1d634e8e4b6d9d5e7b1882">hal::ContentLayoutArea::clear</a></div><div class="ttdeci">void clear()</div><div class="ttdef"><b>Definition:</b> <a href="content__layout__area_8cpp_source.html#l00134">content_layout_area.cpp:134</a></div></div>
 <div class="ttc" id="aclasshal_1_1_content_layout_area_html_a1e754d379448f0b0db84f31041b1feb7"><div class="ttname"><a href="classhal_1_1_content_layout_area.html#a1e754d379448f0b0db84f31041b1feb7">hal::ContentLayoutArea::handleDragEnd</a></div><div class="ttdeci">void handleDragEnd()</div><div class="ttdef"><b>Definition:</b> <a href="content__layout__area_8cpp_source.html#l00200">content_layout_area.cpp:200</a></div></div>
-<div class="ttc" id="aclasshal_1_1_dock_bar_html"><div class="ttname"><a href="classhal_1_1_dock_bar.html">hal::DockBar</a></div><div class="ttdoc">Contains and handles DockButtons.</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8h_source.html#l00045">dock_bar.h:45</a></div></div>
+<div class="ttc" id="aclasshal_1_1_dock_bar_html"><div class="ttname"><a href="classhal_1_1_dock_bar.html">hal::DockBar</a></div><div class="ttdoc">Contains and handles DockButtons.</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8h_source.html#l00047">dock_bar.h:47</a></div></div>
 <div class="ttc" id="aclasshal_1_1_content_layout_area_html_a0ccb12440d31886fbb9975dbe6cbda03"><div class="ttname"><a href="classhal_1_1_content_layout_area.html#a0ccb12440d31886fbb9975dbe6cbda03">hal::ContentLayoutArea::addContent</a></div><div class="ttdeci">void addContent(ContentWidget *widget, int index, content_anchor anchor)</div><div class="ttdef"><b>Definition:</b> <a href="content__layout__area_8cpp_source.html#l00110">content_layout_area.cpp:110</a></div></div>
 <div class="ttc" id="anamespacehal_html_a5183c9d870930c09f0bff0a061797b45a71f262d796bed1ab30e8a2d5a8ddee6f"><div class="ttname"><a href="namespacehal.html#a5183c9d870930c09f0bff0a061797b45a71f262d796bed1ab30e8a2d5a8ddee6f">hal::content_anchor::bottom</a></div><div class="ttdeci">@ bottom</div></div>
 <div class="ttc" id="anamespacehal_html_a5183c9d870930c09f0bff0a061797b45aadb115059e28d960fa8badfac5516667"><div class="ttname"><a href="namespacehal.html#a5183c9d870930c09f0bff0a061797b45aadb115059e28d960fa8badfac5516667">hal::content_anchor::center</a></div><div class="ttdeci">@ center</div></div>
-<div class="ttc" id="aclasshal_1_1_content_layout_area_html"><div class="ttname"><a href="classhal_1_1_content_layout_area.html">hal::ContentLayoutArea</a></div><div class="ttdoc">Manages the layout of all ContentWidgets.</div><div class="ttdef"><b>Definition:</b> <a href="content__layout__area_8h_source.html#l00077">content_layout_area.h:77</a></div></div>
-<div class="ttc" id="aclasshal_1_1_tab_widget_html"><div class="ttname"><a href="classhal_1_1_tab_widget.html">hal::TabWidget</a></div><div class="ttdoc">Adds specific ContentWidgets to HALs main content area.</div><div class="ttdef"><b>Definition:</b> <a href="tab__widget_8h_source.html#l00050">tab_widget.h:50</a></div></div>
+<div class="ttc" id="aclasshal_1_1_content_layout_area_html"><div class="ttname"><a href="classhal_1_1_content_layout_area.html">hal::ContentLayoutArea</a></div><div class="ttdoc">Manages the layout of all ContentWidgets.</div><div class="ttdef"><b>Definition:</b> <a href="content__layout__area_8h_source.html#l00079">content_layout_area.h:79</a></div></div>
+<div class="ttc" id="aclasshal_1_1_tab_widget_html"><div class="ttname"><a href="classhal_1_1_tab_widget.html">hal::TabWidget</a></div><div class="ttdoc">Adds specific ContentWidgets to HALs main content area.</div><div class="ttdef"><b>Definition:</b> <a href="tab__widget_8h_source.html#l00052">tab_widget.h:52</a></div></div>
 <div class="ttc" id="aclasshal_1_1_content_layout_area_html_a70f4c9024775591824ec79175e5fa1f7"><div class="ttname"><a href="classhal_1_1_content_layout_area.html#a70f4c9024775591824ec79175e5fa1f7">hal::ContentLayoutArea::removeContent</a></div><div class="ttdeci">void removeContent(ContentWidget *widget)</div><div class="ttdef"><b>Definition:</b> <a href="content__layout__area_8cpp_source.html#l00129">content_layout_area.cpp:129</a></div></div>
 <div class="ttc" id="aclasshal_1_1_content_layout_area_html_a97bd4f28826308cfb70c7603300219a0"><div class="ttname"><a href="classhal_1_1_content_layout_area.html#a97bd4f28826308cfb70c7603300219a0">hal::ContentLayoutArea::updateBottomDockBar</a></div><div class="ttdeci">void updateBottomDockBar()</div><div class="ttdef"><b>Definition:</b> <a href="content__layout__area_8cpp_source.html#l00185">content_layout_area.cpp:185</a></div></div>
-<div class="ttc" id="aclasshal_1_1_content_widget_html"><div class="ttname"><a href="classhal_1_1_content_widget.html">hal::ContentWidget</a></div><div class="ttdoc">Abstract class for Widgets within HAL's ContentArea.</div><div class="ttdef"><b>Definition:</b> <a href="content__widget_8h_source.html#l00047">content_widget.h:47</a></div></div>
+<div class="ttc" id="aclasshal_1_1_content_widget_html"><div class="ttname"><a href="classhal_1_1_content_widget.html">hal::ContentWidget</a></div><div class="ttdoc">Abstract class for Widgets within HAL's ContentArea.</div><div class="ttdef"><b>Definition:</b> <a href="content__widget_8h_source.html#l00049">content_widget.h:49</a></div></div>
 <div class="ttc" id="aclasshal_1_1_content_layout_area_html_ab5a46be9ba7bb42cccdad98404c780d4"><div class="ttname"><a href="classhal_1_1_content_layout_area.html#ab5a46be9ba7bb42cccdad98404c780d4">hal::ContentLayoutArea::updateRightDockBar</a></div><div class="ttdeci">void updateRightDockBar()</div><div class="ttdef"><b>Definition:</b> <a href="content__layout__area_8cpp_source.html#l00171">content_layout_area.cpp:171</a></div></div>
 <div class="ttc" id="acontent__widget_8h_html"><div class="ttname"><a href="content__widget_8h.html">content_widget.h</a></div></div>
 <div class="ttc" id="anamespacehal_html_a5183c9d870930c09f0bff0a061797b45a7c4f29407893c334a6cb7a87bf045c0d"><div class="ttname"><a href="namespacehal.html#a5183c9d870930c09f0bff0a061797b45a7c4f29407893c334a6cb7a87bf045c0d">hal::content_anchor::right</a></div><div class="ttdeci">@ right</div></div>
@@ -225,12 +227,12 @@ $(document).ready(function(){initNavTree('content__layout__area_8h_source.html',
 <div class="ttc" id="aclasshal_1_1_content_layout_area_html_a79e2d98b43683f2bff0d8a7a6efe28f4"><div class="ttname"><a href="classhal_1_1_content_layout_area.html#a79e2d98b43683f2bff0d8a7a6efe28f4">hal::ContentLayoutArea::updateLeftDockBar</a></div><div class="ttdeci">void updateLeftDockBar()</div><div class="ttdef"><b>Definition:</b> <a href="content__layout__area_8cpp_source.html#l00157">content_layout_area.cpp:157</a></div></div>
 <div class="ttc" id="aqwidget_html_size-prop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html#size-prop">QWidget::size</a></div><div class="ttdeci">size</div></div>
 <div class="ttc" id="aqobject_html_parent"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent</a></div><div class="ttdeci">QObject * parent() const const</div></div>
-<div class="ttc" id="anamespacehal_html_a5183c9d870930c09f0bff0a061797b45"><div class="ttname"><a href="namespacehal.html#a5183c9d870930c09f0bff0a061797b45">hal::content_anchor</a></div><div class="ttdeci">content_anchor</div><div class="ttdef"><b>Definition:</b> <a href="content__layout__area_8h_source.html#l00041">content_layout_area.h:41</a></div></div>
+<div class="ttc" id="anamespacehal_html_a5183c9d870930c09f0bff0a061797b45"><div class="ttname"><a href="namespacehal.html#a5183c9d870930c09f0bff0a061797b45">hal::content_anchor</a></div><div class="ttdeci">content_anchor</div><div class="ttdef"><b>Definition:</b> <a href="content__layout__area_8h_source.html#l00043">content_layout_area.h:43</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_ecae83387e54337397617f193474db15.html">content_layout_area</a></li><li class="navelem"><a class="el" href="content__layout__area_8h.html">content_layout_area.h</a></li>
-    <li class="footer">Generated on Fri Oct 21 2022 13:08:32 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:45:53 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

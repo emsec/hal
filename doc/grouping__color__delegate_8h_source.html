@@ -86,45 +86,47 @@ $(document).ready(function(){initNavTree('grouping__color__delegate_8h_source.ht
 <div class="title">grouping_color_delegate.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="grouping__color__delegate_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//  MIT License</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//  Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//  of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//  in the Software without restriction, including without limitation the rights</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//  copies of the Software, and to permit persons to whom the Software is</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//  furnished to do so, subject to the following conditions:</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">//  The above copyright notice and this permission notice shall be included in all</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">//  copies or substantial portions of the Software.</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">//  THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">//  SOFTWARE.</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<a href="grouping__color__delegate_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// MIT License</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">// Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">// Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann (&quot;ORIGINAL AUTHORS&quot;). All rights reserved.</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">// Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">// Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix (&quot;ORIGINAL AUTHORS&quot;). All Rights reserved.</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">// of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">// in the Software without restriction, including without limitation the rights</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">// copies of the Software, and to permit persons to whom the Software is</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">// furnished to do so, subject to the following conditions:</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">// The above copyright notice and this permission notice shall be included in all</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">// copies or substantial portions of the Software.</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">// SOFTWARE.</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &lt;QStyledItemDelegate&gt;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a> {</div>
-<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="classhal_1_1_grouping_color_delegate.html">   36</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_grouping_color_delegate.html">GroupingColorDelegate</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstyleditemdelegate.html">QStyledItemDelegate</a></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    {</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classhal_1_1_grouping_color_delegate.html#a2d08686e780e4c5ab121d92147cfade9">   45</a></span>&#160;        <a class="code" href="classhal_1_1_grouping_color_delegate.html#a2d08686e780e4c5ab121d92147cfade9">GroupingColorDelegate</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = 0) : <a class="codeRef" href="https://doc.qt.io/qt-5/qstyleditemdelegate.html">QStyledItemDelegate</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a>) {;}</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_grouping_color_delegate.html#a86ea5ee5d8b3d6027e6038d1c9c3f988">paint</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html">QPainter</a> *painter, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstyleoptionviewitem.html">QStyleOptionViewItem</a> &amp;<a class="code" href="plugins_2gui_2_c_make_lists_8txt.html#a9f23355343051b13de5c52ef9a13eb08">option</a>, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;index) <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qsize.html">QSize</a> <a class="code" href="classhal_1_1_grouping_color_delegate.html#a39cd8e31605d480b767a28019fed0a8b">sizeHint</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstyleoptionviewitem.html">QStyleOptionViewItem</a> &amp;<a class="code" href="plugins_2gui_2_c_make_lists_8txt.html#a9f23355343051b13de5c52ef9a13eb08">option</a>, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;index) <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    };</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;}</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &lt;QStyledItemDelegate&gt;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a> {</div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="classhal_1_1_grouping_color_delegate.html">   38</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_grouping_color_delegate.html">GroupingColorDelegate</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstyleditemdelegate.html">QStyledItemDelegate</a></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    {</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="classhal_1_1_grouping_color_delegate.html#a2d08686e780e4c5ab121d92147cfade9">   47</a></span>&#160;        <a class="code" href="classhal_1_1_grouping_color_delegate.html#a2d08686e780e4c5ab121d92147cfade9">GroupingColorDelegate</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = 0) : <a class="codeRef" href="https://doc.qt.io/qt-5/qstyleditemdelegate.html">QStyledItemDelegate</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a>) {;}</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_grouping_color_delegate.html#a86ea5ee5d8b3d6027e6038d1c9c3f988">paint</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html">QPainter</a> *painter, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstyleoptionviewitem.html">QStyleOptionViewItem</a> &amp;<a class="code" href="plugins_2gui_2_c_make_lists_8txt.html#a9f23355343051b13de5c52ef9a13eb08">option</a>, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;index) <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qsize.html">QSize</a> <a class="code" href="classhal_1_1_grouping_color_delegate.html#a39cd8e31605d480b767a28019fed0a8b">sizeHint</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstyleoptionviewitem.html">QStyleOptionViewItem</a> &amp;<a class="code" href="plugins_2gui_2_c_make_lists_8txt.html#a9f23355343051b13de5c52ef9a13eb08">option</a>, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;index) <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    };</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aqobject_html_Q_OBJECT"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">QObject::Q_OBJECT</a></div><div class="ttdeci">Q_OBJECTQ_OBJECT</div></div>
@@ -137,15 +139,15 @@ $(document).ready(function(){initNavTree('grouping__color__delegate_8h_source.ht
 <div class="ttc" id="aclasshal_1_1_grouping_color_delegate_html_a39cd8e31605d480b767a28019fed0a8b"><div class="ttname"><a href="classhal_1_1_grouping_color_delegate.html#a39cd8e31605d480b767a28019fed0a8b">hal::GroupingColorDelegate::sizeHint</a></div><div class="ttdeci">QSize sizeHint(const QStyleOptionViewItem &amp;option, const QModelIndex &amp;index) const override</div><div class="ttdef"><b>Definition:</b> <a href="grouping__color__delegate_8cpp_source.html#l00026">grouping_color_delegate.cpp:26</a></div></div>
 <div class="ttc" id="aqobject_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html">QObject</a></div></div>
 <div class="ttc" id="aqstyleoptionviewitem_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstyleoptionviewitem.html">QStyleOptionViewItem</a></div></div>
-<div class="ttc" id="aclasshal_1_1_grouping_color_delegate_html"><div class="ttname"><a href="classhal_1_1_grouping_color_delegate.html">hal::GroupingColorDelegate</a></div><div class="ttdoc">Displays a colored box for the GroupingManagerWidget.</div><div class="ttdef"><b>Definition:</b> <a href="grouping__color__delegate_8h_source.html#l00036">grouping_color_delegate.h:36</a></div></div>
+<div class="ttc" id="aclasshal_1_1_grouping_color_delegate_html"><div class="ttname"><a href="classhal_1_1_grouping_color_delegate.html">hal::GroupingColorDelegate</a></div><div class="ttdoc">Displays a colored box for the GroupingManagerWidget.</div><div class="ttdef"><b>Definition:</b> <a href="grouping__color__delegate_8h_source.html#l00038">grouping_color_delegate.h:38</a></div></div>
 <div class="ttc" id="aqmodelindex_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a></div></div>
-<div class="ttc" id="aclasshal_1_1_grouping_color_delegate_html_a2d08686e780e4c5ab121d92147cfade9"><div class="ttname"><a href="classhal_1_1_grouping_color_delegate.html#a2d08686e780e4c5ab121d92147cfade9">hal::GroupingColorDelegate::GroupingColorDelegate</a></div><div class="ttdeci">GroupingColorDelegate(QObject *parent=0)</div><div class="ttdef"><b>Definition:</b> <a href="grouping__color__delegate_8h_source.html#l00045">grouping_color_delegate.h:45</a></div></div>
+<div class="ttc" id="aclasshal_1_1_grouping_color_delegate_html_a2d08686e780e4c5ab121d92147cfade9"><div class="ttname"><a href="classhal_1_1_grouping_color_delegate.html#a2d08686e780e4c5ab121d92147cfade9">hal::GroupingColorDelegate::GroupingColorDelegate</a></div><div class="ttdeci">GroupingColorDelegate(QObject *parent=0)</div><div class="ttdef"><b>Definition:</b> <a href="grouping__color__delegate_8h_source.html#l00047">grouping_color_delegate.h:47</a></div></div>
 <div class="ttc" id="aqobject_html_parent"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent</a></div><div class="ttdeci">QObject * parent() const const</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_2ec203bf81b5a243f757f87a262fbc17.html">grouping</a></li><li class="navelem"><a class="el" href="grouping__color__delegate_8h.html">grouping_color_delegate.h</a></li>
-    <li class="footer">Generated on Fri Oct 21 2022 13:08:32 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:45:53 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -86,58 +86,60 @@ $(document).ready(function(){initNavTree('circle__separated__net_8h_source.html'
 <div class="title">circle_separated_net.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="circle__separated__net_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//  MIT License</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//  Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//  of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//  in the Software without restriction, including without limitation the rights</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//  copies of the Software, and to permit persons to whom the Software is</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//  furnished to do so, subject to the following conditions:</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">//  The above copyright notice and this permission notice shall be included in all</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">//  copies or substantial portions of the Software.</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">//  THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">//  SOFTWARE.</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<a href="circle__separated__net_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// MIT License</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">// Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">// Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann (&quot;ORIGINAL AUTHORS&quot;). All rights reserved.</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">// Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">// Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix (&quot;ORIGINAL AUTHORS&quot;). All Rights reserved.</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">// of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">// in the Software without restriction, including without limitation the rights</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">// copies of the Software, and to permit persons to whom the Software is</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">// furnished to do so, subject to the following conditions:</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">// The above copyright notice and this permission notice shall be included in all</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">// copies or substantial portions of the Software.</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">// SOFTWARE.</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="separated__graphics__net_8h.html">gui/graph_widget/items/nets/separated_graphics_net.h</a>&quot;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;{</div>
-<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="classhal_1_1_circle_separated_net.html">   36</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_circle_separated_net.html">CircleSeparatedNet</a> : <span class="keyword">public</span> <a class="code" href="classhal_1_1_separated_graphics_net.html">SeparatedGraphicsNet</a></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    {</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_circle_separated_net.html#a9472a66216dbb898d37c42f1e1cc9a45">loadSettings</a>();</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <a class="code" href="classhal_1_1_circle_separated_net.html#a609816c133783c669987303f93ca05f6">CircleSeparatedNet</a>(<a class="code" href="classhal_1_1_net.html">Net</a>* n);</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_circle_separated_net.html#a69c471d2bb173e008ec7d71709c7cf28">paint</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html">QPainter</a>* painter, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstyleoptiongraphicsitem.html">QStyleOptionGraphicsItem</a>* <a class="code" href="plugins_2gui_2_c_make_lists_8txt.html#a9f23355343051b13de5c52ef9a13eb08">option</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* widget) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_circle_separated_net.html#a8fbb624c8dc588353e1b6916b8168666">addInput</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a>&amp; scene_position) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_circle_separated_net.html#a671e41b2b0ab2db2dd5b789469a9e2d1">addOutput</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a>&amp; scene_position) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        qreal <a class="code" href="classhal_1_1_circle_separated_net.html#a1121137ee9e6b34a919e40a044997f47">inputWidth</a>() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        qreal <a class="code" href="classhal_1_1_circle_separated_net.html#ac63183190512e61fdf9a8231fd5a4fe2">outputWidth</a>() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <span class="keyword">static</span> qreal sWireLength;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="keyword">static</span> qreal sCircleOffset;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="keyword">static</span> qreal sRadius;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    };</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;}</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="separated__graphics__net_8h.html">gui/graph_widget/items/nets/separated_graphics_net.h</a>&quot;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;{</div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="classhal_1_1_circle_separated_net.html">   38</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_circle_separated_net.html">CircleSeparatedNet</a> : <span class="keyword">public</span> <a class="code" href="classhal_1_1_separated_graphics_net.html">SeparatedGraphicsNet</a></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    {</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_circle_separated_net.html#a9472a66216dbb898d37c42f1e1cc9a45">loadSettings</a>();</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <a class="code" href="classhal_1_1_circle_separated_net.html#a609816c133783c669987303f93ca05f6">CircleSeparatedNet</a>(<a class="code" href="classhal_1_1_net.html">Net</a>* n);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_circle_separated_net.html#a69c471d2bb173e008ec7d71709c7cf28">paint</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html">QPainter</a>* painter, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstyleoptiongraphicsitem.html">QStyleOptionGraphicsItem</a>* <a class="code" href="plugins_2gui_2_c_make_lists_8txt.html#a9f23355343051b13de5c52ef9a13eb08">option</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* widget) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_circle_separated_net.html#a8fbb624c8dc588353e1b6916b8168666">addInput</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a>&amp; scene_position) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_circle_separated_net.html#a671e41b2b0ab2db2dd5b789469a9e2d1">addOutput</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a>&amp; scene_position) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        qreal <a class="code" href="classhal_1_1_circle_separated_net.html#a1121137ee9e6b34a919e40a044997f47">inputWidth</a>() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        qreal <a class="code" href="classhal_1_1_circle_separated_net.html#ac63183190512e61fdf9a8231fd5a4fe2">outputWidth</a>() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="keyword">static</span> qreal sWireLength;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <span class="keyword">static</span> qreal sCircleOffset;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="keyword">static</span> qreal sRadius;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    };</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclasshal_1_1_circle_separated_net_html_a69c471d2bb173e008ec7d71709c7cf28"><div class="ttname"><a href="classhal_1_1_circle_separated_net.html#a69c471d2bb173e008ec7d71709c7cf28">hal::CircleSeparatedNet::paint</a></div><div class="ttdeci">void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override</div><div class="ttdef"><b>Definition:</b> <a href="circle__separated__net_8cpp_source.html#l00026">circle_separated_net.cpp:26</a></div></div>
@@ -151,17 +153,17 @@ $(document).ready(function(){initNavTree('circle__separated__net_8h_source.html'
 <div class="ttc" id="aclasshal_1_1_circle_separated_net_html_a9472a66216dbb898d37c42f1e1cc9a45"><div class="ttname"><a href="classhal_1_1_circle_separated_net.html#a9472a66216dbb898d37c42f1e1cc9a45">hal::CircleSeparatedNet::loadSettings</a></div><div class="ttdeci">static void loadSettings()</div><div class="ttdef"><b>Definition:</b> <a href="circle__separated__net_8cpp_source.html#l00015">circle_separated_net.cpp:15</a></div></div>
 <div class="ttc" id="aclasshal_1_1_circle_separated_net_html_ac63183190512e61fdf9a8231fd5a4fe2"><div class="ttname"><a href="classhal_1_1_circle_separated_net.html#ac63183190512e61fdf9a8231fd5a4fe2">hal::CircleSeparatedNet::outputWidth</a></div><div class="ttdeci">qreal outputWidth() const override</div><div class="ttdef"><b>Definition:</b> <a href="circle__separated__net_8cpp_source.html#l00145">circle_separated_net.cpp:145</a></div></div>
 <div class="ttc" id="aclasshal_1_1_circle_separated_net_html_a8fbb624c8dc588353e1b6916b8168666"><div class="ttname"><a href="classhal_1_1_circle_separated_net.html#a8fbb624c8dc588353e1b6916b8168666">hal::CircleSeparatedNet::addInput</a></div><div class="ttdeci">void addInput(const QPointF &amp;scene_position) override</div><div class="ttdef"><b>Definition:</b> <a href="circle__separated__net_8cpp_source.html#l00090">circle_separated_net.cpp:90</a></div></div>
-<div class="ttc" id="aclasshal_1_1_net_html"><div class="ttname"><a href="classhal_1_1_net.html">hal::Net</a></div><div class="ttdef"><b>Definition:</b> <a href="net_8h_source.html#l00055">net.h:55</a></div></div>
+<div class="ttc" id="aclasshal_1_1_net_html"><div class="ttname"><a href="classhal_1_1_net.html">hal::Net</a></div><div class="ttdef"><b>Definition:</b> <a href="net_8h_source.html#l00057">net.h:57</a></div></div>
 <div class="ttc" id="aqstyleoptiongraphicsitem_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstyleoptiongraphicsitem.html">QStyleOptionGraphicsItem</a></div></div>
 <div class="ttc" id="aclasshal_1_1_circle_separated_net_html_a609816c133783c669987303f93ca05f6"><div class="ttname"><a href="classhal_1_1_circle_separated_net.html#a609816c133783c669987303f93ca05f6">hal::CircleSeparatedNet::CircleSeparatedNet</a></div><div class="ttdeci">CircleSeparatedNet(Net *n)</div><div class="ttdef"><b>Definition:</b> <a href="circle__separated__net_8cpp_source.html#l00022">circle_separated_net.cpp:22</a></div></div>
-<div class="ttc" id="aclasshal_1_1_circle_separated_net_html"><div class="ttname"><a href="classhal_1_1_circle_separated_net.html">hal::CircleSeparatedNet</a></div><div class="ttdoc">Used to display all nets which destinations are not in the current view.</div><div class="ttdef"><b>Definition:</b> <a href="circle__separated__net_8h_source.html#l00036">circle_separated_net.h:36</a></div></div>
+<div class="ttc" id="aclasshal_1_1_circle_separated_net_html"><div class="ttname"><a href="classhal_1_1_circle_separated_net.html">hal::CircleSeparatedNet</a></div><div class="ttdoc">Used to display all nets which destinations are not in the current view.</div><div class="ttdef"><b>Definition:</b> <a href="circle__separated__net_8h_source.html#l00038">circle_separated_net.h:38</a></div></div>
 <div class="ttc" id="aseparated__graphics__net_8h_html"><div class="ttname"><a href="separated__graphics__net_8h.html">separated_graphics_net.h</a></div></div>
-<div class="ttc" id="aclasshal_1_1_separated_graphics_net_html"><div class="ttname"><a href="classhal_1_1_separated_graphics_net.html">hal::SeparatedGraphicsNet</a></div><div class="ttdoc">Abstract base class for separated nets (e.g. ArrowSeparatedNet)</div><div class="ttdef"><b>Definition:</b> <a href="separated__graphics__net_8h_source.html#l00038">separated_graphics_net.h:38</a></div></div>
+<div class="ttc" id="aclasshal_1_1_separated_graphics_net_html"><div class="ttname"><a href="classhal_1_1_separated_graphics_net.html">hal::SeparatedGraphicsNet</a></div><div class="ttdoc">Abstract base class for separated nets (e.g. ArrowSeparatedNet)</div><div class="ttdef"><b>Definition:</b> <a href="separated__graphics__net_8h_source.html#l00040">separated_graphics_net.h:40</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_e6f210bccc64e8ff5ef57a64ae71bbf6.html">graph_widget</a></li><li class="navelem"><a class="el" href="dir_7ecf1597906790ec3d9fed512a2519c8.html">items</a></li><li class="navelem"><a class="el" href="dir_04cb3ed2d120b2c1f58d3009e0b49bb3.html">nets</a></li><li class="navelem"><a class="el" href="circle__separated__net_8h.html">circle_separated_net.h</a></li>
-    <li class="footer">Generated on Fri Oct 21 2022 13:08:32 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:45:53 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

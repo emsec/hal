@@ -86,96 +86,98 @@ $(document).ready(function(){initNavTree('endpoint_8h_source.html',''); initResi
 <div class="title">endpoint.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="endpoint_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//  MIT License</span></div>
+<a href="endpoint_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// MIT License</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//  Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//  of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//  in the Software without restriction, including without limitation the rights</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//  copies of the Software, and to permit persons to whom the Software is</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//  furnished to do so, subject to the following conditions:</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">//  The above copyright notice and this permission notice shall be included in all</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">//  copies or substantial portions of the Software.</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">//  THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">//  SOFTWARE.</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">// Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">// Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann (&quot;ORIGINAL AUTHORS&quot;). All rights reserved.</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">// Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">// Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix (&quot;ORIGINAL AUTHORS&quot;). All Rights reserved.</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">// of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">// in the Software without restriction, including without limitation the rights</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">// copies of the Software, and to permit persons to whom the Software is</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">// furnished to do so, subject to the following conditions:</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">// The above copyright notice and this permission notice shall be included in all</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">// copies or substantial portions of the Software.</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">// SOFTWARE.</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="defines_8h.html">hal_core/defines.h</a>&quot;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;{</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="comment">/* forward declaration */</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keyword">class </span><a class="code" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ad25b4bd4c72aa2c07ee87adb10b59f16">Gate</a>;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keyword">class </span><a class="code" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1a5012af45088eb8e999bb8350077b12ca">Net</a>;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keyword">class </span>GatePin;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classhal_1_1_endpoint.html">   40</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_endpoint.html">Endpoint</a></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    {</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_endpoint.html#a8b11d0e2bbf41dcdcd3bd9cec0d5082e">operator==</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>&amp; other) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_endpoint.html#aaa1f3e2681b24e03ac009d6a322afd2f">operator!=</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>&amp; other) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <a class="code" href="classhal_1_1_gate.html">Gate</a>* <a class="code" href="classhal_1_1_endpoint.html#aa5d98029f04ec9dc36da48b3fece7bd6">get_gate</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* <a class="code" href="classhal_1_1_endpoint.html#a883e6db8e1984bfda94e673662bb4d8e">get_pin</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>* <a class="code" href="classhal_1_1_endpoint.html#a4eb6a0c6fc8133fb74feebfdf0cd1589">get_net</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_endpoint.html#a93c74ed50f0ce4d8db33bc156edf7c35">is_source_pin</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_endpoint.html#ade1baf1f38d7cf9e518b8564767fcdde">is_destination_pin</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00095"></a><span class="lineno"><a class="line" href="classhal_1_1_endpoint.html#a71851ef81c1a491be6395f4c883218de">   95</a></span>&#160;        <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classhal_1_1_netlist_internal_manager.html">NetlistInternalManager</a>;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>(<a class="code" href="classhal_1_1_gate.html">Gate</a>* gate, <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin, <a class="code" href="classhal_1_1_net.html">Net</a>* <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>, <span class="keywordtype">bool</span> is_a_destination);</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>(<a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>&amp;&amp;)      = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>&amp; operator=(<a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>&amp;&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <a class="code" href="classhal_1_1_gate.html">Gate</a>* m_gate;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* m_pin;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>* m_net;</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keywordtype">bool</span> m_is_a_destination;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    };</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="defines_8h.html">hal_core/defines.h</a>&quot;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;{</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="comment">/* forward declaration */</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keyword">class </span><a class="code" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ad25b4bd4c72aa2c07ee87adb10b59f16">Gate</a>;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">class </span><a class="code" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1a5012af45088eb8e999bb8350077b12ca">Net</a>;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keyword">class </span>GatePin;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="classhal_1_1_endpoint.html">   42</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_endpoint.html">Endpoint</a></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    {</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_endpoint.html#a8b11d0e2bbf41dcdcd3bd9cec0d5082e">operator==</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>&amp; other) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_endpoint.html#aaa1f3e2681b24e03ac009d6a322afd2f">operator!=</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>&amp; other) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <a class="code" href="classhal_1_1_gate.html">Gate</a>* <a class="code" href="classhal_1_1_endpoint.html#aa5d98029f04ec9dc36da48b3fece7bd6">get_gate</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* <a class="code" href="classhal_1_1_endpoint.html#a883e6db8e1984bfda94e673662bb4d8e">get_pin</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>* <a class="code" href="classhal_1_1_endpoint.html#a4eb6a0c6fc8133fb74feebfdf0cd1589">get_net</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_endpoint.html#a93c74ed50f0ce4d8db33bc156edf7c35">is_source_pin</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_endpoint.html#ade1baf1f38d7cf9e518b8564767fcdde">is_destination_pin</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00097"></a><span class="lineno"><a class="line" href="classhal_1_1_endpoint.html#a71851ef81c1a491be6395f4c883218de">   97</a></span>&#160;        <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classhal_1_1_netlist_internal_manager.html">NetlistInternalManager</a>;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>(<a class="code" href="classhal_1_1_gate.html">Gate</a>* gate, <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin, <a class="code" href="classhal_1_1_net.html">Net</a>* <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>, <span class="keywordtype">bool</span> is_a_destination);</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>&amp;)            = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>(<a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>&amp;&amp;)                 = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>&amp; operator=(<a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>&amp;&amp;)      = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <a class="code" href="classhal_1_1_gate.html">Gate</a>* m_gate;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* m_pin;</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>* m_net;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        <span class="keywordtype">bool</span> m_is_a_destination;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    };</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclasshal_1_1_endpoint_html_a883e6db8e1984bfda94e673662bb4d8e"><div class="ttname"><a href="classhal_1_1_endpoint.html#a883e6db8e1984bfda94e673662bb4d8e">hal::Endpoint::get_pin</a></div><div class="ttdeci">GatePin * get_pin() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2endpoint_8cpp_source.html#l00028">endpoint.cpp:28</a></div></div>
 <div class="ttc" id="aclasshal_1_1_endpoint_html_aa5d98029f04ec9dc36da48b3fece7bd6"><div class="ttname"><a href="classhal_1_1_endpoint.html#aa5d98029f04ec9dc36da48b3fece7bd6">hal::Endpoint::get_gate</a></div><div class="ttdeci">Gate * get_gate() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2endpoint_8cpp_source.html#l00023">endpoint.cpp:23</a></div></div>
 <div class="ttc" id="aclasshal_1_1_endpoint_html_a93c74ed50f0ce4d8db33bc156edf7c35"><div class="ttname"><a href="classhal_1_1_endpoint.html#a93c74ed50f0ce4d8db33bc156edf7c35">hal::Endpoint::is_source_pin</a></div><div class="ttdeci">bool is_source_pin() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2endpoint_8cpp_source.html#l00043">endpoint.cpp:43</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
-<div class="ttc" id="aclasshal_1_1_gate_html"><div class="ttname"><a href="classhal_1_1_gate.html">hal::Gate</a></div><div class="ttdef"><b>Definition:</b> <a href="gate_8h_source.html#l00055">gate.h:55</a></div></div>
+<div class="ttc" id="aclasshal_1_1_gate_html"><div class="ttname"><a href="classhal_1_1_gate.html">hal::Gate</a></div><div class="ttdef"><b>Definition:</b> <a href="gate_8h_source.html#l00057">gate.h:57</a></div></div>
 <div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="defines_8h.html">defines.h</a></div></div>
 <div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_a504c73ff1a68c50e5435dece66bc2772"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a></div><div class="ttdeci">Net * net</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00055">netlist_serializer.cpp:55</a></div></div>
 <div class="ttc" id="aclasshal_1_1_endpoint_html_a4eb6a0c6fc8133fb74feebfdf0cd1589"><div class="ttname"><a href="classhal_1_1_endpoint.html#a4eb6a0c6fc8133fb74feebfdf0cd1589">hal::Endpoint::get_net</a></div><div class="ttdeci">Net * get_net() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2endpoint_8cpp_source.html#l00033">endpoint.cpp:33</a></div></div>
 <div class="ttc" id="aclasshal_1_1_endpoint_html_aaa1f3e2681b24e03ac009d6a322afd2f"><div class="ttname"><a href="classhal_1_1_endpoint.html#aaa1f3e2681b24e03ac009d6a322afd2f">hal::Endpoint::operator!=</a></div><div class="ttdeci">bool operator!=(const Endpoint &amp;other) const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2endpoint_8cpp_source.html#l00018">endpoint.cpp:18</a></div></div>
-<div class="ttc" id="aclasshal_1_1_endpoint_html"><div class="ttname"><a href="classhal_1_1_endpoint.html">hal::Endpoint</a></div><div class="ttdef"><b>Definition:</b> <a href="endpoint_8h_source.html#l00040">endpoint.h:40</a></div></div>
+<div class="ttc" id="aclasshal_1_1_endpoint_html"><div class="ttname"><a href="classhal_1_1_endpoint.html">hal::Endpoint</a></div><div class="ttdef"><b>Definition:</b> <a href="endpoint_8h_source.html#l00042">endpoint.h:42</a></div></div>
 <div class="ttc" id="agroup__gui_html_ggaab0cd38a41c1215ae70822b1d501daa1ad25b4bd4c72aa2c07ee87adb10b59f16"><div class="ttname"><a href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ad25b4bd4c72aa2c07ee87adb10b59f16">hal::ItemType::Gate</a></div><div class="ttdeci">@ Gate</div></div>
-<div class="ttc" id="aclasshal_1_1_net_html"><div class="ttname"><a href="classhal_1_1_net.html">hal::Net</a></div><div class="ttdef"><b>Definition:</b> <a href="net_8h_source.html#l00055">net.h:55</a></div></div>
+<div class="ttc" id="aclasshal_1_1_net_html"><div class="ttname"><a href="classhal_1_1_net.html">hal::Net</a></div><div class="ttdef"><b>Definition:</b> <a href="net_8h_source.html#l00057">net.h:57</a></div></div>
 <div class="ttc" id="agroup__gui_html_ggaab0cd38a41c1215ae70822b1d501daa1a5012af45088eb8e999bb8350077b12ca"><div class="ttname"><a href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1a5012af45088eb8e999bb8350077b12ca">hal::ItemType::Net</a></div><div class="ttdeci">@ Net</div></div>
 <div class="ttc" id="aclasshal_1_1_endpoint_html_ade1baf1f38d7cf9e518b8564767fcdde"><div class="ttname"><a href="classhal_1_1_endpoint.html#ade1baf1f38d7cf9e518b8564767fcdde">hal::Endpoint::is_destination_pin</a></div><div class="ttdeci">bool is_destination_pin() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2endpoint_8cpp_source.html#l00038">endpoint.cpp:38</a></div></div>
-<div class="ttc" id="aclasshal_1_1_netlist_internal_manager_html"><div class="ttname"><a href="classhal_1_1_netlist_internal_manager.html">hal::NetlistInternalManager</a></div><div class="ttdef"><b>Definition:</b> <a href="netlist__internal__manager_8h_source.html#l00048">netlist_internal_manager.h:48</a></div></div>
-<div class="ttc" id="aclasshal_1_1_gate_pin_html"><div class="ttname"><a href="classhal_1_1_gate_pin.html">hal::GatePin</a></div><div class="ttdef"><b>Definition:</b> <a href="gate__pin_8h_source.html#l00019">gate_pin.h:19</a></div></div>
+<div class="ttc" id="aclasshal_1_1_netlist_internal_manager_html"><div class="ttname"><a href="classhal_1_1_netlist_internal_manager.html">hal::NetlistInternalManager</a></div><div class="ttdef"><b>Definition:</b> <a href="netlist__internal__manager_8h_source.html#l00050">netlist_internal_manager.h:50</a></div></div>
+<div class="ttc" id="aclasshal_1_1_gate_pin_html"><div class="ttname"><a href="classhal_1_1_gate_pin.html">hal::GatePin</a></div><div class="ttdef"><b>Definition:</b> <a href="gate__pin_8h_source.html#l00044">gate_pin.h:44</a></div></div>
 <div class="ttc" id="aclasshal_1_1_endpoint_html_a8b11d0e2bbf41dcdcd3bd9cec0d5082e"><div class="ttname"><a href="classhal_1_1_endpoint.html#a8b11d0e2bbf41dcdcd3bd9cec0d5082e">hal::Endpoint::operator==</a></div><div class="ttdeci">bool operator==(const Endpoint &amp;other) const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2endpoint_8cpp_source.html#l00013">endpoint.cpp:13</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_ef96d94451875f81e56c678363187add.html">netlist</a></li><li class="navelem"><a class="el" href="endpoint_8h.html">endpoint.h</a></li>
-    <li class="footer">Generated on Fri Oct 21 2022 13:08:31 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:45:52 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

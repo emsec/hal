@@ -1,10 +1,10 @@
 <map id="/home/runner/work/hal/hal/plugins/hgl_writer/include/hgl_writer/plugin_hgl_writer.h" name="/home/runner/work/hal/hal/plugins/hgl_writer/include/hgl_writer/plugin_hgl_writer.h">
-<area shape="rect" id="node1" title=" " alt="" coords="157,5,344,76"/>
-<area shape="rect" id="node2" href="$plugin__interface__base_8h.html" title=" " alt="" coords="160,124,341,165"/>
-<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="91,303,231,329"/>
-<area shape="rect" id="node4" href="$log_8h.html" title=" " alt="" coords="96,213,227,255"/>
-<area shape="rect" id="node5" title=" " alt="" coords="5,303,48,329"/>
-<area shape="rect" id="node6" title=" " alt="" coords="373,303,432,329"/>
-<area shape="rect" id="node7" href="$plugin__parameter_8h.html" title=" " alt="" coords="504,213,680,255"/>
-<area shape="rect" id="node8" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="251,221,429,247"/>
+<area shape="rect" id="node1" title=" " alt="" coords="251,5,437,76"/>
+<area shape="rect" id="node2" href="$plugin__interface__base_8h.html" title=" " alt="" coords="253,124,435,165"/>
+<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="45,303,185,329"/>
+<area shape="rect" id="node4" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="25,221,204,247"/>
+<area shape="rect" id="node5" title=" " alt="" coords="315,303,373,329"/>
+<area shape="rect" id="node6" href="$plugin__parameter_8h.html" title=" " alt="" coords="433,213,609,255"/>
+<area shape="rect" id="node7" href="$log_8h.html" title=" " alt="" coords="228,213,359,255"/>
+<area shape="rect" id="node8" title=" " alt="" coords="536,303,579,329"/>
 </map>

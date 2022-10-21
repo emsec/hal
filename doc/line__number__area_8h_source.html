@@ -86,78 +86,80 @@ $(document).ready(function(){initNavTree('line__number__area_8h_source.html','')
 <div class="title">line_number_area.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="line__number__area_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//  MIT License</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//  Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//  of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//  in the Software without restriction, including without limitation the rights</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//  copies of the Software, and to permit persons to whom the Software is</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//  furnished to do so, subject to the following conditions:</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">//  The above copyright notice and this permission notice shall be included in all</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">//  copies or substantial portions of the Software.</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">//  THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">//  SOFTWARE.</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<a href="line__number__area_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// MIT License</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">// Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">// Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann (&quot;ORIGINAL AUTHORS&quot;). All rights reserved.</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">// Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">// Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix (&quot;ORIGINAL AUTHORS&quot;). All Rights reserved.</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">// of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">// in the Software without restriction, including without limitation the rights</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">// copies of the Software, and to permit persons to whom the Software is</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">// furnished to do so, subject to the following conditions:</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">// The above copyright notice and this permission notice shall be included in all</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">// copies or substantial portions of the Software.</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">// SOFTWARE.</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &lt;QWidget&gt;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;{</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keyword">class </span>CodeEditor;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="classhal_1_1_line_number_area.html">   42</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_line_number_area.html">LineNumberArea</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    {</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
-<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classhal_1_1_line_number_area.html#a3920f1da35f031d9d811864583ccf091">   45</a></span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_PROPERTY">Q_PROPERTY</a>(<span class="keywordtype">int</span> <a class="code" href="classhal_1_1_line_number_area.html#a3920f1da35f031d9d811864583ccf091">leftOffset</a> READ <a class="code" href="classhal_1_1_line_number_area.html#a3920f1da35f031d9d811864583ccf091">leftOffset</a> WRITE <a class="code" href="classhal_1_1_line_number_area.html#a2c18a0a9570c287cdc3a8acd881b1ae9">setLeftOffset</a>)</div>
-<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="classhal_1_1_line_number_area.html#ac0afa5b321899bfc0007b44e17cf9723">   46</a></span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_PROPERTY">Q_PROPERTY</a>(<span class="keywordtype">int</span> <a class="code" href="classhal_1_1_line_number_area.html#ac0afa5b321899bfc0007b44e17cf9723">rightOffset</a> READ <a class="code" href="classhal_1_1_line_number_area.html#ac0afa5b321899bfc0007b44e17cf9723">rightOffset</a> WRITE <a class="code" href="classhal_1_1_line_number_area.html#a80d23adfe6646eae2f961de34b841e6e">setRightOffset</a>)</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    public:</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        explicit <a class="code" href="classhal_1_1_line_number_area.html">LineNumberArea</a>(<a class="code" href="classhal_1_1_code_editor.html">CodeEditor</a>* editor);</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classhal_1_1_line_number_area.html#a3920f1da35f031d9d811864583ccf091">leftOffset</a>() const;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classhal_1_1_line_number_area.html#ac0afa5b321899bfc0007b44e17cf9723">rightOffset</a>() const;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_line_number_area.html#a2c18a0a9570c287cdc3a8acd881b1ae9">setLeftOffset</a>(const <span class="keywordtype">int</span> offset);</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_line_number_area.html#a80d23adfe6646eae2f961de34b841e6e">setRightOffset</a>(const <span class="keywordtype">int</span> offset);</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_line_number_area.html#ab9bbfd02d13c7a08baaa6de582e76b96">repolish</a>();</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    protected:</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_line_number_area.html#a69b2639560bd0f3eec8f2e73ffa98a2c">paintEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qpaintevent.html">QPaintEvent</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#event">event</a>) override;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_line_number_area.html#a41f602643db70509473eadeab5487e9c">wheelEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwheelevent.html">QWheelEvent</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#event">event</a>) override;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    private:</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <a class="code" href="classhal_1_1_code_editor.html">CodeEditor</a>* mEditor;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="keywordtype">int</span> mLeftOffset;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <span class="keywordtype">int</span> mRightOffset;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    };</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;}</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &lt;QWidget&gt;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;{</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keyword">class </span>CodeEditor;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classhal_1_1_line_number_area.html">   44</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_line_number_area.html">LineNumberArea</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    {</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
+<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="classhal_1_1_line_number_area.html#a3920f1da35f031d9d811864583ccf091">   47</a></span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_PROPERTY">Q_PROPERTY</a>(<span class="keywordtype">int</span> <a class="code" href="classhal_1_1_line_number_area.html#a3920f1da35f031d9d811864583ccf091">leftOffset</a> READ <a class="code" href="classhal_1_1_line_number_area.html#a3920f1da35f031d9d811864583ccf091">leftOffset</a> WRITE <a class="code" href="classhal_1_1_line_number_area.html#a2c18a0a9570c287cdc3a8acd881b1ae9">setLeftOffset</a>)</div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="classhal_1_1_line_number_area.html#ac0afa5b321899bfc0007b44e17cf9723">   48</a></span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_PROPERTY">Q_PROPERTY</a>(<span class="keywordtype">int</span> <a class="code" href="classhal_1_1_line_number_area.html#ac0afa5b321899bfc0007b44e17cf9723">rightOffset</a> READ <a class="code" href="classhal_1_1_line_number_area.html#ac0afa5b321899bfc0007b44e17cf9723">rightOffset</a> WRITE <a class="code" href="classhal_1_1_line_number_area.html#a80d23adfe6646eae2f961de34b841e6e">setRightOffset</a>)</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    public:</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        explicit <a class="code" href="classhal_1_1_line_number_area.html">LineNumberArea</a>(<a class="code" href="classhal_1_1_code_editor.html">CodeEditor</a>* editor);</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classhal_1_1_line_number_area.html#a3920f1da35f031d9d811864583ccf091">leftOffset</a>() const;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classhal_1_1_line_number_area.html#ac0afa5b321899bfc0007b44e17cf9723">rightOffset</a>() const;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_line_number_area.html#a2c18a0a9570c287cdc3a8acd881b1ae9">setLeftOffset</a>(const <span class="keywordtype">int</span> offset);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_line_number_area.html#a80d23adfe6646eae2f961de34b841e6e">setRightOffset</a>(const <span class="keywordtype">int</span> offset);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_line_number_area.html#ab9bbfd02d13c7a08baaa6de582e76b96">repolish</a>();</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    protected:</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_line_number_area.html#a69b2639560bd0f3eec8f2e73ffa98a2c">paintEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qpaintevent.html">QPaintEvent</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#event">event</a>) override;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_line_number_area.html#a41f602643db70509473eadeab5487e9c">wheelEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwheelevent.html">QWheelEvent</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#event">event</a>) override;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    private:</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <a class="code" href="classhal_1_1_code_editor.html">CodeEditor</a>* mEditor;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <span class="keywordtype">int</span> mLeftOffset;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="keywordtype">int</span> mRightOffset;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    };</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aqwheelevent_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwheelevent.html">QWheelEvent</a></div></div>
 <div class="ttc" id="aqobject_html_Q_OBJECT"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">QObject::Q_OBJECT</a></div><div class="ttdeci">Q_OBJECTQ_OBJECT</div></div>
-<div class="ttc" id="aclasshal_1_1_code_editor_html"><div class="ttname"><a href="classhal_1_1_code_editor.html">hal::CodeEditor</a></div><div class="ttdoc">A plain text edit widget that is intended for editing code.</div><div class="ttdef"><b>Definition:</b> <a href="code__editor_8h_source.html#l00048">code_editor.h:48</a></div></div>
+<div class="ttc" id="aclasshal_1_1_code_editor_html"><div class="ttname"><a href="classhal_1_1_code_editor.html">hal::CodeEditor</a></div><div class="ttdoc">A plain text edit widget that is intended for editing code.</div><div class="ttdef"><b>Definition:</b> <a href="code__editor_8h_source.html#l00050">code_editor.h:50</a></div></div>
 <div class="ttc" id="aqobject_html_Q_PROPERTY"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_PROPERTY">QObject::Q_PROPERTY</a></div><div class="ttdeci">Q_PROPERTY(...)</div></div>
 <div class="ttc" id="aqwidget_html_event"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html#event">QWidget::event</a></div><div class="ttdeci">virtual bool event(QEvent *event) override</div></div>
 <div class="ttc" id="aqwidget_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
-<div class="ttc" id="aclasshal_1_1_line_number_area_html_ac0afa5b321899bfc0007b44e17cf9723"><div class="ttname"><a href="classhal_1_1_line_number_area.html#ac0afa5b321899bfc0007b44e17cf9723">hal::LineNumberArea::rightOffset</a></div><div class="ttdeci">int rightOffset</div><div class="ttdef"><b>Definition:</b> <a href="line__number__area_8h_source.html#l00046">line_number_area.h:46</a></div></div>
-<div class="ttc" id="aclasshal_1_1_line_number_area_html_a3920f1da35f031d9d811864583ccf091"><div class="ttname"><a href="classhal_1_1_line_number_area.html#a3920f1da35f031d9d811864583ccf091">hal::LineNumberArea::leftOffset</a></div><div class="ttdeci">int leftOffset</div><div class="ttdef"><b>Definition:</b> <a href="line__number__area_8h_source.html#l00045">line_number_area.h:45</a></div></div>
-<div class="ttc" id="aclasshal_1_1_line_number_area_html"><div class="ttname"><a href="classhal_1_1_line_number_area.html">hal::LineNumberArea</a></div><div class="ttdoc">Shows line numbers next to a CodeEditor.</div><div class="ttdef"><b>Definition:</b> <a href="line__number__area_8h_source.html#l00042">line_number_area.h:42</a></div></div>
+<div class="ttc" id="aclasshal_1_1_line_number_area_html_ac0afa5b321899bfc0007b44e17cf9723"><div class="ttname"><a href="classhal_1_1_line_number_area.html#ac0afa5b321899bfc0007b44e17cf9723">hal::LineNumberArea::rightOffset</a></div><div class="ttdeci">int rightOffset</div><div class="ttdef"><b>Definition:</b> <a href="line__number__area_8h_source.html#l00048">line_number_area.h:48</a></div></div>
+<div class="ttc" id="aclasshal_1_1_line_number_area_html_a3920f1da35f031d9d811864583ccf091"><div class="ttname"><a href="classhal_1_1_line_number_area.html#a3920f1da35f031d9d811864583ccf091">hal::LineNumberArea::leftOffset</a></div><div class="ttdeci">int leftOffset</div><div class="ttdef"><b>Definition:</b> <a href="line__number__area_8h_source.html#l00047">line_number_area.h:47</a></div></div>
+<div class="ttc" id="aclasshal_1_1_line_number_area_html"><div class="ttname"><a href="classhal_1_1_line_number_area.html">hal::LineNumberArea</a></div><div class="ttdoc">Shows line numbers next to a CodeEditor.</div><div class="ttdef"><b>Definition:</b> <a href="line__number__area_8h_source.html#l00044">line_number_area.h:44</a></div></div>
 <div class="ttc" id="aclasshal_1_1_line_number_area_html_a41f602643db70509473eadeab5487e9c"><div class="ttname"><a href="classhal_1_1_line_number_area.html#a41f602643db70509473eadeab5487e9c">hal::LineNumberArea::wheelEvent</a></div><div class="ttdeci">void wheelEvent(QWheelEvent *event) override</div><div class="ttdef"><b>Definition:</b> <a href="line__number__area_8cpp_source.html#l00051">line_number_area.cpp:51</a></div></div>
 <div class="ttc" id="aclasshal_1_1_line_number_area_html_a69b2639560bd0f3eec8f2e73ffa98a2c"><div class="ttname"><a href="classhal_1_1_line_number_area.html#a69b2639560bd0f3eec8f2e73ffa98a2c">hal::LineNumberArea::paintEvent</a></div><div class="ttdeci">void paintEvent(QPaintEvent *event) override</div><div class="ttdef"><b>Definition:</b> <a href="line__number__area_8cpp_source.html#l00042">line_number_area.cpp:42</a></div></div>
 <div class="ttc" id="aclasshal_1_1_line_number_area_html_a80d23adfe6646eae2f961de34b841e6e"><div class="ttname"><a href="classhal_1_1_line_number_area.html#a80d23adfe6646eae2f961de34b841e6e">hal::LineNumberArea::setRightOffset</a></div><div class="ttdeci">void setRightOffset(const int offset)</div><div class="ttdef"><b>Definition:</b> <a href="line__number__area_8cpp_source.html#l00029">line_number_area.cpp:29</a></div></div>
@@ -168,7 +170,7 @@ $(document).ready(function(){initNavTree('line__number__area_8h_source.html','')
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_e597ffa93f7bdb95469ec32316daa779.html">code_editor</a></li><li class="navelem"><a class="el" href="line__number__area_8h.html">line_number_area.h</a></li>
-    <li class="footer">Generated on Fri Oct 21 2022 13:08:32 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:45:53 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

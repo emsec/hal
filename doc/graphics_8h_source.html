@@ -86,53 +86,55 @@ $(document).ready(function(){initNavTree('graphics_8h_source.html',''); initResi
 <div class="title">graphics.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="graphics_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//  MIT License</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//  Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//  of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//  in the Software without restriction, including without limitation the rights</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//  copies of the Software, and to permit persons to whom the Software is</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//  furnished to do so, subject to the following conditions:</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">//  The above copyright notice and this permission notice shall be included in all</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">//  copies or substantial portions of the Software.</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">//  THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">//  SOFTWARE.</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<a href="graphics_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// MIT License</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">// Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">// Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann (&quot;ORIGINAL AUTHORS&quot;). All rights reserved.</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">// Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">// Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix (&quot;ORIGINAL AUTHORS&quot;). All Rights reserved.</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">// of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">// in the Software without restriction, including without limitation the rights</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">// copies of the Software, and to permit persons to whom the Software is</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">// furnished to do so, subject to the following conditions:</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">// The above copyright notice and this permission notice shall be included in all</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">// copies or substantial portions of the Software.</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">// SOFTWARE.</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &lt;QColor&gt;</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &lt;QIcon&gt;</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &lt;QString&gt;</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &lt;QPixmap&gt;</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;{</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">namespace </span>gui_utility</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    {</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keyword">extern</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> <a class="code" href="namespacehal_1_1gui__utility.html#adcce0f5282e882eec03b345429ea7547">getSvgData</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; svg_path);</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keyword">extern</span> <span class="keywordtype">void</span> <a class="code" href="namespacehal_1_1gui__utility.html#a52bce16bd78e03f2497250a4cb004baf">changeSvgColor</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; svg_data, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>&amp; <a class="code" href="_apache_01_license_8txt.html#aaf8226a059307a1b18aac1295b5cf3a2">from</a>, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>&amp; <a class="code" href="namespacehal_1_1core__strings.html#a37f09aeed09bf8c9d56b599ffcdceef2">to</a>);</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keyword">extern</span> <span class="keywordtype">void</span> <a class="code" href="namespacehal_1_1gui__utility.html#a4926060472430b7ddd06a9fc73694022">changeAllSvgColors</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; svg_data, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>&amp; <a class="code" href="namespacehal_1_1core__strings.html#a37f09aeed09bf8c9d56b599ffcdceef2">to</a>);</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keyword">extern</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qicon.html">QIcon</a> <a class="code" href="namespacehal_1_1gui__utility.html#afd89fa00ad0a207bd576dd6ad73a5021">getIconFromSvgData</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; svg_data);</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keyword">extern</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qicon.html">QIcon</a> <a class="code" href="namespacehal_1_1gui__utility.html#aaa94c0be01b066146ccbe1401662b1d5">getStyledSvgIcon</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; from_to_colors, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; svg_path);</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <span class="keyword">extern</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a> <a class="code" href="namespacehal_1_1gui__utility.html#ae5629eeed28d980e104fe78483f92fae">getRandomColor</a>();</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    }</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;}</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &lt;QColor&gt;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &lt;QIcon&gt;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;QString&gt;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;QPixmap&gt;</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;{</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">namespace </span>gui_utility</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    {</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keyword">extern</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> <a class="code" href="namespacehal_1_1gui__utility.html#adcce0f5282e882eec03b345429ea7547">getSvgData</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; svg_path);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keyword">extern</span> <span class="keywordtype">void</span> <a class="code" href="namespacehal_1_1gui__utility.html#a52bce16bd78e03f2497250a4cb004baf">changeSvgColor</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; svg_data, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>&amp; <a class="code" href="_apache_01_license_8txt.html#aaf8226a059307a1b18aac1295b5cf3a2">from</a>, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>&amp; <a class="code" href="namespacehal_1_1core__strings.html#a37f09aeed09bf8c9d56b599ffcdceef2">to</a>);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keyword">extern</span> <span class="keywordtype">void</span> <a class="code" href="namespacehal_1_1gui__utility.html#a4926060472430b7ddd06a9fc73694022">changeAllSvgColors</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; svg_data, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>&amp; <a class="code" href="namespacehal_1_1core__strings.html#a37f09aeed09bf8c9d56b599ffcdceef2">to</a>);</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keyword">extern</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qicon.html">QIcon</a> <a class="code" href="namespacehal_1_1gui__utility.html#afd89fa00ad0a207bd576dd6ad73a5021">getIconFromSvgData</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; svg_data);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keyword">extern</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qicon.html">QIcon</a> <a class="code" href="namespacehal_1_1gui__utility.html#aaa94c0be01b066146ccbe1401662b1d5">getStyledSvgIcon</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; from_to_colors, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; svg_path);</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="keyword">extern</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a> <a class="code" href="namespacehal_1_1gui__utility.html#ae5629eeed28d980e104fe78483f92fae">getRandomColor</a>();</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    }</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aqcolor_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qcolor.html">QColor</a></div></div>
@@ -145,13 +147,13 @@ $(document).ready(function(){initNavTree('graphics_8h_source.html',''); initResi
 <div class="ttc" id="anamespacehal_1_1gui__utility_html_a52bce16bd78e03f2497250a4cb004baf"><div class="ttname"><a href="namespacehal_1_1gui__utility.html#a52bce16bd78e03f2497250a4cb004baf">hal::gui_utility::changeSvgColor</a></div><div class="ttdeci">void changeSvgColor(QString &amp;svg_data, const QColor &amp;from, const QColor &amp;to)</div><div class="ttdef"><b>Definition:</b> <a href="graphics_8cpp_source.html#l00020">graphics.cpp:20</a></div></div>
 <div class="ttc" id="aqicon_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qicon.html">QIcon</a></div></div>
 <div class="ttc" id="a_apache_01_license_8txt_html_aaf8226a059307a1b18aac1295b5cf3a2"><div class="ttname"><a href="_apache_01_license_8txt.html#aaf8226a059307a1b18aac1295b5cf3a2">from</a></div><div class="ttdeci">Apache License January AND DISTRIBUTION Definitions License shall mean the terms and conditions for and distribution as defined by Sections through of this document Licensor shall mean the copyright owner or entity authorized by the copyright owner that is granting the License Legal Entity shall mean the union of the acting entity and all other entities that control are controlled by or are under common control with that entity For the purposes of this definition control direct or to cause the direction or management of such whether by contract or including but not limited to software source documentation and configuration files Object form shall mean any form resulting from mechanical transformation or translation of a Source including but not limited to compiled object generated and conversions to other media types Work shall mean the work of whether in Source or Object made available under the as indicated by a copyright notice that is included in or attached to the whether in Source or Object that is based or other modifications as a an original work of authorship For the purposes of this Derivative Works shall not include works that remain separable from</div><div class="ttdef"><b>Definition:</b> <a href="_apache_01_license_8txt_source.html#l00045">Apache License.txt:45</a></div></div>
-<div class="ttc" id="anamespacehal_1_1core__strings_html_a37f09aeed09bf8c9d56b599ffcdceef2"><div class="ttname"><a href="namespacehal_1_1core__strings.html#a37f09aeed09bf8c9d56b599ffcdceef2">hal::core_strings::to</a></div><div class="ttdeci">S to(const T &amp;str)</div><div class="ttdef"><b>Definition:</b> <a href="special__strings_8h_source.html#l00044">special_strings.h:44</a></div></div>
+<div class="ttc" id="anamespacehal_1_1core__strings_html_a37f09aeed09bf8c9d56b599ffcdceef2"><div class="ttname"><a href="namespacehal_1_1core__strings.html#a37f09aeed09bf8c9d56b599ffcdceef2">hal::core_strings::to</a></div><div class="ttdeci">S to(const T &amp;str)</div><div class="ttdef"><b>Definition:</b> <a href="special__strings_8h_source.html#l00046">special_strings.h:46</a></div></div>
 <div class="ttc" id="anamespacehal_1_1gui__utility_html_afd89fa00ad0a207bd576dd6ad73a5021"><div class="ttname"><a href="namespacehal_1_1gui__utility.html#afd89fa00ad0a207bd576dd6ad73a5021">hal::gui_utility::getIconFromSvgData</a></div><div class="ttdeci">QIcon getIconFromSvgData(const QString &amp;svg_data)</div><div class="ttdef"><b>Definition:</b> <a href="graphics_8cpp_source.html#l00032">graphics.cpp:32</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_c64fca93e3f36ffbc8b598153575cd3b.html">gui_utils</a></li><li class="navelem"><a class="el" href="graphics_8h.html">graphics.h</a></li>
-    <li class="footer">Generated on Fri Oct 21 2022 13:08:32 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:45:53 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

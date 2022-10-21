@@ -406,7 +406,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="textblock"><p>The <a class="el" href="classhal_1_1_node_boxes.html" title="The NodeBoxes class owns all NodeBox&#39;es from hal view.">NodeBoxes</a> class owns all <a class="el" href="classhal_1_1_node_box.html" title="The NodeBox class represents a node placed at a grid position within a hal view.">NodeBox</a>'es from hal view. </p>
 <p>Several index members (<a class="elRef" href="https://doc.qt.io/qt-5/qhash.html">QHash</a>) allow fast access by grid position, node id, mouse click in graphics, or net endpoint. Pointer to new <a class="el" href="classhal_1_1_node_box.html" title="The NodeBox class represents a node placed at a grid position within a hal view.">NodeBox</a>'es should only be added using the <a class="el" href="classhal_1_1_node_boxes.html#a2ece4aaa0d759749b7fc4f920690f0f9" title="addBox call NodeBox constructor and store pointer in vector">addBox()</a> method to update index correctly. </p>
 
-<p class="definition">Definition at line <a class="el" href="node__box_8h_source.html#l00147">147</a> of file <a class="el" href="node__box_8h_source.html">node_box.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="node__box_8h_source.html#l00149">149</a> of file <a class="el" href="node__box_8h_source.html">node_box.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a3d12d7072eb80a76b2c00c8af3fae956"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3d12d7072eb80a76b2c00c8af3fae956">&#9670;&nbsp;</a></span>NodeBoxes()</h2>
@@ -432,7 +432,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Constructor </p>
 
-<p class="definition">Definition at line <a class="el" href="node__box_8h_source.html#l00153">153</a> of file <a class="el" href="node__box_8h_source.html">node_box.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="node__box_8h_source.html#l00155">155</a> of file <a class="el" href="node__box_8h_source.html">node_box.h</a>.</p>
 
 </div>
 </div>
@@ -501,7 +501,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="node__box_8cpp_source.html#l00061">61</a> of file <a class="el" href="node__box_8cpp_source.html">node_box.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#append">QVector&lt; NodeBox * &gt;::append()</a>, <a class="el" href="test_8py_source.html#l00005">test::g</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00393">hal::Module::get_gates()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00579">hal::Netlist::get_module_by_id()</a>, <a class="el" href="node__box_8h_source.html#l00073">hal::NodeBox::getNode()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00051">hal::gNetlist</a>, <a class="el" href="node__box_8h_source.html#l00085">hal::NodeBox::id()</a>, <a class="el" href="gui__def_8h_source.html#l00084">hal::Node::isGate()</a>, <a class="el" href="gui__def_8h_source.html#l00090">hal::Node::isModule()</a>, and <a class="el" href="node__box_8h_source.html#l00122">hal::NodeBox::item()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#append">QVector&lt; NodeBox * &gt;::append()</a>, <a class="el" href="test_8py_source.html#l00005">test::g</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00393">hal::Module::get_gates()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00579">hal::Netlist::get_module_by_id()</a>, <a class="el" href="node__box_8h_source.html#l00075">hal::NodeBox::getNode()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00051">hal::gNetlist</a>, <a class="el" href="node__box_8h_source.html#l00087">hal::NodeBox::id()</a>, <a class="el" href="gui__def_8h_source.html#l00086">hal::Node::isGate()</a>, <a class="el" href="gui__def_8h_source.html#l00092">hal::Node::isModule()</a>, and <a class="el" href="node__box_8h_source.html#l00124">hal::NodeBox::item()</a>.</p>
 
 </div>
 </div>
@@ -539,7 +539,7 @@ Additional Inherited Members</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>pointer to <a class="el" href="classhal_1_1_node_box.html" title="The NodeBox class represents a node placed at a grid position within a hal view.">NodeBox</a> or nullptr if none found</dd></dl>
 <p>A <a class="el" href="classhal_1_1_node_box.html" title="The NodeBox class represents a node placed at a grid position within a hal view.">NodeBox</a> is returned if the box either represents the given gate or if the gate is part of a module rendered as box. The method ist mostly used to find boxes by net endpoints. </p>
 
-<p class="definition">Definition at line <a class="el" href="node__box_8h_source.html#l00182">182</a> of file <a class="el" href="node__box_8h_source.html">node_box.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="node__box_8h_source.html#l00184">184</a> of file <a class="el" href="node__box_8h_source.html">node_box.h</a>.</p>
 
 <p class="reference">References <a class="el" href="test_8py_source.html#l00005">test::g</a>.</p>
 
@@ -581,7 +581,7 @@ Additional Inherited Members</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>pointer to <a class="el" href="classhal_1_1_node_box.html" title="The NodeBox class represents a node placed at a grid position within a hal view.">NodeBox</a> or nullptr if none found</dd></dl>
 <p>Mostly used to find <a class="el" href="classhal_1_1_node_box.html" title="The NodeBox class represents a node placed at a grid position within a hal view.">NodeBox</a> selected in <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html">QGraphicsView</a> engine, e.g. by mouse position </p>
 
-<p class="definition">Definition at line <a class="el" href="node__box_8h_source.html#l00207">207</a> of file <a class="el" href="node__box_8h_source.html">node_box.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="node__box_8h_source.html#l00209">209</a> of file <a class="el" href="node__box_8h_source.html">node_box.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="graph__layouter_8cpp_source.html#l00122">hal::GraphLayouter::gridPointByItem()</a>.</p>
 
@@ -621,7 +621,7 @@ Additional Inherited Members</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>pointer to <a class="el" href="classhal_1_1_node_box.html" title="The NodeBox class represents a node placed at a grid position within a hal view.">NodeBox</a> or nullptr if none found</dd></dl>
 <p>Used to search gates or modules by ID. </p>
 
-<p class="definition">Definition at line <a class="el" href="node__box_8h_source.html#l00198">198</a> of file <a class="el" href="node__box_8h_source.html">node_box.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="node__box_8h_source.html#l00200">200</a> of file <a class="el" href="node__box_8h_source.html">node_box.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="action__move__node_8cpp_source.html#l00053">hal::ActionMoveNode::exec()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00886">hal::ShortestPath::module()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00820">hal::GraphContext::writeToFile()</a>.</p>
 
@@ -660,7 +660,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>pointer to <a class="el" href="classhal_1_1_node_box.html" title="The NodeBox class represents a node placed at a grid position within a hal view.">NodeBox</a> or nullptr if none found </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="node__box_8h_source.html#l00189">189</a> of file <a class="el" href="node__box_8h_source.html">node_box.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="node__box_8h_source.html#l00191">191</a> of file <a class="el" href="node__box_8h_source.html">node_box.h</a>.</p>
 
 </div>
 </div>
@@ -705,7 +705,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="node__box_8cpp_source.html#l00083">83</a> of file <a class="el" href="node__box_8cpp_source.html">node_box.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__def_8h_source.html#l00058">hal::Node::Gate</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>.</p>
+<p class="reference">References <a class="el" href="gui__def_8h_source.html#l00060">hal::Node::Gate</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>.</p>
 
 </div>
 </div>
@@ -719,7 +719,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_node_boxes.html">NodeBoxes</a></li>
-    <li class="footer">Generated on Fri Oct 21 2022 13:08:38 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:45:58 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
