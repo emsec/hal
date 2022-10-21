@@ -26,8 +26,7 @@ namespace hal
 
     void BasePluginInterface::initialize_logging()
     {
-        LogManager& l = LogManager::get_instance();
-        l.add_channel(get_name(), {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+        LogManager::get_instance()->add_channel(get_name(), {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     }
 
     bool BasePluginInterface::has_type(PluginInterfaceType t) const

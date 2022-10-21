@@ -53,7 +53,7 @@ namespace hal
 #define STRINGIFY(x) STRINGISTRINGIFY(x)
 
 // macro to get the log channel
-#define LOG_CHANNEL(channel) LogManager::get_instance().get_channel(channel)
+#define LOG_CHANNEL(channel) LogManager::get_instance()->get_channel(channel)
 
 /**
  * @ingroup utilities
@@ -120,7 +120,7 @@ namespace hal
          * @param[in] file_name - The file where the log is stored.
          * @returns The log manager.
          */
-        static LogManager& get_instance(const std::filesystem::path& file_name = "");
+        static LogManager* get_instance(const std::filesystem::path& file_name = "");
 
         /**
          * Set the log file name.<br>
@@ -294,6 +294,8 @@ namespace hal
         ProgramOptions m_descriptions;
 
         std::string m_enforce_level;
+
+        static LogManager* m_instance;
     };
 
     class log_gui_sink : public spdlog::sinks::base_sink<std::mutex>

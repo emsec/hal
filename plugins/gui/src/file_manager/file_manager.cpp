@@ -252,9 +252,8 @@ namespace hal
                 gatelib = targetGateLib;
         }
 
-        LogManager& lm              = LogManager::get_instance();
         std::filesystem::path lpath = pm->get_project_directory().get_default_filename(".log");
-        lm.set_file_name(lpath);
+        LogManager::get_instance()->set_file_name(lpath);
 
         if (deprecatedOpenFile(netlistFilename, gatelib))
         {
@@ -332,9 +331,8 @@ namespace hal
         QString filename = QString::fromStdString(pm->get_netlist_filename());
         projectSuccessfullyLoaded(projPath, filename);
 
-        LogManager& lm              = LogManager::get_instance();
         std::filesystem::path lpath = pm->get_project_directory().get_default_filename(".log");
-        lm.set_file_name(lpath);
+        LogManager::get_instance()->set_file_name(lpath);
     }
 
     bool FileManager::deprecatedOpenFile(QString filename, QString gatelibraryPath)

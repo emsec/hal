@@ -139,5 +139,6 @@ namespace hal
         WaveWidget* mCurrentWaveWidget;
 
         void takeControllerOwnership(std::unique_ptr<NetlistSimulatorController>& ctrlRef, bool create);
+        void showCloseButton();
     };
 }    // namespace hal

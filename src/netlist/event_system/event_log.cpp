@@ -298,7 +298,7 @@ namespace hal
 
     void initialize()
     {
-        LogManager::get_instance().add_channel("event", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+        LogManager::get_instance()->add_channel("event", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     }
 
 }    // namespace hal

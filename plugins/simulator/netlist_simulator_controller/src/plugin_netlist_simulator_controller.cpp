@@ -152,7 +152,7 @@ namespace hal
     void NetlistSimulatorControllerPlugin::on_load()
     {
         // report simulation warnings and error messages not related to specific controller to common channel
-        LogManager::get_instance().add_channel("simulation_plugin", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+        LogManager::get_instance()->add_channel("simulation_plugin", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
         QResource::registerResource("simulator_resources.rcc");
         QDir userConfigDir(QString::fromStdString(utils::get_user_config_directory()));
         sSimulationSettings = new SimulationSettings(userConfigDir.absoluteFilePath("simulationsettings.ini"));

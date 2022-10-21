@@ -178,10 +178,9 @@ namespace hal
                                                     "python_context",
                                                     "test_utils"};
 
-            LogManager& lm = LogManager::get_instance();
             for (std::string ch_id : channel_ids)
             {
-                lm.add_channel(ch_id, {LogManager::create_stdout_sink()}, "info");
+                LogManager::get_instance()->add_channel(ch_id, {LogManager::create_stdout_sink()}, "info");
             }
             already_init = true;
         }

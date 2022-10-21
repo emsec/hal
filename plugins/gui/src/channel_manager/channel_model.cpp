@@ -12,13 +12,13 @@ namespace hal
     ChannelModel::ChannelModel(QObject* parent) : QAbstractTableModel(parent)
     {
         mChannelToIgnore = {"UserStudy"};
-        LogManager::get_instance().get_gui_callback().add_callback("gui",
+        LogManager::get_instance()->get_gui_callback().add_callback("gui",
             std::bind(&ChannelModel::handleLogmanagerCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
     }
 
     ChannelModel::~ChannelModel()
     {
-        LogManager::get_instance().get_gui_callback().remove_callback("gui");
+        LogManager::get_instance()->get_gui_callback().remove_callback("gui");
     }
 
     ChannelModel* ChannelModel::instance()
