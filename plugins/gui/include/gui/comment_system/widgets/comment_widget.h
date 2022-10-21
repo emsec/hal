@@ -41,6 +41,7 @@ namespace hal
     class Toolbar;
     class Searchbar;
     class CommentItem;
+    class CommentEntry;
 
     class CommentWidget : public QWidget
     {
@@ -84,5 +85,9 @@ namespace hal
 
         void handleSearchbarTriggered();
         void handleNewCommentTriggered();
+
+        // possible other params: commententry, node
+        void handleCommentEntryDeleteRequest(CommentItem* item);
+        void handleCommentAboutToBeDeleted(CommentEntry* entry);
     };
 }

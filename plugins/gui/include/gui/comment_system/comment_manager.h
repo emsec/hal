@@ -84,6 +84,25 @@ namespace hal
          */
         bool contains(const Node& nd) const;
 
+        /**
+         * Removes and deletes the given entry.
+         * Before deleting the comment, the entryAboutToBeDeleted is emmitted.
+         * (Perhaps return true on success instead of just void?)
+         * @param nd
+         * @param entry
+         */
+        void deleteComment(CommentEntry* entry);
+
+    Q_SIGNALS:
+        /**
+         * This signal is emmitted just before the entry is deleted (from the
+         * deleteComment function).
+         *
+         * @param nd - The associated node to which the entry belongs.
+         * @param entry - The entry that will be deleted.
+         */
+        void entryAboutToBeDeleted(CommentEntry* entry);
+
     private:
         QMultiHash<Node,CommentEntry*> mEntries;
         bool restoreInternal(const std::filesystem::path& loaddir, const std::string& relFilename);

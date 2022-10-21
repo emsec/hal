@@ -88,9 +88,11 @@ namespace hal
         setMinimumWidth(350);
         resize(350, 300);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
+
         // connections / logic
         connect(mSearchButton, &QAbstractButton::clicked, this, &CommentWidget::handleSearchbarTriggered);
         connect(mSearchbar, &Searchbar::searchIconClicked, this, &CommentWidget::handleSearchbarTriggered);
+        connect(gCommentManager, &CommentManager::entryAboutToBeDeleted, this, &CommentWidget::handleCommentAboutToBeDeleted);
     }
 
     CommentWidget::~CommentWidget()
@@ -117,6 +119,7 @@ namespace hal
 
     QWidget *CommentWidget::createAndFillCommentContainerFactory(const Node &nd)
     {
+        mEntryItems.clear();
         QWidget* container = new QWidget();
         QVBoxLayout* containerLayout = new QVBoxLayout(container);
         containerLayout->setSpacing(0);
@@ -128,9 +131,11 @@ namespace hal
         for(const auto& entry : commentList)
         {
             CommentItem* item = new CommentItem(entry, container);
+            connect(item, &CommentItem::delete_requested, this, &CommentWidget::handleCommentEntryDeleteRequest);
             //item->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
             containerLayout->addWidget(item);
             item->show();
+            mEntryItems.append(item);
         }
 
         containerLayout->addStretch();
@@ -155,6 +160,41 @@ namespace hal
     void CommentWidget::handleNewCommentTriggered()
     {
         qDebug() << "A new comment wants to be created!";
+    }
+
+    void CommentWidget::handleCommentEntryDeleteRequest(CommentItem *item)
+    {
+        // remove item from local list and layout
+        mEntryItems.removeOne(item);
+        mScrollArea->widget()->layout()->removeWidget(item);
+
+        // notify global manager to delete the entry
+        gCommentManager->deleteComment(item->getEntry());
+
+        // delete commentitem
+        item->deleteLater();
+    }
+
+    void CommentWidget::handleCommentAboutToBeDeleted(CommentEntry *entry)
+    {
+        // search for corresponding commentitem
+        CommentItem* commentItem = nullptr;
+        for(const auto& item : mEntryItems)
+        {
+            if(item->getEntry() == entry)
+            {
+                commentItem = item;
+                break;
+            }
+        }
+
+        if(commentItem == nullptr)
+            return;
+
+        // remove and delete item
+        mEntryItems.removeOne(commentItem);
+        mScrollArea->widget()->layout()->removeWidget(commentItem);
+        commentItem->deleteLater();
     }
 
 }
