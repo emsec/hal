@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['seconds_5fsince_39820',['seconds_since',['../timing__utils_8h.html#a688d26ed86c8b545bd8b86a74085ca99',1,'seconds_since():&#160;timing_utils.h'],['../simulator__test_8cpp.html#a688d26ed86c8b545bd8b86a74085ca99',1,'seconds_since():&#160;simulator_test.cpp']]],
-  ['stringify_39821',['STRINGIFY',['../log_8h.html#a6df1d22fb5f09eccc23b9f399670cfd7',1,'log.h']]],
-  ['stringistringify_39822',['STRINGISTRINGIFY',['../log_8h.html#ac96c6afee3270eb88719a98239ea7f75',1,'log.h']]]
+  ['plugin_5fapi_39702',['PLUGIN_API',['../arch__linux_8h.html#afcb1b0bf7320fa3ebfc13fd896ebca4d',1,'PLUGIN_API():&#160;arch_linux.h'],['../arch__mac_8h.html#afcb1b0bf7320fa3ebfc13fd896ebca4d',1,'PLUGIN_API():&#160;arch_mac.h'],['../arch__win_8h.html#afcb1b0bf7320fa3ebfc13fd896ebca4d',1,'PLUGIN_API():&#160;arch_win.h']]],
+  ['pretty_5fjson_5foutput_39703',['PRETTY_JSON_OUTPUT',['../netlist_2persistent_2netlist__serializer_8cpp.html#a442c4f02c70cb01b96e1d3068b619d20',1,'PRETTY_JSON_OUTPUT():&#160;netlist_serializer.cpp'],['../project__manager_8cpp.html#a442c4f02c70cb01b96e1d3068b619d20',1,'PRETTY_JSON_OUTPUT():&#160;project_manager.cpp'],['../json__write__document_8cpp.html#a442c4f02c70cb01b96e1d3068b619d20',1,'PRETTY_JSON_OUTPUT():&#160;json_write_document.cpp']]],
+  ['protected_39704',['PROTECTED',['../defines_8h.html#af0cbb16b703892a6f3be7149dbe7d1a3',1,'defines.h']]]
 ];

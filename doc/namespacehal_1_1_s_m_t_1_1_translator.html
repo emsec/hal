@@ -91,29 +91,75 @@ $(document).ready(function(){initNavTree('namespacehal_1_1_s_m_t_1_1_translator.
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a6290ad3cfbb81a9fc7e01697a190c8d1"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; bool, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_translator.html#a6290ad3cfbb81a9fc7e01697a190c8d1">reduce_to_smt2</a> (const <a class="el" href="structhal_1_1_boolean_function_1_1_node.html">BooleanFunction::Node</a> *node, std::vector&lt; std::string &gt; &amp;&amp;operands)</td></tr>
-<tr class="separator:a6290ad3cfbb81a9fc7e01697a190c8d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a066d1c8a4e50bb0ebe58158169b479e0"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; bool, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_translator.html#a066d1c8a4e50bb0ebe58158169b479e0">translate_to_smt2</a> (const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;function)</td></tr>
-<tr class="separator:a066d1c8a4e50bb0ebe58158169b479e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6222c3f2e18e693a1f5681505e2edd4e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_translator.html#a6222c3f2e18e693a1f5681505e2edd4e">const2str</a> (const std::vector&lt; <a class="el" href="classhal_1_1_boolean_function.html#aac7bb4fda3bf06664f6bc717c3be92fb">BooleanFunction::Value</a> &gt; &amp;number)</td></tr>
+<tr class="separator:a6222c3f2e18e693a1f5681505e2edd4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50d1fbb237c473754b22a8c481e3b05f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_translator.html#a50d1fbb237c473754b22a8c481e3b05f">reduce_to_smt2</a> (const <a class="el" href="structhal_1_1_boolean_function_1_1_node.html">BooleanFunction::Node</a> &amp;node, std::vector&lt; std::string &gt; &amp;&amp;p, size_t index, const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;function)</td></tr>
+<tr class="separator:a50d1fbb237c473754b22a8c481e3b05f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f5025c43fbfe4675f2b8b8be739f2fa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_translator.html#a1f5025c43fbfe4675f2b8b8be739f2fa">translate_to_smt2</a> (const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;function)</td></tr>
+<tr class="separator:a1f5025c43fbfe4675f2b8b8be739f2fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a6290ad3cfbb81a9fc7e01697a190c8d1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6290ad3cfbb81a9fc7e01697a190c8d1">&#9670;&nbsp;</a></span>reduce_to_smt2()</h2>
+<a id="a6222c3f2e18e693a1f5681505e2edd4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6222c3f2e18e693a1f5681505e2edd4e">&#9670;&nbsp;</a></span>const2str()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::tuple&lt;bool, std::string&gt; hal::SMT::Translator::reduce_to_smt2 </td>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt;std::string&gt; hal::SMT::Translator::const2str </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structhal_1_1_boolean_function_1_1_node.html">BooleanFunction::Node</a> *&#160;</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classhal_1_1_boolean_function.html#aac7bb4fda3bf06664f6bc717c3be92fb">BooleanFunction::Value</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>number</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Helper function to translate arbitrary-long constant values into an decimal string for SMT-LIB v2 translation compatibility.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">number</td><td>- Boolean function constant node values. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK()</a> and constant on success, Err() otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="translator_8cpp_source.html#l00021">21</a> of file <a class="el" href="translator_8cpp_source.html">translator.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00051">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00047">OK</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="translator_8cpp_source.html#l00053">reduce_to_smt2()</a>.</p>
+
+</div>
+</div>
+<a id="a50d1fbb237c473754b22a8c481e3b05f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50d1fbb237c473754b22a8c481e3b05f">&#9670;&nbsp;</a></span>reduce_to_smt2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt;std::string&gt; hal::SMT::Translator::reduce_to_smt2 </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structhal_1_1_boolean_function_1_1_node.html">BooleanFunction::Node</a> &amp;&#160;</td>
           <td class="paramname"><em>node</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::vector&lt; std::string &gt; &amp;&amp;&#160;</td>
-          <td class="paramname"><em>operands</em>&#160;</td>
+          <td class="paramname"><em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;&#160;</td>
+          <td class="paramname"><em>function</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -125,29 +171,31 @@ Functions</h2></td></tr>
 <p>Helper function to reduce a view into the abstract syntax tree of a node and its parameter leaf nodes to an SMT-LIB string.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">node</td><td>- <a class="el" href="classhal_1_1_node.html" title="The Node class object represents a module or a gate.">Node</a>. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">operands</td><td>- Operands of node. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">node</td><td>- Boolean function node. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p</td><td>- Boolean function node parameters. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">index</td><td>- Index of node in function. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">function</td><td>- Boolean function to be translated to SMT-LIB string. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>(1) status (true on success, false otherwise), (2) SMT-LIB string representation of node and operands. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK()</a> and SMT-LIB v2 string representation of node and operands on success, Err() otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="translator_8cpp_source.html#l00018">18</a> of file <a class="el" href="translator_8cpp_source.html">translator.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="translator_8cpp_source.html#l00053">53</a> of file <a class="el" href="translator_8cpp_source.html">translator.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="boolean__function_8h_source.html#l00550">hal::BooleanFunction::NodeType::Add</a>, <a class="el" href="boolean__function_8h_source.html#l00545">hal::BooleanFunction::NodeType::And</a>, <a class="el" href="boolean__function_8h_source.html#l00552">hal::BooleanFunction::NodeType::Concat</a>, <a class="el" href="boolean__function_8h_source.html#l00556">hal::BooleanFunction::NodeType::Constant</a>, <a class="el" href="boolean__function_8h_source.html#l00610">hal::BooleanFunction::OperandNode::constant</a>, <a class="el" href="enums_8h_source.html#l00050">hal::enum_to_string()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01568">hal::BooleanFunction::Node::get_arity()</a>, <a class="el" href="boolean__function_8h_source.html#l00499">hal::BooleanFunction::Node::get_as()</a>, <a class="el" href="boolean__function_8h_source.html#l00557">hal::BooleanFunction::NodeType::Index</a>, <a class="el" href="boolean__function_8h_source.html#l00612">hal::BooleanFunction::OperandNode::index</a>, <a class="el" href="boolean__function_8h_source.html#l00547">hal::BooleanFunction::NodeType::Not</a>, <a class="el" href="boolean__function_8h_source.html#l00546">hal::BooleanFunction::NodeType::Or</a>, <a class="el" href="boolean__function_8h_source.html#l00472">hal::BooleanFunction::Node::size</a>, <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>, <a class="el" href="boolean__function_8h_source.html#l00470">hal::BooleanFunction::Node::type</a>, <a class="el" href="boolean__function_8h_source.html#l00558">hal::BooleanFunction::NodeType::Variable</a>, and <a class="el" href="boolean__function_8h_source.html#l00548">hal::BooleanFunction::NodeType::Xor</a>.</p>
+<p class="reference">References <a class="el" href="boolean__function_8h_source.html#l01079">hal::BooleanFunction::NodeType::Add</a>, <a class="el" href="boolean__function_8h_source.html#l01074">hal::BooleanFunction::NodeType::And</a>, <a class="el" href="boolean__function_8h_source.html#l01087">hal::BooleanFunction::NodeType::Concat</a>, <a class="el" href="translator_8cpp_source.html#l00021">const2str()</a>, <a class="el" href="boolean__function_8h_source.html#l00883">hal::BooleanFunction::Node::constant</a>, <a class="el" href="boolean__function_8h_source.html#l01099">hal::BooleanFunction::NodeType::Constant</a>, <a class="el" href="boolean__function_8h_source.html#l01092">hal::BooleanFunction::NodeType::Eq</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00051">ERR</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01469">hal::BooleanFunction::Node::get_arity()</a>, <a class="el" href="boolean__function_8h_source.html#l00885">hal::BooleanFunction::Node::index</a>, <a class="el" href="boolean__function_8h_source.html#l01100">hal::BooleanFunction::NodeType::Index</a>, <a class="el" href="boolean__function_8h_source.html#l01097">hal::BooleanFunction::NodeType::Ite</a>, <a class="el" href="boolean__function_8h_source.html#l01081">hal::BooleanFunction::NodeType::Mul</a>, <a class="el" href="boolean__function_8h_source.html#l01076">hal::BooleanFunction::NodeType::Not</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00047">OK</a>, <a class="el" href="boolean__function_8h_source.html#l01075">hal::BooleanFunction::NodeType::Or</a>, <a class="el" href="boolean__function_8h_source.html#l01082">hal::BooleanFunction::NodeType::Sdiv</a>, <a class="el" href="boolean__function_8h_source.html#l01090">hal::BooleanFunction::NodeType::Sext</a>, <a class="el" href="boolean__function_8h_source.html#l00881">hal::BooleanFunction::Node::size</a>, <a class="el" href="boolean__function_8h_source.html#l01093">hal::BooleanFunction::NodeType::Sle</a>, <a class="el" href="boolean__function_8h_source.html#l01088">hal::BooleanFunction::NodeType::Slice</a>, <a class="el" href="boolean__function_8h_source.html#l01094">hal::BooleanFunction::NodeType::Slt</a>, <a class="el" href="boolean__function_8h_source.html#l01084">hal::BooleanFunction::NodeType::Srem</a>, <a class="el" href="control_8py_source.html#l00014">control::str</a>, <a class="el" href="boolean__function_8h_source.html#l01080">hal::BooleanFunction::NodeType::Sub</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01400">hal::BooleanFunction::Node::to_string()</a>, <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>, <a class="el" href="boolean__function_8h_source.html#l00879">hal::BooleanFunction::Node::type</a>, <a class="el" href="boolean__function_8h_source.html#l01083">hal::BooleanFunction::NodeType::Udiv</a>, <a class="el" href="boolean__function_8h_source.html#l01095">hal::BooleanFunction::NodeType::Ule</a>, <a class="el" href="boolean__function_8h_source.html#l01096">hal::BooleanFunction::NodeType::Ult</a>, <a class="el" href="boolean__function_8h_source.html#l01085">hal::BooleanFunction::NodeType::Urem</a>, <a class="el" href="boolean__function_8h_source.html#l00887">hal::BooleanFunction::Node::variable</a>, <a class="el" href="boolean__function_8h_source.html#l01101">hal::BooleanFunction::NodeType::Variable</a>, <a class="el" href="boolean__function_8h_source.html#l01077">hal::BooleanFunction::NodeType::Xor</a>, and <a class="el" href="boolean__function_8h_source.html#l01089">hal::BooleanFunction::NodeType::Zext</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="translator_8cpp_source.html#l00065">translate_to_smt2()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="translator_8cpp_source.html#l00126">translate_to_smt2()</a>.</p>
 
 </div>
 </div>
-<a id="a066d1c8a4e50bb0ebe58158169b479e0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a066d1c8a4e50bb0ebe58158169b479e0">&#9670;&nbsp;</a></span>translate_to_smt2()</h2>
+<a id="a1f5025c43fbfe4675f2b8b8be739f2fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f5025c43fbfe4675f2b8b8be739f2fa">&#9670;&nbsp;</a></span>translate_to_smt2()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::tuple&lt; bool, std::string &gt; hal::SMT::Translator::translate_to_smt2 </td>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::string &gt; hal::SMT::Translator::translate_to_smt2 </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;&#160;</td>
           <td class="paramname"><em>function</em></td><td>)</td>
@@ -162,11 +210,11 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>(1) status (true on success, false otherwise), and (2) SMT-LIB compatible string. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Ok() and SMT-LIB v2 compatible string on success, Err() otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="translator_8cpp_source.html#l00065">65</a> of file <a class="el" href="translator_8cpp_source.html">translator.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="translator_8cpp_source.html#l00126">126</a> of file <a class="el" href="translator_8cpp_source.html">translator.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="translator_8cpp_source.html#l00018">reduce_to_smt2()</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00051">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00055">ERR_APPEND</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00047">OK</a>, and <a class="el" href="translator_8cpp_source.html#l00053">reduce_to_smt2()</a>.</p>
 
 </div>
 </div>
@@ -176,7 +224,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a></li><li class="navelem"><a class="el" href="namespacehal_1_1_s_m_t_1_1_translator.html">Translator</a></li>
-    <li class="footer">Generated on Tue Jul 12 2022 15:50:07 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:08:40 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -1,5 +1,5 @@
 <map id="hal::ActionCreateObject" name="hal::ActionCreateObject">
-<area shape="rect" id="node1" title="Create a new item." alt="" coords="5,507,181,672"/>
-<area shape="rect" id="node2" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="15,219,171,457"/>
-<area shape="rect" id="node3" href="$classhal_1_1_user_action_object.html" title="The UserActionObject class represents a single object used in UserAction." alt="" coords="12,5,175,156"/>
+<area shape="rect" id="node1" title="Create a new item." alt="" coords="27,565,203,731"/>
+<area shape="rect" id="node2" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="5,233,224,516"/>
+<area shape="rect" id="node3" href="$classhal_1_1_user_action_object.html" title="The UserActionObject class represents a single object used in UserAction." alt="" coords="33,5,196,156"/>
 </map>

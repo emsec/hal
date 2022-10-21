@@ -50,6 +50,8 @@ var classhal_1_1_graph_context =
     [ "storeViewport", "classhal_1_1_graph_context.html#a8889a0c74139f131610e6e8606579f6a", null ],
     [ "testIfAffected", "classhal_1_1_graph_context.html#a752666f0e3b3552d81ab76186980b7bd", null ],
     [ "unfoldModule", "classhal_1_1_graph_context.html#af5994fa27903de66f5af0453368f3cf3", null ],
+    [ "updateNets", "classhal_1_1_graph_context.html#aaf23ce353b6c765a4bd012fc35985367", null ],
+    [ "willBeEmptied", "classhal_1_1_graph_context.html#ad488d810a5db9b76266b04105e53dd20", null ],
     [ "writeToFile", "classhal_1_1_graph_context.html#a246b2047c7dd7a7239779a383e2bb3f9", null ],
     [ "GraphContextManager", "classhal_1_1_graph_context.html#a86a0cb713ffa26636ccf96114f7566ec", null ],
     [ "LayoutLockerManager", "classhal_1_1_graph_context.html#a86285ea7584f0c31dd775ee66c145412", null ]

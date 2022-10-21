@@ -10,6 +10,6 @@ var gui__globals_8h =
     [ "gNetlistOwner", "gui__globals_8h.html#ae9eb93dc7dd8514d3afb4c935a09a9a0", null ],
     [ "gNetlistRelay", "gui__globals_8h.html#ac87c0ce709dc346017d7c2aff4aea006", null ],
     [ "gPluginRelay", "gui__globals_8h.html#a4cd901560b6cb156908e4cb43a1ea812", null ],
-    [ "gPythonContext", "gui__globals_8h.html#a54235e7df25a78fa437937569928dc84", null ],
+    [ "gPythonContext", "gui__globals_8h.html#a178bb1ac9a8ee6bbbec41ddb2e84250a", null ],
     [ "gSelectionRelay", "gui__globals_8h.html#a6ba6e6ec49eb58d0b35a604e16187112", null ]
 ];

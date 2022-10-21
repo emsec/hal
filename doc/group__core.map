@@ -1,7 +1,8 @@
 <map id="HAL Core" name="HAL Core">
-<area shape="rect" id="node1" href="$group__utilities.html" title=" " alt="" coords="163,5,236,31"/>
-<area shape="rect" id="node2" href="$group__pybind.html" title=" " alt="" coords="136,55,263,80"/>
-<area shape="rect" id="node3" href="$group__netlist.html" title=" " alt="" coords="167,104,232,129"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,80,88,105"/>
-<area shape="rect" id="node5" href="$group__plugins.html" title=" " alt="" coords="142,153,257,179"/>
+<area shape="rect" id="node1" href="$group__pins.html" title=" " alt="" coords="175,5,224,31"/>
+<area shape="rect" id="node2" href="$group__utilities.html" title=" " alt="" coords="163,55,236,80"/>
+<area shape="rect" id="node3" href="$group__pybind.html" title=" " alt="" coords="136,104,263,129"/>
+<area shape="rect" id="node4" href="$group__netlist.html" title=" " alt="" coords="167,153,232,179"/>
+<area shape="rect" id="node5" title=" " alt="" coords="5,104,88,129"/>
+<area shape="rect" id="node6" href="$group__plugins.html" title=" " alt="" coords="142,203,257,228"/>
 </map>

@@ -136,6 +136,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a17ecf8929723bb20a2b154420e4e6560 inherit pub_methods_classhal_1_1_base_plugin_interface"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc5adcc49af4d469d6641ac9f2725a54 inherit pub_methods_classhal_1_1_base_plugin_interface"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_base_plugin_interface.html#adc5adcc49af4d469d6641ac9f2725a54">initialize_logging</a> ()</td></tr>
 <tr class="separator:adc5adcc49af4d469d6641ac9f2725a54 inherit pub_methods_classhal_1_1_base_plugin_interface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54402a70dd64522d0aeaa9b25bdeb5a6 inherit pub_methods_classhal_1_1_base_plugin_interface"><td class="memItemLeft" align="right" valign="top">virtual std::vector&lt; <a class="el" href="classhal_1_1_plugin_parameter.html">PluginParameter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_base_plugin_interface.html#a54402a70dd64522d0aeaa9b25bdeb5a6">get_parameter</a> () const</td></tr>
+<tr class="separator:a54402a70dd64522d0aeaa9b25bdeb5a6 inherit pub_methods_classhal_1_1_base_plugin_interface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a923a7f8262cd451e1c18aa49c916127d inherit pub_methods_classhal_1_1_base_plugin_interface"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_base_plugin_interface.html#a923a7f8262cd451e1c18aa49c916127d">set_parameter</a> (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl, const std::vector&lt; <a class="el" href="classhal_1_1_plugin_parameter.html">PluginParameter</a> &gt; &amp;params)</td></tr>
+<tr class="separator:a923a7f8262cd451e1c18aa49c916127d inherit pub_methods_classhal_1_1_base_plugin_interface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a034ff0dfd603b4c6042cf13f5ba9c0b0 inherit pub_methods_classhal_1_1_base_plugin_interface"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_base_plugin_interface.html#a034ff0dfd603b4c6042cf13f5ba9c0b0">register_progress_indicator</a> (std::function&lt; void(int, const std::string &amp;)&gt; pif)</td></tr>
+<tr class="separator:a034ff0dfd603b4c6042cf13f5ba9c0b0 inherit pub_methods_classhal_1_1_base_plugin_interface"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
@@ -231,7 +237,7 @@ Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="plugin__vhdl__parser_8cpp_source.html#l00023">23</a> of file <a class="el" href="plugin__vhdl__parser_8cpp_source.html">plugin_vhdl_parser.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist__parser__manager_8cpp_source.html#l00128">hal::netlist_parser_manager::register_parser()</a>.</p>
+<p class="reference">References <a class="el" href="netlist__parser__manager_8cpp_source.html#l00147">hal::netlist_parser_manager::register_parser()</a>.</p>
 
 </div>
 </div>
@@ -263,7 +269,7 @@ Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="plugin__vhdl__parser_8cpp_source.html#l00028">28</a> of file <a class="el" href="plugin__vhdl__parser_8cpp_source.html">plugin_vhdl_parser.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist__parser__manager_8cpp_source.html#l00149">hal::netlist_parser_manager::unregister_parser()</a>.</p>
+<p class="reference">References <a class="el" href="netlist__parser__manager_8cpp_source.html#l00168">hal::netlist_parser_manager::unregister_parser()</a>.</p>
 
 </div>
 </div>
@@ -277,7 +283,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_v_h_d_l_parser_plugin.html">VHDLParserPlugin</a></li>
-    <li class="footer">Generated on Tue Jul 12 2022 15:50:07 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:08:40 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

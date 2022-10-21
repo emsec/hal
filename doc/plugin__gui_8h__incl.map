@@ -1,6 +1,8 @@
 <map id="/home/runner/work/hal/hal/plugins/gui/include/gui/plugin_gui.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/plugin_gui.h">
-<area shape="rect" id="node1" title=" " alt="" coords="29,5,201,61"/>
+<area shape="rect" id="node1" title=" " alt="" coords="169,5,341,61"/>
 <area shape="rect" id="node2" href="$plugin__interface__ui_8h.html" title=" " alt="" coords="27,109,203,151"/>
+<area shape="rect" id="node6" title=" " alt="" coords="227,117,282,143"/>
+<area shape="rect" id="node7" title=" " alt="" coords="307,117,381,143"/>
 <area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="45,288,185,315"/>
 <area shape="rect" id="node4" href="$plugin__interface__base_8h.html" title=" " alt="" coords="24,199,205,240"/>
 <area shape="rect" id="node5" href="$program__options_8h.html" title=" " alt="" coords="230,199,378,240"/>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Gate &mdash; hal_py v3.3.0-169-gd427c070b documentation</title>
+  <title>Gate &mdash; hal_py v3.3.0-985-gbde57951a documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.3.0-169-gd427c070b
+                v3.3.0-985-gbde57951a
               </div>
             
           
@@ -94,12 +94,16 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Gate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_library.html">Gate Library</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_library_manager.html">Gate Library Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gate_pin.html">Gate Pin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gate_pin_group.html">Gate Pin Group</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_type.html">Gate Type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_type_component.html">Gate Type Component</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_type_property.html">Gate Type Property</a></li>
 <li class="toctree-l2"><a class="reference internal" href="grouping.html">Grouping</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gui_plugin_interface.html">GUI Plugin Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module.html">Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_pin.html">Module Pin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_pin_group.html">Module Pin Group</a></li>
 <li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist.html">Netlist</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_factory.html">Netlist Factory</a></li>
@@ -110,6 +114,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pin_direction.html">Pin Direction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_type.html">Pin Type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smt.html">SMT</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="plugins.html">HAL Plugins Documentation</a></li>
@@ -188,16 +193,22 @@
 <p>Gate class containing information about a gate including its location, functions, and module.</p>
 <dl class="method">
 <dt id="hal_py.Gate.add_boolean_function">
-<code class="descname">add_boolean_function</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em>, <em>name: str</em>, <em>func: hal::BooleanFunction</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Gate.add_boolean_function" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add the boolean function with the specified name only for this gate.</p>
+<code class="descname">add_boolean_function</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em>, <em>name: str</em>, <em>func: hal::BooleanFunction</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Gate.add_boolean_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a Boolean function with the given name to the gate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The function name, usually an output port.</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The name.</li>
 <li><strong>func</strong> (<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – The function.</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, False otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
 </td>
 </tr>
 </tbody>
@@ -207,7 +218,7 @@
 <dl class="attribute">
 <dt id="hal_py.Gate.boolean_functions">
 <code class="descname">boolean_functions</code><a class="headerlink" href="#hal_py.Gate.boolean_functions" title="Permalink to this definition">¶</a></dt>
-<dd><p>A dictionary from function name to boolean function for all boolean functions associated with this gate.</p>
+<dd><p>A dictionary from function name to Boolean function for all boolean functions associated with this gate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -258,9 +269,23 @@
 </dd></dl>
 
 <dl class="attribute">
+<dt id="hal_py.Gate.fan_in_endpoints">
+<code class="descname">fan_in_endpoints</code><a class="headerlink" href="#hal_py.Gate.fan_in_endpoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of all fan-in endpoints of the gate, i.e., all endpoints associated with an input pin of the gate.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>[<a class="reference internal" href="endpoint.html#hal_py.Endpoint" title="hal_py.Endpoint">hal_py.Endpoint</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="hal_py.Gate.fan_in_nets">
 <code class="descname">fan_in_nets</code><a class="headerlink" href="#hal_py.Gate.fan_in_nets" title="Permalink to this definition">¶</a></dt>
-<dd><p>A list of all fan-in nets of the gate, i.e. all nets that are connected to one of the input pins.</p>
+<dd><p>A list of all fan-in nets of the gate, i.e., all nets that are connected to one of the input pins.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -272,16 +297,28 @@
 </dd></dl>
 
 <dl class="attribute">
-<dt id="hal_py.Gate.fan_out_nets">
-<code class="descname">fan_out_nets</code><a class="headerlink" href="#hal_py.Gate.fan_out_nets" title="Permalink to this definition">¶</a></dt>
-<dd><p>A list of all fan-out nets of the gate, i.e. all nets that are connected to one of the output pins.</p>
+<dt id="hal_py.Gate.fan_out_endpoints">
+<code class="descname">fan_out_endpoints</code><a class="headerlink" href="#hal_py.Gate.fan_out_endpoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of all fan-out endpoints of the gate, i.e., all endpoints associated with an output pin of the gate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of all connected output nets.</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>[<a class="reference internal" href="endpoint.html#hal_py.Endpoint" title="hal_py.Endpoint">hal_py.Endpoint</a>]</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Gate.fan_out_nets">
+<code class="descname">fan_out_nets</code><a class="headerlink" href="#hal_py.Gate.fan_out_nets" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of all fan-out nets of the gate, i.e., all nets that are connected to one of the output pins.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -289,27 +326,53 @@
 
 <dl class="method">
 <dt id="hal_py.Gate.get_boolean_function">
-<code class="descname">get_boolean_function</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em>, <em>name: str = ''</em><span class="sig-paren">)</span> &#x2192; hal::BooleanFunction<a class="headerlink" href="#hal_py.Gate.get_boolean_function" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the boolean function associated with a specific name. This name can for example be an output pin of the gate or a defined functionality like “reset”.
-If name is empty, the function of the first output pin is returned. If there is no function for the given name, the constant ‘X’ is returned.</p>
+<code class="descname">get_boolean_function</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.Gate.get_boolean_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">get_boolean_function(self: hal_py.Gate, name: str) -&gt; hal::BooleanFunction</p>
+<blockquote>
+<div><p>Get the Boolean function specified by the given name.
+This name can for example be an output pin of the gate or any other user-defined function name.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The function name.</td>
+<tr class="field-odd field"><th class="field-name">param str name:</th><td class="field-body">The name.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The boolean function.</td>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The Boolean function on success, an empty Boolean function otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a></td>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.BooleanFunction</td>
 </tr>
 </tbody>
 </table>
+</div></blockquote>
+</li>
+<li><p class="first">get_boolean_function(self: hal_py.Gate, pin: hal_py.GatePin = None) -&gt; hal::BooleanFunction</p>
+<blockquote>
+<div><p>Get the Boolean function corresponding to the given output pin.
+If pin is None, the Boolean function of the first output pin is returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.GatePin pin:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The pin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The Boolean function on success, an empty Boolean function otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.BooleanFunction</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
 </dd></dl>
 
 <dl class="method">
 <dt id="hal_py.Gate.get_boolean_functions">
 <code class="descname">get_boolean_functions</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em>, <em>only_custom_functions: bool = False</em><span class="sig-paren">)</span> &#x2192; Dict[str, hal::BooleanFunction]<a class="headerlink" href="#hal_py.Gate.get_boolean_functions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a dictionary from function name to boolean function for all boolean functions associated with this gate.</p>
+<dd><p>Get a dictionary from function name to Boolean function for all boolean functions associated with this gate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -366,33 +429,57 @@ If name is empty, the function of the first output pin is returned. If there is 
 
 <dl class="method">
 <dt id="hal_py.Gate.get_fan_in_endpoint">
-<code class="descname">get_fan_in_endpoint</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em>, <em>pin: str</em><span class="sig-paren">)</span> &#x2192; hal_py.Endpoint<a class="headerlink" href="#hal_py.Gate.get_fan_in_endpoint" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the fan-out endpoint which represents a specific input pin.
-If the input pin type is unknown or no net is connected, <em>None</em> is returned.</p>
+<code class="descname">get_fan_in_endpoint</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.Gate.get_fan_in_endpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">get_fan_in_endpoint(self: hal_py.Gate, pin_name: str) -&gt; hal_py.Endpoint</p>
+<blockquote>
+<div><p>Get the fan-in endpoint corresponding to the input pin specified by name.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The output pin type.</td>
+<tr class="field-odd field"><th class="field-name" colspan="2">param str pin_name:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The input pin name.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The output endpoint.</td>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The endpoint on success, None otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="endpoint.html#hal_py.Endpoint" title="hal_py.Endpoint">hal_py.Endpoint</a></td>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Endpoint or None</td>
 </tr>
 </tbody>
 </table>
+</div></blockquote>
+</li>
+<li><p class="first">get_fan_in_endpoint(self: hal_py.Gate, pin: hal_py.GatePin) -&gt; hal_py.Endpoint</p>
+<blockquote>
+<div><p>Get the fan-in endpoint corresponding to the specified input pin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param str pin_name:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The input pin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The endpoint on success, None otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Endpoint or None</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
 </dd></dl>
 
 <dl class="method">
 <dt id="hal_py.Gate.get_fan_in_endpoints">
 <code class="descname">get_fan_in_endpoints</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Endpoint]<a class="headerlink" href="#hal_py.Gate.get_fan_in_endpoints" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a list of all fan-in endpoints of the gate,
-i.e. all connected endpoints that represent an input pin of this gate.</p>
+<dd><p>Get a list of all fan-in endpoints of the gate, i.e., all endpoints associated with an input pin of the gate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of all connected input endpoints.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of all fan-in endpoints.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>[<a class="reference internal" href="endpoint.html#hal_py.Endpoint" title="hal_py.Endpoint">hal_py.Endpoint</a>]</td>
 </tr>
@@ -402,32 +489,57 @@ i.e. all connected endpoints that represent an input pin of this gate.</p>
 
 <dl class="method">
 <dt id="hal_py.Gate.get_fan_in_net">
-<code class="descname">get_fan_in_net</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em>, <em>pin: str</em><span class="sig-paren">)</span> &#x2192; hal::Net<a class="headerlink" href="#hal_py.Gate.get_fan_in_net" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the fan-in net which is connected to a specific input pin.
-If the input pin type is unknown or no net is connected, <em>None</em> is returned.</p>
+<code class="descname">get_fan_in_net</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.Gate.get_fan_in_net" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">get_fan_in_net(self: hal_py.Gate, pin_name: str) -&gt; hal::Net</p>
+<blockquote>
+<div><p>Get the fan-in endpoint corresponding to the input pin specified by name.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The input pin type.</td>
+<tr class="field-odd field"><th class="field-name" colspan="2">param str pin_name:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The input pin name.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The connected input net.</td>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The fan-in net on success, None otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a></td>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Net or None</td>
 </tr>
 </tbody>
 </table>
+</div></blockquote>
+</li>
+<li><p class="first">get_fan_in_net(self: hal_py.Gate, pin: hal_py.GatePin) -&gt; hal::Net</p>
+<blockquote>
+<div><p>Get the fan-in endpoint corresponding to the specified input pin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.GatePin pin:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The input pin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The fan-in net on success, None otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Net or None</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
 </dd></dl>
 
 <dl class="method">
 <dt id="hal_py.Gate.get_fan_in_nets">
 <code class="descname">get_fan_in_nets</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; List[hal::Net]<a class="headerlink" href="#hal_py.Gate.get_fan_in_nets" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a list of all fan-in nets of the gate, i.e. all nets that are connected to one of the input pins.</p>
+<dd><p>Get a list of all fan-in nets of the gate, i.e., all nets that are connected to one of the input pins.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of all connected input nets.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of all fan-in endpoints.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
 </tr>
@@ -437,33 +549,57 @@ If the input pin type is unknown or no net is connected, <em>None</em> is return
 
 <dl class="method">
 <dt id="hal_py.Gate.get_fan_out_endpoint">
-<code class="descname">get_fan_out_endpoint</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em>, <em>pin: str</em><span class="sig-paren">)</span> &#x2192; hal_py.Endpoint<a class="headerlink" href="#hal_py.Gate.get_fan_out_endpoint" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the fan-out endpoint which represents a specific output pin.
-If the input pin type is unknown or no net is connected to the respective pin, <em>None</em> is returned.</p>
+<code class="descname">get_fan_out_endpoint</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.Gate.get_fan_out_endpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">get_fan_out_endpoint(self: hal_py.Gate, pin_name: str) -&gt; hal_py.Endpoint</p>
+<blockquote>
+<div><p>Get the fan-out endpoint corresponding to the output pin specified by name.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The output pin type.</td>
+<tr class="field-odd field"><th class="field-name" colspan="2">param str pin_name:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The output pin name.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The connected output endpoint.</td>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The endpoint on success, None otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="endpoint.html#hal_py.Endpoint" title="hal_py.Endpoint">hal_py.Endpoint</a></td>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Endpoint or None</td>
 </tr>
 </tbody>
 </table>
+</div></blockquote>
+</li>
+<li><p class="first">get_fan_out_endpoint(self: hal_py.Gate, pin: hal_py.GatePin) -&gt; hal_py.Endpoint</p>
+<blockquote>
+<div><p>Get the fan-out endpoint corresponding to the specified output pin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param str pin_name:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The output pin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The endpoint on success, None otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Endpoint or None</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
 </dd></dl>
 
 <dl class="method">
 <dt id="hal_py.Gate.get_fan_out_endpoints">
 <code class="descname">get_fan_out_endpoints</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Endpoint]<a class="headerlink" href="#hal_py.Gate.get_fan_out_endpoints" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a list of all fan-out endpoints of the gate,
-i.e. all connected endpoints that represent an output pin of this gate.</p>
+<dd><p>Get a list of all fan-out endpoints of the gate, i.e., all endpoints associated with an output pin of the gate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of all output endpoints.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of all fan-out endpoints.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>[<a class="reference internal" href="endpoint.html#hal_py.Endpoint" title="hal_py.Endpoint">hal_py.Endpoint</a>]</td>
 </tr>
@@ -473,32 +609,57 @@ i.e. all connected endpoints that represent an output pin of this gate.</p>
 
 <dl class="method">
 <dt id="hal_py.Gate.get_fan_out_net">
-<code class="descname">get_fan_out_net</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em>, <em>pin: str</em><span class="sig-paren">)</span> &#x2192; hal::Net<a class="headerlink" href="#hal_py.Gate.get_fan_out_net" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the fan-out net which is connected to a specific output pin.
-If the output pin type is unknown or no net is connected, <em>None</em> is returned.</p>
+<code class="descname">get_fan_out_net</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.Gate.get_fan_out_net" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">get_fan_out_net(self: hal_py.Gate, pin_name: str) -&gt; hal::Net</p>
+<blockquote>
+<div><p>Get the fan-out endpoint corresponding to the output pin specified by name.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The output pin type.</td>
+<tr class="field-odd field"><th class="field-name" colspan="2">param str pin_name:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The output pin name.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The connected output net.</td>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The fan-out net on success, None otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a></td>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Net or None</td>
 </tr>
 </tbody>
 </table>
+</div></blockquote>
+</li>
+<li><p class="first">get_fan_out_net(self: hal_py.Gate, pin: hal_py.GatePin) -&gt; hal::Net</p>
+<blockquote>
+<div><p>Get the fan-out endpoint corresponding to the specified output pin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.GatePin pin:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The output pin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The fan-out net on success, None otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Net or None</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
 </dd></dl>
 
 <dl class="method">
 <dt id="hal_py.Gate.get_fan_out_nets">
 <code class="descname">get_fan_out_nets</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; List[hal::Net]<a class="headerlink" href="#hal_py.Gate.get_fan_out_nets" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a list of all fan-out nets of the gate, i.e. all nets that are connected to one of the output pins.</p>
+<dd><p>Get a list of all fan-out nets of the gate, i.e., all nets that are connected to one of the output pins.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of all connected output nets.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of all fan-out endpoints.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
 </tr>
@@ -534,22 +695,6 @@ If no grouping contains this gate, <em>None</em> is returned.</p>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The unique id.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.Gate.get_input_pins">
-<code class="descname">get_input_pins</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#hal_py.Gate.get_input_pins" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a list of all input pin types of the gate.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of input pin types.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -655,50 +800,61 @@ If no valid physical location y-coordinate is assigned, a negative value is retu
 </dd></dl>
 
 <dl class="method">
-<dt id="hal_py.Gate.get_output_pins">
-<code class="descname">get_output_pins</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#hal_py.Gate.get_output_pins" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a list of all output pin types of the gate.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of output pin types.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
 <dt id="hal_py.Gate.get_predecessor">
-<code class="descname">get_predecessor</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em>, <em>which_pin: str</em><span class="sig-paren">)</span> &#x2192; hal_py.Endpoint<a class="headerlink" href="#hal_py.Gate.get_predecessor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the direct predecessor endpoint of the gate connected to a specific input pin.
-If the input pin type is unknown or there is no predecessor endpoint or there are multiple predecessor
-endpoints, <em>None</em> is returned.</p>
+<code class="descname">get_predecessor</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.Gate.get_predecessor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">get_predecessor(self: hal_py.Gate, pin_name: str) -&gt; hal_py.Endpoint</p>
+<blockquote>
+<div><p>Get a single direct predecessor endpoint that is connected to the input pin specified by name.
+Fails if there are no or more than one predecessors.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>which_pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The input pin type of the this gate.</td>
+<tr class="field-odd field"><th class="field-name" colspan="2">param str pin_name:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The input pin name.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The predecessor endpoint.</td>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The predecessor endpoint on success, None otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="endpoint.html#hal_py.Endpoint" title="hal_py.Endpoint">hal_py.Endpoint</a></td>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Endpoint or None</td>
 </tr>
 </tbody>
 </table>
+</div></blockquote>
+</li>
+<li><p class="first">get_predecessor(self: hal_py.Gate, pin: hal_py.GatePin) -&gt; hal_py.Endpoint</p>
+<blockquote>
+<div><p>Get a single direct predecessor endpoint that is connected to the specified input pin.
+Fails if there are no or more than one predecessors.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.GatePin pin:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The input pin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The predecessor endpoint on success, None otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Endpoint or None</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
 </dd></dl>
 
 <dl class="method">
 <dt id="hal_py.Gate.get_predecessors">
-<code class="descname">get_predecessors</code><span class="sig-paren">(</span><em>self: hal_py.Gate, filter: Callable[[str, hal_py.Endpoint], bool] = None</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Endpoint]<a class="headerlink" href="#hal_py.Gate.get_predecessors" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a list of all direct predecessor endpoints of the gate filterable by the gate’s input pin and a specific gate type.</p>
+<code class="descname">get_predecessors</code><span class="sig-paren">(</span><em>self: hal_py.Gate, filter: Callable[[hal_py.GatePin, hal_py.Endpoint], bool] = None</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Endpoint]<a class="headerlink" href="#hal_py.Gate.get_predecessors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of all direct predecessor endpoints of the gate, i.e., all predecessor endpoints that are connected to an input pin of the gate. 
+The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filter</strong> (<em>lambda</em>) – The function used for filtering. Leave empty for no filtering.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filter</strong> (<em>lambda</em>) – An optional filter being evaluated on the gate’s input pin as well as the predecessor endpoint.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of predecessors endpoints.</td>
 </tr>
@@ -710,34 +866,60 @@ endpoints, <em>None</em> is returned.</p>
 
 <dl class="method">
 <dt id="hal_py.Gate.get_successor">
-<code class="descname">get_successor</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em>, <em>which_pin: str</em><span class="sig-paren">)</span> &#x2192; hal_py.Endpoint<a class="headerlink" href="#hal_py.Gate.get_successor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the direct successor endpoint of the gate connected to a specific input pin.
-If the input pin type is unknown or there is no successor endpoint or there are multiple successor
-endpoints, <em>None</em> is returned.</p>
+<code class="descname">get_successor</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.Gate.get_successor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">get_successor(self: hal_py.Gate, pin_name: str) -&gt; hal_py.Endpoint</p>
+<blockquote>
+<div><p>Get a single direct successor endpoint that is connected to the output pin specified by name.
+Fails if there are no or more than one successors.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>which_pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The output pin type of this gate to get the successor from.</td>
+<tr class="field-odd field"><th class="field-name" colspan="2">param str pin_name:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The output pin name.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The successor endpoint.</td>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The successor endpoint on success, None otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="endpoint.html#hal_py.Endpoint" title="hal_py.Endpoint">hal_py.Endpoint</a></td>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Endpoint or None</td>
 </tr>
 </tbody>
 </table>
+</div></blockquote>
+</li>
+<li><p class="first">get_successor(self: hal_py.Gate, pin: hal_py.GatePin) -&gt; hal_py.Endpoint</p>
+<blockquote>
+<div><p>Get a single direct successor endpoint that is connected to the output pin specified by name.
+Fails if there are no or more than one successors.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.GatePin pin:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The output pin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The successor endpoint on success, None otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Endpoint or None</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
 </dd></dl>
 
 <dl class="method">
 <dt id="hal_py.Gate.get_successors">
-<code class="descname">get_successors</code><span class="sig-paren">(</span><em>self: hal_py.Gate, filter: Callable[[str, hal_py.Endpoint], bool] = None</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Endpoint]<a class="headerlink" href="#hal_py.Gate.get_successors" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a list of all direct successor endpoints of the gate.
-A filter can be supplied which filters out all potential values that return false.</p>
+<code class="descname">get_successors</code><span class="sig-paren">(</span><em>self: hal_py.Gate, filter: Callable[[hal_py.GatePin, hal_py.Endpoint], bool] = None</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Endpoint]<a class="headerlink" href="#hal_py.Gate.get_successors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of all direct successor endpoints of the gate, i.e., all successor endpoints that are connected to an output pin of the gate. 
+The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filter</strong> (<em>lambda</em>) – A function to filter the output, using the output pin type of the gate (1st param) and a connected successor endpoint (2nd param). Leave empty for no filtering.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filter</strong> (<em>lambda</em>) – An optional filter being evaluated on the gate’s output pin as well as the successor endpoint.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of successor endpoints.</td>
 </tr>
@@ -765,14 +947,14 @@ A filter can be supplied which filters out all potential values that return fals
 
 <dl class="method">
 <dt id="hal_py.Gate.get_unique_predecessors">
-<code class="descname">get_unique_predecessors</code><span class="sig-paren">(</span><em>self: hal_py.Gate, filter: Callable[[str, hal_py.Endpoint], bool] = None</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Gate]<a class="headerlink" href="#hal_py.Gate.get_unique_predecessors" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_unique_predecessors</code><span class="sig-paren">(</span><em>self: hal_py.Gate, filter: Callable[[hal_py.GatePin, hal_py.Endpoint], bool] = None</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Gate]<a class="headerlink" href="#hal_py.Gate.get_unique_predecessors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of all unique predecessor gates of the gate.
-A filter can be supplied which filters out all potential values that return false.</p>
+The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filter</strong> (<em>lambda</em>) – A function to filter the output, using the input pin type of the gate (1st param) and a connected predecessor endpoint (2nd param). Leave empty for no filtering.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filter</strong> (<em>lambda</em>) – An optional filter being evaluated on the gate’s input pin as well as the predecessor endpoint.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of unique predecessors endpoints.</td>
 </tr>
@@ -784,14 +966,14 @@ A filter can be supplied which filters out all potential values that return fals
 
 <dl class="method">
 <dt id="hal_py.Gate.get_unique_successors">
-<code class="descname">get_unique_successors</code><span class="sig-paren">(</span><em>self: hal_py.Gate, filter: Callable[[str, hal_py.Endpoint], bool] = None</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Gate]<a class="headerlink" href="#hal_py.Gate.get_unique_successors" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_unique_successors</code><span class="sig-paren">(</span><em>self: hal_py.Gate, filter: Callable[[hal_py.GatePin, hal_py.Endpoint], bool] = None</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Gate]<a class="headerlink" href="#hal_py.Gate.get_unique_successors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of all unique successor gates of the gate.
-A filter can be supplied which filters out all potential values that return false.</p>
+The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filter</strong> (<em>lambda</em>) – A function to filter the output, using the output pin type of the gate (1st param) and a connected successor endpoint (2nd param). Leave empty for no filtering.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filter</strong> (<em>lambda</em>) – An optional filter being evaluated on the gate’s output pin as well as the successor endpoint.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of unique successor endpoints.</td>
 </tr>
@@ -855,20 +1037,6 @@ A filter can be supplied which filters out all potential values that return fals
 </table>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="hal_py.Gate.input_pins">
-<code class="descname">input_pins</code><a class="headerlink" href="#hal_py.Gate.input_pins" title="Permalink to this definition">¶</a></dt>
-<dd><p>A list of all input pin types of the gate.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 <dl class="method">
 <dt id="hal_py.Gate.is_gnd_gate">
 <code class="descname">is_gnd_gate</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Gate.is_gnd_gate" title="Permalink to this definition">¶</a></dt>
@@ -877,7 +1045,7 @@ A filter can be supplied which filters out all potential values that return fals
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the gate is a global gnd gate.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the gate is a global gnd gate, False otherwise.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
 </tr>
@@ -893,7 +1061,7 @@ A filter can be supplied which filters out all potential values that return fals
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the gate is a global vcc gate.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the gate is a global vcc gate, False otherwise.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
 </tr>
@@ -953,7 +1121,7 @@ Only positive values are valid, negative values will be regarded as no location 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True on success.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True on success, False otherwise.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
 </tr>
@@ -969,7 +1137,7 @@ Only positive values are valid, negative values will be regarded as no location 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True on success.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True on success, False otherwise.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
 </tr>
@@ -1020,23 +1188,9 @@ Only positive values are valid, negative values will be regarded as no location 
 </dd></dl>
 
 <dl class="attribute">
-<dt id="hal_py.Gate.output_pins">
-<code class="descname">output_pins</code><a class="headerlink" href="#hal_py.Gate.output_pins" title="Permalink to this definition">¶</a></dt>
-<dd><p>A list of all output pin types of the gate.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
 <dt id="hal_py.Gate.predecessors">
 <code class="descname">predecessors</code><a class="headerlink" href="#hal_py.Gate.predecessors" title="Permalink to this definition">¶</a></dt>
-<dd><p>A list of all all direct predecessor endpoints of the gate.</p>
+<dd><p>A list of all direct predecessor endpoints of the gate, i.e., all predecessor endpoints that are connected to an input pin of the gate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1137,7 +1291,7 @@ Only positive values are valid, negative values will be regarded as no location 
 <dl class="attribute">
 <dt id="hal_py.Gate.successors">
 <code class="descname">successors</code><a class="headerlink" href="#hal_py.Gate.successors" title="Permalink to this definition">¶</a></dt>
-<dd><p>A list of all direct successor endpoints of the gate.</p>
+<dd><p>A list of all direct successor endpoints of the gate, i.e., all successor endpoints that are connected to an output pin of the gate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1198,7 +1352,7 @@ Only positive values are valid, negative values will be regarded as no location 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True on success.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True on success, False otherwise.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
 </tr>
@@ -1214,7 +1368,7 @@ Only positive values are valid, negative values will be regarded as no location 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True on success.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True on success, False otherwise.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
 </tr>

@@ -1,6 +1,11 @@
 var searchData=
 [
-  ['plugin_5fapi_39816',['PLUGIN_API',['../arch__linux_8h.html#afcb1b0bf7320fa3ebfc13fd896ebca4d',1,'PLUGIN_API():&#160;arch_linux.h'],['../arch__mac_8h.html#afcb1b0bf7320fa3ebfc13fd896ebca4d',1,'PLUGIN_API():&#160;arch_mac.h'],['../arch__win_8h.html#afcb1b0bf7320fa3ebfc13fd896ebca4d',1,'PLUGIN_API():&#160;arch_win.h']]],
-  ['pretty_5fjson_5foutput_39817',['PRETTY_JSON_OUTPUT',['../netlist_2persistent_2netlist__serializer_8cpp.html#a442c4f02c70cb01b96e1d3068b619d20',1,'PRETTY_JSON_OUTPUT():&#160;netlist_serializer.cpp'],['../hal__file__manager_8cpp.html#a442c4f02c70cb01b96e1d3068b619d20',1,'PRETTY_JSON_OUTPUT():&#160;hal_file_manager.cpp']]],
-  ['protected_39818',['PROTECTED',['../defines_8h.html#af0cbb16b703892a6f3be7149dbe7d1a3',1,'defines.h']]]
+  ['netlist_5fapi_39693',['NETLIST_API',['../arch__linux_8h.html#a3541b40303f35100314d8bb7efd18371',1,'NETLIST_API():&#160;arch_linux.h'],['../arch__mac_8h.html#a3541b40303f35100314d8bb7efd18371',1,'NETLIST_API():&#160;arch_mac.h'],['../arch__win_8h.html#a3541b40303f35100314d8bb7efd18371',1,'NETLIST_API():&#160;arch_win.h']]],
+  ['nlohmann_5fbasic_5fjson_5ftpl_39694',['NLOHMANN_BASIC_JSON_TPL',['../json_8hpp.html#a80b7254e63f199a1f656f07ae551f632',1,'json.hpp']]],
+  ['nlohmann_5fbasic_5fjson_5ftpl_5fdeclaration_39695',['NLOHMANN_BASIC_JSON_TPL_DECLARATION',['../json_8hpp.html#a0643bd74c2dc6f0e4e420b8190ea8f0f',1,'json.hpp']]],
+  ['nlohmann_5fjson_5fserialize_5fenum_39696',['NLOHMANN_JSON_SERIALIZE_ENUM',['../json_8hpp.html#a4c5d399dfa9252e70f876756f3f49084',1,'json.hpp']]],
+  ['nlohmann_5fjson_5fversion_5fmajor_39697',['NLOHMANN_JSON_VERSION_MAJOR',['../json_8hpp.html#a7c94253db90041af11dd946a49f0f8a4',1,'json.hpp']]],
+  ['nlohmann_5fjson_5fversion_5fminor_39698',['NLOHMANN_JSON_VERSION_MINOR',['../json_8hpp.html#ab5ca1e164894d78d3276d2e5fe58c5e3',1,'json.hpp']]],
+  ['nlohmann_5fjson_5fversion_5fpatch_39699',['NLOHMANN_JSON_VERSION_PATCH',['../json_8hpp.html#a307e0238ebc35e99ea45c68823eb83eb',1,'json.hpp']]],
+  ['not_5fexported_39700',['NOT_EXPORTED',['../defines_8h.html#a7a18783e5822ba5ea364d35854897085',1,'defines.h']]]
 ];

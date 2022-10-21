@@ -3,6 +3,7 @@ var log_8h =
     [ "log_sink", "structhal_1_1_log_manager_1_1log__sink.html", "structhal_1_1_log_manager_1_1log__sink" ],
     [ "log_gui_sink", "classhal_1_1log__gui__sink.html", "classhal_1_1log__gui__sink" ],
     [ "die", "group__utilities.html#ga2258fcb2d8e5c8f15437e9c4dea3483d", null ],
+    [ "FMT_HEADER_ONLY", "log_8h.html#a27b3249db8d77bd236109bda307bc263", null ],
     [ "LOG_CHANNEL", "log_8h.html#ab459fae788a7a0b6e60d70c6bb53a5d2", null ],
     [ "log_critical", "group__utilities.html#ga9f09e61a5832ae08b39fde17dc9e04ce", null ],
     [ "log_debug", "group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466", null ],

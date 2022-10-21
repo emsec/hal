@@ -125,160 +125,165 @@ $(document).ready(function(){initNavTree('log_8h_source.html',''); initResizable
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#include &lt;tuple&gt;</span></div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="preprocessor">#pragma GCC diagnostic push</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor">#pragma GCC diagnostic ignored &quot;-Wshadow&quot;</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="preprocessor">#include &lt;spdlog/sinks/base_sink.h&gt;</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="preprocessor">#include &lt;spdlog/spdlog.h&gt;</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="preprocessor">#pragma GCC diagnostic pop</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;{</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="comment">// macros to stringify to transform int to const char*</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="log_8h.html#ac96c6afee3270eb88719a98239ea7f75">   49</a></span>&#160;<span class="preprocessor">#define STRINGISTRINGIFY(x) #x</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="log_8h.html#a6df1d22fb5f09eccc23b9f399670cfd7">   50</a></span>&#160;<span class="preprocessor">#define STRINGIFY(x) STRINGISTRINGIFY(x)</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment">// macro to get the log channel</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="log_8h.html#ab459fae788a7a0b6e60d70c6bb53a5d2">   53</a></span>&#160;<span class="preprocessor">#define LOG_CHANNEL(channel) LogManager::get_instance().get_channel(channel)</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno"><a class="line" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">   67</a></span>&#160;<span class="preprocessor">#define log_info(channel, ...) LOG_CHANNEL(channel)-&gt;info(__VA_ARGS__)</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="group__utilities.html#gaf7de45767abb16dd9841f83ef5dd0608">   69</a></span>&#160;<span class="preprocessor">#define log_trace(channel, ...) LOG_CHANNEL(channel)-&gt;trace(&quot;[&quot; __FILE__ &quot;:&quot; STRINGIFY(__LINE__) &quot;] &quot; __VA_ARGS__)</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">   71</a></span>&#160;<span class="preprocessor">#define log_debug(channel, ...) LOG_CHANNEL(channel)-&gt;debug(&quot;[&quot; __FILE__ &quot;:&quot; STRINGIFY(__LINE__) &quot;] &quot; __VA_ARGS__)</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">   73</a></span>&#160;<span class="preprocessor">#define log_warning(channel, ...) LOG_CHANNEL(channel)-&gt;warn(&quot;[&quot; __FILE__ &quot;:&quot; STRINGIFY(__LINE__) &quot;] &quot; __VA_ARGS__)</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno"><a class="line" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">   75</a></span>&#160;<span class="preprocessor">#define log_error(channel, ...) LOG_CHANNEL(channel)-&gt;error(&quot;[&quot; __FILE__ &quot;:&quot; STRINGIFY(__LINE__) &quot;] &quot; __VA_ARGS__)</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="group__utilities.html#ga9f09e61a5832ae08b39fde17dc9e04ce">   77</a></span>&#160;<span class="preprocessor">#define log_critical(channel, ...) LOG_CHANNEL(channel)-&gt;critical(&quot;[&quot; __FILE__ &quot;:&quot; STRINGIFY(__LINE__) &quot;] &quot; __VA_ARGS__)</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
-<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="group__utilities.html#ga2258fcb2d8e5c8f15437e9c4dea3483d">   91</a></span>&#160;<span class="preprocessor">#define die(channel, ...)                                                                      \</span></div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="preprocessor">    do                                                                                         \</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="preprocessor">    {                                                                                          \</span></div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="preprocessor">        LOG_CHANNEL(channel)-&gt;critical(&quot;[&quot; __FILE__ &quot;:&quot; STRINGIFY(__LINE__) &quot;] &quot; __VA_ARGS__); \</span></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="preprocessor">        exit(1);                                                                               \</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor">    } while (0);</span></div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
-<div class="line"><a name="l00101"></a><span class="lineno"><a class="line" href="classhal_1_1_log_manager.html">  101</a></span>&#160;    <span class="keyword">class </span><a class="code" href="arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="code" href="classhal_1_1_log_manager.html">LogManager</a></div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    {</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00104"></a><span class="lineno"><a class="line" href="structhal_1_1_log_manager_1_1log__sink.html">  104</a></span>&#160;        <span class="keyword">struct </span><a class="code" href="structhal_1_1_log_manager_1_1log__sink.html">log_sink</a></div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        {</div>
-<div class="line"><a name="l00106"></a><span class="lineno"><a class="line" href="structhal_1_1_log_manager_1_1log__sink.html#aa6c054fb308f53d9786ee4134413de27">  106</a></span>&#160;            std::shared_ptr&lt;spdlog::sinks::sink&gt; <a class="code" href="structhal_1_1_log_manager_1_1log__sink.html#aa6c054fb308f53d9786ee4134413de27">spdlog_sink</a>;</div>
-<div class="line"><a name="l00107"></a><span class="lineno"><a class="line" href="structhal_1_1_log_manager_1_1log__sink.html#aa39047eba08df4948b012a86240729fa">  107</a></span>&#160;            <span class="keywordtype">bool</span> <a class="code" href="structhal_1_1_log_manager_1_1log__sink.html#aa39047eba08df4948b012a86240729fa">is_file_sink</a>;</div>
-<div class="line"><a name="l00108"></a><span class="lineno"><a class="line" href="structhal_1_1_log_manager_1_1log__sink.html#a3a09ddb29a0af4fec0ad93a7cb76a498">  108</a></span>&#160;            <span class="keywordtype">bool</span> <a class="code" href="structhal_1_1_log_manager_1_1log__sink.html#a3a09ddb29a0af4fec0ad93a7cb76a498">truncate</a>;</div>
-<div class="line"><a name="l00109"></a><span class="lineno"><a class="line" href="structhal_1_1_log_manager_1_1log__sink.html#a267e71d77e6f2a52ee57d934e88df357">  109</a></span>&#160;            std::filesystem::path <a class="code" href="structhal_1_1_log_manager_1_1log__sink.html#a267e71d77e6f2a52ee57d934e88df357">path</a>;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        };</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        <span class="keyword">static</span> <a class="code" href="classhal_1_1_log_manager.html">LogManager</a>&amp; get_instance(<span class="keyword">const</span> std::filesystem::path&amp; file_name = <span class="stringliteral">&quot;&quot;</span>);</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        <span class="keywordtype">void</span> set_file_name(<span class="keyword">const</span> std::filesystem::path&amp; file_name);</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;        <span class="keywordtype">void</span> set_format_pattern(<span class="keyword">const</span> std::string&amp; format);</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160; </div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        std::shared_ptr&lt;spdlog::logger&gt; get_channel(<span class="keyword">const</span> std::string&amp; channel_name = <span class="stringliteral">&quot;stdout&quot;</span>);</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160; </div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        std::set&lt;std::string&gt; get_channels() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160; </div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        std::shared_ptr&lt;spdlog::logger&gt; add_channel(<span class="keyword">const</span> std::string&amp; channel_name, <span class="keyword">const</span> std::vector&lt;std::shared_ptr&lt;log_sink&gt;&gt;&amp; sinks, <span class="keyword">const</span> std::string&amp; level = <span class="stringliteral">&quot;info&quot;</span>);</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160; </div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        <span class="keywordtype">void</span> remove_channel(<span class="keyword">const</span> std::string&amp; channel_name);</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160; </div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        std::string get_level_of_channel(<span class="keyword">const</span> std::string&amp; channel_name) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160; </div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        <span class="keywordtype">void</span> set_level_of_channel(<span class="keyword">const</span> std::string&amp; channel_name, <span class="keyword">const</span> std::string&amp; level);</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160; </div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        std::set&lt;std::string&gt; get_available_log_levels() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160; </div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        <span class="keywordtype">void</span> activate_channel(<span class="keyword">const</span> std::string&amp; channel_name);</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160; </div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;        <span class="keywordtype">void</span> activate_all_channels();</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160; </div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;        <span class="keywordtype">void</span> deactivate_channel(<span class="keyword">const</span> std::string&amp; channel_name);</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160; </div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        <span class="keywordtype">void</span> deactivate_all_channels();</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160; </div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;        <a class="code" href="classhal_1_1_callback_hook.html">CallbackHook</a>&lt;<a class="code" href="namespacenlohmann_1_1detail.html#a59fca69799f6b9e366710cb9043aa77d">void</a>(<span class="keyword">const</span> spdlog::level::level_enum&amp;, <span class="keyword">const</span> std::string&amp;, <span class="keyword">const</span> std::string&amp;)&gt;&amp; get_gui_callback();</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160; </div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;        <a class="code" href="classhal_1_1_program_options.html">ProgramOptions</a>&amp; get_option_descriptions();</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160; </div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;        <span class="keywordtype">void</span> handle_options(<a class="code" href="classhal_1_1_program_arguments.html">ProgramArguments</a>&amp; <a class="code" href="namespacecontrol.html#a3cdfe36ea256f5d4c35f5d89c9f22d46">args</a>);</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160; </div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        <span class="keyword">static</span> std::shared_ptr&lt;log_sink&gt; create_stdout_sink(<span class="keyword">const</span> <span class="keywordtype">bool</span> colored = <span class="keyword">true</span>);</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160; </div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        <span class="keyword">static</span> std::shared_ptr&lt;log_sink&gt; create_file_sink(<span class="keyword">const</span> std::filesystem::path&amp; file_name = <span class="stringliteral">&quot;&quot;</span>, <span class="keyword">const</span> <span class="keywordtype">bool</span> truncate = <span class="keyword">false</span>);</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160; </div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;        <span class="keyword">static</span> std::shared_ptr&lt;log_sink&gt; create_gui_sink();</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160; </div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        <span class="keyword">static</span> std::map&lt;std::string, std::shared_ptr&lt;log_sink&gt;&gt; m_file_sinks;</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160; </div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;        <span class="comment">// LogManager class constructor (private due to singleton)</span></div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;        <a class="code" href="classhal_1_1_log_manager.html">LogManager</a>(<span class="keyword">const</span> std::filesystem::path&amp; file_name);</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160; </div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;        <span class="comment">// LogManager class destructor (private due to singleton)</span></div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        ~<a class="code" href="classhal_1_1_log_manager.html">LogManager</a>();</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160; </div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        <span class="comment">// LogManager class object non-copyable</span></div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        <a class="code" href="classhal_1_1_log_manager.html">LogManager</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_log_manager.html">LogManager</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160; </div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        <span class="comment">// LogManager class object non-copyable</span></div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        <a class="code" href="classhal_1_1_log_manager.html">LogManager</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classhal_1_1_log_manager.html">LogManager</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160; </div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        std::filesystem::path m_file_path;</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160; </div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;        std::map&lt;std::string, spdlog::level::level_enum&gt; m_level;</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160; </div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;        std::map&lt;std::string, std::shared_ptr&lt;spdlog::logger&gt;&gt; m_logger;</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160; </div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;        std::map&lt;std::string, std::vector&lt;std::shared_ptr&lt;log_sink&gt;&gt;&gt; m_logger_sinks;</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160; </div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        <a class="code" href="classhal_1_1_callback_hook.html">CallbackHook</a>&lt;<a class="code" href="namespacenlohmann_1_1detail.html#a59fca69799f6b9e366710cb9043aa77d">void</a>(<span class="keyword">const</span> spdlog::level::level_enum&amp;, <span class="keyword">const</span> std::string&amp;, <span class="keyword">const</span> std::string&amp;)&gt; m_gui_callback;</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160; </div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;        <a class="code" href="classhal_1_1_program_options.html">ProgramOptions</a> m_descriptions;</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    };</div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="log_8h.html#a27b3249db8d77bd236109bda307bc263">   40</a></span>&#160;<span class="preprocessor">#define FMT_HEADER_ONLY</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor">#pragma GCC diagnostic push</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="preprocessor">#pragma GCC diagnostic ignored &quot;-Wshadow&quot;</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="preprocessor">#include &lt;spdlog/sinks/base_sink.h&gt;</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="preprocessor">#include &lt;spdlog/spdlog.h&gt;</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="preprocessor">#pragma GCC diagnostic pop</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;{</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="comment">// macros to stringify to transform int to const char*</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="log_8h.html#ac96c6afee3270eb88719a98239ea7f75">   50</a></span>&#160;<span class="preprocessor">#define STRINGISTRINGIFY(x) #x</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="log_8h.html#a6df1d22fb5f09eccc23b9f399670cfd7">   51</a></span>&#160;<span class="preprocessor">#define STRINGIFY(x) STRINGISTRINGIFY(x)</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment">// macro to get the log channel</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="log_8h.html#ab459fae788a7a0b6e60d70c6bb53a5d2">   54</a></span>&#160;<span class="preprocessor">#define LOG_CHANNEL(channel) LogManager::get_instance()-&gt;get_channel(channel)</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">   68</a></span>&#160;<span class="preprocessor">#define log_info(channel, ...) LOG_CHANNEL(channel)-&gt;info(__VA_ARGS__)</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno"><a class="line" href="group__utilities.html#gaf7de45767abb16dd9841f83ef5dd0608">   70</a></span>&#160;<span class="preprocessor">#define log_trace(channel, ...) LOG_CHANNEL(channel)-&gt;trace(&quot;[&quot; __FILE__ &quot;:&quot; STRINGIFY(__LINE__) &quot;] &quot; __VA_ARGS__)</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">   72</a></span>&#160;<span class="preprocessor">#define log_debug(channel, ...) LOG_CHANNEL(channel)-&gt;debug(&quot;[&quot; __FILE__ &quot;:&quot; STRINGIFY(__LINE__) &quot;] &quot; __VA_ARGS__)</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">   74</a></span>&#160;<span class="preprocessor">#define log_warning(channel, ...) LOG_CHANNEL(channel)-&gt;warn(&quot;[&quot; __FILE__ &quot;:&quot; STRINGIFY(__LINE__) &quot;] &quot; __VA_ARGS__)</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">   76</a></span>&#160;<span class="preprocessor">#define log_error(channel, ...) LOG_CHANNEL(channel)-&gt;error(&quot;[&quot; __FILE__ &quot;:&quot; STRINGIFY(__LINE__) &quot;] &quot; __VA_ARGS__)</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno"><a class="line" href="group__utilities.html#ga9f09e61a5832ae08b39fde17dc9e04ce">   78</a></span>&#160;<span class="preprocessor">#define log_critical(channel, ...) LOG_CHANNEL(channel)-&gt;critical(&quot;[&quot; __FILE__ &quot;:&quot; STRINGIFY(__LINE__) &quot;] &quot; __VA_ARGS__)</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="group__utilities.html#ga2258fcb2d8e5c8f15437e9c4dea3483d">   92</a></span>&#160;<span class="preprocessor">#define die(channel, ...)                                                                      \</span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="preprocessor">    do                                                                                         \</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="preprocessor">    {                                                                                          \</span></div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="preprocessor">        LOG_CHANNEL(channel)-&gt;critical(&quot;[&quot; __FILE__ &quot;:&quot; STRINGIFY(__LINE__) &quot;] &quot; __VA_ARGS__); \</span></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor">        exit(1);                                                                               \</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="preprocessor">    } while (0);</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno"><a class="line" href="classhal_1_1_log_manager.html">  102</a></span>&#160;    <span class="keyword">class </span><a class="code" href="arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="code" href="classhal_1_1_log_manager.html">LogManager</a></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    {</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00105"></a><span class="lineno"><a class="line" href="structhal_1_1_log_manager_1_1log__sink.html">  105</a></span>&#160;        <span class="keyword">struct </span><a class="code" href="structhal_1_1_log_manager_1_1log__sink.html">log_sink</a></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        {</div>
+<div class="line"><a name="l00107"></a><span class="lineno"><a class="line" href="structhal_1_1_log_manager_1_1log__sink.html#aa6c054fb308f53d9786ee4134413de27">  107</a></span>&#160;            std::shared_ptr&lt;spdlog::sinks::sink&gt; <a class="code" href="structhal_1_1_log_manager_1_1log__sink.html#aa6c054fb308f53d9786ee4134413de27">spdlog_sink</a>;</div>
+<div class="line"><a name="l00108"></a><span class="lineno"><a class="line" href="structhal_1_1_log_manager_1_1log__sink.html#aa39047eba08df4948b012a86240729fa">  108</a></span>&#160;            <span class="keywordtype">bool</span> <a class="code" href="structhal_1_1_log_manager_1_1log__sink.html#aa39047eba08df4948b012a86240729fa">is_file_sink</a>;</div>
+<div class="line"><a name="l00109"></a><span class="lineno"><a class="line" href="structhal_1_1_log_manager_1_1log__sink.html#a3a09ddb29a0af4fec0ad93a7cb76a498">  109</a></span>&#160;            <span class="keywordtype">bool</span> <a class="code" href="structhal_1_1_log_manager_1_1log__sink.html#a3a09ddb29a0af4fec0ad93a7cb76a498">truncate</a>;</div>
+<div class="line"><a name="l00110"></a><span class="lineno"><a class="line" href="structhal_1_1_log_manager_1_1log__sink.html#a267e71d77e6f2a52ee57d934e88df357">  110</a></span>&#160;            std::filesystem::path <a class="code" href="structhal_1_1_log_manager_1_1log__sink.html#a267e71d77e6f2a52ee57d934e88df357">path</a>;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        };</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        <span class="keyword">static</span> <a class="code" href="classhal_1_1_log_manager.html">LogManager</a>* get_instance(<span class="keyword">const</span> std::filesystem::path&amp; file_name = <span class="stringliteral">&quot;&quot;</span>);</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        <span class="keywordtype">void</span> set_file_name(<span class="keyword">const</span> std::filesystem::path&amp; file_name);</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        <span class="keywordtype">void</span> set_format_pattern(<span class="keyword">const</span> std::string&amp; format);</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160; </div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        std::shared_ptr&lt;spdlog::logger&gt; get_channel(<span class="keyword">const</span> std::string&amp; channel_name = <span class="stringliteral">&quot;stdout&quot;</span>);</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160; </div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        std::set&lt;std::string&gt; get_channels() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160; </div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;        std::shared_ptr&lt;spdlog::logger&gt; add_channel(<span class="keyword">const</span> std::string&amp; channel_name, <span class="keyword">const</span> std::vector&lt;std::shared_ptr&lt;log_sink&gt;&gt;&amp; sinks, <span class="keyword">const</span> std::string&amp; level = <span class="stringliteral">&quot;info&quot;</span>);</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160; </div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        <span class="keywordtype">void</span> remove_channel(<span class="keyword">const</span> std::string&amp; channel_name);</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160; </div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        std::string get_level_of_channel(<span class="keyword">const</span> std::string&amp; channel_name) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160; </div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        <span class="keywordtype">void</span> set_level_of_channel(<span class="keyword">const</span> std::string&amp; channel_name, <span class="keyword">const</span> std::string&amp; level);</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160; </div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        std::set&lt;std::string&gt; get_available_log_levels() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160; </div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;        <span class="keywordtype">void</span> activate_channel(<span class="keyword">const</span> std::string&amp; channel_name);</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160; </div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        <span class="keywordtype">void</span> activate_all_channels();</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160; </div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;        <span class="keywordtype">void</span> deactivate_channel(<span class="keyword">const</span> std::string&amp; channel_name);</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160; </div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;        <span class="keywordtype">void</span> deactivate_all_channels();</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; </div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;        <a class="code" href="classhal_1_1_callback_hook.html">CallbackHook</a>&lt;<a class="code" href="namespacenlohmann_1_1detail.html#a59fca69799f6b9e366710cb9043aa77d">void</a>(<span class="keyword">const</span> spdlog::level::level_enum&amp;, <span class="keyword">const</span> std::string&amp;, <span class="keyword">const</span> std::string&amp;)&gt;&amp; get_gui_callback();</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160; </div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;        <a class="code" href="classhal_1_1_program_options.html">ProgramOptions</a>&amp; get_option_descriptions();</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160; </div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;        <span class="keywordtype">void</span> handle_options(<a class="code" href="classhal_1_1_program_arguments.html">ProgramArguments</a>&amp; <a class="code" href="namespacecontrol.html#a3cdfe36ea256f5d4c35f5d89c9f22d46">args</a>);</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160; </div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        <span class="keyword">static</span> std::shared_ptr&lt;log_sink&gt; create_stdout_sink(<span class="keyword">const</span> <span class="keywordtype">bool</span> colored = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160; </div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;        <span class="keyword">static</span> std::shared_ptr&lt;log_sink&gt; create_file_sink(<span class="keyword">const</span> std::filesystem::path&amp; file_name = <span class="stringliteral">&quot;&quot;</span>, <span class="keyword">const</span> <span class="keywordtype">bool</span> truncate = <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160; </div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;        <span class="keyword">static</span> std::shared_ptr&lt;log_sink&gt; create_gui_sink();</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160; </div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;        <span class="keyword">static</span> std::map&lt;std::string, std::shared_ptr&lt;log_sink&gt;&gt; m_file_sinks;</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160; </div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;        <span class="comment">// LogManager class constructor (private due to singleton)</span></div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;        <a class="code" href="classhal_1_1_log_manager.html">LogManager</a>(<span class="keyword">const</span> std::filesystem::path&amp; file_name);</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160; </div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        <span class="comment">// LogManager class destructor (private due to singleton)</span></div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        ~<a class="code" href="classhal_1_1_log_manager.html">LogManager</a>();</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160; </div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        <span class="comment">// LogManager class object non-copyable</span></div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        <a class="code" href="classhal_1_1_log_manager.html">LogManager</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_log_manager.html">LogManager</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160; </div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        <span class="comment">// LogManager class object non-copyable</span></div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;        <a class="code" href="classhal_1_1_log_manager.html">LogManager</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classhal_1_1_log_manager.html">LogManager</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160; </div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;        std::filesystem::path m_file_path;</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160; </div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        std::map&lt;std::string, spdlog::level::level_enum&gt; m_level;</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160; </div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;        std::map&lt;std::string, std::shared_ptr&lt;spdlog::logger&gt;&gt; m_logger;</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160; </div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;        std::map&lt;std::string, std::vector&lt;std::shared_ptr&lt;log_sink&gt;&gt;&gt; m_logger_sinks;</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160; </div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;        <a class="code" href="classhal_1_1_callback_hook.html">CallbackHook</a>&lt;<a class="code" href="namespacenlohmann_1_1detail.html#a59fca69799f6b9e366710cb9043aa77d">void</a>(<span class="keyword">const</span> spdlog::level::level_enum&amp;, <span class="keyword">const</span> std::string&amp;, <span class="keyword">const</span> std::string&amp;)&gt; m_gui_callback;</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160; </div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;        <a class="code" href="classhal_1_1_program_options.html">ProgramOptions</a> m_descriptions;</div>
 <div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160; </div>
-<div class="line"><a name="l00294"></a><span class="lineno"><a class="line" href="classhal_1_1log__gui__sink.html">  294</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1log__gui__sink.html">log_gui_sink</a> : <span class="keyword">public</span> spdlog::sinks::base_sink&lt;std::mutex&gt;</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    {</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        <a class="code" href="classhal_1_1log__gui__sink.html#a11fe35a5215333c9d2ba070bfc09a523">log_gui_sink</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        <a class="code" href="classhal_1_1log__gui__sink.html#aae5cd17079900fb341196dea45f89a85">~log_gui_sink</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160; </div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;    <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1log__gui__sink.html#a3452384d9bbfec21011da245e7c7045e">sink_it_</a>(<span class="keyword">const</span> spdlog::details::log_msg&amp; msg) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1log__gui__sink.html#a3c967dd201e147778004bddbd196ca9e">flush_</a>() <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;    };</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        std::string m_enforce_level;</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160; </div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;        <span class="keyword">static</span> <a class="code" href="classhal_1_1_log_manager.html">LogManager</a>* m_instance;</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;    };</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160; </div>
+<div class="line"><a name="l00299"></a><span class="lineno"><a class="line" href="classhal_1_1log__gui__sink.html">  299</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1log__gui__sink.html">log_gui_sink</a> : <span class="keyword">public</span> spdlog::sinks::base_sink&lt;std::mutex&gt;</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;    {</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        <a class="code" href="classhal_1_1log__gui__sink.html#a11fe35a5215333c9d2ba070bfc09a523">log_gui_sink</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;        <a class="code" href="classhal_1_1log__gui__sink.html#aae5cd17079900fb341196dea45f89a85">~log_gui_sink</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160; </div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1log__gui__sink.html#a3452384d9bbfec21011da245e7c7045e">sink_it_</a>(<span class="keyword">const</span> spdlog::details::log_msg&amp; msg) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1log__gui__sink.html#a3c967dd201e147778004bddbd196ca9e">flush_</a>() <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;    };</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclasshal_1_1_program_arguments_html"><div class="ttname"><a href="classhal_1_1_program_arguments.html">hal::ProgramArguments</a></div><div class="ttdef"><b>Definition:</b> <a href="program__arguments_8h_source.html#l00043">program_arguments.h:43</a></div></div>
-<div class="ttc" id="astructhal_1_1_log_manager_1_1log__sink_html_aa39047eba08df4948b012a86240729fa"><div class="ttname"><a href="structhal_1_1_log_manager_1_1log__sink.html#aa39047eba08df4948b012a86240729fa">hal::LogManager::log_sink::is_file_sink</a></div><div class="ttdeci">bool is_file_sink</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00107">log.h:107</a></div></div>
-<div class="ttc" id="astructhal_1_1_log_manager_1_1log__sink_html_a267e71d77e6f2a52ee57d934e88df357"><div class="ttname"><a href="structhal_1_1_log_manager_1_1log__sink.html#a267e71d77e6f2a52ee57d934e88df357">hal::LogManager::log_sink::path</a></div><div class="ttdeci">std::filesystem::path path</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00109">log.h:109</a></div></div>
-<div class="ttc" id="aclasshal_1_1log__gui__sink_html"><div class="ttname"><a href="classhal_1_1log__gui__sink.html">hal::log_gui_sink</a></div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00294">log.h:294</a></div></div>
+<div class="ttc" id="astructhal_1_1_log_manager_1_1log__sink_html_aa39047eba08df4948b012a86240729fa"><div class="ttname"><a href="structhal_1_1_log_manager_1_1log__sink.html#aa39047eba08df4948b012a86240729fa">hal::LogManager::log_sink::is_file_sink</a></div><div class="ttdeci">bool is_file_sink</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00108">log.h:108</a></div></div>
+<div class="ttc" id="astructhal_1_1_log_manager_1_1log__sink_html_a267e71d77e6f2a52ee57d934e88df357"><div class="ttname"><a href="structhal_1_1_log_manager_1_1log__sink.html#a267e71d77e6f2a52ee57d934e88df357">hal::LogManager::log_sink::path</a></div><div class="ttdeci">std::filesystem::path path</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00110">log.h:110</a></div></div>
+<div class="ttc" id="aclasshal_1_1log__gui__sink_html"><div class="ttname"><a href="classhal_1_1log__gui__sink.html">hal::log_gui_sink</a></div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00299">log.h:299</a></div></div>
 <div class="ttc" id="aclasshal_1_1_callback_hook_html"><div class="ttname"><a href="classhal_1_1_callback_hook.html">hal::CallbackHook</a></div><div class="ttdef"><b>Definition:</b> <a href="callback__hook_8h_source.html#l00038">callback_hook.h:38</a></div></div>
 <div class="ttc" id="aclasshal_1_1log__gui__sink_html_a11fe35a5215333c9d2ba070bfc09a523"><div class="ttname"><a href="classhal_1_1log__gui__sink.html#a11fe35a5215333c9d2ba070bfc09a523">hal::log_gui_sink::log_gui_sink</a></div><div class="ttdeci">log_gui_sink()=default</div></div>
 <div class="ttc" id="aprogram__arguments_8h_html"><div class="ttname"><a href="program__arguments_8h.html">program_arguments.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1log__gui__sink_html_aae5cd17079900fb341196dea45f89a85"><div class="ttname"><a href="classhal_1_1log__gui__sink.html#aae5cd17079900fb341196dea45f89a85">hal::log_gui_sink::~log_gui_sink</a></div><div class="ttdeci">~log_gui_sink()=default</div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00009">solver.cpp:9</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
 <div class="ttc" id="aprogram__options_8h_html"><div class="ttname"><a href="program__options_8h.html">program_options.h</a></div></div>
 <div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="defines_8h.html">defines.h</a></div></div>
 <div class="ttc" id="aarch__linux_8h_html_afea66f9a6812c2354b544f31910fd72f"><div class="ttname"><a href="arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a></div><div class="ttdeci">#define CORE_API</div><div class="ttdef"><b>Definition:</b> <a href="arch__linux_8h_source.html#l00026">arch_linux.h:26</a></div></div>
 <div class="ttc" id="autils_8h_html"><div class="ttname"><a href="utils_8h.html">utils.h</a></div></div>
-<div class="ttc" id="aclasshal_1_1log__gui__sink_html_a3c967dd201e147778004bddbd196ca9e"><div class="ttname"><a href="classhal_1_1log__gui__sink.html#a3c967dd201e147778004bddbd196ca9e">hal::log_gui_sink::flush_</a></div><div class="ttdeci">void flush_() override</div><div class="ttdef"><b>Definition:</b> <a href="log_8cpp_source.html#l00395">log.cpp:395</a></div></div>
+<div class="ttc" id="aclasshal_1_1log__gui__sink_html_a3c967dd201e147778004bddbd196ca9e"><div class="ttname"><a href="classhal_1_1log__gui__sink.html#a3c967dd201e147778004bddbd196ca9e">hal::log_gui_sink::flush_</a></div><div class="ttdeci">void flush_() override</div><div class="ttdef"><b>Definition:</b> <a href="log_8cpp_source.html#l00406">log.cpp:406</a></div></div>
 <div class="ttc" id="aclasshal_1_1_program_options_html"><div class="ttname"><a href="classhal_1_1_program_options.html">hal::ProgramOptions</a></div><div class="ttdef"><b>Definition:</b> <a href="program__options_8h_source.html#l00045">program_options.h:45</a></div></div>
 <div class="ttc" id="anamespacenlohmann_1_1detail_html_a59fca69799f6b9e366710cb9043aa77d"><div class="ttname"><a href="namespacenlohmann_1_1detail.html#a59fca69799f6b9e366710cb9043aa77d">nlohmann::detail::void</a></div><div class="ttdeci">j template void())</div><div class="ttdef"><b>Definition:</b> <a href="json_8hpp_source.html#l03108">json.hpp:3108</a></div></div>
-<div class="ttc" id="astructhal_1_1_log_manager_1_1log__sink_html_aa6c054fb308f53d9786ee4134413de27"><div class="ttname"><a href="structhal_1_1_log_manager_1_1log__sink.html#aa6c054fb308f53d9786ee4134413de27">hal::LogManager::log_sink::spdlog_sink</a></div><div class="ttdeci">std::shared_ptr&lt; spdlog::sinks::sink &gt; spdlog_sink</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00106">log.h:106</a></div></div>
+<div class="ttc" id="astructhal_1_1_log_manager_1_1log__sink_html_aa6c054fb308f53d9786ee4134413de27"><div class="ttname"><a href="structhal_1_1_log_manager_1_1log__sink.html#aa6c054fb308f53d9786ee4134413de27">hal::LogManager::log_sink::spdlog_sink</a></div><div class="ttdeci">std::shared_ptr&lt; spdlog::sinks::sink &gt; spdlog_sink</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00107">log.h:107</a></div></div>
 <div class="ttc" id="anamespacecontrol_html_a3cdfe36ea256f5d4c35f5d89c9f22d46"><div class="ttname"><a href="namespacecontrol.html#a3cdfe36ea256f5d4c35f5d89c9f22d46">control.args</a></div><div class="ttdeci">args</div><div class="ttdef"><b>Definition:</b> <a href="control_8py_source.html#l00033">control.py:33</a></div></div>
-<div class="ttc" id="astructhal_1_1_log_manager_1_1log__sink_html"><div class="ttname"><a href="structhal_1_1_log_manager_1_1log__sink.html">hal::LogManager::log_sink</a></div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00104">log.h:104</a></div></div>
-<div class="ttc" id="aclasshal_1_1_log_manager_html"><div class="ttname"><a href="classhal_1_1_log_manager.html">hal::LogManager</a></div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00101">log.h:101</a></div></div>
-<div class="ttc" id="aclasshal_1_1log__gui__sink_html_a3452384d9bbfec21011da245e7c7045e"><div class="ttname"><a href="classhal_1_1log__gui__sink.html#a3452384d9bbfec21011da245e7c7045e">hal::log_gui_sink::sink_it_</a></div><div class="ttdeci">void sink_it_(const spdlog::details::log_msg &amp;msg) override</div><div class="ttdef"><b>Definition:</b> <a href="log_8cpp_source.html#l00388">log.cpp:388</a></div></div>
-<div class="ttc" id="astructhal_1_1_log_manager_1_1log__sink_html_a3a09ddb29a0af4fec0ad93a7cb76a498"><div class="ttname"><a href="structhal_1_1_log_manager_1_1log__sink.html#a3a09ddb29a0af4fec0ad93a7cb76a498">hal::LogManager::log_sink::truncate</a></div><div class="ttdeci">bool truncate</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00108">log.h:108</a></div></div>
+<div class="ttc" id="astructhal_1_1_log_manager_1_1log__sink_html"><div class="ttname"><a href="structhal_1_1_log_manager_1_1log__sink.html">hal::LogManager::log_sink</a></div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00105">log.h:105</a></div></div>
+<div class="ttc" id="aclasshal_1_1_log_manager_html"><div class="ttname"><a href="classhal_1_1_log_manager.html">hal::LogManager</a></div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00102">log.h:102</a></div></div>
+<div class="ttc" id="aclasshal_1_1log__gui__sink_html_a3452384d9bbfec21011da245e7c7045e"><div class="ttname"><a href="classhal_1_1log__gui__sink.html#a3452384d9bbfec21011da245e7c7045e">hal::log_gui_sink::sink_it_</a></div><div class="ttdeci">void sink_it_(const spdlog::details::log_msg &amp;msg) override</div><div class="ttdef"><b>Definition:</b> <a href="log_8cpp_source.html#l00399">log.cpp:399</a></div></div>
+<div class="ttc" id="astructhal_1_1_log_manager_1_1log__sink_html_a3a09ddb29a0af4fec0ad93a7cb76a498"><div class="ttname"><a href="structhal_1_1_log_manager_1_1log__sink.html#a3a09ddb29a0af4fec0ad93a7cb76a498">hal::LogManager::log_sink::truncate</a></div><div class="ttdeci">bool truncate</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00109">log.h:109</a></div></div>
 <div class="ttc" id="acallback__hook_8h_html"><div class="ttname"><a href="callback__hook_8h.html">callback_hook.h</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_8cff0e4740b4a22580dd05764b73d449.html">utilities</a></li><li class="navelem"><a class="el" href="log_8h.html">log.h</a></li>
-    <li class="footer">Generated on Tue Jul 12 2022 15:49:58 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:08:32 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -1,4 +1,4 @@
 <map id="hal::NetlistRelay" name="hal::NetlistRelay">
-<area shape="rect" id="node1" title="Connects the hal&#45;core events to the gui." alt="" coords="5,395,224,575"/>
+<area shape="rect" id="node1" title="Connects the hal&#45;core events to the gui." alt="" coords="5,395,224,589"/>
 <area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="31,5,198,347"/>
 </map>

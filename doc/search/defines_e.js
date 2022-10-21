@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['unique_5fname_39824',['UNIQUE_NAME',['../timing__utils_8h.html#ad3ea2394cf8954b1f8768bffd12cd5e1',1,'timing_utils.h']]],
-  ['unused_39825',['UNUSED',['../defines_8h.html#aea1d71af1a30c261dbd16745c82e94ba',1,'defines.h']]]
+  ['seconds_5fsince_39706',['seconds_since',['../timing__utils_8h.html#a688d26ed86c8b545bd8b86a74085ca99',1,'timing_utils.h']]],
+  ['stringify_39707',['STRINGIFY',['../log_8h.html#a6df1d22fb5f09eccc23b9f399670cfd7',1,'log.h']]],
+  ['stringistringify_39708',['STRINGISTRINGIFY',['../log_8h.html#ac96c6afee3270eb88719a98239ea7f75',1,'log.h']]]
 ];

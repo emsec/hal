@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Solve FSM &mdash; hal_py v3.3.0-169-gd427c070b documentation</title>
+  <title>Solve FSM &mdash; hal_py v3.3.0-985-gbde57951a documentation</title>
   
 
   
@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Netlist Simulator" href="netlist_simulator.html" /> 
+    <link rel="prev" title="Verilator Simulator" href="verilator.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                v3.3.0-169-gd427c070b
+                v3.3.0-985-gbde57951a
               </div>
             
           
@@ -91,6 +91,7 @@
 <li class="toctree-l2"><a class="reference internal" href="graph_algorithm.html">Graph Algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gui.html">GUI API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_simulator.html">Netlist Simulator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="verilator.html">Verilator Simulator</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Solve FSM</a></li>
 </ul>
 </li>
@@ -195,7 +196,7 @@
 <p>:param dict{halPy.Gate, bool} initial_state - A mapping from the state registers to their initial value. If omitted the intial state will be set to 0.
 :param str graph_path: Path to the location where the state graph is saved in dot format.
 :param int timeout - Timeout value for the sat solvers. Defaults to 600 (unit unkown).
-:returns: The transition state graph in dot format.
+:returns: A mapping from each state to all its possible successors states
 :rtype: dict()</p>
 </dd></dl>
 
@@ -215,7 +216,7 @@
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The transition state graph in dot format.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A mapping from each state to all its possible transitions. The transitions are a map from the successor state to all the possible input mappings that lead to it.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a>()</p>
@@ -238,7 +239,7 @@
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="netlist_simulator.html" class="btn btn-neutral float-left" title="Netlist Simulator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="verilator.html" class="btn btn-neutral float-left" title="Verilator Simulator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

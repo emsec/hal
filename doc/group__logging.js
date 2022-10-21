@@ -95,7 +95,7 @@ var group__logging =
       [ "searchIconStyle", "classhal_1_1_logger_widget.html#af7b0fdc5f504ba568435d98c9ea8c335", null ],
       [ "setSearchIconPath", "classhal_1_1_logger_widget.html#a8e30d1734296b809a7f5a1f83b3c9b22", null ],
       [ "setSearchIconStyle", "classhal_1_1_logger_widget.html#a7bfe34c98c5961099d51f9482d603998", null ],
-      [ "setupToolbar", "classhal_1_1_logger_widget.html#abb7b62784a10e4a496e12834aff7ce91", null ],
+      [ "setupToolbar", "classhal_1_1_logger_widget.html#a1d261def9cb41c2b0d82d2b4626a6708", null ],
       [ "toggleSearchbar", "classhal_1_1_logger_widget.html#ad5ea16846a7d99ae3fd7fdca9bca1901", null ],
       [ "searchIconPath", "classhal_1_1_logger_widget.html#a827b605ec4fd86613524ffa4b5d03836", null ],
       [ "searchIconStyle", "classhal_1_1_logger_widget.html#a5d80ab99a06b9cf52308589c0c014f18", null ]

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['rapidjson_5fhas_5fstdstring_39819',['RAPIDJSON_HAS_STDSTRING',['../hgl__writer_8h.html#a2f2eef0ee4477f3fe5874703a66e997f',1,'RAPIDJSON_HAS_STDSTRING():&#160;hgl_writer.h'],['../hal__file__manager_8h.html#a2f2eef0ee4477f3fe5874703a66e997f',1,'RAPIDJSON_HAS_STDSTRING():&#160;hal_file_manager.h']]]
+  ['ok_39701',['OK',['../include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7',1,'result.h']]]
 ];

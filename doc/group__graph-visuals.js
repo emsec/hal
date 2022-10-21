@@ -14,6 +14,7 @@ var group__graph_visuals =
       [ "setDragModifier", "classhal_1_1_graph_graphics_view.html#a4b1419d80f01aea4229d54ba95f93dc7", null ],
       [ "setGridType", "classhal_1_1_graph_graphics_view.html#a1284b4d251c36b76d29fa316da85c03c", null ],
       [ "setPanModifier", "classhal_1_1_graph_graphics_view.html#a2a0580d1bee10998a43badc5f8435c31", null ],
+      [ "triggerTerminatePicker", "classhal_1_1_graph_graphics_view.html#aba56852e26de43eed9b2208529d35dda", null ],
       [ "viewportCenterZoom", "classhal_1_1_graph_graphics_view.html#a3892fc8c230865246ac588d7fcd397d7", null ],
       [ "GraphWidget", "classhal_1_1_graph_graphics_view.html#a883185841d7deb422d7400dafea4e113", null ]
     ] ],
@@ -32,6 +33,7 @@ var group__graph_visuals =
     ] ],
     [ "GraphicsGate", "classhal_1_1_graphics_gate.html", [
       [ "GraphicsGate", "classhal_1_1_graphics_gate.html#a8099a21ce8f6918c8989a35d2ea0df26", null ],
+      [ "mGate", "classhal_1_1_graphics_gate.html#a78ad635959aed1ee5c39ecc4bf90ba9b", null ],
       [ "mInputPins", "classhal_1_1_graphics_gate.html#a8e3339bc6846a4da7464b929d5e92742", null ],
       [ "mOutputPins", "classhal_1_1_graphics_gate.html#a813b7153cf74c7ffb73a36eb57326715", null ],
       [ "mType", "classhal_1_1_graphics_gate.html#a38de4073444caa17038f78cd42126fdd", null ]

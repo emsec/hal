@@ -1,0 +1,8 @@
+<map id="hal::BooleanFunctionTableEntry" name="hal::BooleanFunctionTableEntry">
+<area shape="rect" id="node1" title="An entry in the boolean function table model." alt="" coords="381,5,603,215"/>
+<area shape="rect" id="node2" href="$classhal_1_1_boolean_function_entry.html" title="A BooleanFunctionTableEntry that represents a boolean function." alt="" coords="5,263,197,384"/>
+<area shape="rect" id="node3" href="$classhal_1_1_c_p_behavior_entry.html" title="A BooleanFunctionTableEntry that represents a clear&#45;preset behavior." alt="" coords="222,277,381,369"/>
+<area shape="rect" id="node4" href="$classhal_1_1_f_f_component_entry.html" title="A entry type that represents properties (functions and behaviors) of an FFCompont." alt="" coords="405,270,579,377"/>
+<area shape="rect" id="node5" href="$classhal_1_1_latch_component_entry.html" title="An entry type that represents properties (functions or behaviors) of a LatchComponent." alt="" coords="604,270,799,377"/>
+<area shape="rect" id="node6" href="$classhal_1_1_state_component_entry.html" title="Utility class that represents a state of the StateComponent." alt="" coords="823,270,1017,377"/>
+</map>

@@ -1,10 +1,6 @@
 <map id="/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/utils/progress_printer.h" name="/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/utils/progress_printer.h">
-<area shape="rect" id="node1" title=" " alt="" coords="357,5,552,91"/>
+<area shape="rect" id="node1" title=" " alt="" coords="121,5,316,91"/>
 <area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="149,139,289,165"/>
-<area shape="rect" id="node7" title=" " alt="" coords="313,139,393,165"/>
-<area shape="rect" id="node8" title=" " alt="" coords="417,139,492,165"/>
-<area shape="rect" id="node9" title=" " alt="" coords="516,139,604,165"/>
-<area shape="rect" id="node10" title=" " alt="" coords="628,139,703,165"/>
 <area shape="rect" id="node3" title=" " alt="" coords="5,213,96,240"/>
 <area shape="rect" id="node4" title=" " alt="" coords="121,213,207,240"/>
 <area shape="rect" id="node5" title=" " alt="" coords="231,213,318,240"/>

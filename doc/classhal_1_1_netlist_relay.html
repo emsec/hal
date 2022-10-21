@@ -101,7 +101,7 @@ Inheritance diagram for hal::NetlistRelay:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_netlist_relay__inherit__graph.png" border="0" usemap="#hal_1_1_netlist_relay_inherit__map" alt="Inheritance graph"/></div>
 <map name="hal_1_1_netlist_relay_inherit__map" id="hal_1_1_netlist_relay_inherit__map">
-<area shape="rect" title="Connects the hal&#45;core events to the gui." alt="" coords="5,395,224,575"/>
+<area shape="rect" title="Connects the hal&#45;core events to the gui." alt="" coords="5,395,224,589"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qobject.html" title=" " alt="" coords="31,5,198,347"/>
 </map>
 </div>
@@ -110,7 +110,7 @@ Collaboration diagram for hal::NetlistRelay:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_netlist_relay__coll__graph.png" border="0" usemap="#hal_1_1_netlist_relay_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1_netlist_relay_coll__map" id="hal_1_1_netlist_relay_coll__map">
-<area shape="rect" title="Connects the hal&#45;core events to the gui." alt="" coords="5,395,224,575"/>
+<area shape="rect" title="Connects the hal&#45;core events to the gui." alt="" coords="5,395,224,589"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qobject.html" title=" " alt="" coords="31,5,198,347"/>
 </map>
 </div>
@@ -121,9 +121,13 @@ Public Slots</h2></td></tr>
 <tr class="separator:ad8f4bc9871e0dc257d637bbb2df61287"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f8aacd4af1c88532eaa8f1b8d6ff429"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a8f8aacd4af1c88532eaa8f1b8d6ff429">debugHandleFileClosed</a> ()</td></tr>
 <tr class="separator:a8f8aacd4af1c88532eaa8f1b8d6ff429"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabe24732a11ade01075ae88ad6743a77"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#aabe24732a11ade01075ae88ad6743a77">handleThreadEvent</a> (int <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>, int evt, void *object, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> associated_data)</td></tr>
+<tr class="separator:aabe24732a11ade01075ae88ad6743a77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="signals"></a>
 Signals</h2></td></tr>
+<tr class="memitem:ad67296d2731c213dbb88b98a66687b41"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#ad67296d2731c213dbb88b98a66687b41">signalThreadEvent</a> (int <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>, int evt, void *object, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> associated_data)</td></tr>
+<tr class="separator:ad67296d2731c213dbb88b98a66687b41"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37214350d5065af0055a02a6bcef706c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a37214350d5065af0055a02a6bcef706c">netlistIdChanged</a> (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *n, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> associated_data) const</td></tr>
 <tr class="separator:a37214350d5065af0055a02a6bcef706c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56487c116520cba55b33dcadd8d9911a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a56487c116520cba55b33dcadd8d9911a">netlistInputFilenameChanged</a> (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *n) const</td></tr>
@@ -164,18 +168,28 @@ Signals</h2></td></tr>
 <tr class="separator:a73b70303af2a2f5fbdc9527c1963d20c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e1646900c7f6da6139a26fe96f7d161"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a6e1646900c7f6da6139a26fe96f7d161">moduleGateRemoved</a> (<a class="el" href="classhal_1_1_module.html">Module</a> *m, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> removed_gate) const</td></tr>
 <tr class="separator:a6e1646900c7f6da6139a26fe96f7d161"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22a082e1959ef3a4c98ecaaa694b68e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a22a082e1959ef3a4c98ecaaa694b68e9">moduleInputPortNameChanged</a> (<a class="el" href="classhal_1_1_module.html">Module</a> *m, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> respective_net) const</td></tr>
-<tr class="separator:a22a082e1959ef3a4c98ecaaa694b68e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ad773eb556d0bcfba29e8bb75228075"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a3ad773eb556d0bcfba29e8bb75228075">moduleOutputPortNameChanged</a> (<a class="el" href="classhal_1_1_module.html">Module</a> *m, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> respective_net) const</td></tr>
-<tr class="separator:a3ad773eb556d0bcfba29e8bb75228075"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37e48730793aa7402a414773bca24f1b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a37e48730793aa7402a414773bca24f1b">modulePortsChanged</a> (<a class="el" href="classhal_1_1_module.html">Module</a> *m) const</td></tr>
+<tr class="separator:a37e48730793aa7402a414773bca24f1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b3abae876a37d302fcc9f125972943a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a3b3abae876a37d302fcc9f125972943a">moduleTypeChanged</a> (<a class="el" href="classhal_1_1_module.html">Module</a> *m) const</td></tr>
 <tr class="separator:a3b3abae876a37d302fcc9f125972943a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a93c5d6a0e037911aae0cc93291d98131"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a93c5d6a0e037911aae0cc93291d98131">gateCreated</a> (<a class="el" href="classhal_1_1_gate.html">Gate</a> *<a class="el" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a>) const</td></tr>
+<tr class="memitem:af7b5857622e8c330a7134cbc2a002d16"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#af7b5857622e8c330a7134cbc2a002d16">moduleGatesAssignBegin</a> (<a class="el" href="classhal_1_1_module.html">Module</a> *m, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> number_gates) const</td></tr>
+<tr class="separator:af7b5857622e8c330a7134cbc2a002d16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a192a78f3a2a4b3dca8250c90fbc637f1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a192a78f3a2a4b3dca8250c90fbc637f1">moduleGatesAssignEnd</a> (<a class="el" href="classhal_1_1_module.html">Module</a> *m, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> number_gates) const</td></tr>
+<tr class="separator:a192a78f3a2a4b3dca8250c90fbc637f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a353657096070de2016e301f5aa255d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a3a353657096070de2016e301f5aa255d">moduleGatesRemoveBegin</a> (<a class="el" href="classhal_1_1_module.html">Module</a> *m, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> number_gates) const</td></tr>
+<tr class="separator:a3a353657096070de2016e301f5aa255d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acabfab536bdad88085eb99326378439f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#acabfab536bdad88085eb99326378439f">moduleGatesRemoveEnd</a> (<a class="el" href="classhal_1_1_module.html">Module</a> *m, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> number_gates) const</td></tr>
+<tr class="separator:acabfab536bdad88085eb99326378439f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93c5d6a0e037911aae0cc93291d98131"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a93c5d6a0e037911aae0cc93291d98131">gateCreated</a> (<a class="el" href="classhal_1_1_gate.html">Gate</a> *g) const</td></tr>
 <tr class="separator:a93c5d6a0e037911aae0cc93291d98131"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaff5f9e3a6d5bd66df2d50ff625e2a71"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#aaff5f9e3a6d5bd66df2d50ff625e2a71">gateRemoved</a> (<a class="el" href="classhal_1_1_gate.html">Gate</a> *<a class="el" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a>) const</td></tr>
+<tr class="memitem:aaff5f9e3a6d5bd66df2d50ff625e2a71"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#aaff5f9e3a6d5bd66df2d50ff625e2a71">gateRemoved</a> (<a class="el" href="classhal_1_1_gate.html">Gate</a> *g) const</td></tr>
 <tr class="separator:aaff5f9e3a6d5bd66df2d50ff625e2a71"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab02f9f5376b48c985eaaa8e0fc5abf80"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#ab02f9f5376b48c985eaaa8e0fc5abf80">gateNameChanged</a> (<a class="el" href="classhal_1_1_gate.html">Gate</a> *<a class="el" href="test__manual_8txt.html#a0c1cc4000b37ba97b39f660cc2b692f6">g</a>) const</td></tr>
+<tr class="memitem:ab02f9f5376b48c985eaaa8e0fc5abf80"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#ab02f9f5376b48c985eaaa8e0fc5abf80">gateNameChanged</a> (<a class="el" href="classhal_1_1_gate.html">Gate</a> *g) const</td></tr>
 <tr class="separator:ab02f9f5376b48c985eaaa8e0fc5abf80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee82e354e1fa507aaf83bec60389f94d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#aee82e354e1fa507aaf83bec60389f94d">gateBooleanFunctionChanged</a> (<a class="el" href="classhal_1_1_gate.html">Gate</a> *g) const</td></tr>
+<tr class="separator:aee82e354e1fa507aaf83bec60389f94d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af33291efb9fbfa54ec9c171942297dbe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#af33291efb9fbfa54ec9c171942297dbe">gateLocationChanged</a> (<a class="el" href="classhal_1_1_gate.html">Gate</a> *g) const</td></tr>
+<tr class="separator:af33291efb9fbfa54ec9c171942297dbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c3d0e11fb8b26e4b60e172c518354d3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a3c3d0e11fb8b26e4b60e172c518354d3">netCreated</a> (<a class="el" href="classhal_1_1_net.html">Net</a> *n) const</td></tr>
 <tr class="separator:a3c3d0e11fb8b26e4b60e172c518354d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7de86cbad084e75c81867a241dd8646a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a7de86cbad084e75c81867a241dd8646a">netRemoved</a> (<a class="el" href="classhal_1_1_net.html">Net</a> *n) const</td></tr>
@@ -198,17 +212,17 @@ Signals</h2></td></tr>
 <tr class="separator:aa578cda62756be2eac0bef7e453ddea9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1386c8a55dee80d82f38269186dfb14a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a1386c8a55dee80d82f38269186dfb14a">groupingColorChanged</a> (<a class="el" href="classhal_1_1_grouping.html">Grouping</a> *grp) const</td></tr>
 <tr class="separator:a1386c8a55dee80d82f38269186dfb14a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a467d0345f9225e4e7378bdb89122e11e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a467d0345f9225e4e7378bdb89122e11e">groupingGateAssigned</a> (<a class="el" href="classhal_1_1_grouping.html">Grouping</a> *grp, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> id) const</td></tr>
+<tr class="memitem:a467d0345f9225e4e7378bdb89122e11e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a467d0345f9225e4e7378bdb89122e11e">groupingGateAssigned</a> (<a class="el" href="classhal_1_1_grouping.html">Grouping</a> *grp, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>) const</td></tr>
 <tr class="separator:a467d0345f9225e4e7378bdb89122e11e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af78c105c5f9968ca72b075403a5096e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#af78c105c5f9968ca72b075403a5096e2">groupingGateRemoved</a> (<a class="el" href="classhal_1_1_grouping.html">Grouping</a> *grp, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> id) const</td></tr>
+<tr class="memitem:af78c105c5f9968ca72b075403a5096e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#af78c105c5f9968ca72b075403a5096e2">groupingGateRemoved</a> (<a class="el" href="classhal_1_1_grouping.html">Grouping</a> *grp, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>) const</td></tr>
 <tr class="separator:af78c105c5f9968ca72b075403a5096e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b0774ad6b37baf5a55a2251d94c9758"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a9b0774ad6b37baf5a55a2251d94c9758">groupingNetAssigned</a> (<a class="el" href="classhal_1_1_grouping.html">Grouping</a> *grp, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> id) const</td></tr>
+<tr class="memitem:a9b0774ad6b37baf5a55a2251d94c9758"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a9b0774ad6b37baf5a55a2251d94c9758">groupingNetAssigned</a> (<a class="el" href="classhal_1_1_grouping.html">Grouping</a> *grp, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>) const</td></tr>
 <tr class="separator:a9b0774ad6b37baf5a55a2251d94c9758"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac741f5a71cae24be21934c40b0ec257c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#ac741f5a71cae24be21934c40b0ec257c">groupingNetRemoved</a> (<a class="el" href="classhal_1_1_grouping.html">Grouping</a> *grp, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> id) const</td></tr>
+<tr class="memitem:ac741f5a71cae24be21934c40b0ec257c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#ac741f5a71cae24be21934c40b0ec257c">groupingNetRemoved</a> (<a class="el" href="classhal_1_1_grouping.html">Grouping</a> *grp, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>) const</td></tr>
 <tr class="separator:ac741f5a71cae24be21934c40b0ec257c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a528ce60be4476595ea9c1ae14ced3f4e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a528ce60be4476595ea9c1ae14ced3f4e">groupingModuleAssigned</a> (<a class="el" href="classhal_1_1_grouping.html">Grouping</a> *grp, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> id) const</td></tr>
+<tr class="memitem:a528ce60be4476595ea9c1ae14ced3f4e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a528ce60be4476595ea9c1ae14ced3f4e">groupingModuleAssigned</a> (<a class="el" href="classhal_1_1_grouping.html">Grouping</a> *grp, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>) const</td></tr>
 <tr class="separator:a528ce60be4476595ea9c1ae14ced3f4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5f5cf98606d549502d25620ebf1d501b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a5f5cf98606d549502d25620ebf1d501b">groupingModuleRemoved</a> (<a class="el" href="classhal_1_1_grouping.html">Grouping</a> *grp, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> id) const</td></tr>
+<tr class="memitem:a5f5cf98606d549502d25620ebf1d501b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a5f5cf98606d549502d25620ebf1d501b">groupingModuleRemoved</a> (<a class="el" href="classhal_1_1_grouping.html">Grouping</a> *grp, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>) const</td></tr>
 <tr class="separator:a5f5cf98606d549502d25620ebf1d501b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abcb90a65239739807e602c79221bd931"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#abcb90a65239739807e602c79221bd931">moduleColorChanged</a> (<a class="el" href="classhal_1_1_module.html">Module</a> *m) const</td></tr>
 <tr class="separator:abcb90a65239739807e602c79221bd931"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -223,21 +237,21 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a3dc315c75ac5ecbcbedf3e26ee75e040"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a597a1b91ef031e791652099ca5a347ff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a597a1b91ef031e791652099ca5a347ff">unregisterNetlistCallbacks</a> ()</td></tr>
 <tr class="separator:a597a1b91ef031e791652099ca5a347ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe4ad79c97e3b5c42c9568e744f2b369"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#afe4ad79c97e3b5c42c9568e744f2b369">getModuleColor</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> id)</td></tr>
+<tr class="memitem:afe4ad79c97e3b5c42c9568e744f2b369"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#afe4ad79c97e3b5c42c9568e744f2b369">getModuleColor</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>)</td></tr>
 <tr class="separator:afe4ad79c97e3b5c42c9568e744f2b369"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b09fe6aff7f2af5ff9d3da3cd3cc42b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_module_model.html">ModuleModel</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a8b09fe6aff7f2af5ff9d3da3cd3cc42b">getModuleModel</a> ()</td></tr>
 <tr class="separator:a8b09fe6aff7f2af5ff9d3da3cd3cc42b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a048b017170c30892f76cbeb624b5ba15"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a048b017170c30892f76cbeb624b5ba15">changeModuleName</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> id)</td></tr>
+<tr class="memitem:a048b017170c30892f76cbeb624b5ba15"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a048b017170c30892f76cbeb624b5ba15">changeModuleName</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>)</td></tr>
 <tr class="separator:a048b017170c30892f76cbeb624b5ba15"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c0e5d65d4d0e2c61dee5bda180c8af3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a1c0e5d65d4d0e2c61dee5bda180c8af3">changeModuleType</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> id)</td></tr>
+<tr class="memitem:a1c0e5d65d4d0e2c61dee5bda180c8af3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a1c0e5d65d4d0e2c61dee5bda180c8af3">changeModuleType</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>)</td></tr>
 <tr class="separator:a1c0e5d65d4d0e2c61dee5bda180c8af3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a634228e732b3757a1e625e17593070a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a634228e732b3757a1e625e17593070a0">changeModuleColor</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> id)</td></tr>
+<tr class="memitem:a634228e732b3757a1e625e17593070a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a634228e732b3757a1e625e17593070a0">changeModuleColor</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>)</td></tr>
 <tr class="separator:a634228e732b3757a1e625e17593070a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac29f9e858b777c7f75399ca37839196"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#aac29f9e858b777c7f75399ca37839196">addSelectionToModule</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> id)</td></tr>
+<tr class="memitem:aac29f9e858b777c7f75399ca37839196"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#aac29f9e858b777c7f75399ca37839196">addSelectionToModule</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>)</td></tr>
 <tr class="separator:aac29f9e858b777c7f75399ca37839196"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f52aff49af92036cb6fe93d072e0320"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a4f52aff49af92036cb6fe93d072e0320">addChildModule</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> id)</td></tr>
+<tr class="memitem:a4f52aff49af92036cb6fe93d072e0320"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a4f52aff49af92036cb6fe93d072e0320">addChildModule</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>)</td></tr>
 <tr class="separator:a4f52aff49af92036cb6fe93d072e0320"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49f8f9a0322f1f1e0231f02b4fceb79b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a49f8f9a0322f1f1e0231f02b4fceb79b">deleteModule</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> id)</td></tr>
+<tr class="memitem:a49f8f9a0322f1f1e0231f02b4fceb79b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a49f8f9a0322f1f1e0231f02b4fceb79b">deleteModule</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>)</td></tr>
 <tr class="separator:a49f8f9a0322f1f1e0231f02b4fceb79b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b1738463cab64e14d9392a43b77a357"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a5b1738463cab64e14d9392a43b77a357">reset</a> ()</td></tr>
 <tr class="separator:a5b1738463cab64e14d9392a43b77a357"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -254,7 +268,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:eventFilter inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:objectName-prop inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#objectName-prop">objectName</a> () const const</td></tr>
 <tr class="separator:objectName-prop inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:objectName-prop inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#objectName-prop">setObjectName</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;name)</td></tr>
+<tr class="memitem:objectName-prop inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#objectName-prop">setObjectName</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
 <tr class="separator:objectName-prop inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:isWidgetType inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#isWidgetType">isWidgetType</a> () const const</td></tr>
 <tr class="separator:isWidgetType inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -272,11 +286,11 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:startTimer inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:startTimer-1 inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#startTimer-1">startTimer</a> (std::chrono::milliseconds time, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#TimerType-enum">Qt::TimerType</a> timerType)</td></tr>
 <tr class="separator:startTimer-1 inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:killTimer inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#killTimer">killTimer</a> (int id)</td></tr>
+<tr class="memitem:killTimer inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#killTimer">killTimer</a> (int <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>)</td></tr>
 <tr class="separator:killTimer inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:findChild inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#findChild">findChild</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;name, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#FindChildOption-enum">Qt::FindChildOptions</a> options) const const</td></tr>
+<tr class="memitem:findChild inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#findChild">findChild</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#FindChildOption-enum">Qt::FindChildOptions</a> options) const const</td></tr>
 <tr class="separator:findChild inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:findChildren inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#findChildren">findChildren</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;name, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#FindChildOption-enum">Qt::FindChildOptions</a> options) const const</td></tr>
+<tr class="memitem:findChildren inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#findChildren">findChildren</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#FindChildOption-enum">Qt::FindChildOptions</a> options) const const</td></tr>
 <tr class="separator:findChildren inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:findChildren-1 inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject-obsolete.html#findChildren-1">findChildren</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qregexp.html">QRegExp</a> &amp;regExp, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#FindChildOption-enum">Qt::FindChildOptions</a> options) const const</td></tr>
 <tr class="separator:findChildren-1 inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -290,7 +304,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:installEventFilter inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:removeEventFilter inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#removeEventFilter">removeEventFilter</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *obj)</td></tr>
 <tr class="separator:removeEventFilter inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:connect-2 inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect-2">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, const char *signal, const char *method, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> type) const const</td></tr>
+<tr class="memitem:connect-2 inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect-2">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, const char *signal, const char *method, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>) const const</td></tr>
 <tr class="separator:connect-2 inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:disconnect-2 inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#disconnect-2">disconnect</a> (const char *signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *receiver, const char *method) const const</td></tr>
 <tr class="separator:disconnect-2 inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -304,9 +318,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:dumpObjectTree inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:dumpObjectInfo inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#dumpObjectInfo">dumpObjectInfo</a> () const const</td></tr>
 <tr class="separator:dumpObjectInfo inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:setProperty inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#setProperty">setProperty</a> (const char *name, const <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> &amp;value)</td></tr>
+<tr class="memitem:setProperty inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#setProperty">setProperty</a> (const char *<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, const <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> &amp;value)</td></tr>
 <tr class="separator:setProperty inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:property inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#property">property</a> (const char *name) const const</td></tr>
+<tr class="memitem:property inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#property">property</a> (const char *<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>) const const</td></tr>
 <tr class="separator:property inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:dynamicPropertyNames inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="elRef" href="https://doc.qt.io/qt-5/qbytearray.html">QByteArray</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#dynamicPropertyNames">dynamicPropertyNames</a> () const const</td></tr>
 <tr class="separator:dynamicPropertyNames inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -330,9 +344,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:qobject_cast inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:qobject_cast-1 inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#qobject_cast-1">qobject_cast</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *object)</td></tr>
 <tr class="separator:qobject_cast-1 inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:qFindChild inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject-obsolete.html#qFindChild">qFindChild</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *obj, const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;name)</td></tr>
+<tr class="memitem:qFindChild inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject-obsolete.html#qFindChild">qFindChild</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *obj, const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
 <tr class="separator:qFindChild inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:qFindChildren inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject-obsolete.html#qFindChildren">qFindChildren</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *obj, const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;name)</td></tr>
+<tr class="memitem:qFindChildren inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject-obsolete.html#qFindChildren">qFindChildren</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *obj, const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
 <tr class="separator:qFindChildren inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:qFindChildren-1 inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#qFindChildren-1">qFindChildren</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *obj, const <a class="elRef" href="https://doc.qt.io/qt-5/qregexp.html">QRegExp</a> &amp;regExp)</td></tr>
 <tr class="separator:qFindChildren-1 inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -388,15 +402,15 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:tr inherit pub_static_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:trUtf8 inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject-obsolete.html#trUtf8">trUtf8</a> (const char *sourceText, const char *disambiguation, int n)</td></tr>
 <tr class="separator:trUtf8 inherit pub_static_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:connect inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, const char *signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *receiver, const char *method, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> type)</td></tr>
+<tr class="memitem:connect inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, const char *signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *receiver, const char *method, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>)</td></tr>
 <tr class="separator:connect inherit pub_static_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:connect-1 inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect-1">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, const <a class="elRef" href="https://doc.qt.io/qt-5/qmetamethod.html">QMetaMethod</a> &amp;signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *receiver, const <a class="elRef" href="https://doc.qt.io/qt-5/qmetamethod.html">QMetaMethod</a> &amp;method, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> type)</td></tr>
+<tr class="memitem:connect-1 inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect-1">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, const <a class="elRef" href="https://doc.qt.io/qt-5/qmetamethod.html">QMetaMethod</a> &amp;signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *receiver, const <a class="elRef" href="https://doc.qt.io/qt-5/qmetamethod.html">QMetaMethod</a> &amp;method, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>)</td></tr>
 <tr class="separator:connect-1 inherit pub_static_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:connect-3 inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect-3">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, PointerToMemberFunction signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *receiver, PointerToMemberFunction method, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> type)</td></tr>
+<tr class="memitem:connect-3 inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect-3">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, PointerToMemberFunction signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *receiver, PointerToMemberFunction method, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>)</td></tr>
 <tr class="separator:connect-3 inherit pub_static_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:connect-4 inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect-4">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, PointerToMemberFunction signal, Functor functor)</td></tr>
 <tr class="separator:connect-4 inherit pub_static_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:connect-5 inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect-5">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, PointerToMemberFunction signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *context, Functor functor, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> type)</td></tr>
+<tr class="memitem:connect-5 inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect-5">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, PointerToMemberFunction signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *context, Functor functor, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>)</td></tr>
 <tr class="separator:connect-5 inherit pub_static_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:disconnect inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#disconnect">disconnect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, const char *signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *receiver, const char *method)</td></tr>
 <tr class="separator:disconnect inherit pub_static_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -470,9 +484,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00030">30</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00028">28</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="el" href="netlist__relay_8cpp_source.html#l00601">debugHandleFileOpened()</a>, <a class="el" href="classhal_1_1_file_manager.html#adce89ed0fffaecd53904a06ced3010f0">hal::FileManager::fileOpened()</a>, and <a class="el" href="file__manager_8cpp_source.html#l00067">hal::FileManager::get_instance()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::BlockingQueuedConnection</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="el" href="netlist__relay_8cpp_source.html#l00655">debugHandleFileOpened()</a>, <a class="el" href="classhal_1_1_file_manager.html#adce89ed0fffaecd53904a06ced3010f0">hal::FileManager::fileOpened()</a>, <a class="el" href="file__manager_8cpp_source.html#l00075">hal::FileManager::get_instance()</a>, <a class="el" href="netlist__relay_8cpp_source.html#l00628">handleThreadEvent()</a>, and <a class="el" href="classhal_1_1_netlist_relay.html#ad67296d2731c213dbb88b98a66687b41">signalThreadEvent()</a>.</p>
 
 </div>
 </div>
@@ -492,9 +506,9 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Destructor. Disconnects this relay from the event system of the hal-core. </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00035">35</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00034">34</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist__relay_8cpp_source.html#l00040">unregisterNetlistCallbacks()</a>.</p>
+<p class="reference">References <a class="el" href="netlist__relay_8cpp_source.html#l00039">unregisterNetlistCallbacks()</a>.</p>
 
 </div>
 </div>
@@ -522,9 +536,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00159">159</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00157">157</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="action__create__object_8cpp_source.html#l00055">hal::ActionCreateObject::exec()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00579">hal::Netlist::get_module_by_id()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qinputdialog.html#getText">QInputDialog::getText()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00048">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="el" href="user__action__object_8h_source.html#l00045">hal::UserActionObjectType::Module</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#EchoMode-enum">QLineEdit::Normal</a>, and <a class="el" href="action__create__object_8h_source.html#l00055">hal::ActionCreateObject::setParentId()</a>.</p>
+<p class="reference">References <a class="el" href="action__create__object_8cpp_source.html#l00059">hal::ActionCreateObject::exec()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00579">hal::Netlist::get_module_by_id()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qinputdialog.html#getText">QInputDialog::getText()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00051">hal::gNetlist</a>, <a class="el" href="user__action__object_8h_source.html#l00049">hal::UserActionObjectType::Module</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#EchoMode-enum">QLineEdit::Normal</a>, and <a class="el" href="action__create__object_8h_source.html#l00055">hal::ActionCreateObject::setParentId()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="module__widget_8cpp_source.html#l00123">hal::ModuleWidget::handleTreeViewContextMenuRequested()</a>.</p>
 
@@ -553,9 +567,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00149">149</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00147">147</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="action__add__items__to__object_8cpp_source.html#l00076">hal::ActionAddItemsToObject::exec()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00051">hal::gSelectionRelay</a>, <a class="el" href="user__action__object_8h_source.html#l00045">hal::UserActionObjectType::Module</a>, <a class="el" href="selection__relay_8h_source.html#l00279">hal::SelectionRelay::selectedGates()</a>, and <a class="el" href="user__action_8cpp_source.html#l00030">hal::UserAction::setObject()</a>.</p>
+<p class="reference">References <a class="el" href="action__add__items__to__object_8cpp_source.html#l00088">hal::ActionAddItemsToObject::exec()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00054">hal::gSelectionRelay</a>, <a class="el" href="user__action__object_8h_source.html#l00049">hal::UserActionObjectType::Module</a>, <a class="el" href="selection__relay_8h_source.html#l00279">hal::SelectionRelay::selectedGates()</a>, and <a class="el" href="user__action_8cpp_source.html#l00033">hal::UserAction::setObject()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="module__widget_8cpp_source.html#l00123">hal::ModuleWidget::handleTreeViewContextMenuRequested()</a>.</p>
 
@@ -584,9 +598,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00130">130</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00128">128</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="action__set__object__color_8cpp_source.html#l00043">hal::ActionSetObjectColor::exec()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00579">hal::Netlist::get_module_by_id()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcolordialog.html#getColor">QColorDialog::getColor()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00048">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcolor.html#isValid">QColor::isValid()</a>, <a class="el" href="user__action__object_8h_source.html#l00045">hal::UserActionObjectType::Module</a>, <a class="el" href="classhal_1_1_netlist_relay.html#abcb90a65239739807e602c79221bd931">moduleColorChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, and <a class="el" href="user__action_8cpp_source.html#l00030">hal::UserAction::setObject()</a>.</p>
+<p class="reference">References <a class="el" href="action__set__object__color_8cpp_source.html#l00043">hal::ActionSetObjectColor::exec()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00579">hal::Netlist::get_module_by_id()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcolordialog.html#getColor">QColorDialog::getColor()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00051">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcolor.html#isValid">QColor::isValid()</a>, <a class="el" href="user__action__object_8h_source.html#l00049">hal::UserActionObjectType::Module</a>, <a class="el" href="classhal_1_1_netlist_relay.html#abcb90a65239739807e602c79221bd931">moduleColorChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, and <a class="el" href="user__action_8cpp_source.html#l00033">hal::UserAction::setObject()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="module__widget_8cpp_source.html#l00123">hal::ModuleWidget::handleTreeViewContextMenuRequested()</a>.</p>
 
@@ -615,9 +629,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00094">94</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00092">92</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="action__rename__object_8cpp_source.html#l00052">hal::ActionRenameObject::exec()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00579">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00099">hal::Module::get_name()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qinputdialog.html#getText">QInputDialog::getText()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00048">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="el" href="user__action__object_8h_source.html#l00045">hal::UserActionObjectType::Module</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#EchoMode-enum">QLineEdit::Normal</a>, and <a class="el" href="user__action_8cpp_source.html#l00030">hal::UserAction::setObject()</a>.</p>
+<p class="reference">References <a class="el" href="action__rename__object_8cpp_source.html#l00049">hal::ActionRenameObject::exec()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00579">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00087">hal::Module::get_name()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qinputdialog.html#getText">QInputDialog::getText()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00051">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="el" href="user__action__object_8h_source.html#l00049">hal::UserActionObjectType::Module</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#EchoMode-enum">QLineEdit::Normal</a>, and <a class="el" href="user__action_8cpp_source.html#l00033">hal::UserAction::setObject()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="module__widget_8cpp_source.html#l00123">hal::ModuleWidget::handleTreeViewContextMenuRequested()</a>.</p>
 
@@ -646,9 +660,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00112">112</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00110">110</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="action__set__object__type_8cpp_source.html#l00041">hal::ActionSetObjectType::exec()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00579">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00119">hal::Module::get_type()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qinputdialog.html#getText">QInputDialog::getText()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00048">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="el" href="user__action__object_8h_source.html#l00045">hal::UserActionObjectType::Module</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#EchoMode-enum">QLineEdit::Normal</a>, and <a class="el" href="user__action_8cpp_source.html#l00030">hal::UserAction::setObject()</a>.</p>
+<p class="reference">References <a class="el" href="action__set__object__type_8cpp_source.html#l00046">hal::ActionSetObjectType::exec()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00579">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00107">hal::Module::get_type()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qinputdialog.html#getText">QInputDialog::getText()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00051">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="el" href="user__action__object_8h_source.html#l00049">hal::UserActionObjectType::Module</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#EchoMode-enum">QLineEdit::Normal</a>, and <a class="el" href="user__action_8cpp_source.html#l00033">hal::UserAction::setObject()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="module__widget_8cpp_source.html#l00123">hal::ModuleWidget::handleTreeViewContextMenuRequested()</a>.</p>
 
@@ -678,11 +692,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Q_SLOT to handle that a netlist has been closed. </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00608">608</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00663">663</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="module__model_8cpp_source.html#l00216">hal::ModuleModel::clear()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="file__manager_8cpp_source.html#l00351">hal::FileManager::closeFile()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="file__manager_8cpp_source.html#l00492">hal::FileManager::closeFile()</a>.</p>
 
 </div>
 </div>
@@ -710,11 +724,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Q_SLOT to handle that a netlist has been opened. Used to initially assign all modules a color. </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00601">601</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00655">655</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00590">hal::Netlist::get_modules()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00048">hal::gNetlist</a>, <a class="el" href="module__model_8cpp_source.html#l00190">hal::ModuleModel::init()</a>, and <a class="el" href="module__model_8cpp_source.html#l00321">hal::ModuleModel::setRandomColor()</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00590">hal::Netlist::get_modules()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00051">hal::gNetlist</a>, <a class="el" href="module__model_8cpp_source.html#l00190">hal::ModuleModel::init()</a>, <a class="el" href="grouping__color__serializer_8cpp_source.html#l00113">hal::ModuleColorSerializer::restore()</a>, and <a class="el" href="module__model_8cpp_source.html#l00321">hal::ModuleModel::setRandomColor()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist__relay_8cpp_source.html#l00030">NetlistRelay()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__relay_8cpp_source.html#l00028">NetlistRelay()</a>.</p>
 
 </div>
 </div>
@@ -741,11 +755,47 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00179">179</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00177">177</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="action__delete__object_8cpp_source.html#l00030">hal::ActionDeleteObject::exec()</a>, <a class="el" href="user__action__object_8h_source.html#l00045">hal::UserActionObjectType::Module</a>, and <a class="el" href="user__action_8cpp_source.html#l00030">hal::UserAction::setObject()</a>.</p>
+<p class="reference">References <a class="el" href="action__delete__object_8cpp_source.html#l00033">hal::ActionDeleteObject::exec()</a>, <a class="el" href="user__action__object_8h_source.html#l00049">hal::UserActionObjectType::Module</a>, and <a class="el" href="user__action_8cpp_source.html#l00033">hal::UserAction::setObject()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="module__widget_8cpp_source.html#l00123">hal::ModuleWidget::handleTreeViewContextMenuRequested()</a>.</p>
+
+</div>
+</div>
+<a id="aee82e354e1fa507aaf83bec60389f94d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee82e354e1fa507aaf83bec60389f94d">&#9670;&nbsp;</a></span>gateBooleanFunctionChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::NetlistRelay::gateBooleanFunctionChanged </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhal_1_1_gate.html">Gate</a> *&#160;</td>
+          <td class="paramname"><em>g</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Q_SIGNAL to notify that the set of boolean functions of a gate has been changed. <br  />
+ Relays the following hal-core event: <em><a class="el" href="classhal_1_1_gate_event.html#afdc7242126c9534b4ec92e285983c6fba3de48476d8260de3b4c4681102c6de9f" title="no associated_data">GateEvent::event::boolean_function_changed</a></em></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">g</td><td>- The gate which boolean functions haven been changed </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="gate__details__tab__widget_8cpp_source.html#l00027">hal::GateDetailsTabWidget::GateDetailsTabWidget()</a>.</p>
 
 </div>
 </div>
@@ -783,6 +833,42 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="af33291efb9fbfa54ec9c171942297dbe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af33291efb9fbfa54ec9c171942297dbe">&#9670;&nbsp;</a></span>gateLocationChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::NetlistRelay::gateLocationChanged </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhal_1_1_gate.html">Gate</a> *&#160;</td>
+          <td class="paramname"><em>g</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Q_SIGNAL to notify that the location of a gate has been changed. <br  />
+ Relays the following hal-core event: <em><a class="el" href="classhal_1_1_gate_event.html#afdc7242126c9534b4ec92e285983c6fba8f8c5d7904ebc694e5373e9ab445976c" title="no associated_data">GateEvent::event::location_changed</a></em></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">g</td><td>- The gate which position has been changed </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="gate__info__table_8cpp_source.html#l00025">hal::GateInfoTable::GateInfoTable()</a>.</p>
+
+</div>
+</div>
 <a id="ab02f9f5376b48c985eaaa8e0fc5abf80"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab02f9f5376b48c985eaaa8e0fc5abf80">&#9670;&nbsp;</a></span>gateNameChanged</h2>
 
@@ -815,7 +901,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="gate__details__widget_8cpp_source.html#l00037">hal::GateDetailsWidget::GateDetailsWidget()</a>, <a class="el" href="net__details__widget_8cpp_source.html#l00027">hal::NetDetailsWidget::NetDetailsWidget()</a>, and <a class="el" href="selection__tree__model_8cpp_source.html#l00012">hal::SelectionTreeModel::SelectionTreeModel()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__tree__model_8cpp_source.html#l00390">hal::ModuleTreeModel::connectEvents()</a>, <a class="el" href="module__tree__model_8cpp_source.html#l00365">hal::ModuleTreeModel::disconnectEvents()</a>, <a class="el" href="gate__info__table_8cpp_source.html#l00025">hal::GateInfoTable::GateInfoTable()</a>, <a class="el" href="netlist__elements__tree__model_8cpp_source.html#l00011">hal::NetlistElementsTreeModel::NetlistElementsTreeModel()</a>, and <a class="el" href="selection__tree__model_8cpp_source.html#l00012">hal::SelectionTreeModel::SelectionTreeModel()</a>.</p>
 
 </div>
 </div>
@@ -852,6 +938,8 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
+<p class="reference">Referenced by <a class="el" href="gate__info__table_8cpp_source.html#l00025">hal::GateInfoTable::GateInfoTable()</a>, and <a class="el" href="netlist__elements__tree__model_8cpp_source.html#l00011">hal::NetlistElementsTreeModel::NetlistElementsTreeModel()</a>.</p>
+
 </div>
 </div>
 <a id="afe4ad79c97e3b5c42c9568e744f2b369"></a>
@@ -878,11 +966,11 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the color of the specified module </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00084">84</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00082">82</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="module__model_8cpp_source.html#l00309">hal::ModuleModel::moduleColor()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__select__model_8cpp_source.html#l00041">hal::ModuleSelectEntry::ModuleSelectEntry()</a>, <a class="el" href="module__shader_8cpp_source.html#l00036">hal::ModuleShader::update()</a>, and <a class="el" href="module__model_8cpp_source.html#l00289">hal::ModuleModel::updateModule()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__select__model_8cpp_source.html#l00040">hal::ModuleSelectEntry::ModuleSelectEntry()</a>, <a class="el" href="module__shader_8cpp_source.html#l00036">hal::ModuleShader::update()</a>, and <a class="el" href="module__model_8cpp_source.html#l00289">hal::ModuleModel::updateModule()</a>.</p>
 
 </div>
 </div>
@@ -903,9 +991,9 @@ Additional Inherited Members</h2></td></tr>
 <p>Accesses the module model.</p>
 <dl class="section return"><dt>Returns</dt><dd>the module model </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00089">89</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00087">87</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="custom__module__dialog_8cpp_source.html#l00023">hal::CustomModuleDialog::CustomModuleDialog()</a>, <a class="el" href="action__delete__object_8cpp_source.html#l00030">hal::ActionDeleteObject::exec()</a>, <a class="el" href="action__set__object__color_8cpp_source.html#l00043">hal::ActionSetObjectColor::exec()</a>, <a class="el" href="module__widget_8cpp_source.html#l00260">hal::ModuleWidget::handleSelectionChanged()</a>, <a class="el" href="module__widget_8cpp_source.html#l00194">hal::ModuleWidget::handleTreeSelectionChanged()</a>, <a class="el" href="module__dialog_8cpp_source.html#l00020">hal::ModuleDialog::ModuleDialog()</a>, and <a class="el" href="module__widget_8cpp_source.html#l00031">hal::ModuleWidget::ModuleWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="action__delete__object_8cpp_source.html#l00033">hal::ActionDeleteObject::exec()</a>, <a class="el" href="action__set__object__color_8cpp_source.html#l00043">hal::ActionSetObjectColor::exec()</a>, <a class="el" href="module__widget_8cpp_source.html#l00260">hal::ModuleWidget::handleSelectionChanged()</a>, <a class="el" href="module__widget_8cpp_source.html#l00194">hal::ModuleWidget::handleTreeSelectionChanged()</a>, <a class="el" href="module__dialog_8cpp_source.html#l00024">hal::ModuleDialog::ModuleDialog()</a>, <a class="el" href="module__widget_8cpp_source.html#l00031">hal::ModuleWidget::ModuleWidget()</a>, and <a class="el" href="grouping__color__serializer_8cpp_source.html#l00137">hal::ModuleColorSerializer::serialize()</a>.</p>
 
 </div>
 </div>
@@ -1024,7 +1112,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00330">hal::GraphicsScene::connectAll()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00346">hal::GraphicsScene::disconnectAll()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00332">hal::GraphicsScene::connectAll()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00348">hal::GraphicsScene::disconnectAll()</a>, and <a class="el" href="groupings__of__item__model_8cpp_source.html#l00011">hal::GroupingsOfItemModel::GroupingsOfItemModel()</a>.</p>
 
 </div>
 </div>
@@ -1071,7 +1159,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00330">hal::GraphicsScene::connectAll()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00346">hal::GraphicsScene::disconnectAll()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00332">hal::GraphicsScene::connectAll()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00348">hal::GraphicsScene::disconnectAll()</a>, and <a class="el" href="groupings__of__item__model_8cpp_source.html#l00011">hal::GroupingsOfItemModel::GroupingsOfItemModel()</a>.</p>
 
 </div>
 </div>
@@ -1118,7 +1206,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00330">hal::GraphicsScene::connectAll()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00346">hal::GraphicsScene::disconnectAll()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00332">hal::GraphicsScene::connectAll()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00348">hal::GraphicsScene::disconnectAll()</a>, and <a class="el" href="groupings__of__item__model_8cpp_source.html#l00011">hal::GroupingsOfItemModel::GroupingsOfItemModel()</a>.</p>
 
 </div>
 </div>
@@ -1165,7 +1253,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00330">hal::GraphicsScene::connectAll()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00346">hal::GraphicsScene::disconnectAll()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00332">hal::GraphicsScene::connectAll()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00348">hal::GraphicsScene::disconnectAll()</a>, and <a class="el" href="groupings__of__item__model_8cpp_source.html#l00011">hal::GroupingsOfItemModel::GroupingsOfItemModel()</a>.</p>
 
 </div>
 </div>
@@ -1201,7 +1289,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="grouping__table__model_8cpp_source.html#l00058">hal::GroupingTableModel::GroupingTableModel()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="groupings__of__item__model_8cpp_source.html#l00011">hal::GroupingsOfItemModel::GroupingsOfItemModel()</a>, and <a class="el" href="grouping__table__model_8cpp_source.html#l00058">hal::GroupingTableModel::GroupingTableModel()</a>.</p>
 
 </div>
 </div>
@@ -1248,7 +1336,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00330">hal::GraphicsScene::connectAll()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00346">hal::GraphicsScene::disconnectAll()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00332">hal::GraphicsScene::connectAll()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00348">hal::GraphicsScene::disconnectAll()</a>, and <a class="el" href="groupings__of__item__model_8cpp_source.html#l00011">hal::GroupingsOfItemModel::GroupingsOfItemModel()</a>.</p>
 
 </div>
 </div>
@@ -1295,7 +1383,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00330">hal::GraphicsScene::connectAll()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00346">hal::GraphicsScene::disconnectAll()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00332">hal::GraphicsScene::connectAll()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00348">hal::GraphicsScene::disconnectAll()</a>, and <a class="el" href="groupings__of__item__model_8cpp_source.html#l00011">hal::GroupingsOfItemModel::GroupingsOfItemModel()</a>.</p>
 
 </div>
 </div>
@@ -1332,7 +1420,61 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="grouping__table__model_8cpp_source.html#l00058">hal::GroupingTableModel::GroupingTableModel()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="groupings__of__item__model_8cpp_source.html#l00011">hal::GroupingsOfItemModel::GroupingsOfItemModel()</a>, and <a class="el" href="grouping__table__model_8cpp_source.html#l00058">hal::GroupingTableModel::GroupingTableModel()</a>.</p>
+
+</div>
+</div>
+<a id="aabe24732a11ade01075ae88ad6743a77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aabe24732a11ade01075ae88ad6743a77">&#9670;&nbsp;</a></span>handleThreadEvent</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::NetlistRelay::handleThreadEvent </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>evt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>object</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramname"><em>associated_data</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00628">628</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">type</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="netlist__relay_8cpp_source.html#l00028">NetlistRelay()</a>.</p>
 
 </div>
 </div>
@@ -1367,7 +1509,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="netlist__relay_8cpp_source.html#l00130">changeModuleColor()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__relay_8cpp_source.html#l00128">changeModuleColor()</a>.</p>
 
 </div>
 </div>
@@ -1448,7 +1590,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="module__details__widget_8cpp_source.html#l00031">hal::ModuleDetailsWidget::ModuleDetailsWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__tree__model_8cpp_source.html#l00390">hal::ModuleTreeModel::connectEvents()</a>, <a class="el" href="module__tree__model_8cpp_source.html#l00365">hal::ModuleTreeModel::disconnectEvents()</a>, <a class="el" href="gate__info__table_8cpp_source.html#l00025">hal::GateInfoTable::GateInfoTable()</a>, <a class="el" href="module__info__table_8cpp_source.html#l00035">hal::ModuleInfoTable::ModuleInfoTable()</a>, and <a class="el" href="netlist__elements__tree__model_8cpp_source.html#l00011">hal::NetlistElementsTreeModel::NetlistElementsTreeModel()</a>.</p>
 
 </div>
 </div>
@@ -1495,12 +1637,12 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="module__details__widget_8cpp_source.html#l00031">hal::ModuleDetailsWidget::ModuleDetailsWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__tree__model_8cpp_source.html#l00390">hal::ModuleTreeModel::connectEvents()</a>, <a class="el" href="module__tree__model_8cpp_source.html#l00365">hal::ModuleTreeModel::disconnectEvents()</a>, <a class="el" href="module__info__table_8cpp_source.html#l00035">hal::ModuleInfoTable::ModuleInfoTable()</a>, and <a class="el" href="netlist__elements__tree__model_8cpp_source.html#l00011">hal::NetlistElementsTreeModel::NetlistElementsTreeModel()</a>.</p>
 
 </div>
 </div>
-<a id="a22a082e1959ef3a4c98ecaaa694b68e9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a22a082e1959ef3a4c98ecaaa694b68e9">&#9670;&nbsp;</a></span>moduleInputPortNameChanged</h2>
+<a id="af7b5857622e8c330a7134cbc2a002d16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7b5857622e8c330a7134cbc2a002d16">&#9670;&nbsp;</a></span>moduleGatesAssignBegin</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1509,7 +1651,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void hal::NetlistRelay::moduleInputPortNameChanged </td>
+          <td class="memname">void hal::NetlistRelay::moduleGatesAssignBegin </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classhal_1_1_module.html">Module</a> *&#160;</td>
           <td class="paramname"><em>m</em>, </td>
@@ -1517,8 +1659,8 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
-          <td class="paramname"><em>respective_net</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramname"><em>number_gates</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1532,17 +1674,157 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Q_SIGNAL to notify that an input port name of a module has been changed. <br  />
- Relays the following hal-core event: <em><a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa2f271574434c0b35c248148f6a9803d4" title="associated_data = id of respective net">ModuleEvent::event::input_port_name_changed</a></em></p>
+<p>Q_SIGNAL to notify that a certain amount of gates will be assigned to a module. <br  />
+ Relays the following hal-core event: <em><a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa87249d8954401fed6417be3ba64c684c" title="associated_data = number of gates to assign">ModuleEvent::event::gates_assign_begin</a></em></p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">m</td><td>- The module with the renamed input port </td></tr>
-    <tr><td class="paramname">respective_net</td><td>- The id of the net of the renamed input port </td></tr>
+    <tr><td class="paramname">m</td><td>- The module to which gates will be assigned. </td></tr>
+    <tr><td class="paramname">number_gates</td><td>- The amount of gates to be assigned. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="module__details__widget_8cpp_source.html#l00031">hal::ModuleDetailsWidget::ModuleDetailsWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__tree__model_8cpp_source.html#l00390">hal::ModuleTreeModel::connectEvents()</a>, and <a class="el" href="module__tree__model_8cpp_source.html#l00365">hal::ModuleTreeModel::disconnectEvents()</a>.</p>
+
+</div>
+</div>
+<a id="a192a78f3a2a4b3dca8250c90fbc637f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a192a78f3a2a4b3dca8250c90fbc637f1">&#9670;&nbsp;</a></span>moduleGatesAssignEnd</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::NetlistRelay::moduleGatesAssignEnd </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhal_1_1_module.html">Module</a> *&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramname"><em>number_gates</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Q_SIGNAL to notify that a certain amount of gates has been assigned to a module. <br  />
+ Relays the following hal-core event: <em><a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53faa00f842019349e5fec426e5b5f1b7c12" title="associated_data = number of assigned gates">ModuleEvent::event::gates_assign_end</a></em></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">m</td><td>- The module to which gates has been assigned. </td></tr>
+    <tr><td class="paramname">number_gates</td><td>- The number of gates that has been assigned. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="module__tree__model_8cpp_source.html#l00390">hal::ModuleTreeModel::connectEvents()</a>, and <a class="el" href="module__tree__model_8cpp_source.html#l00365">hal::ModuleTreeModel::disconnectEvents()</a>.</p>
+
+</div>
+</div>
+<a id="a3a353657096070de2016e301f5aa255d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a353657096070de2016e301f5aa255d">&#9670;&nbsp;</a></span>moduleGatesRemoveBegin</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::NetlistRelay::moduleGatesRemoveBegin </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhal_1_1_module.html">Module</a> *&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramname"><em>number_gates</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Q_SIGNAL to notify that a certain amount of gates will be removed from a module. <br  />
+ Relays the following hal-core event: <em><a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53faa034ad9ff6284cea7a7af194181b2e58" title="associated_data = number of gates to remove">ModuleEvent::event::gates_remove_begin</a></em></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">m</td><td>- The module from which gates will be removed. </td></tr>
+    <tr><td class="paramname">number_gates</td><td>- The amount of gates to be removed. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="module__tree__model_8cpp_source.html#l00390">hal::ModuleTreeModel::connectEvents()</a>, and <a class="el" href="module__tree__model_8cpp_source.html#l00365">hal::ModuleTreeModel::disconnectEvents()</a>.</p>
+
+</div>
+</div>
+<a id="acabfab536bdad88085eb99326378439f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acabfab536bdad88085eb99326378439f">&#9670;&nbsp;</a></span>moduleGatesRemoveEnd</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::NetlistRelay::moduleGatesRemoveEnd </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhal_1_1_module.html">Module</a> *&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramname"><em>number_gates</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Q_SIGNAL to notify that a certain amount of gates has been removed from a module. <br  />
+ Relays the following hal-core event: <em><a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa0f975f12da3a233e7b7e38665cf67f08" title="associated_data = number of removed gates">ModuleEvent::event::gates_remove_end</a></em> </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">m</td><td></td></tr>
+    <tr><td class="paramname">number_gates</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="module__tree__model_8cpp_source.html#l00390">hal::ModuleTreeModel::connectEvents()</a>, and <a class="el" href="module__tree__model_8cpp_source.html#l00365">hal::ModuleTreeModel::disconnectEvents()</a>.</p>
 
 </div>
 </div>
@@ -1578,54 +1860,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="graph__context_8cpp_source.html#l00023">hal::GraphContext::GraphContext()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00031">hal::ModuleDetailsWidget::ModuleDetailsWidget()</a>, and <a class="el" href="selection__tree__model_8cpp_source.html#l00012">hal::SelectionTreeModel::SelectionTreeModel()</a>.</p>
-
-</div>
-</div>
-<a id="a3ad773eb556d0bcfba29e8bb75228075"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3ad773eb556d0bcfba29e8bb75228075">&#9670;&nbsp;</a></span>moduleOutputPortNameChanged</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void hal::NetlistRelay::moduleOutputPortNameChanged </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classhal_1_1_module.html">Module</a> *&#160;</td>
-          <td class="paramname"><em>m</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
-          <td class="paramname"><em>respective_net</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Q_SIGNAL to notify that an output port name of a module has been changed. <br  />
- Relays the following hal-core event: <em><a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa5b4ec692a3ed15d168fd5ee741450a15" title="associated_data = id of respective net">ModuleEvent::event::output_port_name_changed</a></em></p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">m</td><td>- The module with the renamed output port </td></tr>
-    <tr><td class="paramname">respective_net</td><td>- The id of the net of the renamed output port </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="reference">Referenced by <a class="el" href="module__details__widget_8cpp_source.html#l00031">hal::ModuleDetailsWidget::ModuleDetailsWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__tree__model_8cpp_source.html#l00390">hal::ModuleTreeModel::connectEvents()</a>, <a class="el" href="module__tree__model_8cpp_source.html#l00365">hal::ModuleTreeModel::disconnectEvents()</a>, <a class="el" href="gate__info__table_8cpp_source.html#l00025">hal::GateInfoTable::GateInfoTable()</a>, <a class="el" href="graph__context_8cpp_source.html#l00024">hal::GraphContext::GraphContext()</a>, <a class="el" href="module__info__table_8cpp_source.html#l00035">hal::ModuleInfoTable::ModuleInfoTable()</a>, <a class="el" href="netlist__elements__tree__model_8cpp_source.html#l00011">hal::NetlistElementsTreeModel::NetlistElementsTreeModel()</a>, and <a class="el" href="selection__tree__model_8cpp_source.html#l00012">hal::SelectionTreeModel::SelectionTreeModel()</a>.</p>
 
 </div>
 </div>
@@ -1661,6 +1896,45 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
+<p class="reference">Referenced by <a class="el" href="module__info__table_8cpp_source.html#l00035">hal::ModuleInfoTable::ModuleInfoTable()</a>.</p>
+
+</div>
+</div>
+<a id="a37e48730793aa7402a414773bca24f1b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a37e48730793aa7402a414773bca24f1b">&#9670;&nbsp;</a></span>modulePortsChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::NetlistRelay::modulePortsChanged </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhal_1_1_module.html">Module</a> *&#160;</td>
+          <td class="paramname"><em>m</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Q_SIGNAL to notify that a port of a module has been changed. <br  />
+ Relays the following hal-core event: <em><a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa630acdba2edff17c07b41d79be77d39e" title="no associated_data">ModuleEvent::event::pin_changed</a></em></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">m</td><td>- The module with the changed port </td></tr>
+    <tr><td class="paramname">respective_net</td><td>- The id of the net of the renamed input port </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="port__tree__model_8cpp_source.html#l00020">hal::ModulePinsTreeModel::ModulePinsTreeModel()</a>, and <a class="el" href="module__table__model_8cpp_source.html#l00011">hal::ModuleTableModel::ModuleTableModel()</a>.</p>
+
 </div>
 </div>
 <a id="ab5199f13e4de7ff88bc2d346b46cf019"></a>
@@ -1695,6 +1969,8 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+<p class="reference">Referenced by <a class="el" href="module__tree__model_8cpp_source.html#l00390">hal::ModuleTreeModel::connectEvents()</a>, <a class="el" href="module__tree__model_8cpp_source.html#l00365">hal::ModuleTreeModel::disconnectEvents()</a>, <a class="el" href="module__info__table_8cpp_source.html#l00035">hal::ModuleInfoTable::ModuleInfoTable()</a>, and <a class="el" href="module__table__model_8cpp_source.html#l00011">hal::ModuleTableModel::ModuleTableModel()</a>.</p>
 
 </div>
 </div>
@@ -1741,7 +2017,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="module__details__widget_8cpp_source.html#l00031">hal::ModuleDetailsWidget::ModuleDetailsWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__tree__model_8cpp_source.html#l00390">hal::ModuleTreeModel::connectEvents()</a>, <a class="el" href="module__tree__model_8cpp_source.html#l00365">hal::ModuleTreeModel::disconnectEvents()</a>, <a class="el" href="module__info__table_8cpp_source.html#l00035">hal::ModuleInfoTable::ModuleInfoTable()</a>, and <a class="el" href="netlist__elements__tree__model_8cpp_source.html#l00011">hal::NetlistElementsTreeModel::NetlistElementsTreeModel()</a>.</p>
 
 </div>
 </div>
@@ -1788,7 +2064,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="module__details__widget_8cpp_source.html#l00031">hal::ModuleDetailsWidget::ModuleDetailsWidget()</a>, and <a class="el" href="module__widget_8cpp_source.html#l00031">hal::ModuleWidget::ModuleWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__tree__model_8cpp_source.html#l00390">hal::ModuleTreeModel::connectEvents()</a>, <a class="el" href="module__tree__model_8cpp_source.html#l00365">hal::ModuleTreeModel::disconnectEvents()</a>, <a class="el" href="module__info__table_8cpp_source.html#l00035">hal::ModuleInfoTable::ModuleInfoTable()</a>, <a class="el" href="module__widget_8cpp_source.html#l00031">hal::ModuleWidget::ModuleWidget()</a>, and <a class="el" href="netlist__elements__tree__model_8cpp_source.html#l00011">hal::NetlistElementsTreeModel::NetlistElementsTreeModel()</a>.</p>
 
 </div>
 </div>
@@ -1824,7 +2100,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="module__details__widget_8cpp_source.html#l00031">hal::ModuleDetailsWidget::ModuleDetailsWidget()</a>, and <a class="el" href="selection__tree__model_8cpp_source.html#l00012">hal::SelectionTreeModel::SelectionTreeModel()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__tree__model_8cpp_source.html#l00390">hal::ModuleTreeModel::connectEvents()</a>, <a class="el" href="module__tree__model_8cpp_source.html#l00365">hal::ModuleTreeModel::disconnectEvents()</a>, <a class="el" href="module__info__table_8cpp_source.html#l00035">hal::ModuleInfoTable::ModuleInfoTable()</a>, <a class="el" href="netlist__elements__tree__model_8cpp_source.html#l00011">hal::NetlistElementsTreeModel::NetlistElementsTreeModel()</a>, and <a class="el" href="selection__tree__model_8cpp_source.html#l00012">hal::SelectionTreeModel::SelectionTreeModel()</a>.</p>
 
 </div>
 </div>
@@ -1905,7 +2181,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="module__details__widget_8cpp_source.html#l00031">hal::ModuleDetailsWidget::ModuleDetailsWidget()</a>, and <a class="el" href="net__details__widget_8cpp_source.html#l00027">hal::NetDetailsWidget::NetDetailsWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__info__table_8cpp_source.html#l00035">hal::ModuleInfoTable::ModuleInfoTable()</a>, and <a class="el" href="net__info__table_8cpp_source.html#l00019">hal::NetInfoTable::NetInfoTable()</a>.</p>
 
 </div>
 </div>
@@ -1952,7 +2228,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="module__details__widget_8cpp_source.html#l00031">hal::ModuleDetailsWidget::ModuleDetailsWidget()</a>, and <a class="el" href="net__details__widget_8cpp_source.html#l00027">hal::NetDetailsWidget::NetDetailsWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__info__table_8cpp_source.html#l00035">hal::ModuleInfoTable::ModuleInfoTable()</a>, and <a class="el" href="net__info__table_8cpp_source.html#l00019">hal::NetInfoTable::NetInfoTable()</a>.</p>
 
 </div>
 </div>
@@ -2191,7 +2467,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="module__details__widget_8cpp_source.html#l00031">hal::ModuleDetailsWidget::ModuleDetailsWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="net__info__table_8cpp_source.html#l00019">hal::NetInfoTable::NetInfoTable()</a>.</p>
 
 </div>
 </div>
@@ -2238,7 +2514,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="module__details__widget_8cpp_source.html#l00031">hal::ModuleDetailsWidget::ModuleDetailsWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="net__info__table_8cpp_source.html#l00019">hal::NetInfoTable::NetInfoTable()</a>.</p>
 
 </div>
 </div>
@@ -2375,7 +2651,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="module__details__widget_8cpp_source.html#l00031">hal::ModuleDetailsWidget::ModuleDetailsWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="net__info__table_8cpp_source.html#l00019">hal::NetInfoTable::NetInfoTable()</a>.</p>
 
 </div>
 </div>
@@ -2422,7 +2698,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="module__details__widget_8cpp_source.html#l00031">hal::ModuleDetailsWidget::ModuleDetailsWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="net__info__table_8cpp_source.html#l00019">hal::NetInfoTable::NetInfoTable()</a>.</p>
 
 </div>
 </div>
@@ -2503,7 +2779,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="module__details__widget_8cpp_source.html#l00031">hal::ModuleDetailsWidget::ModuleDetailsWidget()</a>, and <a class="el" href="net__details__widget_8cpp_source.html#l00027">hal::NetDetailsWidget::NetDetailsWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="net__info__table_8cpp_source.html#l00019">hal::NetInfoTable::NetInfoTable()</a>.</p>
 
 </div>
 </div>
@@ -2540,7 +2816,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="net__details__widget_8cpp_source.html#l00027">hal::NetDetailsWidget::NetDetailsWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="net__info__table_8cpp_source.html#l00019">hal::NetInfoTable::NetInfoTable()</a>, and <a class="el" href="netlist__elements__tree__model_8cpp_source.html#l00011">hal::NetlistElementsTreeModel::NetlistElementsTreeModel()</a>.</p>
 
 </div>
 </div>
@@ -2587,7 +2863,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="module__details__widget_8cpp_source.html#l00031">hal::ModuleDetailsWidget::ModuleDetailsWidget()</a>, and <a class="el" href="net__details__widget_8cpp_source.html#l00027">hal::NetDetailsWidget::NetDetailsWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__info__table_8cpp_source.html#l00035">hal::ModuleInfoTable::ModuleInfoTable()</a>, and <a class="el" href="net__info__table_8cpp_source.html#l00019">hal::NetInfoTable::NetInfoTable()</a>.</p>
 
 </div>
 </div>
@@ -2634,7 +2910,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="module__details__widget_8cpp_source.html#l00031">hal::ModuleDetailsWidget::ModuleDetailsWidget()</a>, and <a class="el" href="net__details__widget_8cpp_source.html#l00027">hal::NetDetailsWidget::NetDetailsWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__info__table_8cpp_source.html#l00035">hal::ModuleInfoTable::ModuleInfoTable()</a>, and <a class="el" href="net__info__table_8cpp_source.html#l00019">hal::NetInfoTable::NetInfoTable()</a>.</p>
 
 </div>
 </div>
@@ -2656,9 +2932,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00051">51</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00139">hal::Netlist::get_event_handler()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00048">hal::gNetlist</a>, <a class="el" href="log_8h_source.html#l00067">log_info</a>, and <a class="el" href="classhal_1_1_event_handler.html#aab69a24745b3c0df656cbe4955b08466">hal::EventHandler::register_callback()</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00137">hal::Netlist::get_event_handler()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00051">hal::gNetlist</a>, <a class="el" href="log_8h_source.html#l00068">log_info</a>, and <a class="el" href="classhal_1_1_event_handler.html#aab69a24745b3c0df656cbe4955b08466">hal::EventHandler::register_callback()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="main__window_8cpp_source.html#l00534">hal::MainWindow::handleActionNew()</a>, and <a class="el" href="file__manager_8cpp_source.html#l00166">hal::FileManager::openFile()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="file__manager_8cpp_source.html#l00338">hal::FileManager::deprecatedOpenFile()</a>, <a class="el" href="main__window_8cpp_source.html#l00581">hal::MainWindow::handleActionNew()</a>, and <a class="el" href="file__manager_8cpp_source.html#l00301">hal::FileManager::openProject()</a>.</p>
 
 </div>
 </div>
@@ -2678,7 +2954,57 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>The <a class="el" href="classhal_1_1_file_status_manager.html" title="Holds information about the state (e.g. saved/unsaved) of all laded files (i.e. .hal/....">FileStatusManager</a> is only notified once. Afterwards this function has to be called to enable the notification again. </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00186">186</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00184">184</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ad67296d2731c213dbb88b98a66687b41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad67296d2731c213dbb88b98a66687b41">&#9670;&nbsp;</a></span>signalThreadEvent</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::NetlistRelay::signalThreadEvent </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>evt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>object</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramname"><em>associated_data</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="netlist__relay_8cpp_source.html#l00028">NetlistRelay()</a>.</p>
 
 </div>
 </div>
@@ -2698,11 +3024,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Unregister callback entries in hal-core. Must be called when netlist gets closed </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00040">40</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00039">39</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00139">hal::Netlist::get_event_handler()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00048">hal::gNetlist</a>, <a class="el" href="log_8h_source.html#l00067">log_info</a>, and <a class="el" href="event__handler_8cpp_source.html#l00132">hal::EventHandler::unregister_callback()</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00137">hal::Netlist::get_event_handler()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00051">hal::gNetlist</a>, <a class="el" href="log_8h_source.html#l00068">log_info</a>, and <a class="el" href="event__handler_8cpp_source.html#l00152">hal::EventHandler::unregister_callback()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="file__manager_8cpp_source.html#l00351">hal::FileManager::closeFile()</a>, and <a class="el" href="netlist__relay_8cpp_source.html#l00035">~NetlistRelay()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="file__manager_8cpp_source.html#l00492">hal::FileManager::closeFile()</a>, and <a class="el" href="netlist__relay_8cpp_source.html#l00034">~NetlistRelay()</a>.</p>
 
 </div>
 </div>
@@ -2716,7 +3042,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_netlist_relay.html">NetlistRelay</a></li>
-    <li class="footer">Generated on Tue Jul 12 2022 15:50:06 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:08:38 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -2,7 +2,6 @@ var classhal_1_1_user_action_manager =
 [
     [ "addExecutedAction", "classhal_1_1_user_action_manager.html#a0688dc0fa9585f5b75eed11e536ed6b3", null ],
     [ "canUndoLastAction", "classhal_1_1_user_action_manager.html#a474db8c46babe0e14afcbd14f2236f63", null ],
-    [ "clearWaitCount", "classhal_1_1_user_action_manager.html#a7ded721ef7419eca338d8cc794a67c7e", null ],
     [ "crashDump", "classhal_1_1_user_action_manager.html#af5d614246698ac63b34009aa17274438", null ],
     [ "getParsedAction", "classhal_1_1_user_action_manager.html#af261864564f37f00c287c03a99d2e22f", null ],
     [ "handleSettingDumpActionChanged", "classhal_1_1_user_action_manager.html#a354ed15e02b30e7db56f52e698cd5216", null ],

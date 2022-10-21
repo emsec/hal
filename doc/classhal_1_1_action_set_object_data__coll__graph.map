@@ -1,0 +1,5 @@
+<map id="hal::ActionSetObjectData" name="hal::ActionSetObjectData">
+<area shape="rect" id="node1" title=" " alt="" coords="5,565,244,731"/>
+<area shape="rect" id="node2" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="15,233,234,516"/>
+<area shape="rect" id="node3" href="$classhal_1_1_user_action_object.html" title="The UserActionObject class represents a single object used in UserAction." alt="" coords="43,5,206,156"/>
+</map>

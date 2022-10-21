@@ -1,7 +1,8 @@
 <map id="hal::Validator" name="hal::Validator">
-<area shape="rect" id="node1" title="Base class for any string validator." alt="" coords="389,5,505,112"/>
+<area shape="rect" id="node1" title="Base class for any string validator." alt="" coords="519,5,635,112"/>
 <area shape="rect" id="node2" href="$classhal_1_1_empty_string_validator.html" title="Checks if a given string is not empty." alt="" coords="5,226,193,318"/>
 <area shape="rect" id="node3" href="$classhal_1_1_grouping_table_model.html" title="Table that holds information about all groupings." alt="" coords="218,160,455,384"/>
-<area shape="rect" id="node4" href="$classhal_1_1_stacked_validator.html" title="Combines different validators into one." alt="" coords="480,204,639,340"/>
-<area shape="rect" id="node5" href="$classhal_1_1_unique_string_validator.html" title="Checks if a given string is unique compared to other given strings." alt="" coords="663,226,855,318"/>
+<area shape="rect" id="node4" href="$classhal_1_1_hexadecimal_validator.html" title=" " alt="" coords="479,226,674,318"/>
+<area shape="rect" id="node5" href="$classhal_1_1_stacked_validator.html" title="Combines different validators into one." alt="" coords="699,204,857,340"/>
+<area shape="rect" id="node6" href="$classhal_1_1_unique_string_validator.html" title="Checks if a given string is unique compared to other given strings." alt="" coords="882,226,1074,318"/>
 </map>

@@ -17,6 +17,7 @@ var classhal_1_1_graph_tab_widget =
     [ "handleCloseAllTabs", "classhal_1_1_graph_tab_widget.html#a12b63972aee6ffe0fa5fc088a936aea9", null ],
     [ "handleCloseTabsToLeft", "classhal_1_1_graph_tab_widget.html#a7e533025ac0f06e3fef98b0ece51259c", null ],
     [ "handleCloseTabsToRight", "classhal_1_1_graph_tab_widget.html#a5992de7f8b9b4d6cff2895314d27ac86", null ],
+    [ "handleContextCreated", "classhal_1_1_graph_tab_widget.html#ab10eefa98d3b702d6426653491895762", null ],
     [ "handleContextRemoved", "classhal_1_1_graph_tab_widget.html#a65385d3e9ab4b904019a3da3332c1a0a", null ],
     [ "handleContextRenamed", "classhal_1_1_graph_tab_widget.html#af147f3e768ddda79c63dac6b588bd22f", null ],
     [ "handleCustomContextMenuRequested", "classhal_1_1_graph_tab_widget.html#a18f0607d7e65a39ebd00d58921168924", null ],
@@ -25,7 +26,9 @@ var classhal_1_1_graph_tab_widget =
     [ "handleNetFocus", "classhal_1_1_graph_tab_widget.html#a92a91a079a63163e9f1f74bbc4c82fa2", null ],
     [ "handleTabChanged", "classhal_1_1_graph_tab_widget.html#acffdd8dc91ee21690d34571252400a0e", null ],
     [ "handleTabCloseRequested", "classhal_1_1_graph_tab_widget.html#a08124b835c3b1422248924f54dc5fb47", null ],
-    [ "selectCursor", "classhal_1_1_graph_tab_widget.html#a77d5304413c680ac00bfe4667993644c", null ],
+    [ "isSelectMode", "classhal_1_1_graph_tab_widget.html#ad3af62d9f03e4c4e2ee0363e8f0c3822", null ],
+    [ "Q_ENUM", "classhal_1_1_graph_tab_widget.html#aa23e76064fd2fd357952898d557bea58", null ],
     [ "setSelectCursor", "classhal_1_1_graph_tab_widget.html#a7bcecd90f97068b9db647d4adc51ea92", null ],
-    [ "showContext", "classhal_1_1_graph_tab_widget.html#aa18b4eee005357a3cf24788fb67c094e", null ]
+    [ "showContext", "classhal_1_1_graph_tab_widget.html#aa18b4eee005357a3cf24788fb67c094e", null ],
+    [ "triggerTerminatePicker", "classhal_1_1_graph_tab_widget.html#ad1cf168615f1f0daba9e1372c18d358a", null ]
 ];

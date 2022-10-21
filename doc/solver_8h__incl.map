@@ -1,10 +1,10 @@
 <map id="/home/runner/work/hal/hal/include/hal_core/netlist/boolean_function/solver.h" name="/home/runner/work/hal/hal/include/hal_core/netlist/boolean_function/solver.h">
-<area shape="rect" id="node1" title=" " alt="" coords="209,5,391,76"/>
-<area shape="rect" id="node2" href="$types_8h.html" title=" " alt="" coords="211,124,389,165"/>
-<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="103,392,243,419"/>
-<area shape="rect" id="node4" href="$boolean__function_8h.html" title=" " alt="" coords="59,213,237,255"/>
-<area shape="rect" id="node5" href="$enums_8h.html" title=" " alt="" coords="5,303,136,344"/>
-<area shape="rect" id="node6" title=" " alt="" coords="224,310,275,337"/>
-<area shape="rect" id="node7" title=" " alt="" coords="363,221,437,247"/>
-<area shape="rect" id="node8" title=" " alt="" coords="461,221,520,247"/>
+<area shape="rect" id="node1" title=" " alt="" coords="154,5,336,76"/>
+<area shape="rect" id="node2" href="$types_8h.html" title=" " alt="" coords="156,124,334,165"/>
+<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="23,392,163,419"/>
+<area shape="rect" id="node4" href="$boolean__function_8h.html" title=" " alt="" coords="93,213,272,255"/>
+<area shape="rect" id="node5" href="$enums_8h.html" title=" " alt="" coords="28,303,158,344"/>
+<area shape="rect" id="node6" title=" " alt="" coords="221,392,272,419"/>
+<area shape="rect" id="node7" title=" " alt="" coords="346,221,421,247"/>
+<area shape="rect" id="node8" title=" " alt="" coords="445,221,504,247"/>
 </map>

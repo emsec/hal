@@ -113,49 +113,56 @@ $(document).ready(function(){initNavTree('netlist__parser_8h_source.html',''); i
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="defines_8h.html">hal_core/defines.h</a>&quot;</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="include_2hal__core_2netlist_2netlist_8h.html">hal_core/netlist/netlist.h</a>&quot;</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &lt;filesystem&gt;</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;{</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="comment">/* forward declaration*/</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">class </span>GateLibrary;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classhal_1_1_netlist_parser.html">   39</a></span>&#160;    <span class="keyword">class </span><a class="code" href="arch__linux_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> <a class="code" href="classhal_1_1_netlist_parser.html">NetlistParser</a></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    {</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <a class="code" href="classhal_1_1_netlist_parser.html">NetlistParser</a>()          = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keyword">virtual</span> ~<a class="code" href="classhal_1_1_netlist_parser.html">NetlistParser</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="namespacehal_1_1gate__library__parser__manager.html#a37de54423126f56b765696a03bd78c48">parse</a>(<span class="keyword">const</span> std::filesystem::path&amp; file_path) = 0;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keyword">virtual</span> std::unique_ptr&lt;Netlist&gt; instantiate(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* gate_library) = 0;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="classhal_1_1_netlist_parser.html#afbfa5b65c9d4ac75b48b3390c7f6ab41">   68</a></span>&#160;        std::unique_ptr&lt;Netlist&gt; <a class="code" href="classhal_1_1_netlist_parser.html#afbfa5b65c9d4ac75b48b3390c7f6ab41">parse_and_instantiate</a>(<span class="keyword">const</span> std::filesystem::path&amp; file_path, <span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* gate_library)</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        {</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="namespacehal_1_1gate__library__parser__manager.html#a37de54423126f56b765696a03bd78c48">parse</a>(file_path))</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            {</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                <span class="keywordflow">return</span> instantiate(gate_library);</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            }</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        }</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    };</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="include_2hal__core_2utilities_2result_8h.html">hal_core/utilities/result.h</a>&quot;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;filesystem&gt;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;{</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="comment">/* forward declaration*/</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keyword">class </span>GateLibrary;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classhal_1_1_netlist_parser.html">   40</a></span>&#160;    <span class="keyword">class </span><a class="code" href="arch__linux_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> <a class="code" href="classhal_1_1_netlist_parser.html">NetlistParser</a></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    {</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <a class="code" href="classhal_1_1_netlist_parser.html">NetlistParser</a>()          = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keyword">virtual</span> ~<a class="code" href="classhal_1_1_netlist_parser.html">NetlistParser</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keyword">virtual</span> <a class="code" href="classhal_1_1_result.html">Result&lt;std::monostate&gt;</a> <a class="code" href="namespacehal_1_1gate__library__parser__manager.html#a37de54423126f56b765696a03bd78c48">parse</a>(<span class="keyword">const</span> std::filesystem::path&amp; file_path) = 0;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keyword">virtual</span> <a class="code" href="classhal_1_1_result.html">Result&lt;std::unique_ptr&lt;Netlist&gt;</a>&gt; instantiate(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* gate_library) = 0;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="classhal_1_1_netlist_parser.html#a1ee24a678cd03d814358160c6c7ca453">   69</a></span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;std::unique_ptr&lt;Netlist&gt;</a>&gt; <a class="code" href="classhal_1_1_netlist_parser.html#a1ee24a678cd03d814358160c6c7ca453">parse_and_instantiate</a>(<span class="keyword">const</span> std::filesystem::path&amp; file_path, <span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* gate_library)</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        {</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = <a class="code" href="namespacehal_1_1gate__library__parser__manager.html#a37de54423126f56b765696a03bd78c48">parse</a>(file_path); res.is_ok())</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            {</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                <span class="keywordflow">return</span> instantiate(gate_library);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            }</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            {</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(res.get_error());</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;            }</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        }</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    };</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="anamespacehal_1_1gate__library__parser__manager_html_a37de54423126f56b765696a03bd78c48"><div class="ttname"><a href="namespacehal_1_1gate__library__parser__manager.html#a37de54423126f56b765696a03bd78c48">hal::gate_library_parser_manager::parse</a></div><div class="ttdeci">std::unique_ptr&lt; GateLibrary &gt; parse(std::filesystem::path file_path)</div><div class="ttdef"><b>Definition:</b> <a href="gate__library__parser__manager_8cpp_source.html#l00076">gate_library_parser_manager.cpp:76</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00009">solver.cpp:9</a></div></div>
+<div class="ttc" id="aclasshal_1_1_result_html"><div class="ttname"><a href="classhal_1_1_result.html">hal::Result</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00061">result.h:61</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
 <div class="ttc" id="ainclude_2hal__core_2netlist_2netlist_8h_html"><div class="ttname"><a href="include_2hal__core_2netlist_2netlist_8h.html">netlist.h</a></div></div>
 <div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="defines_8h.html">defines.h</a></div></div>
-<div class="ttc" id="aclasshal_1_1_netlist_parser_html"><div class="ttname"><a href="classhal_1_1_netlist_parser.html">hal::NetlistParser</a></div><div class="ttdef"><b>Definition:</b> <a href="netlist__parser_8h_source.html#l00039">netlist_parser.h:39</a></div></div>
+<div class="ttc" id="ainclude_2hal__core_2utilities_2result_8h_html_a1c3e89a5c947d0af52de06b706adcf09"><div class="ttname"><a href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a></div><div class="ttdeci">#define ERR(message)</div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00051">result.h:51</a></div></div>
+<div class="ttc" id="aclasshal_1_1_netlist_parser_html_a1ee24a678cd03d814358160c6c7ca453"><div class="ttname"><a href="classhal_1_1_netlist_parser.html#a1ee24a678cd03d814358160c6c7ca453">hal::NetlistParser::parse_and_instantiate</a></div><div class="ttdeci">Result&lt; std::unique_ptr&lt; Netlist &gt; &gt; parse_and_instantiate(const std::filesystem::path &amp;file_path, const GateLibrary *gate_library)</div><div class="ttdef"><b>Definition:</b> <a href="netlist__parser_8h_source.html#l00069">netlist_parser.h:69</a></div></div>
+<div class="ttc" id="aclasshal_1_1_netlist_parser_html"><div class="ttname"><a href="classhal_1_1_netlist_parser.html">hal::NetlistParser</a></div><div class="ttdef"><b>Definition:</b> <a href="netlist__parser_8h_source.html#l00040">netlist_parser.h:40</a></div></div>
+<div class="ttc" id="ainclude_2hal__core_2utilities_2result_8h_html"><div class="ttname"><a href="include_2hal__core_2utilities_2result_8h.html">result.h</a></div></div>
 <div class="ttc" id="aarch__linux_8h_html_a3541b40303f35100314d8bb7efd18371"><div class="ttname"><a href="arch__linux_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a></div><div class="ttdeci">#define NETLIST_API</div><div class="ttdef"><b>Definition:</b> <a href="arch__linux_8h_source.html#l00028">arch_linux.h:28</a></div></div>
-<div class="ttc" id="aclasshal_1_1_netlist_parser_html_afbfa5b65c9d4ac75b48b3390c7f6ab41"><div class="ttname"><a href="classhal_1_1_netlist_parser.html#afbfa5b65c9d4ac75b48b3390c7f6ab41">hal::NetlistParser::parse_and_instantiate</a></div><div class="ttdeci">std::unique_ptr&lt; Netlist &gt; parse_and_instantiate(const std::filesystem::path &amp;file_path, const GateLibrary *gate_library)</div><div class="ttdef"><b>Definition:</b> <a href="netlist__parser_8h_source.html#l00068">netlist_parser.h:68</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_library_html"><div class="ttname"><a href="classhal_1_1_gate_library.html">hal::GateLibrary</a></div><div class="ttdef"><b>Definition:</b> <a href="gate__library_8h_source.html#l00041">gate_library.h:41</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_ef96d94451875f81e56c678363187add.html">netlist</a></li><li class="navelem"><a class="el" href="dir_abba67f4224cd1ce7afa95c199d6e255.html">netlist_parser</a></li><li class="navelem"><a class="el" href="netlist__parser_8h.html">netlist_parser.h</a></li>
-    <li class="footer">Generated on Tue Jul 12 2022 15:49:58 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:08:32 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

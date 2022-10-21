@@ -1,11 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhal_1_1_gate_type_component.html" title=" " alt="" coords="5,183,192,209"/>
-<area shape="rect" id="node2" href="$classhal_1_1_f_f_component.html" title=" " alt="" coords="260,5,401,32"/>
-<area shape="rect" id="node3" href="$classhal_1_1_init_component.html" title=" " alt="" coords="257,56,404,83"/>
-<area shape="rect" id="node4" href="$classhal_1_1_latch_component.html" title=" " alt="" coords="251,107,411,133"/>
-<area shape="rect" id="node5" href="$classhal_1_1_l_u_t_component.html" title=" " alt="" coords="256,157,405,184"/>
-<area shape="rect" id="node6" href="$classhal_1_1_m_a_c_component.html" title=" " alt="" coords="253,208,408,235"/>
-<area shape="rect" id="node7" href="$classhal_1_1_r_a_m_component.html" title=" " alt="" coords="253,259,408,285"/>
-<area shape="rect" id="node8" href="$classhal_1_1_r_a_m_port_component.html" title=" " alt="" coords="240,309,421,336"/>
-<area shape="rect" id="node9" href="$classhal_1_1_state_component.html" title=" " alt="" coords="251,360,410,387"/>
+<area shape="rect" id="node1" href="$classhal_1_1_gate_event.html" title=" " alt="" coords="5,5,124,32"/>
 </map>

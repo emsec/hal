@@ -19,6 +19,23 @@ var group__gui =
       [ "setText", "classhal_1_1_action.html#aa1605d515378031d036a24f9906706a0", null ],
       [ "setToolTip", "classhal_1_1_action.html#afd1b9d7e9ef96e5ed95cf3a87ff225ae", null ]
     ] ],
+    [ "BaseTreeModel", "classhal_1_1_base_tree_model.html", [
+      [ "BaseTreeModel", "classhal_1_1_base_tree_model.html#a5ebb5626566e69f5aef46e0576113087", null ],
+      [ "clear", "classhal_1_1_base_tree_model.html#a7e771dcacc1c8bff919fae75ff78abf2", null ],
+      [ "columnCount", "classhal_1_1_base_tree_model.html#a1609dc24552c4cba992c972635fd2e90", null ],
+      [ "data", "classhal_1_1_base_tree_model.html#aac6235e965fcc2fb3af1efb842edeaf6", null ],
+      [ "flags", "classhal_1_1_base_tree_model.html#a83493fadd018c82da176da0952ae07ce", null ],
+      [ "getIndexFromItem", "classhal_1_1_base_tree_model.html#aba03bbb5da24d1cbc23bbc34e07458e8", null ],
+      [ "getItemFromIndex", "classhal_1_1_base_tree_model.html#a64847c202485e2983e7129a3e641dc76", null ],
+      [ "getRootItem", "classhal_1_1_base_tree_model.html#aea07846e0ffe591e3ce82608ec5c6975", null ],
+      [ "headerData", "classhal_1_1_base_tree_model.html#a7ac73226f6f7640b74950a82fd4c2c2a", null ],
+      [ "index", "classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a", null ],
+      [ "parent", "classhal_1_1_base_tree_model.html#a1b76d0eea8c5a6f0d52d8025ddda6813", null ],
+      [ "rowCount", "classhal_1_1_base_tree_model.html#afceba1b11b5bd81fc4017ba85b46ab1e", null ],
+      [ "setContent", "classhal_1_1_base_tree_model.html#a8a1cb230a6a37ca7d2f57ed0b0af838f", null ],
+      [ "setHeaderLabels", "classhal_1_1_base_tree_model.html#aee85a904236791128d23dd8de5415a7c", null ],
+      [ "mRootItem", "classhal_1_1_base_tree_model.html#ac788cf49960622718a22ed371a347476", null ]
+    ] ],
     [ "ContentLayoutArea", "classhal_1_1_content_layout_area.html", [
       [ "ContentLayoutArea", "classhal_1_1_content_layout_area.html#a50fe3e390dcf3c061f6ad53e6afd0bcc", null ],
       [ "addContent", "classhal_1_1_content_layout_area.html#a0ccb12440d31886fbb9975dbe6cbda03", null ],
@@ -64,6 +81,7 @@ var group__gui =
       [ "remove", "classhal_1_1_content_widget.html#a710c4f22b31bec0e46b1183fbd8b5778", null ],
       [ "removed", "classhal_1_1_content_widget.html#a90ba2df3b6f51f27a41dece20a350d29", null ],
       [ "repolish", "classhal_1_1_content_widget.html#abcce27bb3fdc3734c38a9f92802170b9", null ],
+      [ "restoreFromProject", "classhal_1_1_content_widget.html#a264a3fb7fa07e2722272366e39974144", null ],
       [ "set_name", "classhal_1_1_content_widget.html#a534c1681313a2a2d05c550cbc6bb17fe", null ],
       [ "setAnchor", "classhal_1_1_content_widget.html#a95a6d6699dade8d1256d3b308b796b0d", null ],
       [ "setIcon", "classhal_1_1_content_widget.html#af94adef57e874fab4af873ad5f866b8e", null ],
@@ -251,13 +269,15 @@ var group__gui =
       [ "handleActionCloseFile", "classhal_1_1_main_window.html#a33e100a72ed2b63e1251546db93b48ca", null ],
       [ "handleActionExport", "classhal_1_1_main_window.html#ae68cd5c12714f48219ab9f31156bf751", null ],
       [ "handleActionGatelibraryManager", "classhal_1_1_main_window.html#a258818c82a1734f56135ec7e7f230f97", null ],
+      [ "handleActionImport", "classhal_1_1_main_window.html#a3f1953656070fd4f12106747fdbb946f", null ],
       [ "handleActionNew", "classhal_1_1_main_window.html#a62352d9e02b54e67a9393a501caf5904", null ],
-      [ "handleActionOpen", "classhal_1_1_main_window.html#ab168645f8f8b6eaec979106c7d5b58d3", null ],
+      [ "handleActionOpenProject", "classhal_1_1_main_window.html#a09326e6e1614a7d633481cb91257035a", null ],
       [ "handleActionPlayMacro", "classhal_1_1_main_window.html#a90c41d58ef3e4aefcc5b88a40288bc07", null ],
       [ "handleActionStartRecording", "classhal_1_1_main_window.html#a7740f2fc27dbb0a0e5f985e20b990961", null ],
       [ "handleActionStopRecording", "classhal_1_1_main_window.html#a4b04ba7653ca22b3d16083acee7f0152", null ],
       [ "handleActionUndo", "classhal_1_1_main_window.html#a2d3d563fb73a78b9c208d3ac0522cd67", null ],
       [ "handleFileOpened", "classhal_1_1_main_window.html#a9da68893eaab7983e8f15299edf28a00", null ],
+      [ "handleProjectOpened", "classhal_1_1_main_window.html#a7c360e2b5e3c13872311b205fd1d2d7d", null ],
       [ "handleSaveAsTriggered", "classhal_1_1_main_window.html#a2c8497b3a5179617c83e8d01bd0a6020", null ],
       [ "handleSaveTriggered", "classhal_1_1_main_window.html#acf671deb01bbf6cac6ea1eeb20345fe5", null ],
       [ "newFileIconPath", "classhal_1_1_main_window.html#a0cae8e90c86b92ae2f1c606d776aed47", null ],
@@ -273,7 +293,6 @@ var group__gui =
       [ "saveAsIconStyle", "classhal_1_1_main_window.html#aad194e3fccefd0004afa7068da532e69", null ],
       [ "saveIconPath", "classhal_1_1_main_window.html#aea4827c2b236052cb34e920beba2e4ae", null ],
       [ "saveIconStyle", "classhal_1_1_main_window.html#a6f9b5258b8d759769ab47b41e4460ecb", null ],
-      [ "saveTriggered", "classhal_1_1_main_window.html#a338814c1fc8db8b66affc36f7492ea4b", null ],
       [ "setContentIconPath", "classhal_1_1_main_window.html#a435fb5267e9f09edd33d05daebe3f4f5", null ],
       [ "setContentIconStyle", "classhal_1_1_main_window.html#ab001d6f50fdca842542f1dae408d87ee", null ],
       [ "setDisabledIconStyle", "classhal_1_1_main_window.html#af423adfd5f01268efeb120d72d765b1b", null ],
@@ -381,7 +400,9 @@ var group__gui =
       [ "debugHandleFileClosed", "classhal_1_1_netlist_relay.html#a8f8aacd4af1c88532eaa8f1b8d6ff429", null ],
       [ "debugHandleFileOpened", "classhal_1_1_netlist_relay.html#ad8f4bc9871e0dc257d637bbb2df61287", null ],
       [ "deleteModule", "classhal_1_1_netlist_relay.html#a49f8f9a0322f1f1e0231f02b4fceb79b", null ],
+      [ "gateBooleanFunctionChanged", "classhal_1_1_netlist_relay.html#aee82e354e1fa507aaf83bec60389f94d", null ],
       [ "gateCreated", "classhal_1_1_netlist_relay.html#a93c5d6a0e037911aae0cc93291d98131", null ],
+      [ "gateLocationChanged", "classhal_1_1_netlist_relay.html#af33291efb9fbfa54ec9c171942297dbe", null ],
       [ "gateNameChanged", "classhal_1_1_netlist_relay.html#ab02f9f5376b48c985eaaa8e0fc5abf80", null ],
       [ "gateRemoved", "classhal_1_1_netlist_relay.html#aaff5f9e3a6d5bd66df2d50ff625e2a71", null ],
       [ "getModuleColor", "classhal_1_1_netlist_relay.html#afe4ad79c97e3b5c42c9568e744f2b369", null ],
@@ -396,14 +417,18 @@ var group__gui =
       [ "groupingNetAssigned", "classhal_1_1_netlist_relay.html#a9b0774ad6b37baf5a55a2251d94c9758", null ],
       [ "groupingNetRemoved", "classhal_1_1_netlist_relay.html#ac741f5a71cae24be21934c40b0ec257c", null ],
       [ "groupingRemoved", "classhal_1_1_netlist_relay.html#a84b5e364e0100c725f32b298cdc85e11", null ],
+      [ "handleThreadEvent", "classhal_1_1_netlist_relay.html#aabe24732a11ade01075ae88ad6743a77", null ],
       [ "moduleColorChanged", "classhal_1_1_netlist_relay.html#abcb90a65239739807e602c79221bd931", null ],
       [ "moduleCreated", "classhal_1_1_netlist_relay.html#ac909d23f8dfc8bd143cb471e7eb8165e", null ],
       [ "moduleGateAssigned", "classhal_1_1_netlist_relay.html#a73b70303af2a2f5fbdc9527c1963d20c", null ],
       [ "moduleGateRemoved", "classhal_1_1_netlist_relay.html#a6e1646900c7f6da6139a26fe96f7d161", null ],
-      [ "moduleInputPortNameChanged", "classhal_1_1_netlist_relay.html#a22a082e1959ef3a4c98ecaaa694b68e9", null ],
+      [ "moduleGatesAssignBegin", "classhal_1_1_netlist_relay.html#af7b5857622e8c330a7134cbc2a002d16", null ],
+      [ "moduleGatesAssignEnd", "classhal_1_1_netlist_relay.html#a192a78f3a2a4b3dca8250c90fbc637f1", null ],
+      [ "moduleGatesRemoveBegin", "classhal_1_1_netlist_relay.html#a3a353657096070de2016e301f5aa255d", null ],
+      [ "moduleGatesRemoveEnd", "classhal_1_1_netlist_relay.html#acabfab536bdad88085eb99326378439f", null ],
       [ "moduleNameChanged", "classhal_1_1_netlist_relay.html#aab996ad30d23ed458721a333621a70e1", null ],
-      [ "moduleOutputPortNameChanged", "classhal_1_1_netlist_relay.html#a3ad773eb556d0bcfba29e8bb75228075", null ],
       [ "moduleParentChanged", "classhal_1_1_netlist_relay.html#ab6ba2204bd9cff45190c47069bba64a0", null ],
+      [ "modulePortsChanged", "classhal_1_1_netlist_relay.html#a37e48730793aa7402a414773bca24f1b", null ],
       [ "moduleRemoved", "classhal_1_1_netlist_relay.html#ab5199f13e4de7ff88bc2d346b46cf019", null ],
       [ "moduleSubmoduleAdded", "classhal_1_1_netlist_relay.html#ac42e72263fd7fe300f666e4cdaea971a", null ],
       [ "moduleSubmoduleRemoved", "classhal_1_1_netlist_relay.html#aa26c2eca1d6dbed9b9683abf3e329a5e", null ],
@@ -429,6 +454,7 @@ var group__gui =
       [ "netSourceRemoved", "classhal_1_1_netlist_relay.html#a75cfac5ab111bd76c99465b6b5a0f053", null ],
       [ "registerNetlistCallbacks", "classhal_1_1_netlist_relay.html#a3dc315c75ac5ecbcbedf3e26ee75e040", null ],
       [ "reset", "classhal_1_1_netlist_relay.html#a5b1738463cab64e14d9392a43b77a357", null ],
+      [ "signalThreadEvent", "classhal_1_1_netlist_relay.html#ad67296d2731c213dbb88b98a66687b41", null ],
       [ "unregisterNetlistCallbacks", "classhal_1_1_netlist_relay.html#a597a1b91ef031e791652099ca5a347ff", null ]
     ] ],
     [ "Overlay", "classhal_1_1_overlay.html", [
@@ -441,13 +467,6 @@ var group__gui =
     [ "WidgetOverlay", "classhal_1_1_widget_overlay.html", [
       [ "WidgetOverlay", "classhal_1_1_widget_overlay.html#a7de74f4f0a26ddc50ff3c531d1cb2408", null ],
       [ "setWidget", "classhal_1_1_widget_overlay.html#ad2a426756b018ad2979e548682a9bb01", null ]
-    ] ],
-    [ "PluginGui", "classhal_1_1_plugin_gui.html", [
-      [ "exec", "classhal_1_1_plugin_gui.html#a4a2326cb6bf9c78d28a7ae82655c15ca", null ],
-      [ "get_cli_options", "classhal_1_1_plugin_gui.html#a104c0c37597094a6ad81a1786bd499fe", null ],
-      [ "get_name", "classhal_1_1_plugin_gui.html#afae9dee5316e1b95812c25b7d1c598a9", null ],
-      [ "get_version", "classhal_1_1_plugin_gui.html#a21214d366b49e93ebdfad07607adeb8f", null ],
-      [ "initialize_logging", "classhal_1_1_plugin_gui.html#a3f50c1907b0de260740cefd7bb8e6e19", null ]
     ] ],
     [ "PluginRelay", "classhal_1_1_plugin_relay.html", [
       [ "PluginRelay", "classhal_1_1_plugin_relay.html#a2015343701da5d20c9477fbec756f5c7", null ],
@@ -500,6 +519,70 @@ var group__gui =
       [ "exactMatchIconStyle", "classhal_1_1_searchbar.html#a8e2f29bd90c7ec014ab78e0c01148c2c", null ],
       [ "searchIcon", "classhal_1_1_searchbar.html#a1581c13c9b0dd2828d0339329ab52bc2", null ],
       [ "searchIconStyle", "classhal_1_1_searchbar.html#acbd16cb15da836f444522dc33f196412", null ]
+    ] ],
+    [ "GatePinsTreeModel", "classhal_1_1_gate_pins_tree_model.html", [
+      [ "itemType", "classhal_1_1_gate_pins_tree_model.html#a7a3bc08bf87ce67f86d908439e0cad59", [
+        [ "grouping", "classhal_1_1_gate_pins_tree_model.html#a7a3bc08bf87ce67f86d908439e0cad59aa0d9c281caf1eec6fab8c47a19a0bd56", null ],
+        [ "pin", "classhal_1_1_gate_pins_tree_model.html#a7a3bc08bf87ce67f86d908439e0cad59a8a6f503814aa4a7cd863e68c7778fbdb", null ]
+      ] ],
+      [ "GatePinsTreeModel", "classhal_1_1_gate_pins_tree_model.html#a10512e7ad81c53d77a9228e798b2f376", null ],
+      [ "~GatePinsTreeModel", "classhal_1_1_gate_pins_tree_model.html#ab7c719109330d4c9dc3bb382458f1eb9", null ],
+      [ "clear", "classhal_1_1_gate_pins_tree_model.html#a901e16ade95a44d0c9840e2e93f7de63", null ],
+      [ "getCurrentGateID", "classhal_1_1_gate_pins_tree_model.html#aa3ffdd002a6b8d7fb89842a2ea8bd7df", null ],
+      [ "getNetIDsOfTreeItem", "classhal_1_1_gate_pins_tree_model.html#a25d42b01ef1a01815987c82a7edfb675", null ],
+      [ "getNumberOfDisplayedPins", "classhal_1_1_gate_pins_tree_model.html#ab1d22417527cc80e14c2acbbed9ef6c1", null ],
+      [ "getTypeOfItem", "classhal_1_1_gate_pins_tree_model.html#aaa98fdf3062e318b8e5c298b3b0b5b6a", null ],
+      [ "setGate", "classhal_1_1_gate_pins_tree_model.html#a525d39f9a8c29a788460af05f0d3a22f", null ],
+      [ "keyRepresentedNetsID", "classhal_1_1_gate_pins_tree_model.html#a7d51ad07eb269e956deea68a9f853831", null ],
+      [ "keyType", "classhal_1_1_gate_pins_tree_model.html#afd11870c2eadd0453e01a724a4d0a022", null ]
+    ] ],
+    [ "GroupingsOfItemModel", "classhal_1_1_groupings_of_item_model.html", [
+      [ "GroupingsOfItemModel", "classhal_1_1_groupings_of_item_model.html#ac4d49d7a65ff019de9757693038bebbd", null ],
+      [ "columnCount", "classhal_1_1_groupings_of_item_model.html#a2310a798a3e546fd6723036dfc843326", null ],
+      [ "data", "classhal_1_1_groupings_of_item_model.html#a9e5ee7820412b4141aa7f4d1f72fb373", null ],
+      [ "getGroupingEntryAtRow", "classhal_1_1_groupings_of_item_model.html#a8bc05e62e9ac681f85c91f4562a91f9d", null ],
+      [ "headerData", "classhal_1_1_groupings_of_item_model.html#a0f6eda2d2670b78fc57150d48dd57ccd", null ],
+      [ "removeRows", "classhal_1_1_groupings_of_item_model.html#a15e638161e84849bc120ed33e47c0554", null ],
+      [ "rowCount", "classhal_1_1_groupings_of_item_model.html#a148209ef06acdeeb01d8e628cb879fa6", null ],
+      [ "setData", "classhal_1_1_groupings_of_item_model.html#aaf7d3d21aba2ab75706509b948106b45", null ],
+      [ "setGate", "classhal_1_1_groupings_of_item_model.html#af5993e1f2b5041a98b516f084a872c3d", null ],
+      [ "setGroupings", "classhal_1_1_groupings_of_item_model.html#aa443053d27e9bb1e690a460a8c9d5936", null ],
+      [ "setModule", "classhal_1_1_groupings_of_item_model.html#a6d829c3c3ad15d176a8a45f735be893f", null ],
+      [ "setNet", "classhal_1_1_groupings_of_item_model.html#ad2fe177e4286ba9ea144323890b129fc", null ]
+    ] ],
+    [ "EndpointTableModel", "classhal_1_1_endpoint_table_model.html", [
+      [ "Type", "classhal_1_1_endpoint_table_model.html#aa915111b587c5f60f5d78ecd2edcb915", [
+        [ "source", "classhal_1_1_endpoint_table_model.html#aa915111b587c5f60f5d78ecd2edcb915ae0f635e03303634676d5b47e4844bfae", null ],
+        [ "destination", "classhal_1_1_endpoint_table_model.html#aa915111b587c5f60f5d78ecd2edcb915abddc0c7a3d67ba64b410efdc7198401b", null ]
+      ] ],
+      [ "EndpointTableModel", "classhal_1_1_endpoint_table_model.html#a91a4d8b13d9de937d0f4b021b0d29b63", null ],
+      [ "clear", "classhal_1_1_endpoint_table_model.html#ad2239067cbc2207be7cca59f565991ee", null ],
+      [ "columnCount", "classhal_1_1_endpoint_table_model.html#af0a2472f9c0eef1e3aa4e51e9f694db0", null ],
+      [ "data", "classhal_1_1_endpoint_table_model.html#a2651b1d0da7b903d055b0403b174ffff", null ],
+      [ "getCurrentNetID", "classhal_1_1_endpoint_table_model.html#a6d13ce6d67e967ad6e27b0b2843e97f9", null ],
+      [ "getGateIDFromIndex", "classhal_1_1_endpoint_table_model.html#a538582fb05b528d5716427a26a1773f3", null ],
+      [ "getPinNameFromIndex", "classhal_1_1_endpoint_table_model.html#a7318d1f50bcbaf710065a04a08c17aaa", null ],
+      [ "getType", "classhal_1_1_endpoint_table_model.html#a30203cb5e19e09392b475b1f04d1c3b6", null ],
+      [ "headerData", "classhal_1_1_endpoint_table_model.html#a88ef12e68d7a8b9b5a632074ebb383c6", null ],
+      [ "rowCount", "classhal_1_1_endpoint_table_model.html#a8609b8c90cf4a110f1fd5db8a6eb9bc1", null ],
+      [ "setNet", "classhal_1_1_endpoint_table_model.html#a73ab50ab00b24960cf7790e299758ace", null ],
+      [ "typeString", "classhal_1_1_endpoint_table_model.html#afa4ca15367039d6f0ffa368e1d6948d9", null ]
+    ] ],
+    [ "ModuleTableModel", "classhal_1_1_module_table_model.html", [
+      [ "ModuleTableModel", "classhal_1_1_module_table_model.html#a8f3d04416be4bde58131a8087db30206", null ],
+      [ "clear", "classhal_1_1_module_table_model.html#a9ba7a88d90d0a84aa2f55e59a1b225f9", null ],
+      [ "columnCount", "classhal_1_1_module_table_model.html#a7f04b2ec68e6fb1a03c2b28e4e65d075", null ],
+      [ "data", "classhal_1_1_module_table_model.html#a6f44d9e5eb5453e54b70285e09c9e20a", null ],
+      [ "getCurrentNetID", "classhal_1_1_module_table_model.html#ae097de66f202f51463ec4bc9f2fda834", null ],
+      [ "getModuleIDFromIndex", "classhal_1_1_module_table_model.html#ad817538352f1f03293fb8b16b462915c", null ],
+      [ "getModuleNameFromIndex", "classhal_1_1_module_table_model.html#a9dfef6b58efa427b38535f9d56f0248e", null ],
+      [ "getPinIDFromIndex", "classhal_1_1_module_table_model.html#a1309381aa2bc38de3014a64687e9c3e0", null ],
+      [ "getPortNameFromIndex", "classhal_1_1_module_table_model.html#acf814276e87e581fa0e5d20a1f9c369f", null ],
+      [ "handleModulePortsChanged", "classhal_1_1_module_table_model.html#a588d0839e0e62bc934b5f6cd02e227df", null ],
+      [ "handleModuleRemoved", "classhal_1_1_module_table_model.html#afb1de3f9f0df43b0453dfa49a7c49276", null ],
+      [ "headerData", "classhal_1_1_module_table_model.html#acc59a4a351f12b8fee77584a98b284d9", null ],
+      [ "rowCount", "classhal_1_1_module_table_model.html#ac7946fce67b623fc771c84a197de5e1e", null ],
+      [ "setNet", "classhal_1_1_module_table_model.html#a0d695c3546fbbc5eeb4fee2116514afd", null ]
     ] ],
     [ "SelectionRelay", "classhal_1_1_selection_relay.html", [
       [ "ItemType", "classhal_1_1_selection_relay.html#ae8fbb1a1150eb6e68ba34cdb2f499c8a", [
@@ -582,6 +665,14 @@ var group__gui =
       [ "addSpacer", "classhal_1_1_toolbar.html#aa6c31190221a870e24a222ab323a10dd", null ],
       [ "repolish", "classhal_1_1_toolbar.html#aca44709fea709ca91894a5a2c0cc8e85", null ]
     ] ],
+    [ "ActionAddBooleanFunction", "classhal_1_1_action_add_boolean_function.html", [
+      [ "ActionAddBooleanFunction", "classhal_1_1_action_add_boolean_function.html#a449b638c4f293e555ee5bb7d9ff53481", null ],
+      [ "addToHash", "classhal_1_1_action_add_boolean_function.html#a0551d5a8e388f0466414ad800b65db6b", null ],
+      [ "exec", "classhal_1_1_action_add_boolean_function.html#a1f117f9334c36fee6317c515d363dbbc", null ],
+      [ "readFromXml", "classhal_1_1_action_add_boolean_function.html#a191776b049d9c7177309b29cdaea18b4", null ],
+      [ "tagname", "classhal_1_1_action_add_boolean_function.html#a2cd7d35ac95499c70e1e76258695e2e0", null ],
+      [ "writeToXml", "classhal_1_1_action_add_boolean_function.html#ae4148adf4e3103b0bbedf66371e54273", null ]
+    ] ],
     [ "EmptyStringValidator", "classhal_1_1_empty_string_validator.html", [
       [ "EmptyStringValidator", "classhal_1_1_empty_string_validator.html#af0a871a7f08faf4aa1aba066f5d466f4", null ],
       [ "validate", "classhal_1_1_empty_string_validator.html#a6977b20960674cb4b6b2d8d7fdbe52b0", null ]
@@ -645,30 +736,32 @@ var group__gui =
     ] ],
     [ "RecentFileItem", "classhal_1_1_recent_file_item.html", [
       [ "RecentFileItem", "classhal_1_1_recent_file_item.html#a723e7b9472d488154869837fb6ced2a2", null ],
-      [ "disabled", "classhal_1_1_recent_file_item.html#aa26ac018dcb5212f476e1cde89f32a78", null ],
       [ "enterEvent", "classhal_1_1_recent_file_item.html#abef2349fda55960e3d55822dcb34f54a", null ],
       [ "eventFilter", "classhal_1_1_recent_file_item.html#ac0f9c33df8153c46e3d73249d2124a62", null ],
       [ "file", "classhal_1_1_recent_file_item.html#a8c8f38db3434b809a7d5cd6916a8f7a5", null ],
-      [ "hover", "classhal_1_1_recent_file_item.html#a146249a5d2b63954b621963ae840be12", null ],
+      [ "hover", "classhal_1_1_recent_file_item.html#a125ef965f5fd2bbd61da7313c65caf23", null ],
       [ "iconPath", "classhal_1_1_recent_file_item.html#adec57c7f413cc4f058e5e3bb18ed12e5", null ],
       [ "iconStyle", "classhal_1_1_recent_file_item.html#a3521d3fa589b9b1679de68a1a41655a8", null ],
+      [ "isProject", "classhal_1_1_recent_file_item.html#aef90392ba4a4e56d49e8baa2411c0334", null ],
       [ "leaveEvent", "classhal_1_1_recent_file_item.html#af9bd15696f5612ef62d9b4e5de977cc4", null ],
+      [ "missing", "classhal_1_1_recent_file_item.html#ae237c308034e6600413474655f78c3e2", null ],
       [ "mousePressEvent", "classhal_1_1_recent_file_item.html#a0b6a2538bc5cf4d332b7f1bc512f75fb", null ],
       [ "removeRequested", "classhal_1_1_recent_file_item.html#a4739f058c8057c9d516f57dfe3067285", null ],
       [ "repolish", "classhal_1_1_recent_file_item.html#a6f2f28dc01a5b60692666a42c1a8e218", null ],
-      [ "setDisabled", "classhal_1_1_recent_file_item.html#a9399cb55acd605c2729e5200079e03cd", null ],
       [ "setHoverActive", "classhal_1_1_recent_file_item.html#a42c983af0f425840ec751218e4b4ab11", null ],
       [ "setIconPath", "classhal_1_1_recent_file_item.html#ad6e9237537525e4512a5d779db1561b0", null ],
       [ "setIconStyle", "classhal_1_1_recent_file_item.html#a3acd7fa17d644e3c181c32d13c2f0e1a", null ],
+      [ "setMissing", "classhal_1_1_recent_file_item.html#abf53f74bf7bddd3afef1463547b8149d", null ],
       [ "sizeHint", "classhal_1_1_recent_file_item.html#aa3230bbc1117767314698d6eeef23dde", null ],
-      [ "disabled", "classhal_1_1_recent_file_item.html#a0400de7a8a739ed5bea9bceb6f0388cf", null ],
       [ "hover", "classhal_1_1_recent_file_item.html#a08911388b5df507deee4910102a667b8", null ],
       [ "iconPath", "classhal_1_1_recent_file_item.html#ace21bce12087ede7676b6349d85de975", null ],
-      [ "iconStyle", "classhal_1_1_recent_file_item.html#a63a8ab21d8b28abf56de650f8c55b9db", null ]
+      [ "iconStyle", "classhal_1_1_recent_file_item.html#a63a8ab21d8b28abf56de650f8c55b9db", null ],
+      [ "isProject", "classhal_1_1_recent_file_item.html#a3aa68986ca2e461980e4d5e0b5dd23ae", null ],
+      [ "missing", "classhal_1_1_recent_file_item.html#aad0eb17ef35b31c7cdcfe2f0abb7f562", null ]
     ] ],
     [ "RecentFilesWidget", "classhal_1_1_recent_files_widget.html", [
       [ "RecentFilesWidget", "classhal_1_1_recent_files_widget.html#a4362c02a0e0849c8c5040a50d4242e98", null ],
-      [ "handleFileOpened", "classhal_1_1_recent_files_widget.html#a47d4bd36696baff7eedde03d1906fbfc", null ],
+      [ "handleProjectUsed", "classhal_1_1_recent_files_widget.html#a5d5de41ea4ef0da1407c29bf614c0611", null ],
       [ "handleRemoveRequested", "classhal_1_1_recent_files_widget.html#adc85b1875e68a7aa2226f4f519d56aee", null ],
       [ "repolish", "classhal_1_1_recent_files_widget.html#ae2e51f7a48d099173dacc0983641ee38", null ]
     ] ],
@@ -691,5 +784,6 @@ var group__gui =
       [ "Gate", "group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ad25b4bd4c72aa2c07ee87adb10b59f16", null ],
       [ "Net", "group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1a5012af45088eb8e999bb8350077b12ca", null ]
     ] ],
-    [ "ensureOnScreen", "group__gui.html#ga284a43cae48443fa22ac672a8b6ea8a0", null ]
+    [ "ensureOnScreen", "group__gui.html#ga284a43cae48443fa22ac672a8b6ea8a0", null ],
+    [ "Q_DECLARE_METATYPE", "group__gui.html#ga077e1c5730ec712b6b5e2328edd17c56", null ]
 ];

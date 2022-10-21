@@ -110,7 +110,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:adcd3bbe2eccad65c88f5333237bc2848"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:adcd3bbe2eccad65c88f5333237bc2848"><td class="memTemplItemLeft" align="right" valign="top">T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#adcd3bbe2eccad65c88f5333237bc2848">get_component_as</a> (const std::function&lt; bool(const <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> *)&gt; &amp;filter=nullptr) const</td></tr>
 <tr class="separator:adcd3bbe2eccad65c88f5333237bc2848"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d82155a77dd05bcef90cb791a95d84f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a8d82155a77dd05bcef90cb791a95d84f">has_component_of_type</a> (const <a class="el" href="classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017">GateTypeComponent::ComponentType</a> type) const</td></tr>
+<tr class="memitem:a8d82155a77dd05bcef90cb791a95d84f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a8d82155a77dd05bcef90cb791a95d84f">has_component_of_type</a> (const <a class="el" href="classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017">GateTypeComponent::ComponentType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>) const</td></tr>
 <tr class="separator:a8d82155a77dd05bcef90cb791a95d84f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad72821321f4c0394d735b4862a66ad9d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#ad72821321f4c0394d735b4862a66ad9d">get_id</a> () const</td></tr>
 <tr class="separator:ad72821321f4c0394d735b4862a66ad9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -130,56 +130,50 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5b64a93c37b450a4ab84a64ad83610e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a458d7c707652effb6fae238f52b09afc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a458d7c707652effb6fae238f52b09afc">operator!=</a> (const <a class="el" href="classhal_1_1_gate_type.html">GateType</a> &amp;other) const</td></tr>
 <tr class="separator:a458d7c707652effb6fae238f52b09afc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af3f180d5e445f30e493960629c0a08f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#af3f180d5e445f30e493960629c0a08f7">add_input_pin</a> (const std::string &amp;pin)</td></tr>
-<tr class="separator:af3f180d5e445f30e493960629c0a08f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a76dcfb68e7835457624d729ebfff1188"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a76dcfb68e7835457624d729ebfff1188">add_input_pins</a> (const std::vector&lt; std::string &gt; &amp;pins)</td></tr>
-<tr class="separator:a76dcfb68e7835457624d729ebfff1188"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a90fb08834cb0074cdf5921f8b6fd0e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a8a90fb08834cb0074cdf5921f8b6fd0e">get_input_pins</a> () const</td></tr>
-<tr class="separator:a8a90fb08834cb0074cdf5921f8b6fd0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e09246a68b8d9ffd2054a40533bab87"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a2e09246a68b8d9ffd2054a40533bab87">add_output_pin</a> (const std::string &amp;pin)</td></tr>
-<tr class="separator:a2e09246a68b8d9ffd2054a40533bab87"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a7bc2b7459bf6231d153323de5ead3a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a8a7bc2b7459bf6231d153323de5ead3a">add_output_pins</a> (const std::vector&lt; std::string &gt; &amp;pins)</td></tr>
-<tr class="separator:a8a7bc2b7459bf6231d153323de5ead3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6187126b28eb574fca729c2418b628c5"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a6187126b28eb574fca729c2418b628c5">get_output_pins</a> () const</td></tr>
-<tr class="separator:a6187126b28eb574fca729c2418b628c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac68704c7d0f84ab942cd5b8d4a14bc0b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#ac68704c7d0f84ab942cd5b8d4a14bc0b">add_pin</a> (const std::string &amp;pin, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a> direction, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a> pin_type=<a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba334c4a4c42fdb79d7ebc3e73b517e6f8">PinType::none</a>)</td></tr>
-<tr class="separator:ac68704c7d0f84ab942cd5b8d4a14bc0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba2e438f410dd3cd9fd2ea2038829423"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#aba2e438f410dd3cd9fd2ea2038829423">add_pins</a> (const std::vector&lt; std::string &gt; &amp;pins, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a> direction, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a> pin_type=<a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba334c4a4c42fdb79d7ebc3e73b517e6f8">PinType::none</a>)</td></tr>
-<tr class="separator:aba2e438f410dd3cd9fd2ea2038829423"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ea8716a68e1ef3d8dfe1ae6583e302f"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; std::string &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a7ea8716a68e1ef3d8dfe1ae6583e302f">get_pins</a> () const</td></tr>
-<tr class="separator:a7ea8716a68e1ef3d8dfe1ae6583e302f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ba546749f9e5d47c5ec0ec94afaf8cd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a3ba546749f9e5d47c5ec0ec94afaf8cd">get_pin_direction</a> (const std::string &amp;pin) const</td></tr>
-<tr class="separator:a3ba546749f9e5d47c5ec0ec94afaf8cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7dbecf06b382554b247c74fe03e3f717"><td class="memItemLeft" align="right" valign="top">const std::unordered_map&lt; std::string, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a7dbecf06b382554b247c74fe03e3f717">get_pin_directions</a> () const</td></tr>
-<tr class="separator:a7dbecf06b382554b247c74fe03e3f717"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b2c7ef297dc5de14da2a89609078a55"><td class="memItemLeft" align="right" valign="top">std::unordered_set&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a3b2c7ef297dc5de14da2a89609078a55">get_pins_of_direction</a> (<a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a> direction) const</td></tr>
-<tr class="separator:a3b2c7ef297dc5de14da2a89609078a55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af7f034ef802216e2321f89edda6b1657"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#af7f034ef802216e2321f89edda6b1657">assign_pin_type</a> (const std::string &amp;pin, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a> pin_type)</td></tr>
-<tr class="separator:af7f034ef802216e2321f89edda6b1657"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:accbf2ccf5f57b6480d313213885de914"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#accbf2ccf5f57b6480d313213885de914">get_pin_type</a> (const std::string &amp;pin) const</td></tr>
-<tr class="separator:accbf2ccf5f57b6480d313213885de914"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d6e8de214a2d343516b833a89f6402c"><td class="memItemLeft" align="right" valign="top">const std::unordered_map&lt; std::string, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a7d6e8de214a2d343516b833a89f6402c">get_pin_types</a> () const</td></tr>
-<tr class="separator:a7d6e8de214a2d343516b833a89f6402c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a190a58de9dce12097dcd77b56c1992d8"><td class="memItemLeft" align="right" valign="top">std::unordered_set&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a190a58de9dce12097dcd77b56c1992d8">get_pins_of_type</a> (<a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a> pin_type) const</td></tr>
-<tr class="separator:a190a58de9dce12097dcd77b56c1992d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63d024e86e3229f92749a20749ad4e4c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a63d024e86e3229f92749a20749ad4e4c">assign_pin_group</a> (const std::string &amp;group, const std::vector&lt; std::pair&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::string &gt;&gt; &amp;pins)</td></tr>
-<tr class="separator:a63d024e86e3229f92749a20749ad4e4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad48fa1422e1234a274406b07231d728a"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#ad48fa1422e1234a274406b07231d728a">get_pin_group</a> (const std::string &amp;pin) const</td></tr>
-<tr class="separator:ad48fa1422e1234a274406b07231d728a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa2d0c6d6a39b2bca0b78425a017303c"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, std::vector&lt; std::pair&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::string &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#afa2d0c6d6a39b2bca0b78425a017303c">get_pin_groups</a> () const</td></tr>
-<tr class="separator:afa2d0c6d6a39b2bca0b78425a017303c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3d6c35298a5297a223617dece72bc084"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::pair&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a3d6c35298a5297a223617dece72bc084">get_pins_of_group</a> (const std::string &amp;group) const</td></tr>
-<tr class="separator:a3d6c35298a5297a223617dece72bc084"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3af6b20626f5c83c416879a0ad8c410"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#ae3af6b20626f5c83c416879a0ad8c410">get_pin_of_group_at_index</a> (const std::string &amp;group, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> index) const</td></tr>
-<tr class="separator:ae3af6b20626f5c83c416879a0ad8c410"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a442f9f880418eef2c01c91e69d1b0f7e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a442f9f880418eef2c01c91e69d1b0f7e">add_boolean_function</a> (const std::string &amp;name, const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;function)</td></tr>
+<tr class="memitem:a921c50d72bb2bcd2a53bc01c211daaef"><td class="memItemLeft" align="right" valign="top"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a921c50d72bb2bcd2a53bc01c211daaef">get_unique_pin_id</a> ()</td></tr>
+<tr class="separator:a921c50d72bb2bcd2a53bc01c211daaef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbbb7759baee7c417c9d57e41c612177"><td class="memItemLeft" align="right" valign="top"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#acbbb7759baee7c417c9d57e41c612177">get_unique_pin_group_id</a> ()</td></tr>
+<tr class="separator:acbbb7759baee7c417c9d57e41c612177"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a017e8f1a87476a7a6ef339315f9d3b17"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a017e8f1a87476a7a6ef339315f9d3b17">create_pin</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>, const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a924ab95925fc83b38cba3ac2d8d7e9aa">direction</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>=<a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba334c4a4c42fdb79d7ebc3e73b517e6f8">PinType::none</a>, bool create_group=true)</td></tr>
+<tr class="separator:a017e8f1a87476a7a6ef339315f9d3b17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1df33d8dd7aeb46ade364813f2d57a8a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a1df33d8dd7aeb46ade364813f2d57a8a">create_pin</a> (const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a924ab95925fc83b38cba3ac2d8d7e9aa">direction</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>=<a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba334c4a4c42fdb79d7ebc3e73b517e6f8">PinType::none</a>, bool create_group=true)</td></tr>
+<tr class="separator:a1df33d8dd7aeb46ade364813f2d57a8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6bff94f5a30c31508e5690ff647d705"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#af6bff94f5a30c31508e5690ff647d705">get_pins</a> (const std::function&lt; bool(<a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> *)&gt; &amp;filter=nullptr) const</td></tr>
+<tr class="separator:af6bff94f5a30c31508e5690ff647d705"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a307497a9e722f492a1f4f5975fa58017"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a307497a9e722f492a1f4f5975fa58017">get_pin_names</a> (const std::function&lt; bool(<a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> *)&gt; &amp;filter=nullptr) const</td></tr>
+<tr class="separator:a307497a9e722f492a1f4f5975fa58017"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1f8907479a3cfb66dc512d5a12a9163"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#ac1f8907479a3cfb66dc512d5a12a9163">get_input_pins</a> () const</td></tr>
+<tr class="separator:ac1f8907479a3cfb66dc512d5a12a9163"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02c15ddfe108682453cbf87305d6fccb"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a02c15ddfe108682453cbf87305d6fccb">get_input_pin_names</a> () const</td></tr>
+<tr class="separator:a02c15ddfe108682453cbf87305d6fccb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ff8c787cda54ece95f10b399abb839a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a2ff8c787cda54ece95f10b399abb839a">get_output_pins</a> () const</td></tr>
+<tr class="separator:a2ff8c787cda54ece95f10b399abb839a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a810edef9bb7ca541d8f18bb61a590ec3"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a810edef9bb7ca541d8f18bb61a590ec3">get_output_pin_names</a> () const</td></tr>
+<tr class="separator:a810edef9bb7ca541d8f18bb61a590ec3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a743d3cc769f908b7b3e512fe133079fe"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a743d3cc769f908b7b3e512fe133079fe">get_pin_by_id</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>) const</td></tr>
+<tr class="separator:a743d3cc769f908b7b3e512fe133079fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a621a17f4711a7e5ad9162332b8ba928a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a621a17f4711a7e5ad9162332b8ba928a">get_pin_by_name</a> (const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>) const</td></tr>
+<tr class="separator:a621a17f4711a7e5ad9162332b8ba928a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea6df5c2816d80644a619c724bb43eb0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="classhal_1_1_pin_group.html">PinGroup</a>&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#aea6df5c2816d80644a619c724bb43eb0">create_pin_group</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>, const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, const std::vector&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> * &gt; <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a1e273622affc5aefcd63c0036e5ce1b9">pins</a>={}, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a924ab95925fc83b38cba3ac2d8d7e9aa">direction</a>=<a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca334c4a4c42fdb79d7ebc3e73b517e6f8">PinDirection::none</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>=<a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba334c4a4c42fdb79d7ebc3e73b517e6f8">PinType::none</a>, bool <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a8ea27602bf4d3ec3850549a2d313ad0c">ascending</a>=false, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a75c5aaa50f6193870be97c566b274281">start_index</a>=0)</td></tr>
+<tr class="separator:aea6df5c2816d80644a619c724bb43eb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a839da4d699107ef45751875fc4b34aa9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="classhal_1_1_pin_group.html">PinGroup</a>&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a839da4d699107ef45751875fc4b34aa9">create_pin_group</a> (const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, const std::vector&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> * &gt; <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a1e273622affc5aefcd63c0036e5ce1b9">pins</a>={}, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a924ab95925fc83b38cba3ac2d8d7e9aa">direction</a>=<a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca334c4a4c42fdb79d7ebc3e73b517e6f8">PinDirection::none</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>=<a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba334c4a4c42fdb79d7ebc3e73b517e6f8">PinType::none</a>, bool <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a8ea27602bf4d3ec3850549a2d313ad0c">ascending</a>=false, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a75c5aaa50f6193870be97c566b274281">start_index</a>=0)</td></tr>
+<tr class="separator:a839da4d699107ef45751875fc4b34aa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39939511c6ca20236bba51dd0e5fc2fa"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhal_1_1_pin_group.html">PinGroup</a>&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a39939511c6ca20236bba51dd0e5fc2fa">get_pin_groups</a> (const std::function&lt; bool(<a class="el" href="classhal_1_1_pin_group.html">PinGroup</a>&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> &gt; *)&gt; &amp;filter=nullptr) const</td></tr>
+<tr class="separator:a39939511c6ca20236bba51dd0e5fc2fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9ab60b81a005e7369da633bd900e2b1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_pin_group.html">PinGroup</a>&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#aa9ab60b81a005e7369da633bd900e2b1">get_pin_group_by_id</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>) const</td></tr>
+<tr class="separator:aa9ab60b81a005e7369da633bd900e2b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7b1db42a6c49646563797b75c33ccab"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_pin_group.html">PinGroup</a>&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#ac7b1db42a6c49646563797b75c33ccab">get_pin_group_by_name</a> (const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>) const</td></tr>
+<tr class="separator:ac7b1db42a6c49646563797b75c33ccab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a442f9f880418eef2c01c91e69d1b0f7e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a442f9f880418eef2c01c91e69d1b0f7e">add_boolean_function</a> (const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;function)</td></tr>
 <tr class="separator:a442f9f880418eef2c01c91e69d1b0f7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2c99cd64ec542bfb38b17225d5af901"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#ac2c99cd64ec542bfb38b17225d5af901">add_boolean_functions</a> (const std::unordered_map&lt; std::string, <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &gt; &amp;functions)</td></tr>
 <tr class="separator:ac2c99cd64ec542bfb38b17225d5af901"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf9bcccd91321c177bab6c64c572ff57"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#acf9bcccd91321c177bab6c64c572ff57">get_boolean_function</a> (const std::string &amp;function_name) const</td></tr>
-<tr class="separator:acf9bcccd91321c177bab6c64c572ff57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af205511b9029e75c0c2300046a367b56"><td class="memItemLeft" align="right" valign="top">const std::unordered_map&lt; std::string, <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#af205511b9029e75c0c2300046a367b56">get_boolean_functions</a> () const</td></tr>
 <tr class="separator:af205511b9029e75c0c2300046a367b56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af14f2febe7d501c08291f38f68c97869"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#af14f2febe7d501c08291f38f68c97869">get_boolean_function</a> (const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>) const</td></tr>
+<tr class="separator:af14f2febe7d501c08291f38f68c97869"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab844cc0777899ae022db1e2cc30355b9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#ab844cc0777899ae022db1e2cc30355b9">get_boolean_function</a> (const <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> *pin=nullptr) const</td></tr>
+<tr class="separator:ab844cc0777899ae022db1e2cc30355b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -191,7 +185,7 @@ Friends</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A gate type contains information about its internals such as input and output pins as well as its Boolean functions. </p>
 
-<p class="definition">Definition at line <a class="el" href="gate__type_8h_source.html#l00070">70</a> of file <a class="el" href="gate__type_8h_source.html">gate_type.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gate__type_8h_source.html#l00072">72</a> of file <a class="el" href="gate__type_8h_source.html">gate_type.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a442f9f880418eef2c01c91e69d1b0f7e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a442f9f880418eef2c01c91e69d1b0f7e">&#9670;&nbsp;</a></span>add_boolean_function()</h2>
@@ -227,7 +221,9 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00347">347</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00472">472</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00626">hal::BooleanFunction::clone()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>.</p>
 
@@ -251,324 +247,16 @@ Friends</h2></td></tr>
 <p>Add multiple Boolean functions to the gate type.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">functions</td><td>- A map from Boolean function names to Boolean functions. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">functions</td><td>- A map from names to Boolean functions. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00352">352</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00477">477</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>.</p>
-
-</div>
-</div>
-<a id="af3f180d5e445f30e493960629c0a08f7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af3f180d5e445f30e493960629c0a08f7">&#9670;&nbsp;</a></span>add_input_pin()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void hal::GateType::add_input_pin </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>pin</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Add an input pin to the gate type.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pin</td><td>- The name of the input pin to add. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00113">113</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00165">add_pin()</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>.</p>
-
-</div>
-</div>
-<a id="a76dcfb68e7835457624d729ebfff1188"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a76dcfb68e7835457624d729ebfff1188">&#9670;&nbsp;</a></span>add_input_pins()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void hal::GateType::add_input_pins </td>
-          <td>(</td>
-          <td class="paramtype">const std::vector&lt; std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>pins</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Add a vector of input pins to the gate type.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pins</td><td>- The vector of names of input pins to add. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00118">118</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00185">add_pins()</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>.</p>
-
-</div>
-</div>
-<a id="a2e09246a68b8d9ffd2054a40533bab87"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2e09246a68b8d9ffd2054a40533bab87">&#9670;&nbsp;</a></span>add_output_pin()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void hal::GateType::add_output_pin </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>pin</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Add an output pin to the gate type.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pin</td><td>- The name of the output pin to add. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00139">139</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00165">add_pin()</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>.</p>
-
-</div>
-</div>
-<a id="a8a7bc2b7459bf6231d153323de5ead3a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8a7bc2b7459bf6231d153323de5ead3a">&#9670;&nbsp;</a></span>add_output_pins()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void hal::GateType::add_output_pins </td>
-          <td>(</td>
-          <td class="paramtype">const std::vector&lt; std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>pins</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Add a vector of output pins to the gate type.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pins</td><td>- The vector of names of output pins to add. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00144">144</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00185">add_pins()</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>.</p>
-
-</div>
-</div>
-<a id="ac68704c7d0f84ab942cd5b8d4a14bc0b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac68704c7d0f84ab942cd5b8d4a14bc0b">&#9670;&nbsp;</a></span>add_pin()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool hal::GateType::add_pin </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>pin</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a>&#160;</td>
-          <td class="paramname"><em>direction</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a>&#160;</td>
-          <td class="paramname"><em>pin_type</em> = <code><a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba334c4a4c42fdb79d7ebc3e73b517e6f8">PinType::none</a></code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Add a pin of the specified direction and type to the gate type.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pin</td><td>- The pin. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">direction</td><td>- The pin direction to be assigned. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pin_type</td><td>- The pin type to be assigned. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00165">165</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00227">assign_pin_type()</a>, and <a class="el" href="log_8h_source.html#l00075">log_error</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00113">add_input_pin()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00139">add_output_pin()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00185">add_pins()</a>, and <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>.</p>
-
-</div>
-</div>
-<a id="aba2e438f410dd3cd9fd2ea2038829423"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aba2e438f410dd3cd9fd2ea2038829423">&#9670;&nbsp;</a></span>add_pins()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool hal::GateType::add_pins </td>
-          <td>(</td>
-          <td class="paramtype">const std::vector&lt; std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>pins</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a>&#160;</td>
-          <td class="paramname"><em>direction</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a>&#160;</td>
-          <td class="paramname"><em>pin_type</em> = <code><a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba334c4a4c42fdb79d7ebc3e73b517e6f8">PinType::none</a></code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Add a vector of pin of the specified direction and type to the gate type.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pins</td><td>- The pins. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">direction</td><td>- The pin direction to be assigned. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pin_type</td><td>- The pin type to be assigned. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00185">185</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00165">add_pin()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00118">add_input_pins()</a>, and <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00144">add_output_pins()</a>.</p>
-
-</div>
-</div>
-<a id="a63d024e86e3229f92749a20749ad4e4c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a63d024e86e3229f92749a20749ad4e4c">&#9670;&nbsp;</a></span>assign_pin_group()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool hal::GateType::assign_pin_group </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>group</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::vector&lt; std::pair&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::string &gt;&gt; &amp;&#160;</td>
-          <td class="paramname"><em>pins</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Assign existing pins to a pin group.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">group</td><td>- The name of the pin group. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pins</td><td>- The pins to be added to the group including their indices. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00273">273</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="log_8h_source.html#l00075">log_error</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>.</p>
-
-</div>
-</div>
-<a id="af7f034ef802216e2321f89edda6b1657"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af7f034ef802216e2321f89edda6b1657">&#9670;&nbsp;</a></span>assign_pin_type()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool hal::GateType::assign_pin_type </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>pin</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a>&#160;</td>
-          <td class="paramname"><em>pin_type</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Assign a pin type to the given pin. The pin must have been added to the gate type beforehand.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pin</td><td>- The pin. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pin_type</td><td>- The pin type to be assigned. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00227">227</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="log_8h_source.html#l00075">log_error</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00165">add_pin()</a>, and <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>.</p>
 
 </div>
 </div>
@@ -587,7 +275,7 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>TODO test Assign a new property to the gate type.</p>
+<p>Assign a new property to the gate type.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">property</td><td>- The property to assign. </td></tr>
@@ -595,39 +283,336 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00073">73</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00083">83</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>.</p>
 
 </div>
 </div>
-<a id="acf9bcccd91321c177bab6c64c572ff57"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acf9bcccd91321c177bab6c64c572ff57">&#9670;&nbsp;</a></span>get_boolean_function()</h2>
+<a id="a1df33d8dd7aeb46ade364813f2d57a8a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1df33d8dd7aeb46ade364813f2d57a8a">&#9670;&nbsp;</a></span>create_pin() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> hal::GateType::get_boolean_function </td>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> * &gt; hal::GateType::create_pin </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>function_name</em></td><td>)</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a>&#160;</td>
+          <td class="paramname"><em>direction</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a>&#160;</td>
+          <td class="paramname"><em>type</em> = <code><a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba334c4a4c42fdb79d7ebc3e73b517e6f8">PinType::none</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>create_group</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Create a gate pin with the specified name. The ID of the pin is set automatically.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>- The name of the pin. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">direction</td><td>- The direction of the pin. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">type</td><td>- The type of the pin. Defaults to <code><a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba334c4a4c42fdb79d7ebc3e73b517e6f8">PinType::none</a></code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The gate pin on success, an error message otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00197">197</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00149">create_pin()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00062">direction</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00123">get_unique_pin_id()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">type</a>.</p>
+
+</div>
+</div>
+<a id="a017e8f1a87476a7a6ef339315f9d3b17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a017e8f1a87476a7a6ef339315f9d3b17">&#9670;&nbsp;</a></span>create_pin() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> * &gt; hal::GateType::create_pin </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramname"><em>id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a>&#160;</td>
+          <td class="paramname"><em>direction</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a>&#160;</td>
+          <td class="paramname"><em>type</em> = <code><a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba334c4a4c42fdb79d7ebc3e73b517e6f8">PinType::none</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>create_group</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Create a gate pin with the specified name.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>- The ID of the pin. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>- The name of the pin. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">direction</td><td>- The direction of the pin. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">type</td><td>- The type of the pin. Defaults to <code><a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba334c4a4c42fdb79d7ebc3e73b517e6f8">PinType::none</a></code>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">create_group</td><td>- Set <code>true</code> to automatically assign the pin to a new pin group, <code>false</code> otherwise. Defaults to <code>true</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The gate pin on success, an error message otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00149">149</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00328">create_pin_group()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00062">direction</a>, <a class="el" href="enums_8h_source.html#l00050">hal::enum_to_string()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00051">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00055">ERR_APPEND</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00054">id</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca334c4a4c42fdb79d7ebc3e73b517e6f8">hal::none</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00047">OK</a>, <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">type</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00197">create_pin()</a>.</p>
+
+</div>
+</div>
+<a id="a839da4d699107ef45751875fc4b34aa9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a839da4d699107ef45751875fc4b34aa9">&#9670;&nbsp;</a></span>create_pin_group() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="classhal_1_1_pin_group.html">PinGroup</a>&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> &gt; * &gt; hal::GateType::create_pin_group </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> * &gt;&#160;</td>
+          <td class="paramname"><em>pins</em> = <code>{}</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a>&#160;</td>
+          <td class="paramname"><em>direction</em> = <code><a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca334c4a4c42fdb79d7ebc3e73b517e6f8">PinDirection::none</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a>&#160;</td>
+          <td class="paramname"><em>type</em> = <code><a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba334c4a4c42fdb79d7ebc3e73b517e6f8">PinType::none</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>ascending</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramname"><em>start_index</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Create a pin group with the given name. The ID of the pin group is set automatically.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>- The name of the pin group. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pins</td><td>- The pins to be assigned to the pin group. Defaults to an empty vector. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">direction</td><td>- The direction of the pin group. Defaults to <code><a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca334c4a4c42fdb79d7ebc3e73b517e6f8">PinDirection::none</a></code>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">type</td><td>- The type of the pin group. Defaults to <code><a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba334c4a4c42fdb79d7ebc3e73b517e6f8">PinType::none</a></code>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ascending</td><td>- Set <code>true</code> for ascending pin order (from 0 to n-1), <code>false</code> otherwise (from n-1 to 0). Defaults to <code>false</code>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start_index</td><td>- The start index of the pin group. Defaults to <code>0</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The pin group on success, an error message otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00412">412</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00065">ascending</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00328">create_pin_group()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00062">direction</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00136">get_unique_pin_group_id()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00064">pins</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00066">start_index</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">type</a>.</p>
+
+</div>
+</div>
+<a id="aea6df5c2816d80644a619c724bb43eb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea6df5c2816d80644a619c724bb43eb0">&#9670;&nbsp;</a></span>create_pin_group() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="classhal_1_1_pin_group.html">PinGroup</a>&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> &gt; * &gt; hal::GateType::create_pin_group </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramname"><em>id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> * &gt;&#160;</td>
+          <td class="paramname"><em>pins</em> = <code>{}</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a>&#160;</td>
+          <td class="paramname"><em>direction</em> = <code><a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca334c4a4c42fdb79d7ebc3e73b517e6f8">PinDirection::none</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a>&#160;</td>
+          <td class="paramname"><em>type</em> = <code><a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba334c4a4c42fdb79d7ebc3e73b517e6f8">PinType::none</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>ascending</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramname"><em>start_index</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Create a pin group with the given name.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>- The ID of the pin group. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>- The name of the pin group. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pins</td><td>- The pins to be assigned to the pin group. Defaults to an empty vector. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">direction</td><td>- The direction of the pin group. Defaults to <code><a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca334c4a4c42fdb79d7ebc3e73b517e6f8">PinDirection::none</a></code>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">type</td><td>- The type of the pin group. Defaults to <code><a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba334c4a4c42fdb79d7ebc3e73b517e6f8">PinType::none</a></code>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ascending</td><td>- Set <code>true</code> for ascending pin order (from 0 to n-1), <code>false</code> otherwise (from n-1 to 0). Defaults to <code>false</code>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start_index</td><td>- The start index of the pin group. Defaults to <code>0</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The pin group on success, an error message otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00328">328</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00065">ascending</a>, <a class="el" href="pin__group_8h_source.html#l00269">hal::PinGroup&lt; T &gt;::assign_pin()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00062">direction</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00051">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00055">ERR_APPEND</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00054">id</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00047">OK</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00064">pins</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00066">start_index</a>, <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">type</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00149">create_pin()</a>, and <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00412">create_pin_group()</a>.</p>
+
+</div>
+</div>
+<a id="ab844cc0777899ae022db1e2cc30355b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab844cc0777899ae022db1e2cc30355b9">&#9670;&nbsp;</a></span>get_boolean_function() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> hal::GateType::get_boolean_function </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> *&#160;</td>
+          <td class="paramname"><em>pin</em> = <code>nullptr</code></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>TODO test Get the Boolean function specified by name. If no Boolean function matches the name, an empty function is returned.</p>
+<p>Get the Boolean function corresponding to the given output pin. If <code>pin</code> is a <code>nullptr</code>, the Boolean function of the first output pin is returned.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">function_name</td><td>- The name of the Boolean function. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pin</td><td>- The pin. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The specified Boolean function. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The Boolean function on success, an empty Boolean function otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00357">357</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00502">502</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00485">get_boolean_function()</a>, <a class="el" href="base__pin_8h_source.html#l00073">hal::BasePin&lt; T &gt;::get_name()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00277">get_output_pins()</a>, <a class="el" href="log_8h_source.html#l00074">log_warning</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
+
+</div>
+</div>
+<a id="af14f2febe7d501c08291f38f68c97869"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af14f2febe7d501c08291f38f68c97869">&#9670;&nbsp;</a></span>get_boolean_function() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> hal::GateType::get_boolean_function </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the Boolean function specified by the given name. This name can for example be an output pin of the gate or any other user-defined function name.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>- The name of the Boolean function. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The Boolean function on success, an empty Boolean function otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00485">485</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="log_8h_source.html#l00074">log_warning</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00502">get_boolean_function()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00135">hal::GateLibrary::mark_gnd_gate_type()</a>, and <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00113">hal::GateLibrary::mark_vcc_gate_type()</a>.</p>
 
 </div>
 </div>
@@ -646,11 +631,11 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Get all Boolean functions of the gate type.</p>
-<dl class="section return"><dt>Returns</dt><dd>A map from Boolean function names to Boolean functions. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A map from names to Boolean functions. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00367">367</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00517">517</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00141">hal::GateLibrary::mark_gnd_gate_type()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00113">hal::GateLibrary::mark_vcc_gate_type()</a>, and <a class="el" href="test_2hgl__parser_8cpp_source.html#l00030">hal::TEST_F()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, and <a class="el" href="test_2liberty__parser_8cpp_source.html#l00026">hal::TEST_F()</a>.</p>
 
 </div>
 </div>
@@ -669,7 +654,7 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>TODO test Get a single component matching the filter condition (if provided). Returns a nullptr if (i) the gate type does not contain any components, (ii) multiple components match the filter condition, or (iii) no component matches the filter condition.</p>
+<p>Get a single component matching the filter condition (if provided). Returns a nullptr if (i) the gate type does not contain any components, (ii) multiple components match the filter condition, or (iii) no component matches the filter condition.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- The filter applied to all candidate components. </td></tr>
@@ -678,9 +663,9 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The component or a nullptr. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00046">46</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00056">56</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00023">get_components()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00033">get_components()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>.</p>
 
@@ -711,7 +696,7 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>TODO test Get a single component and convert it to a component of the type specified by the template parameter. A user-defined filter may be applied to the result set, but is disabled by default. If more no or than one components match the filter condition, a nullptr is returned. A check is performed to determine whether the conversion is legal and a nullptr is returned in case it is not.</p>
+<p>Get a single component and convert it to a component of the type specified by the template parameter. A user-defined filter may be applied to the result set, but is disabled by default. If more no or than one components match the filter condition, a nullptr is returned. A check is performed to determine whether the conversion is legal and a nullptr is returned in case it is not.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- The user-defined filter function applied to all candidate components. </td></tr>
@@ -720,11 +705,11 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The component converted to the target type or a nullptr. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="gate__type_8h_source.html#l00104">104</a> of file <a class="el" href="gate__type_8h_source.html">gate_type.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gate__type_8h_source.html#l00103">103</a> of file <a class="el" href="gate__type_8h_source.html">gate_type.h</a>.</p>
 
 <p class="reference">References <a class="el" href="gate__type__component_8h_source.html#l00151">hal::GateTypeComponent::convert_to()</a>, and <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="test_2hgl__parser_8cpp_source.html#l00030">hal::TEST_F()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="py__code__provider_8cpp_source.html#l00080">hal::PyCodeProvider::pyCodeGateAsyncSetResetBehavior()</a>, and <a class="el" href="test_2liberty__parser_8cpp_source.html#l00097">hal::TEST_F()</a>.</p>
 
 </div>
 </div>
@@ -743,7 +728,7 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>TODO test Get all components matching the filter condition (if provided) as a vector. Returns an empty vector if (i) the gate type does not contain any components or (ii) no component matches the filter condition.</p>
+<p>Get all components matching the filter condition (if provided) as a vector. Returns an empty vector if (i) the gate type does not contain any components or (ii) no component matches the filter condition.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- The filter applied to all candidate components, disabled by default. </td></tr>
@@ -752,9 +737,9 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The components. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00023">23</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00033">33</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00046">get_component()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00058">has_component_of_type()</a>, and <a class="el" href="test_2hgl__parser_8cpp_source.html#l00030">hal::TEST_F()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00056">get_component()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00068">has_component_of_type()</a>, and <a class="el" href="test_2liberty__parser_8cpp_source.html#l00026">hal::TEST_F()</a>.</p>
 
 </div>
 </div>
@@ -775,9 +760,9 @@ template&lt;typename T &gt; </div>
 <p>Get the gate library this gate type is associated with.</p>
 <dl class="section return"><dt>Returns</dt><dd>The gate library. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00088">88</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00098">98</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, and <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00103">operator==()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, and <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00113">operator==()</a>.</p>
 
 </div>
 </div>
@@ -798,34 +783,59 @@ template&lt;typename T &gt; </div>
 <p>Get the unique ID of the gate type.</p>
 <dl class="section return"><dt>Returns</dt><dd>The unique ID of the gate type. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00063">63</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00073">73</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00103">operator==()</a>, and <a class="el" href="test_2hgl__parser_8cpp_source.html#l00030">hal::TEST_F()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, and <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00113">operator==()</a>.</p>
 
 </div>
 </div>
-<a id="a8a90fb08834cb0074cdf5921f8b6fd0e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8a90fb08834cb0074cdf5921f8b6fd0e">&#9670;&nbsp;</a></span>get_input_pins()</h2>
+<a id="a02c15ddfe108682453cbf87305d6fccb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02c15ddfe108682453cbf87305d6fccb">&#9670;&nbsp;</a></span>get_input_pin_names()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; std::string &gt; hal::GateType::get_input_pins </td>
+          <td class="memname">std::vector&lt; std::string &gt; hal::GateType::get_input_pin_names </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get a vector of input pins of the gate type.</p>
-<dl class="section return"><dt>Returns</dt><dd>A vector of input pin names of the gate type. </dd></dl>
+<p>Get an ordered vector of the names of all input pins of the gate type (including inout pins).</p>
+<dl class="section return"><dt>Returns</dt><dd>An ordered vector of input pin names. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00123">123</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00269">269</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca54c9ccb45f5ee60133cca31fca024432">hal::inout</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00062">direction</a>, <a class="el" href="base__pin_8h_source.html#l00093">hal::BasePin&lt; T &gt;::get_direction()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00230">get_pin_names()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca54c9ccb45f5ee60133cca31fca024432">hal::inout</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="graphics__gate_8cpp_source.html#l00008">hal::GraphicsGate::GraphicsGate()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00141">hal::GateLibrary::mark_gnd_gate_type()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00113">hal::GateLibrary::mark_vcc_gate_type()</a>, and <a class="el" href="test_2hgl__parser_8cpp_source.html#l00030">hal::TEST_F()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, and <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00802">hal::netlist_utils::remove_buffers()</a>.</p>
+
+</div>
+</div>
+<a id="ac1f8907479a3cfb66dc512d5a12a9163"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac1f8907479a3cfb66dc512d5a12a9163">&#9670;&nbsp;</a></span>get_input_pins()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> * &gt; hal::GateType::get_input_pins </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get an ordered vector of all input pins of the gate type (including inout pins).</p>
+<dl class="section return"><dt>Returns</dt><dd>An ordered vector of input pins. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00261">261</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00062">direction</a>, <a class="el" href="base__pin_8h_source.html#l00093">hal::BasePin&lt; T &gt;::get_direction()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00202">get_pins()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca54c9ccb45f5ee60133cca31fca024432">hal::inout</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="graphics__gate_8cpp_source.html#l00008">hal::GraphicsGate::GraphicsGate()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00135">hal::GateLibrary::mark_gnd_gate_type()</a>, and <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00113">hal::GateLibrary::mark_vcc_gate_type()</a>.</p>
 
 </div>
 </div>
@@ -846,355 +856,279 @@ template&lt;typename T &gt; </div>
 <p>Get the name of the gate type.</p>
 <dl class="section return"><dt>Returns</dt><dd>The name of the gate type. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00068">68</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00078">78</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="selection__tree__item_8cpp_source.html#l00170">hal::SelectionTreeItemGate::boxType()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00059">hal::GateLibrary::contains_gate_type()</a>, <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00104">hal::BooleanInfluencePlugin::get_boolean_influences_of_gate()</a>, <a class="el" href="graphics__gate_8cpp_source.html#l00008">hal::GraphicsGate::GraphicsGate()</a>, <a class="el" href="event__log_8cpp_source.html#l00025">hal::event_log::handle_gate_event()</a>, <a class="el" href="netlist__simulator_8cpp_source.html#l00174">hal::NetlistSimulator::load_initial_values_from_netlist()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00141">hal::GateLibrary::mark_gnd_gate_type()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00113">hal::GateLibrary::mark_vcc_gate_type()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l01059">hal::netlist_utils::replace_gate()</a>, and <a class="el" href="test_2hgl__parser_8cpp_source.html#l00030">hal::TEST_F()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="selection__tree__item_8cpp_source.html#l00170">hal::SelectionTreeItemGate::boxType()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00059">hal::GateLibrary::contains_gate_type()</a>, <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00104">hal::BooleanInfluencePlugin::get_boolean_influences_of_gate()</a>, <a class="el" href="graphics__gate_8cpp_source.html#l00008">hal::GraphicsGate::GraphicsGate()</a>, <a class="el" href="event__log_8cpp_source.html#l00025">hal::event_log::handle_gate_event()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00135">hal::GateLibrary::mark_gnd_gate_type()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00113">hal::GateLibrary::mark_vcc_gate_type()</a>, <a class="el" href="netlist__elements__tree__model_8cpp_source.html#l00267">hal::NetlistElementsTreeModel::moduleGateAssigned()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l01088">hal::netlist_utils::replace_gate()</a>, and <a class="el" href="netlist__elements__tree__model_8cpp_source.html#l00063">hal::NetlistElementsTreeModel::setContent()</a>.</p>
 
 </div>
 </div>
-<a id="a6187126b28eb574fca729c2418b628c5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6187126b28eb574fca729c2418b628c5">&#9670;&nbsp;</a></span>get_output_pins()</h2>
+<a id="a810edef9bb7ca541d8f18bb61a590ec3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a810edef9bb7ca541d8f18bb61a590ec3">&#9670;&nbsp;</a></span>get_output_pin_names()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; std::string &gt; hal::GateType::get_output_pins </td>
+          <td class="memname">std::vector&lt; std::string &gt; hal::GateType::get_output_pin_names </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get a vector of output pins of the gate type.</p>
-<dl class="section return"><dt>Returns</dt><dd>A vector of output pins of the gate type. </dd></dl>
+<p>Get an ordered vector of the names of all output pins of the gate type (including inout pins).</p>
+<dl class="section return"><dt>Returns</dt><dd>An ordered vector of output pin names. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00149">149</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00285">285</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca54c9ccb45f5ee60133cca31fca024432">hal::inout</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00062">direction</a>, <a class="el" href="base__pin_8h_source.html#l00093">hal::BasePin&lt; T &gt;::get_direction()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00230">get_pin_names()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca54c9ccb45f5ee60133cca31fca024432">hal::inout</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="graphics__gate_8cpp_source.html#l00008">hal::GraphicsGate::GraphicsGate()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00141">hal::GateLibrary::mark_gnd_gate_type()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00113">hal::GateLibrary::mark_vcc_gate_type()</a>, and <a class="el" href="test_2hgl__parser_8cpp_source.html#l00030">hal::TEST_F()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>.</p>
 
 </div>
 </div>
-<a id="a3ba546749f9e5d47c5ec0ec94afaf8cd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3ba546749f9e5d47c5ec0ec94afaf8cd">&#9670;&nbsp;</a></span>get_pin_direction()</h2>
+<a id="a2ff8c787cda54ece95f10b399abb839a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ff8c787cda54ece95f10b399abb839a">&#9670;&nbsp;</a></span>get_output_pins()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a> hal::GateType::get_pin_direction </td>
+          <td class="memname">std::vector&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> * &gt; hal::GateType::get_output_pins </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>pin</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the pin direction of the given pin. The user has to make sure that the pin exists before calling this function. If the pin does not exist, the direction 'internal' will be returned.</p>
+<p>Get an ordered vector of all output pins of the gate type (including inout pins).</p>
+<dl class="section return"><dt>Returns</dt><dd>An ordered vector of output pins. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00277">277</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00062">direction</a>, <a class="el" href="base__pin_8h_source.html#l00093">hal::BasePin&lt; T &gt;::get_direction()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00202">get_pins()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca54c9ccb45f5ee60133cca31fca024432">hal::inout</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00502">get_boolean_function()</a>, <a class="el" href="graphics__gate_8cpp_source.html#l00008">hal::GraphicsGate::GraphicsGate()</a>, <a class="el" href="src_2verilog__parser_8cpp_source.html#l00634">hal::VerilogParser::instantiate()</a>, <a class="el" href="src_2vhdl__parser_8cpp_source.html#l00201">hal::VHDLParser::instantiate()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00135">hal::GateLibrary::mark_gnd_gate_type()</a>, and <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00113">hal::GateLibrary::mark_vcc_gate_type()</a>.</p>
+
+</div>
+</div>
+<a id="a743d3cc769f908b7b3e512fe133079fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a743d3cc769f908b7b3e512fe133079fe">&#9670;&nbsp;</a></span>get_pin_by_id()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> * hal::GateType::get_pin_by_id </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the pin corresponding to the given ID.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pin</td><td>- The pin. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>- The ID of the pin. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The pin direction. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The pin on success, a <code>nullptr</code> otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00293">293</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="log_8h_source.html#l00074">log_warning</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>.</p>
+
+</div>
+</div>
+<a id="a621a17f4711a7e5ad9162332b8ba928a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a621a17f4711a7e5ad9162332b8ba928a">&#9670;&nbsp;</a></span>get_pin_by_name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> * hal::GateType::get_pin_by_name </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the pin corresponding to the given name.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>- The name of the pin. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The pin on success, a <code>nullptr</code> otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00310">310</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="log_8h_source.html#l00074">log_warning</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="netlist_2net_8cpp_source.html#l00259">hal::Net::add_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00130">hal::Net::add_source()</a>, <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00325">hal::Net::is_a_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00195">hal::Net::is_a_source()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00290">hal::Net::remove_destination()</a>, and <a class="el" href="netlist_2net_8cpp_source.html#l00160">hal::Net::remove_source()</a>.</p>
+
+</div>
+</div>
+<a id="aa9ab60b81a005e7369da633bd900e2b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9ab60b81a005e7369da633bd900e2b1">&#9670;&nbsp;</a></span>get_pin_group_by_id()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_pin_group.html">PinGroup</a>&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> &gt; * hal::GateType::get_pin_group_by_id </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the pin group corresponding to the given ID.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>- The ID of the pin group. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The pin group on success, a <code>nullptr</code> otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00438">438</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="log_8h_source.html#l00074">log_warning</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>.</p>
+
+</div>
+</div>
+<a id="ac7b1db42a6c49646563797b75c33ccab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7b1db42a6c49646563797b75c33ccab">&#9670;&nbsp;</a></span>get_pin_group_by_name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_pin_group.html">PinGroup</a>&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> &gt; * hal::GateType::get_pin_group_by_name </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the pin group corresponding to the given name.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>- The name of the pin group. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The pin group on success, a <code>nullptr</code> otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00455">455</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="log_8h_source.html#l00072">log_debug</a>, <a class="el" href="log_8h_source.html#l00074">log_warning</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>.</p>
+
+</div>
+</div>
+<a id="a39939511c6ca20236bba51dd0e5fc2fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39939511c6ca20236bba51dd0e5fc2fa">&#9670;&nbsp;</a></span>get_pin_groups()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="classhal_1_1_pin_group.html">PinGroup</a>&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> &gt; * &gt; hal::GateType::get_pin_groups </td>
+          <td>(</td>
+          <td class="paramtype">const std::function&lt; bool(<a class="el" href="classhal_1_1_pin_group.html">PinGroup</a>&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> &gt; *)&gt; &amp;&#160;</td>
+          <td class="paramname"><em>filter</em> = <code>nullptr</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get an ordered vector of all pin groups of the gate type. The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- An optional filter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An ordered vector of pin groups. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00417">417</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a307497a9e722f492a1f4f5975fa58017"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a307497a9e722f492a1f4f5975fa58017">&#9670;&nbsp;</a></span>get_pin_names()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::string &gt; hal::GateType::get_pin_names </td>
+          <td>(</td>
+          <td class="paramtype">const std::function&lt; bool(<a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> *)&gt; &amp;&#160;</td>
+          <td class="paramname"><em>filter</em> = <code>nullptr</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get an ordered vector of the names of all pins of the gate type. The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- An optional filter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An ordered vector of pin names. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00230">230</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00064">pins</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00269">get_input_pin_names()</a>, and <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00285">get_output_pin_names()</a>.</p>
+
+</div>
+</div>
+<a id="af6bff94f5a30c31508e5690ff647d705"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6bff94f5a30c31508e5690ff647d705">&#9670;&nbsp;</a></span>get_pins()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> * &gt; hal::GateType::get_pins </td>
+          <td>(</td>
+          <td class="paramtype">const std::function&lt; bool(<a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> *)&gt; &amp;&#160;</td>
+          <td class="paramname"><em>filter</em> = <code>nullptr</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get an ordered vector of all pins of the gate type. The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- An optional filter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An ordered vector of pins. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00202">202</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecad1efad72dc5b17dc66a46767c32fff40">hal::internal</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00064">pins</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>.</p>
-
-</div>
-</div>
-<a id="a7dbecf06b382554b247c74fe03e3f717"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7dbecf06b382554b247c74fe03e3f717">&#9670;&nbsp;</a></span>get_pin_directions()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const std::unordered_map&lt; std::string, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a> &gt; &amp; hal::GateType::get_pin_directions </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Get the pin directions of all pins as a map.</p>
-<dl class="section return"><dt>Returns</dt><dd>A map from pin to pin direction. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00212">212</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>.</p>
-
-</div>
-</div>
-<a id="ad48fa1422e1234a274406b07231d728a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad48fa1422e1234a274406b07231d728a">&#9670;&nbsp;</a></span>get_pin_group()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string hal::GateType::get_pin_group </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>pin</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Get the pin type of the given pin. The user has to make sure that the pin exists before calling this function. If the pin is not in a group or the does not exist, an empty string will be returned.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pin</td><td>- The pin. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The pin group. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00303">303</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>.</p>
-
-</div>
-</div>
-<a id="afa2d0c6d6a39b2bca0b78425a017303c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afa2d0c6d6a39b2bca0b78425a017303c">&#9670;&nbsp;</a></span>get_pin_groups()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::unordered_map&lt; std::string, std::vector&lt; std::pair&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::string &gt; &gt; &gt; hal::GateType::get_pin_groups </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Get all pin groups of the gate type.</p>
-<dl class="section return"><dt>Returns</dt><dd>A map from pin group names to the pins of each group including their indices. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00313">313</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, and <a class="el" href="test_2hgl__parser_8cpp_source.html#l00030">hal::TEST_F()</a>.</p>
-
-</div>
-</div>
-<a id="ae3af6b20626f5c83c416879a0ad8c410"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae3af6b20626f5c83c416879a0ad8c410">&#9670;&nbsp;</a></span>get_pin_of_group_at_index()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string hal::GateType::get_pin_of_group_at_index </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>group</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
-          <td class="paramname"><em>index</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Get the pin at the specified index of the given group.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">group</td><td>- The name of the pin group. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">index</td><td>- The index of the pin. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The pin. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00329">329</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="log_8h_source.html#l00075">log_error</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>.</p>
-
-</div>
-</div>
-<a id="accbf2ccf5f57b6480d313213885de914"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#accbf2ccf5f57b6480d313213885de914">&#9670;&nbsp;</a></span>get_pin_type()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a> hal::GateType::get_pin_type </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>pin</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Get the pin type of the given pin. The user has to make sure that the pin exists before calling this function. If the pin does not exist, the type 'none' will be returned.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pin</td><td>- The pin. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The pin type. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00248">248</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba334c4a4c42fdb79d7ebc3e73b517e6f8">hal::none</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, and <a class="el" href="test_2hgl__parser_8cpp_source.html#l00030">hal::TEST_F()</a>.</p>
-
-</div>
-</div>
-<a id="a7d6e8de214a2d343516b833a89f6402c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7d6e8de214a2d343516b833a89f6402c">&#9670;&nbsp;</a></span>get_pin_types()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const std::unordered_map&lt; std::string, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a> &gt; &amp; hal::GateType::get_pin_types </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Get the pin types of all pins as a map.</p>
-<dl class="section return"><dt>Returns</dt><dd>A map from pin to pin type. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00258">258</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="netlist__simulator_8cpp_source.html#l00136">hal::NetlistSimulator::load_initial_values()</a>, <a class="el" href="netlist__simulator_8cpp_source.html#l00174">hal::NetlistSimulator::load_initial_values_from_netlist()</a>, and <a class="el" href="test_2hgl__writer_8cpp_source.html#l00178">hal::TEST_F()</a>.</p>
-
-</div>
-</div>
-<a id="a7ea8716a68e1ef3d8dfe1ae6583e302f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7ea8716a68e1ef3d8dfe1ae6583e302f">&#9670;&nbsp;</a></span>get_pins()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const std::vector&lt; std::string &gt; &amp; hal::GateType::get_pins </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Get all pins belonging to the gate type.</p>
-<dl class="section return"><dt>Returns</dt><dd>A vector of pins. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00197">197</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>.</p>
-
-</div>
-</div>
-<a id="a3b2c7ef297dc5de14da2a89609078a55"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b2c7ef297dc5de14da2a89609078a55">&#9670;&nbsp;</a></span>get_pins_of_direction()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::unordered_set&lt; std::string &gt; hal::GateType::get_pins_of_direction </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a>&#160;</td>
-          <td class="paramname"><em>direction</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Get all pins of the specified pin direction.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">direction</td><td>- The pin direction. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A set of pins. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00217">217</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="src_2vhdl__parser_8cpp_source.html#l00169">hal::VHDLParser::instantiate()</a>, <a class="el" href="src_2verilog__parser_8cpp_source.html#l00188">hal::VerilogParser::instantiate()</a>, and <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00755">hal::netlist_utils::remove_buffers()</a>.</p>
-
-</div>
-</div>
-<a id="a3d6c35298a5297a223617dece72bc084"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3d6c35298a5297a223617dece72bc084">&#9670;&nbsp;</a></span>get_pins_of_group()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt; std::pair&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::string &gt; &gt; hal::GateType::get_pins_of_group </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>group</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Get all pins of the specified pin group including their indices.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">group</td><td>- The name of the pin group. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The pins including their indices. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00318">318</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="log_8h_source.html#l00075">log_error</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>.</p>
-
-</div>
-</div>
-<a id="a190a58de9dce12097dcd77b56c1992d8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a190a58de9dce12097dcd77b56c1992d8">&#9670;&nbsp;</a></span>get_pins_of_type()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::unordered_set&lt; std::string &gt; hal::GateType::get_pins_of_type </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a>&#160;</td>
-          <td class="paramname"><em>pin_type</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Get all pins of the specified pin type.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pin_type</td><td>- The pin type. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A set of pins. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00263">263</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00104">hal::BooleanInfluencePlugin::get_boolean_influences_of_gate()</a>, and <a class="el" href="test_2liberty__parser_8cpp_source.html#l00026">hal::TEST_F()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00104">hal::BooleanInfluencePlugin::get_boolean_influences_of_gate()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00261">get_input_pins()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00277">get_output_pins()</a>, <a class="el" href="pin__tree__model_8cpp_source.html#l00039">hal::GatePinsTreeModel::setGate()</a>, and <a class="el" href="test_2liberty__parser_8cpp_source.html#l00026">hal::TEST_F()</a>.</p>
 
 </div>
 </div>
@@ -1215,9 +1149,57 @@ template&lt;typename T &gt; </div>
 <p>Get the properties assigned to the gate type.</p>
 <dl class="section return"><dt>Returns</dt><dd>The properties of the gate type. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00078">78</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00088">88</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, and <a class="el" href="test_2hgl__parser_8cpp_source.html#l00030">hal::TEST_F()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, and <a class="el" href="test_2liberty__parser_8cpp_source.html#l00026">hal::TEST_F()</a>.</p>
+
+</div>
+</div>
+<a id="acbbb7759baee7c417c9d57e41c612177"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acbbb7759baee7c417c9d57e41c612177">&#9670;&nbsp;</a></span>get_unique_pin_group_id()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> hal::GateType::get_unique_pin_group_id </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get a spare pin group ID.<br  />
+ The value of 0 is reserved and represents an invalid ID.</p>
+<dl class="section return"><dt>Returns</dt><dd>The pin group ID. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00136">136</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00412">create_pin_group()</a>.</p>
+
+</div>
+</div>
+<a id="a921c50d72bb2bcd2a53bc01c211daaef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a921c50d72bb2bcd2a53bc01c211daaef">&#9670;&nbsp;</a></span>get_unique_pin_id()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> hal::GateType::get_unique_pin_id </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get a spare pin ID.<br  />
+ The value of 0 is reserved and represents an invalid ID.</p>
+<dl class="section return"><dt>Returns</dt><dd>The pin ID. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00123">123</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00197">create_pin()</a>.</p>
 
 </div>
 </div>
@@ -1236,7 +1218,7 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>TODO test Check if the gate type contains a component of the specified type.</p>
+<p>Check if the gate type contains a component of the specified type.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">type</td><td>- The component type to check for. </td></tr>
@@ -1245,9 +1227,9 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the gate type contains a component of the speciifed type, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00058">58</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00068">68</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00023">get_components()</a>, <a class="el" href="classhal_1_1_gate_type_component.html#a4104ed67b98abffcf8485a42cd49f248">hal::GateTypeComponent::get_type()</a>, and <a class="el" href="control_8py_source.html#l00014">control::type</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00033">get_components()</a>, <a class="el" href="classhal_1_1_gate_type_component.html#a4104ed67b98abffcf8485a42cd49f248">hal::GateTypeComponent::get_type()</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">type</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>.</p>
 
@@ -1277,9 +1259,9 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the gate type has the specified property, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00083">83</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00093">93</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00104">hal::BooleanInfluencePlugin::get_boolean_influences_of_gate()</a>, and <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00755">hal::netlist_utils::remove_buffers()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00104">hal::BooleanInfluencePlugin::get_boolean_influences_of_gate()</a>, and <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00802">hal::netlist_utils::remove_buffers()</a>.</p>
 
 </div>
 </div>
@@ -1307,7 +1289,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if both gate types are unequal, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00108">108</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00118">118</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
 
 </div>
 </div>
@@ -1335,9 +1317,9 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if both gate types are equal, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00103">103</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00113">113</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00088">get_gate_library()</a>, and <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00063">get_id()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00098">get_gate_library()</a>, and <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00073">get_id()</a>.</p>
 
 </div>
 </div>
@@ -1358,9 +1340,9 @@ template&lt;typename T &gt; </div>
 <p>Get a string describing the given gate type.</p>
 <dl class="section return"><dt>Returns</dt><dd>A string describing the gate type. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00093">93</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00103">103</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, and <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00098">hal::operator&lt;&lt;()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, and <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00108">hal::operator&lt;&lt;()</a>.</p>
 
 </div>
 </div>
@@ -1385,7 +1367,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gate__type_8h_source.html#l00398">398</a> of file <a class="el" href="gate__type_8h_source.html">gate_type.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gate__type_8h_source.html#l00403">403</a> of file <a class="el" href="gate__type_8h_source.html">gate_type.h</a>.</p>
 
 </div>
 </div>
@@ -1432,7 +1414,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>An output stream. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00098">98</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00108">108</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
 
 </div>
 </div>
@@ -1446,7 +1428,7 @@ template&lt;typename T &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_gate_type.html">GateType</a></li>
-    <li class="footer">Generated on Tue Jul 12 2022 15:50:05 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:08:37 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

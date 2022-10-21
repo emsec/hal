@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['netlist_20simulator_20plugin_39863',['Netlist Simulator Plugin',['../md__home_runner_work_hal_hal_plugins_netlist_simulator_readme.html',1,'']]]
+  ['welcome_20to_20hal_21_39749',['Welcome to HAL!',['../index.html',1,'']]]
 ];

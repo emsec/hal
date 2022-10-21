@@ -12,12 +12,16 @@ HAL Core Documentation
    gate
    gate_library
    gate_library_manager
+   gate_pin
+   gate_pin_group
    gate_type
    gate_type_component
    gate_type_property
    grouping
    gui_plugin_interface
    module
+   module_pin
+   module_pin_group
    net
    netlist
    netlist_factory
@@ -28,3 +32,4 @@ HAL Core Documentation
    pin_direction
    pin_type
    plugin_manager
+   smt

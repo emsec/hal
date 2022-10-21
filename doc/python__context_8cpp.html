@@ -92,10 +92,19 @@ $(document).ready(function(){initNavTree('python__context_8cpp.html',''); initRe
 <div class="textblock"><code>#include &quot;<a class="el" href="python__context_8h_source.html">gui/python/python_context.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="gui__globals_8h_source.html">gui/gui_globals.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="python__context__subscriber_8h_source.html">gui/python/python_context_subscriber.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="python__thread_8h_source.html">gui/python/python_thread.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="python__editor_8h_source.html">gui/python/python_editor.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="gate__dialog_8h_source.html">gui/module_dialog/gate_dialog.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="module__dialog_8h_source.html">gui/module_dialog/module_dialog.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="layout__locker_8h_source.html">gui/graph_widget/layout_locker.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="python__bindings_8h_source.html">hal_core/python_bindings/python_bindings.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="log_8h_source.html">hal_core/utilities/log.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="utils_8h_source.html">hal_core/utilities/utils.h</a>&quot;</code><br />
 <code>#include &lt;QDir&gt;</code><br />
+<code>#include &lt;QDebug&gt;</code><br />
+<code>#include &lt;QInputDialog&gt;</code><br />
+<code>#include &lt;QApplication&gt;</code><br />
+<code>#include &lt;QFileDialog&gt;</code><br />
 <code>#include &lt;fstream&gt;</code><br />
 <code>#include &quot;hal_config.h&quot;</code><br />
 <code>#include &lt;Python.h&gt;</code><br />
@@ -104,33 +113,6 @@ $(document).ready(function(){initNavTree('python__context_8cpp.html',''); initRe
 <code>#include &lt;grammar.h&gt;</code><br />
 <code>#include &lt;node.h&gt;</code><br />
 <code>#include &lt;parsetok.h&gt;</code><br />
-</div><div class="textblock"><div class="dynheader">
-Include dependency graph for python_context.cpp:</div>
-<div class="dyncontent">
-<div class="center"><img src="python__context_8cpp__incl.png" border="0" usemap="#_2home_2runner_2work_2hal_2hal_2plugins_2gui_2src_2python_2python__context_8cpp" alt=""/></div>
-<map name="_2home_2runner_2work_2hal_2hal_2plugins_2gui_2src_2python_2python__context_8cpp" id="_2home_2runner_2work_2hal_2hal_2plugins_2gui_2src_2python_2python__context_8cpp">
-<area shape="rect" title=" " alt="" coords="851,5,1053,61"/>
-<area shape="rect" href="python__context_8h.html" title=" " alt="" coords="287,206,495,233"/>
-<area shape="rect" href="python__context__subscriber_8h.html" title=" " alt="" coords="350,377,546,419"/>
-<area shape="rect" href="gui__globals_8h.html" title=" " alt="" coords="318,117,450,143"/>
-<area shape="rect" href="python__bindings_8h.html" title=" " alt="" coords="627,109,815,151"/>
-<area shape="rect" href="log_8h.html" title=" " alt="" coords="576,199,707,240"/>
-<area shape="rect" href="utils_8h.html" title=" " alt="" coords="628,288,759,329"/>
-<area shape="rect" title=" " alt="" coords="840,117,891,143"/>
-<area shape="rect" title=" " alt="" coords="915,117,989,143"/>
-<area shape="rect" title=" " alt="" coords="1013,117,1113,143"/>
-<area shape="rect" title=" " alt="" coords="1137,117,1215,143"/>
-<area shape="rect" title=" " alt="" coords="1239,117,1326,143"/>
-<area shape="rect" title=" " alt="" coords="1351,117,1433,143"/>
-<area shape="rect" title=" " alt="" coords="1457,117,1551,143"/>
-<area shape="rect" title=" " alt="" coords="1575,117,1641,143"/>
-<area shape="rect" title=" " alt="" coords="1665,117,1756,143"/>
-<area shape="rect" href="python__console_8h.html" title=" " alt="" coords="343,295,553,322"/>
-<area shape="rect" title=" " alt="" coords="483,467,554,493"/>
-<area shape="rect" title=" " alt="" coords="26,295,169,322"/>
-<area shape="rect" title=" " alt="" coords="193,295,319,322"/>
-</map>
-</div>
 </div>
 <p><a href="python__context_8cpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -165,7 +147,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_609dd161604b7aa86c7b630207f12412.html">python</a></li><li class="navelem"><a class="el" href="python__context_8cpp.html">python_context.cpp</a></li>
-    <li class="footer">Generated on Tue Jul 12 2022 15:50:04 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:08:36 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

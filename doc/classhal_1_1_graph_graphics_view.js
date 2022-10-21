@@ -10,6 +10,7 @@ var classhal_1_1_graph_graphics_view =
     [ "setDragModifier", "classhal_1_1_graph_graphics_view.html#a4b1419d80f01aea4229d54ba95f93dc7", null ],
     [ "setGridType", "classhal_1_1_graph_graphics_view.html#a1284b4d251c36b76d29fa316da85c03c", null ],
     [ "setPanModifier", "classhal_1_1_graph_graphics_view.html#a2a0580d1bee10998a43badc5f8435c31", null ],
+    [ "triggerTerminatePicker", "classhal_1_1_graph_graphics_view.html#aba56852e26de43eed9b2208529d35dda", null ],
     [ "viewportCenterZoom", "classhal_1_1_graph_graphics_view.html#a3892fc8c230865246ac588d7fcd397d7", null ],
     [ "GraphWidget", "classhal_1_1_graph_graphics_view.html#a883185841d7deb422d7400dafea4e113", null ]
 ];

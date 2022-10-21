@@ -116,8 +116,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae465d61b825304d2c03f2bcd795a55c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e5aa9f5e1ce20a506d3a7ecce45fd16"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_library_parser.html#a6e5aa9f5e1ce20a506d3a7ecce45fd16">~GateLibraryParser</a> ()=default</td></tr>
 <tr class="separator:a6e5aa9f5e1ce20a506d3a7ecce45fd16"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad29d747d61aba7f8685567d4f889c8de"><td class="memItemLeft" align="right" valign="top">virtual std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_library.html">GateLibrary</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_library_parser.html#ad29d747d61aba7f8685567d4f889c8de">parse</a> (const std::filesystem::path &amp;file_path)=0</td></tr>
-<tr class="separator:ad29d747d61aba7f8685567d4f889c8de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8b3fdfc65b6d87782d8fc7da1a33b36"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_library.html">GateLibrary</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_library_parser.html#ad8b3fdfc65b6d87782d8fc7da1a33b36">parse</a> (const std::filesystem::path &amp;file_path)=0</td></tr>
+<tr class="separator:ad8b3fdfc65b6d87782d8fc7da1a33b36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The gate library parser is the base class that needs to be inherited from all parsers that shall be registered with HAL. </p>
@@ -175,8 +175,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ad29d747d61aba7f8685567d4f889c8de"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad29d747d61aba7f8685567d4f889c8de">&#9670;&nbsp;</a></span>parse()</h2>
+<a id="ad8b3fdfc65b6d87782d8fc7da1a33b36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8b3fdfc65b6d87782d8fc7da1a33b36">&#9670;&nbsp;</a></span>parse()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -185,7 +185,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual std::unique_ptr&lt;<a class="el" href="classhal_1_1_gate_library.html">GateLibrary</a>&gt; hal::GateLibraryParser::parse </td>
+          <td class="memname">virtual <a class="el" href="classhal_1_1_result.html">Result</a>&lt;std::unique_ptr&lt;<a class="el" href="classhal_1_1_gate_library.html">GateLibrary</a>&gt; &gt; hal::GateLibraryParser::parse </td>
           <td>(</td>
           <td class="paramtype">const std::filesystem::path &amp;&#160;</td>
           <td class="paramname"><em>file_path</em></td><td>)</td>
@@ -205,9 +205,9 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The gate library or a nullptr on failure. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The gate library on success, an error otherwise. </dd></dl>
 
-<p>Implemented in <a class="el" href="classhal_1_1_liberty_parser.html#a9004dd5312ba339b2add120046c914b1">hal::LibertyParser</a>, and <a class="el" href="classhal_1_1_h_g_l_parser.html#ad0c291fa12c4fce6df5ac7ad1a762d25">hal::HGLParser</a>.</p>
+<p>Implemented in <a class="el" href="classhal_1_1_liberty_parser.html#ac3feba23c6e43271052561b325be0b72">hal::LibertyParser</a>, and <a class="el" href="classhal_1_1_h_g_l_parser.html#aef1def52a65633346a43e8a2c0fcda1d">hal::HGLParser</a>.</p>
 
 </div>
 </div>
@@ -220,7 +220,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_gate_library_parser.html">GateLibraryParser</a></li>
-    <li class="footer">Generated on Tue Jul 12 2022 15:50:05 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:08:37 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

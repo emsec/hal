@@ -1,22 +1,22 @@
 <map id="/home/runner/work/hal/hal/plugins/gui/src/user_action/action_delete_object.cpp" name="/home/runner/work/hal/hal/plugins/gui/src/user_action/action_delete_object.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="878,5,1071,76"/>
-<area shape="rect" id="node2" href="$action__add__items__to__object_8h.html" title=" " alt="" coords="132,124,308,165"/>
-<area shape="rect" id="node7" href="$action__delete__object_8h.html" title=" " alt="" coords="892,124,1057,165"/>
-<area shape="rect" id="node8" href="$action__create__object_8h.html" title=" " alt="" coords="513,124,679,165"/>
-<area shape="rect" id="node9" href="$action__set__object__color_8h.html" title=" " alt="" coords="1081,124,1247,165"/>
-<area shape="rect" id="node11" href="$action__set__object__type_8h.html" title=" " alt="" coords="703,124,868,165"/>
-<area shape="rect" id="node12" href="$user__action__compound_8h.html" title=" " alt="" coords="333,124,489,165"/>
-<area shape="rect" id="node14" href="$layout__locker_8h.html" title=" " alt="" coords="5,213,184,255"/>
-<area shape="rect" id="node15" href="$grouping__manager__widget_8h.html" title=" " alt="" coords="1322,124,1486,165"/>
-<area shape="rect" id="node17" href="$grouping__table__model_8h.html" title=" " alt="" coords="1158,213,1322,255"/>
-<area shape="rect" id="node19" href="$module__model_8h.html" title=" " alt="" coords="1574,213,1770,255"/>
-<area shape="rect" id="node20" href="$gui__globals_8h.html" title=" " alt="" coords="1562,131,1694,158"/>
-<area shape="rect" id="node3" href="$user__action_8h.html" title=" " alt="" coords="636,221,745,247"/>
-<area shape="rect" id="node4" href="$gui__def_8h.html" title=" " alt="" coords="259,221,365,247"/>
-<area shape="rect" id="node6" title=" " alt="" coords="195,303,248,329"/>
-<area shape="rect" id="node5" href="$defines_8h.html" title=" " alt="" coords="1211,303,1351,329"/>
-<area shape="rect" id="node10" title=" " alt="" coords="1460,303,1527,329"/>
-<area shape="rect" id="node13" title=" " alt="" coords="1033,303,1087,329"/>
-<area shape="rect" id="node16" href="$content__widget_8h.html" title=" " alt="" coords="987,213,1133,255"/>
-<area shape="rect" id="node18" title=" " alt="" coords="1397,221,1499,247"/>
+<area shape="rect" id="node1" title=" " alt="" coords="1120,5,1314,76"/>
+<area shape="rect" id="node2" href="$action__delete__object_8h.html" title=" " alt="" coords="1510,124,1676,165"/>
+<area shape="rect" id="node4" href="$layout__locker_8h.html" title=" " alt="" coords="769,124,948,165"/>
+<area shape="rect" id="node6" href="$grouping__manager__widget_8h.html" title=" " alt="" coords="214,124,378,165"/>
+<area shape="rect" id="node8" href="$grouping__table__model_8h.html" title=" " alt="" coords="646,213,810,255"/>
+<area shape="rect" id="node14" href="$gui__globals_8h.html" title=" " alt="" coords="972,131,1104,158"/>
+<area shape="rect" id="node15" href="$module__model_8h.html" title=" " alt="" coords="834,213,1030,255"/>
+<area shape="rect" id="node16" href="$action__add__items__to__object_8h.html" title=" " alt="" coords="1129,124,1305,165"/>
+<area shape="rect" id="node17" href="$action__create__object_8h.html" title=" " alt="" coords="1700,124,1865,165"/>
+<area shape="rect" id="node18" href="$action__set__object__color_8h.html" title=" " alt="" coords="2078,124,2244,165"/>
+<area shape="rect" id="node19" href="$action__set__object__type_8h.html" title=" " alt="" coords="1889,124,2054,165"/>
+<area shape="rect" id="node20" href="$user__action__compound_8h.html" title=" " alt="" coords="1330,124,1486,165"/>
+<area shape="rect" id="node3" href="$user__action_8h.html" title=" " alt="" coords="1633,221,1742,247"/>
+<area shape="rect" id="node5" title=" " alt="" coords="1145,221,1198,247"/>
+<area shape="rect" id="node7" href="$content__widget_8h.html" title=" " alt="" coords="286,213,433,255"/>
+<area shape="rect" id="node9" title=" " alt="" coords="860,303,926,329"/>
+<area shape="rect" id="node10" href="$defines_8h.html" title=" " alt="" coords="658,303,798,329"/>
+<area shape="rect" id="node11" href="$grouping__color__serializer_8h.html" title=" " alt="" coords="458,213,622,255"/>
+<area shape="rect" id="node12" title=" " alt="" coords="76,221,177,247"/>
+<area shape="rect" id="node13" title=" " alt="" coords="202,221,262,247"/>
 </map>

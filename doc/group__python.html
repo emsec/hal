@@ -84,8 +84,7 @@ $(document).ready(function(){initNavTree('group__python.html',''); initResizable
 <div class="header">
   <div class="summary">
 <a href="#groups">Modules</a> &#124;
-<a href="#nested-classes">Classes</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#nested-classes">Classes</a>  </div>
   <div class="headertitle">
 <div class="title">Python<div class="ingroups"><a class="el" href="group__gui.html">HAL Gui</a></div></div>  </div>
 </div><!--header-->
@@ -125,108 +124,15 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_context_subscriber.html">hal::PythonContextSubscriber</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interface for handling python outputs.  <a href="classhal_1_1_python_context_subscriber.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:ga36c639fc24efc401958974c0c3c5adad"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__python.html#ga36c639fc24efc401958974c0c3c5adad">hal::__attribute__</a> ((visibility(&quot;default&quot;))) PythonContext</td></tr>
-<tr class="memdesc:ga36c639fc24efc401958974c0c3c5adad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interface for pybind11.  <a href="group__python.html#ga36c639fc24efc401958974c0c3c5adad">More...</a><br /></td></tr>
-<tr class="separator:ga36c639fc24efc401958974c0c3c5adad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Contains everything that can be associated with the python usage within the GUI. </p>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="ga36c639fc24efc401958974c0c3c5adad"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga36c639fc24efc401958974c0c3c5adad">&#9670;&nbsp;</a></span>__attribute__()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">class hal::__attribute__ </td>
-          <td>(</td>
-          <td class="paramtype">(visibility(&quot;default&quot;))&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Interface for pybind11. </p>
-<p>This class provides an interface for using pybind11. It can call a python interpreter to run python expressions and scripts. Moreover it provides a function to get auto-completion candidates that are available in the context. </p>
-<p>Constructor.</p>
-<p>Destructor.</p>
-<p>Interprets an input string in python format.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">input</td><td>- The input string in python format. </td></tr>
-    <tr><td class="paramname">multiple_expressions</td><td>- Must be set to <b>true</b> if the input contains multiple expressions (i.e. is a compound statement).</td></tr>
-  </table>
-  </dd>
-</dl>
-<p>Interprets a python script.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">input</td><td>- The python script as a string.</td></tr>
-  </table>
-  </dd>
-</dl>
-<p>Forwards standard output to the python console.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">output</td><td>- The output</td></tr>
-  </table>
-  </dd>
-</dl>
-<p>Forwards error output to the python console.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">output</td><td>- The output</td></tr>
-  </table>
-  </dd>
-</dl>
-<p>Clears the python console.</p>
-<p>Resets the python console.</p>
-<p>Assign this object the python console to work with.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">console</td><td>- The python console to work with.</td></tr>
-  </table>
-  </dd>
-</dl>
-<p>Compute a list of auto completion options for a given input. <br  />
- Each entry is a tuple (name_with_symbols, complete). <br  />
- E.g. for <em>text</em>="pri" one entry would be ("print", "nt")</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">text</td><td>- The text to complete </td></tr>
-    <tr><td class="paramname">use_console_context</td><td>- Set <b>true</b> if identifiers in the context of the python console should be considered in the auto completion. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>a vector of all possible auto completion candidates.</dd></dl>
-<p>Check if given statement is a complete or incomplete statement for compound statement processing. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">[text]</td><td>text - The text to check. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>-1 on error, 0 for an incomplete statement and 1 for an complete statement.</dd></dl>
-<p>Initializes the context to work with hal.</p>
-<p>Close the current context.</p>
-<p>Update the current netlist the python context works with.</p>
-
-<p class="definition">Definition at line <a class="el" href="python__context_8h_source.html#l00052">52</a> of file <a class="el" href="python__context_8h_source.html">python_context.h</a>.</p>
-
-<p class="reference">References <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>.</p>
-
-</div>
-</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Jul 12 2022 15:50:05 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:08:36 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

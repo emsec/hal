@@ -1,9 +1,0 @@
-<map id="hal::DetailsWidget" name="hal::DetailsWidget">
-<area shape="rect" id="node1" title="Base class for specific details widgets." alt="" coords="277,887,486,1096"/>
-<area shape="rect" id="node5" href="$classhal_1_1_gate_details_widget.html" title="Displays specific gate details." alt="" coords="5,1173,240,1397"/>
-<area shape="rect" id="node6" href="$classhal_1_1_module_details_widget.html" title="Displays specific module details." alt="" coords="265,1144,498,1427"/>
-<area shape="rect" id="node7" href="$classhal_1_1_net_details_widget.html" title="Displays specific net details." alt="" coords="523,1173,773,1397"/>
-<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qwidget.html" title=" " alt="" coords="278,395,485,839"/>
-<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="209,5,375,347"/>
-<area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qpaintdevice.html" title=" " alt="" coords="399,49,545,303"/>
-</map>

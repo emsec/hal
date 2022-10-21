@@ -23,6 +23,7 @@ var group__graph =
       [ "handleCloseAllTabs", "classhal_1_1_graph_tab_widget.html#a12b63972aee6ffe0fa5fc088a936aea9", null ],
       [ "handleCloseTabsToLeft", "classhal_1_1_graph_tab_widget.html#a7e533025ac0f06e3fef98b0ece51259c", null ],
       [ "handleCloseTabsToRight", "classhal_1_1_graph_tab_widget.html#a5992de7f8b9b4d6cff2895314d27ac86", null ],
+      [ "handleContextCreated", "classhal_1_1_graph_tab_widget.html#ab10eefa98d3b702d6426653491895762", null ],
       [ "handleContextRemoved", "classhal_1_1_graph_tab_widget.html#a65385d3e9ab4b904019a3da3332c1a0a", null ],
       [ "handleContextRenamed", "classhal_1_1_graph_tab_widget.html#af147f3e768ddda79c63dac6b588bd22f", null ],
       [ "handleCustomContextMenuRequested", "classhal_1_1_graph_tab_widget.html#a18f0607d7e65a39ebd00d58921168924", null ],
@@ -31,9 +32,11 @@ var group__graph =
       [ "handleNetFocus", "classhal_1_1_graph_tab_widget.html#a92a91a079a63163e9f1f74bbc4c82fa2", null ],
       [ "handleTabChanged", "classhal_1_1_graph_tab_widget.html#acffdd8dc91ee21690d34571252400a0e", null ],
       [ "handleTabCloseRequested", "classhal_1_1_graph_tab_widget.html#a08124b835c3b1422248924f54dc5fb47", null ],
-      [ "selectCursor", "classhal_1_1_graph_tab_widget.html#a77d5304413c680ac00bfe4667993644c", null ],
+      [ "isSelectMode", "classhal_1_1_graph_tab_widget.html#ad3af62d9f03e4c4e2ee0363e8f0c3822", null ],
+      [ "Q_ENUM", "classhal_1_1_graph_tab_widget.html#aa23e76064fd2fd357952898d557bea58", null ],
       [ "setSelectCursor", "classhal_1_1_graph_tab_widget.html#a7bcecd90f97068b9db647d4adc51ea92", null ],
-      [ "showContext", "classhal_1_1_graph_tab_widget.html#aa18b4eee005357a3cf24788fb67c094e", null ]
+      [ "showContext", "classhal_1_1_graph_tab_widget.html#aa18b4eee005357a3cf24788fb67c094e", null ],
+      [ "triggerTerminatePicker", "classhal_1_1_graph_tab_widget.html#ad1cf168615f1f0daba9e1372c18d358a", null ]
     ] ],
     [ "GraphNavigationTableWidget", "classhal_1_1_graph_navigation_table_widget.html", [
       [ "GraphNavigationTableWidget", "classhal_1_1_graph_navigation_table_widget.html#a9fa157c552d8dd7202ff67e23ff55e49", null ],
@@ -42,6 +45,7 @@ var group__graph =
     ] ],
     [ "GraphWidget", "classhal_1_1_graph_widget.html", [
       [ "GraphWidget", "classhal_1_1_graph_widget.html#a0421e8059b062ba06f1bb84ea141fdc8", null ],
+      [ "~GraphWidget", "classhal_1_1_graph_widget.html#a9aa4130bf02d344d5a11e4e0eb4caa22", null ],
       [ "ensureSelectionVisible", "classhal_1_1_graph_widget.html#a16b3545213c6ecc75287833bb73bd02d", null ],
       [ "focusGate", "classhal_1_1_graph_widget.html#a9ea3d35683d49169fd015c6562348093", null ],
       [ "focusModule", "classhal_1_1_graph_widget.html#abc032294c0ba3084763faa1bd940610c", null ],
@@ -51,6 +55,7 @@ var group__graph =
       [ "handleSceneAvailable", "classhal_1_1_graph_widget.html#a9bcc225353026c99b9a99dbc06115187", null ],
       [ "handleSceneUnavailable", "classhal_1_1_graph_widget.html#a260b8bb8b05a3920fd4784f58a59eb56", null ],
       [ "keyPressEvent", "classhal_1_1_graph_widget.html#a2423cbb2324d143cccd840382a88559e", null ],
+      [ "showBusy", "classhal_1_1_graph_widget.html#a4c5b9b75b65cc63dafc031a4bf0222bb", null ],
       [ "showProgress", "classhal_1_1_graph_widget.html#a782b0dd809b860e2563b88f4a8c021db", null ],
       [ "storeViewport", "classhal_1_1_graph_widget.html#aa095d87d96b9269e98e8e38006cbb670", null ],
       [ "view", "classhal_1_1_graph_widget.html#ac922c09975a0de4105b344addd4eff2b", null ]
@@ -126,6 +131,7 @@ var group__graph =
       [ "removeGraphItem", "classhal_1_1_graphics_scene.html#a0366a0f81bab584cfc078c39658bba76", null ],
       [ "startDragShadow", "classhal_1_1_graphics_scene.html#a0026dfd9d3d4be7b031f10bf0f111482", null ],
       [ "stopDragShadow", "classhal_1_1_graphics_scene.html#ad3ed269a30d6af98604003dfddebc574", null ],
+      [ "updateAllItems", "classhal_1_1_graphics_scene.html#a67b93e8efb90c600b222f438f040e066", null ],
       [ "updateVisuals", "classhal_1_1_graphics_scene.html#a10ff430e7ff392dff7418144c01e30c7", null ]
     ] ]
 ];

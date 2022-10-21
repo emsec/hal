@@ -83,7 +83,11 @@ $(document).ready(function(){initNavTree('classhal_1_1_python_console.html','');
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-slots">Public Slots</a> &#124;
+<a href="#signals">Signals</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="classhal_1_1_python_console-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hal::PythonConsole Class Reference<div class="ingroups"><a class="el" href="group__gui.html">HAL Gui</a> &raquo; <a class="el" href="group__python.html">Python</a> &raquo; <a class="el" href="group__python-console.html">Python Console</a></div></div>  </div>
@@ -99,7 +103,7 @@ Inheritance diagram for hal::PythonConsole:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_python_console__inherit__graph.png" border="0" usemap="#hal_1_1_python_console_inherit__map" alt="Inheritance graph"/></div>
 <map name="hal_1_1_python_console_inherit__map" id="hal_1_1_python_console_inherit__map">
-<area shape="rect" title="An interactable python console." alt="" coords="146,813,309,964"/>
+<area shape="rect" title="An interactable python console." alt="" coords="132,813,323,1008"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qtextedit.html" title=" " alt="" coords="39,365,202,765"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qabstractscrollarea.html" title=" " alt="" coords="5,5,236,317"/>
 <area shape="rect" href="classhal_1_1_python_context_subscriber.html" title="Interface for handling python outputs." alt="" coords="227,512,441,619"/>
@@ -110,21 +114,58 @@ Collaboration diagram for hal::PythonConsole:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_python_console__coll__graph.png" border="0" usemap="#hal_1_1_python_console_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1_python_console_coll__map" id="hal_1_1_python_console_coll__map">
-<area shape="rect" title="An interactable python console." alt="" coords="146,813,309,964"/>
+<area shape="rect" title="An interactable python console." alt="" coords="132,813,323,1008"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qtextedit.html" title=" " alt="" coords="39,365,202,765"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qabstractscrollarea.html" title=" " alt="" coords="5,5,236,317"/>
 <area shape="rect" href="classhal_1_1_python_context_subscriber.html" title="Interface for handling python outputs." alt="" coords="227,512,441,619"/>
 </map>
 </div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a1be3d0cb9bd3ba23f2902c85844c0b31"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_console.html#a1be3d0cb9bd3ba23f2902c85844c0b31">PromptType</a> { <a class="el" href="classhal_1_1_python_console.html#a1be3d0cb9bd3ba23f2902c85844c0b31af019d3bd9f4cf17f42c0d198849dc2cf">Standard</a>, 
+<a class="el" href="classhal_1_1_python_console.html#a1be3d0cb9bd3ba23f2902c85844c0b31ad3a745aec1b9e91ebc7484dd98bb7794">Compound</a>, 
+<a class="el" href="classhal_1_1_python_console.html#a1be3d0cb9bd3ba23f2902c85844c0b31aaed4b3b0a1ee6083aae12474b0a487c3">Input</a>
+ }</td></tr>
+<tr class="separator:a1be3d0cb9bd3ba23f2902c85844c0b31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_qtextedit"><td colspan="2" onclick="javascript:toggleInherit('pub_types_qtextedit')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el"  href="https://doc.qt.io/qt-5/qtextedit.html">QTextEdit</a></td></tr>
+<tr class="memitem:LineWrapMode-enum inherit pub_types_qtextedit"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>LineWrapMode</b> </td></tr>
+<tr class="separator:LineWrapMode-enum inherit pub_types_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:AutoFormattingFlag-enum inherit pub_types_qtextedit"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>AutoFormattingFlag</b> </td></tr>
+<tr class="separator:AutoFormattingFlag-enum inherit pub_types_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_qabstractscrollarea"><td colspan="2" onclick="javascript:toggleInherit('pub_types_qabstractscrollarea')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el"  href="https://doc.qt.io/qt-5/qabstractscrollarea.html">QAbstractScrollArea</a></td></tr>
+<tr class="memitem:SizeAdjustPolicy-enum inherit pub_types_qabstractscrollarea"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>SizeAdjustPolicy</b> </td></tr>
+<tr class="separator:SizeAdjustPolicy-enum inherit pub_types_qabstractscrollarea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_qframe"><td colspan="2" onclick="javascript:toggleInherit('pub_types_qframe')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el"  href="https://doc.qt.io/qt-5/qframe.html">QFrame</a></td></tr>
+<tr class="memitem:Shape-enum inherit pub_types_qframe"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>Shape</b> </td></tr>
+<tr class="separator:Shape-enum inherit pub_types_qframe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:Shadow-enum inherit pub_types_qframe"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>Shadow</b> </td></tr>
+<tr class="separator:Shadow-enum inherit pub_types_qframe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:StyleMask-enum inherit pub_types_qframe"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>StyleMask</b> </td></tr>
+<tr class="separator:StyleMask-enum inherit pub_types_qframe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_qwidget"><td colspan="2" onclick="javascript:toggleInherit('pub_types_qwidget')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el"  href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></td></tr>
+<tr class="memitem:RenderFlag-enum inherit pub_types_qwidget"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>RenderFlag</b> </td></tr>
+<tr class="separator:RenderFlag-enum inherit pub_types_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_qpaintdevice"><td colspan="2" onclick="javascript:toggleInherit('pub_types_qpaintdevice')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el"  href="https://doc.qt.io/qt-5/qpaintdevice.html">QPaintDevice</a></td></tr>
+<tr class="memitem:PaintDeviceMetric-enum inherit pub_types_qpaintdevice"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>PaintDeviceMetric</b> </td></tr>
+<tr class="separator:PaintDeviceMetric-enum inherit pub_types_qpaintdevice"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-slots"></a>
+Public Slots</h2></td></tr>
+<tr class="memitem:a028f45abfde8838a52e203263d85a6f5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_console.html#a028f45abfde8838a52e203263d85a6f5">handleThreadFinished</a> ()</td></tr>
+<tr class="separator:a028f45abfde8838a52e203263d85a6f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="signals"></a>
+Signals</h2></td></tr>
+<tr class="memitem:a49354e20ada84bed8fc20bd38002c489"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_console.html#a49354e20ada84bed8fc20bd38002c489">inputReceived</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> input)</td></tr>
+<tr class="separator:a49354e20ada84bed8fc20bd38002c489"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a2b2fdb6c56694b9c4bae479c6551df4f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_console.html#a2b2fdb6c56694b9c4bae479c6551df4f">PythonConsole</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a>=nullptr)</td></tr>
 <tr class="separator:a2b2fdb6c56694b9c4bae479c6551df4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a37220602fec3a55a2be2b7d43359ce63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_console.html#a37220602fec3a55a2be2b7d43359ce63">keyPressEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qkeyevent.html">QKeyEvent</a> *e) override</td></tr>
-<tr class="separator:a37220602fec3a55a2be2b7d43359ce63"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a9c74ad14277dca87092ad872dc887e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_console.html#a1a9c74ad14277dca87092ad872dc887e">mousePressEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qmouseevent.html">QMouseEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#event">event</a>) override</td></tr>
-<tr class="separator:a1a9c74ad14277dca87092ad872dc887e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a432713566bd86b824e85931cd13884b0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_console.html#a432713566bd86b824e85931cd13884b0">~PythonConsole</a> ()</td></tr>
+<tr class="separator:a432713566bd86b824e85931cd13884b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f718e12610e89012ad39bcd756fd037"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_console.html#a4f718e12610e89012ad39bcd756fd037">handleStdout</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;output) override</td></tr>
 <tr class="separator:a4f718e12610e89012ad39bcd756fd037"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe50448d66cb1cc18bd1b7eb0b2c072a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_console.html#abe50448d66cb1cc18bd1b7eb0b2c072a">handleError</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;output) override</td></tr>
@@ -151,6 +192,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4703019c5f08d8f180ea292a40955c4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafa0ebd289894f69cf062cf3a8855e5d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_console.html#aafa0ebd289894f69cf062cf3a8855e5d">insertAtEnd</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;text, <a class="elRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a> <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#textColor">textColor</a>)</td></tr>
 <tr class="separator:aafa0ebd289894f69cf062cf3a8855e5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a424d08df97acfc6facae8675d8e5eb0a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_console.html#a424d08df97acfc6facae8675d8e5eb0a">setInputMode</a> (bool state)</td></tr>
+<tr class="separator:a424d08df97acfc6facae8675d8e5eb0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a530e84d63c4c7277a08a9193c052b69b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_python_console_abort_thread.html">PythonConsoleAbortThread</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_console.html#a530e84d63c4c7277a08a9193c052b69b">abortThreadWidget</a> ()</td></tr>
+<tr class="separator:a530e84d63c4c7277a08a9193c052b69b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_qtextedit"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_qtextedit')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qtextedit.html">QTextEdit</a></td></tr>
 <tr class="memitem:QTextEdit inherit pub_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#QTextEdit">QTextEdit</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a>)</td></tr>
 <tr class="separator:QTextEdit inherit pub_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -244,7 +289,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:markdown-prop inherit pub_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ensureCursorVisible inherit pub_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#ensureCursorVisible">ensureCursorVisible</a> ()</td></tr>
 <tr class="separator:ensureCursorVisible inherit pub_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:loadResource inherit pub_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#loadResource">loadResource</a> (int type, const <a class="elRef" href="https://doc.qt.io/qt-5/qurl.html">QUrl</a> &amp;name)</td></tr>
+<tr class="memitem:loadResource inherit pub_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#loadResource">loadResource</a> (int <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>, const <a class="elRef" href="https://doc.qt.io/qt-5/qurl.html">QUrl</a> &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
 <tr class="separator:loadResource inherit pub_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:createStandardContextMenu inherit pub_methods_qtextedit"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmenu.html">QMenu</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#createStandardContextMenu">createStandardContextMenu</a> ()</td></tr>
 <tr class="separator:createStandardContextMenu inherit pub_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -336,7 +381,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:insertHtml inherit pub_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:append inherit pub_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#append">append</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;text)</td></tr>
 <tr class="separator:append inherit pub_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:scrollToAnchor inherit pub_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#scrollToAnchor">scrollToAnchor</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;name)</td></tr>
+<tr class="memitem:scrollToAnchor inherit pub_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#scrollToAnchor">scrollToAnchor</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
 <tr class="separator:scrollToAnchor inherit pub_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:zoomIn inherit pub_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#zoomIn">zoomIn</a> (int range)</td></tr>
 <tr class="separator:zoomIn inherit pub_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -667,13 +712,13 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:whatsThis-prop inherit pub_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:accessibleName-prop inherit pub_methods_qwidget"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#accessibleName-prop">accessibleName</a> () const const</td></tr>
 <tr class="separator:accessibleName-prop inherit pub_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:accessibleName-prop inherit pub_methods_qwidget"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#accessibleName-prop">setAccessibleName</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;name)</td></tr>
+<tr class="memitem:accessibleName-prop inherit pub_methods_qwidget"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#accessibleName-prop">setAccessibleName</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
 <tr class="separator:accessibleName-prop inherit pub_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:accessibleDescription-prop inherit pub_methods_qwidget"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#accessibleDescription-prop">accessibleDescription</a> () const const</td></tr>
 <tr class="separator:accessibleDescription-prop inherit pub_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:accessibleDescription-prop inherit pub_methods_qwidget"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#accessibleDescription-prop">setAccessibleDescription</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;description)</td></tr>
 <tr class="separator:accessibleDescription-prop inherit pub_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:layoutDirection-prop inherit pub_methods_qwidget"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#layoutDirection-prop">setLayoutDirection</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qt.html#LayoutDirection-enum">Qt::LayoutDirection</a> direction)</td></tr>
+<tr class="memitem:layoutDirection-prop inherit pub_methods_qwidget"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#layoutDirection-prop">setLayoutDirection</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qt.html#LayoutDirection-enum">Qt::LayoutDirection</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a924ab95925fc83b38cba3ac2d8d7e9aa">direction</a>)</td></tr>
 <tr class="separator:layoutDirection-prop inherit pub_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:layoutDirection-prop inherit pub_methods_qwidget"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qt.html#LayoutDirection-enum">Qt::LayoutDirection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#layoutDirection-prop">layoutDirection</a> () const const</td></tr>
 <tr class="separator:layoutDirection-prop inherit pub_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -721,11 +766,11 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:releaseKeyboard inherit pub_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:grabShortcut inherit pub_methods_qwidget"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#grabShortcut">grabShortcut</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qkeysequence.html">QKeySequence</a> &amp;key, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ShortcutContext-enum">Qt::ShortcutContext</a> context)</td></tr>
 <tr class="separator:grabShortcut inherit pub_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:releaseShortcut inherit pub_methods_qwidget"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#releaseShortcut">releaseShortcut</a> (int id)</td></tr>
+<tr class="memitem:releaseShortcut inherit pub_methods_qwidget"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#releaseShortcut">releaseShortcut</a> (int <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>)</td></tr>
 <tr class="separator:releaseShortcut inherit pub_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:setShortcutEnabled inherit pub_methods_qwidget"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#setShortcutEnabled">setShortcutEnabled</a> (int id, bool enable)</td></tr>
+<tr class="memitem:setShortcutEnabled inherit pub_methods_qwidget"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#setShortcutEnabled">setShortcutEnabled</a> (int <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>, bool enable)</td></tr>
 <tr class="separator:setShortcutEnabled inherit pub_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:setShortcutAutoRepeat inherit pub_methods_qwidget"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#setShortcutAutoRepeat">setShortcutAutoRepeat</a> (int id, bool enable)</td></tr>
+<tr class="memitem:setShortcutAutoRepeat inherit pub_methods_qwidget"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#setShortcutAutoRepeat">setShortcutAutoRepeat</a> (int <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>, bool enable)</td></tr>
 <tr class="separator:setShortcutAutoRepeat inherit pub_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:updatesEnabled-prop inherit pub_methods_qwidget"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#updatesEnabled-prop">updatesEnabled</a> () const const</td></tr>
 <tr class="separator:updatesEnabled-prop inherit pub_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -867,7 +912,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:actions inherit pub_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:parentWidget inherit pub_methods_qwidget"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#parentWidget">parentWidget</a> () const const</td></tr>
 <tr class="separator:parentWidget inherit pub_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:windowFlags-prop inherit pub_methods_qwidget"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#windowFlags-prop">setWindowFlags</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qt.html#WindowType-enum">Qt::WindowFlags</a> type)</td></tr>
+<tr class="memitem:windowFlags-prop inherit pub_methods_qwidget"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#windowFlags-prop">setWindowFlags</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qt.html#WindowType-enum">Qt::WindowFlags</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>)</td></tr>
 <tr class="separator:windowFlags-prop inherit pub_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:windowFlags-prop inherit pub_methods_qwidget"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qt.html#WindowType-enum">Qt::WindowFlags</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#windowFlags-prop">windowFlags</a> () const const</td></tr>
 <tr class="separator:windowFlags-prop inherit pub_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -930,7 +975,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:eventFilter inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:objectName-prop inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#objectName-prop">objectName</a> () const const</td></tr>
 <tr class="separator:objectName-prop inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:objectName-prop inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#objectName-prop">setObjectName</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;name)</td></tr>
+<tr class="memitem:objectName-prop inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#objectName-prop">setObjectName</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
 <tr class="separator:objectName-prop inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:isWidgetType inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#isWidgetType">isWidgetType</a> () const const</td></tr>
 <tr class="separator:isWidgetType inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -948,11 +993,11 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:startTimer inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:startTimer-1 inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#startTimer-1">startTimer</a> (std::chrono::milliseconds time, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#TimerType-enum">Qt::TimerType</a> timerType)</td></tr>
 <tr class="separator:startTimer-1 inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:killTimer inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#killTimer">killTimer</a> (int id)</td></tr>
+<tr class="memitem:killTimer inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#killTimer">killTimer</a> (int <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>)</td></tr>
 <tr class="separator:killTimer inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:findChild inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#findChild">findChild</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;name, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#FindChildOption-enum">Qt::FindChildOptions</a> options) const const</td></tr>
+<tr class="memitem:findChild inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#findChild">findChild</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#FindChildOption-enum">Qt::FindChildOptions</a> options) const const</td></tr>
 <tr class="separator:findChild inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:findChildren inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#findChildren">findChildren</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;name, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#FindChildOption-enum">Qt::FindChildOptions</a> options) const const</td></tr>
+<tr class="memitem:findChildren inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#findChildren">findChildren</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#FindChildOption-enum">Qt::FindChildOptions</a> options) const const</td></tr>
 <tr class="separator:findChildren inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:findChildren-1 inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject-obsolete.html#findChildren-1">findChildren</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qregexp.html">QRegExp</a> &amp;regExp, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#FindChildOption-enum">Qt::FindChildOptions</a> options) const const</td></tr>
 <tr class="separator:findChildren-1 inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -966,7 +1011,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:installEventFilter inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:removeEventFilter inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#removeEventFilter">removeEventFilter</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *obj)</td></tr>
 <tr class="separator:removeEventFilter inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:connect-2 inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect-2">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, const char *signal, const char *method, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> type) const const</td></tr>
+<tr class="memitem:connect-2 inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect-2">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, const char *signal, const char *method, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>) const const</td></tr>
 <tr class="separator:connect-2 inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:disconnect-2 inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#disconnect-2">disconnect</a> (const char *signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *receiver, const char *method) const const</td></tr>
 <tr class="separator:disconnect-2 inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -980,9 +1025,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:dumpObjectTree inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:dumpObjectInfo inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#dumpObjectInfo">dumpObjectInfo</a> () const const</td></tr>
 <tr class="separator:dumpObjectInfo inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:setProperty inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#setProperty">setProperty</a> (const char *name, const <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> &amp;value)</td></tr>
+<tr class="memitem:setProperty inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#setProperty">setProperty</a> (const char *<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, const <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> &amp;value)</td></tr>
 <tr class="separator:setProperty inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:property inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#property">property</a> (const char *name) const const</td></tr>
+<tr class="memitem:property inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#property">property</a> (const char *<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>) const const</td></tr>
 <tr class="separator:property inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:dynamicPropertyNames inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="elRef" href="https://doc.qt.io/qt-5/qbytearray.html">QByteArray</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#dynamicPropertyNames">dynamicPropertyNames</a> () const const</td></tr>
 <tr class="separator:dynamicPropertyNames inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1006,9 +1051,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:qobject_cast inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:qobject_cast-1 inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#qobject_cast-1">qobject_cast</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *object)</td></tr>
 <tr class="separator:qobject_cast-1 inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:qFindChild inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject-obsolete.html#qFindChild">qFindChild</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *obj, const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;name)</td></tr>
+<tr class="memitem:qFindChild inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject-obsolete.html#qFindChild">qFindChild</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *obj, const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
 <tr class="separator:qFindChild inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:qFindChildren inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject-obsolete.html#qFindChildren">qFindChildren</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *obj, const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;name)</td></tr>
+<tr class="memitem:qFindChildren inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject-obsolete.html#qFindChildren">qFindChildren</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *obj, const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
 <tr class="separator:qFindChildren inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:qFindChildren-1 inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#qFindChildren-1">qFindChildren</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *obj, const <a class="elRef" href="https://doc.qt.io/qt-5/qregexp.html">QRegExp</a> &amp;regExp)</td></tr>
 <tr class="separator:qFindChildren-1 inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1086,29 +1131,129 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:depth inherit pub_methods_qpaintdevice"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qpaintdevice.html#depth">depth</a> () const const</td></tr>
 <tr class="separator:depth inherit pub_methods_qpaintdevice"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a37220602fec3a55a2be2b7d43359ce63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_console.html#a37220602fec3a55a2be2b7d43359ce63">keyPressEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qkeyevent.html">QKeyEvent</a> *e) override</td></tr>
+<tr class="separator:a37220602fec3a55a2be2b7d43359ce63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a9c74ad14277dca87092ad872dc887e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_console.html#a1a9c74ad14277dca87092ad872dc887e">mousePressEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qmouseevent.html">QMouseEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#event">event</a>) override</td></tr>
+<tr class="separator:a1a9c74ad14277dca87092ad872dc887e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_qtextedit"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_qtextedit')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qtextedit.html">QTextEdit</a></td></tr>
+<tr class="memitem:keyReleaseEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#keyReleaseEvent">keyReleaseEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qkeyevent.html">QKeyEvent</a> *e) override</td></tr>
+<tr class="separator:keyReleaseEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:resizeEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#resizeEvent">resizeEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qresizeevent.html">QResizeEvent</a> *e) override</td></tr>
+<tr class="separator:resizeEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:paintEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#paintEvent">paintEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qpaintevent.html">QPaintEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#event">event</a>) override</td></tr>
+<tr class="separator:paintEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:mouseMoveEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#mouseMoveEvent">mouseMoveEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qmouseevent.html">QMouseEvent</a> *e) override</td></tr>
+<tr class="separator:mouseMoveEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:mouseReleaseEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#mouseReleaseEvent">mouseReleaseEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qmouseevent.html">QMouseEvent</a> *e) override</td></tr>
+<tr class="separator:mouseReleaseEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:mouseDoubleClickEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#mouseDoubleClickEvent">mouseDoubleClickEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qmouseevent.html">QMouseEvent</a> *e) override</td></tr>
+<tr class="separator:mouseDoubleClickEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:focusNextPrevChild inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#focusNextPrevChild">focusNextPrevChild</a> (bool next) override</td></tr>
+<tr class="separator:focusNextPrevChild inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:contextMenuEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#contextMenuEvent">contextMenuEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qcontextmenuevent.html">QContextMenuEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#event">event</a>) override</td></tr>
+<tr class="separator:contextMenuEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:dragEnterEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#dragEnterEvent">dragEnterEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qdragenterevent.html">QDragEnterEvent</a> *e) override</td></tr>
+<tr class="separator:dragEnterEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:dragLeaveEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#dragLeaveEvent">dragLeaveEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qdragleaveevent.html">QDragLeaveEvent</a> *e) override</td></tr>
+<tr class="separator:dragLeaveEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:dragMoveEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#dragMoveEvent">dragMoveEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qdragmoveevent.html">QDragMoveEvent</a> *e) override</td></tr>
+<tr class="separator:dragMoveEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:dropEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#dropEvent">dropEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qdropevent.html">QDropEvent</a> *e) override</td></tr>
+<tr class="separator:dropEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:focusInEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#focusInEvent">focusInEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qfocusevent.html">QFocusEvent</a> *e) override</td></tr>
+<tr class="separator:focusInEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:focusOutEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#focusOutEvent">focusOutEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qfocusevent.html">QFocusEvent</a> *e) override</td></tr>
+<tr class="separator:focusOutEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:showEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#showEvent">showEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qshowevent.html">QShowEvent</a> *) override</td></tr>
+<tr class="separator:showEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:changeEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#changeEvent">changeEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qevent.html">QEvent</a> *e) override</td></tr>
+<tr class="separator:changeEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:wheelEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#wheelEvent">wheelEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qwheelevent.html">QWheelEvent</a> *e) override</td></tr>
+<tr class="separator:wheelEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:createMimeDataFromSelection inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual <a class="elRef" href="https://doc.qt.io/qt-5/qmimedata.html">QMimeData</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#createMimeDataFromSelection">createMimeDataFromSelection</a> () const const</td></tr>
+<tr class="separator:createMimeDataFromSelection inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:canInsertFromMimeData inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#canInsertFromMimeData">canInsertFromMimeData</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qmimedata.html">QMimeData</a> *<a class="el" href="_apache_01_license_8txt.html#a40e859b9aaa2d8657227ee008c8a6c7b">source</a>) const const</td></tr>
+<tr class="separator:canInsertFromMimeData inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:insertFromMimeData inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#insertFromMimeData">insertFromMimeData</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qmimedata.html">QMimeData</a> *<a class="el" href="_apache_01_license_8txt.html#a40e859b9aaa2d8657227ee008c8a6c7b">source</a>)</td></tr>
+<tr class="separator:insertFromMimeData inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:inputMethodEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#inputMethodEvent">inputMethodEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qinputmethodevent.html">QInputMethodEvent</a> *e) override</td></tr>
+<tr class="separator:inputMethodEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:scrollContentsBy inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#scrollContentsBy">scrollContentsBy</a> (int dx, int dy) override</td></tr>
+<tr class="separator:scrollContentsBy inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_qabstractscrollarea"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_qabstractscrollarea')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qabstractscrollarea.html">QAbstractScrollArea</a></td></tr>
+<tr class="memitem:setViewportMargins inherit pro_methods_qabstractscrollarea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#setViewportMargins">setViewportMargins</a> (int left, int top, int right, int bottom)</td></tr>
+<tr class="separator:setViewportMargins inherit pro_methods_qabstractscrollarea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:setViewportMargins-1 inherit pro_methods_qabstractscrollarea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#setViewportMargins-1">setViewportMargins</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qmargins.html">QMargins</a> &amp;margins)</td></tr>
+<tr class="separator:setViewportMargins-1 inherit pro_methods_qabstractscrollarea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:viewportMargins inherit pro_methods_qabstractscrollarea"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmargins.html">QMargins</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#viewportMargins">viewportMargins</a> () const const</td></tr>
+<tr class="separator:viewportMargins inherit pro_methods_qabstractscrollarea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:event inherit pro_methods_qabstractscrollarea"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#event">event</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qevent.html">QEvent</a> *event) override</td></tr>
+<tr class="separator:event inherit pro_methods_qabstractscrollarea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:viewportEvent inherit pro_methods_qabstractscrollarea"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#viewportEvent">viewportEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qevent.html">QEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#event">event</a>)</td></tr>
+<tr class="separator:viewportEvent inherit pro_methods_qabstractscrollarea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:viewportSizeHint inherit pro_methods_qabstractscrollarea"><td class="memItemLeft" align="right" valign="top">virtual <a class="elRef" href="https://doc.qt.io/qt-5/qsize.html">QSize</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#viewportSizeHint">viewportSizeHint</a> () const const</td></tr>
+<tr class="separator:viewportSizeHint inherit pro_methods_qabstractscrollarea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_qframe"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_qframe')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qframe.html">QFrame</a></td></tr>
+<tr class="memitem:initStyleOption inherit pro_methods_qframe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qframe.html#initStyleOption">initStyleOption</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qstyleoptionframe.html">QStyleOptionFrame</a> *<a class="el" href="plugins_2liberty__parser_2_c_make_lists_8txt.html#a0b15f71f691b5d99bcd0267d8e190d1a">option</a>) const const</td></tr>
+<tr class="separator:initStyleOption inherit pro_methods_qframe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_qwidget"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_qwidget')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></td></tr>
+<tr class="memitem:enterEvent inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#enterEvent">enterEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qevent.html">QEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#event">event</a>)</td></tr>
+<tr class="separator:enterEvent inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:leaveEvent inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#leaveEvent">leaveEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qevent.html">QEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#event">event</a>)</td></tr>
+<tr class="separator:leaveEvent inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:moveEvent inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#moveEvent">moveEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qmoveevent.html">QMoveEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#event">event</a>)</td></tr>
+<tr class="separator:moveEvent inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:closeEvent inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#closeEvent">closeEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qcloseevent.html">QCloseEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#event">event</a>)</td></tr>
+<tr class="separator:closeEvent inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:tabletEvent inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#tabletEvent">tabletEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qtabletevent.html">QTabletEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#event">event</a>)</td></tr>
+<tr class="separator:tabletEvent inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:actionEvent inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#actionEvent">actionEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qactionevent.html">QActionEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#event">event</a>)</td></tr>
+<tr class="separator:actionEvent inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:hideEvent inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#hideEvent">hideEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qhideevent.html">QHideEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#event">event</a>)</td></tr>
+<tr class="separator:hideEvent inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:nativeEvent inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#nativeEvent">nativeEvent</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qbytearray.html">QByteArray</a> &amp;eventType, void *<a class="el" href="plugins_2gui_2_c_make_lists_8txt.html#a0f85e1d15de90d7e8c90ac2c8a621575">message</a>, long *result)</td></tr>
+<tr class="separator:nativeEvent inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:metric inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#metric">metric</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qpaintdevice.html#PaintDeviceMetric-enum">QPaintDevice::PaintDeviceMetric</a> m) const const override</td></tr>
+<tr class="separator:metric inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:initPainter inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#initPainter">initPainter</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qpainter.html">QPainter</a> *painter) const const override</td></tr>
+<tr class="separator:initPainter inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:updateMicroFocus inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#updateMicroFocus">updateMicroFocus</a> ()</td></tr>
+<tr class="separator:updateMicroFocus inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:create inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#create">create</a> (WId <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#window">window</a>, bool initializeWindow, bool destroyOldWindow)</td></tr>
+<tr class="separator:create inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:destroy inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#destroy">destroy</a> (bool destroyWindow, bool destroySubWindows)</td></tr>
+<tr class="separator:destroy inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:focusNextChild inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#focusNextChild">focusNextChild</a> ()</td></tr>
+<tr class="separator:focusNextChild inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:focusPreviousChild inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#focusPreviousChild">focusPreviousChild</a> ()</td></tr>
+<tr class="separator:focusPreviousChild inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_qobject"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_qobject')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qobject.html">QObject</a></td></tr>
+<tr class="memitem:sender inherit pro_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a> () const const</td></tr>
+<tr class="separator:sender inherit pro_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:senderSignalIndex inherit pro_methods_qobject"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#senderSignalIndex">senderSignalIndex</a> () const const</td></tr>
+<tr class="separator:senderSignalIndex inherit pro_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:receivers inherit pro_methods_qobject"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#receivers">receivers</a> (const char *signal) const const</td></tr>
+<tr class="separator:receivers inherit pro_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:isSignalConnected inherit pro_methods_qobject"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#isSignalConnected">isSignalConnected</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qmetamethod.html">QMetaMethod</a> &amp;signal) const const</td></tr>
+<tr class="separator:isSignalConnected inherit pro_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:timerEvent inherit pro_methods_qobject"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#timerEvent">timerEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qtimerevent.html">QTimerEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#event">event</a>)</td></tr>
+<tr class="separator:timerEvent inherit pro_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:childEvent inherit pro_methods_qobject"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#childEvent">childEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qchildevent.html">QChildEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#event">event</a>)</td></tr>
+<tr class="separator:childEvent inherit pro_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:customEvent inherit pro_methods_qobject"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#customEvent">customEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qevent.html">QEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#event">event</a>)</td></tr>
+<tr class="separator:customEvent inherit pro_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:connectNotify inherit pro_methods_qobject"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connectNotify">connectNotify</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qmetamethod.html">QMetaMethod</a> &amp;signal)</td></tr>
+<tr class="separator:connectNotify inherit pro_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:disconnectNotify inherit pro_methods_qobject"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#disconnectNotify">disconnectNotify</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qmetamethod.html">QMetaMethod</a> &amp;signal)</td></tr>
+<tr class="separator:disconnectNotify inherit pro_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_qpaintdevice"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_qpaintdevice')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qpaintdevice.html">QPaintDevice</a></td></tr>
+<tr class="memitem:QPaintDevice inherit pro_methods_qpaintdevice"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qpaintdevice.html#QPaintDevice">QPaintDevice</a> ()</td></tr>
+<tr class="separator:QPaintDevice inherit pro_methods_qpaintdevice"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_types_qtextedit"><td colspan="2" onclick="javascript:toggleInherit('pub_types_qtextedit')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el"  href="https://doc.qt.io/qt-5/qtextedit.html">QTextEdit</a></td></tr>
-<tr class="memitem:LineWrapMode-enum inherit pub_types_qtextedit"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>LineWrapMode</b> </td></tr>
-<tr class="separator:LineWrapMode-enum inherit pub_types_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:AutoFormattingFlag-enum inherit pub_types_qtextedit"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>AutoFormattingFlag</b> </td></tr>
-<tr class="separator:AutoFormattingFlag-enum inherit pub_types_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_types_qabstractscrollarea"><td colspan="2" onclick="javascript:toggleInherit('pub_types_qabstractscrollarea')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el"  href="https://doc.qt.io/qt-5/qabstractscrollarea.html">QAbstractScrollArea</a></td></tr>
-<tr class="memitem:SizeAdjustPolicy-enum inherit pub_types_qabstractscrollarea"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>SizeAdjustPolicy</b> </td></tr>
-<tr class="separator:SizeAdjustPolicy-enum inherit pub_types_qabstractscrollarea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_types_qframe"><td colspan="2" onclick="javascript:toggleInherit('pub_types_qframe')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el"  href="https://doc.qt.io/qt-5/qframe.html">QFrame</a></td></tr>
-<tr class="memitem:Shape-enum inherit pub_types_qframe"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>Shape</b> </td></tr>
-<tr class="separator:Shape-enum inherit pub_types_qframe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:Shadow-enum inherit pub_types_qframe"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>Shadow</b> </td></tr>
-<tr class="separator:Shadow-enum inherit pub_types_qframe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:StyleMask-enum inherit pub_types_qframe"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>StyleMask</b> </td></tr>
-<tr class="separator:StyleMask-enum inherit pub_types_qframe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_types_qwidget"><td colspan="2" onclick="javascript:toggleInherit('pub_types_qwidget')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el"  href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></td></tr>
-<tr class="memitem:RenderFlag-enum inherit pub_types_qwidget"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>RenderFlag</b> </td></tr>
-<tr class="separator:RenderFlag-enum inherit pub_types_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_types_qpaintdevice"><td colspan="2" onclick="javascript:toggleInherit('pub_types_qpaintdevice')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el"  href="https://doc.qt.io/qt-5/qpaintdevice.html">QPaintDevice</a></td></tr>
-<tr class="memitem:PaintDeviceMetric-enum inherit pub_types_qpaintdevice"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>PaintDeviceMetric</b> </td></tr>
-<tr class="separator:PaintDeviceMetric-enum inherit pub_types_qpaintdevice"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_static_methods_qwidget"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_qwidget')"><img src="closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></td></tr>
 <tr class="memitem:setTabOrder inherit pub_static_methods_qwidget"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#setTabOrder">setTabOrder</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *first, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *second)</td></tr>
 <tr class="separator:setTabOrder inherit pub_static_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1116,7 +1261,7 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:mouseGrabber inherit pub_static_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:keyboardGrabber inherit pub_static_methods_qwidget"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#keyboardGrabber">keyboardGrabber</a> ()</td></tr>
 <tr class="separator:keyboardGrabber inherit pub_static_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:find inherit pub_static_methods_qwidget"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#find">find</a> (WId id)</td></tr>
+<tr class="memitem:find inherit pub_static_methods_qwidget"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#find">find</a> (WId <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>)</td></tr>
 <tr class="separator:find inherit pub_static_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:createWindowContainer inherit pub_static_methods_qwidget"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#createWindowContainer">createWindowContainer</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qwindow.html">QWindow</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#window">window</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#WindowType-enum">Qt::WindowFlags</a> flags)</td></tr>
 <tr class="separator:createWindowContainer inherit pub_static_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1125,15 +1270,15 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:tr inherit pub_static_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:trUtf8 inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject-obsolete.html#trUtf8">trUtf8</a> (const char *sourceText, const char *disambiguation, int n)</td></tr>
 <tr class="separator:trUtf8 inherit pub_static_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:connect inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, const char *signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *receiver, const char *method, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> type)</td></tr>
+<tr class="memitem:connect inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, const char *signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *receiver, const char *method, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>)</td></tr>
 <tr class="separator:connect inherit pub_static_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:connect-1 inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect-1">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, const <a class="elRef" href="https://doc.qt.io/qt-5/qmetamethod.html">QMetaMethod</a> &amp;signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *receiver, const <a class="elRef" href="https://doc.qt.io/qt-5/qmetamethod.html">QMetaMethod</a> &amp;method, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> type)</td></tr>
+<tr class="memitem:connect-1 inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect-1">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, const <a class="elRef" href="https://doc.qt.io/qt-5/qmetamethod.html">QMetaMethod</a> &amp;signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *receiver, const <a class="elRef" href="https://doc.qt.io/qt-5/qmetamethod.html">QMetaMethod</a> &amp;method, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>)</td></tr>
 <tr class="separator:connect-1 inherit pub_static_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:connect-3 inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect-3">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, PointerToMemberFunction signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *receiver, PointerToMemberFunction method, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> type)</td></tr>
+<tr class="memitem:connect-3 inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect-3">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, PointerToMemberFunction signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *receiver, PointerToMemberFunction method, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>)</td></tr>
 <tr class="separator:connect-3 inherit pub_static_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:connect-4 inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect-4">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, PointerToMemberFunction signal, Functor functor)</td></tr>
 <tr class="separator:connect-4 inherit pub_static_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:connect-5 inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect-5">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, PointerToMemberFunction signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *context, Functor functor, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> type)</td></tr>
+<tr class="memitem:connect-5 inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect-5">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, PointerToMemberFunction signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *context, Functor functor, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>)</td></tr>
 <tr class="separator:connect-5 inherit pub_static_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:disconnect inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#disconnect">disconnect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, const char *signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *receiver, const char *method)</td></tr>
 <tr class="separator:disconnect inherit pub_static_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1229,120 +1374,6 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:PaintDeviceMetric-enum inherit pub_attribs_qpaintdevice"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:PaintDeviceMetric-enum inherit pub_attribs_qpaintdevice"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qpaintdevice.html#PaintDeviceMetric-enum">PdmDevicePixelRatioScaled</a></td></tr>
 <tr class="separator:PaintDeviceMetric-enum inherit pub_attribs_qpaintdevice"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_methods_qtextedit"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_qtextedit')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qtextedit.html">QTextEdit</a></td></tr>
-<tr class="memitem:keyReleaseEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#keyReleaseEvent">keyReleaseEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qkeyevent.html">QKeyEvent</a> *e) override</td></tr>
-<tr class="separator:keyReleaseEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:resizeEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#resizeEvent">resizeEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qresizeevent.html">QResizeEvent</a> *e) override</td></tr>
-<tr class="separator:resizeEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:paintEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#paintEvent">paintEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qpaintevent.html">QPaintEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#event">event</a>) override</td></tr>
-<tr class="separator:paintEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:mouseMoveEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#mouseMoveEvent">mouseMoveEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qmouseevent.html">QMouseEvent</a> *e) override</td></tr>
-<tr class="separator:mouseMoveEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:mouseReleaseEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#mouseReleaseEvent">mouseReleaseEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qmouseevent.html">QMouseEvent</a> *e) override</td></tr>
-<tr class="separator:mouseReleaseEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:mouseDoubleClickEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#mouseDoubleClickEvent">mouseDoubleClickEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qmouseevent.html">QMouseEvent</a> *e) override</td></tr>
-<tr class="separator:mouseDoubleClickEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:focusNextPrevChild inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#focusNextPrevChild">focusNextPrevChild</a> (bool next) override</td></tr>
-<tr class="separator:focusNextPrevChild inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:contextMenuEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#contextMenuEvent">contextMenuEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qcontextmenuevent.html">QContextMenuEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#event">event</a>) override</td></tr>
-<tr class="separator:contextMenuEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:dragEnterEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#dragEnterEvent">dragEnterEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qdragenterevent.html">QDragEnterEvent</a> *e) override</td></tr>
-<tr class="separator:dragEnterEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:dragLeaveEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#dragLeaveEvent">dragLeaveEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qdragleaveevent.html">QDragLeaveEvent</a> *e) override</td></tr>
-<tr class="separator:dragLeaveEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:dragMoveEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#dragMoveEvent">dragMoveEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qdragmoveevent.html">QDragMoveEvent</a> *e) override</td></tr>
-<tr class="separator:dragMoveEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:dropEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#dropEvent">dropEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qdropevent.html">QDropEvent</a> *e) override</td></tr>
-<tr class="separator:dropEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:focusInEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#focusInEvent">focusInEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qfocusevent.html">QFocusEvent</a> *e) override</td></tr>
-<tr class="separator:focusInEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:focusOutEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#focusOutEvent">focusOutEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qfocusevent.html">QFocusEvent</a> *e) override</td></tr>
-<tr class="separator:focusOutEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:showEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#showEvent">showEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qshowevent.html">QShowEvent</a> *) override</td></tr>
-<tr class="separator:showEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:changeEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#changeEvent">changeEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qevent.html">QEvent</a> *e) override</td></tr>
-<tr class="separator:changeEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:wheelEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#wheelEvent">wheelEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qwheelevent.html">QWheelEvent</a> *e) override</td></tr>
-<tr class="separator:wheelEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:createMimeDataFromSelection inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual <a class="elRef" href="https://doc.qt.io/qt-5/qmimedata.html">QMimeData</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#createMimeDataFromSelection">createMimeDataFromSelection</a> () const const</td></tr>
-<tr class="separator:createMimeDataFromSelection inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:canInsertFromMimeData inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#canInsertFromMimeData">canInsertFromMimeData</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qmimedata.html">QMimeData</a> *<a class="el" href="_apache_01_license_8txt.html#a40e859b9aaa2d8657227ee008c8a6c7b">source</a>) const const</td></tr>
-<tr class="separator:canInsertFromMimeData inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:insertFromMimeData inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#insertFromMimeData">insertFromMimeData</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qmimedata.html">QMimeData</a> *<a class="el" href="_apache_01_license_8txt.html#a40e859b9aaa2d8657227ee008c8a6c7b">source</a>)</td></tr>
-<tr class="separator:insertFromMimeData inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:inputMethodEvent inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#inputMethodEvent">inputMethodEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qinputmethodevent.html">QInputMethodEvent</a> *e) override</td></tr>
-<tr class="separator:inputMethodEvent inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:scrollContentsBy inherit pro_methods_qtextedit"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#scrollContentsBy">scrollContentsBy</a> (int dx, int dy) override</td></tr>
-<tr class="separator:scrollContentsBy inherit pro_methods_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_methods_qabstractscrollarea"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_qabstractscrollarea')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qabstractscrollarea.html">QAbstractScrollArea</a></td></tr>
-<tr class="memitem:setViewportMargins inherit pro_methods_qabstractscrollarea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#setViewportMargins">setViewportMargins</a> (int left, int top, int right, int bottom)</td></tr>
-<tr class="separator:setViewportMargins inherit pro_methods_qabstractscrollarea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:setViewportMargins-1 inherit pro_methods_qabstractscrollarea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#setViewportMargins-1">setViewportMargins</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qmargins.html">QMargins</a> &amp;margins)</td></tr>
-<tr class="separator:setViewportMargins-1 inherit pro_methods_qabstractscrollarea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:viewportMargins inherit pro_methods_qabstractscrollarea"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmargins.html">QMargins</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#viewportMargins">viewportMargins</a> () const const</td></tr>
-<tr class="separator:viewportMargins inherit pro_methods_qabstractscrollarea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:event inherit pro_methods_qabstractscrollarea"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#event">event</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qevent.html">QEvent</a> *event) override</td></tr>
-<tr class="separator:event inherit pro_methods_qabstractscrollarea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:viewportEvent inherit pro_methods_qabstractscrollarea"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#viewportEvent">viewportEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qevent.html">QEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#event">event</a>)</td></tr>
-<tr class="separator:viewportEvent inherit pro_methods_qabstractscrollarea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:viewportSizeHint inherit pro_methods_qabstractscrollarea"><td class="memItemLeft" align="right" valign="top">virtual <a class="elRef" href="https://doc.qt.io/qt-5/qsize.html">QSize</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#viewportSizeHint">viewportSizeHint</a> () const const</td></tr>
-<tr class="separator:viewportSizeHint inherit pro_methods_qabstractscrollarea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_methods_qframe"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_qframe')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qframe.html">QFrame</a></td></tr>
-<tr class="memitem:initStyleOption inherit pro_methods_qframe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qframe.html#initStyleOption">initStyleOption</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qstyleoptionframe.html">QStyleOptionFrame</a> *<a class="el" href="plugins_2netlist__simulator_2_c_make_lists_8txt.html#a524135315bbb00b251766327e3957627">option</a>) const const</td></tr>
-<tr class="separator:initStyleOption inherit pro_methods_qframe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_methods_qwidget"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_qwidget')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></td></tr>
-<tr class="memitem:enterEvent inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#enterEvent">enterEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qevent.html">QEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#event">event</a>)</td></tr>
-<tr class="separator:enterEvent inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:leaveEvent inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#leaveEvent">leaveEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qevent.html">QEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#event">event</a>)</td></tr>
-<tr class="separator:leaveEvent inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:moveEvent inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#moveEvent">moveEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qmoveevent.html">QMoveEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#event">event</a>)</td></tr>
-<tr class="separator:moveEvent inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:closeEvent inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#closeEvent">closeEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qcloseevent.html">QCloseEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#event">event</a>)</td></tr>
-<tr class="separator:closeEvent inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:tabletEvent inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#tabletEvent">tabletEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qtabletevent.html">QTabletEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#event">event</a>)</td></tr>
-<tr class="separator:tabletEvent inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:actionEvent inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#actionEvent">actionEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qactionevent.html">QActionEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#event">event</a>)</td></tr>
-<tr class="separator:actionEvent inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:hideEvent inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#hideEvent">hideEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qhideevent.html">QHideEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#event">event</a>)</td></tr>
-<tr class="separator:hideEvent inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:nativeEvent inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#nativeEvent">nativeEvent</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qbytearray.html">QByteArray</a> &amp;eventType, void *<a class="el" href="plugins_2gui_2_c_make_lists_8txt.html#a0f85e1d15de90d7e8c90ac2c8a621575">message</a>, long *result)</td></tr>
-<tr class="separator:nativeEvent inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:metric inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#metric">metric</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qpaintdevice.html#PaintDeviceMetric-enum">QPaintDevice::PaintDeviceMetric</a> m) const const override</td></tr>
-<tr class="separator:metric inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:initPainter inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#initPainter">initPainter</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qpainter.html">QPainter</a> *painter) const const override</td></tr>
-<tr class="separator:initPainter inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:updateMicroFocus inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#updateMicroFocus">updateMicroFocus</a> ()</td></tr>
-<tr class="separator:updateMicroFocus inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:create inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#create">create</a> (WId <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#window">window</a>, bool initializeWindow, bool destroyOldWindow)</td></tr>
-<tr class="separator:create inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:destroy inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#destroy">destroy</a> (bool destroyWindow, bool destroySubWindows)</td></tr>
-<tr class="separator:destroy inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:focusNextChild inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#focusNextChild">focusNextChild</a> ()</td></tr>
-<tr class="separator:focusNextChild inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:focusPreviousChild inherit pro_methods_qwidget"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#focusPreviousChild">focusPreviousChild</a> ()</td></tr>
-<tr class="separator:focusPreviousChild inherit pro_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_methods_qobject"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_qobject')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qobject.html">QObject</a></td></tr>
-<tr class="memitem:sender inherit pro_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a> () const const</td></tr>
-<tr class="separator:sender inherit pro_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:senderSignalIndex inherit pro_methods_qobject"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#senderSignalIndex">senderSignalIndex</a> () const const</td></tr>
-<tr class="separator:senderSignalIndex inherit pro_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:receivers inherit pro_methods_qobject"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#receivers">receivers</a> (const char *signal) const const</td></tr>
-<tr class="separator:receivers inherit pro_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:isSignalConnected inherit pro_methods_qobject"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#isSignalConnected">isSignalConnected</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qmetamethod.html">QMetaMethod</a> &amp;signal) const const</td></tr>
-<tr class="separator:isSignalConnected inherit pro_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:timerEvent inherit pro_methods_qobject"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#timerEvent">timerEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qtimerevent.html">QTimerEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#event">event</a>)</td></tr>
-<tr class="separator:timerEvent inherit pro_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:childEvent inherit pro_methods_qobject"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#childEvent">childEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qchildevent.html">QChildEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#event">event</a>)</td></tr>
-<tr class="separator:childEvent inherit pro_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:customEvent inherit pro_methods_qobject"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#customEvent">customEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qevent.html">QEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#event">event</a>)</td></tr>
-<tr class="separator:customEvent inherit pro_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:connectNotify inherit pro_methods_qobject"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connectNotify">connectNotify</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qmetamethod.html">QMetaMethod</a> &amp;signal)</td></tr>
-<tr class="separator:connectNotify inherit pro_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:disconnectNotify inherit pro_methods_qobject"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#disconnectNotify">disconnectNotify</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qmetamethod.html">QMetaMethod</a> &amp;signal)</td></tr>
-<tr class="separator:disconnectNotify inherit pro_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_methods_qpaintdevice"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_qpaintdevice')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qpaintdevice.html">QPaintDevice</a></td></tr>
-<tr class="memitem:QPaintDevice inherit pro_methods_qpaintdevice"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qpaintdevice.html#QPaintDevice">QPaintDevice</a> ()</td></tr>
-<tr class="separator:QPaintDevice inherit pro_methods_qpaintdevice"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header properties_qtextedit"><td colspan="2" onclick="javascript:toggleInherit('properties_qtextedit')"><img src="closed.png" alt="-"/>&#160;Properties inherited from <a class="el"  href="https://doc.qt.io/qt-5/qtextedit.html">QTextEdit</a></td></tr>
 <tr class="memitem:autoFormatting-prop inherit properties_qtextedit"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#autoFormatting-prop">autoFormatting</a></td></tr>
 <tr class="separator:autoFormatting-prop inherit properties_qtextedit"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1531,8 +1562,30 @@ Additional Inherited Members</h2></td></tr>
 <div class="textblock"><p>An interactable python console. </p>
 <p>A widget that represents a simple python console with various features that most python consoles provide. </p>
 
-<p class="definition">Definition at line <a class="el" href="python__console_8h_source.html#l00041">41</a> of file <a class="el" href="python__console_8h_source.html">python_console.h</a>.</p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<p class="definition">Definition at line <a class="el" href="python__console_8h_source.html#l00062">62</a> of file <a class="el" href="python__console_8h_source.html">python_console.h</a>.</p>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a1be3d0cb9bd3ba23f2902c85844c0b31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1be3d0cb9bd3ba23f2902c85844c0b31">&#9670;&nbsp;</a></span>PromptType</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classhal_1_1_python_console.html#a1be3d0cb9bd3ba23f2902c85844c0b31">hal::PythonConsole::PromptType</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a1be3d0cb9bd3ba23f2902c85844c0b31af019d3bd9f4cf17f42c0d198849dc2cf"></a>Standard&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a1be3d0cb9bd3ba23f2902c85844c0b31ad3a745aec1b9e91ebc7484dd98bb7794"></a>Compound&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a1be3d0cb9bd3ba23f2902c85844c0b31aaed4b3b0a1ee6083aae12474b0a487c3"></a>Input&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="python__console_8h_source.html#l00073">73</a> of file <a class="el" href="python__console_8h_source.html">python_console.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a2b2fdb6c56694b9c4bae479c6551df4f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2b2fdb6c56694b9c4bae479c6551df4f">&#9670;&nbsp;</a></span>PythonConsole()</h2>
 
@@ -1550,13 +1603,55 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Constructor. </p>
 
-<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00016">16</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00019">19</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="python__console_8cpp_source.html#l00199">displayPrompt()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#document-prop">QTextEdit::document</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#ensureCursorVisible">QTextEdit::ensureCursorVisible()</a>, <a class="el" href="python__console__qss__adapter_8h_source.html#l00041">hal::PythonConsoleQssAdapter::errorColor</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00055">hal::gPythonContext</a>, <a class="el" href="python__console__qss__adapter_8cpp_source.html#l00014">hal::PythonConsoleQssAdapter::instance()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qframe.html#Shape-enum">QFrame::NoFrame</a>, <a class="el" href="python__console__qss__adapter_8h_source.html#l00042">hal::PythonConsoleQssAdapter::promtColor</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qframe.html#setFrameStyle">QFrame::setFrameStyle()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#undoRedoEnabled-prop">QTextEdit::setUndoRedoEnabled()</a>, and <a class="el" href="python__console__qss__adapter_8h_source.html#l00040">hal::PythonConsoleQssAdapter::standardColor</a>.</p>
+<p class="reference">References <a class="el" href="python__console_8cpp_source.html#l00249">displayPrompt()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#document-prop">QTextEdit::document</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#ensureCursorVisible">QTextEdit::ensureCursorVisible()</a>, <a class="el" href="python__console__qss__adapter_8h_source.html#l00041">hal::PythonConsoleQssAdapter::errorColor</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00058">hal::gPythonContext</a>, <a class="el" href="python__console__qss__adapter_8cpp_source.html#l00014">hal::PythonConsoleQssAdapter::instance()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qframe.html#Shape-enum">QFrame::NoFrame</a>, <a class="el" href="python__console__qss__adapter_8h_source.html#l00042">hal::PythonConsoleQssAdapter::promtColor</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qframe.html#setFrameStyle">QFrame::setFrameStyle()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#undoRedoEnabled-prop">QTextEdit::setUndoRedoEnabled()</a>, and <a class="el" href="python__console__qss__adapter_8h_source.html#l00040">hal::PythonConsoleQssAdapter::standardColor</a>.</p>
+
+</div>
+</div>
+<a id="a432713566bd86b824e85931cd13884b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a432713566bd86b824e85931cd13884b0">&#9670;&nbsp;</a></span>~PythonConsole()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">hal::PythonConsole::~PythonConsole </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00040">40</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="plugin__gui_8cpp_source.html#l00058">hal::gPythonContext</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a530e84d63c4c7277a08a9193c052b69b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a530e84d63c4c7277a08a9193c052b69b">&#9670;&nbsp;</a></span>abortThreadWidget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_python_console_abort_thread.html">PythonConsoleAbortThread</a> * hal::PythonConsole::abortThreadWidget </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00462">462</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="python__console__widget_8cpp_source.html#l00009">hal::PythonConsoleWidget::PythonConsoleWidget()</a>.</p>
+
+</div>
+</div>
 <a id="ac2c922dfa813947910ac8a420aff64e6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac2c922dfa813947910ac8a420aff64e6">&#9670;&nbsp;</a></span>appendToCurrentCommand()</h2>
 
@@ -1580,11 +1675,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00285">285</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00345">345</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#cursor-prop">QWidget::cursor</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextcursor.html#MoveOperation-enum">QTextCursor::End</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#textCursor">QTextEdit::textCursor()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__console_8cpp_source.html#l00347">handleTabKeyPressed()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__console_8cpp_source.html#l00407">handleTabKeyPressed()</a>.</p>
 
 </div>
 </div>
@@ -1614,7 +1709,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classhal_1_1_python_context_subscriber.html#a79500bfa9299a4783ebe7e025965a17c">hal::PythonContextSubscriber</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00194">194</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00236">236</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#clear">QTextEdit::clear()</a>.</p>
 
@@ -1636,11 +1731,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Used to display the editors content within the <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html">QTextEdit</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00199">199</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00249">249</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#cursor-prop">QWidget::cursor</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#document-prop">QTextEdit::document</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextcursor.html#MoveOperation-enum">QTextCursor::End</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextcursor.html#MoveOperation-enum">QTextCursor::EndOfLine</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#length">QString::length()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextcursor.html#position">QTextCursor::position()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextformat.html#setForeground">QTextFormat::setForeground()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#setTextCursor">QTextEdit::setTextCursor()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#textCursor">QTextEdit::textCursor()</a>.</p>
+<p class="reference">References <a class="el" href="python__console_8h_source.html#l00073">Compound</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#cursor-prop">QWidget::cursor</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#document-prop">QTextEdit::document</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextcursor.html#MoveOperation-enum">QTextCursor::End</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextcursor.html#MoveOperation-enum">QTextCursor::EndOfLine</a>, <a class="el" href="python__console_8h_source.html#l00073">Input</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#length">QString::length()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextcursor.html#position">QTextCursor::position()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextformat.html#setForeground">QTextFormat::setForeground()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#setTextCursor">QTextEdit::setTextCursor()</a>, <a class="el" href="python__console_8h_source.html#l00073">Standard</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#textCursor">QTextEdit::textCursor()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__console_8cpp_source.html#l00347">handleTabKeyPressed()</a>, <a class="el" href="python__console_8cpp_source.html#l00229">interpretCommand()</a>, and <a class="el" href="python__console_8cpp_source.html#l00016">PythonConsole()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__console_8cpp_source.html#l00407">handleTabKeyPressed()</a>, <a class="el" href="python__console_8cpp_source.html#l00289">interpretCommand()</a>, and <a class="el" href="python__console_8cpp_source.html#l00019">PythonConsole()</a>.</p>
 
 </div>
 </div>
@@ -1661,11 +1756,11 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the recently types python command (of the current line).</p>
 <dl class="section return"><dt>Returns</dt><dd>the current command as a string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00265">265</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00325">325</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="control_8py_source.html#l00076">control::command</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#cursor-prop">QWidget::cursor</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextcursor.html#MoveOperation-enum">QTextCursor::End</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextcursor.html#MoveMode-enum">QTextCursor::KeepAnchor</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#textCursor">QTextEdit::textCursor()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__console_8cpp_source.html#l00347">handleTabKeyPressed()</a>, <a class="el" href="python__console_8cpp_source.html#l00299">handleUpKeyPressed()</a>, and <a class="el" href="python__console_8cpp_source.html#l00229">interpretCommand()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__console_8cpp_source.html#l00407">handleTabKeyPressed()</a>, <a class="el" href="python__console_8cpp_source.html#l00359">handleUpKeyPressed()</a>, and <a class="el" href="python__console_8cpp_source.html#l00289">interpretCommand()</a>.</p>
 
 </div>
 </div>
@@ -1685,11 +1780,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Handles presses of KEY_DOWN. Used to jump forward in history. </p>
 
-<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00326">326</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00386">386</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, and <a class="el" href="python__console_8cpp_source.html#l00277">replaceCurrentCommand()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, and <a class="el" href="python__console_8cpp_source.html#l00337">replaceCurrentCommand()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__console_8cpp_source.html#l00035">keyPressEvent()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__console_8cpp_source.html#l00070">keyPressEvent()</a>.</p>
 
 </div>
 </div>
@@ -1726,9 +1821,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classhal_1_1_python_context_subscriber.html#a3ed556552deb7dc41898a67842aecf38">hal::PythonContextSubscriber</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00186">186</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00228">228</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#endsWith">QString::endsWith()</a>, <a class="el" href="python__console_8cpp_source.html#l00174">insertAtEnd()</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#endsWith">QString::endsWith()</a>, <a class="el" href="python__console_8cpp_source.html#l00216">insertAtEnd()</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>.</p>
 
 </div>
 </div>
@@ -1765,11 +1860,11 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classhal_1_1_python_context_subscriber.html#a0e0a66d92c70d921ceef5fd5af92ef6f">hal::PythonContextSubscriber</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00181">181</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00223">223</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="python__console_8cpp_source.html#l00174">insertAtEnd()</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>.</p>
+<p class="reference">References <a class="el" href="python__console_8cpp_source.html#l00216">insertAtEnd()</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__console_8cpp_source.html#l00347">handleTabKeyPressed()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__console_8cpp_source.html#l00407">handleTabKeyPressed()</a>.</p>
 
 </div>
 </div>
@@ -1789,11 +1884,40 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Handles presses of TAB. Used to indent or auto-complete the current command. </p>
 
-<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00347">347</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00407">407</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="python__console_8cpp_source.html#l00285">appendToCurrentCommand()</a>, <a class="el" href="python__console_8cpp_source.html#l00199">displayPrompt()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="python__console_8cpp_source.html#l00265">getCurrentCommand()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00055">hal::gPythonContext</a>, <a class="el" href="python__console_8cpp_source.html#l00181">handleStdout()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#insertPlainText">QTextEdit::insertPlainText()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="el" href="log_8h_source.html#l00067">log_info</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#mid">QString::mid()</a>, <a class="el" href="python__console_8cpp_source.html#l00277">replaceCurrentCommand()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#size">QString::size()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>.</p>
+<p class="reference">References <a class="el" href="python__console_8cpp_source.html#l00345">appendToCurrentCommand()</a>, <a class="el" href="python__console_8h_source.html#l00073">Compound</a>, <a class="el" href="python__console_8cpp_source.html#l00249">displayPrompt()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="python__console_8cpp_source.html#l00325">getCurrentCommand()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00058">hal::gPythonContext</a>, <a class="el" href="python__console_8cpp_source.html#l00223">handleStdout()</a>, <a class="el" href="python__console_8h_source.html#l00073">Input</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#insertPlainText">QTextEdit::insertPlainText()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="el" href="log_8h_source.html#l00068">log_info</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#mid">QString::mid()</a>, <a class="el" href="python__console_8cpp_source.html#l00337">replaceCurrentCommand()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#size">QString::size()</a>, <a class="el" href="python__console_8h_source.html#l00073">Standard</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__console_8cpp_source.html#l00035">keyPressEvent()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__console_8cpp_source.html#l00070">keyPressEvent()</a>.</p>
+
+</div>
+</div>
+<a id="a028f45abfde8838a52e203263d85a6f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a028f45abfde8838a52e203263d85a6f5">&#9670;&nbsp;</a></span>handleThreadFinished</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::PythonConsole::handleThreadFinished </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00284">284</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="python__console_8cpp_source.html#l00517">hal::PythonConsoleAbortThread::stop()</a>.</p>
 
 </div>
 </div>
@@ -1813,11 +1937,37 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Handles presses of KEY_UP. Used to jump back in history. </p>
 
-<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00299">299</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00359">359</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="python__console_8cpp_source.html#l00265">getCurrentCommand()</a>, and <a class="el" href="python__console_8cpp_source.html#l00277">replaceCurrentCommand()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="python__console_8cpp_source.html#l00325">getCurrentCommand()</a>, and <a class="el" href="python__console_8cpp_source.html#l00337">replaceCurrentCommand()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__console_8cpp_source.html#l00035">keyPressEvent()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__console_8cpp_source.html#l00070">keyPressEvent()</a>.</p>
+
+</div>
+</div>
+<a id="a49354e20ada84bed8fc20bd38002c489"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49354e20ada84bed8fc20bd38002c489">&#9670;&nbsp;</a></span>inputReceived</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::PythonConsole::inputReceived </td>
+          <td>(</td>
+          <td class="paramtype"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td>
+          <td class="paramname"><em>input</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -1855,11 +2005,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00174">174</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00216">216</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qtextcursor.html#MoveOperation-enum">QTextCursor::End</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#insertPlainText">QTextEdit::insertPlainText()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#moveCursor">QTextEdit::moveCursor()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#setTextColor">QTextEdit::setTextColor()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#textColor">QTextEdit::textColor()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__console_8cpp_source.html#l00186">handleError()</a>, and <a class="el" href="python__console_8cpp_source.html#l00181">handleStdout()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__console_8cpp_source.html#l00228">handleError()</a>, and <a class="el" href="python__console_8cpp_source.html#l00223">handleStdout()</a>.</p>
 
 </div>
 </div>
@@ -1879,11 +2029,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Process the recently typed python command after pressing ENTER/RETURN. If the command is within (or starts) a compound statement (for example a 'for'-loop), the command is appended to the current compound input. Else, the command (or the finished compound) is interpreted and executed. </p>
 
-<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00229">229</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00289">289</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#cursor-prop">QWidget::cursor</a>, <a class="el" href="python__console_8cpp_source.html#l00199">displayPrompt()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextcursor.html#MoveOperation-enum">QTextCursor::End</a>, <a class="el" href="python__console_8cpp_source.html#l00265">getCurrentCommand()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00055">hal::gPythonContext</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#textCursor">QTextEdit::textCursor()</a>.</p>
+<p class="reference">References <a class="el" href="python__console_8h_source.html#l00073">Compound</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#cursor-prop">QWidget::cursor</a>, <a class="el" href="python__console_8cpp_source.html#l00249">displayPrompt()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextcursor.html#MoveOperation-enum">QTextCursor::End</a>, <a class="el" href="python__console_8cpp_source.html#l00325">getCurrentCommand()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00058">hal::gPythonContext</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="python__console_8h_source.html#l00073">Standard</a>, <a class="el" href="python__console_8cpp_source.html#l00509">hal::PythonConsoleAbortThread::start()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#textCursor">QTextEdit::textCursor()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__console_8cpp_source.html#l00035">keyPressEvent()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__console_8cpp_source.html#l00070">keyPressEvent()</a>.</p>
 
 </div>
 </div>
@@ -1906,7 +2056,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1929,9 +2079,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#keyPressEvent">QTextEdit</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00035">35</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00070">70</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qevent.html#accept">QEvent::accept()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#KeyboardModifier-enum">Qt::ControlModifier</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qkeysequence.html#StandardKey-enum">QKeySequence::Copy</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#copy">QTextEdit::copy()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#cursor-prop">QWidget::cursor</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qkeysequence.html#StandardKey-enum">QKeySequence::Cut</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextcursor.html#MoveOperation-enum">QTextCursor::End</a>, <a class="el" href="python__console_8cpp_source.html#l00326">handleDownKeyPressed()</a>, <a class="el" href="python__console_8cpp_source.html#l00347">handleTabKeyPressed()</a>, <a class="el" href="python__console_8cpp_source.html#l00299">handleUpKeyPressed()</a>, <a class="el" href="python__console_8cpp_source.html#l00229">interpretCommand()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qkeyevent.html#key">QKeyEvent::key()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Backspace</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Control</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Down</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_End</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Enter</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Home</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Left</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Return</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Right</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Tab</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Up</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#keyPressEvent">QTextEdit::keyPressEvent()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qkeyevent.html#matches">QKeyEvent::matches()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qkeyevent.html#modifiers">QKeyEvent::modifiers()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextcursor.html#MoveMode-enum">QTextCursor::MoveAnchor</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#moveCursor">QTextEdit::moveCursor()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#setTextCursor">QTextEdit::setTextCursor()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#textCursor">QTextEdit::textCursor()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qevent.html#accept">QEvent::accept()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#KeyboardModifier-enum">Qt::ControlModifier</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qkeysequence.html#StandardKey-enum">QKeySequence::Copy</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#copy">QTextEdit::copy()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#cursor-prop">QWidget::cursor</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qkeysequence.html#StandardKey-enum">QKeySequence::Cut</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextcursor.html#MoveOperation-enum">QTextCursor::End</a>, <a class="el" href="python__console_8cpp_source.html#l00386">handleDownKeyPressed()</a>, <a class="el" href="python__console_8cpp_source.html#l00407">handleTabKeyPressed()</a>, <a class="el" href="python__console_8cpp_source.html#l00359">handleUpKeyPressed()</a>, <a class="el" href="python__console_8cpp_source.html#l00289">interpretCommand()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qkeyevent.html#key">QKeyEvent::key()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Backspace</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Control</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Down</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_End</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Enter</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Home</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Left</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Return</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Right</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Tab</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Up</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#keyPressEvent">QTextEdit::keyPressEvent()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qkeyevent.html#matches">QKeyEvent::matches()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qkeyevent.html#modifiers">QKeyEvent::modifiers()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextcursor.html#MoveMode-enum">QTextCursor::MoveAnchor</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#moveCursor">QTextEdit::moveCursor()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#setTextCursor">QTextEdit::setTextCursor()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#textCursor">QTextEdit::textCursor()</a>.</p>
 
 </div>
 </div>
@@ -1954,7 +2104,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1968,7 +2118,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#mousePressEvent">QTextEdit</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00159">159</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00201">201</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#event">QAbstractScrollArea::event()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#mousePressEvent">QTextEdit::mousePressEvent()</a>.</p>
 
@@ -1997,11 +2147,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00277">277</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00337">337</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#cursor-prop">QWidget::cursor</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextcursor.html#MoveOperation-enum">QTextCursor::End</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextcursor.html#MoveMode-enum">QTextCursor::KeepAnchor</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#textCursor">QTextEdit::textCursor()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__console_8cpp_source.html#l00326">handleDownKeyPressed()</a>, <a class="el" href="python__console_8cpp_source.html#l00347">handleTabKeyPressed()</a>, and <a class="el" href="python__console_8cpp_source.html#l00299">handleUpKeyPressed()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__console_8cpp_source.html#l00386">handleDownKeyPressed()</a>, <a class="el" href="python__console_8cpp_source.html#l00407">handleTabKeyPressed()</a>, and <a class="el" href="python__console_8cpp_source.html#l00359">handleUpKeyPressed()</a>.</p>
 
 </div>
 </div>
@@ -2022,9 +2172,38 @@ Additional Inherited Members</h2></td></tr>
 <p>Currently unused.</p>
 <dl class="section return"><dt>Returns</dt><dd>false </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00292">292</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00352">352</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#cursor-prop">QWidget::cursor</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#document-prop">QTextEdit::document</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qtextedit.html#textCursor">QTextEdit::textCursor()</a>.</p>
+
+</div>
+</div>
+<a id="a424d08df97acfc6facae8675d8e5eb0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a424d08df97acfc6facae8675d8e5eb0a">&#9670;&nbsp;</a></span>setInputMode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::PythonConsole::setInputMode </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>state</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Set input mode on or off. In input mode input for running script is expected.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">state</td><td>- true=on, false=off </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="python__console_8cpp_source.html#l00241">241</a> of file <a class="el" href="python__console_8cpp_source.html">python_console.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="python__console_8h_source.html#l00073">Input</a>, <a class="el" href="python__console_8h_source.html#l00073">Standard</a>, and <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">hal::state</a>.</p>
 
 </div>
 </div>
@@ -2038,7 +2217,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_python_console.html">PythonConsole</a></li>
-    <li class="footer">Generated on Tue Jul 12 2022 15:50:06 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:08:39 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -143,30 +143,34 @@ $(document).ready(function(){initNavTree('file__modified__bar_8h_source.html',''
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_file_modified_bar.html#a029c1adea62ceddbe62d5e8820c30ae1">handleFileChanged</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> path);</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a>* mLayout;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a>* mMessageLabel;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>* mReloadButton;</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>* mIgnoreButton;</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>* mOkButton;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <span class="keywordtype">void</span> handleReloadClicked();</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <span class="keywordtype">void</span> handleIgnoreClicked();</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <span class="keywordtype">void</span> handleOkClicked();</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <span class="keywordtype">void</span> handleFileContentModified(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> path);</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keywordtype">void</span> handleFileMovOrDel(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> path);</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    };</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;}</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_file_modified_bar.html#a093c51f8634ebc269373a1f3dfc04bd4">handleScriptExecute</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> path);</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a>* mLayout;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a>* mMessageLabel;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>* mReloadButton;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>* mIgnoreButton;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>* mOkButton;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>* mAbortButton;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <span class="keywordtype">void</span> handleReloadClicked();</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <span class="keywordtype">void</span> handleIgnoreClicked();</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <span class="keywordtype">void</span> handleOkClicked();</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keywordtype">void</span> handleAbortClicked();</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keywordtype">void</span> handleFileContentModified(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> path);</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        <span class="keywordtype">void</span> handleFileMovOrDel(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> path);</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    };</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aqobject_html_Q_OBJECT"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">QObject::Q_OBJECT</a></div><div class="ttdeci">Q_OBJECTQ_OBJECT</div></div>
 <div class="ttc" id="aqframe_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qframe.html">QFrame</a></div></div>
 <div class="ttc" id="aqobject_html_Q_SLOTS"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">QObject::Q_SLOTS</a></div><div class="ttdeci">Q_SLOTSQ_SLOTS</div></div>
-<div class="ttc" id="aclasshal_1_1_file_modified_bar_html_a029c1adea62ceddbe62d5e8820c30ae1"><div class="ttname"><a href="classhal_1_1_file_modified_bar.html#a029c1adea62ceddbe62d5e8820c30ae1">hal::FileModifiedBar::handleFileChanged</a></div><div class="ttdeci">void handleFileChanged(QString path)</div><div class="ttdef"><b>Definition:</b> <a href="file__modified__bar_8cpp_source.html#l00033">file_modified_bar.cpp:33</a></div></div>
+<div class="ttc" id="aclasshal_1_1_file_modified_bar_html_a029c1adea62ceddbe62d5e8820c30ae1"><div class="ttname"><a href="classhal_1_1_file_modified_bar.html#a029c1adea62ceddbe62d5e8820c30ae1">hal::FileModifiedBar::handleFileChanged</a></div><div class="ttdeci">void handleFileChanged(QString path)</div><div class="ttdef"><b>Definition:</b> <a href="file__modified__bar_8cpp_source.html#l00042">file_modified_bar.cpp:42</a></div></div>
 <div class="ttc" id="aqwidget_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00009">solver.cpp:9</a></div></div>
-<div class="ttc" id="aclasshal_1_1_file_modified_bar_html_a83eaeacecb7df7b4b3228e1cbe891adc"><div class="ttname"><a href="classhal_1_1_file_modified_bar.html#a83eaeacecb7df7b4b3228e1cbe891adc">hal::FileModifiedBar::FileModifiedBar</a></div><div class="ttdeci">FileModifiedBar(QWidget *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="file__modified__bar_8cpp_source.html#l00007">file_modified_bar.cpp:7</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
+<div class="ttc" id="aclasshal_1_1_file_modified_bar_html_a83eaeacecb7df7b4b3228e1cbe891adc"><div class="ttname"><a href="classhal_1_1_file_modified_bar.html#a83eaeacecb7df7b4b3228e1cbe891adc">hal::FileModifiedBar::FileModifiedBar</a></div><div class="ttdeci">FileModifiedBar(QWidget *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="file__modified__bar_8cpp_source.html#l00010">file_modified_bar.cpp:10</a></div></div>
+<div class="ttc" id="aclasshal_1_1_file_modified_bar_html_a093c51f8634ebc269373a1f3dfc04bd4"><div class="ttname"><a href="classhal_1_1_file_modified_bar.html#a093c51f8634ebc269373a1f3dfc04bd4">hal::FileModifiedBar::handleScriptExecute</a></div><div class="ttdeci">void handleScriptExecute(QString path)</div><div class="ttdef"><b>Definition:</b> <a href="file__modified__bar_8cpp_source.html#l00052">file_modified_bar.cpp:52</a></div></div>
 <div class="ttc" id="aqlabel_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a></div></div>
 <div class="ttc" id="aclasshal_1_1_file_modified_bar_html"><div class="ttname"><a href="classhal_1_1_file_modified_bar.html">hal::FileModifiedBar</a></div><div class="ttdoc">A dialog in form of a bar to let the user decide how to handle file changes outside of HAL.</div><div class="ttdef"><b>Definition:</b> <a href="file__modified__bar_8h_source.html#l00045">file_modified_bar.h:45</a></div></div>
 <div class="ttc" id="aqpushbutton_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a></div></div>
@@ -184,7 +188,7 @@ $(document).ready(function(){initNavTree('file__modified__bar_8h_source.html',''
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_33f5e9141ebe4d7128195f86684506f2.html">file_modified_bar</a></li><li class="navelem"><a class="el" href="file__modified__bar_8h.html">file_modified_bar.h</a></li>
-    <li class="footer">Generated on Tue Jul 12 2022 15:49:59 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:08:32 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

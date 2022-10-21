@@ -83,14 +83,18 @@ $(document).ready(function(){initNavTree('python__context_8h.html',''); initResi
 
 <div class="header">
   <div class="summary">
-<a href="#namespaces">Namespaces</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#namespaces">Namespaces</a>  </div>
   <div class="headertitle">
 <div class="title">python_context.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="python__console_8h_source.html">gui/python/python_console.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="python__thread_8h_source.html">gui/python/python_thread.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="gate__select__model_8h_source.html">gui/module_dialog/gate_select_model.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="module__select__model_8h_source.html">gui/module_dialog/module_select_model.h</a>&quot;</code><br />
 <code>#include &lt;QString&gt;</code><br />
+<code>#include &lt;QObject&gt;</code><br />
 <code>#include &quot;pybind11/embed.h&quot;</code><br />
 <code>#include &quot;pybind11/eval.h&quot;</code><br />
 <code>#include &quot;pybind11/functional.h&quot;</code><br />
@@ -102,33 +106,42 @@ Include dependency graph for python_context.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="python__context_8h__incl.png" border="0" usemap="#_2home_2runner_2work_2hal_2hal_2plugins_2gui_2include_2gui_2python_2python__context_8h" alt=""/></div>
 <map name="_2home_2runner_2work_2hal_2hal_2plugins_2gui_2include_2gui_2python_2python__context_8h" id="_2home_2runner_2work_2hal_2hal_2plugins_2gui_2include_2gui_2python_2python__context_8h">
-<area shape="rect" title=" " alt="" coords="695,5,907,61"/>
-<area shape="rect" href="python__console_8h.html" title=" " alt="" coords="183,109,392,136"/>
-<area shape="rect" title=" " alt="" coords="240,273,311,300"/>
-<area shape="rect" title=" " alt="" coords="487,109,629,136"/>
-<area shape="rect" title=" " alt="" coords="653,109,780,136"/>
-<area shape="rect" title=" " alt="" coords="805,109,967,136"/>
-<area shape="rect" title=" " alt="" coords="991,109,1151,136"/>
-<area shape="rect" title=" " alt="" coords="1175,109,1290,136"/>
-<area shape="rect" title=" " alt="" coords="1314,109,1463,136"/>
-<area shape="rect" href="python__context__subscriber_8h.html" title=" " alt="" coords="5,184,201,225"/>
-<area shape="rect" title=" " alt="" coords="225,191,309,218"/>
-<area shape="rect" title=" " alt="" coords="334,191,411,218"/>
+<area shape="rect" title=" " alt="" coords="1168,5,1380,61"/>
+<area shape="rect" href="python__console_8h.html" title=" " alt="" coords="519,117,728,143"/>
+<area shape="rect" title=" " alt="" coords="5,288,76,315"/>
+<area shape="rect" href="python__thread_8h.html" title=" " alt="" coords="216,117,417,143"/>
+<area shape="rect" href="gate__select__model_8h.html" title=" " alt="" coords="752,109,927,151"/>
+<area shape="rect" href="module__select__model_8h.html" title=" " alt="" coords="951,109,1146,151"/>
+<area shape="rect" title=" " alt="" coords="1170,117,1245,143"/>
+<area shape="rect" title=" " alt="" coords="1269,117,1412,143"/>
+<area shape="rect" title=" " alt="" coords="1436,117,1563,143"/>
+<area shape="rect" title=" " alt="" coords="1587,117,1750,143"/>
+<area shape="rect" title=" " alt="" coords="1774,117,1934,143"/>
+<area shape="rect" title=" " alt="" coords="1958,117,2073,143"/>
+<area shape="rect" title=" " alt="" coords="2097,117,2246,143"/>
+<area shape="rect" href="python__context__subscriber_8h.html" title=" " alt="" coords="525,199,721,240"/>
+<area shape="rect" title=" " alt="" coords="745,206,829,233"/>
+<area shape="rect" title=" " alt="" coords="854,206,931,233"/>
+<area shape="rect" title=" " alt="" coords="78,206,155,233"/>
+<area shape="rect" title=" " alt="" coords="180,206,253,233"/>
+<area shape="rect" title=" " alt="" coords="277,206,356,233"/>
+<area shape="rect" title=" " alt="" coords="380,206,501,233"/>
 </map>
 </div>
 </div>
 <p><a href="python__context_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_gate_selection_receiver.html">hal::PythonGateSelectionReceiver</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_module_selection_receiver.html">hal::PythonModuleSelectionReceiver</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespacehal"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal.html">hal</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:ga36c639fc24efc401958974c0c3c5adad"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__python.html#ga36c639fc24efc401958974c0c3c5adad">hal::__attribute__</a> ((visibility(&quot;default&quot;))) PythonContext</td></tr>
-<tr class="memdesc:ga36c639fc24efc401958974c0c3c5adad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interface for pybind11.  <a href="group__python.html#ga36c639fc24efc401958974c0c3c5adad">More...</a><br /></td></tr>
-<tr class="separator:ga36c639fc24efc401958974c0c3c5adad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -136,7 +149,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_7c750ac7d7398768b8029f5632912b7a.html">python</a></li><li class="navelem"><a class="el" href="python__context_8h.html">python_context.h</a></li>
-    <li class="footer">Generated on Tue Jul 12 2022 15:50:04 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:08:35 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

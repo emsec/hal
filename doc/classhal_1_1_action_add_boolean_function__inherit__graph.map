@@ -1,0 +1,4 @@
+<map id="hal::ActionAddBooleanFunction" name="hal::ActionAddBooleanFunction">
+<area shape="rect" id="node1" title="Either adds a new function or changes an exisiting function of a given gate." alt="" coords="5,351,229,501"/>
+<area shape="rect" id="node2" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="8,5,227,303"/>
+</map>

@@ -87,97 +87,131 @@ $(document).ready(function(){initNavTree('file__modified__bar_8cpp_source.html',
 </div><!--header-->
 <div class="contents">
 <a href="file__modified__bar_8cpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="file__modified__bar_8h.html">gui/file_modified_bar/file_modified_bar.h</a>&quot;</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;QFileInfo&gt;</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;{</div>
-<div class="line"><a name="l00007"></a><span class="lineno"><a class="line" href="classhal_1_1_file_modified_bar.html#a83eaeacecb7df7b4b3228e1cbe891adc">    7</a></span>&#160;    <a class="code" href="classhal_1_1_file_modified_bar.html#a83eaeacecb7df7b4b3228e1cbe891adc">FileModifiedBar::FileModifiedBar</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* parent)</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    {</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;        Q_UNUSED(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a>);</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        mLayout = <span class="keyword">new</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a>();</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#setLayout">setLayout</a>(mLayout);</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        mMessageLabel = <span class="keyword">new</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a>(<span class="stringliteral">&quot;&quot;</span>);</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        mLayout-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qboxlayout.html#addWidget">addWidget</a>(mMessageLabel);</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="gui__globals_8h.html">gui/gui_globals.h</a>&quot;</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="python__context_8h.html">gui/python/python_context.h</a>&quot;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="python__thread_8h.html">gui/python/python_thread.h</a>&quot;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;QFileInfo&gt;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;sys/types.h&gt;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;{</div>
+<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="classhal_1_1_file_modified_bar.html#a83eaeacecb7df7b4b3228e1cbe891adc">   10</a></span>&#160;    <a class="code" href="classhal_1_1_file_modified_bar.html#a83eaeacecb7df7b4b3228e1cbe891adc">FileModifiedBar::FileModifiedBar</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* parent)</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    {</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        Q_UNUSED(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a>);</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        mLayout = <span class="keyword">new</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a>();</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#setLayout">setLayout</a>(mLayout);</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        mReloadButton = <span class="keyword">new</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>(<span class="stringliteral">&quot;Reload&quot;</span>);</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        mReloadButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#sizePolicy-prop">setSizePolicy</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qsizepolicy.html#Policy-enum">QSizePolicy::Fixed</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qsizepolicy.html#Policy-enum">QSizePolicy::Fixed</a>);</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        mLayout-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qboxlayout.html#addWidget">addWidget</a>(mReloadButton);</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        mIgnoreButton = <span class="keyword">new</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>(<span class="stringliteral">&quot;Ignore&quot;</span>);</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        mIgnoreButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#sizePolicy-prop">setSizePolicy</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qsizepolicy.html#Policy-enum">QSizePolicy::Fixed</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qsizepolicy.html#Policy-enum">QSizePolicy::Fixed</a>);</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        mLayout-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qboxlayout.html#addWidget">addWidget</a>(mIgnoreButton);</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        mOkButton = <span class="keyword">new</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>(<span class="stringliteral">&quot;Ok&quot;</span>);</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        mOkButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#sizePolicy-prop">setSizePolicy</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qsizepolicy.html#Policy-enum">QSizePolicy::Fixed</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qsizepolicy.html#Policy-enum">QSizePolicy::Fixed</a>);</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        mLayout-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qboxlayout.html#addWidget">addWidget</a>(mOkButton);</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#connect">connect</a>(mReloadButton, &amp;<a class="codeRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#clicked">QPushButton::clicked</a>, <span class="keyword">this</span>, &amp;FileModifiedBar::handleReloadClicked);</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#connect">connect</a>(mIgnoreButton, &amp;<a class="codeRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#clicked">QPushButton::clicked</a>, <span class="keyword">this</span>, &amp;FileModifiedBar::handleIgnoreClicked);</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#connect">connect</a>(mOkButton, &amp;<a class="codeRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#clicked">QPushButton::clicked</a>, <span class="keyword">this</span>, &amp;FileModifiedBar::handleOkClicked);</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    }</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="classhal_1_1_file_modified_bar.html#a029c1adea62ceddbe62d5e8820c30ae1">   33</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_file_modified_bar.html#a029c1adea62ceddbe62d5e8820c30ae1">FileModifiedBar::handleFileChanged</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> path)</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    {</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qfile.html">QFile</a> <a class="code" href="_apache_01_license_8txt.html#a54c3aaa43358b77e4f57f4f72cbe56c6">file</a>(path);</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keywordflow">if</span>(<a class="code" href="_apache_01_license_8txt.html#a54c3aaa43358b77e4f57f4f72cbe56c6">file</a>.exists())</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            handleFileContentModified(path);</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            handleFileMovOrDel(path);</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    }</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordtype">void</span> FileModifiedBar::handleFileContentModified(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> path)</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    {</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        mOkButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#setHidden">setHidden</a>(<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        mReloadButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#setHidden">setHidden</a>(<span class="keyword">false</span>);</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        mIgnoreButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#setHidden">setHidden</a>(<span class="keyword">false</span>);</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        mMessageLabel-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html#text-prop">setText</a>(path + <span class="stringliteral">&quot; has been modified on disk.&quot;</span>);</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        mMessageLabel = <span class="keyword">new</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a>(<span class="stringliteral">&quot;&quot;</span>);</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        mLayout-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qboxlayout.html#addWidget">addWidget</a>(mMessageLabel);</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        mReloadButton = <span class="keyword">new</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>(<span class="stringliteral">&quot;Reload&quot;</span>);</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        mReloadButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#sizePolicy-prop">setSizePolicy</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qsizepolicy.html#Policy-enum">QSizePolicy::Fixed</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qsizepolicy.html#Policy-enum">QSizePolicy::Fixed</a>);</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        mLayout-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qboxlayout.html#addWidget">addWidget</a>(mReloadButton);</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        mIgnoreButton = <span class="keyword">new</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>(<span class="stringliteral">&quot;Ignore&quot;</span>);</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        mIgnoreButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#sizePolicy-prop">setSizePolicy</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qsizepolicy.html#Policy-enum">QSizePolicy::Fixed</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qsizepolicy.html#Policy-enum">QSizePolicy::Fixed</a>);</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        mLayout-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qboxlayout.html#addWidget">addWidget</a>(mIgnoreButton);</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        mOkButton = <span class="keyword">new</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>(<span class="stringliteral">&quot;Ok&quot;</span>);</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        mOkButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#sizePolicy-prop">setSizePolicy</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qsizepolicy.html#Policy-enum">QSizePolicy::Fixed</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qsizepolicy.html#Policy-enum">QSizePolicy::Fixed</a>);</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        mLayout-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qboxlayout.html#addWidget">addWidget</a>(mOkButton);</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        mAbortButton = <span class="keyword">new</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>(<span class="stringliteral">&quot;Abort&quot;</span>);</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        mAbortButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#sizePolicy-prop">setSizePolicy</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qsizepolicy.html#Policy-enum">QSizePolicy::Fixed</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qsizepolicy.html#Policy-enum">QSizePolicy::Fixed</a>);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        mLayout-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qboxlayout.html#addWidget">addWidget</a>(mAbortButton);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#connect">connect</a>(mReloadButton, &amp;<a class="codeRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#clicked">QPushButton::clicked</a>, <span class="keyword">this</span>, &amp;FileModifiedBar::handleReloadClicked);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#connect">connect</a>(mIgnoreButton, &amp;<a class="codeRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#clicked">QPushButton::clicked</a>, <span class="keyword">this</span>, &amp;FileModifiedBar::handleIgnoreClicked);</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#connect">connect</a>(mOkButton, &amp;<a class="codeRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#clicked">QPushButton::clicked</a>, <span class="keyword">this</span>, &amp;FileModifiedBar::handleOkClicked);</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#connect">connect</a>(mAbortButton, &amp;<a class="codeRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#clicked">QPushButton::clicked</a>, <span class="keyword">this</span>, &amp;FileModifiedBar::handleAbortClicked);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    }</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="classhal_1_1_file_modified_bar.html#a029c1adea62ceddbe62d5e8820c30ae1">   42</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_file_modified_bar.html#a029c1adea62ceddbe62d5e8820c30ae1">FileModifiedBar::handleFileChanged</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> path)</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    {</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qfile.html">QFile</a> <a class="code" href="_apache_01_license_8txt.html#a54c3aaa43358b77e4f57f4f72cbe56c6">file</a>(path);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordflow">if</span>(<a class="code" href="_apache_01_license_8txt.html#a54c3aaa43358b77e4f57f4f72cbe56c6">file</a>.exists())</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            handleFileContentModified(path);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            handleFileMovOrDel(path);</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    }</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keywordtype">void</span> FileModifiedBar::handleFileMovOrDel(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> path)</div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="classhal_1_1_file_modified_bar.html#a093c51f8634ebc269373a1f3dfc04bd4">   52</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_file_modified_bar.html#a093c51f8634ebc269373a1f3dfc04bd4">FileModifiedBar::handleScriptExecute</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> path)</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    {</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        mOkButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#setHidden">setHidden</a>(<span class="keyword">false</span>);</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        mReloadButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#setHidden">setHidden</a>(<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        mIgnoreButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#setHidden">setHidden</a>(<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        mMessageLabel-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html#text-prop">setText</a>(path + <span class="stringliteral">&quot; has been moved on disk.&quot;</span>);</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    }</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">void</span> FileModifiedBar::handleReloadClicked()</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    {</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">Q_EMIT</a> <a class="code" href="classhal_1_1_file_modified_bar.html#af2db32d4bfd379041a5cf3a17e10737e">reloadClicked</a>();</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    }</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keywordtype">void</span> FileModifiedBar::handleIgnoreClicked()</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    {</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">Q_EMIT</a> <a class="code" href="classhal_1_1_file_modified_bar.html#a75691e8da7478a0b51ed1c94a5f089bd">ignoreClicked</a>();</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    }</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keywordtype">void</span> FileModifiedBar::handleOkClicked()</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    {</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">Q_EMIT</a> <a class="code" href="classhal_1_1_file_modified_bar.html#ac3db2ec34627250bb2fe45a05613d2ac">okClicked</a>();</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    }</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;}</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        mAbortButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#setHidden">setHidden</a>(<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        mOkButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#setHidden">setHidden</a>(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        mReloadButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#setHidden">setHidden</a>(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        mIgnoreButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#setHidden">setHidden</a>(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        mMessageLabel-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html#text-prop">setText</a>(<span class="stringliteral">&quot;Executing script &quot;</span> + path + <span class="stringliteral">&quot;...&quot;</span>);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    }</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">void</span> FileModifiedBar::handleFileContentModified(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> path)</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    {</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        mAbortButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#setHidden">setHidden</a>(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        mOkButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#setHidden">setHidden</a>(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        mReloadButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#setHidden">setHidden</a>(<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        mIgnoreButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#setHidden">setHidden</a>(<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        mMessageLabel-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html#text-prop">setText</a>(path + <span class="stringliteral">&quot; has been modified on disk.&quot;</span>);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    }</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keywordtype">void</span> FileModifiedBar::handleFileMovOrDel(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> path)</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    {</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        mAbortButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#setHidden">setHidden</a>(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        mOkButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#setHidden">setHidden</a>(<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        mReloadButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#setHidden">setHidden</a>(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        mIgnoreButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#setHidden">setHidden</a>(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        mMessageLabel-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html#text-prop">setText</a>(path + <span class="stringliteral">&quot; has been moved on disk.&quot;</span>);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    }</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="comment">// FIXME why are we using FileModifiedBar for aborting a python script?</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keywordtype">void</span> FileModifiedBar::handleAbortClicked()</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    {</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <a class="code" href="namespacehal.html#a178bb1ac9a8ee6bbbec41ddb2e84250a">gPythonContext</a>-&gt;abortThread();</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    }</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keywordtype">void</span> FileModifiedBar::handleReloadClicked()</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    {</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">Q_EMIT</a> <a class="code" href="classhal_1_1_file_modified_bar.html#af2db32d4bfd379041a5cf3a17e10737e">reloadClicked</a>();</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    }</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keywordtype">void</span> FileModifiedBar::handleIgnoreClicked()</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    {</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">Q_EMIT</a> <a class="code" href="classhal_1_1_file_modified_bar.html#a75691e8da7478a0b51ed1c94a5f089bd">ignoreClicked</a>();</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    }</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keywordtype">void</span> FileModifiedBar::handleOkClicked()</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    {</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">Q_EMIT</a> <a class="code" href="classhal_1_1_file_modified_bar.html#ac3db2ec34627250bb2fe45a05613d2ac">okClicked</a>();</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    }</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="a_apache_01_license_8txt_html_a54c3aaa43358b77e4f57f4f72cbe56c6"><div class="ttname"><a href="_apache_01_license_8txt.html#a54c3aaa43358b77e4f57f4f72cbe56c6">file</a></div><div class="ttdeci">then any Derivative Works that You distribute must include a readable copy of the attribution notices contained within such NOTICE file</div><div class="ttdef"><b>Definition:</b> <a href="_apache_01_license_8txt_source.html#l00109">Apache License.txt:109</a></div></div>
+<div class="ttc" id="apython__context_8h_html"><div class="ttname"><a href="python__context_8h.html">python_context.h</a></div></div>
 <div class="ttc" id="aqlabel_html_text-prop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlabel.html#text-prop">QLabel::setText</a></div><div class="ttdeci">void setText(const QString &amp;)</div></div>
 <div class="ttc" id="aqwidget_html_sizePolicy-prop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html#sizePolicy-prop">QWidget::setSizePolicy</a></div><div class="ttdeci">void setSizePolicy(QSizePolicy)</div></div>
 <div class="ttc" id="aqobject_html_Q_EMIT"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT</a></div><div class="ttdeci">Q_EMITQ_EMIT</div></div>
-<div class="ttc" id="aclasshal_1_1_file_modified_bar_html_a029c1adea62ceddbe62d5e8820c30ae1"><div class="ttname"><a href="classhal_1_1_file_modified_bar.html#a029c1adea62ceddbe62d5e8820c30ae1">hal::FileModifiedBar::handleFileChanged</a></div><div class="ttdeci">void handleFileChanged(QString path)</div><div class="ttdef"><b>Definition:</b> <a href="file__modified__bar_8cpp_source.html#l00033">file_modified_bar.cpp:33</a></div></div>
+<div class="ttc" id="aclasshal_1_1_file_modified_bar_html_a029c1adea62ceddbe62d5e8820c30ae1"><div class="ttname"><a href="classhal_1_1_file_modified_bar.html#a029c1adea62ceddbe62d5e8820c30ae1">hal::FileModifiedBar::handleFileChanged</a></div><div class="ttdeci">void handleFileChanged(QString path)</div><div class="ttdef"><b>Definition:</b> <a href="file__modified__bar_8cpp_source.html#l00042">file_modified_bar.cpp:42</a></div></div>
+<div class="ttc" id="anamespacehal_html_a178bb1ac9a8ee6bbbec41ddb2e84250a"><div class="ttname"><a href="namespacehal.html#a178bb1ac9a8ee6bbbec41ddb2e84250a">hal::gPythonContext</a></div><div class="ttdeci">PythonContext * gPythonContext</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00058">plugin_gui.cpp:58</a></div></div>
 <div class="ttc" id="aqabstractbutton_html_clicked"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractbutton.html#clicked">QAbstractButton::clicked</a></div><div class="ttdeci">void clicked(bool checked)</div></div>
 <div class="ttc" id="aqwidget_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00009">solver.cpp:9</a></div></div>
-<div class="ttc" id="aclasshal_1_1_file_modified_bar_html_a83eaeacecb7df7b4b3228e1cbe891adc"><div class="ttname"><a href="classhal_1_1_file_modified_bar.html#a83eaeacecb7df7b4b3228e1cbe891adc">hal::FileModifiedBar::FileModifiedBar</a></div><div class="ttdeci">FileModifiedBar(QWidget *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="file__modified__bar_8cpp_source.html#l00007">file_modified_bar.cpp:7</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
+<div class="ttc" id="aclasshal_1_1_file_modified_bar_html_a83eaeacecb7df7b4b3228e1cbe891adc"><div class="ttname"><a href="classhal_1_1_file_modified_bar.html#a83eaeacecb7df7b4b3228e1cbe891adc">hal::FileModifiedBar::FileModifiedBar</a></div><div class="ttdeci">FileModifiedBar(QWidget *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="file__modified__bar_8cpp_source.html#l00010">file_modified_bar.cpp:10</a></div></div>
+<div class="ttc" id="apython__thread_8h_html"><div class="ttname"><a href="python__thread_8h.html">python_thread.h</a></div></div>
 <div class="ttc" id="aqobject_html_connect"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect</a></div><div class="ttdeci">QMetaObject::Connection connect(const QObject *sender, const char *signal, const QObject *receiver, const char *method, Qt::ConnectionType type)</div></div>
+<div class="ttc" id="aclasshal_1_1_file_modified_bar_html_a093c51f8634ebc269373a1f3dfc04bd4"><div class="ttname"><a href="classhal_1_1_file_modified_bar.html#a093c51f8634ebc269373a1f3dfc04bd4">hal::FileModifiedBar::handleScriptExecute</a></div><div class="ttdeci">void handleScriptExecute(QString path)</div><div class="ttdef"><b>Definition:</b> <a href="file__modified__bar_8cpp_source.html#l00052">file_modified_bar.cpp:52</a></div></div>
 <div class="ttc" id="aqboxlayout_html_addWidget"><div class="ttname"><a href="https://doc.qt.io/qt-5/qboxlayout.html#addWidget">QBoxLayout::addWidget</a></div><div class="ttdeci">void addWidget(QWidget *widget, int stretch, Qt::Alignment alignment)</div></div>
 <div class="ttc" id="aqlabel_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a></div></div>
 <div class="ttc" id="aqwidget_html_setHidden"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html#setHidden">QWidget::setHidden</a></div><div class="ttdeci">void setHidden(bool hidden)</div></div>
 <div class="ttc" id="aqpushbutton_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a></div></div>
 <div class="ttc" id="aqstring_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstring.html">QString</a></div></div>
+<div class="ttc" id="agui__globals_8h_html"><div class="ttname"><a href="gui__globals_8h.html">gui_globals.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1_file_modified_bar_html_ac3db2ec34627250bb2fe45a05613d2ac"><div class="ttname"><a href="classhal_1_1_file_modified_bar.html#ac3db2ec34627250bb2fe45a05613d2ac">hal::FileModifiedBar::okClicked</a></div><div class="ttdeci">void okClicked()</div></div>
 <div class="ttc" id="aclasshal_1_1_file_modified_bar_html_a75691e8da7478a0b51ed1c94a5f089bd"><div class="ttname"><a href="classhal_1_1_file_modified_bar.html#a75691e8da7478a0b51ed1c94a5f089bd">hal::FileModifiedBar::ignoreClicked</a></div><div class="ttdeci">void ignoreClicked()</div></div>
 <div class="ttc" id="aqhboxlayout_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a></div></div>
@@ -191,7 +225,7 @@ $(document).ready(function(){initNavTree('file__modified__bar_8cpp_source.html',
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_789103a3fceb0fc143b85dbe9979f451.html">file_modified_bar</a></li><li class="navelem"><a class="el" href="file__modified__bar_8cpp.html">file_modified_bar.cpp</a></li>
-    <li class="footer">Generated on Tue Jul 12 2022 15:50:00 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:08:33 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

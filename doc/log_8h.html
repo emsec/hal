@@ -150,11 +150,13 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
+<tr class="memitem:a27b3249db8d77bd236109bda307bc263"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="log_8h.html#a27b3249db8d77bd236109bda307bc263">FMT_HEADER_ONLY</a></td></tr>
+<tr class="separator:a27b3249db8d77bd236109bda307bc263"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac96c6afee3270eb88719a98239ea7f75"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="log_8h.html#ac96c6afee3270eb88719a98239ea7f75">STRINGISTRINGIFY</a>(x)&#160;&#160;&#160;#x</td></tr>
 <tr class="separator:ac96c6afee3270eb88719a98239ea7f75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6df1d22fb5f09eccc23b9f399670cfd7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="log_8h.html#a6df1d22fb5f09eccc23b9f399670cfd7">STRINGIFY</a>(x)&#160;&#160;&#160;<a class="el" href="log_8h.html#ac96c6afee3270eb88719a98239ea7f75">STRINGISTRINGIFY</a>(x)</td></tr>
 <tr class="separator:a6df1d22fb5f09eccc23b9f399670cfd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab459fae788a7a0b6e60d70c6bb53a5d2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="log_8h.html#ab459fae788a7a0b6e60d70c6bb53a5d2">LOG_CHANNEL</a>(channel)&#160;&#160;&#160;LogManager::get_instance().get_channel(channel)</td></tr>
+<tr class="memitem:ab459fae788a7a0b6e60d70c6bb53a5d2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="log_8h.html#ab459fae788a7a0b6e60d70c6bb53a5d2">LOG_CHANNEL</a>(channel)&#160;&#160;&#160;LogManager::get_instance()-&gt;get_channel(channel)</td></tr>
 <tr class="separator:ab459fae788a7a0b6e60d70c6bb53a5d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga2258fcb2d8e5c8f15437e9c4dea3483d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__utilities.html#ga2258fcb2d8e5c8f15437e9c4dea3483d">die</a>(channel, ...)</td></tr>
 <tr class="separator:ga2258fcb2d8e5c8f15437e9c4dea3483d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -173,6 +175,22 @@ Macros</h2></td></tr>
 <tr class="separator:ga9f09e61a5832ae08b39fde17dc9e04ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a27b3249db8d77bd236109bda307bc263"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27b3249db8d77bd236109bda307bc263">&#9670;&nbsp;</a></span>FMT_HEADER_ONLY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define FMT_HEADER_ONLY</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="log_8h_source.html#l00040">40</a> of file <a class="el" href="log_8h_source.html">log.h</a>.</p>
+
+</div>
+</div>
 <a id="ab459fae788a7a0b6e60d70c6bb53a5d2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab459fae788a7a0b6e60d70c6bb53a5d2">&#9670;&nbsp;</a></span>LOG_CHANNEL</h2>
 
@@ -184,12 +202,12 @@ Macros</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">channel</td><td>)</td>
-          <td>&#160;&#160;&#160;LogManager::get_instance().get_channel(channel)</td>
+          <td>&#160;&#160;&#160;LogManager::get_instance()-&gt;get_channel(channel)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="log_8h_source.html#l00053">53</a> of file <a class="el" href="log_8h_source.html">log.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="log_8h_source.html#l00054">54</a> of file <a class="el" href="log_8h_source.html">log.h</a>.</p>
 
 </div>
 </div>
@@ -209,7 +227,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="log_8h_source.html#l00050">50</a> of file <a class="el" href="log_8h_source.html">log.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="log_8h_source.html#l00051">51</a> of file <a class="el" href="log_8h_source.html">log.h</a>.</p>
 
 </div>
 </div>
@@ -229,7 +247,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="log_8h_source.html#l00049">49</a> of file <a class="el" href="log_8h_source.html">log.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="log_8h_source.html#l00050">50</a> of file <a class="el" href="log_8h_source.html">log.h</a>.</p>
 
 </div>
 </div>
@@ -239,7 +257,7 @@ Macros</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_8cff0e4740b4a22580dd05764b73d449.html">utilities</a></li><li class="navelem"><a class="el" href="log_8h.html">log.h</a></li>
-    <li class="footer">Generated on Tue Jul 12 2022 15:50:04 for HAL by
+    <li class="footer">Generated on Fri Oct 21 2022 13:08:35 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

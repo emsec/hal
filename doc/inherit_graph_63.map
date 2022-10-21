@@ -1,3 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structhal_1_1_log_manager_1_1log__sink.html" title=" " alt="" coords="5,5,197,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,132,53,159"/>
+<area shape="rect" id="node2" href="$classhal_1_1_h_g_l_parser_test.html" title=" " alt="" coords="111,5,253,32"/>
+<area shape="rect" id="node3" href="$classhal_1_1_h_g_l_writer_test.html" title=" " alt="" coords="111,56,253,83"/>
+<area shape="rect" id="node4" href="$classhal_1_1_liberty_parser_test.html" title=" " alt="" coords="101,107,263,133"/>
+<area shape="rect" id="node5" href="$classhal_1_1_verilog_parser_test.html" title=" " alt="" coords="101,157,263,184"/>
+<area shape="rect" id="node6" href="$classhal_1_1_verilog_writer_test.html" title=" " alt="" coords="101,208,263,235"/>
+<area shape="rect" id="node7" href="$classhal_1_1_v_h_d_l_parser_test.html" title=" " alt="" coords="106,259,258,285"/>
 </map>

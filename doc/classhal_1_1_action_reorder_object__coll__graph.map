@@ -1,0 +1,5 @@
+<map id="hal::ActionReorderObject" name="hal::ActionReorderObject">
+<area shape="rect" id="node1" title="Reorders an item within a container." alt="" coords="23,565,207,716"/>
+<area shape="rect" id="node2" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="5,233,224,516"/>
+<area shape="rect" id="node3" href="$classhal_1_1_user_action_object.html" title="The UserActionObject class represents a single object used in UserAction." alt="" coords="33,5,196,156"/>
+</map>

@@ -3,8 +3,6 @@ var dir_37c7a6205962feb0590a50d9a5e40d47 =
     [ "plugin_verilog_parser.h", "plugin__verilog__parser_8h.html", [
       [ "VerilogParserPlugin", "classhal_1_1_verilog_parser_plugin.html", "classhal_1_1_verilog_parser_plugin" ]
     ] ],
-    [ "verilog_module.h", "verilog__module_8h.html", [
-      [ "VerilogModule", "structhal_1_1_verilog_module.html", "structhal_1_1_verilog_module" ]
-    ] ],
+    [ "verilog_module.h", "verilog__module_8h.html", "verilog__module_8h" ],
     [ "verilog_parser.h", "verilog__parser_8h.html", null ]
 ];

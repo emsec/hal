@@ -1,5 +1,5 @@
 <map id="hal::PythonConsole" name="hal::PythonConsole">
-<area shape="rect" id="node1" title="An interactable python console." alt="" coords="146,813,309,964"/>
+<area shape="rect" id="node1" title="An interactable python console." alt="" coords="132,813,323,1008"/>
 <area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qtextedit.html" title=" " alt="" coords="39,365,202,765"/>
 <area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qabstractscrollarea.html" title=" " alt="" coords="5,5,236,317"/>
 <area shape="rect" id="node4" href="$classhal_1_1_python_context_subscriber.html" title="Interface for handling python outputs." alt="" coords="227,512,441,619"/>
