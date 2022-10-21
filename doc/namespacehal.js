@@ -270,6 +270,7 @@ var namespacehal =
     [ "NetlistRelay", "classhal_1_1_netlist_relay.html", "classhal_1_1_netlist_relay" ],
     [ "NetlistWriter", "classhal_1_1_netlist_writer.html", "classhal_1_1_netlist_writer" ],
     [ "NetModuleTable", "classhal_1_1_net_module_table.html", "classhal_1_1_net_module_table" ],
+    [ "NewProjectDialog", "classhal_1_1_new_project_dialog.html", "classhal_1_1_new_project_dialog" ],
     [ "Node", "classhal_1_1_node.html", "classhal_1_1_node" ],
     [ "NodeBox", "classhal_1_1_node_box.html", "classhal_1_1_node_box" ],
     [ "NodeBoxes", "classhal_1_1_node_boxes.html", "classhal_1_1_node_boxes" ],

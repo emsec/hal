@@ -6,7 +6,7 @@ var dir_5e8fab963b6d7d6d8891b5cad4f241a7 =
     [ "action_delete_object.cpp", "action__delete__object_8cpp.html", null ],
     [ "action_fold_module.cpp", "action__fold__module_8cpp.html", null ],
     [ "action_move_node.cpp", "action__move__node_8cpp.html", null ],
-    [ "action_open_netlist_file.cpp", "action__open__netlist__file_8cpp.html", null ],
+    [ "action_open_netlist_file.cpp", "action__open__netlist__file_8cpp.html", "action__open__netlist__file_8cpp" ],
     [ "action_remove_items_from_object.cpp", "action__remove__items__from__object_8cpp.html", null ],
     [ "action_rename_object.cpp", "action__rename__object_8cpp.html", null ],
     [ "action_reorder_object.cpp", "action__reorder__object_8cpp.html", null ],

@@ -20,6 +20,7 @@ var group__file__management =
       [ "fileOpen", "classhal_1_1_file_manager.html#a81f0e10b173cc8fbc8a17a1a0c4d0e35", null ],
       [ "fileOpened", "classhal_1_1_file_manager.html#adce89ed0fffaecd53904a06ced3010f0", null ],
       [ "importFile", "classhal_1_1_file_manager.html#a17cef7f3f9a862c36e085fc56d627b95", null ],
+      [ "newProject", "classhal_1_1_file_manager.html#a8bc43e7f07d187ff6f3dfd1405ee670e", null ],
       [ "openProject", "classhal_1_1_file_manager.html#a31c55da323bf871b2837318178516463", null ],
       [ "projectOpened", "classhal_1_1_file_manager.html#ad0826acdc85c5fb03e0eae1259822635", null ],
       [ "projectSaved", "classhal_1_1_file_manager.html#a7866d600e9ead9829f6a61018d8b80f2", null ],
