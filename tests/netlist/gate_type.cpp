@@ -78,12 +78,12 @@ namespace hal
 
         // LUT gate type
         {
-            GateType* gt = gl.create_gate_type("lut", {GateTypeProperty::lut});
+            GateType* gt = gl.create_gate_type("lut", {GateTypeProperty::c_lut});
             ASSERT_NE(gt, nullptr);
             EXPECT_EQ(gt->get_id(), 4);
             EXPECT_EQ(gt->get_name(), "lut");
-            EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::lut}));
-            EXPECT_TRUE(gt->has_property(GateTypeProperty::lut));
+            EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::c_lut}));
+            EXPECT_TRUE(gt->has_property(GateTypeProperty::c_lut));
             EXPECT_FALSE(gt->has_property(GateTypeProperty::ff));
             EXPECT_EQ(gt->get_gate_library(), &gl);
         }
@@ -156,14 +156,68 @@ namespace hal
         ss << GateTypeProperty::combinational;
         EXPECT_EQ(ss.str(), "combinational");
         ss.str(std::string());
+        ss << GateTypeProperty::sequential;
+        EXPECT_EQ(ss.str(), "sequential");
+        ss.str(std::string());
+        ss << GateTypeProperty::power;
+        EXPECT_EQ(ss.str(), "power");
+        ss.str(std::string());
+        ss << GateTypeProperty::ground;
+        EXPECT_EQ(ss.str(), "ground");
+        ss.str(std::string());
         ss << GateTypeProperty::ff;
         EXPECT_EQ(ss.str(), "ff");
         ss.str(std::string());
         ss << GateTypeProperty::latch;
         EXPECT_EQ(ss.str(), "latch");
         ss.str(std::string());
-        ss << GateTypeProperty::lut;
-        EXPECT_EQ(ss.str(), "lut");
+        ss << GateTypeProperty::ram;
+        EXPECT_EQ(ss.str(), "ram");
+        ss.str(std::string());
+        ss << GateTypeProperty::io;
+        EXPECT_EQ(ss.str(), "io");
+        ss.str(std::string());
+        ss << GateTypeProperty::dsp;
+        EXPECT_EQ(ss.str(), "dsp");
+        ss.str(std::string());
+        ss << GateTypeProperty::pll;
+        EXPECT_EQ(ss.str(), "pll");
+        ss.str(std::string());
+        ss << GateTypeProperty::oscillator;
+        EXPECT_EQ(ss.str(), "oscillator");
+        ss.str(std::string());
+        ss << GateTypeProperty::c_buffer;
+        EXPECT_EQ(ss.str(), "c_buffer");
+        ss.str(std::string());
+        ss << GateTypeProperty::c_inverter;
+        EXPECT_EQ(ss.str(), "c_inverter");
+        ss.str(std::string());
+        ss << GateTypeProperty::c_and;
+        EXPECT_EQ(ss.str(), "c_and");
+        ss.str(std::string());
+        ss << GateTypeProperty::c_nand;
+        EXPECT_EQ(ss.str(), "c_nand");
+        ss.str(std::string());
+        ss << GateTypeProperty::c_or;
+        EXPECT_EQ(ss.str(), "c_or");
+        ss.str(std::string());
+        ss << GateTypeProperty::c_nor;
+        EXPECT_EQ(ss.str(), "c_nor");
+        ss.str(std::string());
+        ss << GateTypeProperty::c_xor;
+        EXPECT_EQ(ss.str(), "c_xor");
+        ss.str(std::string());
+        ss << GateTypeProperty::c_xnor;
+        EXPECT_EQ(ss.str(), "c_xnor");
+        ss.str(std::string());
+        ss << GateTypeProperty::c_mux;
+        EXPECT_EQ(ss.str(), "c_mux");
+        ss.str(std::string());
+        ss << GateTypeProperty::c_carry;
+        EXPECT_EQ(ss.str(), "c_carry");
+        ss.str(std::string());
+        ss << GateTypeProperty::c_lut;
+        EXPECT_EQ(ss.str(), "c_lut");
         ss.str(std::string());
 
         // pin direction to ostream
@@ -594,7 +648,7 @@ namespace hal
 
     //     // LUT pin types
     //     {
-    //         GateType* gt = gl.create_gate_type("dummy2", {GateTypeProperty::lut});
+    //         GateType* gt = gl.create_gate_type("dummy2", {GateTypeProperty::c_lut});
     //         ASSERT_NE(gt, nullptr);
 
     //         std::unordered_map<std::string, PinType> pin_to_type;
@@ -746,7 +800,7 @@ namespace hal
 
         GateLibrary gl("no_path", "example_gl");
 
-        GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::lut}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("category1", {"identifier1"}), true));
+        GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::c_lut}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("category1", {"identifier1"}), true));
         ASSERT_NE(gt, nullptr);
 
         LUTComponent* lut_component = gt->get_component_as<LUTComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::lut; });
