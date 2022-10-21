@@ -86,7 +86,7 @@ namespace hal
             ASSERT_TRUE(gt_latch != nullptr);
 
             // LUT gate type
-            auto gt_lut = gl->create_gate_type("gt_lut", {GateTypeProperty::lut});
+            auto gt_lut = gl->create_gate_type("gt_lut", {GateTypeProperty::c_lut});
             ASSERT_TRUE(gt_lut != nullptr);
 
             // check if all gate types contained in library
@@ -99,7 +99,7 @@ namespace hal
             EXPECT_EQ(gt_or->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::combinational}));
             EXPECT_EQ(gt_ff->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::ff}));
             EXPECT_EQ(gt_latch->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::latch}));
-            EXPECT_EQ(gt_lut->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::lut}));
+            EXPECT_EQ(gt_lut->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::c_lut}));
 
             // check contains_gate_type and contains_gate_type_by_name
             EXPECT_TRUE(gl->contains_gate_type(gt_and));
