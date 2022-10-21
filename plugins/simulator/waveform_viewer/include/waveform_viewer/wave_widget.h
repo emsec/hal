@@ -55,6 +55,7 @@ namespace hal {
         NetlistSimulatorController* controller() const { return mController; }
         void setVisualizeNetState(bool state, bool activeTab);
         void takeOwnership(std::unique_ptr<NetlistSimulatorController>& ctrl);
+        bool hasOwnership() const;
         bool triggerClose();
         void setGates(const std::vector<Gate*>& gats);
         void addResults();

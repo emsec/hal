@@ -38,7 +38,7 @@ namespace hal
           mSimulationInput(new SimulationInput)
     {
         if (mName.isEmpty()) mName = QString("sim_controller%1").arg(mId);
-        LogManager::get_instance().add_channel(mName.toStdString(), {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+        LogManager::get_instance()->add_channel(mName.toStdString(), {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
 
         if (workdir.empty())
         {
@@ -115,7 +115,7 @@ namespace hal
                 simulatedGates.push_back(g);
             }
         }
-        LogManager::get_instance().add_channel(mName.toStdString(), {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+        LogManager::get_instance()->add_channel(mName.toStdString(), {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
         QDir saleaeDir(workDir.absoluteFilePath("saleae"));
         saleaeDir.mkpath(saleaeDir.absolutePath());
         mWaveDataList = new WaveDataList(saleaeDir.absoluteFilePath("saleae.json"));

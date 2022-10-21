@@ -32,6 +32,7 @@
 #include <QVBoxLayout>
 #include <QProgressBar>
 #include <QInputDialog>
+#include <QTabBar>
 #include "hal_core/plugin_system/plugin_manager.h"
 
 namespace hal
@@ -60,7 +61,7 @@ namespace hal
         : ContentWidget("WaveformViewer",parent),
           mVisualizeNetState(false), mCurrentWaveWidget(nullptr)
     {
-        LogManager::get_instance().add_channel(std::string("waveform_viewer"), {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+        LogManager::get_instance()->add_channel(std::string("waveform_viewer"), {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
         mCreateControlAction = new QAction(this);
         mSimulSettingsAction = new QAction(this);
         mOpenInputfileAction = new QAction(this);
@@ -373,6 +374,7 @@ namespace hal
         if (!nsc) return;
         WaveWidget* ww = new WaveWidget(nsc, mTabWidget);
         mTabWidget->addTab(ww,nsc->name());
+        showCloseButton();
     }
 
     void WaveformViewer::handleControllerRemoved(u32 controllerId)
@@ -416,6 +418,31 @@ namespace hal
             log_warning("simulation_plugin", "Unable to restore saved data from file '{}'.", filename.toStdString());
     }
 
+    void WaveformViewer::showCloseButton()
+    {
+        for (int i=0; i<mTabWidget->count(); i++)
+        {
+            bool own = static_cast<const WaveWidget*>(mTabWidget->widget(i))->hasOwnership();
+            for (int j=0; j<2; j++)
+            {
+                QWidget* closeBut = mTabWidget->tabBar()->tabButton(i,j?QTabBar::LeftSide:QTabBar::RightSide);
+                if (closeBut && closeBut->metaObject()->className() == QByteArray("CloseButton"))
+                {
+                    if (own)
+                    {
+                        if (!closeBut->isVisible())
+                            closeBut->show();
+                    }
+                    else
+                    {
+                        if (closeBut->isVisible())
+                            closeBut->hide();
+                    }
+                }
+            }
+        }
+    }
+
     void WaveformViewer::takeControllerOwnership(std::unique_ptr<NetlistSimulatorController> &ctrlRef, bool create)
     {
         NetlistSimulatorController* nsc = ctrlRef.get();
@@ -441,6 +468,7 @@ namespace hal
         }
         Q_ASSERT(ww);
         ww->takeOwnership(ctrlRef);
+        showCloseButton();
     }
 
     void WaveformViewer::handleSaveWaveforms()

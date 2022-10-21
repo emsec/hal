@@ -124,6 +124,11 @@ namespace hal {
         return mController->get_state();
     }
 
+    bool WaveWidget::hasOwnership() const
+    {
+        return mControllerOwner != nullptr;
+    }
+
     void WaveWidget::takeOwnership(std::unique_ptr<NetlistSimulatorController>& ctrl)
     {
         mControllerOwner = std::move(ctrl);
