@@ -443,14 +443,31 @@ namespace hal
          */
         Endpoint* get_successor(const GatePin* pin) const;
 
+        /**
+         * Get the INIT data of the gate, if available. 
+         * An error is returned in case the gate does not hold any INIT data.
+         * 
+         * @return The INIT data as a vector on success, an error message otherwise.
+         */
+        Result<std::vector<std::string>> get_init_data() const;
+
+        /**
+         * Set the INIT data of the gate, if available. 
+         * An error is returned in case the gate does not hold any INIT data.
+         * 
+         * @param[in] init_data - The INIT data as a vector.
+         * @returns Ok on success, an error message otherwise.
+         */
+        Result<std::monostate> set_init_data(const std::vector<std::string>& init_data);
+
     private:
         friend class NetlistInternalManager;
         Gate(NetlistInternalManager* mgr, EventHandler* event_handler, u32 id, GateType* gt, const std::string& name, i32 x, i32 y);
 
-        Gate(const Gate&) = delete;
-        Gate(Gate&&)      = delete;
+        Gate(const Gate&)            = delete;
+        Gate(Gate&&)                 = delete;
         Gate& operator=(const Gate&) = delete;
-        Gate& operator=(Gate&&) = delete;
+        Gate& operator=(Gate&&)      = delete;
 
         BooleanFunction get_lut_function(const GatePin* pin) const;
 

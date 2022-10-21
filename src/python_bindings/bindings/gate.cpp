@@ -481,5 +481,51 @@ namespace hal
             :returns: The successor endpoint on success, None otherwise.
             :rtype: hal_py.Endpoint or None
         )");
+
+        py_gate.def(
+            "get_init_data",
+            [](Gate& self) -> std::vector<std::string> {
+                auto res = self.get_init_data();
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting INIT data:\n{}", res.get_error().get());
+                    return {};
+                }
+            },
+            R"(
+            Get the INIT data of the gate, if available. 
+            An error is returned in case the gate does not hold any INIT data.
+
+            :returns: The INIT data as a list on success, an empty list otherwise.
+            :rtype: list[str]
+        )");
+
+        py_gate.def(
+            "set_init_data",
+            [](Gate& self, const std::vector<std::string>& init_data) -> bool {
+                auto res = self.set_init_data(init_data);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while setting INIT data:\n{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("init_data"),
+            R"(
+            Set the INIT data of the gate, if available.
+            An error is returned in case the gate does not hold any INIT data.
+
+            :param list[str] init_data: The INIT data as a list.
+            :returns: True on success, False otherwise.
+            :rtype: bool
+        )");
     }
 }    // namespace hal
