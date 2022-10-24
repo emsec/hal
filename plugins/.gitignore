@@ -3,6 +3,8 @@
 !boolean_influence/**/*
 !dataflow_analysis*
 !dataflow_analysis/**/*
+!extend_context*
+!extend_context/**/*
 !gate_libraries*
 !gate_libraries/**/*
 !gexf_writer*
