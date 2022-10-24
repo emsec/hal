@@ -145,7 +145,7 @@ var searchData=
   ['restoreframebufferbinding_35809',['RestoreFrameBufferBinding',['https://doc.qt.io/qt-5/qopenglframebufferobject.html#FramebufferRestorePolicy-enum',1,'QOpenGLFramebufferObject']]],
   ['restoreframebufferbindingtodefault_35810',['RestoreFramebufferBindingToDefault',['https://doc.qt.io/qt-5/qopenglframebufferobject.html#FramebufferRestorePolicy-enum',1,'QOpenGLFramebufferObject']]],
   ['restoreproperties_35811',['RestoreProperties',['https://doc.qt.io/qt-5/qstate.html#RestorePolicy-enum',1,'QState']]],
-  ['result_35812',['Result',['https://doc.qt.io/qt-5/qgesturerecognizer.html#ResultFlag-enum',1,'QGestureRecognizer::Result()'],['../structhal_1_1dataflow_1_1processing_1_1_context.html#ab2ba7e7d5a217b15da65b4f25778df21',1,'hal::dataflow::processing::Context::result()']]],
+  ['result_35812',['result',['../structhal_1_1dataflow_1_1processing_1_1_context.html#ab2ba7e7d5a217b15da65b4f25778df21',1,'hal::dataflow::processing::Context::result()'],['https://doc.qt.io/qt-5/qgesturerecognizer.html#ResultFlag-enum',1,'QGestureRecognizer::Result()']]],
   ['result_5fmutex_35813',['result_mutex',['../structhal_1_1dataflow_1_1processing_1_1_context.html#ae81975178fc6b4f9c2f327a184428782',1,'hal::dataflow::processing::Context']]],
   ['result_5ftype_35814',['result_type',['https://doc.qt.io/qt-5/qrandomgenerator.html#result_type-typedef',1,'QRandomGenerator::result_type()'],['https://doc.qt.io/qt-5/qrandomgenerator64.html#result_type-typedef',1,'QRandomGenerator64::result_type()']]],
   ['resulthint_5fmask_35815',['ResultHint_Mask',['https://doc.qt.io/qt-5/qgesturerecognizer.html#ResultFlag-enum',1,'QGestureRecognizer']]],

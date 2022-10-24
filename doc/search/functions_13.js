@@ -151,7 +151,7 @@ var searchData=
   ['timerinfo_29835',['TimerInfo',['https://doc.qt.io/qt-5/qabstracteventdispatcher-timerinfo.html#TimerInfo',1,'QAbstractEventDispatcher::TimerInfo']]],
   ['timertype_29836',['timerType',['https://doc.qt.io/qt-5/qdeadlinetimer.html#timerType',1,'QDeadlineTimer::timerType()'],['https://doc.qt.io/qt-5/qtimer.html#timerType-prop',1,'QTimer::timerType()']]],
   ['timespec_29837',['timeSpec',['https://doc.qt.io/qt-5/qdatetime.html#timeSpec',1,'QDateTime::timeSpec()'],['https://doc.qt.io/qt-5/qdatetimeedit.html#timeSpec-prop',1,'QDateTimeEdit::timeSpec()']]],
-  ['timestamp_29838',['timestamp',['https://doc.qt.io/qt-5/qinputevent.html#timestamp',1,'QInputEvent::timestamp()'],['../classhal_1_1_user_action.html#abab9958a26320a17089ebee61e035d2c',1,'hal::UserAction::timeStamp()'],['../classhal_1_1_user_action_manager.html#ae810fa314e08add41373a4e1db7c516d',1,'hal::UserActionManager::timeStamp()']]],
+  ['timestamp_29838',['timeStamp',['../classhal_1_1_user_action.html#abab9958a26320a17089ebee61e035d2c',1,'hal::UserAction::timeStamp()'],['../classhal_1_1_user_action_manager.html#ae810fa314e08add41373a4e1db7c516d',1,'hal::UserActionManager::timeStamp()'],['https://doc.qt.io/qt-5/qinputevent.html#timestamp',1,'QInputEvent::timestamp()']]],
   ['timezone_29839',['timeZone',['https://doc.qt.io/qt-5/qdatetime.html#timeZone',1,'QDateTime']]],
   ['timezoneabbreviation_29840',['timeZoneAbbreviation',['https://doc.qt.io/qt-5/qdatetime.html#timeZoneAbbreviation',1,'QDateTime']]],
   ['tip_29841',['tip',['https://doc.qt.io/qt-5/qstatustipevent.html#tip',1,'QStatusTipEvent']]],
