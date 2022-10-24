@@ -473,7 +473,8 @@ namespace hal
                 srcPoints.insert(srcPnt);
                 mWireEndpoint[id].addSource(srcPnt);
                 mGlobalInputHash[id] = ypos;
-                mWireEndpoint[id].setNetType(EndpointList::MultipleDestination);
+                mWireEndpoint[id].setNetType(EndpointList::HasGlobalEndpoint);
+                mWireEndpoint[id].setInputArrow();
             }
 
             if ((nType == EndpointList::SingleSource && srcPoints.size() > 1) || (nType == EndpointList::SourceAndDestination && mViewOutput.contains(n->get_id())))
@@ -484,7 +485,8 @@ namespace hal
                 dstPoints.insert(dstPnt);
                 mWireEndpoint[id].addDestination(dstPnt);
                 mGlobalOutputHash[id] = ypos;
-                mWireEndpoint[id].setNetType(EndpointList::MultipleSource);
+                mWireEndpoint[id].setNetType(EndpointList::HasGlobalEndpoint);
+                mWireEndpoint[id].setOutputArrow();
             }
 
             const EndpointList& epl = mWireEndpoint.value(id);
@@ -513,8 +515,8 @@ namespace hal
                 }
                 break;
                 case EndpointList::SourceAndDestination:
-                case EndpointList::MultipleDestination:
-                case EndpointList::MultipleSource: {
+                case EndpointList::HasGlobalEndpoint:
+                {
                     NetLayoutConnectionFactory nlcf(srcPoints.toList(), dstPoints.toList());
                     // nlcf.dump(QString("wire %1").arg(id));
                     mConnectionMetric.insert(NetLayoutMetric(id, nlcf.connection), nlcf.connection);
@@ -1349,27 +1351,30 @@ namespace hal
             GraphicsNet* graphicsNet = nullptr;
             switch (epl.netType())
             {
-                case EndpointList::MultipleDestination: {
-                    StandardArrowNet* san = new StandardArrowNet(n, lines);
-                    graphicsNet           = san;
-                    int yGridPos          = mGlobalInputHash.value(id, -1);
-                    Q_ASSERT(yGridPos >= 0);
-                    const EndpointCoordinate& epc = mEndpointHash.value(QPoint(mNodeBoundingBox.left(), yGridPos * 2));
-                    san->setInputPosition(QPointF(mCoordX.value(mNodeBoundingBox.left()).lanePosition(-1), epc.lanePosition(0, true)));
-                }
-                break;
-                case EndpointList::MultipleSource: {
-                    StandardArrowNet* san = new StandardArrowNet(n, lines);
-                    graphicsNet           = san;
-                    int yGridPos          = mGlobalOutputHash.value(id, -1);
-                    Q_ASSERT(yGridPos >= 0);
-                    QPoint pnt(mNodeBoundingBox.right() + 1, yGridPos * 2);
-                    const EndpointCoordinate& epc = mEndpointHash.value(pnt);
-                    const NetLayoutJunction* nlj  = mJunctionHash.value(pnt);
-                    Q_ASSERT(nlj);
-                    san->setOutputPosition(QPointF(mCoordX.value(pnt.x()).lanePosition(nlj->rect().right() + 1), epc.lanePosition(0, true)));
-                }
-                break;
+                case EndpointList::HasGlobalEndpoint:
+                    if (epl.hasInputArrow())
+                    {
+                        StandardArrowNet* san = new StandardArrowNet(n, lines);
+                        graphicsNet           = san;
+                        int yGridPos          = mGlobalInputHash.value(id, -1);
+                        Q_ASSERT(yGridPos >= 0);
+                        const EndpointCoordinate& epc = mEndpointHash.value(QPoint(mNodeBoundingBox.left(), yGridPos * 2));
+                        san->setInputPosition(QPointF(mCoordX.value(mNodeBoundingBox.left()).lanePosition(-1), epc.lanePosition(0, true)));
+                    }
+                    if (epl.hasOutputArrow())
+                    {
+                        if (graphicsNet) mScene->addGraphItem(graphicsNet);
+                        StandardArrowNet* san = new StandardArrowNet(n, lines);
+                        graphicsNet           = san;
+                        int yGridPos          = mGlobalOutputHash.value(id, -1);
+                        Q_ASSERT(yGridPos >= 0);
+                        QPoint pnt(mNodeBoundingBox.right() + 1, yGridPos * 2);
+                        const EndpointCoordinate& epc = mEndpointHash.value(pnt);
+                        const NetLayoutJunction* nlj  = mJunctionHash.value(pnt);
+                        Q_ASSERT(nlj);
+                        san->setOutputPosition(QPointF(mCoordX.value(pnt.x()).lanePosition(nlj->rect().right() + 1), epc.lanePosition(0, true)));
+                    }
+                    break;
                 case EndpointList::SourceAndDestination:
                     if (lines.nLines() > 0)
                         graphicsNet = new StandardGraphicsNet(n, lines);
