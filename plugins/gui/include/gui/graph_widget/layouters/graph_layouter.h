@@ -56,6 +56,7 @@ namespace hal
     class NetLayoutJunctionHash;
     class NetLayoutJunctionEntries;
     class CommentSpeechBubble;
+    class CommentEntry;
 
     /**
      * @ingroup graph-layouter
@@ -364,6 +365,7 @@ namespace hal
         void drawNetsIsolated(u32 id, Net* n, const EndpointList& epl);
         void updateSceneRect();
         static bool verifyModulePort(Net* n, const Node& modNode, bool isModInput);
+        void handleCommentAboutToDeleted(CommentEntry* entry);
 
         bool boxExists(const int x, const int y) const;
 

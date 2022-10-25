@@ -129,12 +129,13 @@ namespace hal
         if(!list.contains(entry)) // in case someone creasted an entry outside of the CommentManager context
             return;
 
-        Q_EMIT entryAboutToBeDeleted(entry);
-
         // all observer must finish handling the signal, otherwise big problems arise when the entry
         // is deleted here. If the above signal is asynchronous, the entry cannot but used to identify
         // the comment, but rather an id that is stored in the comment widgets and items seperately.
         mEntries.remove(entry->getNode(), entry); // check if this only removes the entry, not the entire node
+
+        Q_EMIT entryAboutToBeDeleted(entry);
+
         delete entry;
     }
 

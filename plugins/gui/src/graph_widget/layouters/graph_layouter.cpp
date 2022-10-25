@@ -47,6 +47,8 @@ namespace hal
         SelectionDetailsWidget* details = gContentManager->getSelectionDetailsWidget();
         if (details)
             connect(details, &SelectionDetailsWidget::triggerHighlight, mScene, &GraphicsScene::handleHighlight);
+
+        connect(gCommentManager, &CommentManager::entryAboutToBeDeleted, this, &GraphLayouter::handleCommentAboutToDeleted);
     }
 
     GraphLayouter::~GraphLayouter()
@@ -421,6 +423,14 @@ namespace hal
         }
 
         return false;
+    }
+
+    void GraphLayouter::handleCommentAboutToDeleted(CommentEntry *entry)
+    {
+        // if this becomes too slow, go through the bubble list and only update
+        // the corresponding gate
+        clearComments();
+        drawComments();
     }
 
     void GraphLayouter::getWireHash()
