@@ -31,6 +31,7 @@ namespace hal {
     std::filesystem::path ProjectDirectory::get_canonical_path() const
     {
         if (empty()) return std::filesystem::path();
+        if (!std::filesystem::exists(*this)) return std::filesystem::path();
         return std::filesystem::canonical(*this);
     }
 

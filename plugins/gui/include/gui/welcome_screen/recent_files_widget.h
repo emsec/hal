@@ -26,6 +26,7 @@
 #pragma once
 
 #include <QFrame>
+#include <QFileSystemWatcher>
 
 class QVBoxLayout;
 
@@ -76,6 +77,12 @@ namespace hal
          */
         void handleRemoveRequested(RecentFileItem* item);
 
+        /**
+         * Handles the case an item disappeared (e.g. deleted, moved to different location) while selection widget is open
+         * @param path - Path to item which which must be checked
+         */
+        void handleItemDisappeared(const QString& path);
+
     private:
         void readSettings();
         void updateSettings();
@@ -83,8 +90,10 @@ namespace hal
         QVBoxLayout* mLayout;
 
         QList<RecentFileItem*> mItems;
+        QFileSystemWatcher* mFileSystemWatcher;
 
         void prependPath(const QString& path);
+        void addWatcher(const QString& path);
         static const int sMaxItems = 14;
     };
 }
