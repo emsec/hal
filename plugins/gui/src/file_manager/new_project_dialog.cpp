@@ -99,6 +99,7 @@ namespace hal
         connect(dbb, &QDialogButtonBox::accepted, this, &QDialog::accept);
         connect(dbb, &QDialogButtonBox::rejected, this, &QDialog::reject);
         layout->addWidget(dbb, irow++, 0, Qt::AlignRight);
+        mOkButton = dbb->button(QDialogButtonBox::Ok);
         connect(mComboGatelib, &QComboBox::currentTextChanged, this, &NewProjectDialog::handleGateLibraryPathChanged);
         handleGateLibraryPathChanged(mComboGatelib->currentText());
     }
@@ -122,9 +123,13 @@ namespace hal
         {
             mCheckCopyGatelib->setCheckState(Qt::Unchecked);
             mCheckCopyGatelib->setDisabled(true);
+            if (mOkButton) mOkButton->setDisabled(true);
         }
         else
+        {
             mCheckCopyGatelib->setEnabled(true);
+            if (mOkButton) mOkButton->setEnabled(true);
+        }
     }
 
     QString NewProjectDialog::gateLibraryPath() const

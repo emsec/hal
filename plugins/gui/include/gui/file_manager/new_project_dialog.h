@@ -27,6 +27,7 @@
 #include <QString>
 #include <QList>
 #include <QMap>
+#include <QPushButton>
 
 class QComboBox;
 class QCheckBox;
@@ -48,6 +49,7 @@ namespace hal {
         QMap<QString,int> mGateLibraryMap;
         QString mSaveIconPath;
         QString mSaveIconStyle;
+        QPushButton* mOkButton;
     private Q_SLOTS:
         void handleGateLibraryPathChanged(const QString& txt);
         void handleFileDialogTriggered();
