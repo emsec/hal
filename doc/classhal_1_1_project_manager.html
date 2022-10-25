@@ -208,7 +208,7 @@ Static Public Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="project__manager_8cpp_source.html#l00086">86</a> of file <a class="el" href="project__manager_8cpp_source.html">project_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="project__directory_8cpp_source.html#l00037">hal::ProjectDirectory::get_default_filename()</a>, <a class="el" href="project__directory_8cpp_source.html#l00046">hal::ProjectDirectory::get_filename()</a>, and <a class="el" href="project__directory_8h_source.html#l00104">hal::ProjectDirectory::s_shadow_dir</a>.</p>
+<p class="reference">References <a class="el" href="project__directory_8cpp_source.html#l00038">hal::ProjectDirectory::get_default_filename()</a>, <a class="el" href="project__directory_8cpp_source.html#l00047">hal::ProjectDirectory::get_filename()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="project__directory_8h_source.html#l00104">hal::ProjectDirectory::s_shadow_dir</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="file__manager_8cpp_source.html#l00252">hal::FileManager::importFile()</a>, and <a class="el" href="file__manager_8cpp_source.html#l00195">hal::FileManager::newProject()</a>.</p>
 
@@ -230,7 +230,7 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>Dump for debugging purpose </p>
 
-<p class="definition">Definition at line <a class="el" href="project__manager_8cpp_source.html#l00288">288</a> of file <a class="el" href="project__manager_8cpp_source.html">project_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="project__manager_8cpp_source.html#l00295">295</a> of file <a class="el" href="project__manager_8cpp_source.html">project_manager.cpp</a>.</p>
 
 </div>
 </div>
@@ -281,7 +281,7 @@ Static Public Attributes</h2></td></tr>
 <p>Returns parsed netlist which is (temporarily) owned by project manager</p>
 <dl class="section return"><dt>Returns</dt><dd>unique pointer to netlist </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="project__manager_8cpp_source.html#l00145">145</a> of file <a class="el" href="project__manager_8cpp_source.html">project_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="project__manager_8cpp_source.html#l00152">152</a> of file <a class="el" href="project__manager_8cpp_source.html">project_manager.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2netlist__factory_8cpp_source.html#l00059">hal::netlist_factory::load_hal_project()</a>, and <a class="el" href="file__manager_8cpp_source.html#l00359">hal::FileManager::openProject()</a>.</p>
 
@@ -304,7 +304,7 @@ Static Public Attributes</h2></td></tr>
 <p>Getter for netlist filename</p>
 <dl class="section return"><dt>Returns</dt><dd>the netlist filename </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="project__manager_8cpp_source.html#l00138">138</a> of file <a class="el" href="project__manager_8cpp_source.html">project_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="project__manager_8cpp_source.html#l00145">145</a> of file <a class="el" href="project__manager_8cpp_source.html">project_manager.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="file__manager_8cpp_source.html#l00252">hal::FileManager::importFile()</a>, <a class="el" href="file__manager_8cpp_source.html#l00195">hal::FileManager::newProject()</a>, and <a class="el" href="file__manager_8cpp_source.html#l00359">hal::FileManager::openProject()</a>.</p>
 
@@ -350,7 +350,7 @@ Static Public Attributes</h2></td></tr>
 <p>Returns the current project status (None, Opened, Saved)</p>
 <dl class="section return"><dt>Returns</dt><dd>project status </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="project__manager_8cpp_source.html#l00109">109</a> of file <a class="el" href="project__manager_8cpp_source.html">project_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="project__manager_8cpp_source.html#l00116">116</a> of file <a class="el" href="project__manager_8cpp_source.html">project_manager.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="file__manager_8cpp_source.html#l00087">hal::FileManager::autosave()</a>, <a class="el" href="main__window_8cpp_source.html#l00698">hal::MainWindow::handleSaveTriggered()</a>, and <a class="el" href="python__editor_8cpp_source.html#l00041">hal::PythonSerializer::PythonSerializer()</a>.</p>
 
@@ -476,7 +476,7 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>Remove existing project directory and empties path member variable </p><dl class="section return"><dt>Returns</dt><dd>true on success, false on error (e.g. directory had been removed before) </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="project__manager_8cpp_source.html#l00098">98</a> of file <a class="el" href="project__manager_8cpp_source.html">project_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="project__manager_8cpp_source.html#l00105">105</a> of file <a class="el" href="project__manager_8cpp_source.html">project_manager.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="file__manager_8cpp_source.html#l00252">hal::FileManager::importFile()</a>.</p>
 
@@ -498,7 +498,7 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>When copying files from autosave in project directory netlist filename needs to be adjusted. </p>
 
-<p class="definition">Definition at line <a class="el" href="project__manager_8cpp_source.html#l00150">150</a> of file <a class="el" href="project__manager_8cpp_source.html">project_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="project__manager_8cpp_source.html#l00157">157</a> of file <a class="el" href="project__manager_8cpp_source.html">project_manager.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="_apache_01_license_8txt_source.html#l00057">of</a>, <a class="el" href="project__manager_8h_source.html#l00201">s_project_file</a>, and <a class="el" href="project__directory_8h_source.html#l00104">hal::ProjectDirectory::s_shadow_dir</a>.</p>
 
@@ -541,9 +541,9 @@ Static Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if serialization of core netlist was successful, false otherwise </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="project__manager_8cpp_source.html#l00119">119</a> of file <a class="el" href="project__manager_8cpp_source.html">project_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="project__manager_8cpp_source.html#l00126">126</a> of file <a class="el" href="project__manager_8cpp_source.html">project_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="project__directory_8cpp_source.html#l00037">hal::ProjectDirectory::get_default_filename()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00132">hal::Netlist::get_gate_library()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00018">hal::GateLibrary::get_path()</a>, <a class="el" href="project__directory_8cpp_source.html#l00057">hal::ProjectDirectory::get_shadow_filename()</a>, <a class="el" href="test__multiple_8py_source.html#l00029">test_multiple::netlist</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00840">hal::netlist_serializer::serialize_to_file()</a>.</p>
+<p class="reference">References <a class="el" href="project__directory_8cpp_source.html#l00038">hal::ProjectDirectory::get_default_filename()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00132">hal::Netlist::get_gate_library()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00018">hal::GateLibrary::get_path()</a>, <a class="el" href="project__directory_8cpp_source.html#l00058">hal::ProjectDirectory::get_shadow_filename()</a>, <a class="el" href="test__multiple_8py_source.html#l00029">test_multiple::netlist</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00840">hal::netlist_serializer::serialize_to_file()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="file__manager_8cpp_source.html#l00087">hal::FileManager::autosave()</a>, <a class="el" href="file__manager_8cpp_source.html#l00252">hal::FileManager::importFile()</a>, and <a class="el" href="file__manager_8cpp_source.html#l00195">hal::FileManager::newProject()</a>.</p>
 
@@ -572,7 +572,7 @@ Static Public Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="project__manager_8cpp_source.html#l00114">114</a> of file <a class="el" href="project__manager_8cpp_source.html">project_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="project__manager_8cpp_source.html#l00121">121</a> of file <a class="el" href="project__manager_8cpp_source.html">project_manager.cpp</a>.</p>
 
 </div>
 </div>
@@ -628,7 +628,7 @@ Static Public Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="project__manager_8cpp_source.html#l00104">104</a> of file <a class="el" href="project__manager_8cpp_source.html">project_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="project__manager_8cpp_source.html#l00111">111</a> of file <a class="el" href="project__manager_8cpp_source.html">project_manager.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="file__manager_8cpp_source.html#l00550">hal::FileManager::closeFile()</a>.</p>
 
@@ -686,7 +686,7 @@ Static Public Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="project__manager_8h_source.html#l00201">201</a> of file <a class="el" href="project__manager_8h_source.html">project_manager.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="file__manager_8cpp_source.html#l00151">hal::FileManager::directoryStatus()</a>, <a class="el" href="file__manager_8cpp_source.html#l00359">hal::FileManager::openProject()</a>, and <a class="el" href="project__manager_8cpp_source.html#l00150">restore_project_file_from_autosave()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="file__manager_8cpp_source.html#l00151">hal::FileManager::directoryStatus()</a>, <a class="el" href="file__manager_8cpp_source.html#l00359">hal::FileManager::openProject()</a>, and <a class="el" href="project__manager_8cpp_source.html#l00157">restore_project_file_from_autosave()</a>.</p>
 
 </div>
 </div>
@@ -700,7 +700,7 @@ Static Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_project_manager.html">ProjectManager</a></li>
-    <li class="footer">Generated on Mon Oct 24 2022 20:50:25 for HAL by
+    <li class="footer">Generated on Tue Oct 25 2022 18:01:39 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

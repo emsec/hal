@@ -1,5 +1,6 @@
 var NAVTREEINDEX34 =
 {
+"structsubprocess_1_1close__fds.html#afc4b28318a4eb067d62f4d95e3c52c9d":[6,0,3,4,0],
 "structsubprocess_1_1cwd.html":[6,0,3,5],
 "structsubprocess_1_1cwd.html#a54f79e88b05e930d01a034cf58ef1a87":[6,0,3,5,0],
 "structsubprocess_1_1defer__spawn.html":[6,0,3,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX34 =
 "unique__string__validator_8h_source.html":[7,0,1,3,0,0,50,3],
 "user__action_8cpp.html":[7,0,1,3,2,46,15],
 "user__action_8cpp_source.html":[7,0,1,3,2,46,15],
-"user__action_8h.html":[7,0,1,3,0,0,49,15],
-"user__action_8h_source.html":[7,0,1,3,0,0,49,15]
+"user__action_8h.html":[7,0,1,3,0,0,49,15]
 };

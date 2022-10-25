@@ -1,5 +1,6 @@
 var NAVTREEINDEX30 =
 {
+"selection__tree__proxy_8h_source.html":[7,0,1,3,0,0,39,3,2],
 "selection__tree__view_8cpp.html":[7,0,1,3,2,37,3,3],
 "selection__tree__view_8cpp_source.html":[7,0,1,3,2,37,3,3],
 "selection__tree__view_8h.html":[7,0,1,3,0,0,39,3,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX30 =
 "src_2python__bindings_2python__bindings_8cpp_source.html":[7,0,2,2,1],
 "src_2verilog__parser_8cpp.html":[7,0,1,8,1,1],
 "src_2verilog__parser_8cpp_source.html":[7,0,1,8,1,1],
-"src_2verilog__writer_8cpp.html":[7,0,1,9,1,1],
-"src_2verilog__writer_8cpp_source.html":[7,0,1,9,1,1]
+"src_2verilog__writer_8cpp.html":[7,0,1,9,1,1]
 };

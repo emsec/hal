@@ -1,5 +1,6 @@
 var NAVTREEINDEX20 =
 {
+"classsubprocess_1_1_buffer.html#a8e0d10dd27c1354156d6f445ec8a8121":[6,0,3,1,3],
 "classsubprocess_1_1_buffer.html#af260f43cff7df94c197a42ee69184e5a":[6,0,3,1,0],
 "classsubprocess_1_1_called_process_error.html":[6,0,3,3],
 "classsubprocess_1_1_called_process_error.html#a55570f627d87ffd79262c75ada8fc6c8":[6,0,3,3,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX20 =
 "dir_1c9b88aaa7e03862471afceea6cd4425.html":[7,0,1,3,2,33],
 "dir_1e0492e75c390b26eb5a24224f1eeffc.html":[7,0,1,9,0],
 "dir_202bb22905ff078586a5d6a8ce64f33e.html":[7,0,1,3,0,0,19,1,1],
-"dir_203e78a72855f1f3788475126339bf32.html":[7,0,1,3,2,39],
-"dir_2089f1c86a5c695e25bdd8ee7b7d2080.html":[7,0,2,2]
+"dir_203e78a72855f1f3788475126339bf32.html":[7,0,1,3,2,39]
 };

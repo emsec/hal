@@ -100,7 +100,7 @@ Inheritance diagram for hal::RecentFilesWidget:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_recent_files_widget__inherit__graph.png" border="0" usemap="#hal_1_1_recent_files_widget_inherit__map" alt="Inheritance graph"/></div>
 <map name="hal_1_1_recent_files_widget_inherit__map" id="hal_1_1_recent_files_widget_inherit__map">
-<area shape="rect" title="The welcome screen&#39;s RecentFiles section." alt="" coords="5,916,220,1037"/>
+<area shape="rect" title="The welcome screen&#39;s RecentFiles section." alt="" coords="5,916,220,1052"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qframe.html" title=" " alt="" coords="41,497,185,868"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qwidget.html" title=" " alt="" coords="9,5,216,449"/>
 </map>
@@ -110,7 +110,7 @@ Collaboration diagram for hal::RecentFilesWidget:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_recent_files_widget__coll__graph.png" border="0" usemap="#hal_1_1_recent_files_widget_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1_recent_files_widget_coll__map" id="hal_1_1_recent_files_widget_coll__map">
-<area shape="rect" title="The welcome screen&#39;s RecentFiles section." alt="" coords="5,916,220,1037"/>
+<area shape="rect" title="The welcome screen&#39;s RecentFiles section." alt="" coords="5,916,220,1052"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qframe.html" title=" " alt="" coords="41,497,185,868"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qwidget.html" title=" " alt="" coords="9,5,216,449"/>
 </map>
@@ -122,6 +122,8 @@ Public Slots</h2></td></tr>
 <tr class="separator:a5d5de41ea4ef0da1407c29bf614c0611"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc85b1875e68a7aa2226f4f519d56aee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_recent_files_widget.html#adc85b1875e68a7aa2226f4f519d56aee">handleRemoveRequested</a> (<a class="el" href="classhal_1_1_recent_file_item.html">RecentFileItem</a> *item)</td></tr>
 <tr class="separator:adc85b1875e68a7aa2226f4f519d56aee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf7da4eb92a6d53e7de23fbd2cc0d558"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_recent_files_widget.html#adf7da4eb92a6d53e7de23fbd2cc0d558">handleItemDisappeared</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;path)</td></tr>
+<tr class="separator:adf7da4eb92a6d53e7de23fbd2cc0d558"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -1171,7 +1173,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="textblock"><p>The welcome screen's RecentFiles section. </p>
 <p>The widget in the welcome screen that shows the recently used files. </p>
 
-<p class="definition">Definition at line <a class="el" href="recent__files__widget_8h_source.html#l00042">42</a> of file <a class="el" href="recent__files__widget_8h_source.html">recent_files_widget.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="recent__files__widget_8h_source.html#l00043">43</a> of file <a class="el" href="recent__files__widget_8h_source.html">recent_files_widget.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a4362c02a0e0849c8c5040a50d4242e98"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4362c02a0e0849c8c5040a50d4242e98">&#9670;&nbsp;</a></span>RecentFilesWidget()</h2>
@@ -1199,11 +1201,49 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="recent__files__widget_8cpp_source.html#l00019">19</a> of file <a class="el" href="recent__files__widget_8cpp_source.html">recent_files_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#AlignmentFlag-enum">Qt::AlignTop</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="el" href="file__manager_8cpp_source.html#l00076">hal::FileManager::get_instance()</a>, <a class="el" href="recent__files__widget_8cpp_source.html#l00049">handleProjectUsed()</a>, <a class="el" href="classhal_1_1_file_manager.html#ad0826acdc85c5fb03e0eae1259822635">hal::FileManager::projectOpened()</a>, <a class="el" href="classhal_1_1_file_manager.html#a7866d600e9ead9829f6a61018d8b80f2">hal::FileManager::projectSaved()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlayout.html#setAlignment">QLayout::setAlignment()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlayout.html#setContentsMargins">QLayout::setContentsMargins()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#setLayout">QWidget::setLayout()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qboxlayout.html#setSpacing">QBoxLayout::setSpacing()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#AlignmentFlag-enum">Qt::AlignTop</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfilesystemwatcher.html#directoryChanged">QFileSystemWatcher::directoryChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfilesystemwatcher.html#fileChanged">QFileSystemWatcher::fileChanged()</a>, <a class="el" href="file__manager_8cpp_source.html#l00076">hal::FileManager::get_instance()</a>, <a class="el" href="recent__files__widget_8cpp_source.html#l00058">handleItemDisappeared()</a>, <a class="el" href="recent__files__widget_8cpp_source.html#l00052">handleProjectUsed()</a>, <a class="el" href="classhal_1_1_file_manager.html#ad0826acdc85c5fb03e0eae1259822635">hal::FileManager::projectOpened()</a>, <a class="el" href="classhal_1_1_file_manager.html#a7866d600e9ead9829f6a61018d8b80f2">hal::FileManager::projectSaved()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlayout.html#setAlignment">QLayout::setAlignment()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlayout.html#setContentsMargins">QLayout::setContentsMargins()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#setLayout">QWidget::setLayout()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qboxlayout.html#setSpacing">QBoxLayout::setSpacing()</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="adf7da4eb92a6d53e7de23fbd2cc0d558"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf7da4eb92a6d53e7de23fbd2cc0d558">&#9670;&nbsp;</a></span>handleItemDisappeared</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::RecentFilesWidget::handleItemDisappeared </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Handles the case an item disappeared (e.g. deleted, moved to different location) while selection widget is open </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>- Path to item which which must be checked </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="recent__files__widget_8cpp_source.html#l00058">58</a> of file <a class="el" href="recent__files__widget_8cpp_source.html">recent_files_widget.cpp</a>.</p>
+
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qfileinfo.html#exists">QFileInfo::exists()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="recent__files__widget_8cpp_source.html#l00019">RecentFilesWidget()</a>.</p>
+
+</div>
+</div>
 <a id="a5d5de41ea4ef0da1407c29bf614c0611"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5d5de41ea4ef0da1407c29bf614c0611">&#9670;&nbsp;</a></span>handleProjectUsed</h2>
 
@@ -1246,7 +1286,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="recent__files__widget_8cpp_source.html#l00049">49</a> of file <a class="el" href="recent__files__widget_8cpp_source.html">recent_files_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="recent__files__widget_8cpp_source.html#l00052">52</a> of file <a class="el" href="recent__files__widget_8cpp_source.html">recent_files_widget.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="recent__files__widget_8cpp_source.html#l00019">RecentFilesWidget()</a>.</p>
 
@@ -1283,9 +1323,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="recent__files__widget_8cpp_source.html#l00081">81</a> of file <a class="el" href="recent__files__widget_8cpp_source.html">recent_files_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="recent__files__widget_8cpp_source.html#l00106">106</a> of file <a class="el" href="recent__files__widget_8cpp_source.html">recent_files_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlayout.html#removeWidget">QLayout::removeWidget()</a>.</p>
+<p class="reference">References <a class="el" href="recent__file__item_8cpp_source.html#l00121">hal::RecentFileItem::file()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfilesystemwatcher.html#removePath">QFileSystemWatcher::removePath()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qlayout.html#removeWidget">QLayout::removeWidget()</a>.</p>
 
 </div>
 </div>
@@ -1305,7 +1345,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Initializes the appearance of the widget. </p>
 
-<p class="definition">Definition at line <a class="el" href="recent__files__widget_8cpp_source.html#l00033">33</a> of file <a class="el" href="recent__files__widget_8cpp_source.html">recent_files_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="recent__files__widget_8cpp_source.html#l00036">36</a> of file <a class="el" href="recent__files__widget_8cpp_source.html">recent_files_widget.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#children">QObject::children()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstyle.html#polish">QStyle::polish()</a>, <a class="el" href="recent__file__item_8cpp_source.html#l00126">hal::RecentFileItem::repolish()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#style">QWidget::style()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstyle.html#unpolish">QStyle::unpolish()</a>.</p>
 
@@ -1323,7 +1363,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_recent_files_widget.html">RecentFilesWidget</a></li>
-    <li class="footer">Generated on Mon Oct 24 2022 20:50:25 for HAL by
+    <li class="footer">Generated on Tue Oct 25 2022 18:01:39 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
