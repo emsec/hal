@@ -175,9 +175,20 @@ namespace hal
 
     void RecentFileItem::setMissing(bool miss)
     {
+        if (mMissing == miss) return;
         mMissing = miss;
-        mNameLabel->setText(mNameLabel->text().append(" [Missing]"));
-        mHover = false;
+        if (mMissing)
+        {
+            mNameLabel->setText(mNameLabel->text().append(" [Missing]"));
+            mHover = false;
+        }
+        else
+        {
+            QString txt = mNameLabel->text();
+            if (txt.endsWith(" [Missing]"))
+                mNameLabel->setText(txt.left(txt.size()-10));
+            mHover = true;
+        }
     }
 
     void RecentFileItem::setIconPath(const QString& path)

@@ -154,31 +154,26 @@ namespace hal
                 SingleDestination    = 2,
                 SourceAndDestination = 3,
                 ConstantLevel        = 4,
-                MultipleSource       = 5,
-                MultipleDestination  = 6
+                HasGlobalEndpoint    = 5
             };
-            EndpointList() : mNetType(NoEndpoint)
-            {
-                ;
-            }
+            EndpointList()
+                : mNetType(NoEndpoint), mInputArrow(false), mOutputArrow(false)
+            {;}
             void addSource(const NetLayoutPoint& pnt);
             void addDestination(const NetLayoutPoint& pnt);
-            void setNetType(EndpointType tp)
-            {
-                mNetType = tp;
-            }
-            EndpointType netType() const
-            {
-                return mNetType;
-            }
-            bool isInput(int index) const
-            {
-                return mPointIsInput.at(index);
-            }
+            void setNetType(EndpointType tp) { mNetType = tp; }
+            EndpointType netType() const { return mNetType; }
+            bool isInput(int index) const { return mPointIsInput.at(index); }
+            void setInputArrow() { mInputArrow = true; }
+            bool hasInputArrow() const { return mInputArrow; }
+            void setOutputArrow() { mOutputArrow = true; }
+            bool hasOutputArrow() const { return  mOutputArrow; }
 
         private:
             EndpointType mNetType;
             QList<bool> mPointIsInput;
+            bool mInputArrow;
+            bool mOutputArrow;
         };
 
         class SeparatedNetWidth
