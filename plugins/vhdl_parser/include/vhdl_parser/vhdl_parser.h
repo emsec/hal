@@ -77,7 +77,7 @@ namespace hal
         };
 
         using ci_string          = core_strings::CaseInsensitiveString;
-        using attribute_buffer_t = std::map<AttributeTarget, std::map<ci_string, VhdlDataEntry>>;
+        using attribute_buffer_t = std::map<AttributeTarget, std::map<ci_string, std::tuple<u32, std::string, std::string, std::string>>>;
 
         std::stringstream m_fs;
         std::filesystem::path m_path;
@@ -85,13 +85,9 @@ namespace hal
         // temporary netlist
         Netlist* m_netlist = nullptr;
 
-        // all entities of the netlist
-        std::vector<std::unique_ptr<VhdlEntity>> m_entities;
-        std::unordered_map<ci_string, VhdlEntity*> m_entities_by_name;
+        // all modules of the netlist
+        std::unordered_map<ci_string, VHDLEntity> m_entities;
         ci_string m_last_entity;
-
-        // std::unordered_map<ci_string, VhdlEntity> m_entities;
-        // ci_string m_last_entity;
 
         // token stream of entire input file
         TokenStream<ci_string> m_token_stream;
@@ -122,25 +118,31 @@ namespace hal
         Result<std::monostate> parse_tokens();
         void parse_library();
         Result<std::monostate> parse_entity();
-        Result<std::monostate> parse_port_definitons(VhdlEntity* vhdl_entity);
+        Result<std::monostate> parse_port_definitons(VHDLEntity& entity);
         Result<std::monostate> parse_attribute();
         Result<std::monostate> parse_architecture();
-        Result<std::monostate> parse_architecture_header(VhdlEntity* vhdl_entity);
-        Result<std::monostate> parse_signal_definition(VhdlEntity* vhdl_entity);
-        Result<std::monostate> parse_architecture_body(VhdlEntity* vhdl_entity);
-        Result<std::monostate> parse_assignment(VhdlEntity* vhdl_entity);
-        Result<std::monostate> parse_instance(VhdlEntity* vhdl_entity);
-        Result<std::monostate> parse_port_assign(VhdlInstance* instance);
-        Result<std::monostate> parse_generic_assign(VhdlInstance* instance);
-        Result<std::monostate> assign_attributes(VhdlEntity* vhdl_entity);
+        Result<std::monostate> parse_architecture_header(VHDLEntity& entity);
+        Result<std::monostate> parse_signal_definition(VHDLEntity& entity);
+        Result<std::monostate> parse_architecture_body(VHDLEntity& entity);
+        void parse_assignment(VHDLEntity& entity);
+        Result<std::monostate> parse_instance(VHDLEntity& entity);
+        void parse_port_assign(VHDLEntity& entity, const ci_string& instance_name);
+        Result<std::monostate> parse_generic_assign(VHDLEntity& entity, const ci_string& instance_name);
+        Result<std::monostate> assign_attributes(VHDLEntity& entity);
 
         // construct netlist from intermediate format
-        Result<std::monostate> construct_netlist(VhdlEntity* top_entity);
-        Result<Module*> instantiate_entity(const ci_string& instance_name, VhdlEntity* vhdl_entity, Module* parent, const std::unordered_map<ci_string, ci_string>& parent_module_assignments);
+        Result<std::monostate> construct_netlist(VHDLEntity& top_entity);
+        Result<Module*> instantiate_entity(const ci_string& instance_name, VHDLEntity& vhdl_entity, Module* parent, const std::unordered_map<ci_string, ci_string>& parent_module_assignments);
 
         // helper functions
+        std::vector<u32> parse_range(TokenStream<ci_string>& range_stream) const;
         Result<std::vector<std::vector<u32>>> parse_signal_ranges(TokenStream<ci_string>& signal_stream) const;
 
+        Result<std::vector<ci_string>> get_bin_from_literal(const Token<ci_string>& value_token) const;
+        Result<ci_string> get_hex_from_literal(const Token<ci_string>& value_token) const;
+        Result<std::vector<ci_string>> expand_assignment_signal(VHDLEntity& entity, TokenStream<ci_string>& signal_stream, bool is_left);
+        std::vector<ci_string> expand_ranges(const ci_string& name, const std::vector<std::vector<u32>>& ranges) const;
+        void expand_ranges_recursively(std::vector<ci_string>& expanded_names, const ci_string& current_name, const std::vector<std::vector<u32>>& ranges, u32 dimension) const;
         ci_string get_unique_alias(std::unordered_map<ci_string, u32>& name_occurrences, const ci_string& name) const;
     };
 }    // namespace hal
