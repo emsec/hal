@@ -165,7 +165,7 @@ namespace hal
 
                     for (const char c : number)
                     {
-                        if ((c >= '0' && c <= '9') || c == 'X' || c == 'Z')
+                        if ((c >= '0' && c <= '9'))
                         {
                             tmp_val = (tmp_val * 10) + (c - '0');
                         }
@@ -649,9 +649,9 @@ namespace hal
         m_net_by_name.clear();
         m_nets_to_merge.clear();
         m_module_ports.clear();
-        for (const auto& module : m_modules)
+        for (const auto& verilog_module : m_modules)
         {
-            for (const auto& instance : module->m_instances)
+            for (const auto& instance : verilog_module->m_instances)
             {
                 if (!instance->m_is_module)
                 {
@@ -696,10 +696,10 @@ namespace hal
         std::vector<std::string> top_module_candidates;
         for (const auto& [name, module] : m_modules_by_name)
         {
-           if (module_name_to_refereneces.find(name) == module_name_to_refereneces.end())
-           {
-               top_module_candidates.push_back(name);
-           }
+            if (module_name_to_refereneces.find(name) == module_name_to_refereneces.end())
+            {
+                top_module_candidates.push_back(name);
+            }
         }
 
         if (top_module_candidates.empty())
@@ -1462,7 +1462,7 @@ namespace hal
         // global input/output signals will be named after ports, so take into account for aliases
         for (const auto& port : top_module->m_ports)
         {
-            for (const std::string& expanded_port_identifier : port->m_expanded_identifiers)
+            for (const auto& expanded_port_identifier : port->m_expanded_identifiers)
             {
                 m_signal_name_occurrences[expanded_port_identifier]++;
             }
@@ -1564,7 +1564,7 @@ namespace hal
         std::unordered_map<std::string, std::string> top_assignments;
         for (const auto& port : top_module->m_ports)
         {
-            for (const std::string& expanded_port_identifier : port->m_expanded_identifiers)
+            for (const auto& expanded_port_identifier : port->m_expanded_identifiers)
             {
                 Net* global_port_net = m_netlist->create_net(expanded_port_identifier);
                 if (global_port_net == nullptr)
@@ -1738,7 +1738,7 @@ namespace hal
                     // return ERR_APPEND(res.get_error(),
                     //                 "could not construct netlist: failed to create pin '" + std::get<1>(port_info) + "' at net '" + net->get_name() + "' with ID " + std::to_string(net->get_id())
                     //                     + " within module '" + mod->get_name() + "' with ID " + std::to_string(mod->get_id()));
-                    // NOTE: The pin creation fails when there are unused ports that never get a net assigned to them (verliog...), 
+                    // NOTE: The pin creation fails when there are unused ports that never get a net assigned to them (verliog...),
                     //       but this also happens when the net just passes through the module (since there is no gate inside the module with that net as either input or output net, the net does not get listed as module input or output)
                     log_warning("verilog_parser", "{}", res.get_error().get());
                 }
@@ -1811,18 +1811,24 @@ namespace hal
         {
             if (!module->set_data("attribute", attribute.m_name, attribute.m_type, attribute.m_value))
             {
-                log_warning("verilog_parser", "could not set attribute ({} = {}) for instance '{}' type '{}'.", attribute.m_name, attribute.m_value, instance_identifier, instance_type);
+                log_warning("verilog_parser",
+                            "could not set attribute '{} = {}' of type '{}' for instance '{}' type '{}'.",
+                            attribute.m_name,
+                            attribute.m_value,
+                            attribute.m_type,
+                            instance_identifier,
+                            instance_type);
             }
         }
 
         // assign module port names and attributes
         for (const auto& port : verilog_module->m_ports)
         {
-            for (const std::string& expanded_port_identifier : port->m_expanded_identifiers)
+            for (const auto& expanded_port_identifier : port->m_expanded_identifiers)
             {
                 if (const auto it = parent_module_assignments.find(expanded_port_identifier); it != parent_module_assignments.end())
                 {
-                    Net* port_net            = m_net_by_name.at(it->second);
+                    Net* port_net = m_net_by_name.at(it->second);
                     m_module_ports[port_net].push_back(std::make_tuple(port->m_direction, expanded_port_identifier, module));
 
                     // assign port attributes
@@ -1831,9 +1837,10 @@ namespace hal
                         if (!port_net->set_data("attribute", attribute.m_name, attribute.m_type, attribute.m_value))
                         {
                             log_warning("verilog_parser",
-                                        "could not set attribute ({} = {}) for port '{}' of instance '{}' of type '{}'.",
+                                        "could not set attribute '{} = {}' of type '{}' for port '{}' of instance '{}' of type '{}'.",
                                         attribute.m_name,
                                         attribute.m_value,
+                                        attribute.m_type,
                                         expanded_port_identifier,
                                         instance_identifier,
                                         instance_type);
@@ -1846,7 +1853,7 @@ namespace hal
         // create internal signals
         for (const auto& signal : verilog_module->m_signals)
         {
-            for (const std::string& expanded_name : signal->m_expanded_names)
+            for (const auto& expanded_name : signal->m_expanded_names)
             {
                 signal_alias[expanded_name] = get_unique_alias(m_signal_name_occurrences, expanded_name);
 
@@ -1860,7 +1867,6 @@ namespace hal
                 m_net_by_name[signal_alias.at(expanded_name)] = signal_net;
 
                 // assign signal attributes
-
                 for (const VerilogDataEntry& attribute : signal->m_attributes)
                 {
                     if (!signal_net->set_data("attribute", attribute.m_name, "unknown", attribute.m_value))

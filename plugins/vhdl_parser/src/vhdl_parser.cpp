@@ -14,6 +14,435 @@
 
 namespace hal
 {
+    namespace
+    {
+        std::vector<u32> parse_range(TokenStream<ci_string>& range_stream)
+        {
+            if (range_stream.remaining() == 1)
+            {
+                return {(u32)std::stoi(core_strings::to<std::string>(range_stream.consume().string))};
+            }
+
+            int direction = 1;
+            const int end = std::stoi(core_strings::to<std::string>(range_stream.consume().string));
+
+            if (range_stream.peek() == "downto")
+            {
+                range_stream.consume("downto");
+            }
+            else
+            {
+                range_stream.consume("to", true);
+                direction = -1;
+            }
+
+            const int start = std::stoi(core_strings::to<std::string>(range_stream.consume().string));
+
+            std::vector<u32> res;
+            for (int i = start; i != end + direction; i += direction)
+            {
+                res.push_back((u32)i);
+            }
+            return res;
+        }
+
+        void expand_ranges_recursively(std::vector<ci_string>& expanded_names, const ci_string& current_name, const std::vector<std::vector<u32>>& ranges, u32 dimension)
+        {
+            // expand signal recursively
+            if (ranges.size() > dimension)
+            {
+                for (const u32 index : ranges[dimension])
+                {
+                    expand_ranges_recursively(expanded_names, current_name + "(" + core_strings::to<ci_string>(std::to_string(index)) + ")", ranges, dimension + 1);
+                }
+            }
+            else
+            {
+                // last dimension
+                expanded_names.push_back(current_name);
+            }
+        }
+
+        std::vector<ci_string> expand_ranges(const ci_string& name, const std::vector<std::vector<u32>>& ranges)
+        {
+            std::vector<ci_string> res;
+
+            expand_ranges_recursively(res, name, ranges, 0);
+
+            return res;
+        }
+
+        static const std::map<char, BooleanFunction::Value> bin_map = {{'0', BooleanFunction::Value::ZERO},
+                                                                       {'1', BooleanFunction::Value::ONE},
+                                                                       {'X', BooleanFunction::Value::X},
+                                                                       {'Z', BooleanFunction::Value::Z}};
+
+        static const std::map<char, std::vector<BooleanFunction::Value>> oct_map = {{'0', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
+                                                                                    {'1', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
+                                                                                    {'2', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
+                                                                                    {'3', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
+                                                                                    {'4', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+                                                                                    {'5', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+                                                                                    {'6', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
+                                                                                    {'7', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
+                                                                                    {'X', {BooleanFunction::Value::X, BooleanFunction::Value::X, BooleanFunction::Value::X}},
+                                                                                    {'Z', {BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z}}};
+
+        static const std::map<char, std::vector<BooleanFunction::Value>> hex_map = {
+            {'0', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
+            {'1', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
+            {'2', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
+            {'3', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
+            {'4', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
+            {'5', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
+            {'6', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
+            {'7', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
+            {'8', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {'9', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {'A', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {'B', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {'C', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
+            {'D', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
+            {'E', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
+            {'F', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
+            {'X', {BooleanFunction::Value::X, BooleanFunction::Value::X, BooleanFunction::Value::X, BooleanFunction::Value::X}},
+            {'Z', {BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z}}};
+
+        Result<std::vector<BooleanFunction::Value>> get_binary_vector(std::string value)
+        {
+            value = utils::to_upper(utils::replace(value, std::string("_"), std::string("")));
+
+            std::string prefix;
+            std::string number;
+            std::vector<BooleanFunction::Value> result;
+
+            // base specified?
+            if (value.at(0) != '\"')
+            {
+                prefix = value.at(0);
+                number = value.substr(2, value.rfind('\"') - 2);
+            }
+            else
+            {
+                prefix = "B";
+                number = value.substr(1, value.rfind('\"') - 1);
+            }
+
+            // select base
+            switch (prefix.at(0))
+            {
+                case 'B': {
+                    for (auto it = number.rbegin(); it != number.rend(); it++)
+                    {
+                        const char c = *it;
+                        if (c == '0' || c == '1' || c == 'Z' || c == 'X')
+                        {
+                            result.push_back(bin_map.at(c));
+                        }
+                        else
+                        {
+                            return ERR("could not convert string to binary vector: invalid character within binary number literal '" + value + "'");
+                        }
+                    }
+                    break;
+                }
+
+                case 'O':
+                    for (auto it = number.rbegin(); it != number.rend(); it++)
+                    {
+                        const char c = *it;
+                        if ((c >= '0' && c <= '7') || c == 'X' || c == 'Z')
+                        {
+                            const auto& bits = oct_map.at(c);
+                            result.insert(result.end(), bits.begin(), bits.end());
+                        }
+                        else
+                        {
+                            return ERR("could not convert string to binary vector: invalid character within octal number literal '" + value + "'");
+                        }
+                    }
+                    break;
+
+                case 'D': {
+                    u64 tmp_val = 0;
+
+                    for (const char c : number)
+                    {
+                        if ((c >= '0' && c <= '9'))
+                        {
+                            tmp_val = (tmp_val * 10) + (c - '0');
+                        }
+                        else
+                        {
+                            return ERR("could not convert string to binary vector: invalid character within decimal number literal '" + value + "'");
+                        }
+                    }
+
+                    do
+                    {
+                        result.push_back(((tmp_val & 1) == 1) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO);
+                        tmp_val >>= 1;
+                    } while (tmp_val != 0);
+                    break;
+                }
+
+                case 'H': {
+                    for (auto it = number.rbegin(); it != number.rend(); it++)
+                    {
+                        const char c = *it;
+                        if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || c == 'X' || c == 'Z')
+                        {
+                            const auto& bits = hex_map.at(c);
+                            result.insert(result.end(), bits.begin(), bits.end());
+                        }
+                        else
+                        {
+                            return ERR("could not convert string to binary vector: invalid character within hexadecimal number literal '" + value + "'");
+                        }
+                    }
+                    break;
+                }
+
+                default: {
+                    return ERR("could not convert string to binary vector: invalid base '" + prefix + "' within number literal '" + value + "'");
+                }
+            }
+
+            return OK(result);
+        }
+
+        Result<std::string> get_hex_from_literal(const Token<ci_string>& value_token)
+        {
+            const u32 line_number = value_token.number;
+            const ci_string value = utils::to_upper(utils::replace(value_token.string, ci_string("_"), ci_string("")));
+
+            ci_string prefix;
+            ci_string number;
+            u32 base;
+
+            // base specified?
+            if (value.at(0) != '\"')
+            {
+                prefix = value.at(0);
+                number = value.substr(2, value.rfind('\"') - 2);
+            }
+            else
+            {
+                prefix = "B";
+                number = value.substr(1, value.rfind('\"') - 1);
+            }
+
+            // select base
+            switch (prefix.at(0))
+            {
+                case 'B': {
+                    if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '1'); }))
+                    {
+                        return ERR("could not convert token to hexadecimal string: invalid character within binary number literal '" + core_strings::to<std::string>(value) + "' (line "
+                                   + std::to_string(line_number) + ")");
+                    }
+
+                    base = 2;
+                    break;
+                }
+
+                case 'O': {
+                    if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '7'); }))
+                    {
+                        return ERR("could not convert token to hexadecimal string: invalid character within ocatl number literal '" + core_strings::to<std::string>(value) + "' (line "
+                                   + std::to_string(line_number) + ")");
+                    }
+
+                    base = 8;
+                    break;
+                }
+
+                case 'D': {
+                    if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '9'); }))
+                    {
+                        return ERR("could not convert token to hexadecimal string: invalid character within decimal number literal '" + core_strings::to<std::string>(value) + "' (line "
+                                   + std::to_string(line_number) + ")");
+                    }
+
+                    base = 10;
+                    break;
+                }
+
+                case 'H': {
+                    std::string res;
+
+                    for (const char c : number)
+                    {
+                        if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F'))
+                        {
+                            res += c;
+                        }
+                        else
+                        {
+                            return ERR("could not convert token to hexadecimal string: invalid character within hexadecimal number literal '" + core_strings::to<std::string>(value) + "' (line "
+                                       + std::to_string(line_number) + ")");
+                        }
+                    }
+
+                    return OK(res);
+                }
+
+                default: {
+                    return ERR("could not convert token to hexadecimal string: invalid base '" + core_strings::to<std::string>(prefix) + "' within number literal '"
+                               + core_strings::to<std::string>(value) + "' (line " + std::to_string(line_number) + ")");
+                }
+            }
+
+            std::stringstream ss;
+            ss << std::uppercase << std::hex << stoull(core_strings::to<std::string>(number), 0, base);
+            return OK(ss.str());
+        }
+
+        Result<std::vector<assignment_t>> parse_assignment_expression(TokenStream<ci_string>&& stream)
+        {
+            // PARSE ASSIGNMENT
+            //   assignment can currently be one of the following:
+            //   (1) NAME
+            //   (2) NUMBER
+            //   (3) NAME(INDEX1, INDEX2, ...)
+            //   (4) NAME(BEGIN_INDEX1 to/downto END_INDEX1, BEGIN_INDEX2 to/downto END_INDEX2, ...)
+            //   (5) ((1 - 4), (1 - 4), ...)
+
+            std::vector<TokenStream<ci_string>> parts;
+
+            if (stream.size() == 0)
+            {
+                return OK({});
+            }
+
+            // (5) ((1 - 4), (1 - 4), ...)
+            if (stream.consume("("))
+            {
+                do
+                {
+                    parts.push_back(stream.extract_until(","));
+                } while (stream.consume(",", false));
+
+                stream.consume(")", true);
+            }
+            else
+            {
+                parts.push_back(stream);
+            }
+
+            std::vector<assignment_t> result;
+            result.reserve(parts.size());
+
+            for (auto it = parts.rbegin(); it != parts.rend(); it++)
+            {
+                TokenStream<ci_string>& part_stream = *it;
+
+                const Token<ci_string> signal_name_token = part_stream.consume();
+                const u32 line_number                    = signal_name_token.number;
+                ci_string signal_name                    = signal_name_token.string;
+
+                // (2) NUMBER
+                if (utils::starts_with(signal_name, core_strings::CaseInsensitiveString("\"")) || utils::starts_with(signal_name, core_strings::CaseInsensitiveString("b\""))
+                    || utils::starts_with(signal_name, core_strings::CaseInsensitiveString("o\"")) || utils::starts_with(signal_name, core_strings::CaseInsensitiveString("x\"")))
+                {
+                    if (auto res = get_binary_vector(core_strings::to<std::string>(signal_name_token.string)); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(), "could not expand assignment signal: unable to convert literal to binary string (line " + std::to_string(signal_name_token.number) + ")");
+                    }
+                    else
+                    {
+                        result.push_back(std::move(res.get()));
+                    }
+                }
+                else if (signal_name == "'0'")
+                {
+                    result.push_back(numeral_t({BooleanFunction::Value::ZERO}));
+                }
+                else if (signal_name == "'1'")
+                {
+                    result.push_back(numeral_t({BooleanFunction::Value::ONE}));
+                }
+                else if (signal_name == "'X'")
+                {
+                    result.push_back(numeral_t({BooleanFunction::Value::X}));
+                }
+                else if (signal_name == "'Z'")
+                {
+                    result.push_back(numeral_t({BooleanFunction::Value::Z}));
+                }
+                else
+                {
+                    // (3) NAME(INDEX1, INDEX2, ...)
+                    // (4) NAME(BEGIN_INDEX1 to/downto END_INDEX1, BEGIN_INDEX2 to/downto END_INDEX2, ...)
+                    if (part_stream.consume("("))
+                    {
+                        std::vector<std::vector<u32>> ranges;
+                        u32 closing_pos = part_stream.find_next(")");
+                        do
+                        {
+                            TokenStream<ci_string> range_stream = part_stream.extract_until(",", closing_pos);
+                            ranges.emplace_back(parse_range(range_stream));
+
+                        } while (part_stream.consume(",", false));
+                        part_stream.consume(")", true);
+                        result.push_back(ranged_identifier_t({std::move(signal_name), std::move(ranges)}));
+                    }
+                    else
+                    {
+                        // (1) NAME
+                        result.push_back(std::move(signal_name));
+                    }
+                }
+            }
+
+            return OK(result);
+        }
+
+        Result<std::vector<ci_string>> expand_assignment_expression(VhdlEntity* vhdl_entity, const std::vector<assignment_t>& vars)
+        {
+            std::vector<ci_string> result;
+            for (const auto& var : vars)
+            {
+                if (const identifier_t* identifier = std::get_if<identifier_t>(&var); identifier != nullptr)
+                {
+                    std::vector<std::vector<u32>> ranges;
+
+                    if (const auto signal_it = vhdl_entity->m_signals_by_name.find(*identifier); signal_it != vhdl_entity->m_signals_by_name.end())
+                    {
+                        ranges = signal_it->second->m_ranges;
+                    }
+                    else if (const auto port_it = vhdl_entity->m_ports_by_identifier.find(*identifier); port_it != vhdl_entity->m_ports_by_identifier.end())
+                    {
+                        ranges = port_it->second->m_ranges;
+                    }
+                    else
+                    {
+                        return ERR("could not expand assignment expression': '" + core_strings::to<std::string>(*identifier) + "' is neither a signal nor a port of entity '"
+                                   + core_strings::to<std::string>(vhdl_entity->m_name) + "'");
+                    }
+
+                    std::vector<ci_string> expanded = expand_ranges(*identifier, ranges);
+                    result.insert(result.end(), expanded.begin(), expanded.end());
+                }
+                else if (const ranged_identifier_t* ranged_identifier = std::get_if<ranged_identifier_t>(&var); ranged_identifier != nullptr)
+                {
+                    std::vector<ci_string> expanded = expand_ranges(ranged_identifier->first, ranged_identifier->second);
+                    result.insert(result.end(), expanded.begin(), expanded.end());
+                }
+                else if (const numeral_t* numeral = std::get_if<numeral_t>(&var); numeral != nullptr)
+                {
+                    for (auto value : *numeral)
+                    {
+                        result.push_back(core_strings::to<ci_string>("'" + BooleanFunction::to_string(value) + "'"));
+                    }
+                }
+            }
+
+            return OK(result);
+        }
+
+    }    // namespace
+
     Result<std::monostate> VHDLParser::parse(const std::filesystem::path& file_path)
     {
         m_path = file_path;
@@ -61,55 +490,50 @@ namespace hal
         }
 
         // expand module port identifiers, signals, and assignments
-        for (auto& [entity_name, entity] : m_entities)
+        for (auto& [entity_name, vhdl_entity] : m_entities_by_name)
         {
             // expand port identifiers
-            for (ci_string& port_identifier : entity.m_port_names)
+            for (const auto& port : vhdl_entity->m_ports)
             {
-                if (const auto ranges_it = entity.m_port_ranges.find(port_identifier); ranges_it != entity.m_port_ranges.end())
+                if (!port->m_ranges.empty())
                 {
-                    entity.m_expanded_port_names[port_identifier] = expand_ranges(port_identifier, ranges_it->second);
+                    port->m_expanded_identifiers = expand_ranges(port->m_identifier, port->m_ranges);
                 }
                 else
                 {
-                    entity.m_expanded_port_names[port_identifier] = std::vector<ci_string>({port_identifier});
+                    port->m_expanded_identifiers = {port->m_identifier};
                 }
             }
 
             // expand signals
-            for (ci_string& signal_identifier : entity.m_signals)
+            for (auto& signal : vhdl_entity->m_signals)
             {
-                if (const auto ranges_it = entity.m_signal_ranges.find(signal_identifier); ranges_it != entity.m_signal_ranges.end())
+                if (!signal->m_ranges.empty())
                 {
-                    entity.m_expanded_signals[signal_identifier] = expand_ranges(signal_identifier, ranges_it->second);
+                    signal->m_expanded_names = expand_ranges(signal->m_name, signal->m_ranges);
                 }
                 else
                 {
-                    entity.m_expanded_signals[signal_identifier] = std::vector<ci_string>({signal_identifier});
+                    signal->m_expanded_names = std::vector<ci_string>({signal->m_name});
                 }
             }
 
             // expand assignments
-            for (auto& [left_stream, right_stream] : entity.m_assignments)
+            for (auto& assignment : vhdl_entity->m_assignments)
             {
-                std::vector<ci_string> left_signals, right_signals;
-                if (auto res = expand_assignment_signal(entity, left_stream, false); res.is_error())
+                auto left_res = expand_assignment_expression(vhdl_entity, assignment.m_variable);
+                if (left_res.is_error())
                 {
-                    return ERR_APPEND(res.get_error(), "could not parse VHDL file '" + m_path.string() + "': failed to expand left side of assignment");
+                    return ERR_APPEND(left_res.get_error(), "could not parse VHDL file '" + m_path.string() + "': unable to expand signal assignment");
                 }
-                else
-                {
-                    left_signals = res.get();
-                }
+                const std::vector<ci_string> left_signals = left_res.get();
 
-                if (auto res = expand_assignment_signal(entity, right_stream, true); res.is_error())
+                auto right_res = expand_assignment_expression(vhdl_entity, assignment.m_assignment);
+                if (right_res.is_error())
                 {
-                    return ERR_APPEND(res.get_error(), "could not parse VHDL file '" + m_path.string() + "': failed to expand right side of assignment");
+                    return ERR_APPEND(right_res.get_error(), "could not parse VHDL file '" + m_path.string() + "': unable to expand signal assignment");
                 }
-                else
-                {
-                    right_signals = res.get();
-                }
+                const std::vector<ci_string> right_signals = right_res.get();
 
                 u32 left_size  = left_signals.size();
                 u32 right_size = right_signals.size();
@@ -125,69 +549,73 @@ namespace hal
                 {
                     for (u32 i = 0; i < right_size; i++)
                     {
-                        entity.m_expanded_assignments.push_back(std::make_pair(left_signals.at(i), right_signals.at(i)));
+                        vhdl_entity->m_expanded_assignments.push_back(std::make_pair(left_signals.at(i), right_signals.at(i)));
                     }
                 }
             }
         }
 
         // expand entity port assignments
-        for (auto& [entity_name, entity] : m_entities)
+        for (auto& [entity_name, vhdl_entity] : m_entities_by_name)
         {
-            for (const ci_string& instance_name : entity.m_instances)
+            for (auto& instance : vhdl_entity->m_instances)
             {
-                const ci_string& instance_type = entity.m_instance_types.at(instance_name);
-                if (auto entity_it = m_entities.find(instance_type); entity_it != m_entities.end())
+                if (auto entity_it = m_entities_by_name.find(instance->m_type); entity_it != m_entities_by_name.end())
                 {
-                    if (auto inst_it = entity.m_instance_assignments.find(instance_name); inst_it != entity.m_instance_assignments.end())
+                    instance->m_is_entity = true;
+                    for (const auto& port_assignment : instance->m_port_assignments)
                     {
-                        for (auto& [port_stream, assignment_stream] : inst_it->second)
+                        std::vector<ci_string> left_port;
+                        if (const identifier_t* identifier = std::get_if<identifier_t>(&(port_assignment.m_port)); identifier != nullptr)
                         {
-                            ci_string port_name = port_stream.consume().string;
-                            std::vector<ci_string> left_port;
-
-                            if (port_stream.consume("("))
+                            if (const auto it = entity_it->second->m_ports_by_identifier.find(*identifier); it != entity_it->second->m_ports_by_identifier.end())
                             {
-                                std::vector<std::vector<u32>> ranges;
-                                u32 closing_pos = port_stream.find_next(")");
-                                do
-                                {
-                                    TokenStream<ci_string> range_stream = port_stream.extract_until(",", closing_pos);
-                                    ranges.emplace_back(parse_range(range_stream));
+                                left_port = it->second->m_expanded_identifiers;
+                            }
+                        }
+                        else if (const ranged_identifier_t* identifier = std::get_if<ranged_identifier_t>(&(port_assignment.m_port)); identifier != nullptr)
+                        {
+                            left_port = expand_ranges(identifier->first, identifier->second);
+                        }
+                        else
+                        {
+                            return ERR("could not parse VHDL file '" + m_path.string() + "': unable to expand entity port assignment");
+                        }
 
-                                } while (port_stream.consume(",", false));
-                                port_stream.consume(")", true);
+                        auto right_res = expand_assignment_expression(vhdl_entity, port_assignment.m_assignment);
+                        if (right_res.is_error())
+                        {
+                            return ERR_APPEND(right_res.get_error(), "could not parse VHDL file '" + m_path.string() + "': unable to expand entity port assignment");
+                        }
+                        const std::vector<ci_string> right_port = right_res.get();
 
-                                left_port = expand_ranges(port_name, ranges);
+                        if (left_port.empty())
+                        {
+                            return ERR("could not parse VHDL file '" + m_path.string() + "': unable to expand entity port assignment");
+                        }
+
+                        if (!right_port.empty())
+                        {
+                            u32 max_size;
+                            if (right_port.size() <= left_port.size())
+                            {
+                                max_size = right_port.size();
                             }
                             else
                             {
-                                left_port = entity_it->second.m_expanded_port_names.at(port_name);
+                                max_size = left_port.size();
                             }
 
-                            std::vector<ci_string> right_port;
-                            if (auto res = expand_assignment_signal(entity, assignment_stream, false); res.is_error())
+                            for (u32 i = 0; i < max_size; i++)
                             {
-                                return ERR_APPEND(res.get_error(), "could not parse VHDL file '" + m_path.string() + "': failed to expand right side of port assignment");
+                                instance->m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));
                             }
-                            else
+                        }
+                        else
+                        {
+                            for (const auto& expanded_port_name : left_port)
                             {
-                                right_port = res.get();
-                            }
-
-                            if (left_port.empty() || right_port.empty())
-                            {
-                                return ERR("could not parse VHDL file '" + m_path.string() + "': failed to expand assignments within entity '" + core_strings::to<std::string>(entity_name) + "'");
-                            }
-                            else if (right_port.size() != left_port.size())
-                            {
-                                return ERR("could not parse VHDL file '" + m_path.string() + "': port assignment width mismatch within instance '" + core_strings::to<std::string>(instance_name)
-                                           + "' of entity '" + core_strings::to<std::string>(instance_type) + "' within entity '" + core_strings::to<std::string>(entity_name) + "'");
-                            }
-
-                            for (u32 i = 0; i < left_port.size(); i++)
-                            {
-                                entity.m_expanded_entity_assignments[instance_name].push_back(std::make_pair(left_port.at(i), right_port.at(i)));
+                                instance->m_expanded_port_assignments.push_back(std::make_pair(expanded_port_name, ""));
                             }
                         }
                     }
@@ -216,6 +644,16 @@ namespace hal
         m_net_by_name.clear();
         m_nets_to_merge.clear();
         m_module_ports.clear();
+        for (const auto& vhdl_entity : m_entities)
+        {
+            for (const auto& instance : vhdl_entity->m_instances)
+            {
+                if (!instance->m_is_entity)
+                {
+                    instance->m_expanded_port_assignments.clear();
+                }
+            }
+        }
 
         // buffer gate types
         for (const auto& [gt_name, gt] : gate_library->get_gate_types())
@@ -248,20 +686,19 @@ namespace hal
 
         // construct the netlist with the last module being considered the top module
         std::map<ci_string, u32> entity_name_to_refereneces;
-        for (const auto& [_name, entity] : m_entities)
+        for (const auto& [_name, vhdl_entity] : m_entities_by_name)
         {
-            for (const auto& instance_name : entity.m_instances)
+            for (const auto& instance : vhdl_entity->m_instances)
             {
-                auto it = entity.m_instance_types.find(instance_name);
-                if (it != entity.m_instance_types.end())
-                    entity_name_to_refereneces[it->second]++;
-                else
-                    entity_name_to_refereneces[instance_name]++;
+                if (const auto it = m_entities_by_name.find(instance->m_type); it != m_entities_by_name.end())
+                {
+                    entity_name_to_refereneces[it->first]++;
+                }
             }
         }
 
         std::vector<ci_string> top_module_candidates;
-        for (const auto& [name, _entity] : m_entities)
+        for (const auto& [name, _entity] : m_entities_by_name)
         {
             if (entity_name_to_refereneces.find(name) == entity_name_to_refereneces.end())
             {
@@ -271,16 +708,16 @@ namespace hal
 
         if (top_module_candidates.empty())
         {
-            return ERR("could not instantiate VHDL netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': unable to find any top entity candidates");
+            return ERR("could not instantiate VHDL netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': unable to find any top module candidates");
         }
 
         if (top_module_candidates.size() > 1)
         {
-            return ERR("could not instantiate VHDL netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': found multiple entity as candidates for the top entity");
+            return ERR("could not instantiate VHDL netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': found multiple entities as candidates for the top module");
         }
 
         // construct the netlist with the the top module
-        VHDLEntity& top_entity = m_entities.at(top_module_candidates.front());
+        VhdlEntity* top_entity = m_entities_by_name.at(top_module_candidates.front());
 
         if (const auto res = construct_netlist(top_entity); res.is_error())
         {
@@ -340,8 +777,10 @@ namespace hal
         // delete unused nets
         for (auto net : m_netlist->get_nets())
         {
-            const bool no_source      = net->get_num_of_sources() == 0 && !net->is_global_input_net();
-            const bool no_destination = net->get_num_of_destinations() == 0 && !net->is_global_output_net();
+            const u32 num_of_sources      = net->get_num_of_sources();
+            const u32 num_of_destinations = net->get_num_of_destinations();
+            const bool no_source          = num_of_sources == 0 && !(net->is_global_input_net() && num_of_destinations != 0);
+            const bool no_destination     = num_of_destinations == 0 && !(net->is_global_output_net() && num_of_sources != 0);
             if (no_source && no_destination)
             {
                 m_netlist->delete_net(net);
@@ -505,16 +944,17 @@ namespace hal
         const ci_string entity_name = m_token_stream.consume().string;
 
         // verify entity name
-        if (const auto it = m_entities.find(entity_name); it != m_entities.end())
+        if (const auto it = m_entities_by_name.find(entity_name); it != m_entities_by_name.end())
         {
             return ERR("could not parse entity '" + core_strings::to<std::string>(entity_name) + "' (line " + std::to_string(line_number) + "): an entity with name '"
-                       + core_strings::to<std::string>(entity_name) + "' does already exist (line " + std::to_string(it->second.m_line_number) + ")");
+                       + core_strings::to<std::string>(entity_name) + "' does already exist (line " + std::to_string(it->second->m_line_number) + ")");
         }
 
         m_token_stream.consume("is", true);
-        VHDLEntity entity;
-        entity.m_line_number = line_number;
-        entity.m_name        = entity_name;
+        auto vhdl_entity               = std::make_unique<VhdlEntity>();
+        VhdlEntity* vhdl_entity_raw    = vhdl_entity.get();
+        vhdl_entity_raw->m_line_number = line_number;
+        vhdl_entity_raw->m_name        = entity_name;
 
         m_attribute_buffer.clear();
 
@@ -528,7 +968,7 @@ namespace hal
             }
             else if (next_token == "port")
             {
-                if (const auto res = parse_port_definitons(entity); res.is_error())
+                if (const auto res = parse_port_definitons(vhdl_entity_raw); res.is_error())
                 {
                     return ERR_APPEND(res.get_error(),
                                       "could not parse entity '" + core_strings::to<std::string>(entity_name) + "': failed to parse port definition (line " + std::to_string(next_token.number) + ")");
@@ -556,13 +996,14 @@ namespace hal
         m_token_stream.consume(";", true);
 
         // add to collection of entities
-        m_entities.emplace(entity_name, entity);
-        m_last_entity = entity_name;
+        m_entities.push_back(std::move(vhdl_entity));
+        m_entities_by_name[entity_name] = vhdl_entity_raw;
+        m_last_entity                   = entity_name;
 
         return OK({});
     }
 
-    Result<std::monostate> VHDLParser::parse_port_definitons(VHDLEntity& entity)
+    Result<std::monostate> VHDLParser::parse_port_definitons(VhdlEntity* vhdl_entity)
     {
         // default port assignments are not supported
         m_token_stream.consume("port", true);
@@ -621,13 +1062,12 @@ namespace hal
 
             for (const ci_string& port_name : port_names)
             {
-                entity.m_port_names.push_back(port_name);
-                entity.m_port_names_set.insert(port_name);
-                entity.m_port_directions[port_name] = direction;
-                if (!ranges.empty())
-                {
-                    entity.m_port_ranges[port_name] = ranges;
-                }
+                auto port                                              = std::make_unique<VhdlPort>();
+                port->m_identifier                                     = port_name;
+                port->m_direction                                      = direction;
+                port->m_ranges                                         = ranges;
+                vhdl_entity->m_ports_by_identifier[port->m_identifier] = port.get();
+                vhdl_entity->m_ports.push_back(std::move(port));
             }
         }
 
@@ -695,9 +1135,11 @@ namespace hal
                 return OK({});
             }
 
-            m_attribute_buffer[target_class].emplace(
-                attribute_target,
-                std::make_tuple(line_number, core_strings::to<std::string>(attribute_name), core_strings::to<std::string>(attribute_type), core_strings::to<std::string>(attribute_value)));
+            VhdlDataEntry attribute;
+            attribute.m_name  = core_strings::to<std::string>(attribute_name);
+            attribute.m_type  = core_strings::to<std::string>(attribute_type);
+            attribute.m_value = core_strings::to<std::string>(attribute_value);
+            m_attribute_buffer[target_class].emplace(attribute_target, attribute);
         }
         else
         {
@@ -716,26 +1158,26 @@ namespace hal
         u32 line_number              = m_token_stream.peek().number;
         const auto entity_name_token = m_token_stream.consume();
 
-        if (const auto it = m_entities.find(entity_name_token.string); it == m_entities.end())
+        if (const auto it = m_entities_by_name.find(entity_name_token.string); it == m_entities_by_name.end())
         {
             return ERR("could not parse architecture: architecture refers to non-existent entity '" + core_strings::to<std::string>(entity_name_token.string) + "' (line "
                        + std::to_string(entity_name_token.number) + ")");
         }
         else
         {
-            VHDLEntity& entity = it->second;
+            VhdlEntity* vhdl_entity = it->second;
 
             m_token_stream.consume("is", true);
 
-            if (const auto res = parse_architecture_header(entity); res.is_error())
+            if (const auto res = parse_architecture_header(vhdl_entity); res.is_error())
             {
                 return ERR_APPEND(res.get_error(), "could not parse architecture: unable to parse architecture header (line " + std::to_string(line_number) + ")");
             }
-            if (const auto res = parse_architecture_body(entity); res.is_error())
+            if (const auto res = parse_architecture_body(vhdl_entity); res.is_error())
             {
                 return ERR_APPEND(res.get_error(), "could not parse architecture: unable to parse architecture body (line " + std::to_string(line_number) + ")");
             }
-            if (const auto res = assign_attributes(entity); res.is_error())
+            if (const auto res = assign_attributes(vhdl_entity); res.is_error())
             {
                 return ERR_APPEND(res.get_error(), "could not parse architecture: unable to assign attributes (line " + std::to_string(line_number) + ")");
             }
@@ -744,14 +1186,14 @@ namespace hal
         }
     }
 
-    Result<std::monostate> VHDLParser::parse_architecture_header(VHDLEntity& entity)
+    Result<std::monostate> VHDLParser::parse_architecture_header(VhdlEntity* vhdl_entity)
     {
         auto next_token = m_token_stream.peek();
         while (next_token != "begin")
         {
             if (next_token == "signal")
             {
-                if (const auto res = parse_signal_definition(entity); res.is_error())
+                if (const auto res = parse_signal_definition(vhdl_entity); res.is_error())
                 {
                     return ERR_APPEND(res.get_error(), "could not parse architecture header: unable to parse signal definition (line " + std::to_string(next_token.number) + ")");
                 }
@@ -788,7 +1230,7 @@ namespace hal
         return OK({});
     }
 
-    Result<std::monostate> VHDLParser::parse_signal_definition(VHDLEntity& entity)
+    Result<std::monostate> VHDLParser::parse_signal_definition(VhdlEntity* vhdl_entity)
     {
         m_token_stream.consume("signal", true);
         u32 line_number = m_token_stream.peek().number;
@@ -818,18 +1260,17 @@ namespace hal
 
         for (const auto& signal_name : signal_names)
         {
-            entity.m_signals.push_back(signal_name);
-            entity.m_signals_set.insert(signal_name);
-            if (!ranges.empty())
-            {
-                entity.m_signal_ranges[signal_name] = ranges;
-            }
+            auto signal                                 = std::make_unique<VhdlSignal>();
+            signal->m_name                              = signal_name;
+            signal->m_ranges                            = ranges;
+            vhdl_entity->m_signals_by_name[signal_name] = signal.get();
+            vhdl_entity->m_signals.push_back(std::move(signal));
         }
 
         return OK({});
     }
 
-    Result<std::monostate> VHDLParser::parse_architecture_body(VHDLEntity& entity)
+    Result<std::monostate> VHDLParser::parse_architecture_body(VhdlEntity* vhdl_entity)
     {
         m_token_stream.consume("begin", true);
         auto next_token = m_token_stream.peek();
@@ -839,7 +1280,7 @@ namespace hal
             // new instance found
             if (m_token_stream.peek(1) == ":")
             {
-                if (const auto res = parse_instance(entity); res.is_error())
+                if (const auto res = parse_instance(vhdl_entity); res.is_error())
                 {
                     return ERR_APPEND(res.get_error(), "could not parse architecture body: unable to parse instance (line " + std::to_string(next_token.number) + ")");
                 }
@@ -847,7 +1288,7 @@ namespace hal
             // not in instance -> has to be a direct assignment
             else if (m_token_stream.find_next("<=") < m_token_stream.find_next(";"))
             {
-                parse_assignment(entity);
+                parse_assignment(vhdl_entity);
             }
             else
             {
@@ -865,52 +1306,70 @@ namespace hal
         return OK({});
     }
 
-    void VHDLParser::parse_assignment(VHDLEntity& entity)
+    Result<std::monostate> VHDLParser::parse_assignment(VhdlEntity* vhdl_entity)
     {
-        TokenStream<ci_string> left_stream = m_token_stream.extract_until("<=");
+        u32 line_number = m_token_stream.peek().number;
+        VhdlAssignment assignment;
+
+        if (auto res = parse_assignment_expression(m_token_stream.extract_until("<=")); res.is_error())
+        {
+            return ERR_APPEND(res.get_error(), "could not parse assignment: unable to parse assignment expression (line " + std::to_string(line_number) + ")");
+        }
+        else
+        {
+            assignment.m_variable = res.get();
+        }
         m_token_stream.consume("<=", true);
-        TokenStream<ci_string> right_stream = m_token_stream.extract_until(";");
+        if (auto res = parse_assignment_expression(m_token_stream.extract_until(";")); res.is_error())
+        {
+            return ERR_APPEND(res.get_error(), "could not parse assignment: unable to parse assignment expression (line " + std::to_string(line_number) + ")");
+        }
+        else
+        {
+            assignment.m_assignment = res.get();
+        }
         m_token_stream.consume(";", true);
 
-        entity.m_assignments.push_back(std::make_pair(left_stream, right_stream));
+        vhdl_entity->m_assignments.push_back(std::move(assignment));
+        return OK({});
     }
 
-    Result<std::monostate> VHDLParser::parse_instance(VHDLEntity& entity)
+    Result<std::monostate> VHDLParser::parse_instance(VhdlEntity* vhdl_entity)
     {
-        u32 line_number               = m_token_stream.peek().number;
-        const ci_string instance_name = m_token_stream.consume();
-        ci_string instance_type;
+        auto instance    = std::make_unique<VhdlInstance>();
+        u32 line_number  = m_token_stream.peek().number;
+        instance->m_name = m_token_stream.consume();
         m_token_stream.consume(":", true);
 
         // remove prefix from type
         if (m_token_stream.peek() == "entity")
         {
             m_token_stream.consume("entity", true);
-            instance_type = m_token_stream.consume();
-            if (const size_t pos = instance_type.find('.'); pos != std::string::npos)
+            instance->m_type = m_token_stream.consume();
+            if (const size_t pos = instance->m_type.find('.'); pos != std::string::npos)
             {
-                instance_type = instance_type.substr(pos + 1);
+                instance->m_type = instance->m_type.substr(pos + 1);
             }
-            if (m_entities.find(instance_type) == m_entities.end())
+            if (m_entities_by_name.find(instance->m_type) == m_entities_by_name.end())
             {
-                return ERR("could not parse instance '" + core_strings::to<std::string>(instance_name) + "' of type '" + core_strings::to<std::string>(instance_type) + "': entity with name '"
-                           + core_strings::to<std::string>(instance_type) + "' does not exist (line " + std::to_string(line_number) + ")");
+                return ERR("could not parse instance '" + core_strings::to<std::string>(instance->m_name) + "' of type '" + core_strings::to<std::string>(instance->m_type) + "': entity with name '"
+                           + core_strings::to<std::string>(instance->m_type) + "' does not exist (line " + std::to_string(line_number) + ")");
             }
         }
         else if (m_token_stream.peek() == "component")
         {
             m_token_stream.consume("component", true);
-            instance_type = m_token_stream.consume();
+            instance->m_type = m_token_stream.consume();
         }
         else
         {
-            instance_type = m_token_stream.consume();
+            instance->m_type = m_token_stream.consume();
             ci_string prefix;
 
             // find longest matching library prefix
             for (const auto& lib : m_libraries)
             {
-                if (lib.size() > prefix.size() && utils::starts_with(instance_type, lib))
+                if (lib.size() > prefix.size() && utils::starts_with(instance->m_type, lib))
                 {
                     prefix = lib;
                 }
@@ -919,38 +1378,37 @@ namespace hal
             // remove prefix
             if (!prefix.empty())
             {
-                instance_type = instance_type.substr(prefix.size());
+                instance->m_type = instance->m_type.substr(prefix.size());
             }
         }
-
-        entity.m_instances.push_back(instance_name);
-        entity.m_instances_set.insert(instance_name);
-        entity.m_instance_types[instance_name] = instance_type;
 
         if (m_token_stream.consume("generic"))
         {
             line_number = m_token_stream.peek().number;
-            if (const auto res = parse_generic_assign(entity, instance_name); res.is_error())
+            if (const auto res = parse_generic_assign(instance.get()); res.is_error())
             {
                 return ERR_APPEND(res.get_error(),
-                                  "could not parse instance '" + core_strings::to<std::string>(instance_name) + "' of type '" + core_strings::to<std::string>(instance_type)
+                                  "could not parse instance '" + core_strings::to<std::string>(instance->m_name) + "' of type '" + core_strings::to<std::string>(instance->m_type)
                                       + "': unable to parse generic assignment (line " + std::to_string(line_number) + ")");
             }
         }
 
         if (m_token_stream.peek() == "port")
         {
-            line_number = m_token_stream.peek().number;
-            parse_port_assign(entity, instance_name);
+            parse_port_assign(instance.get());
         }
+
+        vhdl_entity->m_instances_by_name[instance->m_name] = instance.get();
+        vhdl_entity->m_instances.push_back(std::move(instance));
 
         m_token_stream.consume(";", true);
 
         return OK({});
     }
 
-    void VHDLParser::parse_port_assign(VHDLEntity& entity, const ci_string& instance_name)
+    Result<std::monostate> VHDLParser::parse_port_assign(VhdlInstance* instance)
     {
+        u32 line_number = m_token_stream.peek().number;
         m_token_stream.consume("port", true);
         m_token_stream.consume("map", true);
         m_token_stream.consume("(", true);
@@ -966,12 +1424,33 @@ namespace hal
 
             if (!right_stream.consume("open"))
             {
-                entity.m_instance_assignments[instance_name].push_back(std::make_pair(left_stream, right_stream));
+                VhdlPortAssignment port_assignment;
+
+                if (auto res = parse_assignment_expression(std::move(left_stream)); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not parse port assignment: unable to parse port (line " + std::to_string(line_number) + ")");
+                }
+                else
+                {
+                    // vector can only have a single entry for left side of port assignment
+                    port_assignment.m_port = res.get().front();
+                }
+
+                if (auto res = parse_assignment_expression(std::move(right_stream)); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not parse port assignment: unable to parse assignment (line " + std::to_string(line_number) + ")");
+                }
+                else
+                {
+                    port_assignment.m_assignment = res.get();
+                }
+
+                instance->m_port_assignments.push_back(std::move(port_assignment));
             }
         }
     }
 
-    Result<std::monostate> VHDLParser::parse_generic_assign(VHDLEntity& entity, const ci_string& instance_name)
+    Result<std::monostate> VHDLParser::parse_generic_assign(VhdlInstance* instance)
     {
         m_token_stream.consume("map", true);
         m_token_stream.consume("(", true);
@@ -980,10 +1459,10 @@ namespace hal
 
         while (generic_stream.remaining() > 0)
         {
-            std::string value, data_type;
+            VhdlDataEntry generic;
 
-            const auto line_number = generic_stream.peek().number;
-            const auto lhs         = core_strings::to<std::string>(generic_stream.join_until("=>", "").string);
+            generic.m_line_number = generic_stream.peek().number;
+            generic.m_name        = core_strings::to<std::string>(generic_stream.join_until("=>", "").string);
             generic_stream.consume("=>", true);
             const auto rhs = generic_stream.join_until(",", "");
             generic_stream.consume(",", generic_stream.remaining() > 0);    // last entry has no comma
@@ -991,34 +1470,34 @@ namespace hal
             // determine data type
             if ((rhs == "true") || (rhs == "false"))
             {
-                value     = core_strings::to<std::string>(rhs.string);
-                data_type = "boolean";
+                generic.m_value = core_strings::to<std::string>(rhs.string);
+                generic.m_type  = "boolean";
             }
             else if (utils::is_integer(rhs.string))
             {
-                value     = core_strings::to<std::string>(rhs.string);
-                data_type = "integer";
+                generic.m_value = core_strings::to<std::string>(rhs.string);
+                generic.m_type  = "integer";
             }
             else if (utils::is_floating_point(rhs.string))
             {
-                value     = core_strings::to<std::string>(rhs.string);
-                data_type = "floating_point";
+                generic.m_value = core_strings::to<std::string>(rhs.string);
+                generic.m_type  = "floating_point";
             }
             else if (utils::ends_with(rhs.string, ci_string("s")) || utils::ends_with(rhs.string, ci_string("sec")) || utils::ends_with(rhs.string, ci_string("min"))
                      || utils::ends_with(rhs.string, ci_string("hr")))
             {
-                value     = core_strings::to<std::string>(rhs.string);
-                data_type = "time";
+                generic.m_value = core_strings::to<std::string>(rhs.string);
+                generic.m_type  = "time";
             }
             else if (rhs.string.at(0) == '\"' && rhs.string.back() == '\"')
             {
-                value     = core_strings::to<std::string>(rhs.string.substr(1, rhs.string.size() - 2));
-                data_type = "string";
+                generic.m_value = core_strings::to<std::string>(rhs.string.substr(1, rhs.string.size() - 2));
+                generic.m_type  = "string";
             }
             else if (rhs.string.at(0) == '\'' && rhs.string.at(2) == '\'')
             {
-                value     = core_strings::to<std::string>(rhs.string.substr(1, 1));
-                data_type = "bit_value";
+                generic.m_value = core_strings::to<std::string>(rhs.string.substr(1, 1));
+                generic.m_type  = "bit_value";
             }
             else if (rhs.string.at(1) == '\"' && rhs.string.back() == '\"')
             {
@@ -1028,22 +1507,23 @@ namespace hal
                 }
                 else
                 {
-                    value     = core_strings::to<std::string>(res.get());
-                    data_type = "bit_vector";
+                    generic.m_value = core_strings::to<std::string>(res.get());
+                    generic.m_type  = "bit_vector";
                 }
             }
             else
             {
                 return ERR("could not parse generic assignment: unable to identify data type of generic map value '" + core_strings::to<std::string>(rhs.string) + "' in instance '"
-                           + core_strings::to<std::string>(instance_name) + "' (line " + std::to_string(line_number) + ")");
+                           + core_strings::to<std::string>(instance->m_name) + "' (line " + std::to_string(generic.m_line_number) + ")");
             }
-            entity.m_instance_generic_assignments[instance_name].push_back(std::make_tuple(lhs, data_type, value));
+
+            instance->m_generics.push_back(generic);
         }
 
         return OK({});
     }
 
-    Result<std::monostate> VHDLParser::assign_attributes(VHDLEntity& entity)
+    Result<std::monostate> VHDLParser::assign_attributes(VhdlEntity* vhdl_entity)
     {
         for (const auto& [target_class, attributes] : m_attribute_buffer)
         {
@@ -1052,14 +1532,14 @@ namespace hal
             {
                 for (const auto& [target, attribute] : attributes)
                 {
-                    if (entity.m_name != target)
+                    if (vhdl_entity->m_name != target)
                     {
                         return ERR("could not assign attributes: invalid attribute target '" + core_strings::to<std::string>(target) + "' within entity '"
-                                   + core_strings::to<std::string>(entity.m_name) + "' (line " + std::to_string(std::get<0>(attribute)) + ")");
+                                   + core_strings::to<std::string>(vhdl_entity->m_name) + "' (line " + std::to_string(attribute.m_line_number) + ")");
                     }
                     else
                     {
-                        entity.m_attributes.push_back(std::make_tuple(std::get<1>(attribute), std::get<2>(attribute), std::get<3>(attribute)));
+                        vhdl_entity->m_attributes.push_back(attribute);
                     }
                 }
             }
@@ -1068,14 +1548,14 @@ namespace hal
             {
                 for (const auto& [target, attribute] : attributes)
                 {
-                    if (const auto instance_it = entity.m_instances_set.find(target); instance_it == entity.m_instances_set.end())
+                    if (const auto instance_it = vhdl_entity->m_instances_by_name.find(target); instance_it == vhdl_entity->m_instances_by_name.end())
                     {
                         return ERR("could not assign attributes: invalid attribute target '" + core_strings::to<std::string>(target) + "' within entity '"
-                                   + core_strings::to<std::string>(entity.m_name) + "' (line " + std::to_string(std::get<0>(attribute)) + ")");
+                                   + core_strings::to<std::string>(vhdl_entity->m_name) + "' (line " + std::to_string(attribute.m_line_number) + ")");
                     }
                     else
                     {
-                        entity.m_instance_attributes[*instance_it].push_back(std::make_tuple(std::get<1>(attribute), std::get<2>(attribute), std::get<3>(attribute)));
+                        instance_it->second->m_attributes.push_back(attribute);
                     }
                 }
             }
@@ -1084,18 +1564,18 @@ namespace hal
             {
                 for (const auto& [target, attribute] : attributes)
                 {
-                    if (const auto signal_it = entity.m_signals_set.find(target); signal_it != entity.m_signals_set.end())
+                    if (const auto signal_it = vhdl_entity->m_signals_by_name.find(target); signal_it != vhdl_entity->m_signals_by_name.end())
                     {
-                        entity.m_signal_attributes[*signal_it].push_back(std::make_tuple(std::get<1>(attribute), std::get<2>(attribute), std::get<3>(attribute)));
+                        signal_it->second->m_attributes.push_back(attribute);
                     }
-                    else if (const auto port_it = entity.m_port_names_set.find(target); port_it != entity.m_port_names_set.end())
+                    else if (const auto port_it = vhdl_entity->m_ports_by_identifier.find(target); port_it != vhdl_entity->m_ports_by_identifier.end())
                     {
-                        entity.m_port_attributes[*port_it].push_back(std::make_tuple(std::get<1>(attribute), std::get<2>(attribute), std::get<3>(attribute)));
+                        port_it->second->m_attributes.push_back(attribute);
                     }
                     else
                     {
                         return ERR("could not assign attributes: invalid attribute target '" + core_strings::to<std::string>(target) + "' within entity '"
-                                   + core_strings::to<std::string>(entity.m_name) + "' (line " + std::to_string(std::get<0>(attribute)) + ")");
+                                   + core_strings::to<std::string>(vhdl_entity->m_name) + "' (line " + std::to_string(attribute.m_line_number) + ")");
                     }
                 }
             }
@@ -1108,74 +1588,68 @@ namespace hal
     // ###########      Assemble Netlist from Intermediate Format       ##########
     // ###########################################################################
 
-    Result<std::monostate> VHDLParser::construct_netlist(VHDLEntity& top_entity)
+    Result<std::monostate> VHDLParser::construct_netlist(VhdlEntity* top_entity)
     {
-        m_netlist->set_design_name(core_strings::to<std::string>(top_entity.m_name));
+        m_netlist->set_design_name(core_strings::to<std::string>(top_entity->m_name));
         m_netlist->enable_automatic_net_checks(false);
 
         std::unordered_map<ci_string, u32> instantiation_count;
 
         // preparations for alias: count the occurences of all names
-        std::queue<VHDLEntity*> q;
-        q.push(&top_entity);
+        std::queue<VhdlEntity*> q;
+        q.push(top_entity);
 
         // top entity instance will be named after its entity, so take into account for aliases
         m_instance_name_occurrences["top_module"]++;
 
         // global input/output signals will be named after ports, so take into account for aliases
-        for (const auto& [_, expanded_names] : top_entity.m_expanded_port_names)
+        for (const auto& port : top_entity->m_ports)
         {
-            UNUSED(_);
-            for (const ci_string& port_identifier : expanded_names)
+            for (const auto& expanded_port_identifier : port->m_expanded_identifiers)
             {
-                m_signal_name_occurrences[port_identifier]++;
+                m_signal_name_occurrences[expanded_port_identifier]++;
             }
         }
 
         while (!q.empty())
         {
-            VHDLEntity* entity = q.front();
+            VhdlEntity* entity = q.front();
             q.pop();
 
             instantiation_count[entity->m_name]++;
 
-            for (const auto& [_, expanded_names] : entity->m_expanded_signals)
+            for (const auto& signal : entity->m_signals)
             {
-                UNUSED(_);
-                for (const ci_string& signal_identifier : expanded_names)
+                for (const auto& expanded_name : signal->m_expanded_names)
                 {
-                    m_signal_name_occurrences[signal_identifier]++;
+                    m_signal_name_occurrences[expanded_name]++;
                 }
             }
 
-            for (const ci_string& instance_identifier : entity->m_instances)
+            for (const auto& instance : entity->m_instances)
             {
-                m_instance_name_occurrences[instance_identifier]++;
+                m_instance_name_occurrences[instance->m_name]++;
 
-                if (const auto it = m_entities.find(entity->m_instance_types.at(instance_identifier)); it != m_entities.end())
+                if (const auto it = m_entities_by_name.find(instance->m_type); it != m_entities_by_name.end())
                 {
-                    q.push(&(it->second));
+                    q.push(it->second);
                 }
             }
         }
 
-        for (auto& [entity_name, entity] : m_entities)
+        for (auto& [entity_name, vhdl_entity] : m_entities_by_name)
         {
             // detect unused entities
             if (instantiation_count[entity_name] == 0)
             {
-                log_warning("vhdl_parser", "module '{}' has been defined in the netlist but is not instantiated.", entity_name);
+                log_warning("vhdl_parser", "entity '{}' has been defined in the netlist but is not instantiated.", entity_name);
                 continue;
             }
 
-            // clear gate assignments for every initialization attempt
-            entity.m_expanded_gate_assignments.clear();
-
             // expand gate pin assignments
-            for (const ci_string& instance_name : entity.m_instances)
+            for (const auto& instance : vhdl_entity->m_instances)
             {
-                const ci_string& instance_type = entity.m_instance_types.at(instance_name);
-                if (const auto gate_type_it = m_gate_types.find(instance_type); gate_type_it != m_gate_types.end())
+                if (const auto gate_type_it = m_gate_types.find(instance->m_type); gate_type_it != m_gate_types.end())
                 {
                     // cache pin groups
                     std::unordered_map<ci_string, std::vector<ci_string>> pin_groups;
@@ -1187,55 +1661,41 @@ namespace hal
                         }
                     }
 
-                    if (auto inst_it = entity.m_instance_assignments.find(instance_name); inst_it != entity.m_instance_assignments.end())
+                    for (const auto& port_assignment : instance->m_port_assignments)
                     {
-                        for (auto [pin_stream, assignment_stream] : inst_it->second)
+                        std::vector<ci_string> left_port;
+                        if (const identifier_t* identifier = std::get_if<identifier_t>(&(port_assignment.m_port)); identifier != nullptr)
                         {
-                            ci_string pin_name = pin_stream.consume().string;
-                            std::vector<ci_string> left_port;
-                            if (const auto group_it = pin_groups.find(pin_name); group_it != pin_groups.end())
+                            if (const auto group_it = pin_groups.find(*identifier); group_it != pin_groups.end())
                             {
-                                if (pin_stream.consume("("))
-                                {
-                                    std::vector<std::vector<u32>> ranges;
-                                    u32 closing_pos = pin_stream.find_next(")");
-                                    do
-                                    {
-                                        TokenStream<ci_string> range_stream = pin_stream.extract_until(",", closing_pos);
-                                        ranges.emplace_back(parse_range(range_stream));
+                                left_port = group_it->second;
+                            }
+                        }
+                        else if (const ranged_identifier_t* identifier = std::get_if<ranged_identifier_t>(&(port_assignment.m_port)); identifier != nullptr)
+                        {
+                            left_port = expand_ranges(identifier->first, identifier->second);
+                        }
+                        else
+                        {
+                            return ERR("could not construct netlist: unable to expand gate port assignment");
+                        }
 
-                                    } while (pin_stream.consume(",", false));
-                                    pin_stream.consume(")", true);
+                        auto right_res = expand_assignment_expression(vhdl_entity, port_assignment.m_assignment);
+                        if (right_res.is_error())
+                        {
+                            return ERR_APPEND(right_res.get_error(), "could not construct netlist: unable to expand gate port assignment");
+                        }
 
-                                    left_port = expand_ranges(pin_name, ranges);
-                                }
-                                else
-                                {
-                                    left_port = group_it->second;
-                                }
-                            }
-                            else
-                            {
-                                left_port.push_back(pin_name);
-                            }
-                            if (auto res = expand_assignment_signal(entity, assignment_stream, false); res.is_error())
-                            {
-                                return ERR_APPEND(res.get_error(), "could not construct netlist: unable to expand assignment signal");
-                            }
-                            else
-                            {
-                                auto right_port = res.get();
-                                if (right_port.size() != left_port.size())
-                                {
-                                    return ERR("could not construct netlist: pin assignment width mismatch at instance '" + core_strings::to<std::string>(instance_name) + "' of gate type '"
-                                               + core_strings::to<std::string>(instance_type) + "' within entity '" + core_strings::to<std::string>(entity_name) + "'");
-                                }
+                        auto right_port = right_res.get();
+                        if (right_port.size() != left_port.size())
+                        {
+                            return ERR("could not construct netlist: pin assignment width mismatch at instance '" + core_strings::to<std::string>(instance->m_name) + "' of gate type '"
+                                       + core_strings::to<std::string>(instance->m_type) + "' within entity '" + core_strings::to<std::string>(entity_name) + "'");
+                        }
 
-                                for (u32 i = 0; i < left_port.size(); i++)
-                                {
-                                    entity.m_expanded_gate_assignments[instance_name].push_back(std::make_pair(left_port.at(i), right_port.at(i)));
-                                }
-                            }
+                        for (u32 i = 0; i < left_port.size(); i++)
+                        {
+                            instance->m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));
                         }
                     }
                 }
@@ -1244,36 +1704,34 @@ namespace hal
 
         // for the top module, generate global i/o signals for all ports
         std::unordered_map<ci_string, ci_string> top_assignments;
-        for (const auto& [port_identifier, expanded_port_identifiers] : top_entity.m_expanded_port_names)
+        for (const auto& port : top_entity->m_ports)
         {
-            PinDirection direction = top_entity.m_port_directions.at(port_identifier);
-
-            for (const ci_string& expanded_identifier : expanded_port_identifiers)
+            for (const auto& expanded_port_identifier : port->m_expanded_identifiers)
             {
-                Net* global_port_net = m_netlist->create_net(core_strings::to<std::string>(expanded_identifier));
+                Net* global_port_net = m_netlist->create_net(core_strings::to<std::string>(expanded_port_identifier));
                 if (global_port_net == nullptr)
                 {
-                    return ERR("could not construct netlist: failed to create global I/O net '" + core_strings::to<std::string>(expanded_identifier) + "'");
+                    return ERR("could not construct netlist: failed to create global I/O net '" + core_strings::to<std::string>(expanded_port_identifier) + "'");
                 }
 
-                m_net_by_name[expanded_identifier] = global_port_net;
+                m_net_by_name[expanded_port_identifier] = global_port_net;
 
                 // assign global port nets to ports of top module
-                top_assignments[expanded_identifier] = expanded_identifier;
+                top_assignments[expanded_port_identifier] = expanded_port_identifier;
 
-                if (direction == PinDirection::input || direction == PinDirection::inout)
+                if (port->m_direction == PinDirection::input || port->m_direction == PinDirection::inout)
                 {
                     if (!global_port_net->mark_global_input_net())
                     {
-                        return ERR("could not construct netlist: failed to mark global I/O net '" + core_strings::to<std::string>(expanded_identifier) + "' as global input");
+                        return ERR("could not construct netlist: failed to mark global I/O net '" + core_strings::to<std::string>(expanded_port_identifier) + "' as global input");
                     }
                 }
 
-                if (direction == PinDirection::output || direction == PinDirection::inout)
+                if (port->m_direction == PinDirection::output || port->m_direction == PinDirection::inout)
                 {
                     if (!global_port_net->mark_global_output_net())
                     {
-                        return ERR("could not construct netlist: failed to mark global I/O net '" + core_strings::to<std::string>(expanded_identifier) + "' as global output");
+                        return ERR("could not construct netlist: failed to mark global I/O net '" + core_strings::to<std::string>(expanded_port_identifier) + "' as global output");
                     }
                 }
             }
@@ -1381,7 +1839,7 @@ namespace hal
                     // update module ports
                     if (const auto it = m_module_ports.find(slave_net); it != m_module_ports.end())
                     {
-                        m_module_ports[master_net] = it->second;
+                        m_module_ports[master_net].insert(m_module_ports[master_net].end(), it->second.begin(), it->second.end());
                         m_module_ports.erase(it);
                     }
 
@@ -1425,7 +1883,7 @@ namespace hal
                     //                     + " within module '" + mod->get_name() + "' with ID " + std::to_string(mod->get_id()));
                     // NOTE: The pin creation fails when there are unused ports that never get a net assigned to them (verliog...),
                     //       but this also happens when the net just passes through the module (since there is no gate inside the module with that net as either input or output net, the net does not get listed as module input or output)
-                    log_warning("verilog_parser", "{}", res.get_error().get());
+                    log_warning("vhdl_parser", "{}", res.get_error().get());
                 }
             }
         }
@@ -1461,7 +1919,7 @@ namespace hal
     }
 
     Result<Module*>
-        VHDLParser::instantiate_entity(const ci_string& instance_identifier, VHDLEntity& vhdl_entity, Module* parent, const std::unordered_map<ci_string, ci_string>& parent_module_assignments)
+        VHDLParser::instantiate_entity(const ci_string& instance_identifier, VhdlEntity* vhdl_entity, Module* parent, const std::unordered_map<ci_string, ci_string>& parent_module_assignments)
     {
         std::unordered_map<ci_string, ci_string> signal_alias;
         std::unordered_map<ci_string, ci_string> instance_alias;
@@ -1482,7 +1940,7 @@ namespace hal
             module = m_netlist->create_module(core_strings::to<std::string>(instance_alias.at(instance_identifier)), parent);
         }
 
-        ci_string instance_type = vhdl_entity.m_name;
+        ci_string instance_type = vhdl_entity->m_name;
         if (module == nullptr)
         {
             return ERR("could not create instance '" + core_strings::to<std::string>(instance_identifier) + "' of type '" + core_strings::to<std::string>(instance_type)
@@ -1491,84 +1949,41 @@ namespace hal
         module->set_type(core_strings::to<std::string>(instance_type));
 
         // assign entity-level attributes
-        for (const std::tuple<std::string, std::string, std::string>& attribute : vhdl_entity.m_attributes)
+        for (const VhdlDataEntry& attribute : vhdl_entity->m_attributes)
         {
-            if (!module->set_data("attribute", std::get<0>(attribute), std::get<1>(attribute), std::get<2>(attribute)))
+            if (!module->set_data("attribute", attribute.m_name, attribute.m_type, attribute.m_value))
             {
                 log_warning("vhdl_parser",
-                            "could not set attribute ({}, {}, {}) for instance '{}' type '{}'.",
-                            std::get<0>(attribute),
-                            std::get<1>(attribute),
-                            std::get<2>(attribute),
+                            "could not set attribute '{} = {}' of type '{}' for instance '{}' type '{}'.",
+                            attribute.m_name,
+                            attribute.m_value,
+                            attribute.m_type,
                             instance_identifier,
                             instance_type);
             }
         }
 
         // assign module port names and attributes
-        for (const auto& [port_identifier, expanded_port_identifiers] : vhdl_entity.m_expanded_port_names)
+        for (const auto& port : vhdl_entity->m_ports)
         {
-            PinDirection direction = vhdl_entity.m_port_directions.at(port_identifier);
-
-            for (const ci_string& expanded_identifier : expanded_port_identifiers)
+            for (const auto& expanded_port_identifier : port->m_expanded_identifiers)
             {
-                if (const auto it = parent_module_assignments.find(expanded_identifier); it != parent_module_assignments.end())
+                if (const auto it = parent_module_assignments.find(expanded_port_identifier); it != parent_module_assignments.end())
                 {
                     Net* port_net = m_net_by_name.at(it->second);
-                    m_module_ports[port_net].push_back(std::make_tuple(direction, core_strings::to<std::string>(expanded_identifier), module));
+                    m_module_ports[port_net].push_back(std::make_tuple(port->m_direction, core_strings::to<std::string>(expanded_port_identifier), module));
 
                     // assign port attributes
-                    if (const auto port_attr_it = vhdl_entity.m_port_attributes.find(port_identifier); port_attr_it != vhdl_entity.m_port_attributes.end())
+                    for (const VhdlDataEntry& attribute : port->m_attributes)
                     {
-                        for (const std::tuple<std::string, std::string, std::string>& attribute : port_attr_it->second)
-                        {
-                            if (!port_net->set_data("attribute", std::get<0>(attribute), std::get<1>(attribute), std::get<2>(attribute)))
-                            {
-                                log_warning("vhdl_parser",
-                                            "could not set attribute ({}, {}, {}) for port '{}' of instance '{}' of type '{}'.",
-                                            std::get<0>(attribute),
-                                            std::get<1>(attribute),
-                                            std::get<2>(attribute),
-                                            port_identifier,
-                                            instance_identifier,
-                                            instance_type);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // create internal signals
-        for (const auto& [signal_identifier, expanded_signal_identifiers] : vhdl_entity.m_expanded_signals)
-        {
-            for (const ci_string& expanded_identifier : expanded_signal_identifiers)
-            {
-                signal_alias[expanded_identifier] = get_unique_alias(m_signal_name_occurrences, expanded_identifier);
-
-                // create new net for the signal
-                Net* signal_net = m_netlist->create_net(core_strings::to<std::string>(signal_alias.at(expanded_identifier)));
-                if (signal_net == nullptr)
-                {
-                    return ERR("could not create instance '" + core_strings::to<std::string>(instance_identifier) + "' of type '" + core_strings::to<std::string>(instance_type)
-                               + "': failed to create net '" + core_strings::to<std::string>(expanded_identifier) + "'");
-                }
-
-                m_net_by_name[signal_alias.at(expanded_identifier)] = signal_net;
-
-                // assign signal attributes
-                if (const auto signal_attr_it = vhdl_entity.m_signal_attributes.find(signal_identifier); signal_attr_it != vhdl_entity.m_port_attributes.end())
-                {
-                    for (const std::tuple<std::string, std::string, std::string>& attribute : signal_attr_it->second)
-                    {
-                        if (!signal_net->set_data("attribute", std::get<0>(attribute), std::get<1>(attribute), std::get<2>(attribute)))
+                        if (!port_net->set_data("attribute", attribute.m_name, attribute.m_type, attribute.m_value))
                         {
                             log_warning("vhdl_parser",
-                                        "could not set attribute ({}, {}, {}) for net '{}' of instance '{}' of type '{}'.",
-                                        std::get<0>(attribute),
-                                        std::get<1>(attribute),
-                                        std::get<2>(attribute),
-                                        signal_identifier,
+                                        "could not set attribute '{} = {}' of type '{}' for port '{}' of instance '{}' of type '{}'.",
+                                        attribute.m_name,
+                                        attribute.m_value,
+                                        attribute.m_type,
+                                        expanded_port_identifier,
                                         instance_identifier,
                                         instance_type);
                         }
@@ -1577,8 +1992,42 @@ namespace hal
             }
         }
 
+        // create internal signals
+        for (const auto& signal : vhdl_entity->m_signals)
+        {
+            for (const auto& expanded_name : signal->m_expanded_names)
+            {
+                signal_alias[expanded_name] = get_unique_alias(m_signal_name_occurrences, expanded_name);
+
+                // create new net for the signal
+                Net* signal_net = m_netlist->create_net(core_strings::to<std::string>(signal_alias.at(expanded_name)));
+                if (signal_net == nullptr)
+                {
+                    return ERR("could not create instance '" + core_strings::to<std::string>(instance_identifier) + "' of type '" + core_strings::to<std::string>(instance_type)
+                               + "': failed to create net '" + core_strings::to<std::string>(expanded_name) + "'");
+                }
+
+                m_net_by_name[signal_alias.at(expanded_name)] = signal_net;
+
+                // assign signal attributes
+                for (const VhdlDataEntry& attribute : signal->m_attributes)
+                {
+                    if (!signal_net->set_data("attribute", attribute.m_name, "unknown", attribute.m_value))
+                    {
+                        log_warning("verilog_parser",
+                                    "could not set attribute ({} = {}) for net '{}' of instance '{}' of type '{}'.",
+                                    attribute.m_name,
+                                    attribute.m_value,
+                                    expanded_name,
+                                    instance_identifier,
+                                    instance_type);
+                    }
+                }
+            }
+        }
+
         // schedule assigned nets for merging
-        for (const auto& [left_expanded_signal, right_expanded_signal] : vhdl_entity.m_expanded_assignments)
+        for (const auto& [left_expanded_signal, right_expanded_signal] : vhdl_entity->m_expanded_assignments)
         {
             ci_string a = left_expanded_signal;
             ci_string b = right_expanded_signal;
@@ -1619,18 +2068,16 @@ namespace hal
         }
 
         // process instances i.e. gates or other entities
-        for (const ci_string& inst_identifier : vhdl_entity.m_instances)
+        for (const auto& instance : vhdl_entity->m_instances)
         {
-            const ci_string& inst_type = vhdl_entity.m_instance_types.at(inst_identifier);
-
             // will later hold either module or gate, so attributes can be assigned properly
-            DataContainer* container;
+            DataContainer* container = nullptr;
 
             // assign actual signal names to ports
             std::unordered_map<ci_string, ci_string> instance_assignments;
 
             // if the instance is another entity, recursively instantiate it
-            if (auto entity_it = m_entities.find(inst_type); entity_it != m_entities.end())
+            if (auto entity_it = m_entities_by_name.find(instance->m_type); entity_it != m_entities_by_name.end())
             {
                 if (const auto inst_it = vhdl_entity.m_expanded_entity_assignments.find(inst_identifier); inst_it != vhdl_entity.m_expanded_entity_assignments.end())
                 {
@@ -1660,11 +2107,11 @@ namespace hal
                     }
                 }
 
-                if (auto res = instantiate_entity(inst_identifier, entity_it->second, module, instance_assignments); res.is_error())
+                if (auto res = instantiate_entity(instance->m_name, entity_it->second, module, instance_assignments); res.is_error())
                 {
                     return ERR_APPEND(res.get_error(),
                                       "could not create instance '" + core_strings::to<std::string>(instance_identifier) + "' of type '" + core_strings::to<std::string>(instance_type)
-                                          + "': unable to create instance '" + core_strings::to<std::string>(inst_identifier) + "' of type '" + core_strings::to<std::string>(entity_it->second.m_name)
+                                          + "': unable to create instance '" + core_strings::to<std::string>(instance->m_name) + "' of type '" + core_strings::to<std::string>(entity_it->second.m_name)
                                           + "'");
                 }
                 else
@@ -1847,36 +2294,6 @@ namespace hal
     // ###################          Helper Functions          ####################
     // ###########################################################################
 
-    std::vector<u32> VHDLParser::parse_range(TokenStream<ci_string>& range_stream) const
-    {
-        if (range_stream.remaining() == 1)
-        {
-            return {(u32)std::stoi(core_strings::to<std::string>(range_stream.consume().string))};
-        }
-
-        int direction = 1;
-        const int end = std::stoi(core_strings::to<std::string>(range_stream.consume().string));
-
-        if (range_stream.peek() == "downto")
-        {
-            range_stream.consume("downto");
-        }
-        else
-        {
-            range_stream.consume("to", true);
-            direction = -1;
-        }
-
-        const int start = std::stoi(core_strings::to<std::string>(range_stream.consume().string));
-
-        std::vector<u32> res;
-        for (int i = start; i != end + direction; i += direction)
-        {
-            res.push_back((u32)i);
-        }
-        return res;
-    }
-
     const static std::map<core_strings::CaseInsensitiveString, size_t> id_to_dim = {{"std_logic_vector", 1}, {"std_logic_vector2", 2}, {"std_logic_vector3", 3}};
 
     Result<std::vector<std::vector<u32>>> VHDLParser::parse_signal_ranges(TokenStream<ci_string>& signal_stream) const
@@ -1919,7 +2336,7 @@ namespace hal
         return OK(ranges);
     }
 
-    Result<std::vector<VHDLParser::ci_string>> VHDLParser::expand_assignment_signal(VHDLEntity& entity, TokenStream<ci_string>& signal_stream, bool is_left)
+    Result<std::vector<VHDLParser::ci_string>> VHDLParser::expand_assignment_signal(VhdlEntity* entity, TokenStream<ci_string>& signal_stream, bool is_left)
     {
         // PARSE ASSIGNMENT
         //   assignment can currently be one of the following:
@@ -2257,32 +2674,6 @@ namespace hal
         }
 
         return OK(res);
-    }
-
-    std::vector<VHDLParser::ci_string> VHDLParser::expand_ranges(const ci_string& name, const std::vector<std::vector<u32>>& ranges) const
-    {
-        std::vector<ci_string> res;
-
-        expand_ranges_recursively(res, name, ranges, 0);
-
-        return res;
-    }
-
-    void VHDLParser::expand_ranges_recursively(std::vector<ci_string>& expanded_names, const ci_string& current_name, const std::vector<std::vector<u32>>& ranges, u32 dimension) const
-    {
-        // expand signal recursively
-        if (ranges.size() > dimension)
-        {
-            for (const u32 index : ranges[dimension])
-            {
-                expand_ranges_recursively(expanded_names, current_name + "(" + core_strings::to<ci_string>(std::to_string(index)) + ")", ranges, dimension + 1);
-            }
-        }
-        else
-        {
-            // last dimension
-            expanded_names.push_back(current_name);
-        }
     }
 
     VHDLParser::ci_string VHDLParser::get_unique_alias(std::unordered_map<ci_string, u32>& name_occurrences, const ci_string& name) const
