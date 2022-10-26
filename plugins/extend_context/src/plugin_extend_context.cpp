@@ -40,25 +40,42 @@ namespace hal
     {
     }
 
-    std::vector<ContextMenuContribution> ExtendContextPlugin::get_context_contribution(const Netlist *nl,
-                                                                          const std::unordered_set<u32>& mods,
-                                                                          const std::unordered_set<u32>& gats,
-                                                                          const std::unordered_set<u32>& nets)
+    void ExtendContextPlugin::on_load()
+    {
+        mGuiExtension = new GuiExtensionContext;
+    }
+
+    void ExtendContextPlugin::on_unload()
+    {
+        delete mGuiExtension;
+    }
+
+    GuiExtensionInterface* ExtendContextPlugin::get_gui_extension() const
+    {
+        return mGuiExtension;
+    }
+
+
+
+    std::vector<ContextMenuContribution> GuiExtensionContext::get_context_contribution(const Netlist *nl,
+                                                                          const std::vector<u32>& mods,
+                                                                          const std::vector<u32>& gats,
+                                                                          const std::vector<u32>& nets)
     {
         std::vector<ContextMenuContribution> retval;
         if (nl && mods.empty() && nets.empty() && gats.size() == 1 )
         {
             Gate *g = nl->get_gate_by_id(*gats.begin());
-            retval.push_back({1,"Highlight gate '" + g->get_name() +"'by extension"});
+            retval.push_back({this,1,"Highlight gate '" + g->get_name() +"'by extension"});
         }
         return retval;
     }
 
-    void ExtendContextPlugin::execute(u32 fid,
+    void GuiExtensionContext::execute_context_action(u32 fid,
                          Netlist *nl,
-                         const std::unordered_set<u32>&,
-                         const std::unordered_set<u32>& gats,
-                         const std::unordered_set<u32>&)
+                         const std::vector<u32>&,
+                         const std::vector<u32>& gats,
+                         const std::vector<u32>&)
     {
 
         if (fid != 1) return; // not my call

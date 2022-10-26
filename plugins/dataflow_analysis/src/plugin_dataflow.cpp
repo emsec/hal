@@ -111,7 +111,7 @@ namespace hal
         return true;
     }
 
-    std::vector<PluginParameter> plugin_dataflow::get_parameter() const
+    std::vector<PluginParameter> GuiExtensionDataflow::get_parameter() const
     {
         std::vector<PluginParameter> retval;
         retval.push_back(PluginParameter(PluginParameter::String, "sizes", "Expected register size (optional)", "8,16,32"));
@@ -125,7 +125,7 @@ namespace hal
         return retval;
     }
 
-    void plugin_dataflow::set_parameter(Netlist* nl, const std::vector<PluginParameter>& params)
+    void GuiExtensionDataflow::set_parameter(Netlist* nl, const std::vector<PluginParameter>& params)
     {
         if (!nl)
         {
@@ -180,7 +180,7 @@ namespace hal
 
         if (isExecPushed)
         {
-            execute(nl, output_path, sizes, draw_graph, create_modules, register_stage_identification, {}, bad_groups);
+            m_parent->execute(nl, output_path, sizes, draw_graph, create_modules, register_stage_identification, {}, bad_groups);
         }
     }
 
@@ -199,8 +199,8 @@ namespace hal
             return std::vector<std::vector<Gate*>>();
         }
 
-        if (s_progress_indicator_function)
-            s_progress_indicator_function(0, "dataflow analysis running ...");
+        if (GuiExtensionDataflow::s_progress_indicator_function)
+            GuiExtensionDataflow::s_progress_indicator_function(0, "dataflow analysis running ...");
 
         dataflow::GuiLayoutLocker gll;
 
@@ -346,15 +346,34 @@ namespace hal
 
         log("dataflow processing finished in {:3.2f}s", total_time);
 
-        if (s_progress_indicator_function)
-            s_progress_indicator_function(100, "dataflow analysis finished");
+        if (GuiExtensionDataflow::s_progress_indicator_function)
+            GuiExtensionDataflow::s_progress_indicator_function(100, "dataflow analysis finished");
 
         return dataflow::state_to_module::create_sets(nl, final_grouping);
     }
 
-    std::function<void(int, const std::string&)> plugin_dataflow::s_progress_indicator_function = nullptr;
+    std::function<void(int, const std::string&)> GuiExtensionDataflow::s_progress_indicator_function = nullptr;
 
-    void plugin_dataflow::register_progress_indicator(std::function<void(int, const std::string&)> pif)
+    void plugin_dataflow::on_load()
+    {
+        m_gui_extension = new GuiExtensionDataflow(this);
+    }
+
+    void plugin_dataflow::on_unload()
+    {
+        if (m_gui_extension)
+        {
+            delete m_gui_extension;
+            m_gui_extension = nullptr;
+        }
+    }
+
+    GuiExtensionInterface* plugin_dataflow::get_gui_extension() const
+    {
+        return m_gui_extension;
+    }
+
+    void GuiExtensionDataflow::register_progress_indicator(std::function<void(int, const std::string&)> pif)
     {
         s_progress_indicator_function = pif;
     }

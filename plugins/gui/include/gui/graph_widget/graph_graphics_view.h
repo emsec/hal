@@ -26,6 +26,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/plugin_system/gui_extension_interface.h"
 #include "gui/gui_globals.h"
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
 #include "gui/graph_widget/graphics_scene.h"
@@ -161,6 +162,7 @@ namespace hal
         void handlePredecessorDistance();
         void handleModuleDialog();
         void handleCancelPickMode();
+        void handlePluginContextContributionTriggered();
 
     private:
         void paintEvent(QPaintEvent* event) override;
@@ -206,6 +208,7 @@ namespace hal
         GraphWidget* mGraphWidget;
 
         GraphicsItem* mItem;
+        QVector<ContextMenuContribution> mPluginContribution;
 
         bool mMinimapEnabled;
 
@@ -253,5 +256,6 @@ namespace hal
         }
 
         static const QString sAssignToGrouping;
+        void contextPluginContribution(QMenu* contextMenu);
     };
 }

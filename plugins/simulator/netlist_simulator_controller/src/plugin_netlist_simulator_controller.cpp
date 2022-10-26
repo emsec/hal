@@ -147,11 +147,17 @@ namespace hal
         QResource::unregisterResource("simulator_resources.rcc");
         if (sSimulationSettings) sSimulationSettings->sync();
         if (sSimulatorSerializer) delete sSimulatorSerializer;
+        if (mGuiExtensions)
+        {
+            delete mGuiExtensions;
+            mGuiExtensions = nullptr;
+        }
     }
 
     void NetlistSimulatorControllerPlugin::on_load()
     {
         // report simulation warnings and error messages not related to specific controller to common channel
+        mGuiExtensions = new GuiExtensionSimulator(this);
         LogManager::get_instance()->add_channel("simulation_plugin", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
         QResource::registerResource("simulator_resources.rcc");
         QDir userConfigDir(QString::fromStdString(utils::get_user_config_directory()));
@@ -159,13 +165,15 @@ namespace hal
         sSimulatorSerializer = new SimulatorSerializer;
     }
 
-    std::vector<PluginParameter> NetlistSimulatorControllerPlugin::get_parameter() const
+    //----------------------------
+
+    std::vector<PluginParameter> GuiExtensionSimulator::get_parameter() const
     {
         const char* colorLabel[] = {"Regular waveform", "Selected waveform", "Undefined value", "Background X", "Background 0", "Background 1"};
         std::vector<PluginParameter> retval;
         retval.push_back(PluginParameter(PluginParameter::TabName,"tab1","Global settings"));
-        retval.push_back(PluginParameter(PluginParameter::Integer,"tab1/max_mem","Max events to load into memory",QString::number(sSimulationSettings->maxSizeLoadable()).toStdString()));
-        retval.push_back(PluginParameter(PluginParameter::Integer,"tab1/max_edit","Max events to load into editor",QString::number(sSimulationSettings->maxSizeEditor()).toStdString()));
+        retval.push_back(PluginParameter(PluginParameter::Integer,"tab1/max_mem","Max events to load into memory",QString::number(NetlistSimulatorControllerPlugin::sSimulationSettings->maxSizeLoadable()).toStdString()));
+        retval.push_back(PluginParameter(PluginParameter::Integer,"tab1/max_edit","Max events to load into editor",QString::number(NetlistSimulatorControllerPlugin::sSimulationSettings->maxSizeEditor()).toStdString()));
         retval.push_back(PluginParameter(PluginParameter::ExistingDir,"tab1/base_dir","Base directory for simulation work directory"));
         retval.push_back(PluginParameter(PluginParameter::TabName,"tab2","Engine parameter"));
         retval.push_back(PluginParameter(PluginParameter::Dictionary,"tab2/par", "Engine parameter"));
@@ -177,14 +185,15 @@ namespace hal
                         PluginParameter(PluginParameter::Color,
                                         QString("tab3/col%1").arg(i).toStdString(),
                                         std::string(colorLabel[i]),
-                                        sSimulationSettings->color(cs).toStdString()));
+                                        NetlistSimulatorControllerPlugin::sSimulationSettings->color(cs).toStdString()));
         }
         retval.push_back(PluginParameter(PluginParameter::PushButton,"ok","Ok"));
         return retval;
     }
 
-    void NetlistSimulatorControllerPlugin::set_parameter(Netlist *nl, const std::vector<PluginParameter>& params)
+    void GuiExtensionSimulator::set_parameter(Netlist *nl, const std::vector<PluginParameter>& params)
     {
 
     }
+
 }    // namespace hal

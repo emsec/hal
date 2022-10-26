@@ -26,8 +26,6 @@
 #pragma once
 
 #include "hal_core/defines.h"
-#include "hal_core/netlist/netlist.h"
-#include "hal_core/plugin_system/plugin_parameter.h"
 #include "hal_core/utilities/log.h"
 
 #include <set>
@@ -35,6 +33,8 @@
 
 namespace hal
 {
+    class GuiExtensionInterface;
+
 /**
  * Automatically declares a factory function when including this header.
  * Has to be implemented in the plugin.
@@ -135,23 +135,10 @@ namespace hal
         virtual void initialize_logging();
 
         /**
-         * Get list of configurable parameter
-         * @return List of configurable parameter
+         * Get GUI extension functionality if implemented by derived class
+         * @return pointer to instance implementing GUI extensions
          */
-        virtual std::vector<PluginParameter> get_parameter() const;
-
-        /**
-         * Set values for configurable parameter
-         * @param[in] nl The current netlist
-         * @param[in] params List of configurable parameter with values
-         */
-        virtual void set_parameter(Netlist* nl, const std::vector<PluginParameter>& params);
-
-        /**
-         * Register function to indicate work progress when busy
-         * @param pif Progress Indicator Function to register
-         */
-        virtual void register_progress_indicator(std::function<void(int, const std::string&)> pif);
+        virtual GuiExtensionInterface* get_gui_extension() const { return nullptr; }
     };
 
     using instantiate_plugin_function = std::unique_ptr<BasePluginInterface> (*)();

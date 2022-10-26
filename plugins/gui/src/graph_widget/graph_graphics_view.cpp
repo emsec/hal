@@ -41,6 +41,8 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist_utils.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/plugin_system/gui_extension_interface.h"
 
 #include <QAction>
 #include <QApplication>
@@ -827,8 +829,48 @@ namespace hal
         // connect(action, &QAction::triggered, this, SLOT);
         // }
 
+        contextPluginContribution(&context_menu);
         context_menu.exec(mapToGlobal(pos));
         update();
+    }
+
+    void GraphGraphicsView::contextPluginContribution(QMenu* contextMenu)
+    {
+
+        mPluginContribution.clear();
+        for (const std::string& pluginName : plugin_manager::get_plugin_names())
+        {
+            BasePluginInterface* bpif = plugin_manager::get_plugin_instance(pluginName);
+            if (!bpif) continue;
+            GuiExtensionInterface* geif = bpif->get_gui_extension();
+            if (!geif) continue;
+            mPluginContribution.append( QVector<ContextMenuContribution>::fromStdVector(geif->get_context_contribution(gNetlist,
+                                                                                                                       gSelectionRelay->selectedModulesVector(),
+                                                                                                                       gSelectionRelay->selectedGatesVector(),
+                                                                                                                       gSelectionRelay->selectedNetsVector())));
+        }
+
+        if (mPluginContribution.isEmpty()) return;
+        contextMenu->addSeparator();
+        for (ContextMenuContribution& cmc : mPluginContribution)
+        {
+            QAction* act = contextMenu->addAction(QString::fromStdString(cmc.mEntry));
+            act->setData(QVariant::fromValue<void*>(&cmc));
+            connect(act,&QAction::triggered,this,&GraphGraphicsView::handlePluginContextContributionTriggered);
+        }
+    }
+
+    void GraphGraphicsView::handlePluginContextContributionTriggered()
+    {
+        QAction* act = static_cast<QAction*>(sender());
+        Q_ASSERT(act);
+        ContextMenuContribution* cmc = static_cast<ContextMenuContribution*>(act->data().value<void*>());
+        Q_ASSERT(cmc);
+        Q_ASSERT(cmc->mContributer);
+        cmc->mContributer->execute_context_action(cmc->mFunctionId,gNetlist,
+                                                  gSelectionRelay->selectedModulesVector(),
+                                                  gSelectionRelay->selectedGatesVector(),
+                                                  gSelectionRelay->selectedNetsVector());
     }
 
     void GraphGraphicsView::updateMatrix(const int delta)

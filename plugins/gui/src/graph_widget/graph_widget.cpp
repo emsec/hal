@@ -29,6 +29,7 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/utils.h"
 #include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/plugin_system/gui_extension_interface.h"
 
 #include <QApplication>
 #include <QDebug>
@@ -86,7 +87,9 @@ namespace hal
         {
             BasePluginInterface* bpif = plugin_manager::get_plugin_instance(pluginName);
             if (!bpif) continue;
-            bpif->register_progress_indicator(&GraphWidget::pluginProgressIndicator);
+            GuiExtensionInterface* geif = bpif->get_gui_extension();
+            if (!geif) continue;
+            geif->register_progress_indicator(&GraphWidget::pluginProgressIndicator);
         }
 
     }

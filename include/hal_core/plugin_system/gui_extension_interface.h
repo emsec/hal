@@ -24,45 +24,57 @@
 // SOFTWARE.
 
 #pragma once
-
-#include "hal_core/plugin_system/plugin_interface_base.h"
-#include "hal_core/plugin_system/gui_extension_interface.h"
+#include <vector>
+#include <functional>
 #include "hal_core/defines.h"
 #include "hal_core/netlist/netlist.h"
-#include <vector>
-#include <unordered_set>
-#include <string>
+#include "hal_core/plugin_system/plugin_parameter.h"
 
-namespace hal
-{
-    class GuiExtensionContext : public GuiExtensionInterface
+namespace hal {
+    class GuiExtensionInterface;
+
+    struct ContextMenuContribution
     {
-        std::vector<ContextMenuContribution> get_context_contribution(const Netlist* nl,
+        GuiExtensionInterface* mContributer;
+        u32 mFunctionId;
+        std::string mEntry;
+    };
+
+    class GuiExtensionInterface
+    {
+    public:
+        GuiExtensionInterface() {;}
+        virtual ~GuiExtensionInterface() {;}
+
+        /**
+         * Get list of configurable parameter
+         * @return List of configurable parameter
+         */
+        virtual std::vector<PluginParameter> get_parameter() const;
+
+        /**
+         * Set values for configurable parameter
+         * @param[in] nl The current netlist
+         * @param[in] params List of configurable parameter with values
+         */
+        virtual void set_parameter(Netlist* nl, const std::vector<PluginParameter>& params);
+
+        /**
+         * Register function to indicate work progress when busy
+         * @param pif Progress Indicator Function to register
+         */
+        virtual void register_progress_indicator(std::function<void(int, const std::string&)> pif);
+
+        virtual std::vector<ContextMenuContribution> get_context_contribution(const Netlist* nl,
                                                                               const std::vector<u32>& mods,
                                                                               const std::vector<u32>& gats,
                                                                               const std::vector<u32>& nets);
 
-        void execute_context_action(u32 fid,
+        virtual void execute_context_action(u32 fid,
                                             Netlist* nl,
                                             const std::vector<u32>& mods,
                                             const std::vector<u32>& gats,
                                             const std::vector<u32>& nets);
 
     };
-
-    class PLUGIN_API ExtendContextPlugin : public BasePluginInterface
-    {
-        GuiExtensionContext* mGuiExtension = nullptr;
-    public:
-
-        std::string get_name() const override;
-        std::string get_version() const override;
-
-        void initialize() override;
-
-        void on_load() override;
-        void on_unload() override;
-
-        GuiExtensionInterface* get_gui_extension() const override;
-    };
-}    // namespace hal
+}

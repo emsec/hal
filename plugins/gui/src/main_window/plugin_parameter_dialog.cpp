@@ -1,5 +1,6 @@
 #include "gui/main_window/plugin_parameter_dialog.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
+#include "hal_core/plugin_system/gui_extension_interface.h"
 #include "gui/main_window/color_selection.h"
 #include "gui/main_window/key_value_table.h"
 #include "gui/gui_utils/graphics.h"
@@ -67,7 +68,9 @@ namespace hal {
 
     void PluginParameterDialog::setupHash()
     {
-        for (PluginParameter par : mPluginInterface->get_parameter())
+        GuiExtensionInterface* geif = mPluginInterface->get_gui_extension();
+        if (!geif) return;
+        for (PluginParameter par : geif->get_parameter())
         {
             if (par.get_type() == PluginParameter::Absent) continue;
             QString parTagname = QString::fromStdString(par.get_tagname());
@@ -174,6 +177,8 @@ namespace hal {
 
     void PluginParameterDialog::accept()
     {
+        GuiExtensionInterface* geif = mPluginInterface->get_gui_extension();
+        if (!geif) return;
         std::vector<PluginParameter> settings;
         for (PluginParameter par : mParameterList)
         {
@@ -235,7 +240,7 @@ namespace hal {
             settings.push_back(par);
         }
         QDialog::accept();
-        mPluginInterface->set_parameter(gNetlist, settings);
+        geif->set_parameter(gNetlist, settings);
     }
 
     void PluginParameterDialog::handlePushbuttonClicked()

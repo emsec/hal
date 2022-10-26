@@ -26,6 +26,7 @@
 #pragma once
 
 #include "hal_core/plugin_system/plugin_interface_cli.h"
+#include "hal_core/plugin_system/gui_extension_interface.h"
 
 #include <vector>
 
@@ -35,44 +36,13 @@ namespace hal
     class Netlist;
     class Gate;
 
-    class PLUGIN_API plugin_dataflow : virtual public CLIPluginInterface
+    class plugin_dataflow;
+
+    class GuiExtensionDataflow : public GuiExtensionInterface
     {
+        plugin_dataflow* m_parent;
     public:
-        /*
-         *      interface implementations
-         */
-
-        plugin_dataflow()  = default;
-        ~plugin_dataflow() = default;
-
-        /**
-         * Get the name of the plugin.
-         *
-         * @returns The name of the plugin.
-         */
-        std::string get_name() const override;
-
-        /**
-         * Get the version of the plugin.
-         *
-         * @returns The version of the plugin.
-         */
-        std::string get_version() const override;
-
-        /** interface implementation: i_cli */
-        ProgramOptions get_cli_options() const override;
-
-        /** interface implementation: i_cli */
-        bool handle_cli_call(Netlist* nl, ProgramArguments& args) override;
-
-        std::vector<std::vector<Gate*>> execute(Netlist* nl,
-                                                std::string path,
-                                                const std::vector<u32> sizes,
-                                                bool draw_graph,
-                                                bool create_modules                        = false,
-                                                bool register_stage_identification         = false,
-                                                std::vector<std::vector<u32>> known_groups = {},
-                                                u32 bad_group_size                         = 7);
+        GuiExtensionDataflow(plugin_dataflow* p) : m_parent(p) {;}
 
         /**
          * Get list of configurable parameter
@@ -94,5 +64,60 @@ namespace hal
         virtual void register_progress_indicator(std::function<void(int, const std::string&)> pif) override;
 
         static std::function<void(int, const std::string&)> s_progress_indicator_function;
+    };
+
+    class PLUGIN_API plugin_dataflow : virtual public CLIPluginInterface
+    {
+        GuiExtensionDataflow* m_gui_extension;
+    public:
+        /*
+         *      interface implementations
+         */
+
+        plugin_dataflow()  : m_gui_extension(nullptr) {;}
+        ~plugin_dataflow() = default;
+
+        /**
+         * Instantiate m_gui_extension
+         */
+        void on_load() override;
+
+        /**
+         * Delete m_gui_extension
+         */
+        void on_unload() override;
+
+        /**
+         * Get the name of the plugin.
+         *
+         * @returns The name of the plugin.
+         */
+        std::string get_name() const override;
+
+        /**
+         * Get the version of the plugin.
+         *
+         * @returns The version of the plugin.
+         */
+        std::string get_version() const override;
+
+        /** interface implementation: i_cli */
+        ProgramOptions get_cli_options() const override;
+
+        /** interface implementation: i_cli */
+        bool handle_cli_call(Netlist* nl, ProgramArguments& args) override;
+
+        GuiExtensionInterface* get_gui_extension() const override;
+
+        std::vector<std::vector<Gate*>> execute(Netlist* nl,
+                                                std::string path,
+                                                const std::vector<u32> sizes,
+                                                bool draw_graph,
+                                                bool create_modules                        = false,
+                                                bool register_stage_identification         = false,
+                                                std::vector<std::vector<u32>> known_groups = {},
+                                                u32 bad_group_size                         = 7);
+
+
     };
 }    // namespace hal

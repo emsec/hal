@@ -33,6 +33,7 @@
 #include "hal_core/netlist/project_manager.h"
 #include "hal_core/utilities/project_directory.h"
 #include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/plugin_system/gui_extension_interface.h"
 
 #include <QApplication>
 #include <QCloseEvent>
@@ -561,7 +562,9 @@ namespace hal
         {
             BasePluginInterface* bpif = plugin_manager::get_plugin_instance(pluginName);
             if (!bpif) continue;
-            plugins[bpif->get_parameter().empty()?1:0].insert(QString::fromStdString(pluginName),bpif);
+            GuiExtensionInterface* geif = bpif->get_gui_extension();
+            if (!geif) continue;
+            plugins[geif->get_parameter().empty()?1:0].insert(QString::fromStdString(pluginName),bpif);
         }
 
         for (auto it = plugins[0].constBegin(); it != plugins[0].constEnd(); ++it)
