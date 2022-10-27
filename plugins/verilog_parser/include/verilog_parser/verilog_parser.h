@@ -107,10 +107,11 @@ namespace hal
         Result<std::monostate> parse_port_definition(VerilogModule* module, std::vector<VerilogDataEntry>& attributes);
         Result<std::monostate> parse_signal_definition(VerilogModule* module, std::vector<VerilogDataEntry>& attributes);
         Result<std::monostate> parse_assignment(VerilogModule* module);
+        Result<std::monostate> parse_defparam(VerilogModule* module);
         void parse_attribute(std::vector<VerilogDataEntry>& attributes);
         Result<std::monostate> parse_instance(VerilogModule* module, std::vector<VerilogDataEntry>& attributes);
         Result<std::monostate> parse_port_assign(VerilogInstance* instance);
-        Result<std::vector<VerilogDataEntry>> parse_generic_assign();
+        Result<std::vector<VerilogDataEntry>> parse_parameter_assign();
 
         // construct netlist from intermediate format
         Result<std::monostate> construct_netlist(VerilogModule* top_module);

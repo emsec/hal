@@ -325,6 +325,54 @@ namespace hal
             return OK(ss.str());
         }
 
+        Result<std::pair<std::string, std::string>> parse_parameter_value(const Token<std::string>& value_token)
+        {
+            std::pair<std::string, std::string> value;
+
+            if (utils::is_integer(value_token.string))
+            {
+                value.first  = "integer";
+                value.second = value_token.string;
+            }
+            else if (utils::is_floating_point(value_token.string))
+            {
+                value.first  = "floating_point";
+                value.second = value_token.string;
+            }
+            else if (value_token.string[0] == '\"' && value_token.string.back() == '\"')
+            {
+                value.first  = "string";
+                value.second = value_token.string.substr(1, value_token.string.size() - 2);
+            }
+            else if (isdigit(value_token.string[0]) || value_token.string[0] == '\'')
+            {
+                if (const auto res = get_hex_from_literal(value_token); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(),
+                                      "could not parse parameter value: failed to convert '" + value_token.string + "' to hexadecimal value (line " + std::to_string(value_token.number) + ")");
+                }
+                else
+                {
+                    value.second = res.get();
+                }
+
+                if (value.second == "0" || value.second == "1")
+                {
+                    value.first = "bit_value";
+                }
+                else
+                {
+                    value.first = "bit_vector";
+                }
+            }
+            else
+            {
+                return ERR("could not parse parameter value: failed to identify data type of parameter '" + value_token.string + "' (line " + std::to_string(value_token.number) + ")");
+            }
+
+            return OK(value);
+        }
+
         Result<std::vector<assignment_t>> parse_assignment_expression(TokenStream<std::string>&& stream)
         {
             std::vector<TokenStream<std::string>> parts;
@@ -1017,6 +1065,13 @@ namespace hal
                     return ERR_APPEND(res.get_error(), "could not parse module '" + module_name + "': unable to parse assignment (line " + std::to_string(line_number) + ")");
                 }
             }
+            else if (next_token == "defparam")
+            {
+                if (auto res = parse_defparam(verilog_module_raw); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not parse module '" + module_name + "': unable to parse defparam (line " + std::to_string(line_number) + ")");
+                }
+            }
             else if (next_token == "(*")
             {
                 parse_attribute(internal_attributes);
@@ -1269,6 +1324,40 @@ namespace hal
         return OK({});
     }
 
+    Result<std::monostate> VerilogParser::parse_defparam(VerilogModule* module)
+    {
+        m_token_stream.consume("defparam", true);
+        std::string instance_name = m_token_stream.consume().string;
+        m_token_stream.consume(".", true);
+        
+        if (const auto inst_it = module->m_instances_by_name.find(instance_name); inst_it != module->m_instances_by_name.end())
+        {
+            VerilogDataEntry param;
+            param.m_name = m_token_stream.consume().string;
+            m_token_stream.consume("=", true);
+
+            if (const auto res = parse_parameter_value(m_token_stream.consume()); res.is_ok())
+            {
+                const auto value = res.get();
+                param.m_type     = value.first;
+                param.m_value    = value.second;
+                inst_it->second->m_parameters.push_back(param);
+            }
+            else
+            {
+                log_warning("verilog_parser", "{}", res.get_error().get());
+            }
+        }
+        else
+        {
+            m_token_stream.consume(";", true);
+            return ERR("could not parse defparam: no instance with name '" + instance_name + "' exists within module '" + module->m_name + "'");
+        }
+
+        m_token_stream.consume(";", true);
+        return OK({});
+    }
+
     void VerilogParser::parse_attribute(std::vector<VerilogDataEntry>& attributes)
     {
         m_token_stream.consume("(*", true);
@@ -1307,7 +1396,7 @@ namespace hal
         // parse generics map
         if (m_token_stream.consume("#("))
         {
-            if (auto res = parse_generic_assign(); res.is_error())
+            if (auto res = parse_parameter_assign(); res.is_error())
             {
                 return ERR_APPEND(res.get_error(), "could not parse instance of type '" + instance->m_type + "': unable to parse parameter assignment (line " + std::to_string(line_number) + ")");
             }
@@ -1372,66 +1461,27 @@ namespace hal
         return OK({});
     }
 
-    Result<std::vector<VerilogDataEntry>> VerilogParser::parse_generic_assign()
+    Result<std::vector<VerilogDataEntry>> VerilogParser::parse_parameter_assign()
     {
         std::vector<VerilogDataEntry> generics;
 
-        u32 line_number;
         do
         {
             if (m_token_stream.consume(".", false))
             {
-                line_number                  = m_token_stream.peek().number;
                 const Token<std::string> lhs = m_token_stream.join_until("(", "");
                 m_token_stream.consume("(", true);
                 const Token<std::string> rhs = m_token_stream.join_until(")", "");
                 m_token_stream.consume(")", true);
 
-                bool skip = false;
-                std::string value, data_type;
-                if (utils::is_integer(rhs.string))
+                if (const auto res = parse_parameter_value(rhs); res.is_ok())
                 {
-                    value     = rhs;
-                    data_type = "integer";
-                }
-                else if (utils::is_floating_point(rhs.string))
-                {
-                    value     = rhs;
-                    data_type = "floating_point";
-                }
-                else if (rhs.string[0] == '\"' && rhs.string.back() == '\"')
-                {
-                    value     = rhs.string.substr(1, rhs.string.size() - 2);
-                    data_type = "string";
-                }
-                else if (isdigit(rhs.string[0]) || rhs.string[0] == '\'')
-                {
-                    if (const auto res = get_hex_from_literal(rhs); res.is_error())
-                    {
-                        skip = true;
-                    }
-                    else
-                    {
-                        value = res.get();
-                    }
-
-                    if (value == "0" || value == "1")
-                    {
-                        data_type = "bit_value";
-                    }
-                    else
-                    {
-                        data_type = "bit_vector";
-                    }
+                    const auto value = res.get();
+                    generics.push_back(VerilogDataEntry({lhs.string, value.first, value.second}));
                 }
                 else
                 {
-                    return ERR("could not parse generic assignment: failed to identify data type of generic map value '" + rhs.string + "' (line " + std::to_string(line_number) + ")");
-                }
-
-                if (!skip)
-                {
-                    generics.push_back(VerilogDataEntry({lhs.string, data_type, value}));
+                    log_warning("verilog_parser", "{}", res.get_error().get());
                 }
             }
         } while (m_token_stream.consume(",", false));
@@ -2089,14 +2139,15 @@ namespace hal
             }
 
             // assign instance attributes
-            for (const VerilogDataEntry& attribute : instance->m_attributes)
+            for (const auto& attribute : instance->m_attributes)
             {
                 if (!container->set_data("attribute", attribute.m_name, attribute.m_type, attribute.m_value))
                 {
                     log_warning("verilog_parser",
-                                "could not set attribute ({} = {}) for instance '{}' of type '{}' within instance '{}' of type '{}'.",
+                                "could not set attribute '{} = {}' of type '{}' for instance '{}' of type '{}' within instance '{}' of type '{}'.",
                                 attribute.m_name,
                                 attribute.m_value,
+                                attribute.m_type,
                                 instance->m_name,
                                 instance->m_type,
                                 instance_identifier,
@@ -2105,15 +2156,15 @@ namespace hal
             }
 
             // process generics
-            for (const VerilogDataEntry& parameter : instance->m_parameters)
+            for (const auto& parameter : instance->m_parameters)
             {
                 if (!container->set_data("generic", parameter.m_name, parameter.m_type, parameter.m_value))
                 {
                     log_warning("verilog_parser",
-                                "could not set generic ({}, {}, {}) for instance '{}' of type '{}' within instance '{}' of type '{}'.",
+                                "could not set generic '{} = {}' of type '{}' for instance '{}' of type '{}' within instance '{}' of type '{}'.",
                                 parameter.m_name,
-                                parameter.m_type,
                                 parameter.m_value,
+                                parameter.m_type,
                                 instance->m_name,
                                 instance->m_type,
                                 instance_identifier,

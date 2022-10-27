@@ -233,7 +233,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VerilogParserTest, check_generic_map) 
+    TEST_F(VerilogParserTest, check_parameters) 
     {
         TEST_START
         {
@@ -258,11 +258,13 @@ namespace hal {
                                     "  .I (global_in ),"
                                     "  .O (global_out )"
                                     " ) ;"
+                                    "defparam gate_0.external_int = 3;"
                                     "endmodule");
             const GateLibrary* gate_lib = test_utils::get_gate_library();
             std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
             VerilogParser verilog_parser;
             auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
+            // std::cout << nl_res.get_error().get() << std::endl;
             ASSERT_TRUE(nl_res.is_ok());
             std::unique_ptr<Netlist> nl = nl_res.get();
             ASSERT_NE(nl, nullptr);
@@ -278,6 +280,7 @@ namespace hal {
             EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_dec"), std::make_tuple("bit_vector", "ABC"));
             EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_oct"), std::make_tuple("bit_vector", "ABC"));
             EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_bin"), std::make_tuple("bit_vector", "ABC"));
+            EXPECT_EQ(gate_0->get_data("generic", "external_int"), std::make_tuple("integer", "3"));
 
             // Special Characters
             EXPECT_EQ(gate_0->get_data("generic", "key_negative_comma_string"), std::make_tuple("string", "test,1,2,3"));
@@ -2339,7 +2342,7 @@ namespace hal {
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
                 auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
-                ASSERT_TRUE(nl_res.is_error());
+                ASSERT_TRUE(nl_res.is_ok());
             }
             {
                 // Use an undeclared signal
