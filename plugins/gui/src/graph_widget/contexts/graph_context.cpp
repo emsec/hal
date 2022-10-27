@@ -635,6 +635,7 @@ namespace hal
         for (const auto& id : mGates)
         {
             auto g = gNetlist->get_gate_by_id(id);
+            if (!g) continue;
             for (auto net : g->get_fan_in_nets())
             {
                 //if(!net->is_unrouted() || net->is_global_input_net() || net->is_global_output_net())
@@ -649,6 +650,7 @@ namespace hal
         for (const auto& id : mModules)
         {
             auto m = gNetlist->get_module_by_id(id);
+            if (!m) continue;
             for (auto net : m->get_input_nets())
             {
                 mNets.insert(net->get_id());
