@@ -139,8 +139,6 @@ namespace hal
         Result<Module*> instantiate_entity(const ci_string& instance_name, VhdlEntity* vhdl_entity, Module* parent, const std::unordered_map<ci_string, ci_string>& parent_module_assignments);
 
         // helper functions
-        Result<std::vector<std::vector<u32>>> parse_signal_ranges(TokenStream<ci_string>& signal_stream) const;
-
         ci_string get_unique_alias(std::unordered_map<ci_string, u32>& name_occurrences, const ci_string& name) const;
     };
 }    // namespace hal
