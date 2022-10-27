@@ -634,6 +634,7 @@ namespace hal
         mNets.clear();
         for (const auto& id : mGates)
         {
+            if (mRemovedGates.contains(id)) continue;
             auto g = gNetlist->get_gate_by_id(id);
             if (!g) continue;
             for (auto net : g->get_fan_in_nets())
@@ -649,6 +650,7 @@ namespace hal
         }
         for (const auto& id : mModules)
         {
+            if (mRemovedModules.contains(id)) continue;
             auto m = gNetlist->get_module_by_id(id);
             if (!m) continue;
             for (auto net : m->get_input_nets())
