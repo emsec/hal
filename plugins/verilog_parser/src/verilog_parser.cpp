@@ -1579,7 +1579,7 @@ namespace hal
                     if (!instance->m_port_assignments.empty())
                     {
                         // all port assignments by name
-                        if (!instance->m_port_assignments.front().m_port_name.has_value())
+                        if (instance->m_port_assignments.front().m_port_name.has_value())
                         {
                             // cache pin groups
                             std::unordered_map<std::string, std::vector<std::string>> pin_groups;

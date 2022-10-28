@@ -38,194 +38,194 @@ namespace hal {
      *
      * Functions: parse
      */
-    // TEST_F(VerilogParserTest, check_main_example) 
-    // {
-    //     TEST_START
-    //     {
-    //         std::string netlist_input("module top ("
-    //                                 "  net_global_in,"
-    //                                 "  net_global_out "
-    //                                 " ) ;"
-    //                                 "  input net_global_in ;"
-    //                                 "  output net_global_out ;"
-    //                                 "  wire net_0 ;"
-    //                                 "  wire net_1 ;"
-    //                                 "BUF gate_0 ("
-    //                                 "  .I (net_global_in ),"
-    //                                 "  .O (net_0 )"
-    //                                 " ) ;"
-    //                                 "AND2 gate_1 ("
-    //                                 "  .I0 (net_global_in ),"
-    //                                 "  .I1 (net_global_in ),"
-    //                                 "  .O (net_1 )"
-    //                                 " ) ;"
-    //                                 "AND3 gate_2 ("
-    //                                 "  .I0 (net_0 ),"
-    //                                 "  .I1 (net_1 ),"
-    //                                 "  .O (net_global_out )"
-    //                                 " ) ;"
-    //                                 "endmodule");
-    //         const GateLibrary* gate_lib = test_utils::get_gate_library();
-    //         std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-    //         VerilogParser verilog_parser;
-    //         auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
-    //         ASSERT_TRUE(nl_res.is_ok());
-    //         std::unique_ptr<Netlist> nl = nl_res.get();
-    //         ASSERT_NE(nl, nullptr);
+    TEST_F(VerilogParserTest, check_main_example) 
+    {
+        TEST_START
+        {
+            std::string netlist_input("module top ("
+                                    "  net_global_in,"
+                                    "  net_global_out "
+                                    " ) ;"
+                                    "  input net_global_in ;"
+                                    "  output net_global_out ;"
+                                    "  wire net_0 ;"
+                                    "  wire net_1 ;"
+                                    "BUF gate_0 ("
+                                    "  .I (net_global_in ),"
+                                    "  .O (net_0 )"
+                                    " ) ;"
+                                    "AND2 gate_1 ("
+                                    "  .I0 (net_global_in ),"
+                                    "  .I1 (net_global_in ),"
+                                    "  .O (net_1 )"
+                                    " ) ;"
+                                    "AND3 gate_2 ("
+                                    "  .I0 (net_0 ),"
+                                    "  .I1 (net_1 ),"
+                                    "  .O (net_global_out )"
+                                    " ) ;"
+                                    "endmodule");
+            const GateLibrary* gate_lib = test_utils::get_gate_library();
+            std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+            VerilogParser verilog_parser;
+            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
+            ASSERT_TRUE(nl_res.is_ok());
+            std::unique_ptr<Netlist> nl = nl_res.get();
+            ASSERT_NE(nl, nullptr);
 
-    //         // Check if the gates are parsed correctly
-    //         ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("BUF")).size(), 1);
-    //         Gate* gate_0 = *(nl->get_gates(test_utils::gate_type_filter("BUF")).begin());
-    //         ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("AND2")).size(), 1);
-    //         Gate* gate_1 = *(nl->get_gates(test_utils::gate_type_filter("AND2")).begin());
-    //         ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("AND3")).size(), 1);
-    //         Gate* gate_2 = *(nl->get_gates(test_utils::gate_type_filter("AND3")).begin());
+            // Check if the gates are parsed correctly
+            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("BUF")).size(), 1);
+            Gate* gate_0 = *(nl->get_gates(test_utils::gate_type_filter("BUF")).begin());
+            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("AND2")).size(), 1);
+            Gate* gate_1 = *(nl->get_gates(test_utils::gate_type_filter("AND2")).begin());
+            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("AND3")).size(), 1);
+            Gate* gate_2 = *(nl->get_gates(test_utils::gate_type_filter("AND3")).begin());
 
-    //         ASSERT_NE(gate_0, nullptr);
-    //         EXPECT_EQ(gate_0->get_name(), "gate_0");
+            ASSERT_NE(gate_0, nullptr);
+            EXPECT_EQ(gate_0->get_name(), "gate_0");
 
-    //         ASSERT_NE(gate_1, nullptr);
-    //         EXPECT_EQ(gate_1->get_name(), "gate_1");
+            ASSERT_NE(gate_1, nullptr);
+            EXPECT_EQ(gate_1->get_name(), "gate_1");
 
-    //         ASSERT_NE(gate_2, nullptr);
-    //         EXPECT_EQ(gate_2->get_name(), "gate_2");
+            ASSERT_NE(gate_2, nullptr);
+            EXPECT_EQ(gate_2->get_name(), "gate_2");
 
-    //         // Check if the nets are parsed correctly
-    //         Net* net_0 = *(nl->get_nets(test_utils::net_name_filter("net_0")).begin());
-    //         Net* net_1 = *(nl->get_nets(test_utils::net_name_filter("net_1")).begin());
-    //         Net*
-    //             net_global_in = *(nl->get_nets(test_utils::net_name_filter("net_global_in")).begin());
-    //         Net*
-    //             net_global_out = *(nl->get_nets(test_utils::net_name_filter("net_global_out")).begin());
+            // Check if the nets are parsed correctly
+            Net* net_0 = *(nl->get_nets(test_utils::net_name_filter("net_0")).begin());
+            Net* net_1 = *(nl->get_nets(test_utils::net_name_filter("net_1")).begin());
+            Net*
+                net_global_in = *(nl->get_nets(test_utils::net_name_filter("net_global_in")).begin());
+            Net*
+                net_global_out = *(nl->get_nets(test_utils::net_name_filter("net_global_out")).begin());
 
-    //         ASSERT_NE(net_0, nullptr);
-    //         EXPECT_EQ(net_0->get_name(), "net_0");
-    //         ASSERT_EQ(net_0->get_sources().size(), 1);
-    //         EXPECT_EQ(net_0->get_sources()[0], test_utils::get_endpoint(gate_0, "O"));
-    //         std::vector<Endpoint*> exp_net_0_dsts = {test_utils::get_endpoint(gate_2, "I0")};
-    //         EXPECT_TRUE(test_utils::vectors_have_same_content(net_0->get_destinations(),
-    //                                                             std::vector<Endpoint*>({test_utils::get_endpoint(gate_2,
-    //                                                                                                             "I0")})));
+            ASSERT_NE(net_0, nullptr);
+            EXPECT_EQ(net_0->get_name(), "net_0");
+            ASSERT_EQ(net_0->get_sources().size(), 1);
+            EXPECT_EQ(net_0->get_sources()[0], test_utils::get_endpoint(gate_0, "O"));
+            std::vector<Endpoint*> exp_net_0_dsts = {test_utils::get_endpoint(gate_2, "I0")};
+            EXPECT_TRUE(test_utils::vectors_have_same_content(net_0->get_destinations(),
+                                                                std::vector<Endpoint*>({test_utils::get_endpoint(gate_2,
+                                                                                                                "I0")})));
 
-    //         ASSERT_NE(net_1, nullptr);
-    //         EXPECT_EQ(net_1->get_name(), "net_1");
-    //         ASSERT_EQ(net_1->get_sources().size(), 1);
-    //         EXPECT_EQ(net_1->get_sources()[0], test_utils::get_endpoint(gate_1, "O"));
-    //         EXPECT_TRUE(test_utils::vectors_have_same_content(net_1->get_destinations(),
-    //                                                             std::vector<Endpoint*>({test_utils::get_endpoint(gate_2,
-    //                                                                                                             "I1")})));
+            ASSERT_NE(net_1, nullptr);
+            EXPECT_EQ(net_1->get_name(), "net_1");
+            ASSERT_EQ(net_1->get_sources().size(), 1);
+            EXPECT_EQ(net_1->get_sources()[0], test_utils::get_endpoint(gate_1, "O"));
+            EXPECT_TRUE(test_utils::vectors_have_same_content(net_1->get_destinations(),
+                                                                std::vector<Endpoint*>({test_utils::get_endpoint(gate_2,
+                                                                                                                "I1")})));
 
-    //         ASSERT_NE(net_global_in, nullptr);
-    //         EXPECT_EQ(net_global_in->get_name(), "net_global_in");
-    //         EXPECT_EQ(net_global_in->get_sources().size(), 0);
-    //         EXPECT_TRUE(test_utils::vectors_have_same_content(net_global_in->get_destinations(),
-    //                                                             std::vector<Endpoint*>({test_utils::get_endpoint(gate_0,
-    //                                                                                                             "I"),
-    //                                                                                     test_utils::get_endpoint(gate_1,
-    //                                                                                                             "I0"),
-    //                                                                                     test_utils::get_endpoint(gate_1,
-    //                                                                                                             "I1")})));
-    //         EXPECT_TRUE(nl->is_global_input_net(net_global_in));
+            ASSERT_NE(net_global_in, nullptr);
+            EXPECT_EQ(net_global_in->get_name(), "net_global_in");
+            EXPECT_EQ(net_global_in->get_sources().size(), 0);
+            EXPECT_TRUE(test_utils::vectors_have_same_content(net_global_in->get_destinations(),
+                                                                std::vector<Endpoint*>({test_utils::get_endpoint(gate_0,
+                                                                                                                "I"),
+                                                                                        test_utils::get_endpoint(gate_1,
+                                                                                                                "I0"),
+                                                                                        test_utils::get_endpoint(gate_1,
+                                                                                                                "I1")})));
+            EXPECT_TRUE(nl->is_global_input_net(net_global_in));
 
-    //         ASSERT_NE(net_global_out, nullptr);
-    //         EXPECT_EQ(net_global_out->get_name(), "net_global_out");
-    //         ASSERT_EQ(net_global_out->get_sources().size(), 1);
-    //         EXPECT_EQ(net_global_out->get_sources()[0], test_utils::get_endpoint(gate_2, "O"));
-    //         EXPECT_TRUE(net_global_out->get_destinations().empty());
-    //         EXPECT_TRUE(nl->is_global_output_net(net_global_out));
+            ASSERT_NE(net_global_out, nullptr);
+            EXPECT_EQ(net_global_out->get_name(), "net_global_out");
+            ASSERT_EQ(net_global_out->get_sources().size(), 1);
+            EXPECT_EQ(net_global_out->get_sources()[0], test_utils::get_endpoint(gate_2, "O"));
+            EXPECT_TRUE(net_global_out->get_destinations().empty());
+            EXPECT_TRUE(nl->is_global_output_net(net_global_out));
 
-    //         EXPECT_EQ(nl->get_global_input_nets().size(), 1);
-    //         EXPECT_EQ(nl->get_global_output_nets().size(), 1);
-    //     }
-    //     TEST_END
-    // }
+            EXPECT_EQ(nl->get_global_input_nets().size(), 1);
+            EXPECT_EQ(nl->get_global_output_nets().size(), 1);
+        }
+        TEST_END
+    }
 
-    // /**
-    //  * The same test, as the main example, but use white spaces of different types (' ','\n','\t') in various locations (or remove some unnecessary ones)
-    //  *
-    //  * Functions: parse
-    //  */
-    // TEST_F(VerilogParserTest, check_whitespace_chaos) 
-    // {
-    //     TEST_START
-    //     {
-    //          std::string netlist_input("module top(net_global_in,net_global_out);input net_global_in;\n"
-    //                                 "  output net_global_out;wire net_0;wire net_1;BUF gate_0 (\n"
-    //                                 "  .I (net_global_in),\n"
-    //                                 "\n"
-    //                                 " \t.O (net_0 )\n"
-    //                                 " );\n"
-    //                                 "AND2 gate_1 (.I0\n\t"
-    //                                 "  (\n"
-    //                                 "    net_global_in\n"
-    //                                 "   \t)\n"
-    //                                 "    ,\n"
-    //                                 "  .I1 (net_global_in),.O (net_1));\n"
-    //                                 "AND3 gate_2 (.I0 (net_0 ),.I1 (net_1 ),.O (net_global_out ));endmodule");
-    //         const GateLibrary* gate_lib = test_utils::get_gate_library();
-    //         std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-    //         VerilogParser verilog_parser;
-    //         auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
-    //         ASSERT_TRUE(nl_res.is_ok());
-    //         std::unique_ptr<Netlist> nl = nl_res.get();
-    //         ASSERT_NE(nl, nullptr);
+    /**
+     * The same test, as the main example, but use white spaces of different types (' ','\n','\t') in various locations (or remove some unnecessary ones)
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_whitespace_chaos) 
+    {
+        TEST_START
+        {
+             std::string netlist_input("module top(net_global_in,net_global_out);input net_global_in;\n"
+                                    "  output net_global_out;wire net_0;wire net_1;BUF gate_0 (\n"
+                                    "  .I (net_global_in),\n"
+                                    "\n"
+                                    " \t.O (net_0 )\n"
+                                    " );\n"
+                                    "AND2 gate_1 (.I0\n\t"
+                                    "  (\n"
+                                    "    net_global_in\n"
+                                    "   \t)\n"
+                                    "    ,\n"
+                                    "  .I1 (net_global_in),.O (net_1));\n"
+                                    "AND3 gate_2 (.I0 (net_0 ),.I1 (net_1 ),.O (net_global_out ));endmodule");
+            const GateLibrary* gate_lib = test_utils::get_gate_library();
+            std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+            VerilogParser verilog_parser;
+            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
+            ASSERT_TRUE(nl_res.is_ok());
+            std::unique_ptr<Netlist> nl = nl_res.get();
+            ASSERT_NE(nl, nullptr);
 
-    //         // Check if the gates are parsed correctly
-    //         ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("BUF")).size(), 1);
-    //         Gate* gate_0 = *(nl->get_gates(test_utils::gate_type_filter("BUF")).begin());
-    //         ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("AND2")).size(), 1);
-    //         Gate* gate_1 = *(nl->get_gates(test_utils::gate_type_filter("AND2")).begin());
-    //         ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("AND3")).size(), 1);
-    //         Gate* gate_2 = *(nl->get_gates(test_utils::gate_type_filter("AND3")).begin());
+            // Check if the gates are parsed correctly
+            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("BUF")).size(), 1);
+            Gate* gate_0 = *(nl->get_gates(test_utils::gate_type_filter("BUF")).begin());
+            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("AND2")).size(), 1);
+            Gate* gate_1 = *(nl->get_gates(test_utils::gate_type_filter("AND2")).begin());
+            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("AND3")).size(), 1);
+            Gate* gate_2 = *(nl->get_gates(test_utils::gate_type_filter("AND3")).begin());
 
-    //         ASSERT_NE(gate_0, nullptr);
-    //         EXPECT_EQ(gate_0->get_name(), "gate_0");
+            ASSERT_NE(gate_0, nullptr);
+            EXPECT_EQ(gate_0->get_name(), "gate_0");
 
-    //         ASSERT_NE(gate_1, nullptr);
-    //         EXPECT_EQ(gate_1->get_name(), "gate_1");
+            ASSERT_NE(gate_1, nullptr);
+            EXPECT_EQ(gate_1->get_name(), "gate_1");
 
-    //         ASSERT_NE(gate_2, nullptr);
-    //         EXPECT_EQ(gate_2->get_name(), "gate_2");
+            ASSERT_NE(gate_2, nullptr);
+            EXPECT_EQ(gate_2->get_name(), "gate_2");
 
-    //         // Check if the nets are parsed correctly
-    //         Net* net_0 = *(nl->get_nets(test_utils::net_name_filter("net_0")).begin());
-    //         Net* net_1 = *(nl->get_nets(test_utils::net_name_filter("net_1")).begin());
-    //         Net* net_global_in = *(nl->get_nets(test_utils::net_name_filter("net_global_in")).begin());
-    //         Net* net_global_out = *(nl->get_nets(test_utils::net_name_filter("net_global_out")).begin());
+            // Check if the nets are parsed correctly
+            Net* net_0 = *(nl->get_nets(test_utils::net_name_filter("net_0")).begin());
+            Net* net_1 = *(nl->get_nets(test_utils::net_name_filter("net_1")).begin());
+            Net* net_global_in = *(nl->get_nets(test_utils::net_name_filter("net_global_in")).begin());
+            Net* net_global_out = *(nl->get_nets(test_utils::net_name_filter("net_global_out")).begin());
 
-    //         ASSERT_NE(net_0, nullptr);
-    //         EXPECT_EQ(net_0->get_name(), "net_0");
-    //         ASSERT_EQ(net_0->get_sources().size(), 1);
-    //         EXPECT_EQ(net_0->get_sources()[0], test_utils::get_endpoint(gate_0, "O"));
-    //         std::vector<Endpoint*> exp_net_0_dsts = {test_utils::get_endpoint(gate_2, "I0")};
-    //         EXPECT_TRUE(test_utils::vectors_have_same_content(net_0->get_destinations(), std::vector<Endpoint*>({test_utils::get_endpoint(gate_2, "I0")})));
+            ASSERT_NE(net_0, nullptr);
+            EXPECT_EQ(net_0->get_name(), "net_0");
+            ASSERT_EQ(net_0->get_sources().size(), 1);
+            EXPECT_EQ(net_0->get_sources()[0], test_utils::get_endpoint(gate_0, "O"));
+            std::vector<Endpoint*> exp_net_0_dsts = {test_utils::get_endpoint(gate_2, "I0")};
+            EXPECT_TRUE(test_utils::vectors_have_same_content(net_0->get_destinations(), std::vector<Endpoint*>({test_utils::get_endpoint(gate_2, "I0")})));
 
-    //         ASSERT_NE(net_1, nullptr);
-    //         EXPECT_EQ(net_1->get_name(), "net_1");
-    //         ASSERT_EQ(net_1->get_sources().size(), 1);
-    //         EXPECT_EQ(net_1->get_sources()[0], test_utils::get_endpoint(gate_1, "O"));
-    //         EXPECT_TRUE(test_utils::vectors_have_same_content(net_1->get_destinations(), std::vector<Endpoint*>({test_utils::get_endpoint(gate_2, "I1")})));
+            ASSERT_NE(net_1, nullptr);
+            EXPECT_EQ(net_1->get_name(), "net_1");
+            ASSERT_EQ(net_1->get_sources().size(), 1);
+            EXPECT_EQ(net_1->get_sources()[0], test_utils::get_endpoint(gate_1, "O"));
+            EXPECT_TRUE(test_utils::vectors_have_same_content(net_1->get_destinations(), std::vector<Endpoint*>({test_utils::get_endpoint(gate_2, "I1")})));
 
-    //         ASSERT_NE(net_global_in, nullptr);
-    //         EXPECT_EQ(net_global_in->get_name(), "net_global_in");
-    //         EXPECT_EQ(net_global_in->get_sources().size(), 0);
-    //         EXPECT_TRUE(test_utils::vectors_have_same_content(net_global_in->get_destinations(), std::vector<Endpoint*>({test_utils::get_endpoint(gate_0, "I"),
-    //                                                                                                                         test_utils::get_endpoint(gate_1, "I0"),
-    //                                                                                                                         test_utils::get_endpoint(gate_1, "I1")})));
-    //         EXPECT_TRUE(nl->is_global_input_net(net_global_in));
+            ASSERT_NE(net_global_in, nullptr);
+            EXPECT_EQ(net_global_in->get_name(), "net_global_in");
+            EXPECT_EQ(net_global_in->get_sources().size(), 0);
+            EXPECT_TRUE(test_utils::vectors_have_same_content(net_global_in->get_destinations(), std::vector<Endpoint*>({test_utils::get_endpoint(gate_0, "I"),
+                                                                                                                            test_utils::get_endpoint(gate_1, "I0"),
+                                                                                                                            test_utils::get_endpoint(gate_1, "I1")})));
+            EXPECT_TRUE(nl->is_global_input_net(net_global_in));
 
-    //         ASSERT_NE(net_global_out, nullptr);
-    //         EXPECT_EQ(net_global_out->get_name(), "net_global_out");
-    //         ASSERT_EQ(net_global_out->get_sources().size(), 1);
-    //         EXPECT_EQ(net_global_out->get_sources()[0], test_utils::get_endpoint(gate_2, "O"));
-    //         EXPECT_TRUE(net_global_out->get_destinations().empty());
-    //         EXPECT_TRUE(nl->is_global_output_net(net_global_out));
+            ASSERT_NE(net_global_out, nullptr);
+            EXPECT_EQ(net_global_out->get_name(), "net_global_out");
+            ASSERT_EQ(net_global_out->get_sources().size(), 1);
+            EXPECT_EQ(net_global_out->get_sources()[0], test_utils::get_endpoint(gate_2, "O"));
+            EXPECT_TRUE(net_global_out->get_destinations().empty());
+            EXPECT_TRUE(nl->is_global_output_net(net_global_out));
 
-    //         EXPECT_EQ(nl->get_global_input_nets().size(), 1);
-    //         EXPECT_EQ(nl->get_global_output_nets().size(), 1);
-    //     }
-    //     TEST_END
-    // }
+            EXPECT_EQ(nl->get_global_input_nets().size(), 1);
+            EXPECT_EQ(nl->get_global_output_nets().size(), 1);
+        }
+        TEST_END
+    }
 
     /**
      * Test different variants of pin assignments to modules and gates.
