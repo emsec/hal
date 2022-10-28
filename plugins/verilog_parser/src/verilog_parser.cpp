@@ -1329,7 +1329,7 @@ namespace hal
         m_token_stream.consume("defparam", true);
         std::string instance_name = m_token_stream.consume().string;
         m_token_stream.consume(".", true);
-        
+
         if (const auto inst_it = module->m_instances_by_name.find(instance_name); inst_it != module->m_instances_by_name.end())
         {
             VerilogDataEntry param;
@@ -1430,10 +1430,11 @@ namespace hal
     {
         u32 line_number = m_token_stream.peek().number;
         m_token_stream.consume("(", true);
+        u32 line_end = m_token_stream.find_next(";");
 
         do
         {
-            if (m_token_stream.consume(".", false))
+            if (m_token_stream.consume("."))
             {
                 VerilogPortAssignment port_assignment;
                 port_assignment.m_port_name = m_token_stream.consume().string;
@@ -1447,6 +1448,23 @@ namespace hal
                     port_assignment.m_assignment = res.get();
                 }
                 m_token_stream.consume(")", true);
+                if (port_assignment.m_assignment.empty())
+                {
+                    continue;
+                }
+                instance->m_port_assignments.push_back(std::move(port_assignment));
+            }
+            else
+            {
+                VerilogPortAssignment port_assignment;
+                if (auto res = parse_assignment_expression(m_token_stream.extract_until(",", line_end - 1)); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not parse port assignment: unable to parse assignment expression (line " + std::to_string(line_number) + ")");
+                }
+                else
+                {
+                    port_assignment.m_assignment = res.get();
+                }
                 if (port_assignment.m_assignment.empty())
                 {
                     continue;
@@ -1558,51 +1576,74 @@ namespace hal
             {
                 if (const auto gate_type_it = m_gate_types.find(instance->m_type); gate_type_it != m_gate_types.end())
                 {
-                    // cache pin groups
-                    std::unordered_map<std::string, std::vector<std::string>> pin_groups;
-                    for (const auto pin_group : gate_type_it->second->get_pin_groups())
+                    if (!instance->m_port_assignments.empty())
                     {
-                        for (const auto pin : pin_group->get_pins())
+                        // all port assignments by name
+                        if (!instance->m_port_assignments.front().m_port_name.has_value())
                         {
-                            pin_groups[pin_group->get_name()].push_back(pin->get_name());
-                        }
-                    }
+                            // cache pin groups
+                            std::unordered_map<std::string, std::vector<std::string>> pin_groups;
+                            for (const auto pin_group : gate_type_it->second->get_pin_groups())
+                            {
+                                for (const auto pin : pin_group->get_pins())
+                                {
+                                    pin_groups[pin_group->get_name()].push_back(pin->get_name());
+                                }
+                            }
 
-                    for (const auto& port_assignment : instance->m_port_assignments)
-                    {
-                        std::vector<std::string> left_port;
-                        if (!port_assignment.m_port_name.has_value())
-                        {
-                            return ERR("could not construct netlist: parsing of unnamed ports is not yet supported");
-                        }
+                            for (const auto& port_assignment : instance->m_port_assignments)
+                            {
+                                std::vector<std::string> right_port = expand_assignment_expression(verilog_module, port_assignment.m_assignment);
+                                if (!right_port.empty())
+                                {
+                                    u32 max_size;
+                                    std::vector<std::string> left_port;
 
-                        const auto& port_name = port_assignment.m_port_name.value();
+                                    const auto& port_name = port_assignment.m_port_name.value();
+                                    if (const auto group_it = pin_groups.find(port_name); group_it != pin_groups.end())
+                                    {
+                                        left_port = group_it->second;
+                                    }
+                                    else
+                                    {
+                                        left_port.push_back(port_name);
+                                    }
 
-                        if (const auto group_it = pin_groups.find(port_name); group_it != pin_groups.end())
-                        {
-                            left_port = group_it->second;
+                                    max_size = right_port.size() <= left_port.size() ? right_port.size() : left_port.size();
+
+                                    for (u32 i = 0; i < max_size; i++)
+                                    {
+                                        instance->m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));
+                                    }
+                                }
+                            }
                         }
+                        // all port assignments by order
                         else
                         {
-                            left_port.push_back(port_name);
-                        }
-                        std::vector<std::string> right_port = expand_assignment_expression(verilog_module, port_assignment.m_assignment);
+                            std::vector<std::string> pins = gate_type_it->second->get_pin_names();
+                            auto pin_it                   = pins.begin();
 
-                        if (!right_port.empty())
-                        {
-                            u32 max_size;
-                            if (right_port.size() <= left_port.size())
+                            for (const auto& port_assignment : instance->m_port_assignments)
                             {
-                                max_size = right_port.size();
-                            }
-                            else
-                            {
-                                max_size = left_port.size();
-                            }
+                                std::vector<std::string> right_port = expand_assignment_expression(verilog_module, port_assignment.m_assignment);
+                                if (!right_port.empty())
+                                {
+                                    u32 max_size;
+                                    std::vector<std::string> left_port;
 
-                            for (u32 i = 0; i < max_size; i++)
-                            {
-                                instance->m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));
+                                    for (u32 i = 0; i < right_port.size() && pin_it != pins.end(); i++)
+                                    {
+                                        left_port.push_back(*pin_it++);
+                                    }
+
+                                    max_size = right_port.size() <= left_port.size() ? right_port.size() : left_port.size();
+
+                                    for (u32 i = 0; i < max_size; i++)
+                                    {
+                                        instance->m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));
+                                    }
+                                }
                             }
                         }
                     }

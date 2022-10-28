@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+* netlist parsers
+  * added (limited) support for 'defparam' statements to Verilog parser
+* bugfixes
+  * fixed VHDL parser ignoring pin order of modules
 
 ## [4.0.1] - 2022-10-24 15:33:15+02:00 (urgency: medium)
 * **WARNING:** this release breaks multiple APIs, please make sure to adjust your code accordingly.
