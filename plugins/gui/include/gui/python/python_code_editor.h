@@ -54,19 +54,27 @@ namespace hal
         PythonCodeEditor(QWidget* parent = nullptr);
 
         /**
-         * Get the absolute path of the file the editor works with.
+         * Get the name of the file the editor works with.
+         * The file name is preferably relative to the current python directory.
+         * File names starting with / are absolute
          * Returns an empty string, if the editor is not connected to a file (i.e. a new file).
          *
-         * @returns the absolute path of the file. Empty string if no file path is set.
+         * @returns the (preferably relative) path of the file. Empty string if no file path is set.
          */
-        QString getFileName();
+        QString getRelFilename() const;
+
+        /**
+         * The absolute file name
+         * @return the absolute path of the file. Empty string if no file path is set.
+         */
+        QString getAbsFilename() const;
 
          /**
           * Set the absolute path of the file the editor works with.
           *
           * @param name - The absolute file path
           */
-        void set_file_name(const QString name);
+        void setFilename(const QString& name);
 
         /**
          * If called with <b>true</b>:
@@ -188,9 +196,7 @@ namespace hal
          */
         void performCodeCompletion(std::tuple<std::string, std::string> completion);
 
-
-
-        QString mFileName;
+        QString mRelFilename;
         QString mTextState;
 
         bool mBaseFileModified;

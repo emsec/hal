@@ -2,6 +2,7 @@
 #include "gui/python/python_editor_code_completion_dialog.h"
 
 #include "gui/code_editor/syntax_highlighter/python_syntax_highlighter.h"
+#include "hal_core/netlist/project_manager.h"
 #include "hal_core/utilities/log.h"
 #include "gui/gui_globals.h"
 
@@ -304,14 +305,25 @@ namespace hal
         textCursor().insertText(QString::fromStdString(std::get<1>(completion)));
     }
 
-    QString PythonCodeEditor::getFileName()
+    QString PythonCodeEditor::getRelFilename() const
     {
-        return mFileName;
+        return mRelFilename;
     }
 
-    void PythonCodeEditor::set_file_name(const QString name)
+    QString PythonCodeEditor::getAbsFilename() const
     {
-        mFileName = name;
+        if (mRelFilename.isEmpty() || mRelFilename.startsWith('/'))
+            return mRelFilename;
+        QDir projectPydir(QString::fromStdString(ProjectManager::instance()->get_project_directory().get_filename("py")));
+        return projectPydir.absoluteFilePath(mRelFilename);
+    }
+
+    void PythonCodeEditor::setFilename(const QString &name)
+    {
+        mRelFilename = name;
+        QString projectLoc = QString::fromStdString(ProjectManager::instance()->get_project_directory().get_filename("py")) + '/';
+        if (name.startsWith(projectLoc))
+            mRelFilename.remove(0,projectLoc.size());
     }
 
     void PythonCodeEditor::setBaseFileModified(bool base_file_modified)
