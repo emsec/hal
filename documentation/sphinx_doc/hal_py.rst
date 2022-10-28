@@ -12,6 +12,8 @@ HAL Core Documentation
    gate
    gate_library
    gate_library_manager
+   gate_pin
+   gate_pin_group
    gate_type
    gate_type_component
    gate_type_property

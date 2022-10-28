@@ -129,7 +129,7 @@ namespace hal
             {
                 std::vector<std::string> parameters;
                 // insert gate specific function
-                if (gt->has_property(hal::GateTypeProperty::lut))
+                if (gt->has_property(hal::GateTypeProperty::c_lut))
                 {
                     u32 lut_size             = gt->get_input_pins().size();
                     u32 init_len             = 1 << lut_size;
@@ -283,7 +283,7 @@ namespace hal
             {
                 std::stringstream gate_description;
                 // insert gate specific function
-                if (gt->has_property(hal::GateTypeProperty::lut))
+                if (gt->has_property(hal::GateTypeProperty::c_lut))
                 {
                     gate_description << verilator::converter::get_function_for_lut(gt) << std::endl;
                 }
@@ -299,7 +299,7 @@ namespace hal
                 {
                     gate_description << verilator::converter::get_function_for_latch(gt) << std::endl;
                 }
-                else if (gt->has_property(hal::GateTypeProperty::buffer))
+                else if (gt->has_property(hal::GateTypeProperty::c_buffer))
                 {
                     gate_description << verilator::converter::get_function_for_combinational_gate(gt) << std::endl;
                 }

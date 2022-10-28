@@ -5,6 +5,7 @@
 #include "hal_core/netlist/netlist_parser/netlist_parser_manager.h"
 #include "hal_core/netlist/netlist_writer/netlist_writer_manager.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
+#include "hal_core/netlist/project_manager.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
 #include "hal_core/plugin_system/plugin_interface_cli.h"
 #include "hal_core/plugin_system/plugin_interface_ui.h"
@@ -12,14 +13,13 @@
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/program_arguments.h"
 #include "hal_core/utilities/program_options.h"
-#include "hal_core/netlist/project_manager.h"
 #include "hal_core/utilities/utils.h"
 #include "hal_version.h"
 
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <string>
-#include <filesystem>
 
 #define SUCCESS 0
 #define ERROR 1
@@ -40,18 +40,18 @@ void initialize_cli_options(ProgramOptions& cli_options)
     ProgramOptions generic_options("generic options");
     /* initialize generic options */
     generic_options.add({"-h", "--help"}, "print help messages");
-    generic_options.add({"-v", "--version"}, "displays the current version");
+    generic_options.add({"-v", "--version"}, "display the current version");
     generic_options.add({"-L", "--show-log-options"}, "show all logging options");
     generic_options.add({"-l", "--logfile"}, "specify log file name", {""});
-    generic_options.add({"--log-time"}, "includes time information into the log");
-    generic_options.add({"--licenses"}, "Shows the licenses of projects used by HAL");
+    generic_options.add({"--log-time"}, "include time information into the log");
+    generic_options.add({"--licenses"}, "show the licenses of all projects used by HAL");
 
-    generic_options.add({"-i", "--import-netlist"}, "import netlist into new project", {ProgramOptions::A_REQUIRED_PARAMETER});
-    generic_options.add({"-p", "--project-dir"}, "hal project directory", {ProgramOptions::A_REQUIRED_PARAMETER});
-    generic_options.add({"-gl", "--gate-library"}, "used gate-library of the netlist", {ProgramOptions::A_REQUIRED_PARAMETER});
-    generic_options.add({"-e", "--empty-project"}, "create a new empty project, requires a gate library to be specified");
-    generic_options.add("--volatile-mode", "[cli only] prevents hal from creating a .hal progress file (e.g. cluster use)");
-    generic_options.add("--no-log", "prevents hal from creating a .log file");
+    generic_options.add({"-i", "--import-netlist"}, "import a netlist into new project", {ProgramOptions::A_REQUIRED_PARAMETER});
+    generic_options.add({"-p", "--project-dir"}, "load a HAL project from its directory", {ProgramOptions::A_REQUIRED_PARAMETER});
+    generic_options.add({"-gl", "--gate-library"}, "specify the gate library to be used", {ProgramOptions::A_REQUIRED_PARAMETER});
+    generic_options.add({"-e", "--empty-project"}, "create an empty project (requires gate library to be specified)");
+    generic_options.add("--volatile-mode", "prevent HAL from creating a .hal progress file (e.g., for cluster use)");
+    generic_options.add("--no-log", "prevent hal from creating a .log file");
 
     /* initialize netlist parser options */
     generic_options.add(netlist_parser_manager::get_cli_options());
@@ -68,40 +68,29 @@ int main(int argc, const char* argv[])
     initialize_cli_options(cli_options);
     ProgramOptions all_options("all options");
     all_options.add(cli_options);
-    all_options.add(LogManager::get_instance().get_option_descriptions());
+    all_options.add(LogManager::get_instance()->get_option_descriptions());
     ProgramArguments args = all_options.parse(argc, argv);
 
     /* initialize logging */
-    LogManager& lm = LogManager::get_instance();
+    LogManager* lm = LogManager::get_instance();
 
-    lm.add_channel("core", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("gate_library_parser", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("gate_library_writer", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("gate_library_manager", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("gate_library", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("netlist", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("netlist_utils", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("netlist_internal", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("netlist_persistent", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("gate", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("net", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("module", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("grouping", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+    const char* info_channels[] = { "core", "stdout", "gate_library_parser", "gate_library_writer", "gate_library_manager", "gate_library",
+                                    "netlist", "netlist_utils", "netlist_internal", "netlist_persistent",
+                                    "gate", "net", "module", "grouping", "netlist_parser", "netlist_writer",
+                                    "python_context", "event", nullptr};
 
-    lm.add_channel("netlist_parser", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("hdl_writer", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("python_context", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("event", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+    for (int i=0; info_channels[i]; i++)
+        lm->add_channel(info_channels[i], {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
 
     if (args.is_option_set("--logfile"))
     {
-        lm.set_file_name(std::filesystem::path(args.get_parameter("--logfile")));
+        lm->set_file_name(std::filesystem::path(args.get_parameter("--logfile")));
     }
-    lm.handle_options(args);
+    lm->handle_options(args);
 
     if (args.is_option_set("--log-time"))
     {
-        lm.set_format_pattern("[%d.%m.%Y %H:%M:%S] [%n] [%l] %v");
+        lm->set_format_pattern("[%d.%m.%Y %H:%M:%S] [%n] [%l] %v");
     }
 
     /* initialize plugin manager */
@@ -110,7 +99,7 @@ int main(int argc, const char* argv[])
     // suppress output
     if (args.is_option_set("--help") || args.is_option_set("--licenses") || args.is_option_set("--version") || argc == 1)
     {
-        lm.deactivate_all_channels();
+        lm->deactivate_all_channels();
     }
 
     if (!plugin_manager::load_all_plugins())
@@ -204,7 +193,7 @@ int main(int argc, const char* argv[])
             }
 
             /* add timestamp to log output */
-            LogManager::get_instance().set_format_pattern("[%d.%m.%Y %H:%M:%S] [%n] [%l] %v");
+            LogManager::get_instance()->set_format_pattern("[%d.%m.%Y %H:%M:%S] [%n] [%l] %v");
 
             auto ret = plugin->exec(args);
 
@@ -218,7 +207,7 @@ int main(int argc, const char* argv[])
 
     if (args.is_option_set("--show-log-options"))
     {
-        std::cout << lm.get_option_descriptions().get_options_string() << std::endl;
+        std::cout << lm->get_option_descriptions().get_options_string() << std::endl;
         return cleanup();
     }
 
@@ -247,7 +236,7 @@ int main(int argc, const char* argv[])
 
     if (args.is_option_set("--empty-project"))
     {
-        proj_path = std::filesystem::path(args.get_parameter("--empty-project"));
+        proj_path    = std::filesystem::path(args.get_parameter("--empty-project"));
         openExisting = false;
     }
     else if (args.is_option_set("--project-dir"))
@@ -257,10 +246,10 @@ int main(int argc, const char* argv[])
     if (args.is_option_set("--import-netlist"))
     {
         import_nl = std::filesystem::path(args.get_parameter("--import-netlist"));
-        if (proj_path.empty()) proj_path = import_nl;
+        if (proj_path.empty())
+            proj_path = import_nl;
         openExisting = false;
     }
-
 
     if (proj_path.string().empty())
     {
@@ -294,7 +283,7 @@ int main(int argc, const char* argv[])
     else if (!args.is_option_set("--logfile"))
     {
         std::filesystem::path log_path = pm->get_project_directory().get_default_filename(".log");
-        lm.set_file_name(log_path);
+        lm->set_file_name(log_path);
     }
 
     std::unique_ptr<Netlist> netlist;

@@ -115,14 +115,36 @@ namespace hal
         {
             for (const auto& base_type : gate_type["types"].GetArray())
             {
+                const std::string property_str = base_type.GetString();
+
                 try
                 {
-                    GateTypeProperty property = enum_from_string<GateTypeProperty>(base_type.GetString());
+                    GateTypeProperty property = enum_from_string<GateTypeProperty>(property_str);
                     properties.insert(property);
                 }
                 catch (const std::runtime_error&)
                 {
-                    return ERR("could not parse gate type '" + name + "': invalid property '" + base_type.GetString() + "'");
+                    // legacy support
+                    if (property_str == "buffer")
+                    {
+                        properties.insert(GateTypeProperty::c_buffer);
+                    }
+                    else if (property_str == "carry")
+                    {
+                        properties.insert(GateTypeProperty::c_carry);
+                    }
+                    else if (property_str == "mux")
+                    {
+                        properties.insert(GateTypeProperty::c_mux);
+                    }
+                    else if (property_str == "lut")
+                    {
+                        properties.insert(GateTypeProperty::c_lut);
+                    }
+                    else
+                    {
+                        return ERR("could not parse gate type '" + name + "': invalid property '" + base_type.GetString() + "'");
+                    }
                 }
             }
         }

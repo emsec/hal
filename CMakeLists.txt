@@ -1,9 +1,28 @@
-# CMakeLists.txt -- Build system for HAL - the hardware analyzer
+# MIT License
 #
-# Copyright (c) 2019 Sebastian Wallat <sebastian.wallat@rub.e>
+# Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+# Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+# Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
+# Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix ("ORIGINAL AUTHORS"). All Rights reserved.
 #
-# All rights reserved. Use of this source code is governed by a
-# MIT-style license that can be found in the LICENSE file.
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 cmake_minimum_required(VERSION 3.10)
 
 # Include common CMake modules
@@ -17,7 +36,9 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build." FORCE)
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "Perf")
 endif()
+
 set(AVAILABLE_BUILD_TYPES "Release" "MinSizeRel" "RelWithDebInfo" "Debug" "Perf")
+
 if(CMAKE_BUILD_TYPE IN_LIST AVAILABLE_BUILD_TYPES)
     message(STATUS "Selected build type: ${CMAKE_BUILD_TYPE}")
 else()
@@ -26,13 +47,14 @@ endif()
 
 # Configure CCache if available
 find_program(CCACHE_FOUND ccache)
+
 if(CCACHE_FOUND)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ${CCACHE_FOUND})
     set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ${CCACHE_FOUND})
     message(STATUS "ccache found!")
 endif(CCACHE_FOUND)
 
-#Add path to CMake script files and include Helper
+# Add path to CMake script files and include Helper
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/" "${CMAKE_SOURCE_DIR}/deps/sanitizers-cmake/cmake/")
 
 # Define Options
@@ -47,7 +69,7 @@ option(BUILD_DOCUMENTATION "Create and install the HTML based API documentation"
 option(ENABLE_INSTALL_LDCONFIG "When installing via make/ninja install, also install and run the LDCONFIG post_install scripts" ON)
 option(UPLOAD_PPA "Upload package to ppa" OFF)
 option(PACKAGE_DEB "Package DEB Package" OFF)
-option(ENABLE_PPA "Prepare PPA" ON )
+option(ENABLE_PPA "Prepare PPA" ON)
 option(PACKAGE_TGZ "Package TGZ archive" OFF)
 option(PACKAGE_ZIP "Package ZIP archive" OFF)
 option(PACKAGE_RPM "Package RPM package" OFF)
@@ -65,24 +87,26 @@ endif()
 
 # Detect Version Information
 set(hal_GENVERSION_PATH "${CMAKE_SOURCE_DIR}/tools")
-if((NOT ${HAL_VERSION_MAJOR}) AND ((NOT ${HAL_VERSION_MINOR}) AND (NOT ${HAL_VERSION_PATCH})))
+
+if((NOT ${HAL_VERSION_MAJOR}) AND((NOT ${HAL_VERSION_MINOR}) AND(NOT ${HAL_VERSION_PATCH})))
     hal_get_version()
 else()
     set(HAL_VERSION_RETURN ${HAL_VERSION_MAJOR}.${HAL_VERSION_MINOR}.${HAL_VERSION_PATCH})
 endif()
+
 configure_file(${CMAKE_SOURCE_DIR}/CURRENT_VERSION.in ${CMAKE_SOURCE_DIR}/CURRENT_VERSION @ONLY)
 unset(HAL_VERSION_MAJOR_SELF CACHE)
 message(STATUS "HAL_VERSION: ${HAL_VERSION_RETURN}")
 
-################################
-#####   The project statement
-################################
-
+# ###############################
+# ####   The project statement
+# ###############################
 project(hal
-        VERSION ${HAL_VERSION_MAJOR}.${HAL_VERSION_MINOR}.${HAL_VERSION_PATCH}
-        DESCRIPTION "HAL - the hardware analyzer"
-        #HOMEPAGE_URL https://github.com/emsec/hal # not supported in cmake 3.10
-        LANGUAGES CXX C)
+    VERSION ${HAL_VERSION_MAJOR}.${HAL_VERSION_MINOR}.${HAL_VERSION_PATCH}
+    DESCRIPTION "HAL - the hardware analyzer"
+
+    # HOMEPAGE_URL https://github.com/emsec/hal # not supported in cmake 3.10
+    LANGUAGES CXX C)
 
 # Common Project Information
 set(PROJECT_VENDOR "hal")
@@ -90,6 +114,7 @@ set(PROJECT_WEBSITE "https://github.com/emsec/hal")
 set(PROJECT_MAINTAINER "Sebastian Wallat <sebastian.wallat@rub.de>")
 set(PROJECT_DESCRIPTION_SUMMARY "Hardware Reverse engineering framework")
 set(PROJECT_DESCRIPTION "hal - Hardware Analyzer")
+
 # set(CHANGELOG_MESSAGE ${CHANGELOG_LAST_MESSAGE})
 set(PROJECT_PPA "ppa:sebastian-wallat/hal")
 set(PROJECT_PPA_USER "sebastian-wallat")
@@ -110,20 +135,19 @@ setup_output_directories()
 # For all ExternalProject_ADD handle configure build and test as different stages
 set_property(DIRECTORY PROPERTY EP_STEP_TARGETS configure build test)
 
-#---Enable Folders in IDE like Visual Studio----------------------------------------------------
+# ---Enable Folders in IDE like Visual Studio----------------------------------------------------
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-#####################################################################
-#####   Find depending packages (See cmake/detect_dependencies.cmake)
-#####################################################################
+# ####################################################################
+# ####   Find depending packages (See cmake/detect_dependencies.cmake)
+# ####################################################################
 include(detect_dependencies)
 
+# ###############################
+# ####   Manage Compiler Flags
+# ###############################
 
-################################
-#####   Manage Compiler Flags
-################################
-
-#Set UNIX (macOS or Linux) compiler flags (clang or gcc). Set optimization level for debug or release.
+# Set UNIX (macOS or Linux) compiler flags (clang or gcc). Set optimization level for debug or release.
 if(UNIX)
     message(STATUS "Checking supported compiler flags...")
 
@@ -144,18 +168,17 @@ if(UNIX)
     enable_cxx_compile_option_if_supported("-fdiagnostics-color=always" "" "PRIVATE")
     enable_cxx_compile_option_if_supported("-fsized-deallocation" "" "PRIVATE")
 
-
     enable_cxx_compile_option_if_supported("-O0" "Debug" "PUBLIC")
     enable_cxx_compile_option_if_supported("-g" "Debug" "PUBLIC")
 
     enable_cxx_compile_option_if_supported("-O3" "Release" "PUBLIC")
     enable_cxx_compile_option_if_supported("-DNDEBUG" "Release" "PUBLIC")
-    #enable_cxx_compile_option_if_supported("-flto" "RELEASE" "PUBLIC")
 
+    # enable_cxx_compile_option_if_supported("-flto" "RELEASE" "PUBLIC")
     enable_cxx_compile_option_if_supported("-Os" "MinSizeRel" "PUBLIC")
     enable_cxx_compile_option_if_supported("-DNDEBUG" "MinSizeRel" "PUBLIC")
-    #enable_cxx_compile_option_if_supported("-flto" "MinSizeRel" "PUBLIC")
 
+    # enable_cxx_compile_option_if_supported("-flto" "MinSizeRel" "PUBLIC")
     enable_cxx_compile_option_if_supported("-O2" "RelWithDebInfo" "PUBLIC")
     enable_cxx_compile_option_if_supported("-g" "RelWithDebInfo" "PUBLIC")
 
@@ -166,15 +189,13 @@ if(UNIX)
     enable_cxx_compile_option_if_supported("-fno-optimize-sibling-calls" "Perf" "PUBLIC")
     enable_cxx_compile_option_if_supported("-fno-omit-frame-pointer" "Perf" "PUBLIC")
 
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+    SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pthread")
 
-    SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -pthread")
-    SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -pthread")
-    #set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-omit-frame-pointer -fsanitize=address")
-
+    # set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-omit-frame-pointer -fsanitize=address")
 
     # SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fsanitize=address")
     # SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
-
     if(USE_LIBCXX)
         enable_cxx_compile_option_if_supported("-stdlib=libc++" "" "PUBLIC")
         enable_c_compile_option_if_supported("-stdlib=libc++" "" "PUBLIC")
@@ -192,16 +213,16 @@ if(${CMAKE_BUILD_TYPE} EQUAL "Debug" AND APPLE AND CMAKE_HOST_APPLE)
     add_definitions(-D_LIBCPP_DEBUG)
 endif(${CMAKE_BUILD_TYPE} EQUAL "Debug" AND APPLE AND CMAKE_HOST_APPLE)
 
-####################################################################
-#####   Setup main target to hold all build definitions and options
-####################################################################
+# ###################################################################
+# ####   Setup main target to hold all build definitions and options
+# ###################################################################
 
 # Sphinx-doc build dir
 set(SPHINX_BUILD_DIR "${CMAKE_BINARY_DIR}/sphinx-build")
 
-################################
-#####   Enable Testing
-################################
+# ###############################
+# ####   Enable Testing
+# ###############################
 
 # Enable test collection
 if(BUILD_TESTS)
@@ -219,54 +240,52 @@ if(BUILD_TESTS)
             '${CMAKE_SOURCE_DIR}/deps/*'
             '${CMAKE_BINARY_DIR}/*'
             '${CMAKE_CURRENT_BINARY_DIR}/*'
-            )
+        )
 
         message(VERBOSE "COVERAGE_EXCLUDES: ${COVERAGE_EXCLUDES}")
         setup_target_for_coverage(NAME ${PROJECT_NAME}_coverage
-                                  EXECUTABLE ctest
-                                  DEPENDENCY runTest-*
-                                  )
+            EXECUTABLE ctest
+            DEPENDENCY runTest-*
+        )
     endif()
 endif()
 
-##################################
-#####   Configure Define Files
-##################################
+# #################################
+# ####   Configure Define Files
+# #################################
 
-#Configure Version file
+# Configure Version file
 configure_file(${CMAKE_SOURCE_DIR}/include/hal_core/hal_version.h.in ${CMAKE_BINARY_DIR}/hal_version.h @ONLY)
 
 # Declare Study Config in hal_config.h
 option(HAL_STUDY "Enable Study Config" OFF)
 configure_file(${CMAKE_SOURCE_DIR}/include/hal_core/hal_config.h.in ${CMAKE_BINARY_DIR}/hal_config.h @ONLY)
+
 if(HAL_STUDY)
     message(STATUS "HAL_STUDY mode turned ON!")
 else()
     message(STATUS "HAL_STUDY mode turned OFF!")
 endif()
 
-
-
-##################################
-#####   Include Code Directories
-##################################
+# #################################
+# ####   Include Code Directories
+# #################################
 add_subdirectory("src")
 add_subdirectory("app")
 add_subdirectory("plugins")
+
 if(${BUILD_TESTS})
     add_subdirectory("tests")
 endif(${BUILD_TESTS})
 
-####################################
-#####   Configure Pkgconfig for HAL
-####################################
-
+# ###################################
+# ####   Configure Pkgconfig for HAL
+# ###################################
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/hal.pc.in ${CMAKE_BINARY_DIR}/hal.pc @ONLY)
 
-#########################################
-#####   Install Header + Auxilary  files
-#########################################
-
+# ########################################
+# ####   Install Header + Auxilary  files
+# ########################################
 set(HAL_CMAKECONFIG_INSTALL_DIR "share/cmake/${PROJECT_NAME}" CACHE STRING "install path for halConfig.cmake")
 
 install(FILES ${CMAKE_BINARY_DIR}/hal_version.h DESTINATION ${INCLUDE_INSTALL_DIRECTORY}/hal_core/)
@@ -279,77 +298,75 @@ install(FILES ${CMAKE_BINARY_DIR}/hal.pc DESTINATION "${PKGCONFIG_INSTALL_DIRECT
 message(VERBOSE "PKGCONFIG_INSTALL_DIRECTORY ${PKGCONFIG_INSTALL_DIRECTORY}")
 
 configure_package_config_file(cmake/halConfig.cmake.in
-                              "${CMAKE_CURRENT_BINARY_DIR}/halConfig.cmake"
-                              INSTALL_DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
+    "${CMAKE_CURRENT_BINARY_DIR}/halConfig.cmake"
+    INSTALL_DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
 
 write_basic_package_version_file(
-        halConfigVersion.cmake
-        VERSION ${HAL_VERSION_RETURN}
-        COMPATIBILITY AnyNewerVersion
+    halConfigVersion.cmake
+    VERSION ${HAL_VERSION_RETURN}
+    COMPATIBILITY AnyNewerVersion
 )
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/halConfig.cmake
-        ${CMAKE_CURRENT_BINARY_DIR}/halConfigVersion.cmake
-        cmake/hal_plugin.cmake
-        cmake/hal_cmake_tools.cmake
-        cmake/FindFilesystem.cmake
-        tools/genversion.py
-        DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
+    ${CMAKE_CURRENT_BINARY_DIR}/halConfigVersion.cmake
+    cmake/hal_plugin.cmake
+    cmake/hal_cmake_tools.cmake
+    cmake/FindFilesystem.cmake
+    tools/genversion.py
+    DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
 
 install(FILES tools/genversion.py
-        DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR}
-        PERMISSIONS
-            OWNER_READ
-            OWNER_WRITE
-            OWNER_EXECUTE
-            GROUP_READ
-            GROUP_EXECUTE
-            WORLD_READ
-            WORLD_EXECUTE)
+    DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR}
+    PERMISSIONS
+    OWNER_READ
+    OWNER_WRITE
+    OWNER_EXECUTE
+    GROUP_READ
+    GROUP_EXECUTE
+    WORLD_READ
+    WORLD_EXECUTE)
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/deps/pybind11 DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/deps/spdlog-1.5.0 DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
 
-
-if(NOT (CMAKE_VERSION VERSION_LESS 3.0))
+if(NOT(CMAKE_VERSION VERSION_LESS 3.0))
     install(EXPORT hal
-            FILE halTargets.cmake
-            NAMESPACE hal::
-            DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR}
-            )
+        FILE halTargets.cmake
+        NAMESPACE hal::
+        DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR}
+    )
 endif()
-
 
 # Configure LDCONFIG for HAL plugins
 if(LINUX)
     configure_file(
-            "${CMAKE_SOURCE_DIR}/packaging/deb/hal.conf.in"
-            "${CMAKE_BINARY_DIR}/hal.conf"
-            @ONLY)
+        "${CMAKE_SOURCE_DIR}/packaging/deb/hal.conf.in"
+        "${CMAKE_BINARY_DIR}/hal.conf"
+        @ONLY)
     install(FILES "${CMAKE_BINARY_DIR}/hal.conf" DESTINATION "${SHARE_INSTALL_DIRECTORY}/ld_conf/")
 endif()
 
 # on make/ninja install run configure and run ldconfig
 if(ENABLE_INSTALL_LDCONFIG AND LINUX)
     configure_file(
-            "${CMAKE_SOURCE_DIR}/cmake/post_install.cmake.in"
-            "${CMAKE_BINARY_DIR}/post_install.cmake"
-            @ONLY)
+        "${CMAKE_SOURCE_DIR}/cmake/post_install.cmake.in"
+        "${CMAKE_BINARY_DIR}/post_install.cmake"
+        @ONLY)
     install(SCRIPT "${CMAKE_BINARY_DIR}/post_install.cmake")
 endif()
 
 # add uninstall target
 configure_file(
-        "${CMAKE_SOURCE_DIR}/cmake/uninstall.cmake.in"
-        "${CMAKE_BINARY_DIR}/uninstall.cmake"
-        @ONLY)
+    "${CMAKE_SOURCE_DIR}/cmake/uninstall.cmake.in"
+    "${CMAKE_BINARY_DIR}/uninstall.cmake"
+    @ONLY)
 add_custom_target(uninstall "${CMAKE_COMMAND}" -P "${CMAKE_BINARY_DIR}/uninstall.cmake")
 
-################################
-#####   Packaging
-################################
+# ###############################
+# ####   Packaging
+# ###############################
 add_subdirectory(packaging)
 
-################################
-#####   Documentation
-################################
+# ###############################
+# ####   Documentation
+# ###############################
 add_subdirectory(documentation)

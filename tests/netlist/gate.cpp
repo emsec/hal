@@ -999,7 +999,9 @@ namespace hal
             int i = 1;
             const InitComponent* init_component = lut_type->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
             ASSERT_NE(init_component, nullptr);
-            lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifiers().front(), "bit_vector", i_to_hex_string(i, 2));
+            auto init_string = i_to_hex_string(i, 2);
+            auto set_init_res = lut_gate->set_init_data({init_string});
+            ASSERT_TRUE(set_init_res.is_ok());
 
             // Testing the access via the function get_boolean_function
             EXPECT_EQ(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pin_names()).get()[0], get_truth_table_from_i(i, 8));
@@ -1008,6 +1010,12 @@ namespace hal
             std::unordered_map<std::string, BooleanFunction> functions = lut_gate->get_boolean_functions();
             ASSERT_TRUE(functions.find("O") != functions.end());
             EXPECT_EQ(functions["O"].compute_truth_table(lut_type->get_input_pin_names()).get()[0], get_truth_table_from_i(i, 8));
+
+            auto get_init_res = lut_gate->get_init_data();
+            ASSERT_TRUE(get_init_res.is_ok());
+            auto get_init_data = get_init_res.get();
+            EXPECT_EQ(get_init_data.size(), 1);
+            EXPECT_EQ(get_init_data.front(), init_string);
         }
         
         {
@@ -1021,9 +1029,15 @@ namespace hal
 
             for (int i = 0x0; i <= 0xff; i++) 
             {
-                lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifiers().front(), "bit_vector", i_to_hex_string(i));
-                EXPECT_EQ(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pin_names()).get()[0],
-                        get_truth_table_from_hex_string(i_to_hex_string(i), 8, false));
+                auto init_string = i_to_hex_string(i);
+                auto set_init_res = lut_gate->set_init_data({init_string});
+                ASSERT_TRUE(set_init_res.is_ok());
+                EXPECT_EQ(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pin_names()).get()[0], get_truth_table_from_hex_string(i_to_hex_string(i), 8, false));
+                auto get_init_res = lut_gate->get_init_data();
+                ASSERT_TRUE(get_init_res.is_ok());
+                auto get_init_data = get_init_res.get();
+                EXPECT_EQ(get_init_data.size(), 1);
+                EXPECT_EQ(get_init_data.front(), init_string);
             }
         }
         {
@@ -1040,9 +1054,15 @@ namespace hal
             lut_component->set_init_ascending(false);
 
             for (int i = 0x0; i <= 0xff; i++) {
-                lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifiers().front(), "bit_vector", i_to_hex_string(i));
-                EXPECT_EQ(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pin_names()).get()[0],
-                        get_truth_table_from_hex_string(i_to_hex_string(i), 8, true));
+                auto init_string = i_to_hex_string(i);
+                auto set_init_res = lut_gate->set_init_data({init_string});
+                ASSERT_TRUE(set_init_res.is_ok());
+                EXPECT_EQ(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pin_names()).get()[0], get_truth_table_from_hex_string(i_to_hex_string(i), 8, true));
+                auto get_init_res = lut_gate->get_init_data();
+                ASSERT_TRUE(get_init_res.is_ok());
+                auto get_init_data = get_init_res.get();
+                EXPECT_EQ(get_init_data.size(), 1);
+                EXPECT_EQ(get_init_data.front(), init_string);
             }
 
             lut_component->set_init_ascending(true);
@@ -1060,7 +1080,11 @@ namespace hal
             lut_gate->add_boolean_function("O", lut_bf);
             EXPECT_EQ(lut_gate->get_boolean_functions().size(), 1);
             EXPECT_EQ(lut_gate->get_boolean_function("O"), lut_bf);
-            EXPECT_EQ(lut_gate->get_data(init_component->get_init_category(), init_component->get_init_identifiers().front()), std::make_tuple(std::string("bit_vector"), std::string("1")));
+            auto get_init_res = lut_gate->get_init_data();
+            ASSERT_TRUE(get_init_res.is_ok());
+            auto get_init_data = get_init_res.get();
+            EXPECT_EQ(get_init_data.size(), 1);
+            EXPECT_EQ(get_init_data.front(), "1");
         }
         // NEGATIVE
         {
@@ -1088,6 +1112,15 @@ namespace hal
             lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifiers().front(), "bit_vector", "NOHx");
             EXPECT_EQ(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pin_names()).get()[0], std::vector<BooleanFunction::Value>(8, BooleanFunction::X));
 
+        }
+        {
+            // try getting and setting INIT data for non-LUT type
+            auto nl = test_utils::create_empty_netlist();
+            GateType* gt = nl->get_gate_library()->get_gate_type_by_name("AND2");
+            Gate* gate = nl->create_gate(gt, "not_a_lut");
+
+            EXPECT_TRUE(gate->get_init_data().is_error());
+            EXPECT_TRUE(gate->set_init_data({"FFFF"}).is_error());
         }
         TEST_END
     }

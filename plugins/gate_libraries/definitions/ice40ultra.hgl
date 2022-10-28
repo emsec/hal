@@ -1,5 +1,5 @@
 {
-    "version": 2,
+    "version": 3,
     "library": "ICE40ULTRA",
     "gate_locations": {
         "data_category": "generic",
@@ -11,7 +11,7 @@
             "name": "SB_CARRY",
             "types": [
                 "combinational",
-                "carry"
+                "c_carry"
             ],
             "pin_groups": [
                 {
@@ -1635,7 +1635,7 @@
             "name": "SB_LUT4",
             "types": [
                 "combinational",
-                "lut"
+                "c_lut"
             ],
             "lut_config": {
                 "bit_order": "ascending",
@@ -3029,7 +3029,7 @@
             "name": "SB_GB",
             "types": [
                 "combinational",
-                "buffer"
+                "c_buffer"
             ],
             "pin_groups": [
                 {
@@ -3566,8 +3566,8 @@
                             "type": "data"
                         }
                     ]
-                        },
-                        {
+                },
+                {
                     "name": "B",
                     "direction": "input",
                     "type": "data",

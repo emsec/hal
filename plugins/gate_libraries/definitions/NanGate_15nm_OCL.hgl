@@ -1,5 +1,5 @@
 {
-    "version": 2,
+    "version": 3,
     "library": "NanGate_15nm_OCL",
     "gate_locations": {
         "data_category": "generic",
@@ -10,7 +10,8 @@
         {
             "name": "AND2_X1",
             "types": [
-                "combinational"
+                "combinational",
+                "c_and"
             ],
             "pin_groups": [
                 {
@@ -89,7 +90,8 @@
         {
             "name": "AND2_X2",
             "types": [
-                "combinational"
+                "combinational",
+                "c_and"
             ],
             "pin_groups": [
                 {
@@ -168,7 +170,8 @@
         {
             "name": "AND3_X1",
             "types": [
-                "combinational"
+                "combinational",
+                "c_and"
             ],
             "pin_groups": [
                 {
@@ -261,7 +264,8 @@
         {
             "name": "AND3_X2",
             "types": [
-                "combinational"
+                "combinational",
+                "c_and"
             ],
             "pin_groups": [
                 {
@@ -354,7 +358,8 @@
         {
             "name": "AND4_X1",
             "types": [
-                "combinational"
+                "combinational",
+                "c_and"
             ],
             "pin_groups": [
                 {
@@ -461,7 +466,8 @@
         {
             "name": "AND4_X2",
             "types": [
-                "combinational"
+                "combinational",
+                "c_and"
             ],
             "pin_groups": [
                 {
@@ -618,7 +624,8 @@
         {
             "name": "AOI21_X1",
             "types": [
-                "combinational"
+                "combinational",
+                "c_aoi"
             ],
             "pin_groups": [
                 {
@@ -711,7 +718,8 @@
         {
             "name": "AOI21_X2",
             "types": [
-                "combinational"
+                "combinational",
+                "c_aoi"
             ],
             "pin_groups": [
                 {
@@ -804,7 +812,8 @@
         {
             "name": "AOI22_X1",
             "types": [
-                "combinational"
+                "combinational",
+                "c_aoi"
             ],
             "pin_groups": [
                 {
@@ -911,7 +920,8 @@
         {
             "name": "AOI22_X2",
             "types": [
-                "combinational"
+                "combinational",
+                "c_aoi"
             ],
             "pin_groups": [
                 {
@@ -1019,7 +1029,7 @@
             "name": "BUF_X1",
             "types": [
                 "combinational",
-                "buffer"
+                "c_buffer"
             ],
             "pin_groups": [
                 {
@@ -1085,7 +1095,7 @@
             "name": "BUF_X2",
             "types": [
                 "combinational",
-                "buffer"
+                "c_buffer"
             ],
             "pin_groups": [
                 {
@@ -1151,7 +1161,7 @@
             "name": "BUF_X4",
             "types": [
                 "combinational",
-                "buffer"
+                "c_buffer"
             ],
             "pin_groups": [
                 {
@@ -1217,7 +1227,7 @@
             "name": "BUF_X8",
             "types": [
                 "combinational",
-                "buffer"
+                "c_buffer"
             ],
             "pin_groups": [
                 {
@@ -1283,7 +1293,7 @@
             "name": "BUF_X12",
             "types": [
                 "combinational",
-                "buffer"
+                "c_buffer"
             ],
             "pin_groups": [
                 {
@@ -1349,7 +1359,7 @@
             "name": "BUF_X16",
             "types": [
                 "combinational",
-                "buffer"
+                "c_buffer"
             ],
             "pin_groups": [
                 {
@@ -1415,7 +1425,7 @@
             "name": "CLKBUF_X1",
             "types": [
                 "combinational",
-                "buffer"
+                "c_buffer"
             ],
             "pin_groups": [
                 {
@@ -1481,7 +1491,7 @@
             "name": "CLKBUF_X2",
             "types": [
                 "combinational",
-                "buffer"
+                "c_buffer"
             ],
             "pin_groups": [
                 {
@@ -1547,7 +1557,7 @@
             "name": "CLKBUF_X4",
             "types": [
                 "combinational",
-                "buffer"
+                "c_buffer"
             ],
             "pin_groups": [
                 {
@@ -1613,7 +1623,7 @@
             "name": "CLKBUF_X8",
             "types": [
                 "combinational",
-                "buffer"
+                "c_buffer"
             ],
             "pin_groups": [
                 {
@@ -1679,7 +1689,7 @@
             "name": "CLKBUF_X12",
             "types": [
                 "combinational",
-                "buffer"
+                "c_buffer"
             ],
             "pin_groups": [
                 {
@@ -1745,7 +1755,7 @@
             "name": "CLKBUF_X16",
             "types": [
                 "combinational",
-                "buffer"
+                "c_buffer"
             ],
             "pin_groups": [
                 {
@@ -2118,7 +2128,8 @@
         {
             "name": "FA_X1",
             "types": [
-                "combinational"
+                "combinational",
+                "c_full_adder"
             ],
             "pin_groups": [
                 {
@@ -2180,28 +2191,28 @@
                 {
                     "name": "CI",
                     "direction": "input",
-                    "type": "none",
+                    "type": "carry",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "CI",
                             "direction": "input",
-                            "type": "none"
+                            "type": "carry"
                         }
                     ]
                 },
                 {
                     "name": "CO",
                     "direction": "output",
-                    "type": "none",
+                    "type": "carry",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "CO",
                             "direction": "output",
-                            "type": "none",
+                            "type": "carry",
                             "function": "((B & CI) | ((B & A) | (CI & A)))"
                         }
                     ]
@@ -2209,14 +2220,14 @@
                 {
                     "name": "S",
                     "direction": "output",
-                    "type": "none",
+                    "type": "sum",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "S",
                             "direction": "output",
-                            "type": "none",
+                            "type": "sum",
                             "function": "(! (((! ((B & CI) | (! (B | CI)))) & A) | (! ((! ((B & CI) | (! (B | CI)))) | A))))"
                         }
                     ]
@@ -2442,7 +2453,8 @@
         {
             "name": "HA_X1",
             "types": [
-                "combinational"
+                "combinational",
+                "c_half_adder"
             ],
             "pin_groups": [
                 {
@@ -2504,14 +2516,14 @@
                 {
                     "name": "CO",
                     "direction": "output",
-                    "type": "none",
+                    "type": "carry",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "CO",
                             "direction": "output",
-                            "type": "none",
+                            "type": "carry",
                             "function": "(A & B)"
                         }
                     ]
@@ -2519,14 +2531,14 @@
                 {
                     "name": "S",
                     "direction": "output",
-                    "type": "none",
+                    "type": "sum",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "S",
                             "direction": "output",
-                            "type": "none",
+                            "type": "sum",
                             "function": "(! ((A & B) | (! (A | B))))"
                         }
                     ]
@@ -2536,7 +2548,8 @@
         {
             "name": "INV_X1",
             "types": [
-                "combinational"
+                "combinational",
+                "c_inverter"
             ],
             "pin_groups": [
                 {
@@ -2601,7 +2614,8 @@
         {
             "name": "INV_X2",
             "types": [
-                "combinational"
+                "combinational",
+                "c_inverter"
             ],
             "pin_groups": [
                 {
@@ -2666,7 +2680,8 @@
         {
             "name": "INV_X4",
             "types": [
-                "combinational"
+                "combinational",
+                "c_inverter"
             ],
             "pin_groups": [
                 {
@@ -2731,7 +2746,8 @@
         {
             "name": "INV_X8",
             "types": [
-                "combinational"
+                "combinational",
+                "c_inverter"
             ],
             "pin_groups": [
                 {
@@ -2796,7 +2812,8 @@
         {
             "name": "INV_X12",
             "types": [
-                "combinational"
+                "combinational",
+                "c_inverter"
             ],
             "pin_groups": [
                 {
@@ -2861,7 +2878,8 @@
         {
             "name": "INV_X16",
             "types": [
-                "combinational"
+                "combinational",
+                "c_inverter"
             ],
             "pin_groups": [
                 {
@@ -3013,7 +3031,7 @@
             "name": "MUX2_X1",
             "types": [
                 "combinational",
-                "mux"
+                "c_mux"
             ],
             "pin_groups": [
                 {
@@ -3047,28 +3065,28 @@
                 {
                     "name": "I0",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "I0",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
                 {
                     "name": "I1",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "I1",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
@@ -3106,7 +3124,8 @@
         {
             "name": "NAND2_X1",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nand"
             ],
             "pin_groups": [
                 {
@@ -3185,7 +3204,8 @@
         {
             "name": "NAND2_X2",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nand"
             ],
             "pin_groups": [
                 {
@@ -3264,7 +3284,8 @@
         {
             "name": "NAND3_X1",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nand"
             ],
             "pin_groups": [
                 {
@@ -3357,7 +3378,8 @@
         {
             "name": "NAND3_X2",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nand"
             ],
             "pin_groups": [
                 {
@@ -3450,7 +3472,8 @@
         {
             "name": "NAND4_X1",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nand"
             ],
             "pin_groups": [
                 {
@@ -3557,7 +3580,8 @@
         {
             "name": "NAND4_X2",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nand"
             ],
             "pin_groups": [
                 {
@@ -3664,7 +3688,8 @@
         {
             "name": "NOR2_X1",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nor"
             ],
             "pin_groups": [
                 {
@@ -3743,7 +3768,8 @@
         {
             "name": "NOR2_X2",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nor"
             ],
             "pin_groups": [
                 {
@@ -3822,7 +3848,8 @@
         {
             "name": "NOR3_X1",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nor"
             ],
             "pin_groups": [
                 {
@@ -3915,7 +3942,8 @@
         {
             "name": "NOR3_X2",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nor"
             ],
             "pin_groups": [
                 {
@@ -4008,7 +4036,8 @@
         {
             "name": "NOR4_X1",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nor"
             ],
             "pin_groups": [
                 {
@@ -4115,7 +4144,8 @@
         {
             "name": "NOR4_X2",
             "types": [
-                "combinational"
+                "combinational",
+                "c_nor"
             ],
             "pin_groups": [
                 {
@@ -4222,7 +4252,8 @@
         {
             "name": "OAI21_X1",
             "types": [
-                "combinational"
+                "combinational",
+                "c_oai"
             ],
             "pin_groups": [
                 {
@@ -4315,7 +4346,8 @@
         {
             "name": "OAI21_X2",
             "types": [
-                "combinational"
+                "combinational",
+                "c_oai"
             ],
             "pin_groups": [
                 {
@@ -4408,7 +4440,8 @@
         {
             "name": "OAI22_X1",
             "types": [
-                "combinational"
+                "combinational",
+                "c_oai"
             ],
             "pin_groups": [
                 {
@@ -4515,7 +4548,8 @@
         {
             "name": "OAI22_X2",
             "types": [
-                "combinational"
+                "combinational",
+                "c_oai"
             ],
             "pin_groups": [
                 {
@@ -4622,7 +4656,8 @@
         {
             "name": "OR2_X1",
             "types": [
-                "combinational"
+                "combinational",
+                "c_or"
             ],
             "pin_groups": [
                 {
@@ -4701,7 +4736,8 @@
         {
             "name": "OR2_X2",
             "types": [
-                "combinational"
+                "combinational",
+                "c_or"
             ],
             "pin_groups": [
                 {
@@ -4780,7 +4816,8 @@
         {
             "name": "OR3_X1",
             "types": [
-                "combinational"
+                "combinational",
+                "c_or"
             ],
             "pin_groups": [
                 {
@@ -4873,7 +4910,8 @@
         {
             "name": "OR3_X2",
             "types": [
-                "combinational"
+                "combinational",
+                "c_or"
             ],
             "pin_groups": [
                 {
@@ -4966,7 +5004,8 @@
         {
             "name": "OR4_X1",
             "types": [
-                "combinational"
+                "combinational",
+                "c_or"
             ],
             "pin_groups": [
                 {
@@ -5073,7 +5112,8 @@
         {
             "name": "OR4_X2",
             "types": [
-                "combinational"
+                "combinational",
+                "c_or"
             ],
             "pin_groups": [
                 {
@@ -5181,7 +5221,8 @@
             "name": "SDFFRNQ_X1",
             "types": [
                 "sequential",
-                "ff"
+                "ff",
+                "scan"
             ],
             "ff_config": {
                 "state": "IQ",
@@ -5250,28 +5291,28 @@
                 {
                     "name": "SE",
                     "direction": "input",
-                    "type": "none",
+                    "type": "enable",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "SE",
                             "direction": "input",
-                            "type": "none"
+                            "type": "enable"
                         }
                     ]
                 },
                 {
                     "name": "SI",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "SI",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
@@ -5310,7 +5351,8 @@
             "name": "SDFFSNQ_X1",
             "types": [
                 "sequential",
-                "ff"
+                "ff",
+                "scan"
             ],
             "ff_config": {
                 "state": "IQ",
@@ -5365,28 +5407,28 @@
                 {
                     "name": "SE",
                     "direction": "input",
-                    "type": "none",
+                    "type": "enable",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "SE",
                             "direction": "input",
-                            "type": "none"
+                            "type": "enable"
                         }
                     ]
                 },
                 {
                     "name": "SI",
                     "direction": "input",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "SI",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
@@ -5438,7 +5480,9 @@
         {
             "name": "TBUF_X1",
             "types": [
-                "combinational"
+                "combinational",
+                "tristate",
+                "c_buffer"
             ],
             "pin_groups": [
                 {
@@ -5518,7 +5562,9 @@
         {
             "name": "TBUF_X2",
             "types": [
-                "combinational"
+                "combinational",
+                "tristate",
+                "c_buffer"
             ],
             "pin_groups": [
                 {
@@ -5598,7 +5644,9 @@
         {
             "name": "TBUF_X4",
             "types": [
-                "combinational"
+                "combinational",
+                "tristate",
+                "c_buffer"
             ],
             "pin_groups": [
                 {
@@ -5678,7 +5726,9 @@
         {
             "name": "TBUF_X8",
             "types": [
-                "combinational"
+                "combinational",
+                "tristate",
+                "c_buffer"
             ],
             "pin_groups": [
                 {
@@ -5758,7 +5808,9 @@
         {
             "name": "TBUF_X12",
             "types": [
-                "combinational"
+                "combinational",
+                "tristate",
+                "c_buffer"
             ],
             "pin_groups": [
                 {
@@ -5838,7 +5890,9 @@
         {
             "name": "TBUF_X16",
             "types": [
-                "combinational"
+                "combinational",
+                "tristate",
+                "c_buffer"
             ],
             "pin_groups": [
                 {
@@ -6022,7 +6076,8 @@
         {
             "name": "XNOR2_X1",
             "types": [
-                "combinational"
+                "combinational",
+                "c_xnor"
             ],
             "pin_groups": [
                 {
@@ -6101,7 +6156,8 @@
         {
             "name": "XOR2_X1",
             "types": [
-                "combinational"
+                "combinational",
+                "c_xor"
             ],
             "pin_groups": [
                 {

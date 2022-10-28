@@ -592,26 +592,8 @@ namespace hal
             return;
         }
 
-        QString title = "Create New Netlist";
-        QString text  = "Please select a gate library";
-
-        QStringList items;
-        auto libraries = gate_library_manager::get_gate_libraries();
-        for (const auto& lib : libraries)
-        {
-            items.append(QString::fromStdString(lib->get_name()));
-        }
-        bool ok          = false;
-        QString selected = QInputDialog::getItem(this, title, text, items, 0, false, &ok);
-
-        if (ok)
-        {
-            auto selected_lib = libraries[items.indexOf(selected)];
-            gNetlistOwner     = netlist_factory::create_netlist(selected_lib);
-            gNetlist          = gNetlistOwner.get();
-            gNetlistRelay->registerNetlistCallbacks();
-            Q_EMIT FileManager::get_instance()->fileOpened("new netlist");
-        }
+        ActionOpenNetlistFile* act = new ActionOpenNetlistFile(ActionOpenNetlistFile::CreateNew);
+        act->exec();
     }
 
     void MainWindow::handleActionOpenProject()
@@ -631,7 +613,7 @@ namespace hal
         ProjectDirDialog pdd("Open netlist", this);
         if (pdd.exec() != QDialog::Accepted) return;
         if (pdd.selectedFiles().isEmpty()) return;
-        ActionOpenNetlistFile* act = new ActionOpenNetlistFile(pdd.selectedFiles().at(0),true);
+        ActionOpenNetlistFile* act = new ActionOpenNetlistFile(ActionOpenNetlistFile::OpenProject, pdd.selectedFiles().at(0));
         act->exec();
     }
 
@@ -664,7 +646,7 @@ namespace hal
         {
             gGuiState->setValue("FileDialog/Path/MainWindow", fileName);
 
-            ActionOpenNetlistFile* actOpenfile = new ActionOpenNetlistFile(fileName,false);
+            ActionOpenNetlistFile* actOpenfile = new ActionOpenNetlistFile(ActionOpenNetlistFile::ImportFile, fileName);
             actOpenfile->exec();
         }
     }
@@ -878,6 +860,8 @@ namespace hal
             if (msgBox.clickedButton() == cancelButton)
                 return false;
         }
+
+        gPythonContext->abortThreadAndWait();
 
         gGraphContextManager->clear();
 
