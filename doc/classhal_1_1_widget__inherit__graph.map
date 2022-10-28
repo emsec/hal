@@ -12,6 +12,6 @@
 <area shape="rect" id="node10" href="$classhal_1_1_logger_widget.html" title="Displays the logs in the gui." alt="" coords="984,1753,1231,2007"/>
 <area shape="rect" id="node11" href="$classhal_1_1_module_widget.html" title="Shows the modules of the netlist hierarchical in a tree view." alt="" coords="1254,1658,1489,2102"/>
 <area shape="rect" id="node12" href="$classhal_1_1_python_console_widget.html" title="Wraps the PythonConsole." alt="" coords="1513,1827,1707,1933"/>
-<area shape="rect" id="node13" href="$classhal_1_1_python_editor.html" title="Main widget that combines all neccessary functionality to develop in python (for hal)." alt="" coords="1731,1629,1961,2131"/>
-<area shape="rect" id="node14" href="$classhal_1_1_selection_details_widget.html" title="Container for all specific details widgets." alt="" coords="1985,1665,2237,2095"/>
+<area shape="rect" id="node13" href="$classhal_1_1_python_editor.html" title="Main widget that combines all neccessary functionality to develop in python (for hal)." alt="" coords="1731,1724,1883,2036"/>
+<area shape="rect" id="node14" href="$classhal_1_1_selection_details_widget.html" title="Container for all specific details widgets." alt="" coords="1908,1665,2160,2095"/>
 </map>

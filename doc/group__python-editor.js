@@ -91,12 +91,13 @@ var group__python_editor =
     ] ],
     [ "PythonCodeEditor", "classhal_1_1_python_code_editor.html", [
       [ "PythonCodeEditor", "classhal_1_1_python_code_editor.html#a7e14fead5da4e9bb6544c50fc6c3e2e0", null ],
-      [ "getFileName", "classhal_1_1_python_code_editor.html#ad065107203a1e6dd43ca9b0233fa2b27", null ],
+      [ "getAbsFilename", "classhal_1_1_python_code_editor.html#a39a4b5589d3f585f87e874f735def3d8", null ],
+      [ "getRelFilename", "classhal_1_1_python_code_editor.html#afd95d63343cc5c9713a54f5643520cc1", null ],
       [ "getUuid", "classhal_1_1_python_code_editor.html#a9b96ad8d9bb656172ff8e29f542f709c", null ],
       [ "isBaseFileModified", "classhal_1_1_python_code_editor.html#a2183a58e5e69ac139698e3ea19d53e1d", null ],
       [ "keyPressed", "classhal_1_1_python_code_editor.html#a3b21e6e99e41856ca019887ee3df9441", null ],
-      [ "set_file_name", "classhal_1_1_python_code_editor.html#aca6b041cfbce27170480c914271f894d", null ],
-      [ "setBaseFileModified", "classhal_1_1_python_code_editor.html#a6fa4ba98fbadd829753ed4a2acde68b0", null ]
+      [ "setBaseFileModified", "classhal_1_1_python_code_editor.html#a6fa4ba98fbadd829753ed4a2acde68b0", null ],
+      [ "setFilename", "classhal_1_1_python_code_editor.html#a38dd1a817fdbb2251cf7a0908940d624", null ]
     ] ],
     [ "PythonEditor", "classhal_1_1_python_editor.html", [
       [ "QueryFilenamePolicy", "classhal_1_1_python_editor.html#a9b4f48fba9f7d8fa68ec8669f46ebb6d", [
@@ -141,7 +142,6 @@ var group__python_editor =
       [ "handleFileOpened", "classhal_1_1_python_editor.html#a605fd0e93d0ca27ddf514fb5ecf5a512", null ],
       [ "handleKeyPressed", "classhal_1_1_python_editor.html#ab3e5da25d08a76c510fa7231a447977d", null ],
       [ "handleSearchbarTextEdited", "classhal_1_1_python_editor.html#ac54bc4b9ad2f9584a47fc382640bb0a2", null ],
-      [ "handleSerializationToHalFile", "classhal_1_1_python_editor.html#a8fc889ef43d953c9f72a278ae82d3009", null ],
       [ "handleStdout", "classhal_1_1_python_editor.html#acb925d091faf57afe87195ce7b9d0f3d", null ],
       [ "handleTabCloseRequested", "classhal_1_1_python_editor.html#a1c65d3537978de675aa0d819280023bd", null ],
       [ "handleTabFileChanged", "classhal_1_1_python_editor.html#a1deab1d739877aab49967f3e8fd29fa9", null ],

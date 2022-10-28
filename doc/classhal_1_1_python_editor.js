@@ -42,7 +42,6 @@ var classhal_1_1_python_editor =
     [ "handleFileOpened", "classhal_1_1_python_editor.html#a605fd0e93d0ca27ddf514fb5ecf5a512", null ],
     [ "handleKeyPressed", "classhal_1_1_python_editor.html#ab3e5da25d08a76c510fa7231a447977d", null ],
     [ "handleSearchbarTextEdited", "classhal_1_1_python_editor.html#ac54bc4b9ad2f9584a47fc382640bb0a2", null ],
-    [ "handleSerializationToHalFile", "classhal_1_1_python_editor.html#a8fc889ef43d953c9f72a278ae82d3009", null ],
     [ "handleStdout", "classhal_1_1_python_editor.html#acb925d091faf57afe87195ce7b9d0f3d", null ],
     [ "handleTabCloseRequested", "classhal_1_1_python_editor.html#a1c65d3537978de675aa0d819280023bd", null ],
     [ "handleTabFileChanged", "classhal_1_1_python_editor.html#a1deab1d739877aab49967f3e8fd29fa9", null ],

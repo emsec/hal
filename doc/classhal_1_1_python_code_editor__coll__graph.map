@@ -1,5 +1,5 @@
 <map id="hal::PythonCodeEditor" name="hal::PythonCodeEditor">
-<area shape="rect" id="node1" title="Code editor to write python code." alt="" coords="57,1092,236,1243"/>
+<area shape="rect" id="node1" title="Code editor to write python code." alt="" coords="57,1092,236,1257"/>
 <area shape="rect" id="node2" href="$classhal_1_1_code_editor.html" title="A plain text edit widget that is intended for editing code." alt="" coords="5,395,288,1044"/>
 <area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qplaintextedit.html" title=" " alt="" coords="65,5,228,347"/>
 </map>

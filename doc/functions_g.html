@@ -959,6 +959,9 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 , <a class="el" href="classhal_1_1_verilog_writer_plugin.html#af90f92ec67fa79ed4810f89985a4840a">hal::VerilogWriterPlugin</a>
 , <a class="el" href="classhal_1_1_v_h_d_l_parser_plugin.html#a57cfb438770ef0926ed6c98fea771c72">hal::VHDLParserPlugin</a>
 </li>
+<li>getAbsFilename()
+: <a class="el" href="classhal_1_1_python_code_editor.html#a39a4b5589d3f585f87e874f735def3d8">hal::PythonCodeEditor</a>
+</li>
 <li>getAdditionalData()
 : <a class="el" href="classhal_1_1_tree_item.html#ae11e71000c9c4df105d1987466bcce0a">hal::TreeItem</a>
 </li>
@@ -1058,9 +1061,6 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <li>getFilename()
 : <a class="el" href="classhal_1_1_plugin_parameter_file_dialog.html#aa227a0bf05efe3d5cf0045b0cf5352d8">hal::PluginParameterFileDialog</a>
 </li>
-<li>getFileName()
-: <a class="el" href="classhal_1_1_python_code_editor.html#ad065107203a1e6dd43ca9b0233fa2b27">hal::PythonCodeEditor</a>
-</li>
 <li>getFindFlags()
 : <a class="el" href="classhal_1_1_python_editor.html#a1b285dd29a7cc8a5def70105ee2f7ce5">hal::PythonEditor</a>
 </li>
@@ -1114,7 +1114,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_get_in_touch_widget.html#a25e6cbcd27c08366d3170718fde88158">hal::GetInTouchWidget</a>
 </li>
 <li>getItem()
-: <a class="el" href="classhal_1_1_module_model.html#a788da4c0a93921306f941a9a541a2c57">hal::ModuleModel</a>
+: <a class="el" href="classhal_1_1_module_model.html#a9aefc1c8a6482d3641b15507df11f1e0">hal::ModuleModel</a>
 </li>
 <li>getItemFromIndex()
 : <a class="el" href="classhal_1_1_base_tree_model.html#a64847c202485e2983e7129a3e641dc76">hal::BaseTreeModel</a>
@@ -1231,6 +1231,9 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 </li>
 <li>getPythonEditorWidget()
 : <a class="el" href="classhal_1_1_content_manager.html#a45ddb1fee415ac5ed73bc62fb112c259">hal::ContentManager</a>
+</li>
+<li>getRelFilename()
+: <a class="el" href="classhal_1_1_python_code_editor.html#afd95d63343cc5c9713a54f5643520cc1">hal::PythonCodeEditor</a>
 </li>
 <li>getRepresentedIdOfItem()
 : <a class="el" href="classhal_1_1_netlist_elements_tree_model.html#a0948a6ab993fcfaad40e0f1b1c61bbdd">hal::NetlistElementsTreeModel</a>
@@ -1395,11 +1398,11 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <li>gridBaseLineColor()
 : <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a0d2a008588e0a6f3ddacb0a3963577bc">hal::GraphicsQssAdapter</a>
 </li>
-<li>gridClusterDotColor
-: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a31b8d28575ff766a99f59a7ff88f0efe">hal::GraphicsQssAdapter</a>
+<li>gridClusterDotColor()
+: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#af9aef20d9706f52511bb341144bb4800">hal::GraphicsQssAdapter</a>
 </li>
-<li>gridClusterLineColor
-: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a93a3f1267b9ea82cf117bf5f9b493b54">hal::GraphicsQssAdapter</a>
+<li>gridClusterLineColor()
+: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a1b197be4d6786e9572af238b493941ff">hal::GraphicsQssAdapter</a>
 </li>
 <li>gridPoint()
 : <a class="el" href="classhal_1_1_net_layout_point.html#a2ab7b2f0f56f9b57b30cb763ff6437d0">hal::NetLayoutPoint</a>
@@ -1433,7 +1436,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_grouping_dialog.html#a31b2b5118bf361433c6b0566258d2d39">hal::GroupingDialog</a>
 </li>
 <li>Grouping()
-: <a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a3368041577b46e6bdc8309d59e9709d3">hal::dataflow::Grouping</a>
+: <a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a9a7e5b1cd6762b9699e58fa660e4d68e">hal::dataflow::Grouping</a>
 </li>
 <li>grouping()
 : <a class="el" href="classhal_1_1_grouping_table_entry.html#a1eddd594c0671c4b62a71119cd547402">hal::GroupingTableEntry</a>
@@ -1522,7 +1525,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_groupings_of_item_widget.html#a11b92486b219ac0edf4a9bfb30daa9ea">hal::GroupingsOfItemWidget</a>
 </li>
 <li>GroupingTableEntry()
-: <a class="el" href="classhal_1_1_grouping_table_entry.html#a37d49df1d50dc47ef28cc039bd29a18a">hal::GroupingTableEntry</a>
+: <a class="el" href="classhal_1_1_grouping_table_entry.html#ae620437a3a81bef2b83bba661054135e">hal::GroupingTableEntry</a>
 </li>
 <li>GroupingTableModel()
 : <a class="el" href="classhal_1_1_grouping_table_model.html#a361bc539eceb5a6712460cf0522b7897">hal::GroupingTableModel</a>
@@ -1548,7 +1551,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Oct 27 2022 15:36:18 for HAL by
+    <li class="footer">Generated on Fri Oct 28 2022 11:16:23 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
