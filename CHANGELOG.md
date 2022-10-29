@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 * netlist parsers
   * added (limited) support for 'defparam' statements to Verilog parser
+  * added support for pin assignments by order instead of name to Verilog parser
 * bugfixes
   * fixed VHDL parser ignoring pin order of modules
 
