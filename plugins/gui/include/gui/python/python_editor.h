@@ -525,18 +525,6 @@ namespace hal
          * @param style - the new style
          */
         void setSearchActiveIconStyle(const QString& style);
-        ///@}
-
-        /**
-         * Serialize the necessary information to the .hal file. <br>
-         * The file paths of the currently opened tabs were stores, as well as the index of the selected tab is saved.
-         *
-         * @param path - Unused
-         * @param netlist - The netlist to serialize (unused)
-         * @param document - The json document of the .hal file
-         * @returns true on success
-         */
-        bool handleSerializationToHalFile(const std::filesystem::path& path, const Netlist* netlist, rapidjson::Document& document);
 
         /**
          * Deserialize the necessary information from the .hal file that is loaded.

@@ -90,7 +90,7 @@ namespace hal
             JsonWriteObject& tabObj = tabArr.add_object();
             tabObj["tab"]  = tabInx;
 
-            QString tabPath = pce->getFileName();
+            QString tabPath = pce->getRelFilename();
             if (tabPath.isEmpty())
                 tabPath = pyDir.absoluteFilePath(pedit->unnamedFilename(tabInx));
             else if (isAutosave)
@@ -276,43 +276,6 @@ namespace hal
         using namespace std::placeholders;
     }
 
-    bool PythonEditor::handleSerializationToHalFile(const std::filesystem::path& path, const Netlist* netlist, rapidjson::Document& document)
-    {
-        UNUSED(path);
-        UNUSED(netlist);
-
-        updateSnapshots();
-
-        rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
-        rapidjson::Value tabs(rapidjson::kArrayType);
-
-        for (int i = 0; i < mTabWidget->count(); i++)
-        {
-            rapidjson::Value val(rapidjson::kObjectType);
-
-            auto tab = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(i));
-
-            if (!tab->getFileName().isEmpty())
-            {
-                // Handle an already stored file
-                val.AddMember("path", tab->getFileName().toStdString(), allocator);
-                tabs.PushBack(val, allocator);
-            }
-        }
-
-        if (!tabs.Empty())
-        {
-            rapidjson::Value root(rapidjson::kObjectType);
-            root.AddMember("tabs", tabs, allocator);
-            if (mTabWidget->currentIndex() != -1)
-            {
-                root.AddMember("selected_tab", rapidjson::Value(mTabWidget->currentIndex()), allocator);
-            }
-            document.AddMember("PythonEditor", root, allocator);
-        }
-        return true;
-    }
-
     bool PythonEditor::handleDeserializationFromHalFile(const std::filesystem::path& path, Netlist* netlist, rapidjson::Document& document)
     {
         UNUSED(path);
@@ -356,7 +319,7 @@ namespace hal
     void PythonEditor::handleTabCloseRequested(int index)
     {
         PythonCodeEditor* editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(index));
-        QString file_name        = editor->getFileName();
+        QString relFilename        = editor->getRelFilename();
         if (editor->document()->isModified())
         {
             QMessageBox::StandardButton ret = askSaveTab(index);
@@ -372,7 +335,7 @@ namespace hal
 
             if (ret == QMessageBox::Save)
             {
-                if (file_name.isEmpty())
+                if (relFilename.isEmpty())
                 {
                     bool suc = saveFile(false, QueryAlways, index);
                     if (!suc)
@@ -548,7 +511,7 @@ namespace hal
             for (int i = 0; i < mTabWidget->count(); ++i)
             {
                 auto editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(i));
-                if (editor->getFileName() == fileName)
+                if (editor->getAbsFilename() == fileName)
                 {
                     mTabWidget->setCurrentIndex(i);
 
@@ -590,7 +553,7 @@ namespace hal
         if (!info.fileName().startsWith(".unnamed_tab"))
         {
             tab->document()->setModified(false);
-            tab->set_file_name(fileName);
+            tab->setFilename(fileName);
             mTabWidget->setTabText(mTabWidget->indexOf(tab), info.completeBaseName() + "." + info.completeSuffix());
             mNewFileCounter--;
 
@@ -634,7 +597,7 @@ namespace hal
             return false;
 
         // currentFilename : unnamed -> empty      autosave -> into autosave
-        QString currentFilename = currentEditor->getFileName();
+        QString currentFilename = currentEditor->getAbsFilename();
         if (isAutosave && !currentFilename.isEmpty())
         {
             currentFilename = QDir(mGenericPath).absoluteFilePath(autosaveFilename(index));
@@ -651,7 +614,7 @@ namespace hal
             if (!selected_file_name.endsWith(".py"))
                 selected_file_name.append(".py");
 
-            currentEditor->set_file_name(selected_file_name);
+            currentEditor->setFilename(selected_file_name);
             mDefaultPath = QFileInfo(selected_file_name).path();
 
             // Remove an existing snapshot and update its location
@@ -733,8 +696,8 @@ namespace hal
     QString PythonEditor::autosaveFilename(int index)
     {
         PythonCodeEditor* pce = getPythonEditor(index);
-        if (!pce || pce->getFileName().isEmpty()) return unnamedFilename(index);
-        return QString(".autosave_tab%1_%2").arg(index).arg(QFileInfo(pce->getFileName()).fileName());
+        if (!pce || pce->getRelFilename().isEmpty()) return unnamedFilename(index);
+        return QString(".autosave_tab%1_%2").arg(index).arg(QFileInfo(pce->getRelFilename()).fileName());
     }
 
     void PythonEditor::saveAllTabs(const QString& genericPath, bool isAutosave)
@@ -759,11 +722,11 @@ namespace hal
     void PythonEditor::discardTab(int index)
     {
         PythonCodeEditor* editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(index));
-        QString s                = editor->getFileName();
-        if (!s.isEmpty())
+        QString absFilename      = editor->getAbsFilename();
+        if (!absFilename.isEmpty())
         {
-            mFileWatcher->removePath(s);
-            mPathEditorMap.remove(s);
+            mFileWatcher->removePath(absFilename);
+            mPathEditorMap.remove(absFilename);
         }
         if (editor->document()->isModified())
         {
@@ -914,9 +877,9 @@ namespace hal
         context_menu.addSeparator();
         action                   = context_menu.addAction("Show in system explorer");
         PythonCodeEditor* editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(mTabRightclicked));
-        QString s                = editor->getFileName();
-        action->setData(s);
-        action->setDisabled(s.isEmpty());
+        QString absFilename      = editor->getAbsFilename();
+        action->setData(absFilename);
+        action->setDisabled(absFilename.isEmpty());
         connect(action, &QAction::triggered, this, &PythonEditor::handleActionShowFile);
 
         context_menu.exec(QCursor::pos());
@@ -1029,7 +992,7 @@ namespace hal
         PythonCodeEditor* currentEditor = dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget());
         mNewFileCounter++;
         //tabLoadFile(currentEditor, currentEditor->getFileName());
-        tabLoadFile(mTabWidget->indexOf(currentEditor), currentEditor->getFileName());
+        tabLoadFile(mTabWidget->indexOf(currentEditor), currentEditor->getAbsFilename());
         currentEditor->setBaseFileModified(false);
         mFileModifiedBar->setHidden(true);
     }
@@ -1086,7 +1049,7 @@ namespace hal
         for (int idx = 0; idx < tabs; idx++)
         {
             PythonCodeEditor* editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(idx));
-            QFileInfo original_path(editor->getFileName());
+            QFileInfo original_path(editor->getAbsFilename());
 
             // Decide whether the snapshot file or the original should be loaded
             bool load_snapshot = decideLoadSnapshot(saved_snapshots, original_path);
@@ -1269,7 +1232,7 @@ namespace hal
         {
             PythonCodeEditor* editor   = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(index));
             QString snapshot_file_name = "~";
-            if (editor->getFileName().isEmpty())
+            if (editor->getRelFilename().isEmpty())
             {
                 // The Tab is unstored
                 snapshot_file_name += "unsaved_tab";
@@ -1277,7 +1240,7 @@ namespace hal
             else
             {
                 // An original file exists
-                QFileInfo original_file_name(editor->getFileName());
+                QFileInfo original_file_name(editor->getRelFilename());
                 snapshot_file_name += original_file_name.fileName();
             }
             //if the filename ends with .py because it is loaded from (or saved to) a file, insert the tabindex before the file extension, otherwise append the index and extension
@@ -1291,7 +1254,7 @@ namespace hal
             if (editor->document()->isModified())
             {
                 // The snapshot is only created if there are modifications
-                this->writeSnapshotFile(snapshot_file_path, editor->getFileName(), editor->toPlainText());
+                this->writeSnapshotFile(snapshot_file_path, editor->getAbsFilename(), editor->toPlainText());
             }
         }
     }
