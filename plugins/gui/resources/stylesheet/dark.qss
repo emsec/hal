@@ -896,6 +896,18 @@ hal--ImportNetlistDialog QWidget:disabled
     background: #2a2a2a;
 }
 
+hal--NewProjectDialog
+{
+    qproperty-saveIconStyle: "all->#3192C5";
+    qproperty-saveIconPath: ":/icons/folder-down";
+}
+
+hal--NewProjectDialog QWidget:disabled
+{
+    color: #777777;
+    background: #2a2a2a;
+}
+
 hal--GetInTouchWidget
 {
     background    : rgb(14, 16, 18);

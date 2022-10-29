@@ -7,9 +7,13 @@
 #include <spdlog/sinks/null_sink.h>
 #include <spdlog/sinks/stdout_sinks.h>
 
+#include <iostream>
+
 namespace hal
 {
     std::map<std::string, std::shared_ptr<LogManager::log_sink>> LogManager::m_file_sinks;
+
+    LogManager* LogManager::m_instance = nullptr;
 
     LogManager::LogManager(const std::filesystem::path& file_name)
     {
@@ -47,15 +51,16 @@ namespace hal
 
     LogManager::~LogManager()
     {
+        std::cerr << "~LogManager" << std::endl;
         for (const auto& it : m_logger)
             it.second->flush();
         spdlog::drop_all();
     }
 
-    LogManager& LogManager::get_instance(const std::filesystem::path& file_name)
+    LogManager *LogManager::get_instance(const std::filesystem::path& file_name)
     {
-        static LogManager l(file_name);
-        return l;
+        if (!m_instance) m_instance = new LogManager(file_name);
+        return m_instance;
     }
 
     void LogManager::set_format_pattern(const std::string& format)
@@ -68,7 +73,8 @@ namespace hal
         auto it = m_logger.find(channel);
         if (it == m_logger.end())
         {
-            log_warning("stdout", "log channel '{}' was not registered so far, creating default channel.", channel);
+            if (channel != "stdout") // avoid infinite recursion
+                log_warning("stdout", "log channel '{}' was not registered so far, creating default channel.", channel);
             return add_channel(channel, {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
         }
 
@@ -217,7 +223,7 @@ namespace hal
     {
         std::filesystem::path path = file_name;
         if (file_name.empty())
-            path = get_instance().m_file_path;
+            path = get_instance()->m_file_path;
 
         auto it = m_file_sinks.find(path.string());
         if (it != m_file_sinks.end())
@@ -394,7 +400,7 @@ namespace hal
     {
         spdlog::memory_buf_t formatted;
         formatter_->format(msg, formatted);
-        LogManager::get_instance().get_gui_callback()(msg.level, std::string(msg.logger_name.data()), std::string(formatted.data(), formatted.size()));
+        LogManager::get_instance()->get_gui_callback()(msg.level, std::string(msg.logger_name.data()), std::string(formatted.data(), formatted.size()));
     }
 
     void log_gui_sink::flush_()

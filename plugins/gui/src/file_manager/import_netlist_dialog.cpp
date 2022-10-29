@@ -20,10 +20,6 @@
 #include <QRegularExpression>
 #include <QSpacerItem>
 
-QLineEdit* mEditProjectdir;
-QComboBox* mComboGatelib;
-QCheckBox* mCheckMoveNetlist;
-
 namespace hal
 {
     ImportNetlistDialog::ImportNetlistDialog(const QString& filename, QWidget* parent) : QDialog(parent)

@@ -68,40 +68,29 @@ int main(int argc, const char* argv[])
     initialize_cli_options(cli_options);
     ProgramOptions all_options("all options");
     all_options.add(cli_options);
-    all_options.add(LogManager::get_instance().get_option_descriptions());
+    all_options.add(LogManager::get_instance()->get_option_descriptions());
     ProgramArguments args = all_options.parse(argc, argv);
 
     /* initialize logging */
-    LogManager& lm = LogManager::get_instance();
+    LogManager* lm = LogManager::get_instance();
 
-    lm.add_channel("core", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("gate_library_parser", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("gate_library_writer", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("gate_library_manager", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("gate_library", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("netlist", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("netlist_utils", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("netlist_internal", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("netlist_persistent", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("gate", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("net", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("module", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("grouping", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+    const char* info_channels[] = { "core", "stdout", "gate_library_parser", "gate_library_writer", "gate_library_manager", "gate_library",
+                                    "netlist", "netlist_utils", "netlist_internal", "netlist_persistent",
+                                    "gate", "net", "module", "grouping", "netlist_parser", "netlist_writer",
+                                    "python_context", "event", nullptr};
 
-    lm.add_channel("netlist_parser", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("netlist_writer", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("python_context", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-    lm.add_channel("event", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+    for (int i=0; info_channels[i]; i++)
+        lm->add_channel(info_channels[i], {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
 
     if (args.is_option_set("--logfile"))
     {
-        lm.set_file_name(std::filesystem::path(args.get_parameter("--logfile")));
+        lm->set_file_name(std::filesystem::path(args.get_parameter("--logfile")));
     }
-    lm.handle_options(args);
+    lm->handle_options(args);
 
     if (args.is_option_set("--log-time"))
     {
-        lm.set_format_pattern("[%d.%m.%Y %H:%M:%S] [%n] [%l] %v");
+        lm->set_format_pattern("[%d.%m.%Y %H:%M:%S] [%n] [%l] %v");
     }
 
     /* initialize plugin manager */
@@ -110,7 +99,7 @@ int main(int argc, const char* argv[])
     // suppress output
     if (args.is_option_set("--help") || args.is_option_set("--licenses") || args.is_option_set("--version") || argc == 1)
     {
-        lm.deactivate_all_channels();
+        lm->deactivate_all_channels();
     }
 
     if (!plugin_manager::load_all_plugins())
@@ -204,7 +193,7 @@ int main(int argc, const char* argv[])
             }
 
             /* add timestamp to log output */
-            LogManager::get_instance().set_format_pattern("[%d.%m.%Y %H:%M:%S] [%n] [%l] %v");
+            LogManager::get_instance()->set_format_pattern("[%d.%m.%Y %H:%M:%S] [%n] [%l] %v");
 
             auto ret = plugin->exec(args);
 
@@ -218,7 +207,7 @@ int main(int argc, const char* argv[])
 
     if (args.is_option_set("--show-log-options"))
     {
-        std::cout << lm.get_option_descriptions().get_options_string() << std::endl;
+        std::cout << lm->get_option_descriptions().get_options_string() << std::endl;
         return cleanup();
     }
 
@@ -294,7 +283,7 @@ int main(int argc, const char* argv[])
     else if (!args.is_option_set("--logfile"))
     {
         std::filesystem::path log_path = pm->get_project_directory().get_default_filename(".log");
-        lm.set_file_name(log_path);
+        lm->set_file_name(log_path);
     }
 
     std::unique_ptr<Netlist> netlist;

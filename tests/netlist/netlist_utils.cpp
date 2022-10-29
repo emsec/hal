@@ -682,7 +682,7 @@ namespace hal
 
             {
                 auto res = netlist_utils::get_gate_chain(g0, {carry->get_pin_by_name("CI")}, {carry->get_pin_by_name("CO")}, [](const Gate* g) {
-                    return g->get_type()->has_property(GateTypeProperty::carry);
+                    return g->get_type()->has_property(GateTypeProperty::c_carry);
                 });
                 ASSERT_TRUE(res.is_error());
             }

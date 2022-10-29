@@ -791,7 +791,7 @@ namespace hal
         if (m->get_gates().empty() && m->get_submodules().empty())
         {
             QMessageBox msg;
-            msg.setText("This module is empty.\nYou can't enter it.");
+            msg.setText("This module does not contain any gates, it cannot be unfolded.");
             msg.setWindowTitle("Error");
             msg.exec();
             return;

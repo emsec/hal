@@ -16,5 +16,7 @@ namespace hal
                                                                  {PinType::data, "data"},
                                                                  {PinType::address, "address"},
                                                                  {PinType::io_pad, "io_pad"},
-                                                                 {PinType::select, "select"}};
+                                                                 {PinType::select, "select"},
+                                                                 {PinType::carry, "carry"},
+                                                                 {PinType::sum, "sum"}};
 }

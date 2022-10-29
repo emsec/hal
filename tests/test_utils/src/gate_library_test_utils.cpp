@@ -40,7 +40,7 @@ namespace hal
                 }
             }
             {
-                GateType* buf = lib->create_gate_type("BUF", {GateTypeProperty::combinational, GateTypeProperty::buffer});
+                GateType* buf = lib->create_gate_type("BUF", {GateTypeProperty::combinational, GateTypeProperty::c_buffer});
                 if (auto res = buf->create_pin("I", PinDirection::input); res.is_error())
                 {
                     return nullptr;
@@ -52,7 +52,7 @@ namespace hal
                 buf->add_boolean_function("O", BooleanFunction::from_string("I").get());
             }
             {
-                GateType* inv = lib->create_gate_type("INV", {GateTypeProperty::combinational});
+                GateType* inv = lib->create_gate_type("INV", {GateTypeProperty::combinational, GateTypeProperty::c_inverter});
                 if (auto res = inv->create_pin("I", PinDirection::input); res.is_error())
                 {
                     return nullptr;
@@ -64,7 +64,7 @@ namespace hal
                 inv->add_boolean_function("O", BooleanFunction::from_string("!I").get());
             }
             {
-                GateType* and2 = lib->create_gate_type("AND2", {GateTypeProperty::combinational});
+                GateType* and2 = lib->create_gate_type("AND2", {GateTypeProperty::combinational, GateTypeProperty::c_and});
                 if (auto res = and2->create_pin("I0", PinDirection::input); res.is_error())
                 {
                     return nullptr;
@@ -80,7 +80,7 @@ namespace hal
                 and2->add_boolean_function("O", BooleanFunction::from_string("I0 & I1").get());
             }
             {
-                GateType* and3 = lib->create_gate_type("AND3", {GateTypeProperty::combinational});
+                GateType* and3 = lib->create_gate_type("AND3", {GateTypeProperty::combinational, GateTypeProperty::c_and});
                 if (auto res = and3->create_pin("I0", PinDirection::input); res.is_error())
                 {
                     return nullptr;
@@ -100,7 +100,7 @@ namespace hal
                 and3->add_boolean_function("O", BooleanFunction::from_string("I0 & I1 & I2").get());
             }
             {
-                GateType* and4 = lib->create_gate_type("AND4", {GateTypeProperty::combinational});
+                GateType* and4 = lib->create_gate_type("AND4", {GateTypeProperty::combinational, GateTypeProperty::c_and});
                 if (auto res = and4->create_pin("I0", PinDirection::input); res.is_error())
                 {
                     return nullptr;
@@ -124,7 +124,7 @@ namespace hal
                 and4->add_boolean_function("O", BooleanFunction::from_string("I0 & I1 & I2 & I3").get());
             }
             {
-                GateType* or2 = lib->create_gate_type("OR2", {GateTypeProperty::combinational});
+                GateType* or2 = lib->create_gate_type("OR2", {GateTypeProperty::combinational, GateTypeProperty::c_or});
                 if (auto res = or2->create_pin("I0", PinDirection::input); res.is_error())
                 {
                     return nullptr;
@@ -140,7 +140,7 @@ namespace hal
                 or2->add_boolean_function("O", BooleanFunction::from_string("I0 | I1").get());
             }
             {
-                GateType* or3 = lib->create_gate_type("OR3", {GateTypeProperty::combinational});
+                GateType* or3 = lib->create_gate_type("OR3", {GateTypeProperty::combinational, GateTypeProperty::c_or});
                 if (auto res = or3->create_pin("I0", PinDirection::input); res.is_error())
                 {
                     return nullptr;
@@ -160,7 +160,7 @@ namespace hal
                 or3->add_boolean_function("O", BooleanFunction::from_string("I0 | I1 | I2").get());
             }
             {
-                GateType* or4 = lib->create_gate_type("OR4", {GateTypeProperty::combinational});
+                GateType* or4 = lib->create_gate_type("OR4", {GateTypeProperty::combinational, GateTypeProperty::c_or});
                 if (auto res = or4->create_pin("I0", PinDirection::input); res.is_error())
                 {
                     return nullptr;
@@ -184,7 +184,7 @@ namespace hal
                 or4->add_boolean_function("O", BooleanFunction::from_string("I0 | I1 | I2 | I3").get());
             }
             {
-                GateType* xor2 = lib->create_gate_type("XOR2", {GateTypeProperty::combinational});
+                GateType* xor2 = lib->create_gate_type("XOR2", {GateTypeProperty::combinational, GateTypeProperty::c_xor});
                 if (auto res = xor2->create_pin("I0", PinDirection::input); res.is_error())
                 {
                     return nullptr;
@@ -200,7 +200,7 @@ namespace hal
                 xor2->add_boolean_function("O", BooleanFunction::from_string("I0 ^ I1").get());
             }
             {
-                GateType* xor3 = lib->create_gate_type("XOR3", {GateTypeProperty::combinational});
+                GateType* xor3 = lib->create_gate_type("XOR3", {GateTypeProperty::combinational, GateTypeProperty::c_xor});
                 if (auto res = xor3->create_pin("I0", PinDirection::input); res.is_error())
                 {
                     return nullptr;
@@ -220,7 +220,7 @@ namespace hal
                 xor3->add_boolean_function("O", BooleanFunction::from_string("I0 ^ I1 ^ I2").get());
             }
             {
-                GateType* xor4 = lib->create_gate_type("XOR4", {GateTypeProperty::combinational});
+                GateType* xor4 = lib->create_gate_type("XOR4", {GateTypeProperty::combinational, GateTypeProperty::c_xor});
                 if (auto res = xor4->create_pin("I0", PinDirection::input); res.is_error())
                 {
                     return nullptr;
@@ -245,7 +245,7 @@ namespace hal
             }
             {
                 GateType* lut2 = lib->create_gate_type(
-                    "LUT2", {GateTypeProperty::combinational, GateTypeProperty::lut}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", {"INIT"}), true));
+                    "LUT2", {GateTypeProperty::combinational, GateTypeProperty::c_lut}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", {"INIT"}), true));
                 if (auto res = lut2->create_pin("I0", PinDirection::input); res.is_error())
                 {
                     return nullptr;
@@ -261,7 +261,7 @@ namespace hal
             }
             {
                 GateType* lut3 = lib->create_gate_type(
-                    "LUT3", {GateTypeProperty::combinational, GateTypeProperty::lut}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", {"INIT"}), true));
+                    "LUT3", {GateTypeProperty::combinational, GateTypeProperty::c_lut}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", {"INIT"}), true));
                 if (auto res = lut3->create_pin("I0", PinDirection::input); res.is_error())
                 {
                     return nullptr;
@@ -281,7 +281,7 @@ namespace hal
             }
             {
                 GateType* lut4 = lib->create_gate_type(
-                    "LUT4", {GateTypeProperty::combinational, GateTypeProperty::lut}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", {"INIT"}), true));
+                    "LUT4", {GateTypeProperty::combinational, GateTypeProperty::c_lut}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", {"INIT"}), true));
                 if (auto res = lut4->create_pin("I0", PinDirection::input); res.is_error())
                 {
                     return nullptr;
@@ -305,7 +305,7 @@ namespace hal
             }
             {
                 GateType* lut5 = lib->create_gate_type(
-                    "LUT5", {GateTypeProperty::combinational, GateTypeProperty::lut}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", {"INIT"}), true));
+                    "LUT5", {GateTypeProperty::combinational, GateTypeProperty::c_lut}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", {"INIT"}), true));
                 if (auto res = lut5->create_pin("I0", PinDirection::input); res.is_error())
                 {
                     return nullptr;
@@ -333,7 +333,7 @@ namespace hal
             }
             {
                 GateType* lut6 = lib->create_gate_type(
-                    "LUT6", {GateTypeProperty::combinational, GateTypeProperty::lut}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", {"INIT"}), true));
+                    "LUT6", {GateTypeProperty::combinational, GateTypeProperty::c_lut}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", {"INIT"}), true));
                 if (auto res = lut6->create_pin("I0", PinDirection::input); res.is_error())
                 {
                     return nullptr;
@@ -364,7 +364,7 @@ namespace hal
                 }
             }
             {
-                GateType* mux = lib->create_gate_type("MUX", {GateTypeProperty::combinational, GateTypeProperty::mux});
+                GateType* mux = lib->create_gate_type("MUX", {GateTypeProperty::combinational, GateTypeProperty::c_mux});
                 if (auto res = mux->create_pin("I0", PinDirection::input); res.is_error())
                 {
                     return nullptr;
@@ -384,7 +384,7 @@ namespace hal
                 mux->add_boolean_function("O", BooleanFunction::from_string("(!S & I0) | (S & I1)").get());
             }
             {
-                GateType* carry = lib->create_gate_type("CARRY", {GateTypeProperty::combinational, GateTypeProperty::carry});
+                GateType* carry = lib->create_gate_type("CARRY", {GateTypeProperty::combinational, GateTypeProperty::c_carry});
                 if (auto res = carry->create_pin("CI", PinDirection::input); res.is_error())
                 {
                     return nullptr;
@@ -988,7 +988,7 @@ namespace hal
                 dff_rse->add_boolean_function("QN", BooleanFunction::from_string("IQN").get());
             }
             {    // just an empty dummy for now, does not come with relevant components
-                GateType* ram = lib->create_gate_type("RAM", {GateTypeProperty::sequential});
+                GateType* ram = lib->create_gate_type("RAM", {GateTypeProperty::sequential, GateTypeProperty::ram});
                 if (auto res = ram->create_pin("CLK", PinDirection::input, PinType::clock); res.is_error())
                 {
                     return nullptr;

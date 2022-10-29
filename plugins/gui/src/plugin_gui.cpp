@@ -99,9 +99,8 @@ namespace hal
             }
             else
             {
-                LogManager& lm              = LogManager::get_instance();
                 std::filesystem::path lpath = pm->get_project_directory().get_default_filename(".log");
-                lm.set_file_name(lpath);
+                LogManager::get_instance()->set_file_name(lpath);
                 if (!FileManager::get_instance()->deprecatedOpenFile(QString::fromStdString(fileName.string()),gateLibraryPath))
                     log_error("gui", "Failed to open netlist '{}'.", fileName.string());
             }
@@ -250,11 +249,9 @@ namespace hal
 
     void PluginGui::initialize_logging()
     {
-        LogManager& l = LogManager::get_instance();
-        l.add_channel("user", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-        l.add_channel("gui", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-        l.add_channel("python", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
-        l.add_channel("UserStudy", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+        const char* gui_info_channel[] = {"user", "gui", "python", "UserStudy", nullptr };
+        for (int i=0; gui_info_channel[i]; i++)
+            LogManager::get_instance()->add_channel(gui_info_channel[i], {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     }
 
     ProgramOptions PluginGui::get_cli_options() const

@@ -85,9 +85,16 @@ namespace hal {
 
     bool ProjectManager::create_project_directory(const std::string& path)
     {
+        std::error_code errCode;
         m_proj_dir = ProjectDirectory(path);
         if (std::filesystem::exists(m_proj_dir)) return false;
-        if (!std::filesystem::create_directory(m_proj_dir)) return false;
+        bool success = std::filesystem::create_directory(m_proj_dir, errCode);
+        if (errCode)
+        {
+            log_warning("project_manager", "cannot create directory '{}': '{}'", m_proj_dir.string(), errCode.message());
+            return false;
+        }
+        if (!success) return false;
         m_netlist_file = m_proj_dir.get_default_filename(".hal");
 
         std::filesystem::create_directory(m_proj_dir.get_filename("py"));

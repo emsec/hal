@@ -36,7 +36,7 @@ namespace hal
                 gate->delete_data("generic", "READ_MODE");
                 gate->delete_data("generic", "WRITE_MODE");
 
-                if (!gate->get_type()->has_property(hal::GateTypeProperty::lut) && gate->get_type()->has_property(hal::GateTypeProperty::combinational))
+                if (!gate->get_type()->has_property(hal::GateTypeProperty::c_lut) && gate->get_type()->has_property(hal::GateTypeProperty::combinational))
                 {
                     gate->delete_data("generic", "INIT");
                 }
