@@ -71,6 +71,11 @@ namespace hal
         return mCreated;
     }
 
+    QDateTime CommentEntry::getLastModifiedTime() const
+    {
+        return mLastModified;
+    }
+
     QJsonObject CommentEntry::toJson() const
     {
         QJsonObject retval;

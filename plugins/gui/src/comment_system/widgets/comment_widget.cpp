@@ -2,6 +2,7 @@
 #include "gui/gui_globals.h"
 #include "gui/comment_system/comment_entry.h"
 #include "gui/comment_system/widgets/comment_item.h"
+#include "gui/comment_system/widgets/comment_dialog.h"
 #include <QDebug>
 #include <QVBoxLayout>
 #include <QScrollArea>
@@ -92,6 +93,7 @@ namespace hal
         // connections / logic
         connect(mSearchButton, &QAbstractButton::clicked, this, &CommentWidget::handleSearchbarTriggered);
         connect(mSearchbar, &Searchbar::searchIconClicked, this, &CommentWidget::handleSearchbarTriggered);
+        connect(mNewCommentButton, &QAbstractButton::clicked, this, &CommentWidget::handleNewCommentTriggered);
         connect(gCommentManager, &CommentManager::entryAboutToBeDeleted, this, &CommentWidget::handleCommentAboutToBeDeleted);
     }
 
@@ -160,6 +162,8 @@ namespace hal
     void CommentWidget::handleNewCommentTriggered()
     {
         qDebug() << "A new comment wants to be created!";
+        CommentDialog commentDialog("New Comment");
+        commentDialog.exec();
     }
 
     void CommentWidget::handleCommentEntryDeleteRequest(CommentItem *item)

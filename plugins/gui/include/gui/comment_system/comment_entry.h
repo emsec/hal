@@ -54,6 +54,7 @@ namespace hal
         QString getText() const;
         Node getNode() const;
         QDateTime getCreationTime() const;
+        QDateTime getLastModifiedTime() const;
         QJsonObject toJson() const;
         bool isInvalid() const;
         void dump() const;

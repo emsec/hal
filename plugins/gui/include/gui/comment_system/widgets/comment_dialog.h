@@ -24,13 +24,59 @@
 #pragma once
 
 #include <QDialog>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
+class QLineEdit;
+class QTextEdit;
+class QLabel;
 
 namespace hal
 {
+    class CommentEntry;
     class CommentDialog : public QDialog
     {
-        CommentDialog(QWidget* parent = nullptr);
+    public:
+        // Perhaps remove the title-parameter and determine "New comment" and "Modify comment"
+        // through the item parameter (or perhaps 2 constructors?)
+        /**
+         * Constructor. If the CommentEntry is a nullptr, this dialog is treated as a
+         * "New Comment" dialog (no real differences to a "Modify" dialog).
+         *
+         * @param windowTitle - The title of the Dialog.
+         * @param entry - The entry. If the entry is a nullptr, this dialog is a "New comment" dialog.
+         * @param parent - The parent of the widget. Usually a nullptr.
+         */
+        CommentDialog(const QString windowTitle, CommentEntry* entry = nullptr, QWidget* parent = nullptr);
         ~CommentDialog();
+
+        // Getter for the header and textfield if the dialog returns accapted?
+        // (Or direct interaction with the manager?)
+
+    private:
+        QVBoxLayout* mLayout;
+        CommentEntry* mCommentEntry;
+
+        // header part
+        QWidget* mHeaderContainer; // for custom margins/spacing on top as well as colored background
+        QHBoxLayout* mHeaderContainerLayout;
+        QLineEdit* mHeaderEdit;
+        QLabel* mLastModifiedLabel;
+
+        // toolbar (Or container widget for Toolbuttons?)
+
+        // textfield
+        QTextEdit* mTextEdit;
+
+        // buttons (perhaps 2 Pushbuttons instead of a buttonbox to put them on different sides)
+        QPushButton* mOkButton;
+        QPushButton* mCancelButton;
+
+
+        void init();
+
+        void handleOkClicked();
+        void handleCancelClicked();
+
     };
 }
