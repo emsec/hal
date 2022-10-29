@@ -541,15 +541,17 @@ namespace hal
             // expand port identifiers
             for (const auto& port : verilog_module->m_ports)
             {
-                if (port->m_expression != port->m_identifier)
+                if (port->m_expression == port->m_identifier)
                 {
                     if (!port->m_ranges.empty())
                     {
                         port->m_expanded_identifiers = expand_ranges(port->m_identifier, port->m_ranges);
+                        verilog_module->m_expanded_port_expressions.insert(port->m_expanded_identifiers.begin(), port->m_expanded_identifiers.end());
                     }
                     else
                     {
                         port->m_expanded_identifiers = {port->m_identifier};
+                        verilog_module->m_expanded_port_expressions.insert(port->m_identifier);
                     }
                 }
                 else
@@ -557,10 +559,13 @@ namespace hal
                     if (!port->m_ranges.empty())
                     {
                         port->m_expanded_identifiers = expand_ranges(port->m_identifier, port->m_ranges);
+                        auto expanded_expression     = expand_ranges(port->m_expression, port->m_ranges);
+                        verilog_module->m_expanded_port_expressions.insert(expanded_expression.begin(), expanded_expression.end());
                     }
                     else
                     {
                         port->m_expanded_identifiers = {port->m_identifier};
+                        verilog_module->m_expanded_port_expressions.insert(port->m_expression);
                     }
                 }
             }
@@ -622,53 +627,72 @@ namespace hal
                 if (auto module_it = m_modules_by_name.find(instance->m_type); module_it != m_modules_by_name.end())
                 {
                     instance->m_is_module = true;
-                    for (const auto& port_assignment : instance->m_port_assignments)
+                    if (!instance->m_port_assignments.empty())
                     {
-                        if (!port_assignment.m_port_name.has_value())
+                        // all port assignments by name
+                        if (instance->m_port_assignments.front().m_port_name.has_value())
                         {
-                            return ERR("could not parse Verilog file '" + m_path.string() + "': parsing of unnamed ports is not yet supported");
-                        }
+                            for (const auto& port_assignment : instance->m_port_assignments)
+                            {
+                                const std::vector<std::string> right_port = expand_assignment_expression(verilog_module, port_assignment.m_assignment);
+                                if (!right_port.empty())
+                                {
+                                    VerilogPort* port;
+                                    if (const auto port_it = module_it->second->m_ports_by_identifier.find(port_assignment.m_port_name.value());
+                                        port_it == module_it->second->m_ports_by_identifier.end())
+                                    {
+                                        return ERR("could not parse Verilog file '" + m_path.string() + "': unable to assign signal to port '" + port_assignment.m_port_name.value()
+                                                   + "' as it is not a port of module '" + module_it->first + "'");
+                                    }
+                                    else
+                                    {
+                                        port = port_it->second;
+                                    }
+                                    const std::vector<std::string>& left_port = port->m_expanded_identifiers;
+                                    if (left_port.empty())
+                                    {
+                                        return ERR("could not parse Verilog file '" + m_path.string() + "': unable to expand port assignment");
+                                    }
 
-                        VerilogPort* port;
-                        if (const auto port_it = module_it->second->m_ports_by_identifier.find(port_assignment.m_port_name.value()); port_it == module_it->second->m_ports_by_identifier.end())
-                        {
-                            return ERR("could not parse Verilog file '" + m_path.string() + "': unable to assign signal to port '" + port_assignment.m_port_name.value()
-                                       + "' as it is not a port of module '" + module_it->first + "'");
+                                    u32 max_size = right_port.size() <= left_port.size() ? right_port.size() : left_port.size();
+
+                                    for (u32 i = 0; i < max_size; i++)
+                                    {
+                                        instance->m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));
+                                    }
+                                }
+                            }
                         }
+                        // all port assignments by order
                         else
                         {
-                            port = port_it->second;
-                        }
-
-                        const std::vector<std::string>& left_port = port->m_expanded_identifiers;
-                        const std::vector<std::string> right_port = expand_assignment_expression(verilog_module, port_assignment.m_assignment);
-                        if (left_port.empty())
-                        {
-                            return ERR("could not parse Verilog file '" + m_path.string() + "': unable to expand port assignment");
-                        }
-
-                        if (!right_port.empty())
-                        {
-                            u32 max_size;
-                            if (right_port.size() <= left_port.size())
+                            std::vector<std::string> ports;
+                            for (const auto& port : m_modules_by_name.at(instance->m_type)->m_ports)
                             {
-                                max_size = right_port.size();
-                            }
-                            else
-                            {
-                                max_size = left_port.size();
+                                ports.insert(ports.end(), port->m_expanded_identifiers.begin(), port->m_expanded_identifiers.end());
                             }
 
-                            for (u32 i = 0; i < max_size; i++)
+                            auto port_it = ports.begin();
+
+                            for (const auto& port_assignment : instance->m_port_assignments)
                             {
-                                instance->m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));
-                            }
-                        }
-                        else
-                        {
-                            for (const auto& expanded_port_name : left_port)
-                            {
-                                instance->m_expanded_port_assignments.push_back(std::make_pair(expanded_port_name, ""));
+                                std::vector<std::string> right_port = expand_assignment_expression(verilog_module, port_assignment.m_assignment);
+                                if (!right_port.empty())
+                                {
+                                    std::vector<std::string> left_port;
+
+                                    for (u32 i = 0; i < right_port.size() && port_it != ports.end(); i++)
+                                    {
+                                        left_port.push_back(*port_it++);
+                                    }
+
+                                    u32 max_size = right_port.size() <= left_port.size() ? right_port.size() : left_port.size();
+
+                                    for (u32 i = 0; i < max_size; i++)
+                                    {
+                                        instance->m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));
+                                    }
+                                }
                             }
                         }
                     }
@@ -1596,7 +1620,6 @@ namespace hal
                                 std::vector<std::string> right_port = expand_assignment_expression(verilog_module, port_assignment.m_assignment);
                                 if (!right_port.empty())
                                 {
-                                    u32 max_size;
                                     std::vector<std::string> left_port;
 
                                     const auto& port_name = port_assignment.m_port_name.value();
@@ -1609,7 +1632,7 @@ namespace hal
                                         left_port.push_back(port_name);
                                     }
 
-                                    max_size = right_port.size() <= left_port.size() ? right_port.size() : left_port.size();
+                                    u32 max_size = right_port.size() <= left_port.size() ? right_port.size() : left_port.size();
 
                                     for (u32 i = 0; i < max_size; i++)
                                     {
@@ -1629,7 +1652,6 @@ namespace hal
                                 std::vector<std::string> right_port = expand_assignment_expression(verilog_module, port_assignment.m_assignment);
                                 if (!right_port.empty())
                                 {
-                                    u32 max_size;
                                     std::vector<std::string> left_port;
 
                                     for (u32 i = 0; i < right_port.size() && pin_it != pins.end(); i++)
@@ -1637,7 +1659,7 @@ namespace hal
                                         left_port.push_back(*pin_it++);
                                     }
 
-                                    max_size = right_port.size() <= left_port.size() ? right_port.size() : left_port.size();
+                                    u32 max_size = right_port.size() <= left_port.size() ? right_port.size() : left_port.size();
 
                                     for (u32 i = 0; i < max_size; i++)
                                     {
@@ -1786,10 +1808,14 @@ namespace hal
                     }
 
                     // update module ports
-                    if (const auto it = m_module_ports.find(slave_net); it != m_module_ports.end())
+                    if (const auto it = m_module_port_by_net.find(slave_net); it != m_module_port_by_net.end())
                     {
-                        m_module_ports[master_net].insert(m_module_ports[master_net].end(), it->second.begin(), it->second.end());
-                        m_module_ports.erase(it);
+                        for (auto [module, index] : it->second)
+                        {
+                            std::get<1>(m_module_ports.at(module).at(index)) = master_net;
+                        }
+                        m_module_port_by_net[master_net].insert(m_module_port_by_net[master_net].end(), it->second.begin(), it->second.end());
+                        m_module_port_by_net.erase(it);
                     }
 
                     m_netlist->delete_net(slave_net);
@@ -1814,24 +1840,23 @@ namespace hal
         }
 
         // assign module pins
-        for (const auto& [net, port_infos] : m_module_ports)
+        for (const auto& [module, ports] : m_module_ports)
         {
-            for (const auto& port_info : port_infos)
+            for (const auto& [port_name, port_net] : ports)
             {
-                if (net->get_num_of_sources() == 0 && net->get_num_of_destinations() == 0)
+                if (port_net->get_num_of_sources() == 0 && port_net->get_num_of_destinations() == 0)
                 {
                     continue;
                 }
 
-                Module* mod = std::get<2>(port_info);
-                if (auto res = mod->create_pin(std::get<1>(port_info), net); res.is_error())
+                if (auto res = module->create_pin(port_name, port_net); res.is_error())
                 {
-                    // return ERR_APPEND(res.get_error(),
-                    //                 "could not construct netlist: failed to create pin '" + std::get<1>(port_info) + "' at net '" + net->get_name() + "' with ID " + std::to_string(net->get_id())
-                    //                     + " within module '" + mod->get_name() + "' with ID " + std::to_string(mod->get_id()));
-                    // NOTE: The pin creation fails when there are unused ports that never get a net assigned to them (verliog...),
+                    return ERR_APPEND(res.get_error(),
+                                      "could not construct netlist: failed to create pin '" + port_name + "' at net '" + port_net->get_name() + "' with ID " + std::to_string(port_net->get_id())
+                                          + " within module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()));
+                    // TODO: The pin creation fails when there are unused ports that never get a net assigned to them (verliog...),
                     //       but this also happens when the net just passes through the module (since there is no gate inside the module with that net as either input or output net, the net does not get listed as module input or output)
-                    log_warning("verilog_parser", "{}", res.get_error().get());
+                    // log_warning("verilog_parser", "{}", res.get_error().get());
                 }
             }
         }
@@ -1920,7 +1945,8 @@ namespace hal
                 if (const auto it = parent_module_assignments.find(expanded_port_identifier); it != parent_module_assignments.end())
                 {
                     Net* port_net = m_net_by_name.at(it->second);
-                    m_module_ports[port_net].push_back(std::make_tuple(port->m_direction, expanded_port_identifier, module));
+                    m_module_ports[module].push_back(std::make_pair(expanded_port_identifier, port_net));
+                    m_module_port_by_net[port_net].push_back(std::make_pair(module, m_module_ports[module].size() - 1));
 
                     // assign port attributes
                     for (const VerilogDataEntry& attribute : port->m_attributes)
@@ -2042,7 +2068,15 @@ namespace hal
                         {
                             instance_assignments[port] = assignment;
                         }
-                        else if (assignment != "'Z'" && assignment != "'X'" && assignment != "")
+                        else if (assignment == "'Z'" || assignment == "'X'" || assignment.empty())
+                        {
+                            continue;
+                        }
+                        else if (verilog_module->m_expanded_port_expressions.find(assignment) != verilog_module->m_expanded_port_expressions.end())
+                        {
+                            continue;
+                        }
+                        else
                         {
                             return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': port assignment '" + port + " = " + assignment + "' is invalid");
                         }
@@ -2116,6 +2150,10 @@ namespace hal
                         signal = assignment;
                     }
                     else if (assignment == "'Z'" || assignment == "'X'")
+                    {
+                        continue;
+                    }
+                    else if (verilog_module->m_expanded_port_expressions.find(assignment) != verilog_module->m_expanded_port_expressions.end())
                     {
                         continue;
                     }
