@@ -1126,7 +1126,7 @@ namespace hal
             :param list[str] ordered_variables: A list describing the order of input variables used to generate the truth table. Defaults to an empty list.
             :param bool remove_unknown_variables: Set True to remove variables from the truth table that are not present within the Boolean function, False otherwise. Defaults to False.
             :returns: A list of values representing the truth table output on success, None otherwise.
-            :rtype: list[hal_py.BooleanFunction.Value] or None
+            :rtype: list[list[hal_py.BooleanFunction.Value]] or None
         )");
 
         py::class_<BooleanFunction::Node> py_boolean_function_node(py_boolean_function, "Node", R"(
