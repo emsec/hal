@@ -837,7 +837,7 @@ namespace hal
             Get the variable name of the top-level node of the Boolean function of type Variable.
 
             :returns: The variable name on success, None otherwise.
-            :rtype: int or None
+            :rtype: str or None
         )");
 
         py_boolean_function.def("is_constant", &BooleanFunction::is_constant, R"(
