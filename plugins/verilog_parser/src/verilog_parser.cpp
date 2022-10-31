@@ -16,430 +16,7 @@ namespace hal
 {
     namespace
     {
-        std::vector<u32> parse_range(TokenStream<std::string>& stream)
-        {
-            if (stream.remaining() == 1)
-            {
-                return {(u32)std::stoi(stream.consume().string)};
-            }
 
-            // MSB to LSB
-            const int end = std::stoi(stream.consume().string);
-            stream.consume(":", true);
-            const int start = std::stoi(stream.consume().string);
-
-            const int direction = (start <= end) ? 1 : -1;
-
-            std::vector<u32> result;
-            for (int i = start; i != end + direction; i += direction)
-            {
-                result.push_back((u32)i);
-            }
-            return result;
-        }
-
-        void expand_ranges_recursively(std::vector<std::string>& expanded_names, const std::string& current_name, const std::vector<std::vector<u32>>& ranges, u32 dimension)
-        {
-            // expand signal recursively
-            if (ranges.size() > dimension)
-            {
-                for (const u32 index : ranges[dimension])
-                {
-                    expand_ranges_recursively(expanded_names, current_name + "(" + std::to_string(index) + ")", ranges, dimension + 1);
-                }
-            }
-            else
-            {
-                // last dimension
-                expanded_names.push_back(current_name);
-            }
-        }
-
-        std::vector<std::string> expand_ranges(const std::string& name, const std::vector<std::vector<u32>>& ranges)
-        {
-            std::vector<std::string> res;
-
-            expand_ranges_recursively(res, name, ranges, 0);
-
-            return res;
-        }
-
-        static const std::map<char, BooleanFunction::Value> bin_map = {{'0', BooleanFunction::Value::ZERO},
-                                                                       {'1', BooleanFunction::Value::ONE},
-                                                                       {'X', BooleanFunction::Value::X},
-                                                                       {'Z', BooleanFunction::Value::Z}};
-
-        static const std::map<char, std::vector<BooleanFunction::Value>> oct_map = {{'0', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
-                                                                                    {'1', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
-                                                                                    {'2', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
-                                                                                    {'3', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
-                                                                                    {'4', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
-                                                                                    {'5', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
-                                                                                    {'6', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
-                                                                                    {'7', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
-                                                                                    {'X', {BooleanFunction::Value::X, BooleanFunction::Value::X, BooleanFunction::Value::X}},
-                                                                                    {'Z', {BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z}}};
-
-        static const std::map<char, std::vector<BooleanFunction::Value>> hex_map = {
-            {'0', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
-            {'1', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
-            {'2', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
-            {'3', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
-            {'4', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
-            {'5', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
-            {'6', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
-            {'7', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
-            {'8', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
-            {'9', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
-            {'A', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
-            {'B', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
-            {'C', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
-            {'D', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
-            {'E', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
-            {'F', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
-            {'X', {BooleanFunction::Value::X, BooleanFunction::Value::X, BooleanFunction::Value::X, BooleanFunction::Value::X}},
-            {'Z', {BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z}}};
-
-        Result<std::vector<BooleanFunction::Value>> get_binary_vector(std::string value)
-        {
-            value = utils::to_upper(utils::replace(value, std::string("_"), std::string("")));
-
-            i32 len = -1;
-            std::string prefix;
-            std::string number;
-            std::vector<BooleanFunction::Value> result;
-
-            // base specified?
-            if (value.find('\'') == std::string::npos)
-            {
-                prefix = "D";
-                number = value;
-            }
-            else
-            {
-                if (value.at(0) != '\'')
-                {
-                    len = std::stoi(value.substr(0, value.find('\'')));
-                }
-                prefix = value.substr(value.find('\'') + 1, 1);
-                number = value.substr(value.find('\'') + 2);
-            }
-
-            // select base
-            switch (prefix.at(0))
-            {
-                case 'B': {
-                    for (auto it = number.rbegin(); it != number.rend(); it++)
-                    {
-                        const char c = *it;
-                        if (c == '0' || c == '1' || c == 'Z' || c == 'X')
-                        {
-                            result.push_back(bin_map.at(c));
-                        }
-                        else
-                        {
-                            return ERR("could not convert string to binary vector: invalid character within binary number literal '" + value + "'");
-                        }
-                    }
-                    break;
-                }
-
-                case 'O':
-                    for (auto it = number.rbegin(); it != number.rend(); it++)
-                    {
-                        const char c = *it;
-                        if ((c >= '0' && c <= '7') || c == 'X' || c == 'Z')
-                        {
-                            const auto& bits = oct_map.at(c);
-                            result.insert(result.end(), bits.begin(), bits.end());
-                        }
-                        else
-                        {
-                            return ERR("could not convert string to binary vector: invalid character within octal number literal '" + value + "'");
-                        }
-                    }
-                    break;
-
-                case 'D': {
-                    u64 tmp_val = 0;
-
-                    for (const char c : number)
-                    {
-                        if ((c >= '0' && c <= '9') || c == 'X' || c == 'Z')
-                        {
-                            tmp_val = (tmp_val * 10) + (c - '0');
-                        }
-                        else
-                        {
-                            return ERR("could not convert string to binary vector: invalid character within decimal number literal '" + value + "'");
-                        }
-                    }
-
-                    do
-                    {
-                        result.push_back(((tmp_val & 1) == 1) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO);
-                        tmp_val >>= 1;
-                    } while (tmp_val != 0);
-                    break;
-                }
-
-                case 'H': {
-                    for (auto it = number.rbegin(); it != number.rend(); it++)
-                    {
-                        const char c = *it;
-                        if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || c == 'X' || c == 'Z')
-                        {
-                            const auto& bits = hex_map.at(c);
-                            result.insert(result.end(), bits.begin(), bits.end());
-                        }
-                        else
-                        {
-                            return ERR("could not convert string to binary vector: invalid character within hexadecimal number literal '" + value + "'");
-                        }
-                    }
-                    break;
-                }
-
-                default: {
-                    return ERR("could not convert string to binary vector: invalid base '" + prefix + "' within number literal '" + value + "'");
-                }
-            }
-
-            if (len != -1)
-            {
-                i32 result_size = result.size();
-
-                if (len > result_size)
-                {
-                    // fill with '0'
-                    for (i32 i = 0; i < (len - result_size); i++)
-                    {
-                        result.push_back(BooleanFunction::Value::ZERO);
-                    }
-                }
-                else
-                {
-                    // drop trailing bits
-                    for (i32 i = 0; i < (result_size - len); i++)
-                    {
-                        result.pop_back();
-                    }
-                }
-            }
-
-            return OK(result);
-        }
-
-        Result<std::string> get_hex_from_literal(const Token<std::string>& value_token)
-        {
-            const u32 line_number   = value_token.number;
-            const std::string value = utils::to_upper(utils::replace(value_token.string, std::string("_"), std::string("")));
-
-            i32 len = -1;
-            std::string prefix;
-            std::string number;
-            u32 base;
-
-            // base specified?
-            if (value.find('\'') == std::string::npos)
-            {
-                prefix = "D";
-                number = value;
-            }
-            else
-            {
-                if (value.at(0) != '\'')
-                {
-                    len = std::stoi(value.substr(0, value.find('\'')));
-                }
-                prefix = value.substr(value.find('\'') + 1, 1);
-                number = value.substr(value.find('\'') + 2);
-            }
-
-            // select base
-            switch (prefix.at(0))
-            {
-                case 'B': {
-                    if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '1'); }))
-                    {
-                        return ERR("could not convert token to hexadecimal string: invalid character within binary number literal '" + value + "' (line " + std::to_string(line_number) + ")");
-                    }
-
-                    base = 2;
-                    break;
-                }
-
-                case 'O': {
-                    if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '7'); }))
-                    {
-                        return ERR("could not convert token to hexadecimal string: invalid character within ocatl number literal '" + value + "' (line " + std::to_string(line_number) + ")");
-                    }
-
-                    base = 8;
-                    break;
-                }
-
-                case 'D': {
-                    if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '9'); }))
-                    {
-                        return ERR("could not convert token to hexadecimal string: invalid character within decimal number literal '" + value + "' (line " + std::to_string(line_number) + ")");
-                    }
-
-                    base = 10;
-                    break;
-                }
-
-                case 'H': {
-                    std::string res;
-
-                    for (const char c : number)
-                    {
-                        if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F'))
-                        {
-                            res += c;
-                        }
-                        else
-                        {
-                            return ERR("could not convert token to hexadecimal string: invalid character within hexadecimal number literal '" + value + "' (line " + std::to_string(line_number) + ")");
-                        }
-                    }
-
-                    return OK(res);
-                }
-
-                default: {
-                    return ERR("could not convert token to hexadecimal string: invalid base '" + prefix + "' within number literal '" + value + "' (line " + std::to_string(line_number) + ")");
-                }
-            }
-
-            std::stringstream ss;
-            if (len != -1)
-            {
-                // fill with '0'
-                ss << std::uppercase << std::setfill('0') << std::setw((len + 3) / 4) << std::hex << stoull(number, 0, base);
-            }
-            else
-            {
-                ss << std::uppercase << std::hex << stoull(number, 0, base);
-            }
-            return OK(ss.str());
-        }
-
-        Result<std::vector<assignment_t>> parse_assignment_expression(TokenStream<std::string>&& stream)
-        {
-            std::vector<TokenStream<std::string>> parts;
-
-            if (stream.size() == 0)
-            {
-                return OK({});
-            }
-
-            if (stream.peek() == "{")
-            {
-                stream.consume("{", true);
-
-                TokenStream<std::string> assignment_list_str = stream.extract_until("}");
-                stream.consume("}", true);
-
-                do
-                {
-                    parts.push_back(assignment_list_str.extract_until(","));
-                } while (assignment_list_str.consume(",", false));
-            }
-            else
-            {
-                parts.push_back(stream);
-            }
-
-            std::vector<assignment_t> result;
-            result.reserve(parts.size());
-
-            for (auto it = parts.rbegin(); it != parts.rend(); it++)
-            {
-                TokenStream<std::string>& part_stream = *it;
-
-                const Token<std::string> signal_name_token = part_stream.consume();
-                std::string signal_name                    = signal_name_token.string;
-
-                // (3) NUMBER
-                if (isdigit(signal_name[0]) || signal_name[0] == '\'')
-                {
-                    if (auto res = get_binary_vector(signal_name_token); res.is_error())
-                    {
-                        return ERR_APPEND(res.get_error(), "could not parse assignment expression: unable to convert token to binary vector");
-                    }
-                    else
-                    {
-                        result.push_back(std::move(res.get()));
-                    }
-                }
-                else
-                {
-                    // any bounds specified?
-                    if (part_stream.consume("["))
-                    {
-                        // (4) NAME[INDEX1][INDEX2]...
-                        // (5) NAME[BEGIN_INDEX1:END_INDEX1][BEGIN_INDEX2:END_INDEX2]...
-
-                        std::vector<std::vector<u32>> ranges;
-                        do
-                        {
-                            TokenStream<std::string> range_str = part_stream.extract_until("]");
-                            ranges.emplace_back(parse_range(range_str));
-                            part_stream.consume("]", true);
-                        } while (part_stream.consume("[", false));
-
-                        result.push_back(ranged_identifier_t({std::move(signal_name), std::move(ranges)}));
-                    }
-                    else
-                    {
-                        // (1) NAME *single-dimensional*
-                        // (2) NAME *multi-dimensional*
-                        result.push_back(std::move(signal_name));
-                    }
-                }
-            }
-
-            return OK(result);
-        }
-
-        std::vector<std::string> expand_assignment_expression(VerilogModule* verilog_module, const std::vector<assignment_t>& vars)
-        {
-            std::vector<std::string> result;
-            for (const auto& var : vars)
-            {
-                if (const identifier_t* identifier = std::get_if<identifier_t>(&var); identifier != nullptr)
-                {
-                    std::vector<std::vector<u32>> ranges;
-
-                    if (const auto signal_it = verilog_module->m_signals_by_name.find(*identifier); signal_it != verilog_module->m_signals_by_name.end())
-                    {
-                        ranges = signal_it->second->m_ranges;
-                    }
-                    else if (const auto port_it = verilog_module->m_ports_by_expression.find(*identifier); port_it != verilog_module->m_ports_by_expression.end())
-                    {
-                        ranges = port_it->second->m_ranges;
-                    }
-
-                    std::vector<std::string> expanded = expand_ranges(*identifier, ranges);
-                    result.insert(result.end(), expanded.begin(), expanded.end());
-                }
-                else if (const ranged_identifier_t* ranged_identifier = std::get_if<ranged_identifier_t>(&var); ranged_identifier != nullptr)
-                {
-                    std::vector<std::string> expanded = expand_ranges(ranged_identifier->first, ranged_identifier->second);
-                    result.insert(result.end(), expanded.begin(), expanded.end());
-                }
-                else if (const numeral_t* numeral = std::get_if<numeral_t>(&var); numeral != nullptr)
-                {
-                    for (auto value : *numeral)
-                    {
-                        result.push_back("'" + BooleanFunction::to_string(value) + "'");
-                    }
-                }
-            }
-
-            return result;
-        }
     }    // namespace
 
     Result<std::monostate> VerilogParser::parse(const std::filesystem::path& file_path)
@@ -493,15 +70,17 @@ namespace hal
             // expand port identifiers
             for (const auto& port : verilog_module->m_ports)
             {
-                if (port->m_expression != port->m_identifier)
+                if (port->m_expression == port->m_identifier)
                 {
                     if (!port->m_ranges.empty())
                     {
                         port->m_expanded_identifiers = expand_ranges(port->m_identifier, port->m_ranges);
+                        verilog_module->m_expanded_port_expressions.insert(port->m_expanded_identifiers.begin(), port->m_expanded_identifiers.end());
                     }
                     else
                     {
                         port->m_expanded_identifiers = {port->m_identifier};
+                        verilog_module->m_expanded_port_expressions.insert(port->m_identifier);
                     }
                 }
                 else
@@ -509,10 +88,13 @@ namespace hal
                     if (!port->m_ranges.empty())
                     {
                         port->m_expanded_identifiers = expand_ranges(port->m_identifier, port->m_ranges);
+                        auto expanded_expression     = expand_ranges(port->m_expression, port->m_ranges);
+                        verilog_module->m_expanded_port_expressions.insert(expanded_expression.begin(), expanded_expression.end());
                     }
                     else
                     {
                         port->m_expanded_identifiers = {port->m_identifier};
+                        verilog_module->m_expanded_port_expressions.insert(port->m_expression);
                     }
                 }
             }
@@ -574,53 +156,72 @@ namespace hal
                 if (auto module_it = m_modules_by_name.find(instance->m_type); module_it != m_modules_by_name.end())
                 {
                     instance->m_is_module = true;
-                    for (const auto& port_assignment : instance->m_port_assignments)
+                    if (!instance->m_port_assignments.empty())
                     {
-                        if (!port_assignment.m_port_name.has_value())
+                        // all port assignments by name
+                        if (instance->m_port_assignments.front().m_port_name.has_value())
                         {
-                            return ERR("could not parse Verilog file '" + m_path.string() + "': parsing of unnamed ports is not yet supported");
-                        }
+                            for (const auto& port_assignment : instance->m_port_assignments)
+                            {
+                                const std::vector<std::string> right_port = expand_assignment_expression(verilog_module, port_assignment.m_assignment);
+                                if (!right_port.empty())
+                                {
+                                    VerilogPort* port;
+                                    if (const auto port_it = module_it->second->m_ports_by_identifier.find(port_assignment.m_port_name.value());
+                                        port_it == module_it->second->m_ports_by_identifier.end())
+                                    {
+                                        return ERR("could not parse Verilog file '" + m_path.string() + "': unable to assign signal to port '" + port_assignment.m_port_name.value()
+                                                   + "' as it is not a port of module '" + module_it->first + "'");
+                                    }
+                                    else
+                                    {
+                                        port = port_it->second;
+                                    }
+                                    const std::vector<std::string>& left_port = port->m_expanded_identifiers;
+                                    if (left_port.empty())
+                                    {
+                                        return ERR("could not parse Verilog file '" + m_path.string() + "': unable to expand port assignment");
+                                    }
 
-                        VerilogPort* port;
-                        if (const auto port_it = module_it->second->m_ports_by_identifier.find(port_assignment.m_port_name.value()); port_it == module_it->second->m_ports_by_identifier.end())
-                        {
-                            return ERR("could not parse Verilog file '" + m_path.string() + "': unable to assign signal to port '" + port_assignment.m_port_name.value()
-                                       + "' as it is not a port of module '" + module_it->first + "'");
+                                    u32 max_size = right_port.size() <= left_port.size() ? right_port.size() : left_port.size();
+
+                                    for (u32 i = 0; i < max_size; i++)
+                                    {
+                                        instance->m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));
+                                    }
+                                }
+                            }
                         }
+                        // all port assignments by order
                         else
                         {
-                            port = port_it->second;
-                        }
-
-                        const std::vector<std::string>& left_port = port->m_expanded_identifiers;
-                        const std::vector<std::string> right_port = expand_assignment_expression(verilog_module, port_assignment.m_assignment);
-                        if (left_port.empty())
-                        {
-                            return ERR("could not parse Verilog file '" + m_path.string() + "': unable to expand port assignment");
-                        }
-
-                        if (!right_port.empty())
-                        {
-                            u32 max_size;
-                            if (right_port.size() <= left_port.size())
+                            std::vector<std::string> ports;
+                            for (const auto& port : m_modules_by_name.at(instance->m_type)->m_ports)
                             {
-                                max_size = right_port.size();
-                            }
-                            else
-                            {
-                                max_size = left_port.size();
+                                ports.insert(ports.end(), port->m_expanded_identifiers.begin(), port->m_expanded_identifiers.end());
                             }
 
-                            for (u32 i = 0; i < max_size; i++)
+                            auto port_it = ports.begin();
+
+                            for (const auto& port_assignment : instance->m_port_assignments)
                             {
-                                instance->m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));
-                            }
-                        }
-                        else
-                        {
-                            for (const auto& expanded_port_name : left_port)
-                            {
-                                instance->m_expanded_port_assignments.push_back(std::make_pair(expanded_port_name, ""));
+                                std::vector<std::string> right_port = expand_assignment_expression(verilog_module, port_assignment.m_assignment);
+                                if (!right_port.empty())
+                                {
+                                    std::vector<std::string> left_port;
+
+                                    for (u32 i = 0; i < right_port.size() && port_it != ports.end(); i++)
+                                    {
+                                        left_port.push_back(*port_it++);
+                                    }
+
+                                    u32 max_size = right_port.size() <= left_port.size() ? right_port.size() : left_port.size();
+
+                                    for (u32 i = 0; i < max_size; i++)
+                                    {
+                                        instance->m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));
+                                    }
+                                }
                             }
                         }
                     }
@@ -649,9 +250,9 @@ namespace hal
         m_net_by_name.clear();
         m_nets_to_merge.clear();
         m_module_ports.clear();
-        for (const auto& module : m_modules)
+        for (const auto& verilog_module : m_modules)
         {
-            for (const auto& instance : module->m_instances)
+            for (const auto& instance : verilog_module->m_instances)
             {
                 if (!instance->m_is_module)
                 {
@@ -696,10 +297,10 @@ namespace hal
         std::vector<std::string> top_module_candidates;
         for (const auto& [name, module] : m_modules_by_name)
         {
-           if (module_name_to_refereneces.find(name) == module_name_to_refereneces.end())
-           {
-               top_module_candidates.push_back(name);
-           }
+            if (module_name_to_refereneces.find(name) == module_name_to_refereneces.end())
+            {
+                top_module_candidates.push_back(name);
+            }
         }
 
         if (top_module_candidates.empty())
@@ -1017,6 +618,13 @@ namespace hal
                     return ERR_APPEND(res.get_error(), "could not parse module '" + module_name + "': unable to parse assignment (line " + std::to_string(line_number) + ")");
                 }
             }
+            else if (next_token == "defparam")
+            {
+                if (auto res = parse_defparam(verilog_module_raw); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not parse module '" + module_name + "': unable to parse defparam (line " + std::to_string(line_number) + ")");
+                }
+            }
             else if (next_token == "(*")
             {
                 parse_attribute(internal_attributes);
@@ -1269,6 +877,40 @@ namespace hal
         return OK({});
     }
 
+    Result<std::monostate> VerilogParser::parse_defparam(VerilogModule* module)
+    {
+        m_token_stream.consume("defparam", true);
+        std::string instance_name = m_token_stream.consume().string;
+        m_token_stream.consume(".", true);
+
+        if (const auto inst_it = module->m_instances_by_name.find(instance_name); inst_it != module->m_instances_by_name.end())
+        {
+            VerilogDataEntry param;
+            param.m_name = m_token_stream.consume().string;
+            m_token_stream.consume("=", true);
+
+            if (const auto res = parse_parameter_value(m_token_stream.consume()); res.is_ok())
+            {
+                const auto value = res.get();
+                param.m_type     = value.first;
+                param.m_value    = value.second;
+                inst_it->second->m_parameters.push_back(param);
+            }
+            else
+            {
+                log_warning("verilog_parser", "{}", res.get_error().get());
+            }
+        }
+        else
+        {
+            m_token_stream.consume(";", true);
+            return ERR("could not parse defparam: no instance with name '" + instance_name + "' exists within module '" + module->m_name + "'");
+        }
+
+        m_token_stream.consume(";", true);
+        return OK({});
+    }
+
     void VerilogParser::parse_attribute(std::vector<VerilogDataEntry>& attributes)
     {
         m_token_stream.consume("(*", true);
@@ -1307,7 +949,7 @@ namespace hal
         // parse generics map
         if (m_token_stream.consume("#("))
         {
-            if (auto res = parse_generic_assign(); res.is_error())
+            if (auto res = parse_parameter_assign(); res.is_error())
             {
                 return ERR_APPEND(res.get_error(), "could not parse instance of type '" + instance->m_type + "': unable to parse parameter assignment (line " + std::to_string(line_number) + ")");
             }
@@ -1341,11 +983,12 @@ namespace hal
     {
         u32 line_number = m_token_stream.peek().number;
         m_token_stream.consume("(", true);
-
-        do
+        u32 line_end = m_token_stream.find_next(";");
+        if (m_token_stream.peek() == ".")
         {
-            if (m_token_stream.consume(".", false))
+            do
             {
+                m_token_stream.consume(".");
                 VerilogPortAssignment port_assignment;
                 port_assignment.m_port_name = m_token_stream.consume().string;
                 m_token_stream.consume("(", true);
@@ -1363,8 +1006,28 @@ namespace hal
                     continue;
                 }
                 instance->m_port_assignments.push_back(std::move(port_assignment));
-            }
-        } while (m_token_stream.consume(",", false));
+            } while (m_token_stream.consume(",", false));
+        }
+        else
+        {
+            do
+            {
+                VerilogPortAssignment port_assignment;
+                if (auto res = parse_assignment_expression(m_token_stream.extract_until(",", line_end - 1)); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not parse port assignment: unable to parse assignment expression (line " + std::to_string(line_number) + ")");
+                }
+                else
+                {
+                    port_assignment.m_assignment = res.get();
+                }
+                if (port_assignment.m_assignment.empty())
+                {
+                    continue;
+                }
+                instance->m_port_assignments.push_back(std::move(port_assignment));
+            } while (m_token_stream.consume(",", false));
+        }
 
         m_token_stream.consume(")", true);
         m_token_stream.consume(";", true);
@@ -1372,66 +1035,27 @@ namespace hal
         return OK({});
     }
 
-    Result<std::vector<VerilogDataEntry>> VerilogParser::parse_generic_assign()
+    Result<std::vector<VerilogParser::VerilogDataEntry>> VerilogParser::parse_parameter_assign()
     {
         std::vector<VerilogDataEntry> generics;
 
-        u32 line_number;
         do
         {
             if (m_token_stream.consume(".", false))
             {
-                line_number                  = m_token_stream.peek().number;
                 const Token<std::string> lhs = m_token_stream.join_until("(", "");
                 m_token_stream.consume("(", true);
                 const Token<std::string> rhs = m_token_stream.join_until(")", "");
                 m_token_stream.consume(")", true);
 
-                bool skip = false;
-                std::string value, data_type;
-                if (utils::is_integer(rhs.string))
+                if (const auto res = parse_parameter_value(rhs); res.is_ok())
                 {
-                    value     = rhs;
-                    data_type = "integer";
-                }
-                else if (utils::is_floating_point(rhs.string))
-                {
-                    value     = rhs;
-                    data_type = "floating_point";
-                }
-                else if (rhs.string[0] == '\"' && rhs.string.back() == '\"')
-                {
-                    value     = rhs.string.substr(1, rhs.string.size() - 2);
-                    data_type = "string";
-                }
-                else if (isdigit(rhs.string[0]) || rhs.string[0] == '\'')
-                {
-                    if (const auto res = get_hex_from_literal(rhs); res.is_error())
-                    {
-                        skip = true;
-                    }
-                    else
-                    {
-                        value = res.get();
-                    }
-
-                    if (value == "0" || value == "1")
-                    {
-                        data_type = "bit_value";
-                    }
-                    else
-                    {
-                        data_type = "bit_vector";
-                    }
+                    const auto value = res.get();
+                    generics.push_back(VerilogDataEntry({lhs.string, value.first, value.second}));
                 }
                 else
                 {
-                    return ERR("could not parse generic assignment: failed to identify data type of generic map value '" + rhs.string + "' (line " + std::to_string(line_number) + ")");
-                }
-
-                if (!skip)
-                {
-                    generics.push_back(VerilogDataEntry({lhs.string, data_type, value}));
+                    log_warning("verilog_parser", "{}", res.get_error().get());
                 }
             }
         } while (m_token_stream.consume(",", false));
@@ -1462,7 +1086,7 @@ namespace hal
         // global input/output signals will be named after ports, so take into account for aliases
         for (const auto& port : top_module->m_ports)
         {
-            for (const std::string& expanded_port_identifier : port->m_expanded_identifiers)
+            for (const auto& expanded_port_identifier : port->m_expanded_identifiers)
             {
                 m_signal_name_occurrences[expanded_port_identifier]++;
             }
@@ -1508,51 +1132,73 @@ namespace hal
             {
                 if (const auto gate_type_it = m_gate_types.find(instance->m_type); gate_type_it != m_gate_types.end())
                 {
-                    // cache pin groups
-                    std::unordered_map<std::string, std::vector<std::string>> pin_groups;
-                    for (const auto pin_group : gate_type_it->second->get_pin_groups())
+                    if (!instance->m_port_assignments.empty())
                     {
-                        for (const auto pin : pin_group->get_pins())
+                        // all port assignments by name
+                        if (instance->m_port_assignments.front().m_port_name.has_value())
                         {
-                            pin_groups[pin_group->get_name()].push_back(pin->get_name());
-                        }
-                    }
+                            // cache pin groups
+                            std::unordered_map<std::string, std::vector<std::string>> pin_groups;
+                            for (const auto pin_group : gate_type_it->second->get_pin_groups())
+                            {
+                                for (const auto pin : pin_group->get_pins())
+                                {
+                                    pin_groups[pin_group->get_name()].push_back(pin->get_name());
+                                }
+                            }
 
-                    for (const auto& port_assignment : instance->m_port_assignments)
-                    {
-                        std::vector<std::string> left_port;
-                        if (!port_assignment.m_port_name.has_value())
-                        {
-                            return ERR("could not construct netlist: parsing of unnamed ports is not yet supported");
-                        }
+                            for (const auto& port_assignment : instance->m_port_assignments)
+                            {
+                                std::vector<std::string> right_port = expand_assignment_expression(verilog_module, port_assignment.m_assignment);
+                                if (!right_port.empty())
+                                {
+                                    std::vector<std::string> left_port;
 
-                        const auto& port_name = port_assignment.m_port_name.value();
+                                    const auto& port_name = port_assignment.m_port_name.value();
+                                    if (const auto group_it = pin_groups.find(port_name); group_it != pin_groups.end())
+                                    {
+                                        left_port = group_it->second;
+                                    }
+                                    else
+                                    {
+                                        left_port.push_back(port_name);
+                                    }
 
-                        if (const auto group_it = pin_groups.find(port_name); group_it != pin_groups.end())
-                        {
-                            left_port = group_it->second;
+                                    u32 max_size = right_port.size() <= left_port.size() ? right_port.size() : left_port.size();
+
+                                    for (u32 i = 0; i < max_size; i++)
+                                    {
+                                        instance->m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));
+                                    }
+                                }
+                            }
                         }
+                        // all port assignments by order
                         else
                         {
-                            left_port.push_back(port_name);
-                        }
-                        std::vector<std::string> right_port = expand_assignment_expression(verilog_module, port_assignment.m_assignment);
+                            // cache pins
+                            std::vector<std::string> pins = gate_type_it->second->get_pin_names();
+                            auto pin_it                   = pins.begin();
 
-                        if (!right_port.empty())
-                        {
-                            u32 max_size;
-                            if (right_port.size() <= left_port.size())
+                            for (const auto& port_assignment : instance->m_port_assignments)
                             {
-                                max_size = right_port.size();
-                            }
-                            else
-                            {
-                                max_size = left_port.size();
-                            }
+                                std::vector<std::string> right_port = expand_assignment_expression(verilog_module, port_assignment.m_assignment);
+                                if (!right_port.empty())
+                                {
+                                    std::vector<std::string> left_port;
 
-                            for (u32 i = 0; i < max_size; i++)
-                            {
-                                instance->m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));
+                                    for (u32 i = 0; i < right_port.size() && pin_it != pins.end(); i++)
+                                    {
+                                        left_port.push_back(*pin_it++);
+                                    }
+
+                                    u32 max_size = right_port.size() <= left_port.size() ? right_port.size() : left_port.size();
+
+                                    for (u32 i = 0; i < max_size; i++)
+                                    {
+                                        instance->m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));
+                                    }
+                                }
                             }
                         }
                     }
@@ -1564,7 +1210,7 @@ namespace hal
         std::unordered_map<std::string, std::string> top_assignments;
         for (const auto& port : top_module->m_ports)
         {
-            for (const std::string& expanded_port_identifier : port->m_expanded_identifiers)
+            for (const auto& expanded_port_identifier : port->m_expanded_identifiers)
             {
                 Net* global_port_net = m_netlist->create_net(expanded_port_identifier);
                 if (global_port_net == nullptr)
@@ -1695,10 +1341,14 @@ namespace hal
                     }
 
                     // update module ports
-                    if (const auto it = m_module_ports.find(slave_net); it != m_module_ports.end())
+                    if (const auto it = m_module_port_by_net.find(slave_net); it != m_module_port_by_net.end())
                     {
-                        m_module_ports[master_net].insert(m_module_ports[master_net].end(), it->second.begin(), it->second.end());
-                        m_module_ports.erase(it);
+                        for (auto [module, index] : it->second)
+                        {
+                            std::get<1>(m_module_ports.at(module).at(index)) = master_net;
+                        }
+                        m_module_port_by_net[master_net].insert(m_module_port_by_net[master_net].end(), it->second.begin(), it->second.end());
+                        m_module_port_by_net.erase(it);
                     }
 
                     m_netlist->delete_net(slave_net);
@@ -1723,24 +1373,22 @@ namespace hal
         }
 
         // assign module pins
-        for (const auto& [net, port_infos] : m_module_ports)
+        for (const auto& [module, ports] : m_module_ports)
         {
-            for (const auto& port_info : port_infos)
+            for (const auto& [port_name, port_net] : ports)
             {
-                if (net->get_num_of_sources() == 0 && net->get_num_of_destinations() == 0)
+                if (port_net->get_num_of_sources() == 0 && port_net->get_num_of_destinations() == 0)
                 {
                     continue;
                 }
 
-                Module* mod = std::get<2>(port_info);
-                if (auto res = mod->create_pin(std::get<1>(port_info), net); res.is_error())
+                if (auto res = module->create_pin(port_name, port_net); res.is_error())
                 {
-                    // return ERR_APPEND(res.get_error(),
-                    //                 "could not construct netlist: failed to create pin '" + std::get<1>(port_info) + "' at net '" + net->get_name() + "' with ID " + std::to_string(net->get_id())
-                    //                     + " within module '" + mod->get_name() + "' with ID " + std::to_string(mod->get_id()));
-                    // NOTE: The pin creation fails when there are unused ports that never get a net assigned to them (verliog...), 
+                    return ERR_APPEND(res.get_error(),
+                                      "could not construct netlist: failed to create pin '" + port_name + "' at net '" + port_net->get_name() + "' with ID " + std::to_string(port_net->get_id())
+                                          + " within module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()));
+                    // TODO: The pin creation fails when there are unused ports that never get a net assigned to them (verliog...),
                     //       but this also happens when the net just passes through the module (since there is no gate inside the module with that net as either input or output net, the net does not get listed as module input or output)
-                    log_warning("verilog_parser", "{}", res.get_error().get());
                 }
             }
         }
@@ -1811,19 +1459,26 @@ namespace hal
         {
             if (!module->set_data("attribute", attribute.m_name, attribute.m_type, attribute.m_value))
             {
-                log_warning("verilog_parser", "could not set attribute ({} = {}) for instance '{}' type '{}'.", attribute.m_name, attribute.m_value, instance_identifier, instance_type);
+                log_warning("verilog_parser",
+                            "could not set attribute '{} = {}' of type '{}' for instance '{}' type '{}'.",
+                            attribute.m_name,
+                            attribute.m_value,
+                            attribute.m_type,
+                            instance_identifier,
+                            instance_type);
             }
         }
 
         // assign module port names and attributes
         for (const auto& port : verilog_module->m_ports)
         {
-            for (const std::string& expanded_port_identifier : port->m_expanded_identifiers)
+            for (const auto& expanded_port_identifier : port->m_expanded_identifiers)
             {
                 if (const auto it = parent_module_assignments.find(expanded_port_identifier); it != parent_module_assignments.end())
                 {
-                    Net* port_net            = m_net_by_name.at(it->second);
-                    m_module_ports[port_net].push_back(std::make_tuple(port->m_direction, expanded_port_identifier, module));
+                    Net* port_net = m_net_by_name.at(it->second);
+                    m_module_ports[module].push_back(std::make_pair(expanded_port_identifier, port_net));
+                    m_module_port_by_net[port_net].push_back(std::make_pair(module, m_module_ports[module].size() - 1));
 
                     // assign port attributes
                     for (const VerilogDataEntry& attribute : port->m_attributes)
@@ -1831,9 +1486,10 @@ namespace hal
                         if (!port_net->set_data("attribute", attribute.m_name, attribute.m_type, attribute.m_value))
                         {
                             log_warning("verilog_parser",
-                                        "could not set attribute ({} = {}) for port '{}' of instance '{}' of type '{}'.",
+                                        "could not set attribute '{} = {}' of type '{}' for port '{}' of instance '{}' of type '{}'.",
                                         attribute.m_name,
                                         attribute.m_value,
+                                        attribute.m_type,
                                         expanded_port_identifier,
                                         instance_identifier,
                                         instance_type);
@@ -1846,7 +1502,7 @@ namespace hal
         // create internal signals
         for (const auto& signal : verilog_module->m_signals)
         {
-            for (const std::string& expanded_name : signal->m_expanded_names)
+            for (const auto& expanded_name : signal->m_expanded_names)
             {
                 signal_alias[expanded_name] = get_unique_alias(m_signal_name_occurrences, expanded_name);
 
@@ -1860,7 +1516,6 @@ namespace hal
                 m_net_by_name[signal_alias.at(expanded_name)] = signal_net;
 
                 // assign signal attributes
-
                 for (const VerilogDataEntry& attribute : signal->m_attributes)
                 {
                     if (!signal_net->set_data("attribute", attribute.m_name, "unknown", attribute.m_value))
@@ -1945,7 +1600,15 @@ namespace hal
                         {
                             instance_assignments[port] = assignment;
                         }
-                        else if (assignment != "'Z'" && assignment != "'X'" && assignment != "")
+                        else if (assignment == "'Z'" || assignment == "'X'" || assignment.empty())
+                        {
+                            continue;
+                        }
+                        else if (verilog_module->m_expanded_port_expressions.find(assignment) != verilog_module->m_expanded_port_expressions.end())
+                        {
+                            continue;
+                        }
+                        else
                         {
                             return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': port assignment '" + port + " = " + assignment + "' is invalid");
                         }
@@ -2022,6 +1685,10 @@ namespace hal
                     {
                         continue;
                     }
+                    else if (verilog_module->m_expanded_port_expressions.find(assignment) != verilog_module->m_expanded_port_expressions.end())
+                    {
+                        continue;
+                    }
                     else
                     {
                         return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': failed to assign '" + assignment + "' to pin '" + pin + "' of gate '"
@@ -2083,14 +1750,15 @@ namespace hal
             }
 
             // assign instance attributes
-            for (const VerilogDataEntry& attribute : instance->m_attributes)
+            for (const auto& attribute : instance->m_attributes)
             {
                 if (!container->set_data("attribute", attribute.m_name, attribute.m_type, attribute.m_value))
                 {
                     log_warning("verilog_parser",
-                                "could not set attribute ({} = {}) for instance '{}' of type '{}' within instance '{}' of type '{}'.",
+                                "could not set attribute '{} = {}' of type '{}' for instance '{}' of type '{}' within instance '{}' of type '{}'.",
                                 attribute.m_name,
                                 attribute.m_value,
+                                attribute.m_type,
                                 instance->m_name,
                                 instance->m_type,
                                 instance_identifier,
@@ -2099,15 +1767,15 @@ namespace hal
             }
 
             // process generics
-            for (const VerilogDataEntry& parameter : instance->m_parameters)
+            for (const auto& parameter : instance->m_parameters)
             {
                 if (!container->set_data("generic", parameter.m_name, parameter.m_type, parameter.m_value))
                 {
                     log_warning("verilog_parser",
-                                "could not set generic ({}, {}, {}) for instance '{}' of type '{}' within instance '{}' of type '{}'.",
+                                "could not set generic '{} = {}' of type '{}' for instance '{}' of type '{}' within instance '{}' of type '{}'.",
                                 parameter.m_name,
-                                parameter.m_type,
                                 parameter.m_value,
+                                parameter.m_type,
                                 instance->m_name,
                                 instance->m_type,
                                 instance_identifier,
@@ -2123,6 +1791,45 @@ namespace hal
     // ###################          Helper Functions          ####################
     // ###########################################################################
 
+    namespace
+    {
+        static const std::map<char, BooleanFunction::Value> bin_map = {{'0', BooleanFunction::Value::ZERO},
+                                                                       {'1', BooleanFunction::Value::ONE},
+                                                                       {'X', BooleanFunction::Value::X},
+                                                                       {'Z', BooleanFunction::Value::Z}};
+
+        static const std::map<char, std::vector<BooleanFunction::Value>> oct_map = {{'0', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
+                                                                                    {'1', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
+                                                                                    {'2', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
+                                                                                    {'3', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
+                                                                                    {'4', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+                                                                                    {'5', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+                                                                                    {'6', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
+                                                                                    {'7', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
+                                                                                    {'X', {BooleanFunction::Value::X, BooleanFunction::Value::X, BooleanFunction::Value::X}},
+                                                                                    {'Z', {BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z}}};
+
+        static const std::map<char, std::vector<BooleanFunction::Value>> hex_map = {
+            {'0', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
+            {'1', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
+            {'2', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
+            {'3', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
+            {'4', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
+            {'5', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
+            {'6', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
+            {'7', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
+            {'8', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {'9', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {'A', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {'B', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {'C', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
+            {'D', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
+            {'E', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
+            {'F', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
+            {'X', {BooleanFunction::Value::X, BooleanFunction::Value::X, BooleanFunction::Value::X, BooleanFunction::Value::X}},
+            {'Z', {BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z}}};
+    }    // namespace
+
     std::string VerilogParser::get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const
     {
         // if the name only appears once, we don't have to suffix it
@@ -2135,5 +1842,442 @@ namespace hal
 
         // otherwise, add a unique string to the name
         return name + "__[" + std::to_string(name_occurrences[name]) + "]__";
+    }
+
+    std::vector<u32> VerilogParser::parse_range(TokenStream<std::string>& stream) const
+    {
+        if (stream.remaining() == 1)
+        {
+            return {(u32)std::stoi(stream.consume().string)};
+        }
+
+        // MSB to LSB
+        const int end = std::stoi(stream.consume().string);
+        stream.consume(":", true);
+        const int start = std::stoi(stream.consume().string);
+
+        const int direction = (start <= end) ? 1 : -1;
+
+        std::vector<u32> result;
+        for (int i = start; i != end + direction; i += direction)
+        {
+            result.push_back((u32)i);
+        }
+        return result;
+    }
+
+    void VerilogParser::expand_ranges_recursively(std::vector<std::string>& expanded_names, const std::string& current_name, const std::vector<std::vector<u32>>& ranges, u32 dimension) const
+    {
+        // expand signal recursively
+        if (ranges.size() > dimension)
+        {
+            for (const u32 index : ranges[dimension])
+            {
+                expand_ranges_recursively(expanded_names, current_name + "(" + std::to_string(index) + ")", ranges, dimension + 1);
+            }
+        }
+        else
+        {
+            // last dimension
+            expanded_names.push_back(current_name);
+        }
+    }
+
+    std::vector<std::string> VerilogParser::expand_ranges(const std::string& name, const std::vector<std::vector<u32>>& ranges) const
+    {
+        std::vector<std::string> res;
+
+        expand_ranges_recursively(res, name, ranges, 0);
+
+        return res;
+    }
+
+    Result<std::vector<BooleanFunction::Value>> VerilogParser::get_binary_vector(std::string value) const
+    {
+        value = utils::to_upper(utils::replace(value, std::string("_"), std::string("")));
+
+        i32 len = -1;
+        std::string prefix;
+        std::string number;
+        std::vector<BooleanFunction::Value> result;
+
+        // base specified?
+        if (value.find('\'') == std::string::npos)
+        {
+            prefix = "D";
+            number = value;
+        }
+        else
+        {
+            if (value.at(0) != '\'')
+            {
+                len = std::stoi(value.substr(0, value.find('\'')));
+            }
+            prefix = value.substr(value.find('\'') + 1, 1);
+            number = value.substr(value.find('\'') + 2);
+        }
+
+        // select base
+        switch (prefix.at(0))
+        {
+            case 'B': {
+                for (auto it = number.rbegin(); it != number.rend(); it++)
+                {
+                    const char c = *it;
+                    if (c == '0' || c == '1' || c == 'Z' || c == 'X')
+                    {
+                        result.push_back(bin_map.at(c));
+                    }
+                    else
+                    {
+                        return ERR("could not convert string to binary vector: invalid character within binary number literal '" + value + "'");
+                    }
+                }
+                break;
+            }
+
+            case 'O':
+                for (auto it = number.rbegin(); it != number.rend(); it++)
+                {
+                    const char c = *it;
+                    if ((c >= '0' && c <= '7') || c == 'X' || c == 'Z')
+                    {
+                        const auto& bits = oct_map.at(c);
+                        result.insert(result.end(), bits.begin(), bits.end());
+                    }
+                    else
+                    {
+                        return ERR("could not convert string to binary vector: invalid character within octal number literal '" + value + "'");
+                    }
+                }
+                break;
+
+            case 'D': {
+                u64 tmp_val = 0;
+
+                for (const char c : number)
+                {
+                    if ((c >= '0' && c <= '9'))
+                    {
+                        tmp_val = (tmp_val * 10) + (c - '0');
+                    }
+                    else
+                    {
+                        return ERR("could not convert string to binary vector: invalid character within decimal number literal '" + value + "'");
+                    }
+                }
+
+                do
+                {
+                    result.push_back(((tmp_val & 1) == 1) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO);
+                    tmp_val >>= 1;
+                } while (tmp_val != 0);
+                break;
+            }
+
+            case 'H': {
+                for (auto it = number.rbegin(); it != number.rend(); it++)
+                {
+                    const char c = *it;
+                    if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || c == 'X' || c == 'Z')
+                    {
+                        const auto& bits = hex_map.at(c);
+                        result.insert(result.end(), bits.begin(), bits.end());
+                    }
+                    else
+                    {
+                        return ERR("could not convert string to binary vector: invalid character within hexadecimal number literal '" + value + "'");
+                    }
+                }
+                break;
+            }
+
+            default: {
+                return ERR("could not convert string to binary vector: invalid base '" + prefix + "' within number literal '" + value + "'");
+            }
+        }
+
+        if (len != -1)
+        {
+            i32 result_size = result.size();
+
+            if (len > result_size)
+            {
+                // fill with '0'
+                for (i32 i = 0; i < (len - result_size); i++)
+                {
+                    result.push_back(BooleanFunction::Value::ZERO);
+                }
+            }
+            else
+            {
+                // drop trailing bits
+                for (i32 i = 0; i < (result_size - len); i++)
+                {
+                    result.pop_back();
+                }
+            }
+        }
+
+        return OK(result);
+    }
+
+    Result<std::string> VerilogParser::get_hex_from_literal(const Token<std::string>& value_token) const
+    {
+        const u32 line_number   = value_token.number;
+        const std::string value = utils::to_upper(utils::replace(value_token.string, std::string("_"), std::string("")));
+
+        i32 len = -1;
+        std::string prefix;
+        std::string number;
+        u32 base;
+
+        // base specified?
+        if (value.find('\'') == std::string::npos)
+        {
+            prefix = "D";
+            number = value;
+        }
+        else
+        {
+            if (value.at(0) != '\'')
+            {
+                len = std::stoi(value.substr(0, value.find('\'')));
+            }
+            prefix = value.substr(value.find('\'') + 1, 1);
+            number = value.substr(value.find('\'') + 2);
+        }
+
+        // select base
+        switch (prefix.at(0))
+        {
+            case 'B': {
+                if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '1'); }))
+                {
+                    return ERR("could not convert token to hexadecimal string: invalid character within binary number literal '" + value + "' (line " + std::to_string(line_number) + ")");
+                }
+
+                base = 2;
+                break;
+            }
+
+            case 'O': {
+                if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '7'); }))
+                {
+                    return ERR("could not convert token to hexadecimal string: invalid character within ocatl number literal '" + value + "' (line " + std::to_string(line_number) + ")");
+                }
+
+                base = 8;
+                break;
+            }
+
+            case 'D': {
+                if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '9'); }))
+                {
+                    return ERR("could not convert token to hexadecimal string: invalid character within decimal number literal '" + value + "' (line " + std::to_string(line_number) + ")");
+                }
+
+                base = 10;
+                break;
+            }
+
+            case 'H': {
+                std::string res;
+
+                for (const char c : number)
+                {
+                    if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F'))
+                    {
+                        res += c;
+                    }
+                    else
+                    {
+                        return ERR("could not convert token to hexadecimal string: invalid character within hexadecimal number literal '" + value + "' (line " + std::to_string(line_number) + ")");
+                    }
+                }
+
+                return OK(res);
+            }
+
+            default: {
+                return ERR("could not convert token to hexadecimal string: invalid base '" + prefix + "' within number literal '" + value + "' (line " + std::to_string(line_number) + ")");
+            }
+        }
+
+        std::stringstream ss;
+        if (len != -1)
+        {
+            // fill with '0'
+            ss << std::uppercase << std::setfill('0') << std::setw((len + 3) / 4) << std::hex << stoull(number, 0, base);
+        }
+        else
+        {
+            ss << std::uppercase << std::hex << stoull(number, 0, base);
+        }
+        return OK(ss.str());
+    }
+
+    Result<std::pair<std::string, std::string>> VerilogParser::parse_parameter_value(const Token<std::string>& value_token) const
+    {
+        std::pair<std::string, std::string> value;
+
+        if (utils::is_integer(value_token.string))
+        {
+            value.first  = "integer";
+            value.second = value_token.string;
+        }
+        else if (utils::is_floating_point(value_token.string))
+        {
+            value.first  = "floating_point";
+            value.second = value_token.string;
+        }
+        else if (value_token.string[0] == '\"' && value_token.string.back() == '\"')
+        {
+            value.first  = "string";
+            value.second = value_token.string.substr(1, value_token.string.size() - 2);
+        }
+        else if (isdigit(value_token.string[0]) || value_token.string[0] == '\'')
+        {
+            if (const auto res = get_hex_from_literal(value_token); res.is_error())
+            {
+                return ERR_APPEND(res.get_error(),
+                                  "could not parse parameter value: failed to convert '" + value_token.string + "' to hexadecimal value (line " + std::to_string(value_token.number) + ")");
+            }
+            else
+            {
+                value.second = res.get();
+            }
+
+            if (value.second == "0" || value.second == "1")
+            {
+                value.first = "bit_value";
+            }
+            else
+            {
+                value.first = "bit_vector";
+            }
+        }
+        else
+        {
+            return ERR("could not parse parameter value: failed to identify data type of parameter '" + value_token.string + "' (line " + std::to_string(value_token.number) + ")");
+        }
+
+        return OK(value);
+    }
+
+    Result<std::vector<VerilogParser::assignment_t>> VerilogParser::parse_assignment_expression(TokenStream<std::string>&& stream) const
+    {
+        std::vector<TokenStream<std::string>> parts;
+
+        if (stream.size() == 0)
+        {
+            return OK({});
+        }
+
+        if (stream.peek() == "{")
+        {
+            stream.consume("{", true);
+
+            TokenStream<std::string> assignment_list_str = stream.extract_until("}");
+            stream.consume("}", true);
+
+            do
+            {
+                parts.push_back(assignment_list_str.extract_until(","));
+            } while (assignment_list_str.consume(",", false));
+        }
+        else
+        {
+            parts.push_back(stream);
+        }
+
+        std::vector<assignment_t> result;
+        result.reserve(parts.size());
+
+        for (auto it = parts.rbegin(); it != parts.rend(); it++)
+        {
+            TokenStream<std::string>& part_stream = *it;
+
+            const Token<std::string> signal_name_token = part_stream.consume();
+            std::string signal_name                    = signal_name_token.string;
+
+            // (3) NUMBER
+            if (isdigit(signal_name[0]) || signal_name[0] == '\'')
+            {
+                if (auto res = get_binary_vector(signal_name_token); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not parse assignment expression: unable to convert token to binary vector");
+                }
+                else
+                {
+                    result.push_back(std::move(res.get()));
+                }
+            }
+            else
+            {
+                // any bounds specified?
+                if (part_stream.consume("["))
+                {
+                    // (4) NAME[INDEX1][INDEX2]...
+                    // (5) NAME[BEGIN_INDEX1:END_INDEX1][BEGIN_INDEX2:END_INDEX2]...
+
+                    std::vector<std::vector<u32>> ranges;
+                    do
+                    {
+                        TokenStream<std::string> range_str = part_stream.extract_until("]");
+                        ranges.emplace_back(parse_range(range_str));
+                        part_stream.consume("]", true);
+                    } while (part_stream.consume("[", false));
+
+                    result.push_back(ranged_identifier_t({std::move(signal_name), std::move(ranges)}));
+                }
+                else
+                {
+                    // (1) NAME *single-dimensional*
+                    // (2) NAME *multi-dimensional*
+                    result.push_back(std::move(signal_name));
+                }
+            }
+        }
+
+        return OK(result);
+    }
+
+    std::vector<std::string> VerilogParser::expand_assignment_expression(VerilogModule* verilog_module, const std::vector<assignment_t>& vars) const
+    {
+        std::vector<std::string> result;
+        for (const auto& var : vars)
+        {
+            if (const identifier_t* identifier = std::get_if<identifier_t>(&var); identifier != nullptr)
+            {
+                std::vector<std::vector<u32>> ranges;
+
+                if (const auto signal_it = verilog_module->m_signals_by_name.find(*identifier); signal_it != verilog_module->m_signals_by_name.end())
+                {
+                    ranges = signal_it->second->m_ranges;
+                }
+                else if (const auto port_it = verilog_module->m_ports_by_expression.find(*identifier); port_it != verilog_module->m_ports_by_expression.end())
+                {
+                    ranges = port_it->second->m_ranges;
+                }
+
+                std::vector<std::string> expanded = expand_ranges(*identifier, ranges);
+                result.insert(result.end(), expanded.begin(), expanded.end());
+            }
+            else if (const ranged_identifier_t* ranged_identifier = std::get_if<ranged_identifier_t>(&var); ranged_identifier != nullptr)
+            {
+                std::vector<std::string> expanded = expand_ranges(ranged_identifier->first, ranged_identifier->second);
+                result.insert(result.end(), expanded.begin(), expanded.end());
+            }
+            else if (const numeral_t* numeral = std::get_if<numeral_t>(&var); numeral != nullptr)
+            {
+                for (auto value : *numeral)
+                {
+                    result.push_back("'" + BooleanFunction::to_string(value) + "'");
+                }
+            }
+        }
+
+        return result;
     }
 }    // namespace hal

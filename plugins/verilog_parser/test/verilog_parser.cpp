@@ -228,12 +228,452 @@ namespace hal {
     }
 
     /**
+     * Test different variants of pin assignments to modules and gates.
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_pin_assignments) {
+
+        TEST_START
+            {   // test gate pin assignment by name
+                const GateLibrary* gl = test_utils::get_gate_library();
+
+                std::string netlist_input(
+                                        "module top (a, b, c); "
+                                        "   input a, b;"
+                                        "   output c;"
+                                        ""
+                                        "   AND2 gate_0 ("
+                                        "       .I0 (a),"
+                                        "       .I1 (b),"
+                                        "       .O (c)"
+                                        "   );"
+                                        ""
+                                        "   AND2 gate_1 ("
+                                        "       .I1 (b),"
+                                        "       .O (c)"
+                                        "   );"
+                                        ""
+                                        "   AND2 gate_2 ("
+                                        "       .O (c)"
+                                        "   );"
+                                        "endmodule");
+                
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VerilogParser verilog_parser;
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
+                ASSERT_NE(nl, nullptr);
+
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("AND2", "gate_0")).size(), 1);
+                Gate* gate_0 = nl->get_gates(test_utils::gate_filter("AND2", "gate_0")).front();
+                EXPECT_EQ(gate_0->get_fan_in_endpoint("I0")->get_net()->get_name(), "a");
+                EXPECT_EQ(gate_0->get_fan_in_endpoint("I1")->get_net()->get_name(), "b");
+                EXPECT_EQ(gate_0->get_fan_out_endpoint("O")->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("AND2", "gate_1")).size(), 1);
+                Gate* gate_1 = nl->get_gates(test_utils::gate_filter("AND2", "gate_1")).front();
+                EXPECT_EQ(gate_1->get_fan_in_endpoint("I0"), nullptr);
+                EXPECT_EQ(gate_1->get_fan_in_endpoint("I1")->get_net()->get_name(), "b");
+                EXPECT_EQ(gate_1->get_fan_out_endpoint("O")->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("AND2", "gate_2")).size(), 1);
+                Gate* gate_2 = nl->get_gates(test_utils::gate_filter("AND2", "gate_2")).front();
+                EXPECT_EQ(gate_2->get_fan_in_endpoint("I0"), nullptr);
+                EXPECT_EQ(gate_2->get_fan_in_endpoint("I1"), nullptr);
+                EXPECT_EQ(gate_2->get_fan_out_endpoint("O")->get_net()->get_name(), "c");
+            }
+            {   // test gate pin assignment by name with empty assignments
+                const GateLibrary* gl = test_utils::get_gate_library();
+
+                std::string netlist_input(
+                                        "module top (a, b, c); "
+                                        "   input a, b;"
+                                        "   output c;"
+                                        ""
+                                        "   AND2 gate_0 ("
+                                        "       .I0 (a),"
+                                        "       .I1 (b),"
+                                        "       .O (c)"
+                                        "   );"
+                                        ""
+                                        "   AND2 gate_1 ("
+                                        "       .I0 (),"
+                                        "       .I1 (b),"
+                                        "       .O (c)"
+                                        "   );"
+                                        ""
+                                        "   AND2 gate_2 ("
+                                        "       .I0 (),"
+                                        "       .I1 (),"
+                                        "       .O (c)"
+                                        "   );"
+                                        "endmodule");
+                
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VerilogParser verilog_parser;
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
+                ASSERT_NE(nl, nullptr);
+
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("AND2", "gate_0")).size(), 1);
+                Gate* gate_0 = nl->get_gates(test_utils::gate_filter("AND2", "gate_0")).front();
+                EXPECT_EQ(gate_0->get_fan_in_endpoint("I0")->get_net()->get_name(), "a");
+                EXPECT_EQ(gate_0->get_fan_in_endpoint("I1")->get_net()->get_name(), "b");
+                EXPECT_EQ(gate_0->get_fan_out_endpoint("O")->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("AND2", "gate_1")).size(), 1);
+                Gate* gate_1 = nl->get_gates(test_utils::gate_filter("AND2", "gate_1")).front();
+                EXPECT_EQ(gate_1->get_fan_in_endpoint("I0"), nullptr);
+                EXPECT_EQ(gate_1->get_fan_in_endpoint("I1")->get_net()->get_name(), "b");
+                EXPECT_EQ(gate_1->get_fan_out_endpoint("O")->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("AND2", "gate_2")).size(), 1);
+                Gate* gate_2 = nl->get_gates(test_utils::gate_filter("AND2", "gate_2")).front();
+                EXPECT_EQ(gate_2->get_fan_in_endpoint("I0"), nullptr);
+                EXPECT_EQ(gate_2->get_fan_in_endpoint("I1"), nullptr);
+                EXPECT_EQ(gate_2->get_fan_out_endpoint("O")->get_net()->get_name(), "c");
+            }
+            {   // test gate pin assignment by order
+                const GateLibrary* gl = test_utils::get_gate_library();
+
+                std::string netlist_input(
+                                        "module top (a, b, c); "
+                                        "   input a, b;"
+                                        "   output c;"
+                                        ""
+                                        "   AND2 gate_0 (a, b, c);"
+                                        ""
+                                        "   AND2 gate_1 (a, b);"
+                                        ""
+                                        "   AND2 gate_2 (a);"
+                                        "endmodule");
+                
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VerilogParser verilog_parser;
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
+                ASSERT_NE(nl, nullptr);
+
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("AND2", "gate_0")).size(), 1);
+                Gate* gate_0 = nl->get_gates(test_utils::gate_filter("AND2", "gate_0")).front();
+                EXPECT_EQ(gate_0->get_fan_in_endpoint("I0")->get_net()->get_name(), "a");
+                EXPECT_EQ(gate_0->get_fan_in_endpoint("I1")->get_net()->get_name(), "b");
+                EXPECT_EQ(gate_0->get_fan_out_endpoint("O")->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("AND2", "gate_1")).size(), 1);
+                Gate* gate_1 = nl->get_gates(test_utils::gate_filter("AND2", "gate_1")).front();
+                EXPECT_EQ(gate_1->get_fan_in_endpoint("I0")->get_net()->get_name(), "a");
+                EXPECT_EQ(gate_1->get_fan_in_endpoint("I1")->get_net()->get_name(), "b");
+                EXPECT_EQ(gate_1->get_fan_out_endpoint("O"), nullptr);
+
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("AND2", "gate_2")).size(), 1);
+                Gate* gate_2 = nl->get_gates(test_utils::gate_filter("AND2", "gate_2")).front();
+                EXPECT_EQ(gate_2->get_fan_in_endpoint("I0")->get_net()->get_name(), "a");
+                EXPECT_EQ(gate_2->get_fan_in_endpoint("I1"), nullptr);
+                EXPECT_EQ(gate_2->get_fan_out_endpoint("O"), nullptr);
+            }
+            {   // test module pin assignment by name
+                const GateLibrary* gl = test_utils::get_gate_library();
+
+                std::string netlist_input(
+                                        "module sub_mod (as, bs, cs);"
+                                        "   input as, bs;"
+                                        "   output cs;"
+                                        ""
+                                        "   AND2 gate_0 ("
+                                        "       .I0 (as),"
+                                        "       .I1 (bs),"
+                                        "       .O (cs)"
+                                        "   );"
+                                        "endmodule"
+                                        "\n"
+                                        "module top (a, b, c); "
+                                        "   input a, b;"
+                                        "   output c;"
+                                        ""
+                                        "   sub_mod inst_0 ("
+                                        "       .as(a),"
+                                        "       .bs(b),"
+                                        "       .cs(c)"
+                                        "   );"
+                                        ""
+                                        "   sub_mod inst_1 ("
+                                        "       .bs(b),"
+                                        "       .cs(c)"
+                                        "   );"
+                                        ""
+                                        "   sub_mod inst_2 ("
+                                        "       .cs(c)"
+                                        "   );"
+                                        "endmodule"
+                                        );
+                
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VerilogParser verilog_parser;
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
+                ASSERT_NE(nl, nullptr);
+
+                ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_0")).size(), 1);
+                Module* inst_0 = nl->get_modules(test_utils::module_name_filter("inst_0")).front();
+                const auto pins_0 = inst_0->get_pins();
+                EXPECT_EQ(pins_0.size(), 3);
+                EXPECT_EQ(pins_0.at(0)->get_name(), "as");
+                EXPECT_EQ(pins_0.at(0)->get_net()->get_name(), "a");
+                EXPECT_EQ(pins_0.at(1)->get_name(), "bs");
+                EXPECT_EQ(pins_0.at(1)->get_net()->get_name(), "b");
+                EXPECT_EQ(pins_0.at(2)->get_name(), "cs");
+                EXPECT_EQ(pins_0.at(2)->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_1")).size(), 1);
+                Module* inst_1 = nl->get_modules(test_utils::module_name_filter("inst_1")).front();
+                const auto pins_1 = inst_1->get_pins();
+                EXPECT_EQ(pins_1.size(), 2);
+                EXPECT_EQ(pins_1.at(0)->get_name(), "bs");
+                EXPECT_EQ(pins_1.at(0)->get_net()->get_name(), "b");
+                EXPECT_EQ(pins_1.at(1)->get_name(), "cs");
+                EXPECT_EQ(pins_1.at(1)->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_2")).size(), 1);
+                Module* inst_2 = nl->get_modules(test_utils::module_name_filter("inst_2")).front();
+                const auto pins_2 = inst_2->get_pins();
+                EXPECT_EQ(pins_2.size(), 1);
+                EXPECT_EQ(pins_2.at(0)->get_name(), "cs");
+                EXPECT_EQ(pins_2.at(0)->get_net()->get_name(), "c");
+            }
+            {   // test module pin assignment by name with empty assignments
+                const GateLibrary* gl = test_utils::get_gate_library();
+
+                std::string netlist_input(
+                                        "module sub_mod (as, bs, cs);"
+                                        "   input as, bs;"
+                                        "   output cs;"
+                                        ""
+                                        "   AND2 gate_0 ("
+                                        "       .I0 (as),"
+                                        "       .I1 (bs),"
+                                        "       .O (cs)"
+                                        "   );"
+                                        "endmodule"
+                                        "\n"
+                                        "module top (a, b, c); "
+                                        "   input a, b;"
+                                        "   output c;"
+                                        ""
+                                        "   sub_mod inst_0 ("
+                                        "       .as(a),"
+                                        "       .bs(b),"
+                                        "       .cs(c)"
+                                        "   );"
+                                        ""
+                                        "   sub_mod inst_1 ("
+                                        "       .as(),"
+                                        "       .bs(b),"
+                                        "       .cs(c)"
+                                        "   );"
+                                        ""
+                                        "   sub_mod inst_2 ("
+                                        "       .as(),"
+                                        "       .bs(),"
+                                        "       .cs(c)"
+                                        "   );"
+                                        "endmodule"
+                                        );
+                
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VerilogParser verilog_parser;
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
+                ASSERT_NE(nl, nullptr);
+
+                ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_0")).size(), 1);
+                Module* inst_0 = nl->get_modules(test_utils::module_name_filter("inst_0")).front();
+                const auto pins_0 = inst_0->get_pins();
+                EXPECT_EQ(pins_0.size(), 3);
+                EXPECT_EQ(pins_0.at(0)->get_name(), "as");
+                EXPECT_EQ(pins_0.at(0)->get_net()->get_name(), "a");
+                EXPECT_EQ(pins_0.at(1)->get_name(), "bs");
+                EXPECT_EQ(pins_0.at(1)->get_net()->get_name(), "b");
+                EXPECT_EQ(pins_0.at(2)->get_name(), "cs");
+                EXPECT_EQ(pins_0.at(2)->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_1")).size(), 1);
+                Module* inst_1 = nl->get_modules(test_utils::module_name_filter("inst_1")).front();
+                const auto pins_1 = inst_1->get_pins();
+                EXPECT_EQ(pins_1.size(), 2);
+                EXPECT_EQ(pins_1.at(0)->get_name(), "bs");
+                EXPECT_EQ(pins_1.at(0)->get_net()->get_name(), "b");
+                EXPECT_EQ(pins_1.at(1)->get_name(), "cs");
+                EXPECT_EQ(pins_1.at(1)->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_2")).size(), 1);
+                Module* inst_2 = nl->get_modules(test_utils::module_name_filter("inst_2")).front();
+                const auto pins_2 = inst_2->get_pins();
+                EXPECT_EQ(pins_2.size(), 1);
+                EXPECT_EQ(pins_2.at(0)->get_name(), "cs");
+                EXPECT_EQ(pins_2.at(0)->get_net()->get_name(), "c");
+            }
+            {   // test module pin assignment by order
+                const GateLibrary* gl = test_utils::get_gate_library();
+
+                std::string netlist_input(
+                                        "module sub_mod (as, bs, cs);"
+                                        "   input as, bs;"
+                                        "   output cs;"
+                                        ""
+                                        "   AND2 gate_0 (as, bs, cs);"
+                                        "endmodule"
+                                        "\n"
+                                        "module top (a, b, c); "
+                                        "   input a, b;"
+                                        "   output c;"
+                                        ""
+                                        "   sub_mod inst_0 (a, b, c);"
+                                        ""
+                                        "   sub_mod inst_1 (a, b);"
+                                        ""
+                                        "   sub_mod inst_2 (a);"
+                                        "endmodule"
+                                        );
+                
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VerilogParser verilog_parser;
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
+                ASSERT_NE(nl, nullptr);
+
+                ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_0")).size(), 1);
+                Module* inst_0 = nl->get_modules(test_utils::module_name_filter("inst_0")).front();
+                const auto pins_0 = inst_0->get_pins();
+                EXPECT_EQ(pins_0.size(), 3);
+                EXPECT_EQ(pins_0.at(0)->get_name(), "as");
+                EXPECT_EQ(pins_0.at(0)->get_net()->get_name(), "a");
+                EXPECT_EQ(pins_0.at(1)->get_name(), "bs");
+                EXPECT_EQ(pins_0.at(1)->get_net()->get_name(), "b");
+                EXPECT_EQ(pins_0.at(2)->get_name(), "cs");
+                EXPECT_EQ(pins_0.at(2)->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_1")).size(), 1);
+                Module* inst_1 = nl->get_modules(test_utils::module_name_filter("inst_1")).front();
+                const auto pins_1 = inst_1->get_pins();
+                EXPECT_EQ(pins_1.size(), 2);
+                EXPECT_EQ(pins_1.at(0)->get_name(), "as");
+                EXPECT_EQ(pins_1.at(0)->get_net()->get_name(), "a");
+                EXPECT_EQ(pins_1.at(1)->get_name(), "bs");
+                EXPECT_EQ(pins_1.at(1)->get_net()->get_name(), "b");
+
+                ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_2")).size(), 1);
+                Module* inst_2 = nl->get_modules(test_utils::module_name_filter("inst_2")).front();
+                const auto pins_2 = inst_2->get_pins();
+                EXPECT_EQ(pins_2.size(), 1);
+                EXPECT_EQ(pins_2.at(0)->get_name(), "as");
+                EXPECT_EQ(pins_2.at(0)->get_net()->get_name(), "a");
+            }
+            {   // test pass-through module
+                const GateLibrary* gl = test_utils::get_gate_library();
+
+                std::string netlist_input(
+                                        "module sub_sub_mod (ass, bss, css);"
+                                        "   input ass, bss;"
+                                        "   output css;"
+                                        ""
+                                        "   AND2 gate_0 ("
+                                        "       .I0 (ass),"
+                                        "       .I1 (bss),"
+                                        "       .O (css)"
+                                        "   );"
+                                        "endmodule"
+                                        "\n"
+                                        "module sub_mod (as, bs, cs);"
+                                        "   input as, bs;"
+                                        "   output cs;"
+                                        ""
+                                        "   sub_sub_mod mid ("
+                                        "       .ass (as),"
+                                        "       .bss (bs),"
+                                        "       .css (cs)"
+                                        "   );"
+                                        "endmodule"
+                                        "\n"
+                                        "module top (a, b, c); "
+                                        "   input a, b;"
+                                        "   output c;"
+                                        ""
+                                        "   sub_mod inst_0 ("
+                                        "       .as(a),"
+                                        "       .bs(b),"
+                                        "       .cs(c)"
+                                        "   );"
+                                        ""
+                                        "   sub_mod inst_1 ("
+                                        "       .bs(b),"
+                                        "       .cs(c)"
+                                        "   );"
+                                        ""
+                                        "   sub_mod inst_2 ("
+                                        "       .cs(c)"
+                                        "   );"
+                                        "endmodule"
+                                        );
+                
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VerilogParser verilog_parser;
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
+                ASSERT_NE(nl, nullptr);
+
+                ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_0")).size(), 1);
+                Module* inst_0 = nl->get_modules(test_utils::module_name_filter("inst_0")).front();
+                const auto pins_0 = inst_0->get_pins();
+                EXPECT_EQ(pins_0.size(), 3);
+                EXPECT_EQ(pins_0.at(0)->get_name(), "as");
+                EXPECT_EQ(pins_0.at(0)->get_net()->get_name(), "a");
+                EXPECT_EQ(pins_0.at(1)->get_name(), "bs");
+                EXPECT_EQ(pins_0.at(1)->get_net()->get_name(), "b");
+                EXPECT_EQ(pins_0.at(2)->get_name(), "cs");
+                EXPECT_EQ(pins_0.at(2)->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_1")).size(), 1);
+                Module* inst_1 = nl->get_modules(test_utils::module_name_filter("inst_1")).front();
+                const auto pins_1 = inst_1->get_pins();
+                EXPECT_EQ(pins_1.size(), 2);
+                EXPECT_EQ(pins_1.at(0)->get_name(), "bs");
+                EXPECT_EQ(pins_1.at(0)->get_net()->get_name(), "b");
+                EXPECT_EQ(pins_1.at(1)->get_name(), "cs");
+                EXPECT_EQ(pins_1.at(1)->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_2")).size(), 1);
+                Module* inst_2 = nl->get_modules(test_utils::module_name_filter("inst_2")).front();
+                const auto pins_2 = inst_2->get_pins();
+                EXPECT_EQ(pins_2.size(), 1);
+                EXPECT_EQ(pins_2.at(0)->get_name(), "cs");
+                EXPECT_EQ(pins_2.at(0)->get_net()->get_name(), "c");
+            }
+        TEST_END
+    }
+
+    /**
      * Testing the correct storage of data of the following data types:
      * integer, floating_point, string, bit_vector (hexadecimal, decimal, octal, binary)
      *
      * Functions: parse
      */
-    TEST_F(VerilogParserTest, check_generic_map) 
+    TEST_F(VerilogParserTest, check_parameters) 
     {
         TEST_START
         {
@@ -258,11 +698,13 @@ namespace hal {
                                     "  .I (global_in ),"
                                     "  .O (global_out )"
                                     " ) ;"
+                                    "defparam gate_0.external_int = 3;"
                                     "endmodule");
             const GateLibrary* gate_lib = test_utils::get_gate_library();
             std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
             VerilogParser verilog_parser;
             auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
+            // std::cout << nl_res.get_error().get() << std::endl;
             ASSERT_TRUE(nl_res.is_ok());
             std::unique_ptr<Netlist> nl = nl_res.get();
             ASSERT_NE(nl, nullptr);
@@ -278,6 +720,7 @@ namespace hal {
             EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_dec"), std::make_tuple("bit_vector", "ABC"));
             EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_oct"), std::make_tuple("bit_vector", "ABC"));
             EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_bin"), std::make_tuple("bit_vector", "ABC"));
+            EXPECT_EQ(gate_0->get_data("generic", "external_int"), std::make_tuple("integer", "3"));
 
             // Special Characters
             EXPECT_EQ(gate_0->get_data("generic", "key_negative_comma_string"), std::make_tuple("string", "test,1,2,3"));
@@ -479,16 +922,16 @@ namespace hal {
                 const GateLibrary* gl = test_utils::get_gate_library();
 
                 std::string netlist_input(
-                                        "module top (); "
-                                        "   wire [3:0] gate_0_in, gate_1_in;"
-                                        "   RAM gate_0 ( "
-                                        "       .DATA_IN (gate_0_in ), "
-                                        "   ) ; "
-                                        "   RAM gate_1 ( "
-                                        "       .DATA_IN (gate_1_in ), "
-                                        "   ) ; "
-                                        "   assign gate_0_in = 4'd0;"
-                                        "   assign gate_1_in = 1'd0;"
+                                        "module top ();\n "
+                                        "   wire [3:0] gate_0_in, gate_1_in;\n"
+                                        "   RAM gate_0 (\n "
+                                        "       .DATA_IN (gate_0_in ) \n"
+                                        "   ) ; \n"
+                                        "   RAM gate_1 (\n "
+                                        "       .DATA_IN (gate_1_in ) \n"
+                                        "   ) ;\n "
+                                        "   assign gate_0_in = 4'd0;\n"
+                                        "   assign gate_1_in = 1'd0;\n"
                                         "endmodule");
                 
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
@@ -2339,7 +2782,7 @@ namespace hal {
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
                 auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
-                ASSERT_TRUE(nl_res.is_error());
+                ASSERT_TRUE(nl_res.is_ok());
             }
             {
                 // Use an undeclared signal
