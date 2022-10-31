@@ -380,7 +380,6 @@ namespace hal
                 TokenStream<ci_string>& part_stream = *it;
 
                 const Token<ci_string> signal_name_token = part_stream.consume();
-                const u32 line_number                    = signal_name_token.number;
                 ci_string signal_name                    = signal_name_token.string;
 
                 // (2) NUMBER
@@ -540,10 +539,12 @@ namespace hal
                 if (!port->m_ranges.empty())
                 {
                     port->m_expanded_identifiers = expand_ranges(port->m_identifier, port->m_ranges);
+                    vhdl_entity->m_expanded_port_identifiers.insert(port->m_expanded_identifiers.begin(), port->m_expanded_identifiers.end());
                 }
                 else
                 {
                     port->m_expanded_identifiers = {port->m_identifier};
+                    vhdl_entity->m_expanded_port_identifiers.insert(port->m_identifier);
                 }
             }
 
@@ -605,59 +606,91 @@ namespace hal
                 if (auto entity_it = m_entities_by_name.find(instance->m_type); entity_it != m_entities_by_name.end())
                 {
                     instance->m_is_entity = true;
-                    for (const auto& port_assignment : instance->m_port_assignments)
+
+                    if (!instance->m_port_assignments.empty())
                     {
-                        std::vector<ci_string> left_port;
-                        if (const identifier_t* identifier = std::get_if<identifier_t>(&(port_assignment.m_port)); identifier != nullptr)
+                        if (instance->m_port_assignments.front().m_port.has_value())
                         {
-                            if (const auto it = entity_it->second->m_ports_by_identifier.find(*identifier); it != entity_it->second->m_ports_by_identifier.end())
+                            for (const auto& port_assignment : instance->m_port_assignments)
                             {
-                                left_port = it->second->m_expanded_identifiers;
+                                auto right_res = expand_assignment_expression(vhdl_entity, port_assignment.m_assignment);
+                                if (right_res.is_error())
+                                {
+                                    return ERR_APPEND(right_res.get_error(), "could not parse VHDL file '" + m_path.string() + "': unable to expand entity port assignment");
+                                }
+                                const std::vector<ci_string> right_port = right_res.get();
+                                if (!right_port.empty())
+                                {
+                                    std::vector<ci_string> left_port;
+                                    if (const identifier_t* identifier = std::get_if<identifier_t>(&(port_assignment.m_port.value())); identifier != nullptr)
+                                    {
+                                        if (const auto it = entity_it->second->m_ports_by_identifier.find(*identifier); it != entity_it->second->m_ports_by_identifier.end())
+                                        {
+                                            left_port = it->second->m_expanded_identifiers;
+                                        }
+                                        else
+                                        {
+                                            return ERR("could not parse VHDL file '" + m_path.string() + "': unable to assign signal to port '" + core_strings::to<std::string>(*identifier)
+                                                       + "' as it is not a port of entity '" + core_strings::to<std::string>(entity_it->first) + "'");
+                                        }
+                                    }
+                                    else if (const ranged_identifier_t* ranged_identifier = std::get_if<ranged_identifier_t>(&(port_assignment.m_port.value())); ranged_identifier != nullptr)
+                                    {
+                                        left_port = expand_ranges(ranged_identifier->first, ranged_identifier->second);
+                                    }
+                                    else
+                                    {
+                                        return ERR("could not parse VHDL file '" + m_path.string() + "': unable to expand entity port assignment");
+                                    }
+
+                                    if (left_port.empty())
+                                    {
+                                        return ERR("could not parse VHDL file '" + m_path.string() + "': unable to expand entity port assignment");
+                                    }
+
+                                    u32 max_size = right_port.size() <= left_port.size() ? right_port.size() : left_port.size();
+
+                                    for (u32 i = 0; i < max_size; i++)
+                                    {
+                                        instance->m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));
+                                    }
+                                }
                             }
-                        }
-                        else if (const ranged_identifier_t* identifier = std::get_if<ranged_identifier_t>(&(port_assignment.m_port)); identifier != nullptr)
-                        {
-                            left_port = expand_ranges(identifier->first, identifier->second);
                         }
                         else
                         {
-                            return ERR("could not parse VHDL file '" + m_path.string() + "': unable to expand entity port assignment");
-                        }
-
-                        auto right_res = expand_assignment_expression(vhdl_entity, port_assignment.m_assignment);
-                        if (right_res.is_error())
-                        {
-                            return ERR_APPEND(right_res.get_error(), "could not parse VHDL file '" + m_path.string() + "': unable to expand entity port assignment");
-                        }
-                        const std::vector<ci_string> right_port = right_res.get();
-
-                        if (left_port.empty())
-                        {
-                            return ERR("could not parse VHDL file '" + m_path.string() + "': unable to expand entity port assignment");
-                        }
-
-                        if (!right_port.empty())
-                        {
-                            u32 max_size;
-                            if (right_port.size() <= left_port.size())
+                            std::vector<ci_string> ports;
+                            for (const auto& port : m_entities_by_name.at(instance->m_type)->m_ports)
                             {
-                                max_size = right_port.size();
-                            }
-                            else
-                            {
-                                max_size = left_port.size();
+                                ports.insert(ports.end(), port->m_expanded_identifiers.begin(), port->m_expanded_identifiers.end());
                             }
 
-                            for (u32 i = 0; i < max_size; i++)
+                            auto port_it = ports.begin();
+
+                            for (const auto& port_assignment : instance->m_port_assignments)
                             {
-                                instance->m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));
-                            }
-                        }
-                        else
-                        {
-                            for (const auto& expanded_port_name : left_port)
-                            {
-                                instance->m_expanded_port_assignments.push_back(std::make_pair(expanded_port_name, ""));
+                                auto right_res = expand_assignment_expression(vhdl_entity, port_assignment.m_assignment);
+                                if (right_res.is_error())
+                                {
+                                    return ERR_APPEND(right_res.get_error(), "could not parse VHDL file '" + m_path.string() + "': unable to expand entity port assignment");
+                                }
+                                const std::vector<ci_string> right_port = right_res.get();
+                                if (!right_port.empty())
+                                {
+                                    std::vector<ci_string> left_port;
+
+                                    for (u32 i = 0; i < right_port.size() && port_it != ports.end(); i++)
+                                    {
+                                        left_port.push_back(*port_it++);
+                                    }
+
+                                    u32 max_size = right_port.size() <= left_port.size() ? right_port.size() : left_port.size();
+
+                                    for (u32 i = 0; i < max_size; i++)
+                                    {
+                                        instance->m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));
+                                    }
+                                }
                             }
                         }
                     }
@@ -1324,18 +1357,25 @@ namespace hal
             {
                 if (const auto res = parse_instance(vhdl_entity); res.is_error())
                 {
-                    return ERR_APPEND(res.get_error(), "could not parse architecture body: unable to parse instance (line " + std::to_string(next_token.number) + ")");
+                    return ERR_APPEND(res.get_error(),
+                                      "could not parse architecture body of entity '" + core_strings::to<std::string>(vhdl_entity->m_name) + "': unable to parse instance (line "
+                                          + std::to_string(next_token.number) + ")");
                 }
             }
             // not in instance -> has to be a direct assignment
             else if (m_token_stream.find_next("<=") < m_token_stream.find_next(";"))
             {
-                parse_assignment(vhdl_entity);
+                if (const auto res = parse_assignment(vhdl_entity); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(),
+                                      "could not parse architecture body of entity '" + core_strings::to<std::string>(vhdl_entity->m_name) + "': unable to parse assignment (line "
+                                          + std::to_string(next_token.number) + ")");
+                }
             }
             else
             {
-                return ERR("could not parse architecture body: unexpected token '" + core_strings::to<std::string>(m_token_stream.peek().string) + "' (line " + std::to_string(next_token.number)
-                           + ")");
+                return ERR("could not parse architecture body of entity '" + core_strings::to<std::string>(vhdl_entity->m_name) + "': unexpected token '"
+                           + core_strings::to<std::string>(m_token_stream.peek().string) + "' (line " + std::to_string(next_token.number) + ")");
             }
 
             next_token = m_token_stream.peek();
@@ -1437,7 +1477,12 @@ namespace hal
 
         if (m_token_stream.peek() == "port")
         {
-            parse_port_assign(instance.get());
+            if (const auto res = parse_port_assign(instance.get()); res.is_error())
+            {
+                return ERR_APPEND(res.get_error(),
+                                  "could not parse instance '" + core_strings::to<std::string>(instance->m_name) + "' of type '" + core_strings::to<std::string>(instance->m_type)
+                                      + "': unable to parse port assignment (line " + std::to_string(line_number) + ")");
+            }
         }
 
         vhdl_entity->m_instances_by_name[instance->m_name] = instance.get();
@@ -1457,37 +1502,64 @@ namespace hal
         TokenStream<ci_string> port_stream = m_token_stream.extract_until(")");
         m_token_stream.consume(")", true);
 
-        while (port_stream.remaining() > 0)
+        if (port_stream.find_next("=>") != TokenStream<ci_string>::END_OF_STREAM)
         {
-            TokenStream<ci_string> left_stream = port_stream.extract_until("=>");
-            port_stream.consume("=>", true);
-            TokenStream<ci_string> right_stream = port_stream.extract_until(",");
-            port_stream.consume(",", port_stream.remaining() > 0);    // last entry has no comma
-
-            if (!right_stream.consume("open"))
+            while (port_stream.remaining() > 0)
             {
-                VhdlPortAssignment port_assignment;
+                TokenStream<ci_string> left_stream = port_stream.extract_until("=>");
+                port_stream.consume("=>", true);
+                TokenStream<ci_string> right_stream = port_stream.extract_until(",");
+                port_stream.consume(",", port_stream.remaining() > 0);    // last entry has no comma
 
-                if (auto res = parse_assignment_expression(std::move(left_stream)); res.is_error())
+                if (!right_stream.consume("open"))
                 {
-                    return ERR_APPEND(res.get_error(), "could not parse port assignment: unable to parse port (line " + std::to_string(line_number) + ")");
-                }
-                else
-                {
-                    // vector can only have a single entry for left side of port assignment
-                    port_assignment.m_port = res.get().front();
-                }
+                    VhdlPortAssignment port_assignment;
 
-                if (auto res = parse_assignment_expression(std::move(right_stream)); res.is_error())
-                {
-                    return ERR_APPEND(res.get_error(), "could not parse port assignment: unable to parse assignment (line " + std::to_string(line_number) + ")");
-                }
-                else
-                {
-                    port_assignment.m_assignment = res.get();
-                }
+                    if (auto res = parse_assignment_expression(std::move(left_stream)); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(), "could not parse port assignment: unable to parse port (line " + std::to_string(line_number) + ")");
+                    }
+                    else
+                    {
+                        // vector can only have a single entry for left side of port assignment
+                        port_assignment.m_port = res.get().front();
+                    }
 
-                instance->m_port_assignments.push_back(std::move(port_assignment));
+                    if (auto res = parse_assignment_expression(std::move(right_stream)); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(), "could not parse port assignment: unable to parse assignment (line " + std::to_string(line_number) + ")");
+                    }
+                    else
+                    {
+                        port_assignment.m_assignment = res.get();
+                    }
+
+                    instance->m_port_assignments.push_back(std::move(port_assignment));
+                }
+            }
+        }
+        else
+        {
+            while (port_stream.remaining() > 0)
+            {
+                TokenStream<ci_string> right_stream = port_stream.extract_until(",");
+                port_stream.consume(",", port_stream.remaining() > 0);    // last entry has no comma
+
+                if (!right_stream.consume("open"))
+                {
+                    VhdlPortAssignment port_assignment;
+
+                    if (auto res = parse_assignment_expression(std::move(right_stream)); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(), "could not parse port assignment: unable to parse assignment (line " + std::to_string(line_number) + ")");
+                    }
+                    else
+                    {
+                        port_assignment.m_assignment = res.get();
+                    }
+
+                    instance->m_port_assignments.push_back(std::move(port_assignment));
+                }
             }
         }
 
@@ -1695,51 +1767,104 @@ namespace hal
             {
                 if (const auto gate_type_it = m_gate_types.find(instance->m_type); gate_type_it != m_gate_types.end())
                 {
-                    // cache pin groups
-                    std::unordered_map<ci_string, std::vector<ci_string>> pin_groups;
-                    for (const auto pin_group : gate_type_it->second->get_pin_groups())
+                    if (!instance->m_port_assignments.empty())
                     {
-                        for (const auto pin : pin_group->get_pins())
+                        // all port assignments by name
+                        if (instance->m_port_assignments.front().m_port.has_value())
                         {
-                            pin_groups[core_strings::to<ci_string>(pin_group->get_name())].push_back(core_strings::to<ci_string>(pin->get_name()));
-                        }
-                    }
-
-                    for (const auto& port_assignment : instance->m_port_assignments)
-                    {
-                        std::vector<ci_string> left_port;
-                        if (const identifier_t* identifier = std::get_if<identifier_t>(&(port_assignment.m_port)); identifier != nullptr)
-                        {
-                            if (const auto group_it = pin_groups.find(*identifier); group_it != pin_groups.end())
+                            // cache pin groups
+                            std::unordered_map<ci_string, std::vector<ci_string>> pin_groups;
+                            for (const auto pin_group : gate_type_it->second->get_pin_groups())
                             {
-                                left_port = group_it->second;
+                                for (const auto pin : pin_group->get_pins())
+                                {
+                                    pin_groups[core_strings::to<ci_string>(pin_group->get_name())].push_back(core_strings::to<ci_string>(pin->get_name()));
+                                }
+                            }
+
+                            for (const auto& port_assignment : instance->m_port_assignments)
+                            {
+                                auto right_res = expand_assignment_expression(vhdl_entity, port_assignment.m_assignment);
+                                if (right_res.is_error())
+                                {
+                                    return ERR_APPEND(right_res.get_error(), "could not construct netlist: unable to expand gate port assignment");
+                                }
+                                auto right_port = right_res.get();
+
+                                if (!right_port.empty())
+                                {
+                                    std::vector<ci_string> left_port;
+
+                                    if (const identifier_t* identifier = std::get_if<identifier_t>(&(port_assignment.m_port.value())); identifier != nullptr)
+                                    {
+                                        if (const auto group_it = pin_groups.find(*identifier); group_it != pin_groups.end())
+                                        {
+                                            left_port = group_it->second;
+                                        }
+                                        else
+                                        {
+                                            left_port.push_back(*identifier);
+                                        }
+                                    }
+                                    else if (const ranged_identifier_t* ranged_identifier = std::get_if<ranged_identifier_t>(&(port_assignment.m_port.value())); ranged_identifier != nullptr)
+                                    {
+                                        left_port = expand_ranges(ranged_identifier->first, ranged_identifier->second);
+                                    }
+                                    else
+                                    {
+                                        return ERR("could not construct netlist: unable to expand gate port assignment");
+                                    }
+
+                                    if (right_port.size() != left_port.size())
+                                    {
+                                        return ERR("could not construct netlist: pin assignment width mismatch at instance '" + core_strings::to<std::string>(instance->m_name) + "' of gate type '"
+                                                   + core_strings::to<std::string>(instance->m_type) + "' within entity '" + core_strings::to<std::string>(entity_name) + "'");
+                                    }
+
+                                    for (u32 i = 0; i < left_port.size(); i++)
+                                    {
+                                        instance->m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));
+                                    }
+                                }
                             }
                         }
-                        else if (const ranged_identifier_t* identifier = std::get_if<ranged_identifier_t>(&(port_assignment.m_port)); identifier != nullptr)
-                        {
-                            left_port = expand_ranges(identifier->first, identifier->second);
-                        }
+                        // all port assignments by order
                         else
                         {
-                            return ERR("could not construct netlist: unable to expand gate port assignment");
-                        }
+                            // cache pins
+                            std::vector<ci_string> pins;
+                            for (const auto pin : gate_type_it->second->get_pins())
+                            {
+                                pins.push_back(core_strings::to<ci_string>(pin->get_name()));
+                            }
+                            auto pin_it = pins.begin();
 
-                        auto right_res = expand_assignment_expression(vhdl_entity, port_assignment.m_assignment);
-                        if (right_res.is_error())
-                        {
-                            return ERR_APPEND(right_res.get_error(), "could not construct netlist: unable to expand gate port assignment");
-                        }
+                            for (const auto& port_assignment : instance->m_port_assignments)
+                            {
+                                auto right_res = expand_assignment_expression(vhdl_entity, port_assignment.m_assignment);
+                                if (right_res.is_error())
+                                {
+                                    return ERR_APPEND(right_res.get_error(), "could not construct netlist: unable to expand gate port assignment");
+                                }
+                                auto right_port = right_res.get();
 
-                        auto right_port = right_res.get();
-                        if (right_port.size() != left_port.size())
-                        {
-                            return ERR("could not construct netlist: pin assignment width mismatch at instance '" + core_strings::to<std::string>(instance->m_name) + "' of gate type '"
-                                       + core_strings::to<std::string>(instance->m_type) + "' within entity '" + core_strings::to<std::string>(entity_name) + "'");
-                        }
+                                if (!right_port.empty())
+                                {
+                                    std::vector<ci_string> left_port;
 
-                        for (u32 i = 0; i < left_port.size(); i++)
-                        {
-                            instance->m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));
+                                    for (u32 i = 0; i < right_port.size() && pin_it != pins.end(); i++)
+                                    {
+                                        left_port.push_back(*pin_it++);
+                                    }
+
+                                    u32 max_size = right_port.size() <= left_port.size() ? right_port.size() : left_port.size();
+
+                                    for (u32 i = 0; i < max_size; i++)
+                                    {
+                                        instance->m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -1881,10 +2006,14 @@ namespace hal
                     }
 
                     // update module ports
-                    if (const auto it = m_module_ports.find(slave_net); it != m_module_ports.end())
+                    if (const auto it = m_module_port_by_net.find(slave_net); it != m_module_port_by_net.end())
                     {
-                        m_module_ports[master_net].insert(m_module_ports[master_net].end(), it->second.begin(), it->second.end());
-                        m_module_ports.erase(it);
+                        for (auto [module, index] : it->second)
+                        {
+                            std::get<1>(m_module_ports.at(module).at(index)) = master_net;
+                        }
+                        m_module_port_by_net[master_net].insert(m_module_port_by_net[master_net].end(), it->second.begin(), it->second.end());
+                        m_module_port_by_net.erase(it);
                     }
 
                     // make sure to keep module ports up to date
@@ -1910,24 +2039,22 @@ namespace hal
         }
 
         // assign module pins
-        for (const auto& [net, port_infos] : m_module_ports)
+        for (const auto& [module, ports] : m_module_ports)
         {
-            for (const auto& port_info : port_infos)
+            for (const auto& [port_name, port_net] : ports)
             {
-                if (net->get_num_of_sources() == 0 && net->get_num_of_destinations() == 0)
+                if (port_net->get_num_of_sources() == 0 && port_net->get_num_of_destinations() == 0)
                 {
                     continue;
                 }
 
-                Module* mod = std::get<2>(port_info);
-                if (auto res = mod->create_pin(std::get<1>(port_info), net); res.is_error())
+                if (auto res = module->create_pin(port_name, port_net); res.is_error())
                 {
-                    // return ERR_APPEND(res.get_error(),
-                    //                 "could not construct netlist: failed to create pin '" + std::get<1>(port_info) + "' at net '" + net->get_name() + "' with ID " + std::to_string(net->get_id())
-                    //                     + " within module '" + mod->get_name() + "' with ID " + std::to_string(mod->get_id()));
-                    // NOTE: The pin creation fails when there are unused ports that never get a net assigned to them (verliog...),
+                    return ERR_APPEND(res.get_error(),
+                                      "could not construct netlist: failed to create pin '" + port_name + "' at net '" + port_net->get_name() + "' with ID " + std::to_string(port_net->get_id())
+                                          + " within module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()));
+                    // TODO: The pin creation fails when there are unused ports that never get a net assigned to them (verliog...),
                     //       but this also happens when the net just passes through the module (since there is no gate inside the module with that net as either input or output net, the net does not get listed as module input or output)
-                    log_warning("vhdl_parser", "{}", res.get_error().get());
                 }
             }
         }
@@ -2015,7 +2142,8 @@ namespace hal
                 if (const auto it = parent_module_assignments.find(expanded_port_identifier); it != parent_module_assignments.end())
                 {
                     Net* port_net = m_net_by_name.at(it->second);
-                    m_module_ports[port_net].push_back(std::make_tuple(port->m_direction, core_strings::to<std::string>(expanded_port_identifier), module));
+                    m_module_ports[module].push_back(std::make_pair(core_strings::to<std::string>(expanded_port_identifier), port_net));
+                    m_module_port_by_net[port_net].push_back(std::make_pair(module, m_module_ports[module].size() - 1));
 
                     // assign port attributes
                     for (const VhdlDataEntry& attribute : port->m_attributes)
@@ -2142,6 +2270,14 @@ namespace hal
                         }
                         else if (assignment != "'Z'" && assignment != "'X'")
                         {
+                            continue;
+                        }
+                        else if (vhdl_entity->m_expanded_port_identifiers.find(assignment) != vhdl_entity->m_expanded_port_identifiers.end())
+                        {
+                            continue;
+                        }
+                        else
+                        {
                             return ERR("could not create instance '" + core_strings::to<std::string>(instance_identifier) + "' of type '" + core_strings::to<std::string>(instance_type)
                                        + "': port assignment '" + core_strings::to<std::string>(port) + " = " + core_strings::to<std::string>(assignment) + "' is invalid");
                         }
@@ -2217,6 +2353,10 @@ namespace hal
                         signal = assignment;
                     }
                     else if (assignment == "'Z'" || assignment == "'X'")
+                    {
+                        continue;
+                    }
+                    else if (vhdl_entity->m_expanded_port_identifiers.find(assignment) != vhdl_entity->m_expanded_port_identifiers.end())
                     {
                         continue;
                     }

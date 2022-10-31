@@ -69,7 +69,7 @@ namespace hal
 
         struct VhdlPortAssignment
         {
-            assignment_t m_port;
+            std::optional<assignment_t> m_port;
             std::vector<assignment_t> m_assignment;
         };
 
@@ -117,38 +117,18 @@ namespace hal
         // ports
         std::vector<std::unique_ptr<VhdlPort>> m_ports;
         std::map<ci_string, VhdlPort*> m_ports_by_identifier;
-        // std::vector<ci_string> m_port_names;                                                                                // port names (in order)
-        // std::unordered_set<ci_string> m_port_names_set;                                                                     // port names set
-        // std::unordered_map<ci_string, PinDirection> m_port_directions;                                                      // port names to direction
-        // std::unordered_map<ci_string, std::vector<std::vector<u32>>> m_port_ranges;                                         // port names to ranges
-        // std::unordered_map<ci_string, std::vector<std::tuple<std::string, std::string, std::string>>> m_port_attributes;    // port attributes
-        // std::unordered_map<ci_string, std::vector<ci_string>> m_expanded_port_names;
+        std::set<ci_string> m_expanded_port_identifiers;
 
         // signals
         std::vector<std::unique_ptr<VhdlSignal>> m_signals;
         std::map<ci_string, VhdlSignal*> m_signals_by_name;
-        // std::vector<ci_string> m_signals;                                                                                     // signal names
-        // std::unordered_set<ci_string> m_signals_set;                                                                          // signal names set
-        // std::unordered_map<ci_string, std::vector<std::vector<u32>>> m_signal_ranges;                                         // signal ranges
-        // std::unordered_map<ci_string, std::vector<std::tuple<std::string, std::string, std::string>>> m_signal_attributes;    // signal attributes
-        // std::unordered_map<ci_string, std::vector<ci_string>> m_expanded_signals;
 
         // assignments
         std::vector<VhdlAssignment> m_assignments;
         std::vector<std::pair<ci_string, ci_string>> m_expanded_assignments;
-        // std::vector<std::pair<TokenStream<ci_string>, TokenStream<ci_string>>> m_assignments;    // signal assignments
-        // std::vector<std::pair<ci_string, ci_string>> m_expanded_assignments;
 
         // instances
         std::vector<std::unique_ptr<VhdlInstance>> m_instances;
         std::map<ci_string, VhdlInstance*> m_instances_by_name;
-        // std::vector<ci_string> m_instances;                                                                                              // instance names
-        // std::unordered_set<ci_string> m_instances_set;                                                                                   // instance names set
-        // std::unordered_map<ci_string, ci_string> m_instance_types;                                                                       // instance types
-        // std::unordered_map<ci_string, std::vector<std::pair<TokenStream<ci_string>, TokenStream<ci_string>>>> m_instance_assignments;    // port assignments
-        // std::unordered_map<ci_string, std::vector<std::tuple<std::string, std::string, std::string>>> m_instance_generic_assignments;    // generic assignments
-        // std::unordered_map<ci_string, std::vector<std::tuple<std::string, std::string, std::string>>> m_instance_attributes;             // instance attributes
-        // std::unordered_map<ci_string, std::vector<std::pair<ci_string, ci_string>>> m_expanded_gate_assignments;
-        // std::unordered_map<ci_string, std::vector<std::pair<ci_string, ci_string>>> m_expanded_entity_assignments;
     };
 }    // namespace hal

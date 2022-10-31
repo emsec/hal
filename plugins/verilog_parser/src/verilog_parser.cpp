@@ -1455,11 +1455,11 @@ namespace hal
         u32 line_number = m_token_stream.peek().number;
         m_token_stream.consume("(", true);
         u32 line_end = m_token_stream.find_next(";");
-
-        do
+        if (m_token_stream.peek() == ".")
         {
-            if (m_token_stream.consume("."))
+            do
             {
+                m_token_stream.consume(".");
                 VerilogPortAssignment port_assignment;
                 port_assignment.m_port_name = m_token_stream.consume().string;
                 m_token_stream.consume("(", true);
@@ -1477,8 +1477,11 @@ namespace hal
                     continue;
                 }
                 instance->m_port_assignments.push_back(std::move(port_assignment));
-            }
-            else
+            } while (m_token_stream.consume(",", false));
+        }
+        else
+        {
+            do
             {
                 VerilogPortAssignment port_assignment;
                 if (auto res = parse_assignment_expression(m_token_stream.extract_until(",", line_end - 1)); res.is_error())
@@ -1494,8 +1497,8 @@ namespace hal
                     continue;
                 }
                 instance->m_port_assignments.push_back(std::move(port_assignment));
-            }
-        } while (m_token_stream.consume(",", false));
+            } while (m_token_stream.consume(",", false));
+        }
 
         m_token_stream.consume(")", true);
         m_token_stream.consume(";", true);
@@ -1644,6 +1647,7 @@ namespace hal
                         // all port assignments by order
                         else
                         {
+                            // cache pins
                             std::vector<std::string> pins = gate_type_it->second->get_pin_names();
                             auto pin_it                   = pins.begin();
 
@@ -1856,7 +1860,6 @@ namespace hal
                                           + " within module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()));
                     // TODO: The pin creation fails when there are unused ports that never get a net assigned to them (verliog...),
                     //       but this also happens when the net just passes through the module (since there is no gate inside the module with that net as either input or output net, the net does not get listed as module input or output)
-                    // log_warning("verilog_parser", "{}", res.get_error().get());
                 }
             }
         }
