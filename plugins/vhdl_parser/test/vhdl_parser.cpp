@@ -393,8 +393,8 @@ namespace hal {
                                         "architecture top_arch of top is "
                                         "begin "
                                         "   gate_0 : AND2 port map (a, b, c); "
-                                        "   gate_1 : AND2 port map (b, c); "
-                                        "   gate_2 : AND2 port map (c); "
+                                        "   gate_1 : AND2 port map (a, b); "
+                                        "   gate_2 : AND2 port map (a); "
                                         "end top_arch;");
                 
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
@@ -616,8 +616,8 @@ namespace hal {
                                         "architecture top_arch of top is "
                                         "begin "
                                         "   inst_0 : sub_mod port map (a, b, c); "
-                                        "   inst_1 : sub_mod port map (b, c); "
-                                        "   inst_2 : sub_mod port map (c); "
+                                        "   inst_1 : sub_mod port map (a, b); "
+                                        "   inst_2 : sub_mod port map (a); "
                                         "end top_arch;");
                 
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
@@ -644,16 +644,16 @@ namespace hal {
                 const auto pins_1 = inst_1->get_pins();
                 EXPECT_EQ(pins_1.size(), 2);
                 EXPECT_EQ(pins_1.at(0)->get_name(), "as");
-                EXPECT_EQ(pins_1.at(0)->get_net()->get_name(), "b");
+                EXPECT_EQ(pins_1.at(0)->get_net()->get_name(), "a");
                 EXPECT_EQ(pins_1.at(1)->get_name(), "bs");
-                EXPECT_EQ(pins_1.at(1)->get_net()->get_name(), "c");
+                EXPECT_EQ(pins_1.at(1)->get_net()->get_name(), "b");
 
                 ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_2")).size(), 1);
                 Module* inst_2 = nl->get_modules(test_utils::module_name_filter("inst_2")).front();
                 const auto pins_2 = inst_2->get_pins();
                 EXPECT_EQ(pins_2.size(), 1);
                 EXPECT_EQ(pins_2.at(0)->get_name(), "as");
-                EXPECT_EQ(pins_2.at(0)->get_net()->get_name(), "c");
+                EXPECT_EQ(pins_2.at(0)->get_net()->get_name(), "a");
             }
             {   // test pass-through module
                 const GateLibrary* gl = test_utils::get_gate_library();

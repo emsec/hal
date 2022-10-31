@@ -609,6 +609,7 @@ namespace hal
 
                     if (!instance->m_port_assignments.empty())
                     {
+                        // all port assignments by name
                         if (instance->m_port_assignments.front().m_port.has_value())
                         {
                             for (const auto& port_assignment : instance->m_port_assignments)
@@ -657,6 +658,7 @@ namespace hal
                                 }
                             }
                         }
+                        // all port assignments by order
                         else
                         {
                             std::vector<ci_string> ports;

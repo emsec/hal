@@ -541,9 +541,9 @@ namespace hal {
                                         ""
                                         "   sub_mod inst_0 (a, b, c);"
                                         ""
-                                        "   sub_mod inst_1 (b, c);"
+                                        "   sub_mod inst_1 (a, b);"
                                         ""
-                                        "   sub_mod inst_2 (c);"
+                                        "   sub_mod inst_2 (a);"
                                         "endmodule"
                                         );
                 
@@ -571,16 +571,16 @@ namespace hal {
                 const auto pins_1 = inst_1->get_pins();
                 EXPECT_EQ(pins_1.size(), 2);
                 EXPECT_EQ(pins_1.at(0)->get_name(), "as");
-                EXPECT_EQ(pins_1.at(0)->get_net()->get_name(), "b");
+                EXPECT_EQ(pins_1.at(0)->get_net()->get_name(), "a");
                 EXPECT_EQ(pins_1.at(1)->get_name(), "bs");
-                EXPECT_EQ(pins_1.at(1)->get_net()->get_name(), "c");
+                EXPECT_EQ(pins_1.at(1)->get_net()->get_name(), "b");
 
                 ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_2")).size(), 1);
                 Module* inst_2 = nl->get_modules(test_utils::module_name_filter("inst_2")).front();
                 const auto pins_2 = inst_2->get_pins();
                 EXPECT_EQ(pins_2.size(), 1);
                 EXPECT_EQ(pins_2.at(0)->get_name(), "as");
-                EXPECT_EQ(pins_2.at(0)->get_net()->get_name(), "c");
+                EXPECT_EQ(pins_2.at(0)->get_net()->get_name(), "a");
             }
             {   // test pass-through module
                 const GateLibrary* gl = test_utils::get_gate_library();
@@ -922,16 +922,16 @@ namespace hal {
                 const GateLibrary* gl = test_utils::get_gate_library();
 
                 std::string netlist_input(
-                                        "module top (); "
-                                        "   wire [3:0] gate_0_in, gate_1_in;"
-                                        "   RAM gate_0 ( "
-                                        "       .DATA_IN (gate_0_in ), "
-                                        "   ) ; "
-                                        "   RAM gate_1 ( "
-                                        "       .DATA_IN (gate_1_in ), "
-                                        "   ) ; "
-                                        "   assign gate_0_in = 4'd0;"
-                                        "   assign gate_1_in = 1'd0;"
+                                        "module top ();\n "
+                                        "   wire [3:0] gate_0_in, gate_1_in;\n"
+                                        "   RAM gate_0 (\n "
+                                        "       .DATA_IN (gate_0_in ) \n"
+                                        "   ) ; \n"
+                                        "   RAM gate_1 (\n "
+                                        "       .DATA_IN (gate_1_in ) \n"
+                                        "   ) ;\n "
+                                        "   assign gate_0_in = 4'd0;\n"
+                                        "   assign gate_1_in = 1'd0;\n"
                                         "endmodule");
                 
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
