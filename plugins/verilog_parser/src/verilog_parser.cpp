@@ -16,478 +16,7 @@ namespace hal
 {
     namespace
     {
-        std::vector<u32> parse_range(TokenStream<std::string>& stream)
-        {
-            if (stream.remaining() == 1)
-            {
-                return {(u32)std::stoi(stream.consume().string)};
-            }
 
-            // MSB to LSB
-            const int end = std::stoi(stream.consume().string);
-            stream.consume(":", true);
-            const int start = std::stoi(stream.consume().string);
-
-            const int direction = (start <= end) ? 1 : -1;
-
-            std::vector<u32> result;
-            for (int i = start; i != end + direction; i += direction)
-            {
-                result.push_back((u32)i);
-            }
-            return result;
-        }
-
-        void expand_ranges_recursively(std::vector<std::string>& expanded_names, const std::string& current_name, const std::vector<std::vector<u32>>& ranges, u32 dimension)
-        {
-            // expand signal recursively
-            if (ranges.size() > dimension)
-            {
-                for (const u32 index : ranges[dimension])
-                {
-                    expand_ranges_recursively(expanded_names, current_name + "(" + std::to_string(index) + ")", ranges, dimension + 1);
-                }
-            }
-            else
-            {
-                // last dimension
-                expanded_names.push_back(current_name);
-            }
-        }
-
-        std::vector<std::string> expand_ranges(const std::string& name, const std::vector<std::vector<u32>>& ranges)
-        {
-            std::vector<std::string> res;
-
-            expand_ranges_recursively(res, name, ranges, 0);
-
-            return res;
-        }
-
-        static const std::map<char, BooleanFunction::Value> bin_map = {{'0', BooleanFunction::Value::ZERO},
-                                                                       {'1', BooleanFunction::Value::ONE},
-                                                                       {'X', BooleanFunction::Value::X},
-                                                                       {'Z', BooleanFunction::Value::Z}};
-
-        static const std::map<char, std::vector<BooleanFunction::Value>> oct_map = {{'0', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
-                                                                                    {'1', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
-                                                                                    {'2', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
-                                                                                    {'3', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
-                                                                                    {'4', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
-                                                                                    {'5', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
-                                                                                    {'6', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
-                                                                                    {'7', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
-                                                                                    {'X', {BooleanFunction::Value::X, BooleanFunction::Value::X, BooleanFunction::Value::X}},
-                                                                                    {'Z', {BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z}}};
-
-        static const std::map<char, std::vector<BooleanFunction::Value>> hex_map = {
-            {'0', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
-            {'1', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
-            {'2', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
-            {'3', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
-            {'4', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
-            {'5', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
-            {'6', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
-            {'7', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
-            {'8', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
-            {'9', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
-            {'A', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
-            {'B', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
-            {'C', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
-            {'D', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
-            {'E', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
-            {'F', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
-            {'X', {BooleanFunction::Value::X, BooleanFunction::Value::X, BooleanFunction::Value::X, BooleanFunction::Value::X}},
-            {'Z', {BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z}}};
-
-        Result<std::vector<BooleanFunction::Value>> get_binary_vector(std::string value)
-        {
-            value = utils::to_upper(utils::replace(value, std::string("_"), std::string("")));
-
-            i32 len = -1;
-            std::string prefix;
-            std::string number;
-            std::vector<BooleanFunction::Value> result;
-
-            // base specified?
-            if (value.find('\'') == std::string::npos)
-            {
-                prefix = "D";
-                number = value;
-            }
-            else
-            {
-                if (value.at(0) != '\'')
-                {
-                    len = std::stoi(value.substr(0, value.find('\'')));
-                }
-                prefix = value.substr(value.find('\'') + 1, 1);
-                number = value.substr(value.find('\'') + 2);
-            }
-
-            // select base
-            switch (prefix.at(0))
-            {
-                case 'B': {
-                    for (auto it = number.rbegin(); it != number.rend(); it++)
-                    {
-                        const char c = *it;
-                        if (c == '0' || c == '1' || c == 'Z' || c == 'X')
-                        {
-                            result.push_back(bin_map.at(c));
-                        }
-                        else
-                        {
-                            return ERR("could not convert string to binary vector: invalid character within binary number literal '" + value + "'");
-                        }
-                    }
-                    break;
-                }
-
-                case 'O':
-                    for (auto it = number.rbegin(); it != number.rend(); it++)
-                    {
-                        const char c = *it;
-                        if ((c >= '0' && c <= '7') || c == 'X' || c == 'Z')
-                        {
-                            const auto& bits = oct_map.at(c);
-                            result.insert(result.end(), bits.begin(), bits.end());
-                        }
-                        else
-                        {
-                            return ERR("could not convert string to binary vector: invalid character within octal number literal '" + value + "'");
-                        }
-                    }
-                    break;
-
-                case 'D': {
-                    u64 tmp_val = 0;
-
-                    for (const char c : number)
-                    {
-                        if ((c >= '0' && c <= '9'))
-                        {
-                            tmp_val = (tmp_val * 10) + (c - '0');
-                        }
-                        else
-                        {
-                            return ERR("could not convert string to binary vector: invalid character within decimal number literal '" + value + "'");
-                        }
-                    }
-
-                    do
-                    {
-                        result.push_back(((tmp_val & 1) == 1) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO);
-                        tmp_val >>= 1;
-                    } while (tmp_val != 0);
-                    break;
-                }
-
-                case 'H': {
-                    for (auto it = number.rbegin(); it != number.rend(); it++)
-                    {
-                        const char c = *it;
-                        if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || c == 'X' || c == 'Z')
-                        {
-                            const auto& bits = hex_map.at(c);
-                            result.insert(result.end(), bits.begin(), bits.end());
-                        }
-                        else
-                        {
-                            return ERR("could not convert string to binary vector: invalid character within hexadecimal number literal '" + value + "'");
-                        }
-                    }
-                    break;
-                }
-
-                default: {
-                    return ERR("could not convert string to binary vector: invalid base '" + prefix + "' within number literal '" + value + "'");
-                }
-            }
-
-            if (len != -1)
-            {
-                i32 result_size = result.size();
-
-                if (len > result_size)
-                {
-                    // fill with '0'
-                    for (i32 i = 0; i < (len - result_size); i++)
-                    {
-                        result.push_back(BooleanFunction::Value::ZERO);
-                    }
-                }
-                else
-                {
-                    // drop trailing bits
-                    for (i32 i = 0; i < (result_size - len); i++)
-                    {
-                        result.pop_back();
-                    }
-                }
-            }
-
-            return OK(result);
-        }
-
-        Result<std::string> get_hex_from_literal(const Token<std::string>& value_token)
-        {
-            const u32 line_number   = value_token.number;
-            const std::string value = utils::to_upper(utils::replace(value_token.string, std::string("_"), std::string("")));
-
-            i32 len = -1;
-            std::string prefix;
-            std::string number;
-            u32 base;
-
-            // base specified?
-            if (value.find('\'') == std::string::npos)
-            {
-                prefix = "D";
-                number = value;
-            }
-            else
-            {
-                if (value.at(0) != '\'')
-                {
-                    len = std::stoi(value.substr(0, value.find('\'')));
-                }
-                prefix = value.substr(value.find('\'') + 1, 1);
-                number = value.substr(value.find('\'') + 2);
-            }
-
-            // select base
-            switch (prefix.at(0))
-            {
-                case 'B': {
-                    if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '1'); }))
-                    {
-                        return ERR("could not convert token to hexadecimal string: invalid character within binary number literal '" + value + "' (line " + std::to_string(line_number) + ")");
-                    }
-
-                    base = 2;
-                    break;
-                }
-
-                case 'O': {
-                    if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '7'); }))
-                    {
-                        return ERR("could not convert token to hexadecimal string: invalid character within ocatl number literal '" + value + "' (line " + std::to_string(line_number) + ")");
-                    }
-
-                    base = 8;
-                    break;
-                }
-
-                case 'D': {
-                    if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '9'); }))
-                    {
-                        return ERR("could not convert token to hexadecimal string: invalid character within decimal number literal '" + value + "' (line " + std::to_string(line_number) + ")");
-                    }
-
-                    base = 10;
-                    break;
-                }
-
-                case 'H': {
-                    std::string res;
-
-                    for (const char c : number)
-                    {
-                        if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F'))
-                        {
-                            res += c;
-                        }
-                        else
-                        {
-                            return ERR("could not convert token to hexadecimal string: invalid character within hexadecimal number literal '" + value + "' (line " + std::to_string(line_number) + ")");
-                        }
-                    }
-
-                    return OK(res);
-                }
-
-                default: {
-                    return ERR("could not convert token to hexadecimal string: invalid base '" + prefix + "' within number literal '" + value + "' (line " + std::to_string(line_number) + ")");
-                }
-            }
-
-            std::stringstream ss;
-            if (len != -1)
-            {
-                // fill with '0'
-                ss << std::uppercase << std::setfill('0') << std::setw((len + 3) / 4) << std::hex << stoull(number, 0, base);
-            }
-            else
-            {
-                ss << std::uppercase << std::hex << stoull(number, 0, base);
-            }
-            return OK(ss.str());
-        }
-
-        Result<std::pair<std::string, std::string>> parse_parameter_value(const Token<std::string>& value_token)
-        {
-            std::pair<std::string, std::string> value;
-
-            if (utils::is_integer(value_token.string))
-            {
-                value.first  = "integer";
-                value.second = value_token.string;
-            }
-            else if (utils::is_floating_point(value_token.string))
-            {
-                value.first  = "floating_point";
-                value.second = value_token.string;
-            }
-            else if (value_token.string[0] == '\"' && value_token.string.back() == '\"')
-            {
-                value.first  = "string";
-                value.second = value_token.string.substr(1, value_token.string.size() - 2);
-            }
-            else if (isdigit(value_token.string[0]) || value_token.string[0] == '\'')
-            {
-                if (const auto res = get_hex_from_literal(value_token); res.is_error())
-                {
-                    return ERR_APPEND(res.get_error(),
-                                      "could not parse parameter value: failed to convert '" + value_token.string + "' to hexadecimal value (line " + std::to_string(value_token.number) + ")");
-                }
-                else
-                {
-                    value.second = res.get();
-                }
-
-                if (value.second == "0" || value.second == "1")
-                {
-                    value.first = "bit_value";
-                }
-                else
-                {
-                    value.first = "bit_vector";
-                }
-            }
-            else
-            {
-                return ERR("could not parse parameter value: failed to identify data type of parameter '" + value_token.string + "' (line " + std::to_string(value_token.number) + ")");
-            }
-
-            return OK(value);
-        }
-
-        Result<std::vector<assignment_t>> parse_assignment_expression(TokenStream<std::string>&& stream)
-        {
-            std::vector<TokenStream<std::string>> parts;
-
-            if (stream.size() == 0)
-            {
-                return OK({});
-            }
-
-            if (stream.peek() == "{")
-            {
-                stream.consume("{", true);
-
-                TokenStream<std::string> assignment_list_str = stream.extract_until("}");
-                stream.consume("}", true);
-
-                do
-                {
-                    parts.push_back(assignment_list_str.extract_until(","));
-                } while (assignment_list_str.consume(",", false));
-            }
-            else
-            {
-                parts.push_back(stream);
-            }
-
-            std::vector<assignment_t> result;
-            result.reserve(parts.size());
-
-            for (auto it = parts.rbegin(); it != parts.rend(); it++)
-            {
-                TokenStream<std::string>& part_stream = *it;
-
-                const Token<std::string> signal_name_token = part_stream.consume();
-                std::string signal_name                    = signal_name_token.string;
-
-                // (3) NUMBER
-                if (isdigit(signal_name[0]) || signal_name[0] == '\'')
-                {
-                    if (auto res = get_binary_vector(signal_name_token); res.is_error())
-                    {
-                        return ERR_APPEND(res.get_error(), "could not parse assignment expression: unable to convert token to binary vector");
-                    }
-                    else
-                    {
-                        result.push_back(std::move(res.get()));
-                    }
-                }
-                else
-                {
-                    // any bounds specified?
-                    if (part_stream.consume("["))
-                    {
-                        // (4) NAME[INDEX1][INDEX2]...
-                        // (5) NAME[BEGIN_INDEX1:END_INDEX1][BEGIN_INDEX2:END_INDEX2]...
-
-                        std::vector<std::vector<u32>> ranges;
-                        do
-                        {
-                            TokenStream<std::string> range_str = part_stream.extract_until("]");
-                            ranges.emplace_back(parse_range(range_str));
-                            part_stream.consume("]", true);
-                        } while (part_stream.consume("[", false));
-
-                        result.push_back(ranged_identifier_t({std::move(signal_name), std::move(ranges)}));
-                    }
-                    else
-                    {
-                        // (1) NAME *single-dimensional*
-                        // (2) NAME *multi-dimensional*
-                        result.push_back(std::move(signal_name));
-                    }
-                }
-            }
-
-            return OK(result);
-        }
-
-        std::vector<std::string> expand_assignment_expression(VerilogModule* verilog_module, const std::vector<assignment_t>& vars)
-        {
-            std::vector<std::string> result;
-            for (const auto& var : vars)
-            {
-                if (const identifier_t* identifier = std::get_if<identifier_t>(&var); identifier != nullptr)
-                {
-                    std::vector<std::vector<u32>> ranges;
-
-                    if (const auto signal_it = verilog_module->m_signals_by_name.find(*identifier); signal_it != verilog_module->m_signals_by_name.end())
-                    {
-                        ranges = signal_it->second->m_ranges;
-                    }
-                    else if (const auto port_it = verilog_module->m_ports_by_expression.find(*identifier); port_it != verilog_module->m_ports_by_expression.end())
-                    {
-                        ranges = port_it->second->m_ranges;
-                    }
-
-                    std::vector<std::string> expanded = expand_ranges(*identifier, ranges);
-                    result.insert(result.end(), expanded.begin(), expanded.end());
-                }
-                else if (const ranged_identifier_t* ranged_identifier = std::get_if<ranged_identifier_t>(&var); ranged_identifier != nullptr)
-                {
-                    std::vector<std::string> expanded = expand_ranges(ranged_identifier->first, ranged_identifier->second);
-                    result.insert(result.end(), expanded.begin(), expanded.end());
-                }
-                else if (const numeral_t* numeral = std::get_if<numeral_t>(&var); numeral != nullptr)
-                {
-                    for (auto value : *numeral)
-                    {
-                        result.push_back("'" + BooleanFunction::to_string(value) + "'");
-                    }
-                }
-            }
-
-            return result;
-        }
     }    // namespace
 
     Result<std::monostate> VerilogParser::parse(const std::filesystem::path& file_path)
@@ -1506,7 +1035,7 @@ namespace hal
         return OK({});
     }
 
-    Result<std::vector<VerilogDataEntry>> VerilogParser::parse_parameter_assign()
+    Result<std::vector<VerilogParser::VerilogDataEntry>> VerilogParser::parse_parameter_assign()
     {
         std::vector<VerilogDataEntry> generics;
 
@@ -2262,6 +1791,45 @@ namespace hal
     // ###################          Helper Functions          ####################
     // ###########################################################################
 
+    namespace
+    {
+        static const std::map<char, BooleanFunction::Value> bin_map = {{'0', BooleanFunction::Value::ZERO},
+                                                                       {'1', BooleanFunction::Value::ONE},
+                                                                       {'X', BooleanFunction::Value::X},
+                                                                       {'Z', BooleanFunction::Value::Z}};
+
+        static const std::map<char, std::vector<BooleanFunction::Value>> oct_map = {{'0', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
+                                                                                    {'1', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
+                                                                                    {'2', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
+                                                                                    {'3', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
+                                                                                    {'4', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+                                                                                    {'5', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+                                                                                    {'6', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
+                                                                                    {'7', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
+                                                                                    {'X', {BooleanFunction::Value::X, BooleanFunction::Value::X, BooleanFunction::Value::X}},
+                                                                                    {'Z', {BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z}}};
+
+        static const std::map<char, std::vector<BooleanFunction::Value>> hex_map = {
+            {'0', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
+            {'1', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
+            {'2', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
+            {'3', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
+            {'4', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
+            {'5', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
+            {'6', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
+            {'7', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
+            {'8', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {'9', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {'A', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {'B', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {'C', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
+            {'D', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
+            {'E', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
+            {'F', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
+            {'X', {BooleanFunction::Value::X, BooleanFunction::Value::X, BooleanFunction::Value::X, BooleanFunction::Value::X}},
+            {'Z', {BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z}}};
+    }    // namespace
+
     std::string VerilogParser::get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const
     {
         // if the name only appears once, we don't have to suffix it
@@ -2274,5 +1842,442 @@ namespace hal
 
         // otherwise, add a unique string to the name
         return name + "__[" + std::to_string(name_occurrences[name]) + "]__";
+    }
+
+    std::vector<u32> VerilogParser::parse_range(TokenStream<std::string>& stream) const
+    {
+        if (stream.remaining() == 1)
+        {
+            return {(u32)std::stoi(stream.consume().string)};
+        }
+
+        // MSB to LSB
+        const int end = std::stoi(stream.consume().string);
+        stream.consume(":", true);
+        const int start = std::stoi(stream.consume().string);
+
+        const int direction = (start <= end) ? 1 : -1;
+
+        std::vector<u32> result;
+        for (int i = start; i != end + direction; i += direction)
+        {
+            result.push_back((u32)i);
+        }
+        return result;
+    }
+
+    void VerilogParser::expand_ranges_recursively(std::vector<std::string>& expanded_names, const std::string& current_name, const std::vector<std::vector<u32>>& ranges, u32 dimension) const
+    {
+        // expand signal recursively
+        if (ranges.size() > dimension)
+        {
+            for (const u32 index : ranges[dimension])
+            {
+                expand_ranges_recursively(expanded_names, current_name + "(" + std::to_string(index) + ")", ranges, dimension + 1);
+            }
+        }
+        else
+        {
+            // last dimension
+            expanded_names.push_back(current_name);
+        }
+    }
+
+    std::vector<std::string> VerilogParser::expand_ranges(const std::string& name, const std::vector<std::vector<u32>>& ranges) const
+    {
+        std::vector<std::string> res;
+
+        expand_ranges_recursively(res, name, ranges, 0);
+
+        return res;
+    }
+
+    Result<std::vector<BooleanFunction::Value>> VerilogParser::get_binary_vector(std::string value) const
+    {
+        value = utils::to_upper(utils::replace(value, std::string("_"), std::string("")));
+
+        i32 len = -1;
+        std::string prefix;
+        std::string number;
+        std::vector<BooleanFunction::Value> result;
+
+        // base specified?
+        if (value.find('\'') == std::string::npos)
+        {
+            prefix = "D";
+            number = value;
+        }
+        else
+        {
+            if (value.at(0) != '\'')
+            {
+                len = std::stoi(value.substr(0, value.find('\'')));
+            }
+            prefix = value.substr(value.find('\'') + 1, 1);
+            number = value.substr(value.find('\'') + 2);
+        }
+
+        // select base
+        switch (prefix.at(0))
+        {
+            case 'B': {
+                for (auto it = number.rbegin(); it != number.rend(); it++)
+                {
+                    const char c = *it;
+                    if (c == '0' || c == '1' || c == 'Z' || c == 'X')
+                    {
+                        result.push_back(bin_map.at(c));
+                    }
+                    else
+                    {
+                        return ERR("could not convert string to binary vector: invalid character within binary number literal '" + value + "'");
+                    }
+                }
+                break;
+            }
+
+            case 'O':
+                for (auto it = number.rbegin(); it != number.rend(); it++)
+                {
+                    const char c = *it;
+                    if ((c >= '0' && c <= '7') || c == 'X' || c == 'Z')
+                    {
+                        const auto& bits = oct_map.at(c);
+                        result.insert(result.end(), bits.begin(), bits.end());
+                    }
+                    else
+                    {
+                        return ERR("could not convert string to binary vector: invalid character within octal number literal '" + value + "'");
+                    }
+                }
+                break;
+
+            case 'D': {
+                u64 tmp_val = 0;
+
+                for (const char c : number)
+                {
+                    if ((c >= '0' && c <= '9'))
+                    {
+                        tmp_val = (tmp_val * 10) + (c - '0');
+                    }
+                    else
+                    {
+                        return ERR("could not convert string to binary vector: invalid character within decimal number literal '" + value + "'");
+                    }
+                }
+
+                do
+                {
+                    result.push_back(((tmp_val & 1) == 1) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO);
+                    tmp_val >>= 1;
+                } while (tmp_val != 0);
+                break;
+            }
+
+            case 'H': {
+                for (auto it = number.rbegin(); it != number.rend(); it++)
+                {
+                    const char c = *it;
+                    if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || c == 'X' || c == 'Z')
+                    {
+                        const auto& bits = hex_map.at(c);
+                        result.insert(result.end(), bits.begin(), bits.end());
+                    }
+                    else
+                    {
+                        return ERR("could not convert string to binary vector: invalid character within hexadecimal number literal '" + value + "'");
+                    }
+                }
+                break;
+            }
+
+            default: {
+                return ERR("could not convert string to binary vector: invalid base '" + prefix + "' within number literal '" + value + "'");
+            }
+        }
+
+        if (len != -1)
+        {
+            i32 result_size = result.size();
+
+            if (len > result_size)
+            {
+                // fill with '0'
+                for (i32 i = 0; i < (len - result_size); i++)
+                {
+                    result.push_back(BooleanFunction::Value::ZERO);
+                }
+            }
+            else
+            {
+                // drop trailing bits
+                for (i32 i = 0; i < (result_size - len); i++)
+                {
+                    result.pop_back();
+                }
+            }
+        }
+
+        return OK(result);
+    }
+
+    Result<std::string> VerilogParser::get_hex_from_literal(const Token<std::string>& value_token) const
+    {
+        const u32 line_number   = value_token.number;
+        const std::string value = utils::to_upper(utils::replace(value_token.string, std::string("_"), std::string("")));
+
+        i32 len = -1;
+        std::string prefix;
+        std::string number;
+        u32 base;
+
+        // base specified?
+        if (value.find('\'') == std::string::npos)
+        {
+            prefix = "D";
+            number = value;
+        }
+        else
+        {
+            if (value.at(0) != '\'')
+            {
+                len = std::stoi(value.substr(0, value.find('\'')));
+            }
+            prefix = value.substr(value.find('\'') + 1, 1);
+            number = value.substr(value.find('\'') + 2);
+        }
+
+        // select base
+        switch (prefix.at(0))
+        {
+            case 'B': {
+                if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '1'); }))
+                {
+                    return ERR("could not convert token to hexadecimal string: invalid character within binary number literal '" + value + "' (line " + std::to_string(line_number) + ")");
+                }
+
+                base = 2;
+                break;
+            }
+
+            case 'O': {
+                if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '7'); }))
+                {
+                    return ERR("could not convert token to hexadecimal string: invalid character within ocatl number literal '" + value + "' (line " + std::to_string(line_number) + ")");
+                }
+
+                base = 8;
+                break;
+            }
+
+            case 'D': {
+                if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '9'); }))
+                {
+                    return ERR("could not convert token to hexadecimal string: invalid character within decimal number literal '" + value + "' (line " + std::to_string(line_number) + ")");
+                }
+
+                base = 10;
+                break;
+            }
+
+            case 'H': {
+                std::string res;
+
+                for (const char c : number)
+                {
+                    if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F'))
+                    {
+                        res += c;
+                    }
+                    else
+                    {
+                        return ERR("could not convert token to hexadecimal string: invalid character within hexadecimal number literal '" + value + "' (line " + std::to_string(line_number) + ")");
+                    }
+                }
+
+                return OK(res);
+            }
+
+            default: {
+                return ERR("could not convert token to hexadecimal string: invalid base '" + prefix + "' within number literal '" + value + "' (line " + std::to_string(line_number) + ")");
+            }
+        }
+
+        std::stringstream ss;
+        if (len != -1)
+        {
+            // fill with '0'
+            ss << std::uppercase << std::setfill('0') << std::setw((len + 3) / 4) << std::hex << stoull(number, 0, base);
+        }
+        else
+        {
+            ss << std::uppercase << std::hex << stoull(number, 0, base);
+        }
+        return OK(ss.str());
+    }
+
+    Result<std::pair<std::string, std::string>> VerilogParser::parse_parameter_value(const Token<std::string>& value_token) const
+    {
+        std::pair<std::string, std::string> value;
+
+        if (utils::is_integer(value_token.string))
+        {
+            value.first  = "integer";
+            value.second = value_token.string;
+        }
+        else if (utils::is_floating_point(value_token.string))
+        {
+            value.first  = "floating_point";
+            value.second = value_token.string;
+        }
+        else if (value_token.string[0] == '\"' && value_token.string.back() == '\"')
+        {
+            value.first  = "string";
+            value.second = value_token.string.substr(1, value_token.string.size() - 2);
+        }
+        else if (isdigit(value_token.string[0]) || value_token.string[0] == '\'')
+        {
+            if (const auto res = get_hex_from_literal(value_token); res.is_error())
+            {
+                return ERR_APPEND(res.get_error(),
+                                  "could not parse parameter value: failed to convert '" + value_token.string + "' to hexadecimal value (line " + std::to_string(value_token.number) + ")");
+            }
+            else
+            {
+                value.second = res.get();
+            }
+
+            if (value.second == "0" || value.second == "1")
+            {
+                value.first = "bit_value";
+            }
+            else
+            {
+                value.first = "bit_vector";
+            }
+        }
+        else
+        {
+            return ERR("could not parse parameter value: failed to identify data type of parameter '" + value_token.string + "' (line " + std::to_string(value_token.number) + ")");
+        }
+
+        return OK(value);
+    }
+
+    Result<std::vector<VerilogParser::assignment_t>> VerilogParser::parse_assignment_expression(TokenStream<std::string>&& stream) const
+    {
+        std::vector<TokenStream<std::string>> parts;
+
+        if (stream.size() == 0)
+        {
+            return OK({});
+        }
+
+        if (stream.peek() == "{")
+        {
+            stream.consume("{", true);
+
+            TokenStream<std::string> assignment_list_str = stream.extract_until("}");
+            stream.consume("}", true);
+
+            do
+            {
+                parts.push_back(assignment_list_str.extract_until(","));
+            } while (assignment_list_str.consume(",", false));
+        }
+        else
+        {
+            parts.push_back(stream);
+        }
+
+        std::vector<assignment_t> result;
+        result.reserve(parts.size());
+
+        for (auto it = parts.rbegin(); it != parts.rend(); it++)
+        {
+            TokenStream<std::string>& part_stream = *it;
+
+            const Token<std::string> signal_name_token = part_stream.consume();
+            std::string signal_name                    = signal_name_token.string;
+
+            // (3) NUMBER
+            if (isdigit(signal_name[0]) || signal_name[0] == '\'')
+            {
+                if (auto res = get_binary_vector(signal_name_token); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not parse assignment expression: unable to convert token to binary vector");
+                }
+                else
+                {
+                    result.push_back(std::move(res.get()));
+                }
+            }
+            else
+            {
+                // any bounds specified?
+                if (part_stream.consume("["))
+                {
+                    // (4) NAME[INDEX1][INDEX2]...
+                    // (5) NAME[BEGIN_INDEX1:END_INDEX1][BEGIN_INDEX2:END_INDEX2]...
+
+                    std::vector<std::vector<u32>> ranges;
+                    do
+                    {
+                        TokenStream<std::string> range_str = part_stream.extract_until("]");
+                        ranges.emplace_back(parse_range(range_str));
+                        part_stream.consume("]", true);
+                    } while (part_stream.consume("[", false));
+
+                    result.push_back(ranged_identifier_t({std::move(signal_name), std::move(ranges)}));
+                }
+                else
+                {
+                    // (1) NAME *single-dimensional*
+                    // (2) NAME *multi-dimensional*
+                    result.push_back(std::move(signal_name));
+                }
+            }
+        }
+
+        return OK(result);
+    }
+
+    std::vector<std::string> VerilogParser::expand_assignment_expression(VerilogModule* verilog_module, const std::vector<assignment_t>& vars) const
+    {
+        std::vector<std::string> result;
+        for (const auto& var : vars)
+        {
+            if (const identifier_t* identifier = std::get_if<identifier_t>(&var); identifier != nullptr)
+            {
+                std::vector<std::vector<u32>> ranges;
+
+                if (const auto signal_it = verilog_module->m_signals_by_name.find(*identifier); signal_it != verilog_module->m_signals_by_name.end())
+                {
+                    ranges = signal_it->second->m_ranges;
+                }
+                else if (const auto port_it = verilog_module->m_ports_by_expression.find(*identifier); port_it != verilog_module->m_ports_by_expression.end())
+                {
+                    ranges = port_it->second->m_ranges;
+                }
+
+                std::vector<std::string> expanded = expand_ranges(*identifier, ranges);
+                result.insert(result.end(), expanded.begin(), expanded.end());
+            }
+            else if (const ranged_identifier_t* ranged_identifier = std::get_if<ranged_identifier_t>(&var); ranged_identifier != nullptr)
+            {
+                std::vector<std::string> expanded = expand_ranges(ranged_identifier->first, ranged_identifier->second);
+                result.insert(result.end(), expanded.begin(), expanded.end());
+            }
+            else if (const numeral_t* numeral = std::get_if<numeral_t>(&var); numeral != nullptr)
+            {
+                for (auto value : *numeral)
+                {
+                    result.push_back("'" + BooleanFunction::to_string(value) + "'");
+                }
+            }
+        }
+
+        return result;
     }
 }    // namespace hal

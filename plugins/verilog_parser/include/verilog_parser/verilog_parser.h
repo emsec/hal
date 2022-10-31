@@ -32,7 +32,6 @@
 #include "hal_core/netlist/netlist_parser/netlist_parser.h"
 #include "hal_core/utilities/special_strings.h"
 #include "hal_core/utilities/token_stream.h"
-#include "verilog_parser/verilog_module.h"
 
 #include <optional>
 #include <sstream>
@@ -42,6 +41,7 @@
 
 namespace hal
 {
+
     /**
      * @ingroup netlist_parser
      */
@@ -68,6 +68,101 @@ namespace hal
         Result<std::unique_ptr<Netlist>> instantiate(const GateLibrary* gate_library) override;
 
     private:
+        using identifier_t        = std::string;
+        using ranged_identifier_t = std::pair<std::string, std::vector<std::vector<u32>>>;
+        using numeral_t           = std::vector<BooleanFunction::Value>;
+        using empty_t             = std::monostate;
+        using assignment_t        = std::variant<identifier_t, ranged_identifier_t, numeral_t, empty_t>;
+
+        struct VerilogDataEntry
+        {
+            std::string m_name;
+            std::string m_type  = "unknown";
+            std::string m_value = "";
+        };
+
+        struct VerilogSignal
+        {
+            std::string m_name;
+            std::vector<std::vector<u32>> m_ranges;
+            std::vector<VerilogDataEntry> m_attributes;
+            std::vector<std::string> m_expanded_names;
+        };
+
+        struct VerilogPort
+        {
+            std::string m_identifier;
+            std::string m_expression;
+            PinDirection m_direction;
+            std::vector<std::vector<u32>> m_ranges;
+            std::vector<VerilogDataEntry> m_attributes;
+            std::vector<std::string> m_expanded_identifiers;
+        };
+
+        struct VerilogPortAssignment
+        {
+            std::optional<std::string> m_port_name;
+            std::vector<assignment_t> m_assignment;
+        };
+
+        struct VerilogAssignment
+        {
+            std::vector<assignment_t> m_variable;
+            std::vector<assignment_t> m_assignment;
+        };
+
+        struct VerilogInstance
+        {
+            std::string m_name;
+            std::string m_type;
+            bool m_is_module = false;
+            std::vector<VerilogPortAssignment> m_port_assignments;
+            std::vector<VerilogDataEntry> m_parameters;
+            std::vector<VerilogDataEntry> m_attributes;
+            std::vector<std::pair<std::string, std::string>> m_expanded_port_assignments;
+        };
+
+        struct VerilogModule
+        {
+        public:
+            VerilogModule()  = default;
+            ~VerilogModule() = default;
+
+            /**
+             * Check whether an module is considered smaller than another module.
+             *
+             * @param[in] other - The module to compare against.
+             * @returns True if the module is smaller than 'other', false otherwise.
+             */
+            bool operator<(const VerilogModule& other) const
+            {
+                return m_name < other.m_name;
+            }
+
+            // module information
+            std::string m_name;
+            u32 m_line_number;
+            std::vector<VerilogDataEntry> m_attributes;    // module attributes
+
+            // ports
+            std::vector<std::unique_ptr<VerilogPort>> m_ports;
+            std::map<std::string, VerilogPort*> m_ports_by_identifier;
+            std::map<std::string, VerilogPort*> m_ports_by_expression;
+            std::set<std::string> m_expanded_port_expressions;
+
+            // signals
+            std::vector<std::unique_ptr<VerilogSignal>> m_signals;
+            std::map<std::string, VerilogSignal*> m_signals_by_name;
+
+            // assignments
+            std::vector<VerilogAssignment> m_assignments;
+            std::vector<std::pair<std::string, std::string>> m_expanded_assignments;
+
+            // instances
+            std::vector<std::unique_ptr<VerilogInstance>> m_instances;
+            std::map<std::string, VerilogInstance*> m_instances_by_name;
+        };
+
         std::stringstream m_fs;
         std::filesystem::path m_path;
 
@@ -121,5 +216,13 @@ namespace hal
 
         // helper functions
         std::string get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const;
+        std::vector<u32> parse_range(TokenStream<std::string>& stream) const;
+        void expand_ranges_recursively(std::vector<std::string>& expanded_names, const std::string& current_name, const std::vector<std::vector<u32>>& ranges, u32 dimension) const;
+        std::vector<std::string> expand_ranges(const std::string& name, const std::vector<std::vector<u32>>& ranges) const;
+        Result<std::vector<BooleanFunction::Value>> get_binary_vector(std::string value) const;
+        Result<std::string> get_hex_from_literal(const Token<std::string>& value_token) const;
+        Result<std::pair<std::string, std::string>> parse_parameter_value(const Token<std::string>& value_token) const;
+        Result<std::vector<VerilogParser::assignment_t>> parse_assignment_expression(TokenStream<std::string>&& stream) const;
+        std::vector<std::string> expand_assignment_expression(VerilogModule* verilog_module, const std::vector<assignment_t>& vars) const;
     };
 }    // namespace hal

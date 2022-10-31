@@ -33,7 +33,6 @@
 #include "hal_core/utilities/result.h"
 #include "hal_core/utilities/special_strings.h"
 #include "hal_core/utilities/token_stream.h"
-#include "vhdl_parser/vhdl_entity.h"
 
 #include <optional>
 #include <sstream>
@@ -69,6 +68,101 @@ namespace hal
         Result<std::unique_ptr<Netlist>> instantiate(const GateLibrary* gate_library) override;
 
     private:
+        using ci_string           = core_strings::CaseInsensitiveString;
+        using identifier_t        = ci_string;
+        using ranged_identifier_t = std::pair<ci_string, std::vector<std::vector<u32>>>;
+        using numeral_t           = std::vector<BooleanFunction::Value>;
+        using empty_t             = std::monostate;
+        using assignment_t        = std::variant<identifier_t, ranged_identifier_t, numeral_t, empty_t>;
+
+        struct VhdlDataEntry
+        {
+            u32 m_line_number;
+            std::string m_name;
+            std::string m_type  = "unknown";
+            std::string m_value = "";
+        };
+
+        struct VhdlSignal
+        {
+            ci_string m_name;
+            std::vector<std::vector<u32>> m_ranges;
+            std::vector<VhdlDataEntry> m_attributes;
+            std::vector<ci_string> m_expanded_names;
+        };
+
+        struct VhdlPort
+        {
+            ci_string m_identifier;
+            PinDirection m_direction;
+            std::vector<std::vector<u32>> m_ranges;
+            std::vector<VhdlDataEntry> m_attributes;
+            std::vector<ci_string> m_expanded_identifiers;
+        };
+
+        struct VhdlPortAssignment
+        {
+            std::optional<assignment_t> m_port;
+            std::vector<assignment_t> m_assignment;
+        };
+
+        struct VhdlAssignment
+        {
+            std::vector<assignment_t> m_variable;
+            std::vector<assignment_t> m_assignment;
+        };
+
+        struct VhdlInstance
+        {
+            ci_string m_name;
+            ci_string m_type;
+            bool m_is_entity = false;
+            std::vector<VhdlPortAssignment> m_port_assignments;
+            std::vector<VhdlDataEntry> m_generics;
+            std::vector<VhdlDataEntry> m_attributes;
+            std::vector<std::pair<ci_string, ci_string>> m_expanded_port_assignments;
+        };
+
+        struct VhdlEntity
+        {
+        public:
+            VhdlEntity()  = default;
+            ~VhdlEntity() = default;
+
+            /**
+         * Check whether an module is considered smaller than another module.
+         *
+         * @param[in] other - The module to compare against.
+         * @returns True if the module is smaller than 'other', false otherwise.
+         */
+            bool operator<(const VhdlEntity& other) const
+            {
+                return m_name < other.m_name;
+            }
+
+            // module information
+            ci_string m_name;
+            u32 m_line_number;
+            std::vector<VhdlDataEntry> m_attributes;    // module attributes
+
+            // ports
+            std::vector<std::unique_ptr<VhdlPort>> m_ports;
+            std::map<ci_string, VhdlPort*> m_ports_by_identifier;
+            std::set<ci_string> m_expanded_port_identifiers;
+
+            // signals
+            std::vector<std::unique_ptr<VhdlSignal>> m_signals;
+            std::map<ci_string, VhdlSignal*> m_signals_by_name;
+
+            // assignments
+            std::vector<VhdlAssignment> m_assignments;
+            std::vector<std::pair<ci_string, ci_string>> m_expanded_assignments;
+
+            // instances
+            std::vector<std::unique_ptr<VhdlInstance>> m_instances;
+            std::map<ci_string, VhdlInstance*> m_instances_by_name;
+        };
+
         enum class AttributeTarget
         {
             ENTITY,
@@ -76,7 +170,6 @@ namespace hal
             SIGNAL
         };
 
-        using ci_string          = core_strings::CaseInsensitiveString;
         using attribute_buffer_t = std::map<AttributeTarget, std::map<ci_string, VhdlDataEntry>>;
 
         std::stringstream m_fs;
@@ -141,5 +234,13 @@ namespace hal
 
         // helper functions
         ci_string get_unique_alias(std::unordered_map<ci_string, u32>& name_occurrences, const ci_string& name) const;
+        std::vector<u32> parse_range(TokenStream<ci_string>& range_stream) const;
+        Result<std::vector<std::vector<u32>>> parse_signal_ranges(TokenStream<ci_string>& signal_stream) const;
+        void expand_ranges_recursively(std::vector<ci_string>& expanded_names, const ci_string& current_name, const std::vector<std::vector<u32>>& ranges, u32 dimension) const;
+        std::vector<ci_string> expand_ranges(const ci_string& name, const std::vector<std::vector<u32>>& ranges) const;
+        Result<std::vector<BooleanFunction::Value>> get_binary_vector(std::string value) const;
+        Result<std::string> get_hex_from_literal(const Token<ci_string>& value_token) const;
+        Result<std::vector<assignment_t>> parse_assignment_expression(TokenStream<ci_string>&& stream) const;
+        Result<std::vector<ci_string>> expand_assignment_expression(VhdlEntity* vhdl_entity, const std::vector<assignment_t>& vars) const;
     };
 }    // namespace hal

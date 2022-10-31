@@ -16,471 +16,6 @@ namespace hal
 {
     namespace
     {
-        std::vector<u32> parse_range(TokenStream<ci_string>& range_stream)
-        {
-            if (range_stream.remaining() == 1)
-            {
-                return {(u32)std::stoi(core_strings::to<std::string>(range_stream.consume().string))};
-            }
-
-            int direction = 1;
-            const int end = std::stoi(core_strings::to<std::string>(range_stream.consume().string));
-
-            if (range_stream.peek() == "downto")
-            {
-                range_stream.consume("downto");
-            }
-            else
-            {
-                range_stream.consume("to", true);
-                direction = -1;
-            }
-
-            const int start = std::stoi(core_strings::to<std::string>(range_stream.consume().string));
-
-            std::vector<u32> res;
-            for (int i = start; i != end + direction; i += direction)
-            {
-                res.push_back((u32)i);
-            }
-            return res;
-        }
-
-        const static std::map<core_strings::CaseInsensitiveString, size_t> id_to_dim = {{"std_logic_vector", 1}, {"std_logic_vector2", 2}, {"std_logic_vector3", 3}};
-
-        Result<std::vector<std::vector<u32>>> parse_signal_ranges(TokenStream<ci_string>& signal_stream)
-        {
-            std::vector<std::vector<u32>> ranges;
-            const u32 line_number = signal_stream.peek().number;
-
-            const Token<ci_string> type_name = signal_stream.consume();
-            if (type_name == "std_logic")
-            {
-                return OK(ranges);
-            }
-
-            signal_stream.consume("(", true);
-            TokenStream<ci_string> signal_bounds_stream = signal_stream.extract_until(")");
-
-            // process ranges
-            do
-            {
-                TokenStream<ci_string> bound_stream = signal_bounds_stream.extract_until(",");
-                ranges.emplace_back(parse_range(bound_stream));
-            } while (signal_bounds_stream.consume(","));
-
-            signal_stream.consume(")", true);
-
-            if (id_to_dim.find(type_name) != id_to_dim.end())
-            {
-                const size_t dimension = id_to_dim.at(type_name);
-
-                if (ranges.size() != dimension)
-                {
-                    return ERR("could not parse signal ranges: mismatch of dimensions (line " + std::to_string(line_number) + ")");
-                }
-            }
-            else
-            {
-                return ERR("could not parse signal ranges: type name '" + core_strings::to<std::string>(type_name.string) + "' is invalid (line " + std::to_string(line_number) + ")");
-            }
-
-            return OK(ranges);
-        }
-
-        void expand_ranges_recursively(std::vector<ci_string>& expanded_names, const ci_string& current_name, const std::vector<std::vector<u32>>& ranges, u32 dimension)
-        {
-            // expand signal recursively
-            if (ranges.size() > dimension)
-            {
-                for (const u32 index : ranges[dimension])
-                {
-                    expand_ranges_recursively(expanded_names, current_name + "(" + core_strings::to<ci_string>(std::to_string(index)) + ")", ranges, dimension + 1);
-                }
-            }
-            else
-            {
-                // last dimension
-                expanded_names.push_back(current_name);
-            }
-        }
-
-        std::vector<ci_string> expand_ranges(const ci_string& name, const std::vector<std::vector<u32>>& ranges)
-        {
-            std::vector<ci_string> res;
-
-            expand_ranges_recursively(res, name, ranges, 0);
-
-            return res;
-        }
-
-        static const std::map<char, BooleanFunction::Value> bin_map = {{'0', BooleanFunction::Value::ZERO},
-                                                                       {'1', BooleanFunction::Value::ONE},
-                                                                       {'X', BooleanFunction::Value::X},
-                                                                       {'Z', BooleanFunction::Value::Z}};
-
-        static const std::map<char, std::vector<BooleanFunction::Value>> oct_map = {{'0', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
-                                                                                    {'1', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
-                                                                                    {'2', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
-                                                                                    {'3', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
-                                                                                    {'4', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
-                                                                                    {'5', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
-                                                                                    {'6', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
-                                                                                    {'7', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
-                                                                                    {'X', {BooleanFunction::Value::X, BooleanFunction::Value::X, BooleanFunction::Value::X}},
-                                                                                    {'Z', {BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z}}};
-
-        static const std::map<char, std::vector<BooleanFunction::Value>> hex_map = {
-            {'0', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
-            {'1', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
-            {'2', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
-            {'3', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
-            {'4', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
-            {'5', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
-            {'6', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
-            {'7', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
-            {'8', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
-            {'9', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
-            {'A', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
-            {'B', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
-            {'C', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
-            {'D', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
-            {'E', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
-            {'F', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
-            {'X', {BooleanFunction::Value::X, BooleanFunction::Value::X, BooleanFunction::Value::X, BooleanFunction::Value::X}},
-            {'Z', {BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z}}};
-
-        Result<std::vector<BooleanFunction::Value>> get_binary_vector(std::string value)
-        {
-            value = utils::to_upper(utils::replace(value, std::string("_"), std::string("")));
-
-            std::string prefix;
-            std::string number;
-            std::vector<BooleanFunction::Value> result;
-
-            // base specified?
-            if (value.at(0) != '\"')
-            {
-                prefix = value.at(0);
-                number = value.substr(2, value.rfind('\"') - 2);
-            }
-            else
-            {
-                prefix = "B";
-                number = value.substr(1, value.rfind('\"') - 1);
-            }
-
-            // select base
-            switch (prefix.at(0))
-            {
-                case 'B': {
-                    for (auto it = number.rbegin(); it != number.rend(); it++)
-                    {
-                        const char c = *it;
-                        if (c == '0' || c == '1' || c == 'Z' || c == 'X')
-                        {
-                            result.push_back(bin_map.at(c));
-                        }
-                        else
-                        {
-                            return ERR("could not convert string to binary vector: invalid character within binary number literal '" + value + "'");
-                        }
-                    }
-                    break;
-                }
-
-                case 'O':
-                    for (auto it = number.rbegin(); it != number.rend(); it++)
-                    {
-                        const char c = *it;
-                        if ((c >= '0' && c <= '7') || c == 'X' || c == 'Z')
-                        {
-                            const auto& bits = oct_map.at(c);
-                            result.insert(result.end(), bits.begin(), bits.end());
-                        }
-                        else
-                        {
-                            return ERR("could not convert string to binary vector: invalid character within octal number literal '" + value + "'");
-                        }
-                    }
-                    break;
-
-                case 'D': {
-                    u64 tmp_val = 0;
-
-                    for (const char c : number)
-                    {
-                        if ((c >= '0' && c <= '9'))
-                        {
-                            tmp_val = (tmp_val * 10) + (c - '0');
-                        }
-                        else
-                        {
-                            return ERR("could not convert string to binary vector: invalid character within decimal number literal '" + value + "'");
-                        }
-                    }
-
-                    do
-                    {
-                        result.push_back(((tmp_val & 1) == 1) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO);
-                        tmp_val >>= 1;
-                    } while (tmp_val != 0);
-                    break;
-                }
-
-                case 'H': {
-                    for (auto it = number.rbegin(); it != number.rend(); it++)
-                    {
-                        const char c = *it;
-                        if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || c == 'X' || c == 'Z')
-                        {
-                            const auto& bits = hex_map.at(c);
-                            result.insert(result.end(), bits.begin(), bits.end());
-                        }
-                        else
-                        {
-                            return ERR("could not convert string to binary vector: invalid character within hexadecimal number literal '" + value + "'");
-                        }
-                    }
-                    break;
-                }
-
-                default: {
-                    return ERR("could not convert string to binary vector: invalid base '" + prefix + "' within number literal '" + value + "'");
-                }
-            }
-
-            return OK(result);
-        }
-
-        Result<std::string> get_hex_from_literal(const Token<ci_string>& value_token)
-        {
-            const u32 line_number = value_token.number;
-            const ci_string value = utils::to_upper(utils::replace(value_token.string, ci_string("_"), ci_string("")));
-
-            ci_string prefix;
-            ci_string number;
-            u32 base;
-
-            // base specified?
-            if (value.at(0) != '\"')
-            {
-                prefix = value.at(0);
-                number = value.substr(2, value.rfind('\"') - 2);
-            }
-            else
-            {
-                prefix = "B";
-                number = value.substr(1, value.rfind('\"') - 1);
-            }
-
-            // select base
-            switch (prefix.at(0))
-            {
-                case 'B': {
-                    if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '1'); }))
-                    {
-                        return ERR("could not convert token to hexadecimal string: invalid character within binary number literal '" + core_strings::to<std::string>(value) + "' (line "
-                                   + std::to_string(line_number) + ")");
-                    }
-
-                    base = 2;
-                    break;
-                }
-
-                case 'O': {
-                    if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '7'); }))
-                    {
-                        return ERR("could not convert token to hexadecimal string: invalid character within ocatl number literal '" + core_strings::to<std::string>(value) + "' (line "
-                                   + std::to_string(line_number) + ")");
-                    }
-
-                    base = 8;
-                    break;
-                }
-
-                case 'D': {
-                    if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '9'); }))
-                    {
-                        return ERR("could not convert token to hexadecimal string: invalid character within decimal number literal '" + core_strings::to<std::string>(value) + "' (line "
-                                   + std::to_string(line_number) + ")");
-                    }
-
-                    base = 10;
-                    break;
-                }
-
-                case 'X': {
-                    std::string res;
-
-                    for (const char c : number)
-                    {
-                        if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F'))
-                        {
-                            res += c;
-                        }
-                        else
-                        {
-                            return ERR("could not convert token to hexadecimal string: invalid character within hexadecimal number literal '" + core_strings::to<std::string>(value) + "' (line "
-                                       + std::to_string(line_number) + ")");
-                        }
-                    }
-
-                    return OK(res);
-                }
-
-                default: {
-                    return ERR("could not convert token to hexadecimal string: invalid base '" + core_strings::to<std::string>(prefix) + "' within number literal '"
-                               + core_strings::to<std::string>(value) + "' (line " + std::to_string(line_number) + ")");
-                }
-            }
-
-            std::stringstream ss;
-            ss << std::uppercase << std::hex << stoull(core_strings::to<std::string>(number), 0, base);
-            return OK(ss.str());
-        }
-
-        Result<std::vector<assignment_t>> parse_assignment_expression(TokenStream<ci_string>&& stream)
-        {
-            // PARSE ASSIGNMENT
-            //   assignment can currently be one of the following:
-            //   (1) NAME
-            //   (2) NUMBER
-            //   (3) NAME(INDEX1, INDEX2, ...)
-            //   (4) NAME(BEGIN_INDEX1 to/downto END_INDEX1, BEGIN_INDEX2 to/downto END_INDEX2, ...)
-            //   (5) ((1 - 4), (1 - 4), ...)
-
-            std::vector<TokenStream<ci_string>> parts;
-
-            if (stream.size() == 0)
-            {
-                return OK({});
-            }
-
-            // (5) ((1 - 4), (1 - 4), ...)
-            if (stream.consume("("))
-            {
-                do
-                {
-                    parts.push_back(stream.extract_until(","));
-                } while (stream.consume(",", false));
-
-                stream.consume(")", true);
-            }
-            else
-            {
-                parts.push_back(stream);
-            }
-
-            std::vector<assignment_t> result;
-            result.reserve(parts.size());
-
-            for (auto it = parts.rbegin(); it != parts.rend(); it++)
-            {
-                TokenStream<ci_string>& part_stream = *it;
-
-                const Token<ci_string> signal_name_token = part_stream.consume();
-                ci_string signal_name                    = signal_name_token.string;
-
-                // (2) NUMBER
-                if (utils::starts_with(signal_name, core_strings::CaseInsensitiveString("\"")) || utils::starts_with(signal_name, core_strings::CaseInsensitiveString("b\""))
-                    || utils::starts_with(signal_name, core_strings::CaseInsensitiveString("o\"")) || utils::starts_with(signal_name, core_strings::CaseInsensitiveString("x\"")))
-                {
-                    if (auto res = get_binary_vector(core_strings::to<std::string>(signal_name_token.string)); res.is_error())
-                    {
-                        return ERR_APPEND(res.get_error(), "could not expand assignment signal: unable to convert literal to binary string (line " + std::to_string(signal_name_token.number) + ")");
-                    }
-                    else
-                    {
-                        result.push_back(std::move(res.get()));
-                    }
-                }
-                else if (signal_name == "'0'")
-                {
-                    result.push_back(numeral_t({BooleanFunction::Value::ZERO}));
-                }
-                else if (signal_name == "'1'")
-                {
-                    result.push_back(numeral_t({BooleanFunction::Value::ONE}));
-                }
-                else if (signal_name == "'X'")
-                {
-                    result.push_back(numeral_t({BooleanFunction::Value::X}));
-                }
-                else if (signal_name == "'Z'")
-                {
-                    result.push_back(numeral_t({BooleanFunction::Value::Z}));
-                }
-                else
-                {
-                    // (3) NAME(INDEX1, INDEX2, ...)
-                    // (4) NAME(BEGIN_INDEX1 to/downto END_INDEX1, BEGIN_INDEX2 to/downto END_INDEX2, ...)
-                    if (part_stream.consume("("))
-                    {
-                        std::vector<std::vector<u32>> ranges;
-                        u32 closing_pos = part_stream.find_next(")");
-                        do
-                        {
-                            TokenStream<ci_string> range_stream = part_stream.extract_until(",", closing_pos);
-                            ranges.emplace_back(parse_range(range_stream));
-
-                        } while (part_stream.consume(",", false));
-                        part_stream.consume(")", true);
-                        result.push_back(ranged_identifier_t({std::move(signal_name), std::move(ranges)}));
-                    }
-                    else
-                    {
-                        // (1) NAME
-                        result.push_back(std::move(signal_name));
-                    }
-                }
-            }
-
-            return OK(result);
-        }
-
-        Result<std::vector<ci_string>> expand_assignment_expression(VhdlEntity* vhdl_entity, const std::vector<assignment_t>& vars)
-        {
-            std::vector<ci_string> result;
-            for (const auto& var : vars)
-            {
-                if (const identifier_t* identifier = std::get_if<identifier_t>(&var); identifier != nullptr)
-                {
-                    std::vector<std::vector<u32>> ranges;
-
-                    if (const auto signal_it = vhdl_entity->m_signals_by_name.find(*identifier); signal_it != vhdl_entity->m_signals_by_name.end())
-                    {
-                        ranges = signal_it->second->m_ranges;
-                    }
-                    else if (const auto port_it = vhdl_entity->m_ports_by_identifier.find(*identifier); port_it != vhdl_entity->m_ports_by_identifier.end())
-                    {
-                        ranges = port_it->second->m_ranges;
-                    }
-                    else
-                    {
-                        return ERR("could not expand assignment expression': '" + core_strings::to<std::string>(*identifier) + "' is neither a signal nor a port of entity '"
-                                   + core_strings::to<std::string>(vhdl_entity->m_name) + "'");
-                    }
-
-                    std::vector<ci_string> expanded = expand_ranges(*identifier, ranges);
-                    result.insert(result.end(), expanded.begin(), expanded.end());
-                }
-                else if (const ranged_identifier_t* ranged_identifier = std::get_if<ranged_identifier_t>(&var); ranged_identifier != nullptr)
-                {
-                    std::vector<ci_string> expanded = expand_ranges(ranged_identifier->first, ranged_identifier->second);
-                    result.insert(result.end(), expanded.begin(), expanded.end());
-                }
-                else if (const numeral_t* numeral = std::get_if<numeral_t>(&var); numeral != nullptr)
-                {
-                    for (auto value : *numeral)
-                    {
-                        result.push_back(core_strings::to<ci_string>("'" + BooleanFunction::to_string(value) + "'"));
-                    }
-                }
-            }
-
-            return OK(result);
-        }
 
     }    // namespace
 
@@ -2469,6 +2004,47 @@ namespace hal
     // ###################          Helper Functions          ####################
     // ###########################################################################
 
+    namespace
+    {
+        const static std::map<core_strings::CaseInsensitiveString, size_t> id_to_dim = {{"std_logic_vector", 1}, {"std_logic_vector2", 2}, {"std_logic_vector3", 3}};
+
+        static const std::map<char, BooleanFunction::Value> bin_map = {{'0', BooleanFunction::Value::ZERO},
+                                                                       {'1', BooleanFunction::Value::ONE},
+                                                                       {'X', BooleanFunction::Value::X},
+                                                                       {'Z', BooleanFunction::Value::Z}};
+
+        static const std::map<char, std::vector<BooleanFunction::Value>> oct_map = {{'0', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
+                                                                                    {'1', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
+                                                                                    {'2', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
+                                                                                    {'3', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
+                                                                                    {'4', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+                                                                                    {'5', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+                                                                                    {'6', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
+                                                                                    {'7', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
+                                                                                    {'X', {BooleanFunction::Value::X, BooleanFunction::Value::X, BooleanFunction::Value::X}},
+                                                                                    {'Z', {BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z}}};
+
+        static const std::map<char, std::vector<BooleanFunction::Value>> hex_map = {
+            {'0', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
+            {'1', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
+            {'2', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
+            {'3', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO}},
+            {'4', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
+            {'5', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
+            {'6', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
+            {'7', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO}},
+            {'8', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {'9', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {'A', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {'B', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {'C', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
+            {'D', {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
+            {'E', {BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
+            {'F', {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE}},
+            {'X', {BooleanFunction::Value::X, BooleanFunction::Value::X, BooleanFunction::Value::X, BooleanFunction::Value::X}},
+            {'Z', {BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z}}};
+    }    // namespace
+
     VHDLParser::ci_string VHDLParser::get_unique_alias(std::unordered_map<ci_string, u32>& name_occurrences, const ci_string& name) const
     {
         // if the name only appears once, we don't have to suffix it
@@ -2481,5 +2057,433 @@ namespace hal
 
         // otherwise, add a unique string to the name
         return name + "__[" + core_strings::to<ci_string>(std::to_string(name_occurrences[name])) + "]__";
+    }
+
+    std::vector<u32> VHDLParser::parse_range(TokenStream<ci_string>& range_stream) const
+    {
+        if (range_stream.remaining() == 1)
+        {
+            return {(u32)std::stoi(core_strings::to<std::string>(range_stream.consume().string))};
+        }
+
+        int direction = 1;
+        const int end = std::stoi(core_strings::to<std::string>(range_stream.consume().string));
+
+        if (range_stream.peek() == "downto")
+        {
+            range_stream.consume("downto");
+        }
+        else
+        {
+            range_stream.consume("to", true);
+            direction = -1;
+        }
+
+        const int start = std::stoi(core_strings::to<std::string>(range_stream.consume().string));
+
+        std::vector<u32> res;
+        for (int i = start; i != end + direction; i += direction)
+        {
+            res.push_back((u32)i);
+        }
+        return res;
+    }
+
+    Result<std::vector<std::vector<u32>>> VHDLParser::parse_signal_ranges(TokenStream<ci_string>& signal_stream) const
+    {
+        std::vector<std::vector<u32>> ranges;
+        const u32 line_number = signal_stream.peek().number;
+
+        const Token<ci_string> type_name = signal_stream.consume();
+        if (type_name == "std_logic")
+        {
+            return OK(ranges);
+        }
+
+        signal_stream.consume("(", true);
+        TokenStream<ci_string> signal_bounds_stream = signal_stream.extract_until(")");
+
+        // process ranges
+        do
+        {
+            TokenStream<ci_string> bound_stream = signal_bounds_stream.extract_until(",");
+            ranges.emplace_back(parse_range(bound_stream));
+        } while (signal_bounds_stream.consume(","));
+
+        signal_stream.consume(")", true);
+
+        if (id_to_dim.find(type_name) != id_to_dim.end())
+        {
+            const size_t dimension = id_to_dim.at(type_name);
+
+            if (ranges.size() != dimension)
+            {
+                return ERR("could not parse signal ranges: mismatch of dimensions (line " + std::to_string(line_number) + ")");
+            }
+        }
+        else
+        {
+            return ERR("could not parse signal ranges: type name '" + core_strings::to<std::string>(type_name.string) + "' is invalid (line " + std::to_string(line_number) + ")");
+        }
+
+        return OK(ranges);
+    }
+
+    void VHDLParser::expand_ranges_recursively(std::vector<ci_string>& expanded_names, const ci_string& current_name, const std::vector<std::vector<u32>>& ranges, u32 dimension) const
+    {
+        // expand signal recursively
+        if (ranges.size() > dimension)
+        {
+            for (const u32 index : ranges[dimension])
+            {
+                expand_ranges_recursively(expanded_names, current_name + "(" + core_strings::to<ci_string>(std::to_string(index)) + ")", ranges, dimension + 1);
+            }
+        }
+        else
+        {
+            // last dimension
+            expanded_names.push_back(current_name);
+        }
+    }
+
+    std::vector<VHDLParser::ci_string> VHDLParser::expand_ranges(const ci_string& name, const std::vector<std::vector<u32>>& ranges) const
+    {
+        std::vector<ci_string> res;
+
+        expand_ranges_recursively(res, name, ranges, 0);
+
+        return res;
+    }
+
+    Result<std::vector<BooleanFunction::Value>> VHDLParser::get_binary_vector(std::string value) const
+    {
+        value = utils::to_upper(utils::replace(value, std::string("_"), std::string("")));
+
+        std::string prefix;
+        std::string number;
+        std::vector<BooleanFunction::Value> result;
+
+        // base specified?
+        if (value.at(0) != '\"')
+        {
+            prefix = value.at(0);
+            number = value.substr(2, value.rfind('\"') - 2);
+        }
+        else
+        {
+            prefix = "B";
+            number = value.substr(1, value.rfind('\"') - 1);
+        }
+
+        // select base
+        switch (prefix.at(0))
+        {
+            case 'B': {
+                for (auto it = number.rbegin(); it != number.rend(); it++)
+                {
+                    const char c = *it;
+                    if (c == '0' || c == '1' || c == 'Z' || c == 'X')
+                    {
+                        result.push_back(bin_map.at(c));
+                    }
+                    else
+                    {
+                        return ERR("could not convert string to binary vector: invalid character within binary number literal '" + value + "'");
+                    }
+                }
+                break;
+            }
+
+            case 'O':
+                for (auto it = number.rbegin(); it != number.rend(); it++)
+                {
+                    const char c = *it;
+                    if ((c >= '0' && c <= '7') || c == 'X' || c == 'Z')
+                    {
+                        const auto& bits = oct_map.at(c);
+                        result.insert(result.end(), bits.begin(), bits.end());
+                    }
+                    else
+                    {
+                        return ERR("could not convert string to binary vector: invalid character within octal number literal '" + value + "'");
+                    }
+                }
+                break;
+
+            case 'D': {
+                u64 tmp_val = 0;
+
+                for (const char c : number)
+                {
+                    if ((c >= '0' && c <= '9'))
+                    {
+                        tmp_val = (tmp_val * 10) + (c - '0');
+                    }
+                    else
+                    {
+                        return ERR("could not convert string to binary vector: invalid character within decimal number literal '" + value + "'");
+                    }
+                }
+
+                do
+                {
+                    result.push_back(((tmp_val & 1) == 1) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO);
+                    tmp_val >>= 1;
+                } while (tmp_val != 0);
+                break;
+            }
+
+            case 'H': {
+                for (auto it = number.rbegin(); it != number.rend(); it++)
+                {
+                    const char c = *it;
+                    if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || c == 'X' || c == 'Z')
+                    {
+                        const auto& bits = hex_map.at(c);
+                        result.insert(result.end(), bits.begin(), bits.end());
+                    }
+                    else
+                    {
+                        return ERR("could not convert string to binary vector: invalid character within hexadecimal number literal '" + value + "'");
+                    }
+                }
+                break;
+            }
+
+            default: {
+                return ERR("could not convert string to binary vector: invalid base '" + prefix + "' within number literal '" + value + "'");
+            }
+        }
+
+        return OK(result);
+    }
+
+    Result<std::string> VHDLParser::get_hex_from_literal(const Token<ci_string>& value_token) const
+    {
+        const u32 line_number = value_token.number;
+        const ci_string value = utils::to_upper(utils::replace(value_token.string, ci_string("_"), ci_string("")));
+
+        ci_string prefix;
+        ci_string number;
+        u32 base;
+
+        // base specified?
+        if (value.at(0) != '\"')
+        {
+            prefix = value.at(0);
+            number = value.substr(2, value.rfind('\"') - 2);
+        }
+        else
+        {
+            prefix = "B";
+            number = value.substr(1, value.rfind('\"') - 1);
+        }
+
+        // select base
+        switch (prefix.at(0))
+        {
+            case 'B': {
+                if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '1'); }))
+                {
+                    return ERR("could not convert token to hexadecimal string: invalid character within binary number literal '" + core_strings::to<std::string>(value) + "' (line "
+                               + std::to_string(line_number) + ")");
+                }
+
+                base = 2;
+                break;
+            }
+
+            case 'O': {
+                if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '7'); }))
+                {
+                    return ERR("could not convert token to hexadecimal string: invalid character within ocatl number literal '" + core_strings::to<std::string>(value) + "' (line "
+                               + std::to_string(line_number) + ")");
+                }
+
+                base = 8;
+                break;
+            }
+
+            case 'D': {
+                if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '9'); }))
+                {
+                    return ERR("could not convert token to hexadecimal string: invalid character within decimal number literal '" + core_strings::to<std::string>(value) + "' (line "
+                               + std::to_string(line_number) + ")");
+                }
+
+                base = 10;
+                break;
+            }
+
+            case 'X': {
+                std::string res;
+
+                for (const char c : number)
+                {
+                    if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F'))
+                    {
+                        res += c;
+                    }
+                    else
+                    {
+                        return ERR("could not convert token to hexadecimal string: invalid character within hexadecimal number literal '" + core_strings::to<std::string>(value) + "' (line "
+                                   + std::to_string(line_number) + ")");
+                    }
+                }
+
+                return OK(res);
+            }
+
+            default: {
+                return ERR("could not convert token to hexadecimal string: invalid base '" + core_strings::to<std::string>(prefix) + "' within number literal '" + core_strings::to<std::string>(value)
+                           + "' (line " + std::to_string(line_number) + ")");
+            }
+        }
+
+        std::stringstream ss;
+        ss << std::uppercase << std::hex << stoull(core_strings::to<std::string>(number), 0, base);
+        return OK(ss.str());
+    }
+
+    Result<std::vector<VHDLParser::assignment_t>> VHDLParser::parse_assignment_expression(TokenStream<ci_string>&& stream) const
+    {
+        // PARSE ASSIGNMENT
+        //   assignment can currently be one of the following:
+        //   (1) NAME
+        //   (2) NUMBER
+        //   (3) NAME(INDEX1, INDEX2, ...)
+        //   (4) NAME(BEGIN_INDEX1 to/downto END_INDEX1, BEGIN_INDEX2 to/downto END_INDEX2, ...)
+        //   (5) ((1 - 4), (1 - 4), ...)
+
+        std::vector<TokenStream<ci_string>> parts;
+
+        if (stream.size() == 0)
+        {
+            return OK({});
+        }
+
+        // (5) ((1 - 4), (1 - 4), ...)
+        if (stream.consume("("))
+        {
+            do
+            {
+                parts.push_back(stream.extract_until(","));
+            } while (stream.consume(",", false));
+
+            stream.consume(")", true);
+        }
+        else
+        {
+            parts.push_back(stream);
+        }
+
+        std::vector<assignment_t> result;
+        result.reserve(parts.size());
+
+        for (auto it = parts.rbegin(); it != parts.rend(); it++)
+        {
+            TokenStream<ci_string>& part_stream = *it;
+
+            const Token<ci_string> signal_name_token = part_stream.consume();
+            ci_string signal_name                    = signal_name_token.string;
+
+            // (2) NUMBER
+            if (utils::starts_with(signal_name, core_strings::CaseInsensitiveString("\"")) || utils::starts_with(signal_name, core_strings::CaseInsensitiveString("b\""))
+                || utils::starts_with(signal_name, core_strings::CaseInsensitiveString("o\"")) || utils::starts_with(signal_name, core_strings::CaseInsensitiveString("x\"")))
+            {
+                if (auto res = get_binary_vector(core_strings::to<std::string>(signal_name_token.string)); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not expand assignment signal: unable to convert literal to binary string (line " + std::to_string(signal_name_token.number) + ")");
+                }
+                else
+                {
+                    result.push_back(std::move(res.get()));
+                }
+            }
+            else if (signal_name == "'0'")
+            {
+                result.push_back(numeral_t({BooleanFunction::Value::ZERO}));
+            }
+            else if (signal_name == "'1'")
+            {
+                result.push_back(numeral_t({BooleanFunction::Value::ONE}));
+            }
+            else if (signal_name == "'X'")
+            {
+                result.push_back(numeral_t({BooleanFunction::Value::X}));
+            }
+            else if (signal_name == "'Z'")
+            {
+                result.push_back(numeral_t({BooleanFunction::Value::Z}));
+            }
+            else
+            {
+                // (3) NAME(INDEX1, INDEX2, ...)
+                // (4) NAME(BEGIN_INDEX1 to/downto END_INDEX1, BEGIN_INDEX2 to/downto END_INDEX2, ...)
+                if (part_stream.consume("("))
+                {
+                    std::vector<std::vector<u32>> ranges;
+                    u32 closing_pos = part_stream.find_next(")");
+                    do
+                    {
+                        TokenStream<ci_string> range_stream = part_stream.extract_until(",", closing_pos);
+                        ranges.emplace_back(parse_range(range_stream));
+
+                    } while (part_stream.consume(",", false));
+                    part_stream.consume(")", true);
+                    result.push_back(ranged_identifier_t({std::move(signal_name), std::move(ranges)}));
+                }
+                else
+                {
+                    // (1) NAME
+                    result.push_back(std::move(signal_name));
+                }
+            }
+        }
+
+        return OK(result);
+    }
+
+    Result<std::vector<VHDLParser::ci_string>> VHDLParser::expand_assignment_expression(VhdlEntity* vhdl_entity, const std::vector<assignment_t>& vars) const
+    {
+        std::vector<ci_string> result;
+        for (const auto& var : vars)
+        {
+            if (const identifier_t* identifier = std::get_if<identifier_t>(&var); identifier != nullptr)
+            {
+                std::vector<std::vector<u32>> ranges;
+
+                if (const auto signal_it = vhdl_entity->m_signals_by_name.find(*identifier); signal_it != vhdl_entity->m_signals_by_name.end())
+                {
+                    ranges = signal_it->second->m_ranges;
+                }
+                else if (const auto port_it = vhdl_entity->m_ports_by_identifier.find(*identifier); port_it != vhdl_entity->m_ports_by_identifier.end())
+                {
+                    ranges = port_it->second->m_ranges;
+                }
+                else
+                {
+                    return ERR("could not expand assignment expression': '" + core_strings::to<std::string>(*identifier) + "' is neither a signal nor a port of entity '"
+                               + core_strings::to<std::string>(vhdl_entity->m_name) + "'");
+                }
+
+                std::vector<ci_string> expanded = expand_ranges(*identifier, ranges);
+                result.insert(result.end(), expanded.begin(), expanded.end());
+            }
+            else if (const ranged_identifier_t* ranged_identifier = std::get_if<ranged_identifier_t>(&var); ranged_identifier != nullptr)
+            {
+                std::vector<ci_string> expanded = expand_ranges(ranged_identifier->first, ranged_identifier->second);
+                result.insert(result.end(), expanded.begin(), expanded.end());
+            }
+            else if (const numeral_t* numeral = std::get_if<numeral_t>(&var); numeral != nullptr)
+            {
+                for (auto value : *numeral)
+                {
+                    result.push_back(core_strings::to<ci_string>("'" + BooleanFunction::to_string(value) + "'"));
+                }
+            }
+        }
+
+        return OK(result);
     }
 }    // namespace hal
