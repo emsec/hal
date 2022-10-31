@@ -1097,6 +1097,12 @@ namespace hal
 
                     instance->m_port_assignments.push_back(std::move(port_assignment));
                 }
+                else
+                {
+                    VhdlPortAssignment port_assignment;
+                    port_assignment.m_assignment.push_back("");
+                    instance->m_port_assignments.push_back(std::move(port_assignment));
+                }
             }
         }
 
@@ -1795,29 +1801,26 @@ namespace hal
                     {
                         instance_assignments[port] = it->second;
                     }
+                    else if (const auto alias_it = signal_alias.find(assignment); alias_it != signal_alias.end())
+                    {
+                        instance_assignments[port] = alias_it->second;
+                    }
+                    else if (assignment == "'0'" || assignment == "'1'")
+                    {
+                        instance_assignments[port] = assignment;
+                    }
+                    else if (assignment == "'Z'" || assignment == "'X'" || assignment == "")
+                    {
+                        continue;
+                    }
+                    else if (vhdl_entity->m_expanded_port_identifiers.find(assignment) != vhdl_entity->m_expanded_port_identifiers.end())
+                    {
+                        continue;
+                    }
                     else
                     {
-                        if (const auto alias_it = signal_alias.find(assignment); alias_it != signal_alias.end())
-                        {
-                            instance_assignments[port] = alias_it->second;
-                        }
-                        else if (assignment == "'0'" || assignment == "'1'")
-                        {
-                            instance_assignments[port] = assignment;
-                        }
-                        else if (assignment != "'Z'" && assignment != "'X'")
-                        {
-                            continue;
-                        }
-                        else if (vhdl_entity->m_expanded_port_identifiers.find(assignment) != vhdl_entity->m_expanded_port_identifiers.end())
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            return ERR("could not create instance '" + core_strings::to<std::string>(instance_identifier) + "' of type '" + core_strings::to<std::string>(instance_type)
-                                       + "': port assignment '" + core_strings::to<std::string>(port) + " = " + core_strings::to<std::string>(assignment) + "' is invalid");
-                        }
+                        return ERR("could not create instance '" + core_strings::to<std::string>(instance_identifier) + "' of type '" + core_strings::to<std::string>(instance_type)
+                                   + "': port assignment '" + core_strings::to<std::string>(port) + " = " + core_strings::to<std::string>(assignment) + "' is invalid");
                     }
                 }
 
@@ -1889,7 +1892,7 @@ namespace hal
                     {
                         signal = assignment;
                     }
-                    else if (assignment == "'Z'" || assignment == "'X'")
+                    else if (assignment == "'Z'" || assignment == "'X'" || assignment == "")
                     {
                         continue;
                     }
@@ -2451,6 +2454,11 @@ namespace hal
         {
             if (const identifier_t* identifier = std::get_if<identifier_t>(&var); identifier != nullptr)
             {
+                if (identifier->empty())
+                {
+                    result.push_back(*identifier);
+                    continue;
+                }
                 std::vector<std::vector<u32>> ranges;
 
                 if (const auto signal_it = vhdl_entity->m_signals_by_name.find(*identifier); signal_it != vhdl_entity->m_signals_by_name.end())
