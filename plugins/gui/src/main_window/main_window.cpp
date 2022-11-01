@@ -698,7 +698,7 @@ namespace hal
     void MainWindow::handleSaveTriggered()
     {
         ProjectManager* pm = ProjectManager::instance();
-        if (pm->get_project_status() == ProjectManager::None) return;
+        if (pm->get_project_status() == ProjectManager::ProjectStatus::NONE) return;
         QString  projectDir = QString::fromStdString(pm->get_project_directory().string());
         saveHandler(projectDir);
         gContentManager->setWindowTitle(projectDir);

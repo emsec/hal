@@ -73,7 +73,7 @@ namespace hal
         enum Value
         {
             ZERO = 0,  /**< Represents a logical 0. */
-            ONE  = 1,  /**< Represents a logical 1 */
+            ONE  = 1,  /**< Represents a logical 1. */
             X    = -1, /**< Represents an undefined value. */
             Z    = -2  /**< Represents a high-impedance value. */
         };
