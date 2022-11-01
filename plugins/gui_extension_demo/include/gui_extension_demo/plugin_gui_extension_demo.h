@@ -31,28 +31,41 @@
 #include "hal_core/netlist/netlist.h"
 #include <vector>
 #include <unordered_set>
+#include <unordered_map>
 #include <string>
 
 namespace hal
 {
+    class GuiExtensionPythonBase;
+
     class GuiExtensionContext : public GuiExtensionInterface
     {
+        std::unordered_map<std::string,GuiExtensionPythonBase*> m_python_plugins;
+
+    public:
+        GuiExtensionContext();
+        ~GuiExtensionContext();
+
         std::vector<ContextMenuContribution> get_context_contribution(const Netlist* nl,
                                                                               const std::vector<u32>& mods,
                                                                               const std::vector<u32>& gats,
-                                                                              const std::vector<u32>& nets);
+                                                                              const std::vector<u32>& nets) override;
 
         void execute_context_action(u32 fid,
                                             Netlist* nl,
                                             const std::vector<u32>& mods,
                                             const std::vector<u32>& gats,
-                                            const std::vector<u32>& nets);
+                                            const std::vector<u32>& nets) override;
 
+        std::vector<PluginParameter> get_parameter() const override;
+
+        virtual void set_parameter(Netlist* nl, const std::vector<PluginParameter>& params) override;
+
+        void register_external_extension(GuiExtensionPythonBase* plug);
     };
 
-    class PLUGIN_API ExtendContextPlugin : public BasePluginInterface
+    class PLUGIN_API GuiExtensionDemoPlugin : public BasePluginInterface
     {
-        GuiExtensionContext* mGuiExtension = nullptr;
     public:
 
         std::string get_name() const override;
@@ -64,5 +77,7 @@ namespace hal
         void on_unload() override;
 
         GuiExtensionInterface* get_gui_extension() const override;
+
+        static GuiExtensionContext* sGuiExtension;
     };
 }    // namespace hal

@@ -441,6 +441,8 @@ namespace hal
 
         void setPluginParameter();
 
+        void handlePluginShow();
+
     private:
         /**
          * Overwritten Qt function to handle the close event.

@@ -3,8 +3,6 @@
 !boolean_influence/**/*
 !dataflow_analysis*
 !dataflow_analysis/**/*
-!extend_context*
-!extend_context/**/*
 !gate_libraries*
 !gate_libraries/**/*
 !gexf_writer*
@@ -13,6 +11,8 @@
 !graph_algorithm/**/*
 !gui*
 !gui/**/*
+!gui_extension_demo*
+!gui_extension_demo/**/*
 !liberty_parser*
 !liberty_parser/**/*
 !hgl_parser*

@@ -250,7 +250,7 @@ namespace hal
         mActionStopRecording->setEnabled(false);
         mActionPlayMacro->setEnabled(true);
 
-        pluginMenu();
+        connect(mMenuPlugin,&QMenu::aboutToShow,this,&MainWindow::handlePluginShow);
         setWindowTitle("HAL");
         mActionNew->setText("New Netlist");
         mActionOpenProject->setText("Open Project");
@@ -557,6 +557,7 @@ namespace hal
 
     void MainWindow::pluginMenu()
     {
+        mMenuPlugin->clear();
         QMap<QString,void*> plugins[2];   // 0 = configurable  1 = only listed
         for (const std::string& pluginName : plugin_manager::get_plugin_names())
         {
@@ -652,6 +653,12 @@ namespace hal
             ActionOpenNetlistFile* actOpenfile = new ActionOpenNetlistFile(ActionOpenNetlistFile::ImportFile, fileName);
             actOpenfile->exec();
         }
+    }
+
+    void MainWindow::handlePluginShow()
+    {
+        qDebug() << "plugin about to show";
+        pluginMenu();
     }
 
     void MainWindow::handleProjectOpened(const QString& projDir, const QString& fileName)
