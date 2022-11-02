@@ -20,6 +20,8 @@
 !python_shell*
 !python_shell/**/*
 !simulator
+!smt_utils*
+!smt_utils/**/*
 !solve_fsm*
 !solve_fsm/**/*
 !verilog_parser*
