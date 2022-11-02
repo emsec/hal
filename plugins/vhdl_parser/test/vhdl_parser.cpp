@@ -257,6 +257,618 @@ namespace hal {
     }
 
     /**
+     * Test different variants of pin assignments to modules and gates.
+     *
+     * Functions: parse
+     */
+    TEST_F(VHDLParserTest, check_pin_assignments) {
+
+        TEST_START
+            {   // test gate pin assignment by name
+                const GateLibrary* gl = test_utils::get_gate_library();
+
+                std::string netlist_input(
+                                        "entity top is "
+                                        "   port ( "
+                                        "       a, b : in STD_LOGIC; "
+                                        "       c : out STD_LOGIC; "
+                                        "   ); "
+                                        "end top; "
+                                        "\n"
+                                        "architecture top_arch of top is "
+                                        "begin "
+                                        "   gate_0 : AND2 "
+                                        "       port map ( "
+                                        "           I0 => a, "
+                                        "           I1 => b, "
+                                        "           O => c "
+                                        "       ); "
+                                        "   gate_1 : AND2 "
+                                        "       port map ( "
+                                        "           I1 => b, "
+                                        "           O => c "
+                                        "       ); "
+                                        "   gate_2 : AND2 "
+                                        "       port map ( "
+                                        "           O => c "
+                                        "       ); "
+                                        "end top_arch;");
+
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
+                ASSERT_NE(nl, nullptr);
+
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("AND2", "gate_0")).size(), 1);
+                Gate* gate_0 = nl->get_gates(test_utils::gate_filter("AND2", "gate_0")).front();
+                EXPECT_EQ(gate_0->get_fan_in_endpoint("I0")->get_net()->get_name(), "a");
+                EXPECT_EQ(gate_0->get_fan_in_endpoint("I1")->get_net()->get_name(), "b");
+                EXPECT_EQ(gate_0->get_fan_out_endpoint("O")->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("AND2", "gate_1")).size(), 1);
+                Gate* gate_1 = nl->get_gates(test_utils::gate_filter("AND2", "gate_1")).front();
+                EXPECT_EQ(gate_1->get_fan_in_endpoint("I0"), nullptr);
+                EXPECT_EQ(gate_1->get_fan_in_endpoint("I1")->get_net()->get_name(), "b");
+                EXPECT_EQ(gate_1->get_fan_out_endpoint("O")->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("AND2", "gate_2")).size(), 1);
+                Gate* gate_2 = nl->get_gates(test_utils::gate_filter("AND2", "gate_2")).front();
+                EXPECT_EQ(gate_2->get_fan_in_endpoint("I0"), nullptr);
+                EXPECT_EQ(gate_2->get_fan_in_endpoint("I1"), nullptr);
+                EXPECT_EQ(gate_2->get_fan_out_endpoint("O")->get_net()->get_name(), "c");
+            }
+            {   // test gate pin assignment by name with open pins
+                const GateLibrary* gl = test_utils::get_gate_library();
+
+                std::string netlist_input(
+                                        "entity top is "
+                                        "   port ( "
+                                        "       a, b : in STD_LOGIC; "
+                                        "       c : out STD_LOGIC; "
+                                        "   ); "
+                                        "end top; "
+                                        "\n"
+                                        "architecture top_arch of top is "
+                                        "begin "
+                                        "   gate_0 : AND2 "
+                                        "       port map ( "
+                                        "           I0 => a, "
+                                        "           I1 => b, "
+                                        "           O => c "
+                                        "       ); "
+                                        "   gate_1 : AND2 "
+                                        "       port map ( "
+                                        "           I0 => open, "
+                                        "           I1 => b, "
+                                        "           O => c "
+                                        "       ); "
+                                        "   gate_2 : AND2 "
+                                        "       port map ( "
+                                        "           I0 => open, "
+                                        "           I1 => open, "
+                                        "           O => c "
+                                        "       ); "
+                                        "end top_arch;");
+                
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
+                ASSERT_NE(nl, nullptr);
+
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("AND2", "gate_0")).size(), 1);
+                Gate* gate_0 = nl->get_gates(test_utils::gate_filter("AND2", "gate_0")).front();
+                EXPECT_EQ(gate_0->get_fan_in_endpoint("I0")->get_net()->get_name(), "a");
+                EXPECT_EQ(gate_0->get_fan_in_endpoint("I1")->get_net()->get_name(), "b");
+                EXPECT_EQ(gate_0->get_fan_out_endpoint("O")->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("AND2", "gate_1")).size(), 1);
+                Gate* gate_1 = nl->get_gates(test_utils::gate_filter("AND2", "gate_1")).front();
+                EXPECT_EQ(gate_1->get_fan_in_endpoint("I0"), nullptr);
+                EXPECT_EQ(gate_1->get_fan_in_endpoint("I1")->get_net()->get_name(), "b");
+                EXPECT_EQ(gate_1->get_fan_out_endpoint("O")->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("AND2", "gate_2")).size(), 1);
+                Gate* gate_2 = nl->get_gates(test_utils::gate_filter("AND2", "gate_2")).front();
+                EXPECT_EQ(gate_2->get_fan_in_endpoint("I0"), nullptr);
+                EXPECT_EQ(gate_2->get_fan_in_endpoint("I1"), nullptr);
+                EXPECT_EQ(gate_2->get_fan_out_endpoint("O")->get_net()->get_name(), "c");
+            }
+            {   // test gate pin assignment by order
+                const GateLibrary* gl = test_utils::get_gate_library();
+
+                std::string netlist_input(
+                                        "entity top is "
+                                        "   port ( "
+                                        "       a, b : in STD_LOGIC; "
+                                        "       c : out STD_LOGIC; "
+                                        "   ); "
+                                        "end top; "
+                                        "\n"
+                                        "architecture top_arch of top is "
+                                        "begin "
+                                        "   gate_0 : AND2 port map (a, b, c); "
+                                        "   gate_1 : AND2 port map (a, b); "
+                                        "   gate_2 : AND2 port map (a); "
+                                        "end top_arch;");
+                
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
+                ASSERT_NE(nl, nullptr);
+
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("AND2", "gate_0")).size(), 1);
+                Gate* gate_0 = nl->get_gates(test_utils::gate_filter("AND2", "gate_0")).front();
+                EXPECT_EQ(gate_0->get_fan_in_endpoint("I0")->get_net()->get_name(), "a");
+                EXPECT_EQ(gate_0->get_fan_in_endpoint("I1")->get_net()->get_name(), "b");
+                EXPECT_EQ(gate_0->get_fan_out_endpoint("O")->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("AND2", "gate_1")).size(), 1);
+                Gate* gate_1 = nl->get_gates(test_utils::gate_filter("AND2", "gate_1")).front();
+                EXPECT_EQ(gate_1->get_fan_in_endpoint("I0")->get_net()->get_name(), "a");
+                EXPECT_EQ(gate_1->get_fan_in_endpoint("I1")->get_net()->get_name(), "b");
+                EXPECT_EQ(gate_1->get_fan_out_endpoint("O"), nullptr);
+
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("AND2", "gate_2")).size(), 1);
+                Gate* gate_2 = nl->get_gates(test_utils::gate_filter("AND2", "gate_2")).front();
+                EXPECT_EQ(gate_2->get_fan_in_endpoint("I0")->get_net()->get_name(), "a");
+                EXPECT_EQ(gate_2->get_fan_in_endpoint("I1"), nullptr);
+                EXPECT_EQ(gate_2->get_fan_out_endpoint("O"), nullptr);
+            }
+            {   // test gate pin assignment by order with open pins
+                const GateLibrary* gl = test_utils::get_gate_library();
+
+                std::string netlist_input(
+                                        "entity top is "
+                                        "   port ( "
+                                        "       a, b : in STD_LOGIC; "
+                                        "       c : out STD_LOGIC; "
+                                        "   ); "
+                                        "end top; "
+                                        "\n"
+                                        "architecture top_arch of top is "
+                                        "begin "
+                                        "   gate_0 : AND2 port map (a, b, c); "
+                                        "   gate_1 : AND2 port map (open, b, c); "
+                                        "   gate_2 : AND2 port map (open, open, c); "
+                                        "end top_arch;");
+                
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
+                ASSERT_NE(nl, nullptr);
+
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("AND2", "gate_0")).size(), 1);
+                Gate* gate_0 = nl->get_gates(test_utils::gate_filter("AND2", "gate_0")).front();
+                EXPECT_EQ(gate_0->get_fan_in_endpoint("I0")->get_net()->get_name(), "a");
+                EXPECT_EQ(gate_0->get_fan_in_endpoint("I1")->get_net()->get_name(), "b");
+                EXPECT_EQ(gate_0->get_fan_out_endpoint("O")->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("AND2", "gate_1")).size(), 1);
+                Gate* gate_1 = nl->get_gates(test_utils::gate_filter("AND2", "gate_1")).front();
+                EXPECT_EQ(gate_1->get_fan_in_endpoint("I0"), nullptr);
+                EXPECT_EQ(gate_1->get_fan_in_endpoint("I1")->get_net()->get_name(), "b");
+                EXPECT_EQ(gate_1->get_fan_out_endpoint("O")->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("AND2", "gate_2")).size(), 1);
+                Gate* gate_2 = nl->get_gates(test_utils::gate_filter("AND2", "gate_2")).front();
+                EXPECT_EQ(gate_2->get_fan_in_endpoint("I0"), nullptr);
+                EXPECT_EQ(gate_2->get_fan_in_endpoint("I1"), nullptr);
+                EXPECT_EQ(gate_2->get_fan_out_endpoint("O")->get_net()->get_name(), "c");
+            }
+            {   // test module pin assignment by name
+                const GateLibrary* gl = test_utils::get_gate_library();
+
+                std::string netlist_input(
+                                        "entity sub_mod is "
+                                        "   port ( "
+                                        "       as, bs : in STD_LOGIC; "
+                                        "       cs : out STD_LOGIC; "
+                                        "   ); "
+                                        "end sub_mod; "
+                                        "\n"
+                                        "architecture sub_arch of sub_mod is "
+                                        "begin "
+                                        "   gate_0 : AND2 "
+                                        "       port map ( "
+                                        "           I0 => as, "
+                                        "           I1 => bs, "
+                                        "           O => cs "
+                                        "       ); "
+                                        "end sub_arch;"
+                                        "\n"
+                                        "entity top is "
+                                        "   port ( "
+                                        "       a, b : in STD_LOGIC; "
+                                        "       c : out STD_LOGIC; "
+                                        "   ); "
+                                        "end top; "
+                                        "\n"
+                                        "architecture top_arch of top is "
+                                        "begin "
+                                        "   inst_0 : sub_mod "
+                                        "       port map ( "
+                                        "           as => a, "
+                                        "           bs => b, "
+                                        "           cs => c "
+                                        "       ); "
+                                        "   inst_1 : sub_mod "
+                                        "       port map ( "
+                                        "           bs => b, "
+                                        "           cs => c "
+                                        "       ); "
+                                        "   inst_2 : sub_mod "
+                                        "       port map ( "
+                                        "           cs => c "
+                                        "       ); "
+                                        "end top_arch;");
+                
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
+                ASSERT_NE(nl, nullptr);
+
+                ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_0")).size(), 1);
+                Module* inst_0 = nl->get_modules(test_utils::module_name_filter("inst_0")).front();
+                const auto pins_0 = inst_0->get_pins();
+                EXPECT_EQ(pins_0.size(), 3);
+                EXPECT_EQ(pins_0.at(0)->get_name(), "as");
+                EXPECT_EQ(pins_0.at(0)->get_net()->get_name(), "a");
+                EXPECT_EQ(pins_0.at(1)->get_name(), "bs");
+                EXPECT_EQ(pins_0.at(1)->get_net()->get_name(), "b");
+                EXPECT_EQ(pins_0.at(2)->get_name(), "cs");
+                EXPECT_EQ(pins_0.at(2)->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_1")).size(), 1);
+                Module* inst_1 = nl->get_modules(test_utils::module_name_filter("inst_1")).front();
+                const auto pins_1 = inst_1->get_pins();
+                EXPECT_EQ(pins_1.size(), 2);
+                EXPECT_EQ(pins_1.at(0)->get_name(), "bs");
+                EXPECT_EQ(pins_1.at(0)->get_net()->get_name(), "b");
+                EXPECT_EQ(pins_1.at(1)->get_name(), "cs");
+                EXPECT_EQ(pins_1.at(1)->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_2")).size(), 1);
+                Module* inst_2 = nl->get_modules(test_utils::module_name_filter("inst_2")).front();
+                const auto pins_2 = inst_2->get_pins();
+                EXPECT_EQ(pins_2.size(), 1);
+                EXPECT_EQ(pins_2.at(0)->get_name(), "cs");
+                EXPECT_EQ(pins_2.at(0)->get_net()->get_name(), "c");
+            }
+            {   // test module pin assignment by name with open pins
+                const GateLibrary* gl = test_utils::get_gate_library();
+
+                std::string netlist_input(
+                                        "entity sub_mod is "
+                                        "   port ( "
+                                        "       as, bs : in STD_LOGIC; "
+                                        "       cs : out STD_LOGIC; "
+                                        "   ); "
+                                        "end sub_mod; "
+                                        "\n"
+                                        "architecture sub_arch of sub_mod is "
+                                        "begin "
+                                        "   gate_0 : AND2 "
+                                        "       port map ( "
+                                        "           I0 => as, "
+                                        "           I1 => bs, "
+                                        "           O => cs "
+                                        "       ); "
+                                        "end sub_arch;"
+                                        "\n"
+                                        "entity top is "
+                                        "   port ( "
+                                        "       a, b : in STD_LOGIC; "
+                                        "       c : out STD_LOGIC; "
+                                        "   ); "
+                                        "end top; "
+                                        "\n"
+                                        "architecture top_arch of top is "
+                                        "begin "
+                                        "   inst_0 : sub_mod "
+                                        "       port map ( "
+                                        "           as => a, "
+                                        "           bs => b, "
+                                        "           cs => c "
+                                        "       ); "
+                                        "   inst_1 : sub_mod "
+                                        "       port map ( "
+                                        "           as => open, "
+                                        "           bs => b, "
+                                        "           cs => c "
+                                        "       ); "
+                                        "   inst_2 : sub_mod "
+                                        "       port map ( "
+                                        "           as => open, "
+                                        "           bs => open, "
+                                        "           cs => c "
+                                        "       ); "
+                                        "end top_arch;");
+                
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
+                ASSERT_NE(nl, nullptr);
+
+                ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_0")).size(), 1);
+                Module* inst_0 = nl->get_modules(test_utils::module_name_filter("inst_0")).front();
+                const auto pins_0 = inst_0->get_pins();
+                EXPECT_EQ(pins_0.size(), 3);
+                EXPECT_EQ(pins_0.at(0)->get_name(), "as");
+                EXPECT_EQ(pins_0.at(0)->get_net()->get_name(), "a");
+                EXPECT_EQ(pins_0.at(1)->get_name(), "bs");
+                EXPECT_EQ(pins_0.at(1)->get_net()->get_name(), "b");
+                EXPECT_EQ(pins_0.at(2)->get_name(), "cs");
+                EXPECT_EQ(pins_0.at(2)->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_1")).size(), 1);
+                Module* inst_1 = nl->get_modules(test_utils::module_name_filter("inst_1")).front();
+                const auto pins_1 = inst_1->get_pins();
+                EXPECT_EQ(pins_1.size(), 2);
+                EXPECT_EQ(pins_1.at(0)->get_name(), "bs");
+                EXPECT_EQ(pins_1.at(0)->get_net()->get_name(), "b");
+                EXPECT_EQ(pins_1.at(1)->get_name(), "cs");
+                EXPECT_EQ(pins_1.at(1)->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_2")).size(), 1);
+                Module* inst_2 = nl->get_modules(test_utils::module_name_filter("inst_2")).front();
+                const auto pins_2 = inst_2->get_pins();
+                EXPECT_EQ(pins_2.size(), 1);
+                EXPECT_EQ(pins_2.at(0)->get_name(), "cs");
+                EXPECT_EQ(pins_2.at(0)->get_net()->get_name(), "c");
+            }
+            {   // test module pin assignment by order
+                const GateLibrary* gl = test_utils::get_gate_library();
+
+                std::string netlist_input(
+                                        "entity sub_mod is "
+                                        "   port ( "
+                                        "       as, bs : in STD_LOGIC; "
+                                        "       cs : out STD_LOGIC; "
+                                        "   ); "
+                                        "end sub_mod; "
+                                        "\n"
+                                        "architecture sub_arch of sub_mod is "
+                                        "begin "
+                                        "   gate_0 : AND2 port map (as, bs, cs); "
+                                        "end sub_arch;"
+                                        "\n"
+                                        "entity top is "
+                                        "   port ( "
+                                        "       a, b : in STD_LOGIC; "
+                                        "       c : out STD_LOGIC; "
+                                        "   ); "
+                                        "end top; "
+                                        "\n"
+                                        "architecture top_arch of top is "
+                                        "begin "
+                                        "   inst_0 : sub_mod port map (a, b, c); "
+                                        "   inst_1 : sub_mod port map (a, b); "
+                                        "   inst_2 : sub_mod port map (a); "
+                                        "end top_arch;");
+                
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
+                ASSERT_NE(nl, nullptr);
+
+                ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_0")).size(), 1);
+                Module* inst_0 = nl->get_modules(test_utils::module_name_filter("inst_0")).front();
+                const auto pins_0 = inst_0->get_pins();
+                EXPECT_EQ(pins_0.size(), 3);
+                EXPECT_EQ(pins_0.at(0)->get_name(), "as");
+                EXPECT_EQ(pins_0.at(0)->get_net()->get_name(), "a");
+                EXPECT_EQ(pins_0.at(1)->get_name(), "bs");
+                EXPECT_EQ(pins_0.at(1)->get_net()->get_name(), "b");
+                EXPECT_EQ(pins_0.at(2)->get_name(), "cs");
+                EXPECT_EQ(pins_0.at(2)->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_1")).size(), 1);
+                Module* inst_1 = nl->get_modules(test_utils::module_name_filter("inst_1")).front();
+                const auto pins_1 = inst_1->get_pins();
+                EXPECT_EQ(pins_1.size(), 2);
+                EXPECT_EQ(pins_1.at(0)->get_name(), "as");
+                EXPECT_EQ(pins_1.at(0)->get_net()->get_name(), "a");
+                EXPECT_EQ(pins_1.at(1)->get_name(), "bs");
+                EXPECT_EQ(pins_1.at(1)->get_net()->get_name(), "b");
+
+                ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_2")).size(), 1);
+                Module* inst_2 = nl->get_modules(test_utils::module_name_filter("inst_2")).front();
+                const auto pins_2 = inst_2->get_pins();
+                EXPECT_EQ(pins_2.size(), 1);
+                EXPECT_EQ(pins_2.at(0)->get_name(), "as");
+                EXPECT_EQ(pins_2.at(0)->get_net()->get_name(), "a");
+            }
+            {    // test module pin assignment by order with open pins
+                const GateLibrary* gl = test_utils::get_gate_library();
+
+                std::string netlist_input("entity sub_mod is "
+                                          "   port ( "
+                                          "       as, bs : in STD_LOGIC; "
+                                          "       cs : out STD_LOGIC; "
+                                          "   ); "
+                                          "end sub_mod; "
+                                          "\n"
+                                          "architecture sub_arch of sub_mod is "
+                                          "begin "
+                                          "   gate_0 : AND2 port map (as, bs, cs); "
+                                          "end sub_arch;"
+                                          "\n"
+                                          "entity top is "
+                                          "   port ( "
+                                          "       a, b : in STD_LOGIC; "
+                                          "       c : out STD_LOGIC; "
+                                          "   ); "
+                                          "end top; "
+                                          "\n"
+                                          "architecture top_arch of top is "
+                                          "begin "
+                                          "   inst_0 : sub_mod port map (a, b, c); "
+                                          "   inst_1 : sub_mod port map (open, b, c); "
+                                          "   inst_2 : sub_mod port map (open, open, c); "
+                                          "end top_arch;");
+
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                auto vhdl_file              = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
+                ASSERT_NE(nl, nullptr);
+
+                ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_0")).size(), 1);
+                Module* inst_0    = nl->get_modules(test_utils::module_name_filter("inst_0")).front();
+                const auto pins_0 = inst_0->get_pins();
+                EXPECT_EQ(pins_0.size(), 3);
+                EXPECT_EQ(pins_0.at(0)->get_name(), "as");
+                EXPECT_EQ(pins_0.at(0)->get_net()->get_name(), "a");
+                EXPECT_EQ(pins_0.at(1)->get_name(), "bs");
+                EXPECT_EQ(pins_0.at(1)->get_net()->get_name(), "b");
+                EXPECT_EQ(pins_0.at(2)->get_name(), "cs");
+                EXPECT_EQ(pins_0.at(2)->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_1")).size(), 1);
+                Module* inst_1    = nl->get_modules(test_utils::module_name_filter("inst_1")).front();
+                const auto pins_1 = inst_1->get_pins();
+                EXPECT_EQ(pins_1.size(), 2);
+                EXPECT_EQ(pins_1.at(0)->get_name(), "bs");
+                EXPECT_EQ(pins_1.at(0)->get_net()->get_name(), "b");
+                EXPECT_EQ(pins_1.at(1)->get_name(), "cs");
+                EXPECT_EQ(pins_1.at(1)->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_2")).size(), 1);
+                Module* inst_2    = nl->get_modules(test_utils::module_name_filter("inst_2")).front();
+                const auto pins_2 = inst_2->get_pins();
+                EXPECT_EQ(pins_2.size(), 1);
+                EXPECT_EQ(pins_2.at(0)->get_name(), "cs");
+                EXPECT_EQ(pins_2.at(0)->get_net()->get_name(), "c");
+            }
+            {   // test pass-through module
+                const GateLibrary* gl = test_utils::get_gate_library();
+
+                std::string netlist_input(
+                                        "entity sub_sub_mod is "
+                                        "   port ( "
+                                        "       ass, bss : in STD_LOGIC; "
+                                        "       css : out STD_LOGIC; "
+                                        "   ); "
+                                        "end sub_sub_mod; "
+                                        "\n"
+                                        "architecture sub_sub_arch of sub_sub_mod is "
+                                        "begin "
+                                        "   gate_0 : AND2 "
+                                        "       port map ( "
+                                        "           I0 => ass, "
+                                        "           I1 => bss, "
+                                        "           O => css "
+                                        "       ); "
+                                        "end sub_sub_arch;"
+                                        "\n"
+                                        "entity sub_mod is "
+                                        "   port ( "
+                                        "       as, bs : in STD_LOGIC; "
+                                        "       cs : out STD_LOGIC; "
+                                        "   ); "
+                                        "end sub_mod; "
+                                        "\n"
+                                        "architecture sub_arch of sub_mod is "
+                                        "begin "
+                                        "   mid : sub_sub_mod "
+                                        "       port map ( "
+                                        "           ass => as, "
+                                        "           bss => bs, "
+                                        "           css => cs "
+                                        "       ); "
+                                        "end sub_arch;"
+                                        "\n"
+                                        "entity top is "
+                                        "   port ( "
+                                        "       a, b : in STD_LOGIC; "
+                                        "       c : out STD_LOGIC; "
+                                        "   ); "
+                                        "end top; "
+                                        "\n"
+                                        "architecture top_arch of top is "
+                                        "begin "
+                                        "   inst_0 : sub_mod "
+                                        "       port map ( "
+                                        "           as => a, "
+                                        "           bs => b, "
+                                        "           cs => c "
+                                        "       ); "
+                                        "   inst_1 : sub_mod "
+                                        "       port map ( "
+                                        "           as => open, "
+                                        "           bs => b, "
+                                        "           cs => c "
+                                        "       ); "
+                                        "   inst_2 : sub_mod "
+                                        "       port map ( "
+                                        "           as => open, "
+                                        "           bs => open, "
+                                        "           cs => c "
+                                        "       ); "
+                                        "end top_arch;");
+                
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
+                ASSERT_NE(nl, nullptr);
+
+                ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_0")).size(), 1);
+                Module* inst_0 = nl->get_modules(test_utils::module_name_filter("inst_0")).front();
+                const auto pins_0 = inst_0->get_pins();
+                EXPECT_EQ(pins_0.size(), 3);
+                EXPECT_EQ(pins_0.at(0)->get_name(), "as");
+                EXPECT_EQ(pins_0.at(0)->get_net()->get_name(), "a");
+                EXPECT_EQ(pins_0.at(1)->get_name(), "bs");
+                EXPECT_EQ(pins_0.at(1)->get_net()->get_name(), "b");
+                EXPECT_EQ(pins_0.at(2)->get_name(), "cs");
+                EXPECT_EQ(pins_0.at(2)->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_1")).size(), 1);
+                Module* inst_1 = nl->get_modules(test_utils::module_name_filter("inst_1")).front();
+                const auto pins_1 = inst_1->get_pins();
+                EXPECT_EQ(pins_1.size(), 2);
+                EXPECT_EQ(pins_1.at(0)->get_name(), "bs");
+                EXPECT_EQ(pins_1.at(0)->get_net()->get_name(), "b");
+                EXPECT_EQ(pins_1.at(1)->get_name(), "cs");
+                EXPECT_EQ(pins_1.at(1)->get_net()->get_name(), "c");
+
+                ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("inst_2")).size(), 1);
+                Module* inst_2 = nl->get_modules(test_utils::module_name_filter("inst_2")).front();
+                const auto pins_2 = inst_2->get_pins();
+                EXPECT_EQ(pins_2.size(), 1);
+                EXPECT_EQ(pins_2.at(0)->get_name(), "cs");
+                EXPECT_EQ(pins_2.at(0)->get_net()->get_name(), "c");
+            }
+        TEST_END
+    }
+
+    /**
      * Testing the correct storage of data, passed by the "generic map" keyword
      *
      * Functions: parse

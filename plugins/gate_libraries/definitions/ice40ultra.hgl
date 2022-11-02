@@ -1640,7 +1640,7 @@
             "lut_config": {
                 "bit_order": "ascending",
                 "data_category": "generic",
-                "data_identifier": "INIT"
+                "data_identifier": "LUT_INIT"
             },
             "pin_groups": [
                 {
@@ -4512,6 +4512,54 @@
                             "name": "SDAOE",
                             "direction": "output",
                             "type": "none"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "GND",
+            "types": [
+                "combinational",
+                "ground"
+            ],
+            "pin_groups": [
+                {
+                    "name": "Y",
+                    "direction": "output",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "Y",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "0b0"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "VCC",
+            "types": [
+                "combinational",
+                "power"
+            ],
+            "pin_groups": [
+                {
+                    "name": "Y",
+                    "direction": "output",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "Y",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "0b1"
                         }
                     ]
                 }

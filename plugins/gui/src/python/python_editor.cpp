@@ -42,7 +42,7 @@ namespace hal
         : ProjectSerializer("pythoneditor")
     {
         ProjectManager* pm = ProjectManager::instance();
-        if (pm->get_project_status() == ProjectManager::None) return;
+        if (pm->get_project_status() == ProjectManager::ProjectStatus::NONE) return;
 
         mSaveDir = QString::fromStdString(pm->get_project_directory().get_filename("py").string());
         QDir().mkpath(mSaveDir);
@@ -568,7 +568,7 @@ namespace hal
     {
         if (!mDefaultPath.isEmpty()) return mDefaultPath;
         ProjectManager* pm = ProjectManager::instance();
-        if (pm->get_project_status() != ProjectManager::None)
+        if (pm->get_project_status() != ProjectManager::ProjectStatus::NONE)
             return QString::fromStdString(pm->get_project_directory().get_filename("py").string());
         return QDir::currentPath();
     }
