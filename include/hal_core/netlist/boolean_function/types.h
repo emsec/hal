@@ -140,6 +140,8 @@ namespace hal
             // Constructors, Destructors, Operators
             ////////////////////////////////////////////////////////////////////////
 
+            Constraint() = default;
+
             /**
              * Constructs a new constraint from one Boolean function that evaluates to a single bit.
              * 

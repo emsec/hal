@@ -31,13 +31,6 @@ namespace hal
                 return ERR("could not verify whether candidate gates implement a less-than comparison: input sizes do not match");
             }
 
-            const auto bf_res = netlist_utils::get_subgraph_function(output, candidate_gates);
-            if (bf_res.is_error())
-            {
-                return ERR_APPEND(bf_res.get_error(), "could not verify whether candidate gates implement a less-than comparison: unable to gte subgraph function");
-            }
-            auto bf = bf_res.get();
-
             auto var_a = BooleanFunction::Var("net_" + std::to_string(input_a.front()->get_id()), 1);
             auto var_b = BooleanFunction::Var("net_" + std::to_string(input_b.front()->get_id()), 1);
             for (u32 i = 1; i < size; i++)
@@ -60,41 +53,16 @@ namespace hal
                 }
             }
 
-            auto function = BooleanFunction::Ult(var_a.clone(), var_b.clone(), size)
-                                .map<BooleanFunction>([bf, size](auto&& ult) { return BooleanFunction::Eq(std::move(ult), bf.clone(), size); })
-                                .map<BooleanFunction>([bf, size](auto&& eq) { return BooleanFunction::Not(std::move(eq), 1); });
-            // if (auto ult_res = BooleanFunction::Ult(var_a.clone(), var_b.clone(), size); ult_res.is_ok())
-            // {
-            //     if (auto eq_res = BooleanFunction::Eq(ult_res.get(), bf.clone(), size); eq_res.is_ok())
-            //     {
-            //         if (auto not_res = BooleanFunction::Not(eq_res.get(), 1); not_res.is_ok())
-            //         {
-            //             auto constraint = SMT::Constraint(not_res.get());
-            //             auto solver     = SMT::Solver({constraint});
-            //             if (auto query_res = solver.query(SMT::QueryConfig().with_solver(SMT::SolverType::Z3).with_local_solver().with_timeout(1000)); query_res.is_ok())
-            //             {
-            //                 return OK(query_res.get().is_unsat());
-            //             }
-            //             else
-            //             {
-            //                 return ERR_APPEND(query_res.get_error(), "could not verify whether candidate gates implement a less-than comparison: unable to query SMT solver");
-            //             }
-            //         }
-            //         else
-            //         {
-            //             return ERR_APPEND(not_res.get_error(), "could not verify whether candidate gates implement a less-than comparison: unable to create NOT function");
-            //         }
-            //     }
-            //     else
-            //     {
-            //         return ERR_APPEND(eq_res.get_error(), "could not verify whether candidate gates implement a less-than comparison: unable to create EQ function");
-            //     }
-            // }
-            // else
-            // {
-            // return ERR_APPEND(ult_res.get_error(), "could not verify whether candidate gates implement a less-than comparison: unable to create ULT function");
-            // }
-            return OK(true);
+            return BooleanFunction::Ult(std::move(var_a), std::move(var_b), size)
+                .map<BooleanFunction>([&](auto&& ult_bf) -> Result<BooleanFunction> {
+                    return netlist_utils::get_subgraph_function(output, candidate_gates).map<BooleanFunction>([&](auto&& subgraph_bf) -> Result<BooleanFunction> {
+                        return BooleanFunction::Eq(std::move(ult_bf), std::move(subgraph_bf), size);
+                    });
+                })
+                .map<BooleanFunction>([](auto&& eq_bf) -> Result<BooleanFunction> { return BooleanFunction::Not(std::move(eq_bf), 1); })
+                .map<SMT::Solver>([](auto&& not_bf) -> Result<SMT::Solver> { return OK(SMT::Solver({SMT::Constraint(std::move(not_bf))})); })
+                .map<SMT::SolverResult>([](auto&& solver) -> Result<SMT::SolverResult> { return solver.query(SMT::QueryConfig()); })
+                .map<bool>([](auto&& result) -> Result<bool> { return OK(result.is_unsat()); });
         }
     }    // namespace smt_utils
 }    // namespace hal
