@@ -6007,14 +6007,14 @@
                 {
                     "name": "Z",
                     "direction": "output",
-                    "type": "none",
+                    "type": "power",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "Z",
                             "direction": "output",
-                            "type": "none",
+                            "type": "power",
                             "function": "0b1"
                         }
                     ]
@@ -6059,14 +6059,14 @@
                 {
                     "name": "ZN",
                     "direction": "output",
-                    "type": "none",
+                    "type": "ground",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "ZN",
                             "direction": "output",
-                            "type": "none",
+                            "type": "ground",
                             "function": "0b0"
                         }
                     ]
