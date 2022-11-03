@@ -60,37 +60,41 @@ namespace hal
                 }
             }
 
-            if (auto ult_res = BooleanFunction::Ult(var_a.clone(), var_b.clone(), size); ult_res.is_ok())
-            {
-                if (auto eq_res = BooleanFunction::Eq(ult_res.get(), bf.clone(), size); eq_res.is_ok())
-                {
-                    if (auto not_res = BooleanFunction::Not(eq_res.get(), 1); not_res.is_ok())
-                    {
-                        auto constraint = SMT::Constraint(not_res.get());
-                        auto solver     = SMT::Solver({constraint});
-                        if (auto query_res = solver.query(SMT::QueryConfig().with_solver(SMT::SolverType::Z3).with_local_solver().with_timeout(1000)); query_res.is_ok())
-                        {
-                            return OK(query_res.get().is_unsat());
-                        }
-                        else
-                        {
-                            return ERR_APPEND(query_res.get_error(), "could not verify whether candidate gates implement a less-than comparison: unable to query SMT solver");
-                        }
-                    }
-                    else
-                    {
-                        return ERR_APPEND(not_res.get_error(), "could not verify whether candidate gates implement a less-than comparison: unable to create NOT function");
-                    }
-                }
-                else
-                {
-                    return ERR_APPEND(eq_res.get_error(), "could not verify whether candidate gates implement a less-than comparison: unable to create EQ function");
-                }
-            }
-            else
-            {
-                return ERR_APPEND(ult_res.get_error(), "could not verify whether candidate gates implement a less-than comparison: unable to create ULT function");
-            }
+            auto function = BooleanFunction::Ult(var_a.clone(), var_b.clone(), size)
+                                .map<BooleanFunction>([bf, size](auto&& ult) { return BooleanFunction::Eq(std::move(ult), bf.clone(), size); })
+                                .map<BooleanFunction>([bf, size](auto&& eq) { return BooleanFunction::Not(std::move(eq), 1); });
+            // if (auto ult_res = BooleanFunction::Ult(var_a.clone(), var_b.clone(), size); ult_res.is_ok())
+            // {
+            //     if (auto eq_res = BooleanFunction::Eq(ult_res.get(), bf.clone(), size); eq_res.is_ok())
+            //     {
+            //         if (auto not_res = BooleanFunction::Not(eq_res.get(), 1); not_res.is_ok())
+            //         {
+            //             auto constraint = SMT::Constraint(not_res.get());
+            //             auto solver     = SMT::Solver({constraint});
+            //             if (auto query_res = solver.query(SMT::QueryConfig().with_solver(SMT::SolverType::Z3).with_local_solver().with_timeout(1000)); query_res.is_ok())
+            //             {
+            //                 return OK(query_res.get().is_unsat());
+            //             }
+            //             else
+            //             {
+            //                 return ERR_APPEND(query_res.get_error(), "could not verify whether candidate gates implement a less-than comparison: unable to query SMT solver");
+            //             }
+            //         }
+            //         else
+            //         {
+            //             return ERR_APPEND(not_res.get_error(), "could not verify whether candidate gates implement a less-than comparison: unable to create NOT function");
+            //         }
+            //     }
+            //     else
+            //     {
+            //         return ERR_APPEND(eq_res.get_error(), "could not verify whether candidate gates implement a less-than comparison: unable to create EQ function");
+            //     }
+            // }
+            // else
+            // {
+            // return ERR_APPEND(ult_res.get_error(), "could not verify whether candidate gates implement a less-than comparison: unable to create ULT function");
+            // }
+            return OK(true);
         }
     }    // namespace smt_utils
 }    // namespace hal

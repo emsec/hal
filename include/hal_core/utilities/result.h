@@ -197,7 +197,7 @@ namespace hal
          * @param[in] f - The mapping function.
          * @returns The result mapped to the target data type.
          */
-        template<typename U = T, typename std::enable_if_t<!std::is_same_v<U, void>, int> = 0>
+        template<typename std::enable_if_t<!std::is_same_v<U, void>, int> = 0>
         Result<U> map(const std::function<Result<U>(const T&)>& f) const
         {
             if (this->is_ok())
@@ -209,6 +209,66 @@ namespace hal
                 return ERR(this->get_error());
             }
         }
+
+        /**
+         * Map the result to a different user-defined data type using the provided mapping function.
+         * 
+         * @tparam U - The target data type.
+         * @param[in] f - The mapping function.
+         * @returns The result mapped to the target data type.
+         */
+        template<typename std::enable_if_t<!std::is_same_v<U, void>, int> = 0>
+        Result<U> map(const std::function<Result<U>(T&&)>& f)
+        {
+            if (this->is_ok())
+            {
+                return f(this->get());
+            }
+            else
+            {
+                return ERR(this->get_error());
+            }
+        }
+
+        // /**
+        //  * Map the result to a different user-defined data type using the provided mapping function.
+        //  *
+        //  * @tparam U - The target data type.
+        //  * @param[in] f - The mapping function.
+        //  * @returns The result mapped to the target data type.
+        //  */
+        // template<std::enable_if_t<!std::is_same_v<U, T>, int> = 0, typename std::enable_if_t<!std::is_same_v<U, void>, int> = 0>
+        // Result<U> map(const std::function<Result<U>(const T&)>& f) const
+        // {
+        //     if (this->is_ok())
+        //     {
+        //         return f(this->get());
+        //     }
+        //     else
+        //     {
+        //         return ERR(this->get_error());
+        //     }
+        // }
+
+        // /**
+        //  * Map the result to a different user-defined data type using the provided mapping function.
+        //  *
+        //  * @tparam U - The target data type.
+        //  * @param[in] f - The mapping function.
+        //  * @returns The result mapped to the target data type.
+        //  */
+        // template<std::enable_if_t<!std::is_same_v<U, T>, int> = 0, typename std::enable_if_t<!std::is_same_v<U, void>, int> = 0>
+        // Result<U> map(const std::function<Result<U>(T&&)>& f)
+        // {
+        //     if (this->is_ok())
+        //     {
+        //         return f(this->get());
+        //     }
+        //     else
+        //     {
+        //         return ERR(this->get_error());
+        //     }
+        // }
 
     private:
         std::variant<T, Error> m_result;
