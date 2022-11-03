@@ -32,8 +32,7 @@ namespace hal
 {
     namespace smt_utils
     {
-        Result<bool> verify_add(const std::vector<Gate*>& candidate_gates, const std::vector<Net*>& input_a, const std::vector<Net*>& input_b, const std::vector<Net*>& output);
-
         Result<bool> verify_ult(const std::vector<Gate*>& candidate_gates, const std::vector<Net*> input, const Net* output);
+        Result<bool> verify_slt(const std::vector<Gate*>& candidate_gates, const std::vector<Net*> input, const Net* output);
     }    // namespace smt_utils
 }    // namespace hal
