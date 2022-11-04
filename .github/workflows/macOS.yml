@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-test:
-    name: Build
+    name: Build and Test macOS
 
     strategy:
       matrix:
