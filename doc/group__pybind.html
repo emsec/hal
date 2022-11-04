@@ -125,6 +125,8 @@ Typedefs</h2></td></tr>
 <tr class="separator:ga6d7aa3afc74611d7f65294808436eac9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaa10fb860bfd6cbdbe95ab96e78c8cb1e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init</a> (py::module &amp;m)</td></tr>
 <tr class="separator:gaa10fb860bfd6cbdbe95ab96e78c8cb1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac072de2b8e9f09d8320090e5873be90d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#gac072de2b8e9f09d8320090e5873be90d">hal::project_manager_init</a> (py::module &amp;m)</td></tr>
+<tr class="separator:gac072de2b8e9f09d8320090e5873be90d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga4294dbde61031dc6505415b4c0efd3f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#ga4294dbde61031dc6505415b4c0efd3f9">hal::netlist_serializer_init</a> (py::module &amp;m)</td></tr>
 <tr class="separator:ga4294dbde61031dc6505415b4c0efd3f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga60d7e2dfe01bc847292f5473e2b849d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#ga60d7e2dfe01bc847292f5473e2b849d1">hal::netlist_utils_init</a> (py::module &amp;m)</td></tr>
@@ -175,7 +177,7 @@ template&lt;class T &gt; </div>
 </div><div class="memdoc">
 <p>Wrapper class so that PyBind can work with raw pointers to classes that are managed by HAL. </p>
 
-<p class="definition">Definition at line <a class="el" href="python__bindings_8h_source.html#l00084">84</a> of file <a class="el" href="python__bindings_8h_source.html">python_bindings.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__bindings_8h_source.html#l00085">85</a> of file <a class="el" href="python__bindings_8h_source.html">python_bindings.h</a>.</p>
 
 </div>
 </div>
@@ -968,6 +970,37 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
+<a id="gac072de2b8e9f09d8320090e5873be90d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac072de2b8e9f09d8320090e5873be90d">&#9670;&nbsp;</a></span>project_manager_init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::project_manager_init </td>
+          <td>(</td>
+          <td class="paramtype">py::module &amp;&#160;</td>
+          <td class="paramname"><em>m</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Initializes Python bindings for the HAL project manager in a python module.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>- the python module </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="python__bindings_2bindings_2project__manager_8cpp_source.html#l00005">5</a> of file <a class="el" href="python__bindings_2bindings_2project__manager_8cpp_source.html">project_manager.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist_2project__manager_8cpp_source.html#l00092">hal::ProjectManager::create_project_directory()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00060">hal::ProjectManager::get_filename()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00158">hal::ProjectManager::get_netlist_filename()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00125">hal::ProjectManager::get_project_status()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00036">hal::ProjectManager::instance()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00068">hal::ProjectManager::open_project()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00113">hal::ProjectManager::remove_project_directory()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00135">hal::ProjectManager::serialize_project()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00130">hal::ProjectManager::set_gate_library_path()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00082">hal::ProjectManager::set_project_directory()</a>, and <a class="el" href="netlist_2project__manager_8cpp_source.html#l00120">hal::ProjectManager::set_project_status()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="src_2python__bindings_2python__bindings_8cpp_source.html#l00010">hal::PYBIND11_PLUGIN()</a>.</p>
+
+</div>
+</div>
 <a id="ga6f399ac0514c1e1adff48f88ee349380"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga6f399ac0514c1e1adff48f88ee349380">&#9670;&nbsp;</a></span>smt_init()</h2>
 
@@ -1004,7 +1037,7 @@ template&lt;class T &gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Mon Oct 31 2022 16:05:58 for HAL by
+    <li class="footer">Generated on Fri Nov 4 2022 08:57:20 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -700,9 +700,9 @@ var hierarchy =
       [ "hal::NodeBoxes", "classhal_1_1_node_boxes.html", null ]
     ] ],
     [ "hal::utils::RecursiveDirectoryRange", "classhal_1_1utils_1_1_recursive_directory_range.html", null ],
-    [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
     [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
     [ "hal::Result< T >", "classhal_1_1_result.html", null ],
+    [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
     [ "reverse_iterator", null, [
       [ "nlohmann::detail::json_reverse_iterator< Base >", "classnlohmann_1_1detail_1_1json__reverse__iterator.html", null ]
     ] ],
@@ -808,14 +808,6 @@ var hierarchy =
     [ "Vec_Int_t_", "struct_vec___int__t__.html", null ],
     [ "Vec_Ptr_t_", "struct_vec___ptr__t__.html", null ],
     [ "Vec_Vec_t_", "struct_vec___vec__t__.html", null ],
-    [ "hal::VerilogAssignment", "structhal_1_1_verilog_assignment.html", null ],
-    [ "hal::VerilogDataEntry", "structhal_1_1_verilog_data_entry.html", null ],
-    [ "hal::VerilogInstance", "structhal_1_1_verilog_instance.html", null ],
-    [ "hal::VerilogModule", "structhal_1_1_verilog_module.html", null ],
-    [ "hal::VerilogPort", "structhal_1_1_verilog_port.html", null ],
-    [ "hal::VerilogPortAssignment", "structhal_1_1_verilog_port_assignment.html", null ],
-    [ "hal::VerilogSignal", "structhal_1_1_verilog_signal.html", null ],
-    [ "hal::VHDLEntity", "structhal_1_1_v_h_d_l_entity.html", null ],
     [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
     [ "hal::GraphicsNode::Visuals", "structhal_1_1_graphics_node_1_1_visuals.html", null ],
     [ "hal::StandardGraphicsNet::VLine", "structhal_1_1_standard_graphics_net_1_1_v_line.html", null ],

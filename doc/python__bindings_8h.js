@@ -27,5 +27,6 @@ var python__bindings_8h =
     [ "pin_group_init", "python__bindings_8h.html#gab64ceab82875b23e9764f07fe5329da0", null ],
     [ "plugin_interfaces_init", "python__bindings_8h.html#gae288c84ff5c0b70e6f9571669aa29eb7", null ],
     [ "plugin_manager_init", "python__bindings_8h.html#ga9e03e20ad125cd9eb1f4e601ac556777", null ],
+    [ "project_manager_init", "python__bindings_8h.html#gac072de2b8e9f09d8320090e5873be90d", null ],
     [ "smt_init", "python__bindings_8h.html#ga6f399ac0514c1e1adff48f88ee349380", null ]
 ];

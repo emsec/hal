@@ -24,5 +24,6 @@ var dir_ded422ec9f163017e5e46b66204ec4a3 =
     [ "pin_group.cpp", "pin__group_8cpp.html", "pin__group_8cpp" ],
     [ "plugin_interfaces.cpp", "plugin__interfaces_8cpp.html", "plugin__interfaces_8cpp" ],
     [ "plugin_manager.cpp", "python__bindings_2bindings_2plugin__manager_8cpp.html", "python__bindings_2bindings_2plugin__manager_8cpp" ],
+    [ "project_manager.cpp", "python__bindings_2bindings_2project__manager_8cpp.html", "python__bindings_2bindings_2project__manager_8cpp" ],
     [ "smt.cpp", "smt_8cpp.html", "smt_8cpp" ]
 ];

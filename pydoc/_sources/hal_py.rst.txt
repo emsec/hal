@@ -32,4 +32,5 @@ HAL Core Documentation
    pin_direction
    pin_type
    plugin_manager
+   project_manager
    smt

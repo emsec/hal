@@ -1,9 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" title=" " alt="" coords="5,196,89,223"/>
-<area shape="rect" id="node2" href="$structnlohmann_1_1detail_1_1conjunction.html" title=" " alt="" coords="173,5,388,61"/>
-<area shape="rect" id="node4" href="$structnlohmann_1_1detail_1_1conjunction.html" title=" " alt="" coords="173,86,388,127"/>
-<area shape="rect" id="node5" href="$structnlohmann_1_1detail_1_1is__basic__json_3_01basic__json_3_01_object_type_00_01_array_type_0003b7300f70a161f2a79dcaaba1e567bb.html" title=" " alt="" coords="143,152,418,267"/>
-<area shape="rect" id="node6" href="$structnlohmann_1_1detail_1_1is__complete__type_3_01_t_00_01decltype_07void_07sizeof_07_t_08_08_08_4.html" title=" " alt="" coords="174,291,387,347"/>
-<area shape="rect" id="node7" href="$structnlohmann_1_1detail_1_1is__constructible__array__type__impl_3_01_basic_json_type_00_01_cons8cf88e17d5eaa68665a8fb4b97604b0e.html" title=" " alt="" coords="137,371,424,485"/>
-<area shape="rect" id="node3" href="$structnlohmann_1_1detail_1_1is__constructible__tuple_3_01_t1_00_01std_1_1tuple_3_01_args_8_8_8_01_4_01_4.html" title=" " alt="" coords="472,5,680,61"/>
+<area shape="rect" id="node1" href="$structnlohmann_1_1detail_1_1external__constructor_3_01value__t_1_1array_01_4.html" title=" " alt="" coords="5,5,228,47"/>
 </map>

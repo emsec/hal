@@ -11,6 +11,7 @@ var test_2vhdl__parser_8cpp =
     [ "TEST_F", "test_2vhdl__parser_8cpp.html#a59976dc168510966d79ad8a60f0d66c8", null ],
     [ "TEST_F", "test_2vhdl__parser_8cpp.html#aec32daee419c5b96ea0314150acd633a", null ],
     [ "TEST_F", "test_2vhdl__parser_8cpp.html#a7c7bf0ebac5fa48494f224e4bdd55a6c", null ],
+    [ "TEST_F", "test_2vhdl__parser_8cpp.html#af9a98fb7e2af02f0b7fde7965dd65055", null ],
     [ "TEST_F", "test_2vhdl__parser_8cpp.html#a68932182daae80646b9aa4b52aef314b", null ],
     [ "TEST_F", "test_2vhdl__parser_8cpp.html#a6267a294d4c0da8c0c65384cf11aa853", null ],
     [ "TEST_F", "test_2vhdl__parser_8cpp.html#a01430531afc64fd1ea517b0ffb0dacf2", null ]
