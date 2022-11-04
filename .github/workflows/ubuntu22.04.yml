@@ -1,4 +1,4 @@
-name: Ubuntu 20.04
+name: Ubuntu 22.04
 
 on:
   push:
@@ -7,13 +7,13 @@ on:
 #      - v*
 
 jobs:
-  release-doc:
-    name: build_ubuntu_20_04
+  build_ubuntu_22_04:
+    name: build_ubuntu_22_04
 
     strategy:
       matrix:
         #        runs-on: [ ubuntu-20.04, macOS-latest]
-        runs-on: [ ubuntu-20.04 ]
+        runs-on: [ ubuntu-22.04 ]
       fail-fast: false
 
     runs-on: ${{ matrix.runs-on }}

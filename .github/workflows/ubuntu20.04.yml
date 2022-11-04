@@ -7,7 +7,7 @@ on:
 #      - v*
 
 jobs:
-  release-doc:
+  build_ubuntu_20_04:
     name: build_ubuntu_20_04
 
     strategy:
