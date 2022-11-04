@@ -16,6 +16,7 @@ var classhal_1_1_boolean_function =
     [ "get_nodes", "classhal_1_1_boolean_function.html#a9ed2f3d3b5abf93dc89e66ddc796f635", null ],
     [ "get_parameters", "classhal_1_1_boolean_function.html#ae795e50021930340bf4ff507827200c5", null ],
     [ "get_top_level_node", "classhal_1_1_boolean_function.html#a432fee6677b88a940fed0d2c83f64a94", null ],
+    [ "get_truth_table_as_string", "classhal_1_1_boolean_function.html#aa7aa5d0d8b8e9224795db1545880becd", null ],
     [ "get_variable_name", "classhal_1_1_boolean_function.html#a3ba7994a1373d72e56be76bd2e8b4d3d", null ],
     [ "get_variable_names", "classhal_1_1_boolean_function.html#a483a5528c57c0561ee9ec5dacecf41cd", null ],
     [ "has_constant_value", "classhal_1_1_boolean_function.html#a61f8794b299f01d101d07bc3dee80990", null ],

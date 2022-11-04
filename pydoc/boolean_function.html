@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Boolean Function &mdash; hal_py v4.0.1-22-g0508004c6 documentation</title>
+  <title>Boolean Function &mdash; hal_py v4.0.1-26-gc81de7dca documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.0.1-22-g0508004c6
+                v4.0.1-26-gc81de7dca
               </div>
             
           
@@ -1997,6 +1997,32 @@ Requires both Boolean functions to be of the same bit-size.</p>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The top-level node.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.BooleanFunction.Node" title="hal_py.BooleanFunction.Node">hal_py.BooleanFunction.Node</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.BooleanFunction.get_truth_table_as_string">
+<code class="descname">get_truth_table_as_string</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>ordered_variables: List[str] = []</em>, <em>function_name: str = ''</em>, <em>remove_unknown_variables: bool = False</em><span class="sig-paren">)</span> &#x2192; Optional[str]<a class="headerlink" href="#hal_py.BooleanFunction.get_truth_table_as_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the truth table for a Boolean function that comprises &lt;= 10 single-bit variables.</p>
+<p>WARNING: The generation of the truth table is exponential in the number of parameters.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ordered_variables</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em>) – A list describing the order of input variables used to generate the truth table. Defaults to an empty list.</li>
+<li><strong>function_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name of the Boolean function to be printed as header of the output columns.</li>
+<li><strong>remove_unknown_variables</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set True to remove variables from the truth table that are not present within the Boolean function, False otherwise. Defaults to False.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A string representing the truth table on success, None otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></p>
+</td>
 </tr>
 </tbody>
 </table>

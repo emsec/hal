@@ -1,5 +1,6 @@
 var NAVTREEINDEX31 =
 {
+"src_2python__bindings_2python__bindings_8cpp.html":[7,0,2,2,1],
 "src_2python__bindings_2python__bindings_8cpp.html#a034467b937d9c580d84c198167d00929":[7,0,2,2,1,0],
 "src_2python__bindings_2python__bindings_8cpp_source.html":[7,0,2,2,1],
 "src_2verilog__parser_8cpp.html":[7,0,1,8,1,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX31 =
 "struct_vec___int__t__.html#a1e28bb412871d25734ce8333c410b77d":[6,0,9,1],
 "struct_vec___int__t__.html#a3122cbf46c7105b837d073cdbd93f594":[6,0,9,2],
 "struct_vec___int__t__.html#aa4e999ab47a7bbfa2251160dc7d5134d":[6,0,9,0],
-"struct_vec___ptr__t__.html":[6,0,10],
-"struct_vec___ptr__t__.html#a2187f4258003e7ace1e78832f3b093b0":[6,0,10,0]
+"struct_vec___ptr__t__.html":[6,0,10]
 };
