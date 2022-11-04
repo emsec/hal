@@ -8,7 +8,7 @@ on:
 
 jobs:
   release-doc:
-    name: release-doc
+    name: Build and release documentation
 
     strategy:
       matrix:

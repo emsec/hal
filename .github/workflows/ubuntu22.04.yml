@@ -8,7 +8,7 @@ on:
 
 jobs:
   build_ubuntu_22_04:
-    name: build_ubuntu_22_04
+    name: Build and Test on Ubuntu 22.04
 
     strategy:
       matrix:
