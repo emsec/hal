@@ -118,11 +118,9 @@ namespace hal
         std::stringstream tmp_stream;
 
         res_stream << "(";
-        std::vector<ModulePin*> pins = module->get_pins();
-        for (auto it = pins.rbegin(); it != pins.rend(); it++)
+        for (const auto* pin : module->get_pins())
         {
-            const ModulePin* pin = *it;
-            Net* net             = pin->get_net();
+            Net* net = pin->get_net();
             if (first_port)
             {
                 first_port = false;
