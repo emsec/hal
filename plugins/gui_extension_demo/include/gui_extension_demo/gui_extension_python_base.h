@@ -27,15 +27,20 @@
 
 #include <vector>
 #include <mutex>
+#include "hal_core/defines.h"
 #include "hal_core/plugin_system/plugin_parameter.h"
 
 namespace hal {
     class GuiExtensionPythonBase
     {
-        std::mutex m_mutex;
         std::string m_tagname;
         std::string m_label;
-        std::vector<PluginParameter> m_param;
+
+        std::vector<u32> m_mods_selected;
+        std::vector<u32> m_gats_selected;
+        std::vector<u32> m_nets_selected;
+
+        std::string m_function_call;
     public:
         GuiExtensionPythonBase(const std::string& tag, const std::string& lab);
         ~GuiExtensionPythonBase();
@@ -44,16 +49,28 @@ namespace hal {
 
         std::string get_label() const { return m_label; }
 
-        std::vector<PluginParameter> get_parameters() const;
+        std::vector<PluginParameter> get_parameter() const;
 
-        virtual void add_parameter(const PluginParameter& param);
+        virtual void add_module_context(const std::string tagname, const std::string label);
 
-        virtual void register_extension();
+        virtual void add_gate_context(const std::string tagname, const std::string label);
 
-        virtual void set_parameters(const std::vector<PluginParameter>& params);
+        virtual void add_net_context(const std::string tagname, const std::string label);
 
-        virtual void wait_for_gui();
+        virtual void add_main_menu(const std::vector<PluginParameter>& params);
 
-        virtual void release_lock();
+        virtual void set_selection(const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>& nets);
+
+        virtual void set_function_call(const std::string& fc);
+
+        std::string get_function_call() const;
+
+        std::vector<u32> get_selected_modules() const;
+
+        std::vector<u32> get_selected_gates() const;
+
+        std::vector<u32> get_selected_nets() const;
+
+        void clear();
     };
 }

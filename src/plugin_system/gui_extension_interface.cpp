@@ -6,7 +6,7 @@ namespace hal {
 
     void GuiExtensionInterface::register_progress_indicator(std::function<void(int,const std::string&)>) {;}
 
-    void GuiExtensionInterface::set_parameter(Netlist*, const std::vector<PluginParameter>&) {;}
+    void GuiExtensionInterface::set_parameter(const std::vector<PluginParameter>&) {;}
 
     std::vector<ContextMenuContribution> GuiExtensionInterface::get_context_contribution(const Netlist*,
                                                                           const std::vector<u32>&,
@@ -16,11 +16,15 @@ namespace hal {
         return std::vector<ContextMenuContribution>();
     }
 
-    void GuiExtensionInterface::execute_context_action(u32,
-                                        Netlist*,
-                                        const std::vector<u32> &,
-                                        const std::vector<u32> &,
-                                                       const std::vector<u32> &) {;}
+    void GuiExtensionInterface::execute_function(std::string,
+                                                 Netlist*,
+                                                 const std::vector<u32> &,
+                                                 const std::vector<u32> &,
+                                                 const std::vector<u32> &) {;}
 
+
+    void GuiExtensionInterface::netlist_loaded(Netlist*) {;}
+
+    void GuiExtensionInterface::netlist_about_to_close(Netlist*) {;}
 
 }

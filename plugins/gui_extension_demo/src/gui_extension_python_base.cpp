@@ -16,42 +16,94 @@ namespace hal {
         std::cerr << "GuiExtensionPythonBase::~GuiExtensionPythonBase <" << m_tagname << "> <" << m_label << ">" << std::endl;
     }
 
-    void GuiExtensionPythonBase::add_parameter(const PluginParameter& param)
-    {
-        m_param.push_back(param);
-    }
-
-    void GuiExtensionPythonBase::register_extension()
+    void GuiExtensionPythonBase::add_main_menu(const std::vector<PluginParameter> &params)
     {
         if (GuiExtensionDemoPlugin::sGuiExtension)
         {
-           GuiExtensionDemoPlugin::sGuiExtension->register_external_extension(this);
-           m_mutex.lock();
+            GuiExtensionDemoPlugin::sGuiExtension->add_main_menu(this,params);
         }
     }
 
-    std::vector<PluginParameter> GuiExtensionPythonBase::get_parameters() const
+    void GuiExtensionPythonBase::add_module_context(const std::string tagname, const std::string label)
     {
-        return m_param;
+        if (GuiExtensionDemoPlugin::sGuiExtension)
+        {
+            GuiExtensionDemoPlugin::sGuiExtension->add_module_context(this,tagname,label);
+        }
+    }
+
+    void GuiExtensionPythonBase::add_gate_context(const std::string tagname, const std::string label)
+    {
+        if (GuiExtensionDemoPlugin::sGuiExtension)
+        {
+            GuiExtensionDemoPlugin::sGuiExtension->add_gate_context(this,tagname,label);
+        }
+    }
+
+    void GuiExtensionPythonBase::add_net_context(const std::string tagname, const std::string label)
+    {
+        if (GuiExtensionDemoPlugin::sGuiExtension)
+        {
+            GuiExtensionDemoPlugin::sGuiExtension->add_net_context(this,tagname,label);
+        }
     }
 
 
-    void GuiExtensionPythonBase::set_parameters(const std::vector<PluginParameter>& params)
+    void GuiExtensionPythonBase::set_selection(const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>& nets)
     {
-        m_param = params;
+        m_mods_selected = mods;
+        m_gats_selected = gats;
+        m_nets_selected = nets;
     }
 
-    void GuiExtensionPythonBase::release_lock()
+    std::vector<u32> GuiExtensionPythonBase::get_selected_modules() const
     {
-        m_mutex.unlock();
+        return m_mods_selected;
     }
 
-    void GuiExtensionPythonBase::wait_for_gui()
+    std::vector<u32> GuiExtensionPythonBase::get_selected_gates() const
     {
-        std::cerr << "wait for gui ..." << std::endl;
-        m_mutex.lock();
-        m_mutex.unlock();
-        std::cerr << "wait for gui done" << std::endl;
+        return m_gats_selected;
     }
 
+    std::vector<u32> GuiExtensionPythonBase::get_selected_nets() const
+    {
+        return m_nets_selected;
+    }
+
+    void GuiExtensionPythonBase::set_function_call(const std::string& fc)
+    {
+        m_function_call = fc;
+    }
+
+    std::string GuiExtensionPythonBase::get_function_call() const
+    {
+        return m_function_call;
+    }
+
+    std::vector<PluginParameter> GuiExtensionPythonBase::get_parameter() const
+    {
+        if (GuiExtensionDemoPlugin::sGuiExtension)
+        {
+            return GuiExtensionDemoPlugin::sGuiExtension->get_parameter();
+        }
+        return std::vector<PluginParameter>();
+    }
+
+    void GuiExtensionPythonBase::clear()
+    {
+        m_tagname.clear();
+        m_label.clear();
+
+        m_mods_selected.clear();
+        m_gats_selected.clear();
+        m_nets_selected.clear();
+
+        m_function_call.clear();
+
+        if (GuiExtensionDemoPlugin::sGuiExtension)
+        {
+           GuiExtensionDemoPlugin::sGuiExtension->clear();
+        }
+    }
 }

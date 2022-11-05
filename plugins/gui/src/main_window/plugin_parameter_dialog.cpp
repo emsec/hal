@@ -55,9 +55,9 @@ namespace hal {
         QDialogButtonBox* retval = new QDialogButtonBox(QDialogButtonBox::Cancel,this);
         for (const PluginParameter& par : mParameterList)
         {
-            if (par.get_type() != PluginParameter::PushButton) continue;
+            if (par.get_type() != PluginParameter::PushButton || par.get_tagname().find('/') != std::string::npos) continue;
             QPushButton* but = static_cast<QPushButton*>(mWidgetMap.value(QString::fromStdString(par.get_tagname())));
-            if (!but) continue;
+            Q_ASSERT(but);
             connect(but,&QPushButton::clicked,this,&PluginParameterDialog::handlePushbuttonClicked);
             retval->addButton(but,QDialogButtonBox::ActionRole);
         }
@@ -158,8 +158,15 @@ namespace hal {
 
             switch (par.get_type())
             {
-            // not in form nor tab
+            // push button not in tab are located in button box
             case PluginParameter::PushButton:
+                if (par.get_tagname().find('/')!=std::string::npos)
+                {
+                    QPushButton* but = static_cast<QPushButton*>(widget);
+                    Q_ASSERT(but);
+                    connect(but,&QPushButton::clicked,this,&PluginParameterDialog::handlePushbuttonClicked);
+                    form->addRow(but);
+                }
                 break;
             // without label
             case PluginParameter::Boolean:
@@ -180,6 +187,7 @@ namespace hal {
         GuiExtensionInterface* geif = mPluginInterface->get_gui_extension();
         if (!geif) return;
         std::vector<PluginParameter> settings;
+        std::string buttonClicked;
         for (PluginParameter par : mParameterList)
         {
             const QWidget* w = mWidgetMap.value(QString::fromStdString(par.get_tagname()));
@@ -188,7 +196,10 @@ namespace hal {
             switch (par.get_type())
             {
             case PluginParameter::PushButton:
-                qDebug() << "Push" << par.get_tagname().c_str() << par.get_value().c_str();
+                if (par.get_value() == "clicked")
+                {
+                    buttonClicked = par.get_tagname();
+                }
                 break;
             case PluginParameter::Dictionary:
             {
@@ -240,7 +251,14 @@ namespace hal {
             settings.push_back(par);
         }
         QDialog::accept();
-        geif->set_parameter(gNetlist, settings);
+        geif->set_parameter(settings);
+
+        if (!buttonClicked.empty())
+        {
+            geif->execute_function(buttonClicked,gNetlist,gSelectionRelay->selectedModulesVector(),gSelectionRelay->selectedGatesVector(),gSelectionRelay->selectedNetsVector());
+            if (gPythonContext->pythonThread())
+                gPythonContext->pythonThread()->unlock();
+        }
     }
 
     void PluginParameterDialog::handlePushbuttonClicked()

@@ -28,6 +28,9 @@
 #include "gui/settings/settings_items/settings_item_keybind.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
+#include "hal_core/plugin_system/plugin_interface_base.h"
+#include "hal_core/plugin_system/gui_extension_interface.h"
+#include "hal_core/plugin_system/plugin_manager.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsView>
@@ -241,20 +244,20 @@ namespace hal
             cw->open();
             cw->restoreFromProject();
         }
-        /*
-        GraphContext* top_module_context = gGraphContextManager->getContextByExclusiveModuleId(gNetlist->get_top_module()->get_id());
 
-        if (!top_module_context)
-        {
-            top_module_context   = gGraphContextManager->createNewContext(context_name);
-            top_module_context->add({top_module->get_id()}, {});
-            top_module_context->setExclusiveModuleId(top_module->get_id());
-            top_module_context->setDirty(false);
-        }
-        */
         if (selectedContext)
             mContextManagerWidget->selectViewContext(selectedContext);
         mContextManagerWidget->handleOpenContextClicked();
+
+        for (const std::string& pluginName : plugin_manager::get_plugin_names())
+        {
+            BasePluginInterface* bpif = plugin_manager::get_plugin_instance(pluginName);
+            if (!bpif) continue;
+            GuiExtensionInterface* geif = bpif->get_gui_extension();
+            if (!geif) continue;
+            geif->netlist_loaded(gNetlist);
+        }
+
     }
 
     GraphContext* ContentManager::topModuleContextFactory()

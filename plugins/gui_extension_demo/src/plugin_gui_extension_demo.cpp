@@ -71,89 +71,88 @@ namespace hal
         std::cerr << "GuiExtensionContext::~GuiExtensionContext" << std::endl;
     }
 
+    void GuiExtensionContext::clear()
+    {
+        m_python_plugins.clear();
+        m_module_context_contribution.clear();
+        m_gate_context_contribution.clear();
+        m_net_context_contribution.clear();
+        m_parameter.clear();
+    }
+
     std::vector<ContextMenuContribution> GuiExtensionContext::get_context_contribution(const Netlist *nl,
                                                                           const std::vector<u32>& mods,
                                                                           const std::vector<u32>& gats,
                                                                           const std::vector<u32>& nets)
     {
-        std::vector<ContextMenuContribution> retval;
-        if (nl && mods.empty() && nets.empty() && gats.size() == 1 )
-        {
-            Gate *g = nl->get_gate_by_id(*gats.begin());
-            retval.push_back({this,1,"Highlight gate '" + g->get_name() +"'by extension"});
-        }
-        return retval;
+        if (!nl)
+            return std::vector<ContextMenuContribution>();
+
+        if (mods.size() == 1 && gats.empty() && nets.empty() )
+            return m_module_context_contribution;
+
+        if (mods.empty() && gats.size() == 1 && nets.empty() )
+            return m_gate_context_contribution;
+
+        if (mods.empty() && gats.empty() && nets.size() == 1 )
+            return m_net_context_contribution;
+
+        return std::vector<ContextMenuContribution>();
     }
 
-    void GuiExtensionContext::execute_context_action(u32 fid,
+    void GuiExtensionContext::execute_function(std::string tag,
                          Netlist *nl,
-                         const std::vector<u32>&,
+                         const std::vector<u32>& mods,
                          const std::vector<u32>& gats,
-                         const std::vector<u32>&)
+                         const std::vector<u32>& nets)
     {
+        Q_UNUSED(nl);
 
-        if (fid != 1) return; // not my call
-
-        static int num = 0;
-        ++num;
-        Grouping* grp = nl->create_grouping("extension grp " + std::to_string(num));
-        grp->set_color({0,255,255});
-        Gate *g = nl->get_gate_by_id(*gats.begin());
-        grp->assign_gate(g);
-    }
-
-    std::vector<PluginParameter> GuiExtensionContext::get_parameter() const
-    {
-        std::vector<PluginParameter> retval;
-        for (auto it = m_python_plugins.begin(); it != m_python_plugins.end(); ++it)
-        {
-            std::string tag = it->second->get_tagname();
-            retval.push_back(PluginParameter(PluginParameter::TabName, tag, it->second->get_label()));
-            for (PluginParameter par : it->second->get_parameters())
-            {
-                par.set_tagname(tag + "/" + par.get_tagname());
-                retval.push_back(par);
-            }
-            retval.push_back(PluginParameter(PluginParameter::PushButton, tag + "/exec", "Execute " + it->second->get_label()));
-        }
-        return retval;
-    }
-
-    void GuiExtensionContext::set_parameter(Netlist* nl, const std::vector<PluginParameter>& params)
-    {
-        std::string tag;
-        for (PluginParameter par : params)
-        {
-            if (par.get_type() == PluginParameter::PushButton && par.get_value() == "clicked" && par.get_tagname().find("/exec") != std::string::npos)
-            {
-                tag = par.get_tagname().substr(0,par.get_tagname().find('/'));
-                std::cerr << "set parameter <" << tag << ">" << std::endl;
-                break;
-            }
-        }
-        if (tag.empty()) return;
+        if (tag.empty()) return; // not my call
 
         auto it = m_python_plugins.find(tag);
         if (it == m_python_plugins.end()) return;
 
-        std::string prefix = tag + '/';
-        int n = prefix.size();
-        std::vector<PluginParameter> plugPars;
-        for (PluginParameter par : params)
-        {
-            if (par.get_tagname().substr(0,n) != prefix) continue;
-            par.set_tagname(par.get_tagname().substr(n+1));
-            plugPars.push_back(par);
-        }
-        it->second->set_parameters(plugPars);
-        it->second->release_lock();
+        it->second->set_function_call(tag);
+        it->second->set_selection(mods, gats, nets);
     }
 
-    void GuiExtensionContext::register_external_extension(GuiExtensionPythonBase* plug)
+    std::vector<PluginParameter> GuiExtensionContext::get_parameter() const
     {
-        std::string tag = plug->get_tagname();
-        m_python_plugins.insert(std::make_pair(tag,plug));
+        return m_parameter;
     }
 
+    void GuiExtensionContext::set_parameter(const std::vector<PluginParameter>& params)
+    {
+        m_parameter = params;
+    }
+
+    void GuiExtensionContext::add_module_context(GuiExtensionPythonBase* plug, const std::string tagname, const std::string label)
+    {
+        m_module_context_contribution.push_back({this,tagname,label});
+        m_python_plugins.insert(std::make_pair(tagname,plug));
+    }
+
+    void GuiExtensionContext::add_gate_context(GuiExtensionPythonBase* plug, const std::string tagname, const std::string label)
+    {
+        m_gate_context_contribution.push_back({this,tagname,label});
+        m_python_plugins.insert(std::make_pair(tagname,plug));
+    }
+
+    void GuiExtensionContext::add_net_context(GuiExtensionPythonBase* plug, const std::string tagname, const std::string label)
+    {
+        m_net_context_contribution.push_back({this,tagname,label});
+        m_python_plugins.insert(std::make_pair(tagname,plug));
+    }
+
+    void GuiExtensionContext::add_main_menu(GuiExtensionPythonBase* plug, const std::vector<PluginParameter>& params)
+    {
+        for (const PluginParameter& par : params)
+        {
+            m_parameter.push_back(par);
+            if (par.get_type() == PluginParameter::PushButton)
+                m_python_plugins.insert(std::make_pair(par.get_tagname(),plug));
+        }
+    }
 
 }    // namespace hal

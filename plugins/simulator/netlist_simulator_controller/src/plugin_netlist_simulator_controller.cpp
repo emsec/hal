@@ -191,7 +191,7 @@ namespace hal
         return retval;
     }
 
-    void GuiExtensionSimulator::set_parameter(Netlist *nl, const std::vector<PluginParameter>& params)
+    void GuiExtensionSimulator::set_parameter(const std::vector<PluginParameter>& params)
     {
 
     }

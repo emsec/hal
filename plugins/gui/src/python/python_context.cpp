@@ -77,7 +77,7 @@ namespace hal
         }
     }
 
-    PythonThread* PythonContext::currentThread() const
+    PythonThread* PythonContext::pythonThread() const
     {
         return mThread;
     }

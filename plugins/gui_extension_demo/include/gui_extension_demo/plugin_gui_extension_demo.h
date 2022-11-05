@@ -41,27 +41,39 @@ namespace hal
     class GuiExtensionContext : public GuiExtensionInterface
     {
         std::unordered_map<std::string,GuiExtensionPythonBase*> m_python_plugins;
+        std::vector<ContextMenuContribution> m_module_context_contribution;
+        std::vector<ContextMenuContribution> m_gate_context_contribution;
+        std::vector<ContextMenuContribution> m_net_context_contribution;
+        std::vector<PluginParameter> m_parameter;
 
     public:
         GuiExtensionContext();
         ~GuiExtensionContext();
 
         std::vector<ContextMenuContribution> get_context_contribution(const Netlist* nl,
-                                                                              const std::vector<u32>& mods,
-                                                                              const std::vector<u32>& gats,
-                                                                              const std::vector<u32>& nets) override;
+                                                                      const std::vector<u32>& mods,
+                                                                      const std::vector<u32>& gats,
+                                                                      const std::vector<u32>& nets) override;
 
-        void execute_context_action(u32 fid,
-                                            Netlist* nl,
-                                            const std::vector<u32>& mods,
-                                            const std::vector<u32>& gats,
-                                            const std::vector<u32>& nets) override;
+        void execute_function(std::string tag,
+                              Netlist* nl,
+                              const std::vector<u32>& mods,
+                              const std::vector<u32>& gats,
+                              const std::vector<u32>& nets) override;
 
         std::vector<PluginParameter> get_parameter() const override;
 
-        virtual void set_parameter(Netlist* nl, const std::vector<PluginParameter>& params) override;
+        void set_parameter(const std::vector<PluginParameter>& params) override;
 
-        void register_external_extension(GuiExtensionPythonBase* plug);
+        void add_module_context(GuiExtensionPythonBase* plug, const std::string tagname, const std::string label);
+
+        void add_gate_context(GuiExtensionPythonBase* plug, const std::string tagname, const std::string label);
+
+        void add_net_context(GuiExtensionPythonBase* plug, const std::string tagname, const std::string label);
+
+        void add_main_menu(GuiExtensionPythonBase* plug, const std::vector<PluginParameter>& params);
+
+        void clear();
     };
 
     class PLUGIN_API GuiExtensionDemoPlugin : public BasePluginInterface

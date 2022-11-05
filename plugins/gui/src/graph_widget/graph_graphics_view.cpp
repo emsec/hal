@@ -867,10 +867,12 @@ namespace hal
         ContextMenuContribution* cmc = static_cast<ContextMenuContribution*>(act->data().value<void*>());
         Q_ASSERT(cmc);
         Q_ASSERT(cmc->mContributer);
-        cmc->mContributer->execute_context_action(cmc->mFunctionId,gNetlist,
-                                                  gSelectionRelay->selectedModulesVector(),
-                                                  gSelectionRelay->selectedGatesVector(),
-                                                  gSelectionRelay->selectedNetsVector());
+        cmc->mContributer->execute_function(cmc->mTagname,gNetlist,
+                                            gSelectionRelay->selectedModulesVector(),
+                                            gSelectionRelay->selectedGatesVector(),
+                                            gSelectionRelay->selectedNetsVector());
+        if (gPythonContext->pythonThread())
+            gPythonContext->pythonThread()->unlock();
     }
 
     void GraphGraphicsView::updateMatrix(const int delta)

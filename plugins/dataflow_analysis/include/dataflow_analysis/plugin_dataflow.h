@@ -41,8 +41,19 @@ namespace hal
     class GuiExtensionDataflow : public GuiExtensionInterface
     {
         plugin_dataflow* m_parent;
+        std::vector<u32> m_sizes;
+        std::string m_output_path;
+        int m_bad_groups;
+        bool m_draw_graph;
+        bool m_create_modules;
+        bool m_register_stage_identification;
+        bool m_button_clicked;
+
     public:
-        GuiExtensionDataflow(plugin_dataflow* p) : m_parent(p) {;}
+        GuiExtensionDataflow(plugin_dataflow* p)
+            : m_parent(p), m_output_path("/tmp"),
+              m_bad_groups(7), m_draw_graph(false), m_create_modules(false),
+              m_register_stage_identification(false), m_button_clicked(false) {;}
 
         /**
          * Get list of configurable parameter
@@ -55,7 +66,9 @@ namespace hal
          * Set configurable parameter to values
          * @param params The parameter with values
          */
-        void set_parameter(Netlist* nl, const std::vector<PluginParameter>& params) override;
+        void set_parameter(const std::vector<PluginParameter>& params) override;
+
+        void execute_function(std::string tag, Netlist *nl, const std::vector<u32> &mods, const std::vector<u32> &gats, const std::vector<u32> &nets) override;
 
         /**
          * Register function to indicate work progress when busy

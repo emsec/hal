@@ -87,6 +87,10 @@ namespace hal
                   :returns: Parameter type.
                   :rtype: ParameterType
              )")
+             .def("set_tagname", &PluginParameter::set_tagname, py::arg("tagname"), R"(
+                  Set new tag name.
+                  :param str tagname: Tag name for parameter.
+             )")
              .def("set_value", &PluginParameter::set_value, py::arg("value"), R"(
                   Set parameter value.
 
@@ -95,25 +99,57 @@ namespace hal
 
         py::class_<GuiExtensionPythonBase>(m,"GuiExtensionPythonBase")
             .def(py::init<std::string,std::string>())
-            .def("add_parameter", &GuiExtensionPythonBase::add_parameter, py::arg("par"), R"(
-                 Add parameter to list.
-
-                 :param PluginParameter par: Parameter to be added.
-             )")
-            .def("wait_for_gui", &GuiExtensionPythonBase::wait_for_gui, R"(
-                 Wait for GUI interaction (e.g. execute button).
-             )")
-            .def("get_parameters", &GuiExtensionPythonBase::get_parameters, R"(
+            .def("add_main_menu", &GuiExtensionPythonBase::add_main_menu, py::arg("params"), R"(
+                 Add form to main menu comprising parameter and push button (special parameter).
+                 :param list[hal_py.PluginParameter] params: Parameter to be added.
+            )")
+            .def("add_module_context", &GuiExtensionPythonBase::add_module_context, py::arg("tagname"), py::arg("label"), R"(
+                 Add context extension if single module selected.
+                 :param str tagname: Tagname of function called from context menu.
+                 :param str label: Entry for context menu.
+            )")
+            .def("add_gate_context", &GuiExtensionPythonBase::add_gate_context, py::arg("tagname"), py::arg("label"), R"(
+                 Add context extension if single gate selected.
+                 :param str tagname: Tagname of function called from context menu.
+                 :param str label: Entry for context menu.
+            )")
+            .def("add_net_context", &GuiExtensionPythonBase::add_net_context, py::arg("tagname"), py::arg("label"), R"(
+                 Add context extension if single net selected.
+                 :param str tagname: Tagname of function called from context menu.
+                 :param str label: Entry for context menu.
+            )")
+            .def("get_parameter", &GuiExtensionPythonBase::get_parameter, R"(
                  Get parameter list.
-
                  :returns: List of parameter.
                  :rtype: list[hal_py.PluginParameter]
-             )")
-            .def("register_extension", &GuiExtensionPythonBase::register_extension, R"(
-                 Register extension and make parameter visibile to GUI.
+            )")
+            .def("get_selected_modules", &GuiExtensionPythonBase::get_selected_modules, R"(
+                 Get IDs of selected modules.
 
-             )");
+                 :returns: List of module IDs.
+                 :rtype: list[int]
+            )")
+            .def("get_selected_gates", &GuiExtensionPythonBase::get_selected_gates, R"(
+                 Get IDs of selected gates.
 
+                 :returns: List of gate IDs.
+                 :rtype: list[int]
+            )")
+            .def("get_selected_nets", &GuiExtensionPythonBase::get_selected_nets, R"(
+                 Get IDs of selected nets.
+
+                 :returns: List of net IDs.
+                 :rtype: list[int]
+            )")
+            .def("get_function_call", &GuiExtensionPythonBase::get_function_call, R"(
+                 Get tag name of function triggered by GUI
+
+                 :returns: Function tag name.
+                 :rtype: str
+            )")
+            .def("clear", &GuiExtensionPythonBase::clear, R"(
+                 Clear all registered callbacks and function tags.
+            )");
 
 #ifndef PYBIND11_MODULE
         return m.ptr();

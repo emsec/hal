@@ -871,6 +871,17 @@ namespace hal
                 return false;
         }
 
+        // going to close
+
+        for (const std::string& pluginName : plugin_manager::get_plugin_names())
+        {
+            BasePluginInterface* bpif = plugin_manager::get_plugin_instance(pluginName);
+            if (!bpif) continue;
+            GuiExtensionInterface* geif = bpif->get_gui_extension();
+            if (!geif) continue;
+            geif->netlist_about_to_close(gNetlist);
+        }
+
         gPythonContext->abortThreadAndWait();
 
         gGraphContextManager->clear();

@@ -44,34 +44,37 @@ PYBIND11_PLUGIN(hal_gui)
     py::module m2 = py_console.def_submodule("redirector", "redirector");
     m2.def("write_stdout", [](std::string s) -> void { gPythonContext->forwardStdout(QString::fromStdString(s)); });
     m2.def("write_stderr", [](std::string s) -> void { gPythonContext->forwardError(QString::fromStdString(s)); });
-    m2.def("thread_stdout", [](std::string s) -> void { if (gPythonContext->currentThread()) gPythonContext->currentThread()->handleStdout(QString::fromStdString(s)); });
-    m2.def("thread_stderr", [](std::string s) -> void { if (gPythonContext->currentThread()) gPythonContext->currentThread()->handleError(QString::fromStdString(s)); });
-    m2.def("thread_stdin", [](std::string s) -> std::string { return (gPythonContext->currentThread()
-                                                                      ?gPythonContext->currentThread()->handleConsoleInput(QString::fromStdString(s))
+    m2.def("thread_stdout", [](std::string s) -> void { if (gPythonContext->pythonThread()) gPythonContext->pythonThread()->handleStdout(QString::fromStdString(s)); });
+    m2.def("thread_stderr", [](std::string s) -> void { if (gPythonContext->pythonThread()) gPythonContext->pythonThread()->handleError(QString::fromStdString(s)); });
+    m2.def("thread_stdin", [](std::string s) -> std::string { return (gPythonContext->pythonThread()
+                                                                      ?gPythonContext->pythonThread()->handleConsoleInput(QString::fromStdString(s))
                                                                       :std::string());});
     auto gui_input = m.def_submodule("gui_input", R"(
         GUI Input Widgets
     )");
     gui_input.def("inputString", [](std::string prompt = std::string("Please enter value"), std::string defval = std::string()) ->
-            std::string { return (gPythonContext->currentThread()
-                                 ?gPythonContext->currentThread()->handleStringInput(QString::fromStdString(prompt),QString::fromStdString(defval))
+            std::string { return (gPythonContext->pythonThread()
+                                 ?gPythonContext->pythonThread()->handleStringInput(QString::fromStdString(prompt),QString::fromStdString(defval))
                                  :std::string());});
     gui_input.def("inputNumber", [](std::string prompt = std::string("Please enter number"), int defval = 0) ->
-            int { return (gPythonContext->currentThread()
-                          ?gPythonContext->currentThread()->handleNumberInput(QString::fromStdString(prompt),defval)
+            int { return (gPythonContext->pythonThread()
+                          ?gPythonContext->pythonThread()->handleNumberInput(QString::fromStdString(prompt),defval)
                           :0);});
     gui_input.def("inputGate", [](std::string prompt = std::string("Please select gate")) ->
-            Gate* { return (gPythonContext->currentThread()
-                           ?gPythonContext->currentThread()->handleGateInput(QString::fromStdString(prompt))
+            Gate* { return (gPythonContext->pythonThread()
+                           ?gPythonContext->pythonThread()->handleGateInput(QString::fromStdString(prompt))
                            :nullptr);});
     gui_input.def("inputModule", [](std::string prompt = std::string("Please select module")) ->
-            Module* { return (gPythonContext->currentThread()
-                             ?gPythonContext->currentThread()->handleModuleInput(QString::fromStdString(prompt))
+            Module* { return (gPythonContext->pythonThread()
+                             ?gPythonContext->pythonThread()->handleModuleInput(QString::fromStdString(prompt))
                              :nullptr);});
     gui_input.def("inputFilename", [](std::string prompt = std::string("Please select filename"), std::string filetype = std::string()) ->
-            std::string { return (gPythonContext->currentThread()
-                             ?gPythonContext->currentThread()->handleFilenameInput(QString::fromStdString(prompt), QString::fromStdString(filetype))
+            std::string { return (gPythonContext->pythonThread()
+                             ?gPythonContext->pythonThread()->handleFilenameInput(QString::fromStdString(prompt), QString::fromStdString(filetype))
                              :std::string());});
+    gui_input.def("wait_for_menu_selection", []() -> void {
+                      if (gPythonContext->pythonThread())
+                      gPythonContext->pythonThread()->getInput(PythonThread::WaitForMenuSelection,QString(),QVariant());});
 
     py::class_<GuiApi> py_gui_api(m, "GuiApi", R"(GUI API)");
 

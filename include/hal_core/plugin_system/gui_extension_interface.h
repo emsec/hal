@@ -36,7 +36,7 @@ namespace hal {
     struct ContextMenuContribution
     {
         GuiExtensionInterface* mContributer;
-        u32 mFunctionId;
+        std::string mTagname;
         std::string mEntry;
     };
 
@@ -57,24 +57,56 @@ namespace hal {
          * @param[in] nl The current netlist
          * @param[in] params List of configurable parameter with values
          */
-        virtual void set_parameter(Netlist* nl, const std::vector<PluginParameter>& params);
+        virtual void set_parameter(const std::vector<PluginParameter>& params);
 
         /**
          * Register function to indicate work progress when busy
-         * @param pif Progress Indicator Function to register
+         * @param[in] pif Progress Indicator Function to register
          */
         virtual void register_progress_indicator(std::function<void(int, const std::string&)> pif);
 
+        /**
+         * Contribution to context menu.
+         * This function gets called when a context menu in GUI graphical netlist view pops up. Plugins that
+         * want to add their own entries in context menu will return one ContextMenuContribution record per
+         * entry line.
+         * @param[in] nl The current netlist in GUI
+         * @param[in] mods List of selected modules
+         * @param[in] gats List of selected gates
+         * @param[in] nets List of selected nets
+         * @return
+         */
         virtual std::vector<ContextMenuContribution> get_context_contribution(const Netlist* nl,
                                                                               const std::vector<u32>& mods,
                                                                               const std::vector<u32>& gats,
                                                                               const std::vector<u32>& nets);
 
-        virtual void execute_context_action(u32 fid,
-                                            Netlist* nl,
-                                            const std::vector<u32>& mods,
-                                            const std::vector<u32>& gats,
-                                            const std::vector<u32>& nets);
+        /**
+         * Call from GUI to execute function.
+         * This function gets called when user selected a plugin contribution (see get_context_contribution) in
+         * context menu of GUI graphical netlist view or when user clicked a push button in contributed plugin menu
+         * @param[in] tag The function tagname (unique identifier)
+         * @param[in] nl The current netlist in GUI
+         * @param[in] mods List of selected modules
+         * @param[in] gats List of selected gates
+         * @param[in] nets List of selected nets
+         */
+        virtual void execute_function(std::string tag,
+                                      Netlist* nl,
+                                      const std::vector<u32>& mods,
+                                      const std::vector<u32>& gats,
+                                      const std::vector<u32>& nets);
 
+        /**
+         * Netlist loaded in GUI
+         * @param[in] nl
+         */
+        virtual void netlist_loaded(Netlist* nl);
+
+        /**
+         * Netlist about to close in GUI
+         * @param[in] nl
+         */
+        virtual void netlist_about_to_close(Netlist* nl);
     };
 }
