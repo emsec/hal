@@ -193,6 +193,9 @@ namespace hal
         mMenuFile->addAction(mActionSaveAs);
         mMenuFile->addAction(mActionGateLibraryManager);
 
+        // dummy entry in plugin menu will be overwritten as soon menu gets visibile. However, without this entry MacOS will 'optimize' menu away
+        mMenuPlugin->addAction("plugin placeholder");
+
         QMenu* menuExport = nullptr;
         for (auto it : netlist_writer_manager::get_writer_extensions())
         {
