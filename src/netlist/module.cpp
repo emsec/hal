@@ -947,7 +947,7 @@ namespace hal
             return it->get();
         }
 
-        log_warning("module", "could not get pin by net for module '{}' with ID {}: no pin belongs to net '{}' with ID {}", m_name, m_id, net->get_name(), net->get_id());
+        log_debug("module", "could not get pin by net for module '{}' with ID {}: no pin belongs to net '{}' with ID {}", m_name, m_id, net->get_name(), net->get_id());
         return nullptr;
     }
 
