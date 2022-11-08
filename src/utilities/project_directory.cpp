@@ -12,7 +12,7 @@ namespace hal {
         replace_extension(); // remove any extension
     }
 
-    ProjectDirectory ProjectDirectory::generateRandom()
+    ProjectDirectory ProjectDirectory::generate_random()
     {
         srand(time(nullptr));
 

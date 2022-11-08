@@ -33,6 +33,8 @@ namespace hal
 
         netlist_init(m);
 
+        project_manager_init(m);
+
         netlist_serializer_init(m);
 
         netlist_utils_init(m);

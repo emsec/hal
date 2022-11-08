@@ -87,7 +87,7 @@ namespace hal
     void FileManager::autosave()
     {
         ProjectManager* pm = ProjectManager::instance();
-        if (pm->get_project_status() != ProjectManager::None && mAutosaveEnabled)
+        if (pm->get_project_status() != ProjectManager::ProjectStatus::NONE && mAutosaveEnabled)
         {
             log_info("gui", "saving a backup in case something goes wrong...");
             ProjectManager::instance()->serialize_project(gNetlist, true);
@@ -145,7 +145,7 @@ namespace hal
         Q_EMIT projectOpened(projectDir, file);
         gNetlistRelay->debugHandleFileOpened();
         gContentManager->handleOpenDocument(file);
-        ProjectManager::instance()->set_project_status(ProjectManager::Opened);
+        ProjectManager::instance()->set_project_status(ProjectManager::ProjectStatus::OPENED);
     }
 
     FileManager::DirectoryStatus FileManager::directoryStatus(const QString& pathname)
@@ -176,13 +176,13 @@ namespace hal
     {
         watchFile(file);
         Q_EMIT fileOpened(file);
-        ProjectManager::instance()->set_project_status(ProjectManager::Opened);
+        ProjectManager::instance()->set_project_status(ProjectManager::ProjectStatus::OPENED);
     }
 
     void FileManager::removeShadowDirectory()
     {
         ProjectManager* pm = ProjectManager::instance();
-        if (pm->get_project_status() == ProjectManager::None) return;
+        if (pm->get_project_status() == ProjectManager::ProjectStatus::NONE) return;
         QDir shDir(QString::fromStdString(pm->get_project_directory().get_shadow_dir()));
         if (shDir.exists())
         {
@@ -568,7 +568,7 @@ namespace hal
         gNetlist = nullptr;
 
         gNetlistRelay->debugHandleFileClosed();
-        ProjectManager::instance()->set_project_status(ProjectManager::None);
+        ProjectManager::instance()->set_project_status(ProjectManager::ProjectStatus::NONE);
 
         Q_EMIT fileClosed();
     }

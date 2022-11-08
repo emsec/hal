@@ -96,7 +96,7 @@ namespace hal {
          * four digit random number
          * @return Absolute path to directory
          */
-        static ProjectDirectory generateRandom();
+        static ProjectDirectory generate_random();
 
         /**
          * Name of autosave subdirectory

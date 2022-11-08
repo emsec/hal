@@ -1640,7 +1640,7 @@
             "lut_config": {
                 "bit_order": "ascending",
                 "data_category": "generic",
-                "data_identifier": "INIT"
+                "data_identifier": "LUT_INIT"
             },
             "pin_groups": [
                 {
@@ -2204,6 +2204,401 @@
             ]
         },
         {
+            "name": "SB_SPRAM256KA",
+            "types": [
+                "sequential",
+                "ram"
+            ],
+            "pin_groups": [
+                {
+                    "name": "WREN",
+                    "direction": "input",
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "WREN",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
+                },
+                {
+                    "name": "CLOCK",
+                    "direction": "input",
+                    "type": "clock",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "CLOCK",
+                            "direction": "input",
+                            "type": "clock"
+                        }
+                    ]
+                },
+                {
+                    "name": "CHIPSELECT",
+                    "direction": "input",
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "CHIPSELECT",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
+                },
+                {
+                    "name": "STANDBY",
+                    "direction": "input",
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "STANDBY",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
+                },
+                {
+                    "name": "SLEEP",
+                    "direction": "input",
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "SLEEP",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
+                },
+                {
+                    "name": "POWEROFF",
+                    "direction": "input",
+                    "type": "clock",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "POWEROFF",
+                            "direction": "input",
+                            "type": "clock"
+                        }
+                    ]
+                },
+                {
+                    "name": "ADDRESS",
+                    "direction": "input",
+                    "type": "address",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "ADDRESS(0)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "ADDRESS(1)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "ADDRESS(2)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "ADDRESS(3)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "ADDRESS(4)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "ADDRESS(5)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "ADDRESS(6)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "ADDRESS(7)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "ADDRESS(8)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "ADDRESS(9)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "ADDRESS(10)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "ADDRESS(11)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "ADDRESS(12)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "ADDRESS(13)",
+                            "direction": "input",
+                            "type": "address"
+                        }
+                    ]
+                },
+                {
+                    "name": "MASKWREN",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "MASKWREN(0)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "MASKWREN(1)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "MASKWREN(2)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "MASKWREN(3)",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "DATAIN",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "DATAIN(0)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(1)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(2)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(3)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(4)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(5)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(6)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(7)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(8)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(9)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(10)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(11)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(12)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(13)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(14)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(15)",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "DATAOUT",
+                    "direction": "output",
+                    "type": "data",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "DATAOUT(0)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(0)"
+                        },
+                        {
+                            "name": "DATAOUT(1)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(1)"
+                        },
+                        {
+                            "name": "DATAOUT(2)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(2)"
+                        },
+                        {
+                            "name": "DATAOUT(3)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(3)"
+                        },
+                        {
+                            "name": "DATAOUT(4)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(4)"
+                        },
+                        {
+                            "name": "DATAOUT(5)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(5)"
+                        },
+                        {
+                            "name": "DATAOUT(6)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(6)"
+                        },
+                        {
+                            "name": "DATAOUT(7)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(7)"
+                        },
+                        {
+                            "name": "DATAOUT(8)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(8)"
+                        },
+                        {
+                            "name": "DATAOUT(9)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(9)"
+                        },
+                        {
+                            "name": "DATAOUT(10)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(10)"
+                        },
+                        {
+                            "name": "DATAOUT(11)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(11)"
+                        },
+                        {
+                            "name": "DATAOUT(12)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(12)"
+                        },
+                        {
+                            "name": "DATAOUT(13)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(13)"
+                        },
+                        {
+                            "name": "DATAOUT(14)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(14)"
+                        },
+                        {
+                            "name": "DATAOUT(15)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(15)"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "name": "SB_RAM256x16",
             "types": [
                 "sequential",
@@ -2710,6 +3105,947 @@
                             "direction": "output",
                             "type": "data",
                             "function": "(RDATA(15) & (! MASK(15)))"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "SB_RAM512x8",
+            "types": [
+                "sequential",
+                "ram"
+            ],
+            "ram_config": {
+                "data_category": "generic",
+                "data_identifiers": [
+                    "INIT_0",
+                    "INIT_1",
+                    "INIT_2",
+                    "INIT_3",
+                    "INIT_4",
+                    "INIT_5",
+                    "INIT_6",
+                    "INIT_7",
+                    "INIT_8",
+                    "INIT_9",
+                    "INIT_A",
+                    "INIT_B",
+                    "INIT_C",
+                    "INIT_D",
+                    "INIT_E",
+                    "INIT_F"
+                ],
+                "bit_size": 4096,
+                "ram_ports": [
+                    {
+                        "data_group": "WDATA",
+                        "address_group": "WADDR",
+                        "clocked_on": "(WCLK & WCLKE)",
+                        "enabled_on": "WE",
+                        "is_write": true
+                    },
+                    {
+                        "data_group": "RDATA",
+                        "address_group": "RADDR",
+                        "clocked_on": "(RCLK & RCLKE)",
+                        "enabled_on": "RE",
+                        "is_write": false
+                    }
+                ]
+            },
+            "pin_groups": [
+                {
+                    "name": "WE",
+                    "direction": "input",
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "WE",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
+                },
+                {
+                    "name": "WCLK",
+                    "direction": "input",
+                    "type": "clock",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "WCLK",
+                            "direction": "input",
+                            "type": "clock"
+                        }
+                    ]
+                },
+                {
+                    "name": "WCLKE",
+                    "direction": "input",
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "WCLKE",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
+                },
+                {
+                    "name": "RE",
+                    "direction": "input",
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "RE",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
+                },
+                {
+                    "name": "RCLKE",
+                    "direction": "input",
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "RCLKE",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
+                },
+                {
+                    "name": "RCLK",
+                    "direction": "input",
+                    "type": "clock",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "RCLK",
+                            "direction": "input",
+                            "type": "clock"
+                        }
+                    ]
+                },
+                {
+                    "name": "WADDR",
+                    "direction": "input",
+                    "type": "address",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "WADDR(0)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "WADDR(1)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "WADDR(2)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "WADDR(3)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "WADDR(4)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "WADDR(5)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "WADDR(6)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "WADDR(7)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "WADDR(8)",
+                            "direction": "input",
+                            "type": "address"
+                        }
+                    ]
+                },
+                {
+                    "name": "RADDR",
+                    "direction": "input",
+                    "type": "address",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "RADDR(0)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "RADDR(1)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "RADDR(2)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "RADDR(3)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "RADDR(4)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "RADDR(5)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "RADDR(6)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "RADDR(7)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "RADDR(8)",
+                            "direction": "input",
+                            "type": "address"
+                        }
+                    ]
+                },
+                {
+                    "name": "WDATA",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "WDATA(0)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(1)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(2)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(3)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(4)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(5)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(6)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(7)",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "RDATA",
+                    "direction": "output",
+                    "type": "data",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "RDATA(0)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "RDATA(1)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "RDATA(2)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "RDATA(3)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "RDATA(4)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "RDATA(5)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "RDATA(6)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "RDATA(7)",
+                            "direction": "output",
+                            "type": "data"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "SB_RAM1024x4",
+            "types": [
+                "sequential",
+                "ram"
+            ],
+            "ram_config": {
+                "data_category": "generic",
+                "data_identifiers": [
+                    "INIT_0",
+                    "INIT_1",
+                    "INIT_2",
+                    "INIT_3",
+                    "INIT_4",
+                    "INIT_5",
+                    "INIT_6",
+                    "INIT_7",
+                    "INIT_8",
+                    "INIT_9",
+                    "INIT_A",
+                    "INIT_B",
+                    "INIT_C",
+                    "INIT_D",
+                    "INIT_E",
+                    "INIT_F"
+                ],
+                "bit_size": 4096,
+                "ram_ports": [
+                    {
+                        "data_group": "WDATA",
+                        "address_group": "WADDR",
+                        "clocked_on": "(WCLK & WCLKE)",
+                        "enabled_on": "WE",
+                        "is_write": true
+                    },
+                    {
+                        "data_group": "RDATA",
+                        "address_group": "RADDR",
+                        "clocked_on": "(RCLK & RCLKE)",
+                        "enabled_on": "RE",
+                        "is_write": false
+                    }
+                ]
+            },
+            "pin_groups": [
+                {
+                    "name": "WE",
+                    "direction": "input",
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "WE",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
+                },
+                {
+                    "name": "WCLK",
+                    "direction": "input",
+                    "type": "clock",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "WCLK",
+                            "direction": "input",
+                            "type": "clock"
+                        }
+                    ]
+                },
+                {
+                    "name": "WCLKE",
+                    "direction": "input",
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "WCLKE",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
+                },
+                {
+                    "name": "RE",
+                    "direction": "input",
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "RE",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
+                },
+                {
+                    "name": "RCLKE",
+                    "direction": "input",
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "RCLKE",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
+                },
+                {
+                    "name": "RCLK",
+                    "direction": "input",
+                    "type": "clock",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "RCLK",
+                            "direction": "input",
+                            "type": "clock"
+                        }
+                    ]
+                },
+                {
+                    "name": "WADDR",
+                    "direction": "input",
+                    "type": "address",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "WADDR(0)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "WADDR(1)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "WADDR(2)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "WADDR(3)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "WADDR(4)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "WADDR(5)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "WADDR(6)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "WADDR(7)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "WADDR(8)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "WADDR(9)",
+                            "direction": "input",
+                            "type": "address"
+                        }
+                    ]
+                },
+                {
+                    "name": "RADDR",
+                    "direction": "input",
+                    "type": "address",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "RADDR(0)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "RADDR(1)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "RADDR(2)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "RADDR(3)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "RADDR(4)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "RADDR(5)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "RADDR(6)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "RADDR(7)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "RADDR(8)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "RADDR(9)",
+                            "direction": "input",
+                            "type": "address"
+                        }
+                    ]
+                },
+                {
+                    "name": "WDATA",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "WDATA(0)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(1)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(2)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(3)",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "RDATA",
+                    "direction": "output",
+                    "type": "data",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "RDATA(0)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "RDATA(1)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "RDATA(2)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "RDATA(3)",
+                            "direction": "output",
+                            "type": "data"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "SB_RAM2048x2",
+            "types": [
+                "sequential",
+                "ram"
+            ],
+            "ram_config": {
+                "data_category": "generic",
+                "data_identifiers": [
+                    "INIT_0",
+                    "INIT_1",
+                    "INIT_2",
+                    "INIT_3",
+                    "INIT_4",
+                    "INIT_5",
+                    "INIT_6",
+                    "INIT_7",
+                    "INIT_8",
+                    "INIT_9",
+                    "INIT_A",
+                    "INIT_B",
+                    "INIT_C",
+                    "INIT_D",
+                    "INIT_E",
+                    "INIT_F"
+                ],
+                "bit_size": 4096,
+                "ram_ports": [
+                    {
+                        "data_group": "WDATA",
+                        "address_group": "WADDR",
+                        "clocked_on": "(WCLK & WCLKE)",
+                        "enabled_on": "WE",
+                        "is_write": true
+                    },
+                    {
+                        "data_group": "RDATA",
+                        "address_group": "RADDR",
+                        "clocked_on": "(RCLK & RCLKE)",
+                        "enabled_on": "RE",
+                        "is_write": false
+                    }
+                ]
+            },
+            "pin_groups": [
+                {
+                    "name": "WE",
+                    "direction": "input",
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "WE",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
+                },
+                {
+                    "name": "WCLK",
+                    "direction": "input",
+                    "type": "clock",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "WCLK",
+                            "direction": "input",
+                            "type": "clock"
+                        }
+                    ]
+                },
+                {
+                    "name": "WCLKE",
+                    "direction": "input",
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "WCLKE",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
+                },
+                {
+                    "name": "RE",
+                    "direction": "input",
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "RE",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
+                },
+                {
+                    "name": "RCLKE",
+                    "direction": "input",
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "RCLKE",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
+                },
+                {
+                    "name": "RCLK",
+                    "direction": "input",
+                    "type": "clock",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "RCLK",
+                            "direction": "input",
+                            "type": "clock"
+                        }
+                    ]
+                },
+                {
+                    "name": "WADDR",
+                    "direction": "input",
+                    "type": "address",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "WADDR(0)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "WADDR(1)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "WADDR(2)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "WADDR(3)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "WADDR(4)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "WADDR(5)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "WADDR(6)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "WADDR(7)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "WADDR(8)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "WADDR(9)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "WADDR(10)",
+                            "direction": "input",
+                            "type": "address"
+                        }
+                    ]
+                },
+                {
+                    "name": "RADDR",
+                    "direction": "input",
+                    "type": "address",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "RADDR(0)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "RADDR(1)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "RADDR(2)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "RADDR(3)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "RADDR(4)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "RADDR(5)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "RADDR(6)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "RADDR(7)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "RADDR(8)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "RADDR(9)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "RADDR(10)",
+                            "direction": "input",
+                            "type": "address"
+                        }
+                    ]
+                },
+                {
+                    "name": "WDATA",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "WDATA(0)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "WDATA(1)",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "RDATA",
+                    "direction": "output",
+                    "type": "data",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "RDATA(0)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "RDATA(1)",
+                            "direction": "output",
+                            "type": "data"
                         }
                     ]
                 }
@@ -4512,6 +5848,54 @@
                             "name": "SDAOE",
                             "direction": "output",
                             "type": "none"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "GND",
+            "types": [
+                "combinational",
+                "ground"
+            ],
+            "pin_groups": [
+                {
+                    "name": "Y",
+                    "direction": "output",
+                    "type": "ground",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "Y",
+                            "direction": "output",
+                            "type": "ground",
+                            "function": "0b0"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "VCC",
+            "types": [
+                "combinational",
+                "power"
+            ],
+            "pin_groups": [
+                {
+                    "name": "Y",
+                    "direction": "output",
+                    "type": "power",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "Y",
+                            "direction": "output",
+                            "type": "power",
+                            "function": "0b1"
                         }
                     ]
                 }

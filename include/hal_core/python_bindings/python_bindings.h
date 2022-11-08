@@ -50,6 +50,7 @@
 #include "hal_core/netlist/pins/gate_pin.h"
 #include "hal_core/netlist/pins/module_pin.h"
 #include "hal_core/netlist/pins/pin_group.h"
+#include "hal_core/netlist/project_manager.h"
 #include "hal_core/plugin_system/plugin_interface_gui.h"
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/log.h"
@@ -166,6 +167,13 @@ namespace hal
      * @param[in] m - the python module
      */
     void netlist_init(py::module& m);
+
+    /**
+     * Initializes Python bindings for the HAL project manager in a python module.
+     *
+     * @param[in] m - the python module
+     */
+    void project_manager_init(py::module& m);
 
     /**
      * Initializes Python bindings for the HAL netlist serializer in a python module.

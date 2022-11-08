@@ -7,8 +7,8 @@ on:
 #      - v*
 
 jobs:
-  release-doc:
-    name: release-doc
+  build_ubuntu_20_04:
+    name:  Build and Test on Ubuntu 20.04
 
     strategy:
       matrix:
@@ -123,48 +123,3 @@ jobs:
           CCACHE_COMPRESS: true
           CCACHE_COMPRESSLEVEL: 6
           CCACHE_MAXSIZE: 400M
-
-      - name: Build Doxygen
-        if: startsWith(runner.os, 'Linux')
-        shell: bash
-        # Execute the build.  You can specify a specific target with "--target <NAME>"
-        run: |
-          cd build
-          export BUILD_TYPE=Debug
-          mkdir -p doc/doc
-          cmake --build . --target doc --config $BUILD_TYPE
-          cp -R documentation/cpp-doc/html/* doc/doc/
-        env:
-          CCACHE_DIR: ${{runner.workspace}}/.ccache
-          CCACHE_COMPRESS: true
-          CCACHE_COMPRESSLEVEL: 6
-          CCACHE_MAXSIZE: 400M
-          HAL_BASE_PATH: ${{runner.workspace}}/hal/build
-
-      - name: Build Sphinx
-        if: startsWith(runner.os, 'Linux')
-        shell: bash
-        # Execute the build.  You can specify a specific target with "--target <NAME>"
-        run: |
-          cd build
-          export BUILD_TYPE=Debug
-          mkdir -p doc/pydoc
-          cmake --build . --target pydoc --config $BUILD_TYPE
-          cp -R documentation/python-doc/html/* doc/pydoc/
-        env:
-          CCACHE_DIR: ${{runner.workspace}}/.ccache
-          CCACHE_COMPRESS: true
-          CCACHE_COMPRESSLEVEL: 6
-          CCACHE_MAXSIZE: 400M
-          HAL_BASE_PATH: ${{runner.workspace}}/hal/build
-
-
-      - name: Deploy Doc
-        if: github.ref == 'refs/heads/master'
-        uses: JamesIves/github-pages-deploy-action@releases/v3
-        with:
-          BRANCH: gh-pages
-          ACCESS_TOKEN: ${{ secrets.GH_PAGES_TOKEN}}
-          FOLDER: build/doc
-          GIT_CONFIG_NAME: 'github-actions[bot]'
-          GIT_CONFIG_EMAIL: 'github-actions[bot]@users.noreply.github.com'

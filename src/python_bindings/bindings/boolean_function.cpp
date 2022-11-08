@@ -837,7 +837,7 @@ namespace hal
             Get the variable name of the top-level node of the Boolean function of type Variable.
 
             :returns: The variable name on success, None otherwise.
-            :rtype: int or None
+            :rtype: str or None
         )");
 
         py_boolean_function.def("is_constant", &BooleanFunction::is_constant, R"(
@@ -1126,7 +1126,36 @@ namespace hal
             :param list[str] ordered_variables: A list describing the order of input variables used to generate the truth table. Defaults to an empty list.
             :param bool remove_unknown_variables: Set True to remove variables from the truth table that are not present within the Boolean function, False otherwise. Defaults to False.
             :returns: A list of values representing the truth table output on success, None otherwise.
-            :rtype: list[hal_py.BooleanFunction.Value] or None
+            :rtype: list[list[hal_py.BooleanFunction.Value]] or None
+        )");
+
+        py_boolean_function.def(
+            "get_truth_table_as_string",
+            [](const BooleanFunction& self, const std::vector<std::string>& ordered_variables, std::string function_name, bool remove_unknown_variables) -> std::optional<std::string> {
+                auto res = self.get_truth_table_as_string(ordered_variables, function_name, remove_unknown_variables);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("ordered_variables")        = std::vector<std::string>(),
+            py::arg("function_name")            = std::string(""),
+            py::arg("remove_unknown_variables") = false,
+            R"(
+            Prints the truth table for a Boolean function that comprises <= 10 single-bit variables.
+
+            WARNING: The generation of the truth table is exponential in the number of parameters.
+
+            :param list[str] ordered_variables: A list describing the order of input variables used to generate the truth table. Defaults to an empty list.
+            :param str function_name: The name of the Boolean function to be printed as header of the output columns.
+            :param bool remove_unknown_variables: Set True to remove variables from the truth table that are not present within the Boolean function, False otherwise. Defaults to False.
+            :returns: A string representing the truth table on success, None otherwise.
+            :rtype: str or None
         )");
 
         py::class_<BooleanFunction::Node> py_boolean_function_node(py_boolean_function, "Node", R"(
