@@ -30,6 +30,9 @@
 class QLineEdit;
 class QTextEdit;
 class QLabel;
+class QToolBar;
+class QAction;
+class QTextCharFormat;
 
 namespace hal
 {
@@ -64,6 +67,13 @@ namespace hal
         QLabel* mLastModifiedLabel;
 
         // toolbar (Or container widget for Toolbuttons?)
+        QToolBar* mToolBar;
+        QAction* mBoldAction;
+        QAction* mItalicsAction;
+        QAction* mUnderscoreAction;
+        QAction* mColorAction; // additional widget/indicatior to show current color?
+        QAction* mListAction;
+        QAction* mCodeAction;
 
         // textfield
         QTextEdit* mTextEdit;
@@ -73,7 +83,17 @@ namespace hal
         QPushButton* mCancelButton;
 
 
+        // helper functions
         void init();
+        void mergeFormatOnWordOrSelection(const QTextCharFormat &format); // taken from richtext example
+        void updateColorActionPixmap(const QColor &c);
+        void handleCurrentCharFormatChanged(const QTextCharFormat &format); // for the color
+        void handleCursorPositionChanged(); // for the color (mTextEdit->textColor is the current color the curser is at)
+
+        void boldTriggered();
+        void italicsTriggered();
+        void underscoreTriggered();
+        void colorTriggered();
 
         void handleOkClicked();
         void handleCancelClicked();

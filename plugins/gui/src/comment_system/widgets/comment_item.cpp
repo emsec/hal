@@ -1,5 +1,6 @@
 #include "gui/comment_system/widgets/comment_item.h"
 #include "gui/comment_system/comment_entry.h"
+#include "gui/comment_system/widgets/comment_dialog.h"
 
 #include <QToolBar>
 #include <QVBoxLayout>
@@ -114,5 +115,7 @@ namespace hal
     void CommentItem::handleModifyButtonTriggered()
     {
         qDebug() << "I want to be modified!";
+        CommentDialog dialog("Modify Comment", mEntry);
+        dialog.exec();
     }
 }
