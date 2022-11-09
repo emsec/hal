@@ -94,6 +94,7 @@ namespace hal
         void italicsTriggered();
         void underscoreTriggered();
         void colorTriggered();
+        void codeTriggered();
 
         void handleOkClicked();
         void handleCancelClicked();

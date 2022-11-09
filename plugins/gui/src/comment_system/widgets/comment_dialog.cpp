@@ -73,7 +73,8 @@ namespace hal
         mToolBar->addSeparator();
         mListAction = mToolBar->addAction("List");
         mToolBar->addSeparator();
-        mCodeAction = mToolBar->addAction("Code");
+        mCodeAction = mToolBar->addAction("Code", this, &CommentDialog::codeTriggered);
+        mCodeAction->setCheckable(true);
 
         // textedit
         mTextEdit = new QTextEdit;
@@ -125,8 +126,11 @@ namespace hal
 
     void CommentDialog::handleCurrentCharFormatChanged(const QTextCharFormat &format)
     {
-        // ugly workaround since the original color is black, but the stylesheet transforms the only the "visuals" (black color is till set as format)
+        // ugly workaround since the original color is black, but the stylesheet transforms only the "visuals" (black color is still set as format)
         QColor color = (format.foreground().color() == Qt::black) ? QColor("#A9B7C6") : format.foreground().color();
+        mBoldAction->setChecked(format.font().bold());
+        mItalicsAction->setChecked(format.font().italic());
+        mUnderscoreAction->setChecked(format.font().underline());
         //auto color = format.foreground().color();
         updateColorActionPixmap(color);
     }
@@ -179,7 +183,12 @@ namespace hal
 //        QTextCharFormat fmt;
 //        fmt.setForeground(color);
 //        mergeFormatOnWordOrSelection(fmt);
-//        updateColorActionPixmap(color);
+        //        updateColorActionPixmap(color);
+    }
+
+    void CommentDialog::codeTriggered()
+    {
+        qDebug() << "Code is triggered to: " << mCodeAction->isChecked();
     }
 
     void CommentDialog::handleOkClicked()
