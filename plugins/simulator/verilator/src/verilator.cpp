@@ -70,7 +70,12 @@ namespace hal
         std::string escape_net_name(std::string net_name)
         {
             std::string new_net_name;
-            new_net_name = utils::replace(net_name, std::string("'"), std::string("__027"));
+            new_net_name = utils::replace(net_name, std::string("__"), std::string("___05F"));
+            new_net_name = utils::replace(new_net_name, std::string("'"), std::string("__027"));
+            new_net_name = utils::replace(new_net_name, std::string("("), std::string("__028"));
+            new_net_name = utils::replace(new_net_name, std::string(")"), std::string("__029"));
+            new_net_name = utils::replace(new_net_name, std::string("["), std::string("__05b"));
+            new_net_name = utils::replace(new_net_name, std::string("]"), std::string("__05d"));
             return new_net_name;
         }
 
