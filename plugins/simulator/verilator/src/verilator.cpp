@@ -4,6 +4,7 @@
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
+#include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_utils.h"
@@ -27,10 +28,27 @@ namespace hal
     {
         void remove_unwanted_parameters_from_netlist(Netlist* nl)
         {
+            const auto* gl = nl->get_gate_library();
+
+            std::vector<std::pair<std::string, std::vector<std::string>>> lut_init_data;
+            for (const auto& lut_type : gl->get_gate_types([](const GateType* gt) { return gt->has_property(GateTypeProperty::c_lut); }))
+            {
+                InitComponent* init_component = lut_type.second->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
+                if (init_component == nullptr)
+                {
+                    continue;
+                }
+
+                lut_init_data.push_back(std::make_pair(init_component->get_init_category(), init_component->get_init_identifiers()));
+            }
+
             for (const auto& gate : nl->get_gates())
             {
-                gate->delete_data("generic", "X_COORDINATE");
-                gate->delete_data("generic", "Y_COORDINATE");
+                const auto& data_category   = gl->get_gate_location_data_category();
+                const auto& data_identifier = gl->get_gate_location_data_identifiers();
+
+                gate->delete_data(data_category, data_identifier.first);
+                gate->delete_data(data_category, data_identifier.second);
 
                 // TODO: remove this from netlist
                 gate->delete_data("generic", "READ_MODE");
@@ -38,7 +56,13 @@ namespace hal
 
                 if (!gate->get_type()->has_property(hal::GateTypeProperty::c_lut) && gate->get_type()->has_property(hal::GateTypeProperty::combinational))
                 {
-                    gate->delete_data("generic", "INIT");
+                    for (const auto& [init_category, init_identifiers] : lut_init_data)
+                    {
+                        for (const auto& init_identifier : init_identifiers)
+                        {
+                            gate->delete_data(init_category, init_identifier);
+                        }
+                    }
                 }
             }
         }
@@ -124,18 +148,18 @@ namespace hal
             {
                 std::string net_name = escape_net_name(input_net->get_name());
                 std::stringstream callback;
-                callback
-                        << "\n"
-                        << "  auto " << net_name << "_net = netMap.find(std::string(\"" << input_net->get_name() << "\"));\n"
-                        << "  if (" << net_name << "_net == netMap.end()) {\n"
-                        << "     std::cerr << \"no SALEAE input data found for net " << net_name << "\" << std::endl;\n"
-                        << "  }\n"
-                        << "  else {\n"
-                        << "     if (!sp.register_callback(" << net_name << "_net->second, set_simulation_value, &dut->" << net_name << ")) {\n"
-                        << "         std::cerr << \"cannot initialize callback for net " << net_name << "\" << std::endl;\n"
-                        << "     }\n"
-                        << "  }\n" << std::endl;
-            
+                callback << "\n"
+                         << "  auto " << net_name << "_net = netMap.find(std::string(\"" << input_net->get_name() << "\"));\n"
+                         << "  if (" << net_name << "_net == netMap.end()) {\n"
+                         << "     std::cerr << \"no SALEAE input data found for net " << net_name << "\" << std::endl;\n"
+                         << "  }\n"
+                         << "  else {\n"
+                         << "     if (!sp.register_callback(" << net_name << "_net->second, set_simulation_value, &dut->" << net_name << ")) {\n"
+                         << "         std::cerr << \"cannot initialize callback for net " << net_name << "\" << std::endl;\n"
+                         << "     }\n"
+                         << "  }\n"
+                         << std::endl;
+
                 //callback << "printf(\"dut->" << net_name << ": %x\\n\", &dut->" << net_name << ");" << std::endl;
 
                 callbacks << callback.str() << std::endl;
@@ -167,10 +191,10 @@ namespace hal
                                                        "-Wno-fatal",
                                                        "--MMD",
                                                        "-trace",
-                                                    //    "--trace-threads",
-                                                    //    "1",
-                                                    //    "--threads",
-                                                    //    "1",
+                                                       //    "--trace-threads",
+                                                       //    "1",
+                                                       //    "--threads",
+                                                       //    "1",
                                                        "-y",
                                                        "gate_definitions/",
                                                        "--Mdir",
