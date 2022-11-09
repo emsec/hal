@@ -1,5 +1,6 @@
 #include "gui/comment_system/widgets/comment_dialog.h"
 #include "gui/comment_system/comment_entry.h"
+#include "gui/comment_system/widgets/comment_color_picker.h"
 #include <QDialogButtonBox>
 #include <QTextEdit>
 #include <QLineEdit>
@@ -7,6 +8,8 @@
 #include <QLabel>
 #include <QToolBar>
 #include <QColorDialog>
+
+#include <QFontDatabase>
 
 namespace hal
 {
@@ -16,6 +19,9 @@ namespace hal
     {
         setWindowTitle(windowTitle);
         init();
+        mDefaultFont = QFont("Iosevka"); //Must be extracted from stylesheet... textedit fonts are different from stylesheet fonts
+        mDefaultFont.setPixelSize(14);
+
         if(entry)
         {
             // fix parsing error and then comment this in!
@@ -131,6 +137,7 @@ namespace hal
         mBoldAction->setChecked(format.font().bold());
         mItalicsAction->setChecked(format.font().italic());
         mUnderscoreAction->setChecked(format.font().underline());
+        mCodeAction->setChecked(format.background().color() == QColor("#334652")); // put these strings in vars...
         //auto color = format.foreground().color();
         updateColorActionPixmap(color);
     }
@@ -163,6 +170,8 @@ namespace hal
 
     void CommentDialog::colorTriggered()
     {
+        CommentColorPicker ccp;
+        ccp.close();
         //QColorDialog colorDialog(mTextEdit->textColor(), this);
         QColorDialog colorDialog(QColor("#A9B7C6"), this);
         colorDialog.setCustomColor(0, QColor("#A9B7C6")); // the default color textcolor is preserved so that the user can revert to it
@@ -189,6 +198,19 @@ namespace hal
     void CommentDialog::codeTriggered()
     {
         qDebug() << "Code is triggered to: " << mCodeAction->isChecked();
+        QTextCharFormat fmt;
+        fmt.setBackground(mCodeAction->isChecked() ? QColor("#334652") : QColor("#171E22")); //dependent on background
+        fmt.setFont(mCodeAction->isChecked() ? QFontDatabase::systemFont(QFontDatabase::FixedFont) : mDefaultFont);
+//        fmt.setFontFixedPitch(true);
+//        fmt.setFontPointSize(20);
+//        fmt.setFontStyleHint(QFont::TypeWriter); //monospace..?
+        //fmt.setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+
+//        QFont font("Monospace");
+//        font.setStyleHint(QFont::TypeWriter);
+//        font.setPointSize(13);
+//        fmt.setFont(font);
+        mergeFormatOnWordOrSelection(fmt);
     }
 
     void CommentDialog::handleOkClicked()

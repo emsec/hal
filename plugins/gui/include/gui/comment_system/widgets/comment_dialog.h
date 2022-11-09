@@ -59,6 +59,7 @@ namespace hal
     private:
         QVBoxLayout* mLayout;
         CommentEntry* mCommentEntry;
+        QFont mDefaultFont;
 
         // header part
         QWidget* mHeaderContainer; // for custom margins/spacing on top as well as colored background
