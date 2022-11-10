@@ -1063,14 +1063,15 @@ $(document).ready(function(){initNavTree('graph__widget_8cpp_source.html',''); i
 <div class="line"><a name="l00975"></a><span class="lineno">  975</span>&#160; </div>
 <div class="line"><a name="l00976"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_widget.html#a9765997fa2305f2fd7fa68341d7c2c26">  976</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_widget.html#a9765997fa2305f2fd7fa68341d7c2c26">GraphWidget::pluginProgressIndicator</a>(<span class="keywordtype">int</span> percent, <span class="keyword">const</span> std::string&amp; msg)</div>
 <div class="line"><a name="l00977"></a><span class="lineno">  977</span>&#160;    {</div>
-<div class="line"><a name="l00978"></a><span class="lineno">  978</span>&#160;        <span class="keywordflow">if</span> (!sInstance) <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00979"></a><span class="lineno">  979</span>&#160;        <span class="keywordflow">if</span> (percent==100)</div>
-<div class="line"><a name="l00980"></a><span class="lineno">  980</span>&#160;            sInstance-&gt;<a class="code" href="classhal_1_1_graph_widget.html#a9bcc225353026c99b9a99dbc06115187">handleSceneAvailable</a>();</div>
-<div class="line"><a name="l00981"></a><span class="lineno">  981</span>&#160;        <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00982"></a><span class="lineno">  982</span>&#160;            sInstance-&gt;<a class="code" href="classhal_1_1_graph_widget.html#a4c5b9b75b65cc63dafc031a4bf0222bb">showBusy</a>(percent, <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(msg));</div>
-<div class="line"><a name="l00983"></a><span class="lineno">  983</span>&#160;    }</div>
-<div class="line"><a name="l00984"></a><span class="lineno">  984</span>&#160; </div>
-<div class="line"><a name="l00985"></a><span class="lineno">  985</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00978"></a><span class="lineno">  978</span>&#160;        <span class="comment">// qDebug() &lt;&lt; &quot;progress&quot; &lt;&lt; hex &lt;&lt; (quintptr) QThread::currentThread() &lt;&lt; (quintptr) gPythonContext-&gt;currentThread() &lt;&lt; (quintptr) dynamic_cast&lt;PythonThread*&gt;(QThread::currentThread());</span></div>
+<div class="line"><a name="l00979"></a><span class="lineno">  979</span>&#160;        <span class="keywordflow">if</span> (!sInstance || <a class="code" href="namespacehal.html#a178bb1ac9a8ee6bbbec41ddb2e84250a">gPythonContext</a>-&gt;currentThread()) <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00980"></a><span class="lineno">  980</span>&#160;        <span class="keywordflow">if</span> (percent==100)</div>
+<div class="line"><a name="l00981"></a><span class="lineno">  981</span>&#160;            sInstance-&gt;<a class="code" href="classhal_1_1_graph_widget.html#a9bcc225353026c99b9a99dbc06115187">handleSceneAvailable</a>();</div>
+<div class="line"><a name="l00982"></a><span class="lineno">  982</span>&#160;        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00983"></a><span class="lineno">  983</span>&#160;            sInstance-&gt;<a class="code" href="classhal_1_1_graph_widget.html#a4c5b9b75b65cc63dafc031a4bf0222bb">showBusy</a>(percent, <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(msg));</div>
+<div class="line"><a name="l00984"></a><span class="lineno">  984</span>&#160;    }</div>
+<div class="line"><a name="l00985"></a><span class="lineno">  985</span>&#160; </div>
+<div class="line"><a name="l00986"></a><span class="lineno">  986</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aqrectf_html_moveCenter"><div class="ttname"><a href="https://doc.qt.io/qt-5/qrectf.html#moveCenter">QRectF::moveCenter</a></div><div class="ttdeci">void moveCenter(const QPointF &amp;position)</div></div>
@@ -1106,6 +1107,7 @@ $(document).ready(function(){initNavTree('graph__widget_8cpp_source.html',''); i
 <div class="ttc" id="aclasshal_1_1_selection_relay_html_a92213d7efc95573f26f8e9232e404a1e"><div class="ttname"><a href="classhal_1_1_selection_relay.html#a92213d7efc95573f26f8e9232e404a1e">hal::SelectionRelay::subfocusIndex</a></div><div class="ttdeci">u32 subfocusIndex() const</div><div class="ttdef"><b>Definition:</b> <a href="selection__relay_8h_source.html#l00489">selection_relay.h:489</a></div></div>
 <div class="ttc" id="aqrectf_html_setWidth"><div class="ttname"><a href="https://doc.qt.io/qt-5/qrectf.html#setWidth">QRectF::setWidth</a></div><div class="ttdeci">void setWidth(qreal width)</div></div>
 <div class="ttc" id="aqgraphicsview_html_DragMode-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qgraphicsview.html#DragMode-enum">QGraphicsView::RubberBandDrag</a></div><div class="ttdeci">RubberBandDrag</div></div>
+<div class="ttc" id="anamespacehal_html_a178bb1ac9a8ee6bbbec41ddb2e84250a"><div class="ttname"><a href="namespacehal.html#a178bb1ac9a8ee6bbbec41ddb2e84250a">hal::gPythonContext</a></div><div class="ttdeci">PythonContext * gPythonContext</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00058">plugin_gui.cpp:58</a></div></div>
 <div class="ttc" id="aclasshal_1_1_progress_bar_html"><div class="ttname"><a href="classhal_1_1_progress_bar.html">hal::ProgressBar</a></div><div class="ttdef"><b>Definition:</b> <a href="progress__bar_8h_source.html#l00048">progress_bar.h:48</a></div></div>
 <div class="ttc" id="aclasshal_1_1_abstract_busy_indicator_html"><div class="ttname"><a href="classhal_1_1_abstract_busy_indicator.html">hal::AbstractBusyIndicator</a></div><div class="ttdef"><b>Definition:</b> <a href="progress__bar_8h_source.html#l00039">progress_bar.h:39</a></div></div>
 <div class="ttc" id="acontent__manager_8h_html"><div class="ttname"><a href="content__manager_8h.html">content_manager.h</a></div></div>
@@ -1296,7 +1298,7 @@ $(document).ready(function(){initNavTree('graph__widget_8cpp_source.html',''); i
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_62580450d675343767dbe0503393e994.html">graph_widget</a></li><li class="navelem"><a class="el" href="graph__widget_8cpp.html">graph_widget.cpp</a></li>
-    <li class="footer">Generated on Wed Nov 9 2022 16:32:51 for HAL by
+    <li class="footer">Generated on Thu Nov 10 2022 13:09:49 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
