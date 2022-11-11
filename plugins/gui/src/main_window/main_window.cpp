@@ -778,18 +778,31 @@ namespace hal
 
     void MainWindow::handleActionStopRecording()
     {
+        UserActionManager* uam = UserActionManager::instance();
+        QString macroFile;
+        bool trySaveMacro = true;
+        while (trySaveMacro) {
+            if (uam->hasRecorded())
+            {
+                macroFile = QFileDialog::getSaveFileName(this, "Save macro to file", ".");
+                if (!macroFile.isEmpty() && !macroFile.contains(QChar('.')))
+                    macroFile += ".xml";
+            }
+            switch (uam->setStopRecording(macroFile))
+            {
+            case QMessageBox::Retry:
+                break;
+            case QMessageBox::Cancel:
+                return;
+            default:
+                // Ok or Discard
+                trySaveMacro = false;
+                break;
+            }
+        }
         mActionStartRecording->setEnabled(true);
         mActionStopRecording->setEnabled(false);
         mActionPlayMacro->setEnabled(true);
-        UserActionManager* uam = UserActionManager::instance();
-        QString macroFile;
-        if (uam->hasRecorded())
-        {
-            macroFile = QFileDialog::getSaveFileName(this, "Save macro to file", ".");
-            if (!macroFile.isEmpty() && !macroFile.contains(QChar('.')))
-                macroFile += ".xml";
-        }
-        uam->setStopRecording(macroFile);
     }
 
     void MainWindow::handleActionPlayMacro()
