@@ -102,16 +102,16 @@ find_package(Filesystem REQUIRED Final Experimental)
 ################################
 
 find_package(RapidJSON REQUIRED)
-message(VERBOSE "Found rapidjson ${RAPIDJSON_INCLUDEDIR}")
+message(STATUS "Found rapidjson ${RAPIDJSON_INCLUDEDIR}")
 if(RapidJSON_FOUND AND NOT TARGET RapidJSON::RapidJSON)
     if(NOT RAPIDJSON_INCLUDEDIR)
-        set(RAPIDJSON_INCLUDEDIR ${RapidJSON_INCLUDE_DIR})    
+        set(RAPIDJSON_INCLUDEDIR ${RAPIDJSON_INCLUDE_DIRS})    
     endif()
     add_library(RapidJSON::RapidJSON INTERFACE IMPORTED)
     set_target_properties(RapidJSON::RapidJSON PROPERTIES
                           INTERFACE_INCLUDE_DIRECTORIES "${RAPIDJSON_INCLUDEDIR}"
                           )
-    message(STATUS "Set rapidjson successully ${RAPIDJSON_INCLUDEDIR}")
+    message(STATUS "Set rapidjson successully: ${RAPIDJSON_INCLUDEDIR}")
 endif()
 
 ################################
