@@ -1535,7 +1535,7 @@ var searchData=
   ['setsteptype_28951',['setStepType',['https://doc.qt.io/qt-5/qdoublespinbox.html#setStepType',1,'QDoubleSpinBox::setStepType()'],['https://doc.qt.io/qt-5/qspinbox.html#setStepType',1,'QSpinBox::setStepType()']]],
   ['setstereo_28952',['setStereo',['https://doc.qt.io/qt-5/qsurfaceformat.html#setStereo',1,'QSurfaceFormat']]],
   ['setstickyfocus_28953',['setStickyFocus',['https://doc.qt.io/qt-5/qgraphicsscene.html#stickyFocus-prop',1,'QGraphicsScene']]],
-  ['setstoprecording_28954',['setStopRecording',['../classhal_1_1_user_action_manager.html#a2fba054ba0f743120bd149f4dc6079ac',1,'hal::UserActionManager']]],
+  ['setstoprecording_28954',['setStopRecording',['../classhal_1_1_user_action_manager.html#abafecd55ef7291cce1570df93623dc9e',1,'hal::UserActionManager']]],
   ['setstops_28955',['setStops',['https://doc.qt.io/qt-5/qgradient.html#setStops',1,'QGradient']]],
   ['setstrength_28956',['setStrength',['https://doc.qt.io/qt-5/qgraphicscolorizeeffect.html#strength-prop',1,'QGraphicsColorizeEffect']]],
   ['setstretch_28957',['setStretch',['https://doc.qt.io/qt-5/qfont.html#setStretch',1,'QFont::setStretch()'],['https://doc.qt.io/qt-5/qboxlayout.html#setStretch',1,'QBoxLayout::setStretch()']]],

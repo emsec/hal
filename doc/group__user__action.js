@@ -229,7 +229,7 @@ var group__user__action =
       [ "playMacro", "classhal_1_1_user_action_manager.html#ab09aba251ce8d2d7fff07ace44a73c6b", null ],
       [ "registerFactory", "classhal_1_1_user_action_manager.html#a0e6b8eb675e81722703fd5b19ecc0c68", null ],
       [ "setStartRecording", "classhal_1_1_user_action_manager.html#a020a96ea58892acabbe350cd28b7c712", null ],
-      [ "setStopRecording", "classhal_1_1_user_action_manager.html#a2fba054ba0f743120bd149f4dc6079ac", null ],
+      [ "setStopRecording", "classhal_1_1_user_action_manager.html#abafecd55ef7291cce1570df93623dc9e", null ],
       [ "timeStamp", "classhal_1_1_user_action_manager.html#ae810fa314e08add41373a4e1db7c516d", null ],
       [ "undoLastAction", "classhal_1_1_user_action_manager.html#a1806f69156c7a564fcdba056fda7db5d", null ]
     ] ],
