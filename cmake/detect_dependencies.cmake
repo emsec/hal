@@ -102,13 +102,16 @@ find_package(Filesystem REQUIRED Final Experimental)
 ################################
 
 find_package(RapidJSON REQUIRED)
-message(VERBOSE "Found rapidjson ${RapidJSON_INCLUDE_DIR}")
+message(VERBOSE "Found rapidjson ${RAPIDJSON_INCLUDEDIR}")
 if(RapidJSON_FOUND AND NOT TARGET RapidJSON::RapidJSON)
+    if(APPLE AND CMAKE_HOST_APPLE)
+        set(RAPIDJSON_INCLUDEDIR ${RapidJSON_INCLUDE_DIR})    
+    endif()
     add_library(RapidJSON::RapidJSON INTERFACE IMPORTED)
     set_target_properties(RapidJSON::RapidJSON PROPERTIES
-                          INTERFACE_INCLUDE_DIRECTORIES "${RapidJSON_INCLUDE_DIR}"
+                          INTERFACE_INCLUDE_DIRECTORIES "${RAPIDJSON_INCLUDEDIR}"
                           )
-    message(STATUS "Set rapidjson successully ${RapidJSON_INCLUDE_DIR}")
+    message(STATUS "Set rapidjson successully ${RAPIDJSON_INCLUDEDIR}")
 endif()
 
 ################################
