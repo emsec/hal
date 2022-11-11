@@ -603,6 +603,8 @@ namespace hal
             currentFilename = QDir(mGenericPath).absoluteFilePath(autosaveFilename(index));
         }
 
+        bool changeFileLocation = false;
+
         // evaluate query policy
         if (queryPolicy == QueryAlways ||
                 ( queryPolicy == QueryIfEmpty && currentFilename.isEmpty()))
@@ -613,6 +615,31 @@ namespace hal
 
             if (!selected_file_name.endsWith(".py"))
                 selected_file_name.append(".py");
+
+            changeFileLocation = true;
+        }
+        else if (queryPolicy == GenericName && currentFilename.isEmpty())
+        {
+            selected_file_name = QDir(mGenericPath).absoluteFilePath(unnamedFilename(index));
+            isUnnamed = true;
+        }
+        else
+        {
+            selected_file_name = currentFilename;
+            // Remove an existing snapshot
+            removeSnapshotFile(currentEditor);
+        }
+
+        std::ofstream out(selected_file_name.toStdString(), std::ios::out);
+        if (!out.is_open())
+        {
+            log_error("gui", "could not open file path '{}' to serialize python script", selected_file_name.toStdString());
+            QMessageBox::warning(this, "Save Script Error", "Cannot save python script to\n<" + selected_file_name + ">");
+            return false;
+        }
+
+        if (changeFileLocation)
+        {
 
             currentEditor->setFilename(selected_file_name);
             mDefaultPath = QFileInfo(selected_file_name).path();
@@ -633,17 +660,6 @@ namespace hal
                 }
             }
         }
-        else if (queryPolicy == GenericName && currentFilename.isEmpty())
-        {
-            selected_file_name = QDir(mGenericPath).absoluteFilePath(unnamedFilename(index));
-            isUnnamed = true;
-        }
-        else
-        {
-            selected_file_name = currentFilename;
-            // Remove an existing snapshot
-            removeSnapshotFile(currentEditor);
-        }
 
         bool isFileWatched = mFileWatcher->files().contains(currentFilename);
         if (isFileWatched)
@@ -652,12 +668,6 @@ namespace hal
             mPathEditorMap.remove(currentFilename);
         }
 
-        std::ofstream out(selected_file_name.toStdString(), std::ios::out);
-        if (!out.is_open())
-        {
-            log_error("gui", "could not open file path '{}' to serialize python script", selected_file_name.toStdString());
-            return false;
-        }
         out << currentEditor->toPlainText().toStdString();
         out.close();
 
