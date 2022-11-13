@@ -4,7 +4,7 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
 
-#include <igraph/igraph.h>
+#include <igraph.h>
 
 namespace hal
 {
