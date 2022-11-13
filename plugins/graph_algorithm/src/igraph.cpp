@@ -2,17 +2,14 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
-#include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/log.h"
 
 #include <igraph/igraph.h>
-#include <tuple>
 
 namespace hal
 {
     std::map<int, Gate*> GraphAlgorithmPlugin::get_igraph_directed(Netlist* const nl, igraph_t* graph)
     {
-        //igraph_t graph;
 
         // count all edges, remember in HAL one net(edge) has multiple sinks
         u32 edge_counter = 0;
@@ -60,12 +57,12 @@ namespace hal
         log_debug("graph_algorithm", "nets: {}, edge_counter: {}", nl->get_nets().size(), edge_counter);
 
         // initialize edge vector
-        igraph_vector_t edges;
-        igraph_vector_init(&edges, 2 * edge_counter);
+        igraph_vector_int_t edges;
+        igraph_vector_int_init(&edges, 2 * edge_counter);
 
         // we need dummy gates for input/outputs
         u32 dummy_gate_counter   = nl->get_gates().size() - 1;
-        u32 edge_vertice_counter = 0;
+        u32 edge_vertex_counter = 0;
 
         for (auto net : nl->get_nets())
         {
@@ -91,8 +88,8 @@ namespace hal
                 u32 dummy_gate = ++dummy_gate_counter;
                 for (const auto& dst_gate : dst_gates)
                 {
-                    VECTOR(edges)[edge_vertice_counter++] = dummy_gate;
-                    VECTOR(edges)[edge_vertice_counter++] = dst_gate->get_id() - 1;
+                    VECTOR(edges)[edge_vertex_counter++] = dummy_gate;
+                    VECTOR(edges)[edge_vertex_counter++] = dst_gate->get_id() - 1;
 
                     log_debug("graph_algorithm", "input_gate: {} --> {}: {}", dummy_gate, dst_gate->get_id() - 1, dst_gate->get_name().c_str());
                 }
@@ -100,8 +97,8 @@ namespace hal
             // if gate has no dsts --> add dummy node
             else if (dst_gates.size() == 0)
             {
-                VECTOR(edges)[edge_vertice_counter++] = src_gate->get_id() - 1;
-                VECTOR(edges)[edge_vertice_counter++] = ++dummy_gate_counter;
+                VECTOR(edges)[edge_vertex_counter++] = src_gate->get_id() - 1;
+                VECTOR(edges)[edge_vertex_counter++] = ++dummy_gate_counter;
 
                 log_debug("graph_algorithm", "{}: {} --> {} output\n", src_gate->get_name().c_str(), src_gate->get_id() - 1, dummy_gate_counter);
             }
@@ -110,8 +107,8 @@ namespace hal
             {
                 for (const auto& dst_gate : dst_gates)
                 {
-                    VECTOR(edges)[edge_vertice_counter++] = src_gate->get_id() - 1;
-                    VECTOR(edges)[edge_vertice_counter++] = dst_gate->get_id() - 1;
+                    VECTOR(edges)[edge_vertex_counter++] = src_gate->get_id() - 1;
+                    VECTOR(edges)[edge_vertex_counter++] = dst_gate->get_id() - 1;
 
                     log_debug("graph_algorithm", "{}: {} --> {}: {}", src_gate->get_name().c_str(), src_gate->get_id() - 1, dst_gate->get_id() - 1, dst_gate->get_name().c_str());
                 }
@@ -120,17 +117,19 @@ namespace hal
 
         igraph_create(graph, &edges, 0, IGRAPH_DIRECTED);
 
-        // map with vertice id to hal-gate
-        std::map<int, Gate*> vertice_to_gate;
+        igraph_vector_int_destroy(&edges);
+
+        // map with vertex id to hal-gate
+        std::map<int, Gate*> vertex_to_gate;
         for (auto const& gate : nl->get_gates())
         {
-            vertice_to_gate[gate->get_id() - 1] = gate;
+            vertex_to_gate[gate->get_id() - 1] = gate;
         }
 
-        return vertice_to_gate;
+        return vertex_to_gate;
     }
 
-    std::map<int, std::set<Gate*>> GraphAlgorithmPlugin::get_memberships_for_hal(igraph_t* graph, igraph_vector_t membership, std::map<int, Gate*> vertex_to_gate)
+    std::map<int, std::set<Gate*>> GraphAlgorithmPlugin::get_memberships_for_hal(igraph_t* graph, igraph_vector_int_t *membership, std::map<int, Gate*> vertex_to_gate)
     {
         // map back to HAL structures
         int vertices_num = (int)igraph_vcount(graph);
@@ -141,7 +140,7 @@ namespace hal
             auto gate = vertex_to_gate[i];
             if (gate == nullptr)
                 continue;
-            community_sets[VECTOR(membership)[i]].insert(gate);
+            community_sets[VECTOR(*membership)[i]].insert(gate);
         }
         return community_sets;
     }
