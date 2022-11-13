@@ -69,7 +69,7 @@ namespace hal
 
         /* transform all nets to igraph_real_t */
         igraph_integer_t *edges  = new igraph_integer_t[edge_counter];
-        u32 edge_vertice_counter = 0;
+        u32 edge_vertex_counter = 0;
         for (auto net : nl->get_nets())
         {
             assert(net->get_sources().size() == 1);
@@ -83,8 +83,8 @@ namespace hal
                 if (successor->get_gate() == nullptr)
                     continue;
                 auto successor_id             = nl_igraph_id_match[successor->get_gate()->get_id()];
-                edges[edge_vertice_counter++] = predecessor_id;
-                edges[edge_vertice_counter++] = successor_id;
+                edges[edge_vertex_counter++] = predecessor_id;
+                edges[edge_vertex_counter++] = successor_id;
             }
         }
 
@@ -96,10 +96,10 @@ namespace hal
         igraph_create(&graph, &netlist_edges, nl->get_gates().size(), IGRAPH_UNDIRECTED);
         igraph_vector_int_destroy(&netlist_edges);
 
-        /* remove double edges */
+        /* remove multi-edges */
         igraph_simplify(&graph, true, false, nullptr);
 
-        /* Louvain method without weights */
+        /* Greedy modularity maximization without weights */
         igraph_vector_int_t membership;
         igraph_vector_int_init(&membership, 0);
         igraph_community_fastgreedy(&graph, nullptr, nullptr, nullptr, &membership);
