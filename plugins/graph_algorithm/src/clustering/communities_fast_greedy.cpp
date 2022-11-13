@@ -20,19 +20,15 @@ namespace hal
         std::map<int, Gate*> vertex_to_gate = get_igraph_directed(nl, &graph);
 
         igraph_vector_int_t membership;
-        igraph_vector_t modularity;
-        igraph_matrix_int_t merges;
 
         igraph_to_undirected(&graph, IGRAPH_TO_UNDIRECTED_MUTUAL, 0);
 
-        igraph_vector_int_init(&membership, 1);
-        igraph_vector_init(&modularity, 1);
-        igraph_matrix_int_init(&merges, 1, 1);
+        igraph_vector_int_init(&membership, 0);
 
         igraph_community_fastgreedy(&graph,
                                     nullptr, /* no weights */
-                                    &merges,
-                                    &modularity,
+                                    nullptr,
+                                    nullptr,
                                     &membership);
 
         // map back to HAL structures
@@ -41,12 +37,9 @@ namespace hal
         {
             community_sets[VECTOR(membership)[i]].insert(vertex_to_gate[i]);
         }
-        //igraph_vector_destroy(&membership);
 
         igraph_destroy(&graph);
         igraph_vector_int_destroy(&membership);
-        igraph_vector_destroy(&modularity);
-        igraph_matrix_int_destroy(&merges);
 
         return community_sets;
     }

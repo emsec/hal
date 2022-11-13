@@ -20,13 +20,12 @@ namespace hal
         igraph_t graph;
         std::map<int, Gate*> vertex_to_gate = get_igraph_directed(nl, &graph);
 
-        igraph_vector_int_t membership, csize;
+        igraph_vector_int_t membership;
         igraph_integer_t number_of_clusters;
         igraph_vector_int_init(&membership, 0);
-        igraph_vector_int_init(&csize, 0);
 
         // run scc
-        igraph_connected_components(&graph, &membership, &csize, &number_of_clusters, IGRAPH_STRONG);
+        igraph_connected_components(&graph, &membership, nullptr, &number_of_clusters, IGRAPH_STRONG);
 
         // map back to HAL structures
         std::map<int, std::set<Gate*>> ssc_membership = get_memberships_for_hal(&graph, &membership, vertex_to_gate);
@@ -46,7 +45,6 @@ namespace hal
         // cleanup
         igraph_destroy(&graph);
         igraph_vector_int_destroy(&membership);
-        igraph_vector_int_destroy(&csize);
 
         return sccs;
     }

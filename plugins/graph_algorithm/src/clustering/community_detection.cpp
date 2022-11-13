@@ -101,14 +101,8 @@ namespace hal
 
         /* Louvain method without weights */
         igraph_vector_int_t membership;
-        igraph_vector_t modularity;
-        igraph_matrix_int_t merges;
         igraph_vector_int_init(&membership, 0);
-        igraph_vector_init(&modularity, 0);
-        igraph_matrix_int_init(&merges, 0, 0);
-        igraph_community_fastgreedy(&graph, nullptr, &merges, &modularity, &membership);
-        igraph_vector_destroy(&modularity);
-        igraph_matrix_int_destroy(&merges);
+        igraph_community_fastgreedy(&graph, nullptr, nullptr, nullptr, &membership);
         igraph_destroy(&graph);
 
         /* group gates by community membership */
