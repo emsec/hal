@@ -97,6 +97,7 @@ namespace hal
         connect(mSearchbar, &Searchbar::textEdited, this, &CommentWidget::handleSearchbarTextEdited);
         connect(mNewCommentButton, &QAbstractButton::clicked, this, &CommentWidget::handleNewCommentTriggered);
         connect(gCommentManager, &CommentManager::entryAboutToBeDeleted, this, &CommentWidget::handleCommentAboutToBeDeleted);
+        connect(gCommentManager, &CommentManager::entryAdded, this, &CommentWidget::handleCommentAdded);
     }
 
     CommentWidget::~CommentWidget()
@@ -118,6 +119,7 @@ namespace hal
 
     void CommentWidget::nodeChanged(const Node& nd)
     {
+        mCurrentNode = nd;
         mScrollArea->setWidget(createAndFillCommentContainerFactory(nd));
     }
 
@@ -165,7 +167,12 @@ namespace hal
     {
         qDebug() << "A new comment wants to be created!";
         CommentDialog commentDialog("New Comment");
-        commentDialog.exec();
+        if(commentDialog.exec() == QDialog::Accepted)
+        {
+            QString header = commentDialog.getHeader();
+            gCommentManager->addComment(new CommentEntry(mCurrentNode, commentDialog.getText(), commentDialog.getHeader()));
+        }
+        commentDialog.close();
     }
 
     void CommentWidget::handleCommentEntryDeleteRequest(CommentItem *item)
@@ -201,6 +208,21 @@ namespace hal
         mEntryItems.removeOne(commentItem);
         mScrollArea->widget()->layout()->removeWidget(commentItem);
         commentItem->deleteLater();
+    }
+
+    void CommentWidget::handleCommentAdded(CommentEntry *entry)
+    {
+        if(entry->getNode() != mCurrentNode)
+            return;
+
+        // 1. just update all...
+        nodeChanged(mCurrentNode);
+
+        // 2. manually just create new commentitem and insert it
+//        CommentItem* item = new CommentItem(entry);
+//        mEntryItems.insert(0, item);
+//        auto layout = dynamic_cast<QBoxLayout*>(mScrollArea->widget()->layout());
+//        layout->insertWidget(0, item);
     }
 
     void CommentWidget::handleSearchbarTextEdited(const QString &text)

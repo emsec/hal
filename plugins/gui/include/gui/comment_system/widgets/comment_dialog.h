@@ -56,6 +56,22 @@ namespace hal
         // Getter for the header and textfield if the dialog returns accapted?
         // (Or direct interaction with the manager?)
 
+        /**
+         * Returns the (new or modified) header of the comment. Usually called
+         * from the instance that requested the dialog after the user clicked OK.
+         *
+         * @return The header.
+         */
+        QString getHeader();
+
+        /**
+         * Returns the (new or modified) text of the comment. Usually called
+         * from the instance that requested the dialog after the user clicked OK.
+         *
+         * @return The actual comment in html format.
+         */
+        QString getText();
+
     private:
         QVBoxLayout* mLayout;
         CommentEntry* mCommentEntry;

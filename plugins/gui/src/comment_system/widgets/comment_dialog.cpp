@@ -37,6 +37,16 @@ namespace hal
 
     }
 
+    QString CommentDialog::getHeader()
+    {
+        return mHeaderEdit->text();
+    }
+
+    QString CommentDialog::getText()
+    {
+        return mTextEdit->toHtml();
+    }
+
     void CommentDialog::init()
     {
         setBaseSize(600, 400);

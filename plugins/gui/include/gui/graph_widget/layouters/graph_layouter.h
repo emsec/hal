@@ -363,6 +363,7 @@ namespace hal
         void updateSceneRect();
         static bool verifyModulePort(Net* n, const Node& modNode, bool isModInput);
         void handleCommentAboutToDeleted(CommentEntry* entry);
+        void handleCommentAdded(CommentEntry* entry);
 
         bool boxExists(const int x, const int y) const;
 

@@ -61,6 +61,7 @@ namespace hal
         QList<CommentItem*> mEntryItems;
         //QVBoxLayout* mTopLayout;
         QGridLayout* mTopLayout;
+        Node mCurrentNode;
 
         // header part
         QHBoxLayout* mHeaderLayout; //perhaps put in a container?
@@ -89,6 +90,7 @@ namespace hal
         // possible other params: commententry, node
         void handleCommentEntryDeleteRequest(CommentItem* item);
         void handleCommentAboutToBeDeleted(CommentEntry* entry);
+        void handleCommentAdded(CommentEntry* entry);
         void handleSearchbarTextEdited(const QString &text);
     };
 }

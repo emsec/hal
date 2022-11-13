@@ -24,12 +24,14 @@ namespace hal
             return;
         mNode = Node(nodeObj["id"].toInt(),(Node::NodeType)nodeObj["type"].toInt());
         mHeader = jsonObj["header"].toString();
-        mCreated = QDateTime::fromString(jsonObj["created"].toString());//, "dd. MMMM. d hh:mm::ss yyyy");
+        //mCreated = QDateTime::fromString(jsonObj["created"].toString());//, "ddd MMM d hh:mm::ss yyyy");
+        mCreated = QDateTime::fromString(jsonObj["created"].toString(), "ddd MMM d HH:mm:ss yyyy");
         mLastModified = QDateTime::fromString(jsonObj["modified"].toString());
         mText = jsonObj["text"].toString();
         qDebug() << "Entry created with date: " << mCreated.toString();
         qDebug() << "In field: " << jsonObj["created"].toString();
         qDebug() << "Is valid: " << mCreated.isValid();
+        qDebug() << QDateTime::fromString(jsonObj["created"].toString());
     }
 
     void CommentEntry::setHeader(QString newHeader)

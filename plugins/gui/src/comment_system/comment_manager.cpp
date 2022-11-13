@@ -126,7 +126,7 @@ namespace hal
     void CommentManager::deleteComment(CommentEntry *entry)
     {
         auto list = mEntries.values(entry->getNode());
-        if(!list.contains(entry)) // in case someone creasted an entry outside of the CommentManager context
+        if(!list.contains(entry)) // in case someone created an entry outside of the CommentManager context
             return;
 
         // all observer must finish handling the signal, otherwise big problems arise when the entry
@@ -137,6 +137,16 @@ namespace hal
         Q_EMIT entryAboutToBeDeleted(entry);
 
         delete entry;
+    }
+
+    void CommentManager::addComment(CommentEntry *entry)
+    {
+        // sanity check, dont add same entry twice
+        for(const auto &item : mEntries.values(entry->getNode()))
+            if(item == entry)  return;
+
+        mEntries.insertMulti(entry->getNode(), entry);
+        Q_EMIT entryAdded(entry);
     }
 
 }

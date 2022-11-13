@@ -93,15 +93,28 @@ namespace hal
          */
         void deleteComment(CommentEntry* entry);
 
+        /**
+         * @brief addComment
+         * @param entry
+         */
+        void addComment(CommentEntry* entry);
+
     Q_SIGNALS:
         /**
          * This signal is emmitted just before the entry is deleted (from the
          * deleteComment function).
          *
-         * @param nd - The associated node to which the entry belongs.
          * @param entry - The entry that will be deleted.
          */
         void entryAboutToBeDeleted(CommentEntry* entry);
+
+        /**
+         * This signal is emmitted when a new entry is added to the CommentManager
+         * (from the addComment function).
+         *
+         * @param entry - The entry that was added.
+         */
+        void entryAdded(CommentEntry* entry);
 
     private:
         QMultiHash<Node,CommentEntry*> mEntries;

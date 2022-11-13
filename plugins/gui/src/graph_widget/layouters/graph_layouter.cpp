@@ -49,6 +49,7 @@ namespace hal
             connect(details, &SelectionDetailsWidget::triggerHighlight, mScene, &GraphicsScene::handleHighlight);
 
         connect(gCommentManager, &CommentManager::entryAboutToBeDeleted, this, &GraphLayouter::handleCommentAboutToDeleted);
+        connect(gCommentManager, &CommentManager::entryAdded, this, &GraphLayouter::handleCommentAdded);
     }
 
     GraphLayouter::~GraphLayouter()
@@ -428,7 +429,15 @@ namespace hal
     void GraphLayouter::handleCommentAboutToDeleted(CommentEntry *entry)
     {
         // if this becomes too slow, go through the bubble list and only update
-        // the corresponding gate
+        // the corresponding gate/module
+        clearComments();
+        drawComments();
+    }
+
+    void GraphLayouter::handleCommentAdded(CommentEntry *entry)
+    {
+        // if this becomes too slow, go through the bubble list and only update
+        // the corresponding gate/module
         clearComments();
         drawComments();
     }
