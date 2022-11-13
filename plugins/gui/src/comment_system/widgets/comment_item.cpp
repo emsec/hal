@@ -8,7 +8,6 @@
 #include <QLabel>
 #include <QAction>
 #include <QToolButton>
-#include <QTextEdit>
 #include <QDebug>
 
 
@@ -43,6 +42,28 @@ namespace hal
         mCreationDate->setText("  " + mEntry->getCreationTime().toString("dd.MM.yy hh:mm"));
         mTextEdit->setHtml(mEntry->getText());
         //setFixedHeight(mTopWidget->height()+mText->height());
+    }
+
+    bool CommentItem::search(const QString &string, QTextDocument::FindFlags options)
+    {
+        bool found = false;
+        QList<QTextEdit::ExtraSelection> extraSelections;
+
+        mTextEdit->moveCursor(QTextCursor::Start);
+        QColor color            = QColor(12, 15, 19);
+        QColor mBackgroundColor = QColor(255, 255, 0);
+
+        while (mTextEdit->find(string, options))
+        {
+            found = true; // just return if something is found, position doesnt matter
+            QTextEdit::ExtraSelection extra;
+            extra.format.setForeground(QBrush(color));
+            extra.format.setBackground(mBackgroundColor);
+            extra.cursor = mTextEdit->textCursor();
+            extraSelections.append(extra);
+        }
+        mTextEdit->setExtraSelections(extraSelections);
+        return found;
     }
 
     CommentEntry *CommentItem::getEntry()

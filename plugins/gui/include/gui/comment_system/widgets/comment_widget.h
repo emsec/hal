@@ -89,5 +89,6 @@ namespace hal
         // possible other params: commententry, node
         void handleCommentEntryDeleteRequest(CommentItem* item);
         void handleCommentAboutToBeDeleted(CommentEntry* entry);
+        void handleSearchbarTextEdited(const QString &text);
     };
 }

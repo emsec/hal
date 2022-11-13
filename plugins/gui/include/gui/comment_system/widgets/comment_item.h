@@ -24,6 +24,7 @@
 #pragma once
 
 #include <QFrame>
+#include <QTextEdit>
 
 
 class QVBoxLayout;
@@ -32,7 +33,6 @@ class QToolBar;
 class QLabel;
 class QAction;
 class QToolButton;
-class QTextEdit;
 
 namespace hal
 {
@@ -48,6 +48,7 @@ namespace hal
 
         void setComment(CommentEntry* entry);
         void updateCurrentEntry();
+        bool search(const QString& string, QTextDocument::FindFlags options = QTextDocument::FindFlags());
 
         CommentEntry* getEntry();
 

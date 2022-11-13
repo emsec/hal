@@ -25,6 +25,7 @@ namespace hal
         mTopLayout->setMargin(0);
         mTopLayout->setSpacing(0);
         mSearchbar = new Searchbar();
+        mSearchbar->setEmitTextWithFlags(false);
         mSearchbar->hide();
 
         // top bar
@@ -93,6 +94,7 @@ namespace hal
         // connections / logic
         connect(mSearchButton, &QAbstractButton::clicked, this, &CommentWidget::handleSearchbarTriggered);
         connect(mSearchbar, &Searchbar::searchIconClicked, this, &CommentWidget::handleSearchbarTriggered);
+        connect(mSearchbar, &Searchbar::textEdited, this, &CommentWidget::handleSearchbarTextEdited);
         connect(mNewCommentButton, &QAbstractButton::clicked, this, &CommentWidget::handleNewCommentTriggered);
         connect(gCommentManager, &CommentManager::entryAboutToBeDeleted, this, &CommentWidget::handleCommentAboutToBeDeleted);
     }
@@ -199,6 +201,21 @@ namespace hal
         mEntryItems.removeOne(commentItem);
         mScrollArea->widget()->layout()->removeWidget(commentItem);
         commentItem->deleteLater();
+    }
+
+    void CommentWidget::handleSearchbarTextEdited(const QString &text)
+    {
+        for(const auto &item : mEntryItems)
+        {
+            if(item->search(text))
+            {
+                // jump to last location
+                // if one wants to jump to the first location and cicle through the hits with the enter-key,
+                // the keypressedevent event must be overriden and an index list with the indices corresponding
+                // to the commentitems must be saved here together with a currentIndex var
+                mScrollArea->ensureWidgetVisible(item);
+            }
+        }
     }
 
 }
