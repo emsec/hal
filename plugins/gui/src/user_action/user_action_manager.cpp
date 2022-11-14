@@ -123,6 +123,7 @@ namespace hal
             }
         }
         mStartRecording = -1;
+        return QMessageBox::Ok;
     }
 
     void UserActionManager::playMacro(const QString& macroFilename)
