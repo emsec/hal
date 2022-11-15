@@ -94,10 +94,20 @@ namespace hal
         void deleteComment(CommentEntry* entry);
 
         /**
-         * @brief addComment
-         * @param entry
+         * Adds a new comment Entry.
+         *
+         * @param entry - The new entry.
          */
         void addComment(CommentEntry* entry);
+
+        /**
+         * This function must be called whenever an instance modifies an entry.
+         * Similiar as to the selectionModel.
+         *
+         * @param entry - The modified entry.
+         * @param sender - The sender.
+         */
+        void relayEntryModified(CommentEntry* entry);
 
     Q_SIGNALS:
         /**
@@ -115,6 +125,15 @@ namespace hal
          * @param entry - The entry that was added.
          */
         void entryAdded(CommentEntry* entry);
+
+        /**
+         * This signal is emmited whenever an entry is modified. To emit this signal,
+         * the function relayEntryModifed must be called from the instance that modified
+         * the entry. Similiar as to the selectionModel.
+         *
+         * @param entry - The modified entry.
+         */
+        void entryModified(CommentEntry* entry);
 
     private:
         QMultiHash<Node,CommentEntry*> mEntries;

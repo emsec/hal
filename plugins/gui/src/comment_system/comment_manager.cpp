@@ -149,4 +149,9 @@ namespace hal
         Q_EMIT entryAdded(entry);
     }
 
+    void CommentManager::relayEntryModified(CommentEntry *entry)
+    {
+        Q_EMIT entryModified(entry);
+    }
+
 }

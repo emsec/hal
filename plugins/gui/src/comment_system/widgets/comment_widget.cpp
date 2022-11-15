@@ -98,6 +98,7 @@ namespace hal
         connect(mNewCommentButton, &QAbstractButton::clicked, this, &CommentWidget::handleNewCommentTriggered);
         connect(gCommentManager, &CommentManager::entryAboutToBeDeleted, this, &CommentWidget::handleCommentAboutToBeDeleted);
         connect(gCommentManager, &CommentManager::entryAdded, this, &CommentWidget::handleCommentAdded);
+        connect(gCommentManager, &CommentManager::entryModified, this, &CommentWidget::handleEntryModified);
     }
 
     CommentWidget::~CommentWidget()
@@ -208,6 +209,25 @@ namespace hal
         mEntryItems.removeOne(commentItem);
         mScrollArea->widget()->layout()->removeWidget(commentItem);
         commentItem->deleteLater();
+    }
+
+    void CommentWidget::handleEntryModified(CommentEntry *entry)
+    {
+        if(entry->getNode() != mCurrentNode)
+            return;
+
+        CommentItem* commentItem = nullptr;
+        for(const auto& item : mEntryItems)
+        {
+            if(item->getEntry() == entry)
+            {
+                commentItem = item;
+                break;
+            }
+        }
+
+        if(!commentItem) return;
+        commentItem->updateCurrentEntry();
     }
 
     void CommentWidget::handleCommentAdded(CommentEntry *entry)

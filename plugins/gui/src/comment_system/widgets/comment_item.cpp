@@ -1,6 +1,7 @@
 #include "gui/comment_system/widgets/comment_item.h"
 #include "gui/comment_system/comment_entry.h"
 #include "gui/comment_system/widgets/comment_dialog.h"
+#include "gui/gui_globals.h"
 
 #include <QToolBar>
 #include <QVBoxLayout>
@@ -137,6 +138,15 @@ namespace hal
     {
         qDebug() << "I want to be modified!";
         CommentDialog dialog("Modify Comment", mEntry);
-        dialog.exec();
+        if(dialog.exec() == QDialog::Accepted)
+        {
+            mEntry->setHeader(dialog.getHeader());
+            mEntry->setText(dialog.getText());
+            // relay modification through manager, let comment-widget call this function
+            // updateCurrentEntry();
+            gCommentManager->relayEntryModified(mEntry);
+        }
+
+        dialog.close();
     }
 }
