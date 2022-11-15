@@ -38,11 +38,11 @@ namespace hal
 
                 if (output_pins.size() > 1)
                 {
-                    log_error("verilator", "unsupported reached: currently only supporting LUTs with one output, split them into two and set the INIT string correctly :) ! aborting...");
+                    log_error("verilator", "unsupported reached: currently only supporting LUTs with one output, split them into two and set the LUT_INIT string correctly :) ! aborting...");
                     return function.str();
                 }
 
-                std::reverse(input_pins.begin(), input_pins.end());    // needs to be reverted due to access in INIT string
+                std::reverse(input_pins.begin(), input_pins.end());    // needs to be reverted due to access in LUT_INIT string
                 function << "wire [" << lut_size - 1 << ":0] lut_lookup = {";
                 for (const auto input_pin : input_pins)
                 {
@@ -53,7 +53,7 @@ namespace hal
 
                 for (const auto& output_pin : output_pins)
                 {
-                    function << "assign " << output_pin->get_name() << " = INIT[lut_lookup];" << std::endl;
+                    function << "assign " << output_pin->get_name() << " = LUT_INIT[lut_lookup];" << std::endl;
                 }
 
                 return function.str();
