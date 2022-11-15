@@ -4,7 +4,7 @@
 #include "netlist_simulator_controller/saleae_directory.h"
 #include "hal_core/utilities/json_write_document.h"
 #endif
-#if __APPLE__
+#if __APPLE__ && STANDALONE_PARSER
 #include "/opt/homebrew/include/rapidjson/document.h",
 #include "/opt/homebrew/include/rapidjson/reader.h",
 #include "/opt/homebrew/include/rapidjson/filereadstream.h",

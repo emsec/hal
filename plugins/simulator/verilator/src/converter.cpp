@@ -150,15 +150,22 @@ namespace hal
 
                     std::stringstream parameter;
 
+                    InitComponent* init_component = gt->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
+                    
+                    if (init_component == nullptr)
+                    {
+                        log_error("verilator", "Could not get init component for gate type {}!", gt->get_name());
+                    }
+
                     if (lut_init_descending)
                     {
                         parameter << "parameter [" << init_len - 1 << ":0]"
-                                  << " INIT = " << init_len << "'h" << std::setfill('0') << std::setw(init_len / 4) << 0 << ",";
+                                  <<  " " << init_component->get_init_identifiers().front() << " = " << init_len << "'h" << std::setfill('0') << std::setw(init_len / 4) << 0 << ",";
                     }
                     else
                     {
                         parameter << "parameter [0:" << init_len - 1 << "]"
-                                  << " INIT = " << init_len << "'h" << std::setfill('0') << std::setw(init_len / 4) << 0 << ",";
+                                  <<  " " << init_component->get_init_identifiers().front() << " = " << init_len << "'h" << std::setfill('0') << std::setw(init_len / 4) << 0 << ",";
                     }
 
                     parameters.push_back(parameter.str());
@@ -169,7 +176,7 @@ namespace hal
                     {
                         std::stringstream parameter;
                         parameter << "parameter [0:0]"
-                                  << " INIT = 1'b0,";
+                                  << " " << init_component->get_init_identifiers().front() <<  "= 1'b0,";
                         parameters.push_back(parameter.str());
                     }
                 }
