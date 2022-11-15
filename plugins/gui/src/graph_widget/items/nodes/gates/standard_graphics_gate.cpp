@@ -150,18 +150,20 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
         {
             Q_ASSERT(i < inpNets.size());
             u32 inpNetId = inpNets.at(i);
-            if (!inpNetId) continue;
             int yText = yFirstTextline + i * (sPinFontHeight + sPinInnerVerticalSpacing);
-            if (gGraphContextManager->sSettingNetGroupingToPins->value().toBool())
+            if (inpNetId)
             {
-                QColor pinBackground = gContentManager->getGroupingManagerWidget()->getModel()->colorForItem(ItemType::Net, inpNetId);
-                if (pinBackground.isValid())
+                if (gGraphContextManager->sSettingNetGroupingToPins->value().toBool())
                 {
-                    QBrush lastBrush = painter->brush();
-                    painter->setBrush(pinBackground);
-                    painter->setPen(QPen(pinBackground,0));
-                    painter->drawRoundRect(sPinOuterHorizontalSpacing,yText-sPinFontAscent,sPinFontHeight,sPinFontHeight,35,35);
-                    painter->setBrush(lastBrush);
+                    QColor pinBackground = gContentManager->getGroupingManagerWidget()->getModel()->colorForItem(ItemType::Net, inpNetId);
+                    if (pinBackground.isValid())
+                    {
+                        QBrush lastBrush = painter->brush();
+                        painter->setBrush(pinBackground);
+                        painter->setPen(QPen(pinBackground,0));
+                        painter->drawRoundRect(sPinOuterHorizontalSpacing,yText-sPinFontAscent,sPinFontHeight,sPinFontHeight,35,35);
+                        painter->setBrush(lastBrush);
+                    }
                 }
             }
             if (gateHasFocus)
@@ -180,18 +182,20 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
         {
             Q_ASSERT(i < outNets.size());
             u32 outNetId = outNets.at(i);
-            if (!outNetId) continue;
             int yText = yFirstTextline + i * (sPinFontHeight + sPinInnerVerticalSpacing);
-            if (gGraphContextManager->sSettingNetGroupingToPins->value().toBool())
+            if (outNetId)
             {
-                QColor pinBackground = gContentManager->getGroupingManagerWidget()->getModel()->colorForItem(ItemType::Net, outNets.at(i));
-                if (pinBackground.isValid())
+                if (gGraphContextManager->sSettingNetGroupingToPins->value().toBool())
                 {
-                    QBrush lastBrush = painter->brush();
-                    painter->setBrush(pinBackground);
-                    painter->setPen(QPen(pinBackground,0));
-                    painter->drawRoundRect(mWidth - sPinOuterHorizontalSpacing - sPinFontHeight,yText-sPinFontAscent,sPinFontHeight,sPinFontHeight,35,35);
-                    painter->setBrush(lastBrush);
+                    QColor pinBackground = gContentManager->getGroupingManagerWidget()->getModel()->colorForItem(ItemType::Net, outNets.at(i));
+                    if (pinBackground.isValid())
+                    {
+                        QBrush lastBrush = painter->brush();
+                        painter->setBrush(pinBackground);
+                        painter->setPen(QPen(pinBackground,0));
+                        painter->drawRoundRect(mWidth - sPinOuterHorizontalSpacing - sPinFontHeight,yText-sPinFontAscent,sPinFontHeight,sPinFontHeight,35,35);
+                        painter->setBrush(lastBrush);
+                    }
                 }
             }
             if (gateHasFocus)
