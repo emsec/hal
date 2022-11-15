@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Gate Library Manager &mdash; hal_py v4.0.1-54-g7a809d1e0 documentation</title>
+  <title>Gate Library Manager &mdash; hal_py v4.0.1-55-g0f3c3a3c5 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.0.1-54-g7a809d1e0
+                v4.0.1-55-g0f3c3a3c5
               </div>
             
           
@@ -198,7 +198,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of gate libraries.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="gate_library.html#hal_py.GateLibrary" title="hal_py.GateLibrary">hal_py.GateLibrary</a>]</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list[<a class="reference internal" href="gate_library.html#hal_py.GateLibrary" title="hal_py.GateLibrary">hal_py.GateLibrary</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -212,11 +212,11 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The input path.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file_path</strong> (<em>str</em>) – The input path.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The gate library on success, None otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="gate_library.html#hal_py.GateLibrary" title="hal_py.GateLibrary">hal_py.GateLibrary</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="gate_library.html#hal_py.GateLibrary" title="hal_py.GateLibrary">hal_py.GateLibrary</a> or None</td>
 </tr>
 </tbody>
 </table>
@@ -230,11 +230,11 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>lib_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name of the gate library.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>lib_name</strong> (<em>str</em>) – The name of the gate library.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The gate library on success, None otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="gate_library.html#hal_py.GateLibrary" title="hal_py.GateLibrary">hal_py.GateLibrary</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="gate_library.html#hal_py.GateLibrary" title="hal_py.GateLibrary">hal_py.GateLibrary</a> or None</td>
 </tr>
 </tbody>
 </table>
@@ -250,14 +250,14 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>file_path</strong> (<em>hal_py.hal_path</em>) – The input path.</li>
-<li><strong>reload</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – If true, reloads the library in case it is already loaded.</li>
+<li><strong>reload</strong> (<em>bool</em>) – If true, reloads the library in case it is already loaded.</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The gate library on success, None otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="gate_library.html#hal_py.GateLibrary" title="hal_py.GateLibrary">hal_py.GateLibrary</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="gate_library.html#hal_py.GateLibrary" title="hal_py.GateLibrary">hal_py.GateLibrary</a> or None</p>
 </td>
 </tr>
 </tbody>
@@ -272,7 +272,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>reload</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – If true, reloads all libraries that have already been loaded.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>reload</strong> (<em>bool</em>) – If true, reloads all libraries that have already been loaded.</td>
 </tr>
 </tbody>
 </table>
@@ -289,14 +289,14 @@
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>file_path</strong> (<em>hal_py.hal_path</em>) – The output path.</li>
 <li><strong>gate_lib</strong> (<a class="reference internal" href="gate_library.html#hal_py.GateLibrary" title="hal_py.GateLibrary"><em>hal_py.GateLibrary</em></a>) – The gate library.</li>
-<li><strong>overwrite</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – If true, overwrites already existing files.</li>
+<li><strong>overwrite</strong> (<em>bool</em>) – If true, overwrites already existing files.</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, false otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
 </td>
 </tr>
 </tbody>

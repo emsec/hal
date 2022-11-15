@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Gate Type &mdash; hal_py v4.0.1-54-g7a809d1e0 documentation</title>
+  <title>Gate Type &mdash; hal_py v4.0.1-55-g0f3c3a3c5 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.0.1-54-g7a809d1e0
+                v4.0.1-55-g0f3c3a3c5
               </div>
             
           
@@ -206,7 +206,7 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name of the Boolean function.</li>
+<li><strong>name</strong> (<em>str</em>) – The name of the Boolean function.</li>
 <li><strong>function</strong> (<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – The Boolean function.</li>
 </ul>
 </td>
@@ -223,7 +223,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>functions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>,</em><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a><em>]</em>) – A dict from names to Boolean functions.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>functions</strong> (<em>dict</em><em>[</em><em>str</em><em>,</em><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a><em>]</em>) – A dict from names to Boolean functions.</td>
 </tr>
 </tbody>
 </table>
@@ -251,7 +251,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>,<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a>]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">dict[str,<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -265,7 +265,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="gate_type_component.html#hal_py.GateTypeComponent" title="hal_py.GateTypeComponent">hal_py.GateTypeComponent</a>]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">list[<a class="reference internal" href="gate_type_component.html#hal_py.GateTypeComponent" title="hal_py.GateTypeComponent">hal_py.GateTypeComponent</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -478,7 +478,7 @@ If pin is a None, the Boolean function of the first output pin is returned.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A map from names to Boolean functions.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>,<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a>]</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict[str,<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -497,7 +497,7 @@ Returns None if (i) the gate type does not contain any components, (ii) multiple
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The component or None.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="gate_type_component.html#hal_py.GateTypeComponent" title="hal_py.GateTypeComponent">hal_py.GateTypeComponent</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="gate_type_component.html#hal_py.GateTypeComponent" title="hal_py.GateTypeComponent">hal_py.GateTypeComponent</a> or None</td>
 </tr>
 </tbody>
 </table>
@@ -516,7 +516,7 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The components.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="gate_type_component.html#hal_py.GateTypeComponent" title="hal_py.GateTypeComponent">hal_py.GateTypeComponent</a>]</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list[<a class="reference internal" href="gate_type_component.html#hal_py.GateTypeComponent" title="hal_py.GateTypeComponent">hal_py.GateTypeComponent</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -548,7 +548,7 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The unique ID of the gate type.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
 </tr>
 </tbody>
 </table>
@@ -564,7 +564,7 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">An ordered list of input pin names.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list[str]</td>
 </tr>
 </tbody>
 </table>
@@ -580,7 +580,7 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">An ordered list of input pins.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a>]</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list[<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -596,7 +596,7 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The name of the gate type.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
 </tr>
 </tbody>
 </table>
@@ -612,7 +612,7 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">An ordered list of output pin names.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list[str]</td>
 </tr>
 </tbody>
 </table>
@@ -628,7 +628,7 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">An ordered list of output pins.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a>]</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list[<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -642,11 +642,11 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The ID of the pin.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>id</strong> (<em>int</em>) – The ID of the pin.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pin on success, None otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a> or None</td>
 </tr>
 </tbody>
 </table>
@@ -660,11 +660,11 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name of the pin.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) – The name of the pin.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pin on success, None otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a> or None</td>
 </tr>
 </tbody>
 </table>
@@ -678,11 +678,11 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The ID of the pin group.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>id</strong> (<em>int</em>) – The ID of the pin group.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pin group on success, None otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="gate_pin_group.html#hal_py.GatePinGroup" title="hal_py.GatePinGroup">hal_py.GatePinGroup</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="gate_pin_group.html#hal_py.GatePinGroup" title="hal_py.GatePinGroup">hal_py.GatePinGroup</a> or None</td>
 </tr>
 </tbody>
 </table>
@@ -696,11 +696,11 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name of the pin group.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) – The name of the pin group.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pin group on success, None otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="gate_pin_group.html#hal_py.GatePinGroup" title="hal_py.GatePinGroup">hal_py.GatePinGroup</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="gate_pin_group.html#hal_py.GatePinGroup" title="hal_py.GatePinGroup">hal_py.GatePinGroup</a> or None</td>
 </tr>
 </tbody>
 </table>
@@ -721,7 +721,7 @@ The optional filter is evaluated on every candidate such that the result only co
 </tr>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">An ordered list of pins.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list[str]</td>
 </tr>
 </tbody>
 </table>
@@ -740,7 +740,7 @@ The optional filter is evaluated on every candidate such that the result only co
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">An ordered list of pins.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a>]</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list[<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -756,7 +756,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The properties of the gate type.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)">set</a>[<a class="reference internal" href="gate_type_property.html#hal_py.GateTypeProperty" title="hal_py.GateTypeProperty">hal_py.GateTypeProperty</a>]</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">set[<a class="reference internal" href="gate_type_property.html#hal_py.GateTypeProperty" title="hal_py.GateTypeProperty">hal_py.GateTypeProperty</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -774,7 +774,7 @@ The optional filter is evaluated on every candidate such that the result only co
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the gate type contains a component of the speciifed type, False otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
 </tr>
 </tbody>
 </table>
@@ -792,7 +792,7 @@ The optional filter is evaluated on every candidate such that the result only co
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the gate type has the specified property, false otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
 </tr>
 </tbody>
 </table>
@@ -819,7 +819,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">list[str]</td>
 </tr>
 </tbody>
 </table>
@@ -833,7 +833,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a>]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">list[<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -847,7 +847,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
 </tr>
 </tbody>
 </table>
@@ -861,7 +861,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">list[str]</td>
 </tr>
 </tbody>
 </table>
@@ -875,7 +875,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a>]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">list[<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -889,7 +889,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">list[str]</td>
 </tr>
 </tbody>
 </table>
@@ -903,7 +903,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a>]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">list[<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -917,7 +917,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)">set</a>[<a class="reference internal" href="gate_type_property.html#hal_py.GateTypeProperty" title="hal_py.GateTypeProperty">hal_py.GateTypeProperty</a>]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">set[<a class="reference internal" href="gate_type_property.html#hal_py.GateTypeProperty" title="hal_py.GateTypeProperty">hal_py.GateTypeProperty</a>]</td>
 </tr>
 </tbody>
 </table>
