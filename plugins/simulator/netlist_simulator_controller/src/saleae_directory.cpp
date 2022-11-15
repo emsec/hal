@@ -4,9 +4,16 @@
 #include "netlist_simulator_controller/saleae_directory.h"
 #include "hal_core/utilities/json_write_document.h"
 #endif
+#if __APPLE__
+#include "/opt/homebrew/include/rapidjson/document.h",
+#include "/opt/homebrew/include/rapidjson/reader.h",
+#include "/opt/homebrew/include/rapidjson/filereadstream.h",
+#else
 #include "rapidjson/document.h"
 #include "rapidjson/reader.h"
 #include "rapidjson/filereadstream.h"
+#endif
+
 #include <iostream>
 #include <sstream>
 

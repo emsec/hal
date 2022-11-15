@@ -226,6 +226,7 @@ namespace hal
                         retval.push_back("--compiler");
                         retval.push_back(m_compiler);
                     }
+
                     return retval;
                     break;
                 }
