@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   * fixed segfault that sometimes occurred when deleting a module
   * fixed saving absolute paths for Python files and not copying them to the new project folder when using `Save as...`
   * fixed some project manager bugs related to inaccessible files
+  * fixed missing Python binding for `GateType::get_pin_groups`
 
 ## [4.0.1] - 2022-10-24 15:33:15+02:00 (urgency: medium)
 * **WARNING:** this release breaks multiple APIs, please make sure to adjust your code accordingly.
