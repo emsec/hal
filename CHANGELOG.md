@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   * added (limited) support for 'defparam' statements to Verilog parser
   * added support for pin assignments by order instead of name to Verilog and VHDL parser
 * miscellaneous
+  * added functions `get_pin_names`, `get_input_pins`, `get_input_pin_names`, `get_output_pins`, and `get_output_pin_names` to class `Module`
   * added function `BooleanFunction::get_truth_table_as_string` that returns the truth table of a Boolean function as a formatted string
   * added missing GND, VCC, and RAM gate types to the `ICE40ULTRA` gate library
   * added Python bindings for the HAL project manager
