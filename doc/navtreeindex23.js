@@ -1,5 +1,10 @@
 var NAVTREEINDEX23 =
 {
+"gate__type__components_8cpp_source.html":[7,0,2,2,0,10],
+"gate__type__property_8cpp.html":[7,0,2,0,2,0,1],
+"gate__type__property_8cpp_source.html":[7,0,2,0,2,0,1],
+"gate__type__property_8h.html":[7,0,0,0,1,2,0,1],
+"gate__type__property_8h.html#adb8da04d2161f277bd489e806a2721ca":[7,0,0,0,1,2,0,1,0],
 "gate__type__property_8h.html#adb8da04d2161f277bd489e806a2721caa09e897936fa4da02957f3304dc672be5":[7,0,0,0,1,2,0,1,0,25],
 "gate__type__property_8h.html#adb8da04d2161f277bd489e806a2721caa166ed01a3c616006a15061e2342a75ba":[7,0,0,0,1,2,0,1,0,27],
 "gate__type__property_8h.html#adb8da04d2161f277bd489e806a2721caa1dd2a9451b66354387656e4bd889a615":[7,0,0,0,1,2,0,1,0,22],
@@ -63,8 +68,8 @@ var NAVTREEINDEX23 =
 "get__in__touch__widget_8cpp_source.html":[7,0,1,3,2,48,1],
 "get__in__touch__widget_8h.html":[7,0,1,3,0,0,51,1],
 "get__in__touch__widget_8h_source.html":[7,0,1,3,0,0,51,1],
-"globals.html":[7,1,0],
 "globals.html":[7,1,0,0],
+"globals.html":[7,1,0],
 "globals_a.html":[7,1,0,1],
 "globals_b.html":[7,1,0,2],
 "globals_c.html":[7,1,0,3],
@@ -241,13 +246,8 @@ var NAVTREEINDEX23 =
 "group__graph-visuals.html":[4,0,0,0],
 "group__graph.html":[4,0,0],
 "group__gui.html":[4,0],
-"group__gui.html#ga077e1c5730ec712b6b5e2328edd17c56":[4,0,58],
 "group__gui.html#ga077e1c5730ec712b6b5e2328edd17c56":[7,0,1,3,0,0,56,0],
+"group__gui.html#ga077e1c5730ec712b6b5e2328edd17c56":[4,0,58],
 "group__gui.html#ga284a43cae48443fa22ac672a8b6ea8a0":[4,0,57],
-"group__gui.html#gaab0cd38a41c1215ae70822b1d501daa1":[4,0,56],
-"group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1a5012af45088eb8e999bb8350077b12ca":[4,0,56,3],
-"group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1a6adf97f83acf6453d4a6a4b1070f3754":[4,0,56,0],
-"group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ad25b4bd4c72aa2c07ee87adb10b59f16":[4,0,56,2],
-"group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ae55f75a29310d7b60f7ac1d390c8ae42":[4,0,56,1],
-"group__logging.html":[4,0,3]
+"group__gui.html#gaab0cd38a41c1215ae70822b1d501daa1":[4,0,56]
 };

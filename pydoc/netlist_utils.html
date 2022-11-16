@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist Utils &mdash; hal_py v4.0.1-55-g0f3c3a3c5 documentation</title>
+  <title>Netlist Utils &mdash; hal_py v4.0.1-58-gaca2e42c9 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.0.1-55-g0f3c3a3c5
+                v4.0.1-58-gaca2e42c9
               </div>
             
           
@@ -217,15 +217,15 @@ If the theshold value is set to 0, a net must be input to all gates to be consid
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>gates</strong> (<em>list</em><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em>) – The gates.</li>
-<li><strong>threshold</strong> (<em>int</em>) – The threshold value, defaults to 0.</li>
+<li><strong>gates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em>) – The gates.</li>
+<li><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The threshold value, defaults to 0.</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The common input nets.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</p>
 </td>
 </tr>
 </tbody>
@@ -246,9 +246,9 @@ The optional filter is evaluated on every gate such that the result only contain
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>start_gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate at which to start the chain detection.</li>
-<li><strong>chain_types</strong> (<em>list</em><em>[</em><a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><em>hal_py.GateType</em></a><em>]</em>) – The sequence of gate types that is expected to make up the gate chain.</li>
-<li><strong>input_pins</strong> (<em>dict</em><em>[</em><a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><em>hal_py.GateType</em></a><em>,</em><em>set</em><em>[</em><em>str</em><em>]</em><em>]</em>) – The input pins through which the gates are allowed to be connected.</li>
-<li><strong>output_pins</strong> (<em>dict</em><em>[</em><a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><em>hal_py.GateType</em></a><em>,</em><em>set</em><em>[</em><em>str</em><em>]</em><em>]</em>) – The output pins through which the gates are allowed to be connected.</li>
+<li><strong>chain_types</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><em>hal_py.GateType</em></a><em>]</em>) – The sequence of gate types that is expected to make up the gate chain.</li>
+<li><strong>input_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>[</em><a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><em>hal_py.GateType</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – The input pins through which the gates are allowed to be connected.</li>
+<li><strong>output_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>[</em><a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><em>hal_py.GateType</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – The output pins through which the gates are allowed to be connected.</li>
 <li><strong>filter</strong> (<em>lambda</em>) – A filter that is evaluated on all candidates.</li>
 </ul>
 </td>
@@ -256,7 +256,7 @@ The optional filter is evaluated on every gate such that the result only contain
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of gates that form a chain.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</p>
 </td>
 </tr>
 </tbody>
@@ -275,7 +275,7 @@ The optional filter is evaluated on every gate such that the result only contain
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A pair consisting of std::map&lt;u32, Gate*&gt;, which includes the mapping from the original gate</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">pair(dict(int, <a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>), list[list[int]])</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">pair(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>, <a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>), <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>]])</td>
 </tr>
 </tbody>
 </table>
@@ -294,8 +294,8 @@ The optional filter is evaluated on every gate such that the result only contain
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>start_gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate at which to start the chain detection.</li>
-<li><strong>input_pins</strong> (<em>list</em><em>[</em><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a><em>]</em>) – The input pins through which the gates must be connected. Defaults to an empty list.</li>
-<li><strong>output_pins</strong> (<em>set</em><em>[</em><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a><em>]</em>) – The output pins through which the gates must be connected. Defaults to an empty list.</li>
+<li><strong>input_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a><em>]</em>) – The input pins through which the gates must be connected. Defaults to an empty list.</li>
+<li><strong>output_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)"><em>set</em></a><em>[</em><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a><em>]</em>) – The output pins through which the gates must be connected. Defaults to an empty list.</li>
 <li><strong>filter</strong> (<em>lambda</em>) – An optional filter function to be evaluated on each gate.</li>
 </ul>
 </td>
@@ -303,7 +303,7 @@ The optional filter is evaluated on every gate such that the result only contain
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of gates that form a chain on success, an empty list on error.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</p>
 </td>
 </tr>
 </tbody>
@@ -320,14 +320,14 @@ The optional filter is evaluated on every gate such that the result only contain
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate.</li>
-<li><strong>pins</strong> (<em>list</em><em>[</em><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a><em>]</em>) – The targeted pins.</li>
+<li><strong>pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a><em>]</em>) – The targeted pins.</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The list of nets connected to the pins.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</p>
 </td>
 </tr>
 </tbody>
@@ -648,8 +648,8 @@ If there is no such path an empty vector is returned. If there is more than one 
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>input_pins</strong> (<em>dict</em><em>[</em><a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><em>hal_py.GateType</em></a><em>,</em><em>list</em><em>[</em><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a><em>]</em><em>]</em>) – The input pins (of every gate type of the sequence) through which the gates must be connected.</li>
-<li><strong>output_pins</strong> (<em>dict</em><em>[</em><a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><em>hal_py.GateType</em></a><em>,</em><em>list</em><em>[</em><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a><em>]</em><em>]</em>) – The output pins (of every gate type of the sequence) through which the gates must be connected.</li>
+<li><strong>input_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>[</em><a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><em>hal_py.GateType</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a><em>]</em><em>]</em>) – The input pins (of every gate type of the sequence) through which the gates must be connected.</li>
+<li><strong>output_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>[</em><a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><em>hal_py.GateType</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a><em>]</em><em>]</em>) – The output pins (of every gate type of the sequence) through which the gates must be connected.</li>
 <li><strong>filter</strong> (<em>lambda</em>) – An optional filter function to be evaluated on each gate.</li>
 </ul>
 </td>
@@ -657,7 +657,7 @@ If there is no such path an empty vector is returned. If there is more than one 
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of gates that form a chain on success, an empty list on error.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</p>
 </td>
 </tr>
 </tbody>
@@ -675,7 +675,7 @@ The variables of the resulting Boolean function are made up of the IDs of the ne
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The output net for which to generate the Boolean function.</li>
-<li><strong>subgraph_gates</strong> (<em>list</em><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em>) – The gates making up the subgraph.</li>
+<li><strong>subgraph_gates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em>) – The gates making up the subgraph.</li>
 </ul>
 </td>
 </tr>
@@ -700,14 +700,14 @@ If enabled, analyzes every gate’s inputs and removes fixed ‘0’ or ‘1’ 
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>netlist</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The target netlist.</li>
-<li><strong>analyze_inputs</strong> (<em>bool</em>) – Set True to dynamically analyze the inputs, False otherwise.</li>
+<li><strong>analyze_inputs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set True to dynamically analyze the inputs, False otherwise.</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The number of removed buffers on success, -1 otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></p>
 </td>
 </tr>
 </tbody>
@@ -726,7 +726,7 @@ If enabled, analyzes every gate’s inputs and removes fixed ‘0’ or ‘1’ 
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The number of removed endpionts on success, -1 otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></td>
 </tr>
 </tbody>
 </table>
@@ -745,14 +745,14 @@ A pin can be omitted if no connection at that pin is desired.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate to be replaced.</li>
 <li><strong>target_type</strong> (<a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><em>hal_py.GateType</em></a>) – The gate type of the replacement gate.</li>
-<li><strong>pin_map</strong> (<em>dict</em><em>[</em><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a><em>,</em><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a><em>]</em>) – A dict from old to new pins.</li>
+<li><strong>pin_map</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>[</em><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a><em>,</em><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a><em>]</em>) – A dict from old to new pins.</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, False otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
 </td>
 </tr>
 </tbody>

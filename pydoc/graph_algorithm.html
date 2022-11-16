@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Graph Algorithms &mdash; hal_py v4.0.1-55-g0f3c3a3c5 documentation</title>
+  <title>Graph Algorithms &mdash; hal_py v4.0.1-58-gaca2e42c9 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.0.1-55-g0f3c3a3c5
+                v4.0.1-58-gaca2e42c9
               </div>
             
           
@@ -179,7 +179,7 @@
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A dict from community IDs to communities.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict[int,set[hal_py.get_gate()]]</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)">set</a>[hal_py.get_gate()]]</td>
 </tr>
 </tbody>
 </table>
@@ -197,7 +197,7 @@
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A dict from community IDs to communities.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict[set[hal_py.get_gate()]]</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)">set</a>[hal_py.get_gate()]]</td>
 </tr>
 </tbody>
 </table>
@@ -213,14 +213,14 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>netlist</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</li>
-<li><strong>spins</strong> (<em>int</em>) – The number of spins.</li>
+<li><strong>spins</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The number of spins.</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A dict from community IDs to communities.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict[int,set[hal_py.get_gate()]]</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)">set</a>[hal_py.get_gate()]]</p>
 </td>
 </tr>
 </tbody>
@@ -239,15 +239,15 @@ The graph cut is returned as a list of sets of gates with the list’s index rep
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>netlist</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</li>
 <li><strong>gate</strong> (<em>hal_py.get_gate</em><em>(</em><em>)</em>) – The gate that is the starting point for the graph cut.</li>
-<li><strong>depth</strong> (<em>int</em>) – The depth of the graph cut.</li>
-<li><strong>terminal_gate_type</strong> (<em>set</em><em>[</em><em>str</em><em>]</em>) – A set of gates at which to terminate the graph cut.</li>
+<li><strong>depth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The depth of the graph cut.</li>
+<li><strong>terminal_gate_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em>) – A set of gates at which to terminate the graph cut.</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The graph cut as a list of sets of gates.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list[set[hal_py.get_gate()]]</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)">set</a>[hal_py.get_gate()]]</p>
 </td>
 </tr>
 </tbody>
@@ -264,7 +264,7 @@ The graph cut is returned as a list of sets of gates with the list’s index rep
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Plugin name.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></td>
 </tr>
 </tbody>
 </table>
@@ -282,7 +282,7 @@ The graph cut is returned as a list of sets of gates with the list’s index rep
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of SCCs.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list[list[hal_py.get_gate()]]</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[hal_py.get_gate()]]</td>
 </tr>
 </tbody>
 </table>
@@ -298,7 +298,7 @@ The graph cut is returned as a list of sets of gates with the list’s index rep
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Plugin version.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></td>
 </tr>
 </tbody>
 </table>
@@ -312,7 +312,7 @@ The graph cut is returned as a list of sets of gates with the list’s index rep
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></td>
 </tr>
 </tbody>
 </table>
@@ -326,7 +326,7 @@ The graph cut is returned as a list of sets of gates with the list’s index rep
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></td>
 </tr>
 </tbody>
 </table>
