@@ -324,6 +324,9 @@ namespace hal
         }
         else
         {
+            // failed to create project: if netlist was moved move back before deleting directory
+            if (ind.isMoveNetlistChecked())
+                QDir().rename(netlistFilename,filename);
             if (pm->remove_project_directory())
                 log_info("gui", "Project directory removed since import failed.");
             else
