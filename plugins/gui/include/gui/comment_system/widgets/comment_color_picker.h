@@ -24,6 +24,10 @@
 #pragma once
 
 #include <QDialog>
+#include <QVBoxLayout>
+#include <QColor>
+
+class QRadioButton;
 
 namespace hal
 {
@@ -31,9 +35,28 @@ namespace hal
     class CommentColorPicker : public QDialog
     {
         public:
-        CommentColorPicker(QWidget* parent = nullptr);
+
+            enum class Color {Default, Red, Yellow, Green};
+            CommentColorPicker(QWidget* parent = nullptr);
+
+            void setInitColor(CommentColorPicker::Color color);
+            QColor getSelectedColor();
 
         private:
+            QVBoxLayout* mLayout;
+
+            QRadioButton* mDefaultButton;
+            QRadioButton* mRedButton;
+            QRadioButton* mYellowButton;
+            QRadioButton* mGreenButton;
+
+            QColor mRedColor;
+            QColor mGreenColor;
+            QColor mYellowColor;
+            QColor mDefaultColor;
+
+            void handleOkClicked();
+            void handleCancelClicked();
     };
 
 }

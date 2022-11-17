@@ -100,7 +100,7 @@ namespace hal
 
 
         // buttons
-        QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok |  QDialogButtonBox::Cancel);
+        QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok |  QDialogButtonBox::Cancel, this);
 
 //        QHBoxLayout* buttonLayout = new QHBoxLayout;
 //        mOkButton = new QPushButton("Ok");
@@ -181,20 +181,34 @@ namespace hal
     void CommentDialog::colorTriggered()
     {
         CommentColorPicker ccp;
-        ccp.close();
-        //QColorDialog colorDialog(mTextEdit->textColor(), this);
-        QColorDialog colorDialog(QColor("#A9B7C6"), this);
-        colorDialog.setCustomColor(0, QColor("#A9B7C6")); // the default color textcolor is preserved so that the user can revert to it
-        if(colorDialog.exec() == QDialog::Accepted)
+        if(ccp.exec() == QDialog::Accepted)
         {
-            QColor color = colorDialog.selectedColor();
+            QColor color = ccp.getSelectedColor();
             if(!color.isValid()) return;
             QTextCharFormat fmt;
             fmt.setForeground(color);
             mergeFormatOnWordOrSelection(fmt);
             updateColorActionPixmap(color);
         }
-        colorDialog.close(); // otherwise xcb connection error...
+        ccp.close();
+
+
+        //QColorDialog colorDialog(mTextEdit->textColor(), this);
+//        QColorDialog colorDialog(QColor("#A9B7C6"), this);
+//        colorDialog.setCustomColor(0, QColor("#A9B7C6")); // the default color textcolor is preserved so that the user can revert to it
+//        if(colorDialog.exec() == QDialog::Accepted)
+//        {
+//            QColor color = colorDialog.selectedColor();
+//            if(!color.isValid()) return;
+//            QTextCharFormat fmt;
+//            fmt.setForeground(color);
+//            mergeFormatOnWordOrSelection(fmt);
+//            updateColorActionPixmap(color);
+//        }
+//        colorDialog.close(); // otherwise xcb connection error...
+
+
+
 
 //        QColor color = QColorDialog::getColor(mTextEdit->textColor(), this);
 //        if(!color.isValid()) return;
