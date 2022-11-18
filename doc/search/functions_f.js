@@ -255,7 +255,7 @@ var searchData=
   ['project_26133',['project',['https://doc.qt.io/qt-5/qvector3d.html#project',1,'QVector3D']]],
   ['project_5fmanager_5finit_26134',['project_manager_init',['../group__pybind.html#gac072de2b8e9f09d8320090e5873be90d',1,'hal']]],
   ['projectdirdialog_26135',['ProjectDirDialog',['../classhal_1_1_project_dir_dialog.html#a07c3012a6ecdc9b87e613fab379091d3',1,'hal::ProjectDirDialog']]],
-  ['projectdirectory_26136',['projectDirectory',['../classhal_1_1_import_netlist_dialog.html#a5080c5299f1991b4d4389501ecba24f5',1,'hal::ImportNetlistDialog::projectDirectory()'],['../classhal_1_1_new_project_dialog.html#abfb87429ef84485dec41f3f8ece4fb18',1,'hal::NewProjectDialog::projectDirectory()'],['../classhal_1_1_project_directory.html#afc56b51c951555d2c408fee932d762c0',1,'hal::ProjectDirectory::ProjectDirectory()']]],
+  ['projectdirectory_26136',['ProjectDirectory',['../classhal_1_1_project_directory.html#afc56b51c951555d2c408fee932d762c0',1,'hal::ProjectDirectory::ProjectDirectory()'],['../classhal_1_1_import_netlist_dialog.html#a5080c5299f1991b4d4389501ecba24f5',1,'hal::ImportNetlistDialog::projectDirectory()'],['../classhal_1_1_new_project_dialog.html#abfb87429ef84485dec41f3f8ece4fb18',1,'hal::NewProjectDialog::projectDirectory()']]],
   ['projectopened_26137',['projectOpened',['../classhal_1_1_file_manager.html#ad0826acdc85c5fb03e0eae1259822635',1,'hal::FileManager']]],
   ['projectsaved_26138',['projectSaved',['../classhal_1_1_file_manager.html#a7866d600e9ead9829f6a61018d8b80f2',1,'hal::FileManager']]],
   ['projectserializer_26139',['ProjectSerializer',['../classhal_1_1_project_serializer.html#a6f96199fe6c278154cf4e6d4cab9c920',1,'hal::ProjectSerializer']]],

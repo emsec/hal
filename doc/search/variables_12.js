@@ -178,7 +178,7 @@ var searchData=
   ['rg_5fati2n_5fsnorm_35736',['RG_ATI2N_SNorm',['https://doc.qt.io/qt-5/qopengltexture.html#TextureFormat-enum',1,'QOpenGLTexture']]],
   ['rg_5fati2n_5funorm_35737',['RG_ATI2N_UNorm',['https://doc.qt.io/qt-5/qopengltexture.html#TextureFormat-enum',1,'QOpenGLTexture']]],
   ['rg_5finteger_35738',['RG_Integer',['https://doc.qt.io/qt-5/qopengltexture.html#PixelFormat-enum',1,'QOpenGLTexture']]],
-  ['rgb_35739',['RGB',['https://doc.qt.io/qt-5/qopengltexture.html#PixelFormat-enum',1,'QOpenGLTexture::RGB()'],['https://doc.qt.io/qt-5/qpixelformat.html#ColorModel-enum',1,'QPixelFormat::RGB()'],['https://doc.qt.io/qt-5/qcolor.html#Spec-enum',1,'QColor::Rgb()']]],
+  ['rgb_35739',['Rgb',['https://doc.qt.io/qt-5/qcolor.html#Spec-enum',1,'QColor::Rgb()'],['https://doc.qt.io/qt-5/qopengltexture.html#PixelFormat-enum',1,'QOpenGLTexture::RGB()'],['https://doc.qt.io/qt-5/qpixelformat.html#ColorModel-enum',1,'QPixelFormat::RGB()']]],
   ['rgb10a2_35740',['RGB10A2',['https://doc.qt.io/qt-5/qopengltexture.html#TextureFormat-enum',1,'QOpenGLTexture']]],
   ['rgb16_5fsnorm_35741',['RGB16_SNorm',['https://doc.qt.io/qt-5/qopengltexture.html#TextureFormat-enum',1,'QOpenGLTexture']]],
   ['rgb16_5funorm_35742',['RGB16_UNorm',['https://doc.qt.io/qt-5/qopengltexture.html#TextureFormat-enum',1,'QOpenGLTexture']]],
