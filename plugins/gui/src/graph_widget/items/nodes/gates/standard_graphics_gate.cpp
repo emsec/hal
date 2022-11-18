@@ -151,21 +151,7 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
             Q_ASSERT(i < inpNets.size());
             u32 inpNetId = inpNets.at(i);
             int yText = yFirstTextline + i * (sPinFontHeight + sPinInnerVerticalSpacing);
-            if (inpNetId)
-            {
-                if (gGraphContextManager->sSettingNetGroupingToPins->value().toBool())
-                {
-                    QColor pinBackground = gContentManager->getGroupingManagerWidget()->getModel()->colorForItem(ItemType::Net, inpNetId);
-                    if (pinBackground.isValid())
-                    {
-                        QBrush lastBrush = painter->brush();
-                        painter->setBrush(pinBackground);
-                        painter->setPen(QPen(pinBackground,0));
-                        painter->drawRoundRect(sPinOuterHorizontalSpacing,yText-sPinFontAscent,sPinFontHeight,sPinFontHeight,35,35);
-                        painter->setBrush(lastBrush);
-                    }
-                }
-            }
+
             if (gateHasFocus)
                 if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Left
                         && i == subFocusIndex)
@@ -173,7 +159,26 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
                 else
                     sPen.setColor(sTextColor);
             else
-                sPen.setColor(penColor(option->state,sTextColor));
+            {
+                QColor pinTextColor = penColor(option->state,sTextColor);
+                if (inpNetId)
+                {
+                    if (gGraphContextManager->sSettingNetGroupingToPins->value().toBool())
+                    {
+                        QColor pinBackground = gContentManager->getGroupingManagerWidget()->getModel()->colorForItem(ItemType::Net, inpNetId);
+                        if (pinBackground.isValid())
+                        {
+                            QBrush lastBrush = painter->brush();
+                            painter->setBrush(pinBackground);
+                            painter->setPen(QPen(pinBackground,0));
+                            painter->drawRoundRect(sPinOuterHorizontalSpacing,yText-sPinFontAscent,sPinFontHeight,sPinFontHeight,35,35);
+                            painter->setBrush(lastBrush);
+                            pinTextColor = legibleColor(pinBackground);
+                        }
+                    }
+                }
+                sPen.setColor(pinTextColor);
+            }
             painter->setPen(sPen);
             painter->drawText(QPointF(sPinOuterHorizontalSpacing,yText), mInputPins.at(i));
         }
@@ -183,21 +188,6 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
             Q_ASSERT(i < outNets.size());
             u32 outNetId = outNets.at(i);
             int yText = yFirstTextline + i * (sPinFontHeight + sPinInnerVerticalSpacing);
-            if (outNetId)
-            {
-                if (gGraphContextManager->sSettingNetGroupingToPins->value().toBool())
-                {
-                    QColor pinBackground = gContentManager->getGroupingManagerWidget()->getModel()->colorForItem(ItemType::Net, outNets.at(i));
-                    if (pinBackground.isValid())
-                    {
-                        QBrush lastBrush = painter->brush();
-                        painter->setBrush(pinBackground);
-                        painter->setPen(QPen(pinBackground,0));
-                        painter->drawRoundRect(mWidth - sPinOuterHorizontalSpacing - sPinFontHeight,yText-sPinFontAscent,sPinFontHeight,sPinFontHeight,35,35);
-                        painter->setBrush(lastBrush);
-                    }
-                }
-            }
             if (gateHasFocus)
                 if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Right
                         && i == subFocusIndex)
@@ -205,7 +195,26 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
                 else
                     sPen.setColor(sTextColor);
             else
-               sPen.setColor(penColor(option->state,sTextColor));
+            {
+                QColor pinTextColor = penColor(option->state,sTextColor);
+                if (outNetId)
+                {
+                    if (gGraphContextManager->sSettingNetGroupingToPins->value().toBool())
+                    {
+                        QColor pinBackground = gContentManager->getGroupingManagerWidget()->getModel()->colorForItem(ItemType::Net, outNets.at(i));
+                        if (pinBackground.isValid())
+                        {
+                            QBrush lastBrush = painter->brush();
+                            painter->setBrush(pinBackground);
+                            painter->setPen(QPen(pinBackground,0));
+                            painter->drawRoundRect(mWidth - sPinOuterHorizontalSpacing - sPinFontHeight,yText-sPinFontAscent,sPinFontHeight,sPinFontHeight,35,35);
+                            painter->setBrush(lastBrush);
+                            pinTextColor = legibleColor(pinBackground);
+                        }
+                    }
+                }
+                sPen.setColor(pinTextColor);
+            }
             painter->setPen(sPen);
             painter->drawText(mOutputPinPositions.at(i), mOutputPins.at(i));
         }
@@ -241,6 +250,17 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
             }
         }
     }
+}
+
+QColor StandardGraphicsGate::legibleColor(const QColor& bgColor)
+{
+    // brightness of color according to YUV color scheme
+    const static float kr = 0.229;
+    const static float kb = 0.114;
+    float y = kr*bgColor.red() + (1-kr-kb)*bgColor.green() + kb*bgColor.blue();
+
+    if (y > 127.5) return QColor(Qt::black);
+    return QColor(Qt::white);
 }
 
 QPointF StandardGraphicsGate::getInputScenePosition(const u32 mNetId, const QString& pin_type) const
