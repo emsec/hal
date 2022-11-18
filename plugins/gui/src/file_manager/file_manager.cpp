@@ -287,6 +287,13 @@ namespace hal
         QString projdir = ind.projectDirectory();
         if (projdir.isEmpty()) return;
 
+        if (!QFileInfo(projdir).suffix().isEmpty())
+        {
+            QMessageBox::warning(qApp->activeWindow(),"Aborted", "selected project directory name must not have suffix ." + QFileInfo(projdir).suffix());
+            return;
+        }
+
+
         ProjectManager* pm = ProjectManager::instance();
         if (!pm->create_project_directory(projdir.toStdString()))
         {
