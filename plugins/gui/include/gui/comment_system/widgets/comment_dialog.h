@@ -111,6 +111,7 @@ namespace hal
         void italicsTriggered();
         void underscoreTriggered();
         void colorTriggered();
+        void bulletListTriggered();
         void codeTriggered();
 
         void handleOkClicked();
