@@ -160,6 +160,7 @@ namespace hal
     void CommentDialog::handleCursorPositionChanged()
     {
         //updateColorActionPixmap(mTextEdit->textCursor().charFormat().foreground().color());
+        mListAction->setChecked(mTextEdit->textCursor().currentList()); // yes this works, isnt c++ fun
     }
 
     void CommentDialog::boldTriggered()
@@ -189,34 +190,36 @@ namespace hal
 //        bar->addAction("test1");
 //        bar->addAction("test2");
 //        bar->show();
-        QMenu* men = new QMenu(this);
-        QPixmap map(16, 16);
-        map.fill(Qt::red);
-        men->addAction(map, "Red");
-        map.fill(Qt::green);
-        men->addAction(map, "Green");
-        map.fill(Qt::yellow);
-        men->addAction(map, "Yellow");
-        map.fill(QColor("#A9B7C6"));
-        men->addAction(map, "Default");
-        QRect geo = mToolBar->actionGeometry(mColorAction);
-        QPoint global = mToolBar->mapToGlobal(QPoint(geo.x(), geo.y()));
-        qDebug() << geo;
-        men->move(global.x(), global.y() + geo.height());
-        men->exec();
-        men->resize(10,10);
 
-//        CommentColorPicker ccp;
-//        if(ccp.exec() == QDialog::Accepted)
-//        {
-//            QColor color = ccp.getSelectedColor();
-//            if(!color.isValid()) return;
-//            QTextCharFormat fmt;
-//            fmt.setForeground(color);
-//            mergeFormatOnWordOrSelection(fmt);
-//            updateColorActionPixmap(color);
-//        }
-//        ccp.close();
+
+//        QMenu* men = new QMenu(this);
+//        QPixmap map(16, 16);
+//        map.fill(Qt::red);
+//        men->addAction(map, "Red");
+//        map.fill(Qt::green);
+//        men->addAction(map, "Green");
+//        map.fill(Qt::yellow);
+//        men->addAction(map, "Yellow");
+//        map.fill(QColor("#A9B7C6"));
+//        men->addAction(map, "Default");
+//        QRect geo = mToolBar->actionGeometry(mColorAction);
+//        QPoint global = mToolBar->mapToGlobal(QPoint(geo.x(), geo.y()));
+//        qDebug() << geo;
+//        men->move(global.x(), global.y() + geo.height());
+//        men->exec();
+//        men->resize(10,10);
+
+        CommentColorPicker ccp;
+        if(ccp.exec() == QDialog::Accepted)
+        {
+            QColor color = ccp.getSelectedColor();
+            if(!color.isValid()) return;
+            QTextCharFormat fmt;
+            fmt.setForeground(color);
+            mergeFormatOnWordOrSelection(fmt);
+            updateColorActionPixmap(color);
+        }
+        ccp.close();
 
 
         //QColorDialog colorDialog(mTextEdit->textColor(), this);
@@ -250,26 +253,37 @@ namespace hal
         qDebug() << "bullet list triggered";
 
         QTextCursor cursor = mTextEdit->textCursor();
-        QTextListFormat::Style style = QTextListFormat::ListDisc;
-        QTextBlockFormat::MarkerType marker = QTextBlockFormat::MarkerType::NoMarker;
-
-        cursor.beginEditBlock();
-
-        QTextBlockFormat blockFmt = cursor.blockFormat();
-        blockFmt.setMarker(marker);
-        cursor.setBlockFormat(blockFmt);
-        QTextListFormat listFmt;
         if(cursor.currentList())
-            listFmt = cursor.currentList()->format();
-        else
         {
-            listFmt.setIndent(blockFmt.indent()+1);
+            QTextBlock block = cursor.block();
+            cursor.currentList()->remove(block);
+            QTextBlockFormat blockFmt = cursor.blockFormat();
             blockFmt.setIndent(0);
             cursor.setBlockFormat(blockFmt);
         }
-        listFmt.setStyle(style);
-        cursor.createList(listFmt);
-        cursor.endEditBlock();
+        else
+        {
+            QTextListFormat::Style style = QTextListFormat::ListDisc;
+            QTextBlockFormat::MarkerType marker = QTextBlockFormat::MarkerType::NoMarker;
+
+            cursor.beginEditBlock();
+
+            QTextBlockFormat blockFmt = cursor.blockFormat();
+            blockFmt.setMarker(marker);
+            cursor.setBlockFormat(blockFmt);
+            QTextListFormat listFmt;
+            if(cursor.currentList())
+                listFmt = cursor.currentList()->format();
+            else
+            {
+                listFmt.setIndent(blockFmt.indent()+1);
+                blockFmt.setIndent(0);
+                cursor.setBlockFormat(blockFmt);
+            }
+            listFmt.setStyle(style);
+            cursor.createList(listFmt);
+            cursor.endEditBlock();
+        }
     }
 
     void CommentDialog::codeTriggered()
