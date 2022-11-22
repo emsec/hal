@@ -31,14 +31,47 @@
 
 namespace hal
 {
-    class BooleanFunctionNetDecorator
+    class NETLIST_API BooleanFunctionNetDecorator
     {
     public:
+        /**
+         * Construct new BooleanFunctionNetDecorator object.
+         * 
+         * @param[in] net - The net to operate on. 
+         */
         BooleanFunctionNetDecorator(const Net& net);
+
+        /**
+         * Generate a unique Boolean variable representing the given net.
+         * 
+         * @return The Boolean variable.
+         */
         BooleanFunction get_boolean_variable() const;
+
+        /**
+         * Generate a unique Boolean variable name representing the given net.
+         * 
+         * @return The Boolean variable name.
+         */
         std::string get_boolean_variable_name() const;
-        static Result<Net*> get_net_from(const Netlist* netlist, const std::string& var_name);
+
+        /**
+         * Get the net represented by a unique Boolean variable.
+         * 
+         * @param[in] netlist - The netlist on which to operate.
+         * @param[in] var_name - The Boolean variable.
+         * @return The specified net on success, an error otherwise.
+         */
         static Result<Net*> get_net_from(const Netlist* netlist, const BooleanFunction& var);
+
+        /**
+         * Get the net represented by a unique Boolean variable name.
+         * 
+         * @param[in] netlist - The netlist on which to operate.
+         * @param[in] var_name - The Boolean variable name.
+         * @return The specified net on success, an error otherwise.
+         */
+        static Result<Net*> get_net_from(const Netlist* netlist, const std::string& var_name);
 
     private:
         static const std::string VAR_NET_PREFIX;

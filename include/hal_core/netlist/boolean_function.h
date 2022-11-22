@@ -51,7 +51,7 @@ namespace hal
      *
      * @ingroup netlist
      */
-    class BooleanFunction final
+    class NETLIST_API BooleanFunction final
     {
     public:
         ////////////////////////////////////////////////////////////////////////

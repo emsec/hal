@@ -32,19 +32,105 @@
 
 namespace hal
 {
-    class SubgraphNetlistDecorator
+    class NETLIST_API SubgraphNetlistDecorator
     {
     public:
+        /**
+         * Construct new SubgraphNetlistDecorator object.
+         * 
+         * @param[in] netlist - The netlist to operate on.
+         */
         SubgraphNetlistDecorator(const Netlist& netlist);
+
+        /**
+         * Get a deep copy of a netlist subgraph including all of its gates and nets, but excluding modules and groupings.
+         * 
+         * @param[in] subgraph_gates - The gates making up the subgraph that shall be copied from the netlist.
+         * @return The copied subgraph netlist on success, an error otherwise.
+         */
         Result<std::unique_ptr<Netlist>> copy_subgraph_netlist(const std::vector<const Gate*>& subgraph_gates) const;
+
+        /**
+         * Get a deep copy of a netlist subgraph including all of its gates and nets, but excluding modules and groupings.
+         * 
+         * @param[in] subgraph_gates - The gates making up the subgraph that shall be copied from the netlist.
+         * @return The copied subgraph netlist on success, an error otherwise.
+         */
         Result<std::unique_ptr<Netlist>> copy_subgraph_netlist(const std::vector<Gate*>& subgraph_gates) const;
+
+        /**
+         * Get a deep copy of a netlist subgraph including all of its gates and nets, but excluding modules and groupings.
+         * 
+         * @param[in] subgraph_module - The module making up the subgraph that shall be copied from the netlist.
+         * @return The copied subgraph netlist on success, an error otherwise.
+         */
         Result<std::unique_ptr<Netlist>> copy_subgraph_netlist(const Module* subgraph_module) const;
+
+        /**
+         * Get the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
+         * The variables of the resulting Boolean function are created from the subgraph input nets using `BooleanFunctionNetDecorator::get_boolean_variable`.
+         * Utilizes a cache for speedup on consecutive calls.
+         * 
+         * @param[in] subgraph_gates - The gates making up the subgraph to consider.
+         * @param[in] subgraph_output - The subgraph oputput net for which to generate the Boolean function.
+         * @param[inout] cache - Cache to speed up computations. The cache is filled by this function.
+         * @return The combined Boolean function of the subgraph on success, an error otherwise.
+         */
         Result<BooleanFunction>
             get_subgraph_function(const std::vector<const Gate*>& subgraph_gates, const Net* subgraph_output, std::map<std::pair<u32, const GatePin*>, BooleanFunction>& cache) const;
+
+        /**
+         * Get the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
+         * The variables of the resulting Boolean function are created from the subgraph input nets using `BooleanFunctionNetDecorator::get_boolean_variable`.
+         * Utilizes a cache for speedup on consecutive calls.
+         * 
+         * @param[in] subgraph_gates - The gates making up the subgraph to consider.
+         * @param[in] subgraph_output - The subgraph oputput net for which to generate the Boolean function.
+         * @param[inout] cache - Cache to speed up computations. The cache is filled by this function.
+         * @return The combined Boolean function of the subgraph on success, an error otherwise.
+         */
         Result<BooleanFunction> get_subgraph_function(const std::vector<Gate*>& subgraph_gates, const Net* subgraph_output, std::map<std::pair<u32, const GatePin*>, BooleanFunction>& cache) const;
+
+        /**
+         * Get the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
+         * The variables of the resulting Boolean function are created from the subgraph input nets using `BooleanFunctionNetDecorator::get_boolean_variable`.
+         * Utilizes a cache for speedup on consecutive calls.
+         * 
+         * @param[in] subgraph_module - The module making up the subgraph to consider.
+         * @param[in] subgraph_output - The subgraph oputput net for which to generate the Boolean function.
+         * @param[inout] cache - Cache to speed up computations. The cache is filled by this function.
+         * @return The combined Boolean function of the subgraph on success, an error otherwise.
+         */
         Result<BooleanFunction> get_subgraph_function(const Module* subgraph_module, const Net* subgraph_output, std::map<std::pair<u32, const GatePin*>, BooleanFunction>& cache) const;
+
+        /**
+         * Get the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
+         * The variables of the resulting Boolean function are created from the subgraph input nets using `BooleanFunctionNetDecorator::get_boolean_variable`.
+         * 
+         * @param[in] subgraph_gates - The gates making up the subgraph to consider.
+         * @param[in] subgraph_output - The subgraph oputput net for which to generate the Boolean function.
+         * @return The combined Boolean function of the subgraph on success, an error otherwise.
+         */
         Result<BooleanFunction> get_subgraph_function(const std::vector<const Gate*>& subgraph_gates, const Net* subgraph_output) const;
+
+        /**
+         * Get the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
+         * The variables of the resulting Boolean function are created from the subgraph input nets using `BooleanFunctionNetDecorator::get_boolean_variable`.
+         * 
+         * @param[in] subgraph_gates - The gates making up the subgraph to consider.
+         * @param[in] subgraph_output - The subgraph oputput net for which to generate the Boolean function.
+         * @return The combined Boolean function of the subgraph on success, an error otherwise.
+         */
         Result<BooleanFunction> get_subgraph_function(const std::vector<Gate*>& subgraph_gates, const Net* subgraph_output) const;
+
+        /**
+         * Get the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
+         * The variables of the resulting Boolean function are created from the subgraph input nets using `BooleanFunctionNetDecorator::get_boolean_variable`.
+         * 
+         * @param[in] subgraph_module - The module making up the subgraph to consider.
+         * @param[in] subgraph_output - The subgraph oputput net for which to generate the Boolean function.
+         * @return The combined Boolean function of the subgraph on success, an error otherwise.
+         */
         Result<BooleanFunction> get_subgraph_function(const Module* subgraph_module, const Net* subgraph_output) const;
 
     private:
