@@ -1,20 +1,20 @@
 // MIT License
-// 
+//
 // Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
 // Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
 // Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 // Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix ("ORIGINAL AUTHORS"). All Rights reserved.
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -198,7 +198,6 @@ namespace hal
         BooleanFunction get_boolean_function(const std::string& name) const;
 
         /**
-          * TODO test
           * Get the Boolean function corresponding to the given output pin.
           * If `pin` is a `nullptr`, the Boolean function of the first output pin is returned.
           *
@@ -292,7 +291,6 @@ namespace hal
         Net* get_fan_in_net(const std::string& pin_name) const;
 
         /**
-         * TODO test
          * Get the fan-in endpoint corresponding to the specified input pin.
          *
          * @param[in] pin - The input pin.
@@ -309,7 +307,6 @@ namespace hal
         Endpoint* get_fan_in_endpoint(const std::string& pin_name) const;
 
         /**
-         * TODO test
          * Get the fan-in endpoint corresponding to the specified input pin.
          *
          * @param[in] pin - The input pin.
@@ -340,7 +337,6 @@ namespace hal
         Net* get_fan_out_net(const std::string& pin_name) const;
 
         /**
-         * TODO test
          * Get the fan-out endpoint corresponding to the specified output pin.
          *
          * @param[in] pin - The output pin.
@@ -357,7 +353,6 @@ namespace hal
         Endpoint* get_fan_out_endpoint(const std::string& pin_name) const;
 
         /**
-         * TODO test
          * Get the fan-out endpoint corresponding to the specified input pin.
          *
          * @param[in] pin - The output pin.
@@ -366,7 +361,6 @@ namespace hal
         Endpoint* get_fan_out_endpoint(const GatePin* pin) const;
 
         /**
-         * TODO test
          * Get a vector of all unique predecessor gates of the gate. 
          * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
@@ -376,7 +370,6 @@ namespace hal
         std::vector<Gate*> get_unique_predecessors(const std::function<bool(const GatePin* pin, Endpoint* ep)>& filter = nullptr) const;
 
         /**
-         * TODO test
          * Get a vector of all direct predecessor endpoints of the gate, i.e., all predecessor endpoints that are connected to an input pin of the gate. 
          * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
@@ -395,7 +388,6 @@ namespace hal
         Endpoint* get_predecessor(const std::string& pin_name) const;
 
         /**
-         * TODO test
          * Get a single direct predecessor endpoint that is connected to the specified input pin.
          * Fails if there are no or more than one predecessors.
          *
@@ -405,7 +397,6 @@ namespace hal
         Endpoint* get_predecessor(const GatePin* pin) const;
 
         /**
-         * TODO test
          * Get a vector of all unique successor gates of the gate. 
          * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
@@ -415,7 +406,6 @@ namespace hal
         std::vector<Gate*> get_unique_successors(const std::function<bool(const GatePin* pin, Endpoint* ep)>& filter = nullptr) const;
 
         /**
-         * TODO test
          * Get a vector of all direct successor endpoints of the gate, i.e., all successor endpoints that are connected to an output pin of the gate. 
          * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
@@ -434,7 +424,6 @@ namespace hal
         Endpoint* get_successor(const std::string& pin_name) const;
 
         /**
-         * TODO test
          * Get a single direct successor endpoint that is connected to the specified output pin.
          * Fails if there are no or more than one successors.
          *
