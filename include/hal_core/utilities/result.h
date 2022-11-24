@@ -81,9 +81,8 @@ namespace hal
         {
         }
 
-        Result(result_constructor_type::ER, const Error& error)
+        Result(result_constructor_type::ER, const Error& error) : m_result(error)
         {
-            m_result = error;
         }
 
         /**

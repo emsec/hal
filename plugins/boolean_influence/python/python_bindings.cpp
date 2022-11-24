@@ -29,24 +29,57 @@ namespace hal
             .def("get_name", &BooleanInfluencePlugin::get_name)
             .def_property_readonly("version", &BooleanInfluencePlugin::get_version)
             .def("get_version", &BooleanInfluencePlugin::get_version)
-            .def("get_boolean_influences_of_gate", &BooleanInfluencePlugin::get_boolean_influences_of_gate, py::arg("gate"), R"(
+            .def_static("get_boolean_influences_of_gate", [](const Gate* gate) -> std::optional<std::map<Net*, double>> {
+                const auto res = BooleanInfluencePlugin::get_boolean_influences_of_gate(gate);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            }, py::arg("gate"), R"(
                 Generates the function of the dataport net of the given flip-flop.
                 Afterwards the generated function gets translated from a z3::expr to efficent c code, compiled, executed and evalated.
 
                 :param hal_py.Gate gate: The flip-flop which data input net is used to build the boolean function.
-                :returns: A mapping of the gates that appear in the function of the data net to their boolean influence in said function.
+                :returns: A mapping of the nets that appear in the function of the data net to their boolean influence in said function.
                 :rtype: dict
             )")
-            .def("get_boolean_influences_of_subcircuit", &BooleanInfluencePlugin::get_boolean_influences_of_subcircuit, py::arg("gates"), py::arg("start_net"), R"(
+            .def_static("get_boolean_influences_of_subcircuit", [](const std::vector<Gate*>& gates, const Net* start_net) -> std::optional<std::map<Net*, double>> {
+                const auto res = BooleanInfluencePlugin::get_boolean_influences_of_subcircuit(gates, start_net);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            }, py::arg("gates"), py::arg("start_net"), R"(
                 Generates the function of the net using only the given gates.
                 Afterwards the generated function gets translated from a z3::expr to efficent c code, compiled, executed and evalated.
 
                 :param list[hal_py.Gate] gates: The gates of the subcircuit.
                 :param hal_py.Net start_net: The output net of the subcircuit at which to start the analysis.
-                :returns: A mapping of the gates that appear in the function of the data net to their boolean influence in said function.
+                :returns: A mapping of the nets that appear in the function of the data net to their boolean influence in said function.
                 :rtype: dict
             )")
-            .def("get_ff_dependency_matrix", &BooleanInfluencePlugin::get_ff_dependency_matrix, py::arg("netlist"), py::arg("with_boolean_influence"), R"(
+            .def_static("get_ff_dependency_matrix", [](const Netlist* nl, bool with_boolean_influence) -> std::optional<std::pair<std::map<u32, Gate*>, std::vector<std::vector<double>>>> {
+                const auto res = BooleanInfluencePlugin::get_ff_dependency_matrix(nl, with_boolean_influence);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            }, py::arg("netlist"), py::arg("with_boolean_influence"), R"(
                 Get the FF dependency matrix of a netlist, with or without boolean influences.
 
                 :param hal_py.Netlist netlist: The netlist to extract the dependency matrix from.

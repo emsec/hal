@@ -53,7 +53,7 @@ namespace hal
          * @param[inout] cache - Cache to speed up computations. The cache is filled by this function.
          * @returns The combined Boolean function of the subgraph on success, an error otherwise.
          */
-        [[deprecated("Will be removed in a future version, use SuibgraphNetlistDecorator::get_subgraph_function instead.")]] CORE_API Result<BooleanFunction>
+        [[deprecated("Will be removed in a future version, use SubgraphNetlistDecorator::get_subgraph_function instead.")]] CORE_API Result<BooleanFunction>
             get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates, std::map<std::pair<u32, const GatePin*>, BooleanFunction>& cache);
 
         /**
@@ -65,7 +65,7 @@ namespace hal
          * @param[in] subgraph_gates - The gates making up the subgraph to consider.
          * @returns The combined Boolean function of the subgraph on success, an error otherwise.
          */
-        [[deprecated("Will be removed in a future version, use SuibgraphNetlistDecorator::get_subgraph_function instead.")]] CORE_API Result<BooleanFunction> get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates);
+        [[deprecated("Will be removed in a future version, use SubgraphNetlistDecorator::get_subgraph_function instead.")]] CORE_API Result<BooleanFunction> get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates);
 
         /**
          * \deprecated
@@ -93,7 +93,7 @@ namespace hal
          * @param[in] subgraph_gates - The gates the subgraph is supposed to consist of.
          * @returns The deep copy of the netlist.
          */
-        [[deprecated("Will be removed in a future version, use SuibgraphNetlistDecorator::copy_subgraph_netlist instead.")]] CORE_API std::unique_ptr<Netlist>
+        [[deprecated("Will be removed in a future version, use SubgraphNetlistDecorator::copy_subgraph_netlist instead.")]] CORE_API std::unique_ptr<Netlist>
             get_partial_netlist(const Netlist* nl, const std::vector<const Gate*>& subgraph_gates);
 
         /**

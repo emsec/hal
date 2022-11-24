@@ -1638,7 +1638,7 @@
                 "c_lut"
             ],
             "lut_config": {
-                "bit_order": "ascending",
+                "bit_order": "descending",
                 "data_category": "generic",
                 "data_identifier": "LUT_INIT"
             },
