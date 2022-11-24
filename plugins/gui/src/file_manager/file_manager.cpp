@@ -89,6 +89,11 @@ namespace hal
         ProjectManager* pm = ProjectManager::instance();
         if (pm->get_project_status() != ProjectManager::ProjectStatus::NONE && mAutosaveEnabled)
         {
+            if (gPythonContext->currentThread())
+            {
+                log_info("gui", "Autosave deferred while python script is running...");
+                return;
+            }
             log_info("gui", "saving a backup in case something goes wrong...");
             if (!ProjectManager::instance()->serialize_project(gNetlist, true))
                 log_warning("gui", "Autosave failed to create project backup to directory '{}'.", pm->get_project_directory().get_shadow_dir().string());
