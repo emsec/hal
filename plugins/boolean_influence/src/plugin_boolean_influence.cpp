@@ -64,171 +64,12 @@ namespace hal
         }
     }  // namespace
 
-    Result<std::pair<std::map<u32, Gate*>, std::vector<std::vector<double>>>> BooleanInfluencePlugin::get_ff_dependency_matrix(const Netlist* nl, bool with_boolean_influence)
+    Result<std::unordered_map<std::string, double>> BooleanInfluencePlugin::get_boolean_influence(const BooleanFunction& bf, const u32 num_evaluations, const std::string& unique_identifier)
     {
-        std::map<u32, Gate*> matrix_id_to_gate;
-        std::map<Gate*, u32> gate_to_matrix_id;
-        std::vector<std::vector<double>> matrix;
+        auto ctx = z3::context();
+        const auto z3_bf = z3_utils::to_z3(bf, ctx);
 
-        std::unordered_map<u32, std::vector<Gate*>> cache;
-
-        u32 matrix_gates = 0;
-        for (const auto& gate : nl->get_gates())
-        {
-            if (!gate->get_type()->has_property(GateTypeProperty::ff))
-            {
-                continue;
-            }
-            gate_to_matrix_id[gate]         = matrix_gates;
-            matrix_id_to_gate[matrix_gates] = gate;
-            matrix_gates++;
-        }
-
-        u32 status_counter = 0;
-        for (const auto& [id, gate] : matrix_id_to_gate)
-        {
-            if (status_counter % 100 == 0)
-            {
-                log_info("boolean_influence", "status {}/{} processed", status_counter, matrix_id_to_gate.size());
-            }
-            status_counter++;
-            std::vector<double> line_of_matrix;
-
-            std::set<u32> gates_to_add;
-            for (const auto& pred_gate : netlist_utils::get_next_sequential_gates(gate, false, cache))
-            {
-                gates_to_add.insert(gate_to_matrix_id[pred_gate]);
-            }
-            std::map<Net*, double> boolean_influence_for_gate;
-            if (with_boolean_influence)
-            {
-                const auto inf_res = get_boolean_influences_of_gate(gate);
-                if (inf_res.is_error())
-                {
-                    return ERR_APPEND(inf_res.get_error(), "unable to generate ff dependency matrix: failed to generate Boolean influence for gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + ".");
-                }
-                boolean_influence_for_gate = inf_res.get();
-            }
-
-            for (u32 i = 0; i < matrix_gates; i++)
-            {
-                if (gates_to_add.find(i) != gates_to_add.end())
-                {
-                    if (with_boolean_influence)
-                    {
-                        double influence = 0.0;
-
-                        Gate* pred_ff = matrix_id_to_gate[i];
-
-                        for (const auto& output_net : pred_ff->get_fan_out_nets())
-                        {
-                            if (boolean_influence_for_gate.find(output_net) != boolean_influence_for_gate.end())
-                            {
-                                influence += boolean_influence_for_gate[output_net];
-                            }
-                        }
-
-                        line_of_matrix.push_back(influence);
-                    }
-                    else
-                    {
-                        line_of_matrix.push_back(1.0);
-                    }
-                }
-                else
-                {
-                    line_of_matrix.push_back(0.0);
-                }
-            }
-            matrix.push_back(line_of_matrix);
-        }
-
-        return OK(std::make_pair(matrix_id_to_gate, matrix));
-    }
-
-    Result<std::map<Net*, double>> BooleanInfluencePlugin::get_boolean_influences_of_gate(const Gate* gate)
-    {
-        if (!gate->get_type()->has_property(GateTypeProperty::ff))
-        {
-            return ERR("unable to get Boolean influence for gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + ": can only handle flip-flops but found gate type " + gate->get_type()->get_name() + ".");
-        }
-
-        // Check for the data port pin
-        auto d_pins = gate->get_type()->get_pins([](const GatePin* p) { return p->get_direction() == PinDirection::input && p->get_type() == PinType::data; });
-        if (d_pins.size() != 1)
-        {
-            return ERR("unable to get Boolean influence for gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + ": can only handle flip-flops with exactly one data port, but found " + std::to_string(d_pins.size()) + ".");
-        }
-        const GatePin* data_pin = d_pins.front();
-
-        // Extract all gates in front of the data port and iterate backwards until another flip flop is found.
-        const auto function_gates = extract_function_gates(gate, data_pin);
-        const auto in_net = gate->get_fan_in_net(data_pin);
-
-        // Generate Boolean influences
-        const auto inf_res = get_boolean_influences_of_subcircuit(function_gates, in_net);
-        if (inf_res.is_error())
-        {
-            return ERR_APPEND(inf_res.get_error(), "unable to get Boolean influence for gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + ": failed to get Boolean influence for data net " + in_net->get_name() + " with ID "+ std::to_string(in_net->get_id()) + ".");
-        }
-
-        return inf_res;
-    }
-
-    Result<std::map<Net*, double>> BooleanInfluencePlugin::get_boolean_influences_of_subcircuit(const std::vector<Gate*>& gates, const Net* start_net)
-    {
-        for (const auto* gate : gates)
-        {
-            if (!gate->get_type()->has_property(GateTypeProperty::combinational) || gate->is_vcc_gate() || gate->is_gnd_gate())
-            {
-                return ERR("unable to get Boolean influence for net " + start_net->get_name() + " with ID " + std::to_string(start_net->get_id()) + ": sub circuit gates include gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + " that is either not a combinational gate or is a VCC / GND gate.");
-            }
-        }
-
-        // Generate function for the data port
-        auto ctx  = z3::context();
-        auto func = z3::expr(ctx);
-
-        if (!gates.empty())
-        {
-            const auto func_res = z3_utils::get_subgraph_z3_function(gates, start_net, ctx);
-            if (func_res.is_error())
-            {
-                return ERR_APPEND(func_res.get_error(), "unable to get Boolean influence for net " + start_net->get_name() + " with ID " + std::to_string(start_net->get_id()) + ": failed to build subgraph function");
-            }
-            func = func_res.get();
-        }
-        // edge case if the gates are empty
-        else
-        {
-            func = ctx.bv_const(BooleanFunctionNetDecorator(*start_net).get_boolean_variable_name().c_str(), 1);
-        }
-
-        // Generate Boolean influences
-        const auto inf_res = get_boolean_influence(func, 32000);
-        if (inf_res.is_error())
-        {
-            return ERR_APPEND(inf_res.get_error(), "unable to get Boolean influence for net " + start_net->get_name() + " with ID " + std::to_string(start_net->get_id()) + ": failed to get boolean influence for net " + start_net->get_name() + " with ID " + std::to_string(start_net->get_id()) + ".");
-        }
-        const std::unordered_map<std::string, double> var_names_to_inf = inf_res.get();
-
-        // translate net_ids back to nets
-        std::map<Net*, double> nets_to_inf;
-
-        Netlist* nl = start_net->get_netlist();
-        for (const auto& [var_name, inf] : var_names_to_inf)
-        {
-            const auto net_res = BooleanFunctionNetDecorator::get_net_from(nl, var_name);
-            if (net_res.is_error())
-            {
-                return ERR_APPEND(net_res.get_error(), "unable to get Boolean influence for net " + start_net->get_name() + " with ID " + std::to_string(start_net->get_id()) + ": failed to reconstruct net from variable " + var_name + ".");
-            }
-            const auto net = net_res.get();
-
-            nets_to_inf.insert({net, inf});
-        }
-
-        return OK(nets_to_inf);
+        return get_boolean_influence(z3_bf, num_evaluations, unique_identifier);
     }
 
     Result<std::unordered_map<std::string, double>> BooleanInfluencePlugin::get_boolean_influence(const z3::expr& expr, const u32 num_evaluations, const std::string& unique_identifier)
@@ -369,4 +210,172 @@ namespace hal
 
         return OK(influences);
     }
+
+    Result<std::map<Net*, double>> BooleanInfluencePlugin::get_boolean_influences_of_subcircuit(const std::vector<Gate*>& gates, const Net* start_net)
+    {
+        for (const auto* gate : gates)
+        {
+            if (!gate->get_type()->has_property(GateTypeProperty::combinational) || gate->is_vcc_gate() || gate->is_gnd_gate())
+            {
+                return ERR("unable to get Boolean influence for net " + start_net->get_name() + " with ID " + std::to_string(start_net->get_id()) + ": sub circuit gates include gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + " that is either not a combinational gate or is a VCC / GND gate.");
+            }
+        }
+
+        // Generate function for the data port
+        auto ctx  = z3::context();
+        auto func = z3::expr(ctx);
+
+        if (!gates.empty())
+        {
+            const auto func_res = z3_utils::get_subgraph_z3_function(gates, start_net, ctx);
+            if (func_res.is_error())
+            {
+                return ERR_APPEND(func_res.get_error(), "unable to get Boolean influence for net " + start_net->get_name() + " with ID " + std::to_string(start_net->get_id()) + ": failed to build subgraph function");
+            }
+            func = func_res.get();
+        }
+        // edge case if the gates are empty
+        else
+        {
+            func = ctx.bv_const(BooleanFunctionNetDecorator(*start_net).get_boolean_variable_name().c_str(), 1);
+        }
+
+        // Generate Boolean influences
+        const auto inf_res = get_boolean_influence(func, 32000);
+        if (inf_res.is_error())
+        {
+            return ERR_APPEND(inf_res.get_error(), "unable to get Boolean influence for net " + start_net->get_name() + " with ID " + std::to_string(start_net->get_id()) + ": failed to get boolean influence for net " + start_net->get_name() + " with ID " + std::to_string(start_net->get_id()) + ".");
+        }
+        const std::unordered_map<std::string, double> var_names_to_inf = inf_res.get();
+
+        // translate net_ids back to nets
+        std::map<Net*, double> nets_to_inf;
+
+        Netlist* nl = start_net->get_netlist();
+        for (const auto& [var_name, inf] : var_names_to_inf)
+        {
+            const auto net_res = BooleanFunctionNetDecorator::get_net_from(nl, var_name);
+            if (net_res.is_error())
+            {
+                return ERR_APPEND(net_res.get_error(), "unable to get Boolean influence for net " + start_net->get_name() + " with ID " + std::to_string(start_net->get_id()) + ": failed to reconstruct net from variable " + var_name + ".");
+            }
+            const auto net = net_res.get();
+
+            nets_to_inf.insert({net, inf});
+        }
+
+        return OK(nets_to_inf);
+    }
+
+    Result<std::map<Net*, double>> BooleanInfluencePlugin::get_boolean_influences_of_gate(const Gate* gate)
+    {
+        if (!gate->get_type()->has_property(GateTypeProperty::ff))
+        {
+            return ERR("unable to get Boolean influence for gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + ": can only handle flip-flops but found gate type " + gate->get_type()->get_name() + ".");
+        }
+
+        // Check for the data port pin
+        auto d_pins = gate->get_type()->get_pins([](const GatePin* p) { return p->get_direction() == PinDirection::input && p->get_type() == PinType::data; });
+        if (d_pins.size() != 1)
+        {
+            return ERR("unable to get Boolean influence for gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + ": can only handle flip-flops with exactly one data port, but found " + std::to_string(d_pins.size()) + ".");
+        }
+        const GatePin* data_pin = d_pins.front();
+
+        // Extract all gates in front of the data port and iterate backwards until another flip flop is found.
+        const auto function_gates = extract_function_gates(gate, data_pin);
+        const auto in_net = gate->get_fan_in_net(data_pin);
+
+        // Generate Boolean influences
+        const auto inf_res = get_boolean_influences_of_subcircuit(function_gates, in_net);
+        if (inf_res.is_error())
+        {
+            return ERR_APPEND(inf_res.get_error(), "unable to get Boolean influence for gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + ": failed to get Boolean influence for data net " + in_net->get_name() + " with ID "+ std::to_string(in_net->get_id()) + ".");
+        }
+
+        return inf_res;
+    }
+
+    Result<std::pair<std::map<u32, Gate*>, std::vector<std::vector<double>>>> BooleanInfluencePlugin::get_ff_dependency_matrix(const Netlist* nl, bool with_boolean_influence)
+    {
+        std::map<u32, Gate*> matrix_id_to_gate;
+        std::map<Gate*, u32> gate_to_matrix_id;
+        std::vector<std::vector<double>> matrix;
+
+        std::unordered_map<u32, std::vector<Gate*>> cache;
+
+        u32 matrix_gates = 0;
+        for (const auto& gate : nl->get_gates())
+        {
+            if (!gate->get_type()->has_property(GateTypeProperty::ff))
+            {
+                continue;
+            }
+            gate_to_matrix_id[gate]         = matrix_gates;
+            matrix_id_to_gate[matrix_gates] = gate;
+            matrix_gates++;
+        }
+
+        u32 status_counter = 0;
+        for (const auto& [id, gate] : matrix_id_to_gate)
+        {
+            if (status_counter % 100 == 0)
+            {
+                log_info("boolean_influence", "status {}/{} processed", status_counter, matrix_id_to_gate.size());
+            }
+            status_counter++;
+            std::vector<double> line_of_matrix;
+
+            std::set<u32> gates_to_add;
+            for (const auto& pred_gate : netlist_utils::get_next_sequential_gates(gate, false, cache))
+            {
+                gates_to_add.insert(gate_to_matrix_id[pred_gate]);
+            }
+            std::map<Net*, double> boolean_influence_for_gate;
+            if (with_boolean_influence)
+            {
+                const auto inf_res = get_boolean_influences_of_gate(gate);
+                if (inf_res.is_error())
+                {
+                    return ERR_APPEND(inf_res.get_error(), "unable to generate ff dependency matrix: failed to generate Boolean influence for gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + ".");
+                }
+                boolean_influence_for_gate = inf_res.get();
+            }
+
+            for (u32 i = 0; i < matrix_gates; i++)
+            {
+                if (gates_to_add.find(i) != gates_to_add.end())
+                {
+                    if (with_boolean_influence)
+                    {
+                        double influence = 0.0;
+
+                        Gate* pred_ff = matrix_id_to_gate[i];
+
+                        for (const auto& output_net : pred_ff->get_fan_out_nets())
+                        {
+                            if (boolean_influence_for_gate.find(output_net) != boolean_influence_for_gate.end())
+                            {
+                                influence += boolean_influence_for_gate[output_net];
+                            }
+                        }
+
+                        line_of_matrix.push_back(influence);
+                    }
+                    else
+                    {
+                        line_of_matrix.push_back(1.0);
+                    }
+                }
+                else
+                {
+                    line_of_matrix.push_back(0.0);
+                }
+            }
+            matrix.push_back(line_of_matrix);
+        }
+
+        return OK(std::make_pair(matrix_id_to_gate, matrix));
+    }
+
 }    // namespace hal
