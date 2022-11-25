@@ -1,5 +1,8 @@
 var NAVTREEINDEX15 =
 {
+"classhal_1_1_searchbar.html#ab01ebf92f7d0597e6db933c357892fc4":[4,0,35,15],
+"classhal_1_1_searchbar.html#abef50b03a038c1ce116c73c69f623f23":[4,0,35,27],
+"classhal_1_1_searchbar.html#acbd16cb15da836f444522dc33f196412":[4,0,35,42],
 "classhal_1_1_searchbar.html#acbd76128c3376555273182d0c8cb3e44":[4,0,35,1],
 "classhal_1_1_searchbar.html#acce2df0b4822dc389bbb13fc981c3f98":[4,0,35,38],
 "classhal_1_1_searchbar.html#acef83db262d1afa9b139f5d30ad38b32":[4,0,35,16],
@@ -246,8 +249,5 @@ var NAVTREEINDEX15 =
 "classhal_1_1_settings_item_checkbox.html#a8cc95b54302fc30f81df7d52380c1045":[4,0,4,10,6],
 "classhal_1_1_settings_item_checkbox.html#a99e08cd893dcc07501e3af3352502c0e":[4,0,4,10,0],
 "classhal_1_1_settings_item_checkbox.html#ac357345cf259d32292dd33614cf29275":[4,0,4,10,5],
-"classhal_1_1_settings_item_checkbox.html#ac9890d0d9f96c59442339e19faf3a8b4":[4,0,4,10,4],
-"classhal_1_1_settings_item_dropdown.html":[4,0,4,11],
-"classhal_1_1_settings_item_dropdown.html#a0ce94ea9cf6220049ae186a97905c273":[4,0,4,11,7],
-"classhal_1_1_settings_item_dropdown.html#a0d362357e30fb60b5b6260ec5acd6b4c":[4,0,4,11,6]
+"classhal_1_1_settings_item_checkbox.html#ac9890d0d9f96c59442339e19faf3a8b4":[4,0,4,10,4]
 };

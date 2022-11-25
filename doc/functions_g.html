@@ -239,6 +239,9 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <li>GeneralTableWidget()
 : <a class="el" href="classhal_1_1_general_table_widget.html#a01b5a18a451a5de8d07382ef282036c0">hal::GeneralTableWidget</a>
 </li>
+<li>generate_dot_graph()
+: <a class="el" href="classhal_1_1_solve_fsm_plugin.html#a0524f48e63076cb30eb3a407b2707d4e">hal::SolveFsmPlugin</a>
+</li>
 <li>generate_model
 : <a class="el" href="structhal_1_1_s_m_t_1_1_query_config.html#a079ce610a89e273a18a7cda4d03023cd">hal::SMT::QueryConfig</a>
 </li>
@@ -298,11 +301,20 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_gate.html#afa206d7a1f84eeb201466cf7e6f211bd">hal::Gate</a>
 , <a class="el" href="classhal_1_1_gate_type.html#af205511b9029e75c0c2300046a367b56">hal::GateType</a>
 </li>
+<li>get_boolean_influence()
+: <a class="el" href="classhal_1_1_boolean_influence_plugin.html#a1c693c3d0a79feacdaa2480de0618c54">hal::BooleanInfluencePlugin</a>
+</li>
 <li>get_boolean_influences_of_gate()
-: <a class="el" href="classhal_1_1_boolean_influence_plugin.html#a4ee8015ffe7a260a144fe82c51dfa230">hal::BooleanInfluencePlugin</a>
+: <a class="el" href="classhal_1_1_boolean_influence_plugin.html#a13b51b48783e88ba10e169735055587b">hal::BooleanInfluencePlugin</a>
 </li>
 <li>get_boolean_influences_of_subcircuit()
-: <a class="el" href="classhal_1_1_boolean_influence_plugin.html#a9aad655e1e3ffe453294c3fad043c269">hal::BooleanInfluencePlugin</a>
+: <a class="el" href="classhal_1_1_boolean_influence_plugin.html#a0cb81e101a5dae8106c39f3c01b86cc6">hal::BooleanInfluencePlugin</a>
+</li>
+<li>get_boolean_variable()
+: <a class="el" href="classhal_1_1_boolean_function_net_decorator.html#ad7f326ae8eb8cacec99e1009d28c3db4">hal::BooleanFunctionNetDecorator</a>
+</li>
+<li>get_boolean_variable_name()
+: <a class="el" href="classhal_1_1_boolean_function_net_decorator.html#a68c2d7aaa24c940c33bc040aa7437e76">hal::BooleanFunctionNetDecorator</a>
 </li>
 <li>get_canonical_path()
 : <a class="el" href="classhal_1_1_project_directory.html#a2ce61d5bf709b4e75b00dce4e5ffa392">hal::ProjectDirectory</a>
@@ -442,7 +454,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_gate.html#af5288f4473c529fa29b5a347091ffc2f">hal::Gate</a>
 </li>
 <li>get_ff_dependency_matrix()
-: <a class="el" href="classhal_1_1_boolean_influence_plugin.html#aba4f64edfcc3f9d8c9cae94403edc852">hal::BooleanInfluencePlugin</a>
+: <a class="el" href="classhal_1_1_boolean_influence_plugin.html#a4414a642f5f41569c7d4254795d9eea0">hal::BooleanInfluencePlugin</a>
 </li>
 <li>get_file_name()
 : <a class="el" href="classhal_1_1_runtime_library.html#a214a3c0acc3d6e3d9d31e18e62fed7ec">hal::RuntimeLibrary</a>
@@ -654,6 +666,12 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <li>get_net_by_id()
 : <a class="el" href="classhal_1_1_netlist.html#ab5e29819702448bdd0315d3282e2eaae">hal::Netlist</a>
 </li>
+<li>get_net_from()
+: <a class="el" href="classhal_1_1_boolean_function_net_decorator.html#a184623934c0570c3c9443640bac90b12">hal::BooleanFunctionNetDecorator</a>
+</li>
+<li>get_net_id_from()
+: <a class="el" href="classhal_1_1_boolean_function_net_decorator.html#a1a09460ce6c2af3c0026033b07f3181b">hal::BooleanFunctionNetDecorator</a>
+</li>
 <li>get_net_ids()
 : <a class="el" href="classhal_1_1_grouping.html#a524384c5f0299a2bca63564d859f2f45">hal::Grouping</a>
 </li>
@@ -788,7 +806,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classnlohmann_1_1detail_1_1lexer.html#abf5143501435f9f79898c1ff238c2622">nlohmann::detail::lexer&lt; BasicJsonType &gt;</a>
 </li>
 <li>get_predecessor()
-: <a class="el" href="classhal_1_1_gate.html#a629e2777724153ea0819e11b2a71d970">hal::Gate</a>
+: <a class="el" href="classhal_1_1_gate.html#ad1e7415916bb54dfde18b30fbb547f77">hal::Gate</a>
 </li>
 <li>get_predecessor_groups_of_group()
 : <a class="el" href="structhal_1_1dataflow_1_1_grouping.html#ad250f8726b429fe14297125e57fbf4aa">hal::dataflow::Grouping</a>
@@ -846,6 +864,9 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 </li>
 <li>get_strongly_connected_components()
 : <a class="el" href="classhal_1_1_graph_algorithm_plugin.html#a8f5e1e5548d6bcca304ae9943f582e61">hal::GraphAlgorithmPlugin</a>
+</li>
+<li>get_subgraph_function()
+: <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#ae8245fa6d538060a09860b7d747b7d6a">hal::SubgraphNetlistDecorator</a>
 </li>
 <li>get_submodule_depth()
 : <a class="el" href="classhal_1_1_module.html#a533cbe33380469fe81fcead287efc437">hal::Module</a>
@@ -1400,17 +1421,17 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_graph_graphics_view.html#a883185841d7deb422d7400dafea4e113">hal::GraphGraphicsView</a>
 , <a class="el" href="classhal_1_1_graph_widget.html#a0421e8059b062ba06f1bb84ea141fdc8">hal::GraphWidget</a>
 </li>
-<li>gridBaseDotColor
-: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a20397d891f58e3b5790725dfb9d8843e">hal::GraphicsQssAdapter</a>
+<li>gridBaseDotColor()
+: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a34f564cd583502946e37e851e1f25862">hal::GraphicsQssAdapter</a>
 </li>
-<li>gridBaseLineColor()
-: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a0d2a008588e0a6f3ddacb0a3963577bc">hal::GraphicsQssAdapter</a>
+<li>gridBaseLineColor
+: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#afff6b69c76ff8bae52a0cc09252c1925">hal::GraphicsQssAdapter</a>
 </li>
-<li>gridClusterDotColor()
-: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#af9aef20d9706f52511bb341144bb4800">hal::GraphicsQssAdapter</a>
+<li>gridClusterDotColor
+: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a31b8d28575ff766a99f59a7ff88f0efe">hal::GraphicsQssAdapter</a>
 </li>
-<li>gridClusterLineColor
-: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a93a3f1267b9ea82cf117bf5f9b493b54">hal::GraphicsQssAdapter</a>
+<li>gridClusterLineColor()
+: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a1b197be4d6786e9572af238b493941ff">hal::GraphicsQssAdapter</a>
 </li>
 <li>gridPoint()
 : <a class="el" href="classhal_1_1_net_layout_point.html#a2ab7b2f0f56f9b57b30cb763ff6437d0">hal::NetLayoutPoint</a>
@@ -1444,7 +1465,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_grouping_dialog.html#a31b2b5118bf361433c6b0566258d2d39">hal::GroupingDialog</a>
 </li>
 <li>Grouping()
-: <a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a9a7e5b1cd6762b9699e58fa660e4d68e">hal::dataflow::Grouping</a>
+: <a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a3368041577b46e6bdc8309d59e9709d3">hal::dataflow::Grouping</a>
 </li>
 <li>grouping()
 : <a class="el" href="classhal_1_1_grouping_table_entry.html#a1eddd594c0671c4b62a71119cd547402">hal::GroupingTableEntry</a>
@@ -1559,7 +1580,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Nov 24 2022 15:00:00 for HAL by
+    <li class="footer">Generated on Fri Nov 25 2022 13:44:03 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

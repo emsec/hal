@@ -90,7 +90,13 @@ $(document).ready(function(){initNavTree('deprecated.html',''); initResizable();
 <dt>Member <a class="el" href="classhal_1_1_graphics_scene.html#aadb7a14bcc7cd28a5ecb04af9c09ed2d">hal::GraphicsScene::snapToGrid</a>  (const <a class="elRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a> &amp;pos) Q_DECL_DEPRECATED</dt>
 <dd><a class="anchor" id="_deprecated000001"></a>Please use GraphGraphicsView::closestLayouterPos instead. </dd>
 <dt>Member <a class="el" href="namespacehal_1_1netlist__utils.html#a491fd812517e94f3ee40e64813d7f9c5">hal::netlist_utils::copy_netlist</a>  (const <a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl)</dt>
-<dd><a class="anchor" id="_deprecated000005"></a> Get a deep copy of an entire netlist including all of its gates, nets, modules, and groupings. </dd>
+<dd><a class="anchor" id="_deprecated000007"></a> Get a deep copy of an entire netlist including all of its gates, nets, modules, and groupings. </dd>
+<dt>Member <a class="el" href="namespacehal_1_1netlist__utils.html#a11b7573f3ebb05f841f575e072767795">hal::netlist_utils::get_partial_netlist</a>  (const <a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl, const std::vector&lt; const Gate * &gt; &amp;subgraph_gates)</dt>
+<dd><a class="anchor" id="_deprecated000008"></a> Get a deep copy of an entire partial netlist including all of its gates, nets, excluding modules and groupings. </dd>
+<dt>Member <a class="el" href="namespacehal_1_1netlist__utils.html#ab8c3054566941b75019e3f599ec16814">hal::netlist_utils::get_subgraph_function</a>  (const <a class="el" href="classhal_1_1_net.html">Net</a> *net, const std::vector&lt; const Gate * &gt; &amp;subgraph_gates, std::map&lt; std::pair&lt; u32, const GatePin * &gt;, <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &gt; &amp;cache)</dt>
+<dd><a class="anchor" id="_deprecated000005"></a> Get the combined Boolean function of a subgraph of combinational gates starting at the source of the given net. The variables of the resulting Boolean function are made up of the IDs of the nets that influence the output ('net_[ID]'). Utilizes a cache for speedup on consecutive calls. </dd>
+<dt>Member <a class="el" href="namespacehal_1_1netlist__utils.html#a77025d97353281c42b543f073de27099">hal::netlist_utils::get_subgraph_function</a>  (const <a class="el" href="classhal_1_1_net.html">Net</a> *net, const std::vector&lt; const Gate * &gt; &amp;subgraph_gates)</dt>
+<dd><a class="anchor" id="_deprecated000006"></a> Get the combined Boolean function of a subgraph of combinational gates starting at the source of the given net. The variables of the resulting Boolean function are made up of the IDs of the nets that influence the output ('net_[ID]'). </dd>
 <dt>Member <a class="el" href="classnlohmann_1_1basic__json.html#a5e4212986136ca1220f351c60e89906b">nlohmann::basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt;::iterator_wrapper</a>  (reference ref) noexcept</dt>
 <dd><a class="anchor" id="_deprecated000002"></a>This stream operator is deprecated and will be removed in future 4.0.0 of the library. Please use <a class="el" href="classnlohmann_1_1basic__json.html#afe3e137ace692efa08590d8df40f58dd">items()</a> instead; that is, replace <code>json::iterator_wrapper(j)</code> with <code>j.items()</code>.  </dd>
 <dt>Member <a class="el" href="classnlohmann_1_1basic__json.html#a60ca396028b8d9714c6e10efbf475af6">nlohmann::basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt;::operator&lt;&lt;</a>  (<a class="el" href="classnlohmann_1_1basic__json.html" title="a class to store JSON values">basic_json</a> &amp;j, std::istream &amp;i)</dt>
@@ -104,7 +110,7 @@ $(document).ready(function(){initNavTree('deprecated.html',''); initResizable();
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Nov 24 2022 14:59:55 for HAL by
+    <li class="footer">Generated on Fri Nov 25 2022 13:43:59 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

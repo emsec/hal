@@ -1,18 +1,18 @@
 var searchData=
 [
-  ['undoavailable_39394',['undoAvailable',['https://doc.qt.io/qt-5/qlineedit.html#undoAvailable-prop',1,'QLineEdit']]],
-  ['undoiconpath_39395',['undoIconPath',['../classhal_1_1_main_window.html#af31a3d91b902a3d98b2be4149605f732',1,'hal::MainWindow']]],
-  ['undoiconstyle_39396',['undoIconStyle',['../classhal_1_1_main_window.html#a28c0d5edd7fcf369192fea951135c363',1,'hal::MainWindow']]],
-  ['undolimit_39397',['undoLimit',['https://doc.qt.io/qt-5/qundostack.html#undoLimit-prop',1,'QUndoStack']]],
-  ['undoredoenabled_39398',['undoRedoEnabled',['https://doc.qt.io/qt-5/qtextdocument.html#undoRedoEnabled-prop',1,'QTextDocument::undoRedoEnabled()'],['https://doc.qt.io/qt-5/qplaintextedit.html#undoRedoEnabled-prop',1,'QPlainTextEdit::undoRedoEnabled()'],['https://doc.qt.io/qt-5/qtextbrowser.html#undoRedoEnabled-prop',1,'QTextBrowser::undoRedoEnabled()'],['https://doc.qt.io/qt-5/qtextedit.html#undoRedoEnabled-prop',1,'QTextEdit::undoRedoEnabled()']]],
-  ['undotext_39399',['undoText',['https://doc.qt.io/qt-5/qundostack.html#undoText-prop',1,'QUndoStack']]],
-  ['unifiedtitleandtoolbaronmac_39400',['unifiedTitleAndToolBarOnMac',['https://doc.qt.io/qt-5/qmainwindow.html#unifiedTitleAndToolBarOnMac-prop',1,'QMainWindow']]],
-  ['uniformitemsizes_39401',['uniformItemSizes',['https://doc.qt.io/qt-5/qlistview.html#uniformItemSizes-prop',1,'QListView']]],
-  ['uniformrowheights_39402',['uniformRowHeights',['https://doc.qt.io/qt-5/qtreeview.html#uniformRowHeights-prop',1,'QTreeView']]],
-  ['updateinterval_39403',['updateInterval',['https://doc.qt.io/qt-5/qtimeline.html#updateInterval-prop',1,'QTimeLine']]],
-  ['updatesenabled_39404',['updatesEnabled',['https://doc.qt.io/qt-5/qwidget.html#updatesEnabled-prop',1,'QWidget']]],
-  ['usedesignmetrics_39405',['useDesignMetrics',['https://doc.qt.io/qt-5/qtextdocument.html#useDesignMetrics-prop',1,'QTextDocument']]],
-  ['usehovereffects_39406',['useHoverEffects',['https://doc.qt.io/qt-5/qstylehints.html#useHoverEffects-prop',1,'QStyleHints']]],
-  ['usertlextensions_39407',['useRtlExtensions',['https://doc.qt.io/qt-5/qstylehints.html#useRtlExtensions-prop',1,'QStyleHints']]],
-  ['usesscrollbuttons_39408',['usesScrollButtons',['https://doc.qt.io/qt-5/qtabbar.html#usesScrollButtons-prop',1,'QTabBar::usesScrollButtons()'],['https://doc.qt.io/qt-5/qtabwidget.html#usesScrollButtons-prop',1,'QTabWidget::usesScrollButtons()']]]
+  ['undoavailable_39407',['undoAvailable',['https://doc.qt.io/qt-5/qlineedit.html#undoAvailable-prop',1,'QLineEdit']]],
+  ['undoiconpath_39408',['undoIconPath',['../classhal_1_1_main_window.html#af31a3d91b902a3d98b2be4149605f732',1,'hal::MainWindow']]],
+  ['undoiconstyle_39409',['undoIconStyle',['../classhal_1_1_main_window.html#a28c0d5edd7fcf369192fea951135c363',1,'hal::MainWindow']]],
+  ['undolimit_39410',['undoLimit',['https://doc.qt.io/qt-5/qundostack.html#undoLimit-prop',1,'QUndoStack']]],
+  ['undoredoenabled_39411',['undoRedoEnabled',['https://doc.qt.io/qt-5/qtextdocument.html#undoRedoEnabled-prop',1,'QTextDocument::undoRedoEnabled()'],['https://doc.qt.io/qt-5/qplaintextedit.html#undoRedoEnabled-prop',1,'QPlainTextEdit::undoRedoEnabled()'],['https://doc.qt.io/qt-5/qtextbrowser.html#undoRedoEnabled-prop',1,'QTextBrowser::undoRedoEnabled()'],['https://doc.qt.io/qt-5/qtextedit.html#undoRedoEnabled-prop',1,'QTextEdit::undoRedoEnabled()']]],
+  ['undotext_39412',['undoText',['https://doc.qt.io/qt-5/qundostack.html#undoText-prop',1,'QUndoStack']]],
+  ['unifiedtitleandtoolbaronmac_39413',['unifiedTitleAndToolBarOnMac',['https://doc.qt.io/qt-5/qmainwindow.html#unifiedTitleAndToolBarOnMac-prop',1,'QMainWindow']]],
+  ['uniformitemsizes_39414',['uniformItemSizes',['https://doc.qt.io/qt-5/qlistview.html#uniformItemSizes-prop',1,'QListView']]],
+  ['uniformrowheights_39415',['uniformRowHeights',['https://doc.qt.io/qt-5/qtreeview.html#uniformRowHeights-prop',1,'QTreeView']]],
+  ['updateinterval_39416',['updateInterval',['https://doc.qt.io/qt-5/qtimeline.html#updateInterval-prop',1,'QTimeLine']]],
+  ['updatesenabled_39417',['updatesEnabled',['https://doc.qt.io/qt-5/qwidget.html#updatesEnabled-prop',1,'QWidget']]],
+  ['usedesignmetrics_39418',['useDesignMetrics',['https://doc.qt.io/qt-5/qtextdocument.html#useDesignMetrics-prop',1,'QTextDocument']]],
+  ['usehovereffects_39419',['useHoverEffects',['https://doc.qt.io/qt-5/qstylehints.html#useHoverEffects-prop',1,'QStyleHints']]],
+  ['usertlextensions_39420',['useRtlExtensions',['https://doc.qt.io/qt-5/qstylehints.html#useRtlExtensions-prop',1,'QStyleHints']]],
+  ['usesscrollbuttons_39421',['usesScrollButtons',['https://doc.qt.io/qt-5/qtabbar.html#usesScrollButtons-prop',1,'QTabBar::usesScrollButtons()'],['https://doc.qt.io/qt-5/qtabwidget.html#usesScrollButtons-prop',1,'QTabWidget::usesScrollButtons()']]]
 ];

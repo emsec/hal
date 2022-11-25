@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Solve FSM &mdash; hal_py v4.0.1-63-g192a6912a documentation</title>
+  <title>Solve FSM &mdash; hal_py v4.0.1-64-g8eed2469b documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                v4.0.1-63-g192a6912a
+                v4.0.1-64-g8eed2469b
               </div>
             
           
@@ -166,7 +166,34 @@
 <dl class="class">
 <dt id="solve_fsm.SolveFsmPlugin">
 <em class="property">class </em><code class="descclassname">solve_fsm.</code><code class="descname">SolveFsmPlugin</code><a class="headerlink" href="#solve_fsm.SolveFsmPlugin" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<dd><dl class="staticmethod">
+<dt id="solve_fsm.SolveFsmPlugin.generate_dot_graph">
+<em class="property">static </em><code class="descname">generate_dot_graph</code><span class="sig-paren">(</span><em>state_reg: List[hal_py.Gate], transitions: Dict[int, Dict[int, hal_py.BooleanFunction]], graph_path: str, max_condition_length: int, base: int</em><span class="sig-paren">)</span> &#x2192; Optional[str]<a class="headerlink" href="#solve_fsm.SolveFsmPlugin.generate_dot_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates the state graph of a finite state machine from the transitions of that fsm.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>state_reg</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><em>halPy.Gate</em><em>]</em>) – Vector contianing the state registers.</li>
+<li><strong>dict{int</strong><strong>, </strong><strong>halPy.BooleanFunction}} transitions</strong> (<em>dict{int</em><em>,</em>) – Transitions of the fsm given as a map from origin state to all possible successor states and the corresponding condition.</li>
+<li><strong>graph_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Path to the location where the state graph is saved in dot format.</li>
+<li><strong>max_condition_length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The maximum character length that is printed for boolean functions representing the conditions.</li>
+<li><strong>base</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The base with that the states are formatted and printed.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A string representing the dot graph.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="solve_fsm.SolveFsmPlugin.get_name">
 <code class="descname">get_name</code><span class="sig-paren">(</span><em>self: solve_fsm.SolveFsmPlugin</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#solve_fsm.SolveFsmPlugin.get_name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -176,33 +203,37 @@
 <code class="descname">get_version</code><span class="sig-paren">(</span><em>self: solve_fsm.SolveFsmPlugin</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#solve_fsm.SolveFsmPlugin.get_version" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="solve_fsm.SolveFsmPlugin.solve_fsm">
-<code class="descname">solve_fsm</code><span class="sig-paren">(</span><em>self: solve_fsm.SolveFsmPlugin, nl: hal_py.Netlist, state_reg: List[hal_py.Gate], transition_logic: List[hal_py.Gate], intial_state: Dict[hal_py.Gate, bool], graph_path: str, timeout: int</em><span class="sig-paren">)</span> &#x2192; Dict[int, Dict[int, List[Dict[int, int]]]]<a class="headerlink" href="#solve_fsm.SolveFsmPlugin.solve_fsm" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">solve_fsm</code><span class="sig-paren">(</span><em>nl: hal_py.Netlist, state_reg: List[hal_py.Gate], transition_logic: List[hal_py.Gate], intial_state: Dict[hal_py.Gate, bool], graph_path: str, timeout: int</em><span class="sig-paren">)</span> &#x2192; Optional[Dict[int, Dict[int, hal_py.BooleanFunction]]]<a class="headerlink" href="#solve_fsm.SolveFsmPlugin.solve_fsm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates the state graph of a finite state machine and returns a mapping from each state to all its possible successor states using z3 as sat solver.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>nl</strong> (<em>halPy.Netlist</em>) – The netlist.</li>
 <li><strong>state_reg</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><em>halPy.Gate</em><em>]</em>) – A list containing all the gates of the fsm representing the state register.</li>
 <li><strong>transition_logic</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><em>halPy.Gate</em><em>]</em>) – A list containing all the gates of the fsm representing the transition_logic.</li>
+<li><strong>bool} initial_state</strong> (<em>dict{halPy.Gate</em><em>,</em>) – A mapping from the state registers to their initial value. If omitted the intial state will be set to 0.</li>
+<li><strong>graph_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Path to the location where the state graph is saved in dot format.</li>
+<li><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Timeout value for the sat solver in seconds.</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A mapping from each state to all its possible successors states</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>()</p>
 </td>
 </tr>
 </tbody>
 </table>
-<p>:param dict{halPy.Gate, bool} initial_state - A mapping from the state registers to their initial value. If omitted the intial state will be set to 0.
-:param str graph_path: Path to the location where the state graph is saved in dot format.
-:param int timeout - Timeout value for the sat solvers. Defaults to 600 (unit unkown).
-:returns: A mapping from each state to all its possible successors states
-:rtype: dict()</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="solve_fsm.SolveFsmPlugin.solve_fsm_brute_force">
-<code class="descname">solve_fsm_brute_force</code><span class="sig-paren">(</span><em>self: solve_fsm.SolveFsmPlugin, nl: hal_py.Netlist, state_reg: List[hal_py.Gate], transition_logic: List[hal_py.Gate], graph_path: str</em><span class="sig-paren">)</span> &#x2192; Dict[int, List[int]]<a class="headerlink" href="#solve_fsm.SolveFsmPlugin.solve_fsm_brute_force" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">solve_fsm_brute_force</code><span class="sig-paren">(</span><em>nl: hal_py.Netlist, state_reg: List[hal_py.Gate], transition_logic: List[hal_py.Gate], graph_path: str</em><span class="sig-paren">)</span> &#x2192; Optional[Dict[int, Set[int]]]<a class="headerlink" href="#solve_fsm.SolveFsmPlugin.solve_fsm_brute_force" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates the state graph of a finite state machine and returns a mapping from each state to all its possible successor states using a simple brute force approach.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -216,7 +247,7 @@
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A mapping from each state to all its possible transitions. The transitions are a map from the successor state to all the possible input mappings that lead to it.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A mapping from each state to all its possible successors states.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>()</p>

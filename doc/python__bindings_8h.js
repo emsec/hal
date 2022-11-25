@@ -3,6 +3,7 @@ var python__bindings_8h =
     [ "RawPtrWrapper", "python__bindings_8h.html#ga81181bacca930bfda574ce3a51a01e9c", null ],
     [ "base_pin_init", "python__bindings_8h.html#ga7b89c9d47d0533ec4c234d5ecaebcc2c", null ],
     [ "boolean_function_init", "python__bindings_8h.html#gae5a4b7d4ff2a9896d9372662906d05fb", null ],
+    [ "boolean_function_net_decorator_init", "python__bindings_8h.html#gab35847badbf935ed3e01dbcaad19205c", null ],
     [ "core_utils_init", "python__bindings_8h.html#gae67f2029fac093c1e1990401edbcfd0a", null ],
     [ "data_container_init", "python__bindings_8h.html#gadc243ad319cf87e17b4593eec859d1f4", null ],
     [ "endpoint_init", "python__bindings_8h.html#ga6d7aa3afc74611d7f65294808436eac9", null ],
@@ -28,5 +29,6 @@ var python__bindings_8h =
     [ "plugin_interfaces_init", "python__bindings_8h.html#gae288c84ff5c0b70e6f9571669aa29eb7", null ],
     [ "plugin_manager_init", "python__bindings_8h.html#ga9e03e20ad125cd9eb1f4e601ac556777", null ],
     [ "project_manager_init", "python__bindings_8h.html#gac072de2b8e9f09d8320090e5873be90d", null ],
-    [ "smt_init", "python__bindings_8h.html#ga6f399ac0514c1e1adff48f88ee349380", null ]
+    [ "smt_init", "python__bindings_8h.html#ga6f399ac0514c1e1adff48f88ee349380", null ],
+    [ "subgraph_netlist_decorator_init", "python__bindings_8h.html#gac5492afb41ef2e8dd6c49f56ddb7e73c", null ]
 ];

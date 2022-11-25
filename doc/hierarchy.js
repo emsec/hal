@@ -42,6 +42,7 @@ var hierarchy =
     [ "nlohmann::detail::binary_reader< BasicJsonType, SAX >", "classnlohmann_1_1detail_1_1binary__reader.html", null ],
     [ "nlohmann::detail::binary_writer< BasicJsonType, CharType >", "classnlohmann_1_1detail_1_1binary__writer.html", null ],
     [ "hal::BooleanFunction", "classhal_1_1_boolean_function.html", null ],
+    [ "hal::BooleanFunctionNetDecorator", "classhal_1_1_boolean_function_net_decorator.html", null ],
     [ "hal::BooleanFunctionTableEntry", "classhal_1_1_boolean_function_table_entry.html", [
       [ "hal::BooleanFunctionEntry", "classhal_1_1_boolean_function_entry.html", null ],
       [ "hal::CPBehaviorEntry", "classhal_1_1_c_p_behavior_entry.html", null ],
@@ -161,7 +162,6 @@ var hierarchy =
       [ "nlohmann::detail::is_iterator_traits< T, typename >", "structnlohmann_1_1detail_1_1is__iterator__traits.html", null ]
     ] ],
     [ "nlohmann::detail::from_json_fn", "structnlohmann_1_1detail_1_1from__json__fn.html", null ],
-    [ "hal::FsmTransition", "structhal_1_1_fsm_transition.html", null ],
     [ "hal::GateEvent", "classhal_1_1_gate_event.html", null ],
     [ "hal::GateLibrary", "classhal_1_1_gate_library.html", null ],
     [ "hal::GateLibraryParser", "classhal_1_1_gate_library_parser.html", [
@@ -700,9 +700,9 @@ var hierarchy =
       [ "hal::NodeBoxes", "classhal_1_1_node_boxes.html", null ]
     ] ],
     [ "hal::utils::RecursiveDirectoryRange", "classhal_1_1utils_1_1_recursive_directory_range.html", null ],
-    [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
     [ "hal::Result< T >", "classhal_1_1_result.html", null ],
     [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
+    [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
     [ "reverse_iterator", null, [
       [ "nlohmann::detail::json_reverse_iterator< Base >", "classnlohmann_1_1detail_1_1json__reverse__iterator.html", null ]
     ] ],
@@ -730,6 +730,7 @@ var hierarchy =
       [ "subprocess::cwd", "structsubprocess_1_1cwd.html", null ],
       [ "subprocess::executable", "structsubprocess_1_1executable.html", null ]
     ] ],
+    [ "hal::SubgraphNetlistDecorator", "classhal_1_1_subgraph_netlist_decorator.html", null ],
     [ "hal::SMT::SymbolicExecution", "classhal_1_1_s_m_t_1_1_symbolic_execution.html", null ],
     [ "hal::SMT::SymbolicState", "classhal_1_1_s_m_t_1_1_symbolic_state.html", null ],
     [ "Test", null, [
@@ -741,8 +742,8 @@ var hierarchy =
       [ "hal::VHDLParserTest", "classhal_1_1_v_h_d_l_parser_test.html", null ]
     ] ],
     [ "nlohmann::detail::to_json_fn", "structnlohmann_1_1detail_1_1to__json__fn.html", null ],
-    [ "hal::BooleanFunctionParser::Token", "structhal_1_1_boolean_function_parser_1_1_token.html", null ],
     [ "hal::Token< T >", "structhal_1_1_token.html", null ],
+    [ "hal::BooleanFunctionParser::Token", "structhal_1_1_boolean_function_parser_1_1_token.html", null ],
     [ "hal::TokenStream< T >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< ci_string >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< std::string >", "classhal_1_1_token_stream.html", null ],

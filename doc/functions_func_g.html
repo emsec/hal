@@ -194,6 +194,9 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>GeneralTableWidget()
 : <a class="el" href="classhal_1_1_general_table_widget.html#a01b5a18a451a5de8d07382ef282036c0">hal::GeneralTableWidget</a>
 </li>
+<li>generate_dot_graph()
+: <a class="el" href="classhal_1_1_solve_fsm_plugin.html#a0524f48e63076cb30eb3a407b2707d4e">hal::SolveFsmPlugin</a>
+</li>
 <li>generate_random()
 : <a class="el" href="classhal_1_1_project_directory.html#a66c2e74a77bef4d0eab40bbc221c9897">hal::ProjectDirectory</a>
 </li>
@@ -247,11 +250,20 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 : <a class="el" href="classhal_1_1_gate.html#afa206d7a1f84eeb201466cf7e6f211bd">hal::Gate</a>
 , <a class="el" href="classhal_1_1_gate_type.html#af205511b9029e75c0c2300046a367b56">hal::GateType</a>
 </li>
+<li>get_boolean_influence()
+: <a class="el" href="classhal_1_1_boolean_influence_plugin.html#a1c693c3d0a79feacdaa2480de0618c54">hal::BooleanInfluencePlugin</a>
+</li>
 <li>get_boolean_influences_of_gate()
-: <a class="el" href="classhal_1_1_boolean_influence_plugin.html#a4ee8015ffe7a260a144fe82c51dfa230">hal::BooleanInfluencePlugin</a>
+: <a class="el" href="classhal_1_1_boolean_influence_plugin.html#a13b51b48783e88ba10e169735055587b">hal::BooleanInfluencePlugin</a>
 </li>
 <li>get_boolean_influences_of_subcircuit()
-: <a class="el" href="classhal_1_1_boolean_influence_plugin.html#a9aad655e1e3ffe453294c3fad043c269">hal::BooleanInfluencePlugin</a>
+: <a class="el" href="classhal_1_1_boolean_influence_plugin.html#a0cb81e101a5dae8106c39f3c01b86cc6">hal::BooleanInfluencePlugin</a>
+</li>
+<li>get_boolean_variable()
+: <a class="el" href="classhal_1_1_boolean_function_net_decorator.html#ad7f326ae8eb8cacec99e1009d28c3db4">hal::BooleanFunctionNetDecorator</a>
+</li>
+<li>get_boolean_variable_name()
+: <a class="el" href="classhal_1_1_boolean_function_net_decorator.html#a68c2d7aaa24c940c33bc040aa7437e76">hal::BooleanFunctionNetDecorator</a>
 </li>
 <li>get_canonical_path()
 : <a class="el" href="classhal_1_1_project_directory.html#a2ce61d5bf709b4e75b00dce4e5ffa392">hal::ProjectDirectory</a>
@@ -358,7 +370,7 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 , <a class="el" href="classhal_1_1_r_a_m_port_component.html#a7fabba1220d9391dccc8dc2dade7279b">hal::RAMPortComponent</a>
 </li>
 <li>get_error()
-: <a class="el" href="classhal_1_1_result.html#a9a85e813a3f52096c1ca54dee1494923">hal::Result&lt; T &gt;</a>
+: <a class="el" href="classhal_1_1_result.html#a1946ab6735ef28b2e15f52b6b3c218bb">hal::Result&lt; T &gt;</a>
 </li>
 <li>get_error_message()
 : <a class="el" href="classnlohmann_1_1detail_1_1lexer.html#a53cebbc684ef97fa49651eb442d58f86">nlohmann::detail::lexer&lt; BasicJsonType &gt;</a>
@@ -391,7 +403,7 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 : <a class="el" href="classhal_1_1_gate.html#af5288f4473c529fa29b5a347091ffc2f">hal::Gate</a>
 </li>
 <li>get_ff_dependency_matrix()
-: <a class="el" href="classhal_1_1_boolean_influence_plugin.html#aba4f64edfcc3f9d8c9cae94403edc852">hal::BooleanInfluencePlugin</a>
+: <a class="el" href="classhal_1_1_boolean_influence_plugin.html#a4414a642f5f41569c7d4254795d9eea0">hal::BooleanInfluencePlugin</a>
 </li>
 <li>get_file_name()
 : <a class="el" href="classhal_1_1_runtime_library.html#a214a3c0acc3d6e3d9d31e18e62fed7ec">hal::RuntimeLibrary</a>
@@ -603,6 +615,12 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>get_net_by_id()
 : <a class="el" href="classhal_1_1_netlist.html#ab5e29819702448bdd0315d3282e2eaae">hal::Netlist</a>
 </li>
+<li>get_net_from()
+: <a class="el" href="classhal_1_1_boolean_function_net_decorator.html#a184623934c0570c3c9443640bac90b12">hal::BooleanFunctionNetDecorator</a>
+</li>
+<li>get_net_id_from()
+: <a class="el" href="classhal_1_1_boolean_function_net_decorator.html#a1a09460ce6c2af3c0026033b07f3181b">hal::BooleanFunctionNetDecorator</a>
+</li>
 <li>get_net_ids()
 : <a class="el" href="classhal_1_1_grouping.html#a524384c5f0299a2bca63564d859f2f45">hal::Grouping</a>
 </li>
@@ -795,6 +813,9 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 </li>
 <li>get_strongly_connected_components()
 : <a class="el" href="classhal_1_1_graph_algorithm_plugin.html#a8f5e1e5548d6bcca304ae9943f582e61">hal::GraphAlgorithmPlugin</a>
+</li>
+<li>get_subgraph_function()
+: <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#a78d92aede2df7af96954115478046601">hal::SubgraphNetlistDecorator</a>
 </li>
 <li>get_submodule_depth()
 : <a class="el" href="classhal_1_1_module.html#a533cbe33380469fe81fcead287efc437">hal::Module</a>
@@ -1456,7 +1477,7 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 : <a class="el" href="classhal_1_1_groupings_of_item_widget.html#a11b92486b219ac0edf4a9bfb30daa9ea">hal::GroupingsOfItemWidget</a>
 </li>
 <li>GroupingTableEntry()
-: <a class="el" href="classhal_1_1_grouping_table_entry.html#ae620437a3a81bef2b83bba661054135e">hal::GroupingTableEntry</a>
+: <a class="el" href="classhal_1_1_grouping_table_entry.html#a5a7b41bbacfe16d7cce06e07aa9ac903">hal::GroupingTableEntry</a>
 </li>
 <li>GroupingTableModel()
 : <a class="el" href="classhal_1_1_grouping_table_model.html#a361bc539eceb5a6712460cf0522b7897">hal::GroupingTableModel</a>
@@ -1482,7 +1503,7 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Nov 24 2022 15:00:00 for HAL by
+    <li class="footer">Generated on Fri Nov 25 2022 13:44:03 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

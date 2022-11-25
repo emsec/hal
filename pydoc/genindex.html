@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; hal_py v4.0.1-63-g192a6912a documentation</title>
+  <title>Index &mdash; hal_py v4.0.1-64-g8eed2469b documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                v4.0.1-63-g192a6912a
+                v4.0.1-64-g8eed2469b
               </div>
             
           
@@ -463,6 +463,8 @@
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.Value">BooleanFunction.Value (class in hal_py)</a>
 </li>
+      <li><a href="boolean_function_net_decorator.html#hal_py.BooleanFunctionNetDecorator">BooleanFunctionNetDecorator (class in hal_py)</a>
+</li>
       <li><a href="boolean_influence.html#boolean_influence.BooleanInfluencePlugin">BooleanInfluencePlugin (class in boolean_influence)</a>
 </li>
       <li><a href="smt.html#hal_py.SMT.SolverType.Boolector">Boolector (hal_py.SMT.SolverType attribute)</a>
@@ -546,6 +548,8 @@
       <li><a href="netlist.html#hal_py.Netlist.copy">copy() (hal_py.Netlist method)</a>
 </li>
       <li><a href="netlist_utils.html#hal_py.NetlistUtils.copy_netlist">copy_netlist() (in module hal_py.NetlistUtils)</a>
+</li>
+      <li><a href="subgraph_netlist_decorator.html#hal_py.SubgraphNetlistDecorator.copy_subgraph_netlist">copy_subgraph_netlist() (hal_py.SubgraphNetlistDecorator method)</a>
 </li>
       <li><a href="netlist.html#hal_py.Netlist.create_gate">create_gate() (hal_py.Netlist method)</a>
 </li>
@@ -741,6 +745,8 @@
 </li>
       <li><a href="gate_type_property.html#hal_py.GateTypeProperty">GateTypeProperty (class in hal_py)</a>
 </li>
+      <li><a href="solve_fsm.html#solve_fsm.SolveFsmPlugin.generate_dot_graph">generate_dot_graph() (solve_fsm.SolveFsmPlugin static method)</a>
+</li>
       <li><a href="smt.html#hal_py.SMT.QueryConfig.generate_model">generate_model (hal_py.SMT.QueryConfig attribute)</a>
 </li>
       <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.generate_vcd">generate_vcd() (netlist_simulator.NetlistSimulator method)</a>
@@ -791,9 +797,15 @@
         <li><a href="gate_type.html#hal_py.GateType.get_boolean_functions">(hal_py.GateType method)</a>
 </li>
       </ul></li>
-      <li><a href="boolean_influence.html#boolean_influence.BooleanInfluencePlugin.get_boolean_influences_of_gate">get_boolean_influences_of_gate() (boolean_influence.BooleanInfluencePlugin method)</a>
+      <li><a href="boolean_influence.html#boolean_influence.BooleanInfluencePlugin.get_boolean_influence">get_boolean_influence() (boolean_influence.BooleanInfluencePlugin static method)</a>
 </li>
-      <li><a href="boolean_influence.html#boolean_influence.BooleanInfluencePlugin.get_boolean_influences_of_subcircuit">get_boolean_influences_of_subcircuit() (boolean_influence.BooleanInfluencePlugin method)</a>
+      <li><a href="boolean_influence.html#boolean_influence.BooleanInfluencePlugin.get_boolean_influences_of_gate">get_boolean_influences_of_gate() (boolean_influence.BooleanInfluencePlugin static method)</a>
+</li>
+      <li><a href="boolean_influence.html#boolean_influence.BooleanInfluencePlugin.get_boolean_influences_of_subcircuit">get_boolean_influences_of_subcircuit() (boolean_influence.BooleanInfluencePlugin static method)</a>
+</li>
+      <li><a href="boolean_function_net_decorator.html#hal_py.BooleanFunctionNetDecorator.get_boolean_variable">get_boolean_variable() (hal_py.BooleanFunctionNetDecorator method)</a>
+</li>
+      <li><a href="boolean_function_net_decorator.html#hal_py.BooleanFunctionNetDecorator.get_boolean_variable_name">get_boolean_variable_name() (hal_py.BooleanFunctionNetDecorator method)</a>
 </li>
       <li><a href="gate_type_component.html#hal_py.FFComponent.get_clock_function">get_clock_function() (hal_py.FFComponent method)</a>
 
@@ -891,7 +903,7 @@
 </li>
       <li><a href="gate.html#hal_py.Gate.get_fan_out_nets">get_fan_out_nets() (hal_py.Gate method)</a>
 </li>
-      <li><a href="boolean_influence.html#boolean_influence.BooleanInfluencePlugin.get_ff_dependency_matrix">get_ff_dependency_matrix() (boolean_influence.BooleanInfluencePlugin method)</a>
+      <li><a href="boolean_influence.html#boolean_influence.BooleanInfluencePlugin.get_ff_dependency_matrix">get_ff_dependency_matrix() (boolean_influence.BooleanInfluencePlugin static method)</a>
 
       <ul>
         <li><a href="netlist_utils.html#hal_py.NetlistUtils.get_ff_dependency_matrix">(in module hal_py.NetlistUtils)</a>
@@ -1039,10 +1051,10 @@
 </li>
       <li><a href="gate.html#hal_py.Gate.get_module">get_module() (hal_py.Gate method)</a>
 </li>
-      <li><a href="netlist.html#hal_py.Netlist.get_module_by_id">get_module_by_id() (hal_py.Netlist method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="netlist.html#hal_py.Netlist.get_module_by_id">get_module_by_id() (hal_py.Netlist method)</a>
+</li>
       <li><a href="grouping.html#hal_py.Grouping.get_module_ids">get_module_ids() (hal_py.Grouping method)</a>
 </li>
       <li><a href="grouping.html#hal_py.Grouping.get_modules">get_modules() (hal_py.Grouping method)</a>
@@ -1094,6 +1106,8 @@
 </li>
       </ul></li>
       <li><a href="netlist.html#hal_py.Netlist.get_net_by_id">get_net_by_id() (hal_py.Netlist method)</a>
+</li>
+      <li><a href="boolean_function_net_decorator.html#hal_py.BooleanFunctionNetDecorator.get_net_from">get_net_from() (hal_py.BooleanFunctionNetDecorator static method)</a>
 </li>
       <li><a href="grouping.html#hal_py.Grouping.get_net_ids">get_net_ids() (hal_py.Grouping method)</a>
 </li>
@@ -1249,8 +1263,12 @@
 </li>
       <li><a href="graph_algorithm.html#graph_algorithm.GraphAlgorithmPlugin.get_strongly_connected_components">get_strongly_connected_components() (graph_algorithm.GraphAlgorithmPlugin method)</a>
 </li>
-      <li><a href="netlist_utils.html#hal_py.NetlistUtils.get_subgraph_function">get_subgraph_function() (in module hal_py.NetlistUtils)</a>
+      <li><a href="subgraph_netlist_decorator.html#hal_py.SubgraphNetlistDecorator.get_subgraph_function">get_subgraph_function() (hal_py.SubgraphNetlistDecorator method)</a>
+
+      <ul>
+        <li><a href="netlist_utils.html#hal_py.NetlistUtils.get_subgraph_function">(in module hal_py.NetlistUtils)</a>
 </li>
+      </ul></li>
       <li><a href="module.html#hal_py.Module.get_submodule_depth">get_submodule_depth() (hal_py.Module method)</a>
 </li>
       <li><a href="module.html#hal_py.Module.get_submodules">get_submodules() (hal_py.Module method)</a>
@@ -2191,9 +2209,9 @@
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.Slt">Slt() (hal_py.BooleanFunction static method)</a>
 </li>
-      <li><a href="solve_fsm.html#solve_fsm.SolveFsmPlugin.solve_fsm">solve_fsm() (solve_fsm.SolveFsmPlugin method)</a>
+      <li><a href="solve_fsm.html#solve_fsm.SolveFsmPlugin.solve_fsm">solve_fsm() (solve_fsm.SolveFsmPlugin static method)</a>
 </li>
-      <li><a href="solve_fsm.html#solve_fsm.SolveFsmPlugin.solve_fsm_brute_force">solve_fsm_brute_force() (solve_fsm.SolveFsmPlugin method)</a>
+      <li><a href="solve_fsm.html#solve_fsm.SolveFsmPlugin.solve_fsm_brute_force">solve_fsm_brute_force() (solve_fsm.SolveFsmPlugin static method)</a>
 </li>
       <li><a href="solve_fsm.html#solve_fsm.SolveFsmPlugin">SolveFsmPlugin (class in solve_fsm)</a>
 </li>
@@ -2226,6 +2244,8 @@
       <li><a href="boolean_function.html#hal_py.BooleanFunction.NodeType.Sub">Sub (hal_py.BooleanFunction.NodeType attribute)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.Sub">Sub() (hal_py.BooleanFunction static method)</a>
+</li>
+      <li><a href="subgraph_netlist_decorator.html#hal_py.SubgraphNetlistDecorator">SubgraphNetlistDecorator (class in hal_py)</a>
 </li>
       <li><a href="module.html#hal_py.Module.submodule_depth">submodule_depth (hal_py.Module attribute)</a>
 </li>
