@@ -1,5 +1,6 @@
 #include "converter/cpp_converter.h"
 
+#include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/utilities/log.h"
 
 #include <algorithm>
@@ -14,17 +15,16 @@ namespace hal
             {
                 return operand.substr(1);
             }
-            if (operand.find("|") != std::string::npos)
-            {
-                auto operand_name = operand.substr(1, operand.size() - 2);
-                return "values[" + operand_name + "]";
-            }
             if (operand.find("sub_") != std::string::npos)
             {
                 return operand;
             }
+            if (utils::starts_with(operand, std::string("var_")))
+            {
+                return "values[" + operand.substr(4) + "]";
+            }
 
-            log_error("z3_utils", "unkown operand format for {}", operand);
+            log_error("z3_utils", "Unkown operand format for {}!", operand);
             return "NOT IMPLEMENTED REACHED";
         }
 
@@ -89,36 +89,37 @@ namespace hal
             return "bool " + lhs + " = " + rhs + ";\n";
         }
 
-        std::string Cpp_Converter::generate_initialization(const std::vector<u32>& inputs) const
+        std::string Cpp_Converter::generate_initialization(const std::vector<std::string>& input_vars) const
         {
             std::string init = "";
-            for (const auto& in : inputs)
+            for (const auto& var : input_vars)
             {
-                init = init + std::to_string(in) + ",\n";
+                if (!utils::starts_with(var, std::string("var_")))
+                {
+                    log_error("z3_utils", "Wrong variable format for {}! Expecting 'var_<INDEX>'.", var);
+                    return "WRONG VAR FORMAT";
+                }
+
+                init = init + var.substr(4) + ",\n";
             }
 
             return init;
         }
 
-        std::string Cpp_Converter::construct_function(const std::string& assignments, const std::string& initalization, const std::vector<u32>& inputs) const
+        std::string Cpp_Converter::construct_function(const std::string& assignments, const std::string& initalization, const std::vector<std::string>& input_vars) const
         {
             std::string func = m_function_corpus;
-
-            const auto max_input = *std::max_element(inputs.begin(), inputs.end());
-
 
             // extract last return val
             const auto last_assigment_pos = assignments.rfind("bool") + 5;    // length of "bool" + one space
             const auto last_line          = assignments.substr(last_assigment_pos);
-
 
             const auto return_var = extract_lhs(last_line);
 
             func = replace_all(func, "<INIT>", initalization);
             func = replace_all(func, "<ASSIGNMENTS>", assignments);
             func = replace_all(func, "<RETURN>", return_var);
-            func = replace_all(func, "<INPUT_SIZE>", std::to_string(max_input + 1));
-
+            func = replace_all(func, "<INPUT_SIZE>", std::to_string(input_vars.size() + 1));
 
             return func;
         }

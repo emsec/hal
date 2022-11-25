@@ -29,6 +29,7 @@ namespace hal
             .def("get_name", &Z3UtilsPlugin::get_name)
             .def_property_readonly("version", &Z3UtilsPlugin::get_version)
             .def("get_version", &Z3UtilsPlugin::get_version)
+            .def("get_subgraph_function", &Z3UtilsPlugin::get_subgraph_function_py)
             ;
 
     #ifndef PYBIND11_MODULE

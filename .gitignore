@@ -41,6 +41,7 @@ CMakeFiles
 CMakeScripts
 build/
 build_dbg/
+build*/
 deps/buddy-2.4/autom4te.cache/
 .vagrant
 .vscode/*

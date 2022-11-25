@@ -73,7 +73,7 @@ namespace hal
              * 
              * @returns A mapping of the net_ids in the wrapped expr to their estimated boolean influence.
              */
-            std::unordered_map<u32, double> get_boolean_influence(const u32 num_evaluations = 32000) const;
+            // std::unordered_map<std::string, double> get_boolean_influence(const u32 num_evaluations = 32000) const;
 
             /**
              * Generates smt2 representation of the wrapped expression.
@@ -109,7 +109,7 @@ namespace hal
              * 
              * @returns A copy of the internal data structure that maps the hal net_ids in the wrapped expression to z3 expressions representing the net_ids.
              */
-            std::unordered_map<u32, z3::expr> get_input_mapping_hal_to_z3() const;
+            std::unordered_map<std::string, z3::expr> get_input_mapping_hal_to_z3() const;
 
             /**
              * Getter to the internal data structure that includes the expressions representing the net_ids in the wrapped expression.
@@ -123,7 +123,7 @@ namespace hal
              * 
              * @returns A copy of the internal data structure that includes the net_ids in the wrapped expression.
              */
-            std::vector<u32> get_inputs_net_ids() const;
+            std::vector<std::string> get_variable_names() const;
 
             /**
              * Transforms the wrapped z3 expression into verligo syntax and writes it to a file.
@@ -131,7 +131,7 @@ namespace hal
              * @param[in] path - Path where the file is written to.
              * @returns True in case of success, false otherwise.
              */
-            bool write_verilog_file(const std::filesystem::path& path, const std::map<u32, bool>& control_mapping = {}) const;
+            bool write_verilog_file(const std::filesystem::path& path, const std::map<std::string, bool>& control_mapping = {}) const;
 
             /**
              * Transforms the wrapped z3 expression into efficent c code and writes it to a file.
@@ -171,9 +171,9 @@ namespace hal
             std::unique_ptr<z3::context> m_ctx;
             std::unique_ptr<z3::expr> m_expr;
 
-            std::unordered_map<u32, z3::expr> m_input_mapping_hal_to_z3;
+            std::unordered_map<std::string, z3::expr> m_input_mapping_hal_to_z3;
             std::vector<z3::expr> m_inputs_z3_expr;
-            std::vector<u32> m_inputs_net_ids;
+            std::vector<std::string> m_var_names;
         };
     }    // namespace z3_utils
 }    // namespace hal

@@ -39,7 +39,7 @@ namespace hal
      *
      * @ingroup netlist
      */
-    class Endpoint
+    class NETLIST_API Endpoint
     {
     public:
         /**

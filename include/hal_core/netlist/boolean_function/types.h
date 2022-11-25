@@ -263,6 +263,14 @@ namespace hal
 			 * @returns Ok() and the model on success, Err() otherwise.
 			 */
             static Result<Model> parse(const std::string& model_str, const SolverType& solver);
+
+            /**
+			 * Evaluates the given boolean function by replacing all variables contained in the model with their corresponding value and simplifying.
+			 *
+			 * @param[in] bf - Boolean function to evaluate.
+			 * @returns Ok() and the evaluated function on success, Err() otherwise.
+			 */
+            Result<BooleanFunction> evaluate(const BooleanFunction& bf);
         };
 
         /**

@@ -51,7 +51,7 @@ namespace hal
      *
      * @ingroup netlist
      */
-    class BooleanFunction final
+    class NETLIST_API BooleanFunction final
     {
     public:
         ////////////////////////////////////////////////////////////////////////
@@ -94,6 +94,14 @@ namespace hal
          * @returns A string representing the values in the given base or an error.
          */
         static Result<std::string> to_string(const std::vector<BooleanFunction::Value>& value, u8 base = 2);
+
+        /**
+         * Convert the given bit-vector to its unsigned 64 bit integer representation.
+         * 
+         * @param[in] value - The value as a bit-vector.
+         * @returns An u64 representing the values in the given base or an error.
+         */
+        static Result<u64> to_u64(const std::vector<BooleanFunction::Value>& value);
 
         /**
          * Output stream operator that forwards to_string of a value.
