@@ -70,7 +70,6 @@ namespace hal
         // perhaps a spacer item with fixed size at the front instead of left spacing/margin
         mHeaderContainerLayout->addWidget(mHeaderEdit);
         mHeaderContainerLayout->addWidget(mLastModifiedLabel);
-        //mHeaderContainerLayout->addStretch();
 
         // toolbar
         // toolbar as qtoolbar
@@ -103,15 +102,8 @@ namespace hal
         fmt.setForeground(QColor("#A9B7C6"));//set text color to the default text color
         mTextEdit->mergeCurrentCharFormat(fmt);
 
-
         // buttons
         QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok |  QDialogButtonBox::Cancel, this);
-
-//        QHBoxLayout* buttonLayout = new QHBoxLayout;
-//        mOkButton = new QPushButton("Ok");
-//        mCancelButton = new QPushButton("Cancel");
-//        buttonLayout->addWidget(mOkButton, 0, Qt::AlignLeft);
-//        buttonLayout->addWidget(mCancelButton, 0, Qt::AlignRight);
 
         // add everything
         mLayout = new QVBoxLayout(this);
@@ -119,8 +111,6 @@ namespace hal
         mLayout->addWidget(mToolBar);
         mLayout->addWidget(mTextEdit);
         mLayout->addWidget(buttonBox);
-        //mLayout->addLayout(buttonLayout);
-
 
         connect(buttonBox, &QDialogButtonBox::accepted, this, &CommentDialog::handleOkClicked);
         connect(buttonBox, &QDialogButtonBox::rejected, this, &CommentDialog::handleCancelClicked);
@@ -143,6 +133,20 @@ namespace hal
         QPixmap pix(16, 16);
         pix.fill(c);
         mColorAction->setIcon(pix);
+    }
+
+    void CommentDialog::handleColorSelected()
+    {
+        auto act = dynamic_cast<QAction*>(sender());
+        if(!act) return;
+
+        auto color = act->data().value<QColor>();
+        if(!color.isValid()) return;
+
+        QTextCharFormat fmt;
+        fmt.setForeground(color);
+        mergeFormatOnWordOrSelection(fmt);
+        updateColorActionPixmap(color);
     }
 
     void CommentDialog::handleCurrentCharFormatChanged(const QTextCharFormat &format)
@@ -186,72 +190,36 @@ namespace hal
 
     void CommentDialog::colorTriggered()
     {
-//        QMenuBar *bar = new QMenuBar;
-//        bar->addAction("test1");
-//        bar->addAction("test2");
-//        bar->show();
+        QColor color(Qt::red);
+        QMenu* men = new QMenu(this);
+        QPixmap map(16, 16);
+        map.fill(color);
+        auto act = men->addAction(map, "Red", this, &CommentDialog::handleColorSelected);
+        act->setData(color);
 
+        color = QColor(Qt::green);
+        map.fill(color);
+        act = men->addAction(map, "Green", this, &CommentDialog::handleColorSelected);
+        act->setData(color);
 
-//        QMenu* men = new QMenu(this);
-//        QPixmap map(16, 16);
-//        map.fill(Qt::red);
-//        men->addAction(map, "Red");
-//        map.fill(Qt::green);
-//        men->addAction(map, "Green");
-//        map.fill(Qt::yellow);
-//        men->addAction(map, "Yellow");
-//        map.fill(QColor("#A9B7C6"));
-//        men->addAction(map, "Default");
-//        QRect geo = mToolBar->actionGeometry(mColorAction);
-//        QPoint global = mToolBar->mapToGlobal(QPoint(geo.x(), geo.y()));
-//        qDebug() << geo;
-//        men->move(global.x(), global.y() + geo.height());
-//        men->exec();
-//        men->resize(10,10);
+        color = QColor(Qt::yellow);
+        map.fill(color);
+        act = men->addAction(map, "Yellow", this, &CommentDialog::handleColorSelected);
+        act->setData(color);
 
-        CommentColorPicker ccp;
-        if(ccp.exec() == QDialog::Accepted)
-        {
-            QColor color = ccp.getSelectedColor();
-            if(!color.isValid()) return;
-            QTextCharFormat fmt;
-            fmt.setForeground(color);
-            mergeFormatOnWordOrSelection(fmt);
-            updateColorActionPixmap(color);
-        }
-        ccp.close();
+        color = QColor("#A9B7C6"); // out of stylesheet
+        map.fill(color);
+        act = men->addAction(map, "Default", this, &CommentDialog::handleColorSelected);
+        act->setData(color);
 
-
-        //QColorDialog colorDialog(mTextEdit->textColor(), this);
-//        QColorDialog colorDialog(QColor("#A9B7C6"), this);
-//        colorDialog.setCustomColor(0, QColor("#A9B7C6")); // the default color textcolor is preserved so that the user can revert to it
-//        if(colorDialog.exec() == QDialog::Accepted)
-//        {
-//            QColor color = colorDialog.selectedColor();
-//            if(!color.isValid()) return;
-//            QTextCharFormat fmt;
-//            fmt.setForeground(color);
-//            mergeFormatOnWordOrSelection(fmt);
-//            updateColorActionPixmap(color);
-//        }
-//        colorDialog.close(); // otherwise xcb connection error...
-
-
-
-
-//        QColor color = QColorDialog::getColor(mTextEdit->textColor(), this);
-//        if(!color.isValid()) return;
-
-//        QTextCharFormat fmt;
-//        fmt.setForeground(color);
-//        mergeFormatOnWordOrSelection(fmt);
-        //        updateColorActionPixmap(color);
+        QRect geo = mToolBar->actionGeometry(mColorAction);
+        QPoint global = mToolBar->mapToGlobal(QPoint(geo.x(), geo.y()));
+        men->move(global.x(), global.y() + geo.height());
+        men->exec();
     }
 
     void CommentDialog::bulletListTriggered()
     {
-        qDebug() << "bullet list triggered";
-
         QTextCursor cursor = mTextEdit->textCursor();
         if(cursor.currentList())
         {
@@ -288,19 +256,10 @@ namespace hal
 
     void CommentDialog::codeTriggered()
     {
-        qDebug() << "Code is triggered to: " << mCodeAction->isChecked();
         QTextCharFormat fmt;
-        fmt.setBackground(mCodeAction->isChecked() ? QColor("#334652") : QColor("#171E22")); //dependent on background
+        //mTextEdit->palette().color(QPalette::Background)
+        fmt.setBackground(mCodeAction->isChecked() ? QColor("#334652") : mTextEdit->palette().color(QPalette::Background)); //dependent on background
         fmt.setFont(mCodeAction->isChecked() ? QFontDatabase::systemFont(QFontDatabase::FixedFont) : mDefaultFont);
-//        fmt.setFontFixedPitch(true);
-//        fmt.setFontPointSize(20);
-//        fmt.setFontStyleHint(QFont::TypeWriter); //monospace..?
-        //fmt.setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
-
-//        QFont font("Monospace");
-//        font.setStyleHint(QFont::TypeWriter);
-//        font.setPointSize(13);
-//        fmt.setFont(font);
         mergeFormatOnWordOrSelection(fmt);
     }
 

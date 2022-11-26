@@ -95,15 +95,11 @@ namespace hal
         // textfield
         QTextEdit* mTextEdit;
 
-        // buttons (perhaps 2 Pushbuttons instead of a buttonbox to put them on different sides)
-        QPushButton* mOkButton;
-        QPushButton* mCancelButton;
-
-
         // helper functions
         void init();
         void mergeFormatOnWordOrSelection(const QTextCharFormat &format); // taken from richtext example
         void updateColorActionPixmap(const QColor &c);
+        void handleColorSelected();
         void handleCurrentCharFormatChanged(const QTextCharFormat &format); // for the color
         void handleCursorPositionChanged(); // for the color (mTextEdit->textColor is the current color the curser is at)
 
