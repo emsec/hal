@@ -143,7 +143,6 @@ namespace hal
         CommentDialog commentDialog("New Comment");
         if(commentDialog.exec() == QDialog::Accepted)
         {
-            QString header = commentDialog.getHeader();
             gCommentManager->addComment(new CommentEntry(mCurrentNode, commentDialog.getText(), commentDialog.getHeader()));
         }
         commentDialog.close();

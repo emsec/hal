@@ -6,7 +6,7 @@ namespace hal
 
     CommentEntry::CommentEntry(Node n, QString text, QString header) : mNode(n), mHeader(header), mText(text), mDirty(false)
     {
-        mCreated = QDateTime::currentDateTime();
+        mCreated = QDateTime::currentDateTime().toUTC();
         mLastModified = mCreated;
     }
 
@@ -24,27 +24,21 @@ namespace hal
             return;
         mNode = Node(nodeObj["id"].toInt(),(Node::NodeType)nodeObj["type"].toInt());
         mHeader = jsonObj["header"].toString();
-        //mCreated = QDateTime::fromString(jsonObj["created"].toString());//, "ddd MMM d hh:mm::ss yyyy");
-        mCreated = QDateTime::fromString(jsonObj["created"].toString(), "ddd MMM d HH:mm:ss yyyy");
-        mLastModified = QDateTime::fromString(jsonObj["modified"].toString());
-        mText = jsonObj["text"].toString();
-        qDebug() << "Entry created with date: " << mCreated.toString();
-        qDebug() << "In field: " << jsonObj["created"].toString();
-        qDebug() << "Is valid: " << mCreated.isValid();
-        qDebug() << QDateTime::fromString(jsonObj["created"].toString());
+        mCreated = QDateTime::fromString(jsonObj["created"].toString(), Qt::ISODate);
+        mLastModified = QDateTime::fromString(jsonObj["modified"].toString(), Qt::ISODate);
     }
 
     void CommentEntry::setHeader(QString newHeader)
     {
         mHeader = newHeader;
-        mLastModified = QDateTime::currentDateTime();
+        mLastModified = QDateTime::currentDateTime().toUTC();
         mDirty = true;
     }
 
     void CommentEntry::setText(QString newText)
     {
         mText = newText;
-        mLastModified = QDateTime::currentDateTime();
+        mLastModified = QDateTime::currentDateTime().toUTC();
         mDirty = true;
     }
 
@@ -86,8 +80,8 @@ namespace hal
         node["type"]       = (int) mNode.type();
         retval["node"]     = node;
         retval["header"]   = mHeader;
-        retval["created"]  = mCreated.toString();
-        retval["modified"] = mLastModified.toString();
+        retval["created"]  = mCreated.toString(Qt::ISODate);
+        retval["modified"] = mLastModified.toString(Qt::ISODate);
         retval["text"]     = mText;
         return retval;
     }
@@ -105,6 +99,11 @@ namespace hal
         xout <<  "   created:   " << mCreated.toString("dd.MM.yyyy hh:mm:ss") << "\n";
         xout <<  "   modified:  " << mLastModified.toString("dd.MM.yyyy hh:mm:ss") << "\n";
         xout <<  "   text:      <" << mText.left(35) << ">\n";
+    }
+
+    QString CommentEntry::getDateFormatString() const
+    {
+        return QString("dd.MM.yy hh:mm");
     }
 
 }

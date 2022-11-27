@@ -40,7 +40,7 @@ namespace hal
     {
         if(!mEntry) return;
         mHeader->setText(mEntry->getHeader());
-        mCreationDate->setText("  " + mEntry->getCreationTime().toString("dd.MM.yy hh:mm"));
+        mCreationDate->setText("  " + mEntry->getCreationTime().toString(mEntry->getDateFormatString()));
         mTextEdit->setHtml(mEntry->getText());
         //setFixedHeight(mTopWidget->height()+mText->height());
     }

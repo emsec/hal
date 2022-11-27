@@ -29,7 +29,7 @@ namespace hal
         if(entry)
         {
             // fix parsing error and then comment this in!
-            //mLastModifiedLabel->setText(mCommentEntry->getLastModifiedTime().toString());
+            mLastModifiedLabel->setText(mCommentEntry->getLastModifiedTime().toString(mCommentEntry->getDateFormatString()));
             mHeaderEdit->setText(entry->getHeader());
             mTextEdit->setHtml(entry->getText());
             updateColorActionPixmap(mTextEdit->textColor()); //default text color
@@ -63,16 +63,12 @@ namespace hal
         mHeaderEdit = new QLineEdit;
         mHeaderEdit->setStyleSheet("background-color: #171e22; color: #A9B7C6;");
         mLastModifiedLabel = new QLabel;
-        mLastModifiedLabel->setText(QDateTime::currentDateTime().toString("dd.MM.yy hh:mm")); // default value, is set outside if entry was given in constructor
-        //mLastModifiedLabel->setText( mCommentEntry ? mCommentEntry->getLastModifiedTime().toString() : QDateTime::currentDateTime().toString("dd.MM.yy hh:mm"));
-        //if(mLastModifiedLabel->text().isEmpty()) mLastModifiedLabel->hide(); (only when an empty string is used instead of current time)
 
         // perhaps a spacer item with fixed size at the front instead of left spacing/margin
         mHeaderContainerLayout->addWidget(mHeaderEdit);
         mHeaderContainerLayout->addWidget(mLastModifiedLabel);
 
         // toolbar
-        // toolbar as qtoolbar
         mToolBar = new QToolBar;
         mBoldAction = mToolBar->addAction("Bold", this, &CommentDialog::boldTriggered); //first arg can be an icon
         mBoldAction->setCheckable(true);

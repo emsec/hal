@@ -59,6 +59,8 @@ namespace hal
         bool isInvalid() const;
         void dump() const;
 
+        QString getDateFormatString() const;
+
         //create all setter/getter for datetimes for serialization/deserialization in case
         //the content manager parses file? Or omit them and create parse/write json methods
         //compareable to user actions, then there would be no need to set datetimes from outside.
