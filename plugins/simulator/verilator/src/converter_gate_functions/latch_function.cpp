@@ -233,20 +233,7 @@ namespace hal
                     // set output wires
                     for (const GatePin* output_pin : output_pins)
                     {
-                        function << "assign " << output_pin->get_name() << " = ";
-                        switch (output_pin->get_type())
-                        {
-                            case PinType::state:
-                                function << "" << internal_state << "";
-                                break;
-                            case PinType::neg_state:
-                                function << "" << internal_negated_state << "";
-                                break;
-                            default:
-                                log_error("verilator", "unsupported reached: Latch has weird outpin '{}' for gate '{}', aborting...", output_pin->get_name(), gt->get_name());
-                                return std::string();
-                        }
-                        function << ";" << std::endl;
+                        function << "assign " << output_pin->get_name() << " = " << gt->get_boolean_function(output_pin) << ";" << std::endl;
                     }
                 }
                 else

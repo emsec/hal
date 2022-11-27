@@ -89,8 +89,14 @@ namespace hal
         ProjectManager* pm = ProjectManager::instance();
         if (pm->get_project_status() != ProjectManager::ProjectStatus::NONE && mAutosaveEnabled)
         {
+            if (gPythonContext->currentThread())
+            {
+                log_info("gui", "Autosave deferred while python script is running...");
+                return;
+            }
             log_info("gui", "saving a backup in case something goes wrong...");
-            ProjectManager::instance()->serialize_project(gNetlist, true);
+            if (!ProjectManager::instance()->serialize_project(gNetlist, true))
+                log_warning("gui", "Autosave failed to create project backup to directory '{}'.", pm->get_project_directory().get_shadow_dir().string());
         }
     }
 
@@ -286,6 +292,13 @@ namespace hal
         QString projdir = ind.projectDirectory();
         if (projdir.isEmpty()) return;
 
+        if (!QFileInfo(projdir).suffix().isEmpty())
+        {
+            QMessageBox::warning(qApp->activeWindow(),"Aborted", "selected project directory name must not have suffix ." + QFileInfo(projdir).suffix());
+            return;
+        }
+
+
         ProjectManager* pm = ProjectManager::instance();
         if (!pm->create_project_directory(projdir.toStdString()))
         {
@@ -323,6 +336,9 @@ namespace hal
         }
         else
         {
+            // failed to create project: if netlist was moved move back before deleting directory
+            if (ind.isMoveNetlistChecked())
+                QDir().rename(netlistFilename,filename);
             if (pm->remove_project_directory())
                 log_info("gui", "Project directory removed since import failed.");
             else

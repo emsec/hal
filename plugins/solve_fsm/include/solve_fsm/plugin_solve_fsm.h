@@ -26,8 +26,6 @@
 #pragma once
 
 #include "hal_core/plugin_system/plugin_interface_base.h"
-#include "utils/fsm_transition.h"
-#include "z3++.h"
 
 #include <map>
 #include <set>
@@ -58,7 +56,7 @@ namespace hal
          * @param[in] timeout - Timeout value for the sat solvers. Defaults to 600000 ms.
          * @returns A mapping from each state to all its possible transitions. The transitions are a map from the successor state to all the possible input mappings that lead to it.
          */
-        std::map<u64, std::map<u64, std::vector<std::map<u32, u8>>>> solve_fsm(Netlist* nl,
+        static Result<std::map<u64, std::map<u64, BooleanFunction>>> solve_fsm(Netlist* nl,
                                                                                const std::vector<Gate*> state_reg,
                                                                                const std::vector<Gate*> transition_logic,
                                                                                const std::map<Gate*, bool> initial_state = {},
@@ -74,18 +72,30 @@ namespace hal
          * @param[in] graph_path - Path where the transition state graph in dot format is saved.
          * @returns A mapping from each state to all its possible successors states.
          */
-        std::map<u64, std::vector<u64>> solve_fsm_brute_force(Netlist* nl, const std::vector<Gate*> state_reg, const std::vector<Gate*> transition_logic, const std::string graph_path = "");
+        static Result<std::map<u64, std::set<u64>>> solve_fsm_brute_force(Netlist* nl, const std::vector<Gate*> state_reg, const std::vector<Gate*> transition_logic, const std::string graph_path = "");
 
-    private:
-        std::map<Net*, Net*> find_output_net_to_input_net(const std::set<Gate*> state_reg);
+        /**
+         * Generates the state graph of a finite state machine from the transitions of that fsm.
+         *
+         * @param[in] state_reg - Vector contianing the state registers.
+         * @param[in] transitions - Transitions of the fsm given as a map from origin state to all possible successor states and the corresponding condition.
+         * @param[in] graph_path - Path where the transition state graph in dot format is saved.
+         * @param[in] max_condition_length - The maximum character length that is printed for boolean functions representing the conditions.
+         * @param[in] base - The base with that the states are formatted and printed.
+         * @returns A string representing the dot graph.
+         */
+        static Result<std::string> generate_dot_graph(const std::vector<Gate*>& state_reg, const std::map<u64, std::map<u64, BooleanFunction>>& transitions, const std::string& graph_path="", const u32 max_condition_length=128, const u32 base=10);
 
-        std::vector<FsmTransition>
-            get_state_successors(const z3::expr& prev_state_vec, const z3::expr& next_state_vec, const z3::expr& start_state, const std::map<u32, z3::expr>& external_ids_to_expr);
-        std::vector<u32> get_relevant_external_inputs(const z3::expr& state, const std::map<u32, z3::expr>& external_ids_to_expr);
-        FsmTransition generate_transition_with_inputs(const z3::expr& start_state, const z3::expr& state, const std::vector<u32>& inputs, const u64 input_values);
-        std::vector<FsmTransition> merge_transitions(const std::vector<FsmTransition>& transitions);
-
-        std::string generate_dot_graph(const Netlist* nl, const std::vector<FsmTransition>& transitions, const std::vector<Gate*>& state_reg);
-        std::string generate_state_transition_table(const Netlist* nl, const std::vector<FsmTransition>& transitions, const std::map<u32, z3::expr>& external_ids_to_expr);
+        /**
+         * Generates the state graph of a finite state machine from the transitions of that fsm.
+         *
+         * @param[in] state_reg - Vector contianing the state registers.
+         * @param[in] transitions - Transitions of the fsm given as a map from origin state to all possible successor states and the corresponding condition.
+         * @param[in] graph_path - Path where the transition state graph in dot format is saved.
+         * @param[in] max_condition_length - The maximum character length that is printed for boolean functions representing the conditions.
+         * @param[in] base - The base with that the states are formatted and printed.
+         * @returns A string representing the dot graph.
+         */
+        static Result<std::string> generate_dot_graph(const std::vector<Gate*>& state_reg, const std::map<u64, std::set<u64>>& transitions, const std::string& graph_path="", const u32 max_condition_length=128, const u32 base=10);
     };
 }    // namespace hal

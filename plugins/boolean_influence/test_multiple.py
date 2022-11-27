@@ -1,8 +1,8 @@
 import sys, os
 
-hal_base_path = "/home/simon/projects/hal_4_0/hal/"
+hal_base_path = "/home/simon/projects/hal/"
 dir_path = "/home/simon/playground/boolean_inf_test/netlists"
-gate_library_path = "/home/simon/projects/hal_4_0/hal/plugins/gate_libraries/definitions/lsi_10k.hgl"
+gate_library_path = "/home/simon/projects/hal/plugins/gate_libraries/definitions/lsi_10k.hgl"
 
 sys.path.append(hal_base_path + "build/lib/") #this is where your hal python lib is located
 os.environ["HAL_BASE_PATH"] = hal_base_path + "build" # hal base path

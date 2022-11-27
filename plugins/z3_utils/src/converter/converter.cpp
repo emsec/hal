@@ -1,5 +1,7 @@
 #include "converter/converter.h"
 
+#include "plugin_z3_utils.h"
+
 #include "hal_core/utilities/log.h"
 
 #include <iomanip>
@@ -245,7 +247,7 @@ namespace hal
             return assignment;
         }
         
-        std::string Converter::convert_z3_expr_to_func(const z3Wrapper& e) const {
+        std::string Converter::convert_z3_expr_to_func(const z3::expr& e) const {
             std::string assignments = "";
 
             // TODO remove this is only for debugging
@@ -255,8 +257,9 @@ namespace hal
             // z3::expr t_3 = {*test_ctx, Z3_mk_bvnot(*test_ctx, t_2)};
             // auto wrap_t3 = z3Wrapper(std::move(test_ctx), t_3);
 
-            auto smt = e.get_smt2_string();
+            auto smt = z3_utils::to_smt2(e);
 
+            // std::cout << "SMT: " << smt << std::endl;
 
             std::istringstream iss(smt);
             for (std::string line; std::getline(iss, line); ) {
@@ -270,15 +273,15 @@ namespace hal
 
             if (assignments.empty()) {
                 // in order to stay compliant with the rest of the converter structure we simply simulate a dummy assignment with a double negation.
-                auto dummy_assignment = "(let ((?x1 (bvnot (bvnot " + e.get_expr().to_string() + ")))))";
+                auto dummy_assignment = "(let ((?x1 (bvnot (bvnot " + e.to_string() + ")))))";
                 assignments += generate_assignment(dummy_assignment);
             }
 
-            const auto input_ids = e.get_inputs_net_ids();
+            const auto input_vars = utils::to_vector(z3_utils::get_variable_names(e));
 
-            std::string initialization = generate_initialization(input_ids);
+            std::string initialization = generate_initialization(input_vars);
 
-            return construct_function(assignments, initialization, input_ids);
+            return construct_function(assignments, initialization, input_vars);
         }
     }  //namespace z3_utils
 }   // namespace hal
