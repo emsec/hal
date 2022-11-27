@@ -157,9 +157,5 @@ namespace hal
 
         //comment tab
         CommentWidget* mCommentWidget;
-        DetailsFrameWidget* mCommentFrame;
-
-        //debug comment list
-        CommentWidget* mCommentWidgetTest;
     };
 }
