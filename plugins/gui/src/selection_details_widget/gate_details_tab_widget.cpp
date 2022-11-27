@@ -91,31 +91,9 @@ namespace hal
         QList<DetailsFrameWidget*> framesDataTab({mDataFrame});
         addTab("Data", framesDataTab);
 
-        //comments tab
+        //comments tab, no frame is used here
         mCommentWidget = new CommentWidget(this);
-//        //mCommentWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-//        mCommentFrame = new DetailsFrameWidget(mCommentWidget, "Comments", this);
-//        //mCommentFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
-//        addTab("Comments",  {mCommentFrame});
         QTabWidget::addTab(mCommentWidget, "Comments");
-
-        //comments test, to remove
-        mCommentWidgetTest = new CommentWidget;
-        mCommentWidgetTest->show();
-
-        CommentWidget* entryList = new CommentWidget();
-        entryList->show();
-
-        CommentEntry* entry = new CommentEntry(Node(1, Node::NodeType::Gate),
-                                               "<font color = \"red\">Lorem ipsum dolor sit amet</font>, consetetur <b>sadipscing elitr</b>, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.","Example Header :D");
-        CommentItem* item = new CommentItem(entry);
-        CommentEntry* entry2 = new CommentEntry(Node(1, Node::NodeType::Gate),
-                                               "<font color = \"blue\">Lorem ipsum dolor sit amet</font>, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.","Example Header 2 :)");
-        CommentItem* item2 = new CommentItem(entry2);
-        item->show();
-        entryList->setItem(item);
-        entryList->setItem(item2);
-        entryList->addHackySpacer();
     }
 
     void GateDetailsTabWidget::setGate(Gate* gate)
@@ -127,7 +105,6 @@ namespace hal
         mPinsTree->setGate(gate);
         mDataTable->setGate(gate);
         mCommentWidget->nodeChanged(Node(gate->get_id(), Node::NodeType::Gate));
-        mCommentWidgetTest->nodeChanged(Node(gate->get_id(), Node::NodeType::Gate));
 
         // Logic for LUT/FF/LATCH
         GateDetailsTabWidget::GateTypeCategory gateTypeCategory = getGateTypeCategory(gate);

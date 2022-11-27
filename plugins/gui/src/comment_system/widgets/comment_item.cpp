@@ -86,7 +86,6 @@ namespace hal
         mTopLayout = new QHBoxLayout(mTopWidget);
         mTopLayout->setSpacing(0);
         mTopLayout->setMargin(0);
-        //mTopWidget->setLayout(mTopLayout);
 
         mHeader = new QLabel(this);
         mHeader->setStyleSheet("font-weight: bold;");
@@ -117,12 +116,6 @@ namespace hal
         mLayout->addWidget(mTextEdit);
         mLayout->addStretch();
 
-//        QWidget* hackySpacer = new QWidget();
-//        hackySpacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-//        mLayout->addWidget(hackySpacer);
-
-        //setLayout(mLayout);
-
         // connections / logic
         connect(mDeleteButton, &QAbstractButton::clicked, this, &CommentItem::handleDeleteButtonTriggered);
         connect(mModifyButton, &QAbstractButton::clicked, this, &CommentItem::handleModifyButtonTriggered);
@@ -130,13 +123,11 @@ namespace hal
 
     void CommentItem::handleDeleteButtonTriggered()
     {
-        qDebug() << "I want to be deleted!";
         Q_EMIT delete_requested(this);
     }
 
     void CommentItem::handleModifyButtonTriggered()
     {
-        qDebug() << "I want to be modified!";
         CommentDialog dialog("Modify Comment", mEntry);
         if(dialog.exec() == QDialog::Accepted)
         {
