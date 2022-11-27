@@ -42,22 +42,6 @@ namespace hal
         mHeaderLayout->addWidget(mSearchButton);// alignright without spacer
         mHeaderLayout->addWidget(mSearchbar);
 
-
-//        mToolbar = new QToolBar("Title?");
-//        //mToolbar = new Toolbar();
-//        QAction* newCommentAction = new QAction(QIcon(":/icons/plus"), "New Comment");
-//        QAction* mSearchAction = new QAction(QIcon(":/icons/search"), "Search");
-//        mToolbar->addAction(newCommentAction);
-//        //mToolbar->addSpacer();
-//        QWidget* spacer = new QWidget(); // must be used when using QToolBar
-//        spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-//        mToolbar->addWidget(spacer);
-//        mToolbar->addAction(mSearchAction);
-//        mToolbar->addWidget(mSearchbar);
-//        mSearchbar->show();
-//        mToolbar->setMinimumHeight(mSearchbar->height());// can be set if QToolbar is used (not custom)
-//        mTopLayout->addWidget(mToolbar);
-
         // comment part
         mCommentsLayout = new QVBoxLayout();
         mCommentsLayout->setSpacing(0);
@@ -70,16 +54,7 @@ namespace hal
         mCommentsContainer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         mScrollArea->setWidget(mCommentsContainer);
         mScrollArea->show();
-        //mCommentsContainer->setMinimumSize(500,200);
-        //mTopLayout->addWidget(mScrollArea);
 
-        // test fillings
-//        QLabel* commentImposter = new QLabel("Perhaps i will be a comment someday?");
-//        commentImposter->setWordWrap(true);
-//        //commentImposter->show();
-//        //mScrollArea->setWidget(commentImposter);
-//        mCommentsLayout->addWidget(commentImposter);
-//        mCommentsLayout->addWidget(new QLabel("II will be another Comment (hopefully)"));
         mTopLayout->addLayout(mHeaderLayout,0,0);
         mTopLayout->addWidget(mScrollArea, 1, 0);
         //mTopLayout->addItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Expanding),2,0);
@@ -161,12 +136,10 @@ namespace hal
             mSearchbar->hide();;
             mSearchButton->show();
         }
-        //mSearchbar->isHidden() ? mSearchbar->show() : mSearchbar->hide();
     }
 
     void CommentWidget::handleNewCommentTriggered()
     {
-        qDebug() << "A new comment wants to be created!";
         CommentDialog commentDialog("New Comment");
         if(commentDialog.exec() == QDialog::Accepted)
         {
