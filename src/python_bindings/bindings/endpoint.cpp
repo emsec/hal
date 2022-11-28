@@ -36,16 +36,16 @@ namespace hal
         )");
 
         py_endpoint.def_property_readonly("pin", &Endpoint::get_pin, R"(
-            The name of the pin associated with the endpoint.
+            The pin associated with the endpoint.
 
-            :type: str
+            :type: hal_py.GatePin
         )");
 
         py_endpoint.def("get_pin", &Endpoint::get_pin, R"(
-            Get the name of the pin associated with the endpoint.
+            Get pin associated with the endpoint.
 
-            :returns: The name of the pin.
-            :rtype: str
+            :returns: The pin.
+            :rtype: hal_py.GatePin
         )");
 
         py_endpoint.def_property_readonly("net", &Endpoint::get_net, R"(

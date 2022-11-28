@@ -20,7 +20,8 @@ namespace hal
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        setSelectionMode(QAbstractItemView::NoSelection);
+        setSelectionMode(QAbstractItemView::SingleSelection);
+        setSelectionBehavior(QAbstractItemView::SelectRows);
         setFocusPolicy(Qt::NoFocus);
         horizontalHeader()->setStretchLastSection(true);
         verticalHeader()->hide();
@@ -90,6 +91,14 @@ namespace hal
             QApplication::clipboard()->setText(pin);
         });
 
+        if (!gSelectionRelay->selectedGates().contains(gateID))
+        {
+            menu.addSeparator();
+            menu.addAction("Add gate to selection", [gateID,this](){
+                gSelectionRelay->addGate(gateID);
+                gSelectionRelay->relaySelectionChanged(this);
+            });
+        }
         menu.addSection("Python");
         QString pythonCommand ="netlist.get_gate_by_id(" + gateIDStr + ").%1(\"" + pin + "\")";
         pythonCommand = (mEndpointModel->getType() == EndpointTableModel::Type::source) ? pythonCommand.arg("get_fan_out_endpoint") : pythonCommand.arg("get_fan_in_endpoint");

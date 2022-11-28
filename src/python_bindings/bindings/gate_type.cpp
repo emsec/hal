@@ -446,6 +446,15 @@ namespace hal
             :rtype: hal_py.GatePinGroup or None
         )");
 
+        py_gate_type.def("get_pin_groups", &GateType::get_pin_groups, R"(
+            Get an ordered list of all pin groups of the gate type.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+
+            :param lambda filter: An optional filter.
+            :returns: An ordered list of pin groups.
+            :rtype: list[hal_py.GatePinGroup]
+        )");
+
         py_gate_type.def("get_pin_group_by_id", &GateType::get_pin_group_by_id, py::arg("id"), R"(
             Get the pin group corresponding to the given ID.
 

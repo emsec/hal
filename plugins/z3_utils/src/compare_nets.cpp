@@ -1,11 +1,9 @@
-#include "compare_nets.h"
+#include "plugin_z3_utils.h"
 
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
-#include "subgraph_function_generator.h"
-#include "z3++.h"
 
 namespace hal
 {
@@ -37,9 +35,6 @@ namespace hal
                 return false;
             }
 
-            SubgraphFunctionGenerator sfg_a;
-            SubgraphFunctionGenerator sfg_b;
-
             std::vector<Gate*> gates_a = netlist_a->get_gates([](Gate* g) {
                 auto props = g->get_type()->get_properties();
                 return props.find(GateTypeProperty::combinational) != props.end();
@@ -54,8 +49,8 @@ namespace hal
             z3::expr bf_a(ctx);
             z3::expr bf_b(ctx);
 
-            std::unordered_set<u32> input_net_ids_a;
-            std::unordered_set<u32> input_net_ids_b;
+            // std::unordered_set<u32> input_net_ids_a;
+            // std::unordered_set<u32> input_net_ids_b;
 
             // if the net has no source just use itself as boolean function
             if (net_a->get_sources().size() == 0)
@@ -64,7 +59,12 @@ namespace hal
             }
             else
             {
-                sfg_a.get_subgraph_z3_function(net_a, gates_a, ctx, bf_a, input_net_ids_a);
+                const auto bf_res = z3_utils::get_subgraph_z3_function(gates_a, net_a, ctx);
+                if (bf_res.is_error())
+                {
+                    log_error("z3_utils", "{}", bf_res.get_error().get());
+                }
+                bf_a = bf_res.get();
             }
 
             // if the net has no source just use itself as boolean function
@@ -74,13 +74,21 @@ namespace hal
             }
             else
             {
-                sfg_b.get_subgraph_z3_function(net_b, gates_b, ctx, bf_b, input_net_ids_b);
+                const auto bf_res = z3_utils::get_subgraph_z3_function(gates_b, net_b, ctx);
+                if (bf_res.is_error())
+                {
+                    log_error("z3_utils", "{}", bf_res.get_error().get());
+                }
+                bf_b = bf_res.get();
             }
 
             z3::solver s(ctx);
 
             if (replace_net_ids)
             {
+                const auto input_net_ids_a = z3_utils::extract_net_ids(bf_a);
+                const auto input_net_ids_b = z3_utils::extract_net_ids(bf_b);
+
                 // replace nets form netlist_a
                 for (const u32 net_id : input_net_ids_a)
                 {

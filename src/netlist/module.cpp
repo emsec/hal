@@ -879,6 +879,69 @@ namespace hal
         return res;
     }
 
+    std::vector<std::string> Module::get_pin_names(const std::function<bool(ModulePin*)>& filter) const
+    {
+        std::vector<std::string> res;
+        if (!filter)
+        {
+            res.reserve(m_pins.size());
+            for (const auto& group : m_pin_groups)
+            {
+                std::vector<ModulePin*> pins = group->get_pins();
+                for (const auto pin : group->get_pins())
+                {
+                    res.push_back(pin->get_name());
+                }
+            }
+        }
+        else
+        {
+            for (PinGroup<ModulePin>* group : m_pin_groups_ordered)
+            {
+                for (ModulePin* pin : group->get_pins())
+                {
+                    if (filter(pin))
+                    {
+                        res.push_back(pin->get_name());
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
+    std::vector<ModulePin*> Module::get_input_pins() const
+    {
+        return get_pins([](const ModulePin* pin) {
+            PinDirection direction = pin->get_direction();
+            return direction == PinDirection::input || direction == PinDirection::inout;
+        });
+    }
+
+    std::vector<std::string> Module::get_input_pin_names() const
+    {
+        return get_pin_names([](const ModulePin* pin) {
+            PinDirection direction = pin->get_direction();
+            return direction == PinDirection::input || direction == PinDirection::inout;
+        });
+    }
+
+    std::vector<ModulePin*> Module::get_output_pins() const
+    {
+        return get_pins([](const ModulePin* pin) {
+            PinDirection direction = pin->get_direction();
+            return direction == PinDirection::output || direction == PinDirection::inout;
+        });
+    }
+
+    std::vector<std::string> Module::get_output_pin_names() const
+    {
+        return get_pin_names([](const ModulePin* pin) {
+            PinDirection direction = pin->get_direction();
+            return direction == PinDirection::output || direction == PinDirection::inout;
+        });
+    }
+
     std::vector<PinGroup<ModulePin>*> Module::get_pin_groups(const std::function<bool(PinGroup<ModulePin>*)>& filter) const
     {
         std::vector<PinGroup<ModulePin>*> res;
@@ -947,7 +1010,7 @@ namespace hal
             return it->get();
         }
 
-        log_warning("module", "could not get pin by net for module '{}' with ID {}: no pin belongs to net '{}' with ID {}", m_name, m_id, net->get_name(), net->get_id());
+        log_debug("module", "could not get pin by net for module '{}' with ID {}: no pin belongs to net '{}' with ID {}", m_name, m_id, net->get_name(), net->get_id());
         return nullptr;
     }
 

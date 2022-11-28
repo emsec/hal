@@ -122,10 +122,12 @@ namespace hal
 
             u64 tmp   = 0;
             u8 x_flag = 0;
-            for (auto v : value)
+
+            for (auto it = value.rbegin(); it != value.rend(); it++)
             {
-                x_flag |= v >> 1;
-                tmp = (tmp << 1) | v;
+                x_flag |= *it >> 1;
+                tmp <<= 1;
+                tmp |= *it;
             }
 
             if (x_flag)
@@ -200,6 +202,28 @@ namespace hal
             default:
                 return ERR("could not convert bit-vector to string: invalid value '" + std::to_string(base) + "' given for base");
         }
+    }
+
+    Result<u64> BooleanFunction::to_u64(const std::vector<BooleanFunction::Value>& value)
+    {
+        if (value.size() > 64)
+        {
+            return ERR("cannot translate vector of values to u64 numeral: can only support vectors up to 64 bits and got vector of size " + std::to_string(value.size()) + ".");
+        }
+
+        u64 val = 0;
+        for (auto it = value.rbegin(); it != value.rend(); it++)
+        {
+            if ((*it != BooleanFunction::Value::ZERO) && (*it != BooleanFunction::Value::ONE))
+            {
+                return ERR("cannot translate vector of values to u64 numeral: found value other than ZERO or ONE: " + BooleanFunction::to_string(*it) + ".");
+            }
+
+            val <<= 1;
+            val |= *it;
+        }
+
+        return OK(val);
     }
 
     std::ostream& operator<<(std::ostream& os, BooleanFunction::Value v)
@@ -1057,6 +1081,7 @@ namespace hal
         auto value = this->evaluate(generic_inputs);
         if (value.is_ok())
         {
+            // TODO i find that this is incorrect behavior -> only because the variables are single bit does not mean the whole result is -> does not take concat into account
             return OK(value.get()[0]);
         }
 
@@ -1078,6 +1103,7 @@ namespace hal
             {
                 if (node.has_variable_name(name) && node.size != value.size())
                 {
+                    // TODO the error message does not reflect what is being checked
                     return ERR("could not evaluate Boolean function '" + this->to_string() + "': as the number of variables (" + std::to_string(node.size)
                                + ") does not match the number of provided inputs (" + std::to_string(value.size()) + ")");
                 }
@@ -1174,6 +1200,93 @@ namespace hal
         return OK(truth_table);
     }
 
+    Result<std::string> BooleanFunction::get_truth_table_as_string(const std::vector<std::string>& ordered_inputs, std::string function_name, bool remove_unknown_inputs) const
+    {
+        std::vector<std::string> inputs;
+        auto inputs_set = this->get_variable_names();
+        if (ordered_inputs.empty())
+        {
+            inputs = std::vector<std::string>(inputs_set.begin(), inputs_set.end());
+        }
+        else
+        {
+            inputs = ordered_inputs;
+        }
+
+        if (remove_unknown_inputs)
+        {
+            inputs.erase(std::remove_if(inputs.begin(), inputs.end(), [&inputs_set](const auto& s) { return inputs_set.find(s) == inputs_set.end(); }), inputs.end());
+        }
+
+        const auto res = compute_truth_table(inputs, false);
+        if (res.is_error())
+        {
+            return ERR_APPEND(res.get_error(), "could not print truth table for Boolean function '" + this->to_string() + "': unable to compute truth table");
+        }
+        const auto truth_table = res.get();
+
+        std::stringstream str("");
+
+        u32 num_inputs  = inputs.size();
+        u32 num_outputs = truth_table.size();
+
+        // table headers
+        std::vector<u32> in_widths;
+        for (const auto& var : inputs)
+        {
+            in_widths.push_back(var.size());
+            str << " " << var << " |";
+        }
+
+        std::vector<u32> out_widths;
+        if (function_name.empty())
+        {
+            function_name = "O";
+        }
+        if (num_outputs == 1)
+        {
+            str << "| " << function_name << " ";
+            out_widths.push_back(function_name.size());
+        }
+        else
+        {
+            for (u32 i = 0; i < num_outputs; i++)
+            {
+                std::string var = function_name + "(" + std::to_string(i) + ")";
+                str << "| " << var << " ";
+                out_widths.push_back(var.size());
+            }
+        }
+        str << std::endl;
+
+        // rule below headers
+        for (u32 i = 0; i < num_inputs; i++)
+        {
+            str << std::setw(in_widths.at(i) + 3) << std::setfill('-') << "+";
+        }
+        for (u32 i = 0; i < num_outputs; i++)
+        {
+            str << "+" << std::setw(out_widths.at(i) + 2) << std::setfill('-') << "-";
+        }
+        str << std::endl;
+
+        // table values
+        for (u32 i = 0; i < (u32)(1 << num_inputs); i++)
+        {
+            for (u32 j = 0; j < num_inputs; j++)
+            {
+                str << " " << std::left << std::setw(in_widths.at(j)) << std::setfill(' ') << ((i >> (num_inputs - j - 1)) & 1) << " |";
+            }
+
+            for (u32 k = 0; k < num_outputs; k++)
+            {
+                str << "| " << std::left << std::setw(out_widths.at(k)) << std::setfill(' ') << truth_table.at(k).at(i) << " ";
+            }
+            str << std::endl;
+        }
+        return OK(str.str());
+    }
+
     z3::expr BooleanFunction::to_z3(z3::context& context, const std::map<std::string, z3::expr>& var2expr) const
     {
         /// Helper function to reduce a abstract syntax subtree to z3 expressions
@@ -1220,7 +1333,7 @@ namespace hal
                 case BooleanFunction::NodeType::Xor:
                     return {true, p[0] ^ p[1]};
                 case BooleanFunction::NodeType::Slice:
-                    return {true, p[0].extract( p[2].get_numeral_uint(), p[1].get_numeral_uint())};
+                    return {true, p[0].extract(p[2].get_numeral_uint(), p[1].get_numeral_uint())};
                 case BooleanFunction::NodeType::Concat:
                     return {true, z3::concat(p[0], p[1])};
                 case BooleanFunction::NodeType::Sext:

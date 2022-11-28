@@ -1,20 +1,20 @@
 // MIT License
-// 
+//
 // Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
 // Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
 // Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 // Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix ("ORIGINAL AUTHORS"). All Rights reserved.
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -51,7 +51,7 @@ namespace hal
      *
      * @ingroup netlist
      */
-    class BooleanFunction final
+    class NETLIST_API BooleanFunction final
     {
     public:
         ////////////////////////////////////////////////////////////////////////
@@ -94,6 +94,14 @@ namespace hal
          * @returns A string representing the values in the given base or an error.
          */
         static Result<std::string> to_string(const std::vector<BooleanFunction::Value>& value, u8 base = 2);
+
+        /**
+         * Convert the given bit-vector to its unsigned 64 bit integer representation.
+         * 
+         * @param[in] value - The value as a bit-vector.
+         * @returns An u64 representing the values in the given base or an error.
+         */
+        static Result<u64> to_u64(const std::vector<BooleanFunction::Value>& value);
 
         /**
          * Output stream operator that forwards to_string of a value.
@@ -742,7 +750,6 @@ namespace hal
          */
         Result<BooleanFunction> substitute(const std::string& variable_name, const BooleanFunction& function) const;
 
-
         /**
          * Substitute multiple variables with other Boolean functions at once.
          * The operation is applied to all instances of the variable in the function.
@@ -777,6 +784,17 @@ namespace hal
          * @returns Ok() and a vector of values representing the truth table output on success, an error otherwise.
          */
         Result<std::vector<std::vector<Value>>> compute_truth_table(const std::vector<std::string>& ordered_variables = {}, bool remove_unknown_variables = false) const;
+
+        /**
+         * Prints the truth table for a Boolean function that comprises <= 10 single-bit variables.
+         * \warning The generation of the truth table is exponential in the number of parameters.
+         * 
+         * @param[in] ordered_variables - A vector describing the order of input variables used to generate the truth table. Defaults to an empty vector.
+         * @param[in] function_name - The name of the Boolean function to be printed as header of the output columns.
+         * @param[in] remove_unknown_variables - Set `true` to remove variables from the truth table that are not present within the Boolean function, `false` otherwise. Defaults to `false`.
+         * @returns Ok() and a string representing the truth table on success, an error otherwise.
+         */
+        Result<std::string> get_truth_table_as_string(const std::vector<std::string>& ordered_variables = {}, std::string function_name = "", bool remove_unknown_variables = false) const;
 
         /**
          * Translates the Boolean function into the z3 expression representation.

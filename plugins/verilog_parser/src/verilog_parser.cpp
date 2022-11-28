@@ -321,56 +321,6 @@ namespace hal
             return ERR_APPEND(res.get_error(), "could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': unable to construct netlist");
         }
 
-        // add global GND gate if required by any instance
-        if (m_netlist->get_gnd_gates().empty())
-        {
-            if (!m_zero_net->get_destinations().empty())
-            {
-                GateType* gnd_type  = m_gnd_gate_types.begin()->second;
-                GatePin* output_pin = gnd_type->get_output_pins().front();
-                Gate* gnd           = m_netlist->create_gate(m_netlist->get_unique_gate_id(), gnd_type, "global_gnd");
-
-                if (!m_netlist->mark_gnd_gate(gnd))
-                {
-                    return ERR("could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': failed to mark GND gate");
-                }
-
-                if (m_zero_net->add_source(gnd, output_pin) == nullptr)
-                {
-                    return ERR("could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': failed to add source to GND gate");
-                }
-            }
-            else
-            {
-                m_netlist->delete_net(m_zero_net);
-            }
-        }
-
-        // add global VCC gate if required by any instance
-        if (m_netlist->get_vcc_gates().empty())
-        {
-            if (!m_one_net->get_destinations().empty())
-            {
-                GateType* vcc_type  = m_vcc_gate_types.begin()->second;
-                GatePin* output_pin = vcc_type->get_output_pins().front();
-                Gate* vcc           = m_netlist->create_gate(m_netlist->get_unique_gate_id(), vcc_type, "global_vcc");
-
-                if (!m_netlist->mark_vcc_gate(vcc))
-                {
-                    return ERR("could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': failed to mark VCC gate");
-                }
-
-                if (m_one_net->add_source(vcc, output_pin) == nullptr)
-                {
-                    return ERR("could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': failed to add source to VCC gate");
-                }
-            }
-            else
-            {
-                m_netlist->delete_net(m_one_net);
-            }
-        }
-
         // delete unused nets
         for (auto net : m_netlist->get_nets())
         {
@@ -1363,6 +1313,56 @@ namespace hal
             if (!progress_made)
             {
                 return ERR("could not construct netlist: cyclic dependency between signals detected");
+            }
+        }
+
+        // add global GND gate if required by any instance
+        if (m_netlist->get_gnd_gates().empty())
+        {
+            if (!m_zero_net->get_destinations().empty())
+            {
+                GateType* gnd_type  = m_gnd_gate_types.begin()->second;
+                GatePin* output_pin = gnd_type->get_output_pins().front();
+                Gate* gnd           = m_netlist->create_gate(m_netlist->get_unique_gate_id(), gnd_type, "global_gnd");
+
+                if (!m_netlist->mark_gnd_gate(gnd))
+                {
+                    return ERR("failed to mark GND gate");
+                }
+
+                if (m_zero_net->add_source(gnd, output_pin) == nullptr)
+                {
+                    return ERR("failed to add source to GND gate");
+                }
+            }
+            else
+            {
+                m_netlist->delete_net(m_zero_net);
+            }
+        }
+
+        // add global VCC gate if required by any instance
+        if (m_netlist->get_vcc_gates().empty())
+        {
+            if (!m_one_net->get_destinations().empty())
+            {
+                GateType* vcc_type  = m_vcc_gate_types.begin()->second;
+                GatePin* output_pin = vcc_type->get_output_pins().front();
+                Gate* vcc           = m_netlist->create_gate(m_netlist->get_unique_gate_id(), vcc_type, "global_vcc");
+
+                if (!m_netlist->mark_vcc_gate(vcc))
+                {
+                    return ERR("failed to mark VCC gate");
+                }
+
+                if (m_one_net->add_source(vcc, output_pin) == nullptr)
+                {
+                    return ERR("failed to add source to VCC gate");
+                }
+            }
+            else
+            {
+                m_netlist->delete_net(m_one_net);
             }
         }
 
