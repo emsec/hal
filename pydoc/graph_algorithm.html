@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Graph Algorithms &mdash; hal_py v4.0.1-69-g5e552a643 documentation</title>
+  <title>Graph Algorithms &mdash; hal_py v4.0.1-71-g72aeca925 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.0.1-69-g5e552a643
+                v4.0.1-71-g72aeca925
               </div>
             
           
@@ -164,6 +164,176 @@
             
   <div class="section" id="graph-algorithms">
 <h1>Graph Algorithms<a class="headerlink" href="#graph-algorithms" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="graph_algorithm.GraphAlgorithmPlugin">
+<em class="property">class </em><code class="descclassname">graph_algorithm.</code><code class="descname">GraphAlgorithmPlugin</code><a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="graph_algorithm.GraphAlgorithmPlugin.get_communities">
+<code class="descname">get_communities</code><span class="sig-paren">(</span><em>self: graph_algorithm.GraphAlgorithmPlugin</em>, <em>netlist: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; Dict[int, Set[hal_py.Gate]]<a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.get_communities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a dict of community IDs to communities. Each community is represented by a set of gates.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>netlist</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A dict from community IDs to communities.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)">set</a>[hal_py.get_gate()]]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_algorithm.GraphAlgorithmPlugin.get_communities_fast_greedy">
+<code class="descname">get_communities_fast_greedy</code><span class="sig-paren">(</span><em>self: graph_algorithm.GraphAlgorithmPlugin</em>, <em>netlist: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; Dict[int, Set[hal_py.Gate]]<a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.get_communities_fast_greedy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a dict of community IDs to communities running the fast greedy clustering algorithm from igraph. Each community is represented by a set of gates.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>netlist</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A dict from community IDs to communities.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)">set</a>[hal_py.get_gate()]]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_algorithm.GraphAlgorithmPlugin.get_communities_spinglass">
+<code class="descname">get_communities_spinglass</code><span class="sig-paren">(</span><em>self: graph_algorithm.GraphAlgorithmPlugin</em>, <em>netlist: hal_py.Netlist</em>, <em>spins: int</em><span class="sig-paren">)</span> &#x2192; Dict[int, Set[hal_py.Gate]]<a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.get_communities_spinglass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a dict of community IDs to communities running the spinglass clustering algorithm. Each community is represented by a set of gates.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>netlist</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</li>
+<li><strong>spins</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The number of spins.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A dict from community IDs to communities.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)">set</a>[hal_py.get_gate()]]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_algorithm.GraphAlgorithmPlugin.get_graph_cut">
+<code class="descname">get_graph_cut</code><span class="sig-paren">(</span><em>self: graph_algorithm.GraphAlgorithmPlugin</em>, <em>netlist: hal_py.Netlist</em>, <em>gate: hal_py.Gate</em>, <em>depth: int = 4294967295</em>, <em>terminal_gate_type: Set[str] = set()</em><span class="sig-paren">)</span> &#x2192; List[Set[hal_py.Gate]]<a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.get_graph_cut" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a graph cut for a specific gate and depth. Further, a set of gates can be specified that limit the graph cut, i.e., flip-flops and memory cells.
+The graph cut is returned as a list of sets of gates with the list’s index representing the distance of each set to the starting point.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>netlist</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</li>
+<li><strong>gate</strong> (<em>hal_py.get_gate</em><em>(</em><em>)</em>) – The gate that is the starting point for the graph cut.</li>
+<li><strong>depth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The depth of the graph cut.</li>
+<li><strong>terminal_gate_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em>) – A set of gates at which to terminate the graph cut.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The graph cut as a list of sets of gates.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)">set</a>[hal_py.get_gate()]]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_algorithm.GraphAlgorithmPlugin.get_name">
+<code class="descname">get_name</code><span class="sig-paren">(</span><em>self: graph_algorithm.GraphAlgorithmPlugin</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.get_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the name of the plugin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Plugin name.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_algorithm.GraphAlgorithmPlugin.get_strongly_connected_components">
+<code class="descname">get_strongly_connected_components</code><span class="sig-paren">(</span><em>self: graph_algorithm.GraphAlgorithmPlugin</em>, <em>netlist: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; List[List[hal_py.Gate]]<a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.get_strongly_connected_components" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of strongly connected components (SCC) with each SSC being represented by a list of gates.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>netlist</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of SCCs.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[hal_py.get_gate()]]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_algorithm.GraphAlgorithmPlugin.get_version">
+<code class="descname">get_version</code><span class="sig-paren">(</span><em>self: graph_algorithm.GraphAlgorithmPlugin</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.get_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the version of the plugin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Plugin version.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="graph_algorithm.GraphAlgorithmPlugin.name">
+<code class="descname">name</code><a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the plugin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="graph_algorithm.GraphAlgorithmPlugin.version">
+<code class="descname">version</code><a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>The version of the plugin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 

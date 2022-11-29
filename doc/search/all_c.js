@@ -154,7 +154,7 @@ var searchData=
   ['key_5fdead_5fgreek_7268',['Key_Dead_Greek',['https://doc.qt.io/qt-5/qt.html#Key-enum',1,'Qt']]],
   ['key_5fdead_5fhook_7269',['Key_Dead_Hook',['https://doc.qt.io/qt-5/qt.html#Key-enum',1,'Qt']]],
   ['key_5fdead_5fhorn_7270',['Key_Dead_Horn',['https://doc.qt.io/qt-5/qt.html#Key-enum',1,'Qt']]],
-  ['key_5fdead_5fi_7271',['Key_Dead_i',['https://doc.qt.io/qt-5/qt.html#Key-enum',1,'Qt::Key_Dead_i()'],['https://doc.qt.io/qt-5/qt.html#Key-enum',1,'Qt::Key_Dead_I()']]],
+  ['key_5fdead_5fi_7271',['Key_Dead_I',['https://doc.qt.io/qt-5/qt.html#Key-enum',1,'Qt::Key_Dead_I()'],['https://doc.qt.io/qt-5/qt.html#Key-enum',1,'Qt::Key_Dead_i()']]],
   ['key_5fdead_5finvertedbreve_7272',['Key_Dead_Invertedbreve',['https://doc.qt.io/qt-5/qt.html#Key-enum',1,'Qt']]],
   ['key_5fdead_5fiota_7273',['Key_Dead_Iota',['https://doc.qt.io/qt-5/qt.html#Key-enum',1,'Qt']]],
   ['key_5fdead_5flongsolidusoverlay_7274',['Key_Dead_Longsolidusoverlay',['https://doc.qt.io/qt-5/qt.html#Key-enum',1,'Qt']]],

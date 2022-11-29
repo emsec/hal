@@ -1,5 +1,6 @@
 var NAVTREEINDEX22 =
 {
+"disputed__big__icon_8h.html":[7,0,1,3,0,0,39,9],
 "disputed__big__icon_8h_source.html":[7,0,1,3,0,0,39,9],
 "dock__bar_8cpp.html":[7,0,1,3,2,9,1],
 "dock__bar_8cpp_source.html":[7,0,1,3,2,9,1],
@@ -163,8 +164,8 @@ var NAVTREEINDEX22 =
 "functions_type.html":[6,3,3],
 "functions_u.html":[6,3,0,21],
 "functions_v.html":[6,3,0,22],
-"functions_vars.html":[6,3,2],
 "functions_vars.html":[6,3,2,0],
+"functions_vars.html":[6,3,2],
 "functions_vars_b.html":[6,3,2,1],
 "functions_vars_c.html":[6,3,2,2],
 "functions_vars_d.html":[6,3,2,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX22 =
 "gate__pin_8h.html":[7,0,0,0,1,7,1],
 "gate__pin_8h_source.html":[7,0,0,0,1,7,1],
 "gate__pin__tree_8cpp.html":[7,0,1,3,2,37,0,3],
-"gate__pin__tree_8cpp_source.html":[7,0,1,3,2,37,0,3],
-"gate__pin__tree_8h.html":[7,0,1,3,0,0,39,0,3]
+"gate__pin__tree_8cpp_source.html":[7,0,1,3,2,37,0,3]
 };

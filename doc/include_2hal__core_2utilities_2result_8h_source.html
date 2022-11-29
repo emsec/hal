@@ -226,7 +226,7 @@ $(document).ready(function(){initNavTree('include_2hal__core_2utilities_2result_
 <div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;            <span class="keywordflow">return</span> std::get&lt;Error&gt;(std::move(m_result));</div>
 <div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;        }</div>
 <div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160; </div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> U = T, <span class="keyword">typename</span> std::enable_if_t&lt;!std::is_same_v&lt;U, <span class="keywordtype">void</span>&gt;, <span class="keywordtype">int</span>&gt; = 0&gt;</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> U, <span class="keyword">typename</span> std::enable_if_t&lt;!std::is_same_v&lt;U, <span class="keywordtype">void</span>&gt;, <span class="keywordtype">int</span>&gt; = 0&gt;</div>
 <div class="line"><a name="l00200"></a><span class="lineno"><a class="line" href="classhal_1_1_result.html#afdff8b3f7d46877e29111f2993b6f2c9">  200</a></span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;U&gt;</a> <a class="code" href="classhal_1_1_result.html#afdff8b3f7d46877e29111f2993b6f2c9">map</a>(<span class="keyword">const</span> std::function&lt;<a class="code" href="classhal_1_1_result.html">Result&lt;U&gt;</a>(<span class="keyword">const</span> T&amp;)&gt;&amp; f)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;<span class="keyword">        </span>{</div>
 <div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;            <span class="keywordflow">if</span> (this-&gt;is_ok())</div>
@@ -239,10 +239,23 @@ $(document).ready(function(){initNavTree('include_2hal__core_2utilities_2result_
 <div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;            }</div>
 <div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        }</div>
 <div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160; </div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;        std::variant&lt;T, Error&gt; m_result;</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;    };</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> U, <span class="keyword">typename</span> std::enable_if_t&lt;!std::is_same_v&lt;U, <span class="keywordtype">void</span>&gt;, <span class="keywordtype">int</span>&gt; = 0&gt;</div>
+<div class="line"><a name="l00220"></a><span class="lineno"><a class="line" href="classhal_1_1_result.html#a96cbbf1edff81797230eb809265cbcc9">  220</a></span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;U&gt;</a> <a class="code" href="classhal_1_1_result.html#a96cbbf1edff81797230eb809265cbcc9">map</a>(<span class="keyword">const</span> std::function&lt;<a class="code" href="classhal_1_1_result.html">Result&lt;U&gt;</a>(T&amp;&amp;)&gt;&amp; f)</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        {</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;            <span class="keywordflow">if</span> (this-&gt;is_ok())</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;            {</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;                <span class="keywordflow">return</span> f(this-&gt;<a class="code" href="namespacenlohmann_1_1detail.html#acc422c11342b31368f610b6f96fcedc6">get</a>());</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;            }</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;            {</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(this-&gt;get_error());</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;            }</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;        }</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160; </div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        std::variant&lt;T, Error&gt; m_result;</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;    };</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclasshal_1_1result__constructor__type_1_1_e_r_html"><div class="ttname"><a href="classhal_1_1result__constructor__type_1_1_e_r.html">hal::result_constructor_type::ER</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00044">result.h:44</a></div></div>
@@ -270,13 +283,14 @@ $(document).ready(function(){initNavTree('include_2hal__core_2utilities_2result_
 <div class="ttc" id="aclasshal_1_1result__constructor__type_1_1_o_k_html"><div class="ttname"><a href="classhal_1_1result__constructor__type_1_1_o_k.html">hal::result_constructor_type::OK</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00040">result.h:40</a></div></div>
 <div class="ttc" id="ainclude_2hal__core_2utilities_2result_8h_html_a5ad667153a89697b109f5b8e64da7fe7"><div class="ttname"><a href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a></div><div class="ttdeci">#define OK(...)</div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00049">result.h:49</a></div></div>
 <div class="ttc" id="aclasshal_1_1_result_html_aa6870131a7f05d819e9cbde3cf5681b6"><div class="ttname"><a href="classhal_1_1_result.html#aa6870131a7f05d819e9cbde3cf5681b6">hal::Result::get</a></div><div class="ttdeci">T &amp;&amp; get()</div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00168">result.h:168</a></div></div>
+<div class="ttc" id="aclasshal_1_1_result_html_a96cbbf1edff81797230eb809265cbcc9"><div class="ttname"><a href="classhal_1_1_result.html#a96cbbf1edff81797230eb809265cbcc9">hal::Result::map</a></div><div class="ttdeci">Result&lt; U &gt; map(const std::function&lt; Result&lt; U &gt;(T &amp;&amp;)&gt; &amp;f)</div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00220">result.h:220</a></div></div>
 <div class="ttc" id="aclasshal_1_1_result_html_afdff8b3f7d46877e29111f2993b6f2c9"><div class="ttname"><a href="classhal_1_1_result.html#afdff8b3f7d46877e29111f2993b6f2c9">hal::Result::map</a></div><div class="ttdeci">Result&lt; U &gt; map(const std::function&lt; Result&lt; U &gt;(const T &amp;)&gt; &amp;f) const</div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00200">result.h:200</a></div></div>
 <div class="ttc" id="aclasshal_1_1_result_html_a8bfa3b8e65ebe7f8860da8fa59db2970"><div class="ttname"><a href="classhal_1_1_result.html#a8bfa3b8e65ebe7f8860da8fa59db2970">hal::Result::Ok</a></div><div class="ttdeci">static Result&lt; T &gt; Ok(const T &amp;value)</div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00095">result.h:95</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_8cff0e4740b4a22580dd05764b73d449.html">utilities</a></li><li class="navelem"><a class="el" href="include_2hal__core_2utilities_2result_8h.html">result.h</a></li>
-    <li class="footer">Generated on Tue Nov 29 2022 14:41:17 for HAL by
+    <li class="footer">Generated on Tue Nov 29 2022 16:30:13 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

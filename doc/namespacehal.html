@@ -1280,8 +1280,6 @@ Functions</h2></td></tr>
 <tr class="separator:a90756e09e3a11b7dd4e7362ae3101ce9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8eead5158d06c7710072254faecce635"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal.html#a8eead5158d06c7710072254faecce635">operator&lt;&lt;</a> (std::ostream &amp;os, const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;function)</td></tr>
 <tr class="separator:a8eead5158d06c7710072254faecce635"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5eae4a08b3b2d9d37aa3c3e6a07f54d4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal.html#a5eae4a08b3b2d9d37aa3c3e6a07f54d4">get_boolean_function_from</a> (const std::vector&lt; <a class="el" href="classhal_1_1_net.html">Net</a> * &gt; &amp;nets, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> extend_to_size, bool sign_extend)</td></tr>
-<tr class="separator:a5eae4a08b3b2d9d37aa3c3e6a07f54d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a45f4052286462e64763c142a3e26ab93"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal.html#a45f4052286462e64763c142a3e26ab93">initialize</a> ()</td></tr>
 <tr class="separator:a45f4052286462e64763c142a3e26ab93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad1c6648030f8b55e519fb07e3a8750f9"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal.html#ad1c6648030f8b55e519fb07e3a8750f9">operator&lt;&lt;</a> (std::ostream &amp;os, const <a class="el" href="classhal_1_1_gate_type.html">GateType</a> &amp;gt)</td></tr>
@@ -1896,44 +1894,6 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 <p class="reference">References <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00130">hal::GateType::create_pin()</a>, <a class="el" href="action__set__object__type_8cpp_source.html#l00046">hal::ActionSetObjectType::exec()</a>, <a class="el" href="enums_8h_source.html#l00115">operator&lt;&lt;()</a>, <a class="el" href="types_8cpp_source.html#l00124">hal::SMT::operator&lt;&lt;()</a>, <a class="el" href="pin__tree__model_8cpp_source.html#l00039">hal::GatePinsTreeModel::setGate()</a>, <a class="el" href="port__tree__model_8cpp_source.html#l00219">hal::ModulePinsTreeModel::setModule()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01513">hal::BooleanFunction::Node::to_string()</a>.</p>
-
-</div>
-</div>
-<a id="a5eae4a08b3b2d9d37aa3c3e6a07f54d4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5eae4a08b3b2d9d37aa3c3e6a07f54d4">&#9670;&nbsp;</a></span>get_boolean_function_from()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt;<a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&gt; hal::get_boolean_function_from </td>
-          <td>(</td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="classhal_1_1_net.html">Net</a> * &gt; &amp;&#160;</td>
-          <td class="paramname"><em>nets</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
-          <td class="paramname"><em>extend_to_size</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>sign_extend</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html#l00057">57</a> of file <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html">boolean_function_decorator.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00650">hal::BooleanFunction::clone()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00424">hal::BooleanFunction::Concat()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html#l00018">hal::BooleanFunctionNetDecorator::get_boolean_variable_name()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00277">hal::BooleanFunction::Index()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00451">hal::BooleanFunction::Sext()</a>, <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00250">hal::BooleanFunction::Var()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00435">hal::BooleanFunction::Zext()</a>.</p>
 
 </div>
 </div>
@@ -4021,7 +3981,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li>
-    <li class="footer">Generated on Tue Nov 29 2022 14:41:22 for HAL by
+    <li class="footer">Generated on Tue Nov 29 2022 16:30:17 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

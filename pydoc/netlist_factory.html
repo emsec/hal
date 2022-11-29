@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist Factory &mdash; hal_py v4.0.1-69-g5e552a643 documentation</title>
+  <title>Netlist Factory &mdash; hal_py v4.0.1-71-g72aeca925 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.0.1-69-g5e552a643
+                v4.0.1-71-g72aeca925
               </div>
             
           
@@ -88,6 +88,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="hal_py.html">HAL Core Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="base_plugin_interface.html">Base Plugin Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boolean_function.html">Boolean Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="boolean_function_decorator.html">Boolean Function Decorator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boolean_function_net_decorator.html">Boolean Function Net Decorator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="core_utils.html">Core Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_container.html">Data Container</a></li>
@@ -187,8 +188,114 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="netlist-factory">
-<h1>Netlist Factory<a class="headerlink" href="#netlist-factory" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-hal_py.NetlistFactory">
+<span id="netlist-factory"></span><h1>Netlist Factory<a class="headerlink" href="#module-hal_py.NetlistFactory" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="hal_py.NetlistFactory.create_netlist">
+<code class="descclassname">hal_py.NetlistFactory.</code><code class="descname">create_netlist</code><span class="sig-paren">(</span><em>gate_library: hal_py.GateLibrary</em><span class="sig-paren">)</span> &#x2192; hal_py.Netlist<a class="headerlink" href="#hal_py.NetlistFactory.create_netlist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new empty netlist using the specified gate library.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate_library</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The gate library.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The netlist on success, None otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist">hal_py.Netlist</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="hal_py.NetlistFactory.load_hal_project">
+<code class="descclassname">hal_py.NetlistFactory.</code><code class="descname">load_hal_project</code><span class="sig-paren">(</span><em>project_dir: hal_py.HalPath</em><span class="sig-paren">)</span> &#x2192; hal_py.Netlist<a class="headerlink" href="#hal_py.NetlistFactory.load_hal_project" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a netlist from the given .hal file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>project_dir</strong> (<em>hal_py.hal_path</em>) – Path to the hal project directory.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The netlist on success, None otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist">hal_py.Netlist</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="hal_py.NetlistFactory.load_netlist">
+<code class="descclassname">hal_py.NetlistFactory.</code><code class="descname">load_netlist</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.NetlistFactory.load_netlist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">load_netlist(hdl_file: hal_py.HalPath, gate_library_file: hal_py.HalPath) -&gt; hal_py.Netlist</p>
+<blockquote>
+<div><p>Create a netlist from the given file using the specified gate library file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param hdl_file:</th><td class="field-body">Path to the file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">type hdl_file:</th><td class="field-body">hal_py.hal_path</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param gate_library_file:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Path to the gate library file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">type gate_library_file:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">hal_py.hal_path</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The netlist on success, None otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Netlist</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">load_netlist(hal_file: hal_py.HalPath) -&gt; hal_py.Netlist</p>
+<blockquote>
+<div><p>Create a netlist from the given .hal file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param hal_file:</th><td class="field-body">Path to the ‘.hal’ file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">type hal_file:</th><td class="field-body">hal_py.hal_path</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The netlist on success, None otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Netlist</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="function">
+<dt id="hal_py.NetlistFactory.load_netlists">
+<code class="descclassname">hal_py.NetlistFactory.</code><code class="descname">load_netlists</code><span class="sig-paren">(</span><em>hdl_file: hal_py.HalPath</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Netlist]<a class="headerlink" href="#hal_py.NetlistFactory.load_netlists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a netlist from a given file for each matching pre-loaded gate library.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hdl_file</strong> (<em>hal_py.hal_path</em>) – Path to the file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of netlists.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist">hal_py.Netlist</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 

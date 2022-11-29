@@ -132,9 +132,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9a85e813a3f52096c1ca54dee1494923"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1946ab6735ef28b2e15f52b6b3c218bb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_error.html">Error</a> &amp;&amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_result.html#a1946ab6735ef28b2e15f52b6b3c218bb">get_error</a> ()</td></tr>
 <tr class="separator:a1946ab6735ef28b2e15f52b6b3c218bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afdff8b3f7d46877e29111f2993b6f2c9"><td class="memTemplParams" colspan="2">template&lt;typename U  = T, typename std::enable_if_t&lt;!std::is_same_v&lt; U, void &gt;, int &gt;  = 0&gt; </td></tr>
+<tr class="memitem:afdff8b3f7d46877e29111f2993b6f2c9"><td class="memTemplParams" colspan="2">template&lt;typename U , typename std::enable_if_t&lt;!std::is_same_v&lt; U, void &gt;, int &gt;  = 0&gt; </td></tr>
 <tr class="memitem:afdff8b3f7d46877e29111f2993b6f2c9"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; U &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classhal_1_1_result.html#afdff8b3f7d46877e29111f2993b6f2c9">map</a> (const std::function&lt; <a class="el" href="classhal_1_1_result.html">Result</a>&lt; U &gt;(const T &amp;)&gt; &amp;f) const</td></tr>
 <tr class="separator:afdff8b3f7d46877e29111f2993b6f2c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96cbbf1edff81797230eb809265cbcc9"><td class="memTemplParams" colspan="2">template&lt;typename U , typename std::enable_if_t&lt;!std::is_same_v&lt; U, void &gt;, int &gt;  = 0&gt; </td></tr>
+<tr class="memitem:a96cbbf1edff81797230eb809265cbcc9"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; U &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classhal_1_1_result.html#a96cbbf1edff81797230eb809265cbcc9">map</a> (const std::function&lt; <a class="el" href="classhal_1_1_result.html">Result</a>&lt; U &gt;(T &amp;&amp;)&gt; &amp;f)</td></tr>
+<tr class="separator:a96cbbf1edff81797230eb809265cbcc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -510,14 +513,14 @@ template&lt;typename T &gt; </div>
 </div>
 </div>
 <a id="afdff8b3f7d46877e29111f2993b6f2c9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afdff8b3f7d46877e29111f2993b6f2c9">&#9670;&nbsp;</a></span>map()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#afdff8b3f7d46877e29111f2993b6f2c9">&#9670;&nbsp;</a></span>map() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename T &gt; </div>
 <div class="memtemplate">
-template&lt;typename U  = T, typename std::enable_if_t&lt;!std::is_same_v&lt; U, void &gt;, int &gt;  = 0&gt; </div>
+template&lt;typename U , typename std::enable_if_t&lt;!std::is_same_v&lt; U, void &gt;, int &gt;  = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -552,6 +555,54 @@ template&lt;typename U  = T, typename std::enable_if_t&lt;!std::is_same_v&lt; U,
 <dl class="section return"><dt>Returns</dt><dd>The result mapped to the target data type. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00200">200</a> of file <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html">result.h</a>.</p>
+
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, and <a class="el" href="json_8hpp_source.html#l03412">nlohmann::detail::get()</a>.</p>
+
+</div>
+</div>
+<a id="a96cbbf1edff81797230eb809265cbcc9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96cbbf1edff81797230eb809265cbcc9">&#9670;&nbsp;</a></span>map() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<div class="memtemplate">
+template&lt;typename U , typename std::enable_if_t&lt;!std::is_same_v&lt; U, void &gt;, int &gt;  = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt;U&gt; <a class="el" href="classhal_1_1_result.html">hal::Result</a>&lt; T &gt;::map </td>
+          <td>(</td>
+          <td class="paramtype">const std::function&lt; <a class="el" href="classhal_1_1_result.html">Result</a>&lt; U &gt;(T &amp;&amp;)&gt; &amp;&#160;</td>
+          <td class="paramname"><em>f</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Map the result to a different user-defined data type using the provided mapping function.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">U</td><td>- The target data type. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">f</td><td>- The mapping function. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The result mapped to the target data type. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00220">220</a> of file <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html">result.h</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, and <a class="el" href="json_8hpp_source.html#l03412">nlohmann::detail::get()</a>.</p>
 
@@ -728,7 +779,7 @@ template&lt;typename T &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_result.html">Result</a></li>
-    <li class="footer">Generated on Tue Nov 29 2022 14:41:25 for HAL by
+    <li class="footer">Generated on Tue Nov 29 2022 16:30:19 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

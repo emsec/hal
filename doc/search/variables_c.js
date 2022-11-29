@@ -92,7 +92,7 @@ var searchData=
   ['librariespath_33968',['LibrariesPath',['https://doc.qt.io/qt-5/qlibraryinfo.html#LibraryLocation-enum',1,'QLibraryInfo']]],
   ['libraryexecutablespath_33969',['LibraryExecutablesPath',['https://doc.qt.io/qt-5/qlibraryinfo.html#LibraryLocation-enum',1,'QLibraryInfo']]],
   ['libya_33970',['Libya',['https://doc.qt.io/qt-5/qlocale.html#Country-enum',1,'QLocale']]],
-  ['license_33971',['License',['../_apache_01_license_8txt.html#aa1d88702a0f7643a389b609f93ff58f7',1,'License():&#160;Apache License.txt'],['../_montserrat_2_o_f_l_8txt.html#afad62cb191ddeb2c1a5f8b0e2d8a2f5d',1,'license():&#160;OFL.txt'],['../_source_01_code_01_pro_2_o_f_l_8txt.html#a75280abaaf506803ba9650063c0dd444',1,'license():&#160;OFL.txt']]],
+  ['license_33971',['license',['../_montserrat_2_o_f_l_8txt.html#afad62cb191ddeb2c1a5f8b0e2d8a2f5d',1,'license():&#160;OFL.txt'],['../_source_01_code_01_pro_2_o_f_l_8txt.html#a75280abaaf506803ba9650063c0dd444',1,'license():&#160;OFL.txt'],['../_apache_01_license_8txt.html#aa1d88702a0f7643a389b609f93ff58f7',1,'License():&#160;Apache License.txt']]],
   ['licensor_33972',['Licensor',['../_apache_01_license_8txt.html#a12b895709729541ec9f656e4b5bcca6e',1,'Apache License.txt']]],
   ['liechtenstein_33973',['Liechtenstein',['https://doc.qt.io/qt-5/qlocale.html#Country-enum',1,'QLocale']]],
   ['light_33974',['Light',['https://doc.qt.io/qt-5/qfont.html#Weight-enum',1,'QFont::Light()'],['https://doc.qt.io/qt-5/qpalette.html#ColorRole-enum',1,'QPalette::Light()']]],

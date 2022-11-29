@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Module &mdash; hal_py v4.0.1-69-g5e552a643 documentation</title>
+  <title>Module &mdash; hal_py v4.0.1-71-g72aeca925 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.0.1-69-g5e552a643
+                v4.0.1-71-g72aeca925
               </div>
             
           
@@ -88,6 +88,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="hal_py.html">HAL Core Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="base_plugin_interface.html">Base Plugin Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boolean_function.html">Boolean Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="boolean_function_decorator.html">Boolean Function Decorator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boolean_function_net_decorator.html">Boolean Function Net Decorator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="core_utils.html">Core Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_container.html">Data Container</a></li>
@@ -189,6 +190,1584 @@
             
   <div class="section" id="module">
 <h1>Module<a class="headerlink" href="#module" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="hal_py.Module">
+<em class="property">class </em><code class="descclassname">hal_py.</code><code class="descname">Module</code><a class="headerlink" href="#hal_py.Module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="data_container.html#hal_py.DataContainer" title="hal_py.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">hal_py.DataContainer</span></code></a></p>
+<p>A module is a container for gates and their associated nets that enables hierarchization within the netlist.
+Each gate can only be in one module at a time. Nets are only loosely associated with modules.</p>
+<dl class="method">
+<dt id="hal_py.Module.assign_gate">
+<code class="descname">assign_gate</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>gate: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.assign_gate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign a gate to the module.
+The gate is removed from its previous module in the process.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate to assign.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success, False otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.assign_gates">
+<code class="descname">assign_gates</code><span class="sig-paren">(</span><em>self: hal_py.Module, gates: List[hal_py.Gate]</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.assign_gates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign a list of gates to the module.
+The gates are removed from their previous module in the process.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em>) – The gates to assign.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success, False otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.assign_pin_to_group">
+<code class="descname">assign_pin_to_group</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>pin_group: hal_py.ModulePinGroup</em>, <em>pin: hal_py.ModulePin</em>, <em>delete_empty_groups: bool = True</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.assign_pin_to_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign a pin to a pin group.
+Only pins with matching direction and type can be assigned to an existing pin group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pin_group</strong> (<a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup"><em>hal_py.ModulePinGroup</em></a>) – The new pin group.</li>
+<li><strong>pin</strong> (<a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin"><em>hal_py.ModulePin</em></a>) – The pin to be added.</li>
+<li><strong>delete_empty_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set True to delete groups that are empty after the pin has been assigned to the new group, False to keep empty groups. Defaults to True.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, False otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.contains_gate">
+<code class="descname">contains_gate</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>gate: hal_py.Gate</em>, <em>recursive: bool = False</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.contains_gate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether a gate is contained in the module.
+If recursive is True, gates in submodules are considered as well.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate to check for.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True to also consider gates in submodules, False otherwise.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if the gate is contained in the module, False otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.contains_module">
+<code class="descname">contains_module</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>other: hal_py.Module</em>, <em>recusive: bool = False</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.contains_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether another module is a submodule of this module.
+If recursive is set to true, all indirect submodules are also included.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>other</strong> (<a class="reference internal" href="#hal_py.Module" title="hal_py.Module"><em>hal_py.Module</em></a>) – Other module to check for.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True to include indirect submodules as well.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if the other module is a submodule, False otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.contains_net">
+<code class="descname">contains_net</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>net: hal_py.Net</em>, <em>recursive: bool = False</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.contains_net" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether a net is contained in the module.
+If recursive is set to true, nets in submodules are considered as well.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The net to check for.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True to also consider nets in submodules, False otherwise.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if the net is contained in the module, False otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.create_pin">
+<code class="descname">create_pin</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>name: str</em>, <em>net: hal_py.Net</em>, <em>type: hal_py.PinType = PinType.none</em>, <em>create_group: bool = True</em><span class="sig-paren">)</span> &#x2192; hal_py.ModulePin<a class="headerlink" href="#hal_py.Module.create_pin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually assign a module pin to a net.
+Checks whether the given direction matches the actual properties of the net, i.e., checks whether the net actually is an input and/or output to the module.
+Hence, make sure to update the module nets beforehand using hal_py.Module.update_net.
+If create_group is set to False, the pin will not be added to a pin group.</p>
+<p>WARNING: can only be used when automatic net checks have been disabled using hal_py.Netlist.enable_automatic_net_checks.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name of the pin.</li>
+<li><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The net that the pin is being assigned to.</li>
+<li><strong>type</strong> (<a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><em>hal_py.PinType</em></a>) – The type of the pin. Defaults to hal_py.PinType.none.</li>
+<li><strong>create_group</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set True to automatically create a pin group and assign the pin, False otherwise.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The module pin on success, None otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin">hal_py.ModulePin</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.create_pin_group">
+<code class="descname">create_pin_group</code><span class="sig-paren">(</span><em>self: hal_py.Module, name: str, pins: List[hal_py.ModulePin], direction: hal_py.PinDirection = PinDirection.none, type: hal_py.PinType = PinType.none, ascending: bool = False, start_index: int = 0, delete_empty_groups: bool = True</em><span class="sig-paren">)</span> &#x2192; hal_py.ModulePinGroup<a class="headerlink" href="#hal_py.Module.create_pin_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new pin group with the given name.
+All pins to be added to the pin group must have the same direction and type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name of the pin group.</li>
+<li><strong>pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin"><em>hal_py.ModulePin</em></a><em>]</em>) – The pins to be assigned to the pin group. Defaults to an empty list.</li>
+<li><strong>direction</strong> (<a class="reference internal" href="pin_direction.html#hal_py.PinDirection" title="hal_py.PinDirection"><em>hal_py.PinDirection</em></a>) – The direction of the pin group, if any. Defaults to hal_py.PinDirection.none.</li>
+<li><strong>type</strong> (<a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><em>hal_py.PinType</em></a>) – The type of the pin group, if any. Defaults to hal_py.PinType.none.</li>
+<li><strong>ascending</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set True for ascending pin order (from 0 to n-1), False otherwise (from n-1 to 0). Defaults to False.</li>
+<li><strong>start_index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The start index of the pin group. Defaults to 0.</li>
+<li><strong>delete_empty_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set True to delete groups that are empty after the pins have been assigned to the new group, False to keep empty groups. Defaults to True.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The pin group on success, None otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup">hal_py.ModulePinGroup</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.data">
+<code class="descname">data</code><a class="headerlink" href="#hal_py.Module.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dict from ((1) category, (2) key) to ((1) type, (2) value) containing all stored data entries.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)">tuple</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>),<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)">tuple</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>)]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.delete_data">
+<code class="descname">delete_data</code><span class="sig-paren">(</span><em>self: hal_py.DataContainer</em>, <em>category: str</em>, <em>key: str</em>, <em>log_with_info_level: bool = False</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.delete_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a data entry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The data key category.</li>
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The data key.</li>
+<li><strong>log_with_info_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Force explicit logging channel ‘netlist’ with log level ‘info’ to trace GUI events.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, false otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.delete_pin_group">
+<code class="descname">delete_pin_group</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>pin_group: hal_py.ModulePinGroup</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.delete_pin_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the given pin group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin_group</strong> (<a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup"><em>hal_py.ModulePinGroup</em></a>) – The pin group to be deleted.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success, False otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.gates">
+<code class="descname">gates</code><a class="headerlink" href="#hal_py.Module.gates" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of all gates contained within the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_data">
+<code class="descname">get_data</code><span class="sig-paren">(</span><em>self: hal_py.DataContainer</em>, <em>category: str</em>, <em>key: str</em><span class="sig-paren">)</span> &#x2192; Tuple[str, str]<a class="headerlink" href="#hal_py.Module.get_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the data entry specified by the given category and key.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The data key category.</li>
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The data key.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The tuple ((1) type, (2) value).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)">tuple</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_data_map">
+<code class="descname">get_data_map</code><span class="sig-paren">(</span><em>self: hal_py.DataContainer</em><span class="sig-paren">)</span> &#x2192; Dict[Tuple[str, str], Tuple[str, str]]<a class="headerlink" href="#hal_py.Module.get_data_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a dict from ((1) category, (2) key) to ((1) type, (2) value) containing all stored data entries.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The stored data as a dict.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)">tuple</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>),<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)">tuple</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>)]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_gate_by_id">
+<code class="descname">get_gate_by_id</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>id: int</em>, <em>recursive: bool = False</em><span class="sig-paren">)</span> &#x2192; hal_py.Gate<a class="headerlink" href="#hal_py.Module.get_gate_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a gate specified by the given ID.
+If recursive is True, gates in submodules are considered as well.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The unique ID of the gate.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True to also consider gates in submodules, False otherwise.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The gate if found, None otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_gates">
+<code class="descname">get_gates</code><span class="sig-paren">(</span><em>self: hal_py.Module, filter: Callable[[hal_py.Gate], bool] = None, recursive: bool = False</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Gate]<a class="headerlink" href="#hal_py.Module.get_gates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all gates contained within the module.
+The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+If recursive is True, gates in submodules are considered as well.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filter</strong> (<em>lambda</em>) – An optional filter.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True to also consider gates in submodules, False otherwise.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of gates.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_grouping">
+<code class="descname">get_grouping</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; hal::Grouping<a class="headerlink" href="#hal_py.Module.get_grouping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the grouping in which this module is contained.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The grouping.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="grouping.html#hal_py.Grouping" title="hal_py.Grouping">hal_py.Grouping</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_id">
+<code class="descname">get_id</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.Module.get_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the unique ID of the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The unique id.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_input_nets">
+<code class="descname">get_input_nets</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; Set[hal_py.Net]<a class="headerlink" href="#hal_py.Module.get_input_nets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all nets that are either a global input to the netlist or have at least one source outside of the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of input nets.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_input_pin_names">
+<code class="descname">get_input_pin_names</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#hal_py.Module.get_input_pin_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an ordered list of the names of all input pins of the module (including inout pins).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">An ordered list of input pin names.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_input_pins">
+<code class="descname">get_input_pins</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; List[hal_py.ModulePin]<a class="headerlink" href="#hal_py.Module.get_input_pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an ordered list of all input pins of the module (including inout pins).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">An ordered list of input pins.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin">hal_py.ModulePin</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_internal_nets">
+<code class="descname">get_internal_nets</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; Set[hal_py.Net]<a class="headerlink" href="#hal_py.Module.get_internal_nets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all nets that have at least one source and one destination within the module, including its submodules. The result may contain nets that are also regarded as input or output nets.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of internal nets.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_name">
+<code class="descname">get_name</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.Module.get_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the name of the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The name.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_netlist">
+<code class="descname">get_netlist</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; hal_py.Netlist<a class="headerlink" href="#hal_py.Module.get_netlist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the netlist this module is associated with.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The netlist.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist">hal_py.Netlist</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_nets">
+<code class="descname">get_nets</code><span class="sig-paren">(</span><em>self: hal_py.Module, filter: Callable[[hal_py.Net], bool] = None, recursive: bool = False</em><span class="sig-paren">)</span> &#x2192; Set[hal_py.Net]<a class="headerlink" href="#hal_py.Module.get_nets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all nets that have at least one source or one destination within the module.
+The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+If recursive is True, nets in submodules are considered as well.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filter</strong> (<em>lambda</em>) – An optional filter.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True to also consider nets in submodules, False otherwise.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of nets.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_output_nets">
+<code class="descname">get_output_nets</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; Set[hal_py.Net]<a class="headerlink" href="#hal_py.Module.get_output_nets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all nets that are either a global output to the netlist or have at least one destination outside of the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of output nets.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_output_pin_names">
+<code class="descname">get_output_pin_names</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#hal_py.Module.get_output_pin_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an ordered list of the names of all output pins of the module (including inout pins).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">An ordered list of output pin names.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_output_pins">
+<code class="descname">get_output_pins</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; List[hal_py.ModulePin]<a class="headerlink" href="#hal_py.Module.get_output_pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an ordered list of all output pins of the module (including inout pins).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">An ordered list of output pins.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin">hal_py.ModulePin</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_parent_module">
+<code class="descname">get_parent_module</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; hal_py.Module<a class="headerlink" href="#hal_py.Module.get_parent_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the parent module of this module.
+For the top module, None is returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The parent module.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.Module" title="hal_py.Module">hal_py.Module</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_parent_modules">
+<code class="descname">get_parent_modules</code><span class="sig-paren">(</span><em>self: hal_py.Module, filter: Callable[[hal_py.Module], bool] = None, recursive: bool = True</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Module]<a class="headerlink" href="#hal_py.Module.get_parent_modules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all direct parent of this module.
+If recursive is set to True, all indirect parents are also included.
+The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filter</strong> (<em>lambda</em>) – An optional filter.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True to include indirect parents as well, False otherwise.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of parent modules.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="#hal_py.Module" title="hal_py.Module">hal_py.Module</a>]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_pin_by_id">
+<code class="descname">get_pin_by_id</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>id: int</em><span class="sig-paren">)</span> &#x2192; hal_py.ModulePin<a class="headerlink" href="#hal_py.Module.get_pin_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the pin corresponding to the given ID.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The ID of the pin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pin on success, None otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin">hal_py.ModulePin</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_pin_by_name">
+<code class="descname">get_pin_by_name</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>name: str</em><span class="sig-paren">)</span> &#x2192; hal_py.ModulePin<a class="headerlink" href="#hal_py.Module.get_pin_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the pin corresponding to the given name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name of the pin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pin on success, None otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin">hal_py.ModulePin</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_pin_by_net">
+<code class="descname">get_pin_by_net</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>net: hal_py.Net</em><span class="sig-paren">)</span> &#x2192; hal_py.ModulePin<a class="headerlink" href="#hal_py.Module.get_pin_by_net" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the pin that passes through the specified net.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The net.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pin on success, None otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin">hal_py.ModulePin</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_pin_group_by_id">
+<code class="descname">get_pin_group_by_id</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>id: int</em><span class="sig-paren">)</span> &#x2192; hal_py.ModulePinGroup<a class="headerlink" href="#hal_py.Module.get_pin_group_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the pin group corresponding to the given ID.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The ID of the pin group.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pin group on success, None otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup">hal_py.ModulePinGroup</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_pin_group_by_name">
+<code class="descname">get_pin_group_by_name</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>name: str</em><span class="sig-paren">)</span> &#x2192; hal_py.ModulePinGroup<a class="headerlink" href="#hal_py.Module.get_pin_group_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the pin group corresponding to the given name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name of the pin group.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pin group on success, None otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup">hal_py.ModulePinGroup</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_pin_groups">
+<code class="descname">get_pin_groups</code><span class="sig-paren">(</span><em>self: hal_py.Module, filter: Callable[[hal_py.ModulePinGroup], bool] = None</em><span class="sig-paren">)</span> &#x2192; List[hal_py.ModulePinGroup]<a class="headerlink" href="#hal_py.Module.get_pin_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all pin groups of the module.
+The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filter</strong> (<em>lambda</em>) – An optional filter.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of pin groups.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup">hal_py.ModulePinGroup</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_pin_names">
+<code class="descname">get_pin_names</code><span class="sig-paren">(</span><em>self: hal_py.Module, arg0: Callable[[hal_py.ModulePin], bool]</em><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#hal_py.Module.get_pin_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an ordered list of the names of all pins of the module.
+The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of input pin names of the module.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filter</strong> (<em>lambda</em>) – An optional filter.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">An ordered list of pins.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_pins">
+<code class="descname">get_pins</code><span class="sig-paren">(</span><em>self: hal_py.Module, filter: Callable[[hal_py.ModulePin], bool] = None</em><span class="sig-paren">)</span> &#x2192; List[hal_py.ModulePin]<a class="headerlink" href="#hal_py.Module.get_pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the (ordered) pins of the module.
+The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filter</strong> (<em>lambda</em>) – An optional filter.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of pins.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin">hal_py.ModulePin</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_submodule_depth">
+<code class="descname">get_submodule_depth</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.Module.get_submodule_depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the depth of the module within the module hierarchie (0 = top module, 1 = direct child of top module, …).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The depth within the module hierarchie.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_submodules">
+<code class="descname">get_submodules</code><span class="sig-paren">(</span><em>self: hal_py.Module, filter: Callable[[hal_py.Module], bool] = None, recursive: bool = False</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Module]<a class="headerlink" href="#hal_py.Module.get_submodules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all direct submodules of this module.
+If recursive is set to True, all indirect submodules are also included.
+The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filter</strong> (<em>lambda</em>) – An optional filter.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True to include indirect submodules as well, False otherwise.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of submodules.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="#hal_py.Module" title="hal_py.Module">hal_py.Module</a>]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_type">
+<code class="descname">get_type</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.Module.get_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the type of the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The type.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_unique_pin_group_id">
+<code class="descname">get_unique_pin_group_id</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.Module.get_unique_pin_group_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a spare pin group ID.
+The value of 0 is reserved and represents an invalid ID.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The pin group ID.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_unique_pin_id">
+<code class="descname">get_unique_pin_id</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.Module.get_unique_pin_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a spare pin ID.
+The value of 0 is reserved and represents an invalid ID.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The pin ID.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.has_data">
+<code class="descname">has_data</code><span class="sig-paren">(</span><em>self: hal_py.DataContainer</em>, <em>category: str</em>, <em>key: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.has_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether an entry of given category and key exists.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The data key category.</li>
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The data key.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if the entry exists, False otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.id">
+<code class="descname">id</code><a class="headerlink" href="#hal_py.Module.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The unique ID of the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.input_nets">
+<code class="descname">input_nets</code><a class="headerlink" href="#hal_py.Module.input_nets" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of all nets that are either a global input to the netlist or have at least one source outside of the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.input_pin_names">
+<code class="descname">input_pin_names</code><a class="headerlink" href="#hal_py.Module.input_pin_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>An ordered list of the names of all input pins of the module (including inout pins).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.input_pins">
+<code class="descname">input_pins</code><a class="headerlink" href="#hal_py.Module.input_pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>An ordered list of all input pins of the module (including inout pins).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin">hal_py.ModulePin</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.internal_nets">
+<code class="descname">internal_nets</code><a class="headerlink" href="#hal_py.Module.internal_nets" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of all nets that have at least one source and one destination within the module, including its submodules. The result may contain nets that are also regarded as input or output nets.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.is_input_net">
+<code class="descname">is_input_net</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>net: hal_py.Net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.is_input_net" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the given net is an input of the module, i.e., whether the net is a global input to the netlist or has at least one source outside of the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The net.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the net is an input net, False otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.is_internal_net">
+<code class="descname">is_internal_net</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>net: hal_py.Net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.is_internal_net" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the given net is an internal net of the module, i.e. whether the net has at least one source and one destination within the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The net.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the net is an internal net, False otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.is_output_net">
+<code class="descname">is_output_net</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>net: hal_py.Net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.is_output_net" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the given net is an output of the module, i.e., whether the net is a global output to the netlist or has at least one destination outside of the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The net.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the net is an output net, False otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.is_parent_module_of">
+<code class="descname">is_parent_module_of</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>module: hal_py.Module</em>, <em>recursive: bool = False</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.is_parent_module_of" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the module is a parent of the specified module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>module</strong> (<a class="reference internal" href="#hal_py.Module" title="hal_py.Module"><em>hal_py.Module</em></a>) – The module.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True to check recursively, False otherwise.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if the module is a parent of the specified module, False otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.is_submodule_of">
+<code class="descname">is_submodule_of</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>module: hal_py.Module</em>, <em>recursive: bool = False</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.is_submodule_of" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the module is a submodule of the specified module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>module</strong> (<a class="reference internal" href="#hal_py.Module" title="hal_py.Module"><em>hal_py.Module</em></a>) – The module.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True to check recursively, False otherwise.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if the module is a submodule of the specified module, False otherwise.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.is_top_module">
+<code class="descname">is_top_module</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.is_top_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true only if the module is the top module of the netlist.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the module is the top module, False otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.move_pin_within_group">
+<code class="descname">move_pin_within_group</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>pin_group: hal_py.ModulePinGroup</em>, <em>pin: hal_py.ModulePin</em>, <em>new_index: int</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.move_pin_within_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move a pin to another index within the given pin group.
+The indices of some other pins within the group will be incremented or decremented to make room for the moved pin to be inserted at the desired position.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pin_group</strong> (<a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup"><em>hal_py.ModulePinGroup</em></a>) – The pin group.</li>
+<li><strong>pin</strong> (<a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin"><em>hal_py.ModulePin</em></a>) – The pin to be moved.</li>
+<li><strong>new_index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The index to which the pin is moved.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, False otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.name">
+<code class="descname">name</code><a class="headerlink" href="#hal_py.Module.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.netlist">
+<code class="descname">netlist</code><a class="headerlink" href="#hal_py.Module.netlist" title="Permalink to this definition">¶</a></dt>
+<dd><p>The netlist this module is associated with.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist">hal_py.Netlist</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.nets">
+<code class="descname">nets</code><a class="headerlink" href="#hal_py.Module.nets" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of all nets that have at least one source or one destination within the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.output_nets">
+<code class="descname">output_nets</code><a class="headerlink" href="#hal_py.Module.output_nets" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of all nets that are either a global output to the netlist or have at least one destination outside of the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)">set</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.output_pin_names">
+<code class="descname">output_pin_names</code><a class="headerlink" href="#hal_py.Module.output_pin_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>An ordered list of the names of all output pins of the module (including inout pins).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.output_pins">
+<code class="descname">output_pins</code><a class="headerlink" href="#hal_py.Module.output_pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>An ordered list of all output pins of the module (including inout pins).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin">hal_py.ModulePin</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.parent_module">
+<code class="descname">parent_module</code><a class="headerlink" href="#hal_py.Module.parent_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>The parent module of this module.
+Is set to None for the top module, but cannot be set to None by the user.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#hal_py.Module" title="hal_py.Module">hal_py.Module</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.parent_modules">
+<code class="descname">parent_modules</code><a class="headerlink" href="#hal_py.Module.parent_modules" title="Permalink to this definition">¶</a></dt>
+<dd><p>The parent modules of this module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="#hal_py.Module" title="hal_py.Module">hal_py.Module</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.pin_groups">
+<code class="descname">pin_groups</code><a class="headerlink" href="#hal_py.Module.pin_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>All pin_groups of the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup">hal_py.ModulePinGroup</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.pin_names">
+<code class="descname">pin_names</code><a class="headerlink" href="#hal_py.Module.pin_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>An ordered list of the names of all pins of the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.pins">
+<code class="descname">pins</code><a class="headerlink" href="#hal_py.Module.pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>The (ordered) pins of the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin">hal_py.ModulePin</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.remove_gate">
+<code class="descname">remove_gate</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>gate: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.remove_gate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a gate from the module.
+Automatically moves the gate to the top module of the netlist.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate to remove.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success, False otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.remove_gates">
+<code class="descname">remove_gates</code><span class="sig-paren">(</span><em>self: hal_py.Module, gates: List[hal_py.Gate]</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.remove_gates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a list of gates from the module.
+Automatically moves the gates to the top module of the netlist.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em>) – The gates to remove.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success, False otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.remove_pin_from_group">
+<code class="descname">remove_pin_from_group</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>pin_group: hal_py.ModulePinGroup</em>, <em>pin: hal_py.ModulePin</em>, <em>delete_empty_groups: bool = True</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.remove_pin_from_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a pin from a pin group.
+The pin will be moved to a new group that goes by the pin’s name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pin_group</strong> (<a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup"><em>hal_py.ModulePinGroup</em></a>) – The old pin group.</li>
+<li><strong>pin</strong> (<a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin"><em>hal_py.ModulePin</em></a>) – The pin to be removed.</li>
+<li><strong>delete_empty_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set True to delete the group of it is empty after the pin has been removed, False to keep the empty group. Defaults to True.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, False otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.set_data">
+<code class="descname">set_data</code><span class="sig-paren">(</span><em>self: hal_py.DataContainer</em>, <em>category: str</em>, <em>key: str</em>, <em>data_type: str</em>, <em>value: str</em>, <em>log_with_info_level: bool = False</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.set_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a data entry.&lt;br&gt;
+May overwrite an existing entry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The data key category.</li>
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The data key.</li>
+<li><strong>data_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The data type.</li>
+<li><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The data value.</li>
+<li><strong>log_with_info_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Force explicit logging channel ‘netlist’ with log level ‘info’ to trace GUI events.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, false otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.set_name">
+<code class="descname">set_name</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>name: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Module.set_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the name of the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The new name.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.set_parent_module">
+<code class="descname">set_parent_module</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>new_parent: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.set_parent_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a new parent for this module.
+If the new parent is a submodule of this module, the new parent is added as a direct submodule to the old parent first.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>new_parent</strong> (<a class="reference internal" href="#hal_py.Module" title="hal_py.Module"><em>hal_py.Module</em></a>) – The new parent module.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the parent was changed, False otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.set_pin_group_direction">
+<code class="descname">set_pin_group_direction</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>pin_group: hal_py.ModulePinGroup</em>, <em>new_direction: hal_py.PinDirection</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.set_pin_group_direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the direction of the given pin group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pin_group</strong> (<a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup"><em>hal_py.ModulePinGroup</em></a>) – The pin group.</li>
+<li><strong>new_direction</strong> (<a class="reference internal" href="pin_direction.html#hal_py.PinDirection" title="hal_py.PinDirection"><em>hal_py.PinDirection</em></a>) – The direction to be assigned to the pin group.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, False otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.set_pin_group_name">
+<code class="descname">set_pin_group_name</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>pin_group: hal_py.ModulePinGroup</em>, <em>new_name: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.set_pin_group_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the name of the given pin group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pin_group</strong> (<a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup"><em>hal_py.ModulePinGroup</em></a>) – The pin group.</li>
+<li><strong>new_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name to be assigned to the pin group.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, False otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.set_pin_group_type">
+<code class="descname">set_pin_group_type</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>pin_group: hal_py.ModulePinGroup</em>, <em>new_type: hal_py.PinType</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.set_pin_group_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the type of the given pin group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pin_group</strong> (<a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup"><em>hal_py.ModulePinGroup</em></a>) – The pin group.</li>
+<li><strong>new_type</strong> (<a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><em>hal_py.PinType</em></a>) – The type to be assigned to the pin group.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, False otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.set_pin_name">
+<code class="descname">set_pin_name</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>pin: hal_py.ModulePin</em>, <em>new_name: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.set_pin_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the name of the given pin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pin</strong> (<a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin"><em>hal_py.ModulePin</em></a>) – The pin.</li>
+<li><strong>new_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name to be assigned to the pin.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, False otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.set_pin_type">
+<code class="descname">set_pin_type</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>pin: hal_py.ModulePin</em>, <em>new_type: hal_py.PinType</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.set_pin_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the type of the given pin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pin</strong> (<a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin"><em>hal_py.ModulePin</em></a>) – The pin.</li>
+<li><strong>new_type</strong> (<a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><em>hal_py.PinType</em></a>) – The type to be assigned to the pin.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, False otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.set_type">
+<code class="descname">set_type</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>type: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Module.set_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the type of the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The new type.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.submodule_depth">
+<code class="descname">submodule_depth</code><a class="headerlink" href="#hal_py.Module.submodule_depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>The depth of the module within the module hierarchie (0 = top module, 1 = direct child of top module, …).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.submodules">
+<code class="descname">submodules</code><a class="headerlink" href="#hal_py.Module.submodules" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of all direct submodules of this module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="#hal_py.Module" title="hal_py.Module">hal_py.Module</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.top_module">
+<code class="descname">top_module</code><a class="headerlink" href="#hal_py.Module.top_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>True only if the module is the top module of the netlist.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.type">
+<code class="descname">type</code><a class="headerlink" href="#hal_py.Module.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>The type of the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.update_nets">
+<code class="descname">update_nets</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Module.update_nets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterates over all nets connected to at least one gate of the module to update the nets, internal nets, input nets, and output nets of the module.
+Has no effect on module pins.</p>
+<p>WARNING: can only be used when automatic net checks have been disabled using hal_py.Netlist.enable_automatic_net_checks.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True on success, False otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 

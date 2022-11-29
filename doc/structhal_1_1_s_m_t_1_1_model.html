@@ -111,8 +111,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af46a846018c43ce39d768d8ff452ea63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67d2af2431b357a27f78b421b3bd0797"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_s_m_t_1_1_model.html#a67d2af2431b357a27f78b421b3bd0797">operator!=</a> (const <a class="el" href="structhal_1_1_s_m_t_1_1_model.html">Model</a> &amp;other) const</td></tr>
 <tr class="separator:a67d2af2431b357a27f78b421b3bd0797"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92829ba859da1e652e0c54c96eb62397"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_s_m_t_1_1_model.html#a92829ba859da1e652e0c54c96eb62397">evaluate</a> (const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;bf)</td></tr>
-<tr class="separator:a92829ba859da1e652e0c54c96eb62397"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab972d570eef3cf49a748c957da931d48"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_s_m_t_1_1_model.html#ab972d570eef3cf49a748c957da931d48">evaluate</a> (const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;bf) const</td></tr>
+<tr class="separator:ab972d570eef3cf49a748c957da931d48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -160,13 +160,13 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00188">188</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="types_8cpp_source.html#l00246">parse()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="types_8cpp_source.html#l00212">parse()</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a92829ba859da1e652e0c54c96eb62397"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a92829ba859da1e652e0c54c96eb62397">&#9670;&nbsp;</a></span>evaluate()</h2>
+<a id="ab972d570eef3cf49a748c957da931d48"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab972d570eef3cf49a748c957da931d48">&#9670;&nbsp;</a></span>evaluate()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -176,20 +176,20 @@ Friends</h2></td></tr>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;&#160;</td>
           <td class="paramname"><em>bf</em></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Evaluates the given boolean function by replacing all variables contained in the model with their corresponding value and simplifying.</p>
+<p>Evaluates the given Boolean function by replacing all variables contained in the model with their corresponding value and simplifying the result.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">bf</td><td>- Boolean function to evaluate. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">bf</td><td>- The Boolean function to evaluate. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Ok() and the evaluated function on success, Err() otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The evaluated function on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00212">212</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00250">250</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00238">hal::BooleanFunction::build()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00255">hal::BooleanFunction::Const()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00760">hal::BooleanFunction::get_nodes()</a>, <a class="el" href="types_8h_source.html#l00216">model</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
 
@@ -294,9 +294,9 @@ Friends</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Ok() and the model on success, Err() otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The model on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00246">246</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00212">212</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aab22590d74202761c89aa802522a21110">hal::SMT::Boolector</a>, <a class="el" href="types_8cpp_source.html#l00080">hal::SMT::ModelParser::BOOLECTOR_MODEL_GRAMMAR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="types_8h_source.html#l00216">model</a>, <a class="el" href="types_8cpp_source.html#l00188">Model()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="types_8cpp_source.html#l00030">hal::SMT::ModelParser::parser_context</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">type</a>, <a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aa70e31ac6776e733109977f8afdd234ed">hal::SMT::Z3</a>, and <a class="el" href="types_8cpp_source.html#l00085">hal::SMT::ModelParser::Z3_MODEL_GRAMMAR</a>.</p>
 
@@ -369,7 +369,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="types_8h_source.html#l00216">216</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="types_8cpp_source.html#l00212">evaluate()</a>, <a class="el" href="types_8cpp_source.html#l00202">hal::SMT::operator&lt;&lt;()</a>, <a class="el" href="types_8cpp_source.html#l00192">operator==()</a>, <a class="el" href="types_8cpp_source.html#l00246">parse()</a>, and <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="types_8cpp_source.html#l00250">evaluate()</a>, <a class="el" href="types_8cpp_source.html#l00202">hal::SMT::operator&lt;&lt;()</a>, <a class="el" href="types_8cpp_source.html#l00192">operator==()</a>, <a class="el" href="types_8cpp_source.html#l00212">parse()</a>, and <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
 
 </div>
 </div>
@@ -383,7 +383,7 @@ Friends</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a></li><li class="navelem"><a class="el" href="structhal_1_1_s_m_t_1_1_model.html">Model</a></li>
-    <li class="footer">Generated on Tue Nov 29 2022 14:41:26 for HAL by
+    <li class="footer">Generated on Tue Nov 29 2022 16:30:20 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
