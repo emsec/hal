@@ -79,20 +79,66 @@ elif [[ "$platform" == 'linux' ]]; then
         fi
 
         sudo apt-get update && sudo apt-get install -y build-essential verilator \
-        lsb-release git cmake pkgconf libboost-all-dev qtbase5-dev \
-        libpython3-dev ccache autoconf autotools-dev libsodium-dev \
-        libqt5svg5-dev libqt5svg5* ninja-build lcov gcovr python3-sphinx \
-        doxygen python3-sphinx-rtd-theme python3-jedi python3-pip \
-        pybind11-dev python3-pybind11 rapidjson-dev libspdlog-dev libz3-dev libreadline-dev \
-        $additional_deps \
-        graphviz libomp-dev libsuitesparse-dev # For documentation
+            lsb-release git cmake pkgconf libboost-all-dev qtbase5-dev \
+            libpython3-dev ccache autoconf autotools-dev libsodium-dev \
+            libqt5svg5-dev libqt5svg5* ninja-build lcov gcovr python3-sphinx \
+            doxygen python3-sphinx-rtd-theme python3-jedi python3-pip \
+            pybind11-dev python3-pybind11 rapidjson-dev libspdlog-dev libz3-dev libreadline-dev \
+            $additional_deps \
+            graphviz libomp-dev libsuitesparse-dev # For documentation
+
         sudo pip3 install -r requirements.txt
     elif [[ "$distribution" == "Arch" ]]; then
         yay -S --needed base-devel lsb-release git verilator cmake boost-libs pkgconf \
-        qt5-base python ccache autoconf libsodium igraph qt5-svg ninja lcov \
-        gcovr python-sphinx doxygen python-sphinx_rtd_theme python-jedi \
-        python-pip pybind11 rapidjson spdlog graphviz boost \
-        python-dateutil z3
+            qt5-base python ccache autoconf libsodium qt5-svg ninja lcov \
+            gcovr python-sphinx doxygen python-sphinx_rtd_theme python-jedi \
+            python-pip pybind11 rapidjson spdlog graphviz boost \
+            python-dateutil z3
+
+        # until igraph version 10 is supported, backport the igraph version on Arch Linux
+        base="https://archive.archlinux.org/packages/i/igraph/"
+        version="0.9.9-1-x86_64"
+        pkg=igraph-$version.pkg.tar.zst
+        sig=$pkg.sig
+
+        echo "Downgrading igraph library to version $version"
+
+        # get package and signature
+        tmp=$(mktemp -d --suffix=hal)
+        wget -P "$tmp" $base$pkg $base$sig -q
+
+        if [[ "$?" ]];then
+            echo "Download successful"
+        else
+            echo "Download failed. Aborting."
+            exit 1
+        fi
+
+        # signature verification
+        gpg --keyserver-options auto-key-retrieve --verify "$tmp"/"$sig"
+        if [[ "$?" ]];then
+            echo "Signature verification succeeded"
+        else
+            echo "Signature verification failed. Aborting."
+            exit 1
+        fi
+
+        # install package
+        sudo pacman -U  "$tmp"/"$pkg"
+        if [[ "$?" ]];then
+            echo "Successfully installed '$pkg'"
+        else
+            echo "Installing package '$pkg' failed. Aborting."
+            exit 1
+        fi
+
+        echo "Do you want to update your pacman cache? [Y/n]"
+        read -r copy_package
+
+        if [[ "$copy_package" =~ ^(y(es)?|Y(ES)?)$ ]];then
+            echo "Updating pacman cache ..."
+            sudo cp -v "$tmp"/* /var/cache/pacman/pkg
+        fi
     else
        echo "Unsupported Linux distribution: abort!"
        exit 255
@@ -100,12 +146,13 @@ elif [[ "$platform" == 'linux' ]]; then
 elif [[ "$platform" == 'docker' ]]; then
     # We can assume that we are in a ubuntu container, because of the official Dockerfile in the hal project
     apt-get update && apt-get install -y build-essential verilator \
-    lsb-release git cmake pkgconf libboost-all-dev qtbase5-dev \
-    libpython3-dev ccache autoconf autotools-dev libsodium-dev \
-    libqt5svg5-dev libqt5svg5* ninja-build lcov gcovr python3-sphinx \
-    doxygen python3-sphinx-rtd-theme python3-jedi python3-pip \
-    pybind11-dev python3-pybind11 rapidjson-dev libspdlog-dev libz3-dev libreadline-dev \
-    libigraph-dev \
-    graphviz libomp-dev libsuitesparse-dev # For documentation
+        lsb-release git cmake pkgconf libboost-all-dev qtbase5-dev \
+        libpython3-dev ccache autoconf autotools-dev libsodium-dev \
+        libqt5svg5-dev libqt5svg5* ninja-build lcov gcovr python3-sphinx \
+        doxygen python3-sphinx-rtd-theme python3-jedi python3-pip \
+        pybind11-dev python3-pybind11 rapidjson-dev libspdlog-dev libz3-dev libreadline-dev \
+        libigraph-dev \
+        graphviz libomp-dev libsuitesparse-dev # For documentation
+
     pip3 install -r requirements.txt
 fi
