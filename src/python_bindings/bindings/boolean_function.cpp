@@ -52,6 +52,29 @@ namespace hal
             :rtype: str or None
         )");
 
+        py_boolean_function.def_static(
+            "to_u64",
+            [](const std::vector<BooleanFunction::Value>& value) -> std::optional<u64> {
+                auto res = BooleanFunction::to_u64(value);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("value"),
+            R"(
+            Convert the given bit-vector to its unsigned 64-bit integer representation.
+
+            :param list[hal_py.BooleanFunction.Value] value: The value as a bit-vector.
+            :returns: A 64-bit integer representing the values on success, None otherwise.
+            :rtype: int or None
+        )");
+
         py_boolean_function.def(py::init<>(), R"(
             Constructs an empty / invalid Boolean function.
         )");

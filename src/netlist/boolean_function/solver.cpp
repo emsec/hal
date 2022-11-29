@@ -335,7 +335,7 @@ namespace hal
             {
                 if (config.generate_model)
                 {
-                    if (auto res = Model::parse(model_str, config.solver).map<SolverResult>([](auto model) -> Result<SolverResult> { return OK(SolverResult::Sat(model)); }); res.is_error())
+                    if (auto res = Model::parse(model_str, config.solver).map<SolverResult>([](const auto& model) -> Result<SolverResult> { return OK(SolverResult::Sat(model)); }); res.is_error())
                     {
                         return ERR_APPEND(res.get_error(), "could not parse SMT result from string: unable to generate model");
                     }
