@@ -1,5 +1,6 @@
 var NAVTREEINDEX28 =
 {
+"node__box_8h_source.html":[7,0,1,3,0,0,19,2,4],
 "node__drag__shadow_8cpp.html":[7,0,1,3,2,18,1,2,0],
 "node__drag__shadow_8cpp_source.html":[7,0,1,3,2,18,1,2,0],
 "node__drag__shadow_8h.html":[7,0,1,3,0,0,19,1,2,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX28 =
 "plugins_2gui_2src_2gui__utils_2netlist_8cpp.html":[7,0,1,3,2,23,3],
 "plugins_2gui_2src_2gui__utils_2netlist_8cpp.html#a3706ba37634242a317cc5abe4acd919f":[7,0,1,3,2,23,3,1],
 "plugins_2gui_2src_2gui__utils_2netlist_8cpp.html#aac880cdffea5d42f94b5582c92d644c3":[7,0,1,3,2,23,3,0],
-"plugins_2gui_2src_2gui__utils_2netlist_8cpp.html#ab18ab45d5471bc18531142eba0744767":[7,0,1,3,2,23,3,2],
-"plugins_2gui_2src_2gui__utils_2netlist_8cpp.html#ad51f27ed983b775629326cdfc3052fe5":[7,0,1,3,2,23,3,3]
+"plugins_2gui_2src_2gui__utils_2netlist_8cpp.html#ab18ab45d5471bc18531142eba0744767":[7,0,1,3,2,23,3,2]
 };

@@ -153,6 +153,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aaa9db7587dbb39363453303d368330be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa206d7a1f84eeb201466cf7e6f211bd"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate.html#afa206d7a1f84eeb201466cf7e6f211bd">get_boolean_functions</a> (bool only_custom_functions=false) const</td></tr>
 <tr class="separator:afa206d7a1f84eeb201466cf7e6f211bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a204ad3ffdd015cfb74455ba97256c364"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate.html#a204ad3ffdd015cfb74455ba97256c364">get_resolved_boolean_function</a> (const <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> *pin) const</td></tr>
+<tr class="separator:a204ad3ffdd015cfb74455ba97256c364"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a06d2932ecc4c3ad6886c84fec319c12a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate.html#a06d2932ecc4c3ad6886c84fec319c12a">add_boolean_function</a> (const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;func)</td></tr>
 <tr class="separator:a06d2932ecc4c3ad6886c84fec319c12a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7f56703158cb9be403c644540eb76ff"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate.html#ad7f56703158cb9be403c644540eb76ff">mark_vcc_gate</a> ()</td></tr>
@@ -283,7 +285,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00382">382</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00458">458</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01134">hal::BooleanFunction::compute_truth_table()</a>, <a class="el" href="gate__type__component_8h_source.html#l00205">hal::GateTypeComponent::get_component_as()</a>, <a class="el" href="init__component_8cpp_source.html#l00025">hal::InitComponent::get_init_category()</a>, <a class="el" href="init__component_8cpp_source.html#l00035">hal::InitComponent::get_init_identifiers()</a>, <a class="el" href="lut__component_8cpp_source.html#l00042">hal::LUTComponent::is_init_ascending()</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00023">hal::BooleanFunction::to_string()</a>.</p>
 
@@ -315,7 +317,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The Boolean function on success, an empty Boolean function otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00222">222</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00223">223</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="base__pin_8h_source.html#l00098">hal::BasePin&lt; T &gt;::get_name()</a>, and <a class="el" href="log_8h_source.html#l00076">log_warning</a>.</p>
 
@@ -345,7 +347,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The Boolean function on success, an empty Boolean function otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00185">185</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00186">186</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="base__pin_8h_source.html#l00098">hal::BasePin&lt; T &gt;::get_name()</a>, <a class="el" href="base__pin_8h_source.html#l00138">hal::BasePin&lt; T &gt;::get_type()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
@@ -377,11 +379,11 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A map from function name to function on success, an empty map otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00238">238</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00239">239</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="base__pin_8h_source.html#l00098">hal::BasePin&lt; T &gt;::get_name()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00049">operator==()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00483">hal::netlist_utils::remove_buffers()</a>, and <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00672">hal::netlist_utils::remove_unused_lut_endpoints()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00050">operator==()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00483">hal::netlist_utils::remove_buffers()</a>, and <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00672">hal::netlist_utils::remove_unused_lut_endpoints()</a>.</p>
 
 </div>
 </div>
@@ -409,7 +411,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The endpoint on success, a <code>nullptr</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00504">504</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00580">580</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00062">direction</a>, <a class="el" href="base__pin_8h_source.html#l00118">hal::BasePin&lt; T &gt;::get_direction()</a>, <a class="el" href="base__pin_8h_source.html#l00098">hal::BasePin&lt; T &gt;::get_name()</a>, <a class="el" href="log_8h_source.html#l00074">log_debug</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
@@ -439,7 +441,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The endpoint on success, a <code>nullptr</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00526">526</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00602">602</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
@@ -464,7 +466,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Get a vector of all fan-in endpoints of the gate, i.e., all endpoints associated with an input pin of the gate.</p>
 <dl class="section return"><dt>Returns</dt><dd>A vector of all fan-in endpoints. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00479">479</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00555">555</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00483">hal::netlist_utils::remove_buffers()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00672">hal::netlist_utils::remove_unused_lut_endpoints()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00769">hal::netlist_utils::replace_gate()</a>, and <a class="el" href="test_2verilog__parser_8cpp_source.html#l00918">hal::TEST_F()</a>.</p>
 
@@ -494,7 +496,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The fan-in net on success, a nullptr otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00484">484</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00560">560</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 </div>
 </div>
@@ -522,7 +524,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The fan-in net on success, a <code>nullptr</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00494">494</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00570">570</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00270">hal::BooleanInfluencePlugin::get_boolean_influences_of_gate()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00443">hal::netlist_utils::get_nets_at_pins()</a>, and <a class="el" href="test_2verilog__parser_8cpp_source.html#l00963">hal::TEST_F()</a>.</p>
 
@@ -545,7 +547,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Get a vector of all fan-in nets of the gate, i.e., all nets that are connected to one of the input pins.</p>
 <dl class="section return"><dt>Returns</dt><dd>A vector of all fan-in nets. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00474">474</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00550">550</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00325">hal::netlist_utils::get_next_sequential_gates()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00410">hal::netlist_utils::get_path()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00877">hal::ShortestPath::net()</a>, and <a class="el" href="test_2verilog__parser_8cpp_source.html#l01859">hal::TEST_F()</a>.</p>
 
@@ -575,7 +577,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The endpoint on success, a <code>nullptr</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00572">572</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00648">648</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00062">direction</a>, <a class="el" href="base__pin_8h_source.html#l00118">hal::BasePin&lt; T &gt;::get_direction()</a>, <a class="el" href="base__pin_8h_source.html#l00098">hal::BasePin&lt; T &gt;::get_name()</a>, <a class="el" href="log_8h_source.html#l00074">log_debug</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
@@ -605,7 +607,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The endpoint on success, a <code>nullptr</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00594">594</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00670">670</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
@@ -630,7 +632,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Get a vector of all fan-out endpoints of the gate, i.e., all endpoints associated with an output pin of the gate.</p>
 <dl class="section return"><dt>Returns</dt><dd>A vector of all fan-out endpoints. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00547">547</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00623">623</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00483">hal::netlist_utils::remove_buffers()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00769">hal::netlist_utils::replace_gate()</a>, and <a class="el" href="test_2verilog__writer_8cpp_source.html#l00364">hal::TEST_F()</a>.</p>
 
@@ -660,7 +662,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The fan-out net on success, a nullptr otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00552">552</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00628">628</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 </div>
 </div>
@@ -688,7 +690,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The fan-out net on success, a <code>nullptr</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00562">562</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00638">638</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00443">hal::netlist_utils::get_nets_at_pins()</a>, and <a class="el" href="test_2verilog__parser_8cpp_source.html#l01044">hal::TEST_F()</a>.</p>
 
@@ -711,7 +713,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Get a vector of all fan-out nets of the gate, i.e., all nets that are connected to one of the output pins.</p>
 <dl class="section return"><dt>Returns</dt><dd>A vector of all fan-out nets. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00542">542</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00618">618</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00299">hal::BooleanInfluencePlugin::get_ff_dependency_matrix()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00325">hal::netlist_utils::get_next_sequential_gates()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00410">hal::netlist_utils::get_path()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00877">hal::ShortestPath::net()</a>, and <a class="el" href="test_2verilog__parser_8cpp_source.html#l01859">hal::TEST_F()</a>.</p>
 
@@ -735,7 +737,7 @@ Additional Inherited Members</h2></td></tr>
  If no grouping contains this gate, a nullptr is returned.</p>
 <dl class="section return"><dt>Returns</dt><dd>The grouping. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00180">180</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00181">181</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, <a class="el" href="selection__details__widget_8cpp_source.html#l00230">hal::SelectionDetailsWidget::groupingUnassignActionFactory()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00769">hal::netlist_utils::replace_gate()</a>, and <a class="el" href="groupings__of__item__model_8cpp_source.html#l00091">hal::GroupingsOfItemModel::setGate()</a>.</p>
 
@@ -758,7 +760,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Hash function for python binding</p>
 <dl class="section return"><dt>Returns</dt><dd>Pybind11 compatible hash </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00089">89</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00090">90</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>.</p>
 
@@ -781,9 +783,9 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the unique id of the gate.</p>
 <dl class="section return"><dt>Returns</dt><dd>The unique id. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00094">94</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00095">95</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2net_8cpp_source.html#l00259">hal::Net::add_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00130">hal::Net::add_source()</a>, <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00136">hal::Grouping::contains_gate()</a>, <a class="el" href="gui__api_8cpp_source.html#l00272">hal::GuiApi::deselectGate()</a>, <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00270">hal::BooleanInfluencePlugin::get_boolean_influences_of_gate()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00214">hal::BooleanInfluencePlugin::get_boolean_influences_of_subcircuit()</a>, <a class="el" href="community__detection_8cpp_source.html#l00011">hal::GraphAlgorithmPlugin::get_communities()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00984">hal::netlist_utils::get_complex_gate_chain()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00299">hal::BooleanInfluencePlugin::get_ff_dependency_matrix()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00861">hal::netlist_utils::get_gate_chain()</a>, <a class="el" href="igraph_8cpp_source.html#l00013">hal::GraphAlgorithmPlugin::get_igraph_directed()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00443">hal::netlist_utils::get_nets_at_pins()</a>, <a class="el" href="selection__details__widget_8cpp_source.html#l00230">hal::SelectionDetailsWidget::groupingUnassignActionFactory()</a>, <a class="el" href="event__log_8cpp_source.html#l00025">hal::event_log::handle_gate_event()</a>, <a class="el" href="event__log_8cpp_source.html#l00159">hal::event_log::handle_grouping_event()</a>, <a class="el" href="selection__tree__model_8cpp_source.html#l00209">hal::SelectionTreeModel::handleGateItemChanged()</a>, <a class="el" href="gate__select__model_8cpp_source.html#l00170">hal::GateSelectPicker::handleSelectionChanged()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l01266">hal::GraphGraphicsView::handleShortestPath()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00325">hal::Net::is_a_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00195">hal::Net::is_a_source()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00244">hal::Netlist::mark_gnd_gate()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00228">hal::Netlist::mark_vcc_gate()</a>, <a class="el" href="netlist__elements__tree__model_8cpp_source.html#l00267">hal::NetlistElementsTreeModel::moduleGateAssigned()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00049">operator==()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00483">hal::netlist_utils::remove_buffers()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00290">hal::Net::remove_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00160">hal::Net::remove_source()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00672">hal::netlist_utils::remove_unused_lut_endpoints()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00769">hal::netlist_utils::replace_gate()</a>, <a class="el" href="gui__api_8cpp_source.html#l00065">hal::GuiApi::selectGate()</a>, <a class="el" href="netlist__elements__tree__model_8cpp_source.html#l00063">hal::NetlistElementsTreeModel::setContent()</a>, <a class="el" href="data__table__widget_8cpp_source.html#l00036">hal::DataTableWidget::setGate()</a>, <a class="el" href="groupings__of__item__widget_8cpp_source.html#l00043">hal::GroupingsOfItemWidget::setGate()</a>, <a class="el" href="groupings__of__item__model_8cpp_source.html#l00091">hal::GroupingsOfItemModel::setGate()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00277">hal::Netlist::unmark_gnd_gate()</a>, and <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00260">hal::Netlist::unmark_vcc_gate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2net_8cpp_source.html#l00259">hal::Net::add_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00130">hal::Net::add_source()</a>, <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00136">hal::Grouping::contains_gate()</a>, <a class="el" href="gui__api_8cpp_source.html#l00272">hal::GuiApi::deselectGate()</a>, <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00270">hal::BooleanInfluencePlugin::get_boolean_influences_of_gate()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00214">hal::BooleanInfluencePlugin::get_boolean_influences_of_subcircuit()</a>, <a class="el" href="community__detection_8cpp_source.html#l00011">hal::GraphAlgorithmPlugin::get_communities()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00984">hal::netlist_utils::get_complex_gate_chain()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00299">hal::BooleanInfluencePlugin::get_ff_dependency_matrix()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00861">hal::netlist_utils::get_gate_chain()</a>, <a class="el" href="igraph_8cpp_source.html#l00013">hal::GraphAlgorithmPlugin::get_igraph_directed()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00443">hal::netlist_utils::get_nets_at_pins()</a>, <a class="el" href="selection__details__widget_8cpp_source.html#l00230">hal::SelectionDetailsWidget::groupingUnassignActionFactory()</a>, <a class="el" href="event__log_8cpp_source.html#l00025">hal::event_log::handle_gate_event()</a>, <a class="el" href="event__log_8cpp_source.html#l00159">hal::event_log::handle_grouping_event()</a>, <a class="el" href="selection__tree__model_8cpp_source.html#l00209">hal::SelectionTreeModel::handleGateItemChanged()</a>, <a class="el" href="gate__select__model_8cpp_source.html#l00170">hal::GateSelectPicker::handleSelectionChanged()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l01266">hal::GraphGraphicsView::handleShortestPath()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00325">hal::Net::is_a_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00195">hal::Net::is_a_source()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00244">hal::Netlist::mark_gnd_gate()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00228">hal::Netlist::mark_vcc_gate()</a>, <a class="el" href="netlist__elements__tree__model_8cpp_source.html#l00267">hal::NetlistElementsTreeModel::moduleGateAssigned()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00050">operator==()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00483">hal::netlist_utils::remove_buffers()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00290">hal::Net::remove_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00160">hal::Net::remove_source()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00672">hal::netlist_utils::remove_unused_lut_endpoints()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00769">hal::netlist_utils::replace_gate()</a>, <a class="el" href="gui__api_8cpp_source.html#l00065">hal::GuiApi::selectGate()</a>, <a class="el" href="netlist__elements__tree__model_8cpp_source.html#l00063">hal::NetlistElementsTreeModel::setContent()</a>, <a class="el" href="data__table__widget_8cpp_source.html#l00036">hal::DataTableWidget::setGate()</a>, <a class="el" href="groupings__of__item__widget_8cpp_source.html#l00043">hal::GroupingsOfItemWidget::setGate()</a>, <a class="el" href="groupings__of__item__model_8cpp_source.html#l00091">hal::GroupingsOfItemModel::setGate()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00277">hal::Netlist::unmark_gnd_gate()</a>, and <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00260">hal::Netlist::unmark_vcc_gate()</a>.</p>
 
 </div>
 </div>
@@ -804,7 +806,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the INIT data of the gate, if available. An error is returned in case the gate does not hold any INIT data.</p>
 <dl class="section return"><dt>Returns</dt><dd>The INIT data as a vector on success, an error message otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00770">770</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00846">846</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="gate__type__component_8h_source.html#l00205">hal::GateTypeComponent::get_component_as()</a>, <a class="el" href="init__component_8cpp_source.html#l00025">hal::InitComponent::get_init_category()</a>, <a class="el" href="init__component_8cpp_source.html#l00035">hal::InitComponent::get_init_identifiers()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
@@ -828,7 +830,7 @@ Additional Inherited Members</h2></td></tr>
  If no valid physical location coordinate is assigned, a negative value is returned for the respective coordinate.</p>
 <dl class="section return"><dt>Returns</dt><dd>A pair &lt;x-coordinate, y-coordinate&gt;. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00141">141</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00142">142</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, and <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00769">hal::netlist_utils::replace_gate()</a>.</p>
 
@@ -852,9 +854,9 @@ Additional Inherited Members</h2></td></tr>
  If no valid physical location x-coordinate is assigned, a negative value is returned.</p>
 <dl class="section return"><dt>Returns</dt><dd>The gate's x-coordinate. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00131">131</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00132">132</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, and <a class="el" href="netlist_2gate_8cpp_source.html#l00049">operator==()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, and <a class="el" href="netlist_2gate_8cpp_source.html#l00050">operator==()</a>.</p>
 
 </div>
 </div>
@@ -876,9 +878,9 @@ Additional Inherited Members</h2></td></tr>
  If no valid physical location y-coordinate is assigned, a negative value is returned.</p>
 <dl class="section return"><dt>Returns</dt><dd>The gate's y-coordinate. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00136">136</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00137">137</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, and <a class="el" href="netlist_2gate_8cpp_source.html#l00049">operator==()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, and <a class="el" href="netlist_2gate_8cpp_source.html#l00050">operator==()</a>.</p>
 
 </div>
 </div>
@@ -899,7 +901,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the module which contains this gate.</p>
 <dl class="section return"><dt>Returns</dt><dd>The module. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00175">175</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00176">176</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="state__to__module_8cpp_source.html#l00016">hal::dataflow::state_to_module::create_modules()</a>, <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, and <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00769">hal::netlist_utils::replace_gate()</a>.</p>
 
@@ -922,9 +924,9 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the name of the gate.</p>
 <dl class="section return"><dt>Returns</dt><dd>The name. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00104">104</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00105">105</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2net_8cpp_source.html#l00259">hal::Net::add_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00130">hal::Net::add_source()</a>, <a class="el" href="action__rename__object_8cpp_source.html#l00049">hal::ActionRenameObject::exec()</a>, <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00270">hal::BooleanInfluencePlugin::get_boolean_influences_of_gate()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00214">hal::BooleanInfluencePlugin::get_boolean_influences_of_subcircuit()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00984">hal::netlist_utils::get_complex_gate_chain()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00299">hal::BooleanInfluencePlugin::get_ff_dependency_matrix()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00861">hal::netlist_utils::get_gate_chain()</a>, <a class="el" href="igraph_8cpp_source.html#l00013">hal::GraphAlgorithmPlugin::get_igraph_directed()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00443">hal::netlist_utils::get_nets_at_pins()</a>, <a class="el" href="event__log_8cpp_source.html#l00025">hal::event_log::handle_gate_event()</a>, <a class="el" href="event__log_8cpp_source.html#l00159">hal::event_log::handle_grouping_event()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l01266">hal::GraphGraphicsView::handleShortestPath()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00325">hal::Net::is_a_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00195">hal::Net::is_a_source()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00244">hal::Netlist::mark_gnd_gate()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00228">hal::Netlist::mark_vcc_gate()</a>, <a class="el" href="netlist__elements__tree__model_8cpp_source.html#l00267">hal::NetlistElementsTreeModel::moduleGateAssigned()</a>, <a class="el" href="selection__tree__item_8cpp_source.html#l00157">hal::SelectionTreeItemGate::name()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00049">operator==()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00483">hal::netlist_utils::remove_buffers()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00290">hal::Net::remove_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00160">hal::Net::remove_source()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00672">hal::netlist_utils::remove_unused_lut_endpoints()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00769">hal::netlist_utils::replace_gate()</a>, <a class="el" href="netlist__elements__tree__model_8cpp_source.html#l00063">hal::NetlistElementsTreeModel::setContent()</a>, <a class="el" href="test_2verilog__parser_8cpp_source.html#l00041">hal::TEST_F()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00277">hal::Netlist::unmark_gnd_gate()</a>, and <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00260">hal::Netlist::unmark_vcc_gate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2net_8cpp_source.html#l00259">hal::Net::add_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00130">hal::Net::add_source()</a>, <a class="el" href="action__rename__object_8cpp_source.html#l00049">hal::ActionRenameObject::exec()</a>, <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00270">hal::BooleanInfluencePlugin::get_boolean_influences_of_gate()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00214">hal::BooleanInfluencePlugin::get_boolean_influences_of_subcircuit()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00984">hal::netlist_utils::get_complex_gate_chain()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00299">hal::BooleanInfluencePlugin::get_ff_dependency_matrix()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00861">hal::netlist_utils::get_gate_chain()</a>, <a class="el" href="igraph_8cpp_source.html#l00013">hal::GraphAlgorithmPlugin::get_igraph_directed()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00443">hal::netlist_utils::get_nets_at_pins()</a>, <a class="el" href="event__log_8cpp_source.html#l00025">hal::event_log::handle_gate_event()</a>, <a class="el" href="event__log_8cpp_source.html#l00159">hal::event_log::handle_grouping_event()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l01266">hal::GraphGraphicsView::handleShortestPath()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00325">hal::Net::is_a_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00195">hal::Net::is_a_source()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00244">hal::Netlist::mark_gnd_gate()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00228">hal::Netlist::mark_vcc_gate()</a>, <a class="el" href="netlist__elements__tree__model_8cpp_source.html#l00267">hal::NetlistElementsTreeModel::moduleGateAssigned()</a>, <a class="el" href="selection__tree__item_8cpp_source.html#l00157">hal::SelectionTreeItemGate::name()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00050">operator==()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00483">hal::netlist_utils::remove_buffers()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00290">hal::Net::remove_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00160">hal::Net::remove_source()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00672">hal::netlist_utils::remove_unused_lut_endpoints()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00769">hal::netlist_utils::replace_gate()</a>, <a class="el" href="netlist__elements__tree__model_8cpp_source.html#l00063">hal::NetlistElementsTreeModel::setContent()</a>, <a class="el" href="test_2verilog__parser_8cpp_source.html#l00041">hal::TEST_F()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00277">hal::Netlist::unmark_gnd_gate()</a>, and <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00260">hal::Netlist::unmark_vcc_gate()</a>.</p>
 
 </div>
 </div>
@@ -945,7 +947,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the netlist this gate is associated with.</p>
 <dl class="section return"><dt>Returns</dt><dd>The netlist. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00099">99</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00100">100</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00984">hal::netlist_utils::get_complex_gate_chain()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00861">hal::netlist_utils::get_gate_chain()</a>, and <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00769">hal::netlist_utils::replace_gate()</a>.</p>
 
@@ -975,7 +977,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The predecessor endpoint on success, a <code>nullptr</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00648">648</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00724">724</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00062">direction</a>, <a class="el" href="base__pin_8h_source.html#l00118">hal::BasePin&lt; T &gt;::get_direction()</a>, <a class="el" href="base__pin_8h_source.html#l00098">hal::BasePin&lt; T &gt;::get_name()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
@@ -1005,7 +1007,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The predecessor endpoint on success, a <code>nullptr</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00674">674</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00750">750</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
@@ -1037,9 +1039,39 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A vector of predecessor endpoints. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00622">622</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00698">698</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, and <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00984">hal::netlist_utils::get_complex_gate_chain()</a>.</p>
+
+</div>
+</div>
+<a id="a204ad3ffdd015cfb74455ba97256c364"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a204ad3ffdd015cfb74455ba97256c364">&#9670;&nbsp;</a></span>get_resolved_boolean_function()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &gt; hal::Gate::get_resolved_boolean_function </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> *&#160;</td>
+          <td class="paramname"><em>pin</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the resolved Boolean function corresponding to the given pin. Resolved meaning, that the function is only depending on input nets and no internal or output pins.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">pin</td><td>- The pin. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The Boolean function on success, an error otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00264">264</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="base__pin_8h_source.html#l00118">hal::BasePin&lt; T &gt;::get_direction()</a>, <a class="el" href="base__pin_8h_source.html#l00098">hal::BasePin&lt; T &gt;::get_name()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00805">hal::BooleanFunction::get_variable_names()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00973">hal::BooleanFunction::substitute()</a>, <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>, and <a class="el" href="utils_8h_source.html#l00490">hal::utils::to_vector()</a>.</p>
 
 </div>
 </div>
@@ -1067,7 +1099,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The successor endpoint on success, a <code>nullptr</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00728">728</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00804">804</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00062">direction</a>, <a class="el" href="base__pin_8h_source.html#l00118">hal::BasePin&lt; T &gt;::get_direction()</a>, <a class="el" href="base__pin_8h_source.html#l00098">hal::BasePin&lt; T &gt;::get_name()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
@@ -1097,7 +1129,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The successor endpoint on success, a <code>nullptr</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00754">754</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00830">830</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
@@ -1129,7 +1161,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A vector of successor endpoints. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00702">702</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00778">778</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00984">hal::netlist_utils::get_complex_gate_chain()</a>, and <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00861">hal::netlist_utils::get_gate_chain()</a>.</p>
 
@@ -1152,9 +1184,9 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the type of the gate.</p>
 <dl class="section return"><dt>Returns</dt><dd>The type. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00126">126</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00127">127</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2net_8cpp_source.html#l00259">hal::Net::add_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00130">hal::Net::add_source()</a>, <a class="el" href="selection__tree__item_8cpp_source.html#l00170">hal::SelectionTreeItemGate::boxType()</a>, <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00270">hal::BooleanInfluencePlugin::get_boolean_influences_of_gate()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00214">hal::BooleanInfluencePlugin::get_boolean_influences_of_subcircuit()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00984">hal::netlist_utils::get_complex_gate_chain()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00299">hal::BooleanInfluencePlugin::get_ff_dependency_matrix()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00861">hal::netlist_utils::get_gate_chain()</a>, <a class="el" href="event__log_8cpp_source.html#l00025">hal::event_log::handle_gate_event()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00325">hal::Net::is_a_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00195">hal::Net::is_a_source()</a>, <a class="el" href="netlist__elements__tree__model_8cpp_source.html#l00267">hal::NetlistElementsTreeModel::moduleGateAssigned()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00049">operator==()</a>, <a class="el" href="py__code__provider_8cpp_source.html#l00080">hal::PyCodeProvider::pyCodeGateAsyncSetResetBehavior()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00483">hal::netlist_utils::remove_buffers()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00290">hal::Net::remove_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00160">hal::Net::remove_source()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00769">hal::netlist_utils::replace_gate()</a>, and <a class="el" href="netlist__elements__tree__model_8cpp_source.html#l00063">hal::NetlistElementsTreeModel::setContent()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2net_8cpp_source.html#l00259">hal::Net::add_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00130">hal::Net::add_source()</a>, <a class="el" href="selection__tree__item_8cpp_source.html#l00170">hal::SelectionTreeItemGate::boxType()</a>, <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00270">hal::BooleanInfluencePlugin::get_boolean_influences_of_gate()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00214">hal::BooleanInfluencePlugin::get_boolean_influences_of_subcircuit()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00984">hal::netlist_utils::get_complex_gate_chain()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00299">hal::BooleanInfluencePlugin::get_ff_dependency_matrix()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00861">hal::netlist_utils::get_gate_chain()</a>, <a class="el" href="event__log_8cpp_source.html#l00025">hal::event_log::handle_gate_event()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00325">hal::Net::is_a_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00195">hal::Net::is_a_source()</a>, <a class="el" href="netlist__elements__tree__model_8cpp_source.html#l00267">hal::NetlistElementsTreeModel::moduleGateAssigned()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00050">operator==()</a>, <a class="el" href="py__code__provider_8cpp_source.html#l00080">hal::PyCodeProvider::pyCodeGateAsyncSetResetBehavior()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00483">hal::netlist_utils::remove_buffers()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00290">hal::Net::remove_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00160">hal::Net::remove_source()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00769">hal::netlist_utils::replace_gate()</a>, and <a class="el" href="netlist__elements__tree__model_8cpp_source.html#l00063">hal::NetlistElementsTreeModel::setContent()</a>.</p>
 
 </div>
 </div>
@@ -1182,7 +1214,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A vector of unique predecessor gates. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00610">610</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00686">686</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>.</p>
 
@@ -1212,7 +1244,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A vector of unique successor gates. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00690">690</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00766">766</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>.</p>
 
@@ -1235,7 +1267,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Check whether the gate's location in the layout is available.</p>
 <dl class="section return"><dt>Returns</dt><dd>True if valid location data is available, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00146">146</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00147">147</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>.</p>
 
@@ -1258,9 +1290,9 @@ Additional Inherited Members</h2></td></tr>
 <p>Checks whether this gate is a global gnd gate.</p>
 <dl class="section return"><dt>Returns</dt><dd>True if the gate is a global gnd gate. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00469">469</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00545">545</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00214">hal::BooleanInfluencePlugin::get_boolean_influences_of_subcircuit()</a>, and <a class="el" href="netlist_2gate_8cpp_source.html#l00049">operator==()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00214">hal::BooleanInfluencePlugin::get_boolean_influences_of_subcircuit()</a>, and <a class="el" href="netlist_2gate_8cpp_source.html#l00050">operator==()</a>.</p>
 
 </div>
 </div>
@@ -1281,9 +1313,9 @@ Additional Inherited Members</h2></td></tr>
 <p>Checks whether this gate is a global vcc gate.</p>
 <dl class="section return"><dt>Returns</dt><dd>True if the gate is a global vcc gate. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00464">464</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00540">540</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00214">hal::BooleanInfluencePlugin::get_boolean_influences_of_subcircuit()</a>, and <a class="el" href="netlist_2gate_8cpp_source.html#l00049">operator==()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00214">hal::BooleanInfluencePlugin::get_boolean_influences_of_subcircuit()</a>, and <a class="el" href="netlist_2gate_8cpp_source.html#l00050">operator==()</a>.</p>
 
 </div>
 </div>
@@ -1304,7 +1336,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Mark this gate as a global gnd gate.</p>
 <dl class="section return"><dt>Returns</dt><dd>True on success. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00449">449</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00525">525</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, and <a class="el" href="test_2verilog__writer_8cpp_source.html#l00041">hal::TEST_F()</a>.</p>
 
@@ -1327,7 +1359,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Mark this gate as a global vcc gate.</p>
 <dl class="section return"><dt>Returns</dt><dd>True on success. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00444">444</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00520">520</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>, and <a class="el" href="test_2verilog__writer_8cpp_source.html#l00041">hal::TEST_F()</a>.</p>
 
@@ -1357,7 +1389,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if both gates are unequal, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00084">84</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00085">85</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 </div>
 </div>
@@ -1385,9 +1417,9 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if both gates are equal, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00049">49</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00050">50</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2gate_8cpp_source.html#l00238">get_boolean_functions()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00094">get_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00131">get_location_x()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00136">get_location_y()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00104">get_name()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00126">get_type()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00469">is_gnd_gate()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00464">is_vcc_gate()</a>, and <a class="el" href="log_8h_source.html#l00070">log_info</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2gate_8cpp_source.html#l00239">get_boolean_functions()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00095">get_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00132">get_location_x()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00137">get_location_y()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00105">get_name()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00127">get_type()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00545">is_gnd_gate()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00540">is_vcc_gate()</a>, and <a class="el" href="log_8h_source.html#l00070">log_info</a>.</p>
 
 </div>
 </div>
@@ -1415,7 +1447,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok on success, an error message otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00791">791</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00867">867</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="gate__type__component_8h_source.html#l00205">hal::GateTypeComponent::get_component_as()</a>, <a class="el" href="init__component_8cpp_source.html#l00025">hal::InitComponent::get_init_category()</a>, <a class="el" href="init__component_8cpp_source.html#l00035">hal::InitComponent::get_init_identifiers()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
@@ -1445,7 +1477,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00169">169</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00170">170</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>.</p>
 
@@ -1475,7 +1507,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00151">151</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00152">152</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>.</p>
 
@@ -1505,7 +1537,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00160">160</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00161">161</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>.</p>
 
@@ -1534,7 +1566,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00109">109</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00110">110</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>, and <a class="el" href="utils_8h_source.html#l00335">hal::utils::trim()</a>.</p>
 
@@ -1559,7 +1591,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Unmark this gate as a global gnd gate.</p>
 <dl class="section return"><dt>Returns</dt><dd>True on success. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00459">459</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00535">535</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>.</p>
 
@@ -1582,7 +1614,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Unmark this gate as a global vcc gate.</p>
 <dl class="section return"><dt>Returns</dt><dd>True on success. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00454">454</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate_8cpp_source.html#l00530">530</a> of file <a class="el" href="netlist_2gate_8cpp_source.html">gate.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate_8cpp_source.html#l00005">hal::gate_init()</a>.</p>
 
@@ -1609,7 +1641,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gate_8h_source.html#l00453">453</a> of file <a class="el" href="gate_8h_source.html">gate.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gate_8h_source.html#l00462">462</a> of file <a class="el" href="gate_8h_source.html">gate.h</a>.</p>
 
 </div>
 </div>
@@ -1623,7 +1655,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_gate.html">Gate</a></li>
-    <li class="footer">Generated on Tue Nov 29 2022 16:30:17 for HAL by
+    <li class="footer">Generated on Tue Nov 29 2022 17:37:46 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

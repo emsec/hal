@@ -1,5 +1,6 @@
 var NAVTREEINDEX31 =
 {
+"special__log__content__manager_8h.html":[7,0,1,3,0,0,24,5],
 "special__log__content__manager_8h_source.html":[7,0,1,3,0,0,24,5],
 "special__strings_8h.html":[7,0,0,0,4,10],
 "special__strings_8h.html#a37f09aeed09bf8c9d56b599ffcdceef2":[7,0,0,0,4,10,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX31 =
 "struct_abc___obj__t__.html#ac9f88afcd14b498f050591e53ccfb935":[6,0,6,8],
 "struct_abc___obj__t__.html#ad0ef935862c51a0f80e8f9f10a456334":[6,0,6,15],
 "struct_abc___obj__t__.html#adde409487536c37dc347260667640979":[6,0,6,17],
-"struct_abc___obj__t__.html#ae34a86385c083e6cd7b13204b17a1ab9":[6,0,6,12],
-"struct_abc___obj__t__.html#ae7e8759c8d2177401a402342a4650e23":[6,0,6,7]
+"struct_abc___obj__t__.html#ae34a86385c083e6cd7b13204b17a1ab9":[6,0,6,12]
 };

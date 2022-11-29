@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Gate &mdash; hal_py v4.0.1-71-g72aeca925 documentation</title>
+  <title>Gate &mdash; hal_py v4.0.1-77-g7ea5514d8 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.0.1-71-g72aeca925
+                v4.0.1-77-g7ea5514d8
               </div>
             
           
@@ -880,6 +880,25 @@ The optional filter is evaluated on every candidate such that the result only co
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of predecessors endpoints.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="endpoint.html#hal_py.Endpoint" title="hal_py.Endpoint">hal_py.Endpoint</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Gate.get_resolved_boolean_function">
+<code class="descname">get_resolved_boolean_function</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em>, <em>pin: hal_py.GatePin = None</em><span class="sig-paren">)</span> &#x2192; Optional[hal::BooleanFunction]<a class="headerlink" href="#hal_py.Gate.get_resolved_boolean_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the resolved Boolean function corresponding to the given pin.
+Resolved meaning, that the function is only depending on input nets and no internal or output pins.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin</strong> (<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a>) – The pin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The Boolean function on success, an error otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a></td>
 </tr>
 </tbody>
 </table>

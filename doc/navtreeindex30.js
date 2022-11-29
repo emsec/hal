@@ -1,5 +1,6 @@
 var NAVTREEINDEX30 =
 {
+"recent__files__widget_8h.html":[7,0,1,3,0,0,51,4],
 "recent__files__widget_8h_source.html":[7,0,1,3,0,0,51,4],
 "register__stage__identification_8cpp.html":[7,0,1,1,3,3,1],
 "register__stage__identification_8cpp.html#a29eb9479aa851c1a6443eafef15c3ecb":[7,0,1,1,3,3,1,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX30 =
 "sort_8h.html#aeacb51281299c97ba69b4152275bc686":[7,0,1,3,0,0,24,4,3],
 "sort_8h_source.html":[7,0,1,3,0,0,24,4],
 "special__log__content__manager_8cpp.html":[7,0,1,3,2,23,5],
-"special__log__content__manager_8cpp_source.html":[7,0,1,3,2,23,5],
-"special__log__content__manager_8h.html":[7,0,1,3,0,0,24,5]
+"special__log__content__manager_8cpp_source.html":[7,0,1,3,2,23,5]
 };

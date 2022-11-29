@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Solve FSM &mdash; hal_py v4.0.1-71-g72aeca925 documentation</title>
+  <title>Solve FSM &mdash; hal_py v4.0.1-77-g7ea5514d8 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                v4.0.1-71-g72aeca925
+                v4.0.1-77-g7ea5514d8
               </div>
             
           
@@ -168,7 +168,7 @@
 <em class="property">class </em><code class="descclassname">solve_fsm.</code><code class="descname">SolveFsmPlugin</code><a class="headerlink" href="#solve_fsm.SolveFsmPlugin" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="staticmethod">
 <dt id="solve_fsm.SolveFsmPlugin.generate_dot_graph">
-<em class="property">static </em><code class="descname">generate_dot_graph</code><span class="sig-paren">(</span><em>state_reg: List[hal_py.Gate], transitions: Dict[int, Dict[int, hal_py.BooleanFunction]], graph_path: str, max_condition_length: int, base: int</em><span class="sig-paren">)</span> &#x2192; Optional[str]<a class="headerlink" href="#solve_fsm.SolveFsmPlugin.generate_dot_graph" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">generate_dot_graph</code><span class="sig-paren">(</span><em>state_reg: List[hal_py.Gate], transitions: Dict[int, Dict[int, hal_py.BooleanFunction]], graph_path: str = '', max_condition_length: int = 128, base: int = 10</em><span class="sig-paren">)</span> &#x2192; Optional[str]<a class="headerlink" href="#solve_fsm.SolveFsmPlugin.generate_dot_graph" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates the state graph of a finite state machine from the transitions of that fsm.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -233,7 +233,7 @@
 
 <dl class="staticmethod">
 <dt id="solve_fsm.SolveFsmPlugin.solve_fsm_brute_force">
-<em class="property">static </em><code class="descname">solve_fsm_brute_force</code><span class="sig-paren">(</span><em>nl: hal_py.Netlist, state_reg: List[hal_py.Gate], transition_logic: List[hal_py.Gate], graph_path: str</em><span class="sig-paren">)</span> &#x2192; Optional[Dict[int, Set[int]]]<a class="headerlink" href="#solve_fsm.SolveFsmPlugin.solve_fsm_brute_force" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">solve_fsm_brute_force</code><span class="sig-paren">(</span><em>nl: hal_py.Netlist, state_reg: List[hal_py.Gate], transition_logic: List[hal_py.Gate], graph_path: str = ''</em><span class="sig-paren">)</span> &#x2192; Optional[Dict[int, Set[int]]]<a class="headerlink" href="#solve_fsm.SolveFsmPlugin.solve_fsm_brute_force" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates the state graph of a finite state machine and returns a mapping from each state to all its possible successor states using a simple brute force approach.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
