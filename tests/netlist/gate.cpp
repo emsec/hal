@@ -949,6 +949,7 @@ namespace hal
             // Access the boolean function of a gate_type
             auto nl = test_utils::create_empty_netlist();
             Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("INV"), "test_gate");
+
             std::unordered_map<std::string, BooleanFunction> functions = test_gate->get_boolean_functions();
             EXPECT_EQ(functions, (std::unordered_map<std::string, BooleanFunction>({{"O", BooleanFunction::from_string("!I").get()}})));
 
@@ -964,6 +965,50 @@ namespace hal
             // should be function of first output pin
             EXPECT_EQ(test_gate->get_boolean_function(), ~BooleanFunction::Var("I"));
         }
+        {
+            auto nl = test_utils::create_empty_netlist();
+            Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("CARRY4"), "test_carry_gate");
+
+            Net* net_ci = nl->create_net(MIN_NET_ID + 7, "CI");
+            Net* net_cyinit = nl->create_net(MIN_NET_ID + 8, "CYINIT");
+
+            Net* net_di0 = nl->create_net(MIN_NET_ID + 9, "DI(0)");
+            Net* net_di1 = nl->create_net(MIN_NET_ID + 10, "DI(1)");
+            Net* net_di2 = nl->create_net(MIN_NET_ID + 11, "DI(2)");
+            Net* net_di3 = nl->create_net(MIN_NET_ID + 12, "DI(3)");
+
+            Net* net_s0 = nl->create_net(MIN_NET_ID + 13, "S(0)");
+            Net* net_s1 = nl->create_net(MIN_NET_ID + 14, "S(1)");
+            Net* net_s2 = nl->create_net(MIN_NET_ID + 15, "S(2)");
+            Net* net_s3 = nl->create_net(MIN_NET_ID + 16, "S(3)");
+
+            net_ci->add_destination(test_gate, "CI");
+            net_cyinit->add_destination(test_gate, "CYINIT");
+
+            net_di0->add_destination(test_gate, "DI(0)");
+            net_di1->add_destination(test_gate, "DI(1)");
+            net_di2->add_destination(test_gate, "DI(2)");
+            net_di3->add_destination(test_gate, "DI(3)");
+
+            net_s0->add_destination(test_gate, "S(0)");
+            net_s1->add_destination(test_gate, "S(1)");
+            net_s2->add_destination(test_gate, "S(2)");
+            net_s3->add_destination(test_gate, "S(3)");
+
+            const std::vector<GatePin*> pins = test_gate->get_type()->get_pins([](const GatePin* gp){ return gp->get_name() == "CO(3)";});
+            
+            ASSERT_TRUE(pins.size() == 1);
+            
+            const GatePin* co3 = pins.front();
+            
+            ASSERT_TRUE(co3 != nullptr);
+
+            const Result<BooleanFunction> res = test_gate->get_resolved_boolean_function(co3);
+
+            EXPECT_TRUE(res.is_ok());
+
+            EXPECT_EQ(res.get(), BooleanFunction::from_string("((net_17 & ((net_16 & ((net_15 & ((net_14 & (net_8 | net_9)) | ((! net_14) & net_10))) | ((! net_15) & net_11))) | ((! net_16) & net_12))) | ((! net_17) & net_13))").get());
+        }
         // NEGATIVE
         {
             // Get a boolean function for a name that is unknown.
@@ -978,6 +1023,103 @@ namespace hal
             Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("RAM"), "test_gate");
 
             EXPECT_TRUE(test_gate->get_boolean_function().is_empty());
+        }
+        {
+            auto nl = test_utils::create_empty_netlist();
+            Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("CARRY4"), "test_gate");
+            
+            Net* net_ci = nl->create_net(MIN_NET_ID + 7, "CI");
+            Net* net_cyinit = nl->create_net(MIN_NET_ID + 8, "CYINIT");
+
+            Net* net_di0 = nl->create_net(MIN_NET_ID + 9, "DI(0)");
+            Net* net_di1 = nl->create_net(MIN_NET_ID + 10, "DI(1)");
+            Net* net_di2 = nl->create_net(MIN_NET_ID + 11, "DI(2)");
+            Net* net_di3 = nl->create_net(MIN_NET_ID + 12, "DI(3)");
+
+            Net* net_s0 = nl->create_net(MIN_NET_ID + 13, "S(0)");
+            Net* net_s1 = nl->create_net(MIN_NET_ID + 14, "S(1)");
+            Net* net_s2 = nl->create_net(MIN_NET_ID + 15, "S(2)");
+            Net* net_s3 = nl->create_net(MIN_NET_ID + 16, "S(3)");
+
+            net_ci->add_destination(test_gate, "CI");
+            net_cyinit->add_destination(test_gate, "CYINIT");
+
+            net_di0->add_destination(test_gate, "DI(0)");
+            net_di1->add_destination(test_gate, "DI(1)");
+            net_di2->add_destination(test_gate, "DI(2)");
+            net_di3->add_destination(test_gate, "DI(3)");
+
+            net_s0->add_destination(test_gate, "S(0)");
+            net_s1->add_destination(test_gate, "S(1)");
+            net_s2->add_destination(test_gate, "S(2)");
+            net_s3->add_destination(test_gate, "S(3)");
+
+            // call with nullptr
+            const Result<BooleanFunction> res = test_gate->get_resolved_boolean_function(nullptr);
+            EXPECT_TRUE(res.is_error());
+        }
+        {
+            auto nl = test_utils::create_empty_netlist();
+            Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("CARRY4"), "test_gate");
+            
+            // call for a net with missing input nets
+            const std::vector<GatePin*> pins = test_gate->get_type()->get_pins([](const GatePin* gp){ return gp->get_name() == "CO(3)";});
+            
+            ASSERT_TRUE(pins.size() == 1);
+            
+            const GatePin* co3 = pins.front();
+            
+            ASSERT_TRUE(co3 != nullptr);
+
+            const Result<BooleanFunction> res = test_gate->get_resolved_boolean_function(co3);
+
+            EXPECT_TRUE(res.is_error());
+        }   
+        {
+            auto nl = test_utils::create_empty_netlist();
+            Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("CARRY4"), "test_gate");
+            
+            Net* net_ci = nl->create_net(MIN_NET_ID + 7, "CI");
+            Net* net_cyinit = nl->create_net(MIN_NET_ID + 8, "CYINIT");
+
+            Net* net_di0 = nl->create_net(MIN_NET_ID + 9, "DI(0)");
+            Net* net_di1 = nl->create_net(MIN_NET_ID + 10, "DI(1)");
+            Net* net_di2 = nl->create_net(MIN_NET_ID + 11, "DI(2)");
+            Net* net_di3 = nl->create_net(MIN_NET_ID + 12, "DI(3)");
+
+            Net* net_s0 = nl->create_net(MIN_NET_ID + 13, "S(0)");
+            Net* net_s1 = nl->create_net(MIN_NET_ID + 14, "S(1)");
+            Net* net_s2 = nl->create_net(MIN_NET_ID + 15, "S(2)");
+            Net* net_s3 = nl->create_net(MIN_NET_ID + 16, "S(3)");
+
+            net_ci->add_destination(test_gate, "CI");
+            net_cyinit->add_destination(test_gate, "CYINIT");
+
+            net_di0->add_destination(test_gate, "DI(0)");
+            net_di1->add_destination(test_gate, "DI(1)");
+            net_di2->add_destination(test_gate, "DI(2)");
+            net_di3->add_destination(test_gate, "DI(3)");
+
+            net_s0->add_destination(test_gate, "S(0)");
+            net_s1->add_destination(test_gate, "S(1)");
+            net_s2->add_destination(test_gate, "S(2)");
+            net_s3->add_destination(test_gate, "S(3)");
+
+
+            ASSERT_TRUE(test_gate->add_boolean_function("CO(3)", BooleanFunction::from_string("((S(3) & CO(3)) | ((! S(3)) & DI(3)))").get()));
+
+            // call with a net whose boolean function would lead to an endless recursion CO(3) -> CO(3) ...
+            const std::vector<GatePin*> pins = test_gate->get_type()->get_pins([](const GatePin* gp){ return gp->get_name() == "CO(3)";});
+            
+            ASSERT_TRUE(pins.size() == 1);
+            
+            const GatePin* co3 = pins.front();
+            
+            ASSERT_TRUE(co3 != nullptr);
+
+            const Result<BooleanFunction> res = test_gate->get_resolved_boolean_function(co3);
+
+            EXPECT_TRUE(res.is_error());
         }
         TEST_END
     }

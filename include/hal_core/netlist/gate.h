@@ -215,6 +215,15 @@ namespace hal
         std::unordered_map<std::string, BooleanFunction> get_boolean_functions(bool only_custom_functions = false) const;
 
         /**
+          * Get the resolved Boolean function corresponding to the given pin.
+          * Resolved meaning, that the function is only depending on input nets and no internal or output pins.
+          *
+          * @param[in] pin - The pin.
+          * @returns The Boolean function on success, an error otherwise.
+          */
+        Result<BooleanFunction> get_resolved_boolean_function(const GatePin* pin) const;
+
+        /**
          * Add a Boolean function with the given name to the gate.
          *
          * @param[in] name - The name.

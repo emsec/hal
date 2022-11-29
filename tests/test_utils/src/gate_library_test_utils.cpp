@@ -404,6 +404,209 @@ namespace hal
                 carry->add_boolean_function("CO", BooleanFunction::from_string("(I0 & I1) | ((I0 | I1) & CI)").get());
             }
             {
+                GateType* carry4 = lib->create_gate_type("CARRY4", {GateTypeProperty::combinational, GateTypeProperty::c_carry});
+               
+                if (auto res = carry4->create_pin("CI", PinDirection::input, PinType::carry); res.is_error())
+                {
+                    return nullptr;
+                }
+
+                if (auto res = carry4->create_pin("CYINIT", PinDirection::input); res.is_error())
+                {
+                    return nullptr;
+                }
+               
+                if (auto res_grp = carry4->create_pin_group("DI", {}, PinDirection::input, PinType::none, true); res_grp.is_error())
+                {
+                    return nullptr;
+                }
+                else 
+                {
+                    const auto grp = res_grp.get();
+
+                    if (auto res = carry4->create_pin("DI(0)", PinDirection::input, PinType::none, false); res.is_error())
+                    {
+                        return nullptr;
+                    }
+                    else 
+                    {
+                        grp->assign_pin(res.get());
+                    }
+
+                    if (auto res = carry4->create_pin("DI(1)", PinDirection::input, PinType::none, false); res.is_error())
+                    {
+                        return nullptr;
+                    }
+                    else 
+                    {
+                        grp->assign_pin(res.get());
+                    }
+
+                    if (auto res = carry4->create_pin("DI(2)", PinDirection::input, PinType::none, false); res.is_error())
+                    {
+                        return nullptr;
+                    }
+                    else 
+                    {
+                        grp->assign_pin(res.get());
+                    }
+
+                    if (auto res = carry4->create_pin("DI(3)", PinDirection::input, PinType::none, false); res.is_error())
+                    {
+                        return nullptr;
+                    }
+                    else 
+                    {
+                        grp->assign_pin(res.get());
+                    }
+                }
+
+                if (auto res_grp = carry4->create_pin_group("S", {}, PinDirection::input, PinType::none, true); res_grp.is_error())
+                {
+                    return nullptr;
+                }
+                else 
+                {
+                    const auto grp = res_grp.get();
+
+                    if (auto res = carry4->create_pin("S(0)", PinDirection::input, PinType::none, false); res.is_error())
+                    {
+                        return nullptr;
+                    }
+                    else 
+                    {
+                        grp->assign_pin(res.get());
+                    }
+
+                    if (auto res = carry4->create_pin("S(1)", PinDirection::input, PinType::none, false); res.is_error())
+                    {
+                        return nullptr;
+                    }
+                    else 
+                    {
+                        grp->assign_pin(res.get());
+                    }
+
+                    if (auto res = carry4->create_pin("S(2)", PinDirection::input, PinType::none, false); res.is_error())
+                    {
+                        return nullptr;
+                    }
+                    else 
+                    {
+                        grp->assign_pin(res.get());
+                    }
+
+                    if (auto res = carry4->create_pin("S(3)", PinDirection::input, PinType::none, false); res.is_error())
+                    {
+                        return nullptr;
+                    }
+                    else 
+                    {
+                        grp->assign_pin(res.get());
+                    }
+                }
+
+                if (auto res_grp = carry4->create_pin_group("CO", {}, PinDirection::output, PinType::carry, true); res_grp.is_error())
+                {
+                    return nullptr;
+                }
+                else 
+                {
+                    const auto grp = res_grp.get();
+
+                    if (auto res = carry4->create_pin("CO(0)", PinDirection::output, PinType::carry, false); res.is_error())
+                    {
+                        return nullptr;
+                    }
+                    else 
+                    {
+                        grp->assign_pin(res.get());
+                    }
+
+                    if (auto res = carry4->create_pin("CO(1)", PinDirection::output, PinType::carry, false); res.is_error())
+                    {
+                        return nullptr;
+                    }
+                    else 
+                    {
+                        grp->assign_pin(res.get());
+                    }
+
+                    if (auto res = carry4->create_pin("CO(2)", PinDirection::output, PinType::carry, false); res.is_error())
+                    {
+                        return nullptr;
+                    }
+                    else 
+                    {
+                        grp->assign_pin(res.get());
+                    }
+
+                    if (auto res = carry4->create_pin("CO(3)", PinDirection::output, PinType::carry, false); res.is_error())
+                    {
+                        return nullptr;
+                    }
+                    else 
+                    {
+                        grp->assign_pin(res.get());
+                    }
+                }
+
+                if (auto res_grp = carry4->create_pin_group("O", {},  PinDirection::output, PinType::none, true); res_grp.is_error())
+                {
+                    return nullptr;
+                }
+                else 
+                {
+                    const auto grp = res_grp.get();
+
+                    if (auto res = carry4->create_pin("O(0)", PinDirection::output, PinType::none, false); res.is_error())
+                    {
+                        return nullptr;
+                    }
+                    else 
+                    {
+                        grp->assign_pin(res.get());
+                    }
+
+                    if (auto res = carry4->create_pin("O(1)", PinDirection::output, PinType::none, false); res.is_error())
+                    {
+                        return nullptr;
+                    }
+                    else 
+                    {
+                        grp->assign_pin(res.get());
+                    }
+
+                    if (auto res = carry4->create_pin("O(2)", PinDirection::output, PinType::none, false); res.is_error())
+                    {
+                        return nullptr;
+                    }
+                    else 
+                    {
+                        grp->assign_pin(res.get());
+                    }
+
+                    if (auto res = carry4->create_pin("O(3)", PinDirection::output, PinType::none, false); res.is_error())
+                    {
+                        return nullptr;
+                    }
+                    else 
+                    {
+                        grp->assign_pin(res.get());
+                    }
+                }
+
+                carry4->add_boolean_function("CO(0)", BooleanFunction::from_string("((S(0) & (CI | CYINIT)) | ((! S(0)) & DI(0)))").get());
+                carry4->add_boolean_function("CO(1)", BooleanFunction::from_string("((S(1) & CO(0)) | ((! S(1)) & DI(1)))").get());
+                carry4->add_boolean_function("CO(2)", BooleanFunction::from_string("((S(2) & CO(1)) | ((! S(2)) & DI(2)))").get());
+                carry4->add_boolean_function("CO(3)", BooleanFunction::from_string("((S(3) & CO(2)) | ((! S(3)) & DI(3)))").get());
+
+                carry4->add_boolean_function("O(0)", BooleanFunction::from_string("(S(0) ^ (CI | CYINIT))").get());
+                carry4->add_boolean_function("O(1)", BooleanFunction::from_string("(S(1) ^ CO(0))").get());
+                carry4->add_boolean_function("O(2)", BooleanFunction::from_string("(S(2) ^ CO(1))").get());
+                carry4->add_boolean_function("O(3)", BooleanFunction::from_string("(S(3) ^ CO(2))").get());
+            }
+            {
                 GateType* comb12 = lib->create_gate_type("COMB12", {GateTypeProperty::combinational});
                 if (auto res = comb12->create_pin("I", PinDirection::input); res.is_error())
                 {
@@ -1162,6 +1365,7 @@ namespace hal
             auto pg2 = gt2->get_pin_groups();
             if (pg1.size() != pg2.size())
             {
+                log_info("test_utils", "unequal amount of pin groups of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
                 return false;
             }
             for (auto [pg1_it, pg2_it] = std::tuple{pg1.begin(), pg2.begin()}; pg1_it != pg1.end() && pg2_it != pg2.end(); pg1_it++, pg2_it++)
