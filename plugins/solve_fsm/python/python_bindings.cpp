@@ -42,7 +42,7 @@ namespace hal
                     log_error("python_context", "{}", res.get_error().get());
                     return std::nullopt;
                 }
-            }, py::arg("nl"), py::arg("state_reg"), py::arg("transition_logic"), py::arg("graph_path"), R"(
+            }, py::arg("nl"), py::arg("state_reg"), py::arg("transition_logic"), py::arg("graph_path") = std::string(""), R"(
             Generates the state graph of a finite state machine and returns a mapping from each state to all its possible successor states using a simple brute force approach.
 
             :param halPy.Netlist nl: The netlist.
@@ -86,7 +86,7 @@ namespace hal
                     log_error("python_context", "{}", res.get_error().get());
                     return std::nullopt;
                 }
-            }, py::arg("state_reg"), py::arg("transitions"), py::arg("graph_path"), py::arg("max_condition_length"), py::arg("base"), R"(
+            }, py::arg("state_reg"), py::arg("transitions"), py::arg("graph_path") = std::string(""), py::arg("max_condition_length") = u32(128), py::arg("base") = u32(10), R"(
             Generates the state graph of a finite state machine from the transitions of that fsm.
 
             :param list[halPy.Gate] state_reg: Vector contianing the state registers.
