@@ -89,10 +89,10 @@ namespace hal
         }
 
         // for developer: dump entries
-        for (const CommentEntry* ce : mEntries.values())
-        {
-            ce->dump();
-        }
+//        for (const CommentEntry* ce : mEntries.values())
+//        {
+//            ce->dump();
+//        }
 
         return true;
     }
