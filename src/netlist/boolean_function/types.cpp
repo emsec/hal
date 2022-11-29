@@ -209,7 +209,7 @@ namespace hal
             return out;
         }
 
-        Result<BooleanFunction> Model::evaluate(const BooleanFunction& bf)
+        Result<BooleanFunction> Model::evaluate(const BooleanFunction& bf) const
         {
             std::vector<BooleanFunction::Node> new_nodes;
 

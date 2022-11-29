@@ -270,7 +270,7 @@ namespace hal
 			 * @param[in] bf - Boolean function to evaluate.
 			 * @returns Ok() and the evaluated function on success, Err() otherwise.
 			 */
-            Result<BooleanFunction> evaluate(const BooleanFunction& bf);
+            Result<BooleanFunction> evaluate(const BooleanFunction& bf) const;
         };
 
         /**
