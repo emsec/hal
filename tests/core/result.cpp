@@ -111,11 +111,11 @@ namespace hal
             auto f = []() -> Result<u32> { return OK(123); };
             auto g = []() -> Result<u32> { return ERR("works on my machine"); };
 
-            auto f_map = f().map<std::string>([](auto value) -> Result<std::string> { return OK(std::to_string(value)); });
+            auto f_map = f().map<std::string>([](const auto& value) -> Result<std::string> { return OK(std::to_string(value)); });
             ASSERT_TRUE(f_map.is_ok());
             EXPECT_EQ(f_map.get(), "123");
 
-            auto g_map = g().map<std::string>([](auto value) -> Result<std::string> { return OK(std::to_string(value)); });
+            auto g_map = g().map<std::string>([](const auto& value) -> Result<std::string> { return OK(std::to_string(value)); });
             ASSERT_TRUE(g_map.is_error());
             EXPECT_TRUE(utils::ends_with<std::string>(g_map.get_error().get(), "works on my machine"));
         }

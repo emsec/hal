@@ -260,15 +260,15 @@ namespace hal
 			 *
 			 * @param[in] model_str - The SMT-Lib model string.
 			 * @param[in] solver - The solver that computed the model.
-			 * @returns Ok() and the model on success, Err() otherwise.
+			 * @returns The model on success, an error otherwise.
 			 */
             static Result<Model> parse(const std::string& model_str, const SolverType& solver);
 
             /**
-			 * Evaluates the given boolean function by replacing all variables contained in the model with their corresponding value and simplifying.
+			 * Evaluates the given Boolean function by replacing all variables contained in the model with their corresponding value and simplifying the result.
 			 *
-			 * @param[in] bf - Boolean function to evaluate.
-			 * @returns Ok() and the evaluated function on success, Err() otherwise.
+			 * @param[in] bf - The Boolean function to evaluate.
+			 * @returns The evaluated function on success, an error otherwise.
 			 */
             Result<BooleanFunction> evaluate(const BooleanFunction& bf) const;
         };

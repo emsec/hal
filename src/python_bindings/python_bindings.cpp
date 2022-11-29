@@ -71,6 +71,8 @@ namespace hal
 
         subgraph_netlist_decorator_init(m);
 
+        boolean_function_decorator_init(m);
+
 #ifndef PYBIND11_MODULE
         return m.ptr();
 #endif    // PYBIND11_MODULE
