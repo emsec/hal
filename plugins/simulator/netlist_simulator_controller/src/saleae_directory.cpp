@@ -4,9 +4,11 @@
 #include "netlist_simulator_controller/saleae_directory.h"
 #include "hal_core/utilities/json_write_document.h"
 #endif
+
 #include "rapidjson/document.h"
 #include "rapidjson/reader.h"
 #include "rapidjson/filereadstream.h"
+
 #include <iostream>
 #include <sstream>
 

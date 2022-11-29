@@ -612,9 +612,19 @@ namespace hal
 
         ProjectDirDialog pdd("Open netlist", this);
         if (pdd.exec() != QDialog::Accepted) return;
-        if (pdd.selectedFiles().isEmpty()) return;
-        ActionOpenNetlistFile* act = new ActionOpenNetlistFile(ActionOpenNetlistFile::OpenProject, pdd.selectedFiles().at(0));
-        act->exec();
+        QStringList projects = pdd.selectedFiles();
+        for (int inx = 0; inx < projects.size(); ++inx)
+        {
+            if (!QFileInfo(projects.at(inx)).suffix().isEmpty())
+            {
+                QMessageBox::warning(this,"Bad project directory", "HAL project directories must not have suffix (." +
+                                     QFileInfo(projects.at(inx)).suffix() + ") in name");
+                continue;
+            }
+            ActionOpenNetlistFile* act = new ActionOpenNetlistFile(ActionOpenNetlistFile::OpenProject, pdd.selectedFiles().at(inx));
+            act->exec();
+            break;
+        }
     }
 
     void MainWindow::handleActionImport()
@@ -721,7 +731,14 @@ namespace hal
             saveProjectDir = QFileDialog::getSaveFileName(nullptr, title, QDir::currentPath(), filter, nullptr);
             if (saveProjectDir.isEmpty()) return QString();
 
-            if (QFileInfo(saveProjectDir).exists())
+            QFileInfo finfo(saveProjectDir);
+
+            if (!finfo.suffix().isEmpty())
+            {
+                QMessageBox::warning(this,"Save Error", "selected project directory name must not have suffix ." + finfo.suffix());
+                return QString();
+            }
+            if (finfo.exists())
             {
                 QMessageBox::warning(this,"Save Error", "folder " + saveProjectDir + " already exists");
                 return QString();
@@ -761,18 +778,31 @@ namespace hal
 
     void MainWindow::handleActionStopRecording()
     {
+        UserActionManager* uam = UserActionManager::instance();
+        QString macroFile;
+        bool trySaveMacro = true;
+        while (trySaveMacro) {
+            if (uam->hasRecorded())
+            {
+                macroFile = QFileDialog::getSaveFileName(this, "Save macro to file", ".");
+                if (!macroFile.isEmpty() && !macroFile.contains(QChar('.')))
+                    macroFile += ".xml";
+            }
+            switch (uam->setStopRecording(macroFile))
+            {
+            case QMessageBox::Retry:
+                break;
+            case QMessageBox::Cancel:
+                return;
+            default:
+                // Ok or Discard
+                trySaveMacro = false;
+                break;
+            }
+        }
         mActionStartRecording->setEnabled(true);
         mActionStopRecording->setEnabled(false);
         mActionPlayMacro->setEnabled(true);
-        UserActionManager* uam = UserActionManager::instance();
-        QString macroFile;
-        if (uam->hasRecorded())
-        {
-            macroFile = QFileDialog::getSaveFileName(this, "Save macro to file", ".");
-            if (!macroFile.isEmpty() && !macroFile.contains(QChar('.')))
-                macroFile += ".xml";
-        }
-        uam->setStopRecording(macroFile);
     }
 
     void MainWindow::handleActionPlayMacro()

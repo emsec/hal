@@ -58,7 +58,7 @@ namespace hal
             ASSERT_TRUE(res.is_ok());
             BooleanFunction sub_graph_bf = res.get();
 
-            BooleanFunction expected_bf = BooleanFunction::from_string(("!" + net_13_name + " & " + net_20_name)).get();
+            BooleanFunction expected_bf = BooleanFunction::from_string((net_20_name + " & " + "(!" + net_13_name + ")")).get();
             EXPECT_EQ(sub_graph_bf, expected_bf);
         }
         // NEGATIVE

@@ -846,14 +846,22 @@ namespace hal
 
             auto begin_time = std::chrono::high_resolution_clock::now();
 
-            // create directory if it got erased in the meantime
             std::filesystem::path serialize_to_dir = hal_file.parent_path();
             if (serialize_to_dir.empty())
                 return false;
+
+            if (serialize_to_dir.is_relative())
+                serialize_to_dir = ProjectManager::instance()->get_project_directory() / serialize_to_dir;
+
+            // create directory if it got erased in the meantime
             if (!std::filesystem::exists(serialize_to_dir))
             {
-                if (!std::filesystem::create_directory(serialize_to_dir))
+                std::error_code err;
+                if (!std::filesystem::create_directories(serialize_to_dir, err))
+                {
+                    log_error("netlist_persistent", "Could not create directory '{}', error was '{}'.", serialize_to_dir.string(), err.message());
                     return false;
+                }
             }
 
             std::ofstream hal_file_stream;

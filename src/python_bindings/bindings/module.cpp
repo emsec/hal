@@ -460,6 +460,77 @@ namespace hal
             :rtype: list[hal_py.ModulePin]
         )");
 
+        py_module.def_property_readonly(
+            "pin_names",
+            [](const Module& self) -> std::vector<std::string> { return self.get_pin_names(); },
+            R"(
+            An ordered list of the names of all pins of the module.
+
+            :type: list[str]
+        )");
+
+        py_module.def("get_pin_names", &Module::get_pin_names, R"(
+            Get an ordered list of the names of all pins of the module.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+
+            :returns: A list of input pin names of the module.
+            :param lambda filter: An optional filter.
+            :returns: An ordered list of pins.
+            :rtype: list[str]
+        )");
+
+        py_module.def_property_readonly("input_pins", &Module::get_input_pins, R"(
+            An ordered list of all input pins of the module (including inout pins).
+
+            :type: list[hal_py.ModulePin]
+        )");
+
+        py_module.def("get_input_pins", &Module::get_input_pins, R"(
+            Get an ordered list of all input pins of the module (including inout pins).
+
+            :returns: An ordered list of input pins.
+            :rtype: list[hal_py.ModulePin]
+        )");
+
+        py_module.def_property_readonly("input_pin_names", &Module::get_input_pin_names, R"(
+            An ordered list of the names of all input pins of the module (including inout pins).
+
+            :type: list[str]
+        )");
+
+        py_module.def("get_input_pin_names", &Module::get_input_pin_names, R"(
+            Get an ordered list of the names of all input pins of the module (including inout pins).
+
+            :returns: An ordered list of input pin names.
+            :rtype: list[str]
+         )");
+
+        py_module.def_property_readonly("output_pins", &Module::get_output_pins, R"(
+            An ordered list of all output pins of the module (including inout pins).
+
+            :type: list[hal_py.ModulePin]
+        )");
+
+        py_module.def("get_output_pins", &Module::get_output_pins, R"(
+            Get an ordered list of all output pins of the module (including inout pins).
+
+            :returns: An ordered list of output pins.
+            :rtype: list[hal_py.ModulePin]
+        )");
+
+        py_module.def_property_readonly("output_pin_names", &Module::get_output_pin_names, R"(
+            An ordered list of the names of all output pins of the module (including inout pins).
+
+            :type: list[str]
+        )");
+
+        py_module.def("get_output_pin_names", &Module::get_output_pin_names, R"(
+            Get an ordered list of the names of all output pins of the module (including inout pins).
+
+            :returns: An ordered list of output pin names.
+            :rtype: list[str]
+        )");
+
         py_module.def_property_readonly("pin_groups", &Module::get_pin_groups, R"(
             All pin_groups of the module.
 
