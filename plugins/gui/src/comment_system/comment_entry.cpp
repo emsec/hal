@@ -26,6 +26,7 @@ namespace hal
         mHeader = jsonObj["header"].toString();
         mCreated = QDateTime::fromString(jsonObj["created"].toString(), Qt::ISODate);
         mLastModified = QDateTime::fromString(jsonObj["modified"].toString(), Qt::ISODate);
+        mText = jsonObj["text"].toString();
     }
 
     void CommentEntry::setHeader(QString newHeader)
