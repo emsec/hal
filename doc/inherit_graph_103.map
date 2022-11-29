@@ -1,3 +1,8 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhal_1_1_py_code_provider.html" title=" " alt="" coords="5,5,159,32"/>
+<area shape="rect" id="node1" href="$classhal_1_1_project_serializer.html" title=" " alt="" coords="5,107,161,133"/>
+<area shape="rect" id="node2" href="$classhal_1_1_graph_context_serializer.html" title=" " alt="" coords="211,5,412,32"/>
+<area shape="rect" id="node3" href="$classhal_1_1_grouping_color_serializer.html" title=" " alt="" coords="209,56,413,83"/>
+<area shape="rect" id="node4" href="$classhal_1_1_grouping_serializer.html" title=" " alt="" coords="226,107,397,133"/>
+<area shape="rect" id="node5" href="$classhal_1_1_module_color_serializer.html" title=" " alt="" coords="215,157,408,184"/>
+<area shape="rect" id="node6" href="$classhal_1_1_python_serializer.html" title=" " alt="" coords="233,208,389,235"/>
 </map>

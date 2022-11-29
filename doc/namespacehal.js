@@ -47,6 +47,7 @@ var namespacehal =
     [ "BasePluginInterface", "classhal_1_1_base_plugin_interface.html", "classhal_1_1_base_plugin_interface" ],
     [ "BaseTreeModel", "classhal_1_1_base_tree_model.html", "classhal_1_1_base_tree_model" ],
     [ "BooleanFunction", "classhal_1_1_boolean_function.html", "classhal_1_1_boolean_function" ],
+    [ "BooleanFunctionDecorator", "classhal_1_1_boolean_function_decorator.html", "classhal_1_1_boolean_function_decorator" ],
     [ "BooleanFunctionEntry", "classhal_1_1_boolean_function_entry.html", "classhal_1_1_boolean_function_entry" ],
     [ "BooleanFunctionNetDecorator", "classhal_1_1_boolean_function_net_decorator.html", "classhal_1_1_boolean_function_net_decorator" ],
     [ "BooleanFunctionTable", "classhal_1_1_boolean_function_table.html", "classhal_1_1_boolean_function_table" ],

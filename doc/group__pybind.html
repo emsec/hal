@@ -163,6 +163,8 @@ Typedefs</h2></td></tr>
 <tr class="separator:gab35847badbf935ed3e01dbcaad19205c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gac5492afb41ef2e8dd6c49f56ddb7e73c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#gac5492afb41ef2e8dd6c49f56ddb7e73c">hal::subgraph_netlist_decorator_init</a> (py::module &amp;m)</td></tr>
 <tr class="separator:gac5492afb41ef2e8dd6c49f56ddb7e73c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gadcbe9ddba67d0061af0b3f101c727c6e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#gadcbe9ddba67d0061af0b3f101c727c6e">hal::boolean_function_decorator_init</a> (py::module &amp;m)</td></tr>
+<tr class="separator:gadcbe9ddba67d0061af0b3f101c727c6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <h2 class="groupheader">Typedef Documentation</h2>
@@ -181,7 +183,7 @@ template&lt;class T &gt; </div>
 </div><div class="memdoc">
 <p>Wrapper class so that PyBind can work with raw pointers to classes that are managed by HAL. </p>
 
-<p class="definition">Definition at line <a class="el" href="python__bindings_8h_source.html#l00087">87</a> of file <a class="el" href="python__bindings_8h_source.html">python_bindings.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__bindings_8h_source.html#l00088">88</a> of file <a class="el" href="python__bindings_8h_source.html">python_bindings.h</a>.</p>
 
 </div>
 </div>
@@ -210,6 +212,37 @@ template&lt;class T &gt; </div>
 </dl>
 
 <p class="definition">Definition at line <a class="el" href="base__pin_8cpp_source.html#l00005">5</a> of file <a class="el" href="base__pin_8cpp_source.html">base_pin.cpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="src_2python__bindings_2python__bindings_8cpp_source.html#l00010">hal::PYBIND11_PLUGIN()</a>.</p>
+
+</div>
+</div>
+<a id="gadcbe9ddba67d0061af0b3f101c727c6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gadcbe9ddba67d0061af0b3f101c727c6e">&#9670;&nbsp;</a></span>boolean_function_decorator_init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::boolean_function_decorator_init </td>
+          <td>(</td>
+          <td class="paramtype">py::module &amp;&#160;</td>
+          <td class="paramname"><em>m</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Initializes Python bindings for the HAL Boolean function decorator in a python module.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>- the python module </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="python__bindings_2bindings_2boolean__function__decorator_8cpp_source.html#l00005">5</a> of file <a class="el" href="python__bindings_2bindings_2boolean__function__decorator_8cpp_source.html">boolean_function_decorator.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="classhal_1_1_boolean_function_decorator.html#a61b9817a9b78df6743acf72ac21b6289">hal::BooleanFunctionDecorator::get_boolean_function_from()</a>, and <a class="el" href="log_8h_source.html#l00078">log_error</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="src_2python__bindings_2python__bindings_8cpp_source.html#l00010">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -1103,7 +1136,7 @@ template&lt;class T &gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Mon Nov 28 2022 20:01:28 for HAL by
+    <li class="footer">Generated on Tue Nov 29 2022 14:05:51 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

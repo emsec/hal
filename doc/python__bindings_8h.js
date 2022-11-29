@@ -2,6 +2,7 @@ var python__bindings_8h =
 [
     [ "RawPtrWrapper", "python__bindings_8h.html#ga81181bacca930bfda574ce3a51a01e9c", null ],
     [ "base_pin_init", "python__bindings_8h.html#ga7b89c9d47d0533ec4c234d5ecaebcc2c", null ],
+    [ "boolean_function_decorator_init", "python__bindings_8h.html#gadcbe9ddba67d0061af0b3f101c727c6e", null ],
     [ "boolean_function_init", "python__bindings_8h.html#gae5a4b7d4ff2a9896d9372662906d05fb", null ],
     [ "boolean_function_net_decorator_init", "python__bindings_8h.html#gab35847badbf935ed3e01dbcaad19205c", null ],
     [ "core_utils_init", "python__bindings_8h.html#gae67f2029fac093c1e1990401edbcfd0a", null ],

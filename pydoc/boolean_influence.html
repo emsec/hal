@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Boolean Influence &mdash; hal_py v4.0.1-66-g8910f43d9 documentation</title>
+  <title>Boolean Influence &mdash; hal_py v4.0.1-67-gfc6ddfb49 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.0.1-66-g8910f43d9
+                v4.0.1-67-gfc6ddfb49
               </div>
             
           
@@ -164,114 +164,6 @@
             
   <div class="section" id="boolean-influence">
 <h1>Boolean Influence<a class="headerlink" href="#boolean-influence" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="boolean_influence.BooleanInfluencePlugin">
-<em class="property">class </em><code class="descclassname">boolean_influence.</code><code class="descname">BooleanInfluencePlugin</code><a class="headerlink" href="#boolean_influence.BooleanInfluencePlugin" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="staticmethod">
-<dt id="boolean_influence.BooleanInfluencePlugin.get_boolean_influence">
-<em class="property">static </em><code class="descname">get_boolean_influence</code><span class="sig-paren">(</span><em>gates: hal_py.BooleanFunction</em>, <em>start_net: int</em><span class="sig-paren">)</span> &#x2192; Optional[Dict[str, float]]<a class="headerlink" href="#boolean_influence.BooleanInfluencePlugin.get_boolean_influence" title="Permalink to this definition">¶</a></dt>
-<dd><p>The Boolean function gets translated to a z3::expr and afterwards efficent c code.
-The program is compiled and executed many times to meassure the Boolean influence of each input variable.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>bf</strong> (<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – The Boolean function.</li>
-<li><strong>num_evaluations</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Amount specifying how often to evaluate the function for each input.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A mapping of the input variable of the function to their boolean influence.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="staticmethod">
-<dt id="boolean_influence.BooleanInfluencePlugin.get_boolean_influences_of_gate">
-<em class="property">static </em><code class="descname">get_boolean_influences_of_gate</code><span class="sig-paren">(</span><em>gate: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; Optional[Dict[hal_py.Net, float]]<a class="headerlink" href="#boolean_influence.BooleanInfluencePlugin.get_boolean_influences_of_gate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates the function of the dataport net of the given flip-flop.
-Afterwards the generated function gets translated from a z3::expr to efficent c code, compiled, executed and evalated.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The flip-flop which data input net is used to build the boolean function.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A mapping of the nets that appear in the function of the data net to their boolean influence in said function.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="staticmethod">
-<dt id="boolean_influence.BooleanInfluencePlugin.get_boolean_influences_of_subcircuit">
-<em class="property">static </em><code class="descname">get_boolean_influences_of_subcircuit</code><span class="sig-paren">(</span><em>gates: List[hal_py.Gate], start_net: hal_py.Net</em><span class="sig-paren">)</span> &#x2192; Optional[Dict[hal_py.Net, float]]<a class="headerlink" href="#boolean_influence.BooleanInfluencePlugin.get_boolean_influences_of_subcircuit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates the function of the net using only the given gates.
-Afterwards the generated function gets translated from a z3::expr to efficent c code, compiled, executed and evalated.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>gates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em>) – The gates of the subcircuit.</li>
-<li><strong>start_net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The output net of the subcircuit at which to start the analysis.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A mapping of the nets that appear in the function of the data net to their boolean influence in said function.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="staticmethod">
-<dt id="boolean_influence.BooleanInfluencePlugin.get_ff_dependency_matrix">
-<em class="property">static </em><code class="descname">get_ff_dependency_matrix</code><span class="sig-paren">(</span><em>netlist: hal_py.Netlist</em>, <em>with_boolean_influence: bool</em><span class="sig-paren">)</span> &#x2192; Optional[Tuple[Dict[int, hal_py.Gate], List[List[float]]]]<a class="headerlink" href="#boolean_influence.BooleanInfluencePlugin.get_ff_dependency_matrix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the FF dependency matrix of a netlist, with or without boolean influences.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>netlist</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to extract the dependency matrix from.</li>
-<li><strong>with_boolean_influence</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True – set boolean influence, False – sets 1.0 if connection between FFs</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A pair consisting of std::map&lt;u32, Gate*&gt;, which includes the mapping from the original gate</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">pair(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>, <a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>), <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[double]])</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="boolean_influence.BooleanInfluencePlugin.get_name">
-<code class="descname">get_name</code><span class="sig-paren">(</span><em>self: boolean_influence.BooleanInfluencePlugin</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#boolean_influence.BooleanInfluencePlugin.get_name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="boolean_influence.BooleanInfluencePlugin.get_version">
-<code class="descname">get_version</code><span class="sig-paren">(</span><em>self: boolean_influence.BooleanInfluencePlugin</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#boolean_influence.BooleanInfluencePlugin.get_version" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 </div>
 
 

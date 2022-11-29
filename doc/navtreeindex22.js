@@ -1,5 +1,10 @@
 var NAVTREEINDEX22 =
 {
+"disputed__big__icon_8h_source.html":[7,0,1,3,0,0,39,9],
+"dock__bar_8cpp.html":[7,0,1,3,2,9,1],
+"dock__bar_8cpp_source.html":[7,0,1,3,2,9,1],
+"dock__bar_8h.html":[7,0,1,3,0,0,10,1],
+"dock__bar_8h_source.html":[7,0,1,3,0,0,10,1],
 "dock__button_8cpp.html":[7,0,1,3,2,9,2],
 "dock__button_8cpp_source.html":[7,0,1,3,2,9,2],
 "dock__button_8h.html":[7,0,1,3,0,0,10,2],
@@ -244,10 +249,5 @@ var NAVTREEINDEX22 =
 "gate__pin_8h_source.html":[7,0,0,0,1,7,1],
 "gate__pin__tree_8cpp.html":[7,0,1,3,2,37,0,3],
 "gate__pin__tree_8cpp_source.html":[7,0,1,3,2,37,0,3],
-"gate__pin__tree_8h.html":[7,0,1,3,0,0,39,0,3],
-"gate__pin__tree_8h_source.html":[7,0,1,3,0,0,39,0,3],
-"gate__select__model_8cpp.html":[7,0,1,3,2,29,1],
-"gate__select__model_8cpp_source.html":[7,0,1,3,2,29,1],
-"gate__select__model_8h.html":[7,0,1,3,0,0,31,1],
-"gate__select__model_8h_source.html":[7,0,1,3,0,0,31,1]
+"gate__pin__tree_8h.html":[7,0,1,3,0,0,39,0,3]
 };

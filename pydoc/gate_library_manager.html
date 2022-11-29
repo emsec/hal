@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Gate Library Manager &mdash; hal_py v4.0.1-66-g8910f43d9 documentation</title>
+  <title>Gate Library Manager &mdash; hal_py v4.0.1-67-gfc6ddfb49 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.0.1-66-g8910f43d9
+                v4.0.1-67-gfc6ddfb49
               </div>
             
           
@@ -187,124 +187,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-hal_py.GateLibraryManager">
-<span id="gate-library-manager"></span><h1>Gate Library Manager<a class="headerlink" href="#module-hal_py.GateLibraryManager" title="Permalink to this headline">¶</a></h1>
-<p>The gate library manager keeps track of all gate libraries that are used within HAL. Further, it takes care of loading and saving gate libraries on demnand.</p>
-<dl class="function">
-<dt id="hal_py.GateLibraryManager.get_gate_libraries">
-<code class="descclassname">hal_py.GateLibraryManager.</code><code class="descname">get_gate_libraries</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[hal_py.GateLibrary]<a class="headerlink" href="#hal_py.GateLibraryManager.get_gate_libraries" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get all loaded gate libraries.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of gate libraries.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="gate_library.html#hal_py.GateLibrary" title="hal_py.GateLibrary">hal_py.GateLibrary</a>]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="hal_py.GateLibraryManager.get_gate_library">
-<code class="descclassname">hal_py.GateLibraryManager.</code><code class="descname">get_gate_library</code><span class="sig-paren">(</span><em>file_path: str</em><span class="sig-paren">)</span> &#x2192; hal_py.GateLibrary<a class="headerlink" href="#hal_py.GateLibraryManager.get_gate_library" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a gate library by file path. If no library with the given name is loaded, loading the gate library from file will be attempted.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The input path.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The gate library on success, None otherwise.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="gate_library.html#hal_py.GateLibrary" title="hal_py.GateLibrary">hal_py.GateLibrary</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="hal_py.GateLibraryManager.get_gate_library_by_name">
-<code class="descclassname">hal_py.GateLibraryManager.</code><code class="descname">get_gate_library_by_name</code><span class="sig-paren">(</span><em>lib_name: str</em><span class="sig-paren">)</span> &#x2192; hal_py.GateLibrary<a class="headerlink" href="#hal_py.GateLibraryManager.get_gate_library_by_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a gate library by name. If no library with the given name is loaded, None will be returned.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>lib_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name of the gate library.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The gate library on success, None otherwise.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="gate_library.html#hal_py.GateLibrary" title="hal_py.GateLibrary">hal_py.GateLibrary</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="hal_py.GateLibraryManager.load">
-<code class="descclassname">hal_py.GateLibraryManager.</code><code class="descname">load</code><span class="sig-paren">(</span><em>file_path: hal_py.HalPath</em>, <em>reload: bool = False</em><span class="sig-paren">)</span> &#x2192; hal_py.GateLibrary<a class="headerlink" href="#hal_py.GateLibraryManager.load" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load a gate library from file.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>file_path</strong> (<em>hal_py.hal_path</em>) – The input path.</li>
-<li><strong>reload</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – If true, reloads the library in case it is already loaded.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The gate library on success, None otherwise.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="gate_library.html#hal_py.GateLibrary" title="hal_py.GateLibrary">hal_py.GateLibrary</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="hal_py.GateLibraryManager.load_all">
-<code class="descclassname">hal_py.GateLibraryManager.</code><code class="descname">load_all</code><span class="sig-paren">(</span><em>reload: bool = False</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateLibraryManager.load_all" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load all gate libraries available in standard gate library directories.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>reload</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – If true, reloads all libraries that have already been loaded.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="hal_py.GateLibraryManager.save">
-<code class="descclassname">hal_py.GateLibraryManager.</code><code class="descname">save</code><span class="sig-paren">(</span><em>file_path: hal_py.HalPath</em>, <em>gate_lib: hal_py.GateLibrary</em>, <em>overwrite: bool = False</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GateLibraryManager.save" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save a gate library to file.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>file_path</strong> (<em>hal_py.hal_path</em>) – The output path.</li>
-<li><strong>gate_lib</strong> (<a class="reference internal" href="gate_library.html#hal_py.GateLibrary" title="hal_py.GateLibrary"><em>hal_py.GateLibrary</em></a>) – The gate library.</li>
-<li><strong>overwrite</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – If true, overwrites already existing files.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, false otherwise.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
+  <div class="section" id="gate-library-manager">
+<h1>Gate Library Manager<a class="headerlink" href="#gate-library-manager" title="Permalink to this headline">¶</a></h1>
 </div>
 
 

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Boolean Function Net Decorator &mdash; hal_py v4.0.1-66-g8910f43d9 documentation</title>
+  <title>Boolean Function Net Decorator &mdash; hal_py v4.0.1-67-gfc6ddfb49 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.0.1-66-g8910f43d9
+                v4.0.1-67-gfc6ddfb49
               </div>
             
           
@@ -189,93 +189,6 @@
             
   <div class="section" id="boolean-function-net-decorator">
 <h1>Boolean Function Net Decorator<a class="headerlink" href="#boolean-function-net-decorator" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="hal_py.BooleanFunctionNetDecorator">
-<em class="property">class </em><code class="descclassname">hal_py.</code><code class="descname">BooleanFunctionNetDecorator</code><a class="headerlink" href="#hal_py.BooleanFunctionNetDecorator" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="hal_py.BooleanFunctionNetDecorator.get_boolean_variable">
-<code class="descname">get_boolean_variable</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunctionNetDecorator</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction<a class="headerlink" href="#hal_py.BooleanFunctionNetDecorator.get_boolean_variable" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a unique Boolean variable representing the given net.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The Boolean variable.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.BooleanFunctionNetDecorator.get_boolean_variable_name">
-<code class="descname">get_boolean_variable_name</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunctionNetDecorator</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.BooleanFunctionNetDecorator.get_boolean_variable_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a unique Boolean variable name representing the given net.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The Boolean variable name.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="staticmethod">
-<dt id="hal_py.BooleanFunctionNetDecorator.get_net_from">
-<em class="property">static </em><code class="descname">get_net_from</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.BooleanFunctionNetDecorator.get_net_from" title="Permalink to this definition">¶</a></dt>
-<dd><p>Overloaded function.</p>
-<ol class="arabic">
-<li><p class="first">get_net_from(netlist: hal_py.Netlist, var: hal_py.BooleanFunction) -&gt; hal_py.Net</p>
-<blockquote>
-<div><p>Get the net represented by a unique Boolean variable.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Netlist netlist:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist on which to operate.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param hal_py.BooleanFunction var:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">The Boolean variable.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The specified net on success, None otherwise.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Net or None</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-</li>
-<li><p class="first">get_net_from(netlist: hal_py.Netlist, var_name: str) -&gt; hal_py.Net</p>
-<blockquote>
-<div><p>Get the net represented by a unique Boolean variable name.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Netlist netlist:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist on which to operate.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param str var_name:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">The Boolean variable name.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The specified net on success, None otherwise.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Net or None</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-</li>
-</ol>
-</dd></dl>
-
-</dd></dl>
-
 </div>
 
 

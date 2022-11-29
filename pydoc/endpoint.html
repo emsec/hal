@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Endpoint &mdash; hal_py v4.0.1-66-g8910f43d9 documentation</title>
+  <title>Endpoint &mdash; hal_py v4.0.1-67-gfc6ddfb49 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.0.1-66-g8910f43d9
+                v4.0.1-67-gfc6ddfb49
               </div>
             
           
@@ -189,168 +189,6 @@
             
   <div class="section" id="endpoint">
 <h1>Endpoint<a class="headerlink" href="#endpoint" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="hal_py.Endpoint">
-<em class="property">class </em><code class="descclassname">hal_py.</code><code class="descname">Endpoint</code><a class="headerlink" href="#hal_py.Endpoint" title="Permalink to this definition">¶</a></dt>
-<dd><p>An endpoint comprises the pin of a gate, the respective gate, and the connected net.</p>
-<dl class="method">
-<dt id="hal_py.Endpoint.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.Endpoint.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="hal_py.Endpoint.destination_pin">
-<code class="descname">destination_pin</code><a class="headerlink" href="#hal_py.Endpoint.destination_pin" title="Permalink to this definition">¶</a></dt>
-<dd><p>True if the pin of the endpoint is a destination (input) pin, False otherwise.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="hal_py.Endpoint.gate">
-<code class="descname">gate</code><a class="headerlink" href="#hal_py.Endpoint.gate" title="Permalink to this definition">¶</a></dt>
-<dd><p>The gate associated with the endpoint.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.Endpoint.get_gate">
-<code class="descname">get_gate</code><span class="sig-paren">(</span><em>self: hal_py.Endpoint</em><span class="sig-paren">)</span> &#x2192; hal::Gate<a class="headerlink" href="#hal_py.Endpoint.get_gate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the gate associated with the endpoint.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The gate.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.Endpoint.get_net">
-<code class="descname">get_net</code><span class="sig-paren">(</span><em>self: hal_py.Endpoint</em><span class="sig-paren">)</span> &#x2192; hal::Net<a class="headerlink" href="#hal_py.Endpoint.get_net" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the net associated with the endpoint.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The net.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.Endpoint.get_pin">
-<code class="descname">get_pin</code><span class="sig-paren">(</span><em>self: hal_py.Endpoint</em><span class="sig-paren">)</span> &#x2192; hal::GatePin<a class="headerlink" href="#hal_py.Endpoint.get_pin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get pin associated with the endpoint.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The pin.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.Endpoint.is_destination_pin">
-<code class="descname">is_destination_pin</code><span class="sig-paren">(</span><em>self: hal_py.Endpoint</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Endpoint.is_destination_pin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks whether the pin of the endpoint is a destination (input) pin.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the endpoint is an destination (input) pin, False otherwise.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.Endpoint.is_source_pin">
-<code class="descname">is_source_pin</code><span class="sig-paren">(</span><em>self: hal_py.Endpoint</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Endpoint.is_source_pin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks whether the pin of the endpoint is a source (output) pin.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the endpoint is an source (output) pin, False otherwise.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="hal_py.Endpoint.net">
-<code class="descname">net</code><a class="headerlink" href="#hal_py.Endpoint.net" title="Permalink to this definition">¶</a></dt>
-<dd><p>The net associated with the endpoint.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="hal_py.Endpoint.pin">
-<code class="descname">pin</code><a class="headerlink" href="#hal_py.Endpoint.pin" title="Permalink to this definition">¶</a></dt>
-<dd><p>The pin associated with the endpoint.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="hal_py.Endpoint.source_pin">
-<code class="descname">source_pin</code><a class="headerlink" href="#hal_py.Endpoint.source_pin" title="Permalink to this definition">¶</a></dt>
-<dd><p>True if the pin of the endpoint is a source (output) pin, False otherwise.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
 </div>
 
 
