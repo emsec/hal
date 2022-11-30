@@ -4,8 +4,12 @@ var classhal_1_1_file_manager =
       [ "ProjectDirectory", "classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2aa079705cb995009829adcfc8e38f0daa", null ],
       [ "OtherDirectory", "classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2a7c502b37a0e93bea1722a43d5869818e", null ],
       [ "IsFile", "classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2ab9413e30a2dc5d068a0c37524463eebe", null ],
-      [ "NotSelectable", "classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2ab7900350971c8a53c917a47c7289655e", null ],
-      [ "NotExisting", "classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2ab5d01d34fae69e2983a508afec60cfa7", null ]
+      [ "NotExisting", "classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2ab5d01d34fae69e2983a508afec60cfa7", null ],
+      [ "InvalidExtension", "classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2a8eda01ea9e29e21e06ff3a9848d67181", null ],
+      [ "ParseError", "classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2a7c623d46780452fa6c77c4c795593717", null ],
+      [ "NetlistError", "classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2a7f9a882277e5c739dc6ce58bf61ee736", null ],
+      [ "GatelibError", "classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2a757fc6ec3efb014850d383aa09dbef7c", null ],
+      [ "UnknownDirectoryEntry", "classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2a8922a75c41864121a3b89ef279fcdfa5", null ]
     ] ],
     [ "autosave", "classhal_1_1_file_manager.html#aa3e2d0ac5986fe0b8921745151df9deb", null ],
     [ "closeFile", "classhal_1_1_file_manager.html#a73fa18829d90d912ca5bb6e927830a56", null ],

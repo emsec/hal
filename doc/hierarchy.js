@@ -598,6 +598,7 @@ var hierarchy =
             [ "hal::WidgetOverlay", "classhal_1_1_widget_overlay.html", null ]
           ] ],
           [ "hal::PreviewWidget", "classhal_1_1_preview_widget.html", null ],
+          [ "hal::ProjectDirDialogStatus", "classhal_1_1_project_dir_dialog_status.html", null ],
           [ "hal::PythonConsoleAbortThread", "classhal_1_1_python_console_abort_thread.html", null ],
           [ "hal::RecentFileItem", "classhal_1_1_recent_file_item.html", null ],
           [ "hal::RecentFilesWidget", "classhal_1_1_recent_files_widget.html", null ],
@@ -701,9 +702,9 @@ var hierarchy =
       [ "hal::NodeBoxes", "classhal_1_1_node_boxes.html", null ]
     ] ],
     [ "hal::utils::RecursiveDirectoryRange", "classhal_1_1utils_1_1_recursive_directory_range.html", null ],
+    [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
     [ "hal::Result< T >", "classhal_1_1_result.html", null ],
     [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
-    [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
     [ "reverse_iterator", null, [
       [ "nlohmann::detail::json_reverse_iterator< Base >", "classnlohmann_1_1detail_1_1json__reverse__iterator.html", null ]
     ] ],

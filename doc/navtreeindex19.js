@@ -1,5 +1,12 @@
 var NAVTREEINDEX19 =
 {
+"classnlohmann_1_1detail_1_1input__buffer__adapter.html#ada76d7b75c5d6b989af0e18687ef07b6":[6,0,1,0,28,1],
+"classnlohmann_1_1detail_1_1input__buffer__adapter.html#ae9e195b04f3551fafb0925aafba00124":[6,0,1,0,28,4],
+"classnlohmann_1_1detail_1_1input__stream__adapter.html":[6,0,1,0,29],
+"classnlohmann_1_1detail_1_1input__stream__adapter.html#a0ae74b874f7db43640905cb7f2442b1d":[6,0,1,0,29,3],
+"classnlohmann_1_1detail_1_1input__stream__adapter.html#a2d71eb469267abd864f765481d1e823f":[6,0,1,0,29,0],
+"classnlohmann_1_1detail_1_1input__stream__adapter.html#a3577dff99cc91968557b52959b0363e4":[6,0,1,0,29,5],
+"classnlohmann_1_1detail_1_1input__stream__adapter.html#a5190fe4d0c5ff2e3b348b28ee3bb2218":[6,0,1,0,29,2],
 "classnlohmann_1_1detail_1_1input__stream__adapter.html#ae0760af923583de6354725e901d1869d":[6,0,1,0,29,4],
 "classnlohmann_1_1detail_1_1input__stream__adapter.html#aeac5048221929b8f7558d1698dd0fb3a":[6,0,1,0,29,6],
 "classnlohmann_1_1detail_1_1input__stream__adapter.html#af487152e4606d013eb4ec6a90eaf82ea":[6,0,1,0,29,1],
@@ -242,12 +249,5 @@ var NAVTREEINDEX19 =
 "classnlohmann_1_1detail_1_1serializer.html#a5f14c33012477b9f9876dc54d97009a0":[6,0,1,0,101,5],
 "classnlohmann_1_1detail_1_1serializer.html#a95460ebd1a535a543e5a0ec52e00f48b":[6,0,1,0,101,4],
 "classnlohmann_1_1detail_1_1serializer.html#aa6c62b51cbebb185307df851dc0167f0":[6,0,1,0,101,3],
-"classnlohmann_1_1detail_1_1serializer.html#ac010525281d97867ee842da37294fe83":[6,0,1,0,101,0],
-"classnlohmann_1_1detail_1_1serializer.html#acaafe3436ee5fb74777eb4132a88c513":[6,0,1,0,101,6],
-"classnlohmann_1_1detail_1_1serializer.html#ae3771351ec4cb892bec707edeb56dc31":[6,0,1,0,101,1],
-"classnlohmann_1_1detail_1_1type__error.html":[6,0,1,0,104],
-"classnlohmann_1_1detail_1_1wide__string__input__adapter.html":[6,0,1,0,105],
-"classnlohmann_1_1detail_1_1wide__string__input__adapter.html#a85c8bddae20bc00d64dd7a2c87109357":[6,0,1,0,105,0],
-"classnlohmann_1_1detail_1_1wide__string__input__adapter.html#abb62b34cf77e557ce5321b7f2490c3b0":[6,0,1,0,105,1],
-"classnlohmann_1_1json__pointer.html":[6,0,1,3]
+"classnlohmann_1_1detail_1_1serializer.html#ac010525281d97867ee842da37294fe83":[6,0,1,0,101,0]
 };

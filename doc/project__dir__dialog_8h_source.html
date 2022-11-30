@@ -114,63 +114,91 @@ $(document).ready(function(){initNavTree('project__dir__dialog_8h_source.html','
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &lt;QFileDialog&gt;</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &lt;QSortFilterProxyModel&gt;</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;QAbstractButton&gt;</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a> {</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment">    class ProjectDirProxy : public QSortFilterProxyModel</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="comment">    {</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment">        Q_OBJECT</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment">        bool hasProjectDirectory(const QString&amp; dir) const;</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment">    public:</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment">        ProjectDirProxy(QObject* parent = nullptr);</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment">        bool filterAcceptsRow(int irow, const QModelIndex &amp;parentInx) const override;</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">    };</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment">*/</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classhal_1_1_project_dir_dialog.html">   44</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_project_dir_dialog.html">ProjectDirDialog</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qfiledialog.html">QFileDialog</a></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    {</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qabstractbutton.html">QAbstractButton</a>* mChooseButton;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordtype">bool</span> mSelectable;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keywordtype">bool</span> isSelectable(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; path = <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>()) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &lt;QFrame&gt;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;QSortFilterProxyModel&gt;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;QAbstractButton&gt;</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &lt;QPixmap&gt;</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="file__manager_8h.html">file_manager.h</a>&quot;</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">class </span><a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a>;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a> {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment">/*</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment">    class ProjectDirProxy : public QSortFilterProxyModel</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment">    {</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">        Q_OBJECT</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment">        bool hasProjectDirectory(const QString&amp; dir) const;</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment">    public:</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment">        ProjectDirProxy(QObject* parent = nullptr);</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment">        bool filterAcceptsRow(int irow, const QModelIndex &amp;parentInx) const override;</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment">    };</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="comment">*/</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="classhal_1_1_project_dir_dialog_status.html">   49</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_project_dir_dialog_status.html">ProjectDirDialogStatus</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qframe.html">QFrame</a></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    {</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a>;</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keyword">private</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="keywordtype">void</span> handleCurrentChanged(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; path);</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_project_dir_dialog.html#a07c9c0071a03844e36182bda3c0f79bf">accept</a>() <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <a class="code" href="classhal_1_1_project_dir_dialog.html#a07c3012a6ecdc9b87e613fab379091d3">ProjectDirDialog</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; title, <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_project_dir_dialog.html#aed6995be26d6d02df810ccb3a1ac768e">eventFilter</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* obj, <a class="codeRef" href="https://doc.qt.io/qt-5/qevent.html">QEvent</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#event">event</a>);</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    };</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;}</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a>* mIcon;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a>* mText;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keyword">static</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpixmap.html">QPixmap</a>* sCheckMark;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keyword">static</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpixmap.html">QPixmap</a>* sAttention;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keyword">static</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpixmap.html">QPixmap</a> getPixmap(<span class="keywordtype">bool</span> ok);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <a class="code" href="classhal_1_1_project_dir_dialog_status.html#a02c6f91a897e56086e88d49db3ed0f6e">ProjectDirDialogStatus</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a>=<span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_project_dir_dialog_status.html#a47e619c548f2655bfd3c003aad999f1e">setMessage</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; path, <a class="code" href="classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2">FileManager::DirectoryStatus</a> stat);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    };</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno"><a class="line" href="classhal_1_1_project_dir_dialog.html">   63</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_project_dir_dialog.html">ProjectDirDialog</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qfiledialog.html">QFileDialog</a></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    {</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qabstractbutton.html">QAbstractButton</a>* mChooseButton;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <a class="code" href="classhal_1_1_project_dir_dialog_status.html">ProjectDirDialogStatus</a>* mStatus;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <a class="code" href="classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2">FileManager::DirectoryStatus</a> mSelectedDirectoryStatus;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keywordtype">bool</span> isSelectable() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keyword">private</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="keywordtype">void</span> handleCurrentChanged(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; path);</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_project_dir_dialog.html#a07c9c0071a03844e36182bda3c0f79bf">accept</a>() <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <a class="code" href="classhal_1_1_project_dir_dialog.html#a2694c7fc4719e69b4bd41df7eb407b18">ProjectDirDialog</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; title, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; defaultDir, <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_project_dir_dialog.html#a243cada5096642466eb6d3da6b90e7d6">eventFilter</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* obj, <a class="codeRef" href="https://doc.qt.io/qt-5/qevent.html">QEvent</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#event">event</a>) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    };</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aqobject_html_Q_OBJECT"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">QObject::Q_OBJECT</a></div><div class="ttdeci">Q_OBJECTQ_OBJECT</div></div>
+<div class="ttc" id="afile__manager_8h_html"><div class="ttname"><a href="file__manager_8h.html">file_manager.h</a></div></div>
+<div class="ttc" id="aclasshal_1_1_project_dir_dialog_html_a2694c7fc4719e69b4bd41df7eb407b18"><div class="ttname"><a href="classhal_1_1_project_dir_dialog.html#a2694c7fc4719e69b4bd41df7eb407b18">hal::ProjectDirDialog::ProjectDirDialog</a></div><div class="ttdeci">ProjectDirDialog(const QString &amp;title, const QString &amp;defaultDir, QWidget *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="project__dir__dialog_8cpp_source.html#l00047">project_dir_dialog.cpp:47</a></div></div>
+<div class="ttc" id="aqframe_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qframe.html">QFrame</a></div></div>
 <div class="ttc" id="aqobject_html_Q_SLOTS"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">QObject::Q_SLOTS</a></div><div class="ttdeci">Q_SLOTSQ_SLOTS</div></div>
 <div class="ttc" id="aqfiledialog_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfiledialog.html">QFileDialog</a></div></div>
 <div class="ttc" id="aqwidget_html_event"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html#event">QWidget::event</a></div><div class="ttdeci">virtual bool event(QEvent *event) override</div></div>
 <div class="ttc" id="aqwidget_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></div></div>
+<div class="ttc" id="aclasshal_1_1_file_manager_html_a5911170f4c0730fb3a214d4d3e7788f2"><div class="ttname"><a href="classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2">hal::FileManager::DirectoryStatus</a></div><div class="ttdeci">DirectoryStatus</div><div class="ttdef"><b>Definition:</b> <a href="file__manager_8h_source.html#l00093">file_manager.h:93</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
-<div class="ttc" id="aclasshal_1_1_project_dir_dialog_html_aed6995be26d6d02df810ccb3a1ac768e"><div class="ttname"><a href="classhal_1_1_project_dir_dialog.html#aed6995be26d6d02df810ccb3a1ac768e">hal::ProjectDirDialog::eventFilter</a></div><div class="ttdeci">bool eventFilter(QObject *obj, QEvent *event)</div><div class="ttdef"><b>Definition:</b> <a href="project__dir__dialog_8cpp_source.html#l00040">project_dir_dialog.cpp:40</a></div></div>
+<div class="ttc" id="aclasshal_1_1_project_dir_dialog_html_a243cada5096642466eb6d3da6b90e7d6"><div class="ttname"><a href="classhal_1_1_project_dir_dialog.html#a243cada5096642466eb6d3da6b90e7d6">hal::ProjectDirDialog::eventFilter</a></div><div class="ttdeci">bool eventFilter(QObject *obj, QEvent *event) override</div><div class="ttdef"><b>Definition:</b> <a href="project__dir__dialog_8cpp_source.html#l00090">project_dir_dialog.cpp:90</a></div></div>
+<div class="ttc" id="aqlabel_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a></div></div>
+<div class="ttc" id="aqpixmap_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qpixmap.html">QPixmap</a></div></div>
 <div class="ttc" id="aqobject_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html">QObject</a></div></div>
 <div class="ttc" id="aqstring_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstring.html">QString</a></div></div>
-<div class="ttc" id="aclasshal_1_1_project_dir_dialog_html_a07c3012a6ecdc9b87e613fab379091d3"><div class="ttname"><a href="classhal_1_1_project_dir_dialog.html#a07c3012a6ecdc9b87e613fab379091d3">hal::ProjectDirDialog::ProjectDirDialog</a></div><div class="ttdeci">ProjectDirDialog(const QString &amp;title, QWidget *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="project__dir__dialog_8cpp_source.html#l00012">project_dir_dialog.cpp:12</a></div></div>
-<div class="ttc" id="aclasshal_1_1_project_dir_dialog_html_a07c9c0071a03844e36182bda3c0f79bf"><div class="ttname"><a href="classhal_1_1_project_dir_dialog.html#a07c9c0071a03844e36182bda3c0f79bf">hal::ProjectDirDialog::accept</a></div><div class="ttdeci">void accept() override</div><div class="ttdef"><b>Definition:</b> <a href="project__dir__dialog_8cpp_source.html#l00077">project_dir_dialog.cpp:77</a></div></div>
+<div class="ttc" id="aclasshal_1_1_project_dir_dialog_html_a07c9c0071a03844e36182bda3c0f79bf"><div class="ttname"><a href="classhal_1_1_project_dir_dialog.html#a07c9c0071a03844e36182bda3c0f79bf">hal::ProjectDirDialog::accept</a></div><div class="ttdeci">void accept() override</div><div class="ttdef"><b>Definition:</b> <a href="project__dir__dialog_8cpp_source.html#l00127">project_dir_dialog.cpp:127</a></div></div>
+<div class="ttc" id="aclasshal_1_1_project_dir_dialog_status_html"><div class="ttname"><a href="classhal_1_1_project_dir_dialog_status.html">hal::ProjectDirDialogStatus</a></div><div class="ttdef"><b>Definition:</b> <a href="project__dir__dialog_8h_source.html#l00049">project_dir_dialog.h:49</a></div></div>
 <div class="ttc" id="aqevent_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qevent.html">QEvent</a></div></div>
 <div class="ttc" id="aqabstractbutton_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractbutton.html">QAbstractButton</a></div></div>
-<div class="ttc" id="aclasshal_1_1_project_dir_dialog_html"><div class="ttname"><a href="classhal_1_1_project_dir_dialog.html">hal::ProjectDirDialog</a></div><div class="ttdef"><b>Definition:</b> <a href="project__dir__dialog_8h_source.html#l00044">project_dir_dialog.h:44</a></div></div>
+<div class="ttc" id="aclasshal_1_1_project_dir_dialog_status_html_a47e619c548f2655bfd3c003aad999f1e"><div class="ttname"><a href="classhal_1_1_project_dir_dialog_status.html#a47e619c548f2655bfd3c003aad999f1e">hal::ProjectDirDialogStatus::setMessage</a></div><div class="ttdeci">void setMessage(const QString &amp;path, FileManager::DirectoryStatus stat)</div><div class="ttdef"><b>Definition:</b> <a href="project__dir__dialog_8cpp_source.html#l00041">project_dir_dialog.cpp:41</a></div></div>
+<div class="ttc" id="aclasshal_1_1_project_dir_dialog_html"><div class="ttname"><a href="classhal_1_1_project_dir_dialog.html">hal::ProjectDirDialog</a></div><div class="ttdef"><b>Definition:</b> <a href="project__dir__dialog_8h_source.html#l00063">project_dir_dialog.h:63</a></div></div>
+<div class="ttc" id="aclasshal_1_1_project_dir_dialog_status_html_a02c6f91a897e56086e88d49db3ed0f6e"><div class="ttname"><a href="classhal_1_1_project_dir_dialog_status.html#a02c6f91a897e56086e88d49db3ed0f6e">hal::ProjectDirDialogStatus::ProjectDirDialogStatus</a></div><div class="ttdeci">ProjectDirDialogStatus(QWidget *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="project__dir__dialog_8cpp_source.html#l00019">project_dir_dialog.cpp:19</a></div></div>
 <div class="ttc" id="aqobject_html_parent"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent</a></div><div class="ttdeci">QObject * parent() const const</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_211d0708befd7ecf30b0a5f684cde5b3.html">file_manager</a></li><li class="navelem"><a class="el" href="project__dir__dialog_8h.html">project_dir_dialog.h</a></li>
-    <li class="footer">Generated on Wed Nov 30 2022 16:05:05 for HAL by
+    <li class="footer">Generated on Wed Nov 30 2022 17:22:11 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

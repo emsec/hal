@@ -294,6 +294,7 @@ var namespacehal =
     [ "ProgramOptions", "classhal_1_1_program_options.html", "classhal_1_1_program_options" ],
     [ "ProgressBar", "classhal_1_1_progress_bar.html", "classhal_1_1_progress_bar" ],
     [ "ProjectDirDialog", "classhal_1_1_project_dir_dialog.html", "classhal_1_1_project_dir_dialog" ],
+    [ "ProjectDirDialogStatus", "classhal_1_1_project_dir_dialog_status.html", "classhal_1_1_project_dir_dialog_status" ],
     [ "ProjectDirectory", "classhal_1_1_project_directory.html", "classhal_1_1_project_directory" ],
     [ "ProjectManager", "classhal_1_1_project_manager.html", "classhal_1_1_project_manager" ],
     [ "ProjectSerializer", "classhal_1_1_project_serializer.html", "classhal_1_1_project_serializer" ],
