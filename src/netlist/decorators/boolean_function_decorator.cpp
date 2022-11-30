@@ -74,7 +74,7 @@ namespace hal
                 return ERR("could not concatenate nets: nets contain a 'nullptr'.");
             }
 
-            if (auto res = BooleanFunction::Concat(BooleanFunction::Var(BooleanFunctionNetDecorator(*(nets.at(i))).get_boolean_variable_name(), 1), var.clone(), i + 1); res.is_error())
+            if (auto res = BooleanFunction::Concat(var.clone(), BooleanFunction::Var(BooleanFunctionNetDecorator(*(nets.at(i))).get_boolean_variable_name(), 1), i + 1); res.is_ok())
             {
                 var = res.get();
             }
@@ -90,7 +90,7 @@ namespace hal
         {
             if (sign_extend == false)
             {
-                if (auto res = BooleanFunction::Zext(var.clone(), BooleanFunction::Index(extend_to_size, extend_to_size), extend_to_size); res.is_error())
+                if (auto res = BooleanFunction::Zext(var.clone(), BooleanFunction::Index(extend_to_size, extend_to_size), extend_to_size); res.is_ok())
                 {
                     var = res.get();
                 }
@@ -102,7 +102,7 @@ namespace hal
             }
             else
             {
-                if (auto res = BooleanFunction::Sext(var.clone(), BooleanFunction::Index(extend_to_size, extend_to_size), extend_to_size); res.is_error())
+                if (auto res = BooleanFunction::Sext(var.clone(), BooleanFunction::Index(extend_to_size, extend_to_size), extend_to_size); res.is_ok())
                 {
                     var = res.get();
                 }
@@ -130,7 +130,7 @@ namespace hal
         for (u32 i = 1; i < functions.size(); i++)
         {
             size += functions.at(i).size();
-            if (auto res = BooleanFunction::Concat(functions.at(i).clone(), var.clone(), size); res.is_error())
+            if (auto res = BooleanFunction::Concat(var.clone(), functions.at(i).clone(), size); res.is_ok())
             {
                 var = res.get();
             }
@@ -146,7 +146,7 @@ namespace hal
         {
             if (sign_extend == false)
             {
-                if (auto res = BooleanFunction::Zext(var.clone(), BooleanFunction::Index(extend_to_size, extend_to_size), extend_to_size); res.is_error())
+                if (auto res = BooleanFunction::Zext(var.clone(), BooleanFunction::Index(extend_to_size, extend_to_size), extend_to_size); res.is_ok())
                 {
                     var = res.get();
                 }
@@ -158,7 +158,7 @@ namespace hal
             }
             else
             {
-                if (auto res = BooleanFunction::Sext(var.clone(), BooleanFunction::Index(extend_to_size, extend_to_size), extend_to_size); res.is_error())
+                if (auto res = BooleanFunction::Sext(var.clone(), BooleanFunction::Index(extend_to_size, extend_to_size), extend_to_size); res.is_ok())
                 {
                     var = res.get();
                 }

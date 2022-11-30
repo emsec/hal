@@ -32,7 +32,7 @@ namespace hal {
     {
         TEST_START
         {
-            // test BooleanFunctionDecorator::substitute_power_ground_nets()
+            // test BooleanFunctionDecorator::substitute_power_ground_nets(const Netlist*)
             std::unique_ptr<Netlist> nl_owner = test_utils::create_empty_netlist();
             auto* nl = nl_owner.get();
             ASSERT_NE(nl, nullptr);
@@ -70,6 +70,54 @@ namespace hal {
             auto subs_res = bf_dec.substitute_power_ground_nets(nl);
             ASSERT_TRUE(subs_res.is_ok());
             EXPECT_EQ(subs_res.get().get_variable_names(), std::set<std::string>({BooleanFunctionNetDecorator(*n0).get_boolean_variable_name(), BooleanFunctionNetDecorator(*n3).get_boolean_variable_name()}));
+        }
+        {
+            // test BooleanFunctionDecorator::get_boolean_function_from(const std::vector<Net*>&, u32, bool)
+            std::unique_ptr<Netlist> nl_owner = test_utils::create_empty_netlist();
+            auto* nl = nl_owner.get();
+            ASSERT_NE(nl, nullptr);
+            const auto* gl = nl->get_gate_library();
+
+            Net* n0 = nl->create_net(1, "n0");
+            ASSERT_NE(n0, nullptr);
+            Net* n1 = nl->create_net(2, "n1");
+            ASSERT_NE(n1, nullptr);
+            Net* n2 = nl->create_net(3, "n2");
+            ASSERT_NE(n2, nullptr);
+
+            auto bf_n0 = BooleanFunctionNetDecorator(*n0).get_boolean_variable();
+            auto bf_n1 = BooleanFunctionNetDecorator(*n1).get_boolean_variable();
+            auto bf_n2 = BooleanFunctionNetDecorator(*n2).get_boolean_variable();
+
+            auto bf_concat = BooleanFunctionDecorator::get_boolean_function_from({n0, n1, n2});
+            ASSERT_TRUE(bf_concat.is_ok());
+            EXPECT_EQ(bf_concat.get(), BooleanFunction::Concat(BooleanFunction::Concat(bf_n0.clone(), bf_n1.clone(), 2).get(), bf_n2.clone(), 3).get());
+
+            const auto bf_concat_zext = BooleanFunctionDecorator::get_boolean_function_from({n0, n1, n2}, 6, false);
+            ASSERT_TRUE(bf_concat_zext.is_ok());
+            EXPECT_EQ(bf_concat_zext.get(), BooleanFunction::Zext(BooleanFunction::Concat(BooleanFunction::Concat(bf_n0.clone(), bf_n1.clone(), 2).get(), bf_n2.clone(), 3).get(), BooleanFunction::Index(6, 6), 6).get());
+
+            const auto bf_concat_sext = BooleanFunctionDecorator::get_boolean_function_from({n0, n1, n2}, 6, true);
+            ASSERT_TRUE(bf_concat_sext.is_ok());
+            EXPECT_EQ(bf_concat_sext.get(), BooleanFunction::Sext(BooleanFunction::Concat(BooleanFunction::Concat(bf_n0.clone(), bf_n1.clone(), 2).get(), bf_n2.clone(), 3).get(), BooleanFunction::Index(6, 6), 6).get());
+        }
+        {
+            // test BooleanFunctionDecorator::get_boolean_function_from(const std::vector<BooleanFunction>&, u32, bool)
+            auto bf_a = BooleanFunction::Var("A", 1);
+            auto bf_b = BooleanFunction::Var("B", 1);
+            auto bf_c = BooleanFunction::Var("C", 1);
+
+            auto bf_concat = BooleanFunctionDecorator::get_boolean_function_from({bf_a, bf_b, bf_c});
+            ASSERT_TRUE(bf_concat.is_ok());
+            EXPECT_EQ(bf_concat.get(), BooleanFunction::Concat(BooleanFunction::Concat(bf_a.clone(), bf_b.clone(), 2).get(), bf_c.clone(), 3).get());
+
+            const auto bf_concat_zext = BooleanFunctionDecorator::get_boolean_function_from({bf_a, bf_b, bf_c}, 6, false);
+            ASSERT_TRUE(bf_concat_zext.is_ok());
+            EXPECT_EQ(bf_concat_zext.get(), BooleanFunction::Zext(BooleanFunction::Concat(BooleanFunction::Concat(bf_a.clone(), bf_b.clone(), 2).get(), bf_c.clone(), 3).get(), BooleanFunction::Index(6, 6), 6).get());
+
+            const auto bf_concat_sext = BooleanFunctionDecorator::get_boolean_function_from({bf_a, bf_b, bf_c}, 6, true);
+            ASSERT_TRUE(bf_concat_sext.is_ok());
+            EXPECT_EQ(bf_concat_sext.get(), BooleanFunction::Sext(BooleanFunction::Concat(BooleanFunction::Concat(bf_a.clone(), bf_b.clone(), 2).get(), bf_c.clone(), 3).get(), BooleanFunction::Index(6, 6), 6).get());
         }
         TEST_END
     }
