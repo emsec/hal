@@ -162,7 +162,7 @@ $(document).ready(function(){initNavTree('netlist_2decorators_2boolean__function
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not concatenate nets: nets contain a &#39;nullptr&#39;.&quot;</span>);</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            }</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = <a class="code" href="classhal_1_1_boolean_function.html#a73ac77fd1a52c75b47401fdc73813a96">BooleanFunction::Concat</a>(<a class="code" href="classhal_1_1_boolean_function.html#a2265500404669bf52f6aeed96d74f92f">BooleanFunction::Var</a>(<a class="code" href="classhal_1_1_boolean_function_net_decorator.html">BooleanFunctionNetDecorator</a>(*(nets.at(i))).<a class="code" href="classhal_1_1_boolean_function_net_decorator.html#a68c2d7aaa24c940c33bc040aa7437e76">get_boolean_variable_name</a>(), 1), var.<a class="code" href="classhal_1_1_boolean_function.html#aab3565a11f258580f68515f6dfaf0f0e">clone</a>(), i + 1); res.is_error())</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = <a class="code" href="classhal_1_1_boolean_function.html#a73ac77fd1a52c75b47401fdc73813a96">BooleanFunction::Concat</a>(var.clone(), <a class="code" href="classhal_1_1_boolean_function.html#a2265500404669bf52f6aeed96d74f92f">BooleanFunction::Var</a>(<a class="code" href="classhal_1_1_boolean_function_net_decorator.html">BooleanFunctionNetDecorator</a>(*(nets.at(i))).<a class="code" href="classhal_1_1_boolean_function_net_decorator.html#a68c2d7aaa24c940c33bc040aa7437e76">get_boolean_variable_name</a>(), 1), i + 1); res.is_ok())</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;            {</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                var = res.get();</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;            }</div>
@@ -178,7 +178,7 @@ $(document).ready(function(){initNavTree('netlist_2decorators_2boolean__function
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        {</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            <span class="keywordflow">if</span> (sign_extend == <span class="keyword">false</span>)</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;            {</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = <a class="code" href="classhal_1_1_boolean_function.html#a4e6d9851132499445b27c6611f217153">BooleanFunction::Zext</a>(var.clone(), <a class="code" href="classhal_1_1_boolean_function.html#a7d9238e392858d5b0e28994e53ebb5ab">BooleanFunction::Index</a>(extend_to_size, extend_to_size), extend_to_size); res.is_error())</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = <a class="code" href="classhal_1_1_boolean_function.html#a4e6d9851132499445b27c6611f217153">BooleanFunction::Zext</a>(var.clone(), <a class="code" href="classhal_1_1_boolean_function.html#a7d9238e392858d5b0e28994e53ebb5ab">BooleanFunction::Index</a>(extend_to_size, extend_to_size), extend_to_size); res.is_ok())</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;                {</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                    var = res.get();</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                }</div>
@@ -190,7 +190,7 @@ $(document).ready(function(){initNavTree('netlist_2decorators_2boolean__function
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            }</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            {</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = <a class="code" href="classhal_1_1_boolean_function.html#a5df350410605f9baf0541b01cad1408f">BooleanFunction::Sext</a>(var.clone(), <a class="code" href="classhal_1_1_boolean_function.html#a7d9238e392858d5b0e28994e53ebb5ab">BooleanFunction::Index</a>(extend_to_size, extend_to_size), extend_to_size); res.is_error())</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = <a class="code" href="classhal_1_1_boolean_function.html#a5df350410605f9baf0541b01cad1408f">BooleanFunction::Sext</a>(var.clone(), <a class="code" href="classhal_1_1_boolean_function.html#a7d9238e392858d5b0e28994e53ebb5ab">BooleanFunction::Index</a>(extend_to_size, extend_to_size), extend_to_size); res.is_ok())</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;                {</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;                    var = res.get();</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;                }</div>
@@ -218,7 +218,7 @@ $(document).ready(function(){initNavTree('netlist_2decorators_2boolean__function
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> i = 1; i &lt; functions.size(); i++)</div>
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        {</div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;            size += functions.at(i).size();</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = <a class="code" href="classhal_1_1_boolean_function.html#a73ac77fd1a52c75b47401fdc73813a96">BooleanFunction::Concat</a>(functions.at(i).clone(), var.clone(), size); res.is_error())</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = <a class="code" href="classhal_1_1_boolean_function.html#a73ac77fd1a52c75b47401fdc73813a96">BooleanFunction::Concat</a>(var.clone(), functions.at(i).clone(), size); res.is_ok())</div>
 <div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;            {</div>
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;                var = res.get();</div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;            }</div>
@@ -234,7 +234,7 @@ $(document).ready(function(){initNavTree('netlist_2decorators_2boolean__function
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        {</div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;            <span class="keywordflow">if</span> (sign_extend == <span class="keyword">false</span>)</div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;            {</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = <a class="code" href="classhal_1_1_boolean_function.html#a4e6d9851132499445b27c6611f217153">BooleanFunction::Zext</a>(var.clone(), <a class="code" href="classhal_1_1_boolean_function.html#a7d9238e392858d5b0e28994e53ebb5ab">BooleanFunction::Index</a>(extend_to_size, extend_to_size), extend_to_size); res.is_error())</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = <a class="code" href="classhal_1_1_boolean_function.html#a4e6d9851132499445b27c6611f217153">BooleanFunction::Zext</a>(var.clone(), <a class="code" href="classhal_1_1_boolean_function.html#a7d9238e392858d5b0e28994e53ebb5ab">BooleanFunction::Index</a>(extend_to_size, extend_to_size), extend_to_size); res.is_ok())</div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;                {</div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;                    var = res.get();</div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;                }</div>
@@ -246,7 +246,7 @@ $(document).ready(function(){initNavTree('netlist_2decorators_2boolean__function
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;            }</div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;            <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;            {</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = <a class="code" href="classhal_1_1_boolean_function.html#a5df350410605f9baf0541b01cad1408f">BooleanFunction::Sext</a>(var.clone(), <a class="code" href="classhal_1_1_boolean_function.html#a7d9238e392858d5b0e28994e53ebb5ab">BooleanFunction::Index</a>(extend_to_size, extend_to_size), extend_to_size); res.is_error())</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = <a class="code" href="classhal_1_1_boolean_function.html#a5df350410605f9baf0541b01cad1408f">BooleanFunction::Sext</a>(var.clone(), <a class="code" href="classhal_1_1_boolean_function.html#a7d9238e392858d5b0e28994e53ebb5ab">BooleanFunction::Index</a>(extend_to_size, extend_to_size), extend_to_size); res.is_ok())</div>
 <div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;                {</div>
 <div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;                    var = res.get();</div>
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;                }</div>
@@ -301,7 +301,7 @@ $(document).ready(function(){initNavTree('netlist_2decorators_2boolean__function
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="dir_8b970151d598b4fae8bb0815b2681fca.html">decorators</a></li><li class="navelem"><a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp.html">boolean_function_decorator.cpp</a></li>
-    <li class="footer">Generated on Tue Nov 29 2022 17:37:45 for HAL by
+    <li class="footer">Generated on Wed Nov 30 2022 10:24:16 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
