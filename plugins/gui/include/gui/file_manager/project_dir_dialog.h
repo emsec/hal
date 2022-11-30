@@ -26,8 +26,13 @@
 #pragma once
 
 #include <QFileDialog>
+#include <QFrame>
 #include <QSortFilterProxyModel>
 #include <QAbstractButton>
+#include <QPixmap>
+#include "file_manager.h"
+
+class QLabel;
 
 namespace hal {
 
@@ -41,14 +46,29 @@ namespace hal {
         bool filterAcceptsRow(int irow, const QModelIndex &parentInx) const override;
     };
 */
+    class ProjectDirDialogStatus : public QFrame
+    {
+        Q_OBJECT;
+
+        QLabel* mIcon;
+        QLabel* mText;
+        static QPixmap* sCheckMark;
+        static QPixmap* sAttention;
+        static QPixmap getPixmap(bool ok);
+    public:
+        ProjectDirDialogStatus(QWidget* parent=nullptr);
+        void setMessage(const QString& path, FileManager::DirectoryStatus stat);
+    };
+
     class ProjectDirDialog : public QFileDialog
     {
         Q_OBJECT
 
         QAbstractButton* mChooseButton;
-        bool mSelectable;
+        ProjectDirDialogStatus* mStatus;
+        FileManager::DirectoryStatus mSelectedDirectoryStatus;
 
-        bool isSelectable(const QString& path = QString()) const;
+        bool isSelectable() const;
 
     private Q_SLOTS:
         void handleCurrentChanged(const QString& path);
@@ -56,8 +76,8 @@ namespace hal {
     public:
         void accept() override;
 
-        ProjectDirDialog(const QString& title, QWidget* parent = nullptr);
+        ProjectDirDialog(const QString& title, const QString& defaultDir, QWidget* parent = nullptr);
 
-        bool eventFilter(QObject* obj, QEvent* event);
+        bool eventFilter(QObject* obj, QEvent* event) override;
     };
 }
