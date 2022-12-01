@@ -197,7 +197,7 @@ namespace hal
             return it->second.get();
         }
 
-        log_error("netlist", "there is no gate with ID {} in the netlist with ID {}.", gate_id, m_netlist_id);
+        log_debug("netlist", "there is no gate with ID {} in the netlist with ID {}.", gate_id, m_netlist_id);
         return nullptr;
     }
 
@@ -352,13 +352,13 @@ namespace hal
 
     Net* Netlist::get_net_by_id(u32 net_id) const
     {
-        auto it = m_nets_map.find(net_id);
-        if (it == m_nets_map.end())
+        if (auto it = m_nets_map.find(net_id); it != m_nets_map.end())
         {
-            log_error("netlist", "there is no net with ID {} in the netlist with ID {}.", net_id, m_netlist_id);
-            return nullptr;
+            return it->second.get();
         }
-        return it->second.get();
+
+        log_debug("netlist", "there is no net with ID {} in the netlist with ID {}.", net_id, m_netlist_id);
+        return nullptr;
     }
 
     const std::vector<Net*>& Netlist::get_nets() const
@@ -578,13 +578,13 @@ namespace hal
 
     Module* Netlist::get_module_by_id(u32 id) const
     {
-        auto it = m_modules_map.find(id);
-        if (it == m_modules_map.end())
+        if (auto it = m_modules_map.find(id); it != m_modules_map.end())
         {
-            log_error("netlist", "there is no module with ID {} in the netlist with ID {}.", id, m_netlist_id);
-            return nullptr;
+            return it->second.get();
         }
-        return it->second.get();
+
+        log_debug("netlist", "there is no module with ID {} in the netlist with ID {}.", id, m_netlist_id);
+        return nullptr;
     }
 
     const std::vector<Module*>& Netlist::get_modules() const
@@ -656,13 +656,13 @@ namespace hal
 
     Grouping* Netlist::get_grouping_by_id(u32 grouping_id) const
     {
-        auto it = m_groupings_map.find(grouping_id);
-        if (it == m_groupings_map.end())
+        if (auto it = m_groupings_map.find(grouping_id); it != m_groupings_map.end())
         {
-            log_error("netlist", "there is no grouping with ID {} in the netlist with ID {}.", grouping_id, m_netlist_id);
-            return nullptr;
+            return it->second.get();
         }
-        return it->second.get();
+
+        log_debug("netlist", "there is no grouping with ID {} in the netlist with ID {}.", grouping_id, m_netlist_id);
+        return nullptr;
     }
 
     std::vector<Grouping*> Netlist::get_groupings(const std::function<bool(Grouping*)>& filter) const
