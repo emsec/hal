@@ -50,7 +50,7 @@ namespace hal
          * 
          * @param[in] vec - The unordered vector.
          * @param[in] element - The element to delete.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         template<typename T>
         CORE_API inline bool unordered_vector_erase(std::vector<T>& vec, T element)
@@ -63,6 +63,27 @@ namespace hal
             *it = vec.back();
             vec.pop_back();
             return true;
+        }
+
+        /**
+         * Check whether two vectors have the same content regardless of their order.
+         *
+         * @param[in] vec_1 - First vector.
+         * @param[in] vec_2 - Second vector.
+         * @returns `true` if the vectors have the same content, `false` otherwise.
+         */
+        template<typename T>
+        bool vectors_have_same_content(std::vector<T> vec_1, std::vector<T> vec_2)
+        {
+            if (vec_1.size() != vec_2.size())
+            {
+                return false;
+            }
+
+            std::sort(vec_1.begin(), vec_1.end());
+            std::sort(vec_2.begin(), vec_2.end());
+
+            return vec_1 == vec_2;
         }
 
         /**
