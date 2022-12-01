@@ -1059,6 +1059,18 @@ namespace hal {
         EXPECT_EQ(((a.clone() & c.clone()) | (b.clone() & ~c.clone()) | (a.clone() & b.clone())).simplify(), (b.clone() | c.clone()) & (a.clone() | ~c.clone()));
     }
 
+
+    TEST(BooleanFunction, SimplificationABC)
+    {
+        const auto start = std::chrono::system_clock::now();
+
+        const auto function = BooleanFunction::from_string("((((0b0 | ((((0b1 & (! s2r_RNI7LA61(0))) & (! s4r17_i__[3]__)) & (! s2d2r(0)__[3]__)) & s2r(16)__[3]__)) | ((((0b1 & s2r_RNI7LA61(0)) & (! s4r17_i__[3]__)) & (! s2d2r(0)__[3]__)) & s2r(16)__[3]__)) | ((((0b1 & (! s2r_RNI7LA61(0))) & s4r17_i__[3]__) & (! s2d2r(0)__[3]__)) & s2r(16)__[3]__)) | ((((0b1 & (! s2r_RNI7LA61(0))) & (! s4r17_i__[3]__)) & s2d2r(0)__[3]__) & s2r(16)__[3]__))").get();
+        const auto simplified = function.simplify();
+
+        const auto duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
+    }
+
+
     TEST(BooleanFunction, SimplificationPerformance)
     {
         const auto start = std::chrono::system_clock::now();
