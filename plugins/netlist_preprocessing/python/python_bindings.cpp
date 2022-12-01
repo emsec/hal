@@ -52,6 +52,54 @@ namespace hal
         )");
 
         py_netlist_preprocessing.def_static(
+            "remove_irrelevant_lut_inputs",
+            [](Netlist* nl) -> std::optional<u32> {
+                auto res = NetlistPreprocessingPlugin::remove_irrelevant_lut_inputs(nl);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("nl"),
+            R"(
+            Removes all LUT fan-in endpoints that do not correspond to a variable within the Boolean function that determines the output of a gate.
+
+            :param hal_py.Netlist nl: The netlist to operate on. 
+            :returns: The number of removed LUT endpoints on success, None otherwise.
+            :rtype: int or None
+        )");
+
+        py_netlist_preprocessing.def_static(
+            "remove_buffers",
+            [](Netlist* nl) -> std::optional<u32> {
+                auto res = NetlistPreprocessingPlugin::remove_buffers(nl);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("nl"),
+            R"(
+            Removes buffer gates from the netlist and connect their fan-in to their fan-out nets.
+            Considers all combinational gates and takes their inputs into account.
+            For example, a 2-input AND gate with one input being connected to constant '1' will also be removed.
+
+            :param hal_py.Netlist nl: The netlist to operate on. 
+            :returns: The number of removed buffers on success, None otherwise.
+            :rtype: int or None
+        )");
+
+        py_netlist_preprocessing.def_static(
             "remove_redundant_logic",
             [](Netlist* nl) -> std::optional<u32> {
                 auto res = NetlistPreprocessingPlugin::remove_redundant_logic(nl);
@@ -70,7 +118,7 @@ namespace hal
             Removes redundant gates from the netlist, i.e., gates that are functionally equivalent and are connected to the same input nets.
 
             :param hal_py.Netlist nl: The netlist to operate on. 
-            :returns: The number of removed gates on success, an error otherwise.
+            :returns: The number of removed gates on success, None otherwise.
             :rtype: int or None
         )");
 

@@ -32,12 +32,36 @@ namespace hal
     class PLUGIN_API NetlistPreprocessingPlugin : public BasePluginInterface
     {
     public:
+        /**
+         * Get the name of the plugin.
+         *
+         * @returns The name of the plugin.
+         */
         std::string get_name() const override;
+
+        /**
+         * Get the version of the plugin.
+         *
+         * @returns The version of the plugin.
+         */
         std::string get_version() const override;
 
-        void initialize() override;
-
+        /**
+         * Removes all LUT fan-in endpoints that do not correspond to a variable within the Boolean function that determines the output of a gate.
+         * 
+         * @param[in] nl - The netlist to operate on. 
+         * @returns The number of removed LUT endpoints on success, an error otherwise.
+         */
         static Result<u32> remove_irrelevant_lut_inputs(Netlist* nl);
+
+        /**
+         * Removes buffer gates from the netlist and connect their fan-in to their fan-out nets.
+         * Considers all combinational gates and takes their inputs into account.
+         * For example, a 2-input AND gate with one input being connected to constant `1` will also be removed.
+         * 
+         * @param[in] nl - The netlist to operate on. 
+         * @returns The number of removed buffers on success, an error otherwise.
+         */
         static Result<u32> remove_buffers(Netlist* nl);
 
         /**
