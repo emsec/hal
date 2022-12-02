@@ -31,7 +31,7 @@ var searchData=
   ['joining_5fnone_6965',['Joining_None',['https://doc.qt.io/qt-5/qchar.html#JoiningType-enum',1,'QChar']]],
   ['joining_5fright_6966',['Joining_Right',['https://doc.qt.io/qt-5/qchar.html#JoiningType-enum',1,'QChar']]],
   ['joining_5ftransparent_6967',['Joining_Transparent',['https://doc.qt.io/qt-5/qchar.html#JoiningType-enum',1,'QChar']]],
-  ['joiningtype_6968',['JoiningType',['https://doc.qt.io/qt-5/qchar.html#JoiningType-enum',1,'QChar::JoiningType()'],['https://doc.qt.io/qt-5/qchar.html#joiningType',1,'QChar::joiningType() const const'],['https://doc.qt.io/qt-5/qchar.html#joiningType-1',1,'QChar::joiningType(uint ucs4)']]],
+  ['joiningtype_6968',['joiningType',['https://doc.qt.io/qt-5/qchar.html#joiningType',1,'QChar::joiningType() const const'],['https://doc.qt.io/qt-5/qchar.html#joiningType-1',1,'QChar::joiningType(uint ucs4)'],['https://doc.qt.io/qt-5/qchar.html#JoiningType-enum',1,'QChar::JoiningType()']]],
   ['joinpreviouseditblock_6969',['joinPreviousEditBlock',['https://doc.qt.io/qt-5/qtextcursor.html#joinPreviousEditBlock',1,'QTextCursor']]],
   ['joinstyle_6970',['joinStyle',['https://doc.qt.io/qt-5/qpainterpathstroker.html#joinStyle',1,'QPainterPathStroker::joinStyle()'],['https://doc.qt.io/qt-5/qpen.html#joinStyle',1,'QPen::joinStyle()']]],
   ['jolafonyi_6971',['JolaFonyi',['https://doc.qt.io/qt-5/qlocale.html#Language-enum',1,'QLocale']]],

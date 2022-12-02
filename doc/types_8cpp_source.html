@@ -361,7 +361,7 @@ $(document).ready(function(){initNavTree('types_8cpp_source.html',''); initResiz
 <div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a>(build_res.get_error(), <span class="stringliteral">&quot;failed to evaluate Boolean function for the model: failed to build function after replacing nodes.&quot;</span>);</div>
 <div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;            }</div>
 <div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160; </div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(build_res.get().simplify());</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(build_res.get().simplify_local());</div>
 <div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;        }</div>
 <div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160; </div>
 <div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        <a class="code" href="structhal_1_1_s_m_t_1_1_solver_result.html#a226f2f31aae8e9214cec12887606bb87">SolverResult::SolverResult</a>(<a class="code" href="namespacehal_1_1_s_m_t.html#a72d121f9b521b20e4b6c3d1fc6bbe7b0">SolverResultType</a> _type, std::optional&lt;Model&gt; _model) : <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>(_type), model(_model)</div>
@@ -514,7 +514,7 @@ $(document).ready(function(){initNavTree('types_8cpp_source.html',''); initResiz
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="dir_c087a112b91d0fc4c12783641a32acb2.html">boolean_function</a></li><li class="navelem"><a class="el" href="types_8cpp.html">types.cpp</a></li>
-    <li class="footer">Generated on Wed Nov 30 2022 17:22:13 for HAL by
+    <li class="footer">Generated on Fri Dec 2 2022 13:51:01 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

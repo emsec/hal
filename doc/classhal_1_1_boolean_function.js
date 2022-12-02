@@ -45,6 +45,7 @@ var classhal_1_1_boolean_function =
     [ "operator|=", "classhal_1_1_boolean_function.html#acb85df6107517cd562f1b5ea3644ca95", null ],
     [ "operator~", "classhal_1_1_boolean_function.html#a6b1fe0e3deb588e7126faee8fc13115e", null ],
     [ "simplify", "classhal_1_1_boolean_function.html#aa56946bb29a1f6bbe3bab2bf84f1c954", null ],
+    [ "simplify_local", "classhal_1_1_boolean_function.html#acce561ac2183c0f586284e7580b410a4", null ],
     [ "size", "classhal_1_1_boolean_function.html#af98903ba34ce51e73df303318996d4ea", null ],
     [ "substitute", "classhal_1_1_boolean_function.html#a4074a3313f582aa925e783d633b86d90", null ],
     [ "substitute", "classhal_1_1_boolean_function.html#ae9242e7d969fc9b6eb402fc5c2386153", null ],

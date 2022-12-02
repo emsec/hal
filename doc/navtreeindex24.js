@@ -1,5 +1,6 @@
 var NAVTREEINDEX24 =
 {
+"group__core.html":[4,1],
 "group__docking.html":[4,0,2],
 "group__docking.html#ga96c899c45d7192341d04caf575c7f02c":[4,0,2,8],
 "group__docking.html#gga96c899c45d7192341d04caf575c7f02ca4505cad087312551a6fbbe6ebe163e0f":[4,0,2,8,0],
@@ -18,8 +19,8 @@ var NAVTREEINDEX24 =
 "group__graph-visuals.html":[4,0,0,0],
 "group__graph.html":[4,0,0],
 "group__gui.html":[4,0],
-"group__gui.html#ga077e1c5730ec712b6b5e2328edd17c56":[7,0,1,3,0,0,56,0],
 "group__gui.html#ga077e1c5730ec712b6b5e2328edd17c56":[4,0,58],
+"group__gui.html#ga077e1c5730ec712b6b5e2328edd17c56":[7,0,1,3,0,0,56,0],
 "group__gui.html#ga284a43cae48443fa22ac672a8b6ea8a0":[4,0,57],
 "group__gui.html#gaab0cd38a41c1215ae70822b1d501daa1":[4,0,56],
 "group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1a5012af45088eb8e999bb8350077b12ca":[4,0,56,3],
@@ -79,10 +80,10 @@ var NAVTREEINDEX24 =
 "group__utilities.html#ga522d6d0c8a408128993be37c86656280":[4,1,3,11],
 "group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466":[7,0,0,0,4,4,6],
 "group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466":[4,1,3,10],
-"group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2":[4,1,3,12],
 "group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2":[7,0,0,0,4,4,8],
-"group__utilities.html#ga9f09e61a5832ae08b39fde17dc9e04ce":[4,1,3,9],
+"group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2":[4,1,3,12],
 "group__utilities.html#ga9f09e61a5832ae08b39fde17dc9e04ce":[7,0,0,0,4,4,5],
+"group__utilities.html#ga9f09e61a5832ae08b39fde17dc9e04ce":[4,1,3,9],
 "group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735":[7,0,0,0,4,4,10],
 "group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735":[4,1,3,14],
 "group__utilities.html#gaf7de45767abb16dd9841f83ef5dd0608":[7,0,0,0,4,4,9],
@@ -248,6 +249,5 @@ var NAVTREEINDEX24 =
 "json_8hpp.html#a1ed8fc6239da25abcaf681d30ace4985af1f713c9e000f5d3f280adbd124df4f5":[7,0,1,1,0,0,2,1,285,2],
 "json_8hpp.html#a1f0395aad0fe853a4539288749d3a603":[7,0,1,1,0,0,2,1,307],
 "json_8hpp.html#a20cf21255e75cff1ffb0869c2c545e63":[7,0,1,1,0,0,2,1,308],
-"json_8hpp.html#a20ea5175c8999fc8b673e46b892f71f6":[7,0,1,1,0,0,2,1,337],
-"json_8hpp.html#a21937c8e7c79a1bef6695691c733e29f":[7,0,1,1,0,0,2,1,202]
+"json_8hpp.html#a20ea5175c8999fc8b673e46b892f71f6":[7,0,1,1,0,0,2,1,337]
 };

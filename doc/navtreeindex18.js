@@ -1,5 +1,6 @@
 var NAVTREEINDEX18 =
 {
+"classhal_1_1log__gui__sink.html#a3452384d9bbfec21011da245e7c7045e":[6,0,0,202,3],
 "classhal_1_1log__gui__sink.html#a3c967dd201e147778004bddbd196ca9e":[6,0,0,202,2],
 "classhal_1_1log__gui__sink.html#aae5cd17079900fb341196dea45f89a85":[6,0,0,202,1],
 "classhal_1_1plugin__dataflow.html":[6,0,0,283],
@@ -248,6 +249,5 @@ var NAVTREEINDEX18 =
 "classnlohmann_1_1detail_1_1input__buffer__adapter.html#a0871125057d993684ba8e45fb2b8a76b":[6,0,1,0,28,6],
 "classnlohmann_1_1detail_1_1input__buffer__adapter.html#a19bb3ff68048a2fc8ecc41a013af37ae":[6,0,1,0,28,5],
 "classnlohmann_1_1detail_1_1input__buffer__adapter.html#ab6bc6bb785408b74af284a5b7544d9dc":[6,0,1,0,28,2],
-"classnlohmann_1_1detail_1_1input__buffer__adapter.html#ac242b822b2f6772e5fc682ddb80cb066":[6,0,1,0,28,3],
-"classnlohmann_1_1detail_1_1input__buffer__adapter.html#ad9b912fabdcb53de255e8c444d625ac3":[6,0,1,0,28,0]
+"classnlohmann_1_1detail_1_1input__buffer__adapter.html#ac242b822b2f6772e5fc682ddb80cb066":[6,0,1,0,28,3]
 };
