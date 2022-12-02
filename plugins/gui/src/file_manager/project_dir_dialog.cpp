@@ -1,40 +1,90 @@
 #include "gui/file_manager/project_dir_dialog.h"
 #include "gui/file_manager/file_manager.h"
-#include "hal_core/netlist/project_manager.h"
-#include <QDebug>
 #include <QDialogButtonBox>
 #include <QEvent>
 #include <QMessageBox>
+#include <QGridLayout>
+#include <QLabel>
+#include <QIcon>
+#include <QStyle>
+#include <QHBoxLayout>
 
 namespace hal {
+    // credits to icon designer https://www.flaticon.com/authors/ian-june
+    QPixmap* ProjectDirDialogStatus::sCheckMark = nullptr;
 
+    // credits to icon designer https://www.flaticon.com/authors/amonrat-rungreangfangsai
+    QPixmap* ProjectDirDialogStatus::sAttention = nullptr;
 
-    ProjectDirDialog::ProjectDirDialog(const QString &title, QWidget* parent)
-        : QFileDialog(parent), mChooseButton(nullptr), mSelectable(false)
+    ProjectDirDialogStatus::ProjectDirDialogStatus(QWidget* parent)
+        : QFrame(parent)
+    {
+        setFrameStyle(QFrame::Panel | QFrame::Sunken);
+        setLineWidth(2);
+        QHBoxLayout* lay = new QHBoxLayout(this);
+        lay->addWidget(mIcon = new QLabel(this));
+        lay->addWidget(mText = new QLabel(this));
+        lay->addStretch(0);
+    }
+
+    QPixmap ProjectDirDialogStatus::getPixmap(bool ok)
+    {
+        if (ok)
+        {
+            if (!sCheckMark) sCheckMark = new QPixmap(":/icons/check-mark", "PNG");
+            return *sCheckMark;
+        }
+        if (!sAttention) sAttention = new QPixmap(":/icons/attention", "PNG");
+        return *sAttention;
+    }
+
+    void ProjectDirDialogStatus::setMessage(const QString &path, FileManager::DirectoryStatus stat)
+    {
+        mIcon->setPixmap(getPixmap(stat == FileManager::ProjectDirectory));
+        mText->setText(path + "\n" + FileManager::directoryStatusText(stat));
+    }
+
+    ProjectDirDialog::ProjectDirDialog(const QString &title, const QString &defaultDir, QWidget* parent)
+        : QFileDialog(parent), mChooseButton(nullptr), mStatus(nullptr),
+          mSelectedDirectoryStatus(FileManager::OtherDirectory)
     {
         setWindowTitle(title);
+        setOption(QFileDialog::DontUseNativeDialog, true);
+        setOption(QFileDialog::ShowDirsOnly,true);
+        setFileMode(QFileDialog::Directory);
         setFilter(QDir::Dirs | QDir::NoDot  | QDir::NoDotDot  );
-        setDirectory("/home/langhein/netlist");
-        setFileMode(QFileDialog::DirectoryOnly);
+        setDirectory(defaultDir);
         connect(this, &QFileDialog::currentChanged, this, &ProjectDirDialog::handleCurrentChanged);
+        connect(this, &QFileDialog::directoryEntered, this, &ProjectDirDialog::handleCurrentChanged);
+
+        QGridLayout* glay = findChild<QGridLayout*>("gridLayout");
+        if (glay)
+        {
+            mStatus = new ProjectDirDialogStatus(this);
+            glay->addWidget(mStatus,4,0,1,3);
+        }
 
         QDialogButtonBox* bbox = findChild<QDialogButtonBox*>("buttonBox");
         if (bbox)
         {
+//            dumpObjectTree();
             for (QAbstractButton* but : bbox->buttons())
-                if (but->text() == "&Choose")
+            {
+                if (but->text() == "&Choose" || but->text() == "&Open")
                 {
                     mChooseButton = but;
                     break;
                 }
+            }
         }
         if (mChooseButton)
             mChooseButton->installEventFilter(this);
+        handleCurrentChanged(defaultDir);
     }
 
-    bool ProjectDirDialog::isSelectable(const QString &path) const
+    bool ProjectDirDialog::isSelectable() const
     {
-        return (FileManager::directoryStatus(path) == FileManager::ProjectDirectory);
+        return mSelectedDirectoryStatus == FileManager::ProjectDirectory;
     }
 
     bool ProjectDirDialog::eventFilter(QObject* obj, QEvent* event)
@@ -43,7 +93,7 @@ namespace hal {
         {
            if (event->type() == QEvent::EnabledChange)
             {
-                if (mSelectable)
+                if (isSelectable())
                 {
                     if (mChooseButton->isEnabled())
                     {
@@ -76,22 +126,30 @@ namespace hal {
 
     void ProjectDirDialog::accept()
     {
-        if (mSelectable)
+        if (isSelectable())
         {
             QDialog::accept();
         }
         else
         {
-            QMessageBox::warning(this,"Warning","Selected directory is not a hal project");
+            QMessageBox::warning(this,"Warning","Selected item is not a HAL project:\n"
+                                 + FileManager::directoryStatusText(mSelectedDirectoryStatus));
             QDialog::reject();
         }
     }
 
     void ProjectDirDialog::handleCurrentChanged(const QString& path)
     {
-        mSelectable = isSelectable(path);
+        QString testPath = QFileInfo(path).isAbsolute()
+                ? path
+                : QDir(directory()).absoluteFilePath(path);
+
+        mSelectedDirectoryStatus = FileManager::directoryStatus(testPath);
+
         if (mChooseButton)
-            mChooseButton->setEnabled(mSelectable);
+            mChooseButton->setEnabled(isSelectable());
+        if (mStatus)
+            mStatus->setMessage(testPath, mSelectedDirectoryStatus);
     }
 
 }
