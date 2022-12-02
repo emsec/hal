@@ -731,6 +731,13 @@ namespace hal
         BooleanFunction simplify() const;
 
         /**
+         * Simplifies the Boolean function using only the local simplification.
+         * 
+         * @returns The simplified Boolean function.
+         */
+        BooleanFunction simplify_local() const;
+
+        /**
          * Substitute a variable name with another one, i.e., renames the variable.
          * The operation is applied to all instances of the variable in the function.
          *

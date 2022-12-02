@@ -278,7 +278,7 @@ namespace hal
                 return ERR_APPEND(build_res.get_error(), "failed to evaluate Boolean function for the model: failed to build function after replacing nodes.");
             }
 
-            return OK(build_res.get().simplify());
+            return OK(build_res.get().simplify_local());
         }
 
         SolverResult::SolverResult(SolverResultType _type, std::optional<Model> _model) : type(_type), model(_model)

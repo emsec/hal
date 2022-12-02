@@ -970,6 +970,13 @@ namespace hal
         return (simplified.is_ok()) ? simplified.get() : this->clone();
     }
 
+    BooleanFunction BooleanFunction::simplify_local() const
+    {
+        auto simplified = Simplification::local_simplification(*this);
+
+        return (simplified.is_ok()) ? simplified.get() : this->clone();
+    }
+
     BooleanFunction BooleanFunction::substitute(const std::string& old_variable_name, const std::string& new_variable_name) const
     {
         auto function = this->clone();
