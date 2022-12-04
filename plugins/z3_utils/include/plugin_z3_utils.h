@@ -77,7 +77,7 @@ namespace hal
          * @param[in] control_mapping - A control mapping that can be applied.
          * @returns A string containing the verilog representation.
          */
-        std::string to_verilog(const z3::expr& e, const std::map<std::string, bool>& control_mapping);
+        std::string to_verilog(const z3::expr& e, const std::map<std::string, bool>& control_mapping={});
         
         /**
          * Extracts all variable names from a z3 expression.

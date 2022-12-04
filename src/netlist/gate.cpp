@@ -1,5 +1,6 @@
 #include "hal_core/netlist/gate.h"
 
+#include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/event_system/event_handler.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
@@ -258,6 +259,81 @@ namespace hal
         }
 
         return res;
+    }
+
+    Result<BooleanFunction> Gate::get_resolved_boolean_function(const GatePin* pin) const
+    {
+        const std::function<Result<BooleanFunction>(const GatePin*, std::unordered_set<std::string>&)> get_resolved_boolean_function_internal = 
+            [this, &get_resolved_boolean_function_internal](const GatePin* output_pin, std::unordered_set<std::string>& on_stack) -> Result<BooleanFunction> 
+        {
+            if (output_pin == nullptr)
+            {
+                return ERR("could not get resolved Boolean function of gate '" + this->get_name() + "' with ID " + std::to_string(this->get_id()) + ": given output pin is null.");
+            }
+            
+            if (on_stack.find(output_pin->get_name()) != on_stack.end())
+            {
+                return ERR("could not get resolved Boolean function of gate '" + this->get_name() + "' with ID " + std::to_string(this->get_id()) + ": boolean functions of gate contain an endless recursion including pin '" + output_pin->get_name() + "'");
+            }
+            on_stack.insert(output_pin->get_name());
+
+            BooleanFunction bf = this->get_boolean_function(output_pin);
+
+            std::map<std::string, BooleanFunction> input_to_bf;
+            std::vector<std::string> input_vars = utils::to_vector(bf.get_variable_names());
+            for (const auto& var : bf.get_variable_names())
+            {
+                const GatePin* pin = this->get_type()->get_pin_by_name(var);
+                if (pin == nullptr)
+                {
+                    return ERR("could not get resolved Boolean function of gate '" + this->get_name() + "' with ID " + std::to_string(this->get_id()) + ": failed to get input pin '" + var + "' by name");
+                }
+
+                const PinDirection pin_dir = pin->get_direction();
+                if (pin_dir == PinDirection::input)
+                {
+                    const Net* const input_net = this->get_fan_in_net(var);
+                    if (input_net == nullptr)
+                    {
+                        // if no net is connected, the input pin name cannot be replaced
+                        return ERR("could not get resolved Boolean function of gate '" + this->get_name() + "' with ID " + std::to_string(this->get_id()) + ": failed to get fan-in net at pin '"
+                                    + pin->get_name() + "'");
+                    }
+
+                    const auto net_dec = BooleanFunctionNetDecorator(*input_net);
+                    input_to_bf.insert({var, net_dec.get_boolean_variable()});
+                }
+                else if ((pin_dir == PinDirection::internal) || (pin_dir == PinDirection::output))
+                {
+                    const auto bf_interal_res = get_resolved_boolean_function_internal(pin, on_stack);
+                    if (bf_interal_res.is_error())
+                    {
+                        return ERR_APPEND(bf_interal_res.get_error(), "could not get resolved Boolean function of gate '" + this->get_name() + "' with ID " + std::to_string(this->get_id())
+                                    + ": failed to get Boolean function at output pin '" + pin->get_name() + "'");
+                    }
+
+                    input_to_bf.insert({pin->get_name(), bf_interal_res.get()});
+                }
+            }
+
+            if (auto substituted = bf.substitute(input_to_bf); substituted.is_error())
+            {
+                return ERR_APPEND(substituted.get_error(),
+                                    "could not get resolved Boolean function of gate '" + this->get_name() + "' with ID " + std::to_string(this->get_id()) + ": failed to substitute variable inputs with other Boolean functions");
+            }
+            else
+            {
+                bf = substituted.get();
+            }
+
+            on_stack.erase(output_pin->get_name());
+
+            return OK(bf);
+        };
+
+        std::unordered_set<std::string> on_stack;
+
+        return get_resolved_boolean_function_internal(pin, on_stack);
     }
 
     BooleanFunction Gate::get_lut_function(const GatePin* pin) const

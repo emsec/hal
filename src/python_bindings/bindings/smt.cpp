@@ -205,13 +205,52 @@ namespace hal
             :type: dict(str,tuple(int,int))
         )");
 
-        py_smt_model.def_static("parse", &SMT::Model::parse, py::arg("model_str"), py::arg("solver"), R"(
+        py_smt_model.def_static(
+            "parse",
+            [](const std::string& model_str, const SMT::SolverType& solver) -> std::optional<SMT::Model> {
+                auto res = SMT::Model::parse(model_str, solver);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("model_str"),
+            py::arg("solver"),
+            R"(
             Parses an SMT-Lib model from a string output by a solver of the given type.
 
             :param str model_str: The SMT-Lib model string.
             :param hal_py.SMT.SolverType solver: The solver that computed the model.
-            :returns: The model on success, a string error message otherwise.
-            :rtype: hal_py.SMT.Model or str
+            :returns: The model on success, None otherwise.
+            :rtype: hal_py.SMT.Model or None
+        )");
+
+        py_smt_model.def(
+            "evaluate",
+            [](const SMT::Model& self, const BooleanFunction& bf) -> std::optional<BooleanFunction> {
+                auto res = self.evaluate(bf);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("bf"),
+            R"(
+            Evaluates the given Boolean function by replacing all variables contained in the model with their corresponding value and simplifying the result.
+
+            :param hal_py.BooleanFunction bf: The Boolean function to evaluate.
+            :returns: The evaluated function on success, None otherwise.
+            :rtype: hal_py.BooleanFunction or None
         )");
 
         py::class_<SMT::SolverResult> py_smt_result(py_smt, "SolverResult", R"(

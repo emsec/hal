@@ -31,6 +31,7 @@
 #include "hal_core/netlist/boolean_function/symbolic_execution.h"
 #include "hal_core/netlist/boolean_function/symbolic_state.h"
 #include "hal_core/netlist/boolean_function/types.h"
+#include "hal_core/netlist/decorators/boolean_function_decorator.h"
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
 #include "hal_core/netlist/gate.h"
@@ -302,6 +303,13 @@ namespace hal
      * @param[in] m - the python module
      */
     void subgraph_netlist_decorator_init(py::module& m);
+
+    /**
+     * Initializes Python bindings for the HAL Boolean function decorator in a python module.
+     *
+     * @param[in] m - the python module
+     */
+    void boolean_function_decorator_init(py::module& m);
 
     /**
      * @}

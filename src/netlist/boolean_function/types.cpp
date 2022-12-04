@@ -209,40 +209,6 @@ namespace hal
             return out;
         }
 
-        Result<BooleanFunction> Model::evaluate(const BooleanFunction& bf)
-        {
-            std::vector<BooleanFunction::Node> new_nodes;
-
-            for (const auto& node : bf.get_nodes())
-            {
-                if (node.is_variable())
-                {
-                    const auto var_name = node.variable;
-                    if (auto it = model.find(var_name); it != model.end())
-                    {
-                        const auto constant = BooleanFunction::Const(std::get<0>(it->second), std::get<1>(it->second));
-                        new_nodes.insert(new_nodes.end(), constant.get_nodes().begin(), constant.get_nodes().end());
-                    }
-                    else
-                    {
-                        new_nodes.push_back(node);
-                    }
-                }
-                else
-                {
-                    new_nodes.push_back(node);
-                }
-            }
-
-            auto build_res = BooleanFunction::build(std::move(new_nodes));
-            if (build_res.is_error())
-            {
-                return ERR_APPEND(build_res.get_error(), "failed to evaluate Boolean function for the model: failed to build function after replacing nodes.");
-            }
-            
-            return OK(build_res.get().simplify());
-        }
-
         Result<Model> Model::parse(const std::string& s, const SolverType& type)
         {
             // TODO:
@@ -279,6 +245,40 @@ namespace hal
                 return OK(Model(ModelParser::parser_context.model));
             }
             return ERR("could not parse SMT-Lib model");
+        }
+
+        Result<BooleanFunction> Model::evaluate(const BooleanFunction& bf) const
+        {
+            std::vector<BooleanFunction::Node> new_nodes;
+
+            for (const auto& node : bf.get_nodes())
+            {
+                if (node.is_variable())
+                {
+                    const auto var_name = node.variable;
+                    if (auto it = model.find(var_name); it != model.end())
+                    {
+                        const auto constant = BooleanFunction::Const(std::get<0>(it->second), std::get<1>(it->second));
+                        new_nodes.insert(new_nodes.end(), constant.get_nodes().begin(), constant.get_nodes().end());
+                    }
+                    else
+                    {
+                        new_nodes.push_back(node);
+                    }
+                }
+                else
+                {
+                    new_nodes.push_back(node);
+                }
+            }
+
+            auto build_res = BooleanFunction::build(std::move(new_nodes));
+            if (build_res.is_error())
+            {
+                return ERR_APPEND(build_res.get_error(), "failed to evaluate Boolean function for the model: failed to build function after replacing nodes.");
+            }
+
+            return OK(build_res.get().simplify_local());
         }
 
         SolverResult::SolverResult(SolverResultType _type, std::optional<Model> _model) : type(_type), model(_model)

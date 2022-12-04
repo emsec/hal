@@ -46,6 +46,7 @@
 #include <QtConcurrent>
 #include <QRegExp>
 #include <QStringList>
+#include <QDir>
 
 namespace hal
 {
@@ -611,7 +612,7 @@ namespace hal
             return;
         }
 
-        ProjectDirDialog pdd("Open netlist", this);
+        ProjectDirDialog pdd("Open HAL project", QDir::currentPath(), this);
         if (pdd.exec() != QDialog::Accepted) return;
         QStringList projects = pdd.selectedFiles();
         for (int inx = 0; inx < projects.size(); ++inx)

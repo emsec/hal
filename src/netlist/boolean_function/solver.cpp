@@ -55,7 +55,7 @@ namespace hal
                                              // read SMT2LIB formula from stdin
                                              "-in",
                                              // kill execution after a given time
-                                             "-t:" + std::to_string(config.timeout_in_seconds)},
+                                             "-T:" + std::to_string(config.timeout_in_seconds)},
                                             subprocess::output{subprocess::PIPE},
                                             subprocess::input{subprocess::PIPE});
 
@@ -111,6 +111,7 @@ namespace hal
                 auto boolector = subprocess::Popen(
                     {
                         binary_path.get(),
+                        // NOTE the boolector binary provided as package takes different parameters. The ones below do not seem to work.
                         // kill execution after a given time
                         "--time=" + std::to_string(config.timeout_in_seconds),
                         // generate SMT-LIB v2 compatible output
@@ -335,7 +336,7 @@ namespace hal
             {
                 if (config.generate_model)
                 {
-                    if (auto res = Model::parse(model_str, config.solver).map<SolverResult>([](auto model) -> Result<SolverResult> { return OK(SolverResult::Sat(model)); }); res.is_error())
+                    if (auto res = Model::parse(model_str, config.solver).map<SolverResult>([](const auto& model) -> Result<SolverResult> { return OK(SolverResult::Sat(model)); }); res.is_error())
                     {
                         return ERR_APPEND(res.get_error(), "could not parse SMT result from string: unable to generate model");
                     }

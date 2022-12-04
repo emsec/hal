@@ -17,73 +17,6 @@ namespace hal
     {
         namespace 
         {
-            Result<BooleanFunction> get_function_of_gate(const Gate* const gate, const GatePin* output_pin, std::map<std::pair<u32, const GatePin*>, BooleanFunction>& cache)
-            {
-                if (auto it = cache.find({gate->get_id(), output_pin}); it != cache.end())
-                {
-                    return OK(it->second);
-                }
-
-                BooleanFunction bf = gate->get_boolean_function(output_pin);
-
-                std::vector<std::string> input_vars = utils::to_vector(bf.get_variable_names());
-                while (!input_vars.empty())
-                {
-                    const std::string var = input_vars.back();
-                    input_vars.pop_back();
-
-                    const GatePin* pin = gate->get_type()->get_pin_by_name(var);
-                    if (pin == nullptr)
-                    {
-                        return ERR("could not get Boolean function of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": failed to get input pin '" + var
-                                    + "' by name");
-                    }
-
-                    const PinDirection pin_dir = pin->get_direction();
-                    if (pin_dir == PinDirection::input)
-                    {
-                        const Net* const input_net = gate->get_fan_in_net(var);
-                        if (input_net == nullptr)
-                        {
-                            // if no net is connected, the input pin name cannot be replaced
-                            return ERR("could not get Boolean function of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": failed to get fan-in net at pin '"
-                                        + pin->get_name() + "'");
-                        }
-
-                        const auto net_dec = BooleanFunctionNetDecorator(*input_net);
-                        bf                 = bf.substitute(var, net_dec.get_boolean_variable_name());
-                    }
-                    else if ((pin_dir == PinDirection::internal) || (pin_dir == PinDirection::output))
-                    {
-                        BooleanFunction bf_interal = gate->get_boolean_function(var);
-                        if (bf_interal.is_empty())
-                        {
-                            return ERR("could not get Boolean function of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id())
-                                        + ": failed to get Boolean function at output pin '" + pin->get_name() + "'");
-                        }
-
-                        const std::vector<std::string> internal_input_vars = utils::to_vector(bf_interal.get_variable_names());
-                        input_vars.insert(input_vars.end(), internal_input_vars.begin(), internal_input_vars.end());
-
-                        if (auto substituted = bf.substitute(var, bf_interal); substituted.is_error())
-                        {
-                            return ERR_APPEND(substituted.get_error(),
-                                                "could not get Boolean function of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": failed to substitute variable '"
-                                                    + var + "' with another Boolean function");
-                        }
-                        else
-                        {
-                            bf = substituted.get();
-                        }
-                    }
-                }
-
-                bf = bf.simplify();
-
-                cache.insert({{gate->get_id(), output_pin}, bf});
-                return OK(bf);
-            }
-
             Result<z3::expr> get_function_of_net(const std::vector<Gate*>& subgraph_gates, const Net* net, z3::context& ctx, std::map<u32, z3::expr>& net_cache, std::map<std::pair<u32, const GatePin*>, BooleanFunction>& gate_cache)
             {
                 if (const auto it = net_cache.find(net->get_id()); it != net_cache.end())
@@ -124,12 +57,22 @@ namespace hal
                     return OK(ret);
                 }
 
-                const auto& bf_res = get_function_of_gate(src, src_ep->get_pin(), gate_cache);
-                if (bf_res.is_error())
+                BooleanFunction bf;
+                if (const auto it = gate_cache.find({src->get_id(), src_ep->get_pin()}); it == gate_cache.end())
                 {
-                    return ERR_APPEND(bf_res.get_error(), "cannot get Boolean z3 function of net " + net->get_name() + " with ID " + std::to_string(net->get_id()) + ": failed to get function of gate.");
+                    const auto bf_res = src->get_resolved_boolean_function(src_ep->get_pin());
+                    if (bf_res.is_error())
+                    {
+                        return ERR_APPEND(bf_res.get_error(), "cannot get Boolean z3 function of net " + net->get_name() + " with ID " + std::to_string(net->get_id()) + ": failed to get function of gate.");
+                    }
+                    bf = bf_res.get();
+
+                    gate_cache.insert({{src->get_id(), src_ep->get_pin()}, bf});
                 }
-                const BooleanFunction bf = bf_res.get();
+                else
+                {
+                    bf = it->second;
+                }
 
                 std::map<std::string, z3::expr> input_to_expr;
 
