@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; hal_py v4.0.1-83-g232793069 documentation</title>
+  <title>Index &mdash; hal_py v4.0.1-84-g8fe09827c documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                v4.0.1-83-g232793069
+                v4.0.1-84-g8fe09827c
               </div>
             
           
@@ -391,7 +391,11 @@
 </li>
       <li><a href="net.html#hal_py.Net.add_source">add_source() (hal_py.Net method)</a>
 </li>
+      <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.WaveDataGroup.add_waveform">add_waveform() (netlist_simulator_controller.WaveDataGroup method)</a>
+</li>
       <li><a href="gate_type_component.html#hal_py.RAMPortComponent.address_group">address_group (hal_py.RAMPortComponent attribute)</a>
+</li>
+      <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.WaveEvent.affected_net">affected_net (netlist_simulator_controller.WaveEvent attribute)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.NodeType.And">And (hal_py.BooleanFunction.NodeType attribute)</a>
 </li>
@@ -399,10 +403,10 @@
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.Node.arity">arity (hal_py.BooleanFunction.Node attribute)</a>
 </li>
-      <li><a href="module_pin_group.html#hal_py.ModulePinGroup.ascending">ascending (hal_py.ModulePinGroup attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_pin_group.html#hal_py.ModulePinGroup.ascending">ascending (hal_py.ModulePinGroup attribute)</a>
+</li>
       <li><a href="grouping.html#hal_py.Grouping.assign_gate">assign_gate() (hal_py.Grouping method)</a>
 
       <ul>
@@ -525,10 +529,10 @@
       </ul></li>
       <li><a href="grouping.html#hal_py.Grouping.contains_gate_by_id">contains_gate_by_id() (hal_py.Grouping method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gate_library.html#hal_py.GateLibrary.contains_gate_type">contains_gate_type() (hal_py.GateLibrary method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gate_library.html#hal_py.GateLibrary.contains_gate_type_by_name">contains_gate_type_by_name() (hal_py.GateLibrary method)</a>
 </li>
       <li><a href="grouping.html#hal_py.Grouping.contains_module">contains_module() (hal_py.Grouping method)</a>
@@ -576,6 +580,8 @@
 </li>
       </ul></li>
       <li><a href="project_manager.html#hal_py.ProjectManager.create_project_directory">create_project_directory() (hal_py.ProjectManager method)</a>
+</li>
+      <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorControllerPlugin.create_simulator_controller">create_simulator_controller() (netlist_simulator_controller.NetlistSimulatorControllerPlugin method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -892,7 +898,11 @@
 </li>
       </ul></li>
       <li><a href="netlist_simulator.html#netlist_simulator.Simulation.get_events">get_events() (netlist_simulator.Simulation method)</a>
+
+      <ul>
+        <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.WaveData.get_events">(netlist_simulator_controller.WaveData method)</a>
 </li>
+      </ul></li>
       <li><a href="gate.html#hal_py.Gate.get_fan_in_endpoint">get_fan_in_endpoint() (hal_py.Gate method)</a>
 </li>
       <li><a href="gate.html#hal_py.Gate.get_fan_in_endpoints">get_fan_in_endpoints() (hal_py.Gate method)</a>
@@ -1014,6 +1024,8 @@
 </li>
         <li><a href="netlist.html#hal_py.Netlist.get_id">(hal_py.Netlist method)</a>
 </li>
+        <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.WaveData.get_id">(netlist_simulator_controller.WaveData method)</a>
+</li>
       </ul></li>
       <li><a href="gate_library.html#hal_py.GateLibrary.get_includes">get_includes() (hal_py.GateLibrary method)</a>
 </li>
@@ -1057,8 +1069,6 @@
 </li>
       <li><a href="gate.html#hal_py.Gate.get_module">get_module() (hal_py.Gate method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="netlist.html#hal_py.Netlist.get_module_by_id">get_module_by_id() (hal_py.Netlist method)</a>
 </li>
       <li><a href="grouping.html#hal_py.Grouping.get_module_ids">get_module_ids() (hal_py.Grouping method)</a>
@@ -1069,6 +1079,8 @@
         <li><a href="netlist.html#hal_py.Netlist.get_modules">(hal_py.Netlist method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="boolean_influence.html#boolean_influence.BooleanInfluencePlugin.get_name">get_name() (boolean_influence.BooleanInfluencePlugin method)</a>
 
       <ul>
@@ -1097,6 +1109,10 @@
         <li><a href="net.html#hal_py.Net.get_name">(hal_py.Net method)</a>
 </li>
         <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulatorPlugin.get_name">(netlist_simulator.NetlistSimulatorPlugin method)</a>
+</li>
+        <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorControllerPlugin.get_name">(netlist_simulator_controller.NetlistSimulatorControllerPlugin method)</a>
+</li>
+        <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.WaveData.get_name">(netlist_simulator_controller.WaveData method)</a>
 </li>
         <li><a href="solve_fsm.html#solve_fsm.SolveFsmPlugin.get_name">(solve_fsm.SolveFsmPlugin method)</a>
 </li>
@@ -1267,6 +1283,8 @@
 </li>
       <li><a href="module_pin_group.html#hal_py.ModulePinGroup.get_start_index">get_start_index() (hal_py.ModulePinGroup method)</a>
 </li>
+      <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.SimulationEngine.get_state">get_state() (netlist_simulator_controller.SimulationEngine method)</a>
+</li>
       <li><a href="gate_type_component.html#hal_py.StateComponent.get_state_identifier">get_state_identifier() (hal_py.StateComponent method)</a>
 </li>
       <li><a href="graph_algorithm.html#graph_algorithm.GraphAlgorithmPlugin.get_strongly_connected_components">get_strongly_connected_components() (graph_algorithm.GraphAlgorithmPlugin method)</a>
@@ -1288,6 +1306,8 @@
       <li><a href="boolean_function.html#hal_py.BooleanFunction.get_top_level_node">get_top_level_node() (hal_py.BooleanFunction method)</a>
 </li>
       <li><a href="netlist.html#hal_py.Netlist.get_top_module">get_top_module() (hal_py.Netlist method)</a>
+</li>
+      <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.WaveData.get_triggered_events">get_triggered_events() (netlist_simulator_controller.WaveData method)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.get_truth_table_as_string">get_truth_table_as_string() (hal_py.BooleanFunction method)</a>
 </li>
@@ -1333,6 +1353,8 @@
 </li>
       <li><a href="core_utils.html#hal_py.CoreUtils.get_user_share_directory">get_user_share_directory() (in module hal_py.CoreUtils)</a>
 </li>
+      <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.WaveData.get_value_at">get_value_at() (netlist_simulator_controller.WaveData method)</a>
+</li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.get_variable_name">get_variable_name() (hal_py.BooleanFunction method)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.get_variable_names">get_variable_names() (hal_py.BooleanFunction method)</a>
@@ -1352,11 +1374,17 @@
 </li>
         <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulatorPlugin.get_version">(netlist_simulator.NetlistSimulatorPlugin method)</a>
 </li>
+        <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorControllerPlugin.get_version">(netlist_simulator_controller.NetlistSimulatorControllerPlugin method)</a>
+</li>
         <li><a href="solve_fsm.html#solve_fsm.SolveFsmPlugin.get_version">(solve_fsm.SolveFsmPlugin method)</a>
 </li>
         <li><a href="verilator.html#verilator.VerilatorSimulatorPlugin.get_version">(verilator.VerilatorSimulatorPlugin method)</a>
 </li>
       </ul></li>
+      <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.WaveDataGroup.get_waveforms">get_waveforms() (netlist_simulator_controller.WaveDataGroup method)</a>
+</li>
+      <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.SimulationEngine.get_working_directory">get_working_directory() (netlist_simulator_controller.SimulationEngine method)</a>
+</li>
       <li><a href="gui.html#hal_gui.GuiApi.getSelectedGateIds">getSelectedGateIds() (hal_gui.GuiApi method)</a>
 </li>
       <li><a href="gui.html#hal_gui.GuiApi.getSelectedGates">getSelectedGates() (hal_gui.GuiApi method)</a>
@@ -1483,6 +1511,8 @@
         <li><a href="net.html#hal_py.Net.id">(hal_py.Net attribute)</a>
 </li>
         <li><a href="netlist.html#hal_py.Netlist.id">(hal_py.Netlist attribute)</a>
+</li>
+        <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.WaveEvent.id">(netlist_simulator_controller.WaveEvent attribute)</a>
 </li>
       </ul></li>
       <li><a href="gate_library.html#hal_py.GateLibrary.includes">includes (hal_py.GateLibrary attribute)</a>
@@ -1816,7 +1846,11 @@
 </li>
         <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulatorPlugin.name">(netlist_simulator.NetlistSimulatorPlugin attribute)</a>
 </li>
+        <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorControllerPlugin.name">(netlist_simulator_controller.NetlistSimulatorControllerPlugin attribute)</a>
+</li>
       </ul></li>
+      <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.SimulationEngine.name">name() (netlist_simulator_controller.SimulationEngine method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gate_type_component.html#hal_py.StateComponent.neg_state_identifier">neg_state_identifier (hal_py.StateComponent attribute)</a>
@@ -1845,6 +1879,8 @@
       </ul></li>
       <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator">NetlistSimulator (class in netlist_simulator)</a>
 </li>
+      <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorControllerPlugin">NetlistSimulatorControllerPlugin (class in netlist_simulator_controller)</a>
+</li>
       <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulatorPlugin">NetlistSimulatorPlugin (class in netlist_simulator)</a>
 </li>
       <li><a href="grouping.html#hal_py.Grouping.nets">nets (hal_py.Grouping attribute)</a>
@@ -1855,6 +1891,8 @@
         <li><a href="netlist.html#hal_py.Netlist.nets">(hal_py.Netlist attribute)</a>
 </li>
       </ul></li>
+      <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.WaveEvent.new_value">new_value (netlist_simulator_controller.WaveEvent attribute)</a>
+</li>
       <li><a href="gate_type_component.html#hal_py.FFComponent.next_state_function">next_state_function (hal_py.FFComponent attribute)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.nodes">nodes() (hal_py.BooleanFunction method)</a>
@@ -1993,10 +2031,10 @@
 </li>
       <li><a href="grouping.html#hal_py.Grouping.remove_module">remove_module() (hal_py.Grouping method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="grouping.html#hal_py.Grouping.remove_module_by_id">remove_module_by_id() (hal_py.Grouping method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="grouping.html#hal_py.Grouping.remove_net">remove_net() (hal_py.Grouping method)</a>
 </li>
       <li><a href="grouping.html#hal_py.Grouping.remove_net_by_id">remove_net_by_id() (hal_py.Grouping method)</a>
@@ -2009,9 +2047,13 @@
 </li>
       <li><a href="netlist_utils.html#hal_py.NetlistUtils.remove_unused_lut_endpoints">remove_unused_lut_endpoints() (in module hal_py.NetlistUtils)</a>
 </li>
+      <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.WaveDataGroup.remove_waveform">remove_waveform() (netlist_simulator_controller.WaveDataGroup method)</a>
+</li>
       <li><a href="netlist_utils.html#hal_py.NetlistUtils.replace_gate">replace_gate() (in module hal_py.NetlistUtils)</a>
 </li>
       <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.reset">reset() (netlist_simulator.NetlistSimulator method)</a>
+</li>
+      <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorControllerPlugin.restore_simulator_controller">restore_simulator_controller() (netlist_simulator_controller.NetlistSimulatorControllerPlugin method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -2095,6 +2137,10 @@
         <li><a href="gate_type_component.html#hal_py.RAMPortComponent.set_enable_function">(hal_py.RAMPortComponent method)</a>
 </li>
       </ul></li>
+      <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.SimulationEngine.set_engine_property">set_engine_property() (netlist_simulator_controller.SimulationEngine method)</a>
+</li>
+      <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.WaveDataTrigger.set_filter_wave">set_filter_wave() (netlist_simulator_controller.WaveDataTrigger method)</a>
+</li>
       <li><a href="netlist.html#hal_py.Netlist.set_free_gate_ids">set_free_gate_ids() (hal_py.Netlist method)</a>
 </li>
       <li><a href="netlist.html#hal_py.Netlist.set_free_grouping_ids">set_free_grouping_ids() (hal_py.Netlist method)</a>
@@ -2197,6 +2243,10 @@
 </li>
       <li><a href="netlist_simulator.html#netlist_simulator.Simulation">Simulation (class in netlist_simulator)</a>
 </li>
+      <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.SimulationEngine">SimulationEngine (class in netlist_simulator_controller)</a>
+</li>
+      <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorControllerPlugin.simulator_controller_by_id">simulator_controller_by_id() (netlist_simulator_controller.NetlistSimulatorControllerPlugin method)</a>
+</li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.size">size (hal_py.BooleanFunction attribute)</a>
 
       <ul>
@@ -2275,6 +2325,8 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.WaveEvent.time">time (netlist_simulator_controller.WaveEvent attribute)</a>
+</li>
       <li><a href="smt.html#hal_py.SMT.QueryConfig.timeout_in_seconds">timeout_in_seconds (hal_py.SMT.QueryConfig attribute)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.to_string">to_string() (hal_py.BooleanFunction static method)</a>
@@ -2289,6 +2341,8 @@
         <li><a href="netlist.html#hal_py.Netlist.top_module">(hal_py.Netlist attribute)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.Node.type">type (hal_py.BooleanFunction.Node attribute)</a>
 
       <ul>
@@ -2410,6 +2464,8 @@
 </li>
         <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulatorPlugin.version">(netlist_simulator.NetlistSimulatorPlugin attribute)</a>
 </li>
+        <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorControllerPlugin.version">(netlist_simulator_controller.NetlistSimulatorControllerPlugin attribute)</a>
+</li>
       </ul></li>
   </ul></td>
 </tr></table>
@@ -2417,18 +2473,28 @@
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.WaveData">WaveData (class in netlist_simulator_controller)</a>
+</li>
+      <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.WaveDataBoolean">WaveDataBoolean (class in netlist_simulator_controller)</a>
+</li>
+      <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.WaveDataGroup">WaveDataGroup (class in netlist_simulator_controller)</a>
+</li>
+      <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.WaveDataTrigger">WaveDataTrigger (class in netlist_simulator_controller)</a>
+</li>
+      <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.WaveEvent">WaveEvent (class in netlist_simulator_controller)</a>
+</li>
       <li><a href="smt.html#hal_py.SMT.Solver.with_constraint">with_constraint() (hal_py.SMT.Solver method)</a>
 </li>
       <li><a href="smt.html#hal_py.SMT.Solver.with_constraints">with_constraints() (hal_py.SMT.Solver method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="smt.html#hal_py.SMT.QueryConfig.with_local_solver">with_local_solver() (hal_py.SMT.QueryConfig method)</a>
 </li>
       <li><a href="smt.html#hal_py.SMT.QueryConfig.with_model_generation">with_model_generation() (hal_py.SMT.QueryConfig method)</a>
 </li>
       <li><a href="smt.html#hal_py.SMT.QueryConfig.with_remote_solver">with_remote_solver() (hal_py.SMT.QueryConfig method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="smt.html#hal_py.SMT.QueryConfig.with_solver">with_solver() (hal_py.SMT.QueryConfig method)</a>
 </li>
       <li><a href="smt.html#hal_py.SMT.QueryConfig.with_timeout">with_timeout() (hal_py.SMT.QueryConfig method)</a>
