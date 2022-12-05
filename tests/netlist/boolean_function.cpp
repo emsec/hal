@@ -191,7 +191,7 @@ namespace hal {
             {"(a & bb) | (ccc & dddd)", 
                 (BooleanFunction::Var("a") & BooleanFunction::Var("bb")) | (BooleanFunction::Var("ccc") & BooleanFunction::Var("dddd"))
             },
-            {"A(1) ^ B(1)", 
+            {"A(1) ^ B(1) ", 
                 BooleanFunction::Var("A(1)") ^ BooleanFunction::Var("B(1)")
             },
             {"!(a ^ a) ^ !(!(b ^ b))", 
@@ -208,6 +208,16 @@ namespace hal {
                 ((BooleanFunction::Const(1, 1) & BooleanFunction::Var("O[0]")) & BooleanFunction::Var("c3"))
                 | (BooleanFunction::Var("RDATA[0]") & (~ BooleanFunction::Var("c3")))
             },
+            {"s4r17_i__[3]__",
+                (BooleanFunction::Var("s4r17_i__[3]__"))
+            },
+            {"(! s4r17_i__[3]__)",
+                (~BooleanFunction::Var("s4r17_i__[3]__"))
+            },
+            // {"((((0b0 | ((((0b1 & (! s2r_RNI7LA61(0))) & (! s4r17_i__[3]__)) & (! s2d2r(0)__[3]__)) & s2r(16)__[3]__)) | ((((0b1 & s2r_RNI7LA61(0)) & (! s4r17_i__[3]__)) & (! s2d2r(0)__[3]__)) & s2r(16)__[3]__)) | ((((0b1 & (! s2r_RNI7LA61(0))) & s4r17_i__[3]__) & (! s2d2r(0)__[3]__)) & s2r(16)__[3]__)) | ((((0b1 & (! s2r_RNI7LA61(0))) & (! s4r17_i__[3]__)) & s2d2r(0)__[3]__) & s2r(16)__[3]__))",
+            //     (~BooleanFunction::Var("s4r17_i__[3]__"))
+            // },
+            
             ////////////////////////////////////////////////////////////////////
             // LIBERTY PARSER
             ////////////////////////////////////////////////////////////////////
@@ -235,6 +245,7 @@ namespace hal {
         };
 
         for (const auto& [s, expected] : data) {
+            std::cout << s << std::endl;
             auto function = BooleanFunction::from_string(s);
             ASSERT_TRUE(function.is_ok());
             ASSERT_EQ(function.get(), expected);

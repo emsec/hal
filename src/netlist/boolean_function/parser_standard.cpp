@@ -14,6 +14,7 @@ namespace hal
             // stores the list of tokens that are generated and filled during the
             // parsing process adn the different semantic actions
             std::vector<Token> tokens;
+            std::stringstream name;
 
             ////////////////////////////////////////////////////////////////////////
             // (1) Semantic actions to generate tokens
@@ -27,29 +28,33 @@ namespace hal
             const auto BracketOpenAction  = [&tokens](auto& /* ctx */) { tokens.emplace_back(BooleanFunctionParser::Token::BracketOpen()); };
             const auto BracketCloseAction = [&tokens](auto& /* ctx */) { tokens.emplace_back(BooleanFunctionParser::Token::BracketClose()); };
 
-            const auto VariableAction = [&tokens](auto& ctx) {
+            const auto VariableStartAction = [&tokens, &name](auto& ctx) {
                 // # Developer Note
                 // We combine the first matched character with the remaining 
                 // string and do not remove any preceding '/' character.
-                std::stringstream name;
-                name << std::string(1, boost::fusion::at_c<0>(_attr(ctx)));
-                name << boost::fusion::at_c<1>(_attr(ctx));
+                
+                name.str("");
 
-                tokens.emplace_back(BooleanFunctionParser::Token::Variable(name.str(), 1));
+                name << boost::fusion::at_c<1>(_attr(ctx));
+                name << boost::fusion::at_c<2>(_attr(ctx));
+
+                std::cout << "Start: " <<  name.str() << std::endl;
             };
-            const auto VariableIndexAction = [&tokens](auto& ctx) {
-                // # Developer Note 
-                // Since the first character is an optional '\' character and 
-                // generally escaped a.k.a. removed within HAL, we also do not 
-                // touch the part and only assemble the remaining string.
-                std::stringstream name;
-                name << std::string(1, boost::fusion::at_c<1>(_attr(ctx)));
+            const auto VariableBracketAction = [&tokens, &name](auto& ctx) {
+                name << boost::fusion::at_c<0>(_attr(ctx));
+                name << boost::fusion::at_c<1>(_attr(ctx));
                 name << boost::fusion::at_c<2>(_attr(ctx));
                 name << boost::fusion::at_c<3>(_attr(ctx));
-                name << boost::fusion::at_c<4>(_attr(ctx));
-                name << boost::fusion::at_c<5>(_attr(ctx));
-                tokens.emplace_back(BooleanFunctionParser::Token::Variable(name.str(), 1));
+
+                std::cout << "Bracket: " << name.str() << std::endl;
             };
+            const auto VariableAction = [&tokens, &name](auto& /*ctx*/) {
+                std::cout << "Push:" << name.str() << std::endl;
+
+                tokens.emplace_back(BooleanFunctionParser::Token::Variable(name.str(), 1));
+                name.str("");
+            };
+            
             const auto ConstantAction = [&tokens](auto& ctx) {
                 const auto value = (_attr(ctx) == '0') ? BooleanFunction::Value::ZERO : BooleanFunction::Value::ONE;
                 tokens.emplace_back(BooleanFunctionParser::Token::Constant({value}));
@@ -69,10 +74,13 @@ namespace hal
             const auto BracketOpenRule  = x3::lit("(")[BracketOpenAction];
             const auto BracketCloseRule = x3::lit(")")[BracketCloseAction];
 
-            const auto VariableRule      = x3::lexeme[(x3::char_("a-zA-Z") >> *x3::char_("a-zA-Z0-9_"))][VariableAction];
-            const auto VariableIndexRoundBracketRule = x3::lexeme[(-(x3::char_("\\")) >> x3::char_("a-zA-Z") >> *x3::char_("a-zA-Z0-9_") >> x3::char_("(") >> x3::int_ >> x3::char_(")"))] [VariableIndexAction];
-            const auto VariableIndexSquareBracketRule = x3::lexeme[(-(x3::char_("\\")) >> x3::char_("a-zA-Z") >> *x3::char_("a-zA-Z0-9_") >> x3::char_("[") >> x3::int_ >> x3::char_("]"))] [VariableIndexAction];
-            const auto VariableIndexRule = VariableIndexRoundBracketRule | VariableIndexSquareBracketRule;
+            const auto VariableStartRule = x3::lexeme[(-(x3::char_("\\")) >> x3::char_("a-zA-Z")) >> *x3::char_("a-zA-Z")];
+            const auto VariableRoundBracketRule = x3::lexeme[(x3::char_("(") >> x3::int_ >> x3::char_(")") >> *x3::char_("a-zA-Z0-9_"))] ;
+            const auto VariableSquareBracketRule = x3::lexeme[(x3::char_("[") >> x3::int_ >> x3::char_("]") >> *x3::char_("a-zA-Z0-9_"))] [VariableBracketAction];
+            
+            //const auto VariableRule3 = ;
+            //const auto VariableRule2 = VariableRule2 ;
+            const auto VariableRule = (VariableStartRule >> *(VariableRoundBracketRule[VariableBracketAction] | VariableSquareBracketRule[VariableStartAction]))[VariableAction];
 
             const auto ConstantRule       = x3::lexeme[x3::char_("0-1")][ConstantAction];
             const auto ConstantPrefixRule = x3::lit("0b") >> x3::lexeme[x3::char_("0-1")][ConstantAction];
@@ -85,7 +93,7 @@ namespace hal
                 ////////////////////////////////////////////////////////////////////
                 // (3) Parsing Expression Grammar
                 ////////////////////////////////////////////////////////////////////
-                +(AndRule | NotRule | OrRule | XorRule | VariableIndexRule | VariableRule | ConstantSuffixRule | ConstantPrefixRule | ConstantRule | BracketOpenRule | BracketCloseRule),
+                +(AndRule | NotRule | OrRule | XorRule  | VariableRule | ConstantSuffixRule | ConstantPrefixRule | ConstantRule | BracketOpenRule | BracketCloseRule),
                 x3::space    // skips any whitespace in between boolean function
             );
 
