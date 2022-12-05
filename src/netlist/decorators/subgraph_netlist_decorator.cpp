@@ -321,7 +321,8 @@ namespace hal
                 {
                     return ERR_APPEND(bf_res.get_error(), "could not get subgraph function of net " + n->get_name() + " with ID " + std::to_string(n->get_id()) + ": failed to get function of gate.");
                 }
-                gate_func = bf_res.get().simplify();
+                // gate_func = bf_res.get().simplify();
+                gate_func = bf_res.get().simplify_local();
 
                 gate_cache.insert({{src_gate->get_id(), src_ep->get_pin()}, gate_func});
             }

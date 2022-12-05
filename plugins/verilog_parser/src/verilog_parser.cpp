@@ -1338,6 +1338,7 @@ namespace hal
             else
             {
                 m_netlist->delete_net(m_zero_net);
+                m_zero_net = nullptr;
             }
         }
 
@@ -1363,6 +1364,7 @@ namespace hal
             else
             {
                 m_netlist->delete_net(m_one_net);
+                m_one_net = nullptr;
             }
         }
 
@@ -1398,23 +1400,29 @@ namespace hal
             std::unordered_set<Net*> input_nets  = module->get_input_nets();
             std::unordered_set<Net*> output_nets = module->get_input_nets();
 
-            if (!module->get_pin_by_net(m_one_net) && (input_nets.find(m_one_net) != input_nets.end() || output_nets.find(m_one_net) != input_nets.end()))
+            if (m_one_net)
             {
-                if (auto res = module->create_pin("'1'", m_one_net); res.is_error())
+                if (!module->get_pin_by_net(m_one_net) && (input_nets.find(m_one_net) != input_nets.end() || output_nets.find(m_one_net) != input_nets.end()))
                 {
-                    return ERR_APPEND(res.get_error(),
-                                      "could not construct netlist: failed to create pin '1' at net '" + m_one_net->get_name() + "' with ID " + std::to_string(m_one_net->get_id()) + "within module '"
-                                          + module->get_name() + "' with ID " + std::to_string(module->get_id()));
+                    if (auto res = module->create_pin("'1'", m_one_net); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(),
+                                          "could not construct netlist: failed to create pin '1' at net '" + m_one_net->get_name() + "' with ID " + std::to_string(m_one_net->get_id()) + "within module '"
+                                              + module->get_name() + "' with ID " + std::to_string(module->get_id()));
+                    }
                 }
             }
 
-            if (!module->get_pin_by_net(m_zero_net) && (input_nets.find(m_zero_net) != input_nets.end() || output_nets.find(m_zero_net) != input_nets.end()))
+            if (m_zero_net)
             {
-                if (auto res = module->create_pin("'0'", m_zero_net); res.is_error())
+                if (!module->get_pin_by_net(m_zero_net) && (input_nets.find(m_zero_net) != input_nets.end() || output_nets.find(m_zero_net) != input_nets.end()))
                 {
-                    return ERR_APPEND(res.get_error(),
-                                      "could not construct netlist: failed to create pin '0' at net '" + m_zero_net->get_name() + "' with ID " + std::to_string(m_zero_net->get_id())
-                                          + "within module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()));
+                    if (auto res = module->create_pin("'0'", m_zero_net); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(),
+                                          "could not construct netlist: failed to create pin '0' at net '" + m_zero_net->get_name() + "' with ID " + std::to_string(m_zero_net->get_id())
+                                              + "within module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()));
+                    }
                 }
             }
         }

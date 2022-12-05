@@ -29,6 +29,7 @@ if(PL_NETLIST_SIMULATOR_CONTROLLER OR PL_SIMULATOR OR BUILD_ALL_PLUGINS)
                    #PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/graph_algorithm.rst
                    HEADER ${NETLIST_SIMULATOR_CONTROLLER_INC}
                    SOURCES ${NETLIST_SIMULATOR_CONTROLLER_SRC} ${NETLIST_SIMULATOR_CONTROLLER_PYTHON_SRC} ${MOC_HDR} ${MOC_QRC}
+                   PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/netlist_simulator_controller.rst
                    LINK_LIBRARIES PUBLIC Qt5::Core)
 
     add_subdirectory(test)
