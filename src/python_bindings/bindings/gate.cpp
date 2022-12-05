@@ -200,7 +200,9 @@ namespace hal
             :rtype: hal_py.BooleanFunction
         )");
 
-        py_gate.def("get_resolved_boolean_function", [](const Gate& self, const GatePin* pin) -> std::optional<BooleanFunction> {
+        py_gate.def(
+            "get_resolved_boolean_function",
+            [](const Gate& self, const GatePin* pin) -> std::optional<BooleanFunction> {
                 auto res = self.get_resolved_boolean_function(pin);
                 if (res.is_ok())
                 {
@@ -211,11 +213,12 @@ namespace hal
                     log_error("python_context", "{}", res.get_error().get());
                     return std::nullopt;
                 }
-            }, py::arg("pin") = nullptr, R"(
-            Get the resolved Boolean function corresponding to the given pin.
-            Resolved meaning, that the function is only depending on input nets and no internal or output pins.
+            },
+            py::arg("pin") = nullptr,
+            R"(
+            Get the resolved Boolean function corresponding to the given output pin, i.e., a Boolean function that is only dependent on input nets and no internal or output pins.
 
-            :param hal_py.GatePin pin: The pin.
+            :param hal_py.GatePin pin: The output pin.
             :returns: The Boolean function on success, an error otherwise.
             :rtype: hal_py.BooleanFunction
         )");
