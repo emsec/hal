@@ -1,5 +1,5 @@
 Netlist Simulator Controller
-==========================
+==============================
 
 .. autoclass:: netlist_simulator_controller.NetlistSimulatorControllerPlugin
    :members:
