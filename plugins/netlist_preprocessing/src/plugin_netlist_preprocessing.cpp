@@ -62,16 +62,15 @@ namespace hal
                         {
                             log_warning(
                                 "netlist_preprocessing", "failed to remove unused input from LUT gate '{}' with ID {} from netlist with ID {}.", gate->get_name(), gate->get_id(), nl->get_id());
+                            continue;
                         }
-                        else if (!gnd_net->add_destination(gate, pin))
+                        if (!gnd_net->add_destination(gate, pin))
                         {
                             log_warning(
                                 "netlist_preprocessing", "failed to reconnect unused input of LUT gate '{}' with ID {} to GND in netlist with ID {}.", gate->get_name(), gate->get_id(), nl->get_id());
+                            continue;
                         }
-                        else
-                        {
-                            num_eps++;
-                        }
+                        num_eps++;
                     }
                 }
             }
@@ -82,7 +81,288 @@ namespace hal
 
     Result<u32> NetlistPreprocessingPlugin::remove_buffers(Netlist* nl)
     {
-        return ERR("not implemented");
+        u32 num_gates = 0;
+
+        for (const auto& gate : nl->get_gates())
+        {
+            std::vector<Endpoint*> fan_out = gate->get_fan_out_endpoints();
+
+            GateType* gt = gate->get_type();
+
+            // continue if of invalid base type
+            if (!gt->has_property(GateTypeProperty::combinational) || gt->has_property(GateTypeProperty::power) || gt->has_property(GateTypeProperty::ground))
+            {
+                continue;
+            }
+
+            // continue if more than one fan-out net
+            if (fan_out.size() != 1)
+            {
+                continue;
+            }
+
+            // continue if more than one Boolean function
+            std::unordered_map<std::string, BooleanFunction> functions = gate->get_boolean_functions();
+            if (functions.size() != 1)
+            {
+                continue;
+            }
+
+            // continue if Boolean function name does not match output pin
+            Endpoint* out_endpoint = *(fan_out.begin());
+            if (out_endpoint->get_pin()->get_name() != (functions.begin())->first)
+            {
+                continue;
+            }
+
+            std::vector<Endpoint*> fan_in = gate->get_fan_in_endpoints();
+            BooleanFunction func          = functions.begin()->second;
+
+            // simplify Boolean function for constant 0 or 1 inputs (takes care of, e.g., an AND2 connected to an input and logic 1)
+            for (Endpoint* ep : fan_in)
+            {
+                auto sources = ep->get_net()->get_sources();
+                if (sources.size() != 1)
+                {
+                    break;
+                }
+
+                if (sources.front()->get_gate()->is_gnd_gate())
+                {
+                    if (auto sub_res = func.substitute(ep->get_pin()->get_name(), BooleanFunction::Const(BooleanFunction::ZERO)); sub_res.is_ok())
+                    {
+                        func = sub_res.get();
+                    }
+                    else
+                    {
+                        log_warning("netlist_preprocessing", "{}", sub_res.get_error().get());
+                    }
+                }
+                else if (sources.front()->get_gate()->is_vcc_gate())
+                {
+                    if (auto sub_res = func.substitute(ep->get_pin()->get_name(), BooleanFunction::Const(BooleanFunction::ONE)); sub_res.is_ok())
+                    {
+                        func = sub_res.get();
+                    }
+                    else
+                    {
+                        log_warning("netlist_preprocessing", "{}", sub_res.get_error().get());
+                    }
+                }
+            }
+
+            func = func.simplify();
+
+            auto func_str                    = func.to_string();
+            std::vector<std::string> in_pins = gt->get_input_pin_names();
+            if (std::find(in_pins.begin(), in_pins.end(), func_str) != in_pins.end())
+            {
+                Net* out_net = out_endpoint->get_net();
+
+                // check all input endpoints and ...
+                bool failed = false;
+                for (Endpoint* in_endpoint : fan_in)
+                {
+                    Net* in_net = in_endpoint->get_net();
+
+                    if (in_endpoint->get_pin()->get_name() == func_str)
+                    {
+                        // reconnect outputs if the input is passed through the buffer
+                        for (Endpoint* dst : out_net->get_destinations())
+                        {
+                            Gate* dst_gate   = dst->get_gate();
+                            GatePin* dst_pin = dst->get_pin();
+                            if (!out_net->remove_destination(dst))
+                            {
+                                log_warning("netlist_preprocessing",
+                                            "failed to remove destination from output net '{}' with ID {} of buffer gate '{}' with ID {} from netlist with ID {}.",
+                                            out_net->get_name(),
+                                            out_net->get_id(),
+                                            gate->get_name(),
+                                            gate->get_id(),
+                                            nl->get_id());
+                                failed = true;
+                                break;
+                            }
+                            if (!in_net->add_destination(dst_gate, dst_pin))
+                            {
+                                log_warning("netlist_preprocessing",
+                                            "failed to add destination to input net '{}' with ID {} of buffer gate '{}' with ID {} from netlist with ID {}.",
+                                            in_net->get_name(),
+                                            in_net->get_id(),
+                                            gate->get_name(),
+                                            gate->get_id(),
+                                            nl->get_id());
+                                failed = true;
+                                break;
+                            }
+
+                            if (failed)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // completely remove the input endpoint otherwise
+                        if (!in_net->remove_destination(in_endpoint))
+                        {
+                            log_warning("netlist_preprocessing",
+                                        "failed to remove destination from input net '{}' with ID {} of buffer gate '{}' with ID {} from netlist with ID {}.",
+                                        in_net->get_name(),
+                                        in_net->get_id(),
+                                        gate->get_name(),
+                                        gate->get_id(),
+                                        nl->get_id());
+                            failed = true;
+                        }
+                    }
+
+                    if (failed)
+                    {
+                        break;
+                    }
+                }
+
+                // delete output net and buffer gate
+                if (!failed && !nl->delete_net(out_net))
+                {
+                    log_warning("netlist_preprocessing",
+                                "failed to remove output net '{}' with ID {} of buffer gate '{}' with ID {} from netlist with ID {}.",
+                                out_net->get_name(),
+                                out_net->get_id(),
+                                gate->get_name(),
+                                gate->get_id(),
+                                nl->get_id());
+                    continue;
+                }
+                if (!failed && !nl->delete_gate(gate))
+                {
+                    log_warning("netlist_preprocessing", "failed to remove buffer gate '{}' with ID {} from netlist with ID {}.", gate->get_name(), gate->get_id(), nl->get_id());
+                    continue;
+                }
+                num_gates++;
+            }
+            else if (func.is_constant() && (func.has_constant_value(0) || func.has_constant_value(1)))
+            {
+                auto* out_net = out_endpoint->get_net();
+
+                const auto& gnd_gates = nl->get_gnd_gates();
+                const auto& vcc_gates = nl->get_vcc_gates();
+                if (gnd_gates.empty() || vcc_gates.empty())
+                {
+                    continue;
+                }
+                auto* gnd_net = gnd_gates.front()->get_fan_out_nets().front();
+                auto* vcc_net = vcc_gates.front()->get_fan_out_nets().front();
+
+                bool failed = false;
+                for (auto* in_endpoint : fan_in)
+                {
+                    auto* in_net = in_endpoint->get_net();
+
+                    // remove the input endpoint otherwise
+                    if (!in_net->remove_destination(gate, in_endpoint->get_pin()))
+                    {
+                        log_warning("netlist_preprocessing",
+                                    "failed to remove destination from input net '{}' with ID {} of buffer gate '{}' with ID {} from netlist with ID {}.",
+                                    in_net->get_name(),
+                                    in_net->get_id(),
+                                    gate->get_name(),
+                                    gate->get_id(),
+                                    nl->get_id());
+                        failed = true;
+                        break;
+                    }
+                }
+                if (!failed && func.has_constant_value(0))
+                {
+                    for (auto* dst : out_net->get_destinations())
+                    {
+                        auto* dst_gate = dst->get_gate();
+                        auto* dst_pin  = dst->get_pin();
+                        if (!out_net->remove_destination(dst))
+                        {
+                            log_warning("netlist_preprocessing",
+                                        "failed to remove destination from output net '{}' with ID {} of buffer gate '{}' with ID {} from netlist with ID {}.",
+                                        out_net->get_name(),
+                                        out_net->get_id(),
+                                        gate->get_name(),
+                                        gate->get_id(),
+                                        nl->get_id());
+                            failed = true;
+                            break;
+                        }
+                        if (!gnd_net->add_destination(dst_gate, dst_pin))
+                        {
+                            log_warning("netlist_preprocessing",
+                                        "failed to add buffer gate '{}' with ID {} as destination to GND net '{}' with ID {} in netlist with ID {}.",
+                                        gnd_net->get_name(),
+                                        gnd_net->get_id(),
+                                        gate->get_name(),
+                                        gate->get_id(),
+                                        nl->get_id());
+                            failed = true;
+                            break;
+                        }
+                    }
+                }
+                else if (!failed && func.has_constant_value(1))
+                {
+                    for (Endpoint* dst : out_net->get_destinations())
+                    {
+                        Gate* dst_gate   = dst->get_gate();
+                        GatePin* dst_pin = dst->get_pin();
+                        if (!out_net->remove_destination(dst))
+                        {
+                            log_warning("netlist_preprocessing",
+                                        "failed to remove destination from output net '{}' with ID {} of buffer gate '{}' with ID {} from netlist with ID {}.",
+                                        out_net->get_name(),
+                                        out_net->get_id(),
+                                        gate->get_name(),
+                                        gate->get_id(),
+                                        nl->get_id());
+                            failed = true;
+                            break;
+                        }
+                        if (!vcc_net->add_destination(dst_gate, dst_pin))
+                        {
+                            log_warning("netlist_preprocessing",
+                                        "failed to add buffer gate '{}' with ID {} as destination to VCC net '{}' with ID {} in netlist with ID {}.",
+                                        vcc_net->get_name(),
+                                        vcc_net->get_id(),
+                                        gate->get_name(),
+                                        gate->get_id(),
+                                        nl->get_id());
+                            failed = true;
+                            break;
+                        }
+                    }
+                }
+
+                // delete output net and buffer gate
+                if (!failed && !nl->delete_net(out_net))
+                {
+                    log_warning("netlist_preprocessing",
+                                "failed to remove output net '{}' with ID {} of buffer gate '{}' with ID {} from netlist with ID {}.",
+                                out_net->get_name(),
+                                out_net->get_id(),
+                                gate->get_name(),
+                                gate->get_id(),
+                                nl->get_id());
+                    continue;
+                }
+                if (!failed && !nl->delete_gate(gate))
+                {
+                    log_warning("netlist_preprocessing", "failed to remove buffer gate '{}' with ID {} from netlist with ID {}.", gate->get_name(), gate->get_id(), nl->get_id());
+                    continue;
+                }
+                num_gates++;
+            }
+        }
+
+        return OK(num_gates);
     }
 
     Result<u32> NetlistPreprocessingPlugin::remove_redundant_logic(Netlist* nl)
