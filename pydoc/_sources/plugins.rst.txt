@@ -8,6 +8,7 @@ HAL Plugins Documentation
    dataflow
    graph_algorithm
    gui
+   netlist_preprocessing
    netlist_simulator
    netlist_simulator_controller
    verilator

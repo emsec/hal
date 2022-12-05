@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; hal_py v4.0.1-84-g8fe09827c documentation</title>
+  <title>Index &mdash; hal_py v4.0.1-85-g46ea8210d documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                v4.0.1-84-g8fe09827c
+                v4.0.1-85-g46ea8210d
               </div>
             
           
@@ -1108,6 +1108,8 @@
 </li>
         <li><a href="net.html#hal_py.Net.get_name">(hal_py.Net method)</a>
 </li>
+        <li><a href="netlist_preprocessing.html#netlist_preprocessing.NetlistPreprocessingPlugin.get_name">(netlist_preprocessing.NetlistPreprocessingPlugin method)</a>
+</li>
         <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulatorPlugin.get_name">(netlist_simulator.NetlistSimulatorPlugin method)</a>
 </li>
         <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorControllerPlugin.get_name">(netlist_simulator_controller.NetlistSimulatorControllerPlugin method)</a>
@@ -1371,6 +1373,8 @@
         <li><a href="graph_algorithm.html#graph_algorithm.GraphAlgorithmPlugin.get_version">(graph_algorithm.GraphAlgorithmPlugin method)</a>
 </li>
         <li><a href="base_plugin_interface.html#hal_py.BasePluginInterface.get_version">(hal_py.BasePluginInterface method)</a>
+</li>
+        <li><a href="netlist_preprocessing.html#netlist_preprocessing.NetlistPreprocessingPlugin.get_version">(netlist_preprocessing.NetlistPreprocessingPlugin method)</a>
 </li>
         <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulatorPlugin.get_version">(netlist_simulator.NetlistSimulatorPlugin method)</a>
 </li>
@@ -1844,6 +1848,8 @@
 </li>
         <li><a href="smt.html#hal_py.SMT.SolverType.name">(hal_py.SMT.SolverType attribute)</a>
 </li>
+        <li><a href="netlist_preprocessing.html#netlist_preprocessing.NetlistPreprocessingPlugin.name">(netlist_preprocessing.NetlistPreprocessingPlugin attribute)</a>
+</li>
         <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulatorPlugin.name">(netlist_simulator.NetlistSimulatorPlugin attribute)</a>
 </li>
         <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorControllerPlugin.name">(netlist_simulator_controller.NetlistSimulatorControllerPlugin attribute)</a>
@@ -1877,6 +1883,8 @@
         <li><a href="net.html#hal_py.Net.netlist">(hal_py.Net attribute)</a>
 </li>
       </ul></li>
+      <li><a href="netlist_preprocessing.html#netlist_preprocessing.NetlistPreprocessingPlugin">NetlistPreprocessingPlugin (class in netlist_preprocessing)</a>
+</li>
       <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator">NetlistSimulator (class in netlist_simulator)</a>
 </li>
       <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorControllerPlugin">NetlistSimulatorControllerPlugin (class in netlist_simulator_controller)</a>
@@ -2016,7 +2024,11 @@
       <li><a href="gate_type_component.html#hal_py.RAMPortComponent">RAMPortComponent (class in hal_py)</a>
 </li>
       <li><a href="netlist_utils.html#hal_py.NetlistUtils.remove_buffers">remove_buffers() (in module hal_py.NetlistUtils)</a>
+
+      <ul>
+        <li><a href="netlist_preprocessing.html#netlist_preprocessing.NetlistPreprocessingPlugin.remove_buffers">(netlist_preprocessing.NetlistPreprocessingPlugin static method)</a>
 </li>
+      </ul></li>
       <li><a href="net.html#hal_py.Net.remove_destination">remove_destination() (hal_py.Net method)</a>
 </li>
       <li><a href="grouping.html#hal_py.Grouping.remove_gate">remove_gate() (hal_py.Grouping method)</a>
@@ -2043,9 +2055,13 @@
 </li>
       <li><a href="project_manager.html#hal_py.ProjectManager.remove_project_directory">remove_project_directory() (hal_py.ProjectManager method)</a>
 </li>
+      <li><a href="netlist_preprocessing.html#netlist_preprocessing.NetlistPreprocessingPlugin.remove_redundant_logic">remove_redundant_logic() (netlist_preprocessing.NetlistPreprocessingPlugin static method)</a>
+</li>
       <li><a href="net.html#hal_py.Net.remove_source">remove_source() (hal_py.Net method)</a>
 </li>
       <li><a href="netlist_utils.html#hal_py.NetlistUtils.remove_unused_lut_endpoints">remove_unused_lut_endpoints() (in module hal_py.NetlistUtils)</a>
+</li>
+      <li><a href="netlist_preprocessing.html#netlist_preprocessing.NetlistPreprocessingPlugin.remove_unused_lut_inputs">remove_unused_lut_inputs() (netlist_preprocessing.NetlistPreprocessingPlugin static method)</a>
 </li>
       <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.WaveDataGroup.remove_waveform">remove_waveform() (netlist_simulator_controller.WaveDataGroup method)</a>
 </li>
@@ -2449,10 +2465,10 @@
 </li>
       <li><a href="gate_library.html#hal_py.GateLibrary.vcc_gate_types">vcc_gate_types (hal_py.GateLibrary attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="netlist.html#hal_py.Netlist.vcc_gates">vcc_gates (hal_py.Netlist attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="verilator.html#verilator.VerilatorSimulatorPlugin">VerilatorSimulatorPlugin (class in verilator)</a>
 </li>
       <li><a href="dataflow.html#dataflow.DataflowPlugin.version">version (dataflow.DataflowPlugin attribute)</a>
@@ -2461,6 +2477,8 @@
         <li><a href="graph_algorithm.html#graph_algorithm.GraphAlgorithmPlugin.version">(graph_algorithm.GraphAlgorithmPlugin attribute)</a>
 </li>
         <li><a href="base_plugin_interface.html#hal_py.BasePluginInterface.version">(hal_py.BasePluginInterface attribute)</a>
+</li>
+        <li><a href="netlist_preprocessing.html#netlist_preprocessing.NetlistPreprocessingPlugin.version">(netlist_preprocessing.NetlistPreprocessingPlugin attribute)</a>
 </li>
         <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulatorPlugin.version">(netlist_simulator.NetlistSimulatorPlugin attribute)</a>
 </li>

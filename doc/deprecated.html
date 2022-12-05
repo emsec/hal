@@ -97,6 +97,10 @@ $(document).ready(function(){initNavTree('deprecated.html',''); initResizable();
 <dd><a class="anchor" id="_deprecated000005"></a> Get the combined Boolean function of a subgraph of combinational gates starting at the source of the given net. The variables of the resulting Boolean function are made up of the IDs of the nets that influence the output ('net_[ID]'). Utilizes a cache for speedup on consecutive calls. </dd>
 <dt>Member <a class="el" href="namespacehal_1_1netlist__utils.html#a77025d97353281c42b543f073de27099">hal::netlist_utils::get_subgraph_function</a>  (const <a class="el" href="classhal_1_1_net.html">Net</a> *net, const std::vector&lt; const Gate * &gt; &amp;subgraph_gates)</dt>
 <dd><a class="anchor" id="_deprecated000006"></a> Get the combined Boolean function of a subgraph of combinational gates starting at the source of the given net. The variables of the resulting Boolean function are made up of the IDs of the nets that influence the output ('net_[ID]'). </dd>
+<dt>Member <a class="el" href="namespacehal_1_1netlist__utils.html#af985cd5c5eb7aa39f151f9fc890e6005">hal::netlist_utils::remove_buffers</a>  (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *netlist, bool analyze_inputs)</dt>
+<dd><a class="anchor" id="_deprecated000009"></a> Remove all buffer gates from the netlist and connect their fan-in to their fan-out nets. If enabled, analyzes every gate's inputs and removes fixed '0' or '1' inputs from the Boolean function. </dd>
+<dt>Member <a class="el" href="namespacehal_1_1netlist__utils.html#ab4c23f16593143c305d3d5de79dcb196">hal::netlist_utils::remove_unused_lut_endpoints</a>  (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *netlist)</dt>
+<dd><a class="anchor" id="_deprecated000010"></a> Remove all LUT fan-in endpoints that are not present within the Boolean function of the output of a gate. </dd>
 <dt>Member <a class="el" href="classnlohmann_1_1basic__json.html#a5e4212986136ca1220f351c60e89906b">nlohmann::basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt;::iterator_wrapper</a>  (reference ref) noexcept</dt>
 <dd><a class="anchor" id="_deprecated000002"></a>This stream operator is deprecated and will be removed in future 4.0.0 of the library. Please use <a class="el" href="classnlohmann_1_1basic__json.html#afe3e137ace692efa08590d8df40f58dd">items()</a> instead; that is, replace <code>json::iterator_wrapper(j)</code> with <code>j.items()</code>.  </dd>
 <dt>Member <a class="el" href="classnlohmann_1_1basic__json.html#a60ca396028b8d9714c6e10efbf475af6">nlohmann::basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt;::operator&lt;&lt;</a>  (<a class="el" href="classnlohmann_1_1basic__json.html" title="a class to store JSON values">basic_json</a> &amp;j, std::istream &amp;i)</dt>
@@ -110,7 +114,7 @@ $(document).ready(function(){initNavTree('deprecated.html',''); initResizable();
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sun Dec 4 2022 21:11:22 for HAL by
+    <li class="footer">Generated on Mon Dec 5 2022 11:41:42 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

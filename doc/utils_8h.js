@@ -40,5 +40,6 @@ var utils_8h =
     [ "toggle_bit", "utils_8h.html#a4a7452b760ebd68235319a6db5ff8965", null ],
     [ "trim", "utils_8h.html#a3b3244bd8945cb61cfa299c32686a601", null ],
     [ "unordered_vector_erase", "utils_8h.html#a99d0bad47b8889780fe90db4c3308b77", null ],
+    [ "vectors_have_same_content", "utils_8h.html#a387d8f01579a42674ccd58d8651d9342", null ],
     [ "which", "utils_8h.html#abe865cd13e526c5228f269a9c7b2629b", null ]
 ];
