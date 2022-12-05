@@ -31,7 +31,7 @@ namespace hal {
         {
             std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
             ASSERT_NE(nl, nullptr);
-            const GateLibrary* gl       = nl->get_gate_library();
+            const GateLibrary* gl = nl->get_gate_library();
             ASSERT_NE(gl, nullptr);
 
             Gate* gnd_gate = nl->create_gate(gl->get_gate_type_by_name("GND"), "gnd");
@@ -98,7 +98,7 @@ namespace hal {
         {
             std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
             ASSERT_NE(nl, nullptr);
-            const GateLibrary* gl       = nl->get_gate_library();
+            const GateLibrary* gl = nl->get_gate_library();
             ASSERT_NE(gl, nullptr);
 
             Gate* gnd_gate = nl->create_gate(gl->get_gate_type_by_name("GND"), "gnd");
@@ -141,7 +141,7 @@ namespace hal {
         {
             std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
             ASSERT_NE(nl, nullptr);
-            const GateLibrary* gl       = nl->get_gate_library();
+            const GateLibrary* gl = nl->get_gate_library();
             ASSERT_NE(gl, nullptr);
 
             Gate* gnd_gate = nl->create_gate(gl->get_gate_type_by_name("GND"), "gnd");
@@ -230,6 +230,82 @@ namespace hal {
             EXPECT_EQ(g0->get_successor("O")->get_gate(), g2);
         }
 
+        TEST_END
+    }
+
+    /**
+     * Test the deletion of redundant logic gates.
+     *
+     * Functions: remove_redundant_logic
+     */
+    TEST_F(NetlistPreprocessingTest, check_remove_redundant_logic)
+    {
+        TEST_START
+        {
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+            const GateLibrary* gl = nl->get_gate_library();
+            ASSERT_NE(gl, nullptr);
+
+            Gate* g0 = nl->create_gate(gl->get_gate_type_by_name("AND2"), "g0");
+            Gate* g1 = nl->create_gate(gl->get_gate_type_by_name("AND2"), "g1");
+            Gate* g2 = nl->create_gate(gl->get_gate_type_by_name("DFF"), "g2");
+            Gate* g3 = nl->create_gate(gl->get_gate_type_by_name("DFF"), "g3");
+            Gate* g4 = nl->create_gate(gl->get_gate_type_by_name("XOR2"), "g4");
+
+            Net* n0 = nl->create_net("n0");
+            n0->add_destination(g0, "I0");
+            n0->add_destination(g1, "I0");
+            n0->mark_global_input_net();
+
+            Net* n1 = nl->create_net("n1");
+            n1->add_destination(g0, "I1");
+            n1->add_destination(g1, "I1");
+            n1->mark_global_input_net();
+
+            Net* n2 = nl->create_net("clk");
+            n2->add_destination(g2, "CLK");
+            n2->add_destination(g3, "CLK");
+            n2->mark_global_input_net();
+
+            Net* n3 = test_utils::connect(nl.get(), g0, "O", g2, "D");
+            Net* n4 = test_utils::connect(nl.get(), g1, "O", g3, "D");
+            
+            Net* n5 = test_utils::connect(nl.get(), g2, "Q", g4, "I0");
+            Net* n6 = test_utils::connect(nl.get(), g3, "QN", g4, "I1");
+
+            auto res = NetlistPreprocessingPlugin::remove_redundant_logic(nl.get());
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get(), 2);
+
+            ASSERT_EQ(nl->get_gates().size(), 3);
+            ASSERT_EQ(nl->get_nets().size(), 6);
+
+            auto and2_gates = nl->get_gates([](const auto* g){ return g->get_type()->get_name() == "AND2"; });
+            ASSERT_EQ(and2_gates.size(), 1);
+            auto and2 = and2_gates.front();
+            auto dff_gates = nl->get_gates([](const auto* g){ return g->get_type()->get_name() == "DFF"; });
+            ASSERT_EQ(dff_gates.size(), 1);
+            auto dff = dff_gates.front();
+            auto xor2_gates = nl->get_gates([](const auto* g){ return g->get_type()->get_name() == "XOR2"; });
+            ASSERT_EQ(xor2_gates.size(), 1);
+            auto xor2 = xor2_gates.front();
+
+            auto and2_suc = and2->get_successor("O");
+            ASSERT_NE(and2_suc, nullptr);
+            EXPECT_EQ(and2_suc->get_gate(), dff);
+            EXPECT_EQ(and2_suc->get_pin()->get_name(), "D");
+
+            auto dff_suc_0 = dff->get_successor("Q");
+            ASSERT_NE(dff_suc_0, nullptr);
+            EXPECT_EQ(dff_suc_0->get_gate(), xor2);
+            EXPECT_EQ(dff_suc_0->get_pin()->get_name(), "I0");
+
+            auto dff_suc_1 = dff->get_successor("QN");
+            ASSERT_NE(dff_suc_1, nullptr);
+            EXPECT_EQ(dff_suc_1->get_gate(), xor2);
+            EXPECT_EQ(dff_suc_1->get_pin()->get_name(), "I1");
+        }
         TEST_END
     }
 } // namespace hal
