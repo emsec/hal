@@ -12,4 +12,6 @@ if(PL_NETLIST_PREPROCESSING OR BUILD_ALL_PLUGINS)
         LINK_LIBRARIES PUBLIC ${Z3_LIBRARIES} z3_utils OpenMP::OpenMP_CXX
         PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/netlist_preprocessing.rst
     )
+
+    add_subdirectory(test)
 endif()
