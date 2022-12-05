@@ -153,21 +153,19 @@ namespace hal
 
             func = func.simplify();
 
-            auto func_str                    = func.to_string();
+            bool failed                      = false;
             std::vector<std::string> in_pins = gt->get_input_pin_names();
-            if (std::find(in_pins.begin(), in_pins.end(), func_str) != in_pins.end())
+            if (func.is_variable() && std::find(in_pins.begin(), in_pins.end(), func.get_variable_name().get()) != in_pins.end())
             {
                 Net* out_net = out_endpoint->get_net();
 
                 // check all input endpoints and ...
-                bool failed = false;
                 for (Endpoint* in_endpoint : fan_in)
                 {
                     Net* in_net = in_endpoint->get_net();
-
-                    if (in_endpoint->get_pin()->get_name() == func_str)
+                    if (in_endpoint->get_pin()->get_name() == func.get_variable_name().get())
                     {
-                        // reconnect outputs if the input is passed through the buffer
+                        // ... reconnect outputs if the input is passed through the buffer
                         for (Endpoint* dst : out_net->get_destinations())
                         {
                             Gate* dst_gate   = dst->get_gate();
@@ -257,7 +255,6 @@ namespace hal
                 auto* gnd_net = gnd_gates.front()->get_fan_out_nets().front();
                 auto* vcc_net = vcc_gates.front()->get_fan_out_nets().front();
 
-                bool failed = false;
                 for (auto* in_endpoint : fan_in)
                 {
                     auto* in_net = in_endpoint->get_net();
