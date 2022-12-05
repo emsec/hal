@@ -65,7 +65,8 @@ namespace hal
          * @param[in] subgraph_gates - The gates making up the subgraph to consider.
          * @returns The combined Boolean function of the subgraph on success, an error otherwise.
          */
-        [[deprecated("Will be removed in a future version, use SubgraphNetlistDecorator::get_subgraph_function instead.")]] CORE_API Result<BooleanFunction> get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates);
+        [[deprecated("Will be removed in a future version, use SubgraphNetlistDecorator::get_subgraph_function instead.")]] CORE_API Result<BooleanFunction>
+            get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates);
 
         /**
          * \deprecated
@@ -243,7 +244,7 @@ namespace hal
         CORE_API std::vector<Net*> get_nets_at_pins(Gate* gate, std::vector<GatePin*> pins);
 
         /**
-         * TODO test
+         * \deprecated
          * Remove all buffer gates from the netlist and connect their fan-in to their fan-out nets.
          * If enabled, analyzes every gate's inputs and removes fixed '0' or '1' inputs from the Boolean function.
          * 
@@ -251,16 +252,17 @@ namespace hal
          * @param[in] analyze_inputs - Set `true` to dynamically analyze the inputs, `false` otherwise.
          * @returns The number of removed buffers on success, an error otherwise.
          */
-        CORE_API Result<u32> remove_buffers(Netlist* netlist, bool analyze_inputs = false);
+        [[deprecated("Will be removed in a future version, use NetlistPreprocessingPlugin::remove_buffers instead.")]] CORE_API Result<u32> remove_buffers(Netlist* netlist,
+                                                                                                                                                           bool analyze_inputs = false);
 
         /**
-         * TODO test
+         * \deprecated
          * Remove all LUT fan-in endpoints that are not present within the Boolean function of the output of a gate.
          * 
          * @param[in] netlist - The target netlist.
          * @returns The number of removed endpoints on success, an error otherwise.
          */
-        CORE_API Result<u32> remove_unused_lut_endpoints(Netlist* netlist);
+        [[deprecated("Will be removed in a future version, use NetlistPreprocessingPlugin::remove_unused_lut_inputs instead.")]] CORE_API Result<u32> remove_unused_lut_endpoints(Netlist* netlist);
 
         /**
          * Returns all nets that are considered to be common inputs to the provided gates.
