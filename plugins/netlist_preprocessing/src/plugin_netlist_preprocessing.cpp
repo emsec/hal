@@ -76,6 +76,7 @@ namespace hal
             }
         }
 
+        log_debug("netlist_preprocessing", "removed {} unused LUT endpoints from netlist with ID {}.", num_eps, nl->get_id());
         return OK(num_eps);
     }
 
@@ -359,6 +360,7 @@ namespace hal
             }
         }
 
+        log_debug("netlist_preprocessing", "removed {} buffer gates from netlist with ID {}.", num_gates, nl->get_id());
         return OK(num_gates);
     }
 
@@ -367,7 +369,7 @@ namespace hal
         const auto& nets   = nl->get_nets();
         auto nets_to_check = std::set<Net*>(nets.begin(), nets.end());
 
-        u32 delete_ctr = 0;
+        u32 num_gates = 0;
         while (!nets_to_check.empty())
         {
             auto* current_net = *nets_to_check.begin();
@@ -564,12 +566,13 @@ namespace hal
                     }
                     else
                     {
-                        delete_ctr++;
+                        num_gates++;
                     }
                 }
             }
         }
 
-        return OK(delete_ctr);
+        log_debug("netlist_preprocessing", "removed {} redundant logic gates from netlist with ID {}.", num_gates, nl->get_id());
+        return OK(num_gates);
     }
 }    // namespace hal
