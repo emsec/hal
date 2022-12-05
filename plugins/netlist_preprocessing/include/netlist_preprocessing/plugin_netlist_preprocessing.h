@@ -52,7 +52,7 @@ namespace hal
          * @param[in] nl - The netlist to operate on. 
          * @returns The number of removed LUT endpoints on success, an error otherwise.
          */
-        static Result<u32> remove_irrelevant_lut_inputs(Netlist* nl);
+        static Result<u32> remove_unused_lut_inputs(Netlist* nl);
 
         /**
          * Removes buffer gates from the netlist and connect their fan-in to their fan-out nets.

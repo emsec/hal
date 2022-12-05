@@ -23,9 +23,61 @@ namespace hal
         return std::string("0.1");
     }
 
-    Result<u32> NetlistPreprocessingPlugin::remove_irrelevant_lut_inputs(Netlist* nl)
+    Result<u32> NetlistPreprocessingPlugin::remove_unused_lut_inputs(Netlist* nl)
     {
-        return ERR("not implemented");
+        u32 num_eps = 0;
+
+        // get net connected to GND
+        const std::vector<Gate*>& gnd_gates = nl->get_gnd_gates();
+        if (gnd_gates.empty())
+        {
+            return ERR("could not remove unused LUT endpoints from netlist with ID " + std::to_string(nl->get_id()) + ": no GND net available within netlist");
+        }
+        Net* gnd_net = gnd_gates.front()->get_fan_out_nets().front();
+
+        // iterate all LUT gates
+        for (const auto& gate : nl->get_gates([](Gate* g) { return g->get_type()->has_property(GateTypeProperty::c_lut); }))
+        {
+            std::vector<Endpoint*> fan_in                              = gate->get_fan_in_endpoints();
+            std::unordered_map<std::string, BooleanFunction> functions = gate->get_boolean_functions();
+
+            // skip if more than one function
+            if (functions.size() != 1)
+            {
+                continue;
+            }
+
+            // only pins used as variables in Boolean function are considered active
+            auto active_pins = functions.begin()->second.get_variable_names();
+
+            // if there are more fan-in nets than there are active pins, remove those that are not used within the Boolean function and reconnect to GND
+            if (fan_in.size() > active_pins.size())
+            {
+                for (const auto& ep : fan_in)
+                {
+                    if (std::find(active_pins.begin(), active_pins.end(), ep->get_pin()->get_name()) == active_pins.end())
+                    {
+                        GatePin* pin = ep->get_pin();
+                        if (!ep->get_net()->remove_destination(gate, pin))
+                        {
+                            log_warning(
+                                "netlist_preprocessing", "failed to remove unused input from LUT gate '{}' with ID {} from netlist with ID {}.", gate->get_name(), gate->get_id(), nl->get_id());
+                        }
+                        else if (!gnd_net->add_destination(gate, pin))
+                        {
+                            log_warning(
+                                "netlist_preprocessing", "failed to reconnect unused input of LUT gate '{}' with ID {} to GND in netlist with ID {}.", gate->get_name(), gate->get_id(), nl->get_id());
+                        }
+                        else
+                        {
+                            num_eps++;
+                        }
+                    }
+                }
+            }
+        }
+
+        return OK(num_eps);
     }
 
     Result<u32> NetlistPreprocessingPlugin::remove_buffers(Netlist* nl)
@@ -216,7 +268,7 @@ namespace hal
                             }
                             if (!nl->delete_net(ep_net))
                             {
-                                log_warning("netlist_preprocessing", "could not delete net '{}' with ID {}.", ep_net->get_name(), ep_net->get_id());
+                                log_warning("netlist_preprocessing", "could not delete net '{}' with ID {} from netlist with ID {}.", ep_net->get_name(), ep_net->get_id(), nl->get_id());
                             }
                             nets_to_check.erase(ep_net);
                         }
@@ -231,7 +283,7 @@ namespace hal
 
                     if (!nl->delete_gate(current_gate))
                     {
-                        log_warning("netlist_preprocessing", "could not delete gate '{}' with ID {}.", current_gate->get_name(), current_gate->get_id());
+                        log_warning("netlist_preprocessing", "could not delete gate '{}' with ID {} from netlist with ID {}.", current_gate->get_name(), current_gate->get_id(), nl->get_id());
                     }
                     else
                     {

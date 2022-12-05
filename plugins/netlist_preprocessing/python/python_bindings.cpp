@@ -52,9 +52,9 @@ namespace hal
         )");
 
         py_netlist_preprocessing.def_static(
-            "remove_irrelevant_lut_inputs",
+            "remove_unused_lut_inputs",
             [](Netlist* nl) -> std::optional<u32> {
-                auto res = NetlistPreprocessingPlugin::remove_irrelevant_lut_inputs(nl);
+                auto res = NetlistPreprocessingPlugin::remove_unused_lut_inputs(nl);
                 if (res.is_ok())
                 {
                     return res.get();
