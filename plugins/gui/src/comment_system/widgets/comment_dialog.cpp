@@ -12,8 +12,10 @@
 #include <QTextList>
 #include <QMenuBar>
 #include <QMenu>
+#include <QDebug>
 
 #include <QFontDatabase>
+#include <QStyle>
 
 namespace hal
 {
@@ -23,7 +25,8 @@ namespace hal
     {
         setWindowTitle(windowTitle);
         init();
-        mDefaultFont = QFont("Iosevka"); //Must be extracted from stylesheet... textedit fonts are different from stylesheet fonts
+        // should be extracted from stylesheet, still doesnt work...
+        mDefaultFont = QFont("Iosevka");
         mDefaultFont.setPixelSize(14);
 
         if(entry)
@@ -59,9 +62,10 @@ namespace hal
         mHeaderContainer = new QWidget;
         mHeaderContainerLayout = new QHBoxLayout(mHeaderContainer);
         mHeaderContainerLayout->setContentsMargins(9,20,6,9); // space of layout to surrounding edges (increases container-widget size)
-        mHeaderContainer->setStyleSheet("background-color: black");
+        //mHeaderContainer->setStyleSheet("background-color: black");
+        mHeaderContainer->setObjectName("header-container");
         mHeaderEdit = new QLineEdit;
-        mHeaderEdit->setStyleSheet("background-color: #171e22; color: #A9B7C6;");
+        //mHeaderEdit->setStyleSheet("background-color: #171e22; color: #A9B7C6;");
         mLastModifiedLabel = new QLabel;
 
         // perhaps a spacer item with fixed size at the front instead of left spacing/margin
@@ -113,6 +117,13 @@ namespace hal
 
         connect(mTextEdit, &QTextEdit::currentCharFormatChanged, this, &CommentDialog::handleCurrentCharFormatChanged);
         connect(mTextEdit, &QTextEdit::cursorPositionChanged, this, &CommentDialog::handleCursorPositionChanged);
+
+        QStyle* s = style();
+        s->unpolish(this);
+        s->polish(this);
+
+        mDefaultFont = mTextEdit->property("font").value<QFont>();
+        qDebug() << "Font: " <<  mDefaultFont;
     }
 
     void CommentDialog::mergeFormatOnWordOrSelection(const QTextCharFormat &format)
@@ -148,12 +159,11 @@ namespace hal
     void CommentDialog::handleCurrentCharFormatChanged(const QTextCharFormat &format)
     {
         // ugly workaround since the original color is black, but the stylesheet transforms only the "visuals" (black color is still set as format)
-        QColor color = (format.foreground().color() == Qt::black) ? QColor("#A9B7C6") : format.foreground().color();
+        QColor color = (format.foreground().color() == Qt::black) ? mDefaultColor : format.foreground().color();
         mBoldAction->setChecked(format.font().bold());
         mItalicsAction->setChecked(format.font().italic());
         mUnderscoreAction->setChecked(format.font().underline());
-        mCodeAction->setChecked(format.background().color() == QColor("#334652")); // put these strings in vars...
-        //auto color = format.foreground().color();
+        mCodeAction->setChecked(format.background().color() == mTextEdit->palette().color(QPalette::AlternateBase)); // put these strings in vars...
         updateColorActionPixmap(color);
     }
 
@@ -186,24 +196,25 @@ namespace hal
 
     void CommentDialog::colorTriggered()
     {
-        QColor color(Qt::red);
+        //QColor color(Qt::red);
+        QColor color(mRedColor);
         QMenu* men = new QMenu(this);
         QPixmap map(16, 16);
         map.fill(color);
         auto act = men->addAction(map, "Red", this, &CommentDialog::handleColorSelected);
         act->setData(color);
 
-        color = QColor(Qt::green);
+        color = QColor(mGreenColor);
         map.fill(color);
         act = men->addAction(map, "Green", this, &CommentDialog::handleColorSelected);
         act->setData(color);
 
-        color = QColor(Qt::yellow);
+        color = QColor(mYellowColor);
         map.fill(color);
         act = men->addAction(map, "Yellow", this, &CommentDialog::handleColorSelected);
         act->setData(color);
 
-        color = QColor("#A9B7C6"); // out of stylesheet
+        color = QColor(mDefaultColor); // out of stylesheet
         map.fill(color);
         act = men->addAction(map, "Default", this, &CommentDialog::handleColorSelected);
         act->setData(color);
@@ -254,7 +265,8 @@ namespace hal
     {
         QTextCharFormat fmt;
         //mTextEdit->palette().color(QPalette::Background)
-        fmt.setBackground(mCodeAction->isChecked() ? QColor("#334652") : mTextEdit->palette().color(QPalette::Background)); //dependent on background
+        //fmt.setBackground(mCodeAction->isChecked() ? QColor("#334652") : mTextEdit->palette().color(QPalette::Background)); //dependent on background
+        fmt.setBackground(mCodeAction->isChecked() ? mTextEdit->palette().color(QPalette::AlternateBase) : mTextEdit->palette().color(QPalette::Background));
         fmt.setFont(mCodeAction->isChecked() ? QFontDatabase::systemFont(QFontDatabase::FixedFont) : mDefaultFont);
         mergeFormatOnWordOrSelection(fmt);
     }

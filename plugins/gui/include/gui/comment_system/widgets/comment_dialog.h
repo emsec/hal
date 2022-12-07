@@ -39,6 +39,11 @@ namespace hal
     class CommentEntry;
     class CommentDialog : public QDialog
     {
+        Q_OBJECT
+        Q_PROPERTY(QString redColor READ redColor WRITE setRedColor)
+        Q_PROPERTY(QString yellowColor READ yellowColor WRITE setYellowColor)
+        Q_PROPERTY(QString greenColor READ greenColor WRITE setGreenColor)
+        Q_PROPERTY(QString defaultColor READ defaultColor WRITE setDefaultColor)
     public:
         // Perhaps remove the title-parameter and determine "New comment" and "Modify comment"
         // through the item parameter (or perhaps 2 constructors?)
@@ -72,10 +77,25 @@ namespace hal
          */
         QString getText();
 
+        //property tests
+        QString redColor(){return mRedColor;}
+        void setRedColor(const QString& str){mRedColor = str;}
+        QString yellowColor(){return mYellowColor;}
+        void setYellowColor(const QString & str){mYellowColor = str;}
+        QString greenColor(){return mGreenColor;}
+        void setGreenColor(const QString& str){mGreenColor = str;}
+        QString defaultColor(){return mDefaultColor;}
+        void setDefaultColor(const QString& str){mDefaultColor = str;}
+
     private:
         QVBoxLayout* mLayout;
         CommentEntry* mCommentEntry;
         QFont mDefaultFont;
+
+        QString mRedColor;
+        QString mYellowColor;
+        QString  mGreenColor;
+        QString mDefaultColor;
 
         // header part
         QWidget* mHeaderContainer; // for custom margins/spacing on top as well as colored background

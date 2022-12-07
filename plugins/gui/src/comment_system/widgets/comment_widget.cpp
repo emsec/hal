@@ -78,7 +78,6 @@ namespace hal
 
     CommentWidget::~CommentWidget()
     {
-        qDebug() << "CommentWidget::~CommentWidget()";
     }
 
     void CommentWidget::setItem(CommentItem *item)
