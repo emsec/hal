@@ -767,205 +767,207 @@ $(document).ready(function(){initNavTree('simplification__abc_8cpp_source.html',
 <div class="line"><a name="l00795"></a><span class="lineno">  795</span>&#160; </div>
 <div class="line"><a name="l00796"></a><span class="lineno">  796</span>&#160;                <span class="comment">// (2.3) assemble &quot;assign $(LHS) = $(RHS);&quot;</span></div>
 <div class="line"><a name="l00797"></a><span class="lineno">  797</span>&#160;                ss &lt;&lt; <span class="stringliteral">&quot;assign &quot;</span> &lt;&lt; lhs &lt;&lt; <span class="stringliteral">&quot; = &quot;</span> &lt;&lt; rhs &lt;&lt; <span class="stringliteral">&quot;;&quot;</span> &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00798"></a><span class="lineno">  798</span>&#160;            }</div>
-<div class="line"><a name="l00799"></a><span class="lineno">  799</span>&#160;            Vec_VecFree(vLevels);</div>
-<div class="line"><a name="l00800"></a><span class="lineno">  800</span>&#160; </div>
-<div class="line"><a name="l00801"></a><span class="lineno">  801</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(ss.str());</div>
-<div class="line"><a name="l00802"></a><span class="lineno">  802</span>&#160;        }</div>
-<div class="line"><a name="l00803"></a><span class="lineno">  803</span>&#160; </div>
-<div class="line"><a name="l00811"></a><span class="lineno">  811</span>&#160;        Result&lt;BooleanFunction&gt; translate_from_verilog(<span class="keyword">const</span> std::string&amp; verilog, <span class="keyword">const</span> BooleanFunction&amp; <span class="keyword">function</span>)</div>
-<div class="line"><a name="l00812"></a><span class="lineno">  812</span>&#160;        {</div>
-<div class="line"><a name="l00820"></a><span class="lineno">  820</span>&#160;            <span class="keyword">auto</span> parse_assignment = [](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; assignment) -&gt; Result&lt;std::tuple&lt;BooleanFunction, BooleanFunction&gt;&gt; {</div>
-<div class="line"><a name="l00821"></a><span class="lineno">  821</span>&#160;                Result&lt;BooleanFunction&gt; lhs = <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;&quot;</span>), rhs = <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;&quot;</span>);</div>
-<div class="line"><a name="l00822"></a><span class="lineno">  822</span>&#160; </div>
-<div class="line"><a name="l00823"></a><span class="lineno">  823</span>&#160;                <span class="keyword">namespace </span>x3 = boost::spirit::x3;</div>
+<div class="line"><a name="l00798"></a><span class="lineno">  798</span>&#160; </div>
+<div class="line"><a name="l00799"></a><span class="lineno">  799</span>&#160;                fclose(stream);</div>
+<div class="line"><a name="l00800"></a><span class="lineno">  800</span>&#160;            }</div>
+<div class="line"><a name="l00801"></a><span class="lineno">  801</span>&#160;            Vec_VecFree(vLevels);</div>
+<div class="line"><a name="l00802"></a><span class="lineno">  802</span>&#160; </div>
+<div class="line"><a name="l00803"></a><span class="lineno">  803</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(ss.str());</div>
+<div class="line"><a name="l00804"></a><span class="lineno">  804</span>&#160;        }</div>
+<div class="line"><a name="l00805"></a><span class="lineno">  805</span>&#160; </div>
+<div class="line"><a name="l00813"></a><span class="lineno">  813</span>&#160;        Result&lt;BooleanFunction&gt; translate_from_verilog(<span class="keyword">const</span> std::string&amp; verilog, <span class="keyword">const</span> BooleanFunction&amp; <span class="keyword">function</span>)</div>
+<div class="line"><a name="l00814"></a><span class="lineno">  814</span>&#160;        {</div>
+<div class="line"><a name="l00822"></a><span class="lineno">  822</span>&#160;            <span class="keyword">auto</span> parse_assignment = [](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; assignment) -&gt; Result&lt;std::tuple&lt;BooleanFunction, BooleanFunction&gt;&gt; {</div>
+<div class="line"><a name="l00823"></a><span class="lineno">  823</span>&#160;                Result&lt;BooleanFunction&gt; lhs = <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;&quot;</span>), rhs = <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;&quot;</span>);</div>
 <div class="line"><a name="l00824"></a><span class="lineno">  824</span>&#160; </div>
-<div class="line"><a name="l00826"></a><span class="lineno">  826</span>&#160;                <span class="comment">// Actions</span></div>
-<div class="line"><a name="l00828"></a><span class="lineno">  828</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00829"></a><span class="lineno">  829</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> LHSAction = [&amp;lhs](<span class="keyword">auto</span>&amp; ctx) { lhs = <a class="code" href="classhal_1_1_boolean_function.html#a9c83dda09f69fb886f33d792cfb8fa6f">BooleanFunction::from_string</a>(_attr(ctx)); };</div>
-<div class="line"><a name="l00830"></a><span class="lineno">  830</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> RHSAction = [&amp;rhs](<span class="keyword">auto</span>&amp; ctx) { rhs = <a class="code" href="classhal_1_1_boolean_function.html#a9c83dda09f69fb886f33d792cfb8fa6f">BooleanFunction::from_string</a>(_attr(ctx)); };</div>
-<div class="line"><a name="l00831"></a><span class="lineno">  831</span>&#160; </div>
-<div class="line"><a name="l00833"></a><span class="lineno">  833</span>&#160;                <span class="comment">// Rules</span></div>
-<div class="line"><a name="l00835"></a><span class="lineno">  835</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00836"></a><span class="lineno">  836</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> EndOfLineRule = x3::lit(<span class="stringliteral">&quot;;&quot;</span>) &gt;&gt; *x3::space;</div>
-<div class="line"><a name="l00837"></a><span class="lineno">  837</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> RHSRule       = x3::lexeme[*x3::char_(<span class="stringliteral">&quot;a-zA-Z0-9_+*~|&amp;!&#39;()[]\\ &quot;</span>)][RHSAction];</div>
-<div class="line"><a name="l00838"></a><span class="lineno">  838</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> EqualSignRule = *x3::space &gt;&gt; x3::lit(<span class="stringliteral">&quot;=&quot;</span>) &gt;&gt; *x3::space;</div>
-<div class="line"><a name="l00839"></a><span class="lineno">  839</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> LHSRule       = x3::lexeme[*x3::char_(<span class="stringliteral">&quot;a-zA-Z0-9_&quot;</span>)][LHSAction];</div>
-<div class="line"><a name="l00840"></a><span class="lineno">  840</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> AssignRule    = *x3::space &gt;&gt; x3::lit(<span class="stringliteral">&quot;assign&quot;</span>) &gt;&gt; *x3::space;</div>
-<div class="line"><a name="l00841"></a><span class="lineno">  841</span>&#160; </div>
-<div class="line"><a name="l00842"></a><span class="lineno">  842</span>&#160;                <span class="comment">// (1) parse the assignment to left-hand and right-hand side</span></div>
-<div class="line"><a name="l00843"></a><span class="lineno">  843</span>&#160;                <span class="keyword">auto</span> iter     = assignment.begin();</div>
-<div class="line"><a name="l00844"></a><span class="lineno">  844</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> ok = x3::phrase_parse(iter,</div>
-<div class="line"><a name="l00845"></a><span class="lineno">  845</span>&#160;                                                 assignment.end(),</div>
-<div class="line"><a name="l00847"></a><span class="lineno">  847</span>&#160;                                                 <span class="comment">// Parsing Expression Grammar</span></div>
-<div class="line"><a name="l00849"></a><span class="lineno">  849</span>&#160;<span class="comment"></span>                                                 AssignRule &gt;&gt; LHSRule &gt;&gt; EqualSignRule &gt;&gt; RHSRule &gt;&gt; EndOfLineRule,</div>
-<div class="line"><a name="l00850"></a><span class="lineno">  850</span>&#160;                                                 <span class="comment">// we use an invalid a.k.a. non-printable ASCII character in order</span></div>
-<div class="line"><a name="l00851"></a><span class="lineno">  851</span>&#160;                                                 <span class="comment">// to prevent the skipping of space characters as they are defined</span></div>
-<div class="line"><a name="l00852"></a><span class="lineno">  852</span>&#160;                                                 <span class="comment">// as skipper within a Boolean function and operation</span></div>
-<div class="line"><a name="l00853"></a><span class="lineno">  853</span>&#160;                                                 x3::char_(0x00));</div>
-<div class="line"><a name="l00854"></a><span class="lineno">  854</span>&#160; </div>
-<div class="line"><a name="l00855"></a><span class="lineno">  855</span>&#160;                <span class="keywordflow">if</span> (!ok || (iter != assignment.end()))</div>
-<div class="line"><a name="l00856"></a><span class="lineno">  856</span>&#160;                {</div>
-<div class="line"><a name="l00857"></a><span class="lineno">  857</span>&#160;                    <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not parse assignment from Verilog notation: &#39;&quot;</span> + assignment + <span class="stringliteral">&quot;&#39; (remaining &#39;&quot;</span> + std::string(iter, assignment.end()) + <span class="stringliteral">&quot;&#39;)&quot;</span>);</div>
-<div class="line"><a name="l00858"></a><span class="lineno">  858</span>&#160;                }</div>
-<div class="line"><a name="l00859"></a><span class="lineno">  859</span>&#160; </div>
-<div class="line"><a name="l00860"></a><span class="lineno">  860</span>&#160;                <span class="keywordflow">if</span> (lhs.is_error())</div>
-<div class="line"><a name="l00861"></a><span class="lineno">  861</span>&#160;                {</div>
-<div class="line"><a name="l00862"></a><span class="lineno">  862</span>&#160;                    <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a>(lhs.get_error(), <span class="stringliteral">&quot;cannot parse assignment from Verilog notation: unable to translate left side of assignment &#39;&quot;</span> + assignment + <span class="stringliteral">&quot;&#39; into a Boolean function&quot;</span>);</div>
-<div class="line"><a name="l00863"></a><span class="lineno">  863</span>&#160;                }</div>
-<div class="line"><a name="l00864"></a><span class="lineno">  864</span>&#160;                <span class="keywordflow">if</span> (rhs.is_error())</div>
-<div class="line"><a name="l00865"></a><span class="lineno">  865</span>&#160;                {</div>
-<div class="line"><a name="l00866"></a><span class="lineno">  866</span>&#160;                    <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a>(rhs.get_error(), <span class="stringliteral">&quot;cannot parse assignment from Verilog notation: unable to translate right side of assignment &#39;&quot;</span> + assignment + <span class="stringliteral">&quot;&#39; into a Boolean function&quot;</span>);</div>
-<div class="line"><a name="l00867"></a><span class="lineno">  867</span>&#160;                }</div>
-<div class="line"><a name="l00868"></a><span class="lineno">  868</span>&#160; </div>
-<div class="line"><a name="l00869"></a><span class="lineno">  869</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>({lhs.get(), rhs.get()});</div>
-<div class="line"><a name="l00870"></a><span class="lineno">  870</span>&#160;            };</div>
-<div class="line"><a name="l00871"></a><span class="lineno">  871</span>&#160; </div>
-<div class="line"><a name="l00872"></a><span class="lineno">  872</span>&#160;            std::map&lt;BooleanFunction, BooleanFunction&gt; assignments;</div>
+<div class="line"><a name="l00825"></a><span class="lineno">  825</span>&#160;                <span class="keyword">namespace </span>x3 = boost::spirit::x3;</div>
+<div class="line"><a name="l00826"></a><span class="lineno">  826</span>&#160; </div>
+<div class="line"><a name="l00828"></a><span class="lineno">  828</span>&#160;                <span class="comment">// Actions</span></div>
+<div class="line"><a name="l00830"></a><span class="lineno">  830</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00831"></a><span class="lineno">  831</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> LHSAction = [&amp;lhs](<span class="keyword">auto</span>&amp; ctx) { lhs = <a class="code" href="classhal_1_1_boolean_function.html#a9c83dda09f69fb886f33d792cfb8fa6f">BooleanFunction::from_string</a>(_attr(ctx)); };</div>
+<div class="line"><a name="l00832"></a><span class="lineno">  832</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> RHSAction = [&amp;rhs](<span class="keyword">auto</span>&amp; ctx) { rhs = <a class="code" href="classhal_1_1_boolean_function.html#a9c83dda09f69fb886f33d792cfb8fa6f">BooleanFunction::from_string</a>(_attr(ctx)); };</div>
+<div class="line"><a name="l00833"></a><span class="lineno">  833</span>&#160; </div>
+<div class="line"><a name="l00835"></a><span class="lineno">  835</span>&#160;                <span class="comment">// Rules</span></div>
+<div class="line"><a name="l00837"></a><span class="lineno">  837</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00838"></a><span class="lineno">  838</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> EndOfLineRule = x3::lit(<span class="stringliteral">&quot;;&quot;</span>) &gt;&gt; *x3::space;</div>
+<div class="line"><a name="l00839"></a><span class="lineno">  839</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> RHSRule       = x3::lexeme[*x3::char_(<span class="stringliteral">&quot;a-zA-Z0-9_+*~|&amp;!&#39;()[]\\ &quot;</span>)][RHSAction];</div>
+<div class="line"><a name="l00840"></a><span class="lineno">  840</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> EqualSignRule = *x3::space &gt;&gt; x3::lit(<span class="stringliteral">&quot;=&quot;</span>) &gt;&gt; *x3::space;</div>
+<div class="line"><a name="l00841"></a><span class="lineno">  841</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> LHSRule       = x3::lexeme[*x3::char_(<span class="stringliteral">&quot;a-zA-Z0-9_&quot;</span>)][LHSAction];</div>
+<div class="line"><a name="l00842"></a><span class="lineno">  842</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> AssignRule    = *x3::space &gt;&gt; x3::lit(<span class="stringliteral">&quot;assign&quot;</span>) &gt;&gt; *x3::space;</div>
+<div class="line"><a name="l00843"></a><span class="lineno">  843</span>&#160; </div>
+<div class="line"><a name="l00844"></a><span class="lineno">  844</span>&#160;                <span class="comment">// (1) parse the assignment to left-hand and right-hand side</span></div>
+<div class="line"><a name="l00845"></a><span class="lineno">  845</span>&#160;                <span class="keyword">auto</span> iter     = assignment.begin();</div>
+<div class="line"><a name="l00846"></a><span class="lineno">  846</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> ok = x3::phrase_parse(iter,</div>
+<div class="line"><a name="l00847"></a><span class="lineno">  847</span>&#160;                                                 assignment.end(),</div>
+<div class="line"><a name="l00849"></a><span class="lineno">  849</span>&#160;                                                 <span class="comment">// Parsing Expression Grammar</span></div>
+<div class="line"><a name="l00851"></a><span class="lineno">  851</span>&#160;<span class="comment"></span>                                                 AssignRule &gt;&gt; LHSRule &gt;&gt; EqualSignRule &gt;&gt; RHSRule &gt;&gt; EndOfLineRule,</div>
+<div class="line"><a name="l00852"></a><span class="lineno">  852</span>&#160;                                                 <span class="comment">// we use an invalid a.k.a. non-printable ASCII character in order</span></div>
+<div class="line"><a name="l00853"></a><span class="lineno">  853</span>&#160;                                                 <span class="comment">// to prevent the skipping of space characters as they are defined</span></div>
+<div class="line"><a name="l00854"></a><span class="lineno">  854</span>&#160;                                                 <span class="comment">// as skipper within a Boolean function and operation</span></div>
+<div class="line"><a name="l00855"></a><span class="lineno">  855</span>&#160;                                                 x3::char_(0x00));</div>
+<div class="line"><a name="l00856"></a><span class="lineno">  856</span>&#160; </div>
+<div class="line"><a name="l00857"></a><span class="lineno">  857</span>&#160;                <span class="keywordflow">if</span> (!ok || (iter != assignment.end()))</div>
+<div class="line"><a name="l00858"></a><span class="lineno">  858</span>&#160;                {</div>
+<div class="line"><a name="l00859"></a><span class="lineno">  859</span>&#160;                    <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not parse assignment from Verilog notation: &#39;&quot;</span> + assignment + <span class="stringliteral">&quot;&#39; (remaining &#39;&quot;</span> + std::string(iter, assignment.end()) + <span class="stringliteral">&quot;&#39;)&quot;</span>);</div>
+<div class="line"><a name="l00860"></a><span class="lineno">  860</span>&#160;                }</div>
+<div class="line"><a name="l00861"></a><span class="lineno">  861</span>&#160; </div>
+<div class="line"><a name="l00862"></a><span class="lineno">  862</span>&#160;                <span class="keywordflow">if</span> (lhs.is_error())</div>
+<div class="line"><a name="l00863"></a><span class="lineno">  863</span>&#160;                {</div>
+<div class="line"><a name="l00864"></a><span class="lineno">  864</span>&#160;                    <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a>(lhs.get_error(), <span class="stringliteral">&quot;cannot parse assignment from Verilog notation: unable to translate left side of assignment &#39;&quot;</span> + assignment + <span class="stringliteral">&quot;&#39; into a Boolean function&quot;</span>);</div>
+<div class="line"><a name="l00865"></a><span class="lineno">  865</span>&#160;                }</div>
+<div class="line"><a name="l00866"></a><span class="lineno">  866</span>&#160;                <span class="keywordflow">if</span> (rhs.is_error())</div>
+<div class="line"><a name="l00867"></a><span class="lineno">  867</span>&#160;                {</div>
+<div class="line"><a name="l00868"></a><span class="lineno">  868</span>&#160;                    <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a>(rhs.get_error(), <span class="stringliteral">&quot;cannot parse assignment from Verilog notation: unable to translate right side of assignment &#39;&quot;</span> + assignment + <span class="stringliteral">&quot;&#39; into a Boolean function&quot;</span>);</div>
+<div class="line"><a name="l00869"></a><span class="lineno">  869</span>&#160;                }</div>
+<div class="line"><a name="l00870"></a><span class="lineno">  870</span>&#160; </div>
+<div class="line"><a name="l00871"></a><span class="lineno">  871</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>({lhs.get(), rhs.get()});</div>
+<div class="line"><a name="l00872"></a><span class="lineno">  872</span>&#160;            };</div>
 <div class="line"><a name="l00873"></a><span class="lineno">  873</span>&#160; </div>
-<div class="line"><a name="l00874"></a><span class="lineno">  874</span>&#160;            <span class="comment">// (1) translate each Verilog assignment of the form &quot;assign ... = ...;&quot;</span></div>
-<div class="line"><a name="l00875"></a><span class="lineno">  875</span>&#160;            std::istringstream <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>(verilog);</div>
-<div class="line"><a name="l00876"></a><span class="lineno">  876</span>&#160;            std::string line;</div>
-<div class="line"><a name="l00877"></a><span class="lineno">  877</span>&#160;            <span class="keywordflow">while</span> (std::getline(data, line))</div>
-<div class="line"><a name="l00878"></a><span class="lineno">  878</span>&#160;            {</div>
-<div class="line"><a name="l00879"></a><span class="lineno">  879</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">auto</span> assignment = parse_assignment(line); assignment.is_ok())</div>
-<div class="line"><a name="l00880"></a><span class="lineno">  880</span>&#160;                {</div>
-<div class="line"><a name="l00881"></a><span class="lineno">  881</span>&#160;                    <span class="keyword">auto</span> [lhs, rhs]  = assignment.get();</div>
-<div class="line"><a name="l00882"></a><span class="lineno">  882</span>&#160;                    assignments[lhs] = rhs;</div>
-<div class="line"><a name="l00883"></a><span class="lineno">  883</span>&#160;                }</div>
-<div class="line"><a name="l00884"></a><span class="lineno">  884</span>&#160;            }</div>
-<div class="line"><a name="l00885"></a><span class="lineno">  885</span>&#160; </div>
-<div class="line"><a name="l00886"></a><span class="lineno">  886</span>&#160;            <span class="comment">// (2) check that each output variable is defined within the assignments</span></div>
-<div class="line"><a name="l00887"></a><span class="lineno">  887</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> output_variables = get_output_variables(<span class="keyword">function</span>);</div>
-<div class="line"><a name="l00888"></a><span class="lineno">  888</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; output_variable : output_variables)</div>
-<div class="line"><a name="l00889"></a><span class="lineno">  889</span>&#160;            {</div>
-<div class="line"><a name="l00890"></a><span class="lineno">  890</span>&#160;                <span class="keywordflow">if</span> (assignments.find(<a class="code" href="classhal_1_1_boolean_function.html#a2265500404669bf52f6aeed96d74f92f">BooleanFunction::Var</a>(output_variable)) == assignments.end())</div>
-<div class="line"><a name="l00891"></a><span class="lineno">  891</span>&#160;                {</div>
-<div class="line"><a name="l00892"></a><span class="lineno">  892</span>&#160;                    <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not parse assignment from Verilog notation: unable to simplify Boolean function&#39;&quot;</span> + <span class="keyword">function</span>.<a class="code" href="namespacenlohmann.html#ad675d1c22f5240b2b3065c241b204477">to_string</a>() + <span class="stringliteral">&quot;&#39; as output variable is not defined in Verilog&quot;</span>);</div>
-<div class="line"><a name="l00893"></a><span class="lineno">  893</span>&#160;                }</div>
-<div class="line"><a name="l00894"></a><span class="lineno">  894</span>&#160;            }</div>
-<div class="line"><a name="l00895"></a><span class="lineno">  895</span>&#160; </div>
-<div class="line"><a name="l00896"></a><span class="lineno">  896</span>&#160;            <span class="comment">// (3) recursively replace the variables for each output Boolean function</span></div>
-<div class="line"><a name="l00897"></a><span class="lineno">  897</span>&#160;            <span class="comment">//     until only input variables of the original function are present in</span></div>
-<div class="line"><a name="l00898"></a><span class="lineno">  898</span>&#160;            <span class="comment">//     the function</span></div>
-<div class="line"><a name="l00899"></a><span class="lineno">  899</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> inputs = <span class="keyword">function</span>.get_variable_names();</div>
-<div class="line"><a name="l00900"></a><span class="lineno">  900</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; output_variable : output_variables)</div>
-<div class="line"><a name="l00901"></a><span class="lineno">  901</span>&#160;            {</div>
-<div class="line"><a name="l00902"></a><span class="lineno">  902</span>&#160;                <span class="keyword">auto</span> <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">output</a> = <a class="code" href="classhal_1_1_boolean_function.html#a2265500404669bf52f6aeed96d74f92f">BooleanFunction::Var</a>(output_variable);</div>
-<div class="line"><a name="l00903"></a><span class="lineno">  903</span>&#160; </div>
-<div class="line"><a name="l00904"></a><span class="lineno">  904</span>&#160;                <span class="comment">// in order to prevent infinite-loops by unsupported inputs such as</span></div>
-<div class="line"><a name="l00905"></a><span class="lineno">  905</span>&#160;                <span class="comment">// cyclic replacement dependencies, we only replace |assignments| times</span></div>
-<div class="line"><a name="l00906"></a><span class="lineno">  906</span>&#160;                <span class="keyword">auto</span> counter = 0u;</div>
-<div class="line"><a name="l00907"></a><span class="lineno">  907</span>&#160;                <span class="keywordflow">while</span> ((assignments[output].get_variable_names() != inputs) &amp;&amp; (counter++ &lt; assignments.size()))</div>
-<div class="line"><a name="l00908"></a><span class="lineno">  908</span>&#160;                {</div>
-<div class="line"><a name="l00909"></a><span class="lineno">  909</span>&#160;                    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; tmp : assignments[output].get_variable_names())</div>
-<div class="line"><a name="l00910"></a><span class="lineno">  910</span>&#160;                    {</div>
-<div class="line"><a name="l00911"></a><span class="lineno">  911</span>&#160;                        <span class="keywordflow">if</span> (inputs.find(tmp) != inputs.end())</div>
-<div class="line"><a name="l00912"></a><span class="lineno">  912</span>&#160;                        {</div>
-<div class="line"><a name="l00913"></a><span class="lineno">  913</span>&#160;                            <span class="keywordflow">continue</span>;</div>
-<div class="line"><a name="l00914"></a><span class="lineno">  914</span>&#160;                        }</div>
-<div class="line"><a name="l00915"></a><span class="lineno">  915</span>&#160;                        <span class="keyword">auto</span> simplified = assignments[<a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">output</a>].substitute(tmp, assignments[<a class="code" href="classhal_1_1_boolean_function.html#a2265500404669bf52f6aeed96d74f92f">BooleanFunction::Var</a>(tmp)]);</div>
-<div class="line"><a name="l00916"></a><span class="lineno">  916</span>&#160;                        <span class="keywordflow">if</span> (simplified.is_error())</div>
-<div class="line"><a name="l00917"></a><span class="lineno">  917</span>&#160;                        {</div>
-<div class="line"><a name="l00918"></a><span class="lineno">  918</span>&#160;                            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(simplified.get_error());</div>
-<div class="line"><a name="l00919"></a><span class="lineno">  919</span>&#160;                        }</div>
-<div class="line"><a name="l00920"></a><span class="lineno">  920</span>&#160; </div>
-<div class="line"><a name="l00921"></a><span class="lineno">  921</span>&#160;                        assignments[<a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">output</a>] = simplified.get();</div>
-<div class="line"><a name="l00922"></a><span class="lineno">  922</span>&#160;                    }</div>
-<div class="line"><a name="l00923"></a><span class="lineno">  923</span>&#160;                }</div>
-<div class="line"><a name="l00924"></a><span class="lineno">  924</span>&#160;            }</div>
-<div class="line"><a name="l00925"></a><span class="lineno">  925</span>&#160; </div>
-<div class="line"><a name="l00926"></a><span class="lineno">  926</span>&#160;            <span class="comment">// (4) validate the all outputs only contain input variables</span></div>
-<div class="line"><a name="l00927"></a><span class="lineno">  927</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; output_variable : output_variables)</div>
-<div class="line"><a name="l00928"></a><span class="lineno">  928</span>&#160;            {</div>
-<div class="line"><a name="l00929"></a><span class="lineno">  929</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; input : assignments[<a class="code" href="classhal_1_1_boolean_function.html#a2265500404669bf52f6aeed96d74f92f">BooleanFunction::Var</a>(output_variable)].get_variable_names())</div>
-<div class="line"><a name="l00930"></a><span class="lineno">  930</span>&#160;                {</div>
-<div class="line"><a name="l00931"></a><span class="lineno">  931</span>&#160;                    <span class="keywordflow">if</span> (inputs.find(input) == inputs.end())</div>
-<div class="line"><a name="l00932"></a><span class="lineno">  932</span>&#160;                    {</div>
-<div class="line"><a name="l00933"></a><span class="lineno">  933</span>&#160;                        <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not parse assignment from Verilog notation: unable to replace output variable &#39;&quot;</span> + output_variable + <span class="stringliteral">&quot;&#39; as it contains temporary variable &#39;&quot;</span> + input + <span class="stringliteral">&quot;&#39;&quot;</span>);</div>
-<div class="line"><a name="l00934"></a><span class="lineno">  934</span>&#160;                    }</div>
-<div class="line"><a name="l00935"></a><span class="lineno">  935</span>&#160;                }</div>
-<div class="line"><a name="l00936"></a><span class="lineno">  936</span>&#160;            }</div>
-<div class="line"><a name="l00937"></a><span class="lineno">  937</span>&#160; </div>
-<div class="line"><a name="l00938"></a><span class="lineno">  938</span>&#160;            <span class="comment">// (5) concatenate all output Boolean functions into a single function</span></div>
-<div class="line"><a name="l00939"></a><span class="lineno">  939</span>&#160;            <span class="keyword">auto</span> <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">state</a> = assignments[<a class="code" href="classhal_1_1_boolean_function.html#a2265500404669bf52f6aeed96d74f92f">BooleanFunction::Var</a>(output_variables[0])];</div>
-<div class="line"><a name="l00940"></a><span class="lineno">  940</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> i = 1u; i &lt; <span class="keyword">function</span>.size(); i++)</div>
-<div class="line"><a name="l00941"></a><span class="lineno">  941</span>&#160;            {</div>
-<div class="line"><a name="l00942"></a><span class="lineno">  942</span>&#160;                <span class="keyword">auto</span> concat = <a class="code" href="classhal_1_1_boolean_function.html#a73ac77fd1a52c75b47401fdc73813a96">BooleanFunction::Concat</a>(assignments[<a class="code" href="classhal_1_1_boolean_function.html#a2265500404669bf52f6aeed96d74f92f">BooleanFunction::Var</a>(output_variables[i])].clone(), <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">state</a>.clone(), <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">state</a>.size() + 1);</div>
-<div class="line"><a name="l00943"></a><span class="lineno">  943</span>&#160; </div>
-<div class="line"><a name="l00944"></a><span class="lineno">  944</span>&#160;                <span class="keywordflow">if</span> (concat.is_ok())</div>
-<div class="line"><a name="l00945"></a><span class="lineno">  945</span>&#160;                {</div>
-<div class="line"><a name="l00946"></a><span class="lineno">  946</span>&#160;                    <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">state</a> = concat.get();</div>
-<div class="line"><a name="l00947"></a><span class="lineno">  947</span>&#160;                }</div>
-<div class="line"><a name="l00948"></a><span class="lineno">  948</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00949"></a><span class="lineno">  949</span>&#160;                {</div>
-<div class="line"><a name="l00950"></a><span class="lineno">  950</span>&#160;                    <span class="keywordflow">return</span> concat;</div>
-<div class="line"><a name="l00951"></a><span class="lineno">  951</span>&#160;                }</div>
-<div class="line"><a name="l00952"></a><span class="lineno">  952</span>&#160;            }</div>
-<div class="line"><a name="l00953"></a><span class="lineno">  953</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(state);</div>
-<div class="line"><a name="l00954"></a><span class="lineno">  954</span>&#160;        }</div>
-<div class="line"><a name="l00955"></a><span class="lineno">  955</span>&#160;    }    <span class="comment">// namespace</span></div>
-<div class="line"><a name="l00956"></a><span class="lineno">  956</span>&#160; </div>
-<div class="line"><a name="l00957"></a><span class="lineno"><a class="line" href="namespacehal_1_1_simplification.html#a596c449cefc0ec052c5ce6d8691e825e">  957</a></span>&#160;    <a class="code" href="classhal_1_1_result.html">Result&lt;BooleanFunction&gt;</a> <a class="code" href="namespacehal_1_1_simplification.html#a596c449cefc0ec052c5ce6d8691e825e">Simplification::abc_simplification</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&amp; <span class="keyword">function</span>)</div>
-<div class="line"><a name="l00958"></a><span class="lineno">  958</span>&#160;    {</div>
-<div class="line"><a name="l00959"></a><span class="lineno">  959</span>&#160;        <span class="comment">// # Developer Note</span></div>
-<div class="line"><a name="l00960"></a><span class="lineno">  960</span>&#160;        <span class="comment">// In order to apply a global optimization to the Boolean function, we</span></div>
-<div class="line"><a name="l00961"></a><span class="lineno">  961</span>&#160;        <span class="comment">// leverage the rich-featured and robust implementations of ABC [1]. To</span></div>
-<div class="line"><a name="l00962"></a><span class="lineno">  962</span>&#160;        <span class="comment">// this end, we first translate the Boolean function into a subset of</span></div>
-<div class="line"><a name="l00963"></a><span class="lineno">  963</span>&#160;        <span class="comment">// ABC&#39;s and-inverter graph structures (e.g., ABC cannot handle arith-</span></div>
-<div class="line"><a name="l00964"></a><span class="lineno">  964</span>&#160;        <span class="comment">// metic such as &#39;+&#39; and we have to translate multi-bit vectors into</span></div>
-<div class="line"><a name="l00965"></a><span class="lineno">  965</span>&#160;        <span class="comment">// single bit-vectors). We then use the rewriting, balancing and re-</span></div>
-<div class="line"><a name="l00966"></a><span class="lineno">  966</span>&#160;        <span class="comment">// factoring in order to minimize the Boolean function and then read-</span></div>
-<div class="line"><a name="l00967"></a><span class="lineno">  967</span>&#160;        <span class="comment">// back the graph back into our Boolean function representation.</span></div>
-<div class="line"><a name="l00968"></a><span class="lineno">  968</span>&#160;        <span class="comment">//</span></div>
-<div class="line"><a name="l00969"></a><span class="lineno">  969</span>&#160;        <span class="comment">// [1] https://people.eecs.berkeley.edu/~alanmi/abc/</span></div>
-<div class="line"><a name="l00970"></a><span class="lineno">  970</span>&#160;        <span class="keyword">static</span> ContextABC context;</div>
-<div class="line"><a name="l00971"></a><span class="lineno">  971</span>&#160; </div>
-<div class="line"><a name="l00972"></a><span class="lineno">  972</span>&#160;        <span class="comment">// (1) check whether the Boolean function can be simplified using ABC</span></div>
-<div class="line"><a name="l00973"></a><span class="lineno">  973</span>&#160;        <span class="keyword">using</span> NodeType = <a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html">BooleanFunction::NodeType</a>;</div>
-<div class="line"><a name="l00974"></a><span class="lineno">  974</span>&#160; </div>
-<div class="line"><a name="l00975"></a><span class="lineno">  975</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> std::set&lt;u16&gt; valid_abc_node_types({</div>
-<div class="line"><a name="l00976"></a><span class="lineno">  976</span>&#160;            <a class="code" href="namespacehal_1_1_s_m_t_1_1_constant_propagation.html#afbc2e6ebdc283c968ec1e626ed3e1909">NodeType::And</a>,</div>
-<div class="line"><a name="l00977"></a><span class="lineno">  977</span>&#160;            <a class="code" href="namespacehal_1_1_s_m_t_1_1_constant_propagation.html#a5d53b5b85ea58da69aadc5f10830d556">NodeType::Not</a>,</div>
-<div class="line"><a name="l00978"></a><span class="lineno">  978</span>&#160;            <a class="code" href="namespacehal_1_1_s_m_t_1_1_constant_propagation.html#a51f6958db49b5a9839e83e4eadf4d397">NodeType::Or</a>,</div>
-<div class="line"><a name="l00979"></a><span class="lineno">  979</span>&#160;            <a class="code" href="namespacehal_1_1_s_m_t_1_1_constant_propagation.html#af563fff1af1b123375641378f162a2fd">NodeType::Xor</a>,</div>
-<div class="line"><a name="l00980"></a><span class="lineno">  980</span>&#160;            NodeType::Variable,</div>
-<div class="line"><a name="l00981"></a><span class="lineno">  981</span>&#160;        });</div>
-<div class="line"><a name="l00982"></a><span class="lineno">  982</span>&#160; </div>
-<div class="line"><a name="l00983"></a><span class="lineno">  983</span>&#160;        <span class="keywordflow">if</span> (<span class="keyword">auto</span> nodes = <span class="keyword">function</span>.get_nodes();</div>
-<div class="line"><a name="l00984"></a><span class="lineno">  984</span>&#160;            std::any_of(nodes.begin(), nodes.end(), [](<span class="keyword">auto</span> node) { return valid_abc_node_types.find(node.type) == valid_abc_node_types.end(); }) || <span class="keyword">function</span>.get_variable_names().empty())</div>
-<div class="line"><a name="l00985"></a><span class="lineno">  985</span>&#160;        {</div>
-<div class="line"><a name="l00986"></a><span class="lineno">  986</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(<span class="keyword">function</span>.clone());</div>
-<div class="line"><a name="l00987"></a><span class="lineno">  987</span>&#160;        }</div>
-<div class="line"><a name="l00988"></a><span class="lineno">  988</span>&#160; </div>
-<div class="line"><a name="l00989"></a><span class="lineno">  989</span>&#160;        <span class="comment">// (2) since the simplification and translations require access to the</span></div>
-<div class="line"><a name="l00990"></a><span class="lineno">  990</span>&#160;        <span class="comment">//     ABC global frame, we have to ensure an exclusive access in case</span></div>
-<div class="line"><a name="l00991"></a><span class="lineno">  991</span>&#160;        <span class="comment">//     Boolean function simplifications are executed in parallel</span></div>
-<div class="line"><a name="l00992"></a><span class="lineno">  992</span>&#160;        <span class="keyword">static</span> std::mutex mutex;</div>
-<div class="line"><a name="l00993"></a><span class="lineno">  993</span>&#160;        mutex.lock();</div>
-<div class="line"><a name="l00994"></a><span class="lineno">  994</span>&#160; </div>
-<div class="line"><a name="l00995"></a><span class="lineno">  995</span>&#160;        <span class="keyword">auto</span> status = translate_to_abc(<span class="keyword">function</span>).map&lt;std::monostate&gt;([](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; network) { <span class="keywordflow">return</span> simplify(network); });</div>
+<div class="line"><a name="l00874"></a><span class="lineno">  874</span>&#160;            std::map&lt;BooleanFunction, BooleanFunction&gt; assignments;</div>
+<div class="line"><a name="l00875"></a><span class="lineno">  875</span>&#160; </div>
+<div class="line"><a name="l00876"></a><span class="lineno">  876</span>&#160;            <span class="comment">// (1) translate each Verilog assignment of the form &quot;assign ... = ...;&quot;</span></div>
+<div class="line"><a name="l00877"></a><span class="lineno">  877</span>&#160;            std::istringstream <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>(verilog);</div>
+<div class="line"><a name="l00878"></a><span class="lineno">  878</span>&#160;            std::string line;</div>
+<div class="line"><a name="l00879"></a><span class="lineno">  879</span>&#160;            <span class="keywordflow">while</span> (std::getline(data, line))</div>
+<div class="line"><a name="l00880"></a><span class="lineno">  880</span>&#160;            {</div>
+<div class="line"><a name="l00881"></a><span class="lineno">  881</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">auto</span> assignment = parse_assignment(line); assignment.is_ok())</div>
+<div class="line"><a name="l00882"></a><span class="lineno">  882</span>&#160;                {</div>
+<div class="line"><a name="l00883"></a><span class="lineno">  883</span>&#160;                    <span class="keyword">auto</span> [lhs, rhs]  = assignment.get();</div>
+<div class="line"><a name="l00884"></a><span class="lineno">  884</span>&#160;                    assignments[lhs] = rhs;</div>
+<div class="line"><a name="l00885"></a><span class="lineno">  885</span>&#160;                }</div>
+<div class="line"><a name="l00886"></a><span class="lineno">  886</span>&#160;            }</div>
+<div class="line"><a name="l00887"></a><span class="lineno">  887</span>&#160; </div>
+<div class="line"><a name="l00888"></a><span class="lineno">  888</span>&#160;            <span class="comment">// (2) check that each output variable is defined within the assignments</span></div>
+<div class="line"><a name="l00889"></a><span class="lineno">  889</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> output_variables = get_output_variables(<span class="keyword">function</span>);</div>
+<div class="line"><a name="l00890"></a><span class="lineno">  890</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; output_variable : output_variables)</div>
+<div class="line"><a name="l00891"></a><span class="lineno">  891</span>&#160;            {</div>
+<div class="line"><a name="l00892"></a><span class="lineno">  892</span>&#160;                <span class="keywordflow">if</span> (assignments.find(<a class="code" href="classhal_1_1_boolean_function.html#a2265500404669bf52f6aeed96d74f92f">BooleanFunction::Var</a>(output_variable)) == assignments.end())</div>
+<div class="line"><a name="l00893"></a><span class="lineno">  893</span>&#160;                {</div>
+<div class="line"><a name="l00894"></a><span class="lineno">  894</span>&#160;                    <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not parse assignment from Verilog notation: unable to simplify Boolean function&#39;&quot;</span> + <span class="keyword">function</span>.<a class="code" href="namespacenlohmann.html#ad675d1c22f5240b2b3065c241b204477">to_string</a>() + <span class="stringliteral">&quot;&#39; as output variable is not defined in Verilog&quot;</span>);</div>
+<div class="line"><a name="l00895"></a><span class="lineno">  895</span>&#160;                }</div>
+<div class="line"><a name="l00896"></a><span class="lineno">  896</span>&#160;            }</div>
+<div class="line"><a name="l00897"></a><span class="lineno">  897</span>&#160; </div>
+<div class="line"><a name="l00898"></a><span class="lineno">  898</span>&#160;            <span class="comment">// (3) recursively replace the variables for each output Boolean function</span></div>
+<div class="line"><a name="l00899"></a><span class="lineno">  899</span>&#160;            <span class="comment">//     until only input variables of the original function are present in</span></div>
+<div class="line"><a name="l00900"></a><span class="lineno">  900</span>&#160;            <span class="comment">//     the function</span></div>
+<div class="line"><a name="l00901"></a><span class="lineno">  901</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> inputs = <span class="keyword">function</span>.get_variable_names();</div>
+<div class="line"><a name="l00902"></a><span class="lineno">  902</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; output_variable : output_variables)</div>
+<div class="line"><a name="l00903"></a><span class="lineno">  903</span>&#160;            {</div>
+<div class="line"><a name="l00904"></a><span class="lineno">  904</span>&#160;                <span class="keyword">auto</span> <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">output</a> = <a class="code" href="classhal_1_1_boolean_function.html#a2265500404669bf52f6aeed96d74f92f">BooleanFunction::Var</a>(output_variable);</div>
+<div class="line"><a name="l00905"></a><span class="lineno">  905</span>&#160; </div>
+<div class="line"><a name="l00906"></a><span class="lineno">  906</span>&#160;                <span class="comment">// in order to prevent infinite-loops by unsupported inputs such as</span></div>
+<div class="line"><a name="l00907"></a><span class="lineno">  907</span>&#160;                <span class="comment">// cyclic replacement dependencies, we only replace |assignments| times</span></div>
+<div class="line"><a name="l00908"></a><span class="lineno">  908</span>&#160;                <span class="keyword">auto</span> counter = 0u;</div>
+<div class="line"><a name="l00909"></a><span class="lineno">  909</span>&#160;                <span class="keywordflow">while</span> ((assignments[output].get_variable_names() != inputs) &amp;&amp; (counter++ &lt; assignments.size()))</div>
+<div class="line"><a name="l00910"></a><span class="lineno">  910</span>&#160;                {</div>
+<div class="line"><a name="l00911"></a><span class="lineno">  911</span>&#160;                    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; tmp : assignments[output].get_variable_names())</div>
+<div class="line"><a name="l00912"></a><span class="lineno">  912</span>&#160;                    {</div>
+<div class="line"><a name="l00913"></a><span class="lineno">  913</span>&#160;                        <span class="keywordflow">if</span> (inputs.find(tmp) != inputs.end())</div>
+<div class="line"><a name="l00914"></a><span class="lineno">  914</span>&#160;                        {</div>
+<div class="line"><a name="l00915"></a><span class="lineno">  915</span>&#160;                            <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00916"></a><span class="lineno">  916</span>&#160;                        }</div>
+<div class="line"><a name="l00917"></a><span class="lineno">  917</span>&#160;                        <span class="keyword">auto</span> simplified = assignments[<a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">output</a>].substitute(tmp, assignments[<a class="code" href="classhal_1_1_boolean_function.html#a2265500404669bf52f6aeed96d74f92f">BooleanFunction::Var</a>(tmp)]);</div>
+<div class="line"><a name="l00918"></a><span class="lineno">  918</span>&#160;                        <span class="keywordflow">if</span> (simplified.is_error())</div>
+<div class="line"><a name="l00919"></a><span class="lineno">  919</span>&#160;                        {</div>
+<div class="line"><a name="l00920"></a><span class="lineno">  920</span>&#160;                            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(simplified.get_error());</div>
+<div class="line"><a name="l00921"></a><span class="lineno">  921</span>&#160;                        }</div>
+<div class="line"><a name="l00922"></a><span class="lineno">  922</span>&#160; </div>
+<div class="line"><a name="l00923"></a><span class="lineno">  923</span>&#160;                        assignments[<a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">output</a>] = simplified.get();</div>
+<div class="line"><a name="l00924"></a><span class="lineno">  924</span>&#160;                    }</div>
+<div class="line"><a name="l00925"></a><span class="lineno">  925</span>&#160;                }</div>
+<div class="line"><a name="l00926"></a><span class="lineno">  926</span>&#160;            }</div>
+<div class="line"><a name="l00927"></a><span class="lineno">  927</span>&#160; </div>
+<div class="line"><a name="l00928"></a><span class="lineno">  928</span>&#160;            <span class="comment">// (4) validate the all outputs only contain input variables</span></div>
+<div class="line"><a name="l00929"></a><span class="lineno">  929</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; output_variable : output_variables)</div>
+<div class="line"><a name="l00930"></a><span class="lineno">  930</span>&#160;            {</div>
+<div class="line"><a name="l00931"></a><span class="lineno">  931</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; input : assignments[<a class="code" href="classhal_1_1_boolean_function.html#a2265500404669bf52f6aeed96d74f92f">BooleanFunction::Var</a>(output_variable)].get_variable_names())</div>
+<div class="line"><a name="l00932"></a><span class="lineno">  932</span>&#160;                {</div>
+<div class="line"><a name="l00933"></a><span class="lineno">  933</span>&#160;                    <span class="keywordflow">if</span> (inputs.find(input) == inputs.end())</div>
+<div class="line"><a name="l00934"></a><span class="lineno">  934</span>&#160;                    {</div>
+<div class="line"><a name="l00935"></a><span class="lineno">  935</span>&#160;                        <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not parse assignment from Verilog notation: unable to replace output variable &#39;&quot;</span> + output_variable + <span class="stringliteral">&quot;&#39; as it contains temporary variable &#39;&quot;</span> + input + <span class="stringliteral">&quot;&#39;&quot;</span>);</div>
+<div class="line"><a name="l00936"></a><span class="lineno">  936</span>&#160;                    }</div>
+<div class="line"><a name="l00937"></a><span class="lineno">  937</span>&#160;                }</div>
+<div class="line"><a name="l00938"></a><span class="lineno">  938</span>&#160;            }</div>
+<div class="line"><a name="l00939"></a><span class="lineno">  939</span>&#160; </div>
+<div class="line"><a name="l00940"></a><span class="lineno">  940</span>&#160;            <span class="comment">// (5) concatenate all output Boolean functions into a single function</span></div>
+<div class="line"><a name="l00941"></a><span class="lineno">  941</span>&#160;            <span class="keyword">auto</span> <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">state</a> = assignments[<a class="code" href="classhal_1_1_boolean_function.html#a2265500404669bf52f6aeed96d74f92f">BooleanFunction::Var</a>(output_variables[0])];</div>
+<div class="line"><a name="l00942"></a><span class="lineno">  942</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> i = 1u; i &lt; <span class="keyword">function</span>.size(); i++)</div>
+<div class="line"><a name="l00943"></a><span class="lineno">  943</span>&#160;            {</div>
+<div class="line"><a name="l00944"></a><span class="lineno">  944</span>&#160;                <span class="keyword">auto</span> concat = <a class="code" href="classhal_1_1_boolean_function.html#a73ac77fd1a52c75b47401fdc73813a96">BooleanFunction::Concat</a>(assignments[<a class="code" href="classhal_1_1_boolean_function.html#a2265500404669bf52f6aeed96d74f92f">BooleanFunction::Var</a>(output_variables[i])].clone(), <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">state</a>.clone(), <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">state</a>.size() + 1);</div>
+<div class="line"><a name="l00945"></a><span class="lineno">  945</span>&#160; </div>
+<div class="line"><a name="l00946"></a><span class="lineno">  946</span>&#160;                <span class="keywordflow">if</span> (concat.is_ok())</div>
+<div class="line"><a name="l00947"></a><span class="lineno">  947</span>&#160;                {</div>
+<div class="line"><a name="l00948"></a><span class="lineno">  948</span>&#160;                    <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">state</a> = concat.get();</div>
+<div class="line"><a name="l00949"></a><span class="lineno">  949</span>&#160;                }</div>
+<div class="line"><a name="l00950"></a><span class="lineno">  950</span>&#160;                <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00951"></a><span class="lineno">  951</span>&#160;                {</div>
+<div class="line"><a name="l00952"></a><span class="lineno">  952</span>&#160;                    <span class="keywordflow">return</span> concat;</div>
+<div class="line"><a name="l00953"></a><span class="lineno">  953</span>&#160;                }</div>
+<div class="line"><a name="l00954"></a><span class="lineno">  954</span>&#160;            }</div>
+<div class="line"><a name="l00955"></a><span class="lineno">  955</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(state);</div>
+<div class="line"><a name="l00956"></a><span class="lineno">  956</span>&#160;        }</div>
+<div class="line"><a name="l00957"></a><span class="lineno">  957</span>&#160;    }    <span class="comment">// namespace</span></div>
+<div class="line"><a name="l00958"></a><span class="lineno">  958</span>&#160; </div>
+<div class="line"><a name="l00959"></a><span class="lineno"><a class="line" href="namespacehal_1_1_simplification.html#a596c449cefc0ec052c5ce6d8691e825e">  959</a></span>&#160;    <a class="code" href="classhal_1_1_result.html">Result&lt;BooleanFunction&gt;</a> <a class="code" href="namespacehal_1_1_simplification.html#a596c449cefc0ec052c5ce6d8691e825e">Simplification::abc_simplification</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&amp; <span class="keyword">function</span>)</div>
+<div class="line"><a name="l00960"></a><span class="lineno">  960</span>&#160;    {</div>
+<div class="line"><a name="l00961"></a><span class="lineno">  961</span>&#160;        <span class="comment">// # Developer Note</span></div>
+<div class="line"><a name="l00962"></a><span class="lineno">  962</span>&#160;        <span class="comment">// In order to apply a global optimization to the Boolean function, we</span></div>
+<div class="line"><a name="l00963"></a><span class="lineno">  963</span>&#160;        <span class="comment">// leverage the rich-featured and robust implementations of ABC [1]. To</span></div>
+<div class="line"><a name="l00964"></a><span class="lineno">  964</span>&#160;        <span class="comment">// this end, we first translate the Boolean function into a subset of</span></div>
+<div class="line"><a name="l00965"></a><span class="lineno">  965</span>&#160;        <span class="comment">// ABC&#39;s and-inverter graph structures (e.g., ABC cannot handle arith-</span></div>
+<div class="line"><a name="l00966"></a><span class="lineno">  966</span>&#160;        <span class="comment">// metic such as &#39;+&#39; and we have to translate multi-bit vectors into</span></div>
+<div class="line"><a name="l00967"></a><span class="lineno">  967</span>&#160;        <span class="comment">// single bit-vectors). We then use the rewriting, balancing and re-</span></div>
+<div class="line"><a name="l00968"></a><span class="lineno">  968</span>&#160;        <span class="comment">// factoring in order to minimize the Boolean function and then read-</span></div>
+<div class="line"><a name="l00969"></a><span class="lineno">  969</span>&#160;        <span class="comment">// back the graph back into our Boolean function representation.</span></div>
+<div class="line"><a name="l00970"></a><span class="lineno">  970</span>&#160;        <span class="comment">//</span></div>
+<div class="line"><a name="l00971"></a><span class="lineno">  971</span>&#160;        <span class="comment">// [1] https://people.eecs.berkeley.edu/~alanmi/abc/</span></div>
+<div class="line"><a name="l00972"></a><span class="lineno">  972</span>&#160;        <span class="keyword">static</span> ContextABC context;</div>
+<div class="line"><a name="l00973"></a><span class="lineno">  973</span>&#160; </div>
+<div class="line"><a name="l00974"></a><span class="lineno">  974</span>&#160;        <span class="comment">// (1) check whether the Boolean function can be simplified using ABC</span></div>
+<div class="line"><a name="l00975"></a><span class="lineno">  975</span>&#160;        <span class="keyword">using</span> NodeType = <a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html">BooleanFunction::NodeType</a>;</div>
+<div class="line"><a name="l00976"></a><span class="lineno">  976</span>&#160; </div>
+<div class="line"><a name="l00977"></a><span class="lineno">  977</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> std::set&lt;u16&gt; valid_abc_node_types({</div>
+<div class="line"><a name="l00978"></a><span class="lineno">  978</span>&#160;            <a class="code" href="namespacehal_1_1_s_m_t_1_1_constant_propagation.html#afbc2e6ebdc283c968ec1e626ed3e1909">NodeType::And</a>,</div>
+<div class="line"><a name="l00979"></a><span class="lineno">  979</span>&#160;            <a class="code" href="namespacehal_1_1_s_m_t_1_1_constant_propagation.html#a5d53b5b85ea58da69aadc5f10830d556">NodeType::Not</a>,</div>
+<div class="line"><a name="l00980"></a><span class="lineno">  980</span>&#160;            <a class="code" href="namespacehal_1_1_s_m_t_1_1_constant_propagation.html#a51f6958db49b5a9839e83e4eadf4d397">NodeType::Or</a>,</div>
+<div class="line"><a name="l00981"></a><span class="lineno">  981</span>&#160;            <a class="code" href="namespacehal_1_1_s_m_t_1_1_constant_propagation.html#af563fff1af1b123375641378f162a2fd">NodeType::Xor</a>,</div>
+<div class="line"><a name="l00982"></a><span class="lineno">  982</span>&#160;            NodeType::Variable,</div>
+<div class="line"><a name="l00983"></a><span class="lineno">  983</span>&#160;        });</div>
+<div class="line"><a name="l00984"></a><span class="lineno">  984</span>&#160; </div>
+<div class="line"><a name="l00985"></a><span class="lineno">  985</span>&#160;        <span class="keywordflow">if</span> (<span class="keyword">auto</span> nodes = <span class="keyword">function</span>.get_nodes();</div>
+<div class="line"><a name="l00986"></a><span class="lineno">  986</span>&#160;            std::any_of(nodes.begin(), nodes.end(), [](<span class="keyword">auto</span> node) { return valid_abc_node_types.find(node.type) == valid_abc_node_types.end(); }) || <span class="keyword">function</span>.get_variable_names().empty())</div>
+<div class="line"><a name="l00987"></a><span class="lineno">  987</span>&#160;        {</div>
+<div class="line"><a name="l00988"></a><span class="lineno">  988</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(<span class="keyword">function</span>.clone());</div>
+<div class="line"><a name="l00989"></a><span class="lineno">  989</span>&#160;        }</div>
+<div class="line"><a name="l00990"></a><span class="lineno">  990</span>&#160; </div>
+<div class="line"><a name="l00991"></a><span class="lineno">  991</span>&#160;        <span class="comment">// (2) since the simplification and translations require access to the</span></div>
+<div class="line"><a name="l00992"></a><span class="lineno">  992</span>&#160;        <span class="comment">//     ABC global frame, we have to ensure an exclusive access in case</span></div>
+<div class="line"><a name="l00993"></a><span class="lineno">  993</span>&#160;        <span class="comment">//     Boolean function simplifications are executed in parallel</span></div>
+<div class="line"><a name="l00994"></a><span class="lineno">  994</span>&#160;        <span class="keyword">static</span> std::mutex mutex;</div>
+<div class="line"><a name="l00995"></a><span class="lineno">  995</span>&#160;        mutex.lock();</div>
 <div class="line"><a name="l00996"></a><span class="lineno">  996</span>&#160; </div>
-<div class="line"><a name="l00997"></a><span class="lineno">  997</span>&#160;        <span class="keywordflow">if</span> (status.is_error())</div>
-<div class="line"><a name="l00998"></a><span class="lineno">  998</span>&#160;        {</div>
-<div class="line"><a name="l00999"></a><span class="lineno">  999</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a>(status.get_error(), <span class="stringliteral">&quot;could not simplyfy Boolean function using ABC: unable to translate &amp; simplify Boolean function &#39;&quot;</span> + <span class="keyword">function</span>.to_string() + <span class="stringliteral">&quot;&#39;&quot;</span>);</div>
-<div class="line"><a name="l01000"></a><span class="lineno"> 1000</span>&#160;        }</div>
-<div class="line"><a name="l01001"></a><span class="lineno"> 1001</span>&#160; </div>
-<div class="line"><a name="l01002"></a><span class="lineno"> 1002</span>&#160;        <span class="comment">// (3) translate the ABC graph back into a Boolean function</span></div>
-<div class="line"><a name="l01003"></a><span class="lineno"> 1003</span>&#160;        <span class="keyword">auto</span> translated_function = translate_from_abc().map&lt;<a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&gt;([&amp;<span class="keyword">function</span>](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; verilog) { <span class="keywordflow">return</span> translate_from_verilog(verilog, <span class="keyword">function</span>); });</div>
-<div class="line"><a name="l01004"></a><span class="lineno"> 1004</span>&#160; </div>
-<div class="line"><a name="l01005"></a><span class="lineno"> 1005</span>&#160;        mutex.unlock();</div>
+<div class="line"><a name="l00997"></a><span class="lineno">  997</span>&#160;        <span class="keyword">auto</span> status = translate_to_abc(<span class="keyword">function</span>).map&lt;std::monostate&gt;([](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; network) { <span class="keywordflow">return</span> simplify(network); });</div>
+<div class="line"><a name="l00998"></a><span class="lineno">  998</span>&#160; </div>
+<div class="line"><a name="l00999"></a><span class="lineno">  999</span>&#160;        <span class="keywordflow">if</span> (status.is_error())</div>
+<div class="line"><a name="l01000"></a><span class="lineno"> 1000</span>&#160;        {</div>
+<div class="line"><a name="l01001"></a><span class="lineno"> 1001</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a>(status.get_error(), <span class="stringliteral">&quot;could not simplyfy Boolean function using ABC: unable to translate &amp; simplify Boolean function &#39;&quot;</span> + <span class="keyword">function</span>.to_string() + <span class="stringliteral">&quot;&#39;&quot;</span>);</div>
+<div class="line"><a name="l01002"></a><span class="lineno"> 1002</span>&#160;        }</div>
+<div class="line"><a name="l01003"></a><span class="lineno"> 1003</span>&#160; </div>
+<div class="line"><a name="l01004"></a><span class="lineno"> 1004</span>&#160;        <span class="comment">// (3) translate the ABC graph back into a Boolean function</span></div>
+<div class="line"><a name="l01005"></a><span class="lineno"> 1005</span>&#160;        <span class="keyword">auto</span> translated_function = translate_from_abc().map&lt;<a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&gt;([&amp;<span class="keyword">function</span>](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; verilog) { <span class="keywordflow">return</span> translate_from_verilog(verilog, <span class="keyword">function</span>); });</div>
 <div class="line"><a name="l01006"></a><span class="lineno"> 1006</span>&#160; </div>
-<div class="line"><a name="l01007"></a><span class="lineno"> 1007</span>&#160;        <span class="keywordflow">if</span> (translated_function.is_ok())</div>
-<div class="line"><a name="l01008"></a><span class="lineno"> 1008</span>&#160;        {</div>
-<div class="line"><a name="l01009"></a><span class="lineno"> 1009</span>&#160;            <span class="keywordflow">return</span> translated_function;</div>
-<div class="line"><a name="l01010"></a><span class="lineno"> 1010</span>&#160;        }</div>
-<div class="line"><a name="l01011"></a><span class="lineno"> 1011</span>&#160;        <span class="keywordflow">else</span></div>
-<div class="line"><a name="l01012"></a><span class="lineno"> 1012</span>&#160;        {</div>
-<div class="line"><a name="l01013"></a><span class="lineno"> 1013</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(<span class="keyword">function</span>.clone());</div>
-<div class="line"><a name="l01014"></a><span class="lineno"> 1014</span>&#160;        }</div>
-<div class="line"><a name="l01015"></a><span class="lineno"> 1015</span>&#160;    }</div>
-<div class="line"><a name="l01016"></a><span class="lineno"> 1016</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l01007"></a><span class="lineno"> 1007</span>&#160;        mutex.unlock();</div>
+<div class="line"><a name="l01008"></a><span class="lineno"> 1008</span>&#160; </div>
+<div class="line"><a name="l01009"></a><span class="lineno"> 1009</span>&#160;        <span class="keywordflow">if</span> (translated_function.is_ok())</div>
+<div class="line"><a name="l01010"></a><span class="lineno"> 1010</span>&#160;        {</div>
+<div class="line"><a name="l01011"></a><span class="lineno"> 1011</span>&#160;            <span class="keywordflow">return</span> translated_function;</div>
+<div class="line"><a name="l01012"></a><span class="lineno"> 1012</span>&#160;        }</div>
+<div class="line"><a name="l01013"></a><span class="lineno"> 1013</span>&#160;        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l01014"></a><span class="lineno"> 1014</span>&#160;        {</div>
+<div class="line"><a name="l01015"></a><span class="lineno"> 1015</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(<span class="keyword">function</span>.clone());</div>
+<div class="line"><a name="l01016"></a><span class="lineno"> 1016</span>&#160;        }</div>
+<div class="line"><a name="l01017"></a><span class="lineno"> 1017</span>&#160;    }</div>
+<div class="line"><a name="l01018"></a><span class="lineno"> 1018</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="asimplification_8h_html"><div class="ttname"><a href="simplification_8h.html">simplification.h</a></div></div>
@@ -1180,7 +1182,7 @@ $(document).ready(function(){initNavTree('simplification__abc_8cpp_source.html',
 <div class="ttc" id="aclasshal_1_1_boolean_function_html"><div class="ttname"><a href="classhal_1_1_boolean_function.html">hal::BooleanFunction</a></div><div class="ttdef"><b>Definition:</b> <a href="boolean__function_8h_source.html#l00054">boolean_function.h:54</a></div></div>
 <div class="ttc" id="asimplification__abc_8cpp_html_a8a812c4c647b7e056f90551186cf61aa"><div class="ttname"><a href="simplification__abc_8cpp.html#a8a812c4c647b7e056f90551186cf61aa">Abc_NtkAlloc</a></div><div class="ttdeci">Abc_Ntk_t * Abc_NtkAlloc(Abc_NtkType_t, Abc_NtkFunc_t, int)</div></div>
 <div class="ttc" id="asimplification__abc_8cpp_html_a74a5d73631b122b8af655b2b79bbded4"><div class="ttname"><a href="simplification__abc_8cpp.html#a74a5d73631b122b8af655b2b79bbded4">Abc_NtkType_t</a></div><div class="ttdeci">Abc_NtkType_t</div><div class="ttdoc">Copied from &quot;src/base/abc/abc.h&quot;, see above for link to ABC's repository.</div><div class="ttdef"><b>Definition:</b> <a href="simplification__abc_8cpp_source.html#l00043">simplification_abc.cpp:43</a></div></div>
-<div class="ttc" id="anamespacehal_1_1_simplification_html_a596c449cefc0ec052c5ce6d8691e825e"><div class="ttname"><a href="namespacehal_1_1_simplification.html#a596c449cefc0ec052c5ce6d8691e825e">hal::Simplification::abc_simplification</a></div><div class="ttdeci">Result&lt; BooleanFunction &gt; abc_simplification(const BooleanFunction &amp;function)</div><div class="ttdef"><b>Definition:</b> <a href="simplification__abc_8cpp_source.html#l00957">simplification_abc.cpp:957</a></div></div>
+<div class="ttc" id="anamespacehal_1_1_simplification_html_a596c449cefc0ec052c5ce6d8691e825e"><div class="ttname"><a href="namespacehal_1_1_simplification.html#a596c449cefc0ec052c5ce6d8691e825e">hal::Simplification::abc_simplification</a></div><div class="ttdeci">Result&lt; BooleanFunction &gt; abc_simplification(const BooleanFunction &amp;function)</div><div class="ttdef"><b>Definition:</b> <a href="simplification__abc_8cpp_source.html#l00959">simplification_abc.cpp:959</a></div></div>
 <div class="ttc" id="astruct_abc___frame__t___html_aad1c9c243d250d0a0aaeeeffe5fe9545"><div class="ttname"><a href="struct_abc___frame__t__.html#aad1c9c243d250d0a0aaeeeffe5fe9545">Abc_Frame_t_::pFuncOnFrameDone</a></div><div class="ttdeci">Abc_Frame_Callback_BmcFrameDone_Func pFuncOnFrameDone</div><div class="ttdef"><b>Definition:</b> <a href="simplification__abc_8cpp_source.html#l00389">simplification_abc.cpp:389</a></div></div>
 <div class="ttc" id="astruct_vec___int__t___html_a3122cbf46c7105b837d073cdbd93f594"><div class="ttname"><a href="struct_vec___int__t__.html#a3122cbf46c7105b837d073cdbd93f594">Vec_Int_t_::pArray</a></div><div class="ttdeci">int * pArray</div><div class="ttdef"><b>Definition:</b> <a href="simplification__abc_8cpp_source.html#l00096">simplification_abc.cpp:96</a></div></div>
 <div class="ttc" id="astruct_abc___ntk__t___html_a73369b0e3b4a78d27f9d57023195cd3f"><div class="ttname"><a href="struct_abc___ntk__t__.html#a73369b0e3b4a78d27f9d57023195cd3f">Abc_Ntk_t_::pExdc</a></div><div class="ttdeci">Abc_Ntk_t * pExdc</div><div class="ttdef"><b>Definition:</b> <a href="simplification__abc_8cpp_source.html#l00230">simplification_abc.cpp:230</a></div></div>
@@ -1292,7 +1294,7 @@ $(document).ready(function(){initNavTree('simplification__abc_8cpp_source.html',
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="dir_c087a112b91d0fc4c12783641a32acb2.html">boolean_function</a></li><li class="navelem"><a class="el" href="simplification__abc_8cpp.html">simplification_abc.cpp</a></li>
-    <li class="footer">Generated on Mon Dec 5 2022 20:26:22 for HAL by
+    <li class="footer">Generated on Thu Dec 8 2022 18:30:27 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

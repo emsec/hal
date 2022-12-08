@@ -102,7 +102,7 @@ Collaboration diagram for subprocess::detail::has_type&lt; F, param_pack&lt; H, 
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:a829019a12ddee4513ab080d5c16b3d31"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structsubprocess_1_1detail_1_1has__type_3_01_f_00_01param__pack_3_01_h_00_01_t_8_8_8_01_4_01_4.html#a829019a12ddee4513ab080d5c16b3d31">value</a></td></tr>
+<tr class="memitem:a829019a12ddee4513ab080d5c16b3d31"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structsubprocess_1_1detail_1_1has__type_3_01_f_00_01param__pack_3_01_h_00_01_t_8_8_8_01_4_01_4.html#a829019a12ddee4513ab080d5c16b3d31">value</a> = std::is_same&lt;F, typename std::decay&lt;H&gt;::<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>&gt;::value ? true : <a class="el" href="structsubprocess_1_1detail_1_1has__type.html">has_type</a>&lt;F, <a class="el" href="structsubprocess_1_1detail_1_1param__pack.html">param_pack</a>&lt;T...&gt;&gt;::value</td></tr>
 <tr class="separator:a829019a12ddee4513ab080d5c16b3d31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -110,7 +110,7 @@ Static Public Attributes</h2></td></tr>
 struct subprocess::detail::has_type&lt; F, param_pack&lt; H, T... &gt; &gt;</h3>
 
 
-<p class="definition">Definition at line <a class="el" href="process_8h_source.html#l00984">984</a> of file <a class="el" href="process_8h_source.html">process.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="process_8h_source.html#l01084">1084</a> of file <a class="el" href="process_8h_source.html">process.h</a>.</p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a829019a12ddee4513ab080d5c16b3d31"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a829019a12ddee4513ab080d5c16b3d31">&#9670;&nbsp;</a></span>value</h2>
@@ -124,7 +124,7 @@ template&lt;typename F , typename H , typename... T&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr bool <a class="el" href="structsubprocess_1_1detail_1_1has__type.html">subprocess::detail::has_type</a>&lt; F, <a class="el" href="structsubprocess_1_1detail_1_1param__pack.html">param_pack</a>&lt; H, T... &gt; &gt;::value</td>
+          <td class="memname">constexpr bool <a class="el" href="structsubprocess_1_1detail_1_1has__type.html">subprocess::detail::has_type</a>&lt; F, <a class="el" href="structsubprocess_1_1detail_1_1param__pack.html">param_pack</a>&lt; H, T... &gt; &gt;::value = std::is_same&lt;F, typename std::decay&lt;H&gt;::<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>&gt;::value ? true : <a class="el" href="structsubprocess_1_1detail_1_1has__type.html">has_type</a>&lt;F, <a class="el" href="structsubprocess_1_1detail_1_1param__pack.html">param_pack</a>&lt;T...&gt;&gt;::value</td>
         </tr>
       </table>
   </td>
@@ -133,10 +133,8 @@ template&lt;typename F , typename H , typename... T&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">=</div>
-<div class="line">    <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">std::is_same&lt;F, typename std::decay&lt;H&gt;::type</a>&gt;<a class="code" href="structsubprocess_1_1detail_1_1has__type_3_01_f_00_01param__pack_3_01_h_00_01_t_8_8_8_01_4_01_4.html#a829019a12ddee4513ab080d5c16b3d31">::value</a> ? true : has_type&lt;F, param_pack&lt;<a class="code" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">T</a>...&gt;&gt;<a class="code" href="structsubprocess_1_1detail_1_1has__type_3_01_f_00_01param__pack_3_01_h_00_01_t_8_8_8_01_4_01_4.html#a829019a12ddee4513ab080d5c16b3d31">::value</a></div>
-</div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="process_8h_source.html#l00985">985</a> of file <a class="el" href="process_8h_source.html">process.h</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="process_8h_source.html#l01086">1086</a> of file <a class="el" href="process_8h_source.html">process.h</a>.</p>
 
 </div>
 </div>
@@ -145,14 +143,11 @@ template&lt;typename F , typename H , typename... T&gt; </div>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_a05e5f99d786b527ca4a260c21170c5e7"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a></div><div class="ttdeci">PinType type</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">netlist_serializer.cpp:57</a></div></div>
-<div class="ttc" id="astructsubprocess_1_1detail_1_1has__type_3_01_f_00_01param__pack_3_01_h_00_01_t_8_8_8_01_4_01_4_html_a829019a12ddee4513ab080d5c16b3d31"><div class="ttname"><a href="structsubprocess_1_1detail_1_1has__type_3_01_f_00_01param__pack_3_01_h_00_01_t_8_8_8_01_4_01_4.html#a829019a12ddee4513ab080d5c16b3d31">subprocess::detail::has_type&lt; F, param_pack&lt; H, T... &gt; &gt;::value</a></div><div class="ttdeci">static constexpr bool value</div><div class="ttdef"><b>Definition:</b> <a href="process_8h_source.html#l00985">process.h:985</a></div></div>
-<div class="ttc" id="anamespacehal_html_a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3"><div class="ttname"><a href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::AsyncSetResetBehavior::T</a></div><div class="ttdeci">@ T</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesubprocess.html">subprocess</a></li><li class="navelem"><a class="el" href="namespacesubprocess_1_1detail.html">detail</a></li><li class="navelem"><a class="el" href="structsubprocess_1_1detail_1_1has__type_3_01_f_00_01param__pack_3_01_h_00_01_t_8_8_8_01_4_01_4.html">has_type&lt; F, param_pack&lt; H, T... &gt; &gt;</a></li>
-    <li class="footer">Generated on Mon Dec 5 2022 20:26:28 for HAL by
+    <li class="footer">Generated on Thu Dec 8 2022 18:30:32 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

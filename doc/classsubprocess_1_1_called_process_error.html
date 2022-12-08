@@ -84,6 +84,7 @@ $(document).ready(function(){initNavTree('classsubprocess_1_1_called_process_err
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="classsubprocess_1_1_called_process_error-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">subprocess::CalledProcessError Class Reference</div>  </div>
@@ -112,16 +113,21 @@ Collaboration diagram for subprocess::CalledProcessError:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a55570f627d87ffd79262c75ada8fc6c8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsubprocess_1_1_called_process_error.html#a55570f627d87ffd79262c75ada8fc6c8">CalledProcessError</a> (const std::string &amp;error_msg)</td></tr>
-<tr class="separator:a55570f627d87ffd79262c75ada8fc6c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a2c67f849385e7c5dca50df93115f28"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsubprocess_1_1_called_process_error.html#a7a2c67f849385e7c5dca50df93115f28">CalledProcessError</a> (const std::string &amp;error_msg, int <a class="el" href="classsubprocess_1_1_called_process_error.html#acee59e7e6d3be64a269f10ed01c1d0f5">retcode</a>)</td></tr>
+<tr class="separator:a7a2c67f849385e7c5dca50df93115f28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:acee59e7e6d3be64a269f10ed01c1d0f5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsubprocess_1_1_called_process_error.html#acee59e7e6d3be64a269f10ed01c1d0f5">retcode</a></td></tr>
+<tr class="separator:acee59e7e6d3be64a269f10ed01c1d0f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>class: <a class="el" href="classsubprocess_1_1_called_process_error.html">CalledProcessError</a> Thrown when there was error executing the command. Check <a class="el" href="classsubprocess_1_1_popen.html">Popen</a> class API's to know when this exception can be thrown. </p>
 
-<p class="definition">Definition at line <a class="el" href="process_8h_source.html#l00123">123</a> of file <a class="el" href="process_8h_source.html">process.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="process_8h_source.html#l00122">122</a> of file <a class="el" href="process_8h_source.html">process.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a55570f627d87ffd79262c75ada8fc6c8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a55570f627d87ffd79262c75ada8fc6c8">&#9670;&nbsp;</a></span>CalledProcessError()</h2>
+<a id="a7a2c67f849385e7c5dca50df93115f28"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a2c67f849385e7c5dca50df93115f28">&#9670;&nbsp;</a></span>CalledProcessError()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -133,8 +139,18 @@ Public Member Functions</h2></td></tr>
           <td class="memname">subprocess::CalledProcessError::CalledProcessError </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>error_msg</em></td><td>)</td>
+          <td class="paramname"><em>error_msg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>retcode</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -148,6 +164,23 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="acee59e7e6d3be64a269f10ed01c1d0f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acee59e7e6d3be64a269f10ed01c1d0f5">&#9670;&nbsp;</a></span>retcode</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int subprocess::CalledProcessError::retcode</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="process_8h_source.html#l00125">125</a> of file <a class="el" href="process_8h_source.html">process.h</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>/home/runner/work/hal/hal/include/hal_core/utilities/<a class="el" href="process_8h_source.html">process.h</a></li>
 </ul>
@@ -157,7 +190,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesubprocess.html">subprocess</a></li><li class="navelem"><a class="el" href="classsubprocess_1_1_called_process_error.html">CalledProcessError</a></li>
-    <li class="footer">Generated on Mon Dec 5 2022 20:26:28 for HAL by
+    <li class="footer">Generated on Thu Dec 8 2022 18:30:32 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -1,5 +1,8 @@
 var NAVTREEINDEX29 =
 {
+"plugins_2gui_2include_2gui_2doxy__groups_8h_source.html":[7,0,1,3,0,0,53],
+"plugins_2gui_2include_2gui_2gui__utils_2netlist_8h.html":[7,0,1,3,0,0,24,3],
+"plugins_2gui_2include_2gui_2gui__utils_2netlist_8h.html#a3706ba37634242a317cc5abe4acd919f":[7,0,1,3,0,0,24,3,1],
 "plugins_2gui_2include_2gui_2gui__utils_2netlist_8h.html#aac880cdffea5d42f94b5582c92d644c3":[7,0,1,3,0,0,24,3,0],
 "plugins_2gui_2include_2gui_2gui__utils_2netlist_8h.html#ab18ab45d5471bc18531142eba0744767":[7,0,1,3,0,0,24,3,2],
 "plugins_2gui_2include_2gui_2gui__utils_2netlist_8h.html#ad51f27ed983b775629326cdfc3052fe5":[7,0,1,3,0,0,24,3,3],
@@ -246,8 +249,5 @@ var NAVTREEINDEX29 =
 "qpoint__extension_8h_source.html":[7,0,1,3,0,0,25,0],
 "ram__component_8cpp.html":[7,0,2,0,3,3,6],
 "ram__component_8cpp_source.html":[7,0,2,0,3,3,6],
-"ram__component_8h.html":[7,0,0,0,1,3,3,6],
-"ram__component_8h_source.html":[7,0,0,0,1,3,3,6],
-"ram__port__component_8cpp.html":[7,0,2,0,3,3,7],
-"ram__port__component_8cpp_source.html":[7,0,2,0,3,3,7]
+"ram__component_8h.html":[7,0,0,0,1,3,3,6]
 };
