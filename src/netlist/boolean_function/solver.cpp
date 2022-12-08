@@ -65,14 +65,15 @@ namespace hal
                 // TODO:
                 // check whether process was terminated (i.e. killed) via the subprocess
                 // API to channel this to the caller
-                const auto output = std::string(z3.communicate().first.buf.data(), z3.communicate().first.buf.size());
+                //const auto output = std::string(z3.communicate().first.buf.data(), z3.communicate().first.buf.size());
+                // const auto output = std::string(z3.communicate().first.buf.data(), z3.communicate().first.buf.size());
+                
+                // z3.close_input();
+                // z3.close_input();
+                // z3.close_input();
+                // z3.kill();
 
-                z3.close_input();
-                z3.close_input();
-                z3.close_input();
-                z3.kill();
-
-                return OK({false, output});
+                return OK({false, z3.communicate().first.buf.data()});
             }
         }    // namespace Z3
 

@@ -63,7 +63,7 @@ namespace hal
             /// Controls whether the SMT solver should generate a model in case formula is satisfiable.
             bool generate_model = true;
             /// The timeout after which the SMT solver is killed in seconds.
-            u64 timeout_in_seconds = 10;
+            u64 timeout_in_seconds = 30;
 
             ////////////////////////////////////////////////////////////////////////
             // Interface
