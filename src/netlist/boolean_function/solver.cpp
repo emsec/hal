@@ -56,6 +56,7 @@ namespace hal
                                              "-in",
                                              // kill execution after a given time
                                              "-T:" + std::to_string(config.timeout_in_seconds)},
+                                            subprocess::error{subprocess::PIPE},
                                             subprocess::output{subprocess::PIPE},
                                             subprocess::input{subprocess::PIPE});
 
@@ -64,7 +65,14 @@ namespace hal
                 // TODO:
                 // check whether process was terminated (i.e. killed) via the subprocess
                 // API to channel this to the caller
-                return OK({false, z3.communicate().first.buf.data()});
+                const auto output = std::string(z3.communicate().first.buf.data(), z3.communicate().first.buf.size());
+
+                z3.close_input();
+                z3.close_input();
+                z3.close_input();
+                z3.kill();
+
+                return OK({false, output});
             }
         }    // namespace Z3
 
