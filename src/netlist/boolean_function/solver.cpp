@@ -62,18 +62,20 @@ namespace hal
 
                 z3.send(input.c_str(), input.size());
 
+                auto z3_communication = z3.communicate();
+
+                std::vector<char> output_buf = z3_communication.first.buf;
+                std::string output(output_buf.begin(), output_buf.end());
+
                 // TODO:
                 // check whether process was terminated (i.e. killed) via the subprocess
                 // API to channel this to the caller
-                //const auto output = std::string(z3.communicate().first.buf.data(), z3.communicate().first.buf.size());
-                // const auto output = std::string(z3.communicate().first.buf.data(), z3.communicate().first.buf.size());
-                
-                // z3.close_input();
-                // z3.close_input();
-                // z3.close_input();
-                // z3.kill();
+                z3.close_input();
+                z3.close_output();
+                z3.close_error();
+                z3.kill();
 
-                return OK({false, z3.communicate().first.buf.data()});
+                return OK({false, output});
             }
         }    // namespace Z3
 
@@ -132,11 +134,19 @@ namespace hal
                     subprocess::input{subprocess::PIPE});
 
                 boolector.send(input.c_str(), input.size());
+                auto boolector_communication = boolector.communicate();
+
+                std::vector<char> output_buf = boolector_communication.first.buf;
+                std::string output(output_buf.begin(), output_buf.end());
 
                 // TODO:
                 // check whether process was terminated (i.e. killed) via the subprocess
                 // API to channel this to the caller
-                return OK({false, boolector.communicate().first.buf.data()});
+                boolector.close_input();
+                boolector.close_output();
+                boolector.close_error();
+                boolector.kill();
+                return OK({false, output});
             }
         }    // namespace Boolector
 
