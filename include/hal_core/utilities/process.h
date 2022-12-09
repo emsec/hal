@@ -1500,14 +1500,26 @@ namespace subprocess
         /// Stream close APIs
         void close_input()
         {
+            if (stream_.input_ != nullptr)
+            {
+                fclose(stream_.input_.get());
+            }
             stream_.input_.reset();
         }
         void close_output()
         {
+            if (stream_.output_ != nullptr)
+            {
+                fclose(stream_.output_.get());
+            }
             stream_.output_.reset();
         }
         void close_error()
         {
+            if (stream_.error_ != nullptr)
+            {
+                fclose(stream_.error_.get());
+            }
             stream_.error_.reset();
         }
 
@@ -2161,6 +2173,10 @@ namespace subprocess
                         }
                     }
                     // Close the input stream
+                    if (stream_->input_ != nullptr)
+                    {
+                        fclose(stream_->input_.get());
+                    }
                     stream_->input_.reset();
                 }
                 else if (stream_->output())
@@ -2178,7 +2194,12 @@ namespace subprocess
                     }
 
                     obuf.length = rbytes;
+
                     // Close the output stream
+                    if (stream_->output_ != nullptr)
+                    {
+                        fclose(stream_->output_.get());
+                    }
                     stream_->output_.reset();
                 }
                 else if (stream_->error())
@@ -2194,7 +2215,12 @@ namespace subprocess
                     }
 
                     ebuf.length = rbytes;
+
                     // Close the error stream
+                    if (stream_->error_ != nullptr)
+                    {
+                        fclose(stream_->error_.get());
+                    }
                     stream_->error_.reset();
                 }
                 return std::make_pair(std::move(obuf), std::move(ebuf));
