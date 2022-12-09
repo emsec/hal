@@ -139,186 +139,186 @@ $(document).ready(function(){initNavTree('solver_8cpp_source.html',''); initResi
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                z3.<a class="code" href="classsubprocess_1_1_popen.html#af7022808d58227377e167a63ae28c362">send</a>(<a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a>.c_str(), <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a>.size());</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                <span class="comment">// TODO:</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                <span class="comment">// check whether process was terminated (i.e. killed) via the subprocess</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                <span class="comment">// API to channel this to the caller</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                <span class="comment">//const auto output = std::string(z3.communicate().first.buf.data(), z3.communicate().first.buf.size());</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                <span class="comment">// const auto output = std::string(z3.communicate().first.buf.data(), z3.communicate().first.buf.size());</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                <span class="comment">// z3.close_input();</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                <span class="comment">// z3.close_input();</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                <span class="comment">// z3.close_input();</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                <span class="comment">// z3.kill();</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>({<span class="keyword">false</span>, z3.communicate().first.buf.data()});</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            }</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        }    <span class="comment">// namespace Z3</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno"><a class="line" href="namespacehal_1_1_s_m_t_1_1_boolector.html">   80</a></span>&#160;        <span class="keyword">namespace </span><a class="code" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aab22590d74202761c89aa802522a21110">Boolector</a></div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        {</div>
-<div class="line"><a name="l00083"></a><span class="lineno"><a class="line" href="namespacehal_1_1_s_m_t_1_1_boolector.html#a6626c1ae9e8922688a72dc6fd3e29f42">   83</a></span>&#160;            <a class="code" href="classhal_1_1_result.html">Result&lt;std::string&gt;</a> <a class="code" href="namespacehal_1_1_s_m_t_1_1_boolector.html#a6626c1ae9e8922688a72dc6fd3e29f42">query_binary_path</a>()</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            {</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                <span class="keyword">static</span> <span class="keyword">const</span> std::vector&lt;std::string&gt; boolector_binary_paths = {</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                    <span class="stringliteral">&quot;/usr/bin/boolector&quot;</span>,</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                    <span class="stringliteral">&quot;/usr/local/bin/boolector&quot;</span>,</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;                    <span class="stringliteral">&quot;/opt/homebrew/bin/boolector&quot;</span>,</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                };</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; path : boolector_binary_paths)</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;                {</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                    <span class="keywordflow">if</span> (std::filesystem::exists(path))</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;                    {</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                        <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(path);</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                    }</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                }</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not query binary path: no binary found for Boolector solver&quot;</span>);</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            }</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
-<div class="line"><a name="l00112"></a><span class="lineno"><a class="line" href="namespacehal_1_1_s_m_t_1_1_boolector.html#a6074035ce8034e3088b82b4ae887ef5c">  112</a></span>&#160;            <a class="code" href="classhal_1_1_result.html">Result&lt;std::tuple&lt;bool, std::string&gt;</a>&gt; <a class="code" href="namespacehal_1_1_s_m_t_1_1_boolector.html#a6074035ce8034e3088b82b4ae887ef5c">query</a>(std::string input, <span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>&amp; config)</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;            {</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;                <span class="keyword">auto</span> binary_path = <a class="code" href="namespacehal_1_1_s_m_t_1_1_boolector.html#a6626c1ae9e8922688a72dc6fd3e29f42">query_binary_path</a>();</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;                <span class="keywordflow">if</span> (binary_path.is_error())</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;                {</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;                    <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a>(binary_path.get_error(), <span class="stringliteral">&quot;could not query Boolector: unable to locate binary&quot;</span>);</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;                }</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;                <span class="keyword">auto</span> boolector = <a class="code" href="classsubprocess_1_1_popen.html">subprocess::Popen</a>(</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;                    {</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;                        binary_path.get(),</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;                        <span class="comment">// NOTE the boolector binary provided as package takes different parameters. The ones below do not seem to work.</span></div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;                        <span class="comment">// kill execution after a given time</span></div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;                        <span class="stringliteral">&quot;--time=&quot;</span> + <a class="code" href="namespacenlohmann.html#ad675d1c22f5240b2b3065c241b204477">std::to_string</a>(config.<a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html#a4d22bcaa540b788ec804f6df24a5df15">timeout_in_seconds</a>),</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;                        <span class="comment">// generate SMT-LIB v2 compatible output</span></div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;                        <span class="stringliteral">&quot;--output-format=smt2&quot;</span>,</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;                        <span class="comment">// set model generation if required</span></div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;                        std::string(<span class="stringliteral">&quot;--model-gen=&quot;</span>) + ((config.<a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html#a079ce610a89e273a18a7cda4d03023cd">generate_model</a>) ? <span class="stringliteral">&quot;1&quot;</span> : <span class="stringliteral">&quot;0&quot;</span>),</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;                    },</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;                    <a class="code" href="structsubprocess_1_1output.html">subprocess::output</a>{<a class="code" href="namespacesubprocess.html#a8c21131feb99bed9ffa644851ff499eda905c516538f07e316c905b58737b38fe">subprocess::PIPE</a>},</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;                    <a class="code" href="structsubprocess_1_1input.html">subprocess::input</a>{<a class="code" href="namespacesubprocess.html#a8c21131feb99bed9ffa644851ff499eda905c516538f07e316c905b58737b38fe">subprocess::PIPE</a>});</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;                boolector.<a class="code" href="classsubprocess_1_1_popen.html#af7022808d58227377e167a63ae28c362">send</a>(<a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a>.c_str(), <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a>.size());</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                <span class="keyword">auto</span> z3_communication = z3.communicate();</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                std::vector&lt;char&gt; output_buf = z3_communication.first.buf;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                std::string <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">output</a>(output_buf.begin(), output_buf.end());</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                <span class="comment">// TODO:</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                <span class="comment">// check whether process was terminated (i.e. killed) via the subprocess</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                <span class="comment">// API to channel this to the caller</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                z3.close_input();</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                z3.close_output();</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                z3.close_error();</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;                z3.kill();</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>({<span class="keyword">false</span>, <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">output</a>});</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            }</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        }    <span class="comment">// namespace Z3</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno"><a class="line" href="namespacehal_1_1_s_m_t_1_1_boolector.html">   82</a></span>&#160;        <span class="keyword">namespace </span><a class="code" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aab22590d74202761c89aa802522a21110">Boolector</a></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        {</div>
+<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="namespacehal_1_1_s_m_t_1_1_boolector.html#a6626c1ae9e8922688a72dc6fd3e29f42">   85</a></span>&#160;            <a class="code" href="classhal_1_1_result.html">Result&lt;std::string&gt;</a> <a class="code" href="namespacehal_1_1_s_m_t_1_1_boolector.html#a6626c1ae9e8922688a72dc6fd3e29f42">query_binary_path</a>()</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            {</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                <span class="keyword">static</span> <span class="keyword">const</span> std::vector&lt;std::string&gt; boolector_binary_paths = {</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;                    <span class="stringliteral">&quot;/usr/bin/boolector&quot;</span>,</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                    <span class="stringliteral">&quot;/usr/local/bin/boolector&quot;</span>,</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                    <span class="stringliteral">&quot;/opt/homebrew/bin/boolector&quot;</span>,</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                };</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; path : boolector_binary_paths)</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;                {</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                    <span class="keywordflow">if</span> (std::filesystem::exists(path))</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                    {</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                        <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(path);</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                    }</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                }</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not query binary path: no binary found for Boolector solver&quot;</span>);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            }</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
+<div class="line"><a name="l00114"></a><span class="lineno"><a class="line" href="namespacehal_1_1_s_m_t_1_1_boolector.html#a6074035ce8034e3088b82b4ae887ef5c">  114</a></span>&#160;            <a class="code" href="classhal_1_1_result.html">Result&lt;std::tuple&lt;bool, std::string&gt;</a>&gt; <a class="code" href="namespacehal_1_1_s_m_t_1_1_boolector.html#a6074035ce8034e3088b82b4ae887ef5c">query</a>(std::string input, <span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>&amp; config)</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;            {</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;                <span class="keyword">auto</span> binary_path = <a class="code" href="namespacehal_1_1_s_m_t_1_1_boolector.html#a6626c1ae9e8922688a72dc6fd3e29f42">query_binary_path</a>();</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;                <span class="keywordflow">if</span> (binary_path.is_error())</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;                {</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;                    <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a>(binary_path.get_error(), <span class="stringliteral">&quot;could not query Boolector: unable to locate binary&quot;</span>);</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;                }</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;                <span class="keyword">auto</span> boolector = <a class="code" href="classsubprocess_1_1_popen.html">subprocess::Popen</a>(</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;                    {</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;                        binary_path.get(),</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;                        <span class="comment">// NOTE the boolector binary provided as package takes different parameters. The ones below do not seem to work.</span></div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;                        <span class="comment">// kill execution after a given time</span></div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;                        <span class="stringliteral">&quot;--time=&quot;</span> + <a class="code" href="namespacenlohmann.html#ad675d1c22f5240b2b3065c241b204477">std::to_string</a>(config.<a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html#a4d22bcaa540b788ec804f6df24a5df15">timeout_in_seconds</a>),</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;                        <span class="comment">// generate SMT-LIB v2 compatible output</span></div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;                        <span class="stringliteral">&quot;--output-format=smt2&quot;</span>,</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;                        <span class="comment">// set model generation if required</span></div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;                        std::string(<span class="stringliteral">&quot;--model-gen=&quot;</span>) + ((config.<a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html#a079ce610a89e273a18a7cda4d03023cd">generate_model</a>) ? <span class="stringliteral">&quot;1&quot;</span> : <span class="stringliteral">&quot;0&quot;</span>),</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;                    },</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;                    <a class="code" href="structsubprocess_1_1output.html">subprocess::output</a>{<a class="code" href="namespacesubprocess.html#a8c21131feb99bed9ffa644851ff499eda905c516538f07e316c905b58737b38fe">subprocess::PIPE</a>},</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;                    <a class="code" href="structsubprocess_1_1input.html">subprocess::input</a>{<a class="code" href="namespacesubprocess.html#a8c21131feb99bed9ffa644851ff499eda905c516538f07e316c905b58737b38fe">subprocess::PIPE</a>});</div>
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;                <span class="comment">// TODO:</span></div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;                <span class="comment">// check whether process was terminated (i.e. killed) via the subprocess</span></div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;                <span class="comment">// API to channel this to the caller</span></div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>({<span class="keyword">false</span>, boolector.communicate().first.buf.data()});</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;            }</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        }    <span class="comment">// namespace Boolector</span></div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160; </div>
-<div class="line"><a name="l00143"></a><span class="lineno"><a class="line" href="classhal_1_1_s_m_t_1_1_solver.html#ab15e1cd82a2be092b14d7c26ab9b4194">  143</a></span>&#160;        <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#ab15e1cd82a2be092b14d7c26ab9b4194">Solver::Solver</a>(<span class="keyword">const</span> std::vector&lt;Constraint&gt;&amp; constraints) : m_constraints(constraints)</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        {</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        }</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160; </div>
-<div class="line"><a name="l00147"></a><span class="lineno"><a class="line" href="classhal_1_1_s_m_t_1_1_solver.html#aeac38e85fce7d2a95d551a9e869c1fed">  147</a></span>&#160;        <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html">Solver</a>&amp; <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#aeac38e85fce7d2a95d551a9e869c1fed">Solver::with_constraint</a>(<span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_constraint.html">Constraint</a>&amp; constraint)</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        {</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;            this-&gt;m_constraints.emplace_back(std::move(constraint));</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;            <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        }</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;                boolector.<a class="code" href="classsubprocess_1_1_popen.html#af7022808d58227377e167a63ae28c362">send</a>(<a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a>.c_str(), <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a>.size());</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;                <span class="keyword">auto</span> boolector_communication = boolector.communicate();</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160; </div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;                std::vector&lt;char&gt; output_buf = boolector_communication.first.buf;</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;                std::string <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">output</a>(output_buf.begin(), output_buf.end());</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160; </div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;                <span class="comment">// TODO:</span></div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;                <span class="comment">// check whether process was terminated (i.e. killed) via the subprocess</span></div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;                <span class="comment">// API to channel this to the caller</span></div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;                boolector.close_input();</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;                boolector.close_output();</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;                boolector.close_error();</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;                boolector.kill();</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>({<span class="keyword">false</span>, <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">output</a>});</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;            }</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        }    <span class="comment">// namespace Boolector</span></div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160; </div>
-<div class="line"><a name="l00153"></a><span class="lineno"><a class="line" href="classhal_1_1_s_m_t_1_1_solver.html#a7af33c85681754a3c2b9bd79aa3076b5">  153</a></span>&#160;        <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html">Solver</a>&amp; <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#a7af33c85681754a3c2b9bd79aa3076b5">Solver::with_constraints</a>(<span class="keyword">const</span> std::vector&lt;Constraint&gt;&amp; constraints)</div>
+<div class="line"><a name="l00153"></a><span class="lineno"><a class="line" href="classhal_1_1_s_m_t_1_1_solver.html#ab15e1cd82a2be092b14d7c26ab9b4194">  153</a></span>&#160;        <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#ab15e1cd82a2be092b14d7c26ab9b4194">Solver::Solver</a>(<span class="keyword">const</span> std::vector&lt;Constraint&gt;&amp; constraints) : m_constraints(constraints)</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        {</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp;&amp; constraint : constraints)</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;            {</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;                this-&gt;m_constraints.emplace_back(std::move(constraint));</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;            }</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;            <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        }</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160; </div>
-<div class="line"><a name="l00162"></a><span class="lineno"><a class="line" href="classhal_1_1_s_m_t_1_1_solver.html#a893f60adb9ff88b60841d02e5992277c">  162</a></span>&#160;        <span class="keyword">const</span> std::vector&lt;Constraint&gt;&amp; <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#a893f60adb9ff88b60841d02e5992277c">Solver::get_constraints</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;            <span class="keywordflow">return</span> m_constraints;</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        }</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160; </div>
-<div class="line"><a name="l00167"></a><span class="lineno"><a class="line" href="classhal_1_1_s_m_t_1_1_solver.html#af65f2cf75a023d67de2ef51125ee13fd">  167</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#af65f2cf75a023d67de2ef51125ee13fd">Solver::has_local_solver_for</a>(<a class="code" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4a">SolverType</a> solver)</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        {</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;            <span class="keyword">static</span> <span class="keyword">const</span> std::map&lt;SolverType, std::function&lt;Result&lt;std::string&gt;()&gt;&gt; type2query = {</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;                {<a class="code" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aa70e31ac6776e733109977f8afdd234ed">SolverType::Z3</a>, <a class="code" href="namespacehal_1_1_s_m_t_1_1_z3.html#aec83d53e618e88eb356a2a34c5b0bd56">Z3::query_binary_path</a>},</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;                {<a class="code" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aab22590d74202761c89aa802522a21110">SolverType::Boolector</a>, <a class="code" href="namespacehal_1_1_s_m_t_1_1_boolector.html#a6626c1ae9e8922688a72dc6fd3e29f42">Boolector::query_binary_path</a>},</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;            };</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160; </div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;            <span class="keywordflow">switch</span> (<span class="keyword">auto</span> it = type2query.find(solver); it != type2query.end())</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;            {</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;                <span class="keywordflow">case</span> <span class="keyword">true</span>:</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;                    <span class="keywordflow">return</span> it-&gt;second().is_ok();</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;                <span class="keywordflow">default</span>:</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;                    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;            }</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        }</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160; </div>
-<div class="line"><a name="l00183"></a><span class="lineno"><a class="line" href="classhal_1_1_s_m_t_1_1_solver.html#a371737bb0724009df7f8867510ab11ad">  183</a></span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;SolverResult&gt;</a> <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#a371737bb0724009df7f8867510ab11ad">Solver::query</a>(<span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>&amp; config)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;            <span class="keywordflow">if</span> (config.local)</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;            {</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = this-&gt;<a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#a46b0be21b0b728ce4d9192eff3433744">query_local</a>(config); res.is_error())</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;                {</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;                    <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a>(res.get_error(), <span class="stringliteral">&quot;unable to query SMT solver: local query failed&quot;</span>);</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;                }</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;                {</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;                    <span class="keywordflow">return</span> res;</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;                }</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;            }</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;            {</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = this-&gt;<a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#abe6e7dfb1915e0e1648c083f86081b90">query_remote</a>(config); res.is_error())</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;                {</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;                    <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a>(res.get_error(), <span class="stringliteral">&quot;unable to query SMT solver: remote query failed&quot;</span>);</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;                }</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;                {</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;                    <span class="keywordflow">return</span> res;</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;                }</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;            }</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;        }</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160; </div>
-<div class="line"><a name="l00209"></a><span class="lineno"><a class="line" href="classhal_1_1_s_m_t_1_1_solver.html#a46b0be21b0b728ce4d9192eff3433744">  209</a></span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;SolverResult&gt;</a> <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#a46b0be21b0b728ce4d9192eff3433744">Solver::query_local</a>(<span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>&amp; config)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;            <span class="keyword">static</span> <span class="keyword">const</span> std::map&lt;SolverType, std::function&lt;Result&lt;std::tuple&lt;bool, std::string&gt;&gt;(std::string, <span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>&amp;)&gt;&gt; type2query = {</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;                {<a class="code" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aa70e31ac6776e733109977f8afdd234ed">SolverType::Z3</a>, <a class="code" href="namespacehal_1_1_s_m_t_1_1_z3.html#a86d8a69e14b8943370e780aa47e76d8d">Z3::query</a>},</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;                {<a class="code" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aab22590d74202761c89aa802522a21110">SolverType::Boolector</a>, <a class="code" href="namespacehal_1_1_s_m_t_1_1_boolector.html#a6074035ce8034e3088b82b4ae887ef5c">Boolector::query</a>},</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;            };</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160; </div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;            <span class="keyword">auto</span> <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a> = Solver::translate_to_smt2(this-&gt;m_constraints, config);</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a>.is_error())</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;            {</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a>(<a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a>.get_error(), <span class="stringliteral">&quot;could not query local SMT solver: unable to translate SMT constraints and configuration to string&quot;</span>);</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;            }</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160; </div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;            <span class="keyword">auto</span> <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#a371737bb0724009df7f8867510ab11ad">query</a> = type2query.at(config.<a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html#a46f0f68c250e39ce8ef281b9f9a43b8d">solver</a>)(<a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a>.get(), config);</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#a371737bb0724009df7f8867510ab11ad">query</a>.is_ok())</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;            {</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;                <span class="keyword">auto</span> [was_killed, <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">output</a>] = <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#a371737bb0724009df7f8867510ab11ad">query</a>.get();</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;                <span class="keywordflow">return</span> Solver::translate_from_smt2(was_killed, <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">output</a>, config);</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;            }</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a>(<a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#a371737bb0724009df7f8867510ab11ad">query</a>.get_error(), <span class="stringliteral">&quot;could not query local SMT solver: unable to parse SMT result from string&quot;</span>);</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        }</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160; </div>
-<div class="line"><a name="l00231"></a><span class="lineno"><a class="line" href="classhal_1_1_s_m_t_1_1_solver.html#abe6e7dfb1915e0e1648c083f86081b90">  231</a></span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;SolverResult&gt;</a> <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#abe6e7dfb1915e0e1648c083f86081b90">Solver::query_remote</a>(<span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>&amp; <span class="comment">/* config */</span>)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;            <span class="comment">// unimplemented as this is feature not required at the moment</span></div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not query remote SMT solver: currently not supported&quot;</span>);</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        }</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160; </div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;std::string&gt;</a> Solver::translate_to_smt2(<span class="keyword">const</span> std::vector&lt;Constraint&gt;&amp; constraints, <span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>&amp; config)</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;        {</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;            <span class="keyword">auto</span> translate_declarations = [](<span class="keyword">const</span> std::vector&lt;Constraint&gt;&amp; _constraints) -&gt; std::string {</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;                std::set&lt;std::tuple&lt;std::string, u16&gt;&gt; inputs;</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; constraint : _constraints)</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;                {</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;                    <span class="keywordflow">if</span> (constraint.is_assignment())</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;                    {</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;                        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; node : constraint.get_assignment().get()-&gt;first.get_nodes())</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;                        {</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;                            <span class="keywordflow">if</span> (node.is_variable())</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;                            {</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;                                inputs.insert(std::make_tuple(node.variable, node.size));</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;                            }</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;                        }</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;                    }</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;                    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        }</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
+<div class="line"><a name="l00157"></a><span class="lineno"><a class="line" href="classhal_1_1_s_m_t_1_1_solver.html#aeac38e85fce7d2a95d551a9e869c1fed">  157</a></span>&#160;        <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html">Solver</a>&amp; <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#aeac38e85fce7d2a95d551a9e869c1fed">Solver::with_constraint</a>(<span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_constraint.html">Constraint</a>&amp; constraint)</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        {</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;            this-&gt;m_constraints.emplace_back(std::move(constraint));</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;            <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        }</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160; </div>
+<div class="line"><a name="l00163"></a><span class="lineno"><a class="line" href="classhal_1_1_s_m_t_1_1_solver.html#a7af33c85681754a3c2b9bd79aa3076b5">  163</a></span>&#160;        <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html">Solver</a>&amp; <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#a7af33c85681754a3c2b9bd79aa3076b5">Solver::with_constraints</a>(<span class="keyword">const</span> std::vector&lt;Constraint&gt;&amp; constraints)</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        {</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp;&amp; constraint : constraints)</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;            {</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;                this-&gt;m_constraints.emplace_back(std::move(constraint));</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;            }</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;            <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        }</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160; </div>
+<div class="line"><a name="l00172"></a><span class="lineno"><a class="line" href="classhal_1_1_s_m_t_1_1_solver.html#a893f60adb9ff88b60841d02e5992277c">  172</a></span>&#160;        <span class="keyword">const</span> std::vector&lt;Constraint&gt;&amp; <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#a893f60adb9ff88b60841d02e5992277c">Solver::get_constraints</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;            <span class="keywordflow">return</span> m_constraints;</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;        }</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160; </div>
+<div class="line"><a name="l00177"></a><span class="lineno"><a class="line" href="classhal_1_1_s_m_t_1_1_solver.html#af65f2cf75a023d67de2ef51125ee13fd">  177</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#af65f2cf75a023d67de2ef51125ee13fd">Solver::has_local_solver_for</a>(<a class="code" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4a">SolverType</a> solver)</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        {</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;            <span class="keyword">static</span> <span class="keyword">const</span> std::map&lt;SolverType, std::function&lt;Result&lt;std::string&gt;()&gt;&gt; type2query = {</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;                {<a class="code" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aa70e31ac6776e733109977f8afdd234ed">SolverType::Z3</a>, <a class="code" href="namespacehal_1_1_s_m_t_1_1_z3.html#aec83d53e618e88eb356a2a34c5b0bd56">Z3::query_binary_path</a>},</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;                {<a class="code" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aab22590d74202761c89aa802522a21110">SolverType::Boolector</a>, <a class="code" href="namespacehal_1_1_s_m_t_1_1_boolector.html#a6626c1ae9e8922688a72dc6fd3e29f42">Boolector::query_binary_path</a>},</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;            };</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160; </div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;            <span class="keywordflow">switch</span> (<span class="keyword">auto</span> it = type2query.find(solver); it != type2query.end())</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;            {</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;                <span class="keywordflow">case</span> <span class="keyword">true</span>:</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;                    <span class="keywordflow">return</span> it-&gt;second().is_ok();</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;                <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;                    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;            }</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        }</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160; </div>
+<div class="line"><a name="l00193"></a><span class="lineno"><a class="line" href="classhal_1_1_s_m_t_1_1_solver.html#a371737bb0724009df7f8867510ab11ad">  193</a></span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;SolverResult&gt;</a> <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#a371737bb0724009df7f8867510ab11ad">Solver::query</a>(<span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>&amp; config)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;            <span class="keywordflow">if</span> (config.local)</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;            {</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = this-&gt;<a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#a46b0be21b0b728ce4d9192eff3433744">query_local</a>(config); res.is_error())</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;                {</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;                    <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a>(res.get_error(), <span class="stringliteral">&quot;unable to query SMT solver: local query failed&quot;</span>);</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;                }</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;                <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;                {</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;                    <span class="keywordflow">return</span> res;</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;                }</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;            }</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;            {</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = this-&gt;<a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#abe6e7dfb1915e0e1648c083f86081b90">query_remote</a>(config); res.is_error())</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;                {</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;                    <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a>(res.get_error(), <span class="stringliteral">&quot;unable to query SMT solver: remote query failed&quot;</span>);</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;                }</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;                <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;                {</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;                    <span class="keywordflow">return</span> res;</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;                }</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;            }</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        }</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160; </div>
+<div class="line"><a name="l00219"></a><span class="lineno"><a class="line" href="classhal_1_1_s_m_t_1_1_solver.html#a46b0be21b0b728ce4d9192eff3433744">  219</a></span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;SolverResult&gt;</a> <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#a46b0be21b0b728ce4d9192eff3433744">Solver::query_local</a>(<span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>&amp; config)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;            <span class="keyword">static</span> <span class="keyword">const</span> std::map&lt;SolverType, std::function&lt;Result&lt;std::tuple&lt;bool, std::string&gt;&gt;(std::string, <span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>&amp;)&gt;&gt; type2query = {</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;                {<a class="code" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aa70e31ac6776e733109977f8afdd234ed">SolverType::Z3</a>, <a class="code" href="namespacehal_1_1_s_m_t_1_1_z3.html#a86d8a69e14b8943370e780aa47e76d8d">Z3::query</a>},</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;                {<a class="code" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aab22590d74202761c89aa802522a21110">SolverType::Boolector</a>, <a class="code" href="namespacehal_1_1_s_m_t_1_1_boolector.html#a6074035ce8034e3088b82b4ae887ef5c">Boolector::query</a>},</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;            };</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160; </div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;            <span class="keyword">auto</span> <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a> = Solver::translate_to_smt2(this-&gt;m_constraints, config);</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a>.is_error())</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;            {</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a>(<a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a>.get_error(), <span class="stringliteral">&quot;could not query local SMT solver: unable to translate SMT constraints and configuration to string&quot;</span>);</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;            }</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160; </div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;            <span class="keyword">auto</span> <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#a371737bb0724009df7f8867510ab11ad">query</a> = type2query.at(config.<a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html#a46f0f68c250e39ce8ef281b9f9a43b8d">solver</a>)(<a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a>.get(), config);</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#a371737bb0724009df7f8867510ab11ad">query</a>.is_ok())</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;            {</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;                <span class="keyword">auto</span> [was_killed, <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">output</a>] = <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#a371737bb0724009df7f8867510ab11ad">query</a>.get();</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;                <span class="keywordflow">return</span> Solver::translate_from_smt2(was_killed, <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">output</a>, config);</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;            }</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a>(<a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#a371737bb0724009df7f8867510ab11ad">query</a>.get_error(), <span class="stringliteral">&quot;could not query local SMT solver: unable to parse SMT result from string&quot;</span>);</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;        }</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160; </div>
+<div class="line"><a name="l00241"></a><span class="lineno"><a class="line" href="classhal_1_1_s_m_t_1_1_solver.html#abe6e7dfb1915e0e1648c083f86081b90">  241</a></span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;SolverResult&gt;</a> <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#abe6e7dfb1915e0e1648c083f86081b90">Solver::query_remote</a>(<span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>&amp; <span class="comment">/* config */</span>)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;            <span class="comment">// unimplemented as this is feature not required at the moment</span></div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not query remote SMT solver: currently not supported&quot;</span>);</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        }</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160; </div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;std::string&gt;</a> Solver::translate_to_smt2(<span class="keyword">const</span> std::vector&lt;Constraint&gt;&amp; constraints, <span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>&amp; config)</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        {</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;            <span class="keyword">auto</span> translate_declarations = [](<span class="keyword">const</span> std::vector&lt;Constraint&gt;&amp; _constraints) -&gt; std::string {</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;                std::set&lt;std::tuple&lt;std::string, u16&gt;&gt; inputs;</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; constraint : _constraints)</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;                {</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;                    <span class="keywordflow">if</span> (constraint.is_assignment())</div>
 <div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;                    {</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;                        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; node : constraint.get_function().get()-&gt;get_nodes())</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;                        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; node : constraint.get_assignment().get()-&gt;first.get_nodes())</div>
 <div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;                        {</div>
 <div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;                            <span class="keywordflow">if</span> (node.is_variable())</div>
 <div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;                            {</div>
@@ -326,117 +326,127 @@ $(document).ready(function(){initNavTree('solver_8cpp_source.html',''); initResi
 <div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;                            }</div>
 <div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;                        }</div>
 <div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;                    }</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;                }</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160; </div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;                <span class="keywordflow">return</span> std::accumulate(inputs.begin(), inputs.end(), std::string(), [](<span class="keyword">auto</span> accumulator, <span class="keyword">auto</span> entry) -&gt; std::string {</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;                    return accumulator + <span class="stringliteral">&quot;(declare-fun &quot;</span> + std::get&lt;0&gt;(entry) + <span class="stringliteral">&quot; () (_ BitVec &quot;</span> + std::to_string(std::get&lt;1&gt;(entry)) + <span class="stringliteral">&quot;))\n&quot;</span>;</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;                });</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;            };</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160; </div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;            <span class="keyword">auto</span> translate_constraints = [](<span class="keyword">const</span> std::vector&lt;Constraint&gt;&amp; _constraints) -&gt; Result&lt;std::string&gt; {</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;                <span class="keywordflow">return</span> std::accumulate(_constraints.cbegin(), _constraints.cend(), <a class="code" href="classhal_1_1_result.html#a8bfa3b8e65ebe7f8860da8fa59db2970">Result&lt;std::string&gt;::Ok</a>({}), [](<span class="keyword">auto</span> accumulator, <span class="keyword">const</span> <span class="keyword">auto</span>&amp; constraint) -&gt; Result&lt;std::string&gt; {</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;                    <span class="comment">// (1) short-hand termination in case accumulator is an error</span></div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;                    if (accumulator.is_error())</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;                    {</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;                        return ERR(accumulator.get_error());</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;                    }</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160; </div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;                    <a class="code" href="plugins_2hgl__parser_2test_2_c_make_lists_8txt.html#a817873c1a7c0eac49a6ee94ceb6a24db">if</a> (constraint.is_assignment())</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;                    {</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;                        const auto assignment = constraint.get_assignment().get();</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;                        auto lhs              = Translator::translate_to_smt2(assignment-&gt;first);</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;                        auto rhs              = Translator::translate_to_smt2(assignment-&gt;second);</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;                        if (lhs.is_error())</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;                        {</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;                            return ERR_APPEND(lhs.get_error(), <span class="stringliteral">&quot;could not translate constraint to SMT-LIB v2: &#39;&quot;</span> + constraint.to_string() + <span class="stringliteral">&quot;&#39;&quot;</span>);</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;                        }</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;                        <span class="keywordflow">else</span> <a class="code" href="plugins_2hgl__parser_2test_2_c_make_lists_8txt.html#a817873c1a7c0eac49a6ee94ceb6a24db">if</a> (rhs.is_error())</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;                        {</div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;                            return ERR_APPEND(rhs.get_error(), <span class="stringliteral">&quot;could not translate constraint to SMT-LIB v2: &#39;&quot;</span> + constraint.to_string() + <span class="stringliteral">&quot;&#39;&quot;</span>);</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;                        }</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;                        <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;                        {</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;                            return OK(accumulator.get() + <span class="stringliteral">&quot;(assert (= &quot;</span> + lhs.get() + <span class="stringliteral">&quot; &quot;</span> + rhs.get() + <span class="stringliteral">&quot;))\n&quot;</span>);</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;                        }</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;                    }</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;                    <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;                    {</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;                        <span class="keyword">auto</span> lhs = <a class="code" href="namespacehal_1_1_s_m_t_1_1_translator.html#a1f5025c43fbfe4675f2b8b8be739f2fa">Translator::translate_to_smt2</a>(*constraint.get_function().get());</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;                        <span class="keywordflow">if</span> (lhs.is_ok())</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;                        {</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;                            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(accumulator.get() + <span class="stringliteral">&quot;(assert (= #b1 &quot;</span> + lhs.get() + <span class="stringliteral">&quot;))\n&quot;</span>);</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;                        }</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;                        <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a>(lhs.get_error(), <span class="stringliteral">&quot;could not translate constraint to SMT-LIB v2: &#39;&quot;</span> + constraint.to_string() + <span class="stringliteral">&quot;&#39;&quot;</span>);</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;                    }</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;                });</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;            };</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160; </div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;            <span class="keyword">auto</span> theory          = std::string(<span class="stringliteral">&quot;(set-logic QF_ABV)&quot;</span>);</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;            <span class="keyword">auto</span> declarations    = translate_declarations(constraints);</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;            <span class="keyword">auto</span> constraints_str = translate_constraints(constraints);</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;            <span class="keyword">auto</span> epilogue        = std::string(<span class="stringliteral">&quot;(check-sat)&quot;</span>) + ((config.<a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html#a079ce610a89e273a18a7cda4d03023cd">generate_model</a>) ? <span class="stringliteral">&quot;\n(get-model)&quot;</span> : <span class="stringliteral">&quot;&quot;</span>);</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160; </div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;            <span class="keywordflow">if</span> (constraints_str.is_ok())</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;            {</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(theory + <span class="stringliteral">&quot;\n&quot;</span> + declarations + <span class="stringliteral">&quot;\n&quot;</span> + constraints_str.get() + <span class="stringliteral">&quot;\n&quot;</span> + epilogue);</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;            }</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a>(constraints_str.get_error(), <span class="stringliteral">&quot;could not translate constraint to SMT-LIB v2: unable to generate translation constraints&quot;</span>);</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;        }</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160; </div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;        Result&lt;SolverResult&gt; Solver::translate_from_smt2(<span class="keywordtype">bool</span> was_killed, std::string stdout, <span class="keyword">const</span> QueryConfig&amp; config)</div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;        {</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;            <span class="keywordflow">if</span> (was_killed)</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;            {</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not parse SMT result from string: the SMT solver was killed&quot;</span>);</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;            }</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160; </div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;            <span class="keyword">auto</span> position            = stdout.find_first_of(<span class="charliteral">&#39;\n&#39;</span>);</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;            <span class="keyword">auto</span> [result, model_str] = std::make_tuple(std::string(stdout, 0, position), std::string(stdout, position + 1));</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;                    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;                    {</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;                        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; node : constraint.get_function().get()-&gt;get_nodes())</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;                        {</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;                            <span class="keywordflow">if</span> (node.is_variable())</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;                            {</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;                                inputs.insert(std::make_tuple(node.variable, node.size));</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;                            }</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;                        }</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;                    }</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;                }</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160; </div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;                <span class="keywordflow">return</span> std::accumulate(inputs.begin(), inputs.end(), std::string(), [](<span class="keyword">auto</span> accumulator, <span class="keyword">auto</span> entry) -&gt; std::string {</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;                    return accumulator + <span class="stringliteral">&quot;(declare-fun &quot;</span> + std::get&lt;0&gt;(entry) + <span class="stringliteral">&quot; () (_ BitVec &quot;</span> + std::to_string(std::get&lt;1&gt;(entry)) + <span class="stringliteral">&quot;))\n&quot;</span>;</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;                });</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;            };</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160; </div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;            <span class="keyword">auto</span> translate_constraints = [](<span class="keyword">const</span> std::vector&lt;Constraint&gt;&amp; _constraints) -&gt; Result&lt;std::string&gt; {</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;                <span class="keywordflow">return</span> std::accumulate(_constraints.cbegin(), _constraints.cend(), <a class="code" href="classhal_1_1_result.html#a8bfa3b8e65ebe7f8860da8fa59db2970">Result&lt;std::string&gt;::Ok</a>({}), [](<span class="keyword">auto</span> accumulator, <span class="keyword">const</span> <span class="keyword">auto</span>&amp; constraint) -&gt; Result&lt;std::string&gt; {</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;                    <span class="comment">// (1) short-hand termination in case accumulator is an error</span></div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;                    if (accumulator.is_error())</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;                    {</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;                        return ERR(accumulator.get_error());</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;                    }</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160; </div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;                    <a class="code" href="plugins_2hgl__parser_2test_2_c_make_lists_8txt.html#a817873c1a7c0eac49a6ee94ceb6a24db">if</a> (constraint.is_assignment())</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;                    {</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;                        const auto assignment = constraint.get_assignment().get();</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;                        auto lhs              = Translator::translate_to_smt2(assignment-&gt;first);</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;                        auto rhs              = Translator::translate_to_smt2(assignment-&gt;second);</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;                        if (lhs.is_error())</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;                        {</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;                            return ERR_APPEND(lhs.get_error(), <span class="stringliteral">&quot;could not translate constraint to SMT-LIB v2: &#39;&quot;</span> + constraint.to_string() + <span class="stringliteral">&quot;&#39;&quot;</span>);</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;                        }</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;                        <span class="keywordflow">else</span> <a class="code" href="plugins_2hgl__parser_2test_2_c_make_lists_8txt.html#a817873c1a7c0eac49a6ee94ceb6a24db">if</a> (rhs.is_error())</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;                        {</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;                            return ERR_APPEND(rhs.get_error(), <span class="stringliteral">&quot;could not translate constraint to SMT-LIB v2: &#39;&quot;</span> + constraint.to_string() + <span class="stringliteral">&quot;&#39;&quot;</span>);</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;                        }</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;                        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;                        {</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;                            return OK(accumulator.get() + <span class="stringliteral">&quot;(assert (= &quot;</span> + lhs.get() + <span class="stringliteral">&quot; &quot;</span> + rhs.get() + <span class="stringliteral">&quot;))\n&quot;</span>);</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;                        }</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;                    }</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;                    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;                    {</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;                        <span class="keyword">auto</span> lhs = <a class="code" href="namespacehal_1_1_s_m_t_1_1_translator.html#a1f5025c43fbfe4675f2b8b8be739f2fa">Translator::translate_to_smt2</a>(*constraint.get_function().get());</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;                        <span class="keywordflow">if</span> (lhs.is_ok())</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;                        {</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;                            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(accumulator.get() + <span class="stringliteral">&quot;(assert (= #b1 &quot;</span> + lhs.get() + <span class="stringliteral">&quot;))\n&quot;</span>);</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;                        }</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;                        <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a>(lhs.get_error(), <span class="stringliteral">&quot;could not translate constraint to SMT-LIB v2: &#39;&quot;</span> + constraint.to_string() + <span class="stringliteral">&quot;&#39;&quot;</span>);</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;                    }</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;                });</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;            };</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160; </div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;            <span class="keyword">auto</span> theory          = std::string(<span class="stringliteral">&quot;(set-logic QF_ABV)&quot;</span>);</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;            <span class="keyword">auto</span> declarations    = translate_declarations(constraints);</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;            <span class="keyword">auto</span> constraints_str = translate_constraints(constraints);</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;            <span class="keyword">auto</span> epilogue        = std::string(<span class="stringliteral">&quot;(check-sat)&quot;</span>) + ((config.<a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html#a079ce610a89e273a18a7cda4d03023cd">generate_model</a>) ? <span class="stringliteral">&quot;\n(get-model)&quot;</span> : <span class="stringliteral">&quot;&quot;</span>);</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160; </div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;            <span class="keywordflow">if</span> (constraints_str.is_ok())</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;            {</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(theory + <span class="stringliteral">&quot;\n&quot;</span> + declarations + <span class="stringliteral">&quot;\n&quot;</span> + constraints_str.get() + <span class="stringliteral">&quot;\n&quot;</span> + epilogue);</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;            }</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a>(constraints_str.get_error(), <span class="stringliteral">&quot;could not translate constraint to SMT-LIB v2: unable to generate translation constraints&quot;</span>);</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        }</div>
 <div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160; </div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;            <span class="keyword">auto</span> to_lowercase = [](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; s) -&gt; std::string {</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;                <span class="keyword">auto</span> lowercase = s;</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;                std::transform(lowercase.begin(), lowercase.end(), lowercase.begin(), ::tolower);</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;                <span class="keywordflow">return</span> lowercase;</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;            };</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160; </div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;            <span class="keywordflow">if</span> (to_lowercase(result) == <span class="stringliteral">&quot;sat&quot;</span>)</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;            {</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;                <span class="keywordflow">if</span> (config.generate_model)</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;                {</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;                    <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = <a class="code" href="namespacehal_1_1gate__library__parser__manager.html#a37de54423126f56b765696a03bd78c48">Model::parse</a>(model_str, config.solver).map&lt;SolverResult&gt;([](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; model) -&gt; Result&lt;SolverResult&gt; { return OK(SolverResult::Sat(model)); }); res.is_error())</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;                    {</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;                        <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a>(res.get_error(), <span class="stringliteral">&quot;could not parse SMT result from string: unable to generate model&quot;</span>);</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;                    }</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;                    <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;                    {</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;                        <span class="keywordflow">return</span> res;</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;                    }</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;                }</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160; </div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(SolverResult::Sat());</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;            }</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;            <span class="keywordflow">if</span> (to_lowercase(result) == <span class="stringliteral">&quot;unsat&quot;</span>)</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;            {</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(SolverResult::UnSat());</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;            }</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160; </div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;            <span class="keywordflow">if</span> ((to_lowercase(result) == <span class="stringliteral">&quot;unknown&quot;</span>) || result.rfind(<span class="stringliteral">&quot;[btor&gt;main] ALARM TRIGGERED: time limit&quot;</span>, 0))</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;            {</div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(SolverResult::Unknown());</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;            }</div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160; </div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not parse SMT result from string: invalid result&quot;</span>);</div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;        }</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;    }    <span class="comment">// namespace SMT</span></div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;        Result&lt;SolverResult&gt; Solver::translate_from_smt2(<span class="keywordtype">bool</span> was_killed, std::string stdout, <span class="keyword">const</span> QueryConfig&amp; config)</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;        {</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;            <span class="keywordflow">if</span> (was_killed)</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;            {</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not parse SMT result from string: the SMT solver was killed&quot;</span>);</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;            }</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160; </div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;            <span class="keyword">auto</span> position            = stdout.find_first_of(<span class="charliteral">&#39;\n&#39;</span>);</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;            <span class="keyword">auto</span> [result, model_str] = std::make_tuple(std::string(stdout, 0, position), std::string(stdout, position + 1));</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160; </div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;            <span class="keyword">auto</span> to_lowercase = [](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; s) -&gt; std::string {</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;                <span class="keyword">auto</span> lowercase = s;</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;                std::transform(lowercase.begin(), lowercase.end(), lowercase.begin(), ::tolower);</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;                <span class="keywordflow">return</span> lowercase;</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;            };</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160; </div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;            <span class="keywordflow">if</span> (to_lowercase(result) == <span class="stringliteral">&quot;sat&quot;</span>)</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;            {</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;                <span class="keywordflow">if</span> (config.generate_model)</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;                {</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;                    <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = <a class="code" href="namespacehal_1_1gate__library__parser__manager.html#a37de54423126f56b765696a03bd78c48">Model::parse</a>(model_str, config.solver).map&lt;SolverResult&gt;([](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; model) -&gt; Result&lt;SolverResult&gt; { return OK(SolverResult::Sat(model)); }); res.is_error())</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;                    {</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;                        <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a>(res.get_error(), <span class="stringliteral">&quot;could not parse SMT result from string: unable to generate model&quot;</span>);</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;                    }</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;                    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;                    {</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;                        <span class="keywordflow">return</span> res;</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;                    }</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;                }</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160; </div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(SolverResult::Sat());</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;            }</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;            <span class="keywordflow">if</span> (to_lowercase(result) == <span class="stringliteral">&quot;unsat&quot;</span>)</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;            {</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(SolverResult::UnSat());</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;            }</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160; </div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;            <span class="keywordflow">if</span> ((to_lowercase(result) == <span class="stringliteral">&quot;unknown&quot;</span>) || result.rfind(<span class="stringliteral">&quot;[btor&gt;main] ALARM TRIGGERED: time limit&quot;</span>, 0))</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;            {</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(SolverResult::Unknown());</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;            }</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160; </div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not parse SMT result from string: invalid result&quot;</span>);</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;        }</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;    }    <span class="comment">// namespace SMT</span></div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aclasshal_1_1_s_m_t_1_1_solver_html_a371737bb0724009df7f8867510ab11ad"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_solver.html#a371737bb0724009df7f8867510ab11ad">hal::SMT::Solver::query</a></div><div class="ttdeci">Result&lt; SolverResult &gt; query(const QueryConfig &amp;config) const</div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00183">solver.cpp:183</a></div></div>
+<div class="ttc" id="aclasshal_1_1_s_m_t_1_1_solver_html_a371737bb0724009df7f8867510ab11ad"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_solver.html#a371737bb0724009df7f8867510ab11ad">hal::SMT::Solver::query</a></div><div class="ttdeci">Result&lt; SolverResult &gt; query(const QueryConfig &amp;config) const</div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00193">solver.cpp:193</a></div></div>
 <div class="ttc" id="asolver_8h_html"><div class="ttname"><a href="solver_8h.html">solver.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1_s_m_t_1_1_solver_html"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_solver.html">hal::SMT::Solver</a></div><div class="ttdef"><b>Definition:</b> <a href="solver_8h_source.html#l00040">solver.h:40</a></div></div>
 <div class="ttc" id="astructhal_1_1_s_m_t_1_1_query_config_html_a46f0f68c250e39ce8ef281b9f9a43b8d"><div class="ttname"><a href="structhal_1_1_s_m_t_1_1_query_config.html#a46f0f68c250e39ce8ef281b9f9a43b8d">hal::SMT::QueryConfig::solver</a></div><div class="ttdeci">SolverType solver</div><div class="ttdoc">The SMT solver identifier.</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00060">types.h:60</a></div></div>
 <div class="ttc" id="anamespacehal_1_1_s_m_t_html_a2b79ea414d0f1bf34d2686e2d38c2c4aab22590d74202761c89aa802522a21110"><div class="ttname"><a href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aab22590d74202761c89aa802522a21110">hal::SMT::SolverType::Boolector</a></div><div class="ttdeci">@ Boolector</div></div>
-<div class="ttc" id="anamespacehal_1_1_s_m_t_1_1_boolector_html_a6074035ce8034e3088b82b4ae887ef5c"><div class="ttname"><a href="namespacehal_1_1_s_m_t_1_1_boolector.html#a6074035ce8034e3088b82b4ae887ef5c">hal::SMT::Boolector::query</a></div><div class="ttdeci">Result&lt; std::tuple&lt; bool, std::string &gt; &gt; query(std::string input, const QueryConfig &amp;config)</div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00112">solver.cpp:112</a></div></div>
+<div class="ttc" id="anamespacehal_1_1_s_m_t_1_1_boolector_html_a6074035ce8034e3088b82b4ae887ef5c"><div class="ttname"><a href="namespacehal_1_1_s_m_t_1_1_boolector.html#a6074035ce8034e3088b82b4ae887ef5c">hal::SMT::Boolector::query</a></div><div class="ttdeci">Result&lt; std::tuple&lt; bool, std::string &gt; &gt; query(std::string input, const QueryConfig &amp;config)</div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00114">solver.cpp:114</a></div></div>
 <div class="ttc" id="atypes_8h_html"><div class="ttname"><a href="types_8h.html">types.h</a></div></div>
 <div class="ttc" id="anamespacesubprocess_html_a8c21131feb99bed9ffa644851ff499eda905c516538f07e316c905b58737b38fe"><div class="ttname"><a href="namespacesubprocess.html#a8c21131feb99bed9ffa644851ff499eda905c516538f07e316c905b58737b38fe">subprocess::PIPE</a></div><div class="ttdeci">@ PIPE</div><div class="ttdef"><b>Definition:</b> <a href="process_8h_source.html#l00808">process.h:808</a></div></div>
 <div class="ttc" id="astructsubprocess_1_1output_html"><div class="ttname"><a href="structsubprocess_1_1output.html">subprocess::output</a></div><div class="ttdef"><b>Definition:</b> <a href="process_8h_source.html#l00866">process.h:866</a></div></div>
@@ -452,20 +462,20 @@ $(document).ready(function(){initNavTree('solver_8cpp_source.html',''); initResi
 <div class="ttc" id="aplugins_2hgl__parser_2test_2_c_make_lists_8txt_html_a817873c1a7c0eac49a6ee94ceb6a24db"><div class="ttname"><a href="plugins_2hgl__parser_2test_2_c_make_lists_8txt.html#a817873c1a7c0eac49a6ee94ceb6a24db">if</a></div><div class="ttdeci">if(BUILD_TESTS) include_directories($</div><div class="ttdef"><b>Definition:</b> <a href="plugins_2hgl__parser_2test_2_c_make_lists_8txt_source.html#l00001">CMakeLists.txt:1</a></div></div>
 <div class="ttc" id="ainclude_2hal__core_2utilities_2result_8h_html_a1c3e89a5c947d0af52de06b706adcf09"><div class="ttname"><a href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a></div><div class="ttdeci">#define ERR(message)</div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00053">result.h:53</a></div></div>
 <div class="ttc" id="aprocess_8h_html"><div class="ttname"><a href="process_8h.html">process.h</a></div></div>
-<div class="ttc" id="anamespacehal_1_1_s_m_t_1_1_boolector_html_a6626c1ae9e8922688a72dc6fd3e29f42"><div class="ttname"><a href="namespacehal_1_1_s_m_t_1_1_boolector.html#a6626c1ae9e8922688a72dc6fd3e29f42">hal::SMT::Boolector::query_binary_path</a></div><div class="ttdeci">Result&lt; std::string &gt; query_binary_path()</div><div class="ttdoc">Checks whether a Boolector binary is available on the system.</div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00083">solver.cpp:83</a></div></div>
-<div class="ttc" id="aclasshal_1_1_s_m_t_1_1_solver_html_aeac38e85fce7d2a95d551a9e869c1fed"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_solver.html#aeac38e85fce7d2a95d551a9e869c1fed">hal::SMT::Solver::with_constraint</a></div><div class="ttdeci">Solver &amp; with_constraint(const Constraint &amp;constraint)</div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00147">solver.cpp:147</a></div></div>
-<div class="ttc" id="aclasshal_1_1_s_m_t_1_1_solver_html_a46b0be21b0b728ce4d9192eff3433744"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_solver.html#a46b0be21b0b728ce4d9192eff3433744">hal::SMT::Solver::query_local</a></div><div class="ttdeci">Result&lt; SolverResult &gt; query_local(const QueryConfig &amp;config) const</div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00209">solver.cpp:209</a></div></div>
-<div class="ttc" id="aclasshal_1_1_s_m_t_1_1_solver_html_a7af33c85681754a3c2b9bd79aa3076b5"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_solver.html#a7af33c85681754a3c2b9bd79aa3076b5">hal::SMT::Solver::with_constraints</a></div><div class="ttdeci">Solver &amp; with_constraints(const std::vector&lt; Constraint &gt; &amp;constraints)</div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00153">solver.cpp:153</a></div></div>
+<div class="ttc" id="anamespacehal_1_1_s_m_t_1_1_boolector_html_a6626c1ae9e8922688a72dc6fd3e29f42"><div class="ttname"><a href="namespacehal_1_1_s_m_t_1_1_boolector.html#a6626c1ae9e8922688a72dc6fd3e29f42">hal::SMT::Boolector::query_binary_path</a></div><div class="ttdeci">Result&lt; std::string &gt; query_binary_path()</div><div class="ttdoc">Checks whether a Boolector binary is available on the system.</div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00085">solver.cpp:85</a></div></div>
+<div class="ttc" id="aclasshal_1_1_s_m_t_1_1_solver_html_aeac38e85fce7d2a95d551a9e869c1fed"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_solver.html#aeac38e85fce7d2a95d551a9e869c1fed">hal::SMT::Solver::with_constraint</a></div><div class="ttdeci">Solver &amp; with_constraint(const Constraint &amp;constraint)</div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00157">solver.cpp:157</a></div></div>
+<div class="ttc" id="aclasshal_1_1_s_m_t_1_1_solver_html_a46b0be21b0b728ce4d9192eff3433744"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_solver.html#a46b0be21b0b728ce4d9192eff3433744">hal::SMT::Solver::query_local</a></div><div class="ttdeci">Result&lt; SolverResult &gt; query_local(const QueryConfig &amp;config) const</div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00219">solver.cpp:219</a></div></div>
+<div class="ttc" id="aclasshal_1_1_s_m_t_1_1_solver_html_a7af33c85681754a3c2b9bd79aa3076b5"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_solver.html#a7af33c85681754a3c2b9bd79aa3076b5">hal::SMT::Solver::with_constraints</a></div><div class="ttdeci">Solver &amp; with_constraints(const std::vector&lt; Constraint &gt; &amp;constraints)</div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00163">solver.cpp:163</a></div></div>
 <div class="ttc" id="aclasssubprocess_1_1_popen_html_af7022808d58227377e167a63ae28c362"><div class="ttname"><a href="classsubprocess_1_1_popen.html#af7022808d58227377e167a63ae28c362">subprocess::Popen::send</a></div><div class="ttdeci">int send(const char *msg, size_t length)</div><div class="ttdef"><b>Definition:</b> <a href="process_8h_source.html#l01448">process.h:1448</a></div></div>
-<div class="ttc" id="aclasshal_1_1_s_m_t_1_1_solver_html_af65f2cf75a023d67de2ef51125ee13fd"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_solver.html#af65f2cf75a023d67de2ef51125ee13fd">hal::SMT::Solver::has_local_solver_for</a></div><div class="ttdeci">static bool has_local_solver_for(SolverType type)</div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00167">solver.cpp:167</a></div></div>
+<div class="ttc" id="aclasshal_1_1_s_m_t_1_1_solver_html_af65f2cf75a023d67de2ef51125ee13fd"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_solver.html#af65f2cf75a023d67de2ef51125ee13fd">hal::SMT::Solver::has_local_solver_for</a></div><div class="ttdeci">static bool has_local_solver_for(SolverType type)</div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00177">solver.cpp:177</a></div></div>
 <div class="ttc" id="astructhal_1_1_s_m_t_1_1_constraint_html"><div class="ttname"><a href="structhal_1_1_s_m_t_1_1_constraint.html">hal::SMT::Constraint</a></div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00130">types.h:130</a></div></div>
 <div class="ttc" id="astructsubprocess_1_1error_html"><div class="ttname"><a href="structsubprocess_1_1error.html">subprocess::error</a></div><div class="ttdef"><b>Definition:</b> <a href="process_8h_source.html#l00904">process.h:904</a></div></div>
 <div class="ttc" id="astructhal_1_1_s_m_t_1_1_query_config_html"><div class="ttname"><a href="structhal_1_1_s_m_t_1_1_query_config.html">hal::SMT::QueryConfig</a></div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00053">types.h:53</a></div></div>
-<div class="ttc" id="aclasshal_1_1_s_m_t_1_1_solver_html_a893f60adb9ff88b60841d02e5992277c"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_solver.html#a893f60adb9ff88b60841d02e5992277c">hal::SMT::Solver::get_constraints</a></div><div class="ttdeci">const std::vector&lt; Constraint &gt; &amp; get_constraints() const</div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00162">solver.cpp:162</a></div></div>
+<div class="ttc" id="aclasshal_1_1_s_m_t_1_1_solver_html_a893f60adb9ff88b60841d02e5992277c"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_solver.html#a893f60adb9ff88b60841d02e5992277c">hal::SMT::Solver::get_constraints</a></div><div class="ttdeci">const std::vector&lt; Constraint &gt; &amp; get_constraints() const</div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00172">solver.cpp:172</a></div></div>
 <div class="ttc" id="anamespacehal_html_a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967"><div class="ttname"><a href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::PinDirection::input</a></div><div class="ttdeci">@ input</div></div>
 <div class="ttc" id="aclasssubprocess_1_1_popen_html"><div class="ttname"><a href="classsubprocess_1_1_popen.html">subprocess::Popen</a></div><div class="ttdef"><b>Definition:</b> <a href="process_8h_source.html#l01365">process.h:1365</a></div></div>
 <div class="ttc" id="astructhal_1_1_s_m_t_1_1_query_config_html_a4d22bcaa540b788ec804f6df24a5df15"><div class="ttname"><a href="structhal_1_1_s_m_t_1_1_query_config.html#a4d22bcaa540b788ec804f6df24a5df15">hal::SMT::QueryConfig::timeout_in_seconds</a></div><div class="ttdeci">u64 timeout_in_seconds</div><div class="ttdoc">The timeout after which the SMT solver is killed in seconds.</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00066">types.h:66</a></div></div>
-<div class="ttc" id="aclasshal_1_1_s_m_t_1_1_solver_html_abe6e7dfb1915e0e1648c083f86081b90"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_solver.html#abe6e7dfb1915e0e1648c083f86081b90">hal::SMT::Solver::query_remote</a></div><div class="ttdeci">Result&lt; SolverResult &gt; query_remote(const QueryConfig &amp;config) const</div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00231">solver.cpp:231</a></div></div>
+<div class="ttc" id="aclasshal_1_1_s_m_t_1_1_solver_html_abe6e7dfb1915e0e1648c083f86081b90"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_solver.html#abe6e7dfb1915e0e1648c083f86081b90">hal::SMT::Solver::query_remote</a></div><div class="ttdeci">Result&lt; SolverResult &gt; query_remote(const QueryConfig &amp;config) const</div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00241">solver.cpp:241</a></div></div>
 <div class="ttc" id="anamespacehal_1_1_s_m_t_html_a2b79ea414d0f1bf34d2686e2d38c2c4aa70e31ac6776e733109977f8afdd234ed"><div class="ttname"><a href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aa70e31ac6776e733109977f8afdd234ed">hal::SMT::SolverType::Z3</a></div><div class="ttdeci">@ Z3</div></div>
 <div class="ttc" id="ainclude_2hal__core_2utilities_2result_8h_html_af20e293cf442ddedc129f87bbb6a69e9"><div class="ttname"><a href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a></div><div class="ttdeci">#define ERR_APPEND(prev_error, message)</div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00057">result.h:57</a></div></div>
 <div class="ttc" id="anamespacehal_html_a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d"><div class="ttname"><a href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::PinDirection::output</a></div><div class="ttdeci">@ output</div></div>
@@ -473,12 +483,12 @@ $(document).ready(function(){initNavTree('solver_8cpp_source.html',''); initResi
 <div class="ttc" id="atranslator_8h_html"><div class="ttname"><a href="translator_8h.html">translator.h</a></div></div>
 <div class="ttc" id="anamespacehal_1_1_s_m_t_1_1_z3_html_aec83d53e618e88eb356a2a34c5b0bd56"><div class="ttname"><a href="namespacehal_1_1_s_m_t_1_1_z3.html#aec83d53e618e88eb356a2a34c5b0bd56">hal::SMT::Z3::query_binary_path</a></div><div class="ttdeci">Result&lt; std::string &gt; query_binary_path()</div><div class="ttdoc">Checks whether a Z3 binary is available on the system.</div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00017">solver.cpp:17</a></div></div>
 <div class="ttc" id="aclasshal_1_1_result_html_a8bfa3b8e65ebe7f8860da8fa59db2970"><div class="ttname"><a href="classhal_1_1_result.html#a8bfa3b8e65ebe7f8860da8fa59db2970">hal::Result::Ok</a></div><div class="ttdeci">static Result&lt; T &gt; Ok(const T &amp;value)</div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00095">result.h:95</a></div></div>
-<div class="ttc" id="aclasshal_1_1_s_m_t_1_1_solver_html_ab15e1cd82a2be092b14d7c26ab9b4194"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_solver.html#ab15e1cd82a2be092b14d7c26ab9b4194">hal::SMT::Solver::Solver</a></div><div class="ttdeci">Solver(const std::vector&lt; Constraint &gt; &amp;constraints={})</div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00143">solver.cpp:143</a></div></div>
+<div class="ttc" id="aclasshal_1_1_s_m_t_1_1_solver_html_ab15e1cd82a2be092b14d7c26ab9b4194"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_solver.html#ab15e1cd82a2be092b14d7c26ab9b4194">hal::SMT::Solver::Solver</a></div><div class="ttdeci">Solver(const std::vector&lt; Constraint &gt; &amp;constraints={})</div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00153">solver.cpp:153</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="dir_c087a112b91d0fc4c12783641a32acb2.html">boolean_function</a></li><li class="navelem"><a class="el" href="solver_8cpp.html">solver.cpp</a></li>
-    <li class="footer">Generated on Thu Dec 8 2022 18:53:26 for HAL by
+    <li class="footer">Generated on Fri Dec 9 2022 15:23:38 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
