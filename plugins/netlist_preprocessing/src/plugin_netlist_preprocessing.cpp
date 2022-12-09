@@ -6,6 +6,8 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/result.h"
 
+#include <queue>
+
 namespace hal
 {
     extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
@@ -83,6 +85,8 @@ namespace hal
     Result<u32> NetlistPreprocessingPlugin::remove_buffers(Netlist* nl)
     {
         u32 num_gates = 0;
+
+        std::queue<Gate*> gates_to_be_deleted;
 
         for (const auto& gate : nl->get_gates())
         {
@@ -236,12 +240,10 @@ namespace hal
                                 nl->get_id());
                     continue;
                 }
-                if (!failed && !nl->delete_gate(gate))
+                if (!failed)
                 {
-                    log_warning("netlist_preprocessing", "failed to remove buffer gate '{}' with ID {} from netlist with ID {}.", gate->get_name(), gate->get_id(), nl->get_id());
-                    continue;
+                    gates_to_be_deleted.push(gate);
                 }
-                num_gates++;
             }
             else if (func.is_constant() && (func.has_constant_value(0) || func.has_constant_value(1)))
             {
@@ -351,16 +353,28 @@ namespace hal
                                 nl->get_id());
                     continue;
                 }
-                if (!failed && !nl->delete_gate(gate))
+                if (!failed)
                 {
-                    log_warning("netlist_preprocessing", "failed to remove buffer gate '{}' with ID {} from netlist with ID {}.", gate->get_name(), gate->get_id(), nl->get_id());
-                    continue;
+                    gates_to_be_deleted.push(gate);
                 }
-                num_gates++;
             }
         }
 
-        log_debug("netlist_preprocessing", "removed {} buffer gates from netlist with ID {}.", num_gates, nl->get_id());
+        log_debug("netlist_preprocessing", "removing {} buffer gates...", gates_to_be_deleted.size());
+
+        while (!gates_to_be_deleted.empty())
+        {
+            Gate* gate = gates_to_be_deleted.front();
+            gates_to_be_deleted.pop();
+            if (!nl->delete_gate(gate))
+            {
+                log_warning("netlist_preprocessing", "failed to remove buffer gate '{}' with ID {} from netlist with ID {}.", gate->get_name(), gate->get_id(), nl->get_id());
+                continue;
+            }
+            num_gates++;
+        }
+
+        log_info("netlist_preprocessing", "removed {} buffer gates from netlist with ID {}.", num_gates, nl->get_id());
         return OK(num_gates);
     }
 

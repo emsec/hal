@@ -322,6 +322,8 @@ namespace hal
         }
 
         // delete unused nets
+        std::queue<Net*> nets_to_be_deleted;
+
         for (auto net : m_netlist->get_nets())
         {
             const u32 num_of_sources      = net->get_num_of_sources();
@@ -330,8 +332,15 @@ namespace hal
             const bool no_destination     = num_of_destinations == 0 && !(net->is_global_output_net() && num_of_sources != 0);
             if (no_source && no_destination)
             {
-                m_netlist->delete_net(net);
+                nets_to_be_deleted.push(net);
             }
+        }
+
+        while (!nets_to_be_deleted.empty())
+        {
+            Net* net = nets_to_be_deleted.front();
+            nets_to_be_deleted.pop();
+            m_netlist->delete_net(net);
         }
 
         m_netlist->load_gate_locations_from_data();
@@ -1407,8 +1416,8 @@ namespace hal
                     if (auto res = module->create_pin("'1'", m_one_net); res.is_error())
                     {
                         return ERR_APPEND(res.get_error(),
-                                          "could not construct netlist: failed to create pin '1' at net '" + m_one_net->get_name() + "' with ID " + std::to_string(m_one_net->get_id()) + "within module '"
-                                              + module->get_name() + "' with ID " + std::to_string(module->get_id()));
+                                          "could not construct netlist: failed to create pin '1' at net '" + m_one_net->get_name() + "' with ID " + std::to_string(m_one_net->get_id())
+                                              + "within module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()));
                     }
                 }
             }

@@ -387,6 +387,8 @@ namespace hal
         }
 
         // delete unused nets
+        std::queue<Net*> nets_to_be_deleted;
+
         for (auto net : m_netlist->get_nets())
         {
             const u32 num_of_sources      = net->get_num_of_sources();
@@ -399,8 +401,15 @@ namespace hal
             }
         }
 
-        m_netlist->load_gate_locations_from_data();
+        while (!nets_to_be_deleted.empty())
+        {
+            Net* net = nets_to_be_deleted.front();
+            nets_to_be_deleted.pop();
+            m_netlist->delete_net(net);
+        }
 
+        m_netlist->load_gate_locations_from_data();
+        
         return OK(std::move(result));
     }
 

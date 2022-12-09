@@ -795,6 +795,8 @@ namespace hal
 
                 // (2.3) assemble "assign $(LHS) = $(RHS);"
                 ss << "assign " << lhs << " = " << rhs << ";" << std::endl;
+
+                fclose(stream);
             }
             Vec_VecFree(vLevels);
 
