@@ -214,14 +214,24 @@ end
 
 
 //	code modify for universal verilog compiler
+//reg	[15:0]	RDATA = 0;
+reg	[15:0]	RDATA;
+
+initial
+begin
+   RDATA = 16'h0000;
+end
 
 always @ (posedge WCLK_g)
 begin
+        $display("+++ WCLK_g: WCLK Time: %.3f   RCLK Time:%.3f  ",time_WCLK, time_RCLK);
         Time_Collision_Detected = Check_Timed_Window_Violation(time_WCLK,time_RCLK,COLLISION_TIME_WINDOW);
-        if (Time_Collision_Detected & Address_Collision_Detected)begin
+        if (Time_Collision_Detected & Address_Collision_Detected)
+                begin
                 $display("Warning: Write-Read collision detected, Data read value is XXXX\n");
                 $display("WCLK Time: %.3f   RCLK Time:%.3f  ",time_WCLK, time_RCLK,"WADDR: %d   RADDR:%d\n",WADDR, RADDR);
-        end
+                RDATA <= 16'hXXXX;
+                end
 
         if	(WE)
 	begin
@@ -236,29 +246,22 @@ begin
 	end
 end
 
-//reg	[15:0]	RDATA = 0;
-reg	[15:0]	RDATA;
-
-initial
-begin
-   RDATA = 16'h0000;
-end
-
 // Look at the rising edge of the clock
 
 always @ (posedge RCLK_g)
 begin
+        $display("+++ RCLK_g: WCLK Time: %.3f   RCLK Time:%.3f  ",time_WCLK, time_RCLK);
         Time_Collision_Detected = Check_Timed_Window_Violation(time_WCLK,time_RCLK,COLLISION_TIME_WINDOW);
-        if (Time_Collision_Detected & Address_Collision_Detected)begin
-                $display("Warning: Write-Read collision detected, Data read value is XXXX\n");
-                $display("WCLK Time: %.3f   RCLK Time:%.3f  ",time_WCLK, time_RCLK,"WADDR: %d   RADDR:%d\n",WADDR, RADDR);
-        end
 
         if	(RE)
 	begin
 //		-> Read_e;
-		if	(Time_Collision_Detected & Address_Collision_Detected) 
-			RDATA <= 16'hXXXX;
+                if	(Time_Collision_Detected & Address_Collision_Detected)
+                        begin
+                        $display("Warning: Write-Read collision detected, Data read value is XXXX\n");
+                        $display("WCLK Time: %.3f   RCLK Time:%.3f  ",time_WCLK, time_RCLK,"WADDR: %d   RADDR:%d\n",WADDR, RADDR);
+                        RDATA <= 16'hXXXX;
+                        end
 		else
 			for	(i=0;i<=BUS_WIDTH-1;i=i+1)
 				RDATA[i]	<= Memory[RADDR*BUS_WIDTH+i];
