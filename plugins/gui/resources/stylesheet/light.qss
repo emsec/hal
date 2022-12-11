@@ -1383,3 +1383,37 @@ hal--DetailsFrameWidget QPushButton:hover
 {
     background-color : rgba(220, 220, 220, 1);
 }
+
+hal--CommentDialog
+{
+    background-color: "#ffffff";
+    qproperty-redColor: "#ff0000";
+    qproperty-yellowColor: "#ffff00";
+    qproperty-greenColor: "#00ff00";
+    qproperty-defaultColor: "#000000";
+
+}
+
+hal--CommentDialog QTextEdit /*Edit for the actual commenttext*/
+{
+    background-color: "#ffffff";
+    color: "#000000";
+    alternate-background-color : "#b0b0b0"; /*used for code action*/
+}
+
+hal--CommentDialog QLineEdit
+{
+    background-color: "#ffffff";
+    color: "#000000";
+}
+
+hal--CommentDialog QLabel
+{
+    background-color: "#a0a0a0";
+    color: "#000000";
+}
+
+hal--CommentDialog #header-container
+{
+    background-color: "#a0a0a0";
+}

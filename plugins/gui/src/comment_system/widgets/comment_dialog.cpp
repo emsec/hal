@@ -58,6 +58,10 @@ namespace hal
     {
         setBaseSize(600, 400);
 
+        QStyle* s = style();
+        s->unpolish(this);
+        s->polish(this);
+
         // header
         mHeaderContainer = new QWidget;
         mHeaderContainerLayout = new QHBoxLayout(mHeaderContainer);
@@ -87,7 +91,7 @@ namespace hal
         mUnderscoreAction->setShortcut(Qt::CTRL | Qt::Key_U);
         mToolBar->addSeparator(); // returns action...?
         QPixmap pix(16, 16);
-        pix.fill(QColor("#A9B7C6")); //put default textcolor here (that is mentioned in the stylesheet)
+        pix.fill(QColor(mDefaultColor));
         mColorAction = mToolBar->addAction(pix, "Colors", this, &CommentDialog::colorTriggered);
         mToolBar->addSeparator();
         mListAction = mToolBar->addAction("List", this, &CommentDialog::bulletListTriggered);
@@ -98,9 +102,9 @@ namespace hal
 
         // textedit
         mTextEdit = new QTextEdit;
-        QTextCharFormat fmt;
-        fmt.setForeground(QColor("#A9B7C6"));//set text color to the default text color
-        mTextEdit->mergeCurrentCharFormat(fmt);
+//        QTextCharFormat fmt;
+//        fmt.setForeground(QColor(mDefaultColor));//set text color to the default text color
+//        mTextEdit->mergeCurrentCharFormat(fmt);
 
         // buttons
         QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok |  QDialogButtonBox::Cancel, this);
@@ -118,12 +122,9 @@ namespace hal
         connect(mTextEdit, &QTextEdit::currentCharFormatChanged, this, &CommentDialog::handleCurrentCharFormatChanged);
         connect(mTextEdit, &QTextEdit::cursorPositionChanged, this, &CommentDialog::handleCursorPositionChanged);
 
-        QStyle* s = style();
+        s = style();
         s->unpolish(this);
         s->polish(this);
-
-        mDefaultFont = mTextEdit->property("font").value<QFont>();
-        qDebug() << "Font: " <<  mDefaultFont;
     }
 
     void CommentDialog::mergeFormatOnWordOrSelection(const QTextCharFormat &format)
