@@ -35,7 +35,7 @@ namespace hal
             mLastModifiedLabel->setText(mCommentEntry->getLastModifiedTime().toString(mCommentEntry->getDateFormatString()));
             mHeaderEdit->setText(entry->getHeader());
             mTextEdit->setHtml(entry->getText());
-            updateColorActionPixmap(mTextEdit->textColor()); //default text color
+            updateColorActionPixmap(mDefaultColor); //default text color
         }
     }
 

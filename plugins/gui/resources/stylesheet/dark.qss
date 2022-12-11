@@ -1396,6 +1396,22 @@ hal--GatelibraryManagementDialog QHeaderView::section
 background: rgb(35, 35, 35);
 }
 
+hal--CommentWidget
+{
+    qproperty-newCommentIconPath : ":/icons/plus";
+    qproperty-newCommentIconStyle: "all->#dddddd";
+    qproperty-searchIconPath: ":/icons/search";
+    qproperty-searchIconStyle: "all->#dddddd";
+}
+
+hal--CommentItem
+{
+    qproperty-modifyCommentIconPath : ":/icons/pen";
+    qproperty-modifyCommentIconStyle : "all->#dddddd";
+    qproperty-deleteCommentIconPath: ":/icons/trashcan";
+    qproperty-deleteCommentIconStyle: "all->#dddddd";
+}
+
 hal--CommentDialog
 {
     background-color: "#202020";

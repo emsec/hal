@@ -41,6 +41,10 @@ namespace hal
     class CommentItem : public QFrame
     {
         Q_OBJECT
+        Q_PROPERTY(QString modifyCommentIconPath READ modifyCommentIconPath WRITE setModifyCommentIconPath)
+        Q_PROPERTY(QString modifyCommentIconStyle READ modifyCommentIconStyle WRITE setModifyCommentIconStyle)
+        Q_PROPERTY(QString deleteCommentIconPath READ deleteCommentIconPath WRITE setDeleteCommentIconPath)
+        Q_PROPERTY(QString deleteCommentIconStyle READ deleteCommentIconStyle WRITE setDeleteCommentIconStyle)
     public:
         CommentItem(QWidget* parent = nullptr);
         CommentItem(CommentEntry* entry, QWidget* parent = nullptr);
@@ -52,6 +56,17 @@ namespace hal
 
         CommentEntry* getEntry();
 
+        // properties
+        QString modifyCommentIconPath(){return mModifyCommentIconPath;}
+        void setModifyCommentIconPath(const QString& str){mModifyCommentIconPath = str;}
+        QString modifyCommentIconStyle(){return mModifyCommentIconStyle;}
+        void setModifyCommentIconStyle(const QString& str){mModifyCommentIconStyle = str;}
+
+        QString deleteCommentIconPath(){return mDeleteCommentIconPath;}
+        void setDeleteCommentIconPath(const QString& str){mDeleteCommentIconPath = str;}
+        QString deleteCommentIconStyle(){return mDeleteCommentIconStyle;}
+        void setDeleteCommentIconStyle(const QString& str){mDeleteCommentIconStyle = str;}
+
     Q_SIGNALS:
 
         //perhaps the CommentEntry for which a delete is requested?
@@ -61,6 +76,11 @@ namespace hal
     private:
         QVBoxLayout* mLayout;
         CommentEntry* mEntry;
+
+        QString mModifyCommentIconPath;
+        QString mModifyCommentIconStyle;
+        QString mDeleteCommentIconPath;
+        QString mDeleteCommentIconStyle;
 
         // header part (perhaps no toolbar but a layout with toolbuttons instead of actions?)
         QToolBar* mTopToolbar;

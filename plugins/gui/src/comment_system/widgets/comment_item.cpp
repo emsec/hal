@@ -10,7 +10,7 @@
 #include <QAction>
 #include <QToolButton>
 #include <QDebug>
-
+#include "gui/gui_utils/graphics.h"
 
 namespace hal
 {
@@ -74,6 +74,10 @@ namespace hal
 
     void CommentItem::init()
     {
+        // extract property information
+        style()->unpolish(this);
+        style()->polish(this);
+
         mEntry = nullptr;
         // TODO: replace fixed sizes (put them in stylesheet / compute them?)
         mLayout = new QVBoxLayout(this);
@@ -92,12 +96,12 @@ namespace hal
         mCreationDate = new QLabel(this);
         mCreationDate->setStyleSheet("font-size: 12px;");
         mModifyButton = new QToolButton(this);
-        mModifyButton->setIcon(QIcon(":/icons/pen"));
-        mModifyButton->setIconSize(QSize(30,30));
+        mModifyButton->setIcon(gui_utility::getStyledSvgIcon(mModifyCommentIconStyle, mModifyCommentIconPath));
+        mModifyButton->setIconSize(QSize(25,25));
         mModifyButton->setAutoRaise(true);
         mDeleteButton = new QToolButton(this);
-        mDeleteButton->setIcon(QIcon(":/icons/trashcan"));
-        mDeleteButton->setIconSize(QSize(30,30));
+        mDeleteButton->setIcon(gui_utility::getStyledSvgIcon(mDeleteCommentIconStyle, mDeleteCommentIconPath));
+        mDeleteButton->setIconSize(QSize(25,25));
         mDeleteButton->setAutoRaise(true);
 
         //perhaps with alignments (header left, date normal, small spacer, fixed buttons without stretch)?

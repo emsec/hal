@@ -46,22 +46,38 @@ namespace hal
     class CommentWidget : public QWidget
     {
         Q_OBJECT
+        Q_PROPERTY(QString newCommentIconPath READ newCommentIconPath WRITE setNewCommentIconPath)
+        Q_PROPERTY(QString newCommentIconStyle READ newCommentIconStyle WRITE setNewCommentIconStyle)
+        Q_PROPERTY(QString searchIconPath READ searchIconPath WRITE setSearchIconPath)
+        Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
+
     public:
         CommentWidget(QWidget* parent = nullptr);
         ~CommentWidget();
 
-        // temporary debug helper function
-        void setItem(CommentItem* item);
-        void addHackySpacer();
+        // property function
+        QString newCommentIconPath(){return mNewCommentIconPath;}
+        void setNewCommentIconPath(const QString& str){mNewCommentIconPath = str;}
+        QString newCommentIconStyle(){return mNewCommentIconStyle;}
+        void setNewCommentIconStyle(const QString& str){mNewCommentIconStyle = str;}
+
+        QString searchIconPath(){return mSearchIconPath;}
+        void setSearchIconPath(const QString& str){mSearchIconPath = str;}
+        QString searchIconStyle(){return mSearchIconStyle;}
+        void setSearchIconStyle(const QString& str){mSearchIconStyle = str;}
 
     public Q_SLOTS:
         void nodeChanged(const Node& nd);
 
     private:
         QList<CommentItem*> mEntryItems;
-        //QVBoxLayout* mTopLayout;
         QGridLayout* mTopLayout;
         Node mCurrentNode;
+
+        QString mNewCommentIconPath;
+        QString mNewCommentIconStyle;
+        QString mSearchIconPath;
+        QString mSearchIconStyle;
 
         // header part
         QHBoxLayout* mHeaderLayout; //perhaps put in a container?

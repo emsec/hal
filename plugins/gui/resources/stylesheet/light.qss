@@ -1384,6 +1384,22 @@ hal--DetailsFrameWidget QPushButton:hover
     background-color : rgba(220, 220, 220, 1);
 }
 
+hal--CommentWidget
+{
+    qproperty-newCommentIconPath : ":/icons/plus";
+    qproperty-newCommentIconStyle: "all->#000000";
+    qproperty-searchIconPath: ":/icons/search";
+    qproperty-searchIconStyle: "all->#000000";
+}
+
+hal--CommentItem
+{
+    qproperty-modifyCommentIconPath : ":/icons/pen";
+    qproperty-modifyCommentIconStyle : "all->#111111";
+    qproperty-deleteCommentIconPath: ":/icons/trashcan";
+    qproperty-deleteCommentIconStyle: "all->#111111";
+}
+
 hal--CommentDialog
 {
     background-color: "#ffffff";

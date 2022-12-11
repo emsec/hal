@@ -15,11 +15,16 @@
 #include <QToolBar>
 #include "gui/toolbar/toolbar.h"
 #include "gui/searchbar/searchbar.h"
+#include "gui/gui_utils/graphics.h"
 
 namespace hal
 {
     CommentWidget::CommentWidget(QWidget *parent) : QWidget(parent)
     {
+        // take properties out of the stylesheet
+        style()->unpolish(this);
+        style()->polish(this);
+
         //mTopLayout = new QVBoxLayout(this);
         mTopLayout = new QGridLayout(this);
         mTopLayout->setMargin(0);
@@ -32,11 +37,11 @@ namespace hal
         // 1. Option
         mHeaderLayout = new QHBoxLayout();
         mNewCommentButton = new QToolButton();
-        mNewCommentButton->setIcon(QIcon(":/icons/plus"));
-        mNewCommentButton->setIconSize(QSize(25,25));
+        mNewCommentButton->setIcon(gui_utility::getStyledSvgIcon(mNewCommentIconStyle, mNewCommentIconPath));
+        mNewCommentButton->setIconSize(QSize(23,23));
         mSearchButton = new QToolButton();
-        mSearchButton->setIcon(QIcon(":/icons/search"));
-        mSearchButton->setIconSize(QSize(25,25));
+        mSearchButton->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
+        mSearchButton->setIconSize(QSize(23,23));
         mHeaderLayout->addWidget(mNewCommentButton);// alignleft without spacer
         mHeaderLayout->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Preferred));
         mHeaderLayout->addWidget(mSearchButton);// alignright without spacer
@@ -78,18 +83,6 @@ namespace hal
 
     CommentWidget::~CommentWidget()
     {
-    }
-
-    void CommentWidget::setItem(CommentItem *item)
-    {
-        mCommentsLayout->addWidget(item, 0, Qt::AlignTop);
-    }
-
-    void CommentWidget::addHackySpacer()
-    {
-                QWidget* hackySpacerItem = new QWidget();
-                hackySpacerItem->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-                mCommentsLayout->addWidget(hackySpacerItem);
     }
 
     void CommentWidget::nodeChanged(const Node& nd)
