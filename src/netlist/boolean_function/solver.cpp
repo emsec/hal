@@ -56,15 +56,26 @@ namespace hal
                                              "-in",
                                              // kill execution after a given time
                                              "-T:" + std::to_string(config.timeout_in_seconds)},
+                                            subprocess::error{subprocess::PIPE},
                                             subprocess::output{subprocess::PIPE},
                                             subprocess::input{subprocess::PIPE});
 
                 z3.send(input.c_str(), input.size());
 
+                auto z3_communication = z3.communicate();
+
+                std::vector<char> output_buf = z3_communication.first.buf;
+                std::string output(output_buf.begin(), output_buf.end());
+
                 // TODO:
                 // check whether process was terminated (i.e. killed) via the subprocess
                 // API to channel this to the caller
-                return OK({false, z3.communicate().first.buf.data()});
+                z3.close_input();
+                z3.close_output();
+                z3.close_error();
+                z3.kill();
+
+                return OK({false, output});
             }
         }    // namespace Z3
 
@@ -123,11 +134,19 @@ namespace hal
                     subprocess::input{subprocess::PIPE});
 
                 boolector.send(input.c_str(), input.size());
+                auto boolector_communication = boolector.communicate();
+
+                std::vector<char> output_buf = boolector_communication.first.buf;
+                std::string output(output_buf.begin(), output_buf.end());
 
                 // TODO:
                 // check whether process was terminated (i.e. killed) via the subprocess
                 // API to channel this to the caller
-                return OK({false, boolector.communicate().first.buf.data()});
+                boolector.close_input();
+                boolector.close_output();
+                boolector.close_error();
+                boolector.kill();
+                return OK({false, output});
             }
         }    // namespace Boolector
 

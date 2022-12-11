@@ -1097,7 +1097,7 @@ namespace hal
             R"(
             Evaluates a Boolean function comprising only single-bit variables using the given input values.
 
-            :param dict[str,hal_pyBooleanFunction.Value] inputs: A dict from variable name to input value.
+            :param dict[str,hal_py.BooleanFunction.Value] inputs: A dict from variable name to input value.
             :returns: The resulting value on success, None otherwise.
             :rtype: hal_py.BooleanFunction.Value or None
         )");
@@ -1120,7 +1120,7 @@ namespace hal
             R"(
             Evaluates a Boolean function comprising multi-bit variables using the given input values.
 
-            :param dict[str,list[hal_pyBooleanFunction.Value]] inputs:  A dict from variable name to a list of input values.
+            :param dict[str,list[hal_py.BooleanFunction.Value]] inputs:  A dict from variable name to a list of input values.
             :returns: A vector of values on success, None otherwise.
             :rtype: list[hal_py.BooleanFunction.Value] or None
         )");
