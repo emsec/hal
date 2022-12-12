@@ -12,7 +12,8 @@
 #include <QTextList>
 #include <QMenuBar>
 #include <QMenu>
-#include <QDebug>
+#include <QTextBlockFormat>
+#include <QTextCharFormat>
 
 #include <QFontDatabase>
 #include <QStyle>
