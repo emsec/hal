@@ -268,7 +268,7 @@ namespace hal
         values.reserve(size);
         for (auto i = 0; i < size; i++)
         {
-            values.emplace_back((value & (1 << i)) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO);
+            values.emplace_back(((value >> i) & 1) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO);
         }
 
         return BooleanFunction::Const(values);
