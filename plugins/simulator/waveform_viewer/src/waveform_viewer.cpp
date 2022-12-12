@@ -259,7 +259,8 @@ namespace hal
             return;
         }
         std::unique_ptr<NetlistSimulatorController> ctrlRef = ctrlPlug->create_simulator_controller();
-        takeControllerOwnership(ctrlRef, false);
+        if (ctrlRef)
+            takeControllerOwnership(ctrlRef, false);
     }
 
     void WaveformViewer::handleSimulSettings()
