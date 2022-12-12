@@ -4,7 +4,6 @@ var hierarchy =
     [ "Abc_Ntk_t_", "struct_abc___ntk__t__.html", null ],
     [ "Abc_Obj_t_", "struct_abc___obj__t__.html", null ],
     [ "nlohmann::adl_serializer< typename, typename >", "structnlohmann_1_1adl__serializer.html", null ],
-    [ "subprocess::detail::ArgumentDeducer", "structsubprocess_1_1detail_1_1_argument_deducer.html", null ],
     [ "hal::AssignedKeybindMap", "classhal_1_1_assigned_keybind_map.html", null ],
     [ "B1", null, [
       [ "nlohmann::detail::conjunction< B1 >", "structnlohmann_1_1detail_1_1conjunction_3_01_b1_01_4.html", null ]
@@ -52,8 +51,6 @@ var hierarchy =
       [ "hal::StateComponentEntry", "classhal_1_1_state_component_entry.html", null ]
     ] ],
     [ "nlohmann::detail::dtoa_impl::boundaries", "structnlohmann_1_1detail_1_1dtoa__impl_1_1boundaries.html", null ],
-    [ "subprocess::Buffer", "classsubprocess_1_1_buffer.html", null ],
-    [ "subprocess::bufsize", "structsubprocess_1_1bufsize.html", null ],
     [ "nlohmann::detail::dtoa_impl::cached_power", "structnlohmann_1_1detail_1_1dtoa__impl_1_1cached__power.html", null ],
     [ "hal::CallbackHook< class >", "classhal_1_1_callback_hook.html", null ],
     [ "hal::CallbackHook< R(ArgTypes...)>", "classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html", null ],
@@ -68,12 +65,9 @@ var hierarchy =
     [ "char_traits", null, [
       [ "hal::core_strings::CaseInsensitiveCharTraits", "structhal_1_1core__strings_1_1_case_insensitive_char_traits.html", null ]
     ] ],
-    [ "subprocess::detail::Child", "classsubprocess_1_1detail_1_1_child.html", null ],
-    [ "subprocess::close_fds", "structsubprocess_1_1close__fds.html", null ],
     [ "hal::utils::Color", "structhal_1_1utils_1_1_color.html", null ],
     [ "hal::CommonSuccessorPredecessor", "classhal_1_1_common_successor_predecessor.html", null ],
     [ "hal::CommonSuccessorPredecessorGateQueue", "classhal_1_1_common_successor_predecessor_gate_queue.html", null ],
-    [ "subprocess::detail::Communication", "classsubprocess_1_1detail_1_1_communication.html", null ],
     [ "hal::dataflow::evaluation::Configuration", "structhal_1_1dataflow_1_1evaluation_1_1_configuration.html", null ],
     [ "hal::dataflow::processing::Configuration", "structhal_1_1dataflow_1_1processing_1_1_configuration.html", null ],
     [ "hal::SMT::Constraint", "structhal_1_1_s_m_t_1_1_constraint.html", null ],
@@ -90,7 +84,6 @@ var hierarchy =
       [ "hal::Net", "classhal_1_1_net.html", null ]
     ] ],
     [ "hal::DataTableModel::DataEntry", "structhal_1_1_data_table_model_1_1_data_entry.html", null ],
-    [ "subprocess::defer_spawn", "structsubprocess_1_1defer__spawn.html", null ],
     [ "hal::DetailsTableUtilities", "classhal_1_1_details_table_utilities.html", null ],
     [ "nlohmann::detail::detector< Default, AlwaysVoid, Op, Args >", "structnlohmann_1_1detail_1_1detector.html", null ],
     [ "nlohmann::detail::detector< Default, void_t< Op< Args... > >, Op, Args... >", "structnlohmann_1_1detail_1_1detector_3_01_default_00_01void__t_3_01_op_3_01_args_8_8_8_01_4_01_4_00_01_op_00_01_args_8_8_8_01_4.html", null ],
@@ -98,10 +91,8 @@ var hierarchy =
     [ "nlohmann::detail::dtoa_impl::diyfp", "structnlohmann_1_1detail_1_1dtoa__impl_1_1diyfp.html", null ],
     [ "hal::Endpoint", "classhal_1_1_endpoint.html", null ],
     [ "hal::EnumStrings< T, typename >", "structhal_1_1_enum_strings.html", null ],
-    [ "subprocess::environment", "structsubprocess_1_1environment.html", null ],
     [ "hal::result_constructor_type::ER", "classhal_1_1result__constructor__type_1_1_e_r.html", null ],
     [ "hal::Error", "classhal_1_1_error.html", null ],
-    [ "subprocess::error", "structsubprocess_1_1error.html", null ],
     [ "hal::EventHandler", "classhal_1_1_event_handler.html", null ],
     [ "exception", null, [
       [ "nlohmann::detail::exception", "classnlohmann_1_1detail_1_1exception.html", [
@@ -195,10 +186,6 @@ var hierarchy =
     [ "nlohmann::detail::has_from_json< BasicJsonType, T, enable_if_t< not is_basic_json< T >::value > >", "structnlohmann_1_1detail_1_1has__from__json_3_01_basic_json_type_00_01_t_00_01enable__if__t_3_01e29213c543deddccc314d19cbaf9f3b4.html", null ],
     [ "nlohmann::detail::has_non_default_from_json< BasicJsonType, T, enable_if_t< not is_basic_json< T >::value > >", "structnlohmann_1_1detail_1_1has__non__default__from__json_3_01_basic_json_type_00_01_t_00_01enab81bd4c814ac1146ff15f3f4636933207.html", null ],
     [ "nlohmann::detail::has_to_json< BasicJsonType, T, enable_if_t< not is_basic_json< T >::value > >", "structnlohmann_1_1detail_1_1has__to__json_3_01_basic_json_type_00_01_t_00_01enable__if__t_3_01nob111e71d40e2273c290d1ce5c6a3b84f.html", null ],
-    [ "subprocess::detail::has_type< F, T >", "structsubprocess_1_1detail_1_1has__type.html", null ],
-    [ "subprocess::detail::has_type< F, param_pack< F, T... > >", "structsubprocess_1_1detail_1_1has__type_3_01_f_00_01param__pack_3_01_f_00_01_t_8_8_8_01_4_01_4.html", null ],
-    [ "subprocess::detail::has_type< F, param_pack< H, T... > >", "structsubprocess_1_1detail_1_1has__type_3_01_f_00_01param__pack_3_01_h_00_01_t_8_8_8_01_4_01_4.html", null ],
-    [ "subprocess::detail::has_type< F, param_pack<> >", "structsubprocess_1_1detail_1_1has__type_3_01_f_00_01param__pack_3_4_01_4.html", null ],
     [ "std::hash< hal::core_strings::CaseInsensitiveString >", "structstd_1_1hash_3_01hal_1_1core__strings_1_1_case_insensitive_string_01_4.html", null ],
     [ "std::hash< nlohmann::json >", "structstd_1_1hash_3_01nlohmann_1_1json_01_4.html", null ],
     [ "hal::StandardGraphicsNet::HLine", "structhal_1_1_standard_graphics_net_1_1_h_line.html", null ],
@@ -214,7 +201,6 @@ var hierarchy =
     [ "nlohmann::detail::index_sequence<>", "structnlohmann_1_1detail_1_1index__sequence.html", [
       [ "nlohmann::detail::make_index_sequence< 0 >", "structnlohmann_1_1detail_1_1make__index__sequence_3_010_01_4.html", null ]
     ] ],
-    [ "subprocess::input", "structsubprocess_1_1input.html", null ],
     [ "nlohmann::detail::input_adapter", "classnlohmann_1_1detail_1_1input__adapter.html", null ],
     [ "nlohmann::detail::input_adapter_protocol", "structnlohmann_1_1detail_1_1input__adapter__protocol.html", [
       [ "nlohmann::detail::file_input_adapter", "classnlohmann_1_1detail_1_1file__input__adapter.html", null ],
@@ -310,14 +296,12 @@ var hierarchy =
     [ "hal::BooleanFunction::NodeType", "structhal_1_1_boolean_function_1_1_node_type.html", null ],
     [ "nlohmann::detail::nonesuch", "structnlohmann_1_1detail_1_1nonesuch.html", null ],
     [ "hal::result_constructor_type::OK", "classhal_1_1result__constructor__type_1_1_o_k.html", null ],
-    [ "subprocess::output", "structsubprocess_1_1output.html", null ],
     [ "nlohmann::detail::output_adapter< CharType, StringType >", "classnlohmann_1_1detail_1_1output__adapter.html", null ],
     [ "nlohmann::detail::output_adapter_protocol< CharType >", "structnlohmann_1_1detail_1_1output__adapter__protocol.html", [
       [ "nlohmann::detail::output_stream_adapter< CharType >", "classnlohmann_1_1detail_1_1output__stream__adapter.html", null ],
       [ "nlohmann::detail::output_string_adapter< CharType, StringType >", "classnlohmann_1_1detail_1_1output__string__adapter.html", null ],
       [ "nlohmann::detail::output_vector_adapter< CharType >", "classnlohmann_1_1detail_1_1output__vector__adapter.html", null ]
     ] ],
-    [ "subprocess::detail::param_pack< T >", "structsubprocess_1_1detail_1_1param__pack.html", null ],
     [ "nlohmann::detail::parser< BasicJsonType >", "classnlohmann_1_1detail_1_1parser.html", null ],
     [ "hal::SMT::ModelParser::ParserContext", "structhal_1_1_s_m_t_1_1_model_parser_1_1_parser_context.html", null ],
     [ "hal::dataflow::processing::PassConfiguration", "structhal_1_1dataflow_1_1processing_1_1_pass_configuration.html", null ],
@@ -328,10 +312,8 @@ var hierarchy =
     [ "hal::PlacementEntry", "classhal_1_1_placement_entry.html", null ],
     [ "hal::PlacementHint", "classhal_1_1_placement_hint.html", null ],
     [ "hal::PluginParameter", "classhal_1_1_plugin_parameter.html", null ],
-    [ "subprocess::Popen", "classsubprocess_1_1_popen.html", null ],
     [ "nlohmann::detail::position_t", "structnlohmann_1_1detail_1_1position__t.html", null ],
     [ "hal::PositionGenerator", "classhal_1_1_position_generator.html", null ],
-    [ "subprocess::preexec_func", "classsubprocess_1_1preexec__func.html", null ],
     [ "nlohmann::detail::primitive_iterator_t", "classnlohmann_1_1detail_1_1primitive__iterator__t.html", null ],
     [ "nlohmann::detail::priority_tag< N >", "structnlohmann_1_1detail_1_1priority__tag.html", null ],
     [ "nlohmann::detail::priority_tag< 0 >", "structnlohmann_1_1detail_1_1priority__tag_3_010_01_4.html", null ],
@@ -702,15 +684,11 @@ var hierarchy =
       [ "hal::NodeBoxes", "classhal_1_1_node_boxes.html", null ]
     ] ],
     [ "hal::utils::RecursiveDirectoryRange", "classhal_1_1utils_1_1_recursive_directory_range.html", null ],
+    [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
     [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
     [ "hal::Result< T >", "classhal_1_1_result.html", null ],
-    [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
     [ "reverse_iterator", null, [
       [ "nlohmann::detail::json_reverse_iterator< Base >", "classnlohmann_1_1detail_1_1json__reverse__iterator.html", null ]
-    ] ],
-    [ "runtime_error", null, [
-      [ "subprocess::CalledProcessError", "classsubprocess_1_1_called_process_error.html", null ],
-      [ "subprocess::OSError", "classsubprocess_1_1_o_s_error.html", null ]
     ] ],
     [ "hal::RuntimeLibrary", "classhal_1_1_runtime_library.html", null ],
     [ "hal::SelectionTreeItem", "classhal_1_1_selection_tree_item.html", [
@@ -721,17 +699,10 @@ var hierarchy =
       [ "hal::SelectionTreeItemNet", "classhal_1_1_selection_tree_item_net.html", null ]
     ] ],
     [ "nlohmann::detail::serializer< BasicJsonType >", "classnlohmann_1_1detail_1_1serializer.html", null ],
-    [ "subprocess::session_leader", "structsubprocess_1_1session__leader.html", null ],
     [ "hal::GraphShader::Shading", "structhal_1_1_graph_shader_1_1_shading.html", null ],
-    [ "subprocess::shell", "structsubprocess_1_1shell.html", null ],
     [ "hal::SMT::Solver", "classhal_1_1_s_m_t_1_1_solver.html", null ],
     [ "hal::SMT::SolverResult", "structhal_1_1_s_m_t_1_1_solver_result.html", null ],
     [ "nlohmann::detail::static_const< T >", "structnlohmann_1_1detail_1_1static__const.html", null ],
-    [ "subprocess::detail::Streams", "classsubprocess_1_1detail_1_1_streams.html", null ],
-    [ "subprocess::string_arg", "structsubprocess_1_1string__arg.html", [
-      [ "subprocess::cwd", "structsubprocess_1_1cwd.html", null ],
-      [ "subprocess::executable", "structsubprocess_1_1executable.html", null ]
-    ] ],
     [ "hal::SubgraphNetlistDecorator", "classhal_1_1_subgraph_netlist_decorator.html", null ],
     [ "hal::SMT::SymbolicExecution", "classhal_1_1_s_m_t_1_1_symbolic_execution.html", null ],
     [ "hal::SMT::SymbolicState", "classhal_1_1_s_m_t_1_1_symbolic_state.html", null ],
@@ -811,8 +782,8 @@ var hierarchy =
     [ "Vec_Int_t_", "struct_vec___int__t__.html", null ],
     [ "Vec_Ptr_t_", "struct_vec___ptr__t__.html", null ],
     [ "Vec_Vec_t_", "struct_vec___vec__t__.html", null ],
-    [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
     [ "hal::GraphicsNode::Visuals", "structhal_1_1_graphics_node_1_1_visuals.html", null ],
+    [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
     [ "hal::StandardGraphicsNet::VLine", "structhal_1_1_standard_graphics_net_1_1_v_line.html", null ],
     [ "hal::WaitToBeSeatedEntry", "classhal_1_1_wait_to_be_seated_entry.html", null ],
     [ "nlohmann::detail::wide_string_input_helper< WideStringType, T >", "structnlohmann_1_1detail_1_1wide__string__input__helper.html", null ],
