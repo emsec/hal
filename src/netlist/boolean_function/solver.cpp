@@ -2,7 +2,7 @@
 
 #include "hal_core/netlist/boolean_function/translator.h"
 #include "hal_core/netlist/boolean_function/types.h"
-#include "hal_core/utilities/process.h"
+#include "subprocess/process.h"
 
 #include <numeric>
 #include <set>
