@@ -306,6 +306,12 @@ public:
     std::string get_working_directory() const;
 
     /**
+     * Verilator's gmake disallows spaces in directory name. Other tests (e.g. dot) might be added in future.
+     * @return true if directory name is legal, false otherwise
+     */
+    bool is_legal_directory_name() const;
+
+    /**
      * Get the filename of SALEAE directory file (JSON format).
      * @return filename as std path
      */

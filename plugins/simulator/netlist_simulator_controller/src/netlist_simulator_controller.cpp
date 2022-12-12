@@ -197,6 +197,12 @@ namespace hal
         return mWorkDir.toStdString();
     }
 
+    bool NetlistSimulatorController::is_legal_directory_name() const
+    {
+        if (mWorkDir.contains(' ')) return false;
+        return true;
+    }
+
     std::filesystem::path NetlistSimulatorController::get_saleae_directory_filename() const
     {
         return std::filesystem::path(mWaveDataList->saleaeDirectory().get_filename());
