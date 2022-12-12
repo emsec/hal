@@ -1,5 +1,8 @@
 var NAVTREEINDEX28 =
 {
+"netlist__writer__manager_8h.html#ada281488258c1fb92351e44a9d8ff60c":[7,0,0,0,1,5,1,3],
+"netlist__writer__manager_8h_source.html":[7,0,0,0,1,5,1],
+"new__project__dialog_8cpp.html":[7,0,1,3,2,12,2],
 "new__project__dialog_8cpp.html#a691d8699a6b31a63463c65c7daf8a2bd":[7,0,1,3,2,12,2,1],
 "new__project__dialog_8cpp.html#abc9b27e1fa553c3966121c0f430557c1":[7,0,1,3,2,12,2,0],
 "new__project__dialog_8cpp_source.html":[7,0,1,3,2,12,2],
@@ -246,8 +249,5 @@ var NAVTREEINDEX28 =
 "plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html":[7,0,1,1,2,0],
 "plugins_2dataflow__analysis_2src_2common_2grouping_8cpp.html":[7,0,1,1,3,0,0],
 "plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html":[7,0,1,1,3,0,0],
-"plugins_2graph__algorithm_2python_2python__bindings_8cpp.html":[7,0,1,2,1,0],
-"plugins_2graph__algorithm_2python_2python__bindings_8cpp.html#a75149032538edc19dd5073e7ef475ad4":[7,0,1,2,1,0,0],
-"plugins_2graph__algorithm_2python_2python__bindings_8cpp_source.html":[7,0,1,2,1,0],
-"plugins_2gui_2include_2gui_2doxy__groups_8h.html":[7,0,1,3,0,0,53]
+"plugins_2graph__algorithm_2python_2python__bindings_8cpp.html":[7,0,1,2,1,0]
 };

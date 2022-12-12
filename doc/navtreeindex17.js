@@ -1,5 +1,8 @@
 var NAVTREEINDEX17 =
 {
+"classhal_1_1_subgraph_netlist_decorator.html#ad134abad3516c0baac414651ff1d24ee":[6,0,0,367,2],
+"classhal_1_1_subgraph_netlist_decorator.html#ae8245fa6d538060a09860b7d747b7d6a":[6,0,0,367,7],
+"classhal_1_1_svg_icon_engine.html":[4,0,42],
 "classhal_1_1_svg_icon_engine.html#a37b5d648025d96b9062c0111d314d3ca":[4,0,42,2],
 "classhal_1_1_svg_icon_engine.html#a61be45b54af219d98b0d91031fbd9924":[4,0,42,0],
 "classhal_1_1_svg_icon_engine.html#a678fb2397f87b610bfb93ec0da535b3d":[4,0,42,3],
@@ -246,8 +249,5 @@ var NAVTREEINDEX17 =
 "classhal_1_1dataflow_1_1measure__block__time__t.html#a98603fcf10ce81c8bdc3b568b8ed5a74":[6,0,0,2,4,1],
 "classhal_1_1gui__utility_1_1_numerated_string.html":[6,0,0,3,0],
 "classhal_1_1gui__utility_1_1_numerated_string.html#a2e3088729f2ee83c767476a51d5bca45":[6,0,0,3,0,2],
-"classhal_1_1gui__utility_1_1_numerated_string.html#a3e67c1c5cf947017d25148a0b4ef5a69":[6,0,0,3,0,1],
-"classhal_1_1gui__utility_1_1_numerated_string.html#a73f7b2c67414d878cd4dbdab26d57c60":[6,0,0,3,0,0],
-"classhal_1_1log__gui__sink.html":[6,0,0,202],
-"classhal_1_1log__gui__sink.html#a11fe35a5215333c9d2ba070bfc09a523":[6,0,0,202,0]
+"classhal_1_1gui__utility_1_1_numerated_string.html#a3e67c1c5cf947017d25148a0b4ef5a69":[6,0,0,3,0,1]
 };

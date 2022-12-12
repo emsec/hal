@@ -9,5 +9,8 @@ var classhal_1_1_subgraph_netlist_decorator =
     [ "get_subgraph_function", "classhal_1_1_subgraph_netlist_decorator.html#a76765575526ecebfd05f18129578a7ed", null ],
     [ "get_subgraph_function", "classhal_1_1_subgraph_netlist_decorator.html#ae8245fa6d538060a09860b7d747b7d6a", null ],
     [ "get_subgraph_function", "classhal_1_1_subgraph_netlist_decorator.html#aa1874f9733e7608b5de773cc73f7460c", null ],
-    [ "get_subgraph_function", "classhal_1_1_subgraph_netlist_decorator.html#a2b39747caa8d3f4680b32af151d03639", null ]
+    [ "get_subgraph_function", "classhal_1_1_subgraph_netlist_decorator.html#a2b39747caa8d3f4680b32af151d03639", null ],
+    [ "get_subgraph_function_inputs", "classhal_1_1_subgraph_netlist_decorator.html#a455e99786471a0d9293000f56b28be7a", null ],
+    [ "get_subgraph_function_inputs", "classhal_1_1_subgraph_netlist_decorator.html#a602fe3be3c5979579024b42b8c4439eb", null ],
+    [ "get_subgraph_function_inputs", "classhal_1_1_subgraph_netlist_decorator.html#aabf7b9a86855378c51d9774d8980b57e", null ]
 ];
