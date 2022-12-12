@@ -241,12 +241,14 @@ namespace hal
         else
         {
             QTextListFormat::Style style = QTextListFormat::ListDisc;
-            QTextBlockFormat::MarkerType marker = QTextBlockFormat::MarkerType::NoMarker;
+            // MarkerType (as well as the function setMarker)  exists since version 5.14,
+            // pipeline from ubuntu 20.04 might use 5.12....
+            //QTextBlockFormat::MarkerType marker = QTextBlockFormat::MarkerType::NoMarker;
 
             cursor.beginEditBlock();
 
             QTextBlockFormat blockFmt = cursor.blockFormat();
-            blockFmt.setMarker(marker);
+            //blockFmt.setMarker(marker);
             cursor.setBlockFormat(blockFmt);
             QTextListFormat listFmt;
             if(cursor.currentList())
