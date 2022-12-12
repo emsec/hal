@@ -1500,26 +1500,14 @@ namespace subprocess
         /// Stream close APIs
         void close_input()
         {
-            if (stream_.input_ != nullptr)
-            {
-                fclose(stream_.input_.get());
-            }
             stream_.input_.reset();
         }
         void close_output()
         {
-            if (stream_.output_ != nullptr)
-            {
-                fclose(stream_.output_.get());
-            }
             stream_.output_.reset();
         }
         void close_error()
         {
-            if (stream_.error_ != nullptr)
-            {
-                fclose(stream_.error_.get());
-            }
             stream_.error_.reset();
         }
 

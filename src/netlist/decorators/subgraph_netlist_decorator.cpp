@@ -201,77 +201,6 @@ namespace hal
 
     namespace
     {
-        /*
-        static Result<BooleanFunction> get_function_of_gate(const Gate* const gate, const GatePin* output_pin, std::map<std::pair<u32, const GatePin*>, BooleanFunction>& cache)
-        {
-            if (auto it = cache.find({gate->get_id(), output_pin}); it != cache.end())
-            {
-                return OK(it->second);
-            }
-
-            // TODO there has to be some kind of endless loop protection. RAM has Boolean function RDATA(0) =  RDATA(0) & !MASK(0) -> leads to endless loop
-
-            BooleanFunction bf = gate->get_boolean_function(output_pin);
-
-            std::vector<std::string> input_vars = utils::to_vector(bf.get_variable_names());
-            while (!input_vars.empty())
-            {
-                const std::string var = input_vars.back();
-                input_vars.pop_back();
-
-                const GatePin* pin = gate->get_type()->get_pin_by_name(var);
-                if (pin == nullptr)
-                {
-                    return ERR("could not get Boolean function of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": failed to get input pin '" + var
-                                + "' by name");
-                }
-
-                const PinDirection pin_dir = pin->get_direction();
-                if (pin_dir == PinDirection::input)
-                {
-                    const Net* const input_net = gate->get_fan_in_net(var);
-                    if (input_net == nullptr)
-                    {
-                        // if no net is connected, the input pin name cannot be replaced
-                        return ERR("could not get Boolean function of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": failed to get fan-in net at pin '"
-                                    + pin->get_name() + "'");
-                    }
-
-                    const auto net_dec = BooleanFunctionNetDecorator(*input_net);
-                    bf                 = bf.substitute(var, net_dec.get_boolean_variable_name());
-                }
-                else if ((pin_dir == PinDirection::internal) || (pin_dir == PinDirection::output))
-                {
-                    BooleanFunction bf_interal = gate->get_boolean_function(var);
-                    if (bf_interal.is_empty())
-                    {
-                        return ERR("could not get Boolean function of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id())
-                                    + ": failed to get Boolean function at output pin '" + pin->get_name() + "'");
-                    }
-
-                    const std::vector<std::string> internal_input_vars = utils::to_vector(bf_interal.get_variable_names());
-                    input_vars.insert(input_vars.end(), internal_input_vars.begin(), internal_input_vars.end());
-
-                    if (auto substituted = bf.substitute(var, bf_interal); substituted.is_error())
-                    {
-                        return ERR_APPEND(substituted.get_error(),
-                                            "could not get Boolean function of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": failed to substitute variable '"
-                                                + var + "' with another Boolean function");
-                    }
-                    else
-                    {
-                        bf = substituted.get();
-                    }
-                }
-            }
-
-            bf = bf.simplify();
-
-            cache.insert({{gate->get_id(), output_pin}, bf});
-            return OK(bf);
-        }
-        */
-
         Result<BooleanFunction> subgraph_function_recursive(const Net* n,
                                                             const std::vector<const Gate*>& subgraph_gates,
                                                             std::map<std::pair<u32, const GatePin*>, BooleanFunction>& gate_cache,
@@ -287,7 +216,8 @@ namespace hal
             // net is multi driven
             if (sources.size() > 1)
             {
-                return ERR("could not get subgraph function of net '" + n->get_name() + "' with ID " + std::to_string(n->get_id()) + ": cannot handle multi driven nets! Encountered at net " + std::to_string(n->get_id()) + ".");
+                return ERR("could not get subgraph function of net '" + n->get_name() + "' with ID " + std::to_string(n->get_id()) + ": cannot handle multi driven nets! Encountered at net "
+                           + std::to_string(n->get_id()) + ".");
             }
 
             // net has no source
@@ -301,7 +231,8 @@ namespace hal
 
             if (src_ep->get_gate() == nullptr)
             {
-                return ERR("could not get subgraph function of net '" + n->get_name() + "' with ID " + std::to_string(n->get_id()) + ": gate at source for net " +  std::to_string(n->get_id()) + " is null.");
+                return ERR("could not get subgraph function of net '" + n->get_name() + "' with ID " + std::to_string(n->get_id()) + ": gate at source for net " + std::to_string(n->get_id())
+                           + " is null.");
             }
 
             const Gate* src_gate = src_ep->get_gate();
@@ -313,23 +244,17 @@ namespace hal
                 return OK(net_dec.get_boolean_variable());
             }
 
-            BooleanFunction gate_func; 
-            if (const auto it = gate_cache.find({src_gate->get_id(), src_ep->get_pin()}); it == gate_cache.end())
+            if (const auto it = gate_cache.find({src_gate->get_id(), src_ep->get_pin()}); it != gate_cache.end())
             {
-                const auto bf_res = src_gate->get_resolved_boolean_function(src_ep->get_pin());
-                if (bf_res.is_error())
-                {
-                    return ERR_APPEND(bf_res.get_error(), "could not get subgraph function of net " + n->get_name() + " with ID " + std::to_string(n->get_id()) + ": failed to get function of gate.");
-                }
-                // gate_func = bf_res.get().simplify();
-                gate_func = bf_res.get().simplify_local();
+                return OK(it->second);
+            }
 
-                gate_cache.insert({{src_gate->get_id(), src_ep->get_pin()}, gate_func});
-            }
-            else
+            const auto bf_res = src_gate->get_resolved_boolean_function(src_ep->get_pin());
+            if (bf_res.is_error())
             {
-                gate_func = it->second;
+                return ERR_APPEND(bf_res.get_error(), "could not get subgraph function of net " + n->get_name() + " with ID " + std::to_string(n->get_id()) + ": failed to get function of gate.");
             }
+            BooleanFunction gate_func = bf_res.get().simplify_local();
 
             on_stack.insert(n);
 
@@ -338,20 +263,21 @@ namespace hal
             for (const std::string& in_net_str : gate_func.get_variable_names())
             {
                 u32 in_net_id = std::stoi(in_net_str.substr(4));
-                Net* in_net = src_gate->get_netlist()->get_net_by_id(in_net_id);
-                
+                Net* in_net   = src_gate->get_netlist()->get_net_by_id(in_net_id);
+
                 if (in_net == nullptr)
                 {
-                    return ERR("could not get subgraph function of net '" + n->get_name() + "' with ID " + std::to_string(n->get_id()) + ": cannot find in_net " + in_net_str + " at gate " + std::to_string(src_gate->get_id()) + "!");
+                    return ERR("could not get subgraph function of net '" + n->get_name() + "' with ID " + std::to_string(n->get_id()) + ": cannot find in_net " + in_net_str + " at gate "
+                               + std::to_string(src_gate->get_id()) + "!");
                 }
 
                 auto input_bf_res = subgraph_function_recursive(in_net, subgraph_gates, gate_cache, on_stack);
 
-                if (input_bf_res.is_error()) 
+                if (input_bf_res.is_error())
                 {
                     // NOTE since this can lead to a deep recursion we dont append the error and instead just forward this.
                     return input_bf_res;
-                } 
+                }
 
                 input_to_bf.insert({in_net_str, input_bf_res.get()});
             }
@@ -359,79 +285,100 @@ namespace hal
             auto res = gate_func.substitute(input_to_bf);
             if (res.is_error())
             {
-                return ERR_APPEND(res.get_error(), "could not get subgraph function of net '" + n->get_name() + "' with ID " + std::to_string(n->get_id()) + ": failed to substitute inputs for gate function " + gate_func.to_string() + ".");
+                return ERR_APPEND(res.get_error(),
+                                  "could not get subgraph function of net '" + n->get_name() + "' with ID " + std::to_string(n->get_id()) + ": failed to substitute inputs for gate function "
+                                      + gate_func.to_string() + ".");
             }
-            
+
             on_stack.erase(n);
 
-            return res;
+            auto bf = res.get();
+
+            gate_cache.insert({{src_gate->get_id(), src_ep->get_pin()}, bf});
+
+            return OK(bf);
         }
 
-        /*
-        Result<std::monostate> subgraph_function_bfs(Net* n,
-                                                     BooleanFunction& current,
-                                                     std::vector<Net*> stack,
-                                                     const std::vector<const Gate*>& subgraph_gates,
-                                                     std::map<std::pair<u32, const GatePin*>, BooleanFunction>& cache)
+        Result<std::set<const Net*>> subgraph_function_inputs_recursive(const Net* n,
+                                                                        const std::vector<const Gate*>& subgraph_gates,
+                                                                        std::map<std::pair<u32, const GatePin*>, std::set<const Net*>>& gate_cache,
+                                                                        std::unordered_set<const Net*>& on_stack)
         {
-            if (n->get_num_of_sources() > 1)
+            if (on_stack.find(n) != on_stack.end())
             {
-                return ERR("could not get subgraph function of net '" + n->get_name() + "' with ID " + std::to_string(n->get_id()) + ": number of sources is greater than 1");
-            }
-            else if (n->get_num_of_sources() == 0)
-            {
-                return OK({});
+                return ERR("could not get subgraph function of net '" + n->get_name() + "' with ID " + std::to_string(n->get_id()) + ": subgraph contains a cycle!");
             }
 
-            if (auto it = std::find(stack.begin(), stack.end(), n); it != stack.end())
+            const std::vector<Endpoint*> sources = n->get_sources();
+
+            // net is multi driven
+            if (sources.size() > 1)
             {
-                return ERR("could not get subgraph function of net '" + n->get_name() + "' with ID " + std::to_string(n->get_id()) + ": subgraph contains a cyclic dependency: "
-                           + utils::join(" -> ", it, stack.end(), [](auto nlog) { return nlog->get_name() + " (ID: " + std::to_string(nlog->get_id()) + ")"; }) + " -> " + n->get_name()
-                           + " (ID: " + std::to_string(n->get_id()) + ")");
+                return ERR("could not get subgraph function of net '" + n->get_name() + "' with ID " + std::to_string(n->get_id()) + ": cannot handle multi driven nets! Encountered at net "
+                           + std::to_string(n->get_id()) + ".");
             }
 
-            stack.push_back(n);
-
-            Gate* src_gate   = n->get_sources()[0]->get_gate();
-            GatePin* src_pin = n->get_sources()[0]->get_pin();
-
-            if (std::find(subgraph_gates.begin(), subgraph_gates.end(), src_gate) != subgraph_gates.end())
+            // net has no source
+            if (sources.empty())
             {
-                if (auto func = get_function_of_gate(src_gate, src_pin, cache); func.is_error())
+                return OK({n});
+            }
+
+            const Endpoint* src_ep = sources.front();
+
+            if (src_ep->get_gate() == nullptr)
+            {
+                return ERR("could not get subgraph function of net '" + n->get_name() + "' with ID " + std::to_string(n->get_id()) + ": gate at source for net " + std::to_string(n->get_id())
+                           + " is null.");
+            }
+
+            const Gate* src_gate = src_ep->get_gate();
+
+            // source is not in subgraph gates
+            if (std::find(subgraph_gates.begin(), subgraph_gates.end(), src_gate) == subgraph_gates.end())
+            {
+                return OK({n});
+            }
+
+            if (const auto it = gate_cache.find({src_gate->get_id(), src_ep->get_pin()}); it != gate_cache.end())
+            {
+                return OK(it->second);
+            }
+
+            const auto bf_res = src_gate->get_resolved_boolean_function(src_ep->get_pin());
+            if (bf_res.is_error())
+            {
+                return ERR_APPEND(bf_res.get_error(), "could not get subgraph function of net " + n->get_name() + " with ID " + std::to_string(n->get_id()) + ": failed to get function of gate.");
+            }
+            BooleanFunction gate_func = bf_res.get().simplify_local();
+
+            on_stack.insert(n);
+
+            std::set<const Net*> inputs;
+
+            for (const std::string& in_net_str : gate_func.get_variable_names())
+            {
+                auto in_net       = BooleanFunctionNetDecorator::get_net_from(n->get_netlist(), in_net_str).get();
+                auto new_nets_res = subgraph_function_inputs_recursive(in_net, subgraph_gates, gate_cache, on_stack);
+                if (new_nets_res.is_error())
                 {
-                    return ERR_APPEND(func.get_error(),
-                                      "could not get subgraph function of net '" + n->get_name() + "' with ID " + std::to_string(n->get_id()) + ": failed to get Boolean function of gate '"
-                                          + src_gate->get_name() + "' with ID " + std::to_string(src_gate->get_id()));
-                }
-                else
-                {
-                    const auto net_dec = BooleanFunctionNetDecorator(*n);
-                    if (auto substitution = current.substitute(net_dec.get_boolean_variable_name(), func.get()); substitution.is_error())
-                    {
-                        return ERR_APPEND(substitution.get_error(),
-                                          "could not get subgraph function of net '" + n->get_name() + "' with ID " + std::to_string(n->get_id()) + ": failed to substitute net with Boolean function");
-                    }
-                    else
-                    {
-                        current = substitution.get();
-                    }
+                    return new_nets_res;
                 }
 
-                for (Net* sn : src_gate->get_fan_in_nets())
+                for (const auto& new_net : new_nets_res.get())
                 {
-                    if (auto res = subgraph_function_bfs(sn, current, stack, subgraph_gates, cache); res.is_error())
-                    {
-                        return ERR_APPEND(res.get_error(), "could not get subgraph function of net '" + n->get_name() + "' with ID " + std::to_string(n->get_id()));
-                    }
+                    inputs.insert(new_net);
                 }
             }
 
-            return OK({});
+            on_stack.erase(n);
+
+            gate_cache.insert({{src_gate->get_id(), src_ep->get_pin()}, inputs});
+
+            return OK(inputs);
         }
-        */
-    }    // namespace
 
-   
+    }    // namespace
 
     Result<BooleanFunction> SubgraphNetlistDecorator::get_subgraph_function(const std::vector<const Gate*>& subgraph_gates,
                                                                             const Net* subgraph_output,
@@ -444,7 +391,8 @@ namespace hal
         }
         else if (std::any_of(subgraph_gates.begin(), subgraph_gates.end(), [](const Gate* g) { return g == nullptr; }))
         {
-            return ERR("could not get subgraph function of net '" + subgraph_output->get_name() + "' with ID " + std::to_string(subgraph_output->get_id()) + ": subgraph contains a gate that is a 'nullptr'");
+            return ERR("could not get subgraph function of net '" + subgraph_output->get_name() + "' with ID " + std::to_string(subgraph_output->get_id())
+                       + ": subgraph contains a gate that is a 'nullptr'");
         }
         else if (subgraph_output == nullptr)
         {
@@ -476,8 +424,9 @@ namespace hal
         return subgraph_function_recursive(subgraph_output, subgraph_gates, gate_cache, on_stack);
     }
 
-    Result<BooleanFunction>
-        SubgraphNetlistDecorator::get_subgraph_function(const std::vector<Gate*>& subgraph_gates, const Net* subgraph_output, std::map<std::pair<u32, const GatePin*>, BooleanFunction>& gate_cache) const
+    Result<BooleanFunction> SubgraphNetlistDecorator::get_subgraph_function(const std::vector<Gate*>& subgraph_gates,
+                                                                            const Net* subgraph_output,
+                                                                            std::map<std::pair<u32, const GatePin*>, BooleanFunction>& gate_cache) const
     {
         const auto subgraph_gates_const = std::vector<const Gate*>(subgraph_gates.begin(), subgraph_gates.end());
         if (auto res = get_subgraph_function(subgraph_gates_const, subgraph_output, gate_cache); res.is_error())
@@ -540,4 +489,57 @@ namespace hal
             return res;
         }
     }
+
+    Result<std::set<const Net*>> SubgraphNetlistDecorator::get_subgraph_function_inputs(const std::vector<const Gate*>& subgraph_gates, const Net* subgraph_output) const
+    {
+        // check validity of subgraph_gates
+        if (subgraph_gates.empty())
+        {
+            return ERR("could not get subgraph function of net '" + subgraph_output->get_name() + "' with ID " + std::to_string(subgraph_output->get_id()) + ": subgraph contains no gates");
+        }
+        else if (std::any_of(subgraph_gates.begin(), subgraph_gates.end(), [](const Gate* g) { return g == nullptr; }))
+        {
+            return ERR("could not get subgraph function of net '" + subgraph_output->get_name() + "' with ID " + std::to_string(subgraph_output->get_id())
+                       + ": subgraph contains a gate that is a 'nullptr'");
+        }
+        else if (subgraph_output == nullptr)
+        {
+            return ERR("could not get subgraph function: net is a 'nullptr'");
+        }
+        else if (subgraph_output->get_num_of_sources() > 1)
+        {
+            return ERR("could not get subgraph function of net '" + subgraph_output->get_name() + "' with ID " + std::to_string(subgraph_output->get_id()) + ": net has more than one source");
+        }
+        else if (subgraph_output->is_global_input_net())
+        {
+            return OK({subgraph_output});
+        }
+        else if (subgraph_output->get_num_of_sources() == 0)
+        {
+            return ERR("could not get subgraph function of net '" + subgraph_output->get_name() + "' with ID " + std::to_string(subgraph_output->get_id()) + ": net has no sources");
+        }
+
+        const Gate* start_gate = subgraph_output->get_sources()[0]->get_gate();
+        if (std::find(subgraph_gates.begin(), subgraph_gates.end(), start_gate) == subgraph_gates.end())
+        {
+            return OK({subgraph_output});
+        }
+
+        std::unordered_set<const Net*> on_stack;
+        std::map<std::pair<u32, const GatePin*>, std::set<const Net*>> gate_cache;
+
+        return subgraph_function_inputs_recursive(subgraph_output, subgraph_gates, gate_cache, on_stack);
+    }
+
+    Result<std::set<const Net*>> SubgraphNetlistDecorator::get_subgraph_function_inputs(const std::vector<Gate*>& subgraph_gates, const Net* subgraph_output) const
+    {
+        const auto subgraph_gates_const = std::vector<const Gate*>(subgraph_gates.begin(), subgraph_gates.end());
+        return get_subgraph_function_inputs(subgraph_gates_const, subgraph_output);
+    }
+
+    Result<std::set<const Net*>> SubgraphNetlistDecorator::get_subgraph_function_inputs(const Module* subgraph_module, const Net* subgraph_output) const
+    {
+        return get_subgraph_function_inputs(subgraph_module->get_gates(), subgraph_output);
+    }
+
 }    // namespace hal

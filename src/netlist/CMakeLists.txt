@@ -26,6 +26,7 @@ target_link_libraries(netlist
                         hal::utilities
                         std::filesystem
                         spdlog::spdlog
+                        subprocess::subprocess
                         ${CMAKE_DL_LIBS}
                         RapidJSON::RapidJSON
                         ${Z3_LIBRARIES}

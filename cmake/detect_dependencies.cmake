@@ -141,6 +141,17 @@ set_target_properties(spdlog::spdlog PROPERTIES
                         )
 
 ################################
+#####   subprocess
+################################
+
+
+message(STATUS "using subprocess from deps")
+add_library(subprocess::subprocess INTERFACE IMPORTED)
+set_target_properties(subprocess::subprocess PROPERTIES
+                        INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/subprocess"
+                        )
+
+################################
 #####   Python support
 ################################
 
