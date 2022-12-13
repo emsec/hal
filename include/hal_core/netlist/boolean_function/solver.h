@@ -112,18 +112,6 @@ namespace hal
 			 */
             Result<SolverResult> query_remote(const QueryConfig& config) const;
 
-        private:
-            ////////////////////////////////////////////////////////////////////////
-            // Member
-            ////////////////////////////////////////////////////////////////////////
-
-            /// stores list of SMT solver constraints
-            std::vector<Constraint> m_constraints;
-
-            ////////////////////////////////////////////////////////////////////////
-            // Interface
-            ////////////////////////////////////////////////////////////////////////
-
             /**
 			 * Translate a list of constraint and a configuration to SMT-LIB v2.
 			 *
@@ -135,6 +123,18 @@ namespace hal
 			 * @returns Ok() and SMT-LIB compatible string representation on success, Err() otherwise.
 			 */
             static Result<std::string> translate_to_smt2(const std::vector<Constraint>& constraints, const QueryConfig& config);
+
+        private:
+            ////////////////////////////////////////////////////////////////////////
+            // Member
+            ////////////////////////////////////////////////////////////////////////
+
+            /// stores list of SMT solver constraints
+            std::vector<Constraint> m_constraints;
+
+            ////////////////////////////////////////////////////////////////////////
+            // Interface
+            ////////////////////////////////////////////////////////////////////////
 
             /**
 			 * Translate a SMT solver result from SMT-LIB v2.
