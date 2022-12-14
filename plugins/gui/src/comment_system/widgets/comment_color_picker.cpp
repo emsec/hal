@@ -7,7 +7,7 @@ namespace hal
 {
 
     CommentColorPicker::CommentColorPicker(QWidget* parent) : QDialog(parent),
-        mRedColor(QColor(Qt::red)), mYellowColor(QColor(Qt::yellow)), mGreenColor(QColor(Qt::green))
+        mRedColor(QColor(Qt::red)), mGreenColor(QColor(Qt::green)), mYellowColor(QColor(Qt::yellow))
     {
         mDefaultColor = QColor("#A9B7C6");
 
@@ -73,6 +73,8 @@ namespace hal
             return mGreenColor;
         if(mDefaultButton->isChecked())
             return mDefaultColor;
+        Q_ASSERT(1==0); // all legal cases covered by if-statements above
+        return QColor();
     }
 
     void CommentColorPicker::handleOkClicked()
