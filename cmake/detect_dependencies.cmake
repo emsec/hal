@@ -1,30 +1,41 @@
-################################
-#####   PkgConfig
-################################
+# ###############################
+# ####   PkgConfig
+# ###############################
 
 find_package(PkgConfig REQUIRED)
+
 if(PkgConfig_FOUND)
     message(VERBOSE "PKG_CONFIG_EXECUTABLE: ${PKG_CONFIG_EXECUTABLE}")
 elseif(NOT PkgConfig_FOUND)
     set(missing_package "TRUE")
+
     if(LINUX)
         message(STATUS "Please install PkgConfig (https://linux.die.net/man/1/pkg-config)")
     endif(LINUX)
+
     if(APPLE AND CMAKE_HOST_APPLE)
         message(STATUS "To install pkgconfig on MacOS using homebrew run following command:")
         message(STATUS "    brew install pkgconfig")
     endif(APPLE AND CMAKE_HOST_APPLE)
 endif(PkgConfig_FOUND)
 
-################################
-#####   Sanitizers
-################################
-
+# ###############################
+# ####   Sanitizers
+# ###############################
 find_package(Sanitizers REQUIRED)
 
-################################
-#####   OpenMP
-################################
+# ###############################
+# ####   Bitwuzla
+# ###############################
+find_package(Bitwuzla)
+
+if(Bitwuzla_FOUND)
+    set(BITWUZLA_LIBRARY Bitwuzla::bitwuzla)
+endif()
+
+# ###############################
+# ####   OpenMP
+# ###############################
 
 # See cmake/detect_dependencies.cmake
 if(APPLE AND CMAKE_HOST_APPLE)
@@ -35,12 +46,13 @@ if(APPLE AND CMAKE_HOST_APPLE)
     endif()
 
     # If OpenMP wasn't found, try if we can find it in the default Macports location
-    if((NOT OPENMP_FOUND) AND (NOT OPENMP_CXX_FOUND) AND EXISTS "/opt/local/lib/libomp/libomp.dylib") # older cmake uses OPENMP_FOUND, newer cmake also sets OPENMP_CXX_FOUND, homebrew installations seem only to get the latter set.
+    if((NOT OPENMP_FOUND) AND(NOT OPENMP_CXX_FOUND) AND EXISTS "/opt/local/lib/libomp/libomp.dylib") # older cmake uses OPENMP_FOUND, newer cmake also sets OPENMP_CXX_FOUND, homebrew installations seem only to get the latter set.
         set(OpenMP_CXX_FLAGS "-Xpreprocessor -fopenmp -I/opt/local/include/libomp/")
         set(OpenMP_CXX_LIB_NAMES omp)
         set(OpenMP_omp_LIBRARY /opt/local/lib/libomp/libomp.dylib)
 
         find_package(OpenMP)
+
         if(OPENMP_FOUND OR OPENMP_CXX_FOUND)
             message(VERBOSE "Found libomp in macports default location.")
         else()
@@ -49,12 +61,13 @@ if(APPLE AND CMAKE_HOST_APPLE)
     endif()
 
     # If OpenMP wasn't found, try if we can find it in the default Homebrew location
-    if((NOT OPENMP_FOUND) AND (NOT OPENMP_CXX_FOUND) AND EXISTS "/usr/local/opt/libomp/lib/libomp.dylib")
+    if((NOT OPENMP_FOUND) AND(NOT OPENMP_CXX_FOUND) AND EXISTS "/usr/local/opt/libomp/lib/libomp.dylib")
         set(OpenMP_CXX_FLAGS "-Xpreprocessor -fopenmp -I/usr/local/opt/libomp/include")
         set(OpenMP_CXX_LIB_NAMES omp)
         set(OpenMP_omp_LIBRARY /usr/local/opt/libomp/lib/libomp.dylib)
 
         find_package(OpenMP)
+
         if(OPENMP_FOUND OR OPENMP_CXX_FOUND)
             message(VERBOSE "Found libomp in homebrew default location.")
         else()
@@ -65,9 +78,9 @@ if(APPLE AND CMAKE_HOST_APPLE)
     set(Additional_OpenMP_Libraries_Workaround "")
 
     # Workaround because older cmake on apple doesn't support FindOpenMP
-    if((NOT OPENMP_FOUND) AND (NOT OPENMP_CXX_FOUND))
-        if((APPLE AND ((CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang") OR (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")))
-            AND ((CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "7.0") AND (CMAKE_VERSION VERSION_LESS "3.12.0")))
+    if((NOT OPENMP_FOUND) AND(NOT OPENMP_CXX_FOUND))
+        if((APPLE AND((CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang") OR(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")))
+            AND((CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "7.0") AND(CMAKE_VERSION VERSION_LESS "3.12.0")))
             message(VERBOSE "Applying workaround for OSX OpenMP with old cmake that doesn't have FindOpenMP")
             set(OpenMP_CXX_FLAGS "-Xclang -fopenmp")
             set(Additional_OpenMP_Libraries_Workaround "-lomp")
@@ -77,6 +90,7 @@ if(APPLE AND CMAKE_HOST_APPLE)
     endif()
 else()
     find_package(OpenMP REQUIRED)
+
     if(OpenMP_FOUND)
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
@@ -84,42 +98,42 @@ else()
     endif()
 endif()
 
-if(OPENMP_FOUND) 
+if(OPENMP_FOUND)
     message(STATUS "openMP found")
 else()
     message(STATUS "openMP not found")
 endif()
 
-################################
-#####   Filesystem
-################################
-
+# ###############################
+# ####   Filesystem
+# ###############################
 find_package(Filesystem REQUIRED Final Experimental)
 
-
-################################
-#####   RapidJSON
-################################
-
+# ###############################
+# ####   RapidJSON
+# ###############################
 find_package(RapidJSON REQUIRED)
 message(STATUS "Found rapidjson ${RAPIDJSON_INCLUDEDIR}")
+
 if(RapidJSON_FOUND AND NOT TARGET RapidJSON::RapidJSON)
     if(NOT RAPIDJSON_INCLUDEDIR)
-        set(RAPIDJSON_INCLUDEDIR ${RAPIDJSON_INCLUDE_DIRS})    
+        set(RAPIDJSON_INCLUDEDIR ${RAPIDJSON_INCLUDE_DIRS})
     endif()
+
     add_library(RapidJSON::RapidJSON INTERFACE IMPORTED)
     set_target_properties(RapidJSON::RapidJSON PROPERTIES
-                          INTERFACE_INCLUDE_DIRECTORIES "${RAPIDJSON_INCLUDEDIR}"
-                          )
+        INTERFACE_INCLUDE_DIRECTORIES "${RAPIDJSON_INCLUDEDIR}"
+    )
     message(STATUS "Set rapidjson successully: ${RAPIDJSON_INCLUDEDIR}")
 endif()
 
-################################
-#####   pybind11
-################################
+# ###############################
+# ####   pybind11
+# ###############################
 
 # Need Version 2.2.4 Not available in ubuntu bionic
 find_package(pybind11 2.4.3 CONFIG)
+
 if(${pybind11_FOUND})
     message(VERBOSE "Found pybind11 v${pybind11_VERSION}: ${pybind11_INCLUDE_DIRS}")
     message(VERBOSE "Found pybind11 >= 2.4.3")
@@ -128,35 +142,32 @@ else()
     add_subdirectory(deps/pybind11)
 endif()
 
-################################
-#####   spdlog
-################################
-
-
+# ###############################
+# ####   spdlog
+# ###############################
 message(STATUS "using spdlog from deps")
 set(spdlog_VERSION 1.9.2)
 add_library(spdlog::spdlog INTERFACE IMPORTED)
 set_target_properties(spdlog::spdlog PROPERTIES
-                        INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/spdlog-1.9.2/include"
-                        )
+    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/spdlog-1.9.2/include"
+)
 
-################################
-#####   subprocess
-################################
-
-
+# ###############################
+# ####   subprocess
+# ###############################
 message(STATUS "using subprocess from deps")
 add_library(subprocess::subprocess INTERFACE IMPORTED)
 set_target_properties(subprocess::subprocess PROPERTIES
-                        INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/subprocess"
-                        )
+    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/subprocess"
+)
 
-################################
-#####   Python support
-################################
+# ###############################
+# ####   Python support
+# ###############################
 
-#set(Python_ADDITIONAL_VERSIONS 3.5 3.6 3.8)
-find_package (Python3 COMPONENTS Interpreter Development)
+# set(Python_ADDITIONAL_VERSIONS 3.5 3.6 3.8)
+find_package(Python3 COMPONENTS Interpreter Development)
+
 if(Python3_Interpreter_FOUND)
     message(STATUS "Python3_INCLUDE_DIRS: ${Python3_INCLUDE_DIRS}")
     message(STATUS "Python3_LIBRARIES: ${Python3_LIBRARIES}")
@@ -164,59 +175,61 @@ if(Python3_Interpreter_FOUND)
     message(STATUS "PYTHON_MODULE_EXTENSION: ${PYTHON_MODULE_EXTENSION}")
 elseif(NOT Python3_Interpreter_FOUND)
     set(Missing_package "TRUE")
+
     if(APPLE AND CMAKE_HOST_APPLE)
         message(STATUS "To install python3 on MacOS using homebrew run following command:")
         message(STATUS "    brew install python3")
     endif(APPLE AND CMAKE_HOST_APPLE)
 endif(Python3_Interpreter_FOUND)
 
-################################
-#####   Graphviz
-################################
+# ###############################
+# ####   Graphviz
+# ###############################
 find_package(Graphviz)
+
 if(${graphviz_FOUND})
     add_library(graphviz::graphviz INTERFACE IMPORTED)
     set_target_properties(graphviz::graphviz PROPERTIES
-                          INTERFACE_INCLUDE_DIRECTORIES ${GRAPHVIZ_INCLUDE_DIR}
-                          )
+        INTERFACE_INCLUDE_DIRECTORIES ${GRAPHVIZ_INCLUDE_DIR}
+    )
     set_target_properties(graphviz::graphviz PROPERTIES
-                          INTERFACE_LINK_LIBRARIES ${GRAPHVIZ_LIBRARIES}
-                          )
+        INTERFACE_LINK_LIBRARIES ${GRAPHVIZ_LIBRARIES}
+    )
 
     # Use graphviz via:
-    #   target_link_libraries(xxx PUBLIC ... graphviz::graphviz ... )
+    # target_link_libraries(xxx PUBLIC ... graphviz::graphviz ... )
     # or in plugins:
-    #   add_custom_target( ...
-    #                      LINK_LIBRARIES ... graphviz::graphviz)
+    # add_custom_target( ...
+    # LINK_LIBRARIES ... graphviz::graphviz)
 endif()
 
-################################
-#####   Berkeley ABC
-################################
+# ###############################
+# ####   Berkeley ABC
+# ###############################
 
 # abc stuff
 # Download and unpack abc at configure time
 add_library(ABC INTERFACE IMPORTED)
 find_package(ABC)
+
 if(${ABC_FOUND})
     message(STATUS "Found ABC:")
     message(STATUS "    ABC_LIBRARY: ${ABC_LIBRARY}")
 else()
     message(STATUS "ABC not found")
     message(STATUS "Will build abc ourselves, check README.md to see how to speed up the process...")
-    
+
     add_subdirectory(deps/abc)
     add_library(abc::libabc-pic INTERFACE IMPORTED)
     set_target_properties(abc::libabc-pic PROPERTIES INTERFACE_LINK_LIBRARIES libabc-pic)
     set(ABC_LIBRARY abc::libabc-pic)
 endif()
 
-
-################################
-#####   z3
-################################
-
+# ###############################
+# ####   z3
+# ###############################
 find_package(Z3 REQUIRED)
+
 if(Z3_FOUND)
     message(STATUS "Found z3")
     message(STATUS "    Z3_LIBRARIES: ${Z3_LIBRARIES}")

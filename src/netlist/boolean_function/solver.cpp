@@ -7,6 +7,10 @@
 #include <numeric>
 #include <set>
 
+#ifdef BITWUZLA_LIBRARY
+#include "bitwuzla/bitwuzla.h"
+#endif
+
 namespace hal
 {
     namespace SMT
@@ -150,14 +154,79 @@ namespace hal
             }
         }    // namespace Boolector
 
+#ifdef BITWUZLA_LIBRARY
+        namespace BitwuzlaLibrary
+        {
+            /// Checks whether a Boolector binary is available on the system.
+            Result<std::string> query_binary_path()
+            {
+                return OK("");
+            }
+
+            /**
+			 * Queries Boolector with an SMT-LIB input and a query configuration.
+			 *
+			 * @param[in] input - SMT-LIB input.
+			 * @param[in] config - SMT query configuration.
+			 * @returns Ok() and status with 
+             *      (0) was_killed (true in case process was killed), and 
+             *      (1) stdout Stdout of Z3 process on success, 
+             *      Err() otherwise
+			 */
+            Result<std::tuple<bool, std::string>> query(std::string input, const QueryConfig& config)
+            {
+                auto bzla = bitwuzla_new();
+
+                const char* smt2_char_string = input.c_str();
+
+                char* out;
+                size_t out_len = {};
+
+                auto in_stream  = fmemopen((void*)smt2_char_string, strlen(smt2_char_string), "r");
+                auto out_stream = open_memstream(&out, &out_len);
+
+                BitwuzlaResult _r;
+                char* error;
+
+                if (config.generate_model)
+                {
+                    bitwuzla_set_option(bzla, BITWUZLA_OPT_PRODUCE_MODELS, 1);
+                }
+
+                auto res = bitwuzla_parse_format(bzla, "smt2", in_stream, "VIRTUAL FILE", out_stream, &error, &_r);
+                fflush(out_stream);
+
+                if (error != nullptr)
+                {
+                    return ERR("failed to solve provided smt2 solver with bitwuzla: " + std::string(error));
+                }
+
+                fclose(in_stream);
+                fclose(out_stream);
+
+                bitwuzla_delete(bzla);
+
+                std::string output(out);
+
+                return OK({false, output});
+            }
+        }    // namespace BitwuzlaLibrary
+#endif
+
         std::map<SolverType, std::function<Result<std::string>()>> Solver::type2query_binary = {
             {SolverType::Z3, Z3::query_binary_path},
             {SolverType::Boolector, Boolector::query_binary_path},
+#ifdef BITWUZLA_LIBRARY
+            {SolverType::BitwuzlaLibrary, BitwuzlaLibrary::query_binary_path},
+#endif
         };
 
         std::map<SolverType, std::function<Result<std::tuple<bool, std::string>>(std::string, const QueryConfig&)>> Solver::type2query = {
             {SolverType::Z3, Z3::query},
             {SolverType::Boolector, Boolector::query},
+#ifdef BITWUZLA_LIBRARY
+            {SolverType::BitwuzlaLibrary, BitwuzlaLibrary::query},
+#endif
         };
 
         Solver::Solver(const std::vector<Constraint>& constraints) : m_constraints(constraints)
@@ -186,12 +255,7 @@ namespace hal
 
         bool Solver::has_local_solver_for(SolverType solver)
         {
-            static const std::map<SolverType, std::function<Result<std::string>()>> type2query = {
-                {SolverType::Z3, Z3::query_binary_path},
-                {SolverType::Boolector, Boolector::query_binary_path},
-            };
-
-            switch (auto it = type2query.find(solver); it != type2query.end())
+            switch (auto it = type2query_binary.find(solver); it != type2query_binary.end())
             {
                 case true:
                     return it->second().is_ok();

@@ -152,11 +152,6 @@ namespace hal
         bool compare_nets(const Netlist* netlist_a, const Netlist* netlist_b, const Net* net_a, const Net* net_b, bool replace_net_ids = true);
     }    // namespace z3_utils
 
-    namespace Bitwuzla
-    {
-        Result<SMT::SolverResult> query(const std::string& smt2);
-    }
-
     class PLUGIN_API Z3UtilsPlugin : public BasePluginInterface
     {
     public:

@@ -234,6 +234,10 @@ namespace hal
                         return boost::spirit::x3::phrase_parse(iter, s.end(), ModelParser::Z3_MODEL_GRAMMAR, boost::spirit::x3::space);
                     case SolverType::Boolector:
                         return boost::spirit::x3::phrase_parse(iter, s.end(), ModelParser::BOOLECTOR_MODEL_GRAMMAR, boost::spirit::x3::space);
+#ifdef BITWUZLA_LIBRARY
+                    case SolverType::BitwuzlaLibrary:
+                        return boost::spirit::x3::phrase_parse(iter, s.end(), ModelParser::BOOLECTOR_MODEL_GRAMMAR, boost::spirit::x3::space);
+#endif
 
                     default:
                         return false;
@@ -339,7 +343,12 @@ namespace hal
     }    // namespace SMT
 
     template<>
-    std::map<SMT::SolverType, std::string> EnumStrings<SMT::SolverType>::data = {{SMT::SolverType::Z3, "Z3"}, {SMT::SolverType::Boolector, "Boolector"}, {SMT::SolverType::Unknown, "Unknown"}};
+    std::map<SMT::SolverType, std::string> EnumStrings<SMT::SolverType>::data = {{SMT::SolverType::Z3, "Z3"},
+                                                                                 {SMT::SolverType::Boolector, "Boolector"},
+#ifdef BITWUZLA_LIBRARY
+                                                                                 {SMT::SolverType::BitwuzlaLibrary, "BitwuzlaLibrary"},
+#endif
+                                                                                 {SMT::SolverType::Unknown, "Unknown"}};
 
     template<>
     std::map<SMT::SolverResultType, std::string> EnumStrings<SMT::SolverResultType>::data = {{SMT::SolverResultType::Sat, "sat"},

@@ -44,7 +44,10 @@ namespace hal
         {
             Z3 = 0,    /**< Z3 SMT solver. */
             Boolector, /**< Boolector SMT solver. */
-            Unknown,   /**< Unknown (unsupported) SMT solver. */
+#ifdef BITWUZLA_LIBRARY
+            BitwuzlaLibrary,
+#endif
+            Unknown, /**< Unknown (unsupported) SMT solver. */
         };
 
         /**
