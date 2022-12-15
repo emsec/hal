@@ -91,6 +91,12 @@ namespace hal
             return *this;
         }
 
+        QueryConfig& QueryConfig::with_call(SolverCall _call)
+        {
+            this->call = _call;
+            return *this;
+        }
+
         QueryConfig& QueryConfig::with_local_solver()
         {
             this->local = true;
@@ -234,10 +240,8 @@ namespace hal
                         return boost::spirit::x3::phrase_parse(iter, s.end(), ModelParser::Z3_MODEL_GRAMMAR, boost::spirit::x3::space);
                     case SolverType::Boolector:
                         return boost::spirit::x3::phrase_parse(iter, s.end(), ModelParser::BOOLECTOR_MODEL_GRAMMAR, boost::spirit::x3::space);
-#ifdef BITWUZLA_LIBRARY
-                    case SolverType::BitwuzlaLibrary:
+                    case SolverType::Bitwuzla:
                         return boost::spirit::x3::phrase_parse(iter, s.end(), ModelParser::Z3_MODEL_GRAMMAR, boost::spirit::x3::space);
-#endif
 
                     default:
                         return false;
@@ -248,6 +252,9 @@ namespace hal
             {
                 return OK(Model(ModelParser::parser_context.model));
             }
+
+            std::cout << "Model: " << s << std::endl; 
+            exit(0);
             return ERR("could not parse SMT-Lib model");
         }
 
@@ -345,9 +352,7 @@ namespace hal
     template<>
     std::map<SMT::SolverType, std::string> EnumStrings<SMT::SolverType>::data = {{SMT::SolverType::Z3, "Z3"},
                                                                                  {SMT::SolverType::Boolector, "Boolector"},
-#ifdef BITWUZLA_LIBRARY
-                                                                                 {SMT::SolverType::BitwuzlaLibrary, "BitwuzlaLibrary"},
-#endif
+                                                                                 {SMT::SolverType::Bitwuzla, "Bitwuzla"},
                                                                                  {SMT::SolverType::Unknown, "Unknown"}};
 
     template<>

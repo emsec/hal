@@ -84,7 +84,7 @@ namespace hal
 			 * @param[in] type - The SMT solver type.
 			 * @returns `true` if an SMT solver of the requested type is available, `false` otherwise.
 			 */
-            static bool has_local_solver_for(SolverType type);
+            static bool has_local_solver_for(SolverType type, SolverCall call);
 
             /**
 			 * Queries an SMT solver with the specified query configuration.
@@ -128,8 +128,9 @@ namespace hal
             /// stores list of SMT solver constraints
             std::vector<Constraint> m_constraints;
 
-            static std::map<SolverType, std::function<Result<std::tuple<bool, std::string>>(std::string&, const QueryConfig&)>> type2query;
+            static std::map<std::pair<SolverType, SolverCall>, std::function<Result<std::tuple<bool, std::string>>(std::string&, const QueryConfig&)>> spec2query;
             static std::map<SolverType, std::function<Result<std::string>()>> type2query_binary;
+            static std::map<SolverType, bool> type2link_status;
 
             ////////////////////////////////////////////////////////////////////////
             // Interface

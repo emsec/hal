@@ -359,10 +359,11 @@ namespace hal
             :rtype: hal_py.SMT.Solver
         )");
 
-        py_smt_solver.def_static("has_local_solver_for", &SMT::Solver::has_local_solver_for, py::arg("type"), R"(
+        py_smt_solver.def_static("has_local_solver_for", &SMT::Solver::has_local_solver_for, py::arg("type"), py::arg("call"), R"(
             Checks whether a SMT solver of the given type is available on the local machine.
 
             :param hal_py.SMT.SolverType type: The SMT solver type.
+            :param hal_py.SMT.SolverCall call: The call to the SMT solver.
             :returns: True if an SMT solver of the requested type is available, False otherwise.
             :rtype: bool
         )");
