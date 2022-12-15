@@ -26,13 +26,16 @@
 #pragma once
 
 #include "hal_core/plugin_system/plugin_interface_base.h"
-
 #include "z3++.h"
-
 #include "z3_wrapper.h"
 
 namespace hal
 {
+    namespace SMT
+    {
+        struct SolverResult;
+    }
+
     namespace z3_utils
     {
         /**
@@ -44,7 +47,7 @@ namespace hal
          * @param[in] var2expr - Optional replacements for variables.
          * @returns A z3 expression equivalent to the Boolean function.
          */
-        z3::expr to_z3(const BooleanFunction& bf, z3::context& context, const std::map<std::string, z3::expr>& var2expr={});
+        z3::expr to_z3(const BooleanFunction& bf, z3::context& context, const std::map<std::string, z3::expr>& var2expr = {});
 
         /**
          * Translates a z3 expression into an equivalent hal Boolean function.
@@ -77,8 +80,8 @@ namespace hal
          * @param[in] control_mapping - A control mapping that can be applied.
          * @returns A string containing the verilog representation.
          */
-        std::string to_verilog(const z3::expr& e, const std::map<std::string, bool>& control_mapping={});
-        
+        std::string to_verilog(const z3::expr& e, const std::map<std::string, bool>& control_mapping = {});
+
         /**
          * Extracts all variable names from a z3 expression.
          * 
@@ -146,10 +149,13 @@ namespace hal
          * @param[in] replace_net_ids - If set, the input_net_ids are substituted by their source gate and pin.
          * 
          */
-        bool compare_nets(const Netlist* netlist_a, const Netlist* netlist_b, const Net* net_a, const Net* net_b,  bool replace_net_ids=true);
+        bool compare_nets(const Netlist* netlist_a, const Netlist* netlist_b, const Net* net_a, const Net* net_b, bool replace_net_ids = true);
+    }    // namespace z3_utils
 
-    }   // namespace z3_utils
-
+    namespace Bitwuzla
+    {
+        Result<SMT::SolverResult> query(const std::string& smt2);
+    }
 
     class PLUGIN_API Z3UtilsPlugin : public BasePluginInterface
     {

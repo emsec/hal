@@ -150,6 +150,16 @@ namespace hal
             }
         }    // namespace Boolector
 
+        std::map<SolverType, std::function<Result<std::string>()>> Solver::type2query_binary = {
+            {SolverType::Z3, Z3::query_binary_path},
+            {SolverType::Boolector, Boolector::query_binary_path},
+        };
+
+        std::map<SolverType, std::function<Result<std::tuple<bool, std::string>>(std::string, const QueryConfig&)>> Solver::type2query = {
+            {SolverType::Z3, Z3::query},
+            {SolverType::Boolector, Boolector::query},
+        };
+
         Solver::Solver(const std::vector<Constraint>& constraints) : m_constraints(constraints)
         {
         }
@@ -218,11 +228,6 @@ namespace hal
 
         Result<SolverResult> Solver::query_local(const QueryConfig& config) const
         {
-            static const std::map<SolverType, std::function<Result<std::tuple<bool, std::string>>(std::string, const QueryConfig&)>> type2query = {
-                {SolverType::Z3, Z3::query},
-                {SolverType::Boolector, Boolector::query},
-            };
-
             auto input = Solver::translate_to_smt2(this->m_constraints, config);
             if (input.is_error())
             {
@@ -242,6 +247,11 @@ namespace hal
         {
             // unimplemented as this is feature not required at the moment
             return ERR("could not query remote SMT solver: currently not supported");
+        }
+
+        Result<std::string> Solver::to_smt2(const QueryConfig& config) const
+        {
+            return translate_to_smt2(this->m_constraints, config);
         }
 
         Result<std::string> Solver::translate_to_smt2(const std::vector<Constraint>& constraints, const QueryConfig& config)

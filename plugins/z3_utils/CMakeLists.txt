@@ -4,11 +4,12 @@ if(PL_Z3_UTILS OR BUILD_ALL_PLUGINS)
     file(GLOB_RECURSE Z3_UTILS_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
     file(GLOB_RECURSE Z3_UTILS_PYTHON_SRC ${CMAKE_CURRENT_SOURCE_DIR}/python/*.cpp)
 
+    find_package(Bitwuzla)
 
     hal_add_plugin(z3_utils
                    SHARED
                    HEADER ${Z3_UTILS_INC}
                    SOURCES ${Z3_UTILS_SRC} ${Z3_UTILS_PYTHON_SRC}
-                   LINK_LIBRARIES PUBLIC ${Z3_LIBRARIES} OpenMP::OpenMP_CXX
+                   LINK_LIBRARIES PUBLIC ${Z3_LIBRARIES} OpenMP::OpenMP_CXX Bitwuzla::bitwuzla
                    )
 endif()
