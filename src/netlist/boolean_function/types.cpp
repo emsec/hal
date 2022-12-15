@@ -236,7 +236,7 @@ namespace hal
                         return boost::spirit::x3::phrase_parse(iter, s.end(), ModelParser::BOOLECTOR_MODEL_GRAMMAR, boost::spirit::x3::space);
 #ifdef BITWUZLA_LIBRARY
                     case SolverType::BitwuzlaLibrary:
-                        return boost::spirit::x3::phrase_parse(iter, s.end(), ModelParser::BOOLECTOR_MODEL_GRAMMAR, boost::spirit::x3::space);
+                        return boost::spirit::x3::phrase_parse(iter, s.end(), ModelParser::Z3_MODEL_GRAMMAR, boost::spirit::x3::space);
 #endif
 
                     default:
