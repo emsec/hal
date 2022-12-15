@@ -47,7 +47,7 @@ namespace hal
              *      (1) stdout Stdout of Z3 process on success, 
              *      Err() otherwise
 			 */
-            Result<std::tuple<bool, std::string>> query(std::string input, const QueryConfig& config)
+            Result<std::tuple<bool, std::string>> query(std::string& input, const QueryConfig& config)
             {
                 auto binary_path = query_binary_path();
                 if (binary_path.is_error())
@@ -115,7 +115,7 @@ namespace hal
              *      (1) stdout Stdout of Z3 process on success, 
              *      Err() otherwise
 			 */
-            Result<std::tuple<bool, std::string>> query(std::string input, const QueryConfig& config)
+            Result<std::tuple<bool, std::string>> query(std::string& input, const QueryConfig& config)
             {
                 auto binary_path = query_binary_path();
                 if (binary_path.is_error())
@@ -173,7 +173,7 @@ namespace hal
              *      (1) stdout Stdout of Z3 process on success, 
              *      Err() otherwise
 			 */
-            Result<std::tuple<bool, std::string>> query(std::string input, const QueryConfig& config)
+            Result<std::tuple<bool, std::string>> query(std::string& input, const QueryConfig& config)
             {
                 auto bzla = bitwuzla_new();
 
@@ -221,7 +221,7 @@ namespace hal
 #endif
         };
 
-        std::map<SolverType, std::function<Result<std::tuple<bool, std::string>>(std::string, const QueryConfig&)>> Solver::type2query = {
+        std::map<SolverType, std::function<Result<std::tuple<bool, std::string>>(std::string&, const QueryConfig&)>> Solver::type2query = {
             {SolverType::Z3, Z3::query},
             {SolverType::Boolector, Boolector::query},
 #ifdef BITWUZLA_LIBRARY
@@ -298,7 +298,8 @@ namespace hal
                 return ERR_APPEND(input.get_error(), "could not query local SMT solver: unable to translate SMT constraints and configuration to string");
             }
 
-            auto query = type2query.at(config.solver)(input.get(), config);
+            auto input_str = input.get();
+            auto query     = type2query.at(config.solver)(input_str, config);
             if (query.is_ok())
             {
                 auto [was_killed, output] = query.get();

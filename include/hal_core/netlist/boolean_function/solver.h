@@ -128,7 +128,7 @@ namespace hal
             /// stores list of SMT solver constraints
             std::vector<Constraint> m_constraints;
 
-            static std::map<SolverType, std::function<Result<std::tuple<bool, std::string>>(std::string, const QueryConfig&)>> type2query;
+            static std::map<SolverType, std::function<Result<std::tuple<bool, std::string>>(std::string&, const QueryConfig&)>> type2query;
             static std::map<SolverType, std::function<Result<std::string>()>> type2query_binary;
 
             ////////////////////////////////////////////////////////////////////////
