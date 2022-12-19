@@ -57,6 +57,14 @@ namespace hal
             :rtype: hal_py.SMT.QueryConfig
         )");
 
+        py_smt_query_config.def("with_call", &SMT::QueryConfig::with_call, py::arg("call"), R"(
+            Sets the call type to the desired target.
+
+            :param hal_py.SMT.CallTyepe call: The solver type identifier.
+            :returns: The updated SMT query configuration.
+            :rtype: hal_py.SMT.QueryConfig
+        )");
+
         py_smt_query_config.def("with_local_solver", &SMT::QueryConfig::with_local_solver, R"(
             Activates local SMT solver execution.
 

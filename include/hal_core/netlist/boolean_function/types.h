@@ -50,8 +50,8 @@ namespace hal
 
         enum class SolverCall : int
         {
-            Binary,  /**< Calls binary in subprocess*/
-            Library, /**< Call a linked library */
+            Binary,  /**< Call binary in subprocess*/
+            Library, /**< Call linked library */
         };
 
         /**

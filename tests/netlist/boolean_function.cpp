@@ -1237,10 +1237,12 @@ namespace hal {
         {
             const auto config = SMT::QueryConfig()
                 .with_solver(SMT::SolverType::Boolector)
+                .with_call(SMT::SolverCall::Library)
                 .with_remote_solver()
                 .without_model_generation();
 
             EXPECT_EQ(config.solver, SMT::SolverType::Boolector);
+            EXPECT_EQ(config.call, SMT::SolverCall::Library);
             EXPECT_EQ(config.local, false);
             EXPECT_EQ(config.generate_model, false);
         }

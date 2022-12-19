@@ -131,6 +131,7 @@ namespace hal
         {
             out << "{";
             out << "solver : " << enum_to_string(config.solver) << ", ";
+            out << "call: " << enum_to_string(config.call) << ", ";
             out << "local : " << std::boolalpha << config.local << ", ";
             out << "generate_model : " << std::boolalpha << config.generate_model << ", ";
             out << "timeout : " << std::dec << config.timeout_in_seconds << "s";
@@ -354,6 +355,11 @@ namespace hal
                                                                                  {SMT::SolverType::Boolector, "Boolector"},
                                                                                  {SMT::SolverType::Bitwuzla, "Bitwuzla"},
                                                                                  {SMT::SolverType::Unknown, "Unknown"}};
+
+    template<>
+    std::map<SMT::SolverCall, std::string> EnumStrings<SMT::SolverCall>::data = {{SMT::SolverCall::Library, "Library"},
+                                                                                 {SMT::SolverCall::Binary, "Binary"}};
+
 
     template<>
     std::map<SMT::SolverResultType, std::string> EnumStrings<SMT::SolverResultType>::data = {{SMT::SolverResultType::Sat, "sat"},
