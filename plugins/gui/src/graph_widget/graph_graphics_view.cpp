@@ -342,7 +342,6 @@ namespace hal
         CommentSpeechBubble* csb = dynamic_cast<CommentSpeechBubble*>(item);
         if (csb)
         {
-            qDebug() << "double click csb";
             csb->mouseDoubleClickEvent(nullptr);
             return;
         }
@@ -384,6 +383,11 @@ namespace hal
 
     void GraphGraphicsView::mousePressEvent(QMouseEvent* event)
     {
+        // it the clicked item is a speechbubble, simply return so that it does
+        // not change / clear the current selection, double-click however works fine
+        if(dynamic_cast<CommentSpeechBubble*>(itemAt(event->pos())))
+            return;
+
         if (event->modifiers() == mPanModifier)
         {
             if (event->button() == Qt::LeftButton)
