@@ -50,6 +50,7 @@ namespace hal
 
         connect(gCommentManager, &CommentManager::entryAboutToBeDeleted, this, &GraphLayouter::handleCommentAboutToDeleted);
         connect(gCommentManager, &CommentManager::entryAdded, this, &GraphLayouter::handleCommentAdded);
+        connect(gCommentManager, &CommentManager::entryModified, this, &GraphLayouter::handleCommentAdded); // can be connected to the same func, does the same
     }
 
     GraphLayouter::~GraphLayouter()
