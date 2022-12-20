@@ -650,6 +650,10 @@ namespace hal
         bool isModule       = false;
         bool isNet          = false;
 
+        // otherwise crashes, speechbubbles do not need a context menu (for now)
+        // add ItemType::SpeechBubble so that it can be handled better?
+        if(dynamic_cast<CommentSpeechBubble*>(item)) return;
+
         bool isMultiGates = gSelectionRelay->selectedGates().size() > 1 &&
                 gSelectionRelay->selectedModules().isEmpty();
         if (item)
