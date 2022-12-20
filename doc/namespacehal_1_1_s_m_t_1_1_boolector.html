@@ -83,7 +83,8 @@ $(document).ready(function(){initNavTree('namespacehal_1_1_s_m_t_1_1_boolector.h
 
 <div class="header">
   <div class="summary">
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">hal::SMT::Boolector Namespace Reference</div>  </div>
 </div><!--header-->
@@ -94,20 +95,27 @@ Functions</h2></td></tr>
 <tr class="memitem:a6626c1ae9e8922688a72dc6fd3e29f42"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_boolector.html#a6626c1ae9e8922688a72dc6fd3e29f42">query_binary_path</a> ()</td></tr>
 <tr class="memdesc:a6626c1ae9e8922688a72dc6fd3e29f42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether a <a class="el" href="namespacehal_1_1_s_m_t_1_1_boolector.html">Boolector</a> binary is available on the system.  <a href="namespacehal_1_1_s_m_t_1_1_boolector.html#a6626c1ae9e8922688a72dc6fd3e29f42">More...</a><br /></td></tr>
 <tr class="separator:a6626c1ae9e8922688a72dc6fd3e29f42"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6074035ce8034e3088b82b4ae887ef5c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::tuple&lt; bool, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_boolector.html#a6074035ce8034e3088b82b4ae887ef5c">query</a> (std::string input, const <a class="el" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a> &amp;config)</td></tr>
-<tr class="separator:a6074035ce8034e3088b82b4ae887ef5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84ba3d4a0826c956a9fa5fea05d77e7c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::tuple&lt; bool, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_boolector.html#a84ba3d4a0826c956a9fa5fea05d77e7c">query_binary</a> (std::string &amp;input, const <a class="el" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a> &amp;config)</td></tr>
+<tr class="separator:a84ba3d4a0826c956a9fa5fea05d77e7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acfd5e0c0247e2eaa46d51901781afe3e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::tuple&lt; bool, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_boolector.html#acfd5e0c0247e2eaa46d51901781afe3e">query_library</a> (std::string &amp;input, const <a class="el" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a> &amp;config)</td></tr>
+<tr class="separator:acfd5e0c0247e2eaa46d51901781afe3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a56fe6b2a0d25341b2ef2b2062de3cacc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_boolector.html#a56fe6b2a0d25341b2ef2b2062de3cacc">is_linked</a> = false</td></tr>
+<tr class="separator:a56fe6b2a0d25341b2ef2b2062de3cacc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a6074035ce8034e3088b82b4ae887ef5c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6074035ce8034e3088b82b4ae887ef5c">&#9670;&nbsp;</a></span>query()</h2>
+<a id="a84ba3d4a0826c956a9fa5fea05d77e7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84ba3d4a0826c956a9fa5fea05d77e7c">&#9670;&nbsp;</a></span>query_binary()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt;std::tuple&lt;bool, std::string&gt; &gt; hal::SMT::Boolector::query </td>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt;std::tuple&lt;bool, std::string&gt; &gt; hal::SMT::Boolector::query_binary </td>
           <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
+          <td class="paramtype">std::string &amp;&#160;</td>
           <td class="paramname"><em>input</em>, </td>
         </tr>
         <tr>
@@ -131,13 +139,11 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Ok() and status with (0) was_killed (true in case process was killed), and (1) stdout Stdout of <a class="el" href="namespacehal_1_1_s_m_t_1_1_z3.html">Z3</a> process on success, Err() otherwise </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Ok() and status with (0) was_killed (true in case process was killed), and (1) stdout Stdout of <a class="el" href="namespacehal_1_1_s_m_t_1_1_boolector.html">Boolector</a> process on success, Err() otherwise </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00114">114</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00139">139</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="types_8h_source.html#l00064">hal::SMT::QueryConfig::generate_model</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>, <a class="el" href="solver_8cpp_source.html#l00085">query_binary_path()</a>, <a class="el" href="types_8h_source.html#l00066">hal::SMT::QueryConfig::timeout_in_seconds</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00219">hal::SMT::Solver::query_local()</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="types_8h_source.html#l00073">hal::SMT::QueryConfig::generate_model</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>, <a class="el" href="solver_8cpp_source.html#l00110">query_binary_path()</a>, <a class="el" href="types_8h_source.html#l00075">hal::SMT::QueryConfig::timeout_in_seconds</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
 </div>
 </div>
@@ -158,11 +164,69 @@ Functions</h2></td></tr>
 
 <p>Checks whether a <a class="el" href="namespacehal_1_1_s_m_t_1_1_boolector.html">Boolector</a> binary is available on the system. </p>
 
-<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00085">85</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00110">110</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00177">hal::SMT::Solver::has_local_solver_for()</a>, and <a class="el" href="solver_8cpp_source.html#l00114">query()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00139">query_binary()</a>.</p>
+
+</div>
+</div>
+<a id="acfd5e0c0247e2eaa46d51901781afe3e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acfd5e0c0247e2eaa46d51901781afe3e">&#9670;&nbsp;</a></span>query_library()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt;std::tuple&lt;bool, std::string&gt; &gt; hal::SMT::Boolector::query_library </td>
+          <td>(</td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>input</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a> &amp;&#160;</td>
+          <td class="paramname"><em>config</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Queries <a class="el" href="namespacehal_1_1_s_m_t_1_1_boolector.html">Boolector</a> with an SMT-LIB input and a query configuration.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">input</td><td>- SMT-LIB input. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">config</td><td>- <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> query configuration. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Ok() and status with (0) was_killed (true in case process was killed), and (1) stdout Stdout of <a class="el" href="namespacehal_1_1_s_m_t_1_1_boolector.html">Boolector</a> process on success, Err() otherwise </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00187">187</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, and <a class="el" href="defines_8h_source.html#l00053">UNUSED</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="a56fe6b2a0d25341b2ef2b2062de3cacc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56fe6b2a0d25341b2ef2b2062de3cacc">&#9670;&nbsp;</a></span>is_linked</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::SMT::Boolector::is_linked = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00107">107</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
 
 </div>
 </div>
@@ -172,7 +236,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a></li><li class="navelem"><a class="el" href="namespacehal_1_1_s_m_t_1_1_boolector.html">Boolector</a></li>
-    <li class="footer">Generated on Wed Dec 14 2022 17:44:15 for HAL by
+    <li class="footer">Generated on Tue Dec 20 2022 12:08:03 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

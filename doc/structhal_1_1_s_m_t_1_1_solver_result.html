@@ -143,7 +143,7 @@ Friends</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents the result of an <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> query. </p>
 
-<p class="definition">Definition at line <a class="el" href="types_8h_source.html#l00279">279</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="types_8h_source.html#l00296">296</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a226f2f31aae8e9214cec12887606bb87"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a226f2f31aae8e9214cec12887606bb87">&#9670;&nbsp;</a></span>SolverResult()</h2>
@@ -170,9 +170,9 @@ Friends</h2></td></tr>
 
 <p>Default constructor (required for Result&lt;T&gt; initialization) </p>
 
-<p class="definition">Definition at line <a class="el" href="types_8h_source.html#l00295">295</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="types_8h_source.html#l00312">312</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="types_8cpp_source.html#l00288">Sat()</a>, <a class="el" href="types_8cpp_source.html#l00298">Unknown()</a>, and <a class="el" href="types_8cpp_source.html#l00293">UnSat()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="types_8cpp_source.html#l00300">Sat()</a>, <a class="el" href="types_8cpp_source.html#l00310">Unknown()</a>, and <a class="el" href="types_8cpp_source.html#l00305">UnSat()</a>.</p>
 
 </div>
 </div>
@@ -201,11 +201,11 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> in case result matches the given type, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00303">303</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00315">315</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8h_source.html#l00286">type</a>.</p>
+<p class="reference">References <a class="el" href="types_8h_source.html#l00303">type</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="types_8cpp_source.html#l00308">is_sat()</a>, <a class="el" href="types_8cpp_source.html#l00318">is_unknown()</a>, <a class="el" href="types_8cpp_source.html#l00313">is_unsat()</a>, and <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="types_8cpp_source.html#l00320">is_sat()</a>, <a class="el" href="types_8cpp_source.html#l00330">is_unknown()</a>, <a class="el" href="types_8cpp_source.html#l00325">is_unsat()</a>, and <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
 
 </div>
 </div>
@@ -226,9 +226,9 @@ Friends</h2></td></tr>
 <p>Checks whether the result is satisfiable.</p>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> in case result is satisfiable, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00308">308</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00320">320</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8cpp_source.html#l00303">is()</a>, and <a class="el" href="namespacehal_1_1_s_m_t.html#a72d121f9b521b20e4b6c3d1fc6bbe7b0a13c7d2d737f81f7bf89aed9fbcd0ad55">hal::SMT::Sat</a>.</p>
+<p class="reference">References <a class="el" href="types_8cpp_source.html#l00315">is()</a>, and <a class="el" href="namespacehal_1_1_s_m_t.html#a72d121f9b521b20e4b6c3d1fc6bbe7b0a13c7d2d737f81f7bf89aed9fbcd0ad55">hal::SMT::Sat</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
 
@@ -251,9 +251,9 @@ Friends</h2></td></tr>
 <p>Checks whether the result is unknown.</p>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> in case result is unknown, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00318">318</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00330">330</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8cpp_source.html#l00303">is()</a>, and <a class="el" href="namespacehal_1_1_s_m_t.html#a72d121f9b521b20e4b6c3d1fc6bbe7b0a88183b946cc5f0e8c96b2e66e1c74a7e">hal::SMT::Unknown</a>.</p>
+<p class="reference">References <a class="el" href="types_8cpp_source.html#l00315">is()</a>, and <a class="el" href="namespacehal_1_1_s_m_t.html#a72d121f9b521b20e4b6c3d1fc6bbe7b0a88183b946cc5f0e8c96b2e66e1c74a7e">hal::SMT::Unknown</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
 
@@ -276,9 +276,9 @@ Friends</h2></td></tr>
 <p>Checks whether the result is unsatisfiable.</p>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> in case result is unsatisfiable, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00313">313</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00325">325</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8cpp_source.html#l00303">is()</a>, and <a class="el" href="namespacehal_1_1_s_m_t.html#a72d121f9b521b20e4b6c3d1fc6bbe7b0a6114aae03b5a0bec62af95481167e1f6">hal::SMT::UnSat</a>.</p>
+<p class="reference">References <a class="el" href="types_8cpp_source.html#l00315">is()</a>, and <a class="el" href="namespacehal_1_1_s_m_t.html#a72d121f9b521b20e4b6c3d1fc6bbe7b0a6114aae03b5a0bec62af95481167e1f6">hal::SMT::UnSat</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
 
@@ -316,9 +316,9 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The result. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00288">288</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00300">300</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8h_source.html#l00288">model</a>, <a class="el" href="namespacehal_1_1_s_m_t.html#a72d121f9b521b20e4b6c3d1fc6bbe7b0a13c7d2d737f81f7bf89aed9fbcd0ad55">hal::SMT::Sat</a>, and <a class="el" href="types_8h_source.html#l00295">SolverResult()</a>.</p>
+<p class="reference">References <a class="el" href="types_8h_source.html#l00305">model</a>, <a class="el" href="namespacehal_1_1_s_m_t.html#a72d121f9b521b20e4b6c3d1fc6bbe7b0a13c7d2d737f81f7bf89aed9fbcd0ad55">hal::SMT::Sat</a>, and <a class="el" href="types_8h_source.html#l00312">SolverResult()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
 
@@ -349,9 +349,9 @@ Friends</h2></td></tr>
 <p>Creates an unknown result.</p>
 <dl class="section return"><dt>Returns</dt><dd>The result. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00298">298</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00310">310</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8h_source.html#l00295">SolverResult()</a>, and <a class="el" href="namespacehal_1_1_s_m_t.html#a72d121f9b521b20e4b6c3d1fc6bbe7b0a88183b946cc5f0e8c96b2e66e1c74a7e">hal::SMT::Unknown</a>.</p>
+<p class="reference">References <a class="el" href="types_8h_source.html#l00312">SolverResult()</a>, and <a class="el" href="namespacehal_1_1_s_m_t.html#a72d121f9b521b20e4b6c3d1fc6bbe7b0a88183b946cc5f0e8c96b2e66e1c74a7e">hal::SMT::Unknown</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
 
@@ -382,9 +382,9 @@ Friends</h2></td></tr>
 <p>Creates an unsatisfiable result.</p>
 <dl class="section return"><dt>Returns</dt><dd>The result. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00293">293</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00305">305</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8h_source.html#l00295">SolverResult()</a>, and <a class="el" href="namespacehal_1_1_s_m_t.html#a72d121f9b521b20e4b6c3d1fc6bbe7b0a6114aae03b5a0bec62af95481167e1f6">hal::SMT::UnSat</a>.</p>
+<p class="reference">References <a class="el" href="types_8h_source.html#l00312">SolverResult()</a>, and <a class="el" href="namespacehal_1_1_s_m_t.html#a72d121f9b521b20e4b6c3d1fc6bbe7b0a6114aae03b5a0bec62af95481167e1f6">hal::SMT::UnSat</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
 
@@ -434,7 +434,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A reference to output stream. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00323">323</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00335">335</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
 
 </div>
 </div>
@@ -453,9 +453,9 @@ Friends</h2></td></tr>
 
 <p>The (optional) model that is only available if <code>type == SMT::ResultType::Sat</code> and model generation is enabled. </p>
 
-<p class="definition">Definition at line <a class="el" href="types_8h_source.html#l00288">288</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="types_8h_source.html#l00305">305</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="types_8cpp_source.html#l00323">hal::SMT::operator&lt;&lt;()</a>, <a class="el" href="types_8cpp_source.html#l00288">Sat()</a>, and <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="types_8cpp_source.html#l00335">hal::SMT::operator&lt;&lt;()</a>, <a class="el" href="types_8cpp_source.html#l00300">Sat()</a>, and <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
 
 </div>
 </div>
@@ -473,9 +473,9 @@ Friends</h2></td></tr>
 
 <p><a class="el" href="classhal_1_1_result.html">Result</a> type of the <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> query. </p>
 
-<p class="definition">Definition at line <a class="el" href="types_8h_source.html#l00286">286</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="types_8h_source.html#l00303">303</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="types_8cpp_source.html#l00303">is()</a>, <a class="el" href="types_8cpp_source.html#l00323">hal::SMT::operator&lt;&lt;()</a>, and <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="types_8cpp_source.html#l00315">is()</a>, <a class="el" href="types_8cpp_source.html#l00335">hal::SMT::operator&lt;&lt;()</a>, and <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
 
 </div>
 </div>
@@ -489,7 +489,7 @@ Friends</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a></li><li class="navelem"><a class="el" href="structhal_1_1_s_m_t_1_1_solver_result.html">SolverResult</a></li>
-    <li class="footer">Generated on Wed Dec 14 2022 17:44:15 for HAL by
+    <li class="footer">Generated on Tue Dec 20 2022 12:08:03 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

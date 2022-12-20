@@ -1,5 +1,6 @@
 var NAVTREEINDEX20 =
 {
+"classnlohmann_1_1detail_1_1serializer.html#a28081304e70cca6b3042c101ee5c498c":[6,0,1,0,101,2],
 "classnlohmann_1_1detail_1_1serializer.html#a5f14c33012477b9f9876dc54d97009a0":[6,0,1,0,101,5],
 "classnlohmann_1_1detail_1_1serializer.html#a95460ebd1a535a543e5a0ec52e00f48b":[6,0,1,0,101,4],
 "classnlohmann_1_1detail_1_1serializer.html#aa6c62b51cbebb185307df851dc0167f0":[6,0,1,0,101,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX20 =
 "dir_4306e172ec3ba51db6685fbbd77505c2.html":[7,0,1,3,2,24],
 "dir_44deab7264ed221a2197772856b729a7.html":[7,0,1,3,0,0,16],
 "dir_473c6ace55deaa3175b28cb9bb76a481.html":[7,0,1,3,2,2],
-"dir_47a583ce1cbc1c7cb0dd54b34c740ef0.html":[7,0,1,3,0,0,20],
-"dir_4879fcb29556b162a25e28b16e2ad258.html":[7,0,1,3,0,0,31]
+"dir_47a583ce1cbc1c7cb0dd54b34c740ef0.html":[7,0,1,3,0,0,20]
 };

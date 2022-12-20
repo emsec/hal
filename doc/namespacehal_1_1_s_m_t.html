@@ -94,6 +94,8 @@ $(document).ready(function(){initNavTree('namespacehal_1_1_s_m_t.html',''); init
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
+<tr class="memitem:namespacehal_1_1_s_m_t_1_1_bitwuzla"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_bitwuzla.html">Bitwuzla</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespacehal_1_1_s_m_t_1_1_boolector"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_boolector.html">Boolector</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespacehal_1_1_s_m_t_1_1_constant_propagation"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_constant_propagation.html">ConstantPropagation</a></td></tr>
@@ -126,9 +128,14 @@ Classes</h2></td></tr>
 Enumerations</h2></td></tr>
 <tr class="memitem:a2b79ea414d0f1bf34d2686e2d38c2c4a"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4a">SolverType</a> : int { <a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aa70e31ac6776e733109977f8afdd234ed">SolverType::Z3</a> = 0, 
 <a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aab22590d74202761c89aa802522a21110">SolverType::Boolector</a>, 
+<a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aa98254531be138d1bf820b43b303a64d4">SolverType::Bitwuzla</a>, 
 <a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aa88183b946cc5f0e8c96b2e66e1c74a7e">SolverType::Unknown</a>
  }</td></tr>
 <tr class="separator:a2b79ea414d0f1bf34d2686e2d38c2c4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27de5a7424d277b60f19547c5e78feb6"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t.html#a27de5a7424d277b60f19547c5e78feb6">SolverCall</a> : int { <a class="el" href="namespacehal_1_1_s_m_t.html#a27de5a7424d277b60f19547c5e78feb6a6ce976e8f061b2b5cfe4d0c50c3405dd">SolverCall::Binary</a>, 
+<a class="el" href="namespacehal_1_1_s_m_t.html#a27de5a7424d277b60f19547c5e78feb6a4d70254b3a8e2bc38b6147fa6ee813be">SolverCall::Library</a>
+ }</td></tr>
+<tr class="separator:a27de5a7424d277b60f19547c5e78feb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72d121f9b521b20e4b6c3d1fc6bbe7b0"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t.html#a72d121f9b521b20e4b6c3d1fc6bbe7b0">SolverResultType</a> { <a class="el" href="namespacehal_1_1_s_m_t.html#a72d121f9b521b20e4b6c3d1fc6bbe7b0a13c7d2d737f81f7bf89aed9fbcd0ad55">SolverResultType::Sat</a>, 
 <a class="el" href="namespacehal_1_1_s_m_t.html#a72d121f9b521b20e4b6c3d1fc6bbe7b0a6114aae03b5a0bec62af95481167e1f6">SolverResultType::UnSat</a>, 
 <a class="el" href="namespacehal_1_1_s_m_t.html#a72d121f9b521b20e4b6c3d1fc6bbe7b0a88183b946cc5f0e8c96b2e66e1c74a7e">SolverResultType::Unknown</a>
@@ -147,6 +154,36 @@ Functions</h2></td></tr>
 <tr class="separator:aef5888a99b63bcb56542aba14547bc46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="a27de5a7424d277b60f19547c5e78feb6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27de5a7424d277b60f19547c5e78feb6">&#9670;&nbsp;</a></span>SolverCall</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespacehal_1_1_s_m_t.html#a27de5a7424d277b60f19547c5e78feb6">hal::SMT::SolverCall</a> : int</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a27de5a7424d277b60f19547c5e78feb6a6ce976e8f061b2b5cfe4d0c50c3405dd"></a>Binary&#160;</td><td class="fielddoc"><p>Call binary in subprocess </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a27de5a7424d277b60f19547c5e78feb6a4d70254b3a8e2bc38b6147fa6ee813be"></a>Library&#160;</td><td class="fielddoc"><p>Call linked library </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="types_8h_source.html#l00051">51</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
+
+</div>
+</div>
 <a id="a72d121f9b521b20e4b6c3d1fc6bbe7b0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a72d121f9b521b20e4b6c3d1fc6bbe7b0">&#9670;&nbsp;</a></span>SolverResultType</h2>
 
@@ -176,7 +213,7 @@ Functions</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="types_8h_source.html#l00199">199</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="types_8h_source.html#l00216">216</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
 
 </div>
 </div>
@@ -204,6 +241,8 @@ Functions</h2></td></tr>
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a2b79ea414d0f1bf34d2686e2d38c2c4aa70e31ac6776e733109977f8afdd234ed"></a>Z3&#160;</td><td class="fielddoc"><p><a class="el" href="namespacehal_1_1_s_m_t_1_1_z3.html">Z3</a> <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> solver. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a2b79ea414d0f1bf34d2686e2d38c2c4aab22590d74202761c89aa802522a21110"></a>Boolector&#160;</td><td class="fielddoc"><p><a class="el" href="namespacehal_1_1_s_m_t_1_1_boolector.html">Boolector</a> <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> solver. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a2b79ea414d0f1bf34d2686e2d38c2c4aa98254531be138d1bf820b43b303a64d4"></a>Bitwuzla&#160;</td><td class="fielddoc"><p><a class="el" href="namespacehal_1_1_s_m_t_1_1_bitwuzla.html">Bitwuzla</a> <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> solver. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a2b79ea414d0f1bf34d2686e2d38c2c4aa88183b946cc5f0e8c96b2e66e1c74a7e"></a>Unknown&#160;</td><td class="fielddoc"><p>Unknown (unsupported) <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> solver. </p>
 </td></tr>
@@ -249,9 +288,9 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A reference to the output stream. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00143">143</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00150">150</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8cpp_source.html#l00170">hal::SMT::Constraint::get_assignment()</a>, <a class="el" href="types_8cpp_source.html#l00179">hal::SMT::Constraint::get_function()</a>, and <a class="el" href="types_8cpp_source.html#l00165">hal::SMT::Constraint::is_assignment()</a>.</p>
+<p class="reference">References <a class="el" href="types_8cpp_source.html#l00177">hal::SMT::Constraint::get_assignment()</a>, <a class="el" href="types_8cpp_source.html#l00186">hal::SMT::Constraint::get_function()</a>, and <a class="el" href="types_8cpp_source.html#l00172">hal::SMT::Constraint::is_assignment()</a>.</p>
 
 </div>
 </div>
@@ -290,9 +329,9 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A reference to the output stream. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00202">202</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00209">209</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8h_source.html#l00216">hal::SMT::Model::model</a>.</p>
+<p class="reference">References <a class="el" href="types_8h_source.html#l00233">hal::SMT::Model::model</a>.</p>
 
 </div>
 </div>
@@ -331,9 +370,9 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A reference to the output stream. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00124">124</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00130">130</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="enums_8h_source.html#l00052">hal::enum_to_string()</a>, <a class="el" href="types_8h_source.html#l00064">hal::SMT::QueryConfig::generate_model</a>, <a class="el" href="types_8h_source.html#l00060">hal::SMT::QueryConfig::solver</a>, and <a class="el" href="types_8h_source.html#l00066">hal::SMT::QueryConfig::timeout_in_seconds</a>.</p>
+<p class="reference">References <a class="el" href="types_8h_source.html#l00069">hal::SMT::QueryConfig::call</a>, <a class="el" href="enums_8h_source.html#l00052">hal::enum_to_string()</a>, <a class="el" href="types_8h_source.html#l00073">hal::SMT::QueryConfig::generate_model</a>, <a class="el" href="types_8h_source.html#l00067">hal::SMT::QueryConfig::solver</a>, and <a class="el" href="types_8h_source.html#l00075">hal::SMT::QueryConfig::timeout_in_seconds</a>.</p>
 
 </div>
 </div>
@@ -372,9 +411,9 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A reference to output stream. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00323">323</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00335">335</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="enums_8h_source.html#l00052">hal::enum_to_string()</a>, <a class="el" href="types_8h_source.html#l00288">hal::SMT::SolverResult::model</a>, and <a class="el" href="types_8h_source.html#l00286">hal::SMT::SolverResult::type</a>.</p>
+<p class="reference">References <a class="el" href="enums_8h_source.html#l00052">hal::enum_to_string()</a>, <a class="el" href="types_8h_source.html#l00305">hal::SMT::SolverResult::model</a>, and <a class="el" href="types_8h_source.html#l00303">hal::SMT::SolverResult::type</a>.</p>
 
 </div>
 </div>
@@ -384,7 +423,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a></li>
-    <li class="footer">Generated on Wed Dec 14 2022 17:44:15 for HAL by
+    <li class="footer">Generated on Tue Dec 20 2022 12:08:03 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

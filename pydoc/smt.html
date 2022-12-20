@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>SMT &mdash; hal_py v4.0.1-106-g78a9ceb60 documentation</title>
+  <title>SMT &mdash; hal_py v4.0.1-107-g91dbb7e1e documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.0.1-106-g78a9ceb60
+                v4.0.1-107-g91dbb7e1e
               </div>
             
           
@@ -489,6 +489,24 @@ A constraint is either an assignment of two Boolean functions or a single Boolea
 </dd></dl>
 
 <dl class="method">
+<dt id="hal_py.SMT.QueryConfig.with_call">
+<code class="descname">with_call</code><span class="sig-paren">(</span><em>self: hal_py.SMT.QueryConfig</em>, <em>call: hal::SMT::SolverCall</em><span class="sig-paren">)</span> &#x2192; hal_py.SMT.QueryConfig<a class="headerlink" href="#hal_py.SMT.QueryConfig.with_call" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the call type to the desired target.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>call</strong> (<em>hal_py.SMT.CallTyepe</em>) – The solver type identifier.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The updated SMT query configuration.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.SMT.QueryConfig" title="hal_py.SMT.QueryConfig">hal_py.SMT.QueryConfig</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="hal_py.SMT.QueryConfig.with_local_solver">
 <code class="descname">with_local_solver</code><span class="sig-paren">(</span><em>self: hal_py.SMT.QueryConfig</em><span class="sig-paren">)</span> &#x2192; hal_py.SMT.QueryConfig<a class="headerlink" href="#hal_py.SMT.QueryConfig.with_local_solver" title="Permalink to this definition">¶</a></dt>
 <dd><p>Activates local SMT solver execution.</p>
@@ -645,17 +663,23 @@ A constraint is either an assignment of two Boolean functions or a single Boolea
 
 <dl class="staticmethod">
 <dt id="hal_py.SMT.Solver.has_local_solver_for">
-<em class="property">static </em><code class="descname">has_local_solver_for</code><span class="sig-paren">(</span><em>type: hal_py.SMT.SolverType</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.SMT.Solver.has_local_solver_for" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">has_local_solver_for</code><span class="sig-paren">(</span><em>type: hal_py.SMT.SolverType</em>, <em>call: hal::SMT::SolverCall</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.SMT.Solver.has_local_solver_for" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks whether a SMT solver of the given type is available on the local machine.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>type</strong> (<a class="reference internal" href="#hal_py.SMT.SolverType" title="hal_py.SMT.SolverType"><em>hal_py.SMT.SolverType</em></a>) – The SMT solver type.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>type</strong> (<a class="reference internal" href="#hal_py.SMT.SolverType" title="hal_py.SMT.SolverType"><em>hal_py.SMT.SolverType</em></a>) – The SMT solver type.</li>
+<li><strong>call</strong> (<em>hal_py.SMT.SolverCall</em>) – The call to the SMT solver.</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if an SMT solver of the requested type is available, False otherwise.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if an SMT solver of the requested type is available, False otherwise.</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</td>
 </tr>
 </tbody>
 </table>

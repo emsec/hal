@@ -97,7 +97,7 @@ Collaboration diagram for hal::SMT::Solver:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_s_m_t_1_1_solver__coll__graph.png" border="0" usemap="#hal_1_1_s_m_t_1_1_solver_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1_s_m_t_1_1_solver_coll__map" id="hal_1_1_s_m_t_1_1_solver_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,185,200"/>
+<area shape="rect" title=" " alt="" coords="5,5,185,171"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -117,13 +117,13 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a46b0be21b0b728ce4d9192eff3433744"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe6e7dfb1915e0e1648c083f86081b90"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="structhal_1_1_s_m_t_1_1_solver_result.html">SolverResult</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_s_m_t_1_1_solver.html#abe6e7dfb1915e0e1648c083f86081b90">query_remote</a> (const <a class="el" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a> &amp;config) const</td></tr>
 <tr class="separator:abe6e7dfb1915e0e1648c083f86081b90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f86f860fdc5ba3ae7155fecef1f0ea3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_s_m_t_1_1_solver.html#a4f86f860fdc5ba3ae7155fecef1f0ea3">to_smt2</a> (const <a class="el" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a> &amp;config) const</td></tr>
+<tr class="separator:a4f86f860fdc5ba3ae7155fecef1f0ea3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:af65f2cf75a023d67de2ef51125ee13fd"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_s_m_t_1_1_solver.html#af65f2cf75a023d67de2ef51125ee13fd">has_local_solver_for</a> (<a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4a">SolverType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>)</td></tr>
-<tr class="separator:af65f2cf75a023d67de2ef51125ee13fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a87319cdcf334587b1aba06eb4324ed4c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_s_m_t_1_1_solver.html#a87319cdcf334587b1aba06eb4324ed4c">translate_to_smt2</a> (const std::vector&lt; <a class="el" href="structhal_1_1_s_m_t_1_1_constraint.html">Constraint</a> &gt; &amp;constraints, const <a class="el" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a> &amp;config)</td></tr>
-<tr class="separator:a87319cdcf334587b1aba06eb4324ed4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57ae56afb290b41fa360779c268d379e"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_s_m_t_1_1_solver.html#a57ae56afb290b41fa360779c268d379e">has_local_solver_for</a> (<a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4a">SolverType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>, <a class="el" href="namespacehal_1_1_s_m_t.html#a27de5a7424d277b60f19547c5e78feb6">SolverCall</a> call)</td></tr>
+<tr class="separator:a57ae56afb290b41fa360779c268d379e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Provides an interface to query <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> solvers for a list of constraints, i.e. statements that have to be equal. To this end, we translate constraints to a SMT-LIB v2 string representation and query solvers with a defined configuration, i.e., chosen solver, model generation etc. </p>
@@ -153,7 +153,7 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00153">153</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00348">348</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
 
 </div>
 </div>
@@ -175,14 +175,14 @@ Static Public Member Functions</h2></td></tr>
 <p>Returns the vector of constraints.</p>
 <dl class="section return"><dt>Returns</dt><dd>The vector of constraints. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00172">172</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00367">367</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
 
 </div>
 </div>
-<a id="af65f2cf75a023d67de2ef51125ee13fd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af65f2cf75a023d67de2ef51125ee13fd">&#9670;&nbsp;</a></span>has_local_solver_for()</h2>
+<a id="a57ae56afb290b41fa360779c268d379e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57ae56afb290b41fa360779c268d379e">&#9670;&nbsp;</a></span>has_local_solver_for()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -194,8 +194,18 @@ Static Public Member Functions</h2></td></tr>
           <td class="memname">bool hal::SMT::Solver::has_local_solver_for </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4a">SolverType</a>&#160;</td>
-          <td class="paramname"><em>type</em></td><td>)</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="namespacehal_1_1_s_m_t.html#a27de5a7424d277b60f19547c5e78feb6">SolverCall</a>&#160;</td>
+          <td class="paramname"><em>call</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -213,9 +223,9 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if an <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> solver of the requested type is available, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00177">177</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00372">372</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aab22590d74202761c89aa802522a21110">hal::SMT::Boolector</a>, <a class="el" href="solver_8cpp_source.html#l00017">hal::SMT::Z3::query_binary_path()</a>, <a class="el" href="solver_8cpp_source.html#l00085">hal::SMT::Boolector::query_binary_path()</a>, and <a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aa70e31ac6776e733109977f8afdd234ed">hal::SMT::Z3</a>.</p>
+<p class="reference">References <a class="el" href="namespacehal_1_1_s_m_t.html#a27de5a7424d277b60f19547c5e78feb6a6ce976e8f061b2b5cfe4d0c50c3405dd">hal::SMT::Binary</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">type</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
 
@@ -245,11 +255,11 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK()</a> and the result on success, Err() otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00193">193</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00398">398</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="solver_8cpp_source.html#l00219">query_local()</a>, and <a class="el" href="solver_8cpp_source.html#l00241">query_remote()</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="solver_8cpp_source.html#l00424">query_local()</a>, and <a class="el" href="solver_8cpp_source.html#l00442">query_remote()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00219">query_local()</a>, and <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00274">hal::SolveFsmPlugin::solve_fsm()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00424">query_local()</a>, and <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00274">hal::SolveFsmPlugin::solve_fsm()</a>.</p>
 
 </div>
 </div>
@@ -277,11 +287,11 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK()</a> and the result on success, Err() otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00219">219</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00424">424</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aab22590d74202761c89aa802522a21110">hal::SMT::Boolector</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>, <a class="el" href="solver_8cpp_source.html#l00046">hal::SMT::Z3::query()</a>, <a class="el" href="solver_8cpp_source.html#l00193">query()</a>, <a class="el" href="solver_8cpp_source.html#l00114">hal::SMT::Boolector::query()</a>, <a class="el" href="types_8h_source.html#l00060">hal::SMT::QueryConfig::solver</a>, <a class="el" href="solver_8cpp_source.html#l00247">translate_to_smt2()</a>, and <a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aa70e31ac6776e733109977f8afdd234ed">hal::SMT::Z3</a>.</p>
+<p class="reference">References <a class="el" href="types_8h_source.html#l00069">hal::SMT::QueryConfig::call</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>, <a class="el" href="solver_8cpp_source.html#l00398">query()</a>, and <a class="el" href="types_8h_source.html#l00067">hal::SMT::QueryConfig::solver</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00193">query()</a>, and <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00398">query()</a>, and <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
 
 </div>
 </div>
@@ -310,79 +320,39 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok() and the result on success, Err() otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00241">241</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00442">442</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00193">query()</a>, and <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00398">query()</a>, and <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
 
 </div>
 </div>
-<a id="a87319cdcf334587b1aba06eb4324ed4c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a87319cdcf334587b1aba06eb4324ed4c">&#9670;&nbsp;</a></span>translate_to_smt2()</h2>
+<a id="a4f86f860fdc5ba3ae7155fecef1f0ea3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f86f860fdc5ba3ae7155fecef1f0ea3">&#9670;&nbsp;</a></span>to_smt2()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::string &gt; hal::SMT::Solver::translate_to_smt2 </td>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::string &gt; hal::SMT::Solver::to_smt2 </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="structhal_1_1_s_m_t_1_1_constraint.html">Constraint</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>constraints</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">const <a class="el" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a> &amp;&#160;</td>
-          <td class="paramname"><em>config</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramname"><em>config</em></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
-<p>Translate a list of constraint and a configuration to SMT-LIB v2.</p>
-<p>NOTE: For details on the SMT-LIB language standard see: <a href="https://smtlib.cs.uiowa.edu/language.shtml">https://smtlib.cs.uiowa.edu/language.shtml</a></p>
+<p>Translate the solver into an SMT-LIB v2 string representation</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">constraints</td><td>- List of constraints. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">config</td><td>- <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> solver configuration. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">config</td><td>- The <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> solver query configuration. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Ok() and SMT-LIB compatible string representation on success, Err() otherwise. </dd></dl>
-<p>Helper to translate variable declarations to an SMT-LIB v2 string representation.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">constraints</td><td>- List of constraints to translate. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>List of variable declarations.</dd></dl>
-<p>Helper to translate constraints to an SMT-LIB v2 string representation.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">constraints</td><td>- List of constraints to translate. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Ok() and constraints as string on success, Err() otherwise.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Ok() and the SMT-LIB v2 string representation, Err() otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00247">247</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="plugins_2hgl__parser_2test_2_c_make_lists_8txt_source.html#l00001">if()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, and <a class="el" href="translator_8cpp_source.html#l00126">hal::SMT::Translator::translate_to_smt2()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00219">query_local()</a>.</p>
+<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00448">448</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
 
 </div>
 </div>
@@ -410,7 +380,7 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The updated <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> solver. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00157">157</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00352">352</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>, and <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00274">hal::SolveFsmPlugin::solve_fsm()</a>.</p>
 
@@ -440,7 +410,7 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The updated <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> solver. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00163">163</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00358">358</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
 
@@ -456,7 +426,7 @@ Static Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a></li><li class="navelem"><a class="el" href="classhal_1_1_s_m_t_1_1_solver.html">Solver</a></li>
-    <li class="footer">Generated on Wed Dec 14 2022 17:44:15 for HAL by
+    <li class="footer">Generated on Tue Dec 20 2022 12:08:03 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

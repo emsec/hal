@@ -1,5 +1,6 @@
 var NAVTREEINDEX25 =
 {
+"json_8hpp.html#a6954bec49ed2a2dfb938c1131c82740a":[7,0,1,1,0,0,2,1,124],
 "json_8hpp.html#a6c274f6db2e65c1b66c7d41b06ad690f":[7,0,1,1,0,0,2,1,239],
 "json_8hpp.html#a701eddd8e14dbe617a9ca81b095e88fb":[7,0,1,1,0,0,2,1,160],
 "json_8hpp.html#a7056c44a5787e78720407fc97aefbd0f":[7,0,1,1,0,0,2,1,159],
@@ -248,6 +249,5 @@ var NAVTREEINDEX25 =
 "merge__successor__predecessor__groupings_8h.html":[7,0,1,1,0,0,4,0,5],
 "merge__successor__predecessor__groupings_8h.html#a0166fc1ff99aa2ec4441783e786caebb":[7,0,1,1,0,0,4,0,5,0],
 "merge__successor__predecessor__groupings_8h_source.html":[7,0,1,1,0,0,4,0,5],
-"minimap__scrollbar_8cpp.html":[7,0,1,3,2,3,5],
-"minimap__scrollbar_8cpp_source.html":[7,0,1,3,2,3,5]
+"minimap__scrollbar_8cpp.html":[7,0,1,3,2,3,5]
 };
