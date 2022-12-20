@@ -36,6 +36,7 @@
 #include "gui/user_action/user_action_compound.h"
 #include "gui/module_dialog/module_dialog.h"
 #include "gui/module_dialog/gate_dialog.h"
+#include "gui/comment_system/widgets/comment_dialog.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
@@ -295,6 +296,18 @@ namespace hal
         if (!scene())
             return;
         mMinScale = std::min(viewport()->width() / scene()->width(), viewport()->height() / scene()->height());
+    }
+
+    void GraphGraphicsView::handleAddCommentAction()
+    {
+        auto action = dynamic_cast<QAction*>(sender());
+        if(!action) return;
+
+        auto node = action->data().value<Node>();
+        CommentDialog commentDialog("New Comment");
+        if(commentDialog.exec() == QDialog::Accepted)
+            gCommentManager->addComment(new CommentEntry(node, commentDialog.getText(), commentDialog.getHeader()));
+        commentDialog.close();
     }
 
     void GraphGraphicsView::paintEvent(QPaintEvent* event)
@@ -770,6 +783,12 @@ namespace hal
                 connect(action, &QAction::triggered, this, &GraphGraphicsView::handleRemoveFromView);
                 // Gate* g   = isGate ? gNetlist->get_gate_by_id(mItem->id()) : nullptr;
                 Module* m = isModule ? gNetlist->get_module_by_id(mItem->id()) : nullptr;
+
+                action = context_menu.addAction("  Add comment");
+                QVariant data;
+                data.setValue(Node(mItem->id(), isGate ? Node::NodeType::Gate : Node::NodeType::Module));
+                action->setData(data);
+                QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleAddCommentAction);
 
                 // only allow move actions on anything that is not the top module
                 if (!gContentManager->getGraphTabWidget()->isSelectMode())

@@ -29,6 +29,7 @@
 #include <QPoint>
 #include <QHash>
 #include <QSet>
+#include <QMetaType>
 
 namespace hal
 {
@@ -238,3 +239,5 @@ namespace hal
     };
 
 }
+// must stand globally at the end
+Q_DECLARE_METATYPE(hal::Node);
