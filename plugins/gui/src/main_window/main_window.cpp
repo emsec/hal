@@ -4,6 +4,7 @@
 #include "gui/content_manager/content_manager.h"
 #include "gui/docking_system/dock_bar.h"
 #include "gui/export/export_registered_format.h"
+#include "gui/export/export_project_dialog.h"
 #include "gui/file_manager/file_manager.h"
 #include "gui/file_manager/project_dir_dialog.h"
 #include "gui/gatelibrary_management/gatelibrary_management_dialog.h"
@@ -125,20 +126,21 @@ namespace hal
         setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
 
         mActionNew                = new Action(this);
-        mActionOpenProject  = new Action(this);
-        mActionImport       = new Action(this);
+        mActionOpenProject        = new Action(this);
+        mActionImport             = new Action(this);
         mActionSave               = new Action(this);
         mActionSaveAs             = new Action(this);
+        mActionExportProject      = new Action(this);
         mActionGateLibraryManager = new Action(this);
         mActionAbout              = new Action(this);
 
-        mActionStartRecording = new Action(this);
-        mActionStopRecording  = new Action(this);
-        mActionPlayMacro      = new Action(this);
-        mActionUndo           = new Action(this);
+        mActionStartRecording     = new Action(this);
+        mActionStopRecording      = new Action(this);
+        mActionPlayMacro          = new Action(this);
+        mActionUndo               = new Action(this);
 
-        mActionSettings = new Action(this);
-        mActionClose    = new Action(this);
+        mActionSettings           = new Action(this);
+        mActionClose              = new Action(this);
 
         //    //mOpenIconStyle = "all->#fcfcb0";
         //    //mOpenIconStyle = "all->#f2e4a4";
@@ -193,7 +195,8 @@ namespace hal
         mMenuFile->addAction(mActionSaveAs);
         mMenuFile->addAction(mActionGateLibraryManager);
 
-        QMenu* menuExport = nullptr;
+        QMenu* menuExport = new QMenu("Export …", this);
+        bool hasExporter = false;
         for (auto it : netlist_writer_manager::get_writer_extensions())
         {
             if (it.second.empty()) continue; // no extensions registered
@@ -209,12 +212,15 @@ namespace hal
             for (std::string ex : it.second)
                 extensions.append(QString::fromStdString(ex));
 
-            if (!menuExport) menuExport = new QMenu("Export …", this);
+            hasExporter = true;
             Action* action = new Action(txt, this);
             action->setData(extensions);
             connect(action, &QAction::triggered, this, &MainWindow::handleActionExport);
             menuExport->addAction(action);
         }
+        if (hasExporter) mMenuFile->addSeparator();
+        mActionExportProject->setDisabled(true);
+        menuExport->addAction(mActionExportProject);
         if (menuExport) mMenuFile->addMenu(menuExport);
 
         SettingsItemCheckbox* evlogSetting =  new SettingsItemCheckbox(
@@ -257,6 +263,7 @@ namespace hal
         mActionImport->setText("Import Netlist");
         mActionSave->setText("Save");
         mActionSaveAs->setText("Save As");
+        mActionExportProject->setText("Export Project");
         mActionGateLibraryManager->setText("Gate Library Manager");
         mActionUndo->setText("Undo");
         mActionAbout->setText("About");
@@ -305,6 +312,7 @@ namespace hal
         connect(mSettings, &MainSettingsWidget::close, this, &MainWindow::closeSettings);
         connect(mActionSave, &Action::triggered, this, &MainWindow::handleSaveTriggered);
         connect(mActionSaveAs, &Action::triggered, this, &MainWindow::handleSaveAsTriggered);
+        connect(mActionExportProject, &Action::triggered, this, &MainWindow::handleExportProjectTriggered);
         connect(mActionGateLibraryManager, &Action::triggered, this, &MainWindow::handleActionGatelibraryManager);
         connect(mActionClose, &Action::triggered, this, &MainWindow::handleActionCloseFile);
 
@@ -665,6 +673,7 @@ namespace hal
     void MainWindow::handleProjectOpened(const QString& projDir, const QString& fileName)
     {
         Q_UNUSED(projDir);
+        mActionExportProject->setEnabled(true);
         handleFileOpened(fileName);
     }
 
@@ -697,6 +706,15 @@ namespace hal
     {
         GatelibraryManagementDialog dialog;
         dialog.exec();
+    }
+
+    void MainWindow::handleExportProjectTriggered()
+    {
+        ExportProjectDialog epd(this);
+        if (epd.exec() == QDialog::Accepted)
+        {
+            qDebug() << "File export accept";
+        }
     }
 
     void MainWindow::handleSaveAsTriggered()
@@ -891,6 +909,8 @@ namespace hal
             if (msgBox.clickedButton() == cancelButton)
                 return false;
         }
+
+        mActionExportProject->setDisabled(true);
 
         gPythonContext->abortThreadAndWait();
 

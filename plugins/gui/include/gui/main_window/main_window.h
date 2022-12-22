@@ -439,6 +439,8 @@ namespace hal
          */
         void handleEventLogEnabled(bool enable);
 
+        void handleExportProjectTriggered();
+
         void setPluginParameter();
 
     private:
@@ -496,6 +498,7 @@ namespace hal
         Action* mActionStopRecording;
         Action* mActionPlayMacro;
         Action* mActionUndo;
+        Action* mActionExportProject;
 
         Action* mActionSettings;
         Action* mActionClose;
