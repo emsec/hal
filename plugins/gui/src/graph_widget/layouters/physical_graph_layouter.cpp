@@ -7,7 +7,7 @@
 
 namespace hal
 {
-    PhysicalGraphLayouter::PhysicalGraphLayouter(const GraphContext* const context)
+    PhysicalGraphLayouter::PhysicalGraphLayouter(GraphContext* context)
         : GraphLayouter(context), mMinXDistance(std::numeric_limits<i32>::max()), mMinYDistance(std::numeric_limits<i32>::max())
     {
     }

@@ -38,6 +38,7 @@ namespace hal
     class ModuleElementsTree;
     class DataTableWidget;
     class GroupingsOfItemWidget;
+    class CommentWidget;
 
     /**
      * @ingroup utility_widgets-selection_details
@@ -90,6 +91,9 @@ namespace hal
         //data tab
         DataTableWidget* mDataTable;
         DetailsFrameWidget* mDataFrame;
+
+        //comment tab
+        CommentWidget* mCommentWidget;
 
     };
 }

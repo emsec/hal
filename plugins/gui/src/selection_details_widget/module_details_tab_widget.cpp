@@ -4,6 +4,7 @@
 #include "gui/selection_details_widget/module_details_widget/module_info_table.h"
 #include "gui/selection_details_widget/module_details_widget/module_ports_tree.h"
 #include "gui/selection_details_widget/module_details_widget/module_elements_tree.h"
+#include "gui/comment_system/widgets/comment_widget.h"
 
 #include "hal_core/netlist/module.h"
 
@@ -45,6 +46,11 @@ namespace hal
 
         QList<DetailsFrameWidget*> framesDataTab({mDataFrame});
         addTab("Data", framesDataTab);
+
+        //comment tab
+        mCommentWidget = new CommentWidget(this);
+        QTabWidget::addTab(mCommentWidget, "Comments");
+
     }
  
     void ModuleDetailsTabWidget::setModule(Module* module)
@@ -55,6 +61,7 @@ namespace hal
         mElementsTree->setModule(module);
         mGroupingsOfItemTable->setModule(module);
         mDataTable->setModule(module);
+        mCommentWidget->nodeChanged(Node(module->get_id(), Node::NodeType::Module));
     }
 
     void ModuleDetailsTabWidget::clear()

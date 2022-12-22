@@ -57,6 +57,11 @@ namespace hal
          */
         void setWidget(QWidget* widget);
 
+        /**
+         * Reset widget reference to nullptr. Does not delete widget since it has not the ownership.
+         */
+        void clearWidget() { mWidget = nullptr; }
+
     private:
         QVBoxLayout* mLayout;
         QWidget* mWidget;

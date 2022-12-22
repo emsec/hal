@@ -424,6 +424,12 @@ namespace hal
         void exclusiveModuleCheck();
 
         /**
+         * Open overlay and show nodes
+         * @param nd The node for which comments should be shown
+         */
+        void showComments(const Node& nd);
+
+        /**
          * Update set of nets so that all connections to gates or modules within view are shown
          */
         void updateNets();
