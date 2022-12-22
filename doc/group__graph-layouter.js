@@ -14,7 +14,7 @@ var group__graph_layouter =
       [ "simplify", "classhal_1_1_coordinate_from_data_map.html#a8d70551c0e59ec88a6e044ce670ba678", null ]
     ] ],
     [ "GraphLayouter", "classhal_1_1_graph_layouter.html", [
-      [ "GraphLayouter", "classhal_1_1_graph_layouter.html#a957fa4c5303f49e601a7906ae653b65d", null ],
+      [ "GraphLayouter", "classhal_1_1_graph_layouter.html#a582598dce420caed4143c16a6583cb22", null ],
       [ "~GraphLayouter", "classhal_1_1_graph_layouter.html#a40ebcd1c03039fe35602588e3950340b", null ],
       [ "add", "classhal_1_1_graph_layouter.html#a51184898aba8a3359b1cb4ec8ea29843", null ],
       [ "alternateLayout", "classhal_1_1_graph_layouter.html#a42a1f1a565b63cbfa24ae215b088639d", null ],
@@ -47,9 +47,9 @@ var group__graph_layouter =
       [ "swapNodePositions", "classhal_1_1_graph_layouter.html#a3f56e5f1f0fa2cd19e4773a09021e511", null ],
       [ "xValues", "classhal_1_1_graph_layouter.html#a237bfbe5d88777e3ae96622c1306588d", null ],
       [ "yValues", "classhal_1_1_graph_layouter.html#a0cf1a3d2b61a728278527a1615953536", null ],
-      [ "mContext", "classhal_1_1_graph_layouter.html#ad138a86a719c89dbf1a923d4c5a912d7", null ],
       [ "mNodeToPositionMap", "classhal_1_1_graph_layouter.html#aeaeddcf086701a164f02e5de0740bac1", null ],
       [ "mNodeToPositionRollback", "classhal_1_1_graph_layouter.html#a23a1081997f0b964ea9f4d52b66ec7c8", null ],
+      [ "mParentContext", "classhal_1_1_graph_layouter.html#ae32c79acff59dff2a186a891a59b1ed0", null ],
       [ "mPositionToNodeMap", "classhal_1_1_graph_layouter.html#a446ea8d8b55b22fb8343ec87e790d14c", null ],
       [ "mScene", "classhal_1_1_graph_layouter.html#a5994e7e9693cce878c09fc059eaab324", null ]
     ] ],
@@ -226,7 +226,7 @@ var group__graph_layouter =
       [ "filterNotInView", "classhal_1_1_node_boxes.html#aca3eafb47c2269d1c6dbd858df864912", null ]
     ] ],
     [ "PhysicalGraphLayouter", "classhal_1_1_physical_graph_layouter.html", [
-      [ "PhysicalGraphLayouter", "classhal_1_1_physical_graph_layouter.html#a99c947b55ce2dc33368da222c925f7ed", null ],
+      [ "PhysicalGraphLayouter", "classhal_1_1_physical_graph_layouter.html#a9c429f0576ceb4a66e32d7ae6c1f4c9f", null ],
       [ "add", "classhal_1_1_physical_graph_layouter.html#a59b24436598a3c47fb6677d98530e2f2", null ],
       [ "mDescription", "classhal_1_1_physical_graph_layouter.html#a61d577e05796a50a1fb8dc02c1d0363f", null ],
       [ "name", "classhal_1_1_physical_graph_layouter.html#a4f9505d86f8bb1bef1f425f2199b33e8", null ],
@@ -238,7 +238,7 @@ var group__graph_layouter =
       [ "position", "classhal_1_1_position_generator.html#a1e6c8b7a9c7ef4c541f7761a9c9379d2", null ]
     ] ],
     [ "StandardGraphLayouter", "classhal_1_1_standard_graph_layouter.html", [
-      [ "StandardGraphLayouter", "classhal_1_1_standard_graph_layouter.html#a36cae12ed171420b74b3e1043e0129ee", null ],
+      [ "StandardGraphLayouter", "classhal_1_1_standard_graph_layouter.html#a0d2161029c00222c9a890b27b8266824", null ],
       [ "add", "classhal_1_1_standard_graph_layouter.html#a4509682aefe2211500fa3d0316b5cc24", null ],
       [ "layoutBoxesEnabled", "classhal_1_1_standard_graph_layouter.html#a5bbd0af55777094721cde2c47c46e433", null ],
       [ "mDescription", "classhal_1_1_standard_graph_layouter.html#acb8a073f4ed31909e7c81a653d6dfd85", null ],

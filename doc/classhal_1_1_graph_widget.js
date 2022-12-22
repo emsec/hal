@@ -12,6 +12,7 @@ var classhal_1_1_graph_widget =
     [ "handleSceneUnavailable", "classhal_1_1_graph_widget.html#a260b8bb8b05a3920fd4784f58a59eb56", null ],
     [ "keyPressEvent", "classhal_1_1_graph_widget.html#a2423cbb2324d143cccd840382a88559e", null ],
     [ "showBusy", "classhal_1_1_graph_widget.html#a4c5b9b75b65cc63dafc031a4bf0222bb", null ],
+    [ "showComments", "classhal_1_1_graph_widget.html#ad063e02b7663021628287fd56f39e662", null ],
     [ "showProgress", "classhal_1_1_graph_widget.html#a782b0dd809b860e2563b88f4a8c021db", null ],
     [ "storeViewport", "classhal_1_1_graph_widget.html#aa095d87d96b9269e98e8e38006cbb670", null ],
     [ "view", "classhal_1_1_graph_widget.html#ac922c09975a0de4105b344addd4eff2b", null ]

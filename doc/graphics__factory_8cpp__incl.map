@@ -1,22 +1,22 @@
 <map id="/home/runner/work/hal/hal/plugins/gui/src/graph_widget/graphics_factory.cpp" name="/home/runner/work/hal/hal/plugins/gui/src/graph_widget/graphics_factory.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="441,5,615,76"/>
-<area shape="rect" id="node2" href="$gui__globals_8h.html" title=" " alt="" coords="1418,139,1550,165"/>
-<area shape="rect" id="node3" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="608,243,787,269"/>
-<area shape="rect" id="node15" href="$graphics__factory_8h.html" title=" " alt="" coords="223,131,417,173"/>
-<area shape="rect" id="node19" href="$standard__graphics__gate_8h.html" title=" " alt="" coords="441,124,615,180"/>
-<area shape="rect" id="node20" href="$standard__graphics__module_8h.html" title=" " alt="" coords="8,124,195,180"/>
-<area shape="rect" id="node5" href="$file__status__manager_8h.html" title=" " alt="" coords="1195,235,1373,277"/>
-<area shape="rect" id="node6" href="$graph__context__manager_8h.html" title=" " alt="" coords="811,235,986,277"/>
-<area shape="rect" id="node8" href="$content__manager_8h.html" title=" " alt="" coords="1011,235,1171,277"/>
-<area shape="rect" id="node9" href="$netlist__relay_8h.html" title=" " alt="" coords="1398,235,1570,277"/>
-<area shape="rect" id="node10" href="$plugin__relay_8h.html" title=" " alt="" coords="1595,235,1765,277"/>
-<area shape="rect" id="node11" href="$python__context_8h.html" title=" " alt="" coords="1789,243,1997,269"/>
-<area shape="rect" id="node12" href="$selection__relay_8h.html" title=" " alt="" coords="2022,235,2167,277"/>
-<area shape="rect" id="node13" href="$gui__api_8h.html" title=" " alt="" coords="2191,243,2347,269"/>
-<area shape="rect" id="node14" title=" " alt="" coords="2372,243,2457,269"/>
-<area shape="rect" id="node4" title=" " alt="" coords="369,332,447,359"/>
-<area shape="rect" id="node7" title=" " alt="" coords="852,332,945,359"/>
-<area shape="rect" id="node16" href="$graphics__gate_8h.html" title=" " alt="" coords="409,228,583,284"/>
-<area shape="rect" id="node17" href="$graphics__module_8h.html" title=" " alt="" coords="5,228,189,284"/>
-<area shape="rect" id="node18" title=" " alt="" coords="213,243,283,269"/>
+<area shape="rect" id="node1" title=" " alt="" coords="1987,5,2160,76"/>
+<area shape="rect" id="node2" href="$gui__globals_8h.html" title=" " alt="" coords="1118,139,1250,165"/>
+<area shape="rect" id="node3" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="5,243,184,269"/>
+<area shape="rect" id="node15" href="$graphics__factory_8h.html" title=" " alt="" coords="2185,131,2378,173"/>
+<area shape="rect" id="node19" href="$standard__graphics__gate_8h.html" title=" " alt="" coords="1986,124,2161,180"/>
+<area shape="rect" id="node20" href="$standard__graphics__module_8h.html" title=" " alt="" coords="2407,124,2593,180"/>
+<area shape="rect" id="node4" href="$file__status__manager_8h.html" title=" " alt="" coords="208,235,387,277"/>
+<area shape="rect" id="node5" href="$graph__context__manager_8h.html" title=" " alt="" coords="411,235,586,277"/>
+<area shape="rect" id="node7" href="$content__manager_8h.html" title=" " alt="" coords="611,235,771,277"/>
+<area shape="rect" id="node8" href="$netlist__relay_8h.html" title=" " alt="" coords="795,235,967,277"/>
+<area shape="rect" id="node9" href="$plugin__relay_8h.html" title=" " alt="" coords="992,235,1163,277"/>
+<area shape="rect" id="node10" href="$python__context_8h.html" title=" " alt="" coords="1187,243,1395,269"/>
+<area shape="rect" id="node11" href="$selection__relay_8h.html" title=" " alt="" coords="1419,235,1565,277"/>
+<area shape="rect" id="node12" href="$gui__api_8h.html" title=" " alt="" coords="1589,243,1745,269"/>
+<area shape="rect" id="node13" href="$comment__manager_8h.html" title=" " alt="" coords="1769,235,1933,277"/>
+<area shape="rect" id="node14" title=" " alt="" coords="1957,243,2043,269"/>
+<area shape="rect" id="node6" title=" " alt="" coords="644,332,737,359"/>
+<area shape="rect" id="node16" href="$graphics__gate_8h.html" title=" " alt="" coords="2067,228,2242,284"/>
+<area shape="rect" id="node17" href="$graphics__module_8h.html" title=" " alt="" coords="2411,228,2595,284"/>
+<area shape="rect" id="node18" title=" " alt="" coords="2317,243,2387,269"/>
 </map>

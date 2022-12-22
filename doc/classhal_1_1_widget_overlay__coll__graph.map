@@ -1,5 +1,5 @@
 <map id="hal::WidgetOverlay" name="hal::WidgetOverlay">
-<area shape="rect" id="node1" title="Container for a QWidget that overlays another one." alt="" coords="13,593,160,685"/>
+<area shape="rect" id="node1" title="Container for a QWidget that overlays another one." alt="" coords="13,593,160,700"/>
 <area shape="rect" id="node2" href="$classhal_1_1_overlay.html" title="The Overlay overlays its parent." alt="" coords="5,424,168,545"/>
 <area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qframe.html" title=" " alt="" coords="15,5,159,376"/>
 </map>

@@ -1,6 +1,7 @@
 var gui__globals_8h =
 [
     [ "GUI_DEBUG_GRID", "gui__globals_8h.html#a45bf493aef646143652f7064c48609ed", null ],
+    [ "gCommentManager", "gui__globals_8h.html#a7b0cfc60e8b2fee81c0ec6131190b078", null ],
     [ "gContentManager", "gui__globals_8h.html#a36ac15c9dc231bbb2cff96b936a5b8d4", null ],
     [ "gFileStatusManager", "gui__globals_8h.html#a4fac8393f1437113df74c148fdd8889d", null ],
     [ "gGraphContextManager", "gui__globals_8h.html#a63d96610e22dcbffc0755f514731d730", null ],

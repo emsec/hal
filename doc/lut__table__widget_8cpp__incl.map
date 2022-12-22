@@ -3,7 +3,7 @@
 <area shape="rect" id="node2" title=" " alt="" coords="91,153,202,180"/>
 <area shape="rect" id="node3" href="$lut__table__widget_8h.html" title=" " alt="" coords="277,139,475,195"/>
 <area shape="rect" id="node5" href="$selection__details__widget_8h.html" title=" " alt="" coords="5,243,192,299"/>
-<area shape="rect" id="node8" href="$gui__globals_8h.html" title=" " alt="" coords="1514,153,1646,180"/>
+<area shape="rect" id="node8" href="$gui__globals_8h.html" title=" " alt="" coords="1611,153,1743,180"/>
 <area shape="rect" id="node4" href="$lut__table__model_8h.html" title=" " alt="" coords="216,257,355,284"/>
 <area shape="rect" id="node6" href="$selection__tree__view_8h.html" title=" " alt="" coords="379,243,557,299"/>
 <area shape="rect" id="node7" title=" " alt="" coords="581,257,680,284"/>
@@ -16,5 +16,6 @@
 <area shape="rect" id="node15" href="$python__context_8h.html" title=" " alt="" coords="1885,257,2093,284"/>
 <area shape="rect" id="node16" href="$selection__relay_8h.html" title=" " alt="" coords="2118,250,2263,291"/>
 <area shape="rect" id="node17" href="$gui__api_8h.html" title=" " alt="" coords="2287,257,2443,284"/>
-<area shape="rect" id="node18" title=" " alt="" coords="2468,257,2553,284"/>
+<area shape="rect" id="node18" href="$comment__manager_8h.html" title=" " alt="" coords="2467,250,2631,291"/>
+<area shape="rect" id="node19" title=" " alt="" coords="2656,257,2741,284"/>
 </map>

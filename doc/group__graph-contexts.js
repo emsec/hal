@@ -48,6 +48,7 @@ var group__graph_contexts =
       [ "setParentWidget", "classhal_1_1_graph_context.html#a7869fa5e5577268e6d4ee36e09eb07a3", null ],
       [ "setShader", "classhal_1_1_graph_context.html#a853ead405c7826297099205cd848636c", null ],
       [ "setSpecialUpdate", "classhal_1_1_graph_context.html#a06f09f6e50af4b7c47a15d427fe2d36b", null ],
+      [ "showComments", "classhal_1_1_graph_context.html#a1bc78b394375158c1212190231f1de1f", null ],
       [ "storeViewport", "classhal_1_1_graph_context.html#a8889a0c74139f131610e6e8606579f6a", null ],
       [ "testIfAffected", "classhal_1_1_graph_context.html#a752666f0e3b3552d81ab76186980b7bd", null ],
       [ "unfoldModule", "classhal_1_1_graph_context.html#af5994fa27903de66f5af0453368f3cf3", null ],

@@ -1,13 +1,14 @@
 <map id="/home/runner/work/hal/hal/plugins/gui/include/gui/file_modified_bar/file_modified_bar.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/file_modified_bar/file_modified_bar.h">
-<area shape="rect" id="node1" title=" " alt="" coords="438,5,625,76"/>
-<area shape="rect" id="node2" href="$gui__def_8h.html" title=" " alt="" coords="193,124,299,151"/>
-<area shape="rect" id="node7" title=" " alt="" coords="323,124,396,151"/>
-<area shape="rect" id="node8" title=" " alt="" coords="420,124,531,151"/>
-<area shape="rect" id="node9" title=" " alt="" coords="555,124,622,151"/>
-<area shape="rect" id="node10" title=" " alt="" coords="646,124,753,151"/>
-<area shape="rect" id="node11" title=" " alt="" coords="777,124,848,151"/>
+<area shape="rect" id="node1" title=" " alt="" coords="483,5,670,76"/>
+<area shape="rect" id="node2" href="$gui__def_8h.html" title=" " alt="" coords="239,124,344,151"/>
+<area shape="rect" id="node8" title=" " alt="" coords="368,124,441,151"/>
+<area shape="rect" id="node9" title=" " alt="" coords="465,124,576,151"/>
+<area shape="rect" id="node10" title=" " alt="" coords="601,124,667,151"/>
+<area shape="rect" id="node11" title=" " alt="" coords="691,124,798,151"/>
+<area shape="rect" id="node12" title=" " alt="" coords="823,124,893,151"/>
 <area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="5,199,145,225"/>
 <area shape="rect" id="node4" title=" " alt="" coords="169,199,235,225"/>
 <area shape="rect" id="node5" title=" " alt="" coords="259,199,324,225"/>
 <area shape="rect" id="node6" title=" " alt="" coords="349,199,402,225"/>
+<area shape="rect" id="node7" title=" " alt="" coords="427,199,521,225"/>
 </map>

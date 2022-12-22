@@ -123,70 +123,74 @@ $(document).ready(function(){initNavTree('gui__globals_8h_source.html',''); init
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="python__context_8h.html">gui/python/python_context.h</a>&quot;</span></div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="selection__relay_8h.html">gui/selection_relay/selection_relay.h</a>&quot;</span></div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="gui__api_8h.html">gui/gui_api/gui_api.h</a>&quot;</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="preprocessor">#include &lt;QSettings&gt;</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;{</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">class </span>Netlist;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keyword">extern</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qsettings.html">QSettings</a>* <a class="code" href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">gGuiState</a>;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keyword">extern</span> ContentManager* <a class="code" href="namespacehal.html#a36ac15c9dc231bbb2cff96b936a5b8d4">gContentManager</a>;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keyword">extern</span> std::shared_ptr&lt;Netlist&gt; <a class="code" href="namespacehal.html#ae9eb93dc7dd8514d3afb4c935a09a9a0">gNetlistOwner</a>;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keyword">extern</span> Netlist* <a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keyword">extern</span> NetlistRelay* <a class="code" href="namespacehal.html#ac87c0ce709dc346017d7c2aff4aea006">gNetlistRelay</a>;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keyword">extern</span> PluginRelay* <a class="code" href="namespacehal.html#a4cd901560b6cb156908e4cb43a1ea812">gPluginRelay</a>;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keyword">extern</span> SelectionRelay* <a class="code" href="namespacehal.html#a6ba6e6ec49eb58d0b35a604e16187112">gSelectionRelay</a>;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keyword">extern</span> FileStatusManager* <a class="code" href="namespacehal.html#a4fac8393f1437113df74c148fdd8889d">gFileStatusManager</a>;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keyword">extern</span> GraphContextManager* <a class="code" href="namespacehal.html#a63d96610e22dcbffc0755f514731d730">gGraphContextManager</a>;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="keyword">extern</span> PythonContext* <a class="code" href="namespacehal.html#a178bb1ac9a8ee6bbbec41ddb2e84250a">gPythonContext</a>;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keyword">extern</span> GuiApi* <a class="code" href="namespacehal.html#ada0064833138221168460e2dafafac6f">gGuiApi</a>;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="comment">// Comment this out to not compile the debug code for the graph grid.</span></div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="comment">// This will also hide the respective debug setting from the settings page.</span></div>
-<div class="line"><a name="l00109"></a><span class="lineno"><a class="line" href="gui__globals_8h.html#a45bf493aef646143652f7064c48609ed">  109</a></span>&#160;<span class="preprocessor">    #define GUI_DEBUG_GRID</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;}</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="comment__manager_8h.html">gui/comment_system/comment_manager.h</a>&quot;</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="preprocessor">#include &lt;QSettings&gt;</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;{</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">class </span>Netlist;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keyword">extern</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qsettings.html">QSettings</a>* <a class="code" href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">gGuiState</a>;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keyword">extern</span> ContentManager* <a class="code" href="namespacehal.html#a36ac15c9dc231bbb2cff96b936a5b8d4">gContentManager</a>;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keyword">extern</span> std::shared_ptr&lt;Netlist&gt; <a class="code" href="namespacehal.html#ae9eb93dc7dd8514d3afb4c935a09a9a0">gNetlistOwner</a>;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keyword">extern</span> Netlist* <a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keyword">extern</span> NetlistRelay* <a class="code" href="namespacehal.html#ac87c0ce709dc346017d7c2aff4aea006">gNetlistRelay</a>;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keyword">extern</span> PluginRelay* <a class="code" href="namespacehal.html#a4cd901560b6cb156908e4cb43a1ea812">gPluginRelay</a>;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keyword">extern</span> SelectionRelay* <a class="code" href="namespacehal.html#a6ba6e6ec49eb58d0b35a604e16187112">gSelectionRelay</a>;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keyword">extern</span> FileStatusManager* <a class="code" href="namespacehal.html#a4fac8393f1437113df74c148fdd8889d">gFileStatusManager</a>;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keyword">extern</span> GraphContextManager* <a class="code" href="namespacehal.html#a63d96610e22dcbffc0755f514731d730">gGraphContextManager</a>;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keyword">extern</span> PythonContext* <a class="code" href="namespacehal.html#a178bb1ac9a8ee6bbbec41ddb2e84250a">gPythonContext</a>;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="keyword">extern</span> GuiApi* <a class="code" href="namespacehal.html#ada0064833138221168460e2dafafac6f">gGuiApi</a>;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="keyword">extern</span> CommentManager* <a class="code" href="namespacehal.html#a7b0cfc60e8b2fee81c0ec6131190b078">gCommentManager</a>;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="comment">// Comment this out to not compile the debug code for the graph grid.</span></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="comment">// This will also hide the respective debug setting from the settings page.</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno"><a class="line" href="gui__globals_8h.html#a45bf493aef646143652f7064c48609ed">  114</a></span>&#160;<span class="preprocessor">    #define GUI_DEBUG_GRID</span></div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="apython__context_8h_html"><div class="ttname"><a href="python__context_8h.html">python_context.h</a></div></div>
 <div class="ttc" id="afile__status__manager_8h_html"><div class="ttname"><a href="file__status__manager_8h.html">file_status_manager.h</a></div></div>
-<div class="ttc" id="anamespacehal_html_a36ac15c9dc231bbb2cff96b936a5b8d4"><div class="ttname"><a href="namespacehal.html#a36ac15c9dc231bbb2cff96b936a5b8d4">hal::gContentManager</a></div><div class="ttdeci">ContentManager * gContentManager</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00049">plugin_gui.cpp:49</a></div></div>
-<div class="ttc" id="anamespacehal_html_a178bb1ac9a8ee6bbbec41ddb2e84250a"><div class="ttname"><a href="namespacehal.html#a178bb1ac9a8ee6bbbec41ddb2e84250a">hal::gPythonContext</a></div><div class="ttdeci">PythonContext * gPythonContext</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00058">plugin_gui.cpp:58</a></div></div>
+<div class="ttc" id="anamespacehal_html_a36ac15c9dc231bbb2cff96b936a5b8d4"><div class="ttname"><a href="namespacehal.html#a36ac15c9dc231bbb2cff96b936a5b8d4">hal::gContentManager</a></div><div class="ttdeci">ContentManager * gContentManager</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00050">plugin_gui.cpp:50</a></div></div>
+<div class="ttc" id="anamespacehal_html_a178bb1ac9a8ee6bbbec41ddb2e84250a"><div class="ttname"><a href="namespacehal.html#a178bb1ac9a8ee6bbbec41ddb2e84250a">hal::gPythonContext</a></div><div class="ttdeci">PythonContext * gPythonContext</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00060">plugin_gui.cpp:60</a></div></div>
 <div class="ttc" id="acontent__manager_8h_html"><div class="ttname"><a href="content__manager_8h.html">content_manager.h</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
 <div class="ttc" id="ainclude_2hal__core_2netlist_2netlist_8h_html"><div class="ttname"><a href="include_2hal__core_2netlist_2netlist_8h.html">netlist.h</a></div></div>
+<div class="ttc" id="anamespacehal_html_a7b0cfc60e8b2fee81c0ec6131190b078"><div class="ttname"><a href="namespacehal.html#a7b0cfc60e8b2fee81c0ec6131190b078">hal::gCommentManager</a></div><div class="ttdeci">CommentManager * gCommentManager</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00059">plugin_gui.cpp:59</a></div></div>
 <div class="ttc" id="anetlist__relay_8h_html"><div class="ttname"><a href="netlist__relay_8h.html">netlist_relay.h</a></div></div>
 <div class="ttc" id="aplugin__relay_8h_html"><div class="ttname"><a href="plugin__relay_8h.html">plugin_relay.h</a></div></div>
-<div class="ttc" id="anamespacehal_html_ac87c0ce709dc346017d7c2aff4aea006"><div class="ttname"><a href="namespacehal.html#ac87c0ce709dc346017d7c2aff4aea006">hal::gNetlistRelay</a></div><div class="ttdeci">NetlistRelay * gNetlistRelay</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00052">plugin_gui.cpp:52</a></div></div>
+<div class="ttc" id="anamespacehal_html_ac87c0ce709dc346017d7c2aff4aea006"><div class="ttname"><a href="namespacehal.html#ac87c0ce709dc346017d7c2aff4aea006">hal::gNetlistRelay</a></div><div class="ttdeci">NetlistRelay * gNetlistRelay</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00053">plugin_gui.cpp:53</a></div></div>
 <div class="ttc" id="agui__api_8h_html"><div class="ttname"><a href="gui__api_8h.html">gui_api.h</a></div></div>
-<div class="ttc" id="anamespacehal_html_a6ba6e6ec49eb58d0b35a604e16187112"><div class="ttname"><a href="namespacehal.html#a6ba6e6ec49eb58d0b35a604e16187112">hal::gSelectionRelay</a></div><div class="ttdeci">SelectionRelay * gSelectionRelay</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00054">plugin_gui.cpp:54</a></div></div>
-<div class="ttc" id="anamespacehal_html_a4fac8393f1437113df74c148fdd8889d"><div class="ttname"><a href="namespacehal.html#a4fac8393f1437113df74c148fdd8889d">hal::gFileStatusManager</a></div><div class="ttdeci">FileStatusManager * gFileStatusManager</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00055">plugin_gui.cpp:55</a></div></div>
-<div class="ttc" id="anamespacehal_html_a63d96610e22dcbffc0755f514731d730"><div class="ttname"><a href="namespacehal.html#a63d96610e22dcbffc0755f514731d730">hal::gGraphContextManager</a></div><div class="ttdeci">GraphContextManager * gGraphContextManager</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00056">plugin_gui.cpp:56</a></div></div>
+<div class="ttc" id="anamespacehal_html_a6ba6e6ec49eb58d0b35a604e16187112"><div class="ttname"><a href="namespacehal.html#a6ba6e6ec49eb58d0b35a604e16187112">hal::gSelectionRelay</a></div><div class="ttdeci">SelectionRelay * gSelectionRelay</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00055">plugin_gui.cpp:55</a></div></div>
+<div class="ttc" id="anamespacehal_html_a4fac8393f1437113df74c148fdd8889d"><div class="ttname"><a href="namespacehal.html#a4fac8393f1437113df74c148fdd8889d">hal::gFileStatusManager</a></div><div class="ttdeci">FileStatusManager * gFileStatusManager</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00056">plugin_gui.cpp:56</a></div></div>
+<div class="ttc" id="anamespacehal_html_a63d96610e22dcbffc0755f514731d730"><div class="ttname"><a href="namespacehal.html#a63d96610e22dcbffc0755f514731d730">hal::gGraphContextManager</a></div><div class="ttdeci">GraphContextManager * gGraphContextManager</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00057">plugin_gui.cpp:57</a></div></div>
 <div class="ttc" id="agraph__context__manager_8h_html"><div class="ttname"><a href="graph__context__manager_8h.html">graph_context_manager.h</a></div></div>
+<div class="ttc" id="acomment__manager_8h_html"><div class="ttname"><a href="comment__manager_8h.html">comment_manager.h</a></div></div>
 <div class="ttc" id="aqsettings_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qsettings.html">QSettings</a></div></div>
-<div class="ttc" id="anamespacehal_html_ae9eb93dc7dd8514d3afb4c935a09a9a0"><div class="ttname"><a href="namespacehal.html#ae9eb93dc7dd8514d3afb4c935a09a9a0">hal::gNetlistOwner</a></div><div class="ttdeci">std::shared_ptr&lt; Netlist &gt; gNetlistOwner</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00050">plugin_gui.cpp:50</a></div></div>
-<div class="ttc" id="anamespacehal_html_ada0064833138221168460e2dafafac6f"><div class="ttname"><a href="namespacehal.html#ada0064833138221168460e2dafafac6f">hal::gGuiApi</a></div><div class="ttdeci">GuiApi * gGuiApi</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00057">plugin_gui.cpp:57</a></div></div>
-<div class="ttc" id="anamespacehal_html_aabb4e1324f8808da9712d67be96fb614"><div class="ttname"><a href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">hal::gNetlist</a></div><div class="ttdeci">Netlist * gNetlist</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00051">plugin_gui.cpp:51</a></div></div>
-<div class="ttc" id="anamespacehal_html_a4cd901560b6cb156908e4cb43a1ea812"><div class="ttname"><a href="namespacehal.html#a4cd901560b6cb156908e4cb43a1ea812">hal::gPluginRelay</a></div><div class="ttdeci">PluginRelay * gPluginRelay</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00053">plugin_gui.cpp:53</a></div></div>
-<div class="ttc" id="anamespacehal_html_a26043d445e88c55f2c8cb048e9abc291"><div class="ttname"><a href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">hal::gGuiState</a></div><div class="ttdeci">QSettings * gGuiState</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00048">plugin_gui.cpp:48</a></div></div>
+<div class="ttc" id="anamespacehal_html_ae9eb93dc7dd8514d3afb4c935a09a9a0"><div class="ttname"><a href="namespacehal.html#ae9eb93dc7dd8514d3afb4c935a09a9a0">hal::gNetlistOwner</a></div><div class="ttdeci">std::shared_ptr&lt; Netlist &gt; gNetlistOwner</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00051">plugin_gui.cpp:51</a></div></div>
+<div class="ttc" id="anamespacehal_html_ada0064833138221168460e2dafafac6f"><div class="ttname"><a href="namespacehal.html#ada0064833138221168460e2dafafac6f">hal::gGuiApi</a></div><div class="ttdeci">GuiApi * gGuiApi</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00058">plugin_gui.cpp:58</a></div></div>
+<div class="ttc" id="anamespacehal_html_aabb4e1324f8808da9712d67be96fb614"><div class="ttname"><a href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">hal::gNetlist</a></div><div class="ttdeci">Netlist * gNetlist</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00052">plugin_gui.cpp:52</a></div></div>
+<div class="ttc" id="anamespacehal_html_a4cd901560b6cb156908e4cb43a1ea812"><div class="ttname"><a href="namespacehal.html#a4cd901560b6cb156908e4cb43a1ea812">hal::gPluginRelay</a></div><div class="ttdeci">PluginRelay * gPluginRelay</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00054">plugin_gui.cpp:54</a></div></div>
+<div class="ttc" id="anamespacehal_html_a26043d445e88c55f2c8cb048e9abc291"><div class="ttname"><a href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">hal::gGuiState</a></div><div class="ttdeci">QSettings * gGuiState</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00049">plugin_gui.cpp:49</a></div></div>
 <div class="ttc" id="aselection__relay_8h_html"><div class="ttname"><a href="selection__relay_8h.html">selection_relay.h</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="gui__globals_8h.html">gui_globals.h</a></li>
-    <li class="footer">Generated on Tue Dec 20 2022 12:07:55 for HAL by
+    <li class="footer">Generated on Thu Dec 22 2022 22:50:28 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

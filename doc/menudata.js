@@ -283,7 +283,8 @@ var menudata={children:[
 {text:"t",url:"functions_prop.html#index_t"},
 {text:"u",url:"functions_prop.html#index_u"},
 {text:"v",url:"functions_prop.html#index_v"},
-{text:"w",url:"functions_prop.html#index_w"}]},
+{text:"w",url:"functions_prop.html#index_w"},
+{text:"y",url:"functions_prop.html#index_y"}]},
 {text:"Related Functions",url:"functions_rela.html",children:[
 {text:":",url:"functions_rela.html#index_:"},
 {text:"b",url:"functions_rela.html#index_b"},

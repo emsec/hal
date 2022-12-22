@@ -133,6 +133,8 @@ Signals</h2></td></tr>
 <tr class="separator:a4df72cab4fd163079e81251f18acb0f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea1dcdf9154fe9e9b3a7dea5b0618c7e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_searchbar.html#aea1dcdf9154fe9e9b3a7dea5b0618c7e">returnPressed</a> ()</td></tr>
 <tr class="separator:aea1dcdf9154fe9e9b3a7dea5b0618c7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc6129bc47b6295ecedc05e903f3fbf7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_searchbar.html#acc6129bc47b6295ecedc05e903f3fbf7">searchIconClicked</a> ()</td></tr>
+<tr class="separator:acc6129bc47b6295ecedc05e903f3fbf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -164,6 +166,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:abef50b03a038c1ce116c73c69f623f23"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab01ebf92f7d0597e6db933c357892fc4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_searchbar.html#ab01ebf92f7d0597e6db933c357892fc4">getEmitTextWithFlags</a> ()</td></tr>
 <tr class="separator:ab01ebf92f7d0597e6db933c357892fc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf9e19d8b335700e107d14d84828c884"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_searchbar.html#adf9e19d8b335700e107d14d84828c884">eventFilter</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *object, <a class="elRef" href="https://doc.qt.io/qt-5/qevent.html">QEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qframe.html#event">event</a>)</td></tr>
+<tr class="separator:adf9e19d8b335700e107d14d84828c884"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Q_PROPERTY READ Functions</div></td></tr>
 <tr class="memitem:a0bddf7bc8db94ca30a99e5658c3a09da"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_searchbar.html#a0bddf7bc8db94ca30a99e5658c3a09da">searchIcon</a> () const</td></tr>
 <tr class="separator:a0bddf7bc8db94ca30a99e5658c3a09da"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -729,8 +733,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:QObject inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:dtor.QObject inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#dtor.QObject">~QObject</a> ()</td></tr>
 <tr class="separator:dtor.QObject inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:eventFilter inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#eventFilter">eventFilter</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *watched, <a class="elRef" href="https://doc.qt.io/qt-5/qevent.html">QEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#event">event</a>)</td></tr>
-<tr class="separator:eventFilter inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:objectName-prop inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#objectName-prop">objectName</a> () const const</td></tr>
 <tr class="separator:objectName-prop inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:objectName-prop inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#objectName-prop">setObjectName</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
@@ -1280,9 +1282,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00017">17</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00018">18</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qboxlayout.html#addWidget">QBoxLayout::addWidget()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#clicked">QAbstractButton::clicked()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="el" href="searchbar_8cpp_source.html#l00215">emitTextEdited()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#ensurePolished">QWidget::ensurePolished()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsizepolicy.html#Policy-enum">QSizePolicy::Fixed</a>, <a class="el" href="graphics_8cpp_source.html#l00037">hal::gui_utility::getStyledSvgIcon()</a>, <a class="el" href="searchbar_8cpp_source.html#l00226">handleClearClicked()</a>, <a class="el" href="searchbar_8cpp_source.html#l00221">handleReturnPressed()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsizepolicy.html#Policy-enum">QSizePolicy::MinimumExpanding</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qframe.html#Shape-enum">QFrame::NoFrame</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#returnPressed">QLineEdit::returnPressed()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#checkable-prop">QAbstractButton::setCheckable()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlayout.html#setContentsMargins">QLayout::setContentsMargins()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#setFixedWidth">QWidget::setFixedWidth()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#setFocusProxy">QWidget::setFocusProxy()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qframe.html#setFrameStyle">QFrame::setFrameStyle()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#icon-prop">QAbstractButton::setIcon()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#iconSize-prop">QAbstractButton::setIconSize()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#setLayout">QWidget::setLayout()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlabel.html#pixmap-prop">QLabel::setPixmap()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#placeholderText-prop">QLineEdit::setPlaceholderText()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#sizePolicy-prop">QWidget::setSizePolicy()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qboxlayout.html#setSpacing">QBoxLayout::setSpacing()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#text-prop">QAbstractButton::setText()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#toolTip-prop">QWidget::setToolTip()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#textEdited">QLineEdit::textEdited()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qboxlayout.html#addWidget">QBoxLayout::addWidget()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#clicked">QAbstractButton::clicked()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="el" href="searchbar_8cpp_source.html#l00217">emitTextEdited()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#ensurePolished">QWidget::ensurePolished()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsizepolicy.html#Policy-enum">QSizePolicy::Fixed</a>, <a class="el" href="graphics_8cpp_source.html#l00037">hal::gui_utility::getStyledSvgIcon()</a>, <a class="el" href="searchbar_8cpp_source.html#l00228">handleClearClicked()</a>, <a class="el" href="searchbar_8cpp_source.html#l00223">handleReturnPressed()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#installEventFilter">QObject::installEventFilter()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsizepolicy.html#Policy-enum">QSizePolicy::MinimumExpanding</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qframe.html#Shape-enum">QFrame::NoFrame</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#returnPressed">QLineEdit::returnPressed()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#checkable-prop">QAbstractButton::setCheckable()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlayout.html#setContentsMargins">QLayout::setContentsMargins()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#setFixedWidth">QWidget::setFixedWidth()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#setFocusProxy">QWidget::setFocusProxy()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qframe.html#setFrameStyle">QFrame::setFrameStyle()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#icon-prop">QAbstractButton::setIcon()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#iconSize-prop">QAbstractButton::setIconSize()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#setLayout">QWidget::setLayout()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlabel.html#pixmap-prop">QLabel::setPixmap()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#placeholderText-prop">QLineEdit::setPlaceholderText()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#sizePolicy-prop">QWidget::setSizePolicy()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qboxlayout.html#setSpacing">QBoxLayout::setSpacing()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#text-prop">QAbstractButton::setText()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#toolTip-prop">QWidget::setToolTip()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#textEdited">QLineEdit::textEdited()</a>.</p>
 
 </div>
 </div>
@@ -1305,11 +1307,11 @@ Additional Inherited Members</h2></td></tr>
 <p>Adds flags ("Exact Match" or "Case Sensitive") as regex modifiers to text.</p>
 <dl class="section return"><dt>Returns</dt><dd>text with regex modifiers as <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00184">184</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00186">186</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#append-1">QString::append()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#checked-prop">QAbstractButton::isChecked()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="searchbar_8cpp_source.html#l00179">getCurrentTextWithFlags()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="searchbar_8cpp_source.html#l00181">getCurrentTextWithFlags()</a>.</p>
 
 </div>
 </div>
@@ -1329,11 +1331,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>mCaseSensitive-&gt;isChecked() </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00236">236</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00238">238</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#checked-prop">QAbstractButton::isChecked()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="searchbar_8cpp_source.html#l00251">filterApplied()</a>, and <a class="el" href="python__editor_8cpp_source.html#l01600">hal::PythonEditor::getFindFlags()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="searchbar_8cpp_source.html#l00266">filterApplied()</a>, and <a class="el" href="python__editor_8cpp_source.html#l01600">hal::PythonEditor::getFindFlags()</a>.</p>
 
 </div>
 </div>
@@ -1387,11 +1389,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Empties the <a class="el" href="classhal_1_1_searchbar.html" title="A QFrame with a QLineEdit that can be used to input a substring to search for.">Searchbar</a>'s <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html">QLineEdit</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00158">158</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00160">160</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#clear">QLineEdit::clear()</a>, and <a class="el" href="searchbar_8cpp_source.html#l00215">emitTextEdited()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#clear">QLineEdit::clear()</a>, and <a class="el" href="searchbar_8cpp_source.html#l00217">emitTextEdited()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="searchbar_8cpp_source.html#l00226">handleClearClicked()</a>, and <a class="el" href="selection__details__widget_8cpp_source.html#l00314">hal::SelectionDetailsWidget::handleSelectionUpdate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="searchbar_8cpp_source.html#l00228">handleClearClicked()</a>, and <a class="el" href="selection__details__widget_8cpp_source.html#l00315">hal::SelectionDetailsWidget::handleSelectionUpdate()</a>.</p>
 
 </div>
 </div>
@@ -1453,11 +1455,53 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Emits textEdited with respect to mEmitTextWithFlags. </p>
 
-<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00215">215</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00217">217</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="searchbar_8cpp_source.html#l00174">getCurrentText()</a>, <a class="el" href="searchbar_8cpp_source.html#l00179">getCurrentTextWithFlags()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, <a class="el" href="searchbar_8cpp_source.html#l00201">repolish()</a>, and <a class="el" href="classhal_1_1_searchbar.html#a4df72cab4fd163079e81251f18acb0f1">textEdited()</a>.</p>
+<p class="reference">References <a class="el" href="searchbar_8cpp_source.html#l00176">getCurrentText()</a>, <a class="el" href="searchbar_8cpp_source.html#l00181">getCurrentTextWithFlags()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, <a class="el" href="searchbar_8cpp_source.html#l00203">repolish()</a>, and <a class="el" href="classhal_1_1_searchbar.html#a4df72cab4fd163079e81251f18acb0f1">textEdited()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="searchbar_8cpp_source.html#l00158">clear()</a>, <a class="el" href="searchbar_8cpp_source.html#l00017">Searchbar()</a>, and <a class="el" href="searchbar_8cpp_source.html#l00169">showEvent()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="searchbar_8cpp_source.html#l00160">clear()</a>, <a class="el" href="searchbar_8cpp_source.html#l00018">Searchbar()</a>, and <a class="el" href="searchbar_8cpp_source.html#l00171">showEvent()</a>.</p>
+
+</div>
+</div>
+<a id="adf9e19d8b335700e107d14d84828c884"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf9e19d8b335700e107d14d84828c884">&#9670;&nbsp;</a></span>eventFilter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::Searchbar::eventFilter </td>
+          <td>(</td>
+          <td class="paramtype"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *&#160;</td>
+          <td class="paramname"><em>object</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="elRef" href="https://doc.qt.io/qt-5/qevent.html">QEvent</a> *&#160;</td>
+          <td class="paramname"><em>event</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#eventFilter">QObject</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00253">253</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
+
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qmouseevent.html#button">QMouseEvent::button()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qframe.html#event">QFrame::event()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#eventFilter">QObject::eventFilter()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qevent.html#Type-enum">QEvent::MouseButtonPress</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, and <a class="el" href="classhal_1_1_searchbar.html#acc6129bc47b6295ecedc05e903f3fbf7">searchIconClicked()</a>.</p>
 
 </div>
 </div>
@@ -1477,11 +1521,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>mExactMatch-&gt;isChecked() </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00231">231</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00233">233</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#checked-prop">QAbstractButton::isChecked()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="searchbar_8cpp_source.html#l00251">filterApplied()</a>, and <a class="el" href="python__editor_8cpp_source.html#l01600">hal::PythonEditor::getFindFlags()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="searchbar_8cpp_source.html#l00266">filterApplied()</a>, and <a class="el" href="python__editor_8cpp_source.html#l01600">hal::PythonEditor::getFindFlags()</a>.</p>
 
 </div>
 </div>
@@ -1536,9 +1580,9 @@ Additional Inherited Members</h2></td></tr>
 <p>A filter is applied when the searchbar contains text or (at least) one of the flags ("Exact Match" or "Case Sensitive") is checked.</p>
 <dl class="section return"><dt>Returns</dt><dd>if a filter is applied </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00251">251</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00266">266</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="searchbar_8cpp_source.html#l00236">caseSensitiveChecked()</a>, <a class="el" href="searchbar_8cpp_source.html#l00231">exactMatchChecked()</a>, <a class="el" href="searchbar_8cpp_source.html#l00174">getCurrentText()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>.</p>
+<p class="reference">References <a class="el" href="searchbar_8cpp_source.html#l00238">caseSensitiveChecked()</a>, <a class="el" href="searchbar_8cpp_source.html#l00233">exactMatchChecked()</a>, <a class="el" href="searchbar_8cpp_source.html#l00176">getCurrentText()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__editor_8cpp_source.html#l00383">hal::PythonEditor::handleSearchbarTextEdited()</a>, <a class="el" href="module__widget_8cpp_source.html#l00285">hal::ModuleWidget::updateSearchIcon()</a>, <a class="el" href="context__manager__widget_8cpp_source.html#l00210">hal::ContextManagerWidget::updateSearchIcon()</a>, and <a class="el" href="python__editor_8cpp_source.html#l01111">hal::PythonEditor::updateSearchIcon()</a>.</p>
 
@@ -1561,11 +1605,11 @@ Additional Inherited Members</h2></td></tr>
 <p>Gets the current <a class="el" href="classhal_1_1_searchbar.html" title="A QFrame with a QLineEdit that can be used to input a substring to search for.">Searchbar</a> input, i.e. the current text in the <a class="el" href="classhal_1_1_searchbar.html" title="A QFrame with a QLineEdit that can be used to input a substring to search for.">Searchbar</a>'s <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html">QLineEdit</a>.</p>
 <dl class="section return"><dt>Returns</dt><dd>the current search string </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00174">174</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00176">176</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#text-prop">QLineEdit::text</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="searchbar_8cpp_source.html#l00215">emitTextEdited()</a>, <a class="el" href="searchbar_8cpp_source.html#l00251">filterApplied()</a>, and <a class="el" href="python__editor_8cpp_source.html#l00394">hal::PythonEditor::handleCurrentTabChanged()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="searchbar_8cpp_source.html#l00217">emitTextEdited()</a>, <a class="el" href="searchbar_8cpp_source.html#l00266">filterApplied()</a>, and <a class="el" href="python__editor_8cpp_source.html#l00394">hal::PythonEditor::handleCurrentTabChanged()</a>.</p>
 
 </div>
 </div>
@@ -1586,11 +1630,11 @@ Additional Inherited Members</h2></td></tr>
 <p>Gets the current <a class="el" href="classhal_1_1_searchbar.html" title="A QFrame with a QLineEdit that can be used to input a substring to search for.">Searchbar</a> input with regex modifier.</p>
 <dl class="section return"><dt>Returns</dt><dd>the current search string </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00179">179</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00181">181</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="searchbar_8cpp_source.html#l00184">addFlags()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#text-prop">QLineEdit::text</a>.</p>
+<p class="reference">References <a class="el" href="searchbar_8cpp_source.html#l00186">addFlags()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#text-prop">QLineEdit::text</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="searchbar_8cpp_source.html#l00215">emitTextEdited()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="searchbar_8cpp_source.html#l00217">emitTextEdited()</a>.</p>
 
 </div>
 </div>
@@ -1609,7 +1653,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00246">246</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00248">248</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
 
 </div>
 </div>
@@ -1637,11 +1681,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Handles "Clear"-Button clicks. </p>
 
-<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00226">226</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00228">228</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="searchbar_8cpp_source.html#l00158">clear()</a>.</p>
+<p class="reference">References <a class="el" href="searchbar_8cpp_source.html#l00160">clear()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="searchbar_8cpp_source.html#l00017">Searchbar()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="searchbar_8cpp_source.html#l00018">Searchbar()</a>.</p>
 
 </div>
 </div>
@@ -1669,11 +1713,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Handles Return/Enter key pressed. Emits the signal returnPressed. </p>
 
-<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00221">221</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00223">223</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, and <a class="el" href="classhal_1_1_searchbar.html#aea1dcdf9154fe9e9b3a7dea5b0618c7e">returnPressed()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="searchbar_8cpp_source.html#l00017">Searchbar()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="searchbar_8cpp_source.html#l00018">Searchbar()</a>.</p>
 
 </div>
 </div>
@@ -1704,7 +1748,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#hideEvent">QWidget</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00164">164</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00166">166</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, and <a class="el" href="classhal_1_1_searchbar.html#a4df72cab4fd163079e81251f18acb0f1">textEdited()</a>.</p>
 
@@ -1726,11 +1770,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Reinitializes the appearance of the <a class="el" href="classhal_1_1_searchbar.html" title="A QFrame with a QLineEdit that can be used to input a substring to search for.">Searchbar</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00201">201</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00203">203</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstyle.html#polish">QStyle::polish()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#style">QWidget::style()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstyle.html#unpolish">QStyle::unpolish()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="searchbar_8cpp_source.html#l00215">emitTextEdited()</a>, and <a class="el" href="gatelibrary__management__dialog_8cpp_source.html#l00071">hal::GatelibraryManagementDialog::repolish()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="searchbar_8cpp_source.html#l00217">emitTextEdited()</a>, and <a class="el" href="gatelibrary__management__dialog_8cpp_source.html#l00071">hal::GatelibraryManagementDialog::repolish()</a>.</p>
 
 </div>
 </div>
@@ -1758,7 +1802,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Q_SIGNAL that is emitted whenever the Return/Enter key has been pressed. </p>
 
-<p class="reference">Referenced by <a class="el" href="searchbar_8cpp_source.html#l00221">handleReturnPressed()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="searchbar_8cpp_source.html#l00223">handleReturnPressed()</a>.</p>
 
 </div>
 </div>
@@ -1776,6 +1820,33 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="acc6129bc47b6295ecedc05e903f3fbf7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc6129bc47b6295ecedc05e903f3fbf7">&#9670;&nbsp;</a></span>searchIconClicked</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::Searchbar::searchIconClicked </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="comment__widget_8cpp_source.html#l00022">hal::CommentWidget::CommentWidget()</a>, and <a class="el" href="searchbar_8cpp_source.html#l00253">eventFilter()</a>.</p>
 
 </div>
 </div>
@@ -1812,7 +1883,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00133">133</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00135">135</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
 
 </div>
 </div>
@@ -1832,7 +1903,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00138">138</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00140">140</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#style">QWidget::style()</a>.</p>
 
@@ -1854,7 +1925,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00123">123</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00125">125</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
 
 </div>
 </div>
@@ -1874,7 +1945,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00128">128</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00130">130</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#style">QWidget::style()</a>.</p>
 
@@ -1896,9 +1967,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00241">241</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00243">243</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__editor_8cpp_source.html#l00176">hal::PythonEditor::PythonEditor()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="comment__widget_8cpp_source.html#l00022">hal::CommentWidget::CommentWidget()</a>, and <a class="el" href="python__editor_8cpp_source.html#l00176">hal::PythonEditor::PythonEditor()</a>.</p>
 
 </div>
 </div>
@@ -1918,7 +1989,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00143">143</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00145">145</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
 
 </div>
 </div>
@@ -1938,7 +2009,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00148">148</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00150">150</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#style">QWidget::style()</a>.</p>
 
@@ -1967,7 +2038,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00153">153</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00155">155</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#placeholderText-prop">QLineEdit::setPlaceholderText()</a>.</p>
 
@@ -1989,7 +2060,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00113">113</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00115">115</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
 
 </div>
 </div>
@@ -2009,7 +2080,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00118">118</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00120">120</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#style">QWidget::style()</a>.</p>
 
@@ -2042,9 +2113,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#showEvent">QWidget</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00169">169</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="searchbar_8cpp_source.html#l00171">171</a> of file <a class="el" href="searchbar_8cpp_source.html">searchbar.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="searchbar_8cpp_source.html#l00215">emitTextEdited()</a>.</p>
+<p class="reference">References <a class="el" href="searchbar_8cpp_source.html#l00217">emitTextEdited()</a>.</p>
 
 </div>
 </div>
@@ -2079,7 +2150,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="context__manager__widget_8cpp_source.html#l00038">hal::ContextManagerWidget::ContextManagerWidget()</a>, <a class="el" href="searchbar_8cpp_source.html#l00215">emitTextEdited()</a>, <a class="el" href="gatelibrary__management__dialog_8cpp_source.html#l00021">hal::GatelibraryManagementDialog::GatelibraryManagementDialog()</a>, <a class="el" href="gate__select__model_8cpp_source.html#l00227">hal::GateSelectView::GateSelectView()</a>, <a class="el" href="grouping__dialog_8cpp_source.html#l00016">hal::GroupingDialog::GroupingDialog()</a>, <a class="el" href="grouping__manager__widget_8cpp_source.html#l00035">hal::GroupingManagerWidget::GroupingManagerWidget()</a>, <a class="el" href="searchbar_8cpp_source.html#l00164">hideEvent()</a>, <a class="el" href="main__settings__widget_8cpp_source.html#l00082">hal::MainSettingsWidget::MainSettingsWidget()</a>, <a class="el" href="module__dialog_8cpp_source.html#l00024">hal::ModuleDialog::ModuleDialog()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00310">hal::ModuleSelectView::ModuleSelectView()</a>, <a class="el" href="module__widget_8cpp_source.html#l00031">hal::ModuleWidget::ModuleWidget()</a>, <a class="el" href="python__editor_8cpp_source.html#l00176">hal::PythonEditor::PythonEditor()</a>, and <a class="el" href="selection__details__widget_8cpp_source.html#l00057">hal::SelectionDetailsWidget::SelectionDetailsWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="comment__widget_8cpp_source.html#l00022">hal::CommentWidget::CommentWidget()</a>, <a class="el" href="context__manager__widget_8cpp_source.html#l00038">hal::ContextManagerWidget::ContextManagerWidget()</a>, <a class="el" href="searchbar_8cpp_source.html#l00217">emitTextEdited()</a>, <a class="el" href="gatelibrary__management__dialog_8cpp_source.html#l00021">hal::GatelibraryManagementDialog::GatelibraryManagementDialog()</a>, <a class="el" href="gate__select__model_8cpp_source.html#l00227">hal::GateSelectView::GateSelectView()</a>, <a class="el" href="grouping__dialog_8cpp_source.html#l00016">hal::GroupingDialog::GroupingDialog()</a>, <a class="el" href="grouping__manager__widget_8cpp_source.html#l00035">hal::GroupingManagerWidget::GroupingManagerWidget()</a>, <a class="el" href="searchbar_8cpp_source.html#l00166">hideEvent()</a>, <a class="el" href="main__settings__widget_8cpp_source.html#l00082">hal::MainSettingsWidget::MainSettingsWidget()</a>, <a class="el" href="module__dialog_8cpp_source.html#l00024">hal::ModuleDialog::ModuleDialog()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00310">hal::ModuleSelectView::ModuleSelectView()</a>, <a class="el" href="module__widget_8cpp_source.html#l00031">hal::ModuleWidget::ModuleWidget()</a>, <a class="el" href="python__editor_8cpp_source.html#l00176">hal::PythonEditor::PythonEditor()</a>, and <a class="el" href="selection__details__widget_8cpp_source.html#l00058">hal::SelectionDetailsWidget::SelectionDetailsWidget()</a>.</p>
 
 </div>
 </div>
@@ -2286,7 +2357,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_searchbar.html">Searchbar</a></li>
-    <li class="footer">Generated on Tue Dec 20 2022 12:08:02 for HAL by
+    <li class="footer">Generated on Thu Dec 22 2022 22:50:36 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

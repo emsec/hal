@@ -1,10 +1,10 @@
 <map id="/home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/graph_widget.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/graph_widget.h">
-<area shape="rect" id="node1" title=" " alt="" coords="1368,5,1547,76"/>
+<area shape="rect" id="node1" title=" " alt="" coords="1447,5,1626,76"/>
 <area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="428,392,568,419"/>
 <area shape="rect" id="node7" href="$gui__globals_8h.html" title=" " alt="" coords="649,131,781,158"/>
-<area shape="rect" id="node16" href="$gui__def_8h.html" title=" " alt="" coords="1005,310,1110,337"/>
-<area shape="rect" id="node19" href="$content__widget_8h.html" title=" " alt="" coords="1495,124,1642,165"/>
-<area shape="rect" id="node20" title=" " alt="" coords="1666,131,1729,158"/>
+<area shape="rect" id="node16" href="$gui__def_8h.html" title=" " alt="" coords="1109,310,1214,337"/>
+<area shape="rect" id="node19" href="$content__widget_8h.html" title=" " alt="" coords="1574,124,1720,165"/>
+<area shape="rect" id="node20" title=" " alt="" coords="1745,131,1808,158"/>
 <area shape="rect" id="node3" title=" " alt="" coords="284,467,375,493"/>
 <area shape="rect" id="node4" title=" " alt="" coords="400,467,486,493"/>
 <area shape="rect" id="node5" title=" " alt="" coords="510,467,597,493"/>
@@ -18,5 +18,5 @@
 <area shape="rect" id="node14" href="$python__context_8h.html" title=" " alt="" coords="752,221,960,247"/>
 <area shape="rect" id="node15" href="$selection__relay_8h.html" title=" " alt="" coords="985,213,1130,255"/>
 <area shape="rect" id="node17" href="$gui__api_8h.html" title=" " alt="" coords="1154,221,1310,247"/>
-<area shape="rect" id="node18" title=" " alt="" coords="1335,221,1420,247"/>
+<area shape="rect" id="node18" href="$comment__manager_8h.html" title=" " alt="" coords="1334,213,1498,255"/>
 </map>

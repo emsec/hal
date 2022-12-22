@@ -159,7 +159,8 @@ $(document).ready(function(){initNavTree('functions_d.html',''); initResizable()
 : <a class="el" href="structhal_1_1_logger_settings.html#a03715354b95165e3722aee1ad1163eb1">hal::LoggerSettings</a>
 </li>
 <li>defaultColor
-: <a class="el" href="classhal_1_1_logger_qss_adapter.html#aa1b9e5116ee41bcb11c0985dfdf4d29d">hal::LoggerQssAdapter</a>
+: <a class="el" href="classhal_1_1_comment_dialog.html#ad8fa287606d599f9907c4b3f899aa9ad">hal::CommentDialog</a>
+, <a class="el" href="classhal_1_1_logger_qss_adapter.html#aa1b9e5116ee41bcb11c0985dfdf4d29d">hal::LoggerQssAdapter</a>
 </li>
 <li>defaultGridHeight()
 : <a class="el" href="classhal_1_1_graph_layouter.html#a38e4d850112fab62190ec4c6353900a5">hal::GraphLayouter</a>
@@ -201,8 +202,20 @@ $(document).ready(function(){initNavTree('functions_d.html',''); initResizable()
 <li>delete_pin_group()
 : <a class="el" href="classhal_1_1_module.html#aeb0e98c2056854a17ac7a1ab1158b4bc">hal::Module</a>
 </li>
+<li>delete_requested()
+: <a class="el" href="classhal_1_1_comment_item.html#a10e919b4a23456dd3e2e9ed3be4c10d0">hal::CommentItem</a>
+</li>
 <li>deleteAllItems()
 : <a class="el" href="classhal_1_1_graphics_scene.html#a0a15f1459122eb8fc2936f5a60a1af13">hal::GraphicsScene</a>
+</li>
+<li>deleteComment()
+: <a class="el" href="classhal_1_1_comment_manager.html#ae513d04dfbede192e596eadb0a195f8e">hal::CommentManager</a>
+</li>
+<li>deleteCommentIconPath
+: <a class="el" href="classhal_1_1_comment_item.html#a8f00e40b42ae2b84853106844a749712">hal::CommentItem</a>
+</li>
+<li>deleteCommentIconStyle
+: <a class="el" href="classhal_1_1_comment_item.html#ab492bee784852760f424f2f436af5e5a">hal::CommentItem</a>
 </li>
 <li>deleteContent()
 : <a class="el" href="classhal_1_1_content_manager.html#a3f44df886385f5fa85dd5ea929d7e18d">hal::ContentManager</a>
@@ -243,13 +256,14 @@ $(document).ready(function(){initNavTree('functions_d.html',''); initResizable()
 : <a class="el" href="classhal_1_1_gui_api.html#a2f4b8531cb657d637415d433234020b2">hal::GuiApi</a>
 </li>
 <li>deselectModule()
-: <a class="el" href="classhal_1_1_gui_api.html#ad3a2e0a2931cb638dda0a590c1621b5b">hal::GuiApi</a>
+: <a class="el" href="classhal_1_1_gui_api.html#a07beac51748c42e249beb70a911a53a3">hal::GuiApi</a>
 </li>
 <li>deselectNet()
-: <a class="el" href="classhal_1_1_gui_api.html#aa9319619c8075f82b3791c066778b85a">hal::GuiApi</a>
+: <a class="el" href="classhal_1_1_gui_api.html#a00dc8f04eb60ac3de9b882647246e2e7">hal::GuiApi</a>
 </li>
 <li>deserialize()
-: <a class="el" href="classhal_1_1_graph_context_serializer.html#aa3282d2b19cde8312d7aca7d3a4b52a5">hal::GraphContextSerializer</a>
+: <a class="el" href="classhal_1_1_comment_manager.html#a04ab5cb17ea76f2dcd70ca224e2996cf">hal::CommentManager</a>
+, <a class="el" href="classhal_1_1_graph_context_serializer.html#aa3282d2b19cde8312d7aca7d3a4b52a5">hal::GraphContextSerializer</a>
 , <a class="el" href="classhal_1_1_grouping_color_serializer.html#a6e753feb0ed10a2ec655bc71e6099709">hal::GroupingColorSerializer</a>
 , <a class="el" href="classhal_1_1_grouping_serializer.html#a3b286be87b2b0f78c988b74a71c71b7d">hal::GroupingSerializer</a>
 , <a class="el" href="classhal_1_1_module_color_serializer.html#a769c749c1208ab2a0e3f584091b208ee">hal::ModuleColorSerializer</a>
@@ -313,11 +327,11 @@ $(document).ready(function(){initNavTree('functions_d.html',''); initResizable()
 <li>DirectoryRange()
 : <a class="el" href="classhal_1_1utils_1_1_directory_range.html#ab98604808d3da3e5492578bfc9f2cb3e">hal::utils::DirectoryRange</a>
 </li>
-<li>DirectoryStatus
-: <a class="el" href="classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2">hal::FileManager</a>
-</li>
 <li>directoryStatus()
 : <a class="el" href="classhal_1_1_file_manager.html#a408006dc497476d24c0114c5c1e37de3">hal::FileManager</a>
+</li>
+<li>DirectoryStatus
+: <a class="el" href="classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2">hal::FileManager</a>
 </li>
 <li>directoryStatusText()
 : <a class="el" href="classhal_1_1_file_manager.html#afde93a6dfaa879b6c66e6402fd58f580">hal::FileManager</a>
@@ -328,7 +342,7 @@ $(document).ready(function(){initNavTree('functions_d.html',''); initResizable()
 <li>disabledIconStyle
 : <a class="el" href="classhal_1_1_context_manager_widget.html#a8ccb134ea0b8dfe8e06ab0c5b19232ee">hal::ContextManagerWidget</a>
 , <a class="el" href="classhal_1_1_grouping_manager_widget.html#a7203b6ebf6ddb801ac9d2ca038698751">hal::GroupingManagerWidget</a>
-, <a class="el" href="classhal_1_1_main_window.html#a7a31c22c730a78c769fdbff03f118764">hal::MainWindow</a>
+, <a class="el" href="classhal_1_1_main_window.html#a7373720942962d281f207ec48614c084">hal::MainWindow</a>
 , <a class="el" href="classhal_1_1_python_editor.html#affc9e3c3c2ceff320f24c91da73e4291">hal::PythonEditor</a>
 , <a class="el" href="classhal_1_1_selection_details_widget.html#a20ffc750d4e0fbdcca3049155d984465">hal::SelectionDetailsWidget</a>
 </li>
@@ -391,8 +405,8 @@ $(document).ready(function(){initNavTree('functions_d.html',''); initResizable()
 <li>Down
 : <a class="el" href="classhal_1_1_net_layout_direction.html#a804a82ac3192d771ed7a64fe9137f142a289390073c8ba9306c68992122f62026">hal::NetLayoutDirection</a>
 </li>
-<li>dragActive()
-: <a class="el" href="classhal_1_1_open_file_widget.html#ab05e51bf4dda8c7240fa68025437ad07">hal::OpenFileWidget</a>
+<li>dragActive
+: <a class="el" href="classhal_1_1_open_file_widget.html#a6cf3ab2dfa9081ca4bb107227220ed26">hal::OpenFileWidget</a>
 </li>
 <li>DragCue
 : <a class="el" href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012b">hal::NodeDragShadow</a>
@@ -435,7 +449,8 @@ $(document).ready(function(){initNavTree('functions_d.html',''); initResizable()
 , <a class="el" href="struct_abc___obj__t__.html#a234c510121ca684775c7ab679b7edb93">Abc_Obj_t_</a>
 </li>
 <li>dump()
-: <a class="el" href="classhal_1_1_json_write_document.html#a69c9337047caabef341435e407b63da0">hal::JsonWriteDocument</a>
+: <a class="el" href="classhal_1_1_comment_entry.html#ac9ed0f95da37e872ffbb6be23d9d0b51">hal::CommentEntry</a>
+, <a class="el" href="classhal_1_1_json_write_document.html#a69c9337047caabef341435e407b63da0">hal::JsonWriteDocument</a>
 , <a class="el" href="classhal_1_1_net_layout_connection_factory.html#a3d24a41876ae685e433d96f4eda72e80">hal::NetLayoutConnectionFactory</a>
 , <a class="el" href="classhal_1_1_net_layout_junction.html#a250da2467d1ad3f9c57eca9dcb04fbcb">hal::NetLayoutJunction</a>
 , <a class="el" href="classhal_1_1_net_layout_junction_entries.html#adc36b8cf96e0d7085f79036da15a9268">hal::NetLayoutJunctionEntries</a>
@@ -450,11 +465,11 @@ $(document).ready(function(){initNavTree('functions_d.html',''); initResizable()
 <li>dumpNodePositions()
 : <a class="el" href="classhal_1_1_graph_layouter.html#a5e128152ac90a4e92d5422555867f952">hal::GraphLayouter</a>
 </li>
-<li>duplicateIconPath()
-: <a class="el" href="classhal_1_1_context_manager_widget.html#a3c6ec92b7f0b6f0c55eda28e2e18b851">hal::ContextManagerWidget</a>
+<li>duplicateIconPath
+: <a class="el" href="classhal_1_1_context_manager_widget.html#ad458cd90596e426b2753b31187ad68fc">hal::ContextManagerWidget</a>
 </li>
-<li>duplicateIconStyle
-: <a class="el" href="classhal_1_1_context_manager_widget.html#a8587904f9354f77549088e11cf509d8d">hal::ContextManagerWidget</a>
+<li>duplicateIconStyle()
+: <a class="el" href="classhal_1_1_context_manager_widget.html#a9ba380c58d7a316e815a354aec3121c2">hal::ContextManagerWidget</a>
 </li>
 </ul>
 </div><!-- contents -->
@@ -462,7 +477,7 @@ $(document).ready(function(){initNavTree('functions_d.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Dec 20 2022 12:08:05 for HAL by
+    <li class="footer">Generated on Thu Dec 22 2022 22:50:38 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -36,6 +36,23 @@ var group__gui =
       [ "setHeaderLabels", "classhal_1_1_base_tree_model.html#aee85a904236791128d23dd8de5415a7c", null ],
       [ "mRootItem", "classhal_1_1_base_tree_model.html#ac788cf49960622718a22ed371a347476", null ]
     ] ],
+    [ "CommentEntry", "classhal_1_1_comment_entry.html", [
+      [ "CommentEntry", "classhal_1_1_comment_entry.html#a4abc144a88ef10bf8352c11b7ca9ceff", null ],
+      [ "CommentEntry", "classhal_1_1_comment_entry.html#a7faa99565f4586120dd862b7b25dfe10", null ],
+      [ "~CommentEntry", "classhal_1_1_comment_entry.html#a6be3b3a130444359b5fa70cde50f9eb5", null ],
+      [ "dump", "classhal_1_1_comment_entry.html#ac9ed0f95da37e872ffbb6be23d9d0b51", null ],
+      [ "getCreationTime", "classhal_1_1_comment_entry.html#a12ccc7c6517bfbdc2f73c8b8bbd312cf", null ],
+      [ "getDateFormatString", "classhal_1_1_comment_entry.html#a6f9d0d5e97429f24a0627468060969e8", null ],
+      [ "getHeader", "classhal_1_1_comment_entry.html#a14fe198e529ed9860ca9ebbcc39e8388", null ],
+      [ "getLastModifiedTime", "classhal_1_1_comment_entry.html#a13544e60515a6374dabd441fb3c0ae83", null ],
+      [ "getNode", "classhal_1_1_comment_entry.html#a558720d3ec28bc9cfb70c44fa6f96dff", null ],
+      [ "getText", "classhal_1_1_comment_entry.html#a6d02e9038d1e93bfb00422b37e418a04", null ],
+      [ "isInvalid", "classhal_1_1_comment_entry.html#a0d32c73661199bffef805763582df4bf", null ],
+      [ "setDirty", "classhal_1_1_comment_entry.html#a55185e09cd0f4f8681a8d12195754497", null ],
+      [ "setHeader", "classhal_1_1_comment_entry.html#ac6a31d6631fbf38a7893e93a6fd2b06c", null ],
+      [ "setText", "classhal_1_1_comment_entry.html#a6e598d0027935a222773655b6b7366d9", null ],
+      [ "toJson", "classhal_1_1_comment_entry.html#a2dda7a00e13f564e8722f883f6c45cd2", null ]
+    ] ],
     [ "ContentLayoutArea", "classhal_1_1_content_layout_area.html", [
       [ "ContentLayoutArea", "classhal_1_1_content_layout_area.html#a50fe3e390dcf3c061f6ad53e6afd0bcc", null ],
       [ "addContent", "classhal_1_1_content_layout_area.html#a0ccb12440d31886fbb9975dbe6cbda03", null ],
@@ -466,6 +483,7 @@ var group__gui =
     ] ],
     [ "WidgetOverlay", "classhal_1_1_widget_overlay.html", [
       [ "WidgetOverlay", "classhal_1_1_widget_overlay.html#a7de74f4f0a26ddc50ff3c531d1cb2408", null ],
+      [ "clearWidget", "classhal_1_1_widget_overlay.html#ade550bd3a0e42ea62ee3d75ff43f8635", null ],
       [ "setWidget", "classhal_1_1_widget_overlay.html#ad2a426756b018ad2979e548682a9bb01", null ]
     ] ],
     [ "PluginRelay", "classhal_1_1_plugin_relay.html", [
@@ -485,6 +503,7 @@ var group__gui =
       [ "clearIcon", "classhal_1_1_searchbar.html#a5baf304e4eba9e28430f3e511dfd6026", null ],
       [ "clearIconStyle", "classhal_1_1_searchbar.html#a2b5a7b7acf1da0cb92d504b84238dfab", null ],
       [ "emitTextEdited", "classhal_1_1_searchbar.html#a5006dc6dc49f7e3327e8ddd60f95ccaa", null ],
+      [ "eventFilter", "classhal_1_1_searchbar.html#adf9e19d8b335700e107d14d84828c884", null ],
       [ "exactMatchChecked", "classhal_1_1_searchbar.html#aec8ed6685ad0ac4ffe847eeb18a3b13d", null ],
       [ "exactMatchIcon", "classhal_1_1_searchbar.html#a3e27c27f706a97b890d3c27bd6e886c6", null ],
       [ "exactMatchIconStyle", "classhal_1_1_searchbar.html#adb1a9291731f9f2325b6105529dd4e77", null ],
@@ -498,6 +517,7 @@ var group__gui =
       [ "repolish", "classhal_1_1_searchbar.html#a1064c3a7d77df4b790a298fc9fc9af8f", null ],
       [ "returnPressed", "classhal_1_1_searchbar.html#aea1dcdf9154fe9e9b3a7dea5b0618c7e", null ],
       [ "searchIcon", "classhal_1_1_searchbar.html#a0bddf7bc8db94ca30a99e5658c3a09da", null ],
+      [ "searchIconClicked", "classhal_1_1_searchbar.html#acc6129bc47b6295ecedc05e903f3fbf7", null ],
       [ "searchIconStyle", "classhal_1_1_searchbar.html#a82238d96b4797c9310c43205b1425657", null ],
       [ "setCaseSensitivityIcon", "classhal_1_1_searchbar.html#a3ebc0f3c3ec39511033db77738a1c804", null ],
       [ "setCaseSensitivityIconStyle", "classhal_1_1_searchbar.html#af4a5a29e49d854119264afff38a5e4b3", null ],

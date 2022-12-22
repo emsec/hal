@@ -1,6 +1,6 @@
 var classhal_1_1_graph_layouter =
 [
-    [ "GraphLayouter", "classhal_1_1_graph_layouter.html#a957fa4c5303f49e601a7906ae653b65d", null ],
+    [ "GraphLayouter", "classhal_1_1_graph_layouter.html#a582598dce420caed4143c16a6583cb22", null ],
     [ "~GraphLayouter", "classhal_1_1_graph_layouter.html#a40ebcd1c03039fe35602588e3950340b", null ],
     [ "add", "classhal_1_1_graph_layouter.html#a51184898aba8a3359b1cb4ec8ea29843", null ],
     [ "alternateLayout", "classhal_1_1_graph_layouter.html#a42a1f1a565b63cbfa24ae215b088639d", null ],
@@ -33,9 +33,9 @@ var classhal_1_1_graph_layouter =
     [ "swapNodePositions", "classhal_1_1_graph_layouter.html#a3f56e5f1f0fa2cd19e4773a09021e511", null ],
     [ "xValues", "classhal_1_1_graph_layouter.html#a237bfbe5d88777e3ae96622c1306588d", null ],
     [ "yValues", "classhal_1_1_graph_layouter.html#a0cf1a3d2b61a728278527a1615953536", null ],
-    [ "mContext", "classhal_1_1_graph_layouter.html#ad138a86a719c89dbf1a923d4c5a912d7", null ],
     [ "mNodeToPositionMap", "classhal_1_1_graph_layouter.html#aeaeddcf086701a164f02e5de0740bac1", null ],
     [ "mNodeToPositionRollback", "classhal_1_1_graph_layouter.html#a23a1081997f0b964ea9f4d52b66ec7c8", null ],
+    [ "mParentContext", "classhal_1_1_graph_layouter.html#ae32c79acff59dff2a186a891a59b1ed0", null ],
     [ "mPositionToNodeMap", "classhal_1_1_graph_layouter.html#a446ea8d8b55b22fb8343ec87e790d14c", null ],
     [ "mScene", "classhal_1_1_graph_layouter.html#a5994e7e9693cce878c09fc059eaab324", null ]
 ];
