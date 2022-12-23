@@ -6,9 +6,10 @@
 
 #include <deque>
 
+// #define PRINT
+
 namespace hal
 {
-
     extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
     {
         return std::make_unique<BitorderPropagationPlugin>();
@@ -136,44 +137,11 @@ namespace hal
         }
 
         /*
-         * This function checks whether a net is a output/input pin of a module and incase it is checks whether the pin group that it leads to has an already known bit order and returns the index. 
+         * This function gathers the connected neighboring pingroups for a net by propagating to the neighboring gates and searches for module pin groups.
          */
-        Result<std::pair<MPG, u32>> gather_bit_index_from_origin(Net* n, Module* m, const std::map<MPG, std::map<Net*, u32>>& wellformed_module_pin_groups, const bool successors)
+        Result<std::map<MPG, std::set<Net*>>> gather_conntected_neighbors(Net* n, Module* module_border, std::unordered_set<Gate*>& visited, bool successors)
         {
-            bool is_border_pin = successors ? m->is_input_net(n) : m->is_output_net(n);
-            if (is_border_pin)
-            {
-                auto border_pin = m->get_pin_by_net(n);
-                if (border_pin == nullptr)
-                {
-                    return ERR("cannot get bit index information for net with ID " + std::to_string(n->get_id()) + " from module with ID " + std::to_string(m->get_id())
-                               + ": net is border net but does not have a pin.");
-                }
-                auto pg = border_pin->get_group().first;
-
-                if (auto it = wellformed_module_pin_groups.find({m, pg}); it != wellformed_module_pin_groups.end())
-                {
-                    auto wellformed_bitorder = it->second;
-                    if (auto bitorder_it = wellformed_bitorder.find(n); bitorder_it != wellformed_bitorder.end())
-                    {
-                        return OK({{m, pg}, bitorder_it->second});
-                    }
-                }
-            }
-
-            return OK({{nullptr, nullptr}, 0});
-        }
-
-        /*
-         * This function gathers bit index information for a net by propagating to the neighboring gates and searches for module pin groups with already known pin groups.
-         */
-        Result<POSSIBLE_BITINDICES> gather_bit_indices_for_net(Net* n,
-                                                               Module* module_border,
-                                                               const std::map<MPG, std::map<Net*, u32>>& wellformed_module_pin_groups,
-                                                               std::unordered_set<Gate*>& visited,
-                                                               bool successors = true)
-        {
-            POSSIBLE_BITINDICES origin_to_bit_indices;
+            std::map<MPG, std::set<Net*>> connected_neighbors;
 
             const bool print = false;
 
@@ -186,22 +154,22 @@ namespace hal
             // check whether the net is a global input or global output net (has no sources or destinations, but might have a bitorder annotated at the top module)
             if ((successors && n->is_global_output_net()) || (!successors && n->is_global_input_net()))
             {
-                auto top_module = n->get_netlist()->get_top_module();
-                const auto res  = gather_bit_index_from_origin(n, top_module, wellformed_module_pin_groups, !successors);
-                if (res.is_error())
+                auto m             = n->get_netlist()->get_top_module();
+                bool is_border_pin = successors ? m->is_input_net(n) : m->is_output_net(n);
+                if (is_border_pin)
                 {
-                    return ERR_APPEND(res.get_error(),
-                                      "cannot gather bit indices for net with ID " + std::to_string(n->get_id()) + " failed to gather index at module with ID " + std::to_string(top_module->get_id()));
-                }
-                const auto [mpg, index] = res.get();
+                    auto border_pin = m->get_pin_by_net(n);
+                    if (border_pin == nullptr)
+                    {
+                        return ERR("cannot get bit index information for net with ID " + std::to_string(n->get_id()) + " from module with ID " + std::to_string(m->get_id())
+                                   + ": net is border net but does not have a pin.");
+                    }
+                    auto pg = border_pin->get_group().first;
 
-                // check whether we actually found a new index
-                if (mpg.first != nullptr)
-                {
-                    origin_to_bit_indices[mpg].insert(index);
+                    connected_neighbors[{m, pg}].insert(n);
                 }
 
-                return OK(origin_to_bit_indices);
+                return OK(connected_neighbors);
             }
 
             const auto neighbors = successors ? n->get_destinations() : n->get_sources();
@@ -225,8 +193,6 @@ namespace hal
                 }
                 visited.insert(g);
 
-                Module* found_module = g->get_module();
-
                 // check whether we left a previously entered module
                 if (!module_border->contains_gate(g, true))
                 {
@@ -235,27 +201,24 @@ namespace hal
                         std::cout << "Encountered gate " << g->get_id() << " that was not part of the module border." << std::endl;
                     }
 
-                    const auto res = gather_bit_index_from_origin(n, module_border, wellformed_module_pin_groups, !successors);
-                    if (res.is_error())
+                    bool is_border_pin = !successors ? module_border->is_input_net(n) : module_border->is_output_net(n);
+                    if (is_border_pin)
                     {
-                        return ERR_APPEND(res.get_error(),
-                                          "cannot gather bit indices for net with ID " + std::to_string(n->get_id()) + " failed to gather index at module with ID "
-                                              + std::to_string(module_border->get_id()));
-                    }
-                    const auto [mpg, index] = res.get();
-
-                    // check whether we actually found a new index
-                    if (mpg.first != nullptr)
-                    {
-                        if (print)
+                        auto border_pin = module_border->get_pin_by_net(n);
+                        if (border_pin == nullptr)
                         {
-                            std::cout << "Found index " << index << " at module " << mpg.first->get_id() << " and pin group " << mpg.second->get_name() << std::endl;
+                            return ERR("cannot get bit index information for net with ID " + std::to_string(n->get_id()) + " from module with ID " + std::to_string(module_border->get_id())
+                                       + ": net is border net but does not have a pin.");
                         }
-                        origin_to_bit_indices[mpg].insert(index);
+                        auto border_pg = border_pin->get_group().first;
+
+                        connected_neighbors[{module_border, border_pg}].insert(n);
                     }
 
                     continue;
                 }
+
+                Module* found_module = g->get_module();
 
                 // reached another module that is not the module we are currently in
                 if (found_module != module_border)
@@ -265,24 +228,18 @@ namespace hal
                         std::cout << "Found new module  " << found_module->get_id() << std::endl;
                     }
 
-                    const auto res = gather_bit_index_from_origin(n, found_module, wellformed_module_pin_groups, successors);
-                    if (res.is_error())
+                    bool is_border_pin = successors ? found_module->is_input_net(n) : found_module->is_output_net(n);
+                    if (is_border_pin)
                     {
-                        return ERR_APPEND(res.get_error(),
-                                          "cannot gather bit indices for net with ID " + std::to_string(n->get_id()) + " failed to gather index at module with ID "
-                                              + std::to_string(found_module->get_id()));
-                    }
-                    const auto [mpg, index] = res.get();
-
-                    // check whether we actually found a new index
-                    if (mpg.first != nullptr)
-                    {
-                        if (print)
+                        auto border_pin = found_module->get_pin_by_net(n);
+                        if (border_pin == nullptr)
                         {
-                            std::cout << "Found index " << index << " at module " << mpg.first->get_id() << " and pin group " << mpg.second->get_name() << std::endl;
+                            return ERR("cannot get bit index information for net with ID " + std::to_string(n->get_id()) + " from module with ID " + std::to_string(found_module->get_id())
+                                       + ": net is border net but does not have a pin.");
                         }
-                        origin_to_bit_indices[mpg].insert(index);
-                        continue;
+                        auto found_pg = border_pin->get_group().first;
+
+                        connected_neighbors[{found_module, found_pg}].insert(n);
                     }
 
                     // only stop propagation at modules with no submodules
@@ -294,7 +251,7 @@ namespace hal
 
                 // propagate and stop at gates that have unsupported gates types
                 std::vector<Net*> next_nets;
-                if (g->get_type()->has_property(GateTypeProperty::combinational))
+                if (!g->get_type()->has_property(GateTypeProperty::sequential))
                 {
                     next_nets = successors ? g->get_fan_out_nets() : g->get_fan_in_nets();
                 }
@@ -310,24 +267,24 @@ namespace hal
                     }
                 }
 
-                std::unordered_set<Gate*> new_visited = visited;
+                /*std::unordered_set<Gate*> new_visited = visited;*/
 
                 for (Net* next_n : next_nets)
                 {
-                    auto res = gather_bit_indices_for_net(next_n, found_module, wellformed_module_pin_groups, new_visited, successors);
+                    auto res = gather_conntected_neighbors(next_n, found_module, /*new_*/ visited, successors);
                     if (res.is_error())
                     {
                         return res;
                     }
 
-                    for (auto& [org_mpg, possible_indices] : res.get())
+                    for (auto& [org_mpg, nets] : res.get())
                     {
-                        origin_to_bit_indices[org_mpg].insert(possible_indices.begin(), possible_indices.end());
+                        connected_neighbors[org_mpg].insert(nets.begin(), nets.end());
                     }
                 }
             }
 
-            return OK(origin_to_bit_indices);
+            return OK(connected_neighbors);
         }
 
         /*
@@ -335,337 +292,315 @@ namespace hal
          * First conflicting information is deleted, second offsets between different information origins are calculated and lastly the resulting bitorder is validated in terms of continuity and completeness.
          * The Validation strictness can be tweaked with the parameter 'only_allow_consecutive_bitorders'.
          */
-        std::map<MPG, std::map<Net*, u32>> extract_well_formed_bitorder(const std::map<MPG, std::map<Net*, POSSIBLE_BITINDICES>>& collected_bitindices, bool only_allow_consecutive_bitorders = true)
+        std::map<Net*, u32> extract_well_formed_bitorder(const MPG& mpg, const std::map<Net*, POSSIBLE_BITINDICES>& collected_bitindices, bool only_allow_consecutive_bitorders = true)
         {
-            std::map<MPG, std::map<Net*, u32>> wellformed_pin_groups;
+            // ############################################### //
+            // ############### CONFLICT FINDING ############## //
+            // ############################################### //
 
-            bool print = true;
-
-            for (auto& [mpg, net_to_possible_bitindices] : collected_bitindices)
+#ifdef PRINT
+            for (const auto& [net, possible_bitindices] : collected_bitindices)
             {
-                auto m  = mpg.first;
-                auto pg = mpg.second;
-
-                // ############################################### //
-                // ############### CONFLICT FINDING ############## //
-                // ############################################### //
-
-                if (print)
+                std::cout << "\t\tNet " << net->get_id() << ": " << std::endl;
+                u32 origins = 0;
+                for (const auto& [org_mpg, indices] : possible_bitindices)
                 {
-                    std::cout << "Consens finding for Module " << m->get_name() << " with id " << m->get_id() << " and pingroup " << pg->get_name() << ": " << std::endl;
-                    std::cout << "\tPossible Indices for Pin group " << pg->get_name() << ": " << std::endl;
-                    for (const auto& [net, possible_bitindices] : net_to_possible_bitindices)
+                    auto org_m  = org_mpg.first;
+                    auto org_pg = org_mpg.second;
+
+                    std::cout << "\t\t\t" << org_m->get_id() << "-" << org_pg->get_name() << ": [";
+                    for (const auto& index : indices)
                     {
-                        std::cout << "\t\tNet " << net->get_id() << ": " << std::endl;
-                        u32 origins = 0;
-                        for (const auto& [org_mpg, indices] : possible_bitindices)
-                        {
-                            auto org_m  = org_mpg.first;
-                            auto org_pg = org_mpg.second;
+                        std::cout << index << ", ";
+                    }
+                    std::cout << "]" << std::endl;
+                    origins += 1;
+                }
 
-                            std::cout << "\t\t\t" << org_m->get_id() << "-" << org_pg->get_name() << ": [";
-                            for (const auto& index : indices)
-                            {
-                                std::cout << index << ", ";
-                            }
-                            std::cout << "]" << std::endl;
-                            origins += 1;
-                        }
+                std::cout << "\t\tORIGINS: [" << origins << "]" << std::endl;
+            }
+#endif
 
-                        std::cout << "\t\tORIGINS: [" << origins << "]" << std::endl;
+            // delete non-valid possible indices
+            // indices are considered non valid when:
+            //  - a pingroup annotates different indices for the same pin
+            //  - a pingroup annotates the same index to different pins
+
+            // 1)  Checks whether a net has multiple indices annotated from the same origin mpg
+            auto reduced_collected_indices = collected_bitindices;
+
+            for (auto& [net, possible_bitindices] : collected_bitindices)
+            {
+                for (auto& [org_mpg, indices] : possible_bitindices)
+                {
+                    if (indices.size() != 1)
+                    {
+                        reduced_collected_indices.at(net).erase(org_mpg);
                     }
                 }
 
-                // delete non-valid possible indices
-                // indices are considered non valid when:
-                //  - a pingroup annotates different indices for the same pin
-                //  - a pingroup annotates the same index to different pins
-
-                // 1)  Checks whether a net has multiple indices annotated from the same origin mpg
-                auto reduced_collected_indices = collected_bitindices.at(mpg);
-
-                for (auto& [net, possible_bitindices] : collected_bitindices.at(mpg))
+                if (reduced_collected_indices.at(net).empty())
                 {
-                    for (auto& [org_mpg, indices] : possible_bitindices)
-                    {
-                        if (indices.size() != 1)
-                        {
-                            reduced_collected_indices.at(net).erase(org_mpg);
-                        }
-                    }
-
-                    if (reduced_collected_indices.at(net).empty())
-                    {
-                        reduced_collected_indices.erase(net);
-                    }
+                    reduced_collected_indices.erase(net);
                 }
-
-                if (reduced_collected_indices.empty())
-                {
-                    continue;
-                }
-
-                // 2) Checks whether the mpg has annotated the same index to different nets
-                std::set<std::pair<MPG, u32>> origin_indices;
-                std::set<std::pair<MPG, u32>> origin_indices_to_remove;
-
-                for (auto& [net, possible_bitindices] : reduced_collected_indices)
-                {
-                    for (auto& [org_mpg, indices] : possible_bitindices)
-                    {
-                        u32 index = *(indices.begin());
-                        if (origin_indices.find({org_mpg, index}) != origin_indices.end())
-                        {
-                            origin_indices_to_remove.insert({org_mpg, index});
-                        }
-                        else
-                        {
-                            origin_indices.insert({org_mpg, index});
-                        }
-                    }
-                }
-
-                if (print)
-                {
-                    for (const auto& [org_mpg, index] : origin_indices_to_remove)
-                    {
-                        std::cout << "Found org " << org_mpg.first->get_id() << "-" << org_mpg.second->get_name() << " index " << index << " pair to remove!" << std::endl;
-                    }
-                }
-
-                auto further_reduced_collected_indices = reduced_collected_indices;
-                for (auto& [net, possible_bitindices] : reduced_collected_indices)
-                {
-                    for (auto& [org_mpg, indices] : possible_bitindices)
-                    {
-                        u32 index = *(indices.begin());
-                        if (origin_indices_to_remove.find({org_mpg, index}) != origin_indices_to_remove.end())
-                        {
-                            further_reduced_collected_indices.at(net).erase(org_mpg);
-                        }
-                    }
-
-                    if (further_reduced_collected_indices.at(net).empty())
-                    {
-                        further_reduced_collected_indices.erase(net);
-                    }
-                }
-
-                if (further_reduced_collected_indices.empty())
-                {
-                    continue;
-                }
-
-                // TODO remove debug printing
-                if (print)
-                {
-                    std::cout << "\tReduced Possible Indices for Module " << m->get_name() << " with id " << m->get_id() << " and pingroup " << pg->get_name() << ": " << std::endl;
-                    for (const auto& [net, possible_bitindices] : net_to_possible_bitindices)
-                    {
-                        std::cout << "\t\tNet " << net->get_id() << ": " << std::endl;
-                        u32 origins = 0;
-                        for (const auto& [org_mpg, indices] : possible_bitindices)
-                        {
-                            auto org_m  = org_mpg.first;
-                            auto org_pg = org_mpg.second;
-
-                            std::cout << "\t\t\t" << org_m->get_id() << "-" << org_pg->get_name() << ": [";
-                            for (const auto& index : indices)
-                            {
-                                std::cout << index << ", ";
-                            }
-                            std::cout << "]" << std::endl;
-                        }
-                    }
-                }
-                // End debug printing
-
-                // ######################################################## //
-                // ############### CONSENS FINDING - OFFSET ############### //
-                // ######################################################## //
-
-                // try to find a consens between the different possible indices
-                std::map<Net*, i32> consens_bitindices;
-
-                auto offset_matrix_res = build_offset_matrix(further_reduced_collected_indices);
-                if (offset_matrix_res.is_error())
-                {
-                    if (print)
-                    {
-                        std::cout << "Failed to build offset matrix : " << offset_matrix_res.get_error().get() << std::endl;
-                    }
-                    continue;
-                }
-                auto offset_matrix = offset_matrix_res.get();
-
-                auto base_line = offset_matrix.begin()->first;
-
-                // TODO remove
-                if (print)
-                {
-                    std::cout << "Found valid offsets pingroup " << pg->get_name() << ": " << std::endl;
-                    std::cout << "Baseline: " << base_line.first->get_id() << "-" << base_line.second->get_name() << std::endl;
-                    for (const auto& [org1, col] : offset_matrix)
-                    {
-                        std::cout << org1.first->get_id() << "-" << org1.second->get_name() << ": ";
-                        for (const auto& [org2, offset] : col)
-                        {
-                            std::cout << org2.first->get_id() << "-" << org2.second->get_name() << "[" << offset << "] ";
-                        }
-                        std::cout << std::endl;
-                    }
-                }
-
-                for (const auto& [net, possible_bitindices] : further_reduced_collected_indices)
-                {
-                    // pair of first possible org_mod and org_pin_group
-                    MPG org = possible_bitindices.begin()->first;
-                    // index at first possible origin
-                    i32 org_index = *(possible_bitindices.begin()->second.begin());
-                    std::set<std::set<MPG>> v;
-                    auto offset_res = get_offset(org, base_line, offset_matrix, v);
-                    if (offset_res.is_error())
-                    {
-                        if (possible_bitindices.size() == 1)
-                        {
-                            // if there cannot be found any valid offset to the baseline, but there is just one possible index annotated, we still allow it
-                            // -> this wont break anything, since this only allows for bitorders that we otherwise would have discarded because of a missing net
-                            consens_bitindices[net] = org_index;
-                        }
-                        else
-                        {
-                            // TODO remove
-                            // std::cout << "Cannot find connection from origin " << org.first->get_id() << "-" << org.second->get_name() << " to baseline!" << std::endl;
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        i32 offset              = offset_res.get();
-                        consens_bitindices[net] = org_index + offset;
-                        //std::cout << "Org Index: " << org_index << " Offset: " << offset << std::endl;
-                    }
-                }
-
-                if (print)
-                {
-                    std::cout << "Found offset bitorder for pingroup " << pg->get_name() << ": " << std::endl;
-                    for (const auto& [net, index] : consens_bitindices)
-                    {
-                        std::cout << net->get_id() << ": " << index << std::endl;
-                    }
-                }
-
-                // ############################################################## //
-                // ############### CONSENS FINDING - COMPLETENESS ############### //
-                // ############################################################## //
-
-                bool complete_pin_group_bitorder = true;
-                std::map<Net*, i32> complete_consens;
-
-                for (auto& pin : pg->get_pins())
-                {
-                    Net* net = pin->get_net();
-                    // Currently also ignoring power/gnd nets but a more optimal approach would be to optimize them away where they are not needed (but we only got LUT4)
-                    // -> maybe not, we would destroy 16 bit muxes if the top most MUX
-                    if (net->is_gnd_net() || net->is_vcc_net())
-                    {
-                        continue;
-                    }
-
-                    if (consens_bitindices.find(net) == consens_bitindices.end())
-                    {
-                        complete_pin_group_bitorder = false;
-
-                        // TODO remove
-                        // std::cout << "Missing in net " << in_net->get_id() << " for complete bitorder." << std::endl;
-
-                        break;
-                    }
-                    else
-                    {
-                        complete_consens[net] = consens_bitindices.at(net);
-                    }
-                }
-
-                if (!complete_pin_group_bitorder)
-                {
-                    continue;
-                }
-
-                // TODO remove
-                if (print)
-                {
-                    std::cout << "Found complete bitorder for pingroup " << pg->get_name() << std::endl;
-                    for (const auto& [net, index] : complete_consens)
-                    {
-                        std::cout << net->get_id() << ": " << index << std::endl;
-                    }
-                }
-
-                // ########################################################### //
-                // ############### CONSENS FINDING - ALIGNMENT ############### //
-                // ########################################################### //
-
-                std::map<Net*, u32> aligned_consens;
-
-                // align consens from m:m+n to 0:n
-                i32 max_index = 0x80000000;
-                i32 min_index = 0x7fffffff;
-                std::set<i32> unique_indices;
-                for (const auto& [_n, index] : complete_consens)
-                {
-                    unique_indices.insert(index);
-
-                    if (index > max_index)
-                    {
-                        max_index = index;
-                    }
-
-                    if (index < min_index)
-                    {
-                        min_index = index;
-                    }
-                }
-
-                // when the range is larger than pin group size there are holes in the bitorder
-                if (only_allow_consecutive_bitorders && ((max_index - min_index) > (i32(complete_consens.size()) - 1)))
-                {
-                    continue;
-                }
-
-                // when there are less unique indices in the range than nets, there are duplicates
-                if (unique_indices.size() < complete_consens.size())
-                {
-                    continue;
-                }
-
-                std::map<i32, Net*> index_to_net;
-                for (const auto& [net, index] : complete_consens)
-                {
-                    index_to_net[index] = net;
-                }
-
-                u32 index_counter = 0;
-                for (const auto& [_unaligned_index, net] : index_to_net)
-                {
-                    aligned_consens[net] = index_counter++;
-                }
-
-                // TODO remove
-                if (print)
-                {
-                    std::cout << "Found valid input bitorder for pingroup " << pg->get_name() << std::endl;
-                    for (const auto& [net, index] : aligned_consens)
-                    {
-                        std::cout << net->get_id() << ": " << index << std::endl;
-                    }
-                }
-
-                wellformed_pin_groups[mpg] = aligned_consens;
             }
 
-            return wellformed_pin_groups;
+            if (reduced_collected_indices.empty())
+            {
+                return {};
+            }
+
+            // 2) Checks whether the mpg has annotated the same index to different nets
+            std::set<std::pair<MPG, u32>> origin_indices;
+            std::set<std::pair<MPG, u32>> origin_indices_to_remove;
+
+            for (auto& [net, possible_bitindices] : reduced_collected_indices)
+            {
+                for (auto& [org_mpg, indices] : possible_bitindices)
+                {
+                    u32 index = *(indices.begin());
+                    if (origin_indices.find({org_mpg, index}) != origin_indices.end())
+                    {
+                        origin_indices_to_remove.insert({org_mpg, index});
+                    }
+                    else
+                    {
+                        origin_indices.insert({org_mpg, index});
+                    }
+                }
+            }
+
+#ifdef PRINT
+            for (const auto& [org_mpg, index] : origin_indices_to_remove)
+            {
+                std::cout << "Found org " << org_mpg.first->get_id() << "-" << org_mpg.second->get_name() << " index " << index << " pair to remove!" << std::endl;
+            }
+#endif
+
+            auto further_reduced_collected_indices = reduced_collected_indices;
+            for (auto& [net, possible_bitindices] : reduced_collected_indices)
+            {
+                for (auto& [org_mpg, indices] : possible_bitindices)
+                {
+                    u32 index = *(indices.begin());
+                    if (origin_indices_to_remove.find({org_mpg, index}) != origin_indices_to_remove.end())
+                    {
+                        further_reduced_collected_indices.at(net).erase(org_mpg);
+                    }
+                }
+
+                if (further_reduced_collected_indices.at(net).empty())
+                {
+                    further_reduced_collected_indices.erase(net);
+                }
+            }
+
+            if (further_reduced_collected_indices.empty())
+            {
+                return {};
+            }
+
+            // TODO remove debug printing
+#ifdef PRINT
+            std::cout << "\tReduced Possible Indices: " << std::endl;
+            for (const auto& [net, possible_bitindices] : further_reduced_collected_indices)
+            {
+                std::cout << "\t\tNet " << net->get_id() << ": " << std::endl;
+                u32 origins = 0;
+                for (const auto& [org_mpg, indices] : possible_bitindices)
+                {
+                    auto org_m  = org_mpg.first;
+                    auto org_pg = org_mpg.second;
+
+                    std::cout << "\t\t\t" << org_m->get_id() << "-" << org_pg->get_name() << ": [";
+                    for (const auto& index : indices)
+                    {
+                        std::cout << index << ", ";
+                    }
+                    std::cout << "]" << std::endl;
+                }
+            }
+#endif
+            // End debug printing
+
+            // ######################################################## //
+            // ############### CONSENS FINDING - OFFSET ############### //
+            // ######################################################## //
+
+            // try to find a consens between the different possible indices
+            std::map<Net*, i32> consens_bitindices;
+
+            auto offset_matrix_res = build_offset_matrix(further_reduced_collected_indices);
+            if (offset_matrix_res.is_error())
+            {
+#ifdef PRINT
+                std::cout << "Failed to build offset matrix : " << offset_matrix_res.get_error().get() << std::endl;
+#endif
+                return {};
+            }
+            auto offset_matrix = offset_matrix_res.get();
+
+            auto base_line = offset_matrix.begin()->first;
+
+            // TODO remove
+#ifdef PRINT
+            std::cout << "Found valid offsets pingroup " << mpg.second->get_name() << ": " << std::endl;
+            std::cout << "Baseline: " << base_line.first->get_id() << "-" << base_line.second->get_name() << std::endl;
+            for (const auto& [org1, col] : offset_matrix)
+            {
+                std::cout << org1.first->get_id() << "-" << org1.second->get_name() << ": ";
+                for (const auto& [org2, offset] : col)
+                {
+                    std::cout << org2.first->get_id() << "-" << org2.second->get_name() << "[" << offset << "] ";
+                }
+                std::cout << std::endl;
+            }
+#endif
+
+            for (const auto& [net, possible_bitindices] : further_reduced_collected_indices)
+            {
+                // pair of first possible org_mod and org_pin_group
+                MPG org = possible_bitindices.begin()->first;
+                // index at first possible origin
+                i32 org_index = *(possible_bitindices.begin()->second.begin());
+                std::set<std::set<MPG>> v;
+                auto offset_res = get_offset(org, base_line, offset_matrix, v);
+                if (offset_res.is_error())
+                {
+                    if (possible_bitindices.size() == 1)
+                    {
+                        // if there cannot be found any valid offset to the baseline, but there is just one possible index annotated, we still allow it
+                        // -> this wont break anything, since this only allows for bitorders that we otherwise would have discarded because of a missing net
+                        consens_bitindices[net] = org_index;
+                    }
+                    else
+                    {
+                        // TODO remove
+                        // std::cout << "Cannot find connection from origin " << org.first->get_id() << "-" << org.second->get_name() << " to baseline!" << std::endl;
+                        break;
+                    }
+                }
+                else
+                {
+                    i32 offset              = offset_res.get();
+                    consens_bitindices[net] = org_index + offset;
+                    //std::cout << "Org Index: " << org_index << " Offset: " << offset << std::endl;
+                }
+            }
+
+#ifdef PRINT
+            std::cout << "Found offset bitorder: " << std::endl;
+            for (const auto& [net, index] : consens_bitindices)
+            {
+                std::cout << net->get_id() << ": " << index << std::endl;
+            }
+#endif
+
+            // ############################################################## //
+            // ############### CONSENS FINDING - COMPLETENESS ############### //
+            // ############################################################## //
+
+            bool complete_pin_group_bitorder = true;
+            std::map<Net*, i32> complete_consens;
+
+            for (auto& pin : mpg.second->get_pins())
+            {
+                Net* net = pin->get_net();
+                // Currently also ignoring power/gnd nets but a more optimal approach would be to optimize them away where they are not needed (but we only got LUT4)
+                // -> maybe not, we would destroy 16 bit muxes if the top most MUX
+                if (net->is_gnd_net() || net->is_vcc_net())
+                {
+                    continue;
+                }
+
+                if (consens_bitindices.find(net) == consens_bitindices.end())
+                {
+                    complete_pin_group_bitorder = false;
+
+                    // TODO remove
+                    // std::cout << "Missing in net " << in_net->get_id() << " for complete bitorder." << std::endl;
+
+                    break;
+                }
+                else
+                {
+                    complete_consens[net] = consens_bitindices.at(net);
+                }
+            }
+
+            if (!complete_pin_group_bitorder)
+            {
+                return {};
+            }
+
+            // TODO remove
+#ifdef PRINT
+            std::cout << "Found complete bitorder for pingroup " << mpg.second->get_name() << std::endl;
+            for (const auto& [net, index] : complete_consens)
+            {
+                std::cout << net->get_id() << ": " << index << std::endl;
+            }
+#endif
+
+            // ########################################################### //
+            // ############### CONSENS FINDING - ALIGNMENT ############### //
+            // ########################################################### //
+
+            std::map<Net*, u32> aligned_consens;
+
+            // align consens from m:m+n to 0:n
+            i32 max_index = 0x80000000;
+            i32 min_index = 0x7fffffff;
+            std::set<i32> unique_indices;
+            for (const auto& [_n, index] : complete_consens)
+            {
+                unique_indices.insert(index);
+
+                if (index > max_index)
+                {
+                    max_index = index;
+                }
+
+                if (index < min_index)
+                {
+                    min_index = index;
+                }
+            }
+
+            // when the range is larger than pin group size there are holes in the bitorder
+            if (only_allow_consecutive_bitorders && ((max_index - min_index) > (i32(complete_consens.size()) - 1)))
+            {
+                return {};
+            }
+
+            // when there are less unique indices in the range than nets, there are duplicates
+            if (unique_indices.size() < complete_consens.size())
+            {
+                return {};
+            }
+
+            std::map<i32, Net*> index_to_net;
+            for (const auto& [net, index] : complete_consens)
+            {
+                index_to_net[index] = net;
+            }
+
+            u32 index_counter = 0;
+            for (const auto& [_unaligned_index, net] : index_to_net)
+            {
+                aligned_consens[net] = index_counter++;
+            }
+
+            // TODO remove
+#ifdef PRINT
+            std::cout << "Found valid input bitorder for pingroup " << mpg.second->get_name() << std::endl;
+            for (const auto& [net, index] : aligned_consens)
+            {
+                std::cout << net->get_id() << ": " << index << std::endl;
+            }
+#endif
+
+            return aligned_consens;
         }
 
     }    // namespace
@@ -674,25 +609,87 @@ namespace hal
                                                                                                              const std::set<MPG>& unknown_bitorders,
                                                                                                              const bool strict_consens_finding)
     {
+        std::unordered_map<std::pair<MPG, Net*>, std::vector<std::pair<MPG, Net*>>, boost::hash<std::pair<MPG, Net*>>> connectivity_inwards;
+        std::unordered_map<std::pair<MPG, Net*>, std::vector<std::pair<MPG, Net*>>, boost::hash<std::pair<MPG, Net*>>> connectivity_outwards;
+
+        // Build connectivity
+        for (const auto& [m, pg] : unknown_bitorders)
+        {
+            bool successors = pg->get_direction() == PinDirection::output;
+
+            for (const auto& p : pg->get_pins())
+            {
+                const auto starting_net = p->get_net();
+
+                std::unordered_set<Gate*> visited_outwards;
+                const auto res_outwards = gather_conntected_neighbors(starting_net, m->get_parent_module(), visited_outwards, successors);
+                if (res_outwards.is_error())
+                {
+                    return ERR_APPEND(res_outwards.get_error(),
+                                      "cannot porpagate bitorder: failed to gather bit indices outwards starting from the module with ID " + std::to_string(m->get_id()) + " and pin group "
+                                          + pg->get_name());
+                }
+                const auto connected_outwards = res_outwards.get();
+
+                std::unordered_set<Gate*> visited_inwards;
+                const auto res_inwards = gather_conntected_neighbors(starting_net, m, visited_inwards, !successors);
+                if (res_inwards.is_error())
+                {
+                    return ERR_APPEND(res_inwards.get_error(),
+                                      "cannot porpagate bitorder: failed to gather bit indices inwwards starting from the module with ID " + std::to_string(m->get_id()) + " and pin group "
+                                          + pg->get_name());
+                }
+                const auto connected_inwards = res_inwards.get();
+
+                for (const auto& [org_mpg, nets] : connected_outwards)
+                {
+                    // ignore MPG origins that are connected via multiple nets
+                    // if (nets.size() > 1)
+                    // {
+                    //     continue;
+                    // }
+
+                    connectivity_outwards[{{m, pg}, starting_net}].push_back({org_mpg, *nets.begin()});
+                }
+
+                for (const auto& [org_mpg, nets] : connected_inwards)
+                {
+                    // ignore MPG origins that are connected via multiple nets
+                    // if (nets.size() > 1)
+                    // {
+                    //     continue;
+                    // }
+
+                    connectivity_inwards[{{m, pg}, starting_net}].push_back({org_mpg, *nets.begin()});
+                }
+            }
+        }
+
+        // TODO remove debug printing
+        for (const auto& [start, connected] : connectivity_outwards)
+        {
+            std::cout << start.first.first->get_id() << " / " << start.first.first->get_name() << " - " << start.first.second->get_name() << " (OUTWARDS)@ " << start.second->get_id() << " / "
+                      << start.second->get_name() << std::endl;
+            for (const auto& [mpg, net] : connected)
+            {
+                std::cout << "\t" << mpg.first->get_id() << " / " << mpg.first->get_name() << " - " << mpg.second->get_name() << ": " << net->get_id() << " / " << net->get_name() << std::endl;
+            }
+        }
+        for (const auto& [start, connected] : connectivity_inwards)
+        {
+            std::cout << start.first.first->get_id() << " / " << start.first.first->get_name() << " - " << start.first.second->get_name() << " (INWARDS)@ " << start.second->get_id() << " / "
+                      << start.second->get_name() << std::endl;
+            for (const auto& [mpg, net] : connected)
+            {
+                std::cout << "\t" << mpg.first->get_id() << " / " << mpg.first->get_name() << " - " << mpg.second->get_name() << ": " << net->get_id() << " / " << net->get_name() << std::endl;
+            }
+        }
+
+        log_info("bitorder_propagation", "Finished conncetivity analysis for bitorder propagation");
+
         std::map<MPG, std::map<Net*, u32>> wellformed_module_pin_groups = known_bitorders;
-        std::map<MPG, std::map<Net*, POSSIBLE_BITINDICES>> previous_collected_bitindices;
 
         u32 iteration_ctr = 0;
-
-        //const auto nl   = known_bitorders.begin()->first.first->get_netlist();
-        //auto top_module = nl->get_top_module();
-
-        // TODO remove
-        // std::cout << "Searching bitorders for: " << std::endl;
-        // for (const auto& [m, pin_groups] : unknown_bitorders)
-        // {
-        //     std::cout << "Module " << m->get_id() << ": " << std::endl;
-        //     for (const auto& pin_group : pin_groups)
-        //     {
-        //         std::cout << pin_group->get_name() << std::endl;
-        //     }
-        //     std::cout << std::endl;
-        // }
 
         while (true)
         {
@@ -702,7 +699,7 @@ namespace hal
             {
                 if (mpg.first->is_top_module())
                 {
-                    log_error("iphone_tools", "Top module is part of the unknown bitorders!");
+                    log_error("bitorder_propagation", "Top module is part of the unknown bitorders!");
                     continue;
                 }
 
@@ -713,70 +710,21 @@ namespace hal
                 }
             };
 
-            std::map<MPG, std::map<Net*, POSSIBLE_BITINDICES>> collected_bitindices;
-
             std::deque<MPG> q = {modules_and_pingroup.begin(), modules_and_pingroup.end()};
-
-            // std::cout << "Searching bitorders in Iteration " << iteration_ctr << " for: " << std::endl;
-            // for (const auto& [m, pin_groups] : unknown_bitorders)
-            // {
-            //     std::cout << "Module " << m->get_id() << ": " << std::endl;
-            //     for (const auto& pin_group : pin_groups)
-            //     {
-            //         std::cout << pin_group->get_name() << std::endl;
-            //     }
-            //     std::cout << std::endl;
-            // }
 
             if (q.empty())
             {
                 break;
             }
 
-            log_info("iphone_tools", "Starting {}bitorder propagation iteration {}.", (strict_consens_finding ? "strict " : ""), iteration_ctr);
+            log_info("bitorder_propagation", "Starting {}bitorder propagation iteration {}.", (strict_consens_finding ? "strict " : ""), iteration_ctr);
 
-            // std::cout << "Blocklist: " << std::endl;
-
-            // std::set<u32> blocked_ids;
-            // for (const auto& g : gate_block_list)
-            // {
-            //     blocked_ids.insert(g->get_id());
-            // }
-            // for (const auto& id : blocked_ids)
-            // {
-            //     std::cout << id << ", ";
-            // }
-            // std::cout << std::endl;
-
-            // Todo remove
-            // for (const auto& [m, pin_group_to_bitorder] : wellformed_module_pin_groups)
-            // {
-            //     std::cout << "Bitorder for module " << m->get_id() << " in iteration " << iteration_ctr << ": " << std::endl;
-            //     for (const auto& [pin_group, bitorder] : pin_group_to_bitorder)
-            //     {
-            //         std::cout << pin_group->get_name() << ": " << std::endl;
-            //         for (const auto& [net, index] : bitorder)
-            //         {
-            //             std::cout << "Net " << net->get_id() << ": " << index << std::endl;
-            //         }
-            //     }
-            // }
+            std::map<MPG, std::map<Net*, u32>> new_wellformed_module_pin_groups = {};
 
             while (!q.empty())
             {
                 auto [m, pg] = q.front();
                 q.pop_front();
-
-                // TODO REMOVE
-                // if (m != nullptr)
-                // {
-                //     std::cout << "Propagate for module " << m->get_id() << " and pingroup " << pin_group->get_name() << std::endl;
-                // }
-                // else
-                // {
-                //     std::cout << "Found nullptr in module/pin_group q!" << std::endl;
-                //     std::cout << "Pingroup: " << pin_group->get_name() << std::endl;
-                // }
 
                 // check wether m has submodules that are in the q
                 bool no_submodules_in_q = true;
@@ -800,121 +748,148 @@ namespace hal
 
                 bool successors = pg->get_direction() == PinDirection::output;
 
+                std::map<Net*, POSSIBLE_BITINDICES> collected_inwards;
+                std::map<Net*, POSSIBLE_BITINDICES> collected_outwards;
+                std::map<Net*, POSSIBLE_BITINDICES> collected_combined;
+
                 for (const auto& pin : pg->get_pins())
                 {
                     Net* starting_net = pin->get_net();
 
-                    std::unordered_set<Gate*> visited_outwards;
-                    const auto res_outwards = gather_bit_indices_for_net(starting_net, m->get_parent_module(), wellformed_module_pin_groups, visited_outwards, successors);
-                    if (res_outwards.is_error())
-                    {
-                        return ERR_APPEND(res_outwards.get_error(),
-                                          "cannot porpagate bitorder: failed to gather bit indices outwards starting from the module with ID " + std::to_string(m->get_id()) + " and pin group "
-                                              + pg->get_name());
-                    }
-                    const auto indices_outwards = res_outwards.get();
-                    collected_bitindices[{m, pg}][starting_net].insert(indices_outwards.begin(), indices_outwards.end());
+                    // ############################################### //
+                    // ################### INWARDS ################### //
+                    // ############################################### //
 
-                    std::unordered_set<Gate*> visited_inwards;
-                    const auto res_inwards = gather_bit_indices_for_net(starting_net, m, wellformed_module_pin_groups, visited_inwards, !successors);
-                    if (res_inwards.is_error())
+                    if (auto con_it = connectivity_inwards.find({{m, pg}, starting_net}); con_it == connectivity_inwards.end())
                     {
-                        return ERR_APPEND(res_inwards.get_error(),
-                                          "cannot porpagate bitorder: failed to gather bit indices inwwards starting from the module with ID " + std::to_string(m->get_id()) + " and pin group "
-                                              + pg->get_name());
+                        log_warning("bitorder_propagation",
+                                    "There are no valid origins connected to modue {} / {} with pin group {} and net {} / {}.",
+                                    m->get_id(),
+                                    m->get_name(),
+                                    pg->get_name(),
+                                    starting_net->get_id(),
+                                    starting_net->get_name());
+                        continue;
                     }
-                    const auto indices_inwards = res_inwards.get();
-                    collected_bitindices[{m, pg}][starting_net].insert(indices_inwards.begin(), indices_inwards.end());
+
+                    const auto& connected_inwards = connectivity_inwards.at({{m, pg}, starting_net});
+
+                    for (const auto& [org_mpg, org_net] : connected_inwards)
+                    {
+                        if (auto mpg_it = wellformed_module_pin_groups.find(org_mpg); mpg_it != wellformed_module_pin_groups.end())
+                        {
+                            const auto& nets = mpg_it->second;
+                            if (auto net_it = nets.find(org_net); net_it != nets.end())
+                            {
+                                collected_inwards[starting_net][org_mpg].insert(net_it->second);
+                                collected_combined[starting_net][org_mpg].insert(net_it->second);
+                            }
+                            else
+                            {
+                                log_warning("bitorder_propagation",
+                                            "Module {} / {} and pin group {} are wellformed but are missing an index for net {} / {}!",
+                                            org_mpg.first->get_id(),
+                                            org_mpg.first->get_name(),
+                                            org_mpg.second->get_name(),
+                                            org_net->get_id(),
+                                            org_net->get_name());
+                            }
+                        }
+                    }
+
+                    // ############################################### //
+                    // ################### OUTWARDS ################## //
+                    // ############################################### //
+
+                    if (auto con_it = connectivity_outwards.find({{m, pg}, starting_net}); con_it == connectivity_outwards.end())
+                    {
+                        log_warning("bitorder_propagation",
+                                    "There are no valid origins connected to modue {} / {} with pin group {} and net {} / {}.",
+                                    m->get_id(),
+                                    m->get_name(),
+                                    pg->get_name(),
+                                    starting_net->get_id(),
+                                    starting_net->get_name());
+                        continue;
+                    }
+
+                    const auto& connected_outwards = connectivity_outwards.at({{m, pg}, starting_net});
+
+                    for (const auto& [org_mpg, org_net] : connected_outwards)
+                    {
+                        if (auto mpg_it = wellformed_module_pin_groups.find(org_mpg); mpg_it != wellformed_module_pin_groups.end())
+                        {
+                            const auto& nets = mpg_it->second;
+                            if (auto net_it = nets.find(org_net); net_it != nets.end())
+                            {
+                                collected_outwards[starting_net][org_mpg].insert(net_it->second);
+                                collected_combined[starting_net][org_mpg].insert(net_it->second);
+                            }
+                            else
+                            {
+                                log_warning("bitorder_propagation",
+                                            "Module {} / {} and pin group {} are wellformed but are missing an index for net {} / {}!",
+                                            org_mpg.first->get_id(),
+                                            org_mpg.first->get_name(),
+                                            org_mpg.second->get_name(),
+                                            org_net->get_id(),
+                                            org_net->get_name());
+                            }
+                        }
+                    }
                 }
 
-                // TODO remove debug printing
-                // std::cout << "Neighbour indices for module " << m->get_id() << " and pingroup " << pin_group->get_name() << " : " << std::endl;
-                // for (const auto& [net, possible_bitindices] : bit_indices_backwards)
-                // {
-                //     std::cout << "IN Net " << net->get_id() << ": ";
-                //     for (const auto& [org_mod, org_pin_group_to_indices] : possible_bitindices)
-                //     {
-                //         for (const auto& [org_pin_group, indices] : org_pin_group_to_indices)
-                //         {
-                //             std::cout << org_mod->get_id() << "(" << org_pin_group->get_name() << ")" << " [" << (indices.size() == 1 ? std::to_string(*indices.begin()) : "CONFLICT") << "], ";
-                //             // std::cout << org_mod->get_id() << " / " << org_mod->get_name() << "(" << org_pin_group->get_name() << ")" << " [" << (indices.size() == 1 ? std::to_string(*indices.begin()) : "CONFLICT") << "], ";
-                //         }
-                //     }
-                //     std::cout << std::endl;
-                // }
-                // std::cout << std::endl;
+#ifdef PRINT
+                std::cout << "Extract for " << m->get_id() << " / " << m->get_name() << " - " << pg->get_name() << ": (INWARDS) " << std::endl;
+#endif
 
-                // std::cout << "Submodule indices for module " << m->get_id() << " and pingroup " << pin_group->get_name() << ": " << std::endl;
-                // for (const auto& [net, possible_bitindices] : bit_indices_inwards_in)
-                // {
-                //     std::cout << "IN Net " << net->get_id() << ": ";
-                //     for (const auto& [org_mod, org_pin_group_to_indices] : possible_bitindices)
-                //     {
-                //         for (const auto& [org_pin_group, indices] : org_pin_group_to_indices)
-                //         {
-                //             std::cout << org_mod->get_id()   << "(" << org_pin_group->get_name() << ")" << " [" << (indices.size() == 1 ? std::to_string(*indices.begin()) : "CONFLICT") << "], ";
-                //             //std::cout << org_mod->get_id() << " / " << org_mod->get_name() << "(" << org_pin_group->get_name() << ")" << " [" << (indices.size() == 1 ? std::to_string(*indices.begin()) : "CONFLICT") << "], ";
-                //         }
-                //     }
-                //     std::cout << std::endl;
-                // }
-                // std::cout << std::endl;
-                // END debug printing
+                const auto newly_wellformed_inwards = extract_well_formed_bitorder({m, pg}, collected_inwards, strict_consens_finding);
+                if (!newly_wellformed_inwards.empty())
+                {
+                    new_wellformed_module_pin_groups[{m, pg}] = newly_wellformed_inwards;
+                    continue;
+                }
+
+#ifdef PRINT
+                std::cout << "Extract for " << m->get_id() << " / " << m->get_name() << " - " << pg->get_name() << ": (OUTWARDS) " << std::endl;
+#endif
+                const auto newly_wellformed_outwards = extract_well_formed_bitorder({m, pg}, collected_outwards, strict_consens_finding);
+                if (!newly_wellformed_outwards.empty())
+                {
+                    new_wellformed_module_pin_groups[{m, pg}] = newly_wellformed_outwards;
+                    continue;
+                }
+
+#ifdef PRINT
+                std::cout << "Extract for " << m->get_id() << " / " << m->get_name() << " - " << pg->get_name() << ": (COMBINED) " << std::endl;
+#endif
+                const auto newly_wellformed_combined = extract_well_formed_bitorder({m, pg}, collected_combined, strict_consens_finding);
+                if (!newly_wellformed_combined.empty())
+                {
+                    new_wellformed_module_pin_groups[{m, pg}] = newly_wellformed_combined;
+                }
             }
 
-            const auto newly_wellformed_module_pin_groups = extract_well_formed_bitorder(collected_bitindices, strict_consens_finding);
-
-            for (const auto& [m, pin_group_to_bitorder] : newly_wellformed_module_pin_groups)
-            {
-                wellformed_module_pin_groups[m].insert(pin_group_to_bitorder.begin(), pin_group_to_bitorder.end());
-            }
-
-            // TODO remove debug printing
-            // for (const auto& [m, pg_to_bitorder] : newly_wellformed_module_pin_groups)
-            // {
-            //     std::cout << "Newly found consens for module " << m->get_id() << std::endl;
-            //     for (const auto& [pg, bitorder] : pg_to_bitorder)
-            //     {
-            //         std::cout << pg->get_name() << ": " << std::endl;
-            //         for (const auto& [n, index] : bitorder)
-            //         {
-            //             std::cout << n->get_id()  << ": " << index << std::endl;
-            //         }
-            //     }
-            // }
-
-            // for (const auto& [m, pg_to_bitorder] : wellformed_module_pin_groups)
-            // {
-            //     std::cout << "Overall found consens for module " << m->get_id() << std::endl;
-            //     for (const auto& [pg, bitorder] : pg_to_bitorder)
-            //     {
-            //         std::cout << pg->get_name() << ": " << std::endl;
-            //         for (const auto& [n, index] : bitorder)
-            //         {
-            //             std::cout << n->get_id() << ": " << index << std::endl;
-            //         }
-            //     }
-            // }
-            // END DEBUG PRINTING
-
-            if (previous_collected_bitindices == collected_bitindices)
+            if (new_wellformed_module_pin_groups.empty())
             {
                 break;
             }
 
-            // NOTE could think about merging if we find that information is lost between iteration
-            previous_collected_bitindices = collected_bitindices;
+            log_info("bitorder_propagation", "Found {} new bitorders in iteration: {}", new_wellformed_module_pin_groups.size(), iteration_ctr);
+
+            // NOTE could think about merging if we find that information is lost between iterations
+            wellformed_module_pin_groups.insert(new_wellformed_module_pin_groups.begin(), new_wellformed_module_pin_groups.end());
 
             iteration_ctr++;
+
+            if (iteration_ctr > 100)
+            {
+                log_error("bitorder_propagation", "Endless loop protection, something went wrong!");
+                break;
+            }
         }
 
-        u32 wellformed_pingroups_counter = 0;
-        for (const auto& [_m, wellformed_pingroups] : wellformed_module_pin_groups)
-        {
-            wellformed_pingroups_counter += wellformed_pingroups.size();
-        }
-
-        log_info("iphone_tools", "Found a valid bitorder for {} pingroups.", wellformed_pingroups_counter);
+        log_info("bitorder_propagation", "Found a valid bitorder for {} pingroups.", wellformed_module_pin_groups.size());
 
         return OK(wellformed_module_pin_groups);
     }
