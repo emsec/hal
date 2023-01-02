@@ -1237,10 +1237,12 @@ namespace hal {
         {
             const auto config = SMT::QueryConfig()
                 .with_solver(SMT::SolverType::Boolector)
+                .with_call(SMT::SolverCall::Library)
                 .with_remote_solver()
                 .without_model_generation();
 
             EXPECT_EQ(config.solver, SMT::SolverType::Boolector);
+            EXPECT_EQ(config.call, SMT::SolverCall::Library);
             EXPECT_EQ(config.local, false);
             EXPECT_EQ(config.generate_model, false);
         }
@@ -1313,8 +1315,8 @@ namespace hal {
         for (auto&& constraints : formulas) {
             const auto solver = SMT::Solver(std::move(constraints));
 
-            for (auto&& solver_type : {SMT::SolverType::Z3}) {
-                if (!SMT::Solver::has_local_solver_for(solver_type)) {
+            for (auto&& [solver_type, solver_call] : std::vector<std::pair<SMT::SolverType, SMT::SolverCall>>{{SMT::SolverType::Z3, SMT::SolverCall::Binary}}) {
+                if (!SMT::Solver::has_local_solver_for(solver_type, solver_call)) {
                     continue;
                 }
 
@@ -1436,8 +1438,8 @@ namespace hal {
 
         for (auto&& constraints : formulas) {
             const auto solver = SMT::Solver(std::move(constraints));
-            for (auto&& solver_type : {SMT::SolverType::Z3}) {
-                if (!SMT::Solver::has_local_solver_for(solver_type)) {
+            for (auto&& [solver_type, solver_call] : std::vector<std::pair<SMT::SolverType, SMT::SolverCall>>{{SMT::SolverType::Z3, SMT::SolverCall::Binary}}) {
+                if (!SMT::Solver::has_local_solver_for(solver_type, solver_call)) {
                     continue;
                 }
 
@@ -1483,8 +1485,8 @@ namespace hal {
         for (auto&& [constraints, model] : formulas) {
             const auto solver = SMT::Solver(std::move(constraints));
 
-            for (auto&& solver_type : {SMT::SolverType::Z3}) {
-                if (!SMT::Solver::has_local_solver_for(solver_type)) {
+            for (auto&& [solver_type, solver_call] : std::vector<std::pair<SMT::SolverType, SMT::SolverCall>>{{SMT::SolverType::Z3, SMT::SolverCall::Binary}}) {
+                if (!SMT::Solver::has_local_solver_for(solver_type, solver_call)) {
                     continue;
                 }
 
@@ -1610,8 +1612,8 @@ namespace hal {
         for (auto&& [constraints, model] : formulas) {
             const auto solver = SMT::Solver(std::move(constraints));
 
-            for (auto&& solver_type : {SMT::SolverType::Z3}) {
-                if (!SMT::Solver::has_local_solver_for(solver_type)) {
+            for (auto&& [solver_type, solver_call] : std::vector<std::pair<SMT::SolverType, SMT::SolverCall>>{{SMT::SolverType::Z3, SMT::SolverCall::Binary}}) {
+                if (!SMT::Solver::has_local_solver_for(solver_type, solver_call)) {
                     continue;
                 }
 

@@ -57,6 +57,8 @@ namespace hal
 
     class NetLayoutJunctionHash;
     class NetLayoutJunctionEntries;
+    class CommentSpeechBubble;
+    class CommentEntry;
 
     /**
      * @ingroup graph-layouter
@@ -252,7 +254,7 @@ namespace hal
          * @param context - The GraphContext the layouter works on
          * @param parent - The parent QObject
          */
-        explicit GraphLayouter(const GraphContext* const context, QObject* parent = nullptr);
+        explicit GraphLayouter(GraphContext *context, QObject* parent = nullptr);
 
         /**
          * Destructor.
@@ -331,13 +333,14 @@ namespace hal
 
     protected:
         GraphicsScene* mScene;
-        const GraphContext* const mContext;
+        GraphContext* mParentContext;
         QMap<Node, QPoint> mNodeToPositionMap;
         QMap<QPoint, Node> mPositionToNodeMap;
         QMap<Node, QPoint> mNodeToPositionRollback;
 
     private:
         void clearLayoutData();
+        void clearComments();
         void createBoxes();
         void calculateNets();
         void getWireHash();
@@ -353,11 +356,14 @@ namespace hal
         void resetRoadsAndJunctions();
         void drawNets();
         void alternateDrawNets();
+        void drawComments();
         void drawNetsJunction(StandardGraphicsNet::Lines& lines, u32 id);
         void drawNetsEndpoint(StandardGraphicsNet::Lines& lines, u32 id);
         void drawNetsIsolated(u32 id, Net* n, const EndpointList& epl);
         void updateSceneRect();
         static bool verifyModulePort(Net* n, const Node& modNode, bool isModInput);
+        void handleCommentAboutToDeleted(CommentEntry* entry);
+        void handleCommentAdded(CommentEntry* entry);
 
         bool boxExists(const int x, const int y) const;
 
@@ -470,5 +476,6 @@ namespace hal
         QHash<u32, int> mGlobalOutputHash;
 
         bool mOptimizeNetLayout;
+        QList<CommentSpeechBubble*> mCommentBubbles;
     };
 }    // namespace hal

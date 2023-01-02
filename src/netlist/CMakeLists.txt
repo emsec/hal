@@ -5,6 +5,11 @@ add_library(netlist SHARED ${NETLIST_LIB_INCLUDE} ${NETLIST_LIB_SOURCE} ${CMAKE_
 set_target_properties(netlist PROPERTIES OUTPUT_NAME "hal_netlist")
 add_library(hal::netlist ALIAS netlist)
 
+if(Bitwuzla_FOUND)
+    add_compile_definitions(BITWUZLA_LIBRARY)
+    message(STATUS "found bitwuzla, adding define for solver query to bitwuzla library")
+endif()
+
 
 target_include_directories(netlist
                            PUBLIC
@@ -21,6 +26,7 @@ target_compile_options(netlist
                        INTERFACE ${COMPILE_OPTIONS_INTERFACE})
 set_target_properties(PROPERTIES DEFINE_SYMBOL BUILDING_CORE)
 
+
 target_link_libraries(netlist
                       PUBLIC
                         hal::utilities
@@ -31,6 +37,7 @@ target_link_libraries(netlist
                         RapidJSON::RapidJSON
                         ${Z3_LIBRARIES}
                         ${ABC_LIBRARY}
+                        ${BITWUZLA_LIBRARY}
                       )
 
 install(TARGETS netlist

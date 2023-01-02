@@ -514,10 +514,6 @@ namespace hal
                             continue;
                         }
                     }
-                    else if (master_type->has_property(GateTypeProperty::ff) || master_type->has_property(GateTypeProperty::latch))
-                    {
-                        auto current_inputs = current_gate->get_fan_in_endpoints();
-                    }
 
                     // gate is determined to be duplicate of other gate
                     duplicate_gates.push_back(current_gate);

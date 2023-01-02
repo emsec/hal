@@ -11,6 +11,7 @@
 #include <QPushButton>
 #include <QStyle>
 #include <QToolButton>
+#include <QDebug>
 
 namespace hal
 {
@@ -26,6 +27,7 @@ namespace hal
         ensurePolished();
 
         mSearchIconLabel->setPixmap(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIcon).pixmap(QSize(16, 16)));
+        mSearchIconLabel->installEventFilter(this);
         mLineEdit->setPlaceholderText("Search");
 
         mClearIconLabel->setPixmap(gui_utility::getStyledSvgIcon(mClearIconStyle, mClearIcon).pixmap(QSize(10, 10)));
@@ -246,6 +248,19 @@ namespace hal
     bool Searchbar::getEmitTextWithFlags()
     {
         return mEmitTextWithFlags;
+    }
+
+    bool Searchbar::eventFilter(QObject *object, QEvent *event)
+    {
+        if(object == mSearchIconLabel && event->type() == QEvent::MouseButtonPress)
+        {
+            QMouseEvent* ev = static_cast<QMouseEvent*>(event);
+            if(ev->button() == Qt::MouseButton::LeftButton)
+                Q_EMIT searchIconClicked();
+
+            return true;
+        }
+        return QWidget::eventFilter(object, event);
     }
 
     bool Searchbar::filterApplied()

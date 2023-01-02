@@ -84,7 +84,7 @@ namespace hal
 			 * @param[in] type - The SMT solver type.
 			 * @returns `true` if an SMT solver of the requested type is available, `false` otherwise.
 			 */
-            static bool has_local_solver_for(SolverType type);
+            static bool has_local_solver_for(SolverType type, SolverCall call);
 
             /**
 			 * Queries an SMT solver with the specified query configuration.
@@ -113,6 +113,30 @@ namespace hal
             Result<SolverResult> query_remote(const QueryConfig& config) const;
 
             /**
+			 * Translate the solver into an SMT-LIB v2 string representation
+			 * 
+			 * @param[in] config - The SMT solver query configuration.
+			 * @returns Ok() and the SMT-LIB v2 string representation, Err() otherwise.
+			 */
+            Result<std::string> to_smt2(const QueryConfig& config) const;
+
+        private:
+            ////////////////////////////////////////////////////////////////////////
+            // Member
+            ////////////////////////////////////////////////////////////////////////
+
+            /// stores list of SMT solver constraints
+            std::vector<Constraint> m_constraints;
+
+            static std::map<std::pair<SolverType, SolverCall>, std::function<Result<std::tuple<bool, std::string>>(std::string&, const QueryConfig&)>> spec2query;
+            static std::map<SolverType, std::function<Result<std::string>()>> type2query_binary;
+            static std::map<SolverType, bool> type2link_status;
+
+            ////////////////////////////////////////////////////////////////////////
+            // Interface
+            ////////////////////////////////////////////////////////////////////////
+
+            /**
 			 * Translate a list of constraint and a configuration to SMT-LIB v2.
 			 *
 			 * NOTE: For details on the SMT-LIB language standard see: 
@@ -123,18 +147,6 @@ namespace hal
 			 * @returns Ok() and SMT-LIB compatible string representation on success, Err() otherwise.
 			 */
             static Result<std::string> translate_to_smt2(const std::vector<Constraint>& constraints, const QueryConfig& config);
-
-        private:
-            ////////////////////////////////////////////////////////////////////////
-            // Member
-            ////////////////////////////////////////////////////////////////////////
-
-            /// stores list of SMT solver constraints
-            std::vector<Constraint> m_constraints;
-
-            ////////////////////////////////////////////////////////////////////////
-            // Interface
-            ////////////////////////////////////////////////////////////////////////
 
             /**
 			 * Translate a SMT solver result from SMT-LIB v2.
