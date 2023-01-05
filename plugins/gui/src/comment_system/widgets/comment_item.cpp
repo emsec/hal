@@ -77,6 +77,7 @@ namespace hal
         // extract property information
         style()->unpolish(this);
         style()->polish(this);
+        QSize iconSize(20, 20);
 
         mEntry = nullptr;
         // TODO: replace fixed sizes (put them in stylesheet / compute them?)
@@ -86,7 +87,7 @@ namespace hal
 
         // top part
         mTopWidget = new QWidget(this);
-        mTopWidget->setFixedHeight(30);
+        mTopWidget->setFixedHeight(iconSize.height()+5); // just some spacing
         mTopLayout = new QHBoxLayout(mTopWidget);
         mTopLayout->setSpacing(0);
         mTopLayout->setMargin(0);
@@ -97,11 +98,11 @@ namespace hal
         mCreationDate->setStyleSheet("font-size: 12px;");
         mModifyButton = new QToolButton(this);
         mModifyButton->setIcon(gui_utility::getStyledSvgIcon(mModifyCommentIconStyle, mModifyCommentIconPath));
-        mModifyButton->setIconSize(QSize(25,25));
+        mModifyButton->setIconSize(iconSize);
         mModifyButton->setAutoRaise(true);
         mDeleteButton = new QToolButton(this);
         mDeleteButton->setIcon(gui_utility::getStyledSvgIcon(mDeleteCommentIconStyle, mDeleteCommentIconPath));
-        mDeleteButton->setIconSize(QSize(25,25));
+        mDeleteButton->setIconSize(iconSize);
         mDeleteButton->setAutoRaise(true);
 
         //perhaps with alignments (header left, date normal, small spacer, fixed buttons without stretch)?

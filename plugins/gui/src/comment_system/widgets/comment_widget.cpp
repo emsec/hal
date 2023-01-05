@@ -33,15 +33,17 @@ namespace hal
         mSearchbar->setEmitTextWithFlags(false);
         mSearchbar->hide();
 
+        QSize iconSize(20, 20);
+
         // top bar
         // 1. Option
         mHeaderLayout = new QHBoxLayout();
         mNewCommentButton = new QToolButton();
         mNewCommentButton->setIcon(gui_utility::getStyledSvgIcon(mNewCommentIconStyle, mNewCommentIconPath));
-        mNewCommentButton->setIconSize(QSize(23,23));
+        mNewCommentButton->setIconSize(iconSize);
         mSearchButton = new QToolButton();
         mSearchButton->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
-        mSearchButton->setIconSize(QSize(23,23));
+        mSearchButton->setIconSize(iconSize);
         mHeaderLayout->addWidget(mNewCommentButton);// alignleft without spacer
         mHeaderLayout->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Preferred));
         mHeaderLayout->addWidget(mSearchButton);// alignright without spacer
