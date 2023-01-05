@@ -545,6 +545,7 @@ namespace hal
     void GraphWidget::handleNavigationLeftRequest()
     {
         const SelectionRelay::Subfocus navigateLeft = SelectionRelay::Subfocus::Left;
+        mOverlay->setWidget(mNavigationWidgetV3);
         switch (gSelectionRelay->focusType())
         {
             case SelectionRelay::ItemType::None: {
@@ -661,6 +662,7 @@ namespace hal
     void GraphWidget::handleNavigationRightRequest()
     {
         const SelectionRelay::Subfocus navigateRight = SelectionRelay::Subfocus::Right;
+        mOverlay->setWidget(mNavigationWidgetV3);
         switch (gSelectionRelay->focusType())
         {
             case SelectionRelay::ItemType::None: {
