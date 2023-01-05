@@ -92,7 +92,7 @@ namespace hal
 			 * @param[in] config - The SMT solver query configuration.
 			 * @returns OK() and the result on success, Err() otherwise.
 			 */
-            Result<SolverResult> query(const QueryConfig& config) const;
+            Result<SolverResult> query(const QueryConfig& config = QueryConfig()) const;
 
             /**
 			 * Queries a local SMT solver with the specified query configuration.

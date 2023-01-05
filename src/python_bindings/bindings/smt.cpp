@@ -378,7 +378,7 @@ namespace hal
 
         py_smt_solver.def(
             "query",
-            [](const SMT::Solver& self, const SMT::QueryConfig& config) -> std::optional<SMT::SolverResult> {
+            [](const SMT::Solver& self, const SMT::QueryConfig& config = SMT::QueryConfig()) -> std::optional<SMT::SolverResult> {
                 auto res = self.query(config);
                 if (res.is_ok())
                 {
@@ -390,7 +390,7 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("config"),
+            py::arg("config") = SMT::QueryConfig(),
             R"(
             Queries an SMT solver with the specified query configuration.
 
