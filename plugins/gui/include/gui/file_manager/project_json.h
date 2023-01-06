@@ -46,5 +46,6 @@ namespace hal {
         Status status() const { return mStatus; }
         QString netlistFilename() const { return mNetlist; }
         QString gateLibraryFilename() const { return mGatelib; }
+        void setGateLibraryFilename(const QString& gl);
     };
 }

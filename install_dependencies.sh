@@ -83,7 +83,8 @@ elif [[ "$platform" == 'linux' ]]; then
         libpython3-dev ccache autoconf autotools-dev libsodium-dev \
         libqt5svg5-dev libqt5svg5* ninja-build lcov gcovr python3-sphinx \
         doxygen python3-sphinx-rtd-theme python3-jedi python3-pip \
-        pybind11-dev python3-pybind11 rapidjson-dev libspdlog-dev libz3-dev z3 libreadline-dev \
+        pybind11-dev python3-pybind11 rapidjson-dev libspdlog-dev libz3-dev z3 \
+        libquazip5-dev libreadline-dev \
         $additional_deps \
         graphviz libomp-dev libsuitesparse-dev # For documentation
         sudo pip3 install -r requirements.txt
@@ -92,7 +93,7 @@ elif [[ "$platform" == 'linux' ]]; then
         qt5-base python ccache autoconf libsodium igraph qt5-svg ninja lcov \
         gcovr python-sphinx doxygen python-sphinx_rtd_theme python-jedi \
         python-pip pybind11 rapidjson spdlog graphviz boost \
-        python-dateutil z3
+        python-dateutil z3 quazip-qt5
     else
        echo "Unsupported Linux distribution: abort!"
        exit 255

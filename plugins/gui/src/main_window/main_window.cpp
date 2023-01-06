@@ -714,7 +714,7 @@ namespace hal
         ExportProjectDialog epd(this);
         if (epd.exec() == QDialog::Accepted)
         {
-            qDebug() << "File export accept";
+            epd.exportProject();
         }
     }
 

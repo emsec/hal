@@ -34,17 +34,16 @@ namespace hal
         Q_OBJECT
 
     public:
-        enum ExportStatus { Ok = 0, ErrorCreateTempDir = -1, ErrorCopy = -2, ErrorCompress = -3, NoExport = -99};
+        enum ExportStatus { Ok = 0, ErrorCreateTempDir = -1, ErrorCopy = -2, ErrorPrepare = -3, ErrorCompress = -4, NoExport = -99};
 
     private:
         QString mProjectName;
         ExportStatus mStatus;
 
-    public Q_SLOTS:
-        void accept() override;
-
+        void copyExternalPython(const QString& projTempDir);
     public:
         ExportProjectDialog(QWidget* parent = nullptr);
         bool success() const { return mStatus == Ok; }
+        void exportProject();
     };
 }

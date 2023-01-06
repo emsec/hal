@@ -49,4 +49,20 @@ namespace hal {
         mStatus = Ok;
     }
 
+    void ProjectJson::setGateLibraryFilename(const QString& gl)
+    {
+        if (mGatelib == gl) return;
+        mGatelib = gl;
+
+        QJsonObject obj = mDocument.object();
+        obj.remove("gate_library");
+        obj.insert("gate_library", mGatelib);
+        mDocument = QJsonDocument(obj);
+
+        QString fname = QDir(mPathname).absoluteFilePath(".project.json");
+        QFile::remove(fname);
+        QFile of(fname);
+        if (of.open(QIODevice::WriteOnly))
+            of.write(mDocument.toJson(QJsonDocument::Compact));
+    }
 }

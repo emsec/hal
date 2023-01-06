@@ -41,6 +41,8 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
         set(Missing_package "TRUE")
     endif(Qt5Svg_FOUND)
 
+    list(APPEND CMAKE_MODULE_PATH "/usr/share/quazip")
+    find_package(QuaZip5 REQUIRED)
     set(INCROOT ${CMAKE_CURRENT_SOURCE_DIR}/include)
     set(SRCROOT ${CMAKE_CURRENT_SOURCE_DIR}/src)
     set(UIROOT ${CMAKE_CURRENT_SOURCE_DIR}/ui)
@@ -90,7 +92,7 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
                            PRIVATE ${COMPILE_OPTIONS_PRIVATE}
                            INTERFACE ${COMPILE_OPTIONS_INTERFACE})
     target_compile_definitions(gui PUBLIC QT_NO_KEYWORDS)
-    target_link_libraries(gui PUBLIC hal::core hal::netlist PRIVATE ${Python3_LIBRARIES} pybind11::embed Qt5::Widgets Qt5::Concurrent Qt5::Svg)
+    target_link_libraries(gui PUBLIC hal::core hal::netlist PRIVATE ${Python3_LIBRARIES} pybind11::embed Qt5::Widgets Qt5::Concurrent Qt5::Svg ${QUAZIP_LIBRARIES})
     hal_plugin_documentation(gui SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/gui.rst)
 
     install(TARGETS gui
