@@ -1,5 +1,9 @@
 var NAVTREEINDEX28 =
 {
+"netlist__parser__manager_8cpp.html#a63453fc628a74a43f09af54a8d9620d1":[7,0,2,0,4,0,1],
+"netlist__parser__manager_8cpp.html#a72dbc0b71389a49406b62b83ca90ff79":[7,0,2,0,4,0,0],
+"netlist__parser__manager_8cpp.html#a8a4ff1e425ebe75804844cf22c96dca7":[7,0,2,0,4,0,5],
+"netlist__parser__manager_8cpp.html#a9ff28049722e4a8532867f675aad614e":[7,0,2,0,4,0,3],
 "netlist__parser__manager_8cpp.html#af1c82137bddfd220906ff6e8a2366b2d":[7,0,2,0,4,0,4],
 "netlist__parser__manager_8cpp.html#af9b49cc8225fbc08027cb661bd07ac38":[7,0,2,0,4,0,2],
 "netlist__parser__manager_8cpp_source.html":[7,0,2,0,4,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX28 =
 "plugin__manager_8h.html#ad34e384af419d40a22d5486356772c24":[7,0,0,0,2,4,3],
 "plugin__manager_8h.html#ad66fea3d4017a3c7b058436924d3dda3":[7,0,0,0,2,4,9],
 "plugin__manager_8h.html#af13862a2a5565fb995d7cc93c0bfd980":[7,0,0,0,2,4,8],
-"plugin__manager_8h_source.html":[7,0,0,0,2,4],
-"plugin__parameter_8h.html":[7,0,0,0,2,5],
-"plugin__parameter_8h_source.html":[7,0,0,0,2,5],
-"plugin__parameter__dialog_8cpp.html":[7,0,1,3,2,29,4],
-"plugin__parameter__dialog_8cpp_source.html":[7,0,1,3,2,29,4]
+"plugin__manager_8h_source.html":[7,0,0,0,2,4]
 };

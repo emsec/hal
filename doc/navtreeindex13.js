@@ -1,5 +1,9 @@
 var NAVTREEINDEX13 =
 {
+"classhal_1_1_new_project_dialog.html":[6,0,0,278],
+"classhal_1_1_new_project_dialog.html#a20f2ac86838f17c3af7723f5c86de9b7":[6,0,0,278,7],
+"classhal_1_1_new_project_dialog.html#a40f2c52c8e683cac0060fb88e48fe661":[6,0,0,278,8],
+"classhal_1_1_new_project_dialog.html#a4aff7683d968578c400f38ddac6cd7d1":[6,0,0,278,2],
 "classhal_1_1_new_project_dialog.html#a4d9f960799fa8d6a1e27d7eb1e9b3986":[6,0,0,278,9],
 "classhal_1_1_new_project_dialog.html#a6d5132e875d58132315133941668a485":[6,0,0,278,4],
 "classhal_1_1_new_project_dialog.html#a93f97dae0b65f576ef7fa9635f162c38":[6,0,0,278,6],
@@ -245,9 +249,5 @@ var NAVTREEINDEX13 =
 "classhal_1_1_pyi__base.html#a78ed1bb3e292d29c266791fb48b585e4":[6,0,0,306,1],
 "classhal_1_1_pyi__base.html#ab71228d46acd8658fdd07540dadce6fb":[6,0,0,306,2],
 "classhal_1_1_pyi__base.html#ad650a0e81cc8fdcf9e59dc64d80d5ba4":[6,0,0,306,0],
-"classhal_1_1_pyi__gui.html":[6,0,0,307],
-"classhal_1_1_pyi__gui.html#a2f70ba1043c75e34c90c0c05b7c52ca9":[6,0,0,307,1],
-"classhal_1_1_pyi__gui.html#a7f96e551640e50887a2a4a9319f858c9":[6,0,0,307,0],
-"classhal_1_1_python_code_editor.html":[4,0,1,0,5],
-"classhal_1_1_python_code_editor.html#a2183a58e5e69ac139698e3ea19d53e1d":[4,0,1,0,5,4]
+"classhal_1_1_pyi__gui.html":[6,0,0,307]
 };

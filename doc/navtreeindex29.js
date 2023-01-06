@@ -1,5 +1,9 @@
 var NAVTREEINDEX29 =
 {
+"plugin__parameter_8h.html":[7,0,0,0,2,5],
+"plugin__parameter_8h_source.html":[7,0,0,0,2,5],
+"plugin__parameter__dialog_8cpp.html":[7,0,1,3,2,29,4],
+"plugin__parameter__dialog_8cpp_source.html":[7,0,1,3,2,29,4],
 "plugin__parameter__dialog_8h.html":[7,0,1,3,0,0,31,4],
 "plugin__parameter__dialog_8h_source.html":[7,0,1,3,0,0,31,4],
 "plugin__relay_8cpp.html":[7,0,1,3,2,35,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX29 =
 "python__console__history_8h_source.html":[7,0,1,3,0,0,38,3],
 "python__console__qss__adapter_8cpp.html":[7,0,1,3,2,36,4],
 "python__console__qss__adapter_8cpp_source.html":[7,0,1,3,2,36,4],
-"python__console__qss__adapter_8h.html":[7,0,1,3,0,0,38,4],
-"python__console__qss__adapter_8h_source.html":[7,0,1,3,0,0,38,4],
-"python__console__widget_8cpp.html":[7,0,1,3,2,36,5],
-"python__console__widget_8cpp_source.html":[7,0,1,3,2,36,5],
-"python__console__widget_8h.html":[7,0,1,3,0,0,38,5]
+"python__console__qss__adapter_8h.html":[7,0,1,3,0,0,38,4]
 };

@@ -1,5 +1,9 @@
 var NAVTREEINDEX12 =
 {
+"classhal_1_1_net_layout_junction_wire_intersection.html#afc2efe400507fbb8da994754117b0ae9aebf2defe950433fa3c332a46208998ab":[4,0,21,0,1],
+"classhal_1_1_net_layout_junction_wire_intersection.html#afc2efe400507fbb8da994754117b0ae9aecc4929f52b41baf5650834ce78a7e44":[4,0,21,0,2],
+"classhal_1_1_net_layout_metric.html":[4,0,0,2,14],
+"classhal_1_1_net_layout_metric.html#a3c196f8694c636c0a313190376bd1487":[4,0,0,2,14,0],
 "classhal_1_1_net_layout_metric.html#a49e5daa88dbd3a01829813edeec5c1bc":[4,0,0,2,14,2],
 "classhal_1_1_net_layout_metric.html#a7b67459474e6d437093e3bc3ce312a6c":[4,0,0,2,14,4],
 "classhal_1_1_net_layout_metric.html#abfeecf1dabcf380845c39bc8dd571a24":[4,0,0,2,14,1],
@@ -245,9 +249,5 @@ var NAVTREEINDEX12 =
 "classhal_1_1_netlist_writer.html":[4,1,0,1,2],
 "classhal_1_1_netlist_writer.html#a145a1be44dddd25fd30f3d7d34007e9e":[4,1,0,1,2,2],
 "classhal_1_1_netlist_writer.html#a3f9c6797526b4848681da7ac8bcd4818":[4,1,0,1,2,0],
-"classhal_1_1_netlist_writer.html#a50d8c5cb49c9fc13a3873b6ca53e69da":[4,1,0,1,2,1],
-"classhal_1_1_new_project_dialog.html":[6,0,0,278],
-"classhal_1_1_new_project_dialog.html#a20f2ac86838f17c3af7723f5c86de9b7":[6,0,0,278,7],
-"classhal_1_1_new_project_dialog.html#a40f2c52c8e683cac0060fb88e48fe661":[6,0,0,278,8],
-"classhal_1_1_new_project_dialog.html#a4aff7683d968578c400f38ddac6cd7d1":[6,0,0,278,2]
+"classhal_1_1_netlist_writer.html#a50d8c5cb49c9fc13a3873b6ca53e69da":[4,1,0,1,2,1]
 };
