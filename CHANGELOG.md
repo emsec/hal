@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+* project export
+  * added export feature: generate zipped project file including external gate libraries and python source files
+  * added import feature by extracting zipped project file
+  * added quazip library sources(deps) since recent distributions link binary packages not longer against qt5
 * netlist parsers
   * added (limited) support for 'defparam' statements to Verilog parser
   * added support for pin assignments by order instead of name to Verilog and VHDL parser
