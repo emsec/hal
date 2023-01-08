@@ -45,7 +45,10 @@ namespace hal
         mSearchButton->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
         mSearchButton->setIconSize(iconSize);
         mHeaderLayout->addWidget(mNewCommentButton);// alignleft without spacer
-        mHeaderLayout->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Preferred));
+        //mHeaderLayout->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Preferred));
+        QWidget* spacerWidget = new QWidget; // spacer items are in the overlay transparent, widgets not
+        spacerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        mHeaderLayout->addWidget(spacerWidget);
         mHeaderLayout->addWidget(mSearchButton);// alignright without spacer
         mHeaderLayout->addWidget(mSearchbar);
 
