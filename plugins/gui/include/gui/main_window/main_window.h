@@ -67,8 +67,10 @@ namespace hal
 
         Q_PROPERTY(QString newFileIconPath READ newFileIconPath WRITE setNewFileIconPath)
         Q_PROPERTY(QString newFileIconStyle READ newFileIconStyle WRITE setNewFileIconStyle)
-        Q_PROPERTY(QString openIconPath READ openIconPath WRITE setOpenIconPath)
-        Q_PROPERTY(QString openIconStyle READ openIconStyle WRITE setOpenIconStyle)
+        Q_PROPERTY(QString openFileIconPath READ openFileIconPath WRITE setOpenFileIconPath)
+        Q_PROPERTY(QString openFileIconStyle READ openFileIconStyle WRITE setOpenFileIconStyle)
+        Q_PROPERTY(QString openProjIconPath READ openProjIconPath WRITE setOpenProjIconPath)
+        Q_PROPERTY(QString openProjIconStyle READ openProjIconStyle WRITE setOpenProjIconStyle)
         Q_PROPERTY(QString saveIconPath READ saveIconPath WRITE setSaveIconPath)
         Q_PROPERTY(QString saveIconStyle READ saveIconStyle WRITE setSaveIconStyle)
         Q_PROPERTY(QString saveAsIconPath READ saveAsIconPath WRITE setSaveAsIconPath)
@@ -129,13 +131,26 @@ namespace hal
          *
          * @returns the 'Open File'-icon path
          */
-        QString openIconPath() const;
+        QString openFileIconPath() const;
         /**
         * Q_PROPERTY READ function for the 'Open File'-icon style.
          *
         * @returns the 'Open File'-icon style
         */
-        QString openIconStyle() const;
+        QString openFileIconStyle() const;
+
+        /**
+         * Q_PROPERTY READ function for the 'Open Proj'-icon path.
+         *
+         * @returns the 'Open Proj'-icon path
+         */
+        QString openProjIconPath() const;
+        /**
+        * Q_PROPERTY READ function for the 'Open Proj'-icon style.
+         *
+        * @returns the 'Open Proj'-icon style
+        */
+        QString openProjIconStyle() const;
 
         /**
          * Q_PROPERTY READ function for the 'Save File'-icon path.
@@ -211,13 +226,26 @@ namespace hal
          *
          * @param path - The new path
         */
-        void setOpenIconPath(const QString& path);
+        void setOpenFileIconPath(const QString& path);
         /**
         * Q_PROPERTY WRITE function for the 'Open File'-icon style.
          *
          * @param style - The new style
         */
-        void setOpenIconStyle(const QString& style);
+        void setOpenFileIconStyle(const QString& style);
+
+        /**
+        * Q_PROPERTY WRITE function for the 'Open Proj'-icon path.
+         *
+         * @param path - The new path
+        */
+        void setOpenProjIconPath(const QString& path);
+        /**
+        * Q_PROPERTY WRITE function for the 'Open Proj'-icon style.
+         *
+         * @param style - The new style
+        */
+        void setOpenProjIconStyle(const QString& style);
 
         /**
          * Q_PROPERTY WRITE function for the 'Save File'-icon path.
@@ -352,7 +380,7 @@ namespace hal
         /**
          * Q_SLOT to import a netlist. Asks the user for the .hal/.vhdl/.v file to open.
          */
-        void handleActionImport();
+        void handleActionImportNetlist();
 
         /**
          * Q_SLOT to open a hal project located in project directory.
@@ -441,6 +469,8 @@ namespace hal
 
         void handleExportProjectTriggered();
 
+        void handleImportProjectTriggered();
+
         void setPluginParameter();
 
     private:
@@ -489,7 +519,7 @@ namespace hal
 
         Action* mActionNew;
         Action* mActionOpenProject;
-        Action* mActionImport;
+        Action* mActionImportNetlist;
         Action* mActionSave;
         Action* mActionSaveAs;
         Action* mActionGateLibraryManager;
@@ -499,6 +529,7 @@ namespace hal
         Action* mActionPlayMacro;
         Action* mActionUndo;
         Action* mActionExportProject;
+        Action* mActionImportProject;
 
         Action* mActionSettings;
         Action* mActionClose;
@@ -515,8 +546,11 @@ namespace hal
         QString mNewFileIconStyle;
         QString mNewFileIconPath;
 
-        QString mOpenIconPath;
-        QString mOpenIconStyle;
+        QString mOpenFileIconPath;
+        QString mOpenFileIconStyle;
+
+        QString mOpenProjIconPath;
+        QString mOpenProjIconStyle;
 
         QString mSaveIconPath;
         QString mSaveIconStyle;

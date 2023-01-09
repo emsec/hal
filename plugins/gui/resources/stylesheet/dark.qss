@@ -1195,8 +1195,11 @@ hal--MainWindow
     qproperty-newFileIconStyle: "";
     qproperty-newFileIconPath: ":/icons/new-file";
 
-    qproperty-openIconStyle: "all->#3192C5";
-    qproperty-openIconPath: ":/icons/folder";
+    qproperty-openProjIconStyle: "all->#3192C5";
+    qproperty-openProjIconPath: ":/icons/folder";
+
+    qproperty-openFileIconStyle: "all->#AFB1B3";
+    qproperty-openFileIconPath: ":/icons/detach";
 
     qproperty-saveIconStyle: "all->#3192C5";
     qproperty-saveIconPath: ":/icons/folder-down";
