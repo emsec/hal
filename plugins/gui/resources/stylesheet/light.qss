@@ -1416,20 +1416,23 @@ hal--CommentDialog QLineEdit
 {
     background-color: "#ffffff";
     color: "#000000";
+    border: 1px solid rgb(155, 155, 155);
+    border-radius: 2px;
 }
 
 hal--CommentDialog QLabel
 {
-    background-color: "#a0a0a0";
+    /*background-color: "#a0a0a0";*/
+    background-color: "#ffffff";
     color: "#000000";
 }
 
-hal--CommentDialog #header-container
+/*hal--CommentDialog #header-container
 {
     background-color: "#a0a0a0";
-}
+}*/
 
 hal--Overlay
 {
-    background : rgba(0, 0, 0, 128);
+    background : rgba(0, 0, 0, 150);
 }

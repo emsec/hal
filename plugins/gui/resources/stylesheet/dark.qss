@@ -1426,17 +1426,20 @@ hal--CommentDialog QTextEdit /*Edit for the actual commenttext*/
 hal--CommentDialog QLineEdit
 {
     background-color: "#2b2b2b";
+    border: 1px solid rgb(75, 78, 82);
+    border-radius: 2px;
 }
 
 hal--CommentDialog QLabel
 {
-    background-color: "#000000";
+    /*background-color: "#000000";*/
+    background-color: "#202020";
 }
 
-hal--CommentDialog #header-container
+/*hal--CommentDialog #header-container
 {
     background-color: "#000000";
-}
+}*/
 
 hal--Overlay
 {
