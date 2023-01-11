@@ -15,7 +15,7 @@ namespace hal
 {
     NetDetailsTabWidget::NetDetailsTabWidget(QWidget* parent) : DetailsTabWidget(parent)
     {
-        setIcon(":/icons/sel_net");
+        setIcon(SelectionDetailsIconProvider::NetIcon);
 
         //create all widgets and replace the qWidgets in the frames with them
         mNetInfoTable = new NetInfoTable(this);
@@ -64,13 +64,14 @@ namespace hal
  
     void NetDetailsTabWidget::setNet(Net* net)
     {
+        if (net) setIcon(SelectionDetailsIconProvider::NetIcon, net->get_id());
         //pass net or other stuff to widgets
         mNetInfoTable->setNet(net);
         mGroupingsOfItemTable->setNet(net);
 
-	mNetModuleTable->setNet(net);
+        mNetModuleTable->setNet(net);
         mSourcesTable->setNet(net);
         mDestinationsTable->setNet(net);
-	mDataTable->setNet(net);
+        mDataTable->setNet(net);
     }
 }

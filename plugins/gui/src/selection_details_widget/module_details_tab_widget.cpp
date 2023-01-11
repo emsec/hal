@@ -12,7 +12,7 @@ namespace hal
 {
     ModuleDetailsTabWidget::ModuleDetailsTabWidget(QWidget* parent) : DetailsTabWidget(parent)
     {
-        setIcon(":/icons/sel_module");
+        setIcon(SelectionDetailsIconProvider::ModuleIcon);
 
         //general tab
         mModuleInfoTable = new ModuleInfoTable(this);
@@ -55,6 +55,7 @@ namespace hal
  
     void ModuleDetailsTabWidget::setModule(Module* module)
     {
+        if (module) setIcon(SelectionDetailsIconProvider::ModuleIcon, module->get_id());
         //pass module or other stuff to widgets
         mModuleInfoTable->setModule(module);
         mPinsTree->setModule(module);

@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+* selection details
+  * module icons reflect module color
+  * gate icons shape according to gate type
+  * user setting to adjust size or omit icon in upper right corner
 * netlist parsers
   * added (limited) support for 'defparam' statements to Verilog parser
   * added support for pin assignments by order instead of name to Verilog and VHDL parser

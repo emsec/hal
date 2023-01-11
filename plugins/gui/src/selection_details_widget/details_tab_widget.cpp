@@ -35,15 +35,37 @@ namespace hal
         return QTabWidget::addTab(scrollArea, label);
     }
 
-    void DetailsTabWidget::setIcon(const QString& fileName)
+    void DetailsTabWidget::setIcon(SelectionDetailsIconProvider::IconCategory catg, u32 itemId)
     {
-        QIcon* icon = new QIcon(fileName);
-        QPixmap scaledIcon = icon->pixmap(24, 24); //assures better quality, icon scaling so smooth, so silky
+        bool existingContainer = true;
+        QLabel* iconContainer = dynamic_cast<QLabel*>(cornerWidget());
+        if (!iconContainer)
+        {
+            existingContainer = false;
+            iconContainer = new QLabel(this);
+        }
 
-        QLabel* iconContainer = new QLabel(this);
+        QPixmap scaledIcon;
+
+        switch (SelectionDetailsIconProvider::sIconSizeSetting->value().toInt())
+        {
+        case SelectionDetailsIconProvider::NoIcon:
+            break;
+        case SelectionDetailsIconProvider::SmallIcon:
+            scaledIcon = QIcon(*SelectionDetailsIconProvider::instance()->getIcon(catg,itemId)).pixmap(16, 16);
+            break;
+        case SelectionDetailsIconProvider::BigIcon:
+             //assures better quality, icon scaling so smooth, so silky
+            scaledIcon = QIcon(*SelectionDetailsIconProvider::instance()->getIcon(catg,itemId)).pixmap(24, 24);
+            break;
+        }
+
         iconContainer->setPixmap(scaledIcon);
-        iconContainer->setContentsMargins(5, 2, 5, 1);
 
-        setCornerWidget(iconContainer);
+        if (!existingContainer)
+        {
+            iconContainer->setContentsMargins(5, 2, 5, 1);
+            setCornerWidget(iconContainer);
+        }
     }
 }

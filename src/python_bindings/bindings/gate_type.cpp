@@ -156,6 +156,13 @@ namespace hal
             :rtype: set[hal_py.GateTypeProperty]
         )");
 
+        py_gate_type.def("get_property_list", &GateType::get_property_list, R"(
+            Get the properties assigned to the gate type as list where the most significant property stands at first position.
+                                                                                     *
+            :returns: The properties of the gate type.
+            :rtype: list[hal_py.GateTypeProperty]
+        )");
+
         py_gate_type.def("has_property", &GateType::has_property, R"(
             Check whether the gate type has the specified property.
 
