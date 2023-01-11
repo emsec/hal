@@ -59,6 +59,10 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
     file(GLOB_RECURSE RSRC ${RSRCROOT}/*.qrc)
 
     qt5_wrap_cpp(MOC_source ${SRC})
+
+    set (QUAZIP_SUBDIR "${CMAKE_SOURCE_DIR}/deps/quazip-1.3")
+    add_subdirectory(${QUAZIP_SUBDIR} ${CMAKE_BINARY_DIR}/quazip)
+
     qt5_wrap_cpp(MOC_HDR ${HDR})
     qt5_wrap_ui(MOC_UI ${UI})
     qt5_add_resources(MOC_RSRC ${RSRC})
@@ -83,6 +87,7 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
                                PUBLIC
                                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
                                $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
+                               $<BUILD_INTERFACE:${QuaZip_Library_SOURCE_DIR}>
                                $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
                                )
     target_compile_options(gui
@@ -90,7 +95,8 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
                            PRIVATE ${COMPILE_OPTIONS_PRIVATE}
                            INTERFACE ${COMPILE_OPTIONS_INTERFACE})
     target_compile_definitions(gui PUBLIC QT_NO_KEYWORDS)
-    target_link_libraries(gui PUBLIC hal::core hal::netlist PRIVATE ${Python3_LIBRARIES} pybind11::embed Qt5::Widgets Qt5::Concurrent Qt5::Svg)
+    target_link_libraries(gui PUBLIC hal::core hal::netlist PRIVATE ${Python3_LIBRARIES} pybind11::embed Qt5::Widgets Qt5::Concurrent Qt5::Svg QuaZip::QuaZip)
+
     hal_plugin_documentation(gui SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/gui.rst)
 
     install(TARGETS gui
