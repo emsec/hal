@@ -28,6 +28,7 @@ var classhal_1_1_gate_type =
     [ "get_pin_names", "classhal_1_1_gate_type.html#a307497a9e722f492a1f4f5975fa58017", null ],
     [ "get_pins", "classhal_1_1_gate_type.html#af6bff94f5a30c31508e5690ff647d705", null ],
     [ "get_properties", "classhal_1_1_gate_type.html#aee787ccd8405d35e6b09ee56b3119002", null ],
+    [ "get_property_list", "classhal_1_1_gate_type.html#a3aa370fe04b415dc9c623bfc7d99893b", null ],
     [ "get_unique_pin_group_id", "classhal_1_1_gate_type.html#acbbb7759baee7c417c9d57e41c612177", null ],
     [ "get_unique_pin_id", "classhal_1_1_gate_type.html#a921c50d72bb2bcd2a53bc01c211daaef", null ],
     [ "has_component_of_type", "classhal_1_1_gate_type.html#a8d82155a77dd05bcef90cb791a95d84f", null ],

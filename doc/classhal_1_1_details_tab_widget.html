@@ -889,8 +889,8 @@ Public Member Functions</h2></td></tr>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a722d0f82e70df1cd657da4e8a757521a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_details_tab_widget.html#a722d0f82e70df1cd657da4e8a757521a">addTab</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;label, <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="classhal_1_1_details_frame_widget.html">DetailsFrameWidget</a> * &gt; frames)</td></tr>
 <tr class="separator:a722d0f82e70df1cd657da4e8a757521a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad198f7bb94d14e9713313877363167c3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_details_tab_widget.html#ad198f7bb94d14e9713313877363167c3">setIcon</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;fileName)</td></tr>
-<tr class="separator:ad198f7bb94d14e9713313877363167c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7384031029f0362f10fe551a1630ea6b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_details_tab_widget.html#a7384031029f0362f10fe551a1630ea6b">setIcon</a> (<a class="el" href="classhal_1_1_selection_details_icon_provider.html#a5b0d410fc7e98ab341009ed087fd8711">SelectionDetailsIconProvider::IconCategory</a> catg, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> itemId=0)</td></tr>
+<tr class="separator:a7384031029f0362f10fe551a1630ea6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_qtabwidget"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_qtabwidget')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qtabwidget.html">QTabWidget</a></td></tr>
 <tr class="memitem:tabInserted inherit pro_methods_qtabwidget"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qtabwidget.html#tabInserted">tabInserted</a> (int index)</td></tr>
 <tr class="separator:tabInserted inherit pro_methods_qtabwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1243,7 +1243,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="details__tab__widget_8h_source.html#l00034">34</a> of file <a class="el" href="details__tab__widget_8h_source.html">details_tab_widget.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="details__tab__widget_8h_source.html#l00035">35</a> of file <a class="el" href="details__tab__widget_8h_source.html">details_tab_widget.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac6ead1e8f48fc88dd5849e0bd41bbc82"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac6ead1e8f48fc88dd5849e0bd41bbc82">&#9670;&nbsp;</a></span>DetailsTabWidget()</h2>
@@ -1323,8 +1323,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="ad198f7bb94d14e9713313877363167c3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad198f7bb94d14e9713313877363167c3">&#9670;&nbsp;</a></span>setIcon()</h2>
+<a id="a7384031029f0362f10fe551a1630ea6b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7384031029f0362f10fe551a1630ea6b">&#9670;&nbsp;</a></span>setIcon()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1335,9 +1335,19 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">void hal::DetailsTabWidget::setIcon </td>
           <td>(</td>
-          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;&#160;</td>
-          <td class="paramname"><em>fileName</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classhal_1_1_selection_details_icon_provider.html#a5b0d410fc7e98ab341009ed087fd8711">SelectionDetailsIconProvider::IconCategory</a>&#160;</td>
+          <td class="paramname"><em>catg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramname"><em>itemId</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -1356,9 +1366,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="details__tab__widget_8cpp_source.html#l00038">38</a> of file <a class="el" href="details__tab__widget_8cpp_source.html">details_tab_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qicon.html#pixmap">QIcon::pixmap()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#setContentsMargins">QWidget::setContentsMargins()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtabwidget.html#setCornerWidget">QTabWidget::setCornerWidget()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qlabel.html#pixmap-prop">QLabel::setPixmap()</a>.</p>
+<p class="reference">References <a class="el" href="selection__details__icon__provider_8h_source.html#l00045">hal::SelectionDetailsIconProvider::BigIcon</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtabwidget.html#cornerWidget">QTabWidget::cornerWidget()</a>, <a class="el" href="selection__details__icon__provider_8cpp_source.html#l00031">hal::SelectionDetailsIconProvider::instance()</a>, <a class="el" href="selection__details__icon__provider_8h_source.html#l00045">hal::SelectionDetailsIconProvider::NoIcon</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qicon.html#pixmap">QIcon::pixmap()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#setContentsMargins">QWidget::setContentsMargins()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtabwidget.html#setCornerWidget">QTabWidget::setCornerWidget()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlabel.html#pixmap-prop">QLabel::setPixmap()</a>, <a class="el" href="selection__details__icon__provider_8h_source.html#l00059">hal::SelectionDetailsIconProvider::sIconSizeSetting</a>, and <a class="el" href="selection__details__icon__provider_8h_source.html#l00045">hal::SelectionDetailsIconProvider::SmallIcon</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gate__details__tab__widget_8cpp_source.html#l00030">hal::GateDetailsTabWidget::GateDetailsTabWidget()</a>, <a class="el" href="module__details__tab__widget_8cpp_source.html#l00013">hal::ModuleDetailsTabWidget::ModuleDetailsTabWidget()</a>, and <a class="el" href="net__details__tab__widget_8cpp_source.html#l00016">hal::NetDetailsTabWidget::NetDetailsTabWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gate__details__tab__widget_8cpp_source.html#l00030">hal::GateDetailsTabWidget::GateDetailsTabWidget()</a>, <a class="el" href="module__details__tab__widget_8cpp_source.html#l00013">hal::ModuleDetailsTabWidget::ModuleDetailsTabWidget()</a>, <a class="el" href="net__details__tab__widget_8cpp_source.html#l00016">hal::NetDetailsTabWidget::NetDetailsTabWidget()</a>, <a class="el" href="gate__details__tab__widget_8cpp_source.html#l00099">hal::GateDetailsTabWidget::setGate()</a>, <a class="el" href="module__details__tab__widget_8cpp_source.html#l00056">hal::ModuleDetailsTabWidget::setModule()</a>, and <a class="el" href="net__details__tab__widget_8cpp_source.html#l00065">hal::NetDetailsTabWidget::setNet()</a>.</p>
 
 </div>
 </div>
@@ -1372,7 +1382,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_details_tab_widget.html">DetailsTabWidget</a></li>
-    <li class="footer">Generated on Wed Jan 11 2023 13:07:12 for HAL by
+    <li class="footer">Generated on Wed Jan 11 2023 13:46:29 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

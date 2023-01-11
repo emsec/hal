@@ -1,5 +1,9 @@
 var NAVTREEINDEX26 =
 {
+"json_8hpp.html#aa1588f4ea4e7819b5b6e66f07865737f":[7,0,1,1,0,0,2,1,210],
+"json_8hpp.html#aa1da535c59b21f70e5967b66473543f0":[7,0,1,1,0,0,2,1,235],
+"json_8hpp.html#aa210655ec7cc8387bef8ade74c3af647":[7,0,1,1,0,0,2,1,162],
+"json_8hpp.html#aa400dd54d50fd20d7e931e2f08ee6374":[7,0,1,1,0,0,2,1,196],
 "json_8hpp.html#aa554fc6a11519e4f347deb25a9f0db40":[7,0,1,1,0,0,2,1,284],
 "json_8hpp.html#aa554fc6a11519e4f347deb25a9f0db40a0b6879b186bfb2b1ec65d2460e4eccd4":[7,0,1,1,0,0,2,1,284,4],
 "json_8hpp.html#aa554fc6a11519e4f347deb25a9f0db40a4537f20910e85437f6d07701864084e8":[7,0,1,1,0,0,2,1,284,3],
@@ -204,10 +208,10 @@ var NAVTREEINDEX26 =
 "minimap__scrollbar_8h_source.html":[7,0,1,3,0,0,3,5],
 "module_8h.html":[7,0,0,0,1,13],
 "module_8h_source.html":[7,0,0,0,1,13],
-"module__details__tab__widget_8cpp.html":[7,0,1,3,2,38,14],
-"module__details__tab__widget_8cpp_source.html":[7,0,1,3,2,38,14],
-"module__details__tab__widget_8h.html":[7,0,1,3,0,0,40,14],
-"module__details__tab__widget_8h_source.html":[7,0,1,3,0,0,40,14],
+"module__details__tab__widget_8cpp.html":[7,0,1,3,2,38,13],
+"module__details__tab__widget_8cpp_source.html":[7,0,1,3,2,38,13],
+"module__details__tab__widget_8h.html":[7,0,1,3,0,0,40,13],
+"module__details__tab__widget_8h_source.html":[7,0,1,3,0,0,40,13],
 "module__dialog_8cpp.html":[7,0,1,3,2,30,2],
 "module__dialog_8cpp_source.html":[7,0,1,3,2,30,2],
 "module__dialog_8h.html":[7,0,1,3,0,0,32,2],
@@ -245,9 +249,5 @@ var NAVTREEINDEX26 =
 "module__shader_8cpp.html":[7,0,1,3,2,19,3,1],
 "module__shader_8cpp_source.html":[7,0,1,3,2,19,3,1],
 "module__shader_8h.html":[7,0,1,3,0,0,20,3,1],
-"module__shader_8h_source.html":[7,0,1,3,0,0,20,3,1],
-"module__table__model_8cpp.html":[7,0,1,3,2,38,2,1],
-"module__table__model_8cpp_source.html":[7,0,1,3,2,38,2,1],
-"module__table__model_8h.html":[7,0,1,3,0,0,40,2,1],
-"module__table__model_8h_source.html":[7,0,1,3,0,0,40,2,1]
+"module__shader_8h_source.html":[7,0,1,3,0,0,20,3,1]
 };

@@ -31,10 +31,6 @@ var group__utility__widgets_selection__details =
       [ "setNet", "classhal_1_1_data_table_widget.html#abe3a47b278901f8fff8f47d6c645fd7a", null ]
     ] ],
     [ "DetailsTableUtilities", "classhal_1_1_details_table_utilities.html", null ],
-    [ "DisputedBigIcon", "classhal_1_1_disputed_big_icon.html", [
-      [ "DisputedBigIcon", "classhal_1_1_disputed_big_icon.html#a569a7a339d18efc2f0171f6118fe7e8a", null ],
-      [ "setVisibleStatus", "classhal_1_1_disputed_big_icon.html#aad93becca708dfdaa980263aa8a47e16", null ]
-    ] ],
     [ "GateDetailsTabWidget", "classhal_1_1_gate_details_tab_widget.html", [
       [ "GateDetailsTabWidget", "classhal_1_1_gate_details_tab_widget.html#a3fb4afef2c86b42bd1367af65141b4f9", null ],
       [ "setGate", "classhal_1_1_gate_details_tab_widget.html#ac18589d9d060c1cb2c1a02618d036425", null ]
@@ -232,7 +228,7 @@ var group__utility__widgets_selection__details =
       [ "child", "classhal_1_1_selection_tree_item.html#a83aa7ae6414f207934144a6c04ce5053", null ],
       [ "childCount", "classhal_1_1_selection_tree_item.html#a22a03fb63fd92c07332c1d4635f3096f", null ],
       [ "data", "classhal_1_1_selection_tree_item.html#a07461aec8fff230c57fc86066ab04678", null ],
-      [ "icon", "classhal_1_1_selection_tree_item.html#ae004c51374b223f6fb0999224a0da42a", null ],
+      [ "icon", "classhal_1_1_selection_tree_item.html#a19ca3862218f08462f8827246362c08b", null ],
       [ "id", "classhal_1_1_selection_tree_item.html#a9571f0b8bf91dd67fcf8aba04c742f24", null ],
       [ "isEqual", "classhal_1_1_selection_tree_item.html#af605657dd13a60db8b0b311e707c8e15", null ],
       [ "itemType", "classhal_1_1_selection_tree_item.html#acc3d34d7ca5190e1d39ac1df7f126bc8", null ],
@@ -252,7 +248,7 @@ var group__utility__widgets_selection__details =
       [ "boxType", "classhal_1_1_selection_tree_item_module.html#adf89187ecaac1f4e60b660b576021666", null ],
       [ "child", "classhal_1_1_selection_tree_item_module.html#a35bc6b8899836bbe851a2a5cca7779d2", null ],
       [ "childCount", "classhal_1_1_selection_tree_item_module.html#a446df5ca6d2747b928452a08781ba146", null ],
-      [ "icon", "classhal_1_1_selection_tree_item_module.html#a257c52bbbc830c31c2128251c2b789f5", null ],
+      [ "icon", "classhal_1_1_selection_tree_item_module.html#a0cc459f2ed00cdeca2c191bba12f6bfa", null ],
       [ "isRoot", "classhal_1_1_selection_tree_item_module.html#a46a5be0835ae1bfa73c7aabd54048d50", null ],
       [ "match", "classhal_1_1_selection_tree_item_module.html#a462f965619b4b1c831711cb55c0642cd", null ],
       [ "name", "classhal_1_1_selection_tree_item_module.html#a7f308a6b2af506e9b94dda3ba1cfb6fd", null ],
@@ -266,13 +262,13 @@ var group__utility__widgets_selection__details =
     [ "SelectionTreeItemGate", "classhal_1_1_selection_tree_item_gate.html", [
       [ "SelectionTreeItemGate", "classhal_1_1_selection_tree_item_gate.html#a8012553f0a5e50d5a495422c32ec8bb3", null ],
       [ "boxType", "classhal_1_1_selection_tree_item_gate.html#a11bbe57b0a5651457993325057343951", null ],
-      [ "icon", "classhal_1_1_selection_tree_item_gate.html#ab80b26cb5cd318f68c3a2d6448fd282d", null ],
+      [ "icon", "classhal_1_1_selection_tree_item_gate.html#adb8f1db02828a9aa3548c480db3c0cc1", null ],
       [ "name", "classhal_1_1_selection_tree_item_gate.html#a69f525301b3a0a8f86ada4d5d5534c12", null ],
       [ "suppressedByFilterRecursion", "classhal_1_1_selection_tree_item_gate.html#a4c496d6dfb4886e702f19d3691865f80", null ]
     ] ],
     [ "SelectionTreeItemNet", "classhal_1_1_selection_tree_item_net.html", [
       [ "SelectionTreeItemNet", "classhal_1_1_selection_tree_item_net.html#aa4bd84705a7f33a232a75d4cb20cad5e", null ],
-      [ "icon", "classhal_1_1_selection_tree_item_net.html#a14b0b276504b6c836e2ab712daa6479d", null ],
+      [ "icon", "classhal_1_1_selection_tree_item_net.html#ad08efdcb89069ec033d430dfec5f4b53", null ],
       [ "name", "classhal_1_1_selection_tree_item_net.html#a3da4148455810767dc6068c8d68274bd", null ],
       [ "suppressedByFilterRecursion", "classhal_1_1_selection_tree_item_net.html#a8b545763003e982765d2d129fd090595", null ]
     ] ],

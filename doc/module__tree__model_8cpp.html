@@ -89,6 +89,7 @@ $(document).ready(function(){initNavTree('module__tree__model_8cpp.html',''); in
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="module__tree__model_8h_source.html">gui/selection_details_widget/module_details_widget/module_tree_model.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="selection__details__icon__provider_8h_source.html">gui/selection_details_widget/selection_details_icon_provider.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="tree__item_8h_source.html">gui/basic_tree_model/tree_item.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="module_8h_source.html">hal_core/netlist/module.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="gate_8h_source.html">hal_core/netlist/gate.h</a>&quot;</code><br />
@@ -99,26 +100,26 @@ Include dependency graph for module_tree_model.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="module__tree__model_8cpp__incl.png" border="0" usemap="#_2home_2runner_2work_2hal_2hal_2plugins_2gui_2src_2selection__details__widget_2module__details__widget_2module__tree__model_8cpp" alt=""/></div>
 <map name="_2home_2runner_2work_2hal_2hal_2plugins_2gui_2src_2selection__details__widget_2module__details__widget_2module__tree__model_8cpp" id="_2home_2runner_2work_2hal_2hal_2plugins_2gui_2src_2selection__details__widget_2module__details__widget_2module__tree__model_8cpp">
-<area shape="rect" title=" " alt="" coords="718,5,949,91"/>
-<area shape="rect" href="module__tree__model_8h.html" title=" " alt="" coords="132,139,351,195"/>
-<area shape="rect" href="tree__item_8h.html" title=" " alt="" coords="183,339,281,366"/>
-<area shape="rect" href="module_8h.html" title=" " alt="" coords="841,153,1028,180"/>
-<area shape="rect" href="gate_8h.html" title=" " alt="" coords="562,153,729,180"/>
-<area shape="rect" href="gui__globals_8h.html" title=" " alt="" coords="1053,153,1185,180"/>
-<area shape="rect" title=" " alt="" coords="1209,153,1284,180"/>
-<area shape="rect" href="base__tree__model_8h.html" title=" " alt="" coords="26,243,187,284"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="963,511,1103,537"/>
-<area shape="rect" title=" " alt="" coords="212,250,271,277"/>
-<area shape="rect" title=" " alt="" coords="295,250,355,277"/>
-<area shape="rect" href="data__container_8h.html" title=" " alt="" coords="481,243,636,284"/>
-<area shape="rect" href="event__handler_8h.html" title=" " alt="" coords="661,243,846,284"/>
-<area shape="rect" href="enums_8h.html" title=" " alt="" coords="968,332,1099,373"/>
-<area shape="rect" href="pin__direction_8h.html" title=" " alt="" coords="972,243,1191,284"/>
-<area shape="rect" href="pin__type_8h.html" title=" " alt="" coords="1215,243,1406,284"/>
-<area shape="rect" href="gate__library_8h.html" title=" " alt="" coords="1183,421,1345,463"/>
-<area shape="rect" href="module__pin_8h.html" title=" " alt="" coords="1482,243,1635,284"/>
-<area shape="rect" href="pin__group_8h.html" title=" " alt="" coords="1533,332,1686,373"/>
-<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="1583,421,1713,463"/>
+<area shape="rect" title=" " alt="" coords="1076,5,1307,91"/>
+<area shape="rect" href="module__tree__model_8h.html" title=" " alt="" coords="206,139,425,195"/>
+<area shape="rect" href="tree__item_8h.html" title=" " alt="" coords="5,347,103,373"/>
+<area shape="rect" href="selection__details__icon__provider_8h.html" title=" " alt="" coords="685,139,871,195"/>
+<area shape="rect" href="module_8h.html" title=" " alt="" coords="1299,153,1486,180"/>
+<area shape="rect" href="gate_8h.html" title=" " alt="" coords="1108,153,1275,180"/>
+<area shape="rect" href="gui__globals_8h.html" title=" " alt="" coords="1511,153,1643,180"/>
+<area shape="rect" title=" " alt="" coords="1667,153,1742,180"/>
+<area shape="rect" href="base__tree__model_8h.html" title=" " alt="" coords="32,250,193,291"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="1013,347,1153,373"/>
+<area shape="rect" title=" " alt="" coords="353,257,411,284"/>
+<area shape="rect" title=" " alt="" coords="217,257,277,284"/>
+<area shape="rect" href="gate__type__property_8h.html" title=" " alt="" coords="487,243,675,299"/>
+<area shape="rect" href="settings__item__dropdown_8h.html" title=" " alt="" coords="699,243,857,299"/>
+<area shape="rect" title=" " alt="" coords="881,257,947,284"/>
+<area shape="rect" title=" " alt="" coords="971,257,1046,284"/>
+<area shape="rect" href="data__container_8h.html" title=" " alt="" coords="1121,250,1275,291"/>
+<area shape="rect" href="event__handler_8h.html" title=" " alt="" coords="1300,250,1485,291"/>
+<area shape="rect" href="pin__direction_8h.html" title=" " alt="" coords="1561,250,1779,291"/>
+<area shape="rect" href="pin__type_8h.html" title=" " alt="" coords="1804,250,1995,291"/>
 </map>
 </div>
 </div>
@@ -135,7 +136,7 @@ Namespaces</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_78f3dec0c5ef157ac74258fc012bc3cd.html">selection_details_widget</a></li><li class="navelem"><a class="el" href="dir_29703ed93360dbc259961a9c5ee9cd0d.html">module_details_widget</a></li><li class="navelem"><a class="el" href="module__tree__model_8cpp.html">module_tree_model.cpp</a></li>
-    <li class="footer">Generated on Wed Jan 11 2023 13:07:11 for HAL by
+    <li class="footer">Generated on Wed Jan 11 2023 13:46:28 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

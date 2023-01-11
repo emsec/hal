@@ -15,7 +15,6 @@ var dir_a35da49c385fb45d333860c108c1de8d =
       [ "DetailsTabWidget", "classhal_1_1_details_tab_widget.html", "classhal_1_1_details_tab_widget" ]
     ] ],
     [ "details_table_utilities.h", "details__table__utilities_8h.html", null ],
-    [ "disputed_big_icon.h", "disputed__big__icon_8h.html", null ],
     [ "gate_details_tab_widget.h", "gate__details__tab__widget_8h.html", null ],
     [ "general_table_widget.h", "general__table__widget_8h.html", [
       [ "GeneralTableWidget", "classhal_1_1_general_table_widget.html", "classhal_1_1_general_table_widget" ]
@@ -24,5 +23,8 @@ var dir_a35da49c385fb45d333860c108c1de8d =
     [ "groupings_of_item_widget.h", "groupings__of__item__widget_8h.html", null ],
     [ "module_details_tab_widget.h", "module__details__tab__widget_8h.html", null ],
     [ "net_details_tab_widget.h", "net__details__tab__widget_8h.html", null ],
+    [ "selection_details_icon_provider.h", "selection__details__icon__provider_8h.html", [
+      [ "SelectionDetailsIconProvider", "classhal_1_1_selection_details_icon_provider.html", "classhal_1_1_selection_details_icon_provider" ]
+    ] ],
     [ "selection_details_widget.h", "selection__details__widget_8h.html", null ]
 ];

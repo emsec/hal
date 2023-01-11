@@ -9,12 +9,12 @@ var dir_78f3dec0c5ef157ac74258fc012bc3cd =
     [ "details_frame_widget.cpp", "details__frame__widget_8cpp.html", null ],
     [ "details_tab_widget.cpp", "details__tab__widget_8cpp.html", null ],
     [ "details_table_utilities.cpp", "details__table__utilities_8cpp.html", null ],
-    [ "disputed_big_icon.cpp", "disputed__big__icon_8cpp.html", null ],
     [ "gate_details_tab_widget.cpp", "gate__details__tab__widget_8cpp.html", null ],
     [ "general_table_widget.cpp", "general__table__widget_8cpp.html", null ],
     [ "groupings_of_item_model.cpp", "groupings__of__item__model_8cpp.html", null ],
     [ "groupings_of_item_widget.cpp", "groupings__of__item__widget_8cpp.html", null ],
     [ "module_details_tab_widget.cpp", "module__details__tab__widget_8cpp.html", null ],
     [ "net_details_tab_widget.cpp", "net__details__tab__widget_8cpp.html", null ],
+    [ "selection_details_icon_provider.cpp", "selection__details__icon__provider_8cpp.html", null ],
     [ "selection_details_widget.cpp", "selection__details__widget_8cpp.html", null ]
 ];

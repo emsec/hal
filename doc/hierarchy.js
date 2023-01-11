@@ -425,6 +425,7 @@ var hierarchy =
       ] ],
       [ "hal::NetlistRelay", "classhal_1_1_netlist_relay.html", null ],
       [ "hal::PluginRelay", "classhal_1_1_plugin_relay.html", null ],
+      [ "hal::SelectionDetailsIconProvider", "classhal_1_1_selection_details_icon_provider.html", null ],
       [ "hal::SelectionRelay", "classhal_1_1_selection_relay.html", null ],
       [ "hal::SelectionTreeModelDisposer", "classhal_1_1_selection_tree_model_disposer.html", null ],
       [ "hal::SettingsItem", "classhal_1_1_settings_item.html", [
@@ -658,7 +659,6 @@ var hierarchy =
             ] ]
           ] ],
           [ "QLabel", "https://doc.qt.io/qt-5/qlabel.html", [
-            [ "hal::DisputedBigIcon", "classhal_1_1_disputed_big_icon.html", null ],
             [ "hal::LabelButton", "classhal_1_1_label_button.html", null ]
           ] ],
           [ "QSplitter", "https://doc.qt.io/qt-5/qsplitter.html", [
@@ -727,8 +727,8 @@ var hierarchy =
       [ "hal::VHDLParserTest", "classhal_1_1_v_h_d_l_parser_test.html", null ]
     ] ],
     [ "nlohmann::detail::to_json_fn", "structnlohmann_1_1detail_1_1to__json__fn.html", null ],
-    [ "hal::Token< T >", "structhal_1_1_token.html", null ],
     [ "hal::BooleanFunctionParser::Token", "structhal_1_1_boolean_function_parser_1_1_token.html", null ],
+    [ "hal::Token< T >", "structhal_1_1_token.html", null ],
     [ "hal::TokenStream< T >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< ci_string >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< std::string >", "classhal_1_1_token_stream.html", null ],
