@@ -1,3 +1,259 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhal_1_1_wait_to_be_seated_entry.html" title=" " alt="" coords="5,5,195,32"/>
+<area shape="rect" id="node1" href="$classhal_1_1_content_anchor.html" title="An abstract class that provides the interface for specific anchors (see SplitterAnchor or TabWidget )..." alt="" coords="10,748,157,775"/>
+<area shape="rect" id="node2" href="$classhal_1_1_splitter_anchor.html" title="Adds specific ContentWidgets to HALs main content area." alt="" coords="255,773,398,800"/>
+<area shape="rect" id="node3" href="$classhal_1_1_tab_widget.html" title="Adds specific ContentWidgets to HALs main content area." alt="" coords="839,1212,957,1239"/>
+<area shape="rect" id="node4" href="$classhal_1_1_project_serializer.html" title=" " alt="" coords="5,132,161,159"/>
+<area shape="rect" id="node5" href="$classhal_1_1_comment_manager.html" title=" " alt="" coords="241,309,412,336"/>
+<area shape="rect" id="node6" href="$classhal_1_1_graph_context_serializer.html" title=" " alt="" coords="226,208,427,235"/>
+<area shape="rect" id="node7" href="$classhal_1_1_grouping_color_serializer.html" title=" " alt="" coords="225,5,429,32"/>
+<area shape="rect" id="node8" href="$classhal_1_1_grouping_serializer.html" title=" " alt="" coords="241,56,412,83"/>
+<area shape="rect" id="node9" href="$classhal_1_1_module_color_serializer.html" title=" " alt="" coords="230,107,423,133"/>
+<area shape="rect" id="node10" href="$classhal_1_1_python_serializer.html" title=" " alt="" coords="249,157,405,184"/>
+<area shape="rect" id="node11" href="$classhal_1_1_python_context_subscriber.html" title="Interface for handling python outputs." alt="" coords="791,2457,1005,2484"/>
+<area shape="rect" id="node12" href="$classhal_1_1_python_console.html" title="An interactable python console." alt="" coords="1349,2648,1496,2675"/>
+<area shape="rect" id="node13" href="$classhal_1_1_python_editor.html" title="Main widget that combines all neccessary functionality to develop in python (for hal)." alt="" coords="1107,1917,1241,1944"/>
+<area shape="rect" id="node14" href="$classhal_1_1_python_thread.html" title=" " alt="" coords="1104,2369,1244,2396"/>
+<area shape="rect" id="node15" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qgraphicsitem.html" title=" " alt="" coords="24,360,143,387"/>
+<area shape="rect" id="node16" href="$classhal_1_1_comment_speech_bubble.html" title=" " alt="" coords="223,360,430,387"/>
+<area shape="rect" id="node17" href="$classhal_1_1_graphics_item.html" title="Superclass for all graphic items used ins the GraphicsScene. It contains information about the underl..." alt="" coords="258,259,395,285"/>
+<area shape="rect" id="node30" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qgraphicsobject.html" title=" " alt="" coords="261,411,392,437"/>
+<area shape="rect" id="node18" href="$classhal_1_1_graphics_net.html" title="The basic net class all other nets inherit from." alt="" coords="545,259,676,285"/>
+<area shape="rect" id="node25" href="$classhal_1_1_graphics_node.html" title="Abstract base class for nodes (e.g. gates, modules)" alt="" coords="540,132,681,159"/>
+<area shape="rect" id="node19" href="$classhal_1_1_separated_graphics_net.html" title="Abstract base class for separated nets (e.g. ArrowSeparatedNet)" alt="" coords="800,233,996,260"/>
+<area shape="rect" id="node23" href="$classhal_1_1_standard_graphics_net.html" title="The most basic net to display the standard nets." alt="" coords="804,284,992,311"/>
+<area shape="rect" id="node20" href="$classhal_1_1_arrow_separated_net.html" title="Used to display all nets which destinations are not in the current view." alt="" coords="1085,233,1263,260"/>
+<area shape="rect" id="node21" href="$classhal_1_1_circle_separated_net.html" title="Used to display all nets which destinations are not in the current view." alt="" coords="1086,284,1262,311"/>
+<area shape="rect" id="node22" href="$classhal_1_1_labeled_separated_net.html" title="Nets whose output and input can be labeled (e.g. from GND/VCC)" alt="" coords="1079,183,1269,209"/>
+<area shape="rect" id="node24" href="$classhal_1_1_standard_arrow_net.html" title="A standard net that has parts of a separated net." alt="" coords="1089,335,1259,361"/>
+<area shape="rect" id="node26" href="$classhal_1_1_graphics_gate.html" title="Abstract base class for gates." alt="" coords="829,81,967,108"/>
+<area shape="rect" id="node28" href="$classhal_1_1_graphics_module.html" title="Abstract base class for modules." alt="" coords="821,132,975,159"/>
+<area shape="rect" id="node27" href="$classhal_1_1_standard_graphics_gate.html" title="The standard gate to visualize netlist gates." alt="" coords="1076,81,1272,108"/>
+<area shape="rect" id="node29" href="$classhal_1_1_standard_graphics_module.html" title="The standard module to visualize netlist modules." alt="" coords="1067,132,1281,159"/>
+<area shape="rect" id="node31" href="$classhal_1_1_node_drag_shadow.html" title="An item that is drawn when a node is dragged through the scene." alt="" coords="527,385,694,412"/>
+<area shape="rect" id="node32" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="46,1457,121,1484"/>
+<area shape="rect" id="node33" href="$classhal_1_1_content_drag_relay.html" title="This relay provides the timing information when a DockButton is dragged. It is implemented as a singl..." alt="" coords="242,824,411,851"/>
+<area shape="rect" id="node34" href="$classhal_1_1_content_manager.html" title="Manages all ContentWidgets." alt="" coords="247,875,406,901"/>
+<area shape="rect" id="node35" href="$classhal_1_1_file_manager.html" title="Stores information about the currently opened netlist." alt="" coords="261,925,392,952"/>
+<area shape="rect" id="node36" href="$classhal_1_1_file_status_manager.html" title="Holds information about the state (e.g. saved/unsaved) of all laded files (i.e. .hal/...." alt="" coords="241,976,412,1003"/>
+<area shape="rect" id="node37" href="$classhal_1_1_gate_select_picker.html" title="The GateSelectPicker class instance gets spawned to pick module from graph." alt="" coords="247,1027,407,1053"/>
+<area shape="rect" id="node38" href="$classhal_1_1_gate_select_receiver.html" title=" " alt="" coords="237,2040,416,2067"/>
+<area shape="rect" id="node41" href="$classhal_1_1_graph_context.html" title="Logical container for modules, gates, and nets." alt="" coords="257,1179,397,1205"/>
+<area shape="rect" id="node42" href="$classhal_1_1_graph_context_manager.html" title="User interface to manage all GraphContexts." alt="" coords="228,1229,425,1256"/>
+<area shape="rect" id="node43" href="$classhal_1_1_graph_layouter.html" title="Base class for all specific layouters." alt="" coords="253,2091,400,2117"/>
+<area shape="rect" id="node46" href="$classhal_1_1_gui_api.html" title="Interface to interact with the gui itself." alt="" coords="280,1128,373,1155"/>
+<area shape="rect" id="node47" href="$classhal_1_1_logger_marshall.html" title="Appends log messages to the corresponding LoggerWidget." alt="" coords="251,1432,402,1459"/>
+<area shape="rect" id="node48" href="$classhal_1_1_module_select_picker.html" title="The ModuleSelectPicker class instance gets spawned to pick module from graph." alt="" coords="238,1483,415,1509"/>
+<area shape="rect" id="node49" href="$classhal_1_1_module_select_receiver.html" title=" " alt="" coords="229,2145,424,2172"/>
+<area shape="rect" id="node52" href="$classhal_1_1_netlist_relay.html" title="Connects the hal&#45;core events to the gui." alt="" coords="261,1533,392,1560"/>
+<area shape="rect" id="node53" href="$classhal_1_1_plugin_relay.html" title="Forwards plugin related events from the core to the gui." alt="" coords="263,1584,390,1611"/>
+<area shape="rect" id="node54" href="$classhal_1_1_selection_relay.html" title="Stores and manages the gui&#39;s selection state." alt="" coords="253,1635,400,1661"/>
+<area shape="rect" id="node55" href="$classhal_1_1_selection_tree_model_disposer.html" title="Deletes the current SelectionTreeModel." alt="" coords="209,1685,444,1712"/>
+<area shape="rect" id="node56" href="$classhal_1_1_settings_item.html" title="The interface for the logical part of a setting." alt="" coords="260,639,393,665"/>
+<area shape="rect" id="node63" href="$classhal_1_1_settings_manager.html" title="Manages and persists the settings on the lowest level." alt="" coords="247,1331,407,1357"/>
+<area shape="rect" id="node64" href="$classhal_1_1_special_log_content_manager.html" title="Logs the python editor and gui screenshots." alt="" coords="213,1787,441,1813"/>
+<area shape="rect" id="node65" href="$classhal_1_1_user_action_manager.html" title="Handles and manages user actions related proccesses." alt="" coords="237,1837,416,1864"/>
+<area shape="rect" id="node66" href="$classhal_1_1_user_action_object_type.html" title="The UserActionObjectType class provides the type for UserActionObject." alt="" coords="230,1888,423,1915"/>
+<area shape="rect" id="node67" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qabstractitemdelegate.html" title=" " alt="" coords="239,2225,414,2252"/>
+<area shape="rect" id="node70" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstractitemmodel.html" title=" " alt="" coords="249,1077,405,1104"/>
+<area shape="rect" id="node100" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qaction.html" title=" " alt="" coords="290,1280,363,1307"/>
+<area shape="rect" id="node102" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qgraphicseffect.html" title=" " alt="" coords="263,1381,390,1408"/>
+<area shape="rect" id="node104" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qgraphicsscene.html" title=" " alt="" coords="263,1736,391,1763"/>
+<area shape="rect" id="node106" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qmimedata.html" title=" " alt="" coords="277,1939,377,1965"/>
+<area shape="rect" id="node108" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qsyntaxhighlighter.html" title=" " alt="" coords="252,1989,401,2016"/>
+<area shape="rect" id="node110" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qthread.html" title=" " alt="" coords="288,2291,365,2317"/>
+<area shape="rect" id="node111" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qwidget.html" title=" " alt="" coords="287,4323,366,4349"/>
+<area shape="rect" id="node39" href="$classhal_1_1_graph_graphics_view_neighbor_selector.html" title=" " alt="" coords="492,1970,729,2011"/>
+<area shape="rect" id="node40" href="$classhal_1_1_python_gate_selection_receiver.html" title=" " alt="" coords="517,1905,704,1946"/>
+<area shape="rect" id="node44" href="$classhal_1_1_physical_graph_layouter.html" title="A specific implementation of a layouter." alt="" coords="511,2087,711,2113"/>
+<area shape="rect" id="node45" href="$classhal_1_1_standard_graph_layouter.html" title="The standard layouter used to layout netlists." alt="" coords="509,2036,713,2063"/>
+<area shape="rect" id="node50" href="$classhal_1_1_add_to_module_receiver.html" title=" " alt="" coords="513,2204,708,2231"/>
+<area shape="rect" id="node51" href="$classhal_1_1_python_module_selection_receiver.html" title=" " alt="" coords="509,2138,712,2179"/>
+<area shape="rect" id="node57" href="$classhal_1_1_settings_item_checkbox.html" title="A SettingsItem representing a Checkbox." alt="" coords="512,487,709,513"/>
+<area shape="rect" id="node58" href="$classhal_1_1_settings_item_dropdown.html" title="A SettingsItem that represents a dropdown menu." alt="" coords="511,537,710,564"/>
+<area shape="rect" id="node59" href="$classhal_1_1_settings_item_keybind.html" title="A SettingsItem to modify keybinds." alt="" coords="518,588,703,615"/>
+<area shape="rect" id="node60" href="$classhal_1_1_settings_item_slider.html" title="A SettingsItem representing a slider." alt="" coords="525,639,696,665"/>
+<area shape="rect" id="node61" href="$classhal_1_1_settings_item_spinbox.html" title="A SettingsItem that represents a spinbox." alt="" coords="518,689,703,716"/>
+<area shape="rect" id="node62" href="$classhal_1_1_settings_item_text.html" title="A SettingsItem that represents a textfield." alt="" coords="531,740,691,767"/>
+<area shape="rect" id="node68" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qstyleditemdelegate.html" title=" " alt="" coords="529,2255,692,2281"/>
+<area shape="rect" id="node69" href="$classhal_1_1_grouping_color_delegate.html" title="Displays a colored box for the GroupingManagerWidget." alt="" coords="797,2255,999,2281"/>
+<area shape="rect" id="node71" href="$classhal_1_1_base_tree_model.html" title="The BaseTreeModel implements generic standard functions of a tree model." alt="" coords="536,1313,685,1340"/>
+<area shape="rect" id="node76" href="$classhal_1_1_module_model.html" title="Represents the netlist module&#39;s hierarchy." alt="" coords="541,1052,680,1079"/>
+<area shape="rect" id="node77" href="$classhal_1_1_selection_tree_model.html" title="A model that contains the current selection." alt="" coords="522,1103,699,1129"/>
+<area shape="rect" id="node78" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstractproxymodel.html" title=" " alt="" coords="529,791,692,817"/>
+<area shape="rect" id="node87" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstracttablemodel.html" title=" " alt="" coords="531,841,691,868"/>
+<area shape="rect" id="node72" href="$classhal_1_1_gate_pins_tree_model.html" title="A model to display the pins of a gate." alt="" coords="811,1313,985,1340"/>
+<area shape="rect" id="node73" href="$classhal_1_1_module_pins_tree_model.html" title="A model to represent the ports of a module." alt="" coords="802,1364,994,1391"/>
+<area shape="rect" id="node74" href="$classhal_1_1_module_tree_model.html" title=" " alt="" coords="815,1415,981,1441"/>
+<area shape="rect" id="node75" href="$classhal_1_1_netlist_elements_tree_model.html" title="A model to display arbitrary elements of the netlist." alt="" coords="807,1466,989,1507"/>
+<area shape="rect" id="node79" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qsortfilterproxymodel.html" title=" " alt="" coords="814,537,982,564"/>
+<area shape="rect" id="node80" href="$classhal_1_1_context_table_proxy_model.html" title="A proxy model to filter the ContextTableModel by a given string." alt="" coords="1068,487,1280,513"/>
+<area shape="rect" id="node81" href="$classhal_1_1_gatelibrary_proxy_model.html" title="Helper model to make filtering available." alt="" coords="1074,537,1274,564"/>
+<area shape="rect" id="node82" href="$classhal_1_1_gate_select_proxy.html" title="The GateSelectProxy class allows sorting and filtering of module tables." alt="" coords="1095,588,1253,615"/>
+<area shape="rect" id="node83" href="$classhal_1_1_grouping_proxy_model.html" title="Helper model to make filtering available." alt="" coords="1081,639,1267,665"/>
+<area shape="rect" id="node84" href="$classhal_1_1_module_proxy_model.html" title="Enables filtering in the ModuleModel." alt="" coords="1087,689,1261,716"/>
+<area shape="rect" id="node85" href="$classhal_1_1_module_select_proxy.html" title="The ModuleSelectProxy class allows sorting and filtering of module tables." alt="" coords="1087,385,1261,412"/>
+<area shape="rect" id="node86" href="$classhal_1_1_selection_tree_proxy_model.html" title="Enables filtering of the SelectionTreeModel." alt="" coords="1067,436,1281,463"/>
+<area shape="rect" id="node88" href="$classhal_1_1_boolean_function_table_model.html" title="A model that holds BooleanFunctions and clear&#45;preset behaviors." alt="" coords="802,994,994,1035"/>
+<area shape="rect" id="node89" href="$classhal_1_1_channel_model.html" title="Table model for log channels." alt="" coords="827,1060,969,1087"/>
+<area shape="rect" id="node90" href="$classhal_1_1_context_table_model.html" title="Base model for the ContextManagerWidget to manage GraphContexts." alt="" coords="811,1111,985,1137"/>
+<area shape="rect" id="node91" href="$classhal_1_1_data_table_model.html" title="A model to display the data of a DataContainer." alt="" coords="821,1161,975,1188"/>
+<area shape="rect" id="node92" href="$classhal_1_1_endpoint_table_model.html" title="A model to display endpoint data." alt="" coords="807,639,989,665"/>
+<area shape="rect" id="node93" href="$classhal_1_1_gatelibrary_table_model.html" title="A model to display loaded gatelibraries." alt="" coords="799,689,997,716"/>
+<area shape="rect" id="node94" href="$classhal_1_1_gate_select_model.html" title="The GateSelectModel class is the source model for module selection." alt="" coords="817,740,979,767"/>
+<area shape="rect" id="node95" href="$classhal_1_1_groupings_of_item_model.html" title="A TableModel to store all Groupings that contain a specified Gate, Net or Module." alt="" coords="797,841,999,868"/>
+<area shape="rect" id="node96" href="$classhal_1_1_grouping_table_model.html" title="Table that holds information about all groupings." alt="" coords="807,588,989,615"/>
+<area shape="rect" id="node97" href="$classhal_1_1_l_u_t_table_model.html" title="A model for truth&#45;tables." alt="" coords="823,892,973,919"/>
+<area shape="rect" id="node98" href="$classhal_1_1_module_select_model.html" title="The ModuleSelectModel class is the source model for module selection." alt="" coords="809,791,987,817"/>
+<area shape="rect" id="node99" href="$classhal_1_1_module_table_model.html" title="A model to display module data." alt="" coords="812,943,984,969"/>
+<area shape="rect" id="node101" href="$classhal_1_1_action.html" title="Provides an interface for triggerable functionality that can be inserted into widgets and also connec..." alt="" coords="565,1364,656,1391"/>
+<area shape="rect" id="node103" href="$classhal_1_1_shadow_effect.html" title="Creates a shadow effect around QObjects." alt="" coords="541,1415,680,1441"/>
+<area shape="rect" id="node105" href="$classhal_1_1_graphics_scene.html" title="Container for a GraphGraphicsView containing gates, nets, and modules." alt="" coords="537,1736,684,1763"/>
+<area shape="rect" id="node107" href="$classhal_1_1_dock_mime_data.html" title="QMineData to store and transfer information while dragging a DockButton." alt="" coords="535,1803,686,1829"/>
+<area shape="rect" id="node109" href="$classhal_1_1_python_syntax_highlighter.html" title="A syntax highlighter that fits for python code." alt="" coords="505,1853,717,1880"/>
+<area shape="rect" id="node112" href="$classhal_1_1_busy_animation.html" title=" " alt="" coords="536,4196,685,4223"/>
+<area shape="rect" id="node113" href="$classhal_1_1_code_editor_minimap.html" title="A minimap that supports an easier navigation in larger files." alt="" coords="521,4247,700,4273"/>
+<area shape="rect" id="node114" href="$classhal_1_1_comment_widget.html" title=" " alt="" coords="531,4297,691,4324"/>
+<area shape="rect" id="node115" href="$classhal_1_1_content_frame.html" title="Wraps the ContentWidget class." alt="" coords="539,4348,682,4375"/>
+<area shape="rect" id="node116" href="$classhal_1_1_content_layout_area.html" title="Manages the layout of all ContentWidgets." alt="" coords="523,4399,698,4425"/>
+<area shape="rect" id="node117" href="$classhal_1_1_details_frame_widget.html" title=" " alt="" coords="519,4449,702,4476"/>
+<area shape="rect" id="node118" href="$classhal_1_1_graphics_qss_adapter.html" title="Connects the stylesheet properties with the code." alt="" coords="519,4500,702,4527"/>
+<area shape="rect" id="node119" href="$classhal_1_1_graph_navigation_widget.html" title=" " alt="" coords="507,4551,714,4577"/>
+<area shape="rect" id="node120" href="$classhal_1_1_key_value_table.html" title=" " alt="" coords="539,4601,683,4628"/>
+<area shape="rect" id="node121" href="$classhal_1_1_line_number_area.html" title="Shows line numbers next to a CodeEditor." alt="" coords="531,4652,690,4679"/>
+<area shape="rect" id="node122" href="$classhal_1_1_logger_qss_adapter.html" title="Connects the stylesheet properties to the log designs." alt="" coords="526,4703,695,4729"/>
+<area shape="rect" id="node123" href="$classhal_1_1_main_settings_widget.html" title="The top&#45;level widget that displays all settings." alt="" coords="520,4753,701,4780"/>
+<area shape="rect" id="node124" href="$classhal_1_1_main_window.html" title="The top level widget." alt="" coords="543,4804,678,4831"/>
+<area shape="rect" id="node125" href="$classhal_1_1_minimap_scrollbar.html" title="The scrollbar of the CodeEditorMinimap." alt="" coords="529,4855,693,4881"/>
+<area shape="rect" id="node126" href="$classhal_1_1_plugin_parameter_file_dialog.html" title=" " alt="" coords="521,4906,701,4947"/>
+<area shape="rect" id="node127" href="$classhal_1_1_python_console_qss_adapter.html" title="Connects the stylesheet properties to the console code." alt="" coords="499,5023,722,5049"/>
+<area shape="rect" id="node128" href="$classhal_1_1_python_qss_adapter.html" title="QSS Adapter to provide the color configurations used by the PythonSyntaxHighlighter." alt="" coords="525,2939,696,2965"/>
+<area shape="rect" id="node129" href="$classhal_1_1_spinner_widget.html" title="A loading wheel." alt="" coords="538,2989,683,3016"/>
+<area shape="rect" id="node130" href="$classhal_1_1_widget.html" title="A QWidget customized for hal." alt="" coords="563,1263,659,1289"/>
+<area shape="rect" id="node140" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qabstractbutton.html" title=" " alt="" coords="546,3699,675,3725"/>
+<area shape="rect" id="node147" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qabstractslider.html" title=" " alt="" coords="549,4972,672,4999"/>
+<area shape="rect" id="node150" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qcombobox.html" title=" " alt="" coords="559,3884,662,3911"/>
+<area shape="rect" id="node152" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qdialog.html" title=" " alt="" coords="573,4044,648,4071"/>
+<area shape="rect" id="node171" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qframe.html" title=" " alt="" coords="574,3040,647,3067"/>
+<area shape="rect" id="node243" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qkeysequenceedit.html" title=" " alt="" coords="539,4095,683,4121"/>
+<area shape="rect" id="node245" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qtabwidget.html" title=" " alt="" coords="561,4145,661,4172"/>
+<area shape="rect" id="node250" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qtoolbar.html" title=" " alt="" coords="571,3609,651,3636"/>
+<area shape="rect" id="node131" href="$classhal_1_1_content_widget.html" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="825,1263,971,1289"/>
+<area shape="rect" id="node132" href="$classhal_1_1_context_manager_widget.html" title="Provides the user with an interface to manage GraphContexts." alt="" coords="1072,1288,1276,1315"/>
+<area shape="rect" id="node133" href="$classhal_1_1_graph_tab_widget.html" title="A ContentWidget that holds all GraphWidget objects (GraphView) as tabs of a QTabWidget." alt="" coords="1095,1339,1253,1365"/>
+<area shape="rect" id="node134" href="$classhal_1_1_graph_widget.html" title="Wraps a GraphContext and a GraphGraphicsView." alt="" coords="1107,1389,1241,1416"/>
+<area shape="rect" id="node135" href="$classhal_1_1_grouping_manager_widget.html" title="User interface for Groupings." alt="" coords="1068,1440,1280,1467"/>
+<area shape="rect" id="node136" href="$classhal_1_1_logger_widget.html" title="Displays the logs in the gui." alt="" coords="1104,1085,1244,1112"/>
+<area shape="rect" id="node137" href="$classhal_1_1_module_widget.html" title="Shows the modules of the netlist hierarchical in a tree view." alt="" coords="1102,1136,1246,1163"/>
+<area shape="rect" id="node138" href="$classhal_1_1_python_console_widget.html" title="Wraps the PythonConsole." alt="" coords="1077,1187,1271,1213"/>
+<area shape="rect" id="node139" href="$classhal_1_1_selection_details_widget.html" title="Container for all specific details widgets." alt="" coords="1073,1237,1275,1264"/>
+<area shape="rect" id="node141" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qcheckbox.html" title=" " alt="" coords="849,3623,947,3649"/>
+<area shape="rect" id="node143" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qpushbutton.html" title=" " alt="" coords="845,3673,951,3700"/>
+<area shape="rect" id="node145" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qtoolbutton.html" title=" " alt="" coords="847,3724,949,3751"/>
+<area shape="rect" id="node142" href="$classhal_1_1_severity_selector.html" title=" " alt="" coords="1095,3623,1253,3649"/>
+<area shape="rect" id="node144" href="$classhal_1_1_color_selection.html" title=" " alt="" coords="1102,3673,1246,3700"/>
+<area shape="rect" id="node146" href="$classhal_1_1_dock_button.html" title="A button of in the DockerBar." alt="" coords="1111,3724,1237,3751"/>
+<area shape="rect" id="node148" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qscrollbar.html" title=" " alt="" coords="853,4972,943,4999"/>
+<area shape="rect" id="node149" href="$classhal_1_1_code_editor_scrollbar.html" title="Represents the scrollbar of the CodeEditor." alt="" coords="1085,4972,1263,4999"/>
+<area shape="rect" id="node151" href="$classhal_1_1_channel_selector.html" title="A combobox for selecting a logger channel." alt="" coords="820,3775,976,3801"/>
+<area shape="rect" id="node153" href="$classhal_1_1_about_dialog.html" title="A dialog that displays the Qt version and our open source license." alt="" coords="833,4095,963,4121"/>
+<area shape="rect" id="node154" href="$classhal_1_1_combobox_dialog.html" title=" " alt="" coords="817,4044,979,4071"/>
+<area shape="rect" id="node156" href="$classhal_1_1_comment_color_picker.html" title=" " alt="" coords="805,4145,991,4172"/>
+<area shape="rect" id="node157" href="$classhal_1_1_comment_dialog.html" title=" " alt="" coords="820,4196,976,4223"/>
+<area shape="rect" id="node158" href="$classhal_1_1_gate_dialog.html" title="The GateDialog class opens a popup window for module selection." alt="" coords="837,4247,959,4273"/>
+<area shape="rect" id="node159" href="$classhal_1_1_gatelibrary_management_dialog.html" title="A dialog for the management of gate libraries." alt="" coords="793,4298,1003,4339"/>
+<area shape="rect" id="node160" href="$classhal_1_1_grouping_dialog.html" title=" " alt="" coords="823,4364,973,4391"/>
+<area shape="rect" id="node161" href="$classhal_1_1_import_netlist_dialog.html" title=" " alt="" coords="809,4415,987,4441"/>
+<area shape="rect" id="node162" href="$classhal_1_1_import_project_dialog.html" title=" " alt="" coords="808,4465,988,4492"/>
+<area shape="rect" id="node163" href="$classhal_1_1_input_dialog.html" title="Generic input dialog for user input." alt="" coords="835,4516,961,4543"/>
+<area shape="rect" id="node164" href="$classhal_1_1_module_dialog.html" title="The ModuleDialog class opens a popup window for module selection." alt="" coords="828,4567,968,4593"/>
+<area shape="rect" id="node165" href="$classhal_1_1_new_project_dialog.html" title=" " alt="" coords="815,3825,981,3852"/>
+<area shape="rect" id="node166" href="$classhal_1_1_plugin_parameter_dialog.html" title=" " alt="" coords="799,3876,997,3903"/>
+<area shape="rect" id="node167" href="$classhal_1_1_python_editor_code_completion_dialog.html" title="Dialog for python code completion." alt="" coords="777,3927,1019,3969"/>
+<area shape="rect" id="node168" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qfiledialog.html" title=" " alt="" coords="849,3993,947,4020"/>
+<area shape="rect" id="node155" href="$classhal_1_1_pingroup_selector_dialog.html" title=" " alt="" coords="1073,4044,1275,4071"/>
+<area shape="rect" id="node169" href="$classhal_1_1_export_project_dialog.html" title=" " alt="" coords="1085,3943,1263,3969"/>
+<area shape="rect" id="node170" href="$classhal_1_1_project_dir_dialog.html" title=" " alt="" coords="1096,3993,1252,4020"/>
+<area shape="rect" id="node172" href="$classhal_1_1_abstract_busy_indicator.html" title=" " alt="" coords="801,3167,995,3193"/>
+<area shape="rect" id="node175" href="$classhal_1_1_comment_item.html" title=" " alt="" coords="826,3217,970,3244"/>
+<area shape="rect" id="node176" href="$classhal_1_1_dock_bar.html" title="Contains and handles DockButtons." alt="" coords="845,3268,951,3295"/>
+<area shape="rect" id="node177" href="$classhal_1_1_expanding_list_button.html" title="One button of the ExpandingListWidget." alt="" coords="806,3319,990,3345"/>
+<area shape="rect" id="node178" href="$classhal_1_1_expanding_list_item.html" title="Wrapper for ExpandingListButtons." alt="" coords="813,3369,983,3396"/>
+<area shape="rect" id="node179" href="$classhal_1_1_file_modified_bar.html" title="A dialog in form of a bar to let the user decide how to handle file changes outside of HAL." alt="" coords="823,3420,973,3447"/>
+<area shape="rect" id="node180" href="$classhal_1_1_file_select_widget.html" title=" " alt="" coords="819,3471,977,3497"/>
+<area shape="rect" id="node181" href="$classhal_1_1_get_in_touch_item.html" title="One item in the welcome screen&#39;s GetInTouch section." alt="" coords="822,3521,974,3548"/>
+<area shape="rect" id="node182" href="$classhal_1_1_get_in_touch_widget.html" title="The welcome screen&#39;s GetInTouch section." alt="" coords="814,2356,982,2383"/>
+<area shape="rect" id="node183" href="$classhal_1_1_labeled_frame.html" title="A QFrame with a label." alt="" coords="827,2407,969,2433"/>
+<area shape="rect" id="node184" href="$classhal_1_1_open_file_widget.html" title="The welcome screen&#39;s OpenFile section." alt="" coords="821,2508,975,2535"/>
+<area shape="rect" id="node185" href="$classhal_1_1_overlay.html" title="The Overlay overlays its parent." alt="" coords="847,2559,949,2585"/>
+<area shape="rect" id="node187" href="$classhal_1_1_preview_widget.html" title="unused." alt="" coords="824,2660,972,2687"/>
+<area shape="rect" id="node188" href="$classhal_1_1_project_dir_dialog_status.html" title=" " alt="" coords="799,2711,997,2737"/>
+<area shape="rect" id="node189" href="$classhal_1_1_python_console_abort_thread.html" title=" " alt="" coords="785,2761,1011,2788"/>
+<area shape="rect" id="node190" href="$classhal_1_1_recent_file_item.html" title="One item in the welcome screen&#39;s RecentFiles section." alt="" coords="824,2812,972,2839"/>
+<area shape="rect" id="node191" href="$classhal_1_1_recent_files_widget.html" title="The welcome screen&#39;s RecentFiles section." alt="" coords="813,2609,983,2636"/>
+<area shape="rect" id="node192" href="$classhal_1_1_searchbar.html" title="A QFrame with a QLineEdit that can be used to input a substring to search for." alt="" coords="841,2863,955,2889"/>
+<area shape="rect" id="node193" href="$classhal_1_1_settings_widget.html" title="The base class for all specific SettingsWidgets." alt="" coords="823,2913,973,2940"/>
+<area shape="rect" id="node200" href="$classhal_1_1_welcome_screen.html" title="Hal&#39;s welcome screen." alt="" coords="821,3015,975,3041"/>
+<area shape="rect" id="node201" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qabstractscrollarea.html" title=" " alt="" coords="822,3116,974,3143"/>
+<area shape="rect" id="node238" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qlabel.html" title=" " alt="" coords="865,2964,931,2991"/>
+<area shape="rect" id="node241" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qsplitter.html" title=" " alt="" coords="859,3065,937,3092"/>
+<area shape="rect" id="node173" href="$classhal_1_1_busy_indicator.html" title=" " alt="" coords="1105,3369,1243,3396"/>
+<area shape="rect" id="node174" href="$classhal_1_1_progress_bar.html" title=" " alt="" coords="1110,3420,1238,3447"/>
+<area shape="rect" id="node186" href="$classhal_1_1_widget_overlay.html" title="Container for a QWidget that overlays another one." alt="" coords="1101,2559,1247,2585"/>
+<area shape="rect" id="node194" href="$classhal_1_1_settings_widget_checkbox.html" title="A SettingsWidget representing a checkbox." alt="" coords="1067,2711,1281,2737"/>
+<area shape="rect" id="node195" href="$classhal_1_1_settings_widget_dropdown.html" title="A SettingsWidget representing a dropdown menu." alt="" coords="1067,2761,1281,2788"/>
+<area shape="rect" id="node196" href="$classhal_1_1_settings_widget_keybind.html" title="A setting to configure keybinds." alt="" coords="1073,2812,1275,2839"/>
+<area shape="rect" id="node197" href="$classhal_1_1_settings_widget_slider.html" title="A SettingsWidget representing a slider." alt="" coords="1081,2863,1267,2889"/>
+<area shape="rect" id="node198" href="$classhal_1_1_settings_widget_spinbox.html" title="A SettingsWidget representing a spinbox." alt="" coords="1073,2913,1275,2940"/>
+<area shape="rect" id="node199" href="$classhal_1_1_settings_widget_text.html" title="A SettingsWidget representing a textfield." alt="" coords="1086,2660,1262,2687"/>
+<area shape="rect" id="node202" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qabstractitemview.html" title=" " alt="" coords="1100,3217,1248,3244"/>
+<area shape="rect" id="node229" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qgraphicsview.html" title=" " alt="" coords="1113,3268,1235,3295"/>
+<area shape="rect" id="node231" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qplaintextedit.html" title=" " alt="" coords="1116,3319,1232,3345"/>
+<area shape="rect" id="node234" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qscrollarea.html" title=" " alt="" coords="1125,3167,1223,3193"/>
+<area shape="rect" id="node237" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qtextedit.html" title=" " alt="" coords="1132,3116,1216,3143"/>
+<area shape="rect" id="node203" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qtableview.html" title=" " alt="" coords="1373,3344,1472,3371"/>
+<area shape="rect" id="node220" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qtreeview.html" title=" " alt="" coords="1377,3091,1468,3117"/>
+<area shape="rect" id="node204" href="$classhal_1_1_boolean_function_table.html" title="A table view that shows BooleanFunctions and clear&#45;preset behaviors." alt="" coords="1571,3192,1763,3219"/>
+<area shape="rect" id="node205" href="$classhal_1_1_data_table_widget.html" title="A widget to display the data of a DataContainer (Module, Gate or Net)" alt="" coords="1587,3243,1748,3269"/>
+<area shape="rect" id="node206" href="$classhal_1_1_gatelibrary_table_view.html" title=" " alt="" coords="1573,3293,1762,3320"/>
+<area shape="rect" id="node207" href="$classhal_1_1_gate_select_view.html" title="The GateSelectView class is the table widget for module selection." alt="" coords="1591,3344,1744,3371"/>
+<area shape="rect" id="node208" href="$classhal_1_1_groupings_of_item_widget.html" title="A TableView to display all groupings that contain a specified Gate, Net or Module." alt="" coords="1564,3395,1771,3421"/>
+<area shape="rect" id="node209" href="$classhal_1_1_grouping_table_view.html" title=" " alt="" coords="1580,3445,1755,3472"/>
+<area shape="rect" id="node210" href="$classhal_1_1_l_u_t_table_widget.html" title="A view for truth&#45;tables (based on the LUTTableModel)" alt="" coords="1590,3496,1745,3523"/>
+<area shape="rect" id="node211" href="$classhal_1_1_module_select_view.html" title="The ModuleSelectView class is the table widget for module selection." alt="" coords="1582,3547,1753,3573"/>
+<area shape="rect" id="node212" href="$classhal_1_1_net_endpoint_table.html" title=" " alt="" coords="1585,3597,1749,3624"/>
+<area shape="rect" id="node213" href="$classhal_1_1_net_module_table.html" title=" " alt="" coords="1590,3648,1745,3675"/>
+<area shape="rect" id="node214" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qtablewidget.html" title=" " alt="" coords="1611,3141,1723,3168"/>
+<area shape="rect" id="node215" href="$classhal_1_1_general_table_widget.html" title=" " alt="" coords="1825,3144,2007,3171"/>
+<area shape="rect" id="node219" href="$classhal_1_1_graph_navigation_table_widget.html" title="A widget used to select destinations when traversing through the graph." alt="" coords="1819,3195,2013,3237"/>
+<area shape="rect" id="node216" href="$classhal_1_1_gate_info_table.html" title=" " alt="" coords="2070,3093,2210,3120"/>
+<area shape="rect" id="node217" href="$classhal_1_1_module_info_table.html" title=" " alt="" coords="2061,3144,2219,3171"/>
+<area shape="rect" id="node218" href="$classhal_1_1_net_info_table.html" title=" " alt="" coords="2074,3195,2206,3221"/>
+<area shape="rect" id="node221" href="$classhal_1_1_module_tree_view.html" title="Wraps the QTreeView used for the ModuleWidget." alt="" coords="1589,2989,1746,3016"/>
+<area shape="rect" id="node222" href="$classhal_1_1_selection_tree_view.html" title="Displays the current selection." alt="" coords="1583,3040,1752,3067"/>
+<area shape="rect" id="node223" href="$classhal_1_1_size_adjustable_tree_view.html" title=" " alt="" coords="1565,3091,1770,3117"/>
+<area shape="rect" id="node227" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qtreewidget.html" title=" " alt="" coords="1615,2935,1720,2961"/>
+<area shape="rect" id="node224" href="$classhal_1_1_gate_pin_tree.html" title="A widget to display the pins of a given gate." alt="" coords="1852,3043,1980,3069"/>
+<area shape="rect" id="node225" href="$classhal_1_1_module_elements_tree.html" title="A widget to display the specific (direct submodules, gates) items of a given module." alt="" coords="1823,3093,2009,3120"/>
+<area shape="rect" id="node226" href="$classhal_1_1_module_pins_tree.html" title="A widget to display the ports of a given module." alt="" coords="1840,2992,1992,3019"/>
+<area shape="rect" id="node228" href="$classhal_1_1_graph_navigation_tree_widget.html" title=" " alt="" coords="1823,2926,2009,2967"/>
+<area shape="rect" id="node230" href="$classhal_1_1_graph_graphics_view.html" title="A view to display the rendered graph (needs a GraphicsScene)." alt="" coords="1333,3395,1512,3421"/>
+<area shape="rect" id="node232" href="$classhal_1_1_code_editor.html" title="A plain text edit widget that is intended for editing code." alt="" coords="1362,3572,1483,3599"/>
+<area shape="rect" id="node233" href="$classhal_1_1_python_code_editor.html" title="Code editor to write python code." alt="" coords="1584,3699,1751,3725"/>
+<area shape="rect" id="node235" href="$classhal_1_1_expanding_list_widget.html" title="A selection menu with a hierarchic structure." alt="" coords="1329,3040,1516,3067"/>
+<area shape="rect" id="node236" href="$classhal_1_1_settings_display.html" title="unused." alt="" coords="1347,2989,1499,3016"/>
+<area shape="rect" id="node239" href="$classhal_1_1_disputed_big_icon.html" title="Displays big icons." alt="" coords="1096,3015,1252,3041"/>
+<area shape="rect" id="node240" href="$classhal_1_1_label_button.html" title="Adds button functionality to a QLabel." alt="" coords="1110,2964,1238,2991"/>
+<area shape="rect" id="node242" href="$classhal_1_1_splitter.html" title="A QSplitter that can be checked if it is unused or not." alt="" coords="1125,3065,1223,3092"/>
+<area shape="rect" id="node244" href="$classhal_1_1_keybind_edit.html" title="A widget to set or configure key shortcuts." alt="" coords="835,4617,961,4644"/>
+<area shape="rect" id="node246" href="$classhal_1_1_details_tab_widget.html" title=" " alt="" coords="816,4668,980,4695"/>
+<area shape="rect" id="node247" href="$classhal_1_1_gate_details_tab_widget.html" title="The DetailsTabWidget that is responsible for showing Gate details." alt="" coords="1077,4617,1271,4644"/>
+<area shape="rect" id="node248" href="$classhal_1_1_module_details_tab_widget.html" title="The DetailsTabWidget that is responsible for showing Module details." alt="" coords="1068,4668,1280,4695"/>
+<area shape="rect" id="node249" href="$classhal_1_1_net_details_tab_widget.html" title="The DetailsTabWidget that is responsible for showing Module details." alt="" coords="1081,4719,1267,4745"/>
+<area shape="rect" id="node251" href="$classhal_1_1_toolbar.html" title="Toolbar for all ContentFrames and ContentWidgets." alt="" coords="849,3572,947,3599"/>
+<area shape="rect" id="node252" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qpaintdevice.html" title=" " alt="" coords="29,4323,138,4349"/>
+<area shape="rect" id="node253" href="$classhal_1_1_validator.html" title="Base class for any string validator." alt="" coords="557,436,665,463"/>
+<area shape="rect" id="node254" href="$classhal_1_1_empty_string_validator.html" title="Checks if a given string is not empty." alt="" coords="804,487,992,513"/>
+<area shape="rect" id="node255" href="$classhal_1_1_hexadecimal_validator.html" title=" " alt="" coords="801,335,995,361"/>
+<area shape="rect" id="node256" href="$classhal_1_1_stacked_validator.html" title="Combines different validators into one." alt="" coords="819,385,977,412"/>
+<area shape="rect" id="node257" href="$classhal_1_1_unique_string_validator.html" title="Checks if a given string is unique compared to other given strings." alt="" coords="802,436,994,463"/>
 </map>

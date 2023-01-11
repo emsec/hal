@@ -321,6 +321,7 @@ var hierarchy =
     [ "hal::ProgramArguments", "classhal_1_1_program_arguments.html", null ],
     [ "hal::ProgramOptions", "classhal_1_1_program_options.html", null ],
     [ "hal::dataflow::ProgressPrinter", "classhal_1_1dataflow_1_1_progress_printer.html", null ],
+    [ "hal::ProjectJson", "classhal_1_1_project_json.html", null ],
     [ "hal::ProjectManager", "classhal_1_1_project_manager.html", null ],
     [ "hal::ProjectSerializer", "classhal_1_1_project_serializer.html", [
       [ "hal::CommentManager", "classhal_1_1_comment_manager.html", null ],
@@ -561,12 +562,14 @@ var hierarchy =
           [ "hal::GatelibraryManagementDialog", "classhal_1_1_gatelibrary_management_dialog.html", null ],
           [ "hal::GroupingDialog", "classhal_1_1_grouping_dialog.html", null ],
           [ "hal::ImportNetlistDialog", "classhal_1_1_import_netlist_dialog.html", null ],
+          [ "hal::ImportProjectDialog", "classhal_1_1_import_project_dialog.html", null ],
           [ "hal::InputDialog", "classhal_1_1_input_dialog.html", null ],
           [ "hal::ModuleDialog", "classhal_1_1_module_dialog.html", null ],
           [ "hal::NewProjectDialog", "classhal_1_1_new_project_dialog.html", null ],
           [ "hal::PluginParameterDialog", "classhal_1_1_plugin_parameter_dialog.html", null ],
           [ "hal::PythonEditorCodeCompletionDialog", "classhal_1_1_python_editor_code_completion_dialog.html", null ],
           [ "QFileDialog", "https://doc.qt.io/qt-5/qfiledialog.html", [
+            [ "hal::ExportProjectDialog", "classhal_1_1_export_project_dialog.html", null ],
             [ "hal::ProjectDirDialog", "classhal_1_1_project_dir_dialog.html", null ]
           ] ]
         ] ],
@@ -580,6 +583,7 @@ var hierarchy =
           [ "hal::ExpandingListButton", "classhal_1_1_expanding_list_button.html", null ],
           [ "hal::ExpandingListItem", "classhal_1_1_expanding_list_item.html", null ],
           [ "hal::FileModifiedBar", "classhal_1_1_file_modified_bar.html", null ],
+          [ "hal::FileSelectWidget", "classhal_1_1_file_select_widget.html", null ],
           [ "hal::GetInTouchItem", "classhal_1_1_get_in_touch_item.html", null ],
           [ "hal::GetInTouchWidget", "classhal_1_1_get_in_touch_widget.html", null ],
           [ "hal::LabeledFrame", "classhal_1_1_labeled_frame.html", null ],
@@ -692,9 +696,9 @@ var hierarchy =
       [ "hal::NodeBoxes", "classhal_1_1_node_boxes.html", null ]
     ] ],
     [ "hal::utils::RecursiveDirectoryRange", "classhal_1_1utils_1_1_recursive_directory_range.html", null ],
-    [ "hal::Result< T >", "classhal_1_1_result.html", null ],
-    [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
     [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
+    [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
+    [ "hal::Result< T >", "classhal_1_1_result.html", null ],
     [ "reverse_iterator", null, [
       [ "nlohmann::detail::json_reverse_iterator< Base >", "classnlohmann_1_1detail_1_1json__reverse__iterator.html", null ]
     ] ],
@@ -723,8 +727,8 @@ var hierarchy =
       [ "hal::VHDLParserTest", "classhal_1_1_v_h_d_l_parser_test.html", null ]
     ] ],
     [ "nlohmann::detail::to_json_fn", "structnlohmann_1_1detail_1_1to__json__fn.html", null ],
-    [ "hal::BooleanFunctionParser::Token", "structhal_1_1_boolean_function_parser_1_1_token.html", null ],
     [ "hal::Token< T >", "structhal_1_1_token.html", null ],
+    [ "hal::BooleanFunctionParser::Token", "structhal_1_1_boolean_function_parser_1_1_token.html", null ],
     [ "hal::TokenStream< T >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< ci_string >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< std::string >", "classhal_1_1_token_stream.html", null ],
