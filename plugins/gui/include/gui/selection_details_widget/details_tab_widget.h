@@ -26,6 +26,7 @@
 #pragma once
 
 #include <QTabWidget>
+#include "gui/selection_details_widget/selection_details_icon_provider.h"
 
 namespace hal
 {
@@ -59,6 +60,6 @@ namespace hal
          *
          * @param fileName - Icon name from gui ressources file.
          */
-        void setIcon(const QString& fileName);
+        void setIcon(SelectionDetailsIconProvider::IconCategory catg, u32 itemId=0);
     };
 }

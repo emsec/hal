@@ -133,6 +133,7 @@ namespace hal
         void handleRenameAction();
         void handleChangeTypeAction();
         void adjustMinScale();
+        void handleAddCommentAction();
 
         void handleFoldParentSingle();
         void handleFoldParentAll();

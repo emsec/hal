@@ -4,6 +4,7 @@
 #include "gui/selection_details_widget/module_details_widget/module_info_table.h"
 #include "gui/selection_details_widget/module_details_widget/module_ports_tree.h"
 #include "gui/selection_details_widget/module_details_widget/module_elements_tree.h"
+#include "gui/comment_system/widgets/comment_widget.h"
 
 #include "hal_core/netlist/module.h"
 
@@ -11,7 +12,7 @@ namespace hal
 {
     ModuleDetailsTabWidget::ModuleDetailsTabWidget(QWidget* parent) : DetailsTabWidget(parent)
     {
-        setIcon(":/icons/sel_module");
+        setIcon(SelectionDetailsIconProvider::ModuleIcon);
 
         //general tab
         mModuleInfoTable = new ModuleInfoTable(this);
@@ -45,16 +46,23 @@ namespace hal
 
         QList<DetailsFrameWidget*> framesDataTab({mDataFrame});
         addTab("Data", framesDataTab);
+
+        //comment tab
+        mCommentWidget = new CommentWidget(this);
+        QTabWidget::addTab(mCommentWidget, "Comments");
+
     }
  
     void ModuleDetailsTabWidget::setModule(Module* module)
     {
+        if (module) setIcon(SelectionDetailsIconProvider::ModuleIcon, module->get_id());
         //pass module or other stuff to widgets
         mModuleInfoTable->setModule(module);
         mPinsTree->setModule(module);
         mElementsTree->setModule(module);
         mGroupingsOfItemTable->setModule(module);
         mDataTable->setModule(module);
+        mCommentWidget->nodeChanged(Node(module->get_id(), Node::NodeType::Module));
     }
 
     void ModuleDetailsTabWidget::clear()

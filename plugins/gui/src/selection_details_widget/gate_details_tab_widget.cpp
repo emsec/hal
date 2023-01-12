@@ -19,13 +19,17 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QDebug>
+#include "gui/comment_system/widgets/comment_widget.h"
+// temporal debug includes
+#include "gui/comment_system/widgets/comment_item.h"
+#include "gui/comment_system/comment_entry.h"
 #include <QMenu>
 
 namespace hal
 {
     GateDetailsTabWidget::GateDetailsTabWidget(QWidget* parent) : DetailsTabWidget(parent)
     {
-        setIcon(":/icons/sel_gate");
+        setIcon(SelectionDetailsIconProvider::GateIcon);
 
         //general tab
         mGateInfoTable        = new GateInfoTable(this);
@@ -86,16 +90,23 @@ namespace hal
 
         QList<DetailsFrameWidget*> framesDataTab({mDataFrame});
         addTab("Data", framesDataTab);
+
+        //comments tab, no frame is used here
+        mCommentWidget = new CommentWidget(this);
+        QTabWidget::addTab(mCommentWidget, "Comments");
     }
 
     void GateDetailsTabWidget::setGate(Gate* gate)
     {
+        if (gate) setIcon(SelectionDetailsIconProvider::GateIcon, gate->get_id());
+
         //pass gate or other stuff to widgets
         mCurrentGate = gate;
         mGateInfoTable->setGate(gate);
         mGroupingsOfItemTable->setGate(gate);
         mPinsTree->setGate(gate);
         mDataTable->setGate(gate);
+        mCommentWidget->nodeChanged(Node(gate->get_id(), Node::NodeType::Gate));
 
         // Logic for LUT/FF/LATCH
         GateDetailsTabWidget::GateTypeCategory gateTypeCategory = getGateTypeCategory(gate);

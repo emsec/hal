@@ -4,6 +4,8 @@
 #include "gui/content_manager/content_manager.h"
 #include "gui/docking_system/dock_bar.h"
 #include "gui/export/export_registered_format.h"
+#include "gui/export/export_project_dialog.h"
+#include "gui/export/import_project_dialog.h"
 #include "gui/file_manager/file_manager.h"
 #include "gui/file_manager/project_dir_dialog.h"
 #include "gui/gatelibrary_management/gatelibrary_management_dialog.h"
@@ -125,20 +127,22 @@ namespace hal
         setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
 
         mActionNew                = new Action(this);
-        mActionOpenProject  = new Action(this);
-        mActionImport       = new Action(this);
+        mActionOpenProject        = new Action(this);
+        mActionImportNetlist      = new Action(this);
         mActionSave               = new Action(this);
         mActionSaveAs             = new Action(this);
+        mActionExportProject      = new Action(this);
+        mActionImportProject      = new Action(this);
         mActionGateLibraryManager = new Action(this);
         mActionAbout              = new Action(this);
 
-        mActionStartRecording = new Action(this);
-        mActionStopRecording  = new Action(this);
-        mActionPlayMacro      = new Action(this);
-        mActionUndo           = new Action(this);
+        mActionStartRecording     = new Action(this);
+        mActionStopRecording      = new Action(this);
+        mActionPlayMacro          = new Action(this);
+        mActionUndo               = new Action(this);
 
-        mActionSettings = new Action(this);
-        mActionClose    = new Action(this);
+        mActionSettings           = new Action(this);
+        mActionClose              = new Action(this);
 
         //    //mOpenIconStyle = "all->#fcfcb0";
         //    //mOpenIconStyle = "all->#f2e4a4";
@@ -166,8 +170,9 @@ namespace hal
         setWindowIcon(gui_utility::getStyledSvgIcon(mHalIconStyle, mHalIconPath));
 
         mActionNew->setIcon(gui_utility::getStyledSvgIcon(mNewFileIconStyle, mNewFileIconPath));
-        mActionOpenProject->setIcon(gui_utility::getStyledSvgIcon(mOpenIconStyle, mOpenIconPath));
-        mActionImport->setIcon(gui_utility::getStyledSvgIcon(mOpenIconStyle, mOpenIconPath));
+        mActionOpenProject->setIcon(gui_utility::getStyledSvgIcon(mOpenProjIconStyle, mOpenProjIconPath));
+        mActionImportNetlist->setIcon(gui_utility::getStyledSvgIcon(mOpenFileIconStyle, mOpenFileIconPath));
+        mActionImportProject->setIcon(gui_utility::getStyledSvgIcon(mOpenProjIconStyle, mOpenProjIconPath));
         mActionSave->setIcon(gui_utility::getStyledSvgIcon(mSaveIconStyle, mSaveIconPath));
         mActionSaveAs->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
         mActionGateLibraryManager->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
@@ -187,13 +192,17 @@ namespace hal
         mMenuBar->addAction(mMenuHelp->menuAction());
         mMenuFile->addAction(mActionNew);
         mMenuFile->addAction(mActionOpenProject);
-        mMenuFile->addAction(mActionImport);
         mMenuFile->addAction(mActionClose);
         mMenuFile->addAction(mActionSave);
         mMenuFile->addAction(mActionSaveAs);
         mMenuFile->addAction(mActionGateLibraryManager);
 
-        QMenu* menuExport = nullptr;
+        QMenu* menuImport = new QMenu("Import …", this);
+        menuImport->addAction(mActionImportNetlist);
+        menuImport->addAction(mActionImportProject);
+
+        QMenu* menuExport = new QMenu("Export …", this);
+        bool hasExporter = false;
         for (auto it : netlist_writer_manager::get_writer_extensions())
         {
             if (it.second.empty()) continue; // no extensions registered
@@ -209,13 +218,18 @@ namespace hal
             for (std::string ex : it.second)
                 extensions.append(QString::fromStdString(ex));
 
-            if (!menuExport) menuExport = new QMenu("Export …", this);
+            hasExporter = true;
             Action* action = new Action(txt, this);
             action->setData(extensions);
             connect(action, &QAction::triggered, this, &MainWindow::handleActionExport);
             menuExport->addAction(action);
         }
-        if (menuExport) mMenuFile->addMenu(menuExport);
+        if (hasExporter) mMenuFile->addSeparator();
+        mActionExportProject->setDisabled(true);
+        menuExport->addAction(mActionExportProject);
+
+        mMenuFile->addMenu(menuImport);
+        mMenuFile->addMenu(menuExport);
 
         SettingsItemCheckbox* evlogSetting =  new SettingsItemCheckbox(
                     "Netlist event log",
@@ -254,9 +268,11 @@ namespace hal
         setWindowTitle("HAL");
         mActionNew->setText("New Netlist");
         mActionOpenProject->setText("Open Project");
-        mActionImport->setText("Import Netlist");
         mActionSave->setText("Save");
         mActionSaveAs->setText("Save As");
+        mActionImportNetlist->setText("Import Netlist");
+        mActionImportProject->setText("Import Project");
+        mActionExportProject->setText("Export Project");
         mActionGateLibraryManager->setText("Gate Library Manager");
         mActionUndo->setText("Undo");
         mActionAbout->setText("About");
@@ -271,6 +287,7 @@ namespace hal
         gPythonContext = new PythonContext(this);
 
         gContentManager = new ContentManager(this);
+        gCommentManager = new CommentManager(this);
 
         mSettingCreateFile = new SettingsItemKeybind(
             "HAL Shortcut 'Create Empty Netlist'", "keybinds/project_create_file", QKeySequence("Ctrl+N"), "Keybindings:Global", "Keybind for creating a new and empty netlist in HAL.");
@@ -299,12 +316,14 @@ namespace hal
 
         connect(mActionNew, &Action::triggered, this, &MainWindow::handleActionNew);
         connect(mActionOpenProject, &Action::triggered, this, &MainWindow::handleActionOpenProject);
-        connect(mActionImport, &Action::triggered, this, &MainWindow::handleActionImport);
+        connect(mActionImportNetlist, &Action::triggered, this, &MainWindow::handleActionImportNetlist);
         connect(mActionAbout, &Action::triggered, this, &MainWindow::handleActionAbout);
         connect(mActionSettings, &Action::triggered, this, &MainWindow::toggleSettings);
         connect(mSettings, &MainSettingsWidget::close, this, &MainWindow::closeSettings);
         connect(mActionSave, &Action::triggered, this, &MainWindow::handleSaveTriggered);
         connect(mActionSaveAs, &Action::triggered, this, &MainWindow::handleSaveAsTriggered);
+        connect(mActionExportProject, &Action::triggered, this, &MainWindow::handleExportProjectTriggered);
+        connect(mActionImportProject, &Action::triggered, this, &MainWindow::handleImportProjectTriggered);
         connect(mActionGateLibraryManager, &Action::triggered, this, &MainWindow::handleActionGatelibraryManager);
         connect(mActionClose, &Action::triggered, this, &MainWindow::handleActionCloseFile);
 
@@ -364,14 +383,24 @@ namespace hal
         return mNewFileIconStyle;
     }
 
-    QString MainWindow::openIconPath() const
+    QString MainWindow::openProjIconPath() const
     {
-        return mOpenIconPath;
+        return mOpenProjIconPath;
     }
 
-    QString MainWindow::openIconStyle() const
+    QString MainWindow::openProjIconStyle() const
     {
-        return mOpenIconStyle;
+        return mOpenProjIconStyle;
+    }
+
+    QString MainWindow::openFileIconPath() const
+    {
+        return mOpenFileIconPath;
+    }
+
+    QString MainWindow::openFileIconStyle() const
+    {
+        return mOpenFileIconStyle;
     }
 
     QString MainWindow::saveIconPath() const
@@ -434,14 +463,24 @@ namespace hal
         mNewFileIconStyle = style;
     }
 
-    void MainWindow::setOpenIconPath(const QString& path)
+    void MainWindow::setOpenFileIconPath(const QString& path)
     {
-        mOpenIconPath = path;
+        mOpenFileIconPath = path;
     }
 
-    void MainWindow::setOpenIconStyle(const QString& style)
+    void MainWindow::setOpenFileIconStyle(const QString& style)
     {
-        mOpenIconStyle = style;
+        mOpenFileIconStyle = style;
+    }
+
+    void MainWindow::setOpenProjIconPath(const QString& path)
+    {
+        mOpenProjIconPath = path;
+    }
+
+    void MainWindow::setOpenProjIconStyle(const QString& style)
+    {
+        mOpenProjIconStyle = style;
     }
 
     void MainWindow::setSaveIconPath(const QString& path)
@@ -628,7 +667,7 @@ namespace hal
         }
     }
 
-    void MainWindow::handleActionImport()
+    void MainWindow::handleActionImportNetlist()
     {
         if (gNetlist != nullptr)
         {
@@ -665,6 +704,8 @@ namespace hal
     void MainWindow::handleProjectOpened(const QString& projDir, const QString& fileName)
     {
         Q_UNUSED(projDir);
+        mActionExportProject->setEnabled(true);
+        mActionImportProject->setDisabled(true);
         handleFileOpened(fileName);
     }
 
@@ -697,6 +738,34 @@ namespace hal
     {
         GatelibraryManagementDialog dialog;
         dialog.exec();
+    }
+
+    void MainWindow::handleImportProjectTriggered()
+    {
+        ImportProjectDialog ipd(this);
+        if (ipd.exec() == QDialog::Accepted)
+        {
+            if (ipd.importProject())
+            {
+                ActionOpenNetlistFile* act = new ActionOpenNetlistFile(ActionOpenNetlistFile::OpenProject,
+                                                                       ipd.extractedProjectDir());
+                act->exec();
+            }
+            else
+                QMessageBox::warning(this,
+                                     "Import Project Failed",
+                                     "Failed to extract a HAL project from selected archive file.\n"
+                                     "You might want to uncompress the archive manually and try to open the project.");
+        }
+    }
+
+    void MainWindow::handleExportProjectTriggered()
+    {
+        ExportProjectDialog epd(this);
+        if (epd.exec() == QDialog::Accepted)
+        {
+            epd.exportProject();
+        }
     }
 
     void MainWindow::handleSaveAsTriggered()
@@ -892,6 +961,9 @@ namespace hal
                 return false;
         }
 
+        mActionExportProject->setDisabled(true);
+        mActionImportProject->setEnabled(true);
+
         gPythonContext->abortThreadAndWait();
 
         gGraphContextManager->clear();
@@ -901,6 +973,8 @@ namespace hal
         gContentManager->deleteContent();
         // PYTHON ???
         gSelectionRelay->clear();
+        gCommentManager->clear();
+
         FileManager::get_instance()->closeFile();
         setWindowTitle("HAL");
 

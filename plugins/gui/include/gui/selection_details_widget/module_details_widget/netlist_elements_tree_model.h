@@ -160,10 +160,6 @@ namespace hal
         void numberOfSubmodulesChanged(const int newNumber);
 
     private:
-        //Note: make these somehow static (does not work with pointer...?)
-        QIcon mModuleIcon;
-        QIcon mGateIcon;
-        QIcon mNetIcon;
 
         bool mGatesDisplayed;
         bool mNetsDisplayed;

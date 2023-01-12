@@ -1,5 +1,6 @@
 #include "gui/gui_globals.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
+#include "gui/selection_details_widget/selection_details_icon_provider.h"
 
 namespace hal
 {
@@ -70,8 +71,6 @@ namespace hal
     }
 
     //------- Module ----
-    QIcon* SelectionTreeItemModule::sIconInstance = nullptr;
-
     SelectionTreeItemModule::SelectionTreeItemModule(u32 id_)
         : SelectionTreeItem(SelectionTreeItem::ModuleItem, id_), mIsRoot(false)
     {;}
@@ -112,10 +111,9 @@ namespace hal
         return QString::fromStdString(module->get_name());
     }
 
-    const QIcon &SelectionTreeItemModule::icon() const
+    QIcon SelectionTreeItemModule::icon() const
     {
-        if (!sIconInstance) sIconInstance = new QIcon(":/icons/sel_module");
-        return *sIconInstance;
+        return QIcon(*SelectionDetailsIconProvider::instance()->getIcon(SelectionDetailsIconProvider::ModuleIcon,mId));
     }
 
     void SelectionTreeItemModule::addChild(SelectionTreeItem* cld)
@@ -148,8 +146,6 @@ namespace hal
     }
 
     //------- Gate ------
-    QIcon* SelectionTreeItemGate::sIconInstance = nullptr;
-
     SelectionTreeItemGate::SelectionTreeItemGate(u32 id_)
         : SelectionTreeItem(SelectionTreeItem::GateItem, id_)
     {;}
@@ -161,10 +157,9 @@ namespace hal
         return QString::fromStdString(gate->get_name());
     }
 
-    const QIcon &SelectionTreeItemGate::icon() const
+    QIcon SelectionTreeItemGate::icon() const
     {
-        if (!sIconInstance) sIconInstance = new QIcon(":/icons/sel_gate");
-        return *sIconInstance;
+        return QIcon(*SelectionDetailsIconProvider::instance()->getIcon(SelectionDetailsIconProvider::GateIcon,mId));
     }
 
     QVariant SelectionTreeItemGate::boxType() const
@@ -183,8 +178,6 @@ namespace hal
     }
 
     //------- Net -------
-    QIcon* SelectionTreeItemNet::sIconInstance = nullptr;
-
     SelectionTreeItemNet::SelectionTreeItemNet(u32 id_)
         : SelectionTreeItem(SelectionTreeItem::NetItem, id_)
     {;}
@@ -196,10 +189,9 @@ namespace hal
         return QString::fromStdString(net->get_name());
     }
 
-    const QIcon &SelectionTreeItemNet::icon() const
+    QIcon SelectionTreeItemNet::icon() const
     {
-        if (!sIconInstance) sIconInstance = new QIcon(":/icons/sel_net");
-        return *sIconInstance;
+        return QIcon(*SelectionDetailsIconProvider::instance()->getIcon(SelectionDetailsIconProvider::NetIcon,mId));
     }
 
     void SelectionTreeItemNet::suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,

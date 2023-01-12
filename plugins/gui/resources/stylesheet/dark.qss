@@ -1195,8 +1195,11 @@ hal--MainWindow
     qproperty-newFileIconStyle: "";
     qproperty-newFileIconPath: ":/icons/new-file";
 
-    qproperty-openIconStyle: "all->#3192C5";
-    qproperty-openIconPath: ":/icons/folder";
+    qproperty-openProjIconStyle: "all->#3192C5";
+    qproperty-openProjIconPath: ":/icons/folder";
+
+    qproperty-openFileIconStyle: "all->#AFB1B3";
+    qproperty-openFileIconPath: ":/icons/detach";
 
     qproperty-saveIconStyle: "all->#3192C5";
     qproperty-saveIconPath: ":/icons/folder-down";
@@ -1394,4 +1397,51 @@ hal--GatelibraryManagementDialog QTableView
 hal--GatelibraryManagementDialog QHeaderView::section
 {
 background: rgb(35, 35, 35);
+}
+
+hal--CommentWidget
+{
+    qproperty-newCommentIconPath : ":/icons/plus";
+    qproperty-newCommentIconStyle: "all->#dddddd";
+    qproperty-searchIconPath: ":/icons/search";
+    qproperty-searchIconStyle: "all->#dddddd";
+}
+
+hal--CommentItem
+{
+    qproperty-modifyCommentIconPath : ":/icons/pen";
+    qproperty-modifyCommentIconStyle : "all->#dddddd";
+    qproperty-deleteCommentIconPath: ":/icons/trashcan";
+    qproperty-deleteCommentIconStyle: "all->#dddddd";
+}
+
+hal--CommentDialog
+{
+    background-color: "#202020";
+    qproperty-redColor: "#ff0000";
+    qproperty-yellowColor: "#ffff00";
+    qproperty-greenColor: "#00ff00";
+    qproperty-defaultColor: "#A9B7C6";
+
+}
+
+hal--CommentDialog QTextEdit /*Edit for the actual commenttext*/
+{
+    background-color: "#2b2b2b";
+    alternate-background-color : "#1f1f1f"; /*used for code action*/
+}
+
+hal--CommentDialog QLineEdit
+{
+    background-color: "#2b2b2b";
+}
+
+hal--CommentDialog QLabel
+{
+    background-color: "#000000";
+}
+
+hal--CommentDialog #header-container
+{
+    background-color: "#000000";
 }
