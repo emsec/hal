@@ -503,7 +503,7 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
                     exit (1);
                 }
                 SaleaeInputFile sf(bin_path);
-                SaleaeDataBuffer *db = sf.get_buffered_data(sf.header()->mNumTransitions);
+                SaleaeDataBuffer *db = sf.get_buffered_data(sf.header()->mNumTransitions + 1);
                 if (!db)
                 {
                     std::cout << "db nullptr: <" << bin_path << ">" << std::endl;
@@ -532,7 +532,7 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
                     exit (1);
                 }
                 SaleaeInputFile sf(bin_path);
-                SaleaeDataBuffer *db = sf.get_buffered_data(sf.header()->mNumTransitions);
+                SaleaeDataBuffer *db = sf.get_buffered_data(sf.header()->mNumTransitions + 1);
                 if (!db)
                 {
                     std::cout << "db nullptr: <" << bin_path << ">" << std::endl;

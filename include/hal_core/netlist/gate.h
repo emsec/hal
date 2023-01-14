@@ -284,14 +284,7 @@ namespace hal
         std::vector<Net*> get_fan_in_nets() const;
 
         /**
-         * Get a vector of all fan-in endpoints of the gate, i.e., all endpoints associated with an input pin of the gate.
-         *
-         * @returns A vector of all fan-in endpoints.
-         */
-        std::vector<Endpoint*> get_fan_in_endpoints() const;
-
-        /**
-         * Get the fan-in endpoint corresponding to the input pin specified by name.
+         * Get the fan-in net corresponding to the input pin specified by name.
          *
          * @param[in] pin_name - The input pin name.
          * @returns The fan-in net on success, a `nullptr` otherwise.
@@ -299,12 +292,27 @@ namespace hal
         Net* get_fan_in_net(const std::string& pin_name) const;
 
         /**
-         * Get the fan-in endpoint corresponding to the specified input pin.
+         * Get the fan-in net corresponding to the specified input pin.
          *
          * @param[in] pin - The input pin.
          * @returns The fan-in net on success, a nullptr otherwise.
          */
         Net* get_fan_in_net(const GatePin* pin) const;
+
+        /**
+         * Check whether the given net is a fan-in of the gate.
+         * 
+         * @param[in] net - The net. 
+         * @returns `true` if the net is a fan-in of the gate, `false` otherwise. 
+         */
+        bool is_fan_in_net(const Net* net) const;
+
+        /**
+         * Get a vector of all fan-in endpoints of the gate, i.e., all endpoints associated with an input pin of the gate.
+         *
+         * @returns A vector of all fan-in endpoints.
+         */
+        std::vector<Endpoint*> get_fan_in_endpoints() const;
 
         /**
          * Get the fan-in endpoint corresponding to the input pin specified by name.
@@ -323,6 +331,14 @@ namespace hal
         Endpoint* get_fan_in_endpoint(const GatePin* pin) const;
 
         /**
+         * Get the fan-in endpoint connected to the specified input net.
+         *
+         * @param[in] net - The input net.
+         * @returns The endpoint on success, a `nullptr` otherwise.
+         */
+        Endpoint* get_fan_in_endpoint(const Net* net) const;
+
+        /**
          * Get a vector of all fan-out nets of the gate, i.e., all nets that are connected to one of the output pins.
          *
          * @returns A vector of all fan-out nets.
@@ -330,14 +346,7 @@ namespace hal
         std::vector<Net*> get_fan_out_nets() const;
 
         /**
-         * Get a vector of all fan-out endpoints of the gate, i.e., all endpoints associated with an output pin of the gate.
-         *
-         * @returns A vector of all fan-out endpoints.
-         */
-        std::vector<Endpoint*> get_fan_out_endpoints() const;
-
-        /**
-         * Get the fan-out endpoint corresponding to the output pin specified by name.
+         * Get the fan-out net corresponding to the output pin specified by name.
          *
          * @param[in] pin_name - The output pin name.
          * @returns The fan-out net on success, a `nullptr` otherwise.
@@ -345,12 +354,27 @@ namespace hal
         Net* get_fan_out_net(const std::string& pin_name) const;
 
         /**
-         * Get the fan-out endpoint corresponding to the specified output pin.
+         * Get the fan-out net corresponding to the specified output pin.
          *
          * @param[in] pin - The output pin.
          * @returns The fan-out net on success, a nullptr otherwise.
          */
         Net* get_fan_out_net(const GatePin* pin) const;
+
+        /**
+         * Check whether the given net is a fan-out of the gate.
+         * 
+         * @param[in] net - The net. 
+         * @returns `true` if the net is a fan-out of the gate, `false` otherwise. 
+         */
+        bool is_fan_out_net(const Net* net) const;
+
+        /**
+         * Get a vector of all fan-out endpoints of the gate, i.e., all endpoints associated with an output pin of the gate.
+         *
+         * @returns A vector of all fan-out endpoints.
+         */
+        std::vector<Endpoint*> get_fan_out_endpoints() const;
 
         /**
          * Get the fan-out endpoint corresponding to the output pin specified by name.
@@ -367,6 +391,14 @@ namespace hal
          * @returns The endpoint on success, a `nullptr` otherwise.
          */
         Endpoint* get_fan_out_endpoint(const GatePin* pin) const;
+
+        /**
+         * Get the fan-out endpoint connected to the specified output net.
+         *
+         * @param[in] net - The output net.
+         * @returns The endpoint on success, a `nullptr` otherwise.
+         */
+        Endpoint* get_fan_out_endpoint(const Net* net) const;
 
         /**
          * Get a vector of all unique predecessor gates of the gate. 

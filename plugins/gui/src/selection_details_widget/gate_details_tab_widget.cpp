@@ -29,7 +29,7 @@ namespace hal
 {
     GateDetailsTabWidget::GateDetailsTabWidget(QWidget* parent) : DetailsTabWidget(parent)
     {
-        setIcon(":/icons/sel_gate");
+        setIcon(SelectionDetailsIconProvider::GateIcon);
 
         //general tab
         mGateInfoTable        = new GateInfoTable(this);
@@ -98,6 +98,8 @@ namespace hal
 
     void GateDetailsTabWidget::setGate(Gate* gate)
     {
+        if (gate) setIcon(SelectionDetailsIconProvider::GateIcon, gate->get_id());
+
         //pass gate or other stuff to widgets
         mCurrentGate = gate;
         mGateInfoTable->setGate(gate);

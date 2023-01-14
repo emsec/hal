@@ -126,6 +126,14 @@ namespace hal
         std::set<GateTypeProperty> get_properties() const;
 
         /**
+         * Get the properties assigned to the gate type as list
+         * where the most significant property stands at first position.
+         *
+         * @return The properties of the gate type.
+         */
+        std::vector<GateTypeProperty> get_property_list() const;
+
+        /**
          * Check whether the gate type has the specified property.
          *
          * @param[in] property - The property to check for.

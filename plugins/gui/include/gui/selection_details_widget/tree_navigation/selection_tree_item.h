@@ -137,7 +137,7 @@ namespace hal
          *
          * @return The subclasse's specific icon.
          */
-        virtual const QIcon& icon() const = 0;
+        virtual QIcon icon() const = 0;
 
 
         /**
@@ -229,7 +229,7 @@ namespace hal
          *
          * @return The module specific icon.
          */
-        virtual const QIcon& icon() const;
+        virtual QIcon icon() const;
 
         /**
          * Returns the name of the module's type.
@@ -275,8 +275,6 @@ namespace hal
     protected:
         bool mIsRoot;
         QList<SelectionTreeItem*> mChildItem;
-    private:
-        static QIcon* sIconInstance;
     };
 
     /**
@@ -325,7 +323,7 @@ namespace hal
          *
          * @return The gate specific icon.
          */
-        virtual const QIcon& icon() const;
+        virtual QIcon icon() const;
 
         /**
          * Matches itself against the given regex. If no match was found it appends itself (its id)
@@ -345,8 +343,6 @@ namespace hal
          * @return The gate type (QString).
          */
         virtual QVariant boxType() const;
-    private:
-        static QIcon* sIconInstance;
     };
 
     /**
@@ -379,7 +375,7 @@ namespace hal
          *
          * @return The net net icon.
          */
-        virtual const QIcon& icon() const;
+        virtual QIcon icon() const;
 
         /**
          * Matches itself against the given regex. If no match was found it appends itself (its id)
@@ -392,8 +388,6 @@ namespace hal
          */
         virtual void suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
                                                  const QRegularExpression& regex) const;
-    private:
-        static QIcon* sIconInstance;
     };
 
 }

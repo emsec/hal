@@ -60,11 +60,17 @@ namespace hal
 
     class PythonSerializer : public ProjectSerializer
     {
+        struct PythonEditorControlEntry {
+            int tabInx;
+            std::string restore;
+            std::string filename;
+        };
+
         QString mSaveDir;
 
-        static QString sPythonRelDir;
-
         void restoreTabs(const std::filesystem::path& loaddir, const std::string& jsonfile);
+
+        static bool write_control_file(const std::filesystem::path& savedir, const std::vector<PythonEditorControlEntry>& tabinfo);
     public:
         PythonSerializer();
 
@@ -75,6 +81,10 @@ namespace hal
         QString getDirectory() const;
 
         std::string serialize_control(const std::filesystem::path& savedir = std::filesystem::path(), bool isAutosave = false);
+
+        static QString sPythonRelDir;
+        static std::string sControlFileName;
+
     };
 
     /**

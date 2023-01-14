@@ -1,4 +1,5 @@
 #include "gui/selection_details_widget/module_details_widget/netlist_elements_tree_model.h"
+#include "gui/selection_details_widget/selection_details_icon_provider.h"
 #include "gui/basic_tree_model/tree_item.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/gate.h"
@@ -8,7 +9,8 @@
 
 namespace hal
 {
-    NetlistElementsTreeModel::NetlistElementsTreeModel(QObject *parent) : BaseTreeModel(parent), mModuleIcon(QIcon(":/icons/sel_module")), mGateIcon(QIcon(":/icons/sel_gate")), mNetIcon(QIcon(":/icons/sel_net")),
+    NetlistElementsTreeModel::NetlistElementsTreeModel(QObject *parent)
+        : BaseTreeModel(parent),
          mGatesDisplayed(true), mNetsDisplayed(true), mDisplaySubmodRecursive(true), mCurrentlyDisplayingModule(false), mModId(-1)
     {
         // use root item to store header information
@@ -383,16 +385,19 @@ namespace hal
     QIcon NetlistElementsTreeModel::getIconFromItem(TreeItem *item) const
     {
         if(!item)
-            return mGateIcon;//some cool gate icon if the item is a nullptr
+            return QIcon();
 
+        u32 id = item->getData(1).toInt();
         switch (getTypeOfItem(item))
         {
-        case itemType::module: return mModuleIcon;
-        case itemType::gate: return mGateIcon;
-        case itemType::net: return mNetIcon;
-        default: return mGateIcon;
+        case itemType::module:
+            return QIcon(*SelectionDetailsIconProvider::instance()->getIcon(SelectionDetailsIconProvider::ModuleIcon,id));
+        case itemType::gate:
+            return QIcon(*SelectionDetailsIconProvider::instance()->getIcon(SelectionDetailsIconProvider::GateIcon,id));
+        default:
+            return QIcon();
         }
-    }
+   }
 
     void NetlistElementsTreeModel::updateInternalNetsOfModule(TreeItem *moduleItem)
     {
