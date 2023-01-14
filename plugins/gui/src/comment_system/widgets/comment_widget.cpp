@@ -185,18 +185,14 @@ namespace hal
         if(entry->getNode() != mCurrentNode)
             return;
 
-        CommentItem* commentItem = nullptr;
         for(const auto& item : mEntryItems)
         {
             if(item->getEntry() == entry)
             {
-                commentItem = item;
+                item->updateCurrentEntry();
                 break;
             }
         }
-
-        if(!commentItem) return;
-        commentItem->updateCurrentEntry();
     }
 
     void CommentWidget::handleCommentAdded(CommentEntry *entry)
