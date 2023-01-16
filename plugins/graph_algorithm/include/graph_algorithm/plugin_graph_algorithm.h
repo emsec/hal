@@ -152,6 +152,6 @@ namespace hal
          * @param[in] vertex_to_gate - map from node ID in igraph to HAL gate
          * @returns map from membership id to set of gates that have the membership.
          */
-        std::map<int, std::set<Gate*>> get_memberships_for_hal(igraph_t* graph, igraph_vector_t membership, std::map<int, Gate*> vertex_to_gate);
+        std::map<int, std::set<Gate*>> get_memberships_for_hal(igraph_t* graph, igraph_vector_int_t *membership, std::map<int, Gate*> vertex_to_gate);
     };
 }    // namespace hal
