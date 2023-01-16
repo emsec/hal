@@ -34,6 +34,7 @@ namespace hal
         {
             // fix parsing error and then comment this in!
             mLastModifiedLabel->setText(mCommentEntry->getLastModifiedTime().toString(mCommentEntry->getDateFormatString()));
+            mLastModifiedLabel->show();
             mHeaderEdit->setText(entry->getHeader());
             mTextEdit->setHtml(entry->getText());
             updateColorActionPixmap(mDefaultColor); //default text color
@@ -64,18 +65,26 @@ namespace hal
         s->polish(this);
 
         // header
-        mHeaderContainer = new QWidget;
-        mHeaderContainerLayout = new QHBoxLayout(mHeaderContainer);
-        mHeaderContainerLayout->setContentsMargins(9,20,6,9); // space of layout to surrounding edges (increases container-widget size)
-        //mHeaderContainer->setStyleSheet("background-color: black");
-        mHeaderContainer->setObjectName("header-container");
-        mHeaderEdit = new QLineEdit;
-        //mHeaderEdit->setStyleSheet("background-color: #171e22; color: #A9B7C6;");
-        mLastModifiedLabel = new QLabel;
+        // with black border
+//        mHeaderContainer = new QWidget;
+//        mHeaderContainerLayout = new QHBoxLayout(mHeaderContainer);
+//        mHeaderContainerLayout->setContentsMargins(9,20,6,9); // space of layout to surrounding edges (increases container-widget size)
+//        //mHeaderContainer->setStyleSheet("background-color: black");
+//        mHeaderContainer->setObjectName("header-container");
+//        mHeaderEdit = new QLineEdit;
+//        //mHeaderEdit->setStyleSheet("background-color: #171e22; color: #A9B7C6;");
+//        mLastModifiedLabel = new QLabel;
+//        // perhaps a spacer item with fixed size at the front instead of left spacing/margin
+//        mHeaderContainerLayout->addWidget(mHeaderEdit);
+//        mHeaderContainerLayout->addWidget(mLastModifiedLabel);
 
-        // perhaps a spacer item with fixed size at the front instead of left spacing/margin
+        //without black border
+        mHeaderContainerLayout = new QHBoxLayout;
+        mHeaderEdit = new QLineEdit;
+        mLastModifiedLabel = new QLabel;
         mHeaderContainerLayout->addWidget(mHeaderEdit);
         mHeaderContainerLayout->addWidget(mLastModifiedLabel);
+        mLastModifiedLabel->hide();
 
         // toolbar
         mToolBar = new QToolBar;
@@ -112,7 +121,8 @@ namespace hal
 
         // add everything
         mLayout = new QVBoxLayout(this);
-        mLayout->addWidget(mHeaderContainer);
+        //mLayout->addWidget(mHeaderContainer);
+        mLayout->addLayout(mHeaderContainerLayout);
         mLayout->addWidget(mToolBar);
         mLayout->addWidget(mTextEdit);
         mLayout->addWidget(buttonBox);
