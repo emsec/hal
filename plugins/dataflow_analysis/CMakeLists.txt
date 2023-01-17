@@ -16,5 +16,4 @@ if(PL_DATAFLOW OR BUILD_ALL_PLUGINS)
                    PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/dataflow.rst
                    )
 		 
-    add_dependencies(dataflow igraph_0_9)
 endif()

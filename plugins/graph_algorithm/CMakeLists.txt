@@ -14,6 +14,4 @@ if(PL_GRAPH_ALGORITHM OR BUILD_ALL_PLUGINS)
         LINK_LIBRARIES PUBLIC ${IGRAPH_LIB}
     )
 
-  add_dependencies(graph_algorithm igraph_0_9)
-
 endif()
