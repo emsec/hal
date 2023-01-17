@@ -6,13 +6,6 @@ if(PL_DATAFLOW OR BUILD_ALL_PLUGINS)
     file(GLOB_RECURSE DATAFLOW_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
     file(GLOB_RECURSE DATAFLOW_PYTHON_SRC ${CMAKE_CURRENT_SOURCE_DIR}/python/*.cpp)
 
-    find_package(IGraph REQUIRED)
-    if(HAVE_IGRAPH)
-        message(STATUS "Found following IGRAPH Libraries")
-        message(STATUS "    IGRAPH_INCLUDE_DIRS: ${IGRAPH_INCLUDES}")
-        message(STATUS "    IGRAPH_LIBRARIES: ${IGRAPH_LIBRARIES}")
-    endif(HAVE_IGRAPH)
-
     hal_add_plugin(dataflow
                    SHARED
                    HEADER ${DATAFLOW_INC}
@@ -22,5 +15,6 @@ if(PL_DATAFLOW OR BUILD_ALL_PLUGINS)
                    LINK_LIBRARIES PUBLIC ${IGRAPH_LIBRARIES} graph_algorithm
                    PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/dataflow.rst
                    )
-
+		 
+    add_dependencies(dataflow igraph_0_9)
 endif()
