@@ -6,7 +6,9 @@
 
 #include <deque>
 
-// #define PRINT
+// #define PRINT_CONFLICT
+// #define PRINT_CONNECTIVITY
+// #define PRINT_GENERAL
 
 namespace hal
 {
@@ -143,9 +145,9 @@ namespace hal
         {
             std::map<MPG, std::set<Net*>> connected_neighbors;
 
-            const bool print = false;
+            const bool PRINT_CONFLICT = false;
 
-            if (print)
+            if (PRINT_CONFLICT)
             {
                 std::cout << "Gathering bit index for net " << n->get_id() << " with current module border " << (module_border ? std::to_string(module_border->get_id()) : "null")
                           << " in direction: " << (successors ? "forwards" : "backwards") << std::endl;
@@ -182,7 +184,7 @@ namespace hal
                     continue;
                 }
 
-                if (print)
+                if (PRINT_CONFLICT)
                 {
                     std::cout << "Checking gate " << g->get_id() << std::endl;
                 }
@@ -196,7 +198,7 @@ namespace hal
                 // check whether we left a previously entered module
                 if (!module_border->contains_gate(g, true))
                 {
-                    if (print)
+                    if (PRINT_CONFLICT)
                     {
                         std::cout << "Encountered gate " << g->get_id() << " that was not part of the module border." << std::endl;
                     }
@@ -223,7 +225,7 @@ namespace hal
                 // reached another module that is not the module we are currently in
                 if (found_module != module_border)
                 {
-                    if (print)
+                    if (PRINT_CONFLICT)
                     {
                         std::cout << "Found new module  " << found_module->get_id() << std::endl;
                     }
@@ -298,7 +300,7 @@ namespace hal
             // ############### CONFLICT FINDING ############## //
             // ############################################### //
 
-#ifdef PRINT
+#ifdef PRINT_CONFLICT
             for (const auto& [net, possible_bitindices] : collected_bitindices)
             {
                 std::cout << "\t\tNet " << net->get_id() << ": " << std::endl;
@@ -370,7 +372,7 @@ namespace hal
                 }
             }
 
-#ifdef PRINT
+#ifdef PRINT_CONFLICT
             for (const auto& [org_mpg, index] : origin_indices_to_remove)
             {
                 std::cout << "Found org " << org_mpg.first->get_id() << "-" << org_mpg.second->get_name() << " index " << index << " pair to remove!" << std::endl;
@@ -401,7 +403,7 @@ namespace hal
             }
 
             // TODO remove debug printing
-#ifdef PRINT
+#ifdef PRINT_CONFLICT
             std::cout << "\tReduced Possible Indices: " << std::endl;
             for (const auto& [net, possible_bitindices] : further_reduced_collected_indices)
             {
@@ -433,7 +435,7 @@ namespace hal
             auto offset_matrix_res = build_offset_matrix(further_reduced_collected_indices);
             if (offset_matrix_res.is_error())
             {
-#ifdef PRINT
+#ifdef PRINT_CONFLICT
                 std::cout << "Failed to build offset matrix : " << offset_matrix_res.get_error().get() << std::endl;
 #endif
                 return {};
@@ -443,7 +445,7 @@ namespace hal
             auto base_line = offset_matrix.begin()->first;
 
             // TODO remove
-#ifdef PRINT
+#ifdef PRINT_CONFLICT
             std::cout << "Found valid offsets pingroup " << mpg.second->get_name() << ": " << std::endl;
             std::cout << "Baseline: " << base_line.first->get_id() << "-" << base_line.second->get_name() << std::endl;
             for (const auto& [org1, col] : offset_matrix)
@@ -488,7 +490,7 @@ namespace hal
                 }
             }
 
-#ifdef PRINT
+#ifdef PRINT_CONFLICT
             std::cout << "Found offset bitorder: " << std::endl;
             for (const auto& [net, index] : consens_bitindices)
             {
@@ -534,7 +536,7 @@ namespace hal
             }
 
             // TODO remove
-#ifdef PRINT
+#ifdef PRINT_CONFLICT
             std::cout << "Found complete bitorder for pingroup " << mpg.second->get_name() << std::endl;
             for (const auto& [net, index] : complete_consens)
             {
@@ -592,7 +594,7 @@ namespace hal
             }
 
             // TODO remove
-#ifdef PRINT
+#ifdef PRINT_CONFLICT
             std::cout << "Found valid input bitorder for pingroup " << mpg.second->get_name() << std::endl;
             for (const auto& [net, index] : aligned_consens)
             {
@@ -666,6 +668,7 @@ namespace hal
         }
 
         // TODO remove debug printing
+#ifdef PRINT_CONNECTIVITY
         for (const auto& [start, connected] : connectivity_outwards)
         {
             std::cout << start.first.first->get_id() << " / " << start.first.first->get_name() << " - " << start.first.second->get_name() << " (OUTWARDS)@ " << start.second->get_id() << " / "
@@ -684,6 +687,7 @@ namespace hal
                 std::cout << "\t" << mpg.first->get_id() << " / " << mpg.first->get_name() << " - " << mpg.second->get_name() << ": " << net->get_id() << " / " << net->get_name() << std::endl;
             }
         }
+#endif
 
         log_info("bitorder_propagation", "Finished conncetivity analysis for bitorder propagation");
 
@@ -762,13 +766,13 @@ namespace hal
 
                     if (auto con_it = connectivity_inwards.find({{m, pg}, starting_net}); con_it == connectivity_inwards.end())
                     {
-                        log_warning("bitorder_propagation",
-                                    "There are no valid origins connected to modue {} / {} with pin group {} and net {} / {}.",
-                                    m->get_id(),
-                                    m->get_name(),
-                                    pg->get_name(),
-                                    starting_net->get_id(),
-                                    starting_net->get_name());
+                        // log_warning("bitorder_propagation",
+                        //             "There are no valid origins connected to modue {} / {} with pin group {} and net {} / {}.",
+                        //             m->get_id(),
+                        //             m->get_name(),
+                        //             pg->get_name(),
+                        //             starting_net->get_id(),
+                        //             starting_net->get_name());
                         continue;
                     }
 
@@ -803,13 +807,13 @@ namespace hal
 
                     if (auto con_it = connectivity_outwards.find({{m, pg}, starting_net}); con_it == connectivity_outwards.end())
                     {
-                        log_warning("bitorder_propagation",
-                                    "There are no valid origins connected to modue {} / {} with pin group {} and net {} / {}.",
-                                    m->get_id(),
-                                    m->get_name(),
-                                    pg->get_name(),
-                                    starting_net->get_id(),
-                                    starting_net->get_name());
+                        // log_warning("bitorder_propagation",
+                        //             "There are no valid origins connected to modue {} / {} with pin group {} and net {} / {}.",
+                        //             m->get_id(),
+                        //             m->get_name(),
+                        //             pg->get_name(),
+                        //             starting_net->get_id(),
+                        //             starting_net->get_name());
                         continue;
                     }
 
@@ -839,7 +843,7 @@ namespace hal
                     }
                 }
 
-#ifdef PRINT
+#ifdef PRINT_GENERAL
                 std::cout << "Extract for " << m->get_id() << " / " << m->get_name() << " - " << pg->get_name() << ": (INWARDS) " << std::endl;
 #endif
 
@@ -850,7 +854,7 @@ namespace hal
                     continue;
                 }
 
-#ifdef PRINT
+#ifdef PRINT_GENERAL
                 std::cout << "Extract for " << m->get_id() << " / " << m->get_name() << " - " << pg->get_name() << ": (OUTWARDS) " << std::endl;
 #endif
                 const auto newly_wellformed_outwards = extract_well_formed_bitorder({m, pg}, collected_outwards, strict_consens_finding);
@@ -860,7 +864,7 @@ namespace hal
                     continue;
                 }
 
-#ifdef PRINT
+#ifdef PRINT_GENERAL
                 std::cout << "Extract for " << m->get_id() << " / " << m->get_name() << " - " << pg->get_name() << ": (COMBINED) " << std::endl;
 #endif
                 const auto newly_wellformed_combined = extract_well_formed_bitorder({m, pg}, collected_combined, strict_consens_finding);
@@ -945,21 +949,24 @@ namespace hal
         return OK({});
     }
 
-    Result<bool> BitorderPropagationPlugin::propagate_bitorder(Netlist* nl, const std::pair<u32, std::string>& src, const std::pair<u32, std::string>& dst)
+    Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>>
+        BitorderPropagationPlugin::propagate_bitorder(Netlist* nl, const std::pair<u32, std::string>& src, const std::pair<u32, std::string>& dst)
     {
         const std::vector<std::pair<u32, std::string>> src_vec = {src};
         const std::vector<std::pair<u32, std::string>> dst_vec = {dst};
         return propagate_bitorder(nl, src_vec, dst_vec);
     }
 
-    Result<bool> BitorderPropagationPlugin::propagate_bitorder(const std::pair<Module*, PinGroup<ModulePin>*>& src, const std::pair<Module*, PinGroup<ModulePin>*>& dst)
+    Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>> BitorderPropagationPlugin::propagate_bitorder(const std::pair<Module*, PinGroup<ModulePin>*>& src,
+                                                                                                                                  const std::pair<Module*, PinGroup<ModulePin>*>& dst)
     {
         const std::vector<std::pair<Module*, PinGroup<ModulePin>*>> src_vec = {src};
         const std::vector<std::pair<Module*, PinGroup<ModulePin>*>> dst_vec = {dst};
         return propagate_bitorder(src_vec, dst_vec);
     }
 
-    Result<bool> BitorderPropagationPlugin::propagate_bitorder(Netlist* nl, const std::vector<std::pair<u32, std::string>>& src, const std::vector<std::pair<u32, std::string>>& dst)
+    Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>>
+        BitorderPropagationPlugin::propagate_bitorder(Netlist* nl, const std::vector<std::pair<u32, std::string>>& src, const std::vector<std::pair<u32, std::string>>& dst)
     {
         std::vector<std::pair<Module*, PinGroup<ModulePin>*>> internal_src;
         std::vector<std::pair<Module*, PinGroup<ModulePin>*>> internal_dst;
@@ -1029,7 +1036,8 @@ namespace hal
         return propagate_bitorder(internal_src, internal_dst);
     }
 
-    Result<bool> BitorderPropagationPlugin::propagate_bitorder(const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& src, const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& dst)
+    Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>> BitorderPropagationPlugin::propagate_bitorder(const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& src,
+                                                                                                                                  const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& dst)
     {
         std::map<MPG, std::map<Net*, u32>> known_bitorders;
         std::set<MPG> unknown_bitorders = {dst.begin(), dst.end()};
@@ -1062,7 +1070,7 @@ namespace hal
 
         reorder_module_pin_groups(all_wellformed_module_pin_groups);
 
-        u32 all_wellformed_bitorders_count = 0;
+#ifdef PRINT_GENERAL
         for (const auto& [mpg, bitorder] : all_wellformed_module_pin_groups)
         {
             auto m  = mpg.first;
@@ -1075,10 +1083,11 @@ namespace hal
             {
                 std::cout << net->get_id() << ": " << index << std::endl;
             }
-            all_wellformed_bitorders_count++;
         }
+#endif
 
-        const u32 new_bit_order_count = all_wellformed_bitorders_count - src.size();
+        const u32 all_wellformed_bitorders_count = all_wellformed_module_pin_groups.size();
+        const u32 new_bit_order_count            = all_wellformed_bitorders_count - src.size();
 
         log_info("bitorder_propagation", "With {} known bitorder, {} unknown bitorders got reconstructed.", src.size(), new_bit_order_count);
         log_info("bitorder_propagation", "{} / {} = {} of all unknown bitorders.", new_bit_order_count, dst.size(), double(new_bit_order_count) / double(dst.size()));
@@ -1088,6 +1097,6 @@ namespace hal
                  dst.size() + src.size(),
                  double(all_wellformed_bitorders_count) / double(dst.size() + src.size()));
 
-        return OK(new_bit_order_count > 0);
+        return OK(all_wellformed_module_pin_groups);
     }
 }    // namespace hal

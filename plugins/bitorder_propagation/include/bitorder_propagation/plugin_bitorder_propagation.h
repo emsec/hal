@@ -39,45 +39,49 @@ namespace hal
         /**
          * Propagates known bit order information to module pin groups with unknown bit order.
          * Afterwards the algorithm tries to reconstrcut valid bit orders from the propagated information.
-         * The valid bit orders are the annotated to the module pin groups.
+         * The valid bit orders are then annotated to the module pin groups.
          *
          * @param[in] src - The module / pin group pair with known bit order. (The pins of the pin group have to be in the right order already) 
          * @param[in] unknown_bitorders - The module / pin group pair with unknown bit order.
-         * @returns OK and true if any new bit orders where found, false otherwise or an Error.
+         * @returns OK and a map containing all known bitorders consisting of the new and already known ones or an Error.
          */
-        static Result<bool> propagate_bitorder(Netlist* nl, const std::pair<u32, std::string>& src, const std::pair<u32, std::string>& dst);
+        static Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>>
+            propagate_bitorder(Netlist* nl, const std::pair<u32, std::string>& src, const std::pair<u32, std::string>& dst);
 
         /**
          * Propagates known bit order information to module pin groups with unknown bit order.
          * Afterwards the algorithm tries to reconstrcut valid bit orders from the propagated information.
-         * The valid bit orders are the annotated to the module pin groups.
+         * The valid bit orders are then annotated to the module pin groups.
          *
          * @param[in] src - The module / pin group pair with known bit order. (The pins of the pin group have to be in the right order already) 
          * @param[in] unknown_bitorders - The module / pin group pair with unknown bit order.
-         * @returns OK and true if any new bit orders where found, false otherwise or an Error.
+         * @returns OK and a map containing all known bitorders consisting of the new and already known ones or an Error.
          */
-        static Result<bool> propagate_bitorder(const std::pair<Module*, PinGroup<ModulePin>*>& src, const std::pair<Module*, PinGroup<ModulePin>*>& dst);
+        static Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>> propagate_bitorder(const std::pair<Module*, PinGroup<ModulePin>*>& src,
+                                                                                                                  const std::pair<Module*, PinGroup<ModulePin>*>& dst);
 
         /**
          * Propagates known bit order information to module pin groups with unknown bit order.
          * Afterwards the algorithm tries to reconstrcut valid bit orders from the propagated information.
-         * The valid bit orders are the annotated to the module pin groups.
+         * The valid bit orders are then annotated to the module pin groups.
          *
          * @param[in] src - The module / pin group pairs with known bit order. (The pins of the pin group have to be in the right order already) 
          * @param[in] unknown_bitorders - The module / pin group pairs with unknown bit order.
-         * @returns OK and true if any new bit orders where found, false otherwise or an Error.
+         * @returns OK and a map containing all known bitorders consisting of the new and already known ones or an Error.
          */
-        static Result<bool> propagate_bitorder(Netlist* nl, const std::vector<std::pair<u32, std::string>>& src, const std::vector<std::pair<u32, std::string>>& dst);
+        static Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>>
+            propagate_bitorder(Netlist* nl, const std::vector<std::pair<u32, std::string>>& src, const std::vector<std::pair<u32, std::string>>& dst);
 
         /**
          * Propagates known bit order information to module pin groups with unknown bit order.
          * Afterwards the algorithm tries to reconstrcut valid bit orders from the propagated information.
-         * The valid bit orders are the annotated to the module pin groups.
+         * The valid bit orders are then annotated to the module pin groups.
          *
          * @param[in] src - The module / pin group pairs with known bit order. (The pins of the pin group have to be in the right order already) 
          * @param[in] unknown_bitorders - The module / pin group pairs with unknown bit order.
-         * @returns OK and true if any new bit orders where found, false otherwise or an Error.
+         * @returns OK and a map containing all known bitorders consisting of the new and already known ones or an Error.
          */
-        static Result<bool> propagate_bitorder(const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& src, const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& dst);
+        static Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>> propagate_bitorder(const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& src,
+                                                                                                                  const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& dst);
     };
 }    // namespace hal

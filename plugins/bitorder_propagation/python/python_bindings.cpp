@@ -31,7 +31,9 @@ namespace hal
             .def("get_version", &BitorderPropagationPlugin::get_version)
             .def_static(
                 "propagate_bitorder",
-                [](Netlist* nl, const std::pair<u32, std::string>& src, const std::pair<u32, std::string>& dst) -> std::optional<bool> {
+                [](Netlist* nl,
+                   const std::pair<u32, std::string>& src,
+                   const std::pair<u32, std::string>& dst) -> std::optional<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>> {
                     const auto res = BitorderPropagationPlugin::propagate_bitorder(nl, src, dst);
                     if (res.is_ok())
                     {
@@ -52,12 +54,14 @@ namespace hal
                 :param hal_py.netlist nl: The netlist.
                 :param tuple src: A pair of module id and pin group name representing the source.
                 :param tuple dst: A pair of module id and pin group name representing the destination.
-                :returns: A bool when there were new bitorders found.
-                :rtype: bool
+                :returns: All wellformed bitorders
+                :rtype: dict()
             )")
             .def_static(
                 "propagate_bitorder",
-                [](Netlist* nl, const std::vector<std::pair<u32, std::string>>& src, const std::vector<std::pair<u32, std::string>>& dst) -> std::optional<bool> {
+                [](Netlist* nl,
+                   const std::vector<std::pair<u32, std::string>>& src,
+                   const std::vector<std::pair<u32, std::string>>& dst) -> std::optional<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>> {
                     const auto res = BitorderPropagationPlugin::propagate_bitorder(nl, src, dst);
                     if (res.is_ok())
                     {
@@ -78,8 +82,8 @@ namespace hal
                 :param hal_py.netlist nl: The netlist.
                 :param list src: A list of pairs of module id and pin group name representing the source.
                 :param list dst: A list of pairs of module id and pin group name representing the destination.
-                :returns: A bool when there were new bitorders found.
-                :rtype: bool
+                :returns: :returns: All wellformed bitorders
+                :rtype: dict()
             )");
 
 #ifndef PYBIND11_MODULE
