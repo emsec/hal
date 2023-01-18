@@ -1,11 +1,13 @@
---- src/CMakeLists.txt	2023-01-17 10:49:39.581722917 +0100
-+++ src/CMakeLists.fix.txt	2023-01-17 10:49:32.913718558 +0100
-@@ -295,7 +295,7 @@
+--- src/CMakeLists.txt	2023-01-18 22:39:25.961620904 +0100
++++ src/CMakeLists.txt	2023-01-18 22:39:48.945900413 +0100
+@@ -295,8 +295,8 @@
  )
  
  # Set soname for the library
 -set_target_properties(igraph PROPERTIES VERSION "0.0.0")
-+set_target_properties(igraph PROPERTIES VERSION "${PACKAGE_VERSION}")
- set_target_properties(igraph PROPERTIES SOVERSION 0)
+-set_target_properties(igraph PROPERTIES SOVERSION 0)
++set_target_properties(igraph PROPERTIES VERSION "2.0.0")
++set_target_properties(igraph PROPERTIES SOVERSION 2)
  
  # Add extra compiler definitions if needed
+ target_compile_definitions(
