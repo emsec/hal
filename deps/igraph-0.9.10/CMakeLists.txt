@@ -11,11 +11,11 @@ message("-- IGRAPH version 0.9.10 : download and build libigraph${CMAKE_SHARED_L
 
 ExternalProject_Add(igraph_0_9
   PREFIX "${IGRAPH_BASE}"
-  URL "https://github.com/igraph/igraph/archive/refs/tags/0.9.10.tar.gz"
+  URL "https://github.com/igraph/igraph/releases/download/0.9.10/igraph-0.9.10.tar.gz"
   SOURCE_DIR "${IGRAPH_DOWNLOAD}"
   CMAKE_ARGS "-DCMAKE_INSTALL_PREFIX=${IGRAPH_BASE}" "-DBUILD_SHARED_LIBS=ON" "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}" "-DIGRAPH_VERSION=0.9.10"
   BINARY_DIR "${IGRAPH_BUILD}"
-  PATCH_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/patch.sh ${CMAKE_CURRENT_SOURCE_DIR} ${IGRAPH_DOWNLOAD}
+  PATCH_COMMAND patch -u ${IGRAPH_DOWNLOAD}/src/CMakeLists.txt -i ${CMAKE_CURRENT_SOURCE_DIR}/patch.txt
   INSTALL_DIR "${IGRAPH_BASE}"
   BUILD_BYPRODUCTS "${IGRAPH_LIB}"
   )
