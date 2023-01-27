@@ -630,13 +630,11 @@ var hierarchy =
                 ] ]
               ] ],
               [ "QTreeView", "https://doc.qt.io/qt-5/qtreeview.html", [
+                [ "hal::GatePinTree", "classhal_1_1_gate_pin_tree.html", null ],
+                [ "hal::ModuleElementsTree", "classhal_1_1_module_elements_tree.html", null ],
+                [ "hal::ModulePinsTree", "classhal_1_1_module_pins_tree.html", null ],
                 [ "hal::ModuleTreeView", "classhal_1_1_module_tree_view.html", null ],
                 [ "hal::SelectionTreeView", "classhal_1_1_selection_tree_view.html", null ],
-                [ "hal::SizeAdjustableTreeView", "classhal_1_1_size_adjustable_tree_view.html", [
-                  [ "hal::GatePinTree", "classhal_1_1_gate_pin_tree.html", null ],
-                  [ "hal::ModuleElementsTree", "classhal_1_1_module_elements_tree.html", null ],
-                  [ "hal::ModulePinsTree", "classhal_1_1_module_pins_tree.html", null ]
-                ] ],
                 [ "QTreeWidget", "https://doc.qt.io/qt-5/qtreewidget.html", [
                   [ "hal::GraphNavigationTreeWidget", "classhal_1_1_graph_navigation_tree_widget.html", null ]
                 ] ]
@@ -697,8 +695,8 @@ var hierarchy =
     ] ],
     [ "hal::utils::RecursiveDirectoryRange", "classhal_1_1utils_1_1_recursive_directory_range.html", null ],
     [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
-    [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
     [ "hal::Result< T >", "classhal_1_1_result.html", null ],
+    [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
     [ "reverse_iterator", null, [
       [ "nlohmann::detail::json_reverse_iterator< Base >", "classnlohmann_1_1detail_1_1json__reverse__iterator.html", null ]
     ] ],
@@ -727,8 +725,8 @@ var hierarchy =
       [ "hal::VHDLParserTest", "classhal_1_1_v_h_d_l_parser_test.html", null ]
     ] ],
     [ "nlohmann::detail::to_json_fn", "structnlohmann_1_1detail_1_1to__json__fn.html", null ],
-    [ "hal::BooleanFunctionParser::Token", "structhal_1_1_boolean_function_parser_1_1_token.html", null ],
     [ "hal::Token< T >", "structhal_1_1_token.html", null ],
+    [ "hal::BooleanFunctionParser::Token", "structhal_1_1_boolean_function_parser_1_1_token.html", null ],
     [ "hal::TokenStream< T >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< ci_string >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< std::string >", "classhal_1_1_token_stream.html", null ],

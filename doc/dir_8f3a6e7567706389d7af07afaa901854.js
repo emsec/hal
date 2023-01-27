@@ -41,7 +41,6 @@ var dir_8f3a6e7567706389d7af07afaa901854 =
     [ "selection_details_widget", "dir_78f3dec0c5ef157ac74258fc012bc3cd.html", "dir_78f3dec0c5ef157ac74258fc012bc3cd" ],
     [ "selection_relay", "dir_065624142a172e6b137c5c3355653862.html", "dir_065624142a172e6b137c5c3355653862" ],
     [ "settings", "dir_203e78a72855f1f3788475126339bf32.html", "dir_203e78a72855f1f3788475126339bf32" ],
-    [ "size_adjustable_tree_view", "dir_ce89fb2499c8e8ba0111a1c80618b723.html", "dir_ce89fb2499c8e8ba0111a1c80618b723" ],
     [ "spinner_widget", "dir_2b1b629e4138ad49d82b98f70a9645c8.html", "dir_2b1b629e4138ad49d82b98f70a9645c8" ],
     [ "splitter", "dir_1aa62386e25b3dbaec35930360b7d032.html", "dir_1aa62386e25b3dbaec35930360b7d032" ],
     [ "style", "dir_08851f402e016d91c18633a9027c07fd.html", "dir_08851f402e016d91c18633a9027c07fd" ],

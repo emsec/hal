@@ -364,7 +364,6 @@ var namespacehal =
     [ "SettingsWidgetText", "classhal_1_1_settings_widget_text.html", "classhal_1_1_settings_widget_text" ],
     [ "SeveritySelector", "classhal_1_1_severity_selector.html", "classhal_1_1_severity_selector" ],
     [ "ShadowEffect", "classhal_1_1_shadow_effect.html", "classhal_1_1_shadow_effect" ],
-    [ "SizeAdjustableTreeView", "classhal_1_1_size_adjustable_tree_view.html", "classhal_1_1_size_adjustable_tree_view" ],
     [ "SolveFsmPlugin", "classhal_1_1_solve_fsm_plugin.html", "classhal_1_1_solve_fsm_plugin" ],
     [ "SpecialLogContentManager", "classhal_1_1_special_log_content_manager.html", "classhal_1_1_special_log_content_manager" ],
     [ "SpinnerWidget", "classhal_1_1_spinner_widget.html", "classhal_1_1_spinner_widget" ],

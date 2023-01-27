@@ -1,12 +1,5 @@
 var NAVTREEINDEX26 =
 {
-"json_8hpp.html#aa1588f4ea4e7819b5b6e66f07865737f":[7,0,1,1,0,0,2,1,210],
-"json_8hpp.html#aa1da535c59b21f70e5967b66473543f0":[7,0,1,1,0,0,2,1,235],
-"json_8hpp.html#aa210655ec7cc8387bef8ade74c3af647":[7,0,1,1,0,0,2,1,162],
-"json_8hpp.html#aa400dd54d50fd20d7e931e2f08ee6374":[7,0,1,1,0,0,2,1,196],
-"json_8hpp.html#aa554fc6a11519e4f347deb25a9f0db40":[7,0,1,1,0,0,2,1,284],
-"json_8hpp.html#aa554fc6a11519e4f347deb25a9f0db40a0b6879b186bfb2b1ec65d2460e4eccd4":[7,0,1,1,0,0,2,1,284,4],
-"json_8hpp.html#aa554fc6a11519e4f347deb25a9f0db40a4537f20910e85437f6d07701864084e8":[7,0,1,1,0,0,2,1,284,3],
 "json_8hpp.html#aa554fc6a11519e4f347deb25a9f0db40a466deec76ecdf5fca6d38571f6324d54":[7,0,1,1,0,0,2,1,284,0],
 "json_8hpp.html#aa554fc6a11519e4f347deb25a9f0db40aaf9de350d652f0c9055ddab514bd23ea":[7,0,1,1,0,0,2,1,284,1],
 "json_8hpp.html#aa554fc6a11519e4f347deb25a9f0db40ac40d516627022a54003ac2b74a82688a":[7,0,1,1,0,0,2,1,284,2],
@@ -168,8 +161,8 @@ var NAVTREEINDEX26 =
 "mac__component_8cpp_source.html":[7,0,2,0,3,3,5],
 "mac__component_8h.html":[7,0,0,0,1,3,3,5],
 "mac__component_8h_source.html":[7,0,0,0,1,3,3,5],
-"main__settings__widget_8cpp.html":[7,0,1,3,2,51],
-"main__settings__widget_8cpp_source.html":[7,0,1,3,2,51],
+"main__settings__widget_8cpp.html":[7,0,1,3,2,50],
+"main__settings__widget_8cpp_source.html":[7,0,1,3,2,50],
 "main__settings__widget_8h.html":[7,0,1,3,0,0,42,3],
 "main__settings__widget_8h_source.html":[7,0,1,3,0,0,42,3],
 "main__window_8cpp.html":[7,0,1,3,2,29,3],
@@ -249,5 +242,12 @@ var NAVTREEINDEX26 =
 "module__shader_8cpp.html":[7,0,1,3,2,19,3,1],
 "module__shader_8cpp_source.html":[7,0,1,3,2,19,3,1],
 "module__shader_8h.html":[7,0,1,3,0,0,20,3,1],
-"module__shader_8h_source.html":[7,0,1,3,0,0,20,3,1]
+"module__shader_8h_source.html":[7,0,1,3,0,0,20,3,1],
+"module__table__model_8cpp.html":[7,0,1,3,2,38,2,1],
+"module__table__model_8cpp_source.html":[7,0,1,3,2,38,2,1],
+"module__table__model_8h.html":[7,0,1,3,0,0,40,2,1],
+"module__table__model_8h_source.html":[7,0,1,3,0,0,40,2,1],
+"module__tree__model_8cpp.html":[7,0,1,3,2,38,1,3],
+"module__tree__model_8cpp_source.html":[7,0,1,3,2,38,1,3],
+"module__tree__model_8h.html":[7,0,1,3,0,0,40,1,3]
 };

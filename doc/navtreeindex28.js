@@ -1,12 +1,5 @@
 var NAVTREEINDEX28 =
 {
-"netlist_2netlist__utils_8cpp.html#afed43ba864b63d01b07464dfb114f847":[7,0,2,0,18,13],
-"netlist_2netlist__utils_8cpp_source.html":[7,0,2,0,18],
-"netlist_2netlist__writer_2netlist__writer__manager_8cpp.html":[7,0,2,0,5,0],
-"netlist_2netlist__writer_2netlist__writer__manager_8cpp.html#a1bb87c0a35221bb18a28e97611b71a12":[7,0,2,0,5,0,5],
-"netlist_2netlist__writer_2netlist__writer__manager_8cpp.html#a4d998d78fd82eb290cc8679a90f57515":[7,0,2,0,5,0,0],
-"netlist_2netlist__writer_2netlist__writer__manager_8cpp.html#a69b04c9bcb90a1aa9ff6743c8b38d68d":[7,0,2,0,5,0,1],
-"netlist_2netlist__writer_2netlist__writer__manager_8cpp.html#aaa30fb9e667974f36773a5b4de75a7fe":[7,0,2,0,5,0,3],
 "netlist_2netlist__writer_2netlist__writer__manager_8cpp.html#ab4c58af2ca2dfd952511f978dafec685":[7,0,2,0,5,0,4],
 "netlist_2netlist__writer_2netlist__writer__manager_8cpp.html#ada281488258c1fb92351e44a9d8ff60c":[7,0,2,0,5,0,2],
 "netlist_2netlist__writer_2netlist__writer__manager_8cpp_source.html":[7,0,2,0,5,0],
@@ -136,10 +129,10 @@ var NAVTREEINDEX28 =
 "node__drag__shadow_8cpp_source.html":[7,0,1,3,2,19,1,2,0],
 "node__drag__shadow_8h.html":[7,0,1,3,0,0,20,1,2,0],
 "node__drag__shadow_8h_source.html":[7,0,1,3,0,0,20,1,2,0],
-"open__file__widget_8cpp.html":[7,0,1,3,2,49,2],
-"open__file__widget_8cpp_source.html":[7,0,1,3,2,49,2],
-"open__file__widget_8h.html":[7,0,1,3,0,0,52,2],
-"open__file__widget_8h_source.html":[7,0,1,3,0,0,52,2],
+"open__file__widget_8cpp.html":[7,0,1,3,2,48,2],
+"open__file__widget_8cpp_source.html":[7,0,1,3,2,48,2],
+"open__file__widget_8h.html":[7,0,1,3,0,0,51,2],
+"open__file__widget_8h_source.html":[7,0,1,3,0,0,51,2],
 "overlay_8cpp.html":[7,0,1,3,2,34,0],
 "overlay_8cpp_source.html":[7,0,1,3,2,34,0],
 "overlay_8h.html":[7,0,1,3,0,0,36,0],
@@ -249,5 +242,12 @@ var NAVTREEINDEX28 =
 "plugin__dataflow_8cpp.html#aa8127688230d54c42984bdd3c2bb1f72":[7,0,1,1,3,6,0],
 "plugin__dataflow_8cpp_source.html":[7,0,1,1,3,6],
 "plugin__dataflow_8h.html":[7,0,1,1,0,0,6],
-"plugin__dataflow_8h_source.html":[7,0,1,1,0,0,6]
+"plugin__dataflow_8h_source.html":[7,0,1,1,0,0,6],
+"plugin__graph__algorithm_8cpp.html":[7,0,1,2,2,3],
+"plugin__graph__algorithm_8cpp.html#aa8127688230d54c42984bdd3c2bb1f72":[7,0,1,2,2,3,0],
+"plugin__graph__algorithm_8cpp_source.html":[7,0,1,2,2,3],
+"plugin__graph__algorithm_8h.html":[7,0,1,2,0,0,0],
+"plugin__graph__algorithm_8h_source.html":[7,0,1,2,0,0,0],
+"plugin__gui_8cpp.html":[7,0,1,3,2,51],
+"plugin__gui_8cpp.html#a87977efcac4fda277a7ee8cc0eb1c83c":[7,0,1,3,2,51,1]
 };

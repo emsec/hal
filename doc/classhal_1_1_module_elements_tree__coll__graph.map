@@ -1,5 +1,5 @@
 <map id="hal::ModuleElementsTree" name="hal::ModuleElementsTree">
-<area shape="rect" id="node1" title="A widget to display the specific (direct submodules, gates) items of a given module." alt="" coords="5,520,252,671"/>
-<area shape="rect" id="node2" href="$classhal_1_1_size_adjustable_tree_view.html" title=" " alt="" coords="26,365,231,472"/>
-<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qtreeview.html" title=" " alt="" coords="33,5,224,317"/>
+<area shape="rect" id="node1" title="A widget to display the specific (direct submodules, gates) items of a given module." alt="" coords="5,813,252,964"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qtreeview.html" title=" " alt="" coords="33,453,224,765"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qabstractitemview.html" title=" " alt="" coords="24,5,233,405"/>
 </map>
