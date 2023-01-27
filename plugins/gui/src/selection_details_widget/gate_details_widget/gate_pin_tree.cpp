@@ -13,7 +13,7 @@
 namespace hal
 {
 
-    GatePinTree::GatePinTree(QWidget *parent) : SizeAdjustableTreeView(parent), mPinModel(new GatePinsTreeModel(this)),
+    GatePinTree::GatePinTree(QWidget *parent) : QTreeView(parent), mPinModel(new GatePinsTreeModel(this)),
          mGateID(-1), mClearSelection(false)
     {
         setContextMenuPolicy(Qt::CustomContextMenu);
@@ -42,8 +42,6 @@ namespace hal
         mPinModel->setGate(g);
         mGateID = gateID;
 
-        adjustSizeToContents();
-
         Q_EMIT updateText(QString("Pins (%1)").arg(mPinModel->getNumberOfDisplayedPins()));
     }
 
@@ -53,8 +51,6 @@ namespace hal
 
         mPinModel->setGate(g);
         mGateID = g->get_id();
-
-        adjustSizeToContents();
 
         Q_EMIT updateText(QString("Pins (%1)").arg(mPinModel->getNumberOfDisplayedPins()));
     }
@@ -67,7 +63,7 @@ namespace hal
 
     void GatePinTree::mouseDoubleClickEvent(QMouseEvent *event)
     {
-        SizeAdjustableTreeView::mouseDoubleClickEvent(event);
+        QTreeView::mouseDoubleClickEvent(event);
 
         QModelIndex idx = indexAt(event->pos());
         if(!idx.isValid())
