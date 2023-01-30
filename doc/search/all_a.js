@@ -597,7 +597,7 @@ var searchData=
   ['isaffine_6471',['isAffine',['https://doc.qt.io/qt-5/qmatrix4x4.html#isAffine',1,'QMatrix4x4::isAffine()'],['https://doc.qt.io/qt-5/qtransform.html#isAffine',1,'QTransform::isAffine()']]],
   ['isambiguous_6472',['isAmbiguous',['https://doc.qt.io/qt-5/qshortcutevent.html#isAmbiguous',1,'QShortcutEvent']]],
   ['isancestorof_6473',['isAncestorOf',['https://doc.qt.io/qt-5/qwindow.html#isAncestorOf',1,'QWindow::isAncestorOf()'],['https://doc.qt.io/qt-5/qgraphicsitem.html#isAncestorOf',1,'QGraphicsItem::isAncestorOf()'],['https://doc.qt.io/qt-5/qwidget.html#isAncestorOf',1,'QWidget::isAncestorOf()']]],
-  ['isanchor_6474',['isAnchor',['https://doc.qt.io/qt-5/qtextcharformat.html#isAnchor',1,'QTextCharFormat::isAnchor()'],['https://doc.qt.io/qt-5/qtextformat.html#Property-enum',1,'QTextFormat::IsAnchor()']]],
+  ['isanchor_6474',['IsAnchor',['https://doc.qt.io/qt-5/qtextformat.html#Property-enum',1,'QTextFormat::IsAnchor()'],['https://doc.qt.io/qt-5/qtextcharformat.html#isAnchor',1,'QTextCharFormat::isAnchor()']]],
   ['isanimated_6475',['isAnimated',['https://doc.qt.io/qt-5/qstatemachine.html#isAnimated',1,'QStateMachine::isAnimated()'],['https://doc.qt.io/qt-5/qmainwindow.html#animated-prop',1,'QMainWindow::isAnimated()'],['https://doc.qt.io/qt-5/qtreeview.html#animated-prop',1,'QTreeView::isAnimated()']]],
   ['isanimating_6476',['isAnimating',['https://doc.qt.io/qt-5/qinputmethod.html#animating-prop',1,'QInputMethod']]],
   ['isanyoftype_6477',['isAnyOfType',['https://doc.qt.io/qt-5/qoperatingsystemversion.html#isAnyOfType',1,'QOperatingSystemVersion']]],

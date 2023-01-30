@@ -28,6 +28,7 @@ var classhal_1_1_graphics_scene =
     [ "moveNetsToBackground", "classhal_1_1_graphics_scene.html#af1b953794af7656ee478baa25e4e4896", null ],
     [ "Q_ENUM", "classhal_1_1_graphics_scene.html#ab7af236447623273e52e79be5c8b4af3", null ],
     [ "removeGraphItem", "classhal_1_1_graphics_scene.html#a0366a0f81bab584cfc078c39658bba76", null ],
+    [ "setMousePressed", "classhal_1_1_graphics_scene.html#a24e241c8c1cb88963a01fd4d60a86cb0", null ],
     [ "startDragShadow", "classhal_1_1_graphics_scene.html#a0026dfd9d3d4be7b031f10bf0f111482", null ],
     [ "stopDragShadow", "classhal_1_1_graphics_scene.html#ad3ed269a30d6af98604003dfddebc574", null ],
     [ "updateAllItems", "classhal_1_1_graphics_scene.html#a67b93e8efb90c600b222f438f040e066", null ],

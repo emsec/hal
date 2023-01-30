@@ -445,7 +445,7 @@ var searchData=
   ['framestyle_3977',['frameStyle',['https://doc.qt.io/qt-5/qframe.html#frameStyle',1,'QFrame']]],
   ['frameswapped_3978',['frameSwapped',['https://doc.qt.io/qt-5/qopenglwindow.html#frameSwapped',1,'QOpenGLWindow::frameSwapped()'],['https://doc.qt.io/qt-5/qopenglwidget.html#frameSwapped',1,'QOpenGLWidget::frameSwapped()']]],
   ['frametopmargin_3979',['FrameTopMargin',['https://doc.qt.io/qt-5/qtextformat.html#Property-enum',1,'QTextFormat']]],
-  ['framewidth_3980',['FrameWidth',['https://doc.qt.io/qt-5/qtextformat.html#Property-enum',1,'QTextFormat::FrameWidth()'],['https://doc.qt.io/qt-5/qframe.html#frameWidth-prop',1,'QFrame::frameWidth()'],['https://doc.qt.io/qt-5/qframe.html#frameWidth-prop',1,'QFrame::frameWidth() const const']]],
+  ['framewidth_3980',['frameWidth',['https://doc.qt.io/qt-5/qframe.html#frameWidth-prop',1,'QFrame::frameWidth()'],['https://doc.qt.io/qt-5/qframe.html#frameWidth-prop',1,'QFrame::frameWidth() const const'],['https://doc.qt.io/qt-5/qtextformat.html#Property-enum',1,'QTextFormat::FrameWidth()']]],
   ['france_3981',['France',['https://doc.qt.io/qt-5/qlocale.html#Country-enum',1,'QLocale']]],
   ['fraserscript_3982',['FraserScript',['https://doc.qt.io/qt-5/qlocale.html#Script-enum',1,'QLocale']]],
   ['free_3983',['Free',['https://doc.qt.io/qt-5/qlistview.html#Movement-enum',1,'QListView::Free()'],['../_apache_01_license_8txt.html#a7296b4cc5177445b437670e7a1559321',1,'free():&#160;Apache License.txt']]],
