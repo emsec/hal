@@ -34,13 +34,13 @@ namespace hal
         //general tab
         mGateInfoTable        = new GateInfoTable(this);
         mGateInformationFrame = new DetailsFrameWidget(mGateInfoTable, "Gate Information", this);
+        addTab("General", mGateInformationFrame);
 
+        //groupings tab
         mGroupingsOfItemTable = new GroupingsOfItemWidget;
         mGroupingsFrame       = new DetailsFrameWidget(mGroupingsOfItemTable, "Groupings", this);    //replace QWidget
         connect(mGroupingsOfItemTable, &GroupingsOfItemWidget::updateText, mGroupingsFrame, &DetailsFrameWidget::setText);
-
-        QList<DetailsFrameWidget*> framesGeneralTab({mGateInformationFrame, mGroupingsFrame});
-        addTab("General", framesGeneralTab);
+        addTab("Groupings", mGroupingsFrame);
 
         //pins tab
         mPinsTree  = new GatePinTree(this);

@@ -17,13 +17,13 @@ namespace hal
         //general tab
         mModuleInfoTable = new ModuleInfoTable(this);
         mModuleInformationFrame = new DetailsFrameWidget(mModuleInfoTable, "Module Information", this);
+        addTab("General", mModuleInformationFrame);
 
+        //groupings tab
         mGroupingsOfItemTable = new GroupingsOfItemWidget;
         mGroupingsFrame = new DetailsFrameWidget(mGroupingsOfItemTable, "Groupings", this);
         connect(mGroupingsOfItemTable,  &GroupingsOfItemWidget::updateText, mGroupingsFrame, &DetailsFrameWidget::setText);
-
-        QList<DetailsFrameWidget*> framesGeneralTab({mModuleInformationFrame, mGroupingsFrame});
-        addTab("General", framesGeneralTab);
+        addTab("Groupings", mGroupingsFrame);
 
         //ports tab
         mPinsTree = new ModulePinsTree(this);
