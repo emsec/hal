@@ -408,10 +408,25 @@ namespace hal
             }
 
             // we still need the normal mouse logic for single clicks
-            QGraphicsView::mousePressEvent(event);
+            mousePressEventNotItemDrag(event);
         }
         else
-            QGraphicsView::mousePressEvent(event);
+            mousePressEventNotItemDrag(event);
+    }
+
+    void GraphGraphicsView::mousePressEventNotItemDrag(QMouseEvent *event)
+    {
+        QGraphicsView::mousePressEvent(event);
+        GraphicsScene* sc = dynamic_cast<GraphicsScene*>(scene());
+        if (sc) sc->setMousePressed(true);
+    }
+
+
+    void GraphGraphicsView::mouseReleaseEvent(QMouseEvent *event)
+    {
+        GraphicsScene* sc = dynamic_cast<GraphicsScene*>(scene());
+        if (sc) sc->setMousePressed(false);
+        QGraphicsView::mouseReleaseEvent(event);
     }
 
     void GraphGraphicsView::mouseMoveEvent(QMouseEvent* event)

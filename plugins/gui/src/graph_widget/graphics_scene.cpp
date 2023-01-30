@@ -108,7 +108,8 @@ namespace hal
     }
 
     GraphicsScene::GraphicsScene(QObject* parent) : QGraphicsScene(parent),
-        mDragShadowGate(new NodeDragShadow()), mDebugGridEnable(false)
+        mDragShadowGate(new NodeDragShadow()), mDebugGridEnable(false),
+        mSelectionStatus(NotPressed)
     {
         // FIND OUT IF MANUAL CHANGE TO DEPTH IS NECESSARY / INCREASES PERFORMANCE
         //mScene.setBspTreeDepth(10);
@@ -404,8 +405,38 @@ namespace hal
             gn->setZValue(-1);
     }
 
+    void GraphicsScene::setMousePressed(bool isPressed)
+    {
+        if (isPressed)
+            mSelectionStatus = BeginPressed;
+        else
+        {
+            // not pressed ...
+            if (mSelectionStatus == SelectionChanged)
+            {
+                mSelectionStatus = EndPressed;
+                handleInternSelectionChanged();
+            }
+            mSelectionStatus = NotPressed;
+        }
+    }
+
     void GraphicsScene::handleInternSelectionChanged()
     {
+        switch (mSelectionStatus)
+        {
+        case SelectionChanged:
+            return;
+        case BeginPressed:
+            mSelectionStatus = SelectionChanged;
+            gSelectionRelay->clear();
+            gSelectionRelay->relaySelectionChanged(this);
+            return;
+        default:
+            // no mouse pressed (single click) or mouse released
+            break;
+        }
+
         gSelectionRelay->clear();
 
         QSet<u32> mods;

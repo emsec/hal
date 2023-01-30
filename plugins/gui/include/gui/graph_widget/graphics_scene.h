@@ -245,6 +245,12 @@ namespace hal
          */
         const GraphicsModule* getModuleItem(const u32 id) const;
 
+        /**
+         * Keep track on mouse pressed status to avoid premature actions during rubber band selection
+         * @param isPressed true=mouse pressed, false=mouse released.
+         */
+        void setMousePressed(bool isPressed);
+
         #ifdef GUI_DEBUG_GRID
         void debugSetLayouterGrid(const QVector<qreal>& debug_x_lines, const QVector<qreal>& debug_y_lines, qreal debug_default_height, qreal debug_default_width);
         void setDebugGridEnabled(bool enabled);
@@ -362,6 +368,7 @@ namespace hal
         qreal mDebugDefaultWidth;
         qreal mDebugDefaultHeight;
         bool mDebugGridEnable;
+        enum RubberBandSelectionStatus { NotPressed, BeginPressed, SelectionChanged, EndPressed } mSelectionStatus;
         #endif
     };
 }
