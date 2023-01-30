@@ -52,8 +52,7 @@ namespace hal
         mDataTable = new DataTableWidget(this);
         mDataFrame = new DetailsFrameWidget(mDataTable, "Data", this);
 
-        QList<DetailsFrameWidget*> framesDataTab({mDataFrame});
-        addTab("Data", framesDataTab);
+        addTab("Data", mDataFrame);
 
         //connect widgets with frames for refreshing the headers when necessary
         connect(mNetModuleTable, &NetModuleTable::updateText, mModulesFrame, &DetailsFrameWidget::setText);

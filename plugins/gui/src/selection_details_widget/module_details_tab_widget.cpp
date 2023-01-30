@@ -30,22 +30,19 @@ namespace hal
         mPinsFrame = new DetailsFrameWidget(mPinsTree, "Pins", this);
         connect(mPinsTree, &ModulePinsTree::updateText, mPinsFrame, &DetailsFrameWidget::setText);
 
-        QList<DetailsFrameWidget*> framesPortTab({mPinsFrame});
-        addTab("Pins", framesPortTab);
+        addTab("Pins", mPinsFrame);
 
         //elements tab
         mElementsTree = new ModuleElementsTree(this);
         mElementsFrame = new DetailsFrameWidget(mElementsTree, "Elements", this);
 
-        QList<DetailsFrameWidget*> framesElementsTab({mElementsFrame});
-        addTab("Elements", framesElementsTab);
+        addTab("Elements", mElementsFrame);
 
         //data tab
         mDataTable = new DataTableWidget(this);
         mDataFrame = new DetailsFrameWidget(mDataTable, "Data", this);
 
-        QList<DetailsFrameWidget*> framesDataTab({mDataFrame});
-        addTab("Data", framesDataTab);
+        addTab("Data", mDataFrame);
 
         //comment tab
         mCommentWidget = new CommentWidget(this);

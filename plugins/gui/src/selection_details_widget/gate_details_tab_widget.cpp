@@ -47,8 +47,7 @@ namespace hal
         mPinsFrame = new DetailsFrameWidget(mPinsTree, "Pins", this);
         connect(mPinsTree, &GatePinTree::updateText, mPinsFrame, &DetailsFrameWidget::setText);
 
-        QList<DetailsFrameWidget*> framesPinsTab({mPinsFrame});
-        addTab("Pins", framesPinsTab);
+        addTab("Pins", mPinsFrame);
 
         //(ff / latch / lut) tab - would love to use seperate tabs, but it's a hassle to hide multiple individual tabs witouth setTabVisible() from qt 5.15
         mFfFunctionTable    = new BooleanFunctionTable(this);
@@ -80,16 +79,14 @@ namespace hal
         mFullFunctionTable->setContextMenuPythonPlainDescr(true);
         mBooleanFunctionsFrame = new DetailsFrameWidget(mFullFunctionTable, "Boolean Functions", this);
 
-        QList<DetailsFrameWidget*> framesBooleanFunctionsTab({mBooleanFunctionsFrame});
-        addTab("Boolean Functions", framesBooleanFunctionsTab);
+        addTab("Boolean Functions", mBooleanFunctionsFrame);
         connect(gNetlistRelay, &NetlistRelay::gateBooleanFunctionChanged, this, &GateDetailsTabWidget::handleGateBooleanFunctionChanged);
 
         //data tab
         mDataTable = new DataTableWidget(this);
         mDataFrame = new DetailsFrameWidget(mDataTable, "Data", this);
 
-        QList<DetailsFrameWidget*> framesDataTab({mDataFrame});
-        addTab("Data", framesDataTab);
+        addTab("Data", mDataFrame);
 
         //comments tab, no frame is used here
         mCommentWidget = new CommentWidget(this);
