@@ -1,5 +1,6 @@
 var NAVTREEINDEX21 =
 {
+"communities__spinglass_8cpp.html":[7,0,1,2,2,0,2],
 "communities__spinglass_8cpp_source.html":[7,0,1,2,2,0,2],
 "community__detection_8cpp.html":[7,0,1,2,2,0,3],
 "community__detection_8cpp_source.html":[7,0,1,2,2,0,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX21 =
 "dir_7cfc8fdb933309cf5774d72e17bef116.html":[7,0,1,3,2,37],
 "dir_7dd719469ab2850cef63a09ca2c8aed4.html":[7,0,1,3,0,0,8],
 "dir_7ecf1597906790ec3d9fed512a2519c8.html":[7,0,1,3,0,0,20,1],
-"dir_805ebc0df5c9adc006f435b512768f5c.html":[7,0,0,0,1,1],
-"dir_809491f59a91bb0efc1a53a1bc131183.html":[7,0,1,3,2,19,1,0]
+"dir_805ebc0df5c9adc006f435b512768f5c.html":[7,0,0,0,1,1]
 };

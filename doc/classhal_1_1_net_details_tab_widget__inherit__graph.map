@@ -1,5 +1,5 @@
 <map id="hal::NetDetailsTabWidget" name="hal::NetDetailsTabWidget">
-<area shape="rect" id="node1" title="The DetailsTabWidget that is responsible for showing Module details." alt="" coords="5,608,192,700"/>
-<area shape="rect" id="node2" href="$classhal_1_1_details_tab_widget.html" title=" " alt="" coords="17,453,181,560"/>
+<area shape="rect" id="node1" title="The DetailsTabWidget that is responsible for showing Module details." alt="" coords="5,623,192,715"/>
+<area shape="rect" id="node2" href="$classhal_1_1_details_tab_widget.html" title=" " alt="" coords="17,453,181,575"/>
 <area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qtabwidget.html" title=" " alt="" coords="27,5,170,405"/>
 </map>

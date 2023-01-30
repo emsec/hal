@@ -1,5 +1,6 @@
 var NAVTREEINDEX20 =
 {
+"classnlohmann_1_1detail_1_1json__reverse__iterator.html#a6b2ef1d632fe49bfcc22fbd1abd62395":[6,0,1,0,76,0],
 "classnlohmann_1_1detail_1_1json__reverse__iterator.html#a6c2d025530114ed989188e8adfc8467e":[6,0,1,0,76,4],
 "classnlohmann_1_1detail_1_1json__reverse__iterator.html#a7bbf1ecd75b7a0a488608a2760237c9f":[6,0,1,0,76,13],
 "classnlohmann_1_1detail_1_1json__reverse__iterator.html#a8ed9e445e03c49c46612eb7f7d55bb61":[6,0,1,0,76,14],
@@ -248,6 +249,5 @@ var NAVTREEINDEX20 =
 "communities__fast__greedy_8cpp.html":[7,0,1,2,2,0,0],
 "communities__fast__greedy_8cpp_source.html":[7,0,1,2,2,0,0],
 "communities__multilevel_8cpp.html":[7,0,1,2,2,0,1],
-"communities__multilevel_8cpp_source.html":[7,0,1,2,2,0,1],
-"communities__spinglass_8cpp.html":[7,0,1,2,2,0,2]
+"communities__multilevel_8cpp_source.html":[7,0,1,2,2,0,1]
 };

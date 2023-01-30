@@ -1,5 +1,6 @@
 var NAVTREEINDEX28 =
 {
+"netlist_2netlist__writer_2netlist__writer__manager_8cpp.html#aaa30fb9e667974f36773a5b4de75a7fe":[7,0,2,0,5,0,3],
 "netlist_2netlist__writer_2netlist__writer__manager_8cpp.html#ab4c58af2ca2dfd952511f978dafec685":[7,0,2,0,5,0,4],
 "netlist_2netlist__writer_2netlist__writer__manager_8cpp.html#ada281488258c1fb92351e44a9d8ff60c":[7,0,2,0,5,0,2],
 "netlist_2netlist__writer_2netlist__writer__manager_8cpp_source.html":[7,0,2,0,5,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX28 =
 "plugin__graph__algorithm_8cpp_source.html":[7,0,1,2,2,3],
 "plugin__graph__algorithm_8h.html":[7,0,1,2,0,0,0],
 "plugin__graph__algorithm_8h_source.html":[7,0,1,2,0,0,0],
-"plugin__gui_8cpp.html":[7,0,1,3,2,51],
-"plugin__gui_8cpp.html#a87977efcac4fda277a7ee8cc0eb1c83c":[7,0,1,3,2,51,1]
+"plugin__gui_8cpp.html":[7,0,1,3,2,51]
 };

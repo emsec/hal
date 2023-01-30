@@ -1,5 +1,6 @@
 var NAVTREEINDEX30 =
 {
+"python__bindings_2bindings_2plugin__manager_8cpp_source.html":[7,0,2,2,0,25],
 "python__bindings_2bindings_2project__manager_8cpp.html":[7,0,2,2,0,26],
 "python__bindings_2bindings_2project__manager_8cpp.html#gac072de2b8e9f09d8320090e5873be90d":[7,0,2,2,0,26,0],
 "python__bindings_2bindings_2project__manager_8cpp_source.html":[7,0,2,2,0,26],
@@ -248,6 +249,5 @@ var NAVTREEINDEX30 =
 "simplification__abc_8cpp.html#a0c2049997674b09ac4738c7090b9f6ad":[7,0,2,0,0,3,28],
 "simplification__abc_8cpp.html#a322534eb5c3d4d2b481dde6097a329b0":[7,0,2,0,0,3,42],
 "simplification__abc_8cpp.html#a417cb53ed767ae84bb9b4e556c34a672":[7,0,2,0,0,3,46],
-"simplification__abc_8cpp.html#a4877b33c386597f15ccfe1e3911fc790":[7,0,2,0,0,3,18],
-"simplification__abc_8cpp.html#a48e110fd5dc37ab6c4f4e88532c2c023":[7,0,2,0,0,3,24]
+"simplification__abc_8cpp.html#a4877b33c386597f15ccfe1e3911fc790":[7,0,2,0,0,3,18]
 };
