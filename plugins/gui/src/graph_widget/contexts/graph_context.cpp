@@ -197,7 +197,7 @@ namespace hal
         return true;
     }
 
-    void GraphContext::unfoldModule(const u32 id)
+    void GraphContext::unfoldModule(const u32 id, const PlacementHint& plc)
     {
         auto contained_modules = mModules + mAddedModules - mRemovedModules;
 
@@ -208,6 +208,7 @@ namespace hal
             QSet<u32> modules;
 
             Node singleContentNode;
+            PlacementHint childPlc;
 
             for (const Gate* g : m->get_gates())
             {
@@ -220,11 +221,16 @@ namespace hal
                 modules.insert(sm->get_id());
             }
 
-            PlacementHint plc;
-            if (gates.size() + modules.size() == 1)
+            if (plc.mode() == PlacementHint::GridPosition)
             {
-                plc = PlacementHint(PlacementHint::GridPosition);
-                plc.addGridPosition(singleContentNode,
+                // placement determined by caller
+                childPlc = plc;
+            }
+            else if (gates.size() + modules.size() == 1)
+            {
+                // There is only a single child in this module, keep the grid position
+                childPlc = PlacementHint(PlacementHint::GridPosition);
+                childPlc.addGridPosition(singleContentNode,
                                     mLayouter->nodeToPositionMap().value(Node(id,Node::Module)));
             }
 
@@ -235,7 +241,7 @@ namespace hal
             beginChange();
             mLayouter->prepareRollback();
             remove({id}, {});
-            add(modules, gates, plc);
+            add(modules, gates, childPlc);
             endChange();
         }
     }
@@ -303,7 +309,7 @@ namespace hal
         return isShowingModule(id, {}, {}, {}, {});
     }
 
-    bool GraphContext::isShowingModule(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates, bool exclusively) const
+    bool GraphContext::isShowingModule(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates) const
     {
         // There are all sorts of problems when we allow this, since now any empty
         // module thinks that it is every other empty module. Blocking this,
@@ -327,12 +333,7 @@ namespace hal
         auto moduleGates = (gates - minus_gates) + plus_gates;
         auto moduleModules = (modules - minus_modules) + plus_modules;
 
-        if (exclusively)
-            return contextGates == moduleGates && contextModules == moduleModules;
-        else
-            return (contextGates.contains(moduleGates) && contextModules.contains(moduleModules) && !moduleGates.empty() && !moduleModules.empty()) ||
-                   (contextGates.contains(moduleGates) && !moduleGates.empty() && moduleModules.empty()) ||
-                   (contextModules.contains(moduleModules) && moduleGates.empty() && !moduleModules.empty());
+        return contextGates == moduleGates && contextModules == moduleModules;
     }
 
     void GraphContext::getModuleChildrenRecursively(const u32 id, QSet<u32>* gates, QSet<u32>* modules) const
@@ -370,7 +371,7 @@ namespace hal
         if (containedGates.empty() && containedModules.size() == 1 && *containedModules.begin() == mExclusiveModuleId)
             return true;
         // unfolded module
-        if (isShowingModule(mExclusiveModuleId, {}, {}, {}, {}, true))
+        if (isShowingModule(mExclusiveModuleId, {}, {}, {}, {}))
             return true;
         return false;
     }

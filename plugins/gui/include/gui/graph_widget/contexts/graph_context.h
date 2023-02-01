@@ -141,7 +141,7 @@ namespace hal
          *
          * @param id - The id of the module to unfold
          */
-        void unfoldModule(const u32 id);
+        void unfoldModule(const u32 id, const PlacementHint& plc);
 
         /**
          * Check if the context is empty i.e. does not contain Module%s or Gate%s.
@@ -183,7 +183,7 @@ namespace hal
          *                      If true, return true if context contents match module contents
          * @returns <b>true</b> if the context Show%s the content of the module.
          */
-        bool isShowingModule(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates, bool exclusively = true) const;
+        bool isShowingModule(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates) const;
 
         /**
          * Checks wether the context shows an module exclusively or not.

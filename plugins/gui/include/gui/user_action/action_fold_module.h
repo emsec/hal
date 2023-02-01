@@ -24,7 +24,7 @@
 // SOFTWARE.
 
 #pragma once
-#include "user_action.h"
+#include "user_action_compound.h"
 
 namespace hal
 {
@@ -39,7 +39,7 @@ namespace hal
      *
      * Undo Action: ActionUnfoldModule
      */
-    class ActionFoldModule : public UserAction
+    class ActionFoldModule : public UserActionCompound
     {
         u32 mContextId;
         PlacementHint mPlacementHint;

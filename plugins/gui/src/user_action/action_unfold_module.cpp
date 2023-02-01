@@ -82,14 +82,14 @@ namespace hal
         if (currentContext->gates().isEmpty() &&
                 currentContext->modules() == QSet<u32>({mObject.id()}))
         {
-            currentContext->unfoldModule(mObject.id());
+            currentContext->unfoldModule(mObject.id(),mPlacementHint);
             return;
         }
 
         // module to unfold and other boxes shown
         if (currentContext->modules().contains(mObject.id()))
         {
-            currentContext->unfoldModule(mObject.id());
+            currentContext->unfoldModule(mObject.id(),mPlacementHint);
             return;
         }
 

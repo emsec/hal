@@ -1,4 +1,6 @@
 #include "gui/user_action/action_fold_module.h"
+#include "gui/user_action/action_add_items_to_object.h"
+#include "gui/user_action/action_remove_items_from_object.h"
 #include "gui/gui_globals.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/context_manager_widget/context_manager_widget.h"
@@ -41,26 +43,48 @@ namespace hal
                 : gContentManager->getContextManagerWidget()->getCurrentContext();
         if (!ctx) return false;
 
-        if (!ctx->foldModuleAction(mObject.id(),mPlacementHint)) return false;
-        ActionUnfoldModule* undo = new ActionUnfoldModule(mObject.id());
-        undo->setContextId(mContextId);
+        Node moduleToFold(mObject.id(),Node::Module);
+        if (ctx->getLayouter()->nodeToPositionMap().contains(moduleToFold))
+            return false; // nothing to do, module already folded
+
+        QPoint polePosition;
+
+        QSet<u32> gats;
+        for (const auto& g : m->get_gates(nullptr, true))
+        {
+            u32 gid = g->get_id();
+            Node childGate(gid,Node::Gate);
+            auto it = ctx->getLayouter()->nodeToPositionMap().find(childGate);
+            if (it==ctx->getLayouter()->nodeToPositionMap().end()) continue;
+            if (gats.isEmpty() || it.value().x() < polePosition.x() || it.value().y() < polePosition.y())
+                polePosition = it.value();
+            gats.insert(gid);
+        }
+
+        QSet<u32> mods;
+        for (auto sm : m->get_submodules(nullptr, true))
+        {
+            u32 mid = sm->get_id();
+            Node childModule(mid,Node::Module);
+            auto it = ctx->getLayouter()->nodeToPositionMap().find(childModule);
+            if (it==ctx->getLayouter()->nodeToPositionMap().end()) continue;
+            if ( (gats.isEmpty()&&mods.isEmpty()) ||
+                    it.value().x() < polePosition.x() || it.value().y() < polePosition.y())
+                polePosition = it.value();
+            mods.insert(mid);
+        }
+
+        ActionRemoveItemsFromObject* actr = new ActionRemoveItemsFromObject(mods,gats);
+        actr->setObject(UserActionObject(ctx->id(),UserActionObjectType::Context));
+        addAction(actr);
+
+        ActionAddItemsToObject* acta = new ActionAddItemsToObject({mObject.id()});
+        acta->setObject(UserActionObject(ctx->id(),UserActionObjectType::Context));
         PlacementHint plc(PlacementHint::GridPosition);
-        for (const Gate* g : m->get_gates())
-        {
-            Node nd(g->get_id(),Node::Gate);
-            auto it = ctx->getLayouter()->nodeToPositionMap().find(nd);
-            if (it!=ctx->getLayouter()->nodeToPositionMap().end())
-                plc.addGridPosition(nd,it.value());
-        }
-        for (auto sm : m->get_submodules())
-        {
-            Node nd(sm->get_id(),Node::Module);
-            auto it = ctx->getLayouter()->nodeToPositionMap().find(nd);
-            if (it!=ctx->getLayouter()->nodeToPositionMap().end())
-                plc.addGridPosition(nd,it.value());
-        }
-        undo->setPlacementHint(plc);
-        mUndoAction = undo;
-        return UserAction::exec();
+        plc.addGridPosition(moduleToFold,polePosition);
+        acta->setPlacementHint(plc);
+        addAction(acta);
+
+        return UserActionCompound::exec();
     }
 }
