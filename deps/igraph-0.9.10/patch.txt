@@ -1,5 +1,5 @@
---- src/CMakeLists.txt	2023-01-18 22:39:25.961620904 +0100
-+++ src/CMakeLists.txt	2023-01-18 22:39:48.945900413 +0100
+--- igraph/download/src/CMakeLists.txt	2023-01-18 22:39:25.961620904 +0100
++++ igraph/download/src/CMakeLists.txt	2023-01-18 22:39:48.945900413 +0100
 @@ -295,8 +295,8 @@
  )
  
@@ -11,3 +11,14 @@
  
  # Add extra compiler definitions if needed
  target_compile_definitions(
+--- igraph/download/etc/cmake/compilers.cmake	2023-02-02 21:15:06.216428366 +0100
++++ igraph/download/etc/cmake/compilers.cmake	2023-02-02 21:16:02.696814096 +0100
+@@ -33,7 +33,7 @@
+       $<$<C_COMPILER_ID:GCC,Clang,AppleClang,Intel>:
+         $<$<BOOL:${IGRAPH_WARNINGS_AS_ERRORS}>:-Werror>
+         -Wall -Wextra -pedantic
+-        -Wno-unused-function -Wno-unused-parameter -Wno-sign-compare
++        -Wno-unused-function -Wno-unused-parameter -Wno-sign-compare -Wno-deprecated
+       >
+       $<$<BOOL:${COMPILER_SUPPORTS_NO_VARARGS_FLAG}>:-Wno-varargs>
+       $<$<BOOL:${COMPILER_SUPPORTS_NO_UNKNOWN_WARNING_OPTION_FLAG}>:-Wno-unknown-warning-option>
