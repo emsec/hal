@@ -3,6 +3,7 @@
 
 #include "hal_core/netlist/module.h"
 #include "hal_core/utilities/log.h"
+#include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/graph_widget/layout_locker.h"
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/graph_widget.h"
@@ -155,23 +156,6 @@ namespace hal
         }
     }
 
-    bool GraphContext::foldModuleAction(u32 moduleId, const PlacementHint &plc)
-    {
-        Module* m = gNetlist->get_module_by_id(moduleId);
-        if (!m) return false;
-        QSet<u32> gats;
-        QSet<u32> mods;
-        for (const auto& g : m->get_gates(nullptr, true))
-            gats.insert(g->get_id());
-        for (auto sm : m->get_submodules(nullptr, true))
-            mods.insert(sm->get_id());
-        beginChange();
-        remove(mods, gats);
-        add({m->get_id()}, {}, plc);
-        endChange();
-        return true;
-    }
-
     bool GraphContext::isGateUnfolded(u32 gateId) const
     {
         QSet<u32> containedGates = mGates + mAddedGates - mRemovedGates;
@@ -230,8 +214,9 @@ namespace hal
             {
                 // There is only a single child in this module, keep the grid position
                 childPlc = PlacementHint(PlacementHint::GridPosition);
-                childPlc.addGridPosition(singleContentNode,
-                                    mLayouter->nodeToPositionMap().value(Node(id,Node::Module)));
+                NetLayoutPoint childPos = mLayouter->positonForNode(Node(id,Node::Module));
+                if (!childPos.isUndefined())
+                    childPlc.addGridPosition(singleContentNode,childPos);
             }
 
             // That would unfold the empty module into nothing, meaning there would
@@ -828,20 +813,18 @@ namespace hal
         json["name"] = mName;
         json["timestamp"] = mTimestamp.toString();
         json["exclusiveModuleId"] = (int) mExclusiveModuleId;
-        if (gContentManager->getContextManagerWidget()->getCurrentContext()==this)
-            json["selected"] = true;
+        json["visible"] = gContentManager->getGraphTabWidget()->visibleStatus(this);
 
         /// modules
         QJsonArray jsonMods;
         for (u32 id : mModules)
         {
-            Node searchMod(id, Node::Module);
-            const NodeBox* box = getLayouter()->boxes().boxForNode(searchMod);
-            Q_ASSERT(box);
+            NetLayoutPoint pos = getLayouter()->positonForNode(Node(id,Node::Module));
+            Q_ASSERT(!pos.isUndefined());
             QJsonObject jsonMod;
             jsonMod["id"] = (int) id;
-            jsonMod["x"]  = (int) box->x();
-            jsonMod["y"]  = (int) box->y();
+            jsonMod["x"]  = (int) pos.x();
+            jsonMod["y"]  = (int) pos.y();
             jsonMods.append(jsonMod);
         }
         json["modules"] = jsonMods;
@@ -850,13 +833,12 @@ namespace hal
         QJsonArray jsonGats;
         for (u32 id : mGates)
         {
-            Node searchGat(id, Node::Gate);
-            const NodeBox* box = getLayouter()->boxes().boxForNode(searchGat);
-            Q_ASSERT(box);
+            NetLayoutPoint pos = getLayouter()->positonForNode(Node(id,Node::Gate));
+            Q_ASSERT(!pos.isUndefined());
             QJsonObject jsonGat;
             jsonGat["id"] = (int) id;
-            jsonGat["x"]  = (int) box->x();
-            jsonGat["y"]  = (int) box->y();
+            jsonGat["x"]  = (int) pos.x();
+            jsonGat["y"]  = (int) pos.y();
             jsonGats.append(jsonGat);
         }
         json["gates"] = jsonGats;

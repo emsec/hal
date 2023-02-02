@@ -44,7 +44,8 @@ namespace hal
         if (!ctx) return false;
 
         Node moduleToFold(mObject.id(),Node::Module);
-        if (ctx->getLayouter()->nodeToPositionMap().contains(moduleToFold))
+        NetLayoutPoint moduleAlreadyPositioned = ctx->getLayouter()->positonForNode(moduleToFold);
+        if (!moduleAlreadyPositioned.isUndefined())
             return false; // nothing to do, module already folded
 
         QPoint polePosition;
@@ -53,11 +54,10 @@ namespace hal
         for (const auto& g : m->get_gates(nullptr, true))
         {
             u32 gid = g->get_id();
-            Node childGate(gid,Node::Gate);
-            auto it = ctx->getLayouter()->nodeToPositionMap().find(childGate);
-            if (it==ctx->getLayouter()->nodeToPositionMap().end()) continue;
-            if (gats.isEmpty() || it.value().x() < polePosition.x() || it.value().y() < polePosition.y())
-                polePosition = it.value();
+            NetLayoutPoint pos = ctx->getLayouter()->positonForNode(Node(gid,Node::Gate));
+            if (pos.isUndefined()) continue;
+            if (gats.isEmpty() || pos.x() < polePosition.x() || pos.y() < polePosition.y())
+                polePosition = pos;
             gats.insert(gid);
         }
 
@@ -65,12 +65,11 @@ namespace hal
         for (auto sm : m->get_submodules(nullptr, true))
         {
             u32 mid = sm->get_id();
-            Node childModule(mid,Node::Module);
-            auto it = ctx->getLayouter()->nodeToPositionMap().find(childModule);
-            if (it==ctx->getLayouter()->nodeToPositionMap().end()) continue;
+            NetLayoutPoint pos = ctx->getLayouter()->positonForNode(Node(mid,Node::Module));
+            if (pos.isUndefined()) continue;
             if ( (gats.isEmpty()&&mods.isEmpty()) ||
-                    it.value().x() < polePosition.x() || it.value().y() < polePosition.y())
-                polePosition = it.value();
+                    pos.x() < polePosition.x() || pos.y() < polePosition.y())
+                polePosition = pos;
             mods.insert(mid);
         }
 

@@ -549,6 +549,9 @@ namespace hal
                 QString viewName = jsonView["name"].toString();
                 if (viewId > mMaxContextId)
                     mMaxContextId = viewId;
+                int visibleFlag = 1; // default to visible before flag was invented
+                if (jsonView.contains("visible"))
+                    visibleFlag = jsonView["visible"].toInt();
                 GraphContext* context = gGraphContextManager->getContextById(viewId);
                 if (context)
                 {
@@ -582,12 +585,15 @@ namespace hal
                     mContextTableModel->beginInsertContext(context);
                     mContextTableModel->addContext(context);
                     mContextTableModel->endInsertContext();
-                    Q_EMIT contextCreated(context);
+                    if (visibleFlag)
+                        Q_EMIT contextCreated(context);
                 }
 
                 if (jsonView.contains("exclusiveModuleId"))
                     context->setExclusiveModuleId(jsonView["exclusiveModuleId"].toInt(),false);
                 if (jsonView.contains("selected"))
+                    selectedContext = context;
+                if (visibleFlag==2)
                     selectedContext = context;
                 if (!firstContext)
                     firstContext = context;

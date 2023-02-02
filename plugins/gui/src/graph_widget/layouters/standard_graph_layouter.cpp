@@ -175,24 +175,23 @@ namespace hal
 
         int x;
         int y;
+        NetLayoutPoint originPos = positonForNode(preferredOrigin);
 
-        if (!preferredOrigin.isNull() && nodeToPositionMap().contains(preferredOrigin))
-        {
-            // place all new nodes right respectively left of the origin node
-            QPoint originPoint = nodeToPositionMap().value(preferredOrigin);
-            x = originPoint.x() + (left ? -1 : 1);
-            // vertically center the column of new nodes relative to the origin node
-            int totalNodes = modules.size() + gates.size();
-            y = originPoint.y() - (totalNodes-1)/2;
-        }
-        else
+        if (originPos.isUndefined())
         {
             // create a new column right- respectively leftmost of all current nodes
             x = left ? minXIndex() - 1 : minXIndex() + xValues().size();
             // center column of new ndoes vertically relative to the entire grid
             y = minYIndex() + (yValues().size()-1) / 2;
         }
-
+        else
+        {
+            // place all new nodes right respectively left of the origin node
+            x = originPos.x() + (left ? -1 : 1);
+            // vertically center the column of new nodes relative to the origin node
+            int totalNodes = modules.size() + gates.size();
+            y = originPos.y() - (totalNodes-1)/2;
+        }
 
         for (const u32 mid : modules)
         {

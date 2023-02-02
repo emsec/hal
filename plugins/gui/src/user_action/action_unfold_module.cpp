@@ -65,10 +65,10 @@ namespace hal
         undo->setContextId(mContextId);
         PlacementHint plc(PlacementHint::GridPosition);
         Node nd(mObject.id(),Node::Module);
-        auto it = ctx->getLayouter()->nodeToPositionMap().find(nd);
-        if (it!=ctx->getLayouter()->nodeToPositionMap().end())
+        NetLayoutPoint pos =  ctx->getLayouter()->positonForNode(nd);
+        if (!pos.isUndefined())
         {
-            plc.addGridPosition(nd,it.value());
+            plc.addGridPosition(nd,pos);
             undo->setPlacementHint(plc);
         }
         mUndoAction = undo;

@@ -127,15 +127,6 @@ namespace hal
         bool isModuleUnfolded(const u32 moduleId) const;
 
         /**
-         * Folds a given module with a given placement hint.
-         *
-         * @param moduleId - The module to fold.
-         * @param plc - The placement hint.
-         * @return True on success, False otherwise.
-         */
-        bool foldModuleAction(u32 moduleId, const PlacementHint& plc);
-
-        /**
          * Unfold a specific module. The specified module is removed from the context and replaced by its Gate%s and
          * submodules.
          *
@@ -455,7 +446,6 @@ namespace hal
         void startSceneUpdate();
         bool testIfAffectedInternal(const u32 id, const u32* moduleId, const u32* gateId);
         void removeModuleContents(const u32 moduleId);
-
 
         u32 mId;
         QString mName;
