@@ -91,7 +91,7 @@ namespace hal
         ProjectManager* pm = ProjectManager::instance();
         if (pm->get_project_status() != ProjectManager::ProjectStatus::NONE && mAutosaveEnabled)
         {
-            if (gPythonContext->currentThread())
+            if (gPythonContext->pythonThread())
             {
                 log_info("gui", "Autosave deferred while python script is running...");
                 return;

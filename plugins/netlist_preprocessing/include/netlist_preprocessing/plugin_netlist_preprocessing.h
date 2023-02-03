@@ -26,6 +26,8 @@
 #pragma once
 
 #include "hal_core/plugin_system/plugin_interface_base.h"
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/utilities/result.h"
 
 namespace hal
 {
