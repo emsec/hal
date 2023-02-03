@@ -2,10 +2,14 @@
 
 #include "hal_core/netlist/boolean_function/translator.h"
 #include "hal_core/netlist/boolean_function/types.h"
-#include "hal_core/utilities/process.h"
+#include "subprocess/process.h"
 
 #include <numeric>
 #include <set>
+
+#ifdef BITWUZLA_LIBRARY
+#include "bitwuzla/bitwuzla.h"
+#endif
 
 namespace hal
 {
@@ -13,6 +17,8 @@ namespace hal
     {
         namespace Z3
         {
+            bool is_linked = false;
+
             /// Checks whether a Z3 binary is available on the system.
             Result<std::string> query_binary_path()
             {
@@ -43,7 +49,7 @@ namespace hal
              *      (1) stdout Stdout of Z3 process on success, 
              *      Err() otherwise
 			 */
-            Result<std::tuple<bool, std::string>> query(std::string input, const QueryConfig& config)
+            Result<std::tuple<bool, std::string>> query_binary(std::string& input, const QueryConfig& config)
             {
                 auto binary_path = query_binary_path();
                 if (binary_path.is_error())
@@ -55,21 +61,51 @@ namespace hal
                                              // read SMT2LIB formula from stdin
                                              "-in",
                                              // kill execution after a given time
-                                             "-t:" + std::to_string(config.timeout_in_seconds)},
+                                             "-T:" + std::to_string(config.timeout_in_seconds)},
+                                            subprocess::error{subprocess::PIPE},
                                             subprocess::output{subprocess::PIPE},
                                             subprocess::input{subprocess::PIPE});
 
                 z3.send(input.c_str(), input.size());
 
+                auto z3_communication = z3.communicate();
+
+                std::vector<char> output_buf = z3_communication.first.buf;
+                std::string output(output_buf.begin(), output_buf.end());
+
                 // TODO:
                 // check whether process was terminated (i.e. killed) via the subprocess
                 // API to channel this to the caller
-                return OK({false, z3.communicate().first.buf.data()});
+                z3.close_input();
+                z3.close_output();
+                z3.close_error();
+                z3.kill();
+
+                return OK({false, output});
+            }
+
+            /**
+			 * Queries Z3 with an SMT-LIB input and a query configuration.
+			 *
+			 * @param[in] input - SMT-LIB input.
+			 * @param[in] config - SMT query configuration.
+			 * @returns Ok() and status with 
+             *      (0) was_killed (true in case process was killed), and 
+             *      (1) stdout Stdout of Z3 process on success, 
+             *      Err() otherwise
+			 */
+            Result<std::tuple<bool, std::string>> query_library(std::string& input, const QueryConfig& config)
+            {
+                UNUSED(input);
+                UNUSED(config);
+                return ERR("could not call Z3 solver library: Library call not implemented");
             }
         }    // namespace Z3
 
         namespace Boolector
         {
+            bool is_linked = false;
+
             /// Checks whether a Boolector binary is available on the system.
             Result<std::string> query_binary_path()
             {
@@ -97,10 +133,10 @@ namespace hal
 			 * @param[in] config - SMT query configuration.
 			 * @returns Ok() and status with 
              *      (0) was_killed (true in case process was killed), and 
-             *      (1) stdout Stdout of Z3 process on success, 
+             *      (1) stdout Stdout of Boolector process on success, 
              *      Err() otherwise
 			 */
-            Result<std::tuple<bool, std::string>> query(std::string input, const QueryConfig& config)
+            Result<std::tuple<bool, std::string>> query_binary(std::string& input, const QueryConfig& config)
             {
                 auto binary_path = query_binary_path();
                 if (binary_path.is_error())
@@ -111,6 +147,7 @@ namespace hal
                 auto boolector = subprocess::Popen(
                     {
                         binary_path.get(),
+                        // NOTE the boolector binary provided as package takes different parameters. The ones below do not seem to work.
                         // kill execution after a given time
                         "--time=" + std::to_string(config.timeout_in_seconds),
                         // generate SMT-LIB v2 compatible output
@@ -122,13 +159,191 @@ namespace hal
                     subprocess::input{subprocess::PIPE});
 
                 boolector.send(input.c_str(), input.size());
+                auto boolector_communication = boolector.communicate();
+
+                std::vector<char> output_buf = boolector_communication.first.buf;
+                std::string output(output_buf.begin(), output_buf.end());
 
                 // TODO:
                 // check whether process was terminated (i.e. killed) via the subprocess
                 // API to channel this to the caller
-                return OK({false, boolector.communicate().first.buf.data()});
+                boolector.close_input();
+                boolector.close_output();
+                boolector.close_error();
+                boolector.kill();
+                return OK({false, output});
+            }
+        
+            /**
+			 * Queries Boolector with an SMT-LIB input and a query configuration.
+			 *
+			 * @param[in] input - SMT-LIB input.
+			 * @param[in] config - SMT query configuration.
+			 * @returns Ok() and status with 
+             *      (0) was_killed (true in case process was killed), and 
+             *      (1) stdout Stdout of Boolector process on success, 
+             *      Err() otherwise
+			 */
+            Result<std::tuple<bool, std::string>> query_library(std::string& input, const QueryConfig& config)
+            {
+                UNUSED(input);
+                UNUSED(config);
+                return ERR("could not call Boolector solver library: Library call not implemented");
             }
         }    // namespace Boolector
+
+        namespace Bitwuzla
+        {
+#ifdef BITWUZLA_LIBRARY
+            bool is_linked = true;
+#else
+            bool is_linked = false;
+#endif
+
+            /// Checks whether a Bitwuzla binary is available on the system.
+            Result<std::string> query_binary_path()
+            {
+                static const std::vector<std::string> bitwuzla_binary_paths = {
+                    "/usr/bin/bitwuzla",
+                    "/usr/local/bin/bitwuzla",
+                    "/opt/homebrew/bin/bitwuzla",
+                };
+
+                for (const auto& path : bitwuzla_binary_paths)
+                {
+                    if (std::filesystem::exists(path))
+                    {
+                        return OK(path);
+                    }
+                }
+
+                return ERR("could not query binary path: no binary found for Bitwuzla solver");
+            }
+
+            /**
+			 * Queries Bitwuzla with an SMT-LIB input and a query configuration.
+			 *
+			 * @param[in] input - SMT-LIB input.
+			 * @param[in] config - SMT query configuration.
+			 * @returns Ok() and status with 
+             *      (0) was_killed (true in case process was killed), and 
+             *      (1) stdout Stdout of Bitwuzla process on success, 
+             *      Err() otherwise
+			 */
+            Result<std::tuple<bool, std::string>> query_library(std::string& input, const QueryConfig& config)
+            {
+#ifdef BITWUZLA_LIBRARY
+                auto bzla = bitwuzla_new();
+
+                const char* smt2_char_string = input.c_str();
+
+                char* out;
+                size_t out_len = {};
+
+                auto in_stream  = fmemopen((void*)smt2_char_string, strlen(smt2_char_string), "r");
+                auto out_stream = open_memstream(&out, &out_len);
+
+                BitwuzlaResult _r;
+                char* error;
+
+                if (config.generate_model)
+                {
+                    bitwuzla_set_option(bzla, BITWUZLA_OPT_PRODUCE_MODELS, 1);
+                }
+
+                auto res = bitwuzla_parse_format(bzla, "smt2", in_stream, "VIRTUAL FILE", out_stream, &error, &_r);
+                fflush(out_stream);
+
+                if (error != nullptr)
+                {
+                    return ERR("failed to solve provided smt2 solver with bitwuzla: " + std::string(error));
+                }
+
+                fclose(in_stream);
+                fclose(out_stream);
+
+                bitwuzla_delete(bzla);
+
+                std::string output(out);
+
+                return OK({false, output});
+#else
+                return ERR("Bitwuzla Library not linked!");
+#endif
+            }
+
+            /**
+			 * Queries Bitwuzla with an SMT-LIB input and a query configuration.
+			 *
+			 * @param[in] input - SMT-LIB input.
+			 * @param[in] config - SMT query configuration.
+			 * @returns Ok() and status with 
+             *      (0) was_killed (true in case process was killed), and 
+             *      (1) stdout Stdout of Bitwuzla process on success, 
+             *      Err() otherwise
+			 */
+            Result<std::tuple<bool, std::string>> query_binary(std::string& input, const QueryConfig& config)
+            {
+                auto binary_path = query_binary_path();
+                if (binary_path.is_error())
+                {
+                    return ERR_APPEND(binary_path.get_error(), "could not query Bitwuzla: unable to locate binary");
+                }
+
+                // TODO check how to timeout bitwuzla
+                UNUSED(config);
+
+                return ERR("could not query Bitwuzla: binary call not implemented");
+
+                /*
+                auto bitwuzla = subprocess::Popen(
+                    {
+                        binary_path.get(),
+                    },
+                    subprocess::error{subprocess::PIPE},
+                    subprocess::output{subprocess::PIPE},
+                    subprocess::input{subprocess::PIPE});
+
+                bitwuzla.send(input.c_str(), input.size());
+
+                auto bitwuzla_communication = bitwuzla.communicate();
+
+                std::vector<char> output_buf = bitwuzla_communication.first.buf;
+                std::string output(output_buf.begin(), output_buf.end());
+
+                // TODO:
+                // check whether process was terminated (i.e. killed) via the subprocess
+                // API to channel this to the caller
+                bitwuzla.close_input();
+                bitwuzla.close_output();
+                bitwuzla.close_error();
+                bitwuzla.kill();
+
+                return OK({false, output});
+                */
+            }
+        }    // namespace Bitwuzla
+
+        std::map<SolverType, std::function<Result<std::string>()>> Solver::type2query_binary = {
+            {SolverType::Z3, Z3::query_binary_path},
+            {SolverType::Boolector, Boolector::query_binary_path},
+            {SolverType::Bitwuzla, Bitwuzla::query_binary_path},
+        };
+
+        std::map<SolverType, bool> Solver::type2link_status = {
+            {SolverType::Z3, Z3::is_linked},
+            {SolverType::Boolector, Boolector::is_linked},
+            {SolverType::Bitwuzla, Bitwuzla::is_linked},
+        };
+
+        std::map<std::pair<SolverType, SolverCall>, std::function<Result<std::tuple<bool, std::string>>(std::string&, const QueryConfig&)>> Solver::spec2query = {
+            {{SolverType::Z3, SolverCall::Binary}, Z3::query_binary},
+            {{SolverType::Z3, SolverCall::Library}, Z3::query_library},
+            {{SolverType::Boolector, SolverCall::Binary}, Boolector::query_binary},
+            {{SolverType::Boolector, SolverCall::Library}, Boolector::query_library},
+            {{SolverType::Bitwuzla, SolverCall::Binary}, Bitwuzla::query_binary},
+            {{SolverType::Bitwuzla, SolverCall::Library}, Bitwuzla::query_library},
+        };
 
         Solver::Solver(const std::vector<Constraint>& constraints) : m_constraints(constraints)
         {
@@ -154,20 +369,30 @@ namespace hal
             return m_constraints;
         }
 
-        bool Solver::has_local_solver_for(SolverType solver)
+        bool Solver::has_local_solver_for(SolverType type, SolverCall call)
         {
-            static const std::map<SolverType, std::function<Result<std::string>()>> type2query = {
-                {SolverType::Z3, Z3::query_binary_path},
-                {SolverType::Boolector, Boolector::query_binary_path},
-            };
-
-            switch (auto it = type2query.find(solver); it != type2query.end())
+            if (call == SolverCall::Binary)
             {
-                case true:
-                    return it->second().is_ok();
-                default:
-                    return false;
+                switch (auto it = type2query_binary.find(type); it != type2query_binary.end())
+                {
+                    case true:
+                        return it->second().is_ok();
+                    default:
+                        return false;
+                }
             }
+            else if (call == SolverCall::Binary)
+            {
+                switch (auto it = type2link_status.find(type); it != type2link_status.end())
+                {
+                    case true:
+                        return it->second;
+                    default:
+                        return false;
+                }
+            }
+
+            return false;
         }
 
         Result<SolverResult> Solver::query(const QueryConfig& config) const
@@ -198,18 +423,14 @@ namespace hal
 
         Result<SolverResult> Solver::query_local(const QueryConfig& config) const
         {
-            static const std::map<SolverType, std::function<Result<std::tuple<bool, std::string>>(std::string, const QueryConfig&)>> type2query = {
-                {SolverType::Z3, Z3::query},
-                {SolverType::Boolector, Boolector::query},
-            };
-
             auto input = Solver::translate_to_smt2(this->m_constraints, config);
             if (input.is_error())
             {
                 return ERR_APPEND(input.get_error(), "could not query local SMT solver: unable to translate SMT constraints and configuration to string");
             }
 
-            auto query = type2query.at(config.solver)(input.get(), config);
+            auto input_str = input.get();
+            auto query     = spec2query.at({config.solver, config.call})(input_str, config);
             if (query.is_ok())
             {
                 auto [was_killed, output] = query.get();
@@ -222,6 +443,11 @@ namespace hal
         {
             // unimplemented as this is feature not required at the moment
             return ERR("could not query remote SMT solver: currently not supported");
+        }
+
+        Result<std::string> Solver::to_smt2(const QueryConfig& config) const
+        {
+            return translate_to_smt2(this->m_constraints, config);
         }
 
         Result<std::string> Solver::translate_to_smt2(const std::vector<Constraint>& constraints, const QueryConfig& config)
@@ -335,7 +561,7 @@ namespace hal
             {
                 if (config.generate_model)
                 {
-                    if (auto res = Model::parse(model_str, config.solver).map<SolverResult>([](auto model) -> Result<SolverResult> { return OK(SolverResult::Sat(model)); }); res.is_error())
+                    if (auto res = Model::parse(model_str, config.solver).map<SolverResult>([](const auto& model) -> Result<SolverResult> { return OK(SolverResult::Sat(model)); }); res.is_error())
                     {
                         return ERR_APPEND(res.get_error(), "could not parse SMT result from string: unable to generate model");
                     }

@@ -11,6 +11,8 @@
 #include "gui/settings/settings_items/settings_item_checkbox.h"
 #include "hal_core/utilities/log.h"
 #include <QTextCursor>
+#include <QMessageBox>
+#include <QApplication>
 
 namespace hal
 {
@@ -72,7 +74,7 @@ namespace hal
         setStopRecording(QString("hal_crashdump_signal%1.xml").arg(sig));
     }
 
-    void UserActionManager::setStopRecording(const QString& macroFilename)
+    QMessageBox::StandardButton UserActionManager::setStopRecording(const QString& macroFilename)
     {
         int n = mActionHistory.size();
         if (n>mStartRecording && !macroFilename.isEmpty())
@@ -96,7 +98,7 @@ namespace hal
                     if (act->compoundOrder() >= 0)
                         xmlOut.writeAttribute("compound",QString::number(act->compoundOrder()));
                     act->object().writeToXml(xmlOut);
-                    //perhaps put this in all actions that need a parentobject? could be redundant though
+//perhaps put this in all actions that need a parentobject? could be redundant though
 //                    if(act->parentObject().type() != UserActionObjectType::None)
 //                    {
 //                        xmlOut.writeStartElement("parentObj");
@@ -109,8 +111,19 @@ namespace hal
                 xmlOut.writeEndElement();
                 xmlOut.writeEndDocument();
             }
+            else
+            {
+                log_warning("gui", "Failed to save macro to '{}.", macroFilename.toStdString());
+                QMessageBox::StandardButton retval =
+                        QMessageBox::warning(qApp->activeWindow(), "Save Macro Failed", "Cannot save macro to file\n<" + macroFilename + ">",
+                                             QMessageBox::Retry | QMessageBox::Discard | QMessageBox::Cancel);
+                if (retval == QMessageBox::Discard)
+                    mStartRecording = -1;
+                return retval;
+            }
         }
         mStartRecording = -1;
+        return QMessageBox::Ok;
     }
 
     void UserActionManager::playMacro(const QString& macroFilename)

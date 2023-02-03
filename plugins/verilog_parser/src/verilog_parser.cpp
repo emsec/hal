@@ -321,57 +321,9 @@ namespace hal
             return ERR_APPEND(res.get_error(), "could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': unable to construct netlist");
         }
 
-        // add global GND gate if required by any instance
-        if (m_netlist->get_gnd_gates().empty())
-        {
-            if (!m_zero_net->get_destinations().empty())
-            {
-                GateType* gnd_type  = m_gnd_gate_types.begin()->second;
-                GatePin* output_pin = gnd_type->get_output_pins().front();
-                Gate* gnd           = m_netlist->create_gate(m_netlist->get_unique_gate_id(), gnd_type, "global_gnd");
-
-                if (!m_netlist->mark_gnd_gate(gnd))
-                {
-                    return ERR("could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': failed to mark GND gate");
-                }
-
-                if (m_zero_net->add_source(gnd, output_pin) == nullptr)
-                {
-                    return ERR("could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': failed to add source to GND gate");
-                }
-            }
-            else
-            {
-                m_netlist->delete_net(m_zero_net);
-            }
-        }
-
-        // add global VCC gate if required by any instance
-        if (m_netlist->get_vcc_gates().empty())
-        {
-            if (!m_one_net->get_destinations().empty())
-            {
-                GateType* vcc_type  = m_vcc_gate_types.begin()->second;
-                GatePin* output_pin = vcc_type->get_output_pins().front();
-                Gate* vcc           = m_netlist->create_gate(m_netlist->get_unique_gate_id(), vcc_type, "global_vcc");
-
-                if (!m_netlist->mark_vcc_gate(vcc))
-                {
-                    return ERR("could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': failed to mark VCC gate");
-                }
-
-                if (m_one_net->add_source(vcc, output_pin) == nullptr)
-                {
-                    return ERR("could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': failed to add source to VCC gate");
-                }
-            }
-            else
-            {
-                m_netlist->delete_net(m_one_net);
-            }
-        }
-
         // delete unused nets
+        std::queue<Net*> nets_to_be_deleted;
+
         for (auto net : m_netlist->get_nets())
         {
             const u32 num_of_sources      = net->get_num_of_sources();
@@ -380,8 +332,15 @@ namespace hal
             const bool no_destination     = num_of_destinations == 0 && !(net->is_global_output_net() && num_of_sources != 0);
             if (no_source && no_destination)
             {
-                m_netlist->delete_net(net);
+                nets_to_be_deleted.push(net);
             }
+        }
+
+        while (!nets_to_be_deleted.empty())
+        {
+            Net* net = nets_to_be_deleted.front();
+            nets_to_be_deleted.pop();
+            m_netlist->delete_net(net);
         }
 
         m_netlist->load_gate_locations_from_data();
@@ -1366,6 +1325,58 @@ namespace hal
             }
         }
 
+        // add global GND gate if required by any instance
+        if (m_netlist->get_gnd_gates().empty())
+        {
+            if (!m_zero_net->get_destinations().empty())
+            {
+                GateType* gnd_type  = m_gnd_gate_types.begin()->second;
+                GatePin* output_pin = gnd_type->get_output_pins().front();
+                Gate* gnd           = m_netlist->create_gate(m_netlist->get_unique_gate_id(), gnd_type, "global_gnd");
+
+                if (!m_netlist->mark_gnd_gate(gnd))
+                {
+                    return ERR("failed to mark GND gate");
+                }
+
+                if (m_zero_net->add_source(gnd, output_pin) == nullptr)
+                {
+                    return ERR("failed to add source to GND gate");
+                }
+            }
+            else
+            {
+                m_netlist->delete_net(m_zero_net);
+                m_zero_net = nullptr;
+            }
+        }
+
+        // add global VCC gate if required by any instance
+        if (m_netlist->get_vcc_gates().empty())
+        {
+            if (!m_one_net->get_destinations().empty())
+            {
+                GateType* vcc_type  = m_vcc_gate_types.begin()->second;
+                GatePin* output_pin = vcc_type->get_output_pins().front();
+                Gate* vcc           = m_netlist->create_gate(m_netlist->get_unique_gate_id(), vcc_type, "global_vcc");
+
+                if (!m_netlist->mark_vcc_gate(vcc))
+                {
+                    return ERR("failed to mark VCC gate");
+                }
+
+                if (m_one_net->add_source(vcc, output_pin) == nullptr)
+                {
+                    return ERR("failed to add source to VCC gate");
+                }
+            }
+            else
+            {
+                m_netlist->delete_net(m_one_net);
+                m_one_net = nullptr;
+            }
+        }
+
         // update module nets, internal nets, input nets, and output nets
         for (Module* module : m_netlist->get_modules())
         {
@@ -1398,23 +1409,29 @@ namespace hal
             std::unordered_set<Net*> input_nets  = module->get_input_nets();
             std::unordered_set<Net*> output_nets = module->get_input_nets();
 
-            if (!module->get_pin_by_net(m_one_net) && (input_nets.find(m_one_net) != input_nets.end() || output_nets.find(m_one_net) != input_nets.end()))
+            if (m_one_net)
             {
-                if (auto res = module->create_pin("'1'", m_one_net); res.is_error())
+                if (!module->get_pin_by_net(m_one_net) && (input_nets.find(m_one_net) != input_nets.end() || output_nets.find(m_one_net) != input_nets.end()))
                 {
-                    return ERR_APPEND(res.get_error(),
-                                      "could not construct netlist: failed to create pin '1' at net '" + m_one_net->get_name() + "' with ID " + std::to_string(m_one_net->get_id()) + "within module '"
-                                          + module->get_name() + "' with ID " + std::to_string(module->get_id()));
+                    if (auto res = module->create_pin("'1'", m_one_net); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(),
+                                          "could not construct netlist: failed to create pin '1' at net '" + m_one_net->get_name() + "' with ID " + std::to_string(m_one_net->get_id())
+                                              + "within module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()));
+                    }
                 }
             }
 
-            if (!module->get_pin_by_net(m_zero_net) && (input_nets.find(m_zero_net) != input_nets.end() || output_nets.find(m_zero_net) != input_nets.end()))
+            if (m_zero_net)
             {
-                if (auto res = module->create_pin("'0'", m_zero_net); res.is_error())
+                if (!module->get_pin_by_net(m_zero_net) && (input_nets.find(m_zero_net) != input_nets.end() || output_nets.find(m_zero_net) != input_nets.end()))
                 {
-                    return ERR_APPEND(res.get_error(),
-                                      "could not construct netlist: failed to create pin '0' at net '" + m_zero_net->get_name() + "' with ID " + std::to_string(m_zero_net->get_id())
-                                          + "within module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()));
+                    if (auto res = module->create_pin("'0'", m_zero_net); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(),
+                                          "could not construct netlist: failed to create pin '0' at net '" + m_zero_net->get_name() + "' with ID " + std::to_string(m_zero_net->get_id())
+                                              + "within module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()));
+                    }
                 }
             }
         }

@@ -61,7 +61,7 @@ time COLLISION_TIME_WINDOW = (CLOCK_PERIOD/8); // This is an arbitray value, but
 						    // value, because the actual time window depends on the actual silicon 
 						    // implementation. Thus the test is indicative of an Error and not
 						    // guaranteed to be an error. Even so this is usefull.
-time time_WCLK_RCLK, time_WCLK, time_RCLK;
+time time_WCLK, time_RCLK;
 
 
 //function reg Check_Timed_Window_Violation;
@@ -211,28 +211,29 @@ end
 always @(posedge RCLK_g) begin
     	time_RCLK = $time;
 end
-integer	SB_RAM256X16_RDATA_log_file;					//.....................
-initial	SB_RAM256X16_RDATA_log_file=("SB_RAM256X16_RDATA_log_file.txt");	//.....................
-always @(posedge WCLK_g) begin
-
-	Time_Collision_Detected = Check_Timed_Window_Violation(time_WCLK,time_RCLK,COLLISION_TIME_WINDOW);
-        if (Time_Collision_Detected & Address_Collision_Detected)begin
-        	$display("Warning: Write-Read collision detected, Data read value is XXXX\n");
- 		$display("WCLK Time: %.3f   RCLK Time:%.3f  ",time_WCLK, time_RCLK,"WADDR: %d   RADDR:%d\n",WADDR, RADDR); 
- 		$fdisplay(SB_RAM256X16_RDATA_log_file,"Warning: Write-Read collision detected, Data read value is XXXX\n");
-		$fdisplay(SB_RAM256X16_RDATA_log_file,"WCLK Time: %.3f   RCLK Time:%.3f  ",time_WCLK, time_RCLK, "WADDR: %d   RADDR:%d\n",WADDR, RADDR); 	
-// 		-> Collision_e;
-	end
-end
-
-
 
 
 //	code modify for universal verilog compiler
+//reg	[15:0]	RDATA = 0;
+reg	[15:0]	RDATA;
+
+initial
+begin
+   RDATA = 16'h0000;
+end
 
 always @ (posedge WCLK_g)
 begin
-	if	(WE)
+        $display("+++ WCLK_g: WCLK Time: %.3f   RCLK Time:%.3f  ",time_WCLK, time_RCLK);
+        Time_Collision_Detected = Check_Timed_Window_Violation(time_WCLK,time_RCLK,COLLISION_TIME_WINDOW);
+        if (Time_Collision_Detected & Address_Collision_Detected)
+                begin
+                $display("Warning: Write-Read collision detected, Data read value is XXXX\n");
+                $display("WCLK Time: %.3f   RCLK Time:%.3f  ",time_WCLK, time_RCLK,"WADDR: %d   RADDR:%d\n",WADDR, RADDR);
+                RDATA <= 16'hXXXX;
+                end
+
+        if	(WE)
 	begin
 //		-> Write_e;
 		for	(i=0;i<=BUS_WIDTH-1; i=i+1)
@@ -245,23 +246,22 @@ begin
 	end
 end
 
-//reg	[15:0]	RDATA = 0;
-reg	[15:0]	RDATA;
-
-initial
-begin
-   RDATA = 16'h0000;
-end
-
 // Look at the rising edge of the clock
 
 always @ (posedge RCLK_g)
 begin
-	if	(RE)
+        $display("+++ RCLK_g: WCLK Time: %.3f   RCLK Time:%.3f  ",time_WCLK, time_RCLK);
+        Time_Collision_Detected = Check_Timed_Window_Violation(time_WCLK,time_RCLK,COLLISION_TIME_WINDOW);
+
+        if	(RE)
 	begin
 //		-> Read_e;
-		if	(Time_Collision_Detected & Address_Collision_Detected) 
-			RDATA <= 16'hXXXX;
+                if	(Time_Collision_Detected & Address_Collision_Detected)
+                        begin
+                        $display("Warning: Write-Read collision detected, Data read value is XXXX\n");
+                        $display("WCLK Time: %.3f   RCLK Time:%.3f  ",time_WCLK, time_RCLK,"WADDR: %d   RADDR:%d\n",WADDR, RADDR);
+                        RDATA <= 16'hXXXX;
+                        end
 		else
 			for	(i=0;i<=BUS_WIDTH-1;i=i+1)
 				RDATA[i]	<= Memory[RADDR*BUS_WIDTH+i];

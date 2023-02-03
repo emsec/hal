@@ -44,7 +44,14 @@ namespace hal
         {
             Z3 = 0,    /**< Z3 SMT solver. */
             Boolector, /**< Boolector SMT solver. */
+            Bitwuzla,  /**< Bitwuzla SMT solver. */
             Unknown,   /**< Unknown (unsupported) SMT solver. */
+        };
+
+        enum class SolverCall : int
+        {
+            Binary,  /**< Call binary in subprocess*/
+            Library, /**< Call linked library */
         };
 
         /**
@@ -58,6 +65,8 @@ namespace hal
 
             /// The SMT solver identifier.
             SolverType solver = SolverType::Z3;
+            /// The calling format for the SMT solver
+            SolverCall call = SolverCall::Binary;
             /// Controls whether the SMT query is performed on a local or a remote machine.
             bool local = true;
             /// Controls whether the SMT solver should generate a model in case formula is satisfiable.
@@ -76,6 +85,14 @@ namespace hal
              * @returns The updated SMT query configuration.
              */
             QueryConfig& with_solver(SolverType solver);
+
+            /**
+             * Sets the solver type to the desired SMT solver.
+             *
+             * @param[in] solver - The solver type identifier.
+             * @returns The updated SMT query configuration.
+             */
+            QueryConfig& with_call(SolverCall call);
 
             /**
              * Activates local SMT solver execution.
@@ -260,9 +277,17 @@ namespace hal
 			 *
 			 * @param[in] model_str - The SMT-Lib model string.
 			 * @param[in] solver - The solver that computed the model.
-			 * @returns Ok() and the model on success, Err() otherwise.
+			 * @returns The model on success, an error otherwise.
 			 */
             static Result<Model> parse(const std::string& model_str, const SolverType& solver);
+
+            /**
+			 * Evaluates the given Boolean function by replacing all variables contained in the model with their corresponding value and simplifying the result.
+			 *
+			 * @param[in] bf - The Boolean function to evaluate.
+			 * @returns The evaluated function on success, an error otherwise.
+			 */
+            Result<BooleanFunction> evaluate(const BooleanFunction& bf) const;
         };
 
         /**

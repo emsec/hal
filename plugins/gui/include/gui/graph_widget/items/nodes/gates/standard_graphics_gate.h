@@ -154,5 +154,6 @@ namespace hal
 
         static QPixmap* sIconInstance;
         static const QPixmap& iconPixmap();
+        static QColor legibleColor(const QColor& bgColor);
     };
 }

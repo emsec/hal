@@ -57,6 +57,14 @@ namespace hal
             :rtype: hal_py.SMT.QueryConfig
         )");
 
+        py_smt_query_config.def("with_call", &SMT::QueryConfig::with_call, py::arg("call"), R"(
+            Sets the call type to the desired target.
+
+            :param hal_py.SMT.CallTyepe call: The solver type identifier.
+            :returns: The updated SMT query configuration.
+            :rtype: hal_py.SMT.QueryConfig
+        )");
+
         py_smt_query_config.def("with_local_solver", &SMT::QueryConfig::with_local_solver, R"(
             Activates local SMT solver execution.
 
@@ -205,13 +213,52 @@ namespace hal
             :type: dict(str,tuple(int,int))
         )");
 
-        py_smt_model.def_static("parse", &SMT::Model::parse, py::arg("model_str"), py::arg("solver"), R"(
+        py_smt_model.def_static(
+            "parse",
+            [](const std::string& model_str, const SMT::SolverType& solver) -> std::optional<SMT::Model> {
+                auto res = SMT::Model::parse(model_str, solver);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("model_str"),
+            py::arg("solver"),
+            R"(
             Parses an SMT-Lib model from a string output by a solver of the given type.
 
             :param str model_str: The SMT-Lib model string.
             :param hal_py.SMT.SolverType solver: The solver that computed the model.
-            :returns: The model on success, a string error message otherwise.
-            :rtype: hal_py.SMT.Model or str
+            :returns: The model on success, None otherwise.
+            :rtype: hal_py.SMT.Model or None
+        )");
+
+        py_smt_model.def(
+            "evaluate",
+            [](const SMT::Model& self, const BooleanFunction& bf) -> std::optional<BooleanFunction> {
+                auto res = self.evaluate(bf);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("bf"),
+            R"(
+            Evaluates the given Boolean function by replacing all variables contained in the model with their corresponding value and simplifying the result.
+
+            :param hal_py.BooleanFunction bf: The Boolean function to evaluate.
+            :returns: The evaluated function on success, None otherwise.
+            :rtype: hal_py.BooleanFunction or None
         )");
 
         py::class_<SMT::SolverResult> py_smt_result(py_smt, "SolverResult", R"(
@@ -320,17 +367,18 @@ namespace hal
             :rtype: hal_py.SMT.Solver
         )");
 
-        py_smt_solver.def_static("has_local_solver_for", &SMT::Solver::has_local_solver_for, py::arg("type"), R"(
+        py_smt_solver.def_static("has_local_solver_for", &SMT::Solver::has_local_solver_for, py::arg("type"), py::arg("call"), R"(
             Checks whether a SMT solver of the given type is available on the local machine.
 
             :param hal_py.SMT.SolverType type: The SMT solver type.
+            :param hal_py.SMT.SolverCall call: The call to the SMT solver.
             :returns: True if an SMT solver of the requested type is available, False otherwise.
             :rtype: bool
         )");
 
         py_smt_solver.def(
             "query",
-            [](const SMT::Solver& self, const SMT::QueryConfig& config) -> std::optional<SMT::SolverResult> {
+            [](const SMT::Solver& self, const SMT::QueryConfig& config = SMT::QueryConfig()) -> std::optional<SMT::SolverResult> {
                 auto res = self.query(config);
                 if (res.is_ok())
                 {
@@ -342,7 +390,7 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("config"),
+            py::arg("config") = SMT::QueryConfig(),
             R"(
             Queries an SMT solver with the specified query configuration.
 

@@ -71,6 +71,22 @@ namespace hal
         return m_properties;
     }
 
+    std::vector<GateTypeProperty> GateType::get_property_list() const
+    {
+        std::vector<GateTypeProperty> ctype_properties;
+        std::vector<GateTypeProperty> other_properties;
+        for (GateTypeProperty gtp : m_properties)
+        {
+            if (gtp >= GateTypeProperty::c_buffer)
+                ctype_properties.push_back(gtp);
+            else
+                other_properties.push_back(gtp);
+        }
+        if (!other_properties.empty())
+            ctype_properties.insert(ctype_properties.end(),other_properties.begin(),other_properties.end());
+        return ctype_properties;
+    }
+
     bool GateType::has_property(GateTypeProperty property) const
     {
         return m_properties.find(property) != m_properties.end();

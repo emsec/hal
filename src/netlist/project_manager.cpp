@@ -70,7 +70,10 @@ namespace hal
         if (!path.empty())
             m_proj_dir = ProjectDirectory(path);
         if (!std::filesystem::exists(m_proj_dir))
+        {
+            log_warning("project_manager", "cannot open project '{}', path doesn't exist.", path);
             return false;
+        }
         if (deserialize())
         {
             m_project_status = ProjectStatus::OPENED;

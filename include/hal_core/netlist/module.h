@@ -359,13 +359,50 @@ namespace hal
         Result<ModulePin*> create_pin(const std::string& name, Net* net, PinType type = PinType::none, bool create_group = true);
 
         /**
-         * Get the (ordered) pins of the module.
+         * Get an ordered vector of all pins of the module.
          * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          * 
          * @param[in] filter - An optional filter.
-         * @returns A vector of pins.
+         * @returns An ordered vector of pins.
          */
         std::vector<ModulePin*> get_pins(const std::function<bool(ModulePin*)>& filter = nullptr) const;
+
+        /**
+         * Get an ordered vector of the names of all pins of the module.
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+         * 
+         * @param[in] filter - An optional filter.
+         * @returns An ordered vector of pin names.
+         */
+        std::vector<std::string> get_pin_names(const std::function<bool(ModulePin*)>& filter = nullptr) const;
+
+        /**
+         * Get an ordered vector of all input pins of the module (including inout pins).
+         * 
+         * @returns An ordered vector of input pins.
+         */
+        std::vector<ModulePin*> get_input_pins() const;
+
+        /**
+         * Get an ordered vector of the names of all input pins of the module (including inout pins).
+         * 
+         * @returns An ordered vector of input pin names.
+         */
+        std::vector<std::string> get_input_pin_names() const;
+
+        /**
+         * Get an ordered vector of all output pins of the module (including inout pins).
+         * 
+         * @returns An ordered vector of output pins.
+         */
+        std::vector<ModulePin*> get_output_pins() const;
+
+        /**
+         * Get an ordered vector of the names of all output pins of the module (including inout pins).
+         * 
+         * @returns An ordered vector of output pin names.
+         */
+        std::vector<std::string> get_output_pin_names() const;
 
         /**
          * Get all pin groups of the module.
@@ -624,7 +661,7 @@ namespace hal
         friend class NetlistInternalManager;
         Module(NetlistInternalManager* internal_manager, EventHandler* event_handler, u32 id, Module* parent, const std::string& name);
 
-        Module(const Module&) = delete;               //disable copy-constructor
+        Module(const Module&)            = delete;    //disable copy-constructor
         Module& operator=(const Module&) = delete;    //disable copy-assignment
 
         struct NetConnectivity

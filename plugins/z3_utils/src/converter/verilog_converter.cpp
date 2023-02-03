@@ -7,7 +7,7 @@ namespace hal
 {
     namespace z3_utils
     {
-        void VerilogConverter::set_control_mapping(const std::map<u32, bool>& control_mapping)
+        void VerilogConverter::set_control_mapping(const std::map<std::string, bool>& control_mapping)
         {
             m_control_mapping = control_mapping;
         }
@@ -18,18 +18,8 @@ namespace hal
             {
                 return operand.substr(1);
             }
-            if (operand.find("|") != std::string::npos)
-            {
-                auto operand_name = operand.substr(1, operand.size() - 2);
-                return "i" + operand_name;
-            }
-            if (operand.find("sub_") != std::string::npos)
-            {
-                return operand;
-            }
 
-            log_error("z3_utils", "unkown operand format for {}", operand);
-            return "NOT IMPLEMENTED REACHED";
+            return operand;
         }
 
         std::string VerilogConverter::build_operation(const Converter::Operation& operation, const std::vector<std::string>& operands) const
@@ -98,25 +88,25 @@ namespace hal
             return "\twire " + lhs + ";\n" + "\tassign " + lhs + " = " + rhs + ";\n";
         }
 
-        std::string VerilogConverter::generate_initialization(const std::vector<u32>& inputs) const
+        std::string VerilogConverter::generate_initialization(const std::vector<std::string>& input_vars) const
         {
             std::string init = "module func ( ";
             int counter      = 0;
-            for (const auto& in : inputs)
+            for (const auto& in : input_vars)
             {
                 counter++;
                 if (m_control_mapping.find(in) == m_control_mapping.end())
                 {
-                    init = init + "i" + std::to_string(in) + ", ";
+                    init = init + in + ", ";
                 }
             }
             init += "out );\n";
 
-            for (const auto& in : inputs)
+            for (const auto& in : input_vars)
             {
                 if (m_control_mapping.find(in) == m_control_mapping.end())
                 {
-                    init += "\tinput i" + std::to_string(in) + ";\n";
+                    init += "\tinput " + in + ";\n";
                 }
             }
 
@@ -124,20 +114,20 @@ namespace hal
 
             init += "\n\n";
 
-            for (const auto& [control_bit, value] : m_control_mapping)
+            for (const auto& [control_var, value] : m_control_mapping)
             {
-                init += "\twire i" + std::to_string(control_bit) + ";\n";
-                init += "\tassign i" + std::to_string(control_bit) + " = " + std::to_string(value) + "; // control bit\n";
+                init += "\twire " + control_var + ";\n";
+                init += "\tassign " + control_var + " = " + std::to_string(value) + "; // control bit\n";
             }
 
             init += "\n\n";
             return init;
         }
 
-        std::string VerilogConverter::construct_function(const std::string& assignments, const std::string& initialization, const std::vector<u32>& inputs) const
+        std::string VerilogConverter::construct_function(const std::string& assignments, const std::string& initialization, const std::vector<std::string>& input_vars) const
         {
             // NOTE the inputs are unused because they are included in the initialization for the verilog converter
-            UNUSED(inputs);
+            UNUSED(input_vars);
             std::string return_var;
             if (assignments.empty())
             {

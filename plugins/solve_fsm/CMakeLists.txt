@@ -10,7 +10,6 @@ if(PL_SOLVE_FSM OR BUILD_ALL_PLUGINS)
                    SHARED
                    HEADER ${SOLVE_FSM_INC}
                    SOURCES ${SOLVE_FSM_SRC} ${SOLVE_FSM_PYTHON_SRC}
-                   LINK_LIBRARIES PUBLIC ${Z3_LIBRARIES} z3_utils
                    PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/solve_fsm.rst
                    )
 endif()

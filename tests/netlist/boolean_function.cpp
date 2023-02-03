@@ -130,7 +130,7 @@ namespace hal {
             {"X", {BooleanFunction::Value::X}},
             {"X", {BooleanFunction::Value::Z}},
             {"21", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
-            {"117", {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {"87", {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
             {"X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::X, BooleanFunction::Value::ONE}},
             {"X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::ONE}},
             {"X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::X}},
@@ -141,6 +141,10 @@ namespace hal {
         {
             EXPECT_EQ(expected, BooleanFunction::to_string(value, 10).get());
         }
+
+        const auto res_137 = BooleanFunction::to_string(BooleanFunction::Const(137, 16).get_top_level_node().constant, 10);
+        ASSERT_TRUE(res_137.is_ok());
+        EXPECT_EQ(res_137.get(), "137");
     }
 
     TEST(BooleanFunction, ValueToHex) {
@@ -1233,10 +1237,12 @@ namespace hal {
         {
             const auto config = SMT::QueryConfig()
                 .with_solver(SMT::SolverType::Boolector)
+                .with_call(SMT::SolverCall::Library)
                 .with_remote_solver()
                 .without_model_generation();
 
             EXPECT_EQ(config.solver, SMT::SolverType::Boolector);
+            EXPECT_EQ(config.call, SMT::SolverCall::Library);
             EXPECT_EQ(config.local, false);
             EXPECT_EQ(config.generate_model, false);
         }
@@ -1309,8 +1315,8 @@ namespace hal {
         for (auto&& constraints : formulas) {
             const auto solver = SMT::Solver(std::move(constraints));
 
-            for (auto&& solver_type : {SMT::SolverType::Z3}) {
-                if (!SMT::Solver::has_local_solver_for(solver_type)) {
+            for (auto&& [solver_type, solver_call] : std::vector<std::pair<SMT::SolverType, SMT::SolverCall>>{{SMT::SolverType::Z3, SMT::SolverCall::Binary}}) {
+                if (!SMT::Solver::has_local_solver_for(solver_type, solver_call)) {
                     continue;
                 }
 
@@ -1432,8 +1438,8 @@ namespace hal {
 
         for (auto&& constraints : formulas) {
             const auto solver = SMT::Solver(std::move(constraints));
-            for (auto&& solver_type : {SMT::SolverType::Z3}) {
-                if (!SMT::Solver::has_local_solver_for(solver_type)) {
+            for (auto&& [solver_type, solver_call] : std::vector<std::pair<SMT::SolverType, SMT::SolverCall>>{{SMT::SolverType::Z3, SMT::SolverCall::Binary}}) {
+                if (!SMT::Solver::has_local_solver_for(solver_type, solver_call)) {
                     continue;
                 }
 
@@ -1479,8 +1485,8 @@ namespace hal {
         for (auto&& [constraints, model] : formulas) {
             const auto solver = SMT::Solver(std::move(constraints));
 
-            for (auto&& solver_type : {SMT::SolverType::Z3}) {
-                if (!SMT::Solver::has_local_solver_for(solver_type)) {
+            for (auto&& [solver_type, solver_call] : std::vector<std::pair<SMT::SolverType, SMT::SolverCall>>{{SMT::SolverType::Z3, SMT::SolverCall::Binary}}) {
+                if (!SMT::Solver::has_local_solver_for(solver_type, solver_call)) {
                     continue;
                 }
 
@@ -1582,6 +1588,7 @@ namespace hal {
                 {
                     SMT::Constraint(BooleanFunction::Srem(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(3, 4)),
                     SMT::Constraint(c.clone(), BooleanFunction::Const(7, 4)),
+                    SMT::Constraint(BooleanFunction::Slt(BooleanFunction::Const(0, 4), d.clone(), 1).get()), // d could be 4 and -4, thats why we bind it to be larger than 0
                 },
                 SMT::Model({{"C", {7, 4}}, {"D", {4, 4}}})
             },
@@ -1589,6 +1596,7 @@ namespace hal {
                 {
                     SMT::Constraint(BooleanFunction::Srem(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(13, 4)), // 13 = -3
                     SMT::Constraint(c.clone(), BooleanFunction::Const(9, 4)), // 9 = -7
+                    SMT::Constraint(BooleanFunction::Slt(BooleanFunction::Const(0, 4), d.clone(), 1).get()), // d could be 4 and -4, thats why we bind it to be larger than 0
                 },
                 SMT::Model({{"C", {9, 4}}, {"D", {4, 4}}}) // 9 = -7
             },
@@ -1604,8 +1612,8 @@ namespace hal {
         for (auto&& [constraints, model] : formulas) {
             const auto solver = SMT::Solver(std::move(constraints));
 
-            for (auto&& solver_type : {SMT::SolverType::Z3}) {
-                if (!SMT::Solver::has_local_solver_for(solver_type)) {
+            for (auto&& [solver_type, solver_call] : std::vector<std::pair<SMT::SolverType, SMT::SolverCall>>{{SMT::SolverType::Z3, SMT::SolverCall::Binary}}) {
+                if (!SMT::Solver::has_local_solver_for(solver_type, solver_call)) {
                     continue;
                 }
 

@@ -15,6 +15,8 @@
 !gui_extension_demo/**/*
 !liberty_parser*
 !liberty_parser/**/*
+!netlist_preprocessing*
+!netlist_preprocessing/**/*
 !hgl_parser*
 !hgl_parser/**/*
 !hgl_writer*

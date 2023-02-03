@@ -28,6 +28,8 @@
 #include <QDir>
 #include <QRegularExpression>
 #include <QDebug>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 namespace hal
 {
@@ -89,8 +91,14 @@ namespace hal
         ProjectManager* pm = ProjectManager::instance();
         if (pm->get_project_status() != ProjectManager::ProjectStatus::NONE && mAutosaveEnabled)
         {
+            if (gPythonContext->currentThread())
+            {
+                log_info("gui", "Autosave deferred while python script is running...");
+                return;
+            }
             log_info("gui", "saving a backup in case something goes wrong...");
-            ProjectManager::instance()->serialize_project(gNetlist, true);
+            if (!ProjectManager::instance()->serialize_project(gNetlist, true))
+                log_warning("gui", "Autosave failed to create project backup to directory '{}'.", pm->get_project_directory().get_shadow_dir().string());
         }
     }
 
@@ -148,6 +156,7 @@ namespace hal
         ProjectManager::instance()->set_project_status(ProjectManager::ProjectStatus::OPENED);
     }
 
+
     FileManager::DirectoryStatus FileManager::directoryStatus(const QString& pathname)
     {
         QFileInfo info(pathname);
@@ -158,18 +167,83 @@ namespace hal
             if (netlist_parser_manager::can_parse(pathname.toStdString()))
                 return IsFile;
             else
-                return NotSelectable;
+                return InvalidExtension;
         }
 
         if (info.isDir())
         {
-            if (QFileInfo(QDir(pathname).absoluteFilePath(QString::fromStdString(ProjectManager::s_project_file))).exists())
+            if (!info.suffix().isEmpty()) return InvalidExtension;
+            QFile ff(QDir(pathname).absoluteFilePath(QString::fromStdString(ProjectManager::s_project_file)));
+            if (ff.exists())
+            {
+                if (!ff.open(QIODevice::ReadOnly))
+                    return ParseError;
+                QJsonParseError err;
+                QJsonDocument doc = QJsonDocument::fromJson(ff.readAll(),&err);
+                if (err.error != QJsonParseError::NoError)
+                    return ParseError;
+                if (!doc.isObject())
+                    return ParseError;
+                if (!doc.object().contains("netlist"))
+                    return NetlistError;
+                QString nl = doc.object()["netlist"].toString();
+                if (nl.isEmpty()) return NetlistError;
+                if (QFileInfo(nl).isAbsolute())
+                {
+                    if (!QFileInfo(nl).exists())
+                        return NetlistError;
+                }
+                else
+                {
+                    if (!QFileInfo(QDir(pathname).absoluteFilePath(nl)).exists())
+                        return NetlistError;
+                }
+                QString gl = doc.object()["gate_library"].toString();
+                if (gl.isEmpty()) return GatelibError;
+                if (QFileInfo(gl).isAbsolute())
+                {
+                    if (!QFileInfo(gl).exists())
+                        return GatelibError;
+                }
+                else
+                {
+                    if (!QFileInfo(QDir(pathname).absoluteFilePath(gl)).exists())
+                        return GatelibError;
+                }
                 return ProjectDirectory;
+            }
             else
                 return OtherDirectory;
         }
 
-        return NotSelectable;
+        return UnknownDirectoryEntry;
+    }
+
+    QString FileManager::directoryStatusText(DirectoryStatus stat)
+    {
+        switch (stat)
+        {
+        case ProjectDirectory:
+            return QString("seems to be a HAL project");
+        case OtherDirectory:
+            return QString("no HAL project file found in current directory");
+        case IsFile:
+            return QString("entry is not a directory but a file");
+        case NotExisting:
+            return QString("directory does not exist");
+        case InvalidExtension:
+            return QString("HAL project directory must not have an extension");
+        case ParseError:
+            return QString("HAL project file parse error");
+        case NetlistError:
+            return QString("cannot find HAL netlist");
+        case GatelibError:
+            return QString("cannot find HAL gate library");
+        case UnknownDirectoryEntry:
+            return QString("entry is neither directory nor file");
+        }
+
+        return QString();
     }
 
     void FileManager::fileSuccessfullyLoaded(QString file)
@@ -286,6 +360,13 @@ namespace hal
         QString projdir = ind.projectDirectory();
         if (projdir.isEmpty()) return;
 
+        if (!QFileInfo(projdir).suffix().isEmpty())
+        {
+            QMessageBox::warning(qApp->activeWindow(),"Aborted", "selected project directory name must not have suffix ." + QFileInfo(projdir).suffix());
+            return;
+        }
+
+
         ProjectManager* pm = ProjectManager::instance();
         if (!pm->create_project_directory(projdir.toStdString()))
         {
@@ -323,6 +404,9 @@ namespace hal
         }
         else
         {
+            // failed to create project: if netlist was moved move back before deleting directory
+            if (ind.isMoveNetlistChecked())
+                QDir().rename(netlistFilename,filename);
             if (pm->remove_project_directory())
                 log_info("gui", "Project directory removed since import failed.");
             else

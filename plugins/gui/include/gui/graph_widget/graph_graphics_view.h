@@ -134,6 +134,7 @@ namespace hal
         void handleRenameAction();
         void handleChangeTypeAction();
         void adjustMinScale();
+        void handleAddCommentAction();
 
         void handleFoldParentSingle();
         void handleFoldParentAll();
@@ -164,11 +165,12 @@ namespace hal
         void handleCancelPickMode();
         void handlePluginContextContributionTriggered();
 
-    private:
+    protected:
         void paintEvent(QPaintEvent* event) override;
         void drawForeground(QPainter* painter, const QRectF& rect) override;
         void mousePressEvent(QMouseEvent* event) override;
         void mouseMoveEvent(QMouseEvent* event) override;
+        void mouseReleaseEvent(QMouseEvent *event) override;
         void mouseDoubleClickEvent(QMouseEvent* event) override;
         void dragEnterEvent(QDragEnterEvent *event) override;
         void dragLeaveEvent(QDragLeaveEvent *event) override;
@@ -179,6 +181,8 @@ namespace hal
         void keyReleaseEvent(QKeyEvent* event) override;
         void resizeEvent(QResizeEvent* event) override;
 
+    private:
+        void mousePressEventNotItemDrag(QMouseEvent* event);
         void showContextMenu(const QPoint& pos);
 
         void updateMatrix(const int delta);

@@ -91,6 +91,12 @@ namespace hal
             return *this;
         }
 
+        QueryConfig& QueryConfig::with_call(SolverCall _call)
+        {
+            this->call = _call;
+            return *this;
+        }
+
         QueryConfig& QueryConfig::with_local_solver()
         {
             this->local = true;
@@ -125,6 +131,7 @@ namespace hal
         {
             out << "{";
             out << "solver : " << enum_to_string(config.solver) << ", ";
+            out << "call: " << enum_to_string(config.call) << ", ";
             out << "local : " << std::boolalpha << config.local << ", ";
             out << "generate_model : " << std::boolalpha << config.generate_model << ", ";
             out << "timeout : " << std::dec << config.timeout_in_seconds << "s";
@@ -234,6 +241,8 @@ namespace hal
                         return boost::spirit::x3::phrase_parse(iter, s.end(), ModelParser::Z3_MODEL_GRAMMAR, boost::spirit::x3::space);
                     case SolverType::Boolector:
                         return boost::spirit::x3::phrase_parse(iter, s.end(), ModelParser::BOOLECTOR_MODEL_GRAMMAR, boost::spirit::x3::space);
+                    case SolverType::Bitwuzla:
+                        return boost::spirit::x3::phrase_parse(iter, s.end(), ModelParser::Z3_MODEL_GRAMMAR, boost::spirit::x3::space);
 
                     default:
                         return false;
@@ -244,7 +253,44 @@ namespace hal
             {
                 return OK(Model(ModelParser::parser_context.model));
             }
+
+            std::cout << "Model: " << s << std::endl; 
+            exit(0);
             return ERR("could not parse SMT-Lib model");
+        }
+
+        Result<BooleanFunction> Model::evaluate(const BooleanFunction& bf) const
+        {
+            std::vector<BooleanFunction::Node> new_nodes;
+
+            for (const auto& node : bf.get_nodes())
+            {
+                if (node.is_variable())
+                {
+                    const auto var_name = node.variable;
+                    if (auto it = model.find(var_name); it != model.end())
+                    {
+                        const auto constant = BooleanFunction::Const(std::get<0>(it->second), std::get<1>(it->second));
+                        new_nodes.insert(new_nodes.end(), constant.get_nodes().begin(), constant.get_nodes().end());
+                    }
+                    else
+                    {
+                        new_nodes.push_back(node);
+                    }
+                }
+                else
+                {
+                    new_nodes.push_back(node);
+                }
+            }
+
+            auto build_res = BooleanFunction::build(std::move(new_nodes));
+            if (build_res.is_error())
+            {
+                return ERR_APPEND(build_res.get_error(), "failed to evaluate Boolean function for the model: failed to build function after replacing nodes.");
+            }
+
+            return OK(build_res.get().simplify_local());
         }
 
         SolverResult::SolverResult(SolverResultType _type, std::optional<Model> _model) : type(_type), model(_model)
@@ -305,7 +351,15 @@ namespace hal
     }    // namespace SMT
 
     template<>
-    std::map<SMT::SolverType, std::string> EnumStrings<SMT::SolverType>::data = {{SMT::SolverType::Z3, "Z3"}, {SMT::SolverType::Boolector, "Boolector"}, {SMT::SolverType::Unknown, "Unknown"}};
+    std::map<SMT::SolverType, std::string> EnumStrings<SMT::SolverType>::data = {{SMT::SolverType::Z3, "Z3"},
+                                                                                 {SMT::SolverType::Boolector, "Boolector"},
+                                                                                 {SMT::SolverType::Bitwuzla, "Bitwuzla"},
+                                                                                 {SMT::SolverType::Unknown, "Unknown"}};
+
+    template<>
+    std::map<SMT::SolverCall, std::string> EnumStrings<SMT::SolverCall>::data = {{SMT::SolverCall::Library, "Library"},
+                                                                                 {SMT::SolverCall::Binary, "Binary"}};
+
 
     template<>
     std::map<SMT::SolverResultType, std::string> EnumStrings<SMT::SolverResultType>::data = {{SMT::SolverResultType::Sat, "sat"},

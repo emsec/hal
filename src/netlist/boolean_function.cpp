@@ -122,10 +122,12 @@ namespace hal
 
             u64 tmp   = 0;
             u8 x_flag = 0;
-            for (auto v : value)
+
+            for (auto it = value.rbegin(); it != value.rend(); it++)
             {
-                x_flag |= v >> 1;
-                tmp = (tmp << 1) | v;
+                x_flag |= *it >> 1;
+                tmp <<= 1;
+                tmp |= *it;
             }
 
             if (x_flag)
@@ -202,6 +204,28 @@ namespace hal
         }
     }
 
+    Result<u64> BooleanFunction::to_u64(const std::vector<BooleanFunction::Value>& value)
+    {
+        if (value.size() > 64)
+        {
+            return ERR("cannot translate vector of values to u64 numeral: can only support vectors up to 64 bits and got vector of size " + std::to_string(value.size()) + ".");
+        }
+
+        u64 val = 0;
+        for (auto it = value.rbegin(); it != value.rend(); it++)
+        {
+            if ((*it != BooleanFunction::Value::ZERO) && (*it != BooleanFunction::Value::ONE))
+            {
+                return ERR("cannot translate vector of values to u64 numeral: found value other than ZERO or ONE: " + BooleanFunction::to_string(*it) + ".");
+            }
+
+            val <<= 1;
+            val |= *it;
+        }
+
+        return OK(val);
+    }
+
     std::ostream& operator<<(std::ostream& os, BooleanFunction::Value v)
     {
         return os << BooleanFunction::to_string(v);
@@ -244,7 +268,7 @@ namespace hal
         values.reserve(size);
         for (auto i = 0; i < size; i++)
         {
-            values.emplace_back((value & (1 << i)) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO);
+            values.emplace_back(((value >> i) & 1) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO);
         }
 
         return BooleanFunction::Const(values);
@@ -946,6 +970,13 @@ namespace hal
         return (simplified.is_ok()) ? simplified.get() : this->clone();
     }
 
+    BooleanFunction BooleanFunction::simplify_local() const
+    {
+        auto simplified = Simplification::local_simplification(*this);
+
+        return (simplified.is_ok()) ? simplified.get() : this->clone();
+    }
+
     BooleanFunction BooleanFunction::substitute(const std::string& old_variable_name, const std::string& new_variable_name) const
     {
         auto function = this->clone();
@@ -1057,6 +1088,7 @@ namespace hal
         auto value = this->evaluate(generic_inputs);
         if (value.is_ok())
         {
+            // TODO i find that this is incorrect behavior -> only because the variables are single bit does not mean the whole result is -> does not take concat into account
             return OK(value.get()[0]);
         }
 
@@ -1078,6 +1110,7 @@ namespace hal
             {
                 if (node.has_variable_name(name) && node.size != value.size())
                 {
+                    // TODO the error message does not reflect what is being checked
                     return ERR("could not evaluate Boolean function '" + this->to_string() + "': as the number of variables (" + std::to_string(node.size)
                                + ") does not match the number of provided inputs (" + std::to_string(value.size()) + ")");
                 }

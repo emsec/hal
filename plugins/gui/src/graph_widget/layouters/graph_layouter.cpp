@@ -12,6 +12,8 @@
 #include "gui/gui_globals.h"
 #include "gui/implementations/qpoint_extension.h"
 #include "gui/selection_details_widget/selection_details_widget.h"
+#include "gui/comment_system/comment_entry.h"
+#include "gui/comment_system/comment_speech_bubble.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
@@ -39,12 +41,16 @@ namespace hal
     const static qreal sMinimumVChannelWidth  = 20;
     const static qreal sMinimumHChannelHeight = 20;
 
-    GraphLayouter::GraphLayouter(const GraphContext* const context, QObject* parent)
-        : QObject(parent), mScene(new GraphicsScene(this)), mContext(context), mDone(false), mRollbackStatus(0), mOptimizeNetLayout(true)
+    GraphLayouter::GraphLayouter(GraphContext* context, QObject* parent)
+        : QObject(parent), mScene(new GraphicsScene(this)), mParentContext(context), mDone(false), mRollbackStatus(0), mOptimizeNetLayout(true)
     {
         SelectionDetailsWidget* details = gContentManager->getSelectionDetailsWidget();
         if (details)
             connect(details, &SelectionDetailsWidget::triggerHighlight, mScene, &GraphicsScene::handleHighlight);
+
+        connect(gCommentManager, &CommentManager::entryAboutToBeDeleted, this, &GraphLayouter::handleCommentAboutToDeleted);
+        connect(gCommentManager, &CommentManager::entryAdded, this, &GraphLayouter::handleCommentAdded);
+        connect(gCommentManager, &CommentManager::entryModified, this, &GraphLayouter::handleCommentAdded); // can be connected to the same func, does the same
     }
 
     GraphLayouter::~GraphLayouter()
@@ -199,22 +205,23 @@ namespace hal
 
     void GraphLayouter::alternateLayout()
     {
-        mContext->layoutProgress(0);
+        mParentContext->layoutProgress(0);
         getWireHash();
 
-        mContext->layoutProgress(1);
+        mParentContext->layoutProgress(1);
         findMaxBoxDimensions();
-        mContext->layoutProgress(2);
+        mParentContext->layoutProgress(2);
         alternateMaxChannelLanes();
-        mContext->layoutProgress(3);
+        mParentContext->layoutProgress(3);
         calculateJunctionMinDistance();
-        mContext->layoutProgress(4);
+        mParentContext->layoutProgress(4);
         alternateGateOffsets();
-        mContext->layoutProgress(5);
+        mParentContext->layoutProgress(5);
         alternatePlaceGates();
-        mContext->layoutProgress(6);
+        mParentContext->layoutProgress(6);
         mDone = true;
         alternateDrawNets();
+        drawComments();
         updateSceneRect();
 
         mScene->moveNetsToBackground();
@@ -285,11 +292,22 @@ namespace hal
         return true;
     }
 
+    void GraphLayouter::clearComments()
+    {
+        for (CommentSpeechBubble* csb : mCommentBubbles)
+        {
+            mScene->removeItem(csb);
+            delete csb;
+        }
+        mCommentBubbles.clear();
+    }
+
     void GraphLayouter::clearLayoutData()
     {
         mDone = false;
 
         mBoxes.clearBoxes();
+        clearComments();
 
         for (const GraphLayouter::Road* r : mHRoads.values())
             delete r;
@@ -409,9 +427,25 @@ namespace hal
         return false;
     }
 
+    void GraphLayouter::handleCommentAboutToDeleted(CommentEntry *entry)
+    {
+        // if this becomes too slow, go through the bubble list and only update
+        // the corresponding gate/module
+        clearComments();
+        drawComments();
+    }
+
+    void GraphLayouter::handleCommentAdded(CommentEntry *entry)
+    {
+        // if this becomes too slow, go through the bubble list and only update
+        // the corresponding gate/module
+        clearComments();
+        drawComments();
+    }
+
     void GraphLayouter::getWireHash()
     {
-        for (const u32 id : mContext->nets())
+        for (const u32 id : mParentContext->nets())
         {
             Net* n = gNetlist->get_net_by_id(id);
             if (!n)
@@ -595,7 +629,7 @@ namespace hal
 
     void GraphLayouter::calculateNets()
     {
-        for (const u32 id : mContext->nets())
+        for (const u32 id : mParentContext->nets())
         {
             Net* n = gNetlist->get_net_by_id(id);
             assert(n);
@@ -608,7 +642,7 @@ namespace hal
             for (Endpoint* src : n->get_sources())
             {
                 // FIND SRC BOX
-                Node node = mContext->nodeForGate(src->get_gate()->get_id());
+                Node node = mParentContext->nodeForGate(src->get_gate()->get_id());
 
                 if (node.isNull())
                     continue;
@@ -620,7 +654,7 @@ namespace hal
                 for (Endpoint* dst : n->get_destinations())
                 {
                     // FIND DST BOX
-                    node = mContext->nodeForGate(dst->get_gate()->get_id());
+                    node = mParentContext->nodeForGate(dst->get_gate()->get_id());
                     if (node.isNull())
                         continue;
 
@@ -1243,6 +1277,21 @@ namespace hal
         }
     }
 
+    void GraphLayouter::drawComments()
+    {
+        for (NodeBox* box : mBoxes)
+        {
+            if (!gCommentManager->contains(box->getNode())) continue;
+            CommentEntry* ce = gCommentManager->getEntriesForNode(box->getNode()).at(0);
+            CommentSpeechBubble* csb = new CommentSpeechBubble(QString("%1 [%2]").arg(ce->getHeader()).arg(ce->getCreationTime().toString("dd.MM.yy")),
+                                                               box->getNode(),mParentContext);
+            QPointF pos = box->item()->pos() + QPointF(box->item()->width(),0);
+            mScene->addItem(csb);
+            mCommentBubbles.append(csb);
+            csb->setPos(pos);
+        }
+    }
+
     void GraphLayouter::alternateDrawNets()
     {
         // lane for given wire and net id
@@ -1255,20 +1304,20 @@ namespace hal
                 laneMap[id].insert(it.key(), ilane++);
         }
 
-        int netCount     = mContext->nets().size();
+        int netCount     = mParentContext->nets().size();
         int percentCount = netCount / 93;
         int doneCount    = 0;
 
-        for (const u32 id : mContext->nets())
+        for (const u32 id : mParentContext->nets())
         {
             ++doneCount;
             if (percentCount)
             {
                 if (doneCount % percentCount == 0)
-                    mContext->layoutProgress(6 + doneCount / percentCount);
+                    mParentContext->layoutProgress(6 + doneCount / percentCount);
             }
             else
-                mContext->layoutProgress(6 + (int)floor(93. * doneCount / netCount));
+                mParentContext->layoutProgress(6 + (int)floor(93. * doneCount / netCount));
 
             Net* n = gNetlist->get_net_by_id(id);
             if (!n)
@@ -1516,7 +1565,7 @@ namespace hal
     void GraphLayouter::drawNets()
     {
         // ROADS AND JUNCTIONS FILLED LEFT TO RIGHT, TOP TO BOTTOM
-        for (const u32 id : mContext->nets())
+        for (const u32 id : mParentContext->nets())
         {
             Net* n = gNetlist->get_net_by_id(id);
             assert(n);
@@ -1532,7 +1581,7 @@ namespace hal
                 {
                     if (src->get_gate())
                     {
-                        Node node = mContext->nodeForGate(src->get_gate()->get_id());
+                        Node node = mParentContext->nodeForGate(src->get_gate()->get_id());
 
                         if (node.isNull())
                             continue;
@@ -1552,7 +1601,7 @@ namespace hal
                 {
                     if (dst->get_gate())
                     {
-                        Node node = mContext->nodeForGate(dst->get_gate()->get_id());
+                        Node node = mParentContext->nodeForGate(dst->get_gate()->get_id());
 
                         if (node.isNull())
                             continue;
@@ -1579,7 +1628,7 @@ namespace hal
 
                 for (Endpoint* src : n->get_sources())
                 {
-                    Node node = mContext->nodeForGate(src->get_gate()->get_id());
+                    Node node = mParentContext->nodeForGate(src->get_gate()->get_id());
 
                     if (!node.isNull())
                     {
@@ -1591,7 +1640,7 @@ namespace hal
 
                 for (Endpoint* dst : n->get_destinations())
                 {
-                    Node node = mContext->nodeForGate(dst->get_gate()->get_id());
+                    Node node = mParentContext->nodeForGate(dst->get_gate()->get_id());
 
                     if (node.isNull())
                         continue;
@@ -1615,7 +1664,7 @@ namespace hal
 
             for (Endpoint* src : n->get_sources())
             {
-                Node node = mContext->nodeForGate(src->get_gate()->get_id());
+                Node node = mParentContext->nodeForGate(src->get_gate()->get_id());
 
                 if (!node.isNull())
                     src_found = true;
@@ -1624,7 +1673,7 @@ namespace hal
 
             for (Endpoint* dst : n->get_destinations())
             {
-                Node node = mContext->nodeForGate(dst->get_gate()->get_id());
+                Node node = mParentContext->nodeForGate(dst->get_gate()->get_id());
 
                 if (!node.isNull())
                     dst_found = true;
@@ -1637,7 +1686,7 @@ namespace hal
 
                 for (Endpoint* src : n->get_sources())
                 {
-                    Node node = mContext->nodeForGate(src->get_gate()->get_id());
+                    Node node = mParentContext->nodeForGate(src->get_gate()->get_id());
 
                     if (node.isNull())
                         continue;
@@ -1659,7 +1708,7 @@ namespace hal
 
                 for (Endpoint* dst : n->get_destinations())
                 {
-                    Node node = mContext->nodeForGate(dst->get_gate()->get_id());
+                    Node node = mParentContext->nodeForGate(dst->get_gate()->get_id());
 
                     if (node.isNull())
                         continue;
@@ -1685,7 +1734,7 @@ namespace hal
                 // FIND SRC BOX
                 const NodeBox* src_box = nullptr;
                 {
-                    Node node = mContext->nodeForGate(src->get_gate()->get_id());
+                    Node node = mParentContext->nodeForGate(src->get_gate()->get_id());
 
                     if (node.isNull())
                         continue;
@@ -1704,7 +1753,7 @@ namespace hal
                     // FIND DST BOX
                     const NodeBox* dst_box = nullptr;
 
-                    Node node = mContext->nodeForGate(dst->get_gate()->get_id());
+                    Node node = mParentContext->nodeForGate(dst->get_gate()->get_id());
 
                     if (node.isNull())
                         continue;

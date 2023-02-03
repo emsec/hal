@@ -156,6 +156,13 @@ namespace hal
             :rtype: set[hal_py.GateTypeProperty]
         )");
 
+        py_gate_type.def("get_property_list", &GateType::get_property_list, R"(
+            Get the properties assigned to the gate type as list where the most significant property stands at first position.
+                                                                                     *
+            :returns: The properties of the gate type.
+            :rtype: list[hal_py.GateTypeProperty]
+        )");
+
         py_gate_type.def("has_property", &GateType::has_property, R"(
             Check whether the gate type has the specified property.
 
@@ -444,6 +451,15 @@ namespace hal
             :param int start_index: The start index of the pin group. Defaults to 0.
             :returns: The pin group on success, None otherwise.
             :rtype: hal_py.GatePinGroup or None
+        )");
+
+        py_gate_type.def("get_pin_groups", &GateType::get_pin_groups, R"(
+            Get an ordered list of all pin groups of the gate type.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+
+            :param lambda filter: An optional filter.
+            :returns: An ordered list of pin groups.
+            :rtype: list[hal_py.GatePinGroup]
         )");
 
         py_gate_type.def("get_pin_group_by_id", &GateType::get_pin_group_by_id, py::arg("id"), R"(

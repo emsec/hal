@@ -31,6 +31,7 @@
 #include <QXmlStreamReader>
 #include <QElapsedTimer>
 #include <QPlainTextEdit>
+#include <QMessageBox>
 #include "hal_core/defines.h"
 
 namespace hal
@@ -83,8 +84,9 @@ namespace hal
          * Stops macro recording and write commands to xml file.
          *
          * @param macroFilename - The file name.
+         * @return Ok=stopped and saved  Discard=stopped not saved   Retry=try with other filename   Cancel=user changed his mind
          */
-        void setStopRecording(const QString& macroFilename);
+        QMessageBox::StandardButton setStopRecording(const QString& macroFilename);
 
         /**
          * Executes macro from file.
@@ -96,7 +98,7 @@ namespace hal
         /**
          * Tests whether actions are currently recorded.
          *
-         * @return True if it is currently recording, False otherwise.
+         * @return True if it is currently recording, false otherwise.
          */
         bool isRecording() const;
 

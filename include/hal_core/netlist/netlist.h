@@ -317,7 +317,7 @@ namespace hal
          * @param[in] name - The name of the net.
          * @returns The new net on success, nullptr otherwise.
          */
-        Net* create_net(const u32 net_id, const std::string& name = "");
+        Net* create_net(const u32 net_id, const std::string& name);
 
         /**
          * Create a new net and add it to the netlist.<br>
@@ -326,7 +326,7 @@ namespace hal
          * @param[in] name - The name of the net.
          * @returns The new net on success, nullptr otherwise.
          */
-        Net* create_net(const std::string& name = "");
+        Net* create_net(const std::string& name);
 
         /**
          * Remove a net from the netlist.

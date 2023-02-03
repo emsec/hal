@@ -53,6 +53,7 @@ namespace hal
     }
 
     QString PythonSerializer::sPythonRelDir = "py";
+    std::string PythonSerializer::sControlFileName = "pythoneditor.json";
 
     std::string PythonSerializer::serialize(Netlist* netlist, const std::filesystem::path &savedir, bool isAutosave)
     {
@@ -63,20 +64,41 @@ namespace hal
         return serialize_control(savedir,isAutosave);
     }
 
-    std::string PythonSerializer::serialize_control(const std::filesystem::path& savedir, bool isAutosave)
+    bool PythonSerializer::write_control_file(const std::filesystem::path& savedir, const std::vector<PythonEditorControlEntry>& tabinfo)
     {
-        const std::string retval("pythoneditor.json");
         QDir workDir(QString::fromStdString(savedir.empty()
                                             ? ProjectManager::instance()->get_project_directory().get_canonical_path().string()
                                             : savedir.string()));
         QDir pyDir(workDir.absoluteFilePath(sPythonRelDir));
-        QString pythonEditorControl = workDir.absoluteFilePath(QString::fromStdString(retval));
+        QString PythonEditorControlFile = workDir.absoluteFilePath(QString::fromStdString(sControlFileName));
 
         JsonWriteDocument doc;
 
         doc["python_dir"] = sPythonRelDir.toStdString();
-
         JsonWriteArray& tabArr = doc.add_array("tabs");
+
+        for (const PythonEditorControlEntry& pece : tabinfo)
+        {
+            JsonWriteObject& tabObj = tabArr.add_object();
+            tabObj["tab"]  = pece.tabInx;
+            if (!pece.restore.empty())
+                tabObj["restore"] = pece.restore;
+            tabObj["filename"] = pece.filename;
+            tabObj.close();
+        }
+
+        tabArr.close();
+        return doc.serialize(PythonEditorControlFile.toStdString());
+    }
+
+    std::string PythonSerializer::serialize_control(const std::filesystem::path& savedir, bool isAutosave)
+    {
+        QDir workDir(QString::fromStdString(savedir.empty()
+                                            ? ProjectManager::instance()->get_project_directory().get_canonical_path().string()
+                                            : savedir.string()));
+        QDir pyDir(workDir.absoluteFilePath(sPythonRelDir));
+
+        std::vector<PythonEditorControlEntry> tabinfo;
 
         PythonEditor* pedit = gContentManager->getPythonEditorWidget();
         if (!pedit) return std::string();
@@ -87,30 +109,30 @@ namespace hal
             PythonCodeEditor* pce = pedit->getPythonEditor(tabInx);
             if (!pce) continue;
 
-            JsonWriteObject& tabObj = tabArr.add_object();
-            tabObj["tab"]  = tabInx;
+            PythonEditorControlEntry pece;
+            pece.tabInx = tabInx;
 
             QString tabPath = pce->getRelFilename();
             if (tabPath.isEmpty())
                 tabPath = pyDir.absoluteFilePath(pedit->unnamedFilename(tabInx));
             else if (isAutosave)
             {
-                tabObj["restore"] = tabPath.toStdString();
+                pece.restore = tabPath.toStdString();
                 tabPath = pyDir.absoluteFilePath(pedit->autosaveFilename(tabInx));
             }
             QString pydirPrefix = pyDir.absolutePath() + "/";
             QString tabFilename = tabPath.startsWith(pydirPrefix)
                     ? tabPath.mid(pydirPrefix.size())
                     : tabPath;
-            tabObj["filename"] = tabFilename.toStdString();
-            tabObj.close();
+            pece.filename = tabFilename.toStdString();
+            tabinfo.push_back(pece);
         }
 
-        tabArr.close();
-
-        doc.serialize(pythonEditorControl.toStdString());
-
-        return retval;
+        if (!write_control_file(savedir,tabinfo))
+        {
+            log_warning("gui", "Failed to save python editor control file to project dir {}.", workDir.absolutePath().toStdString());
+        }
+        return sControlFileName;
     }
 
     void PythonSerializer::deserialize(Netlist* netlist, const std::filesystem::path& loaddir)
@@ -603,6 +625,8 @@ namespace hal
             currentFilename = QDir(mGenericPath).absoluteFilePath(autosaveFilename(index));
         }
 
+        bool changeFileLocation = false;
+
         // evaluate query policy
         if (queryPolicy == QueryAlways ||
                 ( queryPolicy == QueryIfEmpty && currentFilename.isEmpty()))
@@ -613,6 +637,31 @@ namespace hal
 
             if (!selected_file_name.endsWith(".py"))
                 selected_file_name.append(".py");
+
+            changeFileLocation = true;
+        }
+        else if (queryPolicy == GenericName && currentFilename.isEmpty())
+        {
+            selected_file_name = QDir(mGenericPath).absoluteFilePath(unnamedFilename(index));
+            isUnnamed = true;
+        }
+        else
+        {
+            selected_file_name = currentFilename;
+            // Remove an existing snapshot
+            removeSnapshotFile(currentEditor);
+        }
+
+        std::ofstream out(selected_file_name.toStdString(), std::ios::out);
+        if (!out.is_open())
+        {
+            log_error("gui", "could not open file path '{}' to serialize python script", selected_file_name.toStdString());
+            QMessageBox::warning(this, "Save Script Error", "Cannot save python script to\n<" + selected_file_name + ">");
+            return false;
+        }
+
+        if (changeFileLocation)
+        {
 
             currentEditor->setFilename(selected_file_name);
             mDefaultPath = QFileInfo(selected_file_name).path();
@@ -633,17 +682,6 @@ namespace hal
                 }
             }
         }
-        else if (queryPolicy == GenericName && currentFilename.isEmpty())
-        {
-            selected_file_name = QDir(mGenericPath).absoluteFilePath(unnamedFilename(index));
-            isUnnamed = true;
-        }
-        else
-        {
-            selected_file_name = currentFilename;
-            // Remove an existing snapshot
-            removeSnapshotFile(currentEditor);
-        }
 
         bool isFileWatched = mFileWatcher->files().contains(currentFilename);
         if (isFileWatched)
@@ -652,12 +690,6 @@ namespace hal
             mPathEditorMap.remove(currentFilename);
         }
 
-        std::ofstream out(selected_file_name.toStdString(), std::ios::out);
-        if (!out.is_open())
-        {
-            log_error("gui", "could not open file path '{}' to serialize python script", selected_file_name.toStdString());
-            return false;
-        }
         out << currentEditor->toPlainText().toStdString();
         out.close();
 

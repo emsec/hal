@@ -6,6 +6,8 @@ HAL Core Documentation
 
    base_plugin_interface
    boolean_function
+   boolean_function_decorator
+   boolean_function_net_decorator
    core_utils
    data_container
    endpoint
@@ -34,3 +36,4 @@ HAL Core Documentation
    plugin_manager
    project_manager
    smt
+   subgraph_netlist_decorator

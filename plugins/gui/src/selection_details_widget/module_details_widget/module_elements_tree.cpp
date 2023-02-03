@@ -11,7 +11,7 @@
 namespace hal
 {
 
-    ModuleElementsTree::ModuleElementsTree(QWidget *parent) : SizeAdjustableTreeView(parent), //mNetlistElementsModel(new NetlistElementsTreeModel(this)),
+    ModuleElementsTree::ModuleElementsTree(QWidget *parent) : QTreeView(parent), //mNetlistElementsModel(new NetlistElementsTreeModel(this)),
         mModel(new ModuleTreeModel(this)), mModuleID(-1)
     {
         setContextMenuPolicy(Qt::CustomContextMenu);
@@ -43,7 +43,6 @@ namespace hal
 
         mModel->setModule(m);
         mModuleID = m->get_id();
-        adjustSizeToContents();
     }
 
     void ModuleElementsTree::removeContent()

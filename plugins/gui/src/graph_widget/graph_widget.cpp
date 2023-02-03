@@ -1,5 +1,6 @@
 #include "gui/graph_widget/graph_widget.h"
 
+#include "gui/comment_system/widgets/comment_widget.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/graph_widget/contexts/graph_context.h"
@@ -54,14 +55,15 @@ namespace hal
     GraphWidget* GraphWidget::sInstance = nullptr;
 
     GraphWidget::GraphWidget(GraphContext* context, QWidget* parent)
-        : ContentWidget("Graph", parent), mView(new GraphGraphicsView(this)), mContext(context), mOverlay(new WidgetOverlay(this)), mNavigationWidgetV3(new GraphNavigationWidget(false)),
-          mProgressBar(nullptr), mSpinnerWidget(new SpinnerWidget(this)), mCurrentExpansion(0)
+        : ContentWidget("Graph", parent), mView(new GraphGraphicsView(this)), mContext(context), mOverlay(new WidgetOverlay(this)),
+          mNavigationWidgetV3(new GraphNavigationWidget(false)), mProgressBar(nullptr),
+          mSpinnerWidget(new SpinnerWidget(this)), mCommentWidget(nullptr), mCurrentExpansion(0)
     {
         connect(mNavigationWidgetV3, &GraphNavigationWidget::navigationRequested, this, &GraphWidget::handleNavigationJumpRequested);
         connect(mNavigationWidgetV3, &GraphNavigationWidget::closeRequested, mOverlay, &WidgetOverlay::hide);
         connect(mNavigationWidgetV3, &GraphNavigationWidget::closeRequested, this, &GraphWidget::resetFocus);
 
-        connect(mOverlay, &WidgetOverlay::clicked, mOverlay, &WidgetOverlay::hide);
+        connect(mOverlay, &WidgetOverlay::clicked, this, &GraphWidget::hideOverlay);
 
         connect(mView, &GraphGraphicsView::moduleDoubleClicked, this, &GraphWidget::handleModuleDoubleClicked);
 
@@ -108,15 +110,9 @@ namespace hal
     {
         mView->setScene(mContext->scene());
 
-        connect(mOverlay, &WidgetOverlay::clicked, mOverlay, &WidgetOverlay::hide);
+        connect(mOverlay, &WidgetOverlay::clicked, this, &GraphWidget::hideOverlay);
 
-        mOverlay->hide();
-        if (mProgressBar)
-        {
-            AbstractBusyIndicator* removeBusyIndicator = mProgressBar;
-            mProgressBar           = nullptr;
-            removeBusyIndicator->deleteLater();
-        }
+        hideOverlay();
         mSpinnerWidget->hide();
         mOverlay->setWidget(mNavigationWidgetV3);
 
@@ -125,6 +121,23 @@ namespace hal
         else if (mStoreViewport.mValid)
         {
             mView->fitInView(restoreViewport(), Qt::KeepAspectRatio);
+        }
+    }
+
+    void GraphWidget::hideOverlay()
+    {
+        mOverlay->hide();
+        if (mProgressBar)
+        {
+            mProgressBar->deleteLater();
+            mProgressBar           = nullptr;
+            mOverlay->clearWidget();
+        }
+        if (mCommentWidget)
+        {
+            mCommentWidget->deleteLater();
+            mCommentWidget = nullptr;
+            mOverlay->clearWidget();
         }
     }
 
@@ -142,6 +155,14 @@ namespace hal
             mProgressBar->setText(text);
         mProgressBar->setValue(percent);
         qApp->processEvents();
+    }
+
+    void GraphWidget::showComments(const Node &nd)
+    {
+        mCommentWidget = new CommentWidget(this);
+        mCommentWidget->nodeChanged(nd);
+        mOverlay->setWidget(mCommentWidget);
+        mOverlay->show();
     }
 
     void GraphWidget::showProgress(int percent, const QString& text)
@@ -165,7 +186,7 @@ namespace hal
     {
         mView->setScene(nullptr);
 
-        disconnect(mOverlay, &WidgetOverlay::clicked, mOverlay, &WidgetOverlay::hide);
+        disconnect(mOverlay, &WidgetOverlay::clicked, this, &GraphWidget::hideOverlay);
 
         mOverlay->setWidget(mSpinnerWidget);
 
@@ -527,6 +548,7 @@ namespace hal
     void GraphWidget::handleNavigationLeftRequest()
     {
         const SelectionRelay::Subfocus navigateLeft = SelectionRelay::Subfocus::Left;
+        mOverlay->setWidget(mNavigationWidgetV3);
         switch (gSelectionRelay->focusType())
         {
             case SelectionRelay::ItemType::None: {
@@ -643,6 +665,7 @@ namespace hal
     void GraphWidget::handleNavigationRightRequest()
     {
         const SelectionRelay::Subfocus navigateRight = SelectionRelay::Subfocus::Right;
+        mOverlay->setWidget(mNavigationWidgetV3);
         switch (gSelectionRelay->focusType())
         {
             case SelectionRelay::ItemType::None: {
@@ -978,7 +1001,8 @@ namespace hal
 
     void GraphWidget::pluginProgressIndicator(int percent, const std::string& msg)
     {
-        if (!sInstance) return;
+        // qDebug() << "progress" << hex << (quintptr) QThread::currentThread() << (quintptr) gPythonContext->currentThread() << (quintptr) dynamic_cast<PythonThread*>(QThread::currentThread());
+        if (!sInstance || gPythonContext->currentThread()) return;
         if (percent==100)
             sInstance->handleSceneAvailable();
         else

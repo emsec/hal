@@ -117,6 +117,12 @@ namespace hal
     std::unique_ptr<NetlistSimulatorController> NetlistSimulatorControllerPlugin::create_simulator_controller(const std::string &nam, const std::string &workdir) const
     {
         NetlistSimulatorController* nsc = new NetlistSimulatorController(++sMaxControllerId, nam, workdir);
+        if (!nsc->is_legal_directory_name())
+        {
+            log_warning("simulation_plugin", "Invalid simulator working directory '{}' (hint: avoid spaces)", nsc->get_working_directory());
+            delete nsc;
+            return nullptr;
+        }
         qApp->processEvents();
         return std::unique_ptr<NetlistSimulatorController>(nsc);
     }

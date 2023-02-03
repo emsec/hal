@@ -16,6 +16,7 @@
 #include "gui/selection_details_widget/net_details_tab_widget.h"
 #include "gui/selection_details_widget/module_details_tab_widget.h"
 
+#include "gui/gui_def.h"
 
 #include "gui/gui_globals.h"
 #include "hal_core/netlist/gate.h"

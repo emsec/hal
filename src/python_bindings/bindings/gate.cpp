@@ -200,6 +200,29 @@ namespace hal
             :rtype: hal_py.BooleanFunction
         )");
 
+        py_gate.def(
+            "get_resolved_boolean_function",
+            [](const Gate& self, const GatePin* pin) -> std::optional<BooleanFunction> {
+                auto res = self.get_resolved_boolean_function(pin);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("pin") = nullptr,
+            R"(
+            Get the resolved Boolean function corresponding to the given output pin, i.e., a Boolean function that is only dependent on input nets and no internal or output pins.
+
+            :param hal_py.GatePin pin: The output pin.
+            :returns: The Boolean function on success, an error otherwise.
+            :rtype: hal_py.BooleanFunction
+        )");
+
         py_gate.def_property_readonly(
             "boolean_functions", [](Gate* g) { return g->get_boolean_functions(); }, R"(
             A dictionary from function name to Boolean function for all boolean functions associated with this gate.
@@ -279,6 +302,30 @@ namespace hal
             :rtype: list[hal_py.Net]
         )");
 
+        py_gate.def("get_fan_in_net", py::overload_cast<const std::string&>(&Gate::get_fan_in_net, py::const_), py::arg("pin_name"), R"(
+            Get the fan-in net corresponding to the input pin specified by name.
+
+            :param str pin_name: The input pin name.
+            :returns: The fan-in net on success, None otherwise.
+            :rtype: hal_py.Net or None
+        )");
+
+        py_gate.def("get_fan_in_net", py::overload_cast<const GatePin*>(&Gate::get_fan_in_net, py::const_), py::arg("pin"), R"(
+            Get the fan-in net corresponding to the specified input pin.
+
+            :param hal_py.GatePin pin: The input pin.
+            :returns: The fan-in net on success, None otherwise.
+            :rtype: hal_py.Net or None
+        )");
+
+        py_gate.def("is_fan_in_net", &Gate::is_fan_in_net, py::arg("net"), R"(
+            Check whether the given net is a fan-in of the gate.
+
+            :param hal_py.Net net: The net.
+            :returns: True if the net is a fan-in of the gate, False otherwise. 
+            :rtype: bool
+        )");
+
         py_gate.def_property_readonly("fan_in_endpoints", &Gate::get_fan_in_endpoints, R"(
             A list of all fan-in endpoints of the gate, i.e., all endpoints associated with an input pin of the gate.
 
@@ -292,22 +339,6 @@ namespace hal
             :rtype: list[hal_py.Endpoint]
         )");
 
-        py_gate.def("get_fan_in_net", py::overload_cast<const std::string&>(&Gate::get_fan_in_net, py::const_), py::arg("pin_name"), R"(
-            Get the fan-in endpoint corresponding to the input pin specified by name.
-
-            :param str pin_name: The input pin name.
-            :returns: The fan-in net on success, None otherwise.
-            :rtype: hal_py.Net or None
-        )");
-
-        py_gate.def("get_fan_in_net", py::overload_cast<const GatePin*>(&Gate::get_fan_in_net, py::const_), py::arg("pin"), R"(
-            Get the fan-in endpoint corresponding to the specified input pin.
-
-            :param hal_py.GatePin pin: The input pin.
-            :returns: The fan-in net on success, None otherwise.
-            :rtype: hal_py.Net or None
-        )");
-
         py_gate.def("get_fan_in_endpoint", py::overload_cast<const std::string&>(&Gate::get_fan_in_endpoint, py::const_), py::arg("pin_name"), R"(
             Get the fan-in endpoint corresponding to the input pin specified by name.
 
@@ -319,7 +350,15 @@ namespace hal
         py_gate.def("get_fan_in_endpoint", py::overload_cast<const GatePin*>(&Gate::get_fan_in_endpoint, py::const_), py::arg("pin"), R"(
             Get the fan-in endpoint corresponding to the specified input pin.
 
-            :param str pin_name: The input pin.
+            :param hal_py.GatePin pin: The input pin.
+            :returns: The endpoint on success, None otherwise.
+            :rtype: hal_py.Endpoint or None
+        )");
+
+        py_gate.def("get_fan_in_endpoint", py::overload_cast<const Net*>(&Gate::get_fan_in_endpoint, py::const_), py::arg("net"), R"(
+            Get the fan-in endpoint connected to the specified input net.
+
+            :param hal_py.Net net: The input net.
             :returns: The endpoint on success, None otherwise.
             :rtype: hal_py.Endpoint or None
         )");
@@ -337,6 +376,30 @@ namespace hal
             :rtype: list[hal_py.Net]
         )");
 
+        py_gate.def("get_fan_out_net", py::overload_cast<const std::string&>(&Gate::get_fan_out_net, py::const_), py::arg("pin_name"), R"(
+            Get the fan-out net corresponding to the output pin specified by name.
+
+            :param str pin_name: The output pin name.
+            :returns: The fan-out net on success, None otherwise.
+            :rtype: hal_py.Net or None
+        )");
+
+        py_gate.def("get_fan_out_net", py::overload_cast<const GatePin*>(&Gate::get_fan_out_net, py::const_), py::arg("pin"), R"(
+            Get the fan-out net corresponding to the specified output pin.
+
+            :param hal_py.GatePin pin: The output pin.
+            :returns: The fan-out net on success, None otherwise.
+            :rtype: hal_py.Net or None
+        )");
+
+        py_gate.def("is_fan_out_net", &Gate::is_fan_out_net, py::arg("net"), R"(
+            Check whether the given net is a fan-out of the gate.
+
+            :param hal_py.Net net: The net.
+            :returns: True if the net is a fan-out of the gate, False otherwise. 
+            :rtype: bool
+        )");
+
         py_gate.def_property_readonly("fan_out_endpoints", &Gate::get_fan_out_endpoints, R"(
             A list of all fan-out endpoints of the gate, i.e., all endpoints associated with an output pin of the gate.
 
@@ -350,22 +413,6 @@ namespace hal
             :rtype: list[hal_py.Endpoint]
         )");
 
-        py_gate.def("get_fan_out_net", py::overload_cast<const std::string&>(&Gate::get_fan_out_net, py::const_), py::arg("pin_name"), R"(
-            Get the fan-out endpoint corresponding to the output pin specified by name.
-
-            :param str pin_name: The output pin name.
-            :returns: The fan-out net on success, None otherwise.
-            :rtype: hal_py.Net or None
-        )");
-
-        py_gate.def("get_fan_out_net", py::overload_cast<const GatePin*>(&Gate::get_fan_out_net, py::const_), py::arg("pin"), R"(
-            Get the fan-out endpoint corresponding to the specified output pin.
-
-            :param hal_py.GatePin pin: The output pin.
-            :returns: The fan-out net on success, None otherwise.
-            :rtype: hal_py.Net or None
-        )");
-
         py_gate.def("get_fan_out_endpoint", py::overload_cast<const std::string&>(&Gate::get_fan_out_endpoint, py::const_), py::arg("pin_name"), R"(
             Get the fan-out endpoint corresponding to the output pin specified by name.
 
@@ -377,7 +424,15 @@ namespace hal
         py_gate.def("get_fan_out_endpoint", py::overload_cast<const GatePin*>(&Gate::get_fan_out_endpoint, py::const_), py::arg("pin"), R"(
             Get the fan-out endpoint corresponding to the specified output pin.
 
-            :param str pin_name: The output pin.
+            :param hal_py.GatePin pin: The output pin.
+            :returns: The endpoint on success, None otherwise.
+            :rtype: hal_py.Endpoint or None
+        )");
+
+        py_gate.def("get_fan_out_endpoint", py::overload_cast<const Net*>(&Gate::get_fan_out_endpoint, py::const_), py::arg("net"), R"(
+            Get the fan-out endpoint connected to the specified output net.
+
+            :param hal_py.Net net: The output net.
             :returns: The endpoint on success, None otherwise.
             :rtype: hal_py.Endpoint or None
         )");

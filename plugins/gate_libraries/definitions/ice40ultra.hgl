@@ -1638,7 +1638,7 @@
                 "c_lut"
             ],
             "lut_config": {
-                "bit_order": "ascending",
+                "bit_order": "descending",
                 "data_category": "generic",
                 "data_identifier": "LUT_INIT"
             },
@@ -2198,6 +2198,401 @@
                             "name": "RDATA(15)",
                             "direction": "output",
                             "type": "data"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "SB_SPRAM256KA",
+            "types": [
+                "sequential",
+                "ram"
+            ],
+            "pin_groups": [
+                {
+                    "name": "WREN",
+                    "direction": "input",
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "WREN",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
+                },
+                {
+                    "name": "CLOCK",
+                    "direction": "input",
+                    "type": "clock",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "CLOCK",
+                            "direction": "input",
+                            "type": "clock"
+                        }
+                    ]
+                },
+                {
+                    "name": "CHIPSELECT",
+                    "direction": "input",
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "CHIPSELECT",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
+                },
+                {
+                    "name": "STANDBY",
+                    "direction": "input",
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "STANDBY",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
+                },
+                {
+                    "name": "SLEEP",
+                    "direction": "input",
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "SLEEP",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
+                },
+                {
+                    "name": "POWEROFF",
+                    "direction": "input",
+                    "type": "clock",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "POWEROFF",
+                            "direction": "input",
+                            "type": "clock"
+                        }
+                    ]
+                },
+                {
+                    "name": "ADDRESS",
+                    "direction": "input",
+                    "type": "address",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "ADDRESS(0)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "ADDRESS(1)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "ADDRESS(2)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "ADDRESS(3)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "ADDRESS(4)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "ADDRESS(5)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "ADDRESS(6)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "ADDRESS(7)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "ADDRESS(8)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "ADDRESS(9)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "ADDRESS(10)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "ADDRESS(11)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "ADDRESS(12)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "ADDRESS(13)",
+                            "direction": "input",
+                            "type": "address"
+                        }
+                    ]
+                },
+                {
+                    "name": "MASKWREN",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "MASKWREN(0)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "MASKWREN(1)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "MASKWREN(2)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "MASKWREN(3)",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "DATAIN",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "DATAIN(0)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(1)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(2)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(3)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(4)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(5)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(6)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(7)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(8)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(9)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(10)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(11)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(12)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(13)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(14)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATAIN(15)",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "DATAOUT",
+                    "direction": "output",
+                    "type": "data",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "DATAOUT(0)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(0)"
+                        },
+                        {
+                            "name": "DATAOUT(1)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(1)"
+                        },
+                        {
+                            "name": "DATAOUT(2)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(2)"
+                        },
+                        {
+                            "name": "DATAOUT(3)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(3)"
+                        },
+                        {
+                            "name": "DATAOUT(4)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(4)"
+                        },
+                        {
+                            "name": "DATAOUT(5)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(5)"
+                        },
+                        {
+                            "name": "DATAOUT(6)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(6)"
+                        },
+                        {
+                            "name": "DATAOUT(7)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(7)"
+                        },
+                        {
+                            "name": "DATAOUT(8)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(8)"
+                        },
+                        {
+                            "name": "DATAOUT(9)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(9)"
+                        },
+                        {
+                            "name": "DATAOUT(10)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(10)"
+                        },
+                        {
+                            "name": "DATAOUT(11)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(11)"
+                        },
+                        {
+                            "name": "DATAOUT(12)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(12)"
+                        },
+                        {
+                            "name": "DATAOUT(13)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(13)"
+                        },
+                        {
+                            "name": "DATAOUT(14)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(14)"
+                        },
+                        {
+                            "name": "DATAOUT(15)",
+                            "direction": "output",
+                            "type": "data",
+                            "function": "DATAOUT(15)"
                         }
                     ]
                 }

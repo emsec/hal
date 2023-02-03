@@ -51,7 +51,7 @@ namespace hal
      *
      * @ingroup netlist
      */
-    class BooleanFunction final
+    class NETLIST_API BooleanFunction final
     {
     public:
         ////////////////////////////////////////////////////////////////////////
@@ -91,9 +91,17 @@ namespace hal
          * 
          * @param[in] value - The value as a bit-vector.
          * @param[in] base - The base that the values should be converted to. Valid values are 2 (default), 8, 10, and 16.
-         * @returns A string representing the values in the given base or an error.
+         * @returns A string representing the values in the given base on success, an error otherwise.
          */
         static Result<std::string> to_string(const std::vector<BooleanFunction::Value>& value, u8 base = 2);
+
+        /**
+         * Convert the given bit-vector to its unsigned 64-bit integer representation.
+         * 
+         * @param[in] value - The value as a bit-vector.
+         * @returns A 64-bit integer representing the values on success, an error otherwise.
+         */
+        static Result<u64> to_u64(const std::vector<BooleanFunction::Value>& value);
 
         /**
          * Output stream operator that forwards to_string of a value.
@@ -721,6 +729,13 @@ namespace hal
          * @returns The simplified Boolean function.
          */
         BooleanFunction simplify() const;
+
+        /**
+         * Simplifies the Boolean function using only the local simplification.
+         * 
+         * @returns The simplified Boolean function.
+         */
+        BooleanFunction simplify_local() const;
 
         /**
          * Substitute a variable name with another one, i.e., renames the variable.

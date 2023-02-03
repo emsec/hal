@@ -52,18 +52,18 @@ namespace hal
                  * This base function prases and splits up the smt representation of a wrapped z3 expression and converts it into another representation 
                  * depending on the child class that overrides the virtual methods. 
                  *
-                 * @param[in] e - Z3Wrapper wrapping the expression that is converted.
+                 * @param[in] e - z3 expression that is converted.
                  * @returns The converted expression as a string.
                  */
-            std::string convert_z3_expr_to_func(const z3Wrapper& e) const;
+            std::string convert_z3_expr_to_func(const z3::expr& e) const;
 
         protected:
             // VIRTUAL METHODS
-            virtual std::string build_operand(const std::string& operand) const                                                                            = 0;
-            virtual std::string build_operation(const Operation& operation, const std::vector<std::string>& operands) const                                = 0;
-            virtual std::string generate_assignment(const std::string& l) const                                                                            = 0;
-            virtual std::string generate_initialization(const std::vector<u32>& inputs) const                                                              = 0;
-            virtual std::string construct_function(const std::string& assignments, const std::string& initalization, const std::vector<u32>& inputs) const = 0;
+            virtual std::string build_operand(const std::string& operand) const                                                                                        = 0;
+            virtual std::string build_operation(const Operation& operation, const std::vector<std::string>& operands) const                                            = 0;
+            virtual std::string generate_assignment(const std::string& l) const                                                                                        = 0;
+            virtual std::string generate_initialization(const std::vector<std::string>& input_vars) const                                                              = 0;
+            virtual std::string construct_function(const std::string& assignments, const std::string& initalization, const std::vector<std::string>& input_vars) const = 0;
 
             // UTILS
             std::string integer_with_leading_zeros(const u32 i, const u32 total_length) const;
@@ -85,7 +85,7 @@ namespace hal
 
             std::string merge_sub_expressions(const std::map<std::string, std::string>& translated_sub_expressions) const;
 
-            std::string generate_function(const std::vector<std::string>& assignments, std::vector<u32>& inputs) const;
+            std::string generate_function(const std::vector<std::string>& assignments, std::vector<std::string>& input_vars) const;
 
             // supported operations
             std::vector<Operation> m_operations = {Converter::bvand, Converter::bvnot, Converter::bvor, Converter::bvxor};

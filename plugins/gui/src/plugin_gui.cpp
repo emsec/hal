@@ -14,6 +14,7 @@
 #include "gui/settings/settings_items/settings_item_dropdown.h"
 #include "gui/style/style.h"
 #include "gui/graph_widget/layout_locker.h"
+#include "gui/comment_system/comment_manager.h"
 
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/netlist.h"
@@ -55,6 +56,7 @@ namespace hal
     FileStatusManager* gFileStatusManager         = nullptr;
     GraphContextManager* gGraphContextManager     = nullptr;
     GuiApi* gGuiApi                               = nullptr;
+    CommentManager* gCommentManager               = nullptr;
     PythonContext* gPythonContext                 = nullptr;
 
     static void handleProgramArguments(const ProgramArguments& args)

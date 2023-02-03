@@ -90,7 +90,8 @@ namespace hal
         /**
          * Return values for static method directoryStatus
          */
-        enum DirectoryStatus { ProjectDirectory=2, OtherDirectory=1, IsFile=0, NotSelectable=-1, NotExisting=-2 };
+        enum DirectoryStatus { ProjectDirectory=2, OtherDirectory=1, IsFile=0, NotExisting=-1, InvalidExtension=-2, ParseError=-3,
+                               NetlistError=-4, GatelibError=-5, UnknownDirectoryEntry=-6  };
 
         /**
          * This function checks whether a given path name is a hal directory (contains .project.json)
@@ -98,6 +99,13 @@ namespace hal
          * @return DirectoryStatus enum (see above)
          */
         static DirectoryStatus directoryStatus(const QString& pathname);
+
+        /**
+         * This function returns a text explaining the DirectoryStatus value when searchin for HAL project directories
+         * @param stat DirectoryStatus value as returned by directoryStatus()
+         * @return Text for status message or message box.
+         */
+        static QString directoryStatusText(DirectoryStatus stat);
     Q_SIGNALS:
         /**
          * Q_SIGNAL that is emitted when a file is successfully opened.

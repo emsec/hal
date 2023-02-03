@@ -100,10 +100,6 @@ namespace hal
 
 
     private:
-        //Note: make these somehow static (does not work with pointer...?)
-        QIcon mModuleIcon;
-        QIcon mGateIcon;
-
         QString mKeyItemType = "type";
         QString mKeyRepId = "id";
         int mThreshold = 1;

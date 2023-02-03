@@ -553,10 +553,11 @@ namespace hal
         Result<BooleanFunction> slice_at(const BooleanFunction& function, const u16 index)
         {
             // (1) setup the sliced Boolean function
-            if (auto res = BooleanFunction::Slice(function.clone(), BooleanFunction::Index(index, function.size()), BooleanFunction::Index(index, function.size()), 1).map<BooleanFunction>([](auto f) {
-                    // (2) perform a local simplification in order to remove unnecessary slices
-                    return Simplification::local_simplification(f);
-                });
+            if (auto res =
+                    BooleanFunction::Slice(function.clone(), BooleanFunction::Index(index, function.size()), BooleanFunction::Index(index, function.size()), 1).map<BooleanFunction>([](const auto& f) {
+                        // (2) perform a local simplification in order to remove unnecessary slices
+                        return Simplification::local_simplification(f);
+                    });
                 res.is_error())
             {
                 return ERR(res.get_error());
@@ -794,6 +795,8 @@ namespace hal
 
                 // (2.3) assemble "assign $(LHS) = $(RHS);"
                 ss << "assign " << lhs << " = " << rhs << ";" << std::endl;
+
+                fclose(stream);
             }
             Vec_VecFree(vLevels);
 
@@ -991,7 +994,7 @@ namespace hal
         static std::mutex mutex;
         mutex.lock();
 
-        auto status = translate_to_abc(function).map<std::monostate>([](auto network) { return simplify(network); });
+        auto status = translate_to_abc(function).map<std::monostate>([](const auto& network) { return simplify(network); });
 
         if (status.is_error())
         {
@@ -999,7 +1002,7 @@ namespace hal
         }
 
         // (3) translate the ABC graph back into a Boolean function
-        auto translated_function = translate_from_abc().map<BooleanFunction>([&function](auto verilog) { return translate_from_verilog(verilog, function); });
+        auto translated_function = translate_from_abc().map<BooleanFunction>([&function](const auto& verilog) { return translate_from_verilog(verilog, function); });
 
         mutex.unlock();
 

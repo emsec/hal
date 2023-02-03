@@ -1,20 +1,20 @@
 // MIT License
-// 
+//
 // Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
 // Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
 // Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 // Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix ("ORIGINAL AUTHORS"). All Rights reserved.
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -198,7 +198,6 @@ namespace hal
         BooleanFunction get_boolean_function(const std::string& name) const;
 
         /**
-          * TODO test
           * Get the Boolean function corresponding to the given output pin.
           * If `pin` is a `nullptr`, the Boolean function of the first output pin is returned.
           *
@@ -214,6 +213,14 @@ namespace hal
          * @returns A map from function name to function on success, an empty map otherwise.
          */
         std::unordered_map<std::string, BooleanFunction> get_boolean_functions(bool only_custom_functions = false) const;
+
+        /**
+          * Get the resolved Boolean function corresponding to the given output pin, i.e., a Boolean function that is only dependent on input nets and no internal or output pins.
+          *
+          * @param[in] pin - The output pin.
+          * @returns The Boolean function on success, an error otherwise.
+          */
+        Result<BooleanFunction> get_resolved_boolean_function(const GatePin* pin) const;
 
         /**
          * Add a Boolean function with the given name to the gate.
@@ -277,6 +284,30 @@ namespace hal
         std::vector<Net*> get_fan_in_nets() const;
 
         /**
+         * Get the fan-in net corresponding to the input pin specified by name.
+         *
+         * @param[in] pin_name - The input pin name.
+         * @returns The fan-in net on success, a `nullptr` otherwise.
+         */
+        Net* get_fan_in_net(const std::string& pin_name) const;
+
+        /**
+         * Get the fan-in net corresponding to the specified input pin.
+         *
+         * @param[in] pin - The input pin.
+         * @returns The fan-in net on success, a nullptr otherwise.
+         */
+        Net* get_fan_in_net(const GatePin* pin) const;
+
+        /**
+         * Check whether the given net is a fan-in of the gate.
+         * 
+         * @param[in] net - The net. 
+         * @returns `true` if the net is a fan-in of the gate, `false` otherwise. 
+         */
+        bool is_fan_in_net(const Net* net) const;
+
+        /**
          * Get a vector of all fan-in endpoints of the gate, i.e., all endpoints associated with an input pin of the gate.
          *
          * @returns A vector of all fan-in endpoints.
@@ -287,29 +318,11 @@ namespace hal
          * Get the fan-in endpoint corresponding to the input pin specified by name.
          *
          * @param[in] pin_name - The input pin name.
-         * @returns The fan-in net on success, a `nullptr` otherwise.
-         */
-        Net* get_fan_in_net(const std::string& pin_name) const;
-
-        /**
-         * TODO test
-         * Get the fan-in endpoint corresponding to the specified input pin.
-         *
-         * @param[in] pin - The input pin.
-         * @returns The fan-in net on success, a nullptr otherwise.
-         */
-        Net* get_fan_in_net(const GatePin* pin) const;
-
-        /**
-         * Get the fan-in endpoint corresponding to the input pin specified by name.
-         *
-         * @param[in] pin_name - The input pin name.
          * @returns The endpoint on success, a `nullptr` otherwise.
          */
         Endpoint* get_fan_in_endpoint(const std::string& pin_name) const;
 
         /**
-         * TODO test
          * Get the fan-in endpoint corresponding to the specified input pin.
          *
          * @param[in] pin - The input pin.
@@ -318,11 +331,43 @@ namespace hal
         Endpoint* get_fan_in_endpoint(const GatePin* pin) const;
 
         /**
+         * Get the fan-in endpoint connected to the specified input net.
+         *
+         * @param[in] net - The input net.
+         * @returns The endpoint on success, a `nullptr` otherwise.
+         */
+        Endpoint* get_fan_in_endpoint(const Net* net) const;
+
+        /**
          * Get a vector of all fan-out nets of the gate, i.e., all nets that are connected to one of the output pins.
          *
          * @returns A vector of all fan-out nets.
          */
         std::vector<Net*> get_fan_out_nets() const;
+
+        /**
+         * Get the fan-out net corresponding to the output pin specified by name.
+         *
+         * @param[in] pin_name - The output pin name.
+         * @returns The fan-out net on success, a `nullptr` otherwise.
+         */
+        Net* get_fan_out_net(const std::string& pin_name) const;
+
+        /**
+         * Get the fan-out net corresponding to the specified output pin.
+         *
+         * @param[in] pin - The output pin.
+         * @returns The fan-out net on success, a nullptr otherwise.
+         */
+        Net* get_fan_out_net(const GatePin* pin) const;
+
+        /**
+         * Check whether the given net is a fan-out of the gate.
+         * 
+         * @param[in] net - The net. 
+         * @returns `true` if the net is a fan-out of the gate, `false` otherwise. 
+         */
+        bool is_fan_out_net(const Net* net) const;
 
         /**
          * Get a vector of all fan-out endpoints of the gate, i.e., all endpoints associated with an output pin of the gate.
@@ -335,29 +380,11 @@ namespace hal
          * Get the fan-out endpoint corresponding to the output pin specified by name.
          *
          * @param[in] pin_name - The output pin name.
-         * @returns The fan-out net on success, a `nullptr` otherwise.
-         */
-        Net* get_fan_out_net(const std::string& pin_name) const;
-
-        /**
-         * TODO test
-         * Get the fan-out endpoint corresponding to the specified output pin.
-         *
-         * @param[in] pin - The output pin.
-         * @returns The fan-out net on success, a nullptr otherwise.
-         */
-        Net* get_fan_out_net(const GatePin* pin) const;
-
-        /**
-         * Get the fan-out endpoint corresponding to the output pin specified by name.
-         *
-         * @param[in] pin_name - The output pin name.
          * @returns The endpoint on success, a `nullptr` otherwise.
          */
         Endpoint* get_fan_out_endpoint(const std::string& pin_name) const;
 
         /**
-         * TODO test
          * Get the fan-out endpoint corresponding to the specified input pin.
          *
          * @param[in] pin - The output pin.
@@ -366,7 +393,14 @@ namespace hal
         Endpoint* get_fan_out_endpoint(const GatePin* pin) const;
 
         /**
-         * TODO test
+         * Get the fan-out endpoint connected to the specified output net.
+         *
+         * @param[in] net - The output net.
+         * @returns The endpoint on success, a `nullptr` otherwise.
+         */
+        Endpoint* get_fan_out_endpoint(const Net* net) const;
+
+        /**
          * Get a vector of all unique predecessor gates of the gate. 
          * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
@@ -376,7 +410,6 @@ namespace hal
         std::vector<Gate*> get_unique_predecessors(const std::function<bool(const GatePin* pin, Endpoint* ep)>& filter = nullptr) const;
 
         /**
-         * TODO test
          * Get a vector of all direct predecessor endpoints of the gate, i.e., all predecessor endpoints that are connected to an input pin of the gate. 
          * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
@@ -395,7 +428,6 @@ namespace hal
         Endpoint* get_predecessor(const std::string& pin_name) const;
 
         /**
-         * TODO test
          * Get a single direct predecessor endpoint that is connected to the specified input pin.
          * Fails if there are no or more than one predecessors.
          *
@@ -405,7 +437,6 @@ namespace hal
         Endpoint* get_predecessor(const GatePin* pin) const;
 
         /**
-         * TODO test
          * Get a vector of all unique successor gates of the gate. 
          * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
@@ -415,7 +446,6 @@ namespace hal
         std::vector<Gate*> get_unique_successors(const std::function<bool(const GatePin* pin, Endpoint* ep)>& filter = nullptr) const;
 
         /**
-         * TODO test
          * Get a vector of all direct successor endpoints of the gate, i.e., all successor endpoints that are connected to an output pin of the gate. 
          * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
@@ -434,7 +464,6 @@ namespace hal
         Endpoint* get_successor(const std::string& pin_name) const;
 
         /**
-         * TODO test
          * Get a single direct successor endpoint that is connected to the specified output pin.
          * Fails if there are no or more than one successors.
          *

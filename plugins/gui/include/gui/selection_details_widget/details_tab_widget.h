@@ -26,6 +26,7 @@
 #pragma once
 
 #include <QTabWidget>
+#include "gui/selection_details_widget/selection_details_icon_provider.h"
 
 namespace hal
 {
@@ -55,10 +56,18 @@ namespace hal
         int addTab(const QString& label, QList<DetailsFrameWidget*> frames);
 
         /**
+         * Convenient function to add a tab to the widget with the provided label and single frame as content.
+         *
+         * @param label - Label text in the tab bar.
+         * @param frame - Single Frame which build the content of the tab.
+         */
+        int addTab(const QString& label, DetailsFrameWidget* frame);
+
+        /**
          *  Set the top right corner icon of the tab details widget.
          *
          * @param fileName - Icon name from gui ressources file.
          */
-        void setIcon(const QString& fileName);
+        void setIcon(SelectionDetailsIconProvider::IconCategory catg, u32 itemId=0);
     };
 }

@@ -1,5 +1,6 @@
 #include "gui/graph_widget/graph_graphics_view.h"
 
+#include "gui/comment_system/comment_speech_bubble.h"
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graph_widget.h"
 #include "gui/graph_widget/graph_widget_constants.h"
@@ -35,6 +36,7 @@
 #include "gui/user_action/user_action_compound.h"
 #include "gui/module_dialog/module_dialog.h"
 #include "gui/module_dialog/gate_dialog.h"
+#include "gui/comment_system/widgets/comment_dialog.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
@@ -298,6 +300,18 @@ namespace hal
         mMinScale = std::min(viewport()->width() / scene()->width(), viewport()->height() / scene()->height());
     }
 
+    void GraphGraphicsView::handleAddCommentAction()
+    {
+        auto action = dynamic_cast<QAction*>(sender());
+        if(!action) return;
+
+        auto node = action->data().value<Node>();
+        CommentDialog commentDialog("New Comment");
+        if(commentDialog.exec() == QDialog::Accepted)
+            gCommentManager->addComment(new CommentEntry(node, commentDialog.getText(), commentDialog.getHeader()));
+        commentDialog.close();
+    }
+
     void GraphGraphicsView::paintEvent(QPaintEvent* event)
     {
         qreal lod = QStyleOptionGraphicsItem::levelOfDetailFromTransform(transform());
@@ -324,13 +338,22 @@ namespace hal
         if (event->button() != Qt::LeftButton)
             return;
 
-        GraphicsItem* item = static_cast<GraphicsItem*>(itemAt(event->pos()));
+        QGraphicsItem* item = itemAt(event->pos());
+        if (!item) return;
 
-        if (!item)
+        CommentSpeechBubble* csb = dynamic_cast<CommentSpeechBubble*>(item);
+        if (csb)
+        {
+            csb->mouseDoubleClickEvent(nullptr);
+            return;
+        }
+
+        GraphicsItem* git = dynamic_cast<GraphicsItem*>(itemAt(event->pos()));
+
+        if (!git || git->itemType() != ItemType::Module)
             return;
 
-        if (item->itemType() == ItemType::Module)
-            Q_EMIT moduleDoubleClicked(item->id());
+        Q_EMIT moduleDoubleClicked(git->id());
     }
 
     void GraphGraphicsView::drawForeground(QPainter* painter, const QRectF& rect)
@@ -362,6 +385,11 @@ namespace hal
 
     void GraphGraphicsView::mousePressEvent(QMouseEvent* event)
     {
+        // it the clicked item is a speechbubble, simply return so that it does
+        // not change / clear the current selection, double-click however works fine
+        if(dynamic_cast<CommentSpeechBubble*>(itemAt(event->pos())))
+            return;
+
         if (event->modifiers() == mPanModifier)
         {
             if (event->button() == Qt::LeftButton)
@@ -382,10 +410,25 @@ namespace hal
             }
 
             // we still need the normal mouse logic for single clicks
-            QGraphicsView::mousePressEvent(event);
+            mousePressEventNotItemDrag(event);
         }
         else
-            QGraphicsView::mousePressEvent(event);
+            mousePressEventNotItemDrag(event);
+    }
+
+    void GraphGraphicsView::mousePressEventNotItemDrag(QMouseEvent *event)
+    {
+        QGraphicsView::mousePressEvent(event);
+        GraphicsScene* sc = dynamic_cast<GraphicsScene*>(scene());
+        if (sc) sc->setMousePressed(true);
+    }
+
+
+    void GraphGraphicsView::mouseReleaseEvent(QMouseEvent *event)
+    {
+        GraphicsScene* sc = dynamic_cast<GraphicsScene*>(scene());
+        if (sc) sc->setMousePressed(false);
+        QGraphicsView::mouseReleaseEvent(event);
     }
 
     void GraphGraphicsView::mouseMoveEvent(QMouseEvent* event)
@@ -628,6 +671,10 @@ namespace hal
         bool isModule       = false;
         bool isNet          = false;
 
+        // otherwise crashes, speechbubbles do not need a context menu (for now)
+        // add ItemType::SpeechBubble so that it can be handled better?
+        if(dynamic_cast<CommentSpeechBubble*>(item)) return;
+
         bool isMultiGates = gSelectionRelay->selectedGates().size() > 1 &&
                 gSelectionRelay->selectedModules().isEmpty();
         if (item)
@@ -761,6 +808,12 @@ namespace hal
                 connect(action, &QAction::triggered, this, &GraphGraphicsView::handleRemoveFromView);
                 // Gate* g   = isGate ? gNetlist->get_gate_by_id(mItem->id()) : nullptr;
                 Module* m = isModule ? gNetlist->get_module_by_id(mItem->id()) : nullptr;
+
+                action = context_menu.addAction("  Add comment");
+                QVariant data;
+                data.setValue(Node(mItem->id(), isGate ? Node::NodeType::Gate : Node::NodeType::Module));
+                action->setData(data);
+                QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleAddCommentAction);
 
                 // only allow move actions on anything that is not the top module
                 if (!gContentManager->getGraphTabWidget()->isSelectMode())
