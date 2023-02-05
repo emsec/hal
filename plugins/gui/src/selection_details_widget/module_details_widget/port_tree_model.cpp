@@ -36,21 +36,32 @@ namespace hal
 
     Qt::ItemFlags ModulePinsTreeModel::flags(const QModelIndex& index) const
     {
-        Qt::ItemFlags defaultFlags = BaseTreeModel::flags(index);
-        TreeItem* item             = index.isValid() ? getItemFromIndex(index) : nullptr;
-        if (item)
-        {
-            //get parent, must be a pingroup item and not the root (not allowed to drag from external group, but maybe later)
-            TreeItem* parentItem = item->getParent();
-            itemType type        = getTypeOfItem(item);
-            if (type == itemType::portMultiBit)
-                return defaultFlags | Qt::ItemIsDropEnabled;
-            else if (type == itemType::pin)                     // && parentItem != mRootItem)//only case that should be possible
-                return defaultFlags | Qt::ItemIsDragEnabled;    // | Qt::ItemIsDropEnabled;
-            if (parentItem == mRootItem && type == itemType::pin)
-                return defaultFlags;
-        }
-        return defaultFlags;
+//        Qt::ItemFlags defaultFlags = BaseTreeModel::flags(index);
+//        TreeItem* item             = index.isValid() ? getItemFromIndex(index) : nullptr;
+//        if (item)
+//        {
+//            //get parent, must be a pingroup item and not the root (not allowed to drag from external group, but maybe later)
+//            TreeItem* parentItem = item->getParent();
+//            itemType type        = getTypeOfItem(item);
+//            if (type == itemType::portMultiBit)
+//                return defaultFlags | Qt::ItemIsDropEnabled;
+//            else if (type == itemType::pin)                     // && parentItem != mRootItem)//only case that should be possible
+//                return defaultFlags | Qt::ItemIsDragEnabled;    // | Qt::ItemIsDropEnabled;
+//            if (parentItem == mRootItem && type == itemType::pin)
+//                return defaultFlags;
+//        }
+        // valid-check must be ommitted when a drop between pingroups is desired, all checks are performed in canDropMimeData
+        return BaseTreeModel::flags(index) | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+//        if(item)
+//        {
+//            // everything can be dragged, but wether it can be dropped on or not depends on the situation
+//            // -> a pin cannot be dropped onto its parent-group (but it can be dropped within its group),
+//            // and a pingroup cannot be dropped onto (or between) a pin. -> what is currently dragged can only
+//            // be checked in the "canDropMimeData" function, ItemIsDropEnabled cannot be set since its conditional on the dragged item
+//            return defaultFlags | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+
+//        }
+//        return defaultFlags;
     }
 
     QStringList ModulePinsTreeModel::mimeTypes() const
@@ -69,144 +80,186 @@ namespace hal
         auto item       = getItemFromIndex(indexes.at(0));
         QByteArray encodedData;
         QDataStream stream(&encodedData, QIODevice::WriteOnly);
-        stream << QString("pin") << getIdOfItem(item);
+        QString type = getTypeOfItem(item) == itemType::pin ? "pin" : "group";
+        stream << type << getIdOfItem(item);
         data->setText(item->getData(sNameColumn).toString());
         data->setData("pintreemodel/item", encodedData);
         return data;
     }
 
-    bool ModulePinsTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent)
+//    bool ModulePinsTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent)
+//    {
+//        Q_UNUSED(action)
+//        Q_UNUSED(column)
+
+//        QString type;
+//        int id;
+//        QByteArray encItem = data->data("pintreemodel/item");
+//        QDataStream dataStream(&encItem, QIODevice::ReadOnly);
+//        dataStream >> type;
+//        dataStream >> id;
+
+//        auto droppedItem       = mIdToPinItem.value(id);
+//        auto droppedParentItem = droppedItem->getParent();
+//        auto mod               = gNetlist->get_module_by_id(mModuleId);
+//        auto droppedPin        = mod->get_pin_by_id(id);
+//        if (droppedPin == nullptr)
+//            return false;
+//        auto ownRow = droppedItem->getOwnRow();
+//        TreeItem* newItem =
+//            new TreeItem(QList<QVariant>() << droppedItem->getData(sNameColumn) << droppedItem->getData(sDirectionColumn) << droppedItem->getData(sTypeColumn) << droppedItem->getData(sNetColumn));
+//        newItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));    //currently only pins can be dragged, so its a pin
+//        newItem->setAdditionalData(keyId, id);
+
+//        if (row != -1)    //between items
+//        {
+//            auto onDroppedParentItem = parent.isValid() ? getItemFromIndex(parent) : mRootItem;
+//            bool bottomEdge          = row == onDroppedParentItem->getChildCount();
+//            auto onDroppedItem       = bottomEdge ? onDroppedParentItem->getChild(row - 1) : onDroppedParentItem->getChild(row);
+//            auto* onDroppedPin       = mod->get_pin_by_id(getIdOfItem(onDroppedItem));
+//            auto desiredIndex        = onDroppedPin->get_group().second;
+
+//            //same-parent (parent != root): move withing same group
+//            if (onDroppedParentItem == droppedParentItem && onDroppedParentItem != mRootItem)
+//            {
+//                if (ownRow == row || ownRow + 1 == row)
+//                    return false;
+
+//                removeItem(droppedItem);
+//                mIgnoreEventsFlag = true;
+//                if (bottomEdge)
+//                {
+//                    insertItem(newItem, droppedParentItem, row - 1);
+//                    ActionReorderObject* reorderObj = new ActionReorderObject(desiredIndex);
+//                    reorderObj->setObject(UserActionObject(droppedPin->get_id(), UserActionObjectType::Pin));
+//                    reorderObj->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+//                    reorderObj->exec();
+//                }
+//                else
+//                {
+//                    if (ownRow < row)
+//                    {
+//                        insertItem(newItem, droppedParentItem, row - 1);
+//                        desiredIndex--;
+//                    }
+//                    else
+//                        insertItem(newItem, droppedParentItem, row);
+//                    ActionReorderObject* reorderObj = new ActionReorderObject(desiredIndex);
+//                    reorderObj->setObject(UserActionObject(droppedPin->get_id(), UserActionObjectType::Pin));
+//                    reorderObj->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+//                    reorderObj->exec();
+//                }
+//                mIgnoreEventsFlag = false;
+//                return true;
+//            }
+
+//            //different parents v1 (dropped's parent = mRoot, onDropped's parent=group)
+//            //+ different parents v2(droppedItem's parent != root, ondropped's != root)
+//            if ((droppedParentItem == mRootItem && onDroppedParentItem != mRootItem) || (droppedParentItem != mRootItem && onDroppedParentItem != mRootItem))
+//            {
+//                auto* pinGroup = mod->get_pin_group_by_id(getIdOfItem(onDroppedParentItem));
+//                if (pinGroup == nullptr)
+//                    return false;
+
+//                mIgnoreEventsFlag        = true;
+//                UserActionCompound* comp = new UserActionCompound;
+
+//                if (droppedParentItem != mRootItem && onDroppedParentItem != mRootItem)
+//                {
+//                    //for undo action, reordering can only be performed when not dragging from the top level
+//                    ActionReorderObject* reordActHack = new ActionReorderObject(droppedPin->get_group().second);
+//                    reordActHack->setObject(UserActionObject(droppedPin->get_id(), UserActionObjectType::Pin));
+//                    reordActHack->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+//                    comp->addAction(reordActHack);
+//                }
+//                ActionAddItemsToObject* addAct = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), QSet<u32>() << droppedPin->get_id());
+//                addAct->setObject(UserActionObject(pinGroup->get_id(), UserActionObjectType::PinGroup));
+//                addAct->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+//                ActionReorderObject* reordAct = new ActionReorderObject(bottomEdge ? desiredIndex + 1 : desiredIndex);
+//                reordAct->setObject(UserActionObject(droppedPin->get_id(), UserActionObjectType::Pin));
+//                reordAct->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+//                comp->addAction(addAct);
+//                comp->addAction(reordAct);
+//                bool ret          = comp->exec();
+//                mIgnoreEventsFlag = false;
+//                if (ret)
+//                {
+//                    removeItem(droppedItem);
+//                    insertItem(newItem, onDroppedParentItem, row);
+//                }
+//                else
+//                    setModule(gNetlist->get_module_by_id(mModuleId));
+//            }
+//        }
+//        else    // on item
+//        {
+//            auto onDroppedItem   = getItemFromIndex(parent);
+//            auto* onDroppedGroup = mod->get_pin_group_by_id(getIdOfItem(onDroppedItem));
+//            if (onDroppedGroup == nullptr)
+//                return false;
+//            //on group (dropped parent = mRoot)
+//            //if(droppedParentItem == mRootItem)//item which is dropped
+//            if (droppedParentItem != onDroppedItem)
+//            {
+//                mIgnoreEventsFlag = true;
+//                //int ret = mod->assign_pin_to_group(onDroppedGroup, droppedPin).is_ok();
+//                ActionAddItemsToObject* addAct = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), QSet<u32>() << droppedPin->get_id());
+//                addAct->setObject(UserActionObject(onDroppedGroup->get_id(), UserActionObjectType::PinGroup));
+//                addAct->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+//                bool ret = addAct->exec();
+//                if (ret)
+//                {
+//                    removeItem(droppedItem);
+//                    insertItem(newItem, onDroppedItem, onDroppedItem->getChildCount());
+//                    mIgnoreEventsFlag = false;
+//                    return true;
+//                }
+//                mIgnoreEventsFlag = false;
+//                return false;
+//            }
+//        }
+//        return false;
+//    }
+
+    bool ModulePinsTreeModel::canDropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) const
     {
         Q_UNUSED(action)
-        Q_UNUSED(column)
+        if(!data->formats().contains("pintreemodel/item")) return false;
 
-        QString type;
-        int id;
-        QByteArray encItem = data->data("pintreemodel/item");
+        QString type; int id;
+        auto encItem = data->data("pintreemodel/item");
         QDataStream dataStream(&encItem, QIODevice::ReadOnly);
-        dataStream >> type;
-        dataStream >> id;
+        dataStream >> type >> id;
+        auto parentItem = getItemFromIndex(parent);
 
-        auto droppedItem       = mIdToPinItem.value(id);
-        auto droppedParentItem = droppedItem->getParent();
-        auto mod               = gNetlist->get_module_by_id(mModuleId);
-        auto droppedPin        = mod->get_pin_by_id(id);
-        if (droppedPin == nullptr)
-            return false;
-        auto ownRow = droppedItem->getOwnRow();
-        TreeItem* newItem =
-            new TreeItem(QList<QVariant>() << droppedItem->getData(sNameColumn) << droppedItem->getData(sDirectionColumn) << droppedItem->getData(sTypeColumn) << droppedItem->getData(sNetColumn));
-        newItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));    //currently only pins can be dragged, so its a pin
-        newItem->setAdditionalData(keyId, id);
-
-        if (row != -1)    //between items
+        // construct a "drop-matrix" here, but only 4 things are NOT allowed (so check for these):
+        // 1: drop a pin on its OWN parent
+        // 3: drop a pingroup on/between pins
+        // 4: drop an item on itself
+        if(type == "group")
         {
-            auto onDroppedParentItem = parent.isValid() ? getItemFromIndex(parent) : mRootItem;
-            bool bottomEdge          = row == onDroppedParentItem->getChildCount();
-            auto onDroppedItem       = bottomEdge ? onDroppedParentItem->getChild(row - 1) : onDroppedParentItem->getChild(row);
-            auto* onDroppedPin       = mod->get_pin_by_id(getIdOfItem(onDroppedItem));
-            auto desiredIndex        = onDroppedPin->get_group().second;
-
-            //same-parent (parent != root): move withing same group
-            if (onDroppedParentItem == droppedParentItem && onDroppedParentItem != mRootItem)
+            if(parentItem)
             {
-                if (ownRow == row || ownRow + 1 == row)
+                auto item = mIdToGroupItem[id];
+                auto type = getTypeOfItem(parentItem);
+                if(type == itemType::pin || (type == itemType::group && row != -1) || item == parentItem)
                     return false;
-
-                removeItem(droppedItem);
-                mIgnoreEventsFlag = true;
-                if (bottomEdge)
-                {
-                    insertItem(newItem, droppedParentItem, row - 1);
-                    ActionReorderObject* reorderObj = new ActionReorderObject(desiredIndex);
-                    reorderObj->setObject(UserActionObject(droppedPin->get_id(), UserActionObjectType::Pin));
-                    reorderObj->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
-                    reorderObj->exec();
-                }
-                else
-                {
-                    if (ownRow < row)
-                    {
-                        insertItem(newItem, droppedParentItem, row - 1);
-                        desiredIndex--;
-                    }
-                    else
-                        insertItem(newItem, droppedParentItem, row);
-                    ActionReorderObject* reorderObj = new ActionReorderObject(desiredIndex);
-                    reorderObj->setObject(UserActionObject(droppedPin->get_id(), UserActionObjectType::Pin));
-                    reorderObj->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
-                    reorderObj->exec();
-                }
-                mIgnoreEventsFlag = false;
-                return true;
-            }
-
-            //different parents v1 (dropped's parent = mRoot, onDropped's parent=group)
-            //+ different parents v2(droppedItem's parent != root, ondropped's != root)
-            if ((droppedParentItem == mRootItem && onDroppedParentItem != mRootItem) || (droppedParentItem != mRootItem && onDroppedParentItem != mRootItem))
-            {
-                auto* pinGroup = mod->get_pin_group_by_id(getIdOfItem(onDroppedParentItem));
-                if (pinGroup == nullptr)
-                    return false;
-
-                mIgnoreEventsFlag        = true;
-                UserActionCompound* comp = new UserActionCompound;
-
-                if (droppedParentItem != mRootItem && onDroppedParentItem != mRootItem)
-                {
-                    //for undo action, reordering can only be performed when not dragging from the top level
-                    ActionReorderObject* reordActHack = new ActionReorderObject(droppedPin->get_group().second);
-                    reordActHack->setObject(UserActionObject(droppedPin->get_id(), UserActionObjectType::Pin));
-                    reordActHack->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
-                    comp->addAction(reordActHack);
-                }
-                ActionAddItemsToObject* addAct = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), QSet<u32>() << droppedPin->get_id());
-                addAct->setObject(UserActionObject(pinGroup->get_id(), UserActionObjectType::PinGroup));
-                addAct->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
-                ActionReorderObject* reordAct = new ActionReorderObject(bottomEdge ? desiredIndex + 1 : desiredIndex);
-                reordAct->setObject(UserActionObject(droppedPin->get_id(), UserActionObjectType::Pin));
-                reordAct->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
-                comp->addAction(addAct);
-                comp->addAction(reordAct);
-                bool ret          = comp->exec();
-                mIgnoreEventsFlag = false;
-                if (ret)
-                {
-                    removeItem(droppedItem);
-                    insertItem(newItem, onDroppedParentItem, row);
-                }
-                else
-                    setModule(gNetlist->get_module_by_id(mModuleId));
             }
         }
-        else    // on item
+        if(type == "pin")
         {
-            auto onDroppedItem   = getItemFromIndex(parent);
-            auto* onDroppedGroup = mod->get_pin_group_by_id(getIdOfItem(onDroppedItem));
-            if (onDroppedGroup == nullptr)
+            // perhaps check here that a pin can only be dropped between groups if its own group has size > 1?
+            // otherwise it does not make much sense...perhaps change this check
+            auto item = mIdToPinItem[id];
+            if((!parentItem && item->getParent()->getChildCount() == 1) || item->getParent() == parentItem || item == parentItem)
                 return false;
-            //on group (dropped parent = mRoot)
-            //if(droppedParentItem == mRootItem)//item which is dropped
-            if (droppedParentItem != onDroppedItem)
-            {
-                mIgnoreEventsFlag = true;
-                //int ret = mod->assign_pin_to_group(onDroppedGroup, droppedPin).is_ok();
-                ActionAddItemsToObject* addAct = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), QSet<u32>() << droppedPin->get_id());
-                addAct->setObject(UserActionObject(onDroppedGroup->get_id(), UserActionObjectType::PinGroup));
-                addAct->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
-                bool ret = addAct->exec();
-                if (ret)
-                {
-                    removeItem(droppedItem);
-                    insertItem(newItem, onDroppedItem, onDroppedItem->getChildCount());
-                    mIgnoreEventsFlag = false;
-                    return true;
-                }
-                mIgnoreEventsFlag = false;
-                return false;
-            }
+//            if(parentItem)
+//            {
+//                if(item->getParent() == parentItem || item == parentItem)
+//                    return false;
+//            }
         }
-        return false;
+        return true;
     }
 
     void ModulePinsTreeModel::clear()
@@ -214,6 +267,8 @@ namespace hal
         BaseTreeModel::clear();
         mModuleId = -1;
         mNameToTreeItem.clear();
+        mIdToGroupItem.clear();
+        mIdToPinItem.clear();
     }
 
     void ModulePinsTreeModel::setModule(Module* m)
@@ -222,54 +277,84 @@ namespace hal
         mModuleId = m->get_id();
         beginResetModel();
 
-        for (PinGroup<ModulePin>* pinGroup : m->get_pin_groups())
+        for(PinGroup<ModulePin>* pinGroup : m->get_pin_groups())
         {
-            //ignore empty pingroups
-            if (pinGroup->empty())
+            if(pinGroup->empty())
                 continue;
 
-            ModulePin* firstPin = pinGroup->get_pins().front();
-            QString pinGroupName;
-            QString pinGroupDirection = QString::fromStdString(enum_to_string(firstPin->get_direction()));
-            QString pinGroupType      = QString::fromStdString(enum_to_string(firstPin->get_type()));
-            if (pinGroup->size() == 1)
-            {
-                pinGroupName = QString::fromStdString(firstPin->get_name());
-            }
-            else
-            {
-                pinGroupName = QString::fromStdString(pinGroup->get_name());
-            }
+            auto pinGroupName = QString::fromStdString(pinGroup->get_name());
+            auto pinGroupDirection = QString::fromStdString(enum_to_string((pinGroup->get_direction())));
+            auto pinGroupType = QString::fromStdString(enum_to_string(pinGroup->get_type()));
 
             TreeItem* pinGroupItem = new TreeItem(QList<QVariant>() << pinGroupName << pinGroupDirection << pinGroupType << "");
-
-            if (pinGroup->size() == 1)
+            pinGroupItem->setAdditionalData(keyType, QVariant::fromValue(itemType::group)); // port multi bit
+            pinGroupItem->setAdditionalData(keyId, pinGroup->get_id());
+            mIdToGroupItem.insert(pinGroup->get_id(), pinGroupItem);
+            for(ModulePin* pin : pinGroup->get_pins())
             {
-                pinGroupItem->setDataAtIndex(sNetColumn, QString::fromStdString(firstPin->get_net()->get_name()));
-                pinGroupItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));
-                //since a single-pin pingroup represents the pin itself, take the pinid
-                pinGroupItem->setAdditionalData(keyId, firstPin->get_id());
-                mIdToPinItem.insert(firstPin->get_id(), pinGroupItem);
+                TreeItem* pinItem = new TreeItem(QList<QVariant>() << QString::fromStdString(pin->get_name())
+                                                 << QString::fromStdString(enum_to_string(pin->get_direction()))
+                                                 << QString::fromStdString(enum_to_string(pin->get_type()))
+                                                 << QString::fromStdString(pin->get_net()->get_name()));
+                pinItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));
+                pinItem->setAdditionalData(keyId, pin->get_id());
+                pinGroupItem->appendChild(pinItem);
+                mNameToTreeItem.insert(QString::fromStdString(pin->get_name()), pinItem);
+                mIdToPinItem.insert(pin->get_id(), pinItem);
             }
-            else
-            {
-                pinGroupItem->setAdditionalData(keyType, QVariant::fromValue(itemType::portMultiBit));
-                pinGroupItem->setAdditionalData(keyId, pinGroup->get_id());
-                mIdToGroupItem.insert(pinGroup->get_id(), pinGroupItem);
-                for (ModulePin* pin : pinGroup->get_pins())
-                {
-                    TreeItem* pinItem =
-                        new TreeItem(QList<QVariant>() << QString::fromStdString(pin->get_name()) << pinGroupDirection << pinGroupType << QString::fromStdString(pin->get_net()->get_name()));
-                    pinItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));
-                    pinItem->setAdditionalData(keyId, pin->get_id());
-                    pinGroupItem->appendChild(pinItem);
-                    mNameToTreeItem.insert(QString::fromStdString(pin->get_name()), pinItem);
-                    mIdToPinItem.insert(pin->get_id(), pinItem);
-                }
-            }
-            mRootItem->appendChild(pinGroupItem);
             mNameToTreeItem.insert(pinGroupName, pinGroupItem);
+            mRootItem->appendChild(pinGroupItem);
         }
+
+//        for (PinGroup<ModulePin>* pinGroup : m->get_pin_groups())
+//        {
+//            //ignore empty pingroups
+//            if (pinGroup->empty())
+//                continue;
+
+
+//            ModulePin* firstPin = pinGroup->get_pins().front();
+//            QString pinGroupName;
+//            QString pinGroupDirection = QString::fromStdString(enum_to_string(firstPin->get_direction()));
+//            QString pinGroupType      = QString::fromStdString(enum_to_string(firstPin->get_type()));
+//            if (pinGroup->size() == 1)
+//            {
+//                pinGroupName = QString::fromStdString(firstPin->get_name());
+//            }
+//            else
+//            {
+//                pinGroupName = QString::fromStdString(pinGroup->get_name());
+//            }
+
+//            TreeItem* pinGroupItem = new TreeItem(QList<QVariant>() << pinGroupName << pinGroupDirection << pinGroupType << "");
+
+//            if (pinGroup->size() == 1)
+//            {
+//                pinGroupItem->setDataAtIndex(sNetColumn, QString::fromStdString(firstPin->get_net()->get_name()));
+//                pinGroupItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));
+//                //since a single-pin pingroup represents the pin itself, take the pinid
+//                pinGroupItem->setAdditionalData(keyId, firstPin->get_id());
+//                mIdToPinItem.insert(firstPin->get_id(), pinGroupItem);
+//            }
+//            else
+//            {
+//                pinGroupItem->setAdditionalData(keyType, QVariant::fromValue(itemType::portMultiBit));
+//                pinGroupItem->setAdditionalData(keyId, pinGroup->get_id());
+//                mIdToGroupItem.insert(pinGroup->get_id(), pinGroupItem);
+//                for (ModulePin* pin : pinGroup->get_pins())
+//                {
+//                    TreeItem* pinItem =
+//                        new TreeItem(QList<QVariant>() << QString::fromStdString(pin->get_name()) << pinGroupDirection << pinGroupType << QString::fromStdString(pin->get_net()->get_name()));
+//                    pinItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));
+//                    pinItem->setAdditionalData(keyId, pin->get_id());
+//                    pinGroupItem->appendChild(pinItem);
+//                    mNameToTreeItem.insert(QString::fromStdString(pin->get_name()), pinItem);
+//                    mIdToPinItem.insert(pin->get_id(), pinItem);
+//                }
+//            }
+//            mRootItem->appendChild(pinGroupItem);
+//            mNameToTreeItem.insert(pinGroupName, pinGroupItem);
+//        }
         endResetModel();
 
         Q_EMIT numberOfPortsChanged(m->get_pins().size());
