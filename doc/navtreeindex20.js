@@ -1,5 +1,6 @@
 var NAVTREEINDEX20 =
 {
+"classnlohmann_1_1detail_1_1json__ref.html#a8c3eb3c6e952ed0cd7eece586ab4047c":[6,0,1,0,75,2],
 "classnlohmann_1_1detail_1_1json__ref.html#a98956ba676b1ae16b62346f9c4fb752e":[6,0,1,0,75,11],
 "classnlohmann_1_1detail_1_1json__ref.html#a9a73363d9be6b300ddd30745786c50a6":[6,0,1,0,75,12],
 "classnlohmann_1_1detail_1_1json__ref.html#aa3100e41472dba02ab78ccc1607e44ab":[6,0,1,0,75,9],
@@ -248,6 +249,5 @@ var NAVTREEINDEX20 =
 "comment__manager_8cpp.html":[7,0,1,3,2,4,2],
 "comment__manager_8cpp_source.html":[7,0,1,3,2,4,2],
 "comment__manager_8h.html":[7,0,1,3,0,0,4,2],
-"comment__manager_8h_source.html":[7,0,1,3,0,0,4,2],
-"comment__speech__bubble_8cpp.html":[7,0,1,3,2,4,3]
+"comment__manager_8h_source.html":[7,0,1,3,0,0,4,2]
 };

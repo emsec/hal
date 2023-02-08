@@ -1,5 +1,6 @@
 var NAVTREEINDEX28 =
 {
+"netlist_2netlist__utils_8cpp.html#aaee8c9cb19883060c6efff0b260cf907":[7,0,2,0,18,5],
 "netlist_2netlist__utils_8cpp.html#ab4c23f16593143c305d3d5de79dcb196":[7,0,2,0,18,21],
 "netlist_2netlist__utils_8cpp.html#ab8c3054566941b75019e3f599ec16814":[7,0,2,0,18,19],
 "netlist_2netlist__utils_8cpp.html#ad44878a824ec4f37dcc5317ddec67db3":[7,0,2,0,18,16],
@@ -248,6 +249,5 @@ var NAVTREEINDEX28 =
 "pingroup__selector__dialog_8cpp.html":[7,0,1,3,2,25,2],
 "pingroup__selector__dialog_8cpp_source.html":[7,0,1,3,2,25,2],
 "pingroup__selector__dialog_8h.html":[7,0,1,3,0,0,27,2],
-"pingroup__selector__dialog_8h_source.html":[7,0,1,3,0,0,27,2],
-"plugin__boolean__influence_8cpp.html":[7,0,1,0,2,0]
+"pingroup__selector__dialog_8h_source.html":[7,0,1,3,0,0,27,2]
 };

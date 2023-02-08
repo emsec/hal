@@ -1,5 +1,6 @@
 var NAVTREEINDEX18 =
 {
+"classhal_1_1_u_i_plugin_interface.html#ae94df09f5acb09d4c5ee7a0f9a49fc78":[4,1,2,4,0],
 "classhal_1_1_unique_string_validator.html":[4,0,48],
 "classhal_1_1_unique_string_validator.html#a37629c18daad1071fe957e0dbe5b5601":[4,0,48,1],
 "classhal_1_1_unique_string_validator.html#af312d8ef62d53c1de74f66377de013b0":[4,0,48,0],
@@ -37,13 +38,13 @@ var NAVTREEINDEX18 =
 "classhal_1_1_user_action_compound.html":[4,0,5,28],
 "classhal_1_1_user_action_compound.html#a1074bfc9fb2bbeeea7b8c5547d28fce2":[4,0,5,28,8],
 "classhal_1_1_user_action_compound.html#a382766f52ee778cef7ca3a49295ccc65":[4,0,5,28,1],
-"classhal_1_1_user_action_compound.html#a4be39ee6f8d79ffd0b432bd19e0b6962":[4,0,5,28,6],
+"classhal_1_1_user_action_compound.html#a3b817e201a254a11ef7e03776fb5e239":[4,0,5,28,3],
 "classhal_1_1_user_action_compound.html#a67a490ea054b92e408046c2fd234ec7b":[4,0,5,28,0],
 "classhal_1_1_user_action_compound.html#a81742b58dabf6cb3c30ad744ebc95945":[4,0,5,28,5],
+"classhal_1_1_user_action_compound.html#a90044b3cb3801a55b1f5a07929ee0ccf":[4,0,5,28,6],
 "classhal_1_1_user_action_compound.html#aa3f53057ccf26e72517e5a708bfcfe15":[4,0,5,28,7],
 "classhal_1_1_user_action_compound.html#abd8267143380e23ad58a2e95a9683e32":[4,0,5,28,4],
 "classhal_1_1_user_action_compound.html#abdbb64e6236796c3784d1d66ba3bc2e6":[4,0,5,28,2],
-"classhal_1_1_user_action_compound.html#aca3e198035b9cbca63d9f33df013ffdf":[4,0,5,28,3],
 "classhal_1_1_user_action_compound_factory.html":[4,0,5,29],
 "classhal_1_1_user_action_compound_factory.html#a5083008180156775c2f27886849f0ca6":[4,0,5,29,1],
 "classhal_1_1_user_action_compound_factory.html#ad07f83a8369e2a7510b5e258d1057388":[4,0,5,29,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX18 =
 "classnlohmann_1_1basic__json.html#a3acba9c6ceb7214e565fe08c3ba5b352":[6,0,1,2,76],
 "classnlohmann_1_1basic__json.html#a4010e8e268fefd86da773c10318f2902":[6,0,1,2,32],
 "classnlohmann_1_1basic__json.html#a404cfe1bdbf1dc6b229627fcf2afb95f":[6,0,1,2,93],
-"classnlohmann_1_1basic__json.html#a4057c5425f4faacfe39a8046871786ca":[6,0,1,2,5],
-"classnlohmann_1_1basic__json.html#a412895af9a582869a4d369a64fb1b6d6":[6,0,1,2,172]
+"classnlohmann_1_1basic__json.html#a4057c5425f4faacfe39a8046871786ca":[6,0,1,2,5]
 };

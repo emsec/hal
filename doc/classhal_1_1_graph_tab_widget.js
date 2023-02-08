@@ -30,5 +30,6 @@ var classhal_1_1_graph_tab_widget =
     [ "Q_ENUM", "classhal_1_1_graph_tab_widget.html#aa23e76064fd2fd357952898d557bea58", null ],
     [ "setSelectCursor", "classhal_1_1_graph_tab_widget.html#a7bcecd90f97068b9db647d4adc51ea92", null ],
     [ "showContext", "classhal_1_1_graph_tab_widget.html#aa18b4eee005357a3cf24788fb67c094e", null ],
-    [ "triggerTerminatePicker", "classhal_1_1_graph_tab_widget.html#ad1cf168615f1f0daba9e1372c18d358a", null ]
+    [ "triggerTerminatePicker", "classhal_1_1_graph_tab_widget.html#ad1cf168615f1f0daba9e1372c18d358a", null ],
+    [ "visibleStatus", "classhal_1_1_graph_tab_widget.html#a634930b6af92ef9cefe60c7c3cae55f0", null ]
 ];

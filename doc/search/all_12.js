@@ -784,7 +784,7 @@ var searchData=
   ['qresizeevent_11698',['QResizeEvent',['https://doc.qt.io/qt-5/qresizeevent.html',1,'QResizeEvent'],['https://doc.qt.io/qt-5/qresizeevent.html#QResizeEvent',1,'QResizeEvent::QResizeEvent()']]],
   ['qresource_11699',['QResource',['https://doc.qt.io/qt-5/qresource.html',1,'QResource'],['https://doc.qt.io/qt-5/qresource.html#QResource',1,'QResource::QResource()']]],
   ['qreturnargument_11700',['QReturnArgument',['https://doc.qt.io/qt-5/qreturnargument.html',1,'']]],
-  ['qrgb_11701',['QRgb',['https://doc.qt.io/qt-5/qcolor.html#QRgb-typedef',1,'QColor::QRgb()'],['https://doc.qt.io/qt-5/qcolor.html#qRgb',1,'QColor::qRgb(int r, int g, int b)']]],
+  ['qrgb_11701',['qRgb',['https://doc.qt.io/qt-5/qcolor.html#qRgb',1,'QColor::qRgb(int r, int g, int b)'],['https://doc.qt.io/qt-5/qcolor.html#QRgb-typedef',1,'QColor::QRgb()']]],
   ['qrgba_11702',['qRgba',['https://doc.qt.io/qt-5/qcolor.html#qRgba',1,'QColor']]],
   ['qrgba64_11703',['QRgba64',['https://doc.qt.io/qt-5/qrgba64.html',1,'QRgba64'],['https://doc.qt.io/qt-5/qcolor.html#qRgba64',1,'QColor::qRgba64(quint16 r, quint16 g, quint16 b, quint16 a)'],['https://doc.qt.io/qt-5/qcolor.html#qRgba64-1',1,'QColor::qRgba64(quint64 c)']]],
   ['qromancalendar_11704',['QRomanCalendar',['https://doc.qt.io/qt-5/qromancalendar.html',1,'']]],

@@ -1,5 +1,6 @@
 var NAVTREEINDEX23 =
 {
+"functions_b.html":[6,3,0,2],
 "functions_c.html":[6,3,0,3],
 "functions_d.html":[6,3,0,4],
 "functions_e.html":[6,3,0,5],
@@ -221,8 +222,8 @@ var NAVTREEINDEX23 =
 "get__in__touch__widget_8cpp_source.html":[7,0,1,3,2,48,1],
 "get__in__touch__widget_8h.html":[7,0,1,3,0,0,51,1],
 "get__in__touch__widget_8h_source.html":[7,0,1,3,0,0,51,1],
-"globals.html":[7,1,0,0],
 "globals.html":[7,1,0],
+"globals.html":[7,1,0,0],
 "globals_a.html":[7,1,0,1],
 "globals_b.html":[7,1,0,2],
 "globals_c.html":[7,1,0,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX23 =
 "globals_s.html":[7,1,0,19],
 "globals_t.html":[7,1,0,20],
 "globals_type.html":[7,1,3],
-"globals_u.html":[7,1,0,21],
-"globals_v.html":[7,1,0,22]
+"globals_u.html":[7,1,0,21]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX12 =
 {
+"classhal_1_1_net_layout_junction_multi_pin.html#ae3b4e6f4c516e32224959ffe4d25f19f":[6,0,0,263,2],
 "classhal_1_1_net_layout_junction_net.html":[4,0,0,2,5],
 "classhal_1_1_net_layout_junction_net.html#a0805639a5239ecd69aa1c0428acd7cc8":[4,0,0,2,5,7],
 "classhal_1_1_net_layout_junction_net.html#a15645b2c68fb4bf79b2d0f97070a7789":[4,0,0,2,5,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX12 =
 "classhal_1_1_netlist_relay.html#a4f52aff49af92036cb6fe93d072e0320":[4,0,32,2],
 "classhal_1_1_netlist_relay.html#a528ce60be4476595ea9c1ae14ced3f4e":[4,0,32,21],
 "classhal_1_1_netlist_relay.html#a56487c116520cba55b33dcadd8d9911a":[4,0,32,49],
-"classhal_1_1_netlist_relay.html#a597a1b91ef031e791652099ca5a347ff":[4,0,32,65],
-"classhal_1_1_netlist_relay.html#a5b1738463cab64e14d9392a43b77a357":[4,0,32,63]
+"classhal_1_1_netlist_relay.html#a597a1b91ef031e791652099ca5a347ff":[4,0,32,65]
 };

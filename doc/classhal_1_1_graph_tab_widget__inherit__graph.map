@@ -1,5 +1,5 @@
 <map id="hal::GraphTabWidget" name="hal::GraphTabWidget">
-<area shape="rect" id="node1" title="A ContentWidget that holds all GraphWidget objects (GraphView) as tabs of a QTabWidget." alt="" coords="43,667,247,920"/>
+<area shape="rect" id="node1" title="A ContentWidget that holds all GraphWidget objects (GraphView) as tabs of a QTabWidget." alt="" coords="43,667,247,905"/>
 <area shape="rect" id="node2" href="$classhal_1_1_content_widget.html" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="5,175,284,619"/>
 <area shape="rect" id="node3" href="$classhal_1_1_widget.html" title="A QWidget customized for hal." alt="" coords="91,5,199,127"/>
 </map>

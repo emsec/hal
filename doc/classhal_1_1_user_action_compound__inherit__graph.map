@@ -1,4 +1,5 @@
 <map id="hal::UserActionCompound" name="hal::UserActionCompound">
 <area shape="rect" id="node1" title=" " alt="" coords="19,351,210,531"/>
+<area shape="rect" id="node3" href="$classhal_1_1_action_fold_module.html" title="Folds a module." alt="" coords="31,579,198,715"/>
 <area shape="rect" id="node2" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="5,5,224,303"/>
 </map>

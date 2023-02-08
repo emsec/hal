@@ -1,5 +1,6 @@
 var NAVTREEINDEX24 =
 {
+"globals_v.html":[7,1,0,22],
 "globals_vars.html":[7,1,2],
 "globals_w.html":[7,1,0,23],
 "graph__context_8cpp.html":[7,0,1,3,2,19,0,0],
@@ -216,8 +217,8 @@ var NAVTREEINDEX24 =
 "group__utilities.html#ga9f09e61a5832ae08b39fde17dc9e04ce":[4,1,3,9],
 "group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735":[4,1,3,14],
 "group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735":[7,0,0,0,4,4,10],
-"group__utilities.html#gaf7de45767abb16dd9841f83ef5dd0608":[7,0,0,0,4,4,9],
 "group__utilities.html#gaf7de45767abb16dd9841f83ef5dd0608":[4,1,3,13],
+"group__utilities.html#gaf7de45767abb16dd9841f83ef5dd0608":[7,0,0,0,4,4,9],
 "group__utility__widgets-context.html":[4,0,7,0],
 "group__utility__widgets-grouping.html":[4,0,7,2],
 "group__utility__widgets-module.html":[4,0,7,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX24 =
 "grouping__serializer_8h.html":[7,0,0,0,1,6,0],
 "grouping__serializer_8h_source.html":[7,0,0,0,1,6,0],
 "grouping__table__model_8cpp.html":[7,0,1,3,2,21,4],
-"grouping__table__model_8cpp.html#ad6d3755ac1791435e2f25fb4647fe895":[7,0,1,3,2,21,4,0],
-"grouping__table__model_8cpp_source.html":[7,0,1,3,2,21,4]
+"grouping__table__model_8cpp.html#ad6d3755ac1791435e2f25fb4647fe895":[7,0,1,3,2,21,4,0]
 };

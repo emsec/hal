@@ -1,13 +1,13 @@
 <map id="/home/runner/work/hal/hal/plugins/gui/src/user_action/action_unfold_module.cpp" name="/home/runner/work/hal/hal/plugins/gui/src/user_action/action_unfold_module.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="1205,5,1398,76"/>
-<area shape="rect" id="node2" href="$action__unfold__module_8h.html" title=" " alt="" coords="69,131,235,173"/>
-<area shape="rect" id="node4" href="$gui__globals_8h.html" title=" " alt="" coords="1143,139,1275,165"/>
+<area shape="rect" id="node1" title=" " alt="" coords="1795,5,1989,76"/>
+<area shape="rect" id="node2" href="$action__unfold__module_8h.html" title=" " alt="" coords="316,131,481,173"/>
+<area shape="rect" id="node4" href="$gui__globals_8h.html" title=" " alt="" coords="1250,139,1382,165"/>
 <area shape="rect" id="node8" href="$content__manager_8h.html" title=" " alt="" coords="139,228,299,269"/>
-<area shape="rect" id="node16" href="$context__manager__widget_8h.html" title=" " alt="" coords="1299,124,1490,180"/>
+<area shape="rect" id="node16" href="$context__manager__widget_8h.html" title=" " alt="" coords="1730,124,1921,180"/>
 <area shape="rect" id="node17" href="$graph__context_8h.html" title=" " alt="" coords="2199,228,2393,269"/>
-<area shape="rect" id="node18" href="$graph__tab__widget_8h.html" title=" " alt="" coords="1565,131,1728,173"/>
-<area shape="rect" id="node19" href="$action__fold__module_8h.html" title=" " alt="" coords="627,131,792,173"/>
-<area shape="rect" id="node20" title=" " alt="" coords="1752,139,1827,165"/>
+<area shape="rect" id="node18" href="$graph__tab__widget_8h.html" title=" " alt="" coords="1996,131,2159,173"/>
+<area shape="rect" id="node19" href="$action__fold__module_8h.html" title=" " alt="" coords="2183,131,2348,173"/>
+<area shape="rect" id="node20" title=" " alt="" coords="2372,139,2447,165"/>
 <area shape="rect" id="node3" href="$user__action_8h.html" title=" " alt="" coords="5,235,115,262"/>
 <area shape="rect" id="node5" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="323,235,501,262"/>
 <area shape="rect" id="node6" href="$file__status__manager_8h.html" title=" " alt="" coords="525,228,704,269"/>

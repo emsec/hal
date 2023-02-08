@@ -1,5 +1,6 @@
 var NAVTREEINDEX8 =
 {
+"classhal_1_1_grouping_manager_widget.html#ad5946591c2622561936395bf59ec55a0":[4,0,7,2,2,52],
 "classhal_1_1_grouping_manager_widget.html#adecd36035cf3a093196b47871c462775":[4,0,7,2,2,17],
 "classhal_1_1_grouping_manager_widget.html#ae42fe7b136c08c79566b0ce59b1a3b79":[4,0,7,2,2,42],
 "classhal_1_1_grouping_manager_widget.html#ae5000938ff5eae0033f20f091ded0870":[4,0,7,2,2,15],
@@ -248,6 +249,5 @@ var NAVTREEINDEX8 =
 "classhal_1_1_json_write_object.html#a17b1918bf8760e9327e7419c0bc19fe2":[6,0,0,197,0],
 "classhal_1_1_json_write_object.html#a1a1b4d59eeb1288cbf21db1bd166c009":[6,0,0,197,4],
 "classhal_1_1_json_write_object.html#abe080fc9d0efa9c44af302e5e2501af6":[6,0,0,197,8],
-"classhal_1_1_json_write_object.html#ac08f7fad27e184acacb469db32151aa5":[6,0,0,197,3],
-"classhal_1_1_json_write_object.html#ad3db9f37da3dc71a541393e0bf32041e":[6,0,0,197,5]
+"classhal_1_1_json_write_object.html#ac08f7fad27e184acacb469db32151aa5":[6,0,0,197,3]
 };

@@ -23,6 +23,7 @@ var classhal_1_1_graph_layouter =
     [ "nodeToPositionMap", "classhal_1_1_graph_layouter.html#a62ea0b873099148db83fcb7320726adb", null ],
     [ "optimizeNetLayoutEnabled", "classhal_1_1_graph_layouter.html#a453370282ae5ee29656154448fca379d", null ],
     [ "positionToNodeMap", "classhal_1_1_graph_layouter.html#a5691840af28d6c8fd39fa1dccbff5ca2", null ],
+    [ "positonForNode", "classhal_1_1_graph_layouter.html#a56963777addc1aafb7c1d0bab5147fff", null ],
     [ "prepareRollback", "classhal_1_1_graph_layouter.html#a2ba8316a28d88cadbd756d0ebb075ee7", null ],
     [ "remove", "classhal_1_1_graph_layouter.html#a17d5e49b37db0df8c9370966c78cdad3", null ],
     [ "removeNodeFromMaps", "classhal_1_1_graph_layouter.html#a1e3225268ccee84e92e2109f34b33c0d", null ],

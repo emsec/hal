@@ -750,7 +750,6 @@ var hierarchy =
       [ "hal::ActionAddItemsToObject", "classhal_1_1_action_add_items_to_object.html", null ],
       [ "hal::ActionCreateObject", "classhal_1_1_action_create_object.html", null ],
       [ "hal::ActionDeleteObject", "classhal_1_1_action_delete_object.html", null ],
-      [ "hal::ActionFoldModule", "classhal_1_1_action_fold_module.html", null ],
       [ "hal::ActionMoveNode", "classhal_1_1_action_move_node.html", null ],
       [ "hal::ActionOpenNetlistFile", "classhal_1_1_action_open_netlist_file.html", null ],
       [ "hal::ActionRemoveItemsFromObject", "classhal_1_1_action_remove_items_from_object.html", null ],
@@ -761,7 +760,9 @@ var hierarchy =
       [ "hal::ActionSetObjectType", "classhal_1_1_action_set_object_type.html", null ],
       [ "hal::ActionSetSelectionFocus", "classhal_1_1_action_set_selection_focus.html", null ],
       [ "hal::ActionUnfoldModule", "classhal_1_1_action_unfold_module.html", null ],
-      [ "hal::UserActionCompound", "classhal_1_1_user_action_compound.html", null ]
+      [ "hal::UserActionCompound", "classhal_1_1_user_action_compound.html", [
+        [ "hal::ActionFoldModule", "classhal_1_1_action_fold_module.html", null ]
+      ] ]
     ] ],
     [ "hal::UserActionFactory", "classhal_1_1_user_action_factory.html", [
       [ "hal::ActionAddBooleanFunctionFactory", "classhal_1_1_action_add_boolean_function_factory.html", null ],
