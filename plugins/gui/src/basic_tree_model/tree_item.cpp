@@ -13,6 +13,11 @@ namespace hal
 
     }
 
+    TreeItem::TreeItem(const TreeItem &item)
+    {
+        mData = item.mData;
+    }
+
     TreeItem::~TreeItem()
     {
         for(TreeItem* item : mChildren)
