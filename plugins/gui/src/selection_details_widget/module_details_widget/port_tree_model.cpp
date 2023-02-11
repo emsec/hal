@@ -86,6 +86,19 @@ namespace hal
         data->setData("pintreemodel/item", encodedData);
         return data;
     }
+    bool ModulePinsTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent)
+    {
+        Q_UNUSED(action)
+        Q_UNUSED(column)
+
+        QString type;
+        int id;
+        QByteArray encItem = data->data("pintreemodel/item");
+        QDataStream dataStream(&encItem, QIODevice::ReadOnly);
+        dataStream >> type >> id;
+        auto droppedItem = (type == "group") ? mIdToGroupItem.value(id) : mIdToPinItem.value(id);
+        auto droppedParentItem = droppedItem->getParent();
+    }
 
 //    bool ModulePinsTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent)
 //    {
