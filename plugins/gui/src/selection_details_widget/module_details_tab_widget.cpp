@@ -17,35 +17,32 @@ namespace hal
         //general tab
         mModuleInfoTable = new ModuleInfoTable(this);
         mModuleInformationFrame = new DetailsFrameWidget(mModuleInfoTable, "Module Information", this);
+        addTab("General", mModuleInformationFrame);
 
+        //groupings tab
         mGroupingsOfItemTable = new GroupingsOfItemWidget;
         mGroupingsFrame = new DetailsFrameWidget(mGroupingsOfItemTable, "Groupings", this);
         connect(mGroupingsOfItemTable,  &GroupingsOfItemWidget::updateText, mGroupingsFrame, &DetailsFrameWidget::setText);
-
-        QList<DetailsFrameWidget*> framesGeneralTab({mModuleInformationFrame, mGroupingsFrame});
-        addTab("General", framesGeneralTab);
+        addTab("Groupings", mGroupingsFrame);
 
         //ports tab
         mPinsTree = new ModulePinsTree(this);
         mPinsFrame = new DetailsFrameWidget(mPinsTree, "Pins", this);
         connect(mPinsTree, &ModulePinsTree::updateText, mPinsFrame, &DetailsFrameWidget::setText);
 
-        QList<DetailsFrameWidget*> framesPortTab({mPinsFrame});
-        addTab("Pins", framesPortTab);
+        addTab("Pins", mPinsFrame);
 
         //elements tab
         mElementsTree = new ModuleElementsTree(this);
         mElementsFrame = new DetailsFrameWidget(mElementsTree, "Elements", this);
 
-        QList<DetailsFrameWidget*> framesElementsTab({mElementsFrame});
-        addTab("Elements", framesElementsTab);
+        addTab("Elements", mElementsFrame);
 
         //data tab
         mDataTable = new DataTableWidget(this);
         mDataFrame = new DetailsFrameWidget(mDataTable, "Data", this);
 
-        QList<DetailsFrameWidget*> framesDataTab({mDataFrame});
-        addTab("Data", framesDataTab);
+        addTab("Data", mDataFrame);
 
         //comment tab
         mCommentWidget = new CommentWidget(this);

@@ -127,21 +127,12 @@ namespace hal
         bool isModuleUnfolded(const u32 moduleId) const;
 
         /**
-         * Folds a given module with a given placement hint.
-         *
-         * @param moduleId - The module to fold.
-         * @param plc - The placement hint.
-         * @return True on success, False otherwise.
-         */
-        bool foldModuleAction(u32 moduleId, const PlacementHint& plc);
-
-        /**
          * Unfold a specific module. The specified module is removed from the context and replaced by its Gate%s and
          * submodules.
          *
          * @param id - The id of the module to unfold
          */
-        void unfoldModule(const u32 id);
+        void unfoldModule(const u32 id, const PlacementHint& plc);
 
         /**
          * Check if the context is empty i.e. does not contain Module%s or Gate%s.
@@ -183,7 +174,7 @@ namespace hal
          *                      If true, return true if context contents match module contents
          * @returns <b>true</b> if the context Show%s the content of the module.
          */
-        bool isShowingModule(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates, bool exclusively = true) const;
+        bool isShowingModule(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates) const;
 
         /**
          * Checks wether the context shows an module exclusively or not.
@@ -455,7 +446,6 @@ namespace hal
         void startSceneUpdate();
         bool testIfAffectedInternal(const u32 id, const u32* moduleId, const u32* gateId);
         void removeModuleContents(const u32 moduleId);
-
 
         u32 mId;
         QString mName;

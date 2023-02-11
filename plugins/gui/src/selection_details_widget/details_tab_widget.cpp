@@ -32,7 +32,15 @@ namespace hal
         for(DetailsFrameWidget* frame : frames)
             containerlLayout->addWidget(frame);
 
+        scrollArea->setVerticalScrollBarPolicy(frames.size()>1 ? Qt::ScrollBarAsNeeded : Qt::ScrollBarAlwaysOff);
         return QTabWidget::addTab(scrollArea, label);
+    }
+
+    int DetailsTabWidget::addTab(const QString& label, DetailsFrameWidget* frame)
+    {
+        QList<DetailsFrameWidget*> frames;
+        frames.append(frame);
+        return addTab(label,frames);
     }
 
     void DetailsTabWidget::setIcon(SelectionDetailsIconProvider::IconCategory catg, u32 itemId)

@@ -68,6 +68,14 @@ namespace hal
         return mNodeToPositionMap;
     }
 
+    NetLayoutPoint GraphLayouter::positonForNode(const Node& nd) const
+    {
+        if (nd.isNull()) return NetLayoutPoint();
+        auto it = mNodeToPositionMap.find(nd);
+        if (it == mNodeToPositionMap.constEnd()) return NetLayoutPoint();
+        return NetLayoutPoint(it.value());
+    }
+
     void GraphLayouter::dumpNodePositions(const QPoint& search) const
     {
         QTextStream xout(stderr, QIODevice::WriteOnly);

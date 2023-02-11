@@ -28,7 +28,7 @@
 
 namespace hal
 {
-    ModulePinsTree::ModulePinsTree(QWidget* parent) : SizeAdjustableTreeView(parent), mPortModel(new ModulePinsTreeModel(this)), mModuleID(-1)
+    ModulePinsTree::ModulePinsTree(QWidget* parent) : QTreeView(parent), mPortModel(new ModulePinsTreeModel(this)), mModuleID(-1)
     {
         setContextMenuPolicy(Qt::CustomContextMenu);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -59,7 +59,6 @@ namespace hal
 
         mPortModel->setModule(m);
         mModuleID = moduleID;
-        adjustSizeToContents();
     }
 
     void ModulePinsTree::setModule(Module* m)
@@ -259,7 +258,6 @@ namespace hal
 
     void ModulePinsTree::handleNumberOfPortsChanged(int newNumberPorts)
     {
-        adjustSizeToContents();
         Q_EMIT updateText(QString("Pins (%1)").arg(newNumberPorts));
     }
 

@@ -95,6 +95,13 @@ namespace hal
          */
         bool isSelectMode() const { return mSelectCursor == Select; }
 
+        /**
+         * returns visible status flag for context
+         * @param ctx The context for which status flag gets requested
+         * @return 0=not shown in any tab   1=background tab   2=visible tab
+         */
+        int visibleStatus(const GraphContext* ctx) const;
+
         enum KeyboardModifier{Alt, Ctrl, Shift};
         Q_ENUM(KeyboardModifier)
 

@@ -294,6 +294,8 @@ namespace hal
 
         const QMap<Node, QPoint> nodeToPositionMap() const;
         const QMap<QPoint, Node> positionToNodeMap() const;
+        NetLayoutPoint positonForNode(const Node& nd) const;
+
         QPoint gridPointByItem(GraphicsNode* item) const;
 
         void dumpNodePositions(const QPoint& search) const;

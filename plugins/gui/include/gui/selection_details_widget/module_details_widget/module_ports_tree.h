@@ -25,9 +25,9 @@
 
 #pragma once
 
-#include "gui/size_adjustable_tree_view/size_adjustable_tree_view.h"
 #include "hal_core/defines.h"
 #include <tuple>
+#include <QTreeView>
 
 namespace hal
 {
@@ -38,7 +38,7 @@ namespace hal
     /**
      * @brief A widget to display the ports of a given module.
      */
-    class ModulePinsTree : public SizeAdjustableTreeView
+    class ModulePinsTree : public QTreeView
     {
         Q_OBJECT
     public:
