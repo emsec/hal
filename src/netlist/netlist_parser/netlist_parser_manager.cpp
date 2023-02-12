@@ -5,6 +5,7 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_parser/netlist_parser.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/plugin_system/plugin_manager.h"
 
 #include <fstream>
 
@@ -163,6 +164,7 @@ namespace hal
 
                 log_info("hdl_parser", "registered hdl parser '{}' for file type '{}'", name, ext);
             }
+            plugin_manager::register_plugin_feature(plugin_manager::NetlistParser, supported_file_extensions, name);
         }
 
         void unregister_parser(const std::string& name)
@@ -233,5 +235,11 @@ namespace hal
 
             return dispatch_parse(file_name, factory(), nullptr, false);
         }
+
+        std::unordered_map<std::string, std::vector<std::string>> get_parser_to_extensions()
+        {
+            return m_parser_to_extensions;
+        }
+
     }    // namespace netlist_parser_manager
 }    // namespace hal

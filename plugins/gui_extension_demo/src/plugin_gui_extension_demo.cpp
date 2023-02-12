@@ -54,9 +54,9 @@ namespace hal
         delete sGuiExtension;
     }
 
-    GuiExtensionInterface* GuiExtensionDemoPlugin::get_gui_extension() const
+    std::vector<AbstractExtensionInterface*> GuiExtensionDemoPlugin::get_extensions() const
     {
-        return sGuiExtension;
+        return std::vector<AbstractExtensionInterface*>({sGuiExtension});
     }
 
 //----------------------

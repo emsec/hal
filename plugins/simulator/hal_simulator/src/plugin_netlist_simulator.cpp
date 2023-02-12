@@ -12,12 +12,17 @@ namespace hal
 
     std::string NetlistSimulatorPlugin::get_name() const
     {
-        return std::string("netlist_simulator");
+        return std::string("hal_simulator");
     }
 
     std::string NetlistSimulatorPlugin::get_version() const
     {
         return std::string("0.1");
+    }
+
+    std::string NetlistSimulatorPlugin::get_description() const
+    {
+        return std::string("Deprecated HAL build-in simulation engine (for tests only)");
     }
 
     std::set<std::string> NetlistSimulatorPlugin::get_dependencies() const

@@ -3,6 +3,7 @@
 #include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/gate_library/gate_library_writer/gate_library_writer.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/plugin_system/plugin_manager.h"
 
 #include <chrono>
 #include <fstream>
@@ -55,6 +56,7 @@ namespace hal
 
                 log_info("gate_library_writer", "registered gate library writer '{}' for file extension '{}'.", name, ext);
             }
+            plugin_manager::register_plugin_feature(plugin_manager::GatelibWriter, supported_file_extensions, name);
         }
 
         void unregister_writer(const std::string& name)

@@ -127,9 +127,10 @@ namespace hal
          *
          * @param[in] plugin_name - The name of the plugin.
          * @param[in] initialize - If false, the plugin's initialize function is not called.
+         * @param[in] silent - If true error message gets omitted if plugin not found
          * @returns The basic plugin interface.
          */
-        BasePluginInterface* get_plugin_instance(const std::string& plugin_name, bool initialize = true);
+        BasePluginInterface* get_plugin_instance(const std::string& plugin_name, bool initialize = true, bool silent = false);
 
         /**
          * TODO Python bindings for different types and extend by initialize flag.
@@ -168,5 +169,42 @@ namespace hal
          * @param[in] id - The id of the registered callback.
          */
         void remove_model_changed_callback(u64 id);
+
+        /**
+         * Enum to classify plugin features
+         */
+        enum Feature { None, GuiExtension, CliExtension, NetlistParser, NetlistWriter, GatelibParser, GatelibWriter };
+
+        /**
+         * The PluginFeature struct. Attribute args may hold file extensions if a parser/writer gets registered.
+         */
+        struct PluginFeature
+        {
+            Feature feature;
+            std::vector<std::string> args;
+            std::string description;
+        };
+
+        /**
+         * Returns whether file has an extension which is legal for plugins in OS
+         * @param file_name
+         * @return False if extension indicated that this file cannot be a plugin, true otherwise
+         */
+        bool has_valid_file_extension(std::filesystem::path file_name);
+
+        /**
+         * Returns list of features for plugin identified by file name stem
+         * @param name file name stem
+         * @return list of features like parser or writer
+         */
+        std::vector<PluginFeature> get_plugin_features(std::string name);
+
+        /**
+         * Registers plugin feature upon on_load()
+         * @param ft Feature like NetlistWriter or GatelibParser
+         * @param args Typically file extensions the plugin can handle
+         * @param desc Description
+         */
+        void register_plugin_feature(Feature ft, const std::vector<std::string>& args, const std::string& desc);
     }    // namespace plugin_manager
 }    // namespace hal

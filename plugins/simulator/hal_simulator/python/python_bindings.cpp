@@ -18,7 +18,7 @@ namespace hal
 #else
     PYBIND11_PLUGIN(netlist_simulator)
     {
-        py::module m("netlist_simulator", "hal NetlistSimulatorPlugin python bindings");
+        py::module m("hal_simulator", "hal NetlistSimulatorPlugin python bindings");
 #endif    // ifdef PYBIND11_MODULE
 
         py::class_<NetlistSimulatorPlugin, RawPtrWrapper<NetlistSimulatorPlugin>, BasePluginInterface>(m, "NetlistSimulatorPlugin")

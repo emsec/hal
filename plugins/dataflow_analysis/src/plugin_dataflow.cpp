@@ -44,6 +44,11 @@ namespace hal
         return std::string("dataflow");
     }
 
+    std::string plugin_dataflow::get_description() const
+    {
+        return "Dataflow analysis for gate-level netlist reverse engineering";
+    }
+
     std::string plugin_dataflow::get_version() const
     {
         return std::string("0.1");
@@ -363,9 +368,9 @@ namespace hal
         }
     }
 
-    GuiExtensionInterface* plugin_dataflow::get_gui_extension() const
+    std::vector<AbstractExtensionInterface*> plugin_dataflow::get_extensions() const
     {
-        return m_gui_extension;
+        return std::vector<AbstractExtensionInterface*>({m_gui_extension});
     }
 
     void GuiExtensionDataflow::register_progress_indicator(std::function<void(int, const std::string&)> pif)

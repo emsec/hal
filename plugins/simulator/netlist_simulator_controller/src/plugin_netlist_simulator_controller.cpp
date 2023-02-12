@@ -114,6 +114,11 @@ namespace hal
         return std::string("0.7");
     }
 
+    std::string NetlistSimulatorControllerPlugin::get_description() const
+    {
+        return std::string("Non-GUI base plugin to control simulation");
+    }
+
     std::unique_ptr<NetlistSimulatorController> NetlistSimulatorControllerPlugin::create_simulator_controller(const std::string &nam, const std::string &workdir) const
     {
         NetlistSimulatorController* nsc = new NetlistSimulatorController(++sMaxControllerId, nam, workdir);

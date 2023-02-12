@@ -2,6 +2,7 @@
 
 #include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser.h"
+#include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
 
@@ -55,6 +56,7 @@ namespace hal
 
                 log_info("gate_library_parser", "registered gate library parser '{}' for file extension '{}'.", name, ext);
             }
+            plugin_manager::register_plugin_feature(plugin_manager::GatelibParser, supported_file_extensions, name);
         }
 
         void unregister_parser(const std::string& name)

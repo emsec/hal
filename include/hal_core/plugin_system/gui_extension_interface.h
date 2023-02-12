@@ -29,6 +29,7 @@
 #include "hal_core/defines.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/plugin_system/plugin_parameter.h"
+#include "hal_core/plugin_system/abstract_extension_interface.h"
 
 namespace hal {
     class GuiExtensionInterface;
@@ -40,7 +41,7 @@ namespace hal {
         std::string mEntry;
     };
 
-    class GuiExtensionInterface
+    class GuiExtensionInterface : public AbstractExtensionInterface
     {
     public:
         GuiExtensionInterface() {;}

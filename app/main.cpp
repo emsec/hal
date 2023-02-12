@@ -102,10 +102,14 @@ int main(int argc, const char* argv[])
         lm->deactivate_all_channels();
     }
 
+    /*
     if (!plugin_manager::load_all_plugins())
     {
         return cleanup(ERROR);
     }
+*/
+    plugin_manager::load("hal_gui", "/home/langhein/src/hal/build/lib/hal_plugins/hal_gui.so");
+
 
     /* add plugin cli options */
     auto options = plugin_manager::get_cli_plugin_options();

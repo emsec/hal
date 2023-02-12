@@ -1,7 +1,6 @@
 #include "hal_core/plugin_system/gui_extension_interface.h"
 
 namespace hal {
-
     std::vector<PluginParameter> GuiExtensionInterface::get_parameter() const { return std::vector<PluginParameter>(); }
 
     void GuiExtensionInterface::register_progress_indicator(std::function<void(int,const std::string&)>) {;}

@@ -23,11 +23,15 @@ namespace hal
         return std::string("0.7");
     }
 
+    std::string WaveformViewerPlugin::get_description() const
+    {
+        return std::string("GUI to control simulation and view resulting waveforms");
+    }
+
     std::set<std::string> WaveformViewerPlugin::get_dependencies() const
     {
         std::set<std::string> retval;
         retval.insert("netlist_simulator_controller");
-        retval.insert("netlist_simulator");
         retval.insert("hal_gui");
         return retval;
     }
@@ -36,11 +40,25 @@ namespace hal
     {
         qRegisterMetaType<std::string>();
         qRegisterMetaType<hal::NetlistSimulatorController::SimulationState>();
-        ExternalContent::instance()->append(new VcdViewerFactory);
+        WaveformViewerFactory* wvFactory = new WaveformViewerFactory(QString::fromStdString(get_name()));
+        ExternalContent::instance()->append(wvFactory);
+        if (gNetlist) gContentManager->addExternalWidget(wvFactory);
     }
 
     void WaveformViewerPlugin::on_unload()
     {
-        // TODO: ExternalContent unregister
+        QString pluginName = QString::fromStdString(get_name());
+        auto it = ExternalContent::instance()->begin();
+        while (it != ExternalContent::instance()->end())
+            if ((*it)->name() == pluginName)
+                it = ExternalContent::instance()->erase(it);
+            else
+                ++it;
+        auto jt = ExternalContent::instance()->openWidgets.find(pluginName);
+        if (jt != ExternalContent::instance()->openWidgets.end())
+        {
+            jt.value()->deleteLater();
+            ExternalContent::instance()->openWidgets.erase(jt);
+        }
     }
 }    // namespace hal

@@ -8,6 +8,7 @@
 #include "gui/main_window/main_window.h"
 #include "gui/netlist_relay/netlist_relay.h"
 #include "gui/plugin_relay/plugin_relay.h"
+#include "gui/plugin_relay/gui_plugin_manager.h"
 #include "gui/python/python_context.h"
 #include "gui/selection_relay/selection_relay.h"
 #include "gui/user_action/user_action_manager.h"

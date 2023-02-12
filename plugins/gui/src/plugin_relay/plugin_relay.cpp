@@ -1,10 +1,11 @@
 #include "gui/plugin_relay/plugin_relay.h"
 
 #include "hal_core/plugin_system/plugin_manager.h"
+#include <QDebug>
 
 namespace hal
 {
-    PluginRelay::PluginRelay(QObject* parent) : QObject(parent)
+    PluginRelay::PluginRelay(QObject* parent) : QObject(parent), mGuiPluginTable(nullptr)
     {
         mCallbackId = plugin_manager::add_model_changed_callback(std::bind(&PluginRelay::pluginManagerCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
     }
@@ -18,6 +19,8 @@ namespace hal
     {
         QString name = QString::fromStdString(plugin_name);
         QString path = QString::fromStdString(plugin_path);
+
+        qDebug() << name << path << is_load;
 
         if (is_load)
             Q_EMIT pluginLoaded(name, path);

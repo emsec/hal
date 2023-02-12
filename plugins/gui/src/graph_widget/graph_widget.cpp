@@ -19,6 +19,7 @@
 #include "gui/gui_utils/netlist.h"
 #include "gui/module_widget/module_widget.h"
 #include "gui/overlay/widget_overlay.h"
+#include "gui/plugin_relay/gui_plugin_manager.h"
 #include "gui/settings/settings_items/settings_item_spinbox.h"
 #include "gui/spinner_widget/spinner_widget.h"
 #include "gui/toolbar/toolbar.h"
@@ -85,15 +86,8 @@ namespace hal
             mView->centerOn(0, 0);
         }
         sInstance = this;
-        for (const std::string& pluginName : plugin_manager::get_plugin_names())
-        {
-            BasePluginInterface* bpif = plugin_manager::get_plugin_instance(pluginName);
-            if (!bpif) continue;
-            GuiExtensionInterface* geif = bpif->get_gui_extension();
-            if (!geif) continue;
+        for (GuiExtensionInterface* geif : GuiPluginManager::getGuiExtensions().values())
             geif->register_progress_indicator(&GraphWidget::pluginProgressIndicator);
-        }
-
     }
 
     GraphWidget::~GraphWidget()

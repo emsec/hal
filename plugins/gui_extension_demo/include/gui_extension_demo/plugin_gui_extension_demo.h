@@ -88,7 +88,7 @@ namespace hal
         void on_load() override;
         void on_unload() override;
 
-        GuiExtensionInterface* get_gui_extension() const override;
+        std::vector<AbstractExtensionInterface*> get_extensions() const override;
 
         static GuiExtensionContext* sGuiExtension;
     };

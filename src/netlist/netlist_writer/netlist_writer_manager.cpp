@@ -4,6 +4,7 @@
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/netlist_writer/netlist_writer.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/plugin_system/plugin_manager.h"
 
 #include <chrono>
 #include <fstream>
@@ -68,6 +69,7 @@ namespace hal
 
                 log_info("netlist_writer", "registered netlist writer '{}' for file extension '{}'.", name, ext);
             }
+            plugin_manager::register_plugin_feature(plugin_manager::NetlistWriter, supported_file_extensions, name);
         }
 
         void unregister_writer(const std::string& name)

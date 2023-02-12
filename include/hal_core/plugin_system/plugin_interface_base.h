@@ -33,7 +33,7 @@
 
 namespace hal
 {
-    class GuiExtensionInterface;
+    class AbstractExtensionInterface;
 
 /**
  * Automatically declares a factory function when including this header.
@@ -93,6 +93,13 @@ namespace hal
         virtual std::string get_version() const = 0;
 
         /**
+         * Get short description about functionality
+         *
+         * @return description should not have more than 40 characters
+         */
+        virtual std::string get_description() const {return std::string(); };
+
+        /**
          * Check whether the plugin has a specific type.
          *
          * @param[in] t - the type to check
@@ -138,7 +145,7 @@ namespace hal
          * Get GUI extension functionality if implemented by derived class
          * @return pointer to instance implementing GUI extensions
          */
-        virtual GuiExtensionInterface* get_gui_extension() const { return nullptr; }
+        virtual std::vector<AbstractExtensionInterface*> get_extensions() const { return std::vector<AbstractExtensionInterface*>(); }
     };
 
     using instantiate_plugin_function = std::unique_ptr<BasePluginInterface> (*)();

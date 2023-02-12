@@ -25,6 +25,9 @@ namespace hal
             // stores library and factory identified by plugin name)
             std::unordered_map<std::string, std::tuple<std::unique_ptr<BasePluginInterface>, std::unique_ptr<RuntimeLibrary>>> m_loaded_plugins;
 
+            // stores special features offered by plugin
+            std::unordered_map<std::string, std::vector<PluginFeature>> m_plugin_features;
+
             // stores the CLI parser option for CLI plugins
             std::unordered_map<std::string, std::string> m_cli_option_to_cli_plugin_name;
 
@@ -42,6 +45,9 @@ namespace hal
 
             // stores the plugin folder
             std::vector<std::filesystem::path> m_plugin_folders = utils::get_plugin_directories();
+
+            // stores name of plugin while loading
+            std::string m_current_loading;
 
             bool solve_dependencies(std::string plugin_name, std::set<std::string> dep_file_name)
             {
@@ -88,19 +94,20 @@ namespace hal
                 return true;
             }
 
-            bool has_valid_file_extension(std::filesystem::path file_name)
-            {
-#if defined(__APPLE__) && defined(__MACH__)
-                if (utils::ends_with(file_name.string(), std::string(".so")))
-                    return true;
-                if (file_name.string().find(".so") != std::string::npos)
-                    return true;
-                if (utils::ends_with(file_name.string(), std::string(".icloud")))
-                    return false;
-#endif
-                return (utils::ends_with(file_name.string(), std::string(".") + std::string(LIBRARY_FILE_EXTENSION)));
-            }
         }    // namespace
+
+        bool has_valid_file_extension(std::filesystem::path file_name)
+        {
+#if defined(__APPLE__) && defined(__MACH__)
+            if (utils::ends_with(file_name.string(), std::string(".so")))
+                return true;
+            if (file_name.string().find(".so") != std::string::npos)
+                return true;
+            if (utils::ends_with(file_name.string(), std::string(".icloud")))
+                return false;
+#endif
+            return (utils::ends_with(file_name.string(), std::string(".") + std::string(LIBRARY_FILE_EXTENSION)));
+        }
 
         std::set<std::string> get_plugin_names()
         {
@@ -110,6 +117,19 @@ namespace hal
                 names.insert(it.first);
             }
             return names;
+        }
+
+        std::vector<PluginFeature> get_plugin_features(std::string name)
+        {
+            auto it = m_plugin_features.find(name);
+            if (it == m_plugin_features.end()) return std::vector<PluginFeature>();
+            return it->second;
+        }
+
+        void register_plugin_feature(Feature ft, const std::vector<std::string>& args, const std::string& desc)
+        {
+            if (m_current_loading.empty()) return; // only on_load() is allowed to register
+            m_plugin_features[m_current_loading].push_back({ft,args,desc});
         }
 
         std::unordered_map<std::string, std::string> get_cli_plugin_flags()
@@ -271,7 +291,9 @@ namespace hal
 
             instance->initialize_logging();
 
+            m_current_loading = plugin_name;
             instance->on_load();
+            m_current_loading.clear();
 
             m_loaded_plugins[plugin_name] = std::make_tuple(std::move(instance), std::move(lib));
 
@@ -355,12 +377,13 @@ namespace hal
             return true;
         }
 
-        BasePluginInterface* get_plugin_instance(const std::string& plugin_name, bool initialize)
+        BasePluginInterface* get_plugin_instance(const std::string& plugin_name, bool initialize, bool silent)
         {
             auto it = m_loaded_plugins.find(plugin_name);
             if (it == m_loaded_plugins.end())
             {
-                log_error("core", "plugin '{}' is not loaded", plugin_name);
+                if (!silent)
+                    log_error("core", "plugin '{}' is not loaded", plugin_name);
                 return nullptr;
             }
 

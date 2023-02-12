@@ -1,5 +1,5 @@
 #include "gui/content_manager/content_manager.h"
-
+#include "gui/plugin_relay/gui_plugin_manager.h"
 #include "gui/content_layout_area/content_layout_area.h"
 #include "gui/content_widget/content_widget.h"
 #include "gui/context_manager_widget/context_manager_widget.h"
@@ -47,6 +47,17 @@ namespace hal
         return inst;
     }
 
+    ExternalContentWidget::ExternalContentWidget(const QString& pluginName, const QString& windowName, QWidget* parent)
+        : ContentWidget(windowName,parent), mPluginName(pluginName)
+    {
+        ExternalContent::instance()->openWidgets.insert(mPluginName,this);
+    }
+
+    ExternalContentWidget::~ExternalContentWidget()
+    {
+        ExternalContent::instance()->openWidgets.remove(mPluginName);
+    }
+
     SettingsItemDropdown* ContentManager::sSettingSortMechanism;
     SettingsItemKeybind* ContentManager::sSettingSearch;
     bool ContentManager::sSettingsInitialized = initializeSettings();
@@ -67,7 +78,7 @@ namespace hal
     }
 
     ContentManager::ContentManager(MainWindow* parent) : QObject(parent), mMainWindow(parent),
-        mContextSerializer(nullptr)
+        mExternalIndex(0), mContextSerializer(nullptr)
     {
         // has to be created this early in order to receive deserialization by the core signals
         mPythonWidget = new PythonEditor();
@@ -128,6 +139,8 @@ namespace hal
 
     void ContentManager::handleOpenDocument(const QString& fileName)
     {
+        mExternalIndex = 6;
+
         mGraphTabWidget = new GraphTabWidget();
         mMainWindow->addContent(mGraphTabWidget, 2, content_anchor::center);
 
@@ -236,28 +249,26 @@ namespace hal
             gGraphContextManager->restoreFromFile(fileName + "v");
         }
 
-        int count = 6;
         for (ContentFactory* cf : *ExternalContent::instance())
         {
-            ContentWidget* cw = cf->contentFactory();
-            mMainWindow->addContent(cw, count++, content_anchor::right);
-            cw->open();
-            cw->restoreFromProject();
+            addExternalWidget(cf);
         }
 
         if (selectedContext)
             mContextManagerWidget->selectViewContext(selectedContext);
         mContextManagerWidget->handleOpenContextClicked();
 
-        for (const std::string& pluginName : plugin_manager::get_plugin_names())
-        {
-            BasePluginInterface* bpif = plugin_manager::get_plugin_instance(pluginName);
-            if (!bpif) continue;
-            GuiExtensionInterface* geif = bpif->get_gui_extension();
-            if (!geif) continue;
+        for (GuiExtensionInterface* geif : GuiPluginManager::getGuiExtensions().values())
             geif->netlist_loaded(gNetlist);
-        }
 
+    }
+
+    void ContentManager::addExternalWidget(ContentFactory* factory)
+    {
+        ContentWidget* cw = factory->contentFactory();
+        mMainWindow->addContent(cw, mExternalIndex++, content_anchor::right);
+        cw->open();
+        cw->restoreFromProject();
     }
 
     GraphContext* ContentManager::topModuleContextFactory()

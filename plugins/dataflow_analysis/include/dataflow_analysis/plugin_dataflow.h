@@ -108,6 +108,13 @@ namespace hal
         std::string get_name() const override;
 
         /**
+         * Get short description for plugin.
+         *
+         * @return The short description.
+         */
+        std::string get_description() const override;
+
+        /**
          * Get the version of the plugin.
          *
          * @returns The version of the plugin.
@@ -120,7 +127,7 @@ namespace hal
         /** interface implementation: i_cli */
         bool handle_cli_call(Netlist* nl, ProgramArguments& args) override;
 
-        GuiExtensionInterface* get_gui_extension() const override;
+        std::vector<AbstractExtensionInterface*> get_extensions() const override;
 
         std::vector<std::vector<Gate*>> execute(Netlist* nl,
                                                 std::string path,

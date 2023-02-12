@@ -96,6 +96,13 @@ namespace hal
         std::string get_version() const override;
 
         /**
+         * Get short description for plugin.
+         *
+         * @return The short description for the plugin.
+         */
+        std::string get_description() const override;
+
+        /**
          * Delete all bindings upon unload
          */
         void on_unload() override;

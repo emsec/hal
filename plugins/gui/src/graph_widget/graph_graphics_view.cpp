@@ -22,6 +22,7 @@
 #include "gui/gui_utils/netlist.h"
 #include "gui/gui_utils/common_successor_predecessor.h"
 #include "gui/implementations/qpoint_extension.h"
+#include "gui/plugin_relay/gui_plugin_manager.h"
 #include "gui/selection_details_widget/selection_details_widget.h"
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/action_create_object.h"
@@ -891,12 +892,9 @@ namespace hal
     {
 
         mPluginContribution.clear();
-        for (const std::string& pluginName : plugin_manager::get_plugin_names())
+        for (GuiExtensionInterface* geif : GuiPluginManager::getGuiExtensions().values())
         {
-            BasePluginInterface* bpif = plugin_manager::get_plugin_instance(pluginName);
-            if (!bpif) continue;
-            GuiExtensionInterface* geif = bpif->get_gui_extension();
-            if (!geif) continue;
+            geif->netlist_loaded(gNetlist);
             mPluginContribution.append( QVector<ContextMenuContribution>::fromStdVector(geif->get_context_contribution(gNetlist,
                                                                                                                        gSelectionRelay->selectedModulesVector(),
                                                                                                                        gSelectionRelay->selectedGatesVector(),

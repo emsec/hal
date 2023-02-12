@@ -19,14 +19,14 @@
 #include <QTableWidget>
 
 namespace hal {
-    PluginParameterDialog::PluginParameterDialog(BasePluginInterface* bpif, QWidget* parent)
-        : QDialog(parent), mPluginInterface(bpif)
+    PluginParameterDialog::PluginParameterDialog(const QString &pname, GuiExtensionInterface *geif, QWidget* parent)
+        : QDialog(parent), mPluginName(pname), mGuiExtensionInterface(geif)
     {
         setupHash();
 
         QDialogButtonBox* bbox = setupButtonBox();
 
-        setWindowTitle("Settings for " + QString::fromStdString(mPluginInterface->get_name()) + " plugin");
+        setWindowTitle("Settings for " + mPluginName + " plugin");
 
         if (mTabNames.isEmpty())
         {
@@ -68,9 +68,8 @@ namespace hal {
 
     void PluginParameterDialog::setupHash()
     {
-        GuiExtensionInterface* geif = mPluginInterface->get_gui_extension();
-        if (!geif) return;
-        for (PluginParameter par : geif->get_parameter())
+        if (!mGuiExtensionInterface) return;
+        for (PluginParameter par : mGuiExtensionInterface->get_parameter())
         {
             if (par.get_type() == PluginParameter::Absent) continue;
             QString parTagname = QString::fromStdString(par.get_tagname());
@@ -184,8 +183,7 @@ namespace hal {
 
     void PluginParameterDialog::accept()
     {
-        GuiExtensionInterface* geif = mPluginInterface->get_gui_extension();
-        if (!geif) return;
+        if (!mGuiExtensionInterface) return;
         std::vector<PluginParameter> settings;
         std::string buttonClicked;
         for (PluginParameter par : mParameterList)
@@ -251,11 +249,11 @@ namespace hal {
             settings.push_back(par);
         }
         QDialog::accept();
-        geif->set_parameter(settings);
+        mGuiExtensionInterface->set_parameter(settings);
 
         if (!buttonClicked.empty())
         {
-            geif->execute_function(buttonClicked,gNetlist,gSelectionRelay->selectedModulesVector(),gSelectionRelay->selectedGatesVector(),gSelectionRelay->selectedNetsVector());
+            mGuiExtensionInterface->execute_function(buttonClicked,gNetlist,gSelectionRelay->selectedModulesVector(),gSelectionRelay->selectedGatesVector(),gSelectionRelay->selectedNetsVector());
             if (gPythonContext->pythonThread())
                 gPythonContext->pythonThread()->unlock();
         }
