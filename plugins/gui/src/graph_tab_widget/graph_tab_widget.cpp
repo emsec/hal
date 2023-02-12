@@ -242,6 +242,23 @@ namespace hal
 
     }
 
+    int GraphTabWidget::visibleStatus(const GraphContext *ctx) const
+    {
+        for (int i = 0; i < mTabWidget->count(); i++)
+        {
+            if (auto p = dynamic_cast<GraphWidget*>(mTabWidget->widget(i)))
+            {
+                if (p->getContext() == ctx)
+                {
+                    if (i == mTabWidget->currentIndex())
+                        return 2;
+                    return 1;
+                }
+            }
+        }
+        return 0;
+    }
+
     int GraphTabWidget::getContextTabIndex(GraphContext* context) const
     {
         for (int i = 0; i < mTabWidget->count(); i++)

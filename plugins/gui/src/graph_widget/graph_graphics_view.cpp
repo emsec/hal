@@ -1667,10 +1667,14 @@ namespace hal
         auto context = mGraphWidget->getContext();
 
         context->beginChange();
+        UserActionCompound* act = new UserActionCompound;
         for (u32 id : gSelectionRelay->selectedModulesList())
         {
-            context->unfoldModule(id);
+            ActionUnfoldModule* ufo = new ActionUnfoldModule(id);
+            ufo->setContextId(context->id());
+            act->addAction(ufo);
         }
+        act->exec();
         context->endChange();
     }
 
