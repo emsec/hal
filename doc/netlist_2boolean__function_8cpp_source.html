@@ -1352,7 +1352,7 @@ $(document).ready(function(){initNavTree('netlist_2boolean__function_8cpp_source
 <div class="line"><a name="l01282"></a><span class="lineno"> 1282</span>&#160;        {</div>
 <div class="line"><a name="l01283"></a><span class="lineno"> 1283</span>&#160;            <span class="keywordflow">for</span> (<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> j = 0; j &lt; num_inputs; j++)</div>
 <div class="line"><a name="l01284"></a><span class="lineno"> 1284</span>&#160;            {</div>
-<div class="line"><a name="l01285"></a><span class="lineno"> 1285</span>&#160;                <a class="code" href="namespacecontrol.html#a42884b866cabdd971b4dbe8c3fcc3735">str</a> &lt;&lt; <span class="stringliteral">&quot; &quot;</span> &lt;&lt; std::left &lt;&lt; std::setw(in_widths.at(j)) &lt;&lt; std::setfill(<span class="charliteral">&#39; &#39;</span>) &lt;&lt; ((i &gt;&gt; (num_inputs - j - 1)) &amp; 1) &lt;&lt; <span class="stringliteral">&quot; |&quot;</span>;</div>
+<div class="line"><a name="l01285"></a><span class="lineno"> 1285</span>&#160;                <a class="code" href="namespacecontrol.html#a42884b866cabdd971b4dbe8c3fcc3735">str</a> &lt;&lt; <span class="stringliteral">&quot; &quot;</span> &lt;&lt; std::left &lt;&lt; std::setw(in_widths.at(j)) &lt;&lt; std::setfill(<span class="charliteral">&#39; &#39;</span>) &lt;&lt; ((i &gt;&gt; j) &amp; 1) &lt;&lt; <span class="stringliteral">&quot; |&quot;</span>;</div>
 <div class="line"><a name="l01286"></a><span class="lineno"> 1286</span>&#160;            }</div>
 <div class="line"><a name="l01287"></a><span class="lineno"> 1287</span>&#160; </div>
 <div class="line"><a name="l01288"></a><span class="lineno"> 1288</span>&#160;            <span class="keywordflow">for</span> (<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> k = 0; k &lt; num_outputs; k++)</div>
@@ -1903,7 +1903,7 @@ $(document).ready(function(){initNavTree('netlist_2boolean__function_8cpp_source
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="netlist_2boolean__function_8cpp.html">boolean_function.cpp</a></li>
-    <li class="footer">Generated on Wed Feb 8 2023 22:31:48 for HAL by
+    <li class="footer">Generated on Tue Feb 14 2023 19:50:15 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
