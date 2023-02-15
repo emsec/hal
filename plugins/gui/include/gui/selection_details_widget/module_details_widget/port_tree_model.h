@@ -149,6 +149,13 @@ namespace hal
 
         void insertItem(TreeItem* item, TreeItem* parent, int index);
         void removeItem(TreeItem* item);
+
+        // helper functions for dnd for more clarity
+        bool dndGroupOnGroup();
+        bool dndGroupBetweenGroup();
+        bool dndPinOnGroup();
+        bool dndPinBetweenPin(TreeItem* droppedPin, TreeItem* onDroppedParent, int row);
+        bool dndPinBetweenGroup();
     };
 }
 

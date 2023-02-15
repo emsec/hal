@@ -2,6 +2,7 @@
 
 #include "gui/basic_tree_model/tree_item.h"
 #include "gui/gui_globals.h"
+#include "gui/input_dialog/input_dialog.h"
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/action_reorder_object.h"
 #include "gui/user_action/user_action_compound.h"
@@ -96,8 +97,48 @@ namespace hal
         QByteArray encItem = data->data("pintreemodel/item");
         QDataStream dataStream(&encItem, QIODevice::ReadOnly);
         dataStream >> type >> id;
+
         auto droppedItem = (type == "group") ? mIdToGroupItem.value(id) : mIdToPinItem.value(id);
         auto droppedParentItem = droppedItem->getParent();
+        auto parentItem = getItemFromIndex(parent);
+
+        // perhaps helper functions?
+        // 1. group on group (between group)
+        // 2. pin on group
+        // 3. pin between groups
+        // 4. pin between pins
+
+        if(type == "group")
+        {
+            if(!parentItem)
+                qDebug() << "group was dropped between groups... with row: " << row; //check in canDropMine if its not an adjacent row?
+            else{
+                qDebug() << "group was dropped on a group?";
+                InputDialog ipd("Name of new group", "Name of new group:", parentItem->getData(sNameColumn).toString());
+                if(ipd.exec() == QDialog::Rejected) return false;
+                mIgnoreEventsFlag = true;
+                auto mod = gNetlist->get_module_by_id(mModuleId);
+                auto group1 = mod->get_pin_group_by_id(id);
+                auto group2 = mod->get_pin_group_by_id(getIdOfItem(parentItem));
+                for(auto pin: group1->get_pins())
+                    mod->assign_pin_to_group(group2, pin, false);
+                mod->delete_pin_group(group1);
+                mod->set_pin_group_name(group2, ipd.textValue().toStdString());
+                mIgnoreEventsFlag = false;
+                setModule(mod);
+                return true;
+            }
+        }
+        else
+        {
+            if(!parentItem)
+                qDebug() << "pin was dropped between groups on row " << row;
+            else if(row != -1)
+                //qDebug() << "pin was dropped between pins";
+                dndPinBetweenPin(droppedItem, parentItem, row);
+            else
+                qDebug() << "pin was dropped on a group...";
+        }
     }
 
 //    bool ModulePinsTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent)
@@ -244,6 +285,7 @@ namespace hal
         QDataStream dataStream(&encItem, QIODevice::ReadOnly);
         dataStream >> type >> id;
         auto parentItem = getItemFromIndex(parent);
+        qDebug() << "type: " << type << ", id" << id << ", row: " << row;
 
         // construct a "drop-matrix" here, but only 4 things are NOT allowed (so check for these):
         // 1: drop a pin on its OWN parent
@@ -264,7 +306,8 @@ namespace hal
             // perhaps check here that a pin can only be dropped between groups if its own group has size > 1?
             // otherwise it does not make much sense...perhaps change this check
             auto item = mIdToPinItem[id];
-            if((!parentItem && item->getParent()->getChildCount() == 1) || item->getParent() == parentItem || item == parentItem)
+            if((!parentItem && item->getParent()->getChildCount() == 1) || (item->getParent() == parentItem && row == -1) || item == parentItem
+                || (parentItem && (getTypeOfItem(parentItem) == itemType::pin)))
                 return false;
 //            if(parentItem)
 //            {
@@ -428,6 +471,15 @@ namespace hal
         //for now, only ids of pin-items (since these functions are only relevant for dnd)
         mIdToPinItem.remove(getIdOfItem(item));
         delete item;
+    }
+
+    bool ModulePinsTreeModel::dndPinBetweenPin(TreeItem *droppedPin, TreeItem *onDroppedParent, int row)
+    {
+        if(droppedPin->getParent() == onDroppedParent)
+            qDebug() << "pin dropped in same group";
+        else
+            qDebug() << "pin dropped in another group";
+
     }
 
     void ModulePinsTreeModel::insertItem(TreeItem* item, TreeItem* parent, int index)
