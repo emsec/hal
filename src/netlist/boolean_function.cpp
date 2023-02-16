@@ -1282,7 +1282,7 @@ namespace hal
         {
             for (u32 j = 0; j < num_inputs; j++)
             {
-                str << " " << std::left << std::setw(in_widths.at(j)) << std::setfill(' ') << ((i >> (num_inputs - j - 1)) & 1) << " |";
+                str << " " << std::left << std::setw(in_widths.at(j)) << std::setfill(' ') << ((i >> j) & 1) << " |";
             }
 
             for (u32 k = 0; k < num_outputs; k++)
