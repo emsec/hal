@@ -140,7 +140,8 @@ namespace hal
         void numberOfPortsChanged(const int newNumber);
 
     private:        
-        int mModuleId;
+        int mModuleId; // perhaps remove?
+        Module* mModule;
         //name is (hopefully) enough to identify
         QMap<QString, TreeItem*> mNameToTreeItem;
         QMap<int, TreeItem*> mIdToPinItem;
@@ -151,11 +152,11 @@ namespace hal
         void removeItem(TreeItem* item);
 
         // helper functions for dnd for more clarity
-        bool dndGroupOnGroup();
+        bool dndGroupOnGroup(TreeItem* droppedGroup, TreeItem* onDroppedGroup);
         bool dndGroupBetweenGroup();
-        bool dndPinOnGroup();
+        bool dndPinOnGroup(TreeItem* droppedPin, TreeItem* onDroppedGroup);
         bool dndPinBetweenPin(TreeItem* droppedPin, TreeItem* onDroppedParent, int row);
-        bool dndPinBetweenGroup();
+        bool dndPinBetweenGroup(TreeItem* droppedPin, int row);
     };
 }
 

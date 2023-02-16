@@ -4,6 +4,7 @@
 #include "gui/gui_globals.h"
 #include "gui/input_dialog/input_dialog.h"
 #include "gui/user_action/action_add_items_to_object.h"
+#include "gui/user_action/action_remove_items_from_object.h"
 #include "gui/user_action/action_reorder_object.h"
 #include "gui/user_action/user_action_compound.h"
 #include "hal_core/netlist/endpoint.h"
@@ -99,7 +100,7 @@ namespace hal
         dataStream >> type >> id;
 
         auto droppedItem = (type == "group") ? mIdToGroupItem.value(id) : mIdToPinItem.value(id);
-        auto droppedParentItem = droppedItem->getParent();
+        //auto droppedParentItem = droppedItem->getParent();
         auto parentItem = getItemFromIndex(parent);
 
         // perhaps helper functions?
@@ -112,32 +113,21 @@ namespace hal
         {
             if(!parentItem)
                 qDebug() << "group was dropped between groups... with row: " << row; //check in canDropMine if its not an adjacent row?
-            else{
-                qDebug() << "group was dropped on a group?";
-                InputDialog ipd("Name of new group", "Name of new group:", parentItem->getData(sNameColumn).toString());
-                if(ipd.exec() == QDialog::Rejected) return false;
-                mIgnoreEventsFlag = true;
-                auto mod = gNetlist->get_module_by_id(mModuleId);
-                auto group1 = mod->get_pin_group_by_id(id);
-                auto group2 = mod->get_pin_group_by_id(getIdOfItem(parentItem));
-                for(auto pin: group1->get_pins())
-                    mod->assign_pin_to_group(group2, pin, false);
-                mod->delete_pin_group(group1);
-                mod->set_pin_group_name(group2, ipd.textValue().toStdString());
-                mIgnoreEventsFlag = false;
-                setModule(mod);
-                return true;
-            }
+            else
+                //qDebug() << "group was dropped on a group?";
+                dndGroupOnGroup(droppedItem, parentItem);
         }
         else
         {
             if(!parentItem)
-                qDebug() << "pin was dropped between groups on row " << row;
+                //qDebug() << "pin was dropped between groups on row " << row;
+                dndPinBetweenGroup(droppedItem, row);
             else if(row != -1)
                 //qDebug() << "pin was dropped between pins";
                 dndPinBetweenPin(droppedItem, parentItem, row);
             else
-                qDebug() << "pin was dropped on a group...";
+                //qDebug() << "pin was dropped on a group...";
+                dndPinOnGroup(droppedItem, parentItem);
         }
     }
 
@@ -287,17 +277,24 @@ namespace hal
         auto parentItem = getItemFromIndex(parent);
         qDebug() << "type: " << type << ", id" << id << ", row: " << row;
 
-        // construct a "drop-matrix" here, but only 4 things are NOT allowed (so check for these):
+        // construct a "drop-matrix" here, but only 4(5) things are NOT allowed (so check for these):
         // 1: drop a pin on its OWN parent
         // 3: drop a pingroup on/between pins
         // 4: drop an item on itself
+        // 5: drop adjecent index to itself, must be at least 1 item apart
         if(type == "group")
         {
+            auto item = mIdToGroupItem[id];
             if(parentItem)
             {
-                auto item = mIdToGroupItem[id];
                 auto type = getTypeOfItem(parentItem);
                 if(type == itemType::pin || (type == itemType::group && row != -1) || item == parentItem)
+                    return false;
+            }
+            else // here, only check for adjacent rows
+            {
+                auto itRow =  item->getOwnRow();
+                if(itRow == row || ((itRow+1) == row))
                     return false;
             }
         }
@@ -309,11 +306,13 @@ namespace hal
             if((!parentItem && item->getParent()->getChildCount() == 1) || (item->getParent() == parentItem && row == -1) || item == parentItem
                 || (parentItem && (getTypeOfItem(parentItem) == itemType::pin)))
                 return false;
-//            if(parentItem)
-//            {
-//                if(item->getParent() == parentItem || item == parentItem)
-//                    return false;
-//            }
+            // case if one wants to drop between pins in same group, check if its not adjacent row (other cases are handled on case above
+            if(item->getParent() == parentItem)
+            {
+                auto itRow = item->getOwnRow();
+                if(itRow == row || ((itRow+1) == row))
+                    return false;
+            }
         }
         return true;
     }
@@ -321,7 +320,8 @@ namespace hal
     void ModulePinsTreeModel::clear()
     {
         BaseTreeModel::clear();
-        mModuleId = -1;
+        mModuleId = -1; // perhaps remove?
+        mModule = nullptr;
         mNameToTreeItem.clear();
         mIdToGroupItem.clear();
         mIdToPinItem.clear();
@@ -331,6 +331,7 @@ namespace hal
     {
         clear();
         mModuleId = m->get_id();
+        mModule = m;
         beginResetModel();
 
         for(PinGroup<ModulePin>* pinGroup : m->get_pin_groups())
@@ -473,13 +474,81 @@ namespace hal
         delete item;
     }
 
+    bool ModulePinsTreeModel::dndGroupOnGroup(TreeItem *droppedGroup, TreeItem *onDroppedGroup)
+    {
+        // SPECIFY: 1) create completely new group, all pins in that, delete old 2 groups
+        // 2) just add all pins from dropped group to "ondroppedgroup", then rename?
+//        InputDialog ipd("Name of new group", "Name of new group:", onDroppedGroup->getData(sNameColumn).toString());
+//        if(ipd.exec() == QDialog::Rejected) return false;
+        mIgnoreEventsFlag = true;
+        QSet<u32> pins, e;
+        auto group = mModule->get_pin_group_by_id(getIdOfItem(droppedGroup));
+        for(const auto &pin : group->get_pins())
+            pins.insert(pin->get_id());
+        ActionAddItemsToObject* addAct = new ActionAddItemsToObject(e,e,e, pins);
+        addAct->setObject(UserActionObject(getIdOfItem(onDroppedGroup), UserActionObjectType::PinGroup));
+        addAct->setParentObject(UserActionObject(mModuleId, UserActionObjectType::Module));
+        addAct->exec();
+        setModule(mModule);
+        mIgnoreEventsFlag = false;
+
+    }
+
+    bool ModulePinsTreeModel::dndPinOnGroup(TreeItem *droppedPin, TreeItem *onDroppedGroup)
+    {
+        mIgnoreEventsFlag = true;
+        QSet<u32> e;
+        ActionAddItemsToObject* addAct = new ActionAddItemsToObject(e,e,e, QSet<u32>() << getIdOfItem(droppedPin));
+        addAct->setObject(UserActionObject(getIdOfItem(onDroppedGroup), UserActionObjectType::PinGroup));
+        addAct->setParentObject(UserActionObject(mModuleId, UserActionObjectType::Module));
+        addAct->exec();;
+        setModule(mModule);
+        mIgnoreEventsFlag = false;
+    }
+
     bool ModulePinsTreeModel::dndPinBetweenPin(TreeItem *droppedPin, TreeItem *onDroppedParent, int row)
     {
-        if(droppedPin->getParent() == onDroppedParent)
-            qDebug() << "pin dropped in same group";
-        else
-            qDebug() << "pin dropped in another group";
+        mIgnoreEventsFlag = true;
+        if(droppedPin->getParent() == onDroppedParent) // same group
+        {
+            bool bottomEdge = row == onDroppedParent->getChildCount();
+            auto desiredIdx = bottomEdge ? row-1 : row;
+            ActionReorderObject* reorderObj = new ActionReorderObject(desiredIdx);
+            reorderObj->setObject(UserActionObject(getIdOfItem(droppedPin), UserActionObjectType::Pin));
+            reorderObj->setParentObject(UserActionObject(mModule->get_id(), UserActionObjectType::Module));
+            reorderObj->exec();
+        }
+        else // different groups
+        {
+            // reorder action from source group is still needed (for undo action)!
+            UserActionCompound* compAct = new UserActionCompound;
+            ActionAddItemsToObject* addAct = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), QSet<u32>() << getIdOfItem(droppedPin));
+            addAct->setObject(UserActionObject(getIdOfItem(onDroppedParent), UserActionObjectType::PinGroup));
+            addAct->setParentObject(UserActionObject(mModuleId, UserActionObjectType::Module));
+            ActionReorderObject* reorderAct = new ActionReorderObject(row);
+            reorderAct->setObject(UserActionObject(getIdOfItem(droppedPin), UserActionObjectType::Pin));
+            reorderAct->setParentObject(UserActionObject(mModule->get_id(), UserActionObjectType::Module));
+            compAct->addAction(addAct);
+            compAct->addAction(reorderAct);
+            compAct->exec();
+        }
+        setModule(mModule);
+        mIgnoreEventsFlag = false;
+    }
 
+    bool ModulePinsTreeModel::dndPinBetweenGroup(TreeItem *droppedPin, int row)
+    {
+        // row is needed for when groups can change its order within the module
+        Q_UNUSED(row)
+        mIgnoreEventsFlag = true;
+        auto pinGroup = mModule->get_pin_group_by_id(getIdOfItem(droppedPin->getParent()));
+        QSet<u32> e;
+        ActionRemoveItemsFromObject* removeAct = new ActionRemoveItemsFromObject(e,e,e, QSet<u32>() << getIdOfItem(droppedPin));
+        removeAct->setObject(UserActionObject(pinGroup->get_id(), UserActionObjectType::PinGroup));
+        removeAct->setParentObject(UserActionObject(mModuleId, UserActionObjectType::Module));
+        removeAct->exec();
+        setModule(mModule);
+        mIgnoreEventsFlag = false;
     }
 
     void ModulePinsTreeModel::insertItem(TreeItem* item, TreeItem* parent, int index)
