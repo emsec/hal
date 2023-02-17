@@ -77,6 +77,7 @@ namespace hal
         ModuleInfoTable* mModuleInfoTable;
         DetailsFrameWidget* mModuleInformationFrame;
 
+        //groupings tab
         GroupingsOfItemWidget* mGroupingsOfItemTable;
         DetailsFrameWidget* mGroupingsFrame;
 

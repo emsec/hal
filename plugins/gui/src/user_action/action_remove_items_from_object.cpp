@@ -84,14 +84,14 @@ namespace hal
                     for (u32 id : mModules)
                     {
                         Node nd(id, Node::Module);
-                        QPoint p = ctx->getLayouter()->nodeToPositionMap().value(nd);
-                        plc.addGridPosition(nd, p);
+                        NetLayoutPoint p = ctx->getLayouter()->positonForNode(nd);
+                        if (!p.isUndefined()) plc.addGridPosition(nd, p);
                     }
                     for (u32 id : mGates)
                     {
                         Node nd(id, Node::Gate);
-                        QPoint p = ctx->getLayouter()->nodeToPositionMap().value(nd);
-                        plc.addGridPosition(nd, p);
+                        NetLayoutPoint p = ctx->getLayouter()->positonForNode(nd);
+                        if (!p.isUndefined()) plc.addGridPosition(nd, p);
                     }
                     undo->setPlacementHint(plc);
                     mUndoAction = undo;

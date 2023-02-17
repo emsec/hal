@@ -65,10 +65,10 @@ namespace hal
         undo->setContextId(mContextId);
         PlacementHint plc(PlacementHint::GridPosition);
         Node nd(mObject.id(),Node::Module);
-        auto it = ctx->getLayouter()->nodeToPositionMap().find(nd);
-        if (it!=ctx->getLayouter()->nodeToPositionMap().end())
+        NetLayoutPoint pos =  ctx->getLayouter()->positonForNode(nd);
+        if (!pos.isUndefined())
         {
-            plc.addGridPosition(nd,it.value());
+            plc.addGridPosition(nd,pos);
             undo->setPlacementHint(plc);
         }
         mUndoAction = undo;
@@ -82,14 +82,14 @@ namespace hal
         if (currentContext->gates().isEmpty() &&
                 currentContext->modules() == QSet<u32>({mObject.id()}))
         {
-            currentContext->unfoldModule(mObject.id());
+            currentContext->unfoldModule(mObject.id(),mPlacementHint);
             return;
         }
 
         // module to unfold and other boxes shown
         if (currentContext->modules().contains(mObject.id()))
         {
-            currentContext->unfoldModule(mObject.id());
+            currentContext->unfoldModule(mObject.id(),mPlacementHint);
             return;
         }
 
