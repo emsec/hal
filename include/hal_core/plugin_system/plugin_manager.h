@@ -27,6 +27,7 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
+#include "hal_core/plugin_system/fac_extension_interface.h"
 #include "hal_core/utilities/callback_hook.h"
 #include "hal_core/utilities/program_options.h"
 
@@ -171,16 +172,11 @@ namespace hal
         void remove_model_changed_callback(u64 id);
 
         /**
-         * Enum to classify plugin features
-         */
-        enum Feature { None, GuiExtension, CliExtension, NetlistParser, NetlistWriter, GatelibParser, GatelibWriter };
-
-        /**
          * The PluginFeature struct. Attribute args may hold file extensions if a parser/writer gets registered.
          */
         struct PluginFeature
         {
-            Feature feature;
+            FacExtensionInterface::Feature feature;
             std::vector<std::string> args;
             std::string description;
         };
@@ -199,12 +195,5 @@ namespace hal
          */
         std::vector<PluginFeature> get_plugin_features(std::string name);
 
-        /**
-         * Registers plugin feature upon on_load()
-         * @param ft Feature like NetlistWriter or GatelibParser
-         * @param args Typically file extensions the plugin can handle
-         * @param desc Description
-         */
-        void register_plugin_feature(Feature ft, const std::vector<std::string>& args, const std::string& desc);
     }    // namespace plugin_manager
 }    // namespace hal

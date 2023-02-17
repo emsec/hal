@@ -256,7 +256,7 @@ namespace hal {
         Q_EMIT dataChanged(index(irow,0),index(irow,10));
     }
 
-    void GuiPluginTable::loadFeature(plugin_manager::Feature ft, const QString& extension)
+    void GuiPluginTable::loadFeature(FacExtensionInterface::Feature ft, const QString& extension)
     {
         for (GuiPluginEntry* gpe : mEntries)
         {
@@ -469,7 +469,7 @@ namespace hal {
         : mState(NotAPlugin), mName(info.baseName()),
           mFilePath(info.absoluteFilePath()),
           mFileModified(info.lastModified()),
-          mFeature(plugin_manager::None),
+          mFeature(FacExtensionInterface::FacUnknown),
           mGuiExtensions(false),
           mCliExtensions(false) {;}
 
@@ -484,10 +484,10 @@ namespace hal {
         case 4: return mDependencies.join(' ');
         case 5: switch (mFeature)
             {
-            case plugin_manager::NetlistParser: return "Netlist parser";
-            case plugin_manager::NetlistWriter: return "Netlist writer";
-            case plugin_manager::GatelibParser: return "Gate library parser";
-            case plugin_manager::GatelibWriter: return "Gate library writer";
+            case FacExtensionInterface::FacNetlistParser: return "Netlist parser";
+            case FacExtensionInterface::FacNetlistWriter: return "Netlist writer";
+            case FacExtensionInterface::FacGatelibParser: return "Gate library parser";
+            case FacExtensionInterface::FacGatelibWriter: return "Gate library writer";
             default: return "Other HAL plugin";
             }
         case 6: return mFeatureArguments.join(' ');
@@ -523,7 +523,7 @@ namespace hal {
         mFilePath         = settings->value("file_path").toString();
         mFileModified     = settings->value("file_modified").toDateTime();
         mDependencies     = settings->value("dependencies").toStringList();
-        mFeature = (plugin_manager::Feature) settings->value("feature_code").toInt();
+        mFeature = (FacExtensionInterface::Feature) settings->value("feature_code").toInt();
         mFeatureArguments = settings->value("feature_args").toStringList();
         mGuiExtensions    = settings->value("extends_gui").toBool();
         mCliExtensions    = settings->value("extends_cli").toBool();

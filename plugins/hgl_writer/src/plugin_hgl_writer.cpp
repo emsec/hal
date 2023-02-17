@@ -10,6 +10,20 @@ namespace hal
         return std::make_unique<HGLWriterPlugin>();
     }
 
+    HGLWriterExtension::HGLWriterExtension()
+        : FacExtensionInterface(FacExtensionInterface::FacGatelibWriter)
+    {
+        m_description = "Default HGL Writer";
+        m_supported_file_extensions.push_back(".hgl");
+        FacFactoryProvider<GateLibraryWriter>* fac = new FacFactoryProvider<GateLibraryWriter>;
+        fac->m_factory = []() { return std::make_unique<HGLWriter>(); };
+        factory_provider = fac;
+    }
+
+    HGLWriterPlugin::HGLWriterPlugin()
+        : m_extension(nullptr)
+    {;}
+
     std::string HGLWriterPlugin::get_name() const
     {
         return std::string("hgl_writer");
@@ -22,11 +36,16 @@ namespace hal
 
     void HGLWriterPlugin::on_load()
     {
-        gate_library_writer_manager::register_writer("Default HGL Writer", []() { return std::make_unique<HGLWriter>(); }, {".hgl"});
+        m_extension = new HGLWriterExtension;
     }
 
     void HGLWriterPlugin::on_unload()
     {
-        gate_library_writer_manager::unregister_writer("Default HGL Writer");
+        delete m_extension;
+    }
+
+    std::vector<AbstractExtensionInterface*> HGLWriterPlugin::get_extensions() const
+    {
+        return std::vector<AbstractExtensionInterface*>({m_extension});
     }
 }    // namespace hal

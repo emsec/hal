@@ -69,7 +69,6 @@ namespace hal
 
                 log_info("netlist_writer", "registered netlist writer '{}' for file extension '{}'.", name, ext);
             }
-            plugin_manager::register_plugin_feature(plugin_manager::NetlistWriter, supported_file_extensions, name);
         }
 
         void unregister_writer(const std::string& name)

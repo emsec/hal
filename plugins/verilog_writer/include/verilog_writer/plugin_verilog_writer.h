@@ -26,16 +26,32 @@
 #pragma once
 
 #include "hal_core/plugin_system/plugin_interface_base.h"
+#include "hal_core/plugin_system/fac_extension_interface.h"
 
 namespace hal
 {
-    class PLUGIN_API VerilogWriterPlugin : public BasePluginInterface
+    class VerilogWriterExtension : public FacExtensionInterface
     {
     public:
+        VerilogWriterExtension();
+    };
+
+    class PLUGIN_API VerilogWriterPlugin : public BasePluginInterface
+    {
+        VerilogWriterExtension* m_extension;
+    public:
+        VerilogWriterPlugin();
+
         std::string get_name() const override;
         std::string get_version() const override;
 
         void on_load() override;
         void on_unload() override;
+
+        /**
+         * Get file access factory extension functionality implemented by Verilog writer
+         * @return pointer to instance implementing FAC extensions
+         */
+        std::vector<AbstractExtensionInterface*> get_extensions() const override;
     };
 }    // namespace hal

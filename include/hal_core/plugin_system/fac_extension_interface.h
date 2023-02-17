@@ -24,34 +24,47 @@
 // SOFTWARE.
 
 #pragma once
+#include "hal_core/plugin_system/abstract_extension_interface.h"
+#include <vector>
+#include <string>
+#include <functional>
+#include <memory>
 
-#include "hal_core/plugin_system/plugin_interface_base.h"
-#include "hal_core/plugin_system/fac_extension_interface.h"
+namespace hal  {
 
-namespace hal
-{
-    class VerilogParserExtension : public FacExtensionInterface
+
+    class AbstractFactoryProvider
     {
     public:
-        VerilogParserExtension();
+        AbstractFactoryProvider() = default;
+        virtual ~AbstractFactoryProvider() = default;
     };
 
-    class PLUGIN_API VerilogParserPlugin : public BasePluginInterface
+    /**
+     * @brief File-Access Factory class
+     */
+    template <typename T> class FacFactoryProvider : public AbstractFactoryProvider
     {
-        VerilogParserExtension* m_extension;
     public:
-        VerilogParserPlugin();
-
-        std::string get_name() const override;
-        std::string get_version() const override;
-
-        void on_load() override;
-        void on_unload() override;
-
-        /**
-         * Get file access factory extension functionality implemented by Verilog parser
-         * @return pointer to instance implementing FAC extensions
-         */
-        std::vector<AbstractExtensionInterface*> get_extensions() const override;
+        FacFactoryProvider() = default;
+        virtual ~FacFactoryProvider() = default;
+        std::function<std::unique_ptr<T>()> m_factory;
     };
-}    // namespace hal
+
+    class FacExtensionInterface : public AbstractExtensionInterface
+    {
+    public:
+        enum Feature { FacUnknown, FacNetlistParser, FacNetlistWriter, FacGatelibParser, FacGatelibWriter };
+
+    protected:
+        Feature m_feature;
+        std::string m_description;
+        std::vector<std::string> m_supported_file_extensions;
+    public:
+        FacExtensionInterface(Feature feat) : m_feature(feat) {;}
+        Feature get_feature() const { return m_feature; }
+        std::string get_description() const { return m_description; }
+        std::vector<std::string> get_supported_file_extensions() const { return m_supported_file_extensions; }
+        AbstractFactoryProvider* factory_provider;
+    };
+}

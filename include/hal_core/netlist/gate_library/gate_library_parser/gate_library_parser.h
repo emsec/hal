@@ -28,6 +28,7 @@
 #include "hal_core/defines.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
+#include "hal_core/plugin_system/fac_extension_interface.h"
 
 #include <sstream>
 

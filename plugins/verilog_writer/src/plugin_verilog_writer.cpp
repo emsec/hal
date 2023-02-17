@@ -10,6 +10,20 @@ namespace hal
         return std::make_unique<VerilogWriterPlugin>();
     }
 
+    VerilogWriterExtension::VerilogWriterExtension()
+        : FacExtensionInterface(FacExtensionInterface::FacGatelibParser)
+    {
+        m_description = "Default Verilog Writer";
+        m_supported_file_extensions.push_back(".v");
+        FacFactoryProvider<NetlistWriter>* fac = new FacFactoryProvider<NetlistWriter>;
+        fac->m_factory = []() { return std::make_unique<VerilogWriter>(); };
+        factory_provider = fac;
+    }
+
+    VerilogWriterPlugin::VerilogWriterPlugin()
+        : m_extension(nullptr)
+    {;}
+
     std::string VerilogWriterPlugin::get_name() const
     {
         return std::string("verilog_writer");
@@ -22,11 +36,16 @@ namespace hal
 
     void VerilogWriterPlugin::on_load()
     {
-        netlist_writer_manager::register_writer("Default Verilog Writer", []() { return std::make_unique<VerilogWriter>(); }, {".v"});
+        m_extension = new VerilogWriterExtension;
     }
 
     void VerilogWriterPlugin::on_unload()
     {
-        netlist_writer_manager::unregister_writer("Default Verilog Writer");
+        delete m_extension;
+    }
+
+    std::vector<AbstractExtensionInterface*> VerilogWriterPlugin::get_extensions() const
+    {
+        return std::vector<AbstractExtensionInterface*>({m_extension});
     }
 }    // namespace hal

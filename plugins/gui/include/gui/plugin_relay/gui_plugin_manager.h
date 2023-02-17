@@ -35,6 +35,7 @@
 #include <QTableView>
 #include <QItemDelegate>
 #include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/plugin_system/fac_extension_interface.h"
 
 class QSettings;
 class QPushButton;
@@ -54,7 +55,7 @@ namespace hal {
         QString mFilePath;
         QDateTime mFileModified;
         QStringList mDependencies;
-        plugin_manager::Feature mFeature;
+        FacExtensionInterface::Feature mFeature;
         QStringList mFeatureArguments;
         bool mGuiExtensions;
         bool mCliExtensions;
@@ -121,7 +122,7 @@ namespace hal {
         bool isLoaded(const QModelIndex& index) const;
         bool hasGuiExtension(const QModelIndex& index) const;
         bool isHalGui(const QModelIndex& index) const;
-        void loadFeature(plugin_manager::Feature ft, const QString& extension=QString());
+        void loadFeature(FacExtensionInterface::Feature ft, const QString& extension=QString());
     };
 
     class GuiPluginView : public QTableView

@@ -10,6 +10,20 @@ namespace hal
         return std::make_unique<LibertyParserPlugin>();
     }
 
+    LibertyParserExtension::LibertyParserExtension()
+        : FacExtensionInterface(FacExtensionInterface::FacGatelibParser)
+    {
+        m_description = "Default Liberty Parser";
+        m_supported_file_extensions.push_back(".lib");
+        FacFactoryProvider<GateLibraryParser>* fac = new FacFactoryProvider<GateLibraryParser>;
+        fac->m_factory = []() { return std::make_unique<LibertyParser>(); };
+        factory_provider = fac;
+    }
+
+    LibertyParserPlugin::LibertyParserPlugin()
+        : m_extension(nullptr)
+    {;}
+
     std::string LibertyParserPlugin::get_name() const
     {
         return std::string("liberty_parser");
@@ -22,11 +36,16 @@ namespace hal
 
     void LibertyParserPlugin::on_load()
     {
-        gate_library_parser_manager::register_parser("Default Liberty Parser", []() { return std::make_unique<LibertyParser>(); }, {".lib"});
+        m_extension = new LibertyParserExtension;
     }
 
     void LibertyParserPlugin::on_unload()
     {
-        gate_library_parser_manager::unregister_parser("Default Liberty Parser");
+        delete m_extension;
+    }
+
+    std::vector<AbstractExtensionInterface*> LibertyParserPlugin::get_extensions() const
+    {
+        return std::vector<AbstractExtensionInterface*>({m_extension});
     }
 }    // namespace hal

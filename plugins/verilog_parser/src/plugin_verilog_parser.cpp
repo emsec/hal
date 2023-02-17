@@ -1,6 +1,6 @@
 #include "verilog_parser/plugin_verilog_parser.h"
 
-#include "hal_core/netlist/netlist_parser/netlist_parser_manager.h"
+#include "hal_core/netlist/netlist_parser/netlist_parser.h"
 #include "verilog_parser/verilog_parser.h"
 
 namespace hal
@@ -9,6 +9,20 @@ namespace hal
     {
         return std::make_unique<VerilogParserPlugin>();
     }
+
+    VerilogParserExtension::VerilogParserExtension()
+        : FacExtensionInterface(FacExtensionInterface::FacGatelibParser)
+    {
+        m_description = "Default Verilog Parser";
+        m_supported_file_extensions.push_back(".v");
+        FacFactoryProvider<NetlistParser>* fac = new FacFactoryProvider<NetlistParser>;
+        fac->m_factory = []() { return std::make_unique<VerilogParser>(); };
+        factory_provider = fac;
+    }
+
+    VerilogParserPlugin::VerilogParserPlugin()
+        : m_extension(nullptr)
+    {;}
 
     std::string VerilogParserPlugin::get_name() const
     {
@@ -22,11 +36,16 @@ namespace hal
 
     void VerilogParserPlugin::on_load()
     {
-        netlist_parser_manager::register_parser("Default Verilog Parser", []() { return std::make_unique<VerilogParser>(); }, {".v"});
+        m_extension = new VerilogParserExtension;
     }
 
     void VerilogParserPlugin::on_unload()
     {
-        netlist_parser_manager::unregister_parser("Default Verilog Parser");
+        delete m_extension;
+    }
+
+    std::vector<AbstractExtensionInterface*> VerilogParserPlugin::get_extensions() const
+    {
+        return std::vector<AbstractExtensionInterface*>({m_extension});
     }
 }    // namespace hal

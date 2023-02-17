@@ -2,7 +2,12 @@
 
 #include "hal_core/plugin_system/plugin_interface_cli.h"
 #include "hal_core/plugin_system/plugin_interface_ui.h"
+#include "hal_core/plugin_system/fac_extension_interface.h"
 #include "hal_core/plugin_system/runtime_library.h"
+#include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser_manager.h"
+#include "hal_core/netlist/gate_library/gate_library_writer/gate_library_writer_manager.h"
+#include "hal_core/netlist/netlist_parser/netlist_parser_manager.h"
+#include "hal_core/netlist/netlist_writer/netlist_writer_manager.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
 
@@ -124,12 +129,6 @@ namespace hal
             auto it = m_plugin_features.find(name);
             if (it == m_plugin_features.end()) return std::vector<PluginFeature>();
             return it->second;
-        }
-
-        void register_plugin_feature(Feature ft, const std::vector<std::string>& args, const std::string& desc)
-        {
-            if (m_current_loading.empty()) return; // only on_load() is allowed to register
-            m_plugin_features[m_current_loading].push_back({ft,args,desc});
         }
 
         std::unordered_map<std::string, std::string> get_cli_plugin_flags()
@@ -293,6 +292,45 @@ namespace hal
 
             m_current_loading = plugin_name;
             instance->on_load();
+
+            for (AbstractExtensionInterface* aeif : instance->get_extensions())
+            {
+                FacExtensionInterface* feif = dynamic_cast<FacExtensionInterface*>(aeif);
+                if (!feif) continue;
+                if (feif->get_feature() != FacExtensionInterface::FacUnknown)
+                    m_plugin_features[plugin_name].push_back({feif->get_feature(),
+                                                              feif->get_supported_file_extensions(),
+                                                              feif->get_description()});
+                switch (feif->get_feature())
+                {
+                case FacExtensionInterface::FacNetlistParser:
+                {
+                    FacFactoryProvider<NetlistParser>* fac = static_cast<FacFactoryProvider<NetlistParser>*>(feif->factory_provider);
+                    netlist_parser_manager::register_parser(feif->get_description(), fac->m_factory, feif->get_supported_file_extensions());
+                    break;
+                }
+                case FacExtensionInterface::FacNetlistWriter:
+                {
+                    FacFactoryProvider<NetlistWriter>* fac = static_cast<FacFactoryProvider<NetlistWriter>*>(feif->factory_provider);
+                    netlist_writer_manager::register_writer(feif->get_description(), fac->m_factory, feif->get_supported_file_extensions());
+                    break;
+                }
+                case FacExtensionInterface::FacGatelibParser:
+                {
+                    FacFactoryProvider<GateLibraryParser>* fac = static_cast<FacFactoryProvider<GateLibraryParser>*>(feif->factory_provider);
+                    gate_library_parser_manager::register_parser(feif->get_description(), fac->m_factory, feif->get_supported_file_extensions());
+                    break;
+                }
+                case FacExtensionInterface::FacGatelibWriter:
+                {
+                    FacFactoryProvider<GateLibraryWriter>* fac = static_cast<FacFactoryProvider<GateLibraryWriter>*>(feif->factory_provider);
+                    gate_library_writer_manager::register_writer(feif->get_description(), fac->m_factory, feif->get_supported_file_extensions());
+                    break;
+                }
+                default:
+                    break;
+                }
+            }
             m_current_loading.clear();
 
             m_loaded_plugins[plugin_name] = std::make_tuple(std::move(instance), std::move(lib));
@@ -357,9 +395,33 @@ namespace hal
                 }
             }
 
+
             auto rt_library  = std::move(std::get<1>(it->second));
             auto plugin_inst = std::move(std::get<0>(it->second));
             m_loaded_plugins.erase(it);
+
+            for (AbstractExtensionInterface* aeif : plugin_inst->get_extensions())
+            {
+                FacExtensionInterface* feif = dynamic_cast<FacExtensionInterface*>(aeif);
+                if (!feif) continue;
+                switch (feif->get_feature())
+                {
+                case FacExtensionInterface::FacNetlistParser:
+                    netlist_parser_manager::unregister_parser(feif->get_description());
+                    break;
+                case FacExtensionInterface::FacNetlistWriter:
+                    netlist_writer_manager::unregister_writer(feif->get_description());
+                    break;
+                case FacExtensionInterface::FacGatelibParser:
+                    gate_library_parser_manager::unregister_parser(feif->get_description());
+                    break;
+                case FacExtensionInterface::FacGatelibWriter:
+                    gate_library_writer_manager::unregister_writer(feif->get_description());
+                    break;
+                default:
+                    break;
+                }
+            }
 
             auto file_name = rt_library->get_file_name();
             plugin_inst->on_unload();

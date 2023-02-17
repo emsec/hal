@@ -26,16 +26,32 @@
 #pragma once
 
 #include "hal_core/plugin_system/plugin_interface_base.h"
+#include "hal_core/plugin_system/fac_extension_interface.h"
 
 namespace hal
 {
-    class PLUGIN_API VHDLParserPlugin : public BasePluginInterface
+    class VHDLParserExtension : public FacExtensionInterface
     {
     public:
+        VHDLParserExtension();
+    };
+
+    class PLUGIN_API VHDLParserPlugin : public BasePluginInterface
+    {
+        VHDLParserExtension* m_extension;
+    public:
+        VHDLParserPlugin();
+
         std::string get_name() const override;
         std::string get_version() const override;
 
         void on_load() override;
         void on_unload() override;
+
+        /**
+         * Get file access factory extension functionality implemented by VHDL parser
+         * @return pointer to instance implementing FAC extensions
+         */
+        std::vector<AbstractExtensionInterface*> get_extensions() const override;
     };
 }    // namespace hal

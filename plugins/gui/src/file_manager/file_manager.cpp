@@ -464,7 +464,7 @@ namespace hal
         ProjectJson projFile(QDir(projPath).absoluteFilePath(".project.json"));
         QString glExtension = QFileInfo(projFile.gateLibraryFilename()).suffix();
         if (!glExtension.isEmpty() && gPluginRelay->mGuiPluginTable)
-            gPluginRelay->mGuiPluginTable->loadFeature(plugin_manager::GatelibParser,"." +glExtension);
+            gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser,"." +glExtension);
 
 
         if (!pm->open_project())
@@ -538,7 +538,7 @@ namespace hal
         else
         {
             if (gPluginRelay->mGuiPluginTable)
-                gPluginRelay->mGuiPluginTable->loadFeature(plugin_manager::NetlistParser,"."+nlInfo.suffix());
+                gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacNetlistParser,"."+nlInfo.suffix());
         }
 
         if (!gatelibraryPath.isEmpty())
@@ -546,7 +546,7 @@ namespace hal
             log_info("gui", "Trying to use gate library {}.", gatelibraryPath.toStdString());
             QFileInfo glInfo(gatelibraryPath);
             if (gPluginRelay->mGuiPluginTable)
-                gPluginRelay->mGuiPluginTable->loadFeature(plugin_manager::GatelibParser,"."+glInfo.suffix());
+                gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser,"."+glInfo.suffix());
 
             auto netlist = netlist_factory::load_netlist(filename.toStdString(), gatelibraryPath.toStdString());
 
@@ -571,7 +571,7 @@ namespace hal
         {
             log_info("gui", "Trying to use gate library {}.", lib_file_name.toStdString());
             if (gPluginRelay->mGuiPluginTable)
-                gPluginRelay->mGuiPluginTable->loadFeature(plugin_manager::GatelibParser,".lib");
+                gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser,".lib");
 
             // event_controls::enable_all(false);
             auto netlist = netlist_factory::load_netlist(filename.toStdString(), lib_file_name.toStdString());
@@ -593,7 +593,7 @@ namespace hal
 
         log_info("gui", "Searching for (other) compatible netlists.");
         if (gPluginRelay->mGuiPluginTable)
-            gPluginRelay->mGuiPluginTable->loadFeature(plugin_manager::GatelibParser);
+            gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser);
 
         // event_controls::enable_all(false);
         std::vector<std::unique_ptr<Netlist>> netlists = netlist_factory::load_netlists(filename.toStdString());

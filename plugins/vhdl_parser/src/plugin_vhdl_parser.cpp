@@ -1,6 +1,7 @@
 #include "vhdl_parser/plugin_vhdl_parser.h"
 
 #include "hal_core/netlist/netlist_parser/netlist_parser_manager.h"
+#include "hal_core/plugin_system/fac_extension_interface.h"
 #include "vhdl_parser/vhdl_parser.h"
 
 namespace hal
@@ -9,6 +10,21 @@ namespace hal
     {
         return std::make_unique<VHDLParserPlugin>();
     }
+
+    VHDLParserExtension::VHDLParserExtension()
+        : FacExtensionInterface(FacExtensionInterface::FacGatelibParser)
+    {
+        m_description = "Default VHDL Parser";
+        m_supported_file_extensions.push_back(".vhd");
+        m_supported_file_extensions.push_back(".vhdl");
+        FacFactoryProvider<NetlistParser>* fac = new FacFactoryProvider<NetlistParser>;
+        fac->m_factory = []() { return std::make_unique<VHDLParser>(); };
+        factory_provider = fac;
+    }
+
+    VHDLParserPlugin::VHDLParserPlugin()
+        : m_extension(nullptr)
+    {;}
 
     std::string VHDLParserPlugin::get_name() const
     {
@@ -22,11 +38,16 @@ namespace hal
 
     void VHDLParserPlugin::on_load()
     {
-        netlist_parser_manager::register_parser("Default VHDL Parser", []() { return std::make_unique<VHDLParser>(); }, {".vhd", ".vhdl"});
+        m_extension = new VHDLParserExtension;
     }
 
     void VHDLParserPlugin::on_unload()
     {
-        netlist_parser_manager::unregister_parser("Default VHDL Parser");
+        delete m_extension;
+    }
+
+    std::vector<AbstractExtensionInterface*> VHDLParserPlugin::get_extensions() const
+    {
+        return std::vector<AbstractExtensionInterface*>({m_extension});
     }
 }    // namespace hal
