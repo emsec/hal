@@ -11,7 +11,7 @@ namespace hal
     }
 
     VerilogWriterExtension::VerilogWriterExtension()
-        : FacExtensionInterface(FacExtensionInterface::FacGatelibParser)
+        : FacExtensionInterface(FacExtensionInterface::FacNetlistWriter)
     {
         m_description = "Default Verilog Writer";
         m_supported_file_extensions.push_back(".v");

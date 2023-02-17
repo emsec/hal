@@ -11,7 +11,7 @@ namespace hal
     }
 
     VerilogParserExtension::VerilogParserExtension()
-        : FacExtensionInterface(FacExtensionInterface::FacGatelibParser)
+        : FacExtensionInterface(FacExtensionInterface::FacNetlistParser)
     {
         m_description = "Default Verilog Parser";
         m_supported_file_extensions.push_back(".v");

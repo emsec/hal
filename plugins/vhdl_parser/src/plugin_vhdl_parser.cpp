@@ -12,7 +12,7 @@ namespace hal
     }
 
     VHDLParserExtension::VHDLParserExtension()
-        : FacExtensionInterface(FacExtensionInterface::FacGatelibParser)
+        : FacExtensionInterface(FacExtensionInterface::FacNetlistParser)
     {
         m_description = "Default VHDL Parser";
         m_supported_file_extensions.push_back(".vhd");

@@ -11,7 +11,7 @@ namespace hal
     }
 
     GexfWriterExtension::GexfWriterExtension()
-        : FacExtensionInterface(FacExtensionInterface::FacGatelibParser)
+        : FacExtensionInterface(FacExtensionInterface::FacNetlistWriter)
     {
         m_description = "Default GEXF Writer";
         m_supported_file_extensions.push_back(".gexf");
