@@ -33,17 +33,22 @@ namespace hal
         mSearchbar->setEmitTextWithFlags(false);
         mSearchbar->hide();
 
+        QSize iconSize(20, 20);
+
         // top bar
         // 1. Option
         mHeaderLayout = new QHBoxLayout();
         mNewCommentButton = new QToolButton();
         mNewCommentButton->setIcon(gui_utility::getStyledSvgIcon(mNewCommentIconStyle, mNewCommentIconPath));
-        mNewCommentButton->setIconSize(QSize(23,23));
+        mNewCommentButton->setIconSize(iconSize);
         mSearchButton = new QToolButton();
         mSearchButton->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
-        mSearchButton->setIconSize(QSize(23,23));
+        mSearchButton->setIconSize(iconSize);
         mHeaderLayout->addWidget(mNewCommentButton);// alignleft without spacer
-        mHeaderLayout->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Preferred));
+        //mHeaderLayout->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Preferred));
+        QWidget* spacerWidget = new QWidget; // spacer items are in the overlay transparent, widgets not
+        spacerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        mHeaderLayout->addWidget(spacerWidget);
         mHeaderLayout->addWidget(mSearchButton);// alignright without spacer
         mHeaderLayout->addWidget(mSearchbar);
 
@@ -180,18 +185,14 @@ namespace hal
         if(entry->getNode() != mCurrentNode)
             return;
 
-        CommentItem* commentItem = nullptr;
         for(const auto& item : mEntryItems)
         {
             if(item->getEntry() == entry)
             {
-                commentItem = item;
+                item->updateCurrentEntry();
                 break;
             }
         }
-
-        if(!commentItem) return;
-        commentItem->updateCurrentEntry();
     }
 
     void CommentWidget::handleCommentAdded(CommentEntry *entry)

@@ -207,14 +207,14 @@ namespace hal
 
         for (GraphContext* context : mContextTableModel->list())
         {
-            if (context->isShowingModule(m->get_id(), {added_module}, {}, {}, {}, false) && !context->isShowingModule(added_module, {}, {}, {}, {}, false))
+            if (context->isShowingModule(m->get_id(), {added_module}, {}, {}, {}) && !context->isShowingModule(added_module, {}, {}, {}, {}))
                 context->add({added_module}, {});
             else
                 context->testIfAffected(m->get_id(), &added_module, nullptr);
 
             // When the module is unfolded and was moved to another folded module visible in view,
             // remove all gates and submodules of added_module from view
-            if (context->isShowingModule(added_module, {}, {}, {}, {}, false))
+            if (context->isShowingModule(added_module, {}, {}, {}, {}))
             {
                 QSet<u32> modules = context->modules();
                 modules.remove(added_module);
@@ -241,7 +241,7 @@ namespace hal
 
         for (GraphContext* context : mContextTableModel->list())
         {
-            if (context->isShowingModule(m->get_id(), {}, {}, {removed_module}, {}, false))
+            if (context->isShowingModule(m->get_id(), {}, {}, {removed_module}, {}))
                 context->remove({removed_module}, {});
             else
                 context->testIfAffected(m->get_id(), &removed_module, nullptr);
@@ -266,7 +266,7 @@ namespace hal
 
         for (GraphContext* context : mContextTableModel->list())
         {
-            if (context->isShowingModule(m->get_id(), {}, {inserted_gate}, {}, {}, false))
+            if (context->isShowingModule(m->get_id(), {}, {inserted_gate}, {}, {}))
                 context->add({}, {inserted_gate});
             else
                 context->testIfAffected(m->get_id(), nullptr, &inserted_gate);
@@ -290,7 +290,7 @@ namespace hal
         //        dump("ModuleGateRemoved", m->get_id(), removed_gate);
         for (GraphContext* context : mContextTableModel->list())
         {
-            if (context->isShowingModule(m->get_id(), {}, {}, {}, {removed_gate}, false))
+            if (context->isShowingModule(m->get_id(), {}, {}, {}, {removed_gate}))
             {
                 context->remove({}, {removed_gate});
                 if (context->empty() || context->willBeEmptied())
@@ -549,6 +549,9 @@ namespace hal
                 QString viewName = jsonView["name"].toString();
                 if (viewId > mMaxContextId)
                     mMaxContextId = viewId;
+                int visibleFlag = 1; // default to visible before flag was invented
+                if (jsonView.contains("visible"))
+                    visibleFlag = jsonView["visible"].toInt();
                 GraphContext* context = gGraphContextManager->getContextById(viewId);
                 if (context)
                 {
@@ -582,12 +585,15 @@ namespace hal
                     mContextTableModel->beginInsertContext(context);
                     mContextTableModel->addContext(context);
                     mContextTableModel->endInsertContext();
-                    Q_EMIT contextCreated(context);
+                    if (visibleFlag)
+                        Q_EMIT contextCreated(context);
                 }
 
                 if (jsonView.contains("exclusiveModuleId"))
                     context->setExclusiveModuleId(jsonView["exclusiveModuleId"].toInt(),false);
                 if (jsonView.contains("selected"))
+                    selectedContext = context;
+                if (visibleFlag==2)
                     selectedContext = context;
                 if (!firstContext)
                     firstContext = context;

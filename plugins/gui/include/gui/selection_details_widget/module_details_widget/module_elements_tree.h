@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include "gui/size_adjustable_tree_view/size_adjustable_tree_view.h"
 #include "hal_core/defines.h"
+#include <QTreeView>
 
 namespace hal
 {
@@ -36,7 +36,7 @@ namespace hal
     /**
      * @brief A widget to display the specific (direct submodules, gates) items of a given module.
      */
-    class ModuleElementsTree : public SizeAdjustableTreeView
+    class ModuleElementsTree : public QTreeView
     {
         Q_OBJECT
 

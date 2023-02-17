@@ -408,10 +408,25 @@ namespace hal
             }
 
             // we still need the normal mouse logic for single clicks
-            QGraphicsView::mousePressEvent(event);
+            mousePressEventNotItemDrag(event);
         }
         else
-            QGraphicsView::mousePressEvent(event);
+            mousePressEventNotItemDrag(event);
+    }
+
+    void GraphGraphicsView::mousePressEventNotItemDrag(QMouseEvent *event)
+    {
+        QGraphicsView::mousePressEvent(event);
+        GraphicsScene* sc = dynamic_cast<GraphicsScene*>(scene());
+        if (sc) sc->setMousePressed(true);
+    }
+
+
+    void GraphGraphicsView::mouseReleaseEvent(QMouseEvent *event)
+    {
+        GraphicsScene* sc = dynamic_cast<GraphicsScene*>(scene());
+        if (sc) sc->setMousePressed(false);
+        QGraphicsView::mouseReleaseEvent(event);
     }
 
     void GraphGraphicsView::mouseMoveEvent(QMouseEvent* event)
@@ -1610,10 +1625,14 @@ namespace hal
         auto context = mGraphWidget->getContext();
 
         context->beginChange();
+        UserActionCompound* act = new UserActionCompound;
         for (u32 id : gSelectionRelay->selectedModulesList())
         {
-            context->unfoldModule(id);
+            ActionUnfoldModule* ufo = new ActionUnfoldModule(id);
+            ufo->setContextId(context->id());
+            act->addAction(ufo);
         }
+        act->exec();
         context->endChange();
     }
 

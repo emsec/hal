@@ -122,6 +122,7 @@ namespace hal
         GateInfoTable* mGateInfoTable;
         DetailsFrameWidget* mGateInformationFrame;
 
+        //groupings tab
         GroupingsOfItemWidget* mGroupingsOfItemTable;
         DetailsFrameWidget* mGroupingsFrame;
 

@@ -250,6 +250,7 @@ namespace hal
         m_net_by_name.clear();
         m_nets_to_merge.clear();
         m_module_ports.clear();
+        m_module_port_by_net.clear();
         for (const auto& verilog_module : m_modules)
         {
             for (const auto& instance : verilog_module->m_instances)
