@@ -82,6 +82,7 @@ namespace hal
 
         std::string get_name() const override;
         std::string get_version() const override;
+        std::string get_description() const override;
 
         void initialize() override;
 

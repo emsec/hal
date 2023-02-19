@@ -137,6 +137,11 @@ namespace hal
         return;
     }
 
+    std::vector<AbstractExtensionInterface*> PluginGui::get_extensions() const
+    {
+        return std::vector<AbstractExtensionInterface*>({mCliExtensions});
+    }
+
     bool PluginGui::exec(ProgramArguments& args)
     {
         int argc;
@@ -248,6 +253,11 @@ namespace hal
         return std::string("2.0");
     }
 
+    std::string PluginGui::get_description() const
+    {
+        return std::string("GUI control for HAL app (can't be unloaded)");
+    }
+
     void PluginGui::initialize_logging()
     {
         const char* gui_info_channel[] = {"user", "gui", "python", "UserStudy", nullptr };
@@ -255,7 +265,7 @@ namespace hal
             LogManager::get_instance()->add_channel(gui_info_channel[i], {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     }
 
-    ProgramOptions PluginGui::get_cli_options() const
+    ProgramOptions CliExtensionsGui::get_cli_options() const
     {
         ProgramOptions mDescription;
 

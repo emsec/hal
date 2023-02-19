@@ -54,7 +54,14 @@ namespace hal
         return std::string("0.1");
     }
 
-    ProgramOptions plugin_dataflow::get_cli_options() const
+
+    plugin_dataflow::plugin_dataflow()
+        : m_gui_extension(nullptr)
+    {
+        m_cli_extension = new CliExtensionDataflow(this);
+    }
+
+    ProgramOptions CliExtensionDataflow::get_cli_options() const
     {
         ProgramOptions description;
 
@@ -69,7 +76,9 @@ namespace hal
         return description;
     }
 
-    bool plugin_dataflow::handle_cli_call(Netlist* nl, ProgramArguments& args)
+
+
+    bool CliExtensionDataflow::handle_cli_call(Netlist* nl, ProgramArguments& args)
     {
         UNUSED(args);
         std::string path;
@@ -108,7 +117,7 @@ namespace hal
             }
         }
 
-        if (execute(nl, path, sizes, false, false, false, {{}}).empty(), bad_group_size)
+        if (m_parent->execute(nl, path, sizes, false, false, false, {{}}).empty(), bad_group_size)
         {
             return false;
         }
@@ -370,7 +379,7 @@ namespace hal
 
     std::vector<AbstractExtensionInterface*> plugin_dataflow::get_extensions() const
     {
-        return std::vector<AbstractExtensionInterface*>({m_gui_extension});
+        return std::vector<AbstractExtensionInterface*>({m_cli_extension,m_gui_extension});
     }
 
     void GuiExtensionDataflow::register_progress_indicator(std::function<void(int, const std::string&)> pif)

@@ -3,6 +3,7 @@
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/plugin_system/gui_extension_interface.h"
 #include "hal_core/plugin_system/cli_extension_interface.h"
+#include "hal_core/plugin_system/plugin_interface_ui.h"
 #include "hal_core/netlist/netlist_parser/netlist_parser_manager.h"
 #include <QDebug>
 #include <QMap>
@@ -12,7 +13,6 @@
 #include <QDateTime>
 #include <QSettings>
 #include <QBrush>
-#include <QDebug>
 #include <QApplication>
 #include <QPainter>
 #include <QPushButton>
@@ -34,6 +34,7 @@ namespace hal {
         mGuiPluginView = new GuiPluginView(this);
         mGuiPluginTable = new GuiPluginTable(this);
         connect(mGuiPluginTable,&GuiPluginTable::triggerInvokeGui,this,&GuiPluginManager::handleInvokeGui);
+        connect(mGuiPluginTable,&GuiPluginTable::showCliOptions,this,&GuiPluginManager::handleShowCliOptions);
         connect(gPluginRelay,&PluginRelay::pluginLoaded,mGuiPluginTable,&GuiPluginTable::handlePluginLoaded);
         connect(gPluginRelay,&PluginRelay::pluginUnloaded,mGuiPluginTable,&GuiPluginTable::handlePluginUnloaded);
         gPluginRelay->mGuiPluginTable = mGuiPluginTable;
@@ -42,6 +43,7 @@ namespace hal {
         GuiPluginDelegate* delegate = new GuiPluginDelegate(this);
         connect(delegate,&GuiPluginDelegate::buttonPressed,mGuiPluginTable,&GuiPluginTable::handleButtonPressed);
         mGuiPluginView->setItemDelegateForColumn(10,delegate);
+        mGuiPluginView->setItemDelegateForColumn(8,delegate);
         mGuiPluginView->setItemDelegateForColumn(7,delegate);
         mGuiPluginView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
         mGuiPluginView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
@@ -51,16 +53,18 @@ namespace hal {
         QLabel* legendHeader = new QLabel("Buttons used in table above:", this);
         legendHeader->setFixedHeight(48);
         layout->addWidget(legendHeader,Qt::AlignLeft);
-        QPixmap* picon[3] = {
+        QPixmap* picon[4] = {
             new QPixmap(":/icons/insert_plugin", "PNG"),
             new QPixmap(":/icons/x_delete",      "PNG"),
+            new QPixmap(":/icons/cli_options",   "PNG"),
             new QPixmap(":/icons/invoke_gui",    "PNG")};
-        QLabel* ltext[3] = {
+        QLabel* ltext[4] = {
             new QLabel("Load HAL plugin and dependencies (if any)", this),
             new QLabel("Unload HAL plugin unless needed as dependency by other plugin", this),
+            new QLabel("This plugin contributes CLI options. Click button for description of options.", this),
             new QLabel("This plugin contributes its own settings menu to GUI. Click button in order to return to netlist and open menu.", this)};
 
-        for (int i=0; i<3; i++)
+        for (int i=0; i<4; i++)
         {
             QHBoxLayout* legend = new QHBoxLayout;
             QLabel* licon = new QLabel(this);
@@ -79,7 +83,7 @@ namespace hal {
         connect(butCancel,&QPushButton::clicked,this,&GuiPluginManager::handleButtonCancel);
         buttonLayout->addWidget(butCancel);
         QPushButton* butRefresh = new QPushButton("Refresh", this);
-        connect(butRefresh,&QPushButton::clicked,this,&GuiPluginManager::handleButtonRefresh);
+        connect(butRefresh,&QPushButton::clicked,mGuiPluginTable,&GuiPluginTable::handleRefresh);
         buttonLayout->addWidget(butRefresh);
         layout->addLayout(buttonLayout);
     }
@@ -89,14 +93,16 @@ namespace hal {
         Q_EMIT backToNetlist(QString());
     }
 
-    void GuiPluginManager::handleButtonRefresh()
-    {
-
-    }
-
     void GuiPluginManager::handleInvokeGui(const QString &pluginName)
     {
         Q_EMIT backToNetlist(pluginName);
+    }
+
+    void GuiPluginManager::handleShowCliOptions(const QString &pluginName, const QString &cliOptions)
+    {
+        QMessageBox* msg = new QMessageBox(QMessageBox::NoIcon, "CLI Options for "+pluginName, cliOptions);
+        msg->setStyleSheet("QLabel{min-width: 800px;}");
+        msg->exec();
     }
 
     //_________________VIEW_______________________________
@@ -109,6 +115,30 @@ namespace hal {
     //_________________TABLE______________________________
     GuiPluginTable::GuiPluginTable(QObject* parent)
         : QAbstractTableModel(parent)
+    {
+        mWaitForRefresh = true;
+        populateTable(false);
+        mWaitForRefresh = false;
+    }
+
+    GuiPluginTable::~GuiPluginTable()
+    {
+        clearMemory();
+    }
+
+    void GuiPluginTable::handleRefresh()
+    {
+        if (mWaitForRefresh) return;
+
+        beginResetModel();
+        mWaitForRefresh = true;
+        clearMemory();
+        populateTable(true);
+        mWaitForRefresh = false;
+        endResetModel();
+    }
+
+    void GuiPluginTable::populateTable(bool refresh)
     {
         QDir userConfigDir(QString::fromStdString(utils::get_user_config_directory()));
         QMap<QString,GuiPluginEntry*> pluginEntries;
@@ -140,17 +170,15 @@ namespace hal {
                 if (gpe)
                 {
                    needUpdate = gpe->mFileModified != info.lastModified();
-                   qDebug() << pluginName << "needs update" << needUpdate << gpe->mFileModified << info.lastModified();
                 }
                 else
                 {
                     gpe = new GuiPluginEntry(info);
                     pluginEntries.insert(pluginName,gpe);
-                    qDebug() << pluginName << "inserted" << info.lastModified();
                 }
 
                 BasePluginInterface* bpif = plugin_manager::get_plugin_instance(pluginName.toStdString(), true, true);
-                if (bpif)
+                if (bpif && !refresh)
                 {
                     // plugin already loaded ?
                     bool alreadyLoaded = loadedPlugins.find(pluginName.toStdString())!=loadedPlugins.end();
@@ -240,11 +268,13 @@ namespace hal {
 
     void GuiPluginTable::handlePluginLoaded(const QString& pluginName, const QString&)
     {
+        if (mWaitForRefresh) return;
         changeState(pluginName,GuiPluginEntry::AutoLoad);
     }
 
     void GuiPluginTable::handlePluginUnloaded(const QString& pluginName, const QString&)
     {
+        if (mWaitForRefresh) return;
         changeState(pluginName,GuiPluginEntry::NotLoaded);
     }
 
@@ -327,10 +357,17 @@ namespace hal {
         return retval;
     }
 
-    GuiPluginTable::~GuiPluginTable()
+    void GuiPluginTable::clearMemory()
     {
+
         for (GuiPluginEntry* entry : mEntries)
             delete entry;
+
+        mEntries.clear();
+        mAvoid.clear();
+        mLookup.clear();
+        mSettings->deleteLater();
+        mSettings = nullptr;
     }
 
     int GuiPluginTable::rowCount(const QModelIndex&) const
@@ -351,10 +388,10 @@ namespace hal {
             {
             case 0: return "Name";
             case 1: return "Description";
-            case 2: return "Path";
+            case 2: return "Filename";
             case 3: return "Timestamp";
             case 4: return "Dependencies";
-            case 5: return "Feature";
+            case 5: return "Category";
             case 6: return "Extensions";
             case 7: return "GUI";
             case 8: return "CLI";
@@ -368,15 +405,25 @@ namespace hal {
 
     void GuiPluginTable::handleButtonPressed(const QModelIndex& buttonIndex)
     {
+        if (mWaitForRefresh) return;
+
         int irow = buttonIndex.row();
         if (irow >= mEntries.size()) return;
         GuiPluginEntry* gpe = mEntries.at(irow);
-        if (gpe->mName == "hal_gui") return;
-        if (buttonIndex.column()<10)
+        switch (buttonIndex.column())
         {
-            if (gpe->isLoaded()) Q_EMIT triggerInvokeGui(gpe->mName);
+        case 7:
+            if (gpe->mName == "hal_gui") return;
+            if (gpe->isLoaded())
+                Q_EMIT triggerInvokeGui(gpe->mName);
+            return;
+        case 8:
+            if (!gpe->mCliOptions.isEmpty())
+                Q_EMIT showCliOptions(gpe->mName, gpe->mCliOptions);
             return;
         }
+        if (gpe->mName == "hal_gui") return;
+
         bool success = false;
         if (gpe->isLoaded())
         {
@@ -440,6 +487,12 @@ namespace hal {
         return mEntries.at(index.row())->mGuiExtensions;
     }
 
+    bool GuiPluginTable::hasCliExtension(const QModelIndex& index) const
+    {
+        if (index.row() >= mEntries.size()) return false;
+        return !mEntries.at(index.row())->mCliOptions.isEmpty();
+    }
+
     bool GuiPluginTable::isLoaded(const QModelIndex &index) const
     {
         if (index.row() >= mEntries.size()) return false;
@@ -470,8 +523,9 @@ namespace hal {
           mFilePath(info.absoluteFilePath()),
           mFileModified(info.lastModified()),
           mFeature(FacExtensionInterface::FacUnknown),
-          mGuiExtensions(false),
-          mCliExtensions(false) {;}
+          mUserInterface(false),
+          mGuiExtensions(false)
+    {;}
 
     QVariant GuiPluginEntry::data(int icol) const
     {
@@ -482,17 +536,22 @@ namespace hal {
         case 2: return QFileInfo(mFilePath).fileName();
         case 3: return mFileModified.toString("dd.MM.yy hh:mm");
         case 4: return mDependencies.join(' ');
-        case 5: switch (mFeature)
+        case 5:
+        {
+            switch (mFeature)
             {
             case FacExtensionInterface::FacNetlistParser: return "Netlist parser";
             case FacExtensionInterface::FacNetlistWriter: return "Netlist writer";
             case FacExtensionInterface::FacGatelibParser: return "Gate library parser";
             case FacExtensionInterface::FacGatelibWriter: return "Gate library writer";
-            default: return "Other HAL plugin";
+            default: break;
             }
+            if (mUserInterface) return "HAL user interface";
+            return "Other HAL plugin";
+        }
         case 6: return mFeatureArguments.join(' ');
         case 7: return mGuiExtensions;
-        case 8: return mCliExtensions;
+        case 8: return mCliOptions;
         case 9: return isLoaded() ? "LOADED" : "-";
         case 10: return (int) mState;
         }
@@ -510,8 +569,9 @@ namespace hal {
         settings->setValue("dependencies", mDependencies);
         settings->setValue("feature_code", (int) mFeature);
         settings->setValue("feature_args", mFeatureArguments);
+        settings->setValue("user_interface", mUserInterface);
         settings->setValue("extends_gui", mGuiExtensions);
-        settings->setValue("extends_cli", mCliExtensions);
+        settings->setValue("cli_options", mCliOptions);
     }
 
     GuiPluginEntry::GuiPluginEntry(const QSettings *settings)
@@ -525,8 +585,9 @@ namespace hal {
         mDependencies     = settings->value("dependencies").toStringList();
         mFeature = (FacExtensionInterface::Feature) settings->value("feature_code").toInt();
         mFeatureArguments = settings->value("feature_args").toStringList();
+        mUserInterface    = settings->value("user_interface").toBool();
         mGuiExtensions    = settings->value("extends_gui").toBool();
-        mCliExtensions    = settings->value("extends_cli").toBool();
+        mCliOptions    = settings->value("cli_options").toString();
     }
 
     void GuiPluginEntry::updateFromLoaded(const BasePluginInterface *bpif, bool isUser, const QDateTime& modified)
@@ -548,13 +609,16 @@ namespace hal {
             for (std::string arg : feature.args)
                 mFeatureArguments.append(QString::fromStdString(arg));
         }
+        mCliOptions.clear();
         for (AbstractExtensionInterface* aeif : bpif->get_extensions())
         {
+            CliExtensionInterface* ceif = nullptr;
             if (dynamic_cast<GuiExtensionInterface*>(aeif))
                 mGuiExtensions = true;
-            else if (dynamic_cast<CliExtensionInterface*>(aeif))
-                mCliExtensions = true;
+            else if ((ceif=dynamic_cast<CliExtensionInterface*>(aeif)))
+                mCliOptions = QString::fromStdString(ceif->get_cli_options().get_options_string());
         }
+        mUserInterface = (dynamic_cast<const UIPluginInterface*>(bpif) != nullptr);
         if (modified.isValid()) mFileModified = modified;
     }
 
@@ -564,7 +628,8 @@ namespace hal {
           mIconLoad(":/icons/insert_plugin"),
           mIconUnload(":/icons/x_delete"),
           mIconInvokeGui(":/icons/invoke_gui"),
-          mIconDisabledGui(":/icons/disabled_gui")
+          mIconDisabledGui(":/icons/disabled_gui"),
+          mIconCliOptions(":/icons/cli_options")
     {
         int bgBright[3] = {26, 46, 80};
         for (int i=0; i<3; i++)
@@ -585,22 +650,31 @@ namespace hal {
         const int w = 28;
         const GuiPluginTable* plt = dynamic_cast<const GuiPluginTable*>(index.model());
         if (!plt) return;
-        if (plt->isHalGui(index)) return;
         QStyleOptionButton button;
-        if (index.column()<10)
+        switch (index.column())
         {
+        case 7:
             button.iconSize = QSize(w-4,w-4);
             if (plt->hasGuiExtension(index))
                 button.icon = (plt->isLoaded(index) && gNetlist) ? mIconInvokeGui : mIconDisabledGui;
             else return;
-        }
-        else
-        {
+            break;
+        case 8:
+            button.iconSize = QSize(w-4,w-4);
+            if (plt->hasCliExtension(index))
+                button.icon = mIconCliOptions;
+            else return;
+            break;
+        case 10:
+            if (plt->isHalGui(index)) return;
             if (plt->isLoaded(index))
                 button.icon = mIconUnload;
             else
                 button.icon = mIconLoad;
             button.iconSize = QSize(w-12,w-12);
+            break;
+        default:
+            return;
         }
 
         QRect r = option.rect;

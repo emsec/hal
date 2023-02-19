@@ -1,6 +1,7 @@
 #include "hal_core/plugin_system/plugin_manager.h"
 
-#include "hal_core/plugin_system/plugin_interface_cli.h"
+#include "hal_core/plugin_system/plugin_interface_base.h"
+#include "hal_core/plugin_system/cli_extension_interface.h"
 #include "hal_core/utilities/log.h"
 #include "netlist_test_utils.h"
 #include "test_def.h"
@@ -345,7 +346,7 @@ namespace hal
         // Load the test_plugin
         if (load_reference_plugin())
         {
-            auto test_plugin_instance = plugin_manager::get_plugin_instance<CLIPluginInterface>(m_reference_library_name);
+            BasePluginInterface* test_plugin_instance = plugin_manager::get_plugin_instance(m_reference_library_name);
             ASSERT_NE(test_plugin_instance, nullptr);
             EXPECT_EQ(test_plugin_instance->get_name(), m_reference_name);
             NO_COUT_TEST_BLOCK;
@@ -363,13 +364,13 @@ namespace hal
         {
             // Passing an unknown plugin name
             NO_COUT_TEST_BLOCK;
-            auto plugin_instance = plugin_manager::get_plugin_instance<CLIPluginInterface>("unknown_plugin");
+            BasePluginInterface* plugin_instance = plugin_manager::get_plugin_instance("unknown_plugin");
             EXPECT_EQ(plugin_instance, nullptr);
         }
         {
             // Passing an empty string
             NO_COUT_TEST_BLOCK;
-            auto plugin_instance = plugin_manager::get_plugin_instance<CLIPluginInterface>("");
+            BasePluginInterface* plugin_instance = plugin_manager::get_plugin_instance("");
             EXPECT_EQ(plugin_instance, nullptr);
         }
 

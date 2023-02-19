@@ -25,8 +25,9 @@
 
 #pragma once
 
-#include "hal_core/plugin_system/plugin_interface_cli.h"
+#include "hal_core/plugin_system/plugin_interface_base.h"
 #include "hal_core/plugin_system/gui_extension_interface.h"
+#include "hal_core/plugin_system/cli_extension_interface.h"
 
 #include <vector>
 
@@ -37,6 +38,17 @@ namespace hal
     class Gate;
 
     class plugin_dataflow;
+
+    class CliExtensionDataflow : public CliExtensionInterface
+    {
+        plugin_dataflow* m_parent;
+    public:
+        CliExtensionDataflow(plugin_dataflow* p)
+            : m_parent(p)
+        {;}
+        virtual ProgramOptions get_cli_options() const override;
+        virtual bool handle_cli_call(Netlist* netlist, ProgramArguments& args) override;
+    };
 
     class GuiExtensionDataflow : public GuiExtensionInterface
     {
@@ -79,15 +91,16 @@ namespace hal
         static std::function<void(int, const std::string&)> s_progress_indicator_function;
     };
 
-    class PLUGIN_API plugin_dataflow : virtual public CLIPluginInterface
+    class PLUGIN_API plugin_dataflow : public BasePluginInterface
     {
+        CliExtensionDataflow* m_cli_extension;
         GuiExtensionDataflow* m_gui_extension;
     public:
         /*
          *      interface implementations
          */
 
-        plugin_dataflow()  : m_gui_extension(nullptr) {;}
+        plugin_dataflow();
         ~plugin_dataflow() = default;
 
         /**
@@ -120,12 +133,6 @@ namespace hal
          * @returns The version of the plugin.
          */
         std::string get_version() const override;
-
-        /** interface implementation: i_cli */
-        ProgramOptions get_cli_options() const override;
-
-        /** interface implementation: i_cli */
-        bool handle_cli_call(Netlist* nl, ProgramArguments& args) override;
 
         std::vector<AbstractExtensionInterface*> get_extensions() const override;
 

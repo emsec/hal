@@ -1,8 +1,8 @@
 #include "hal_core/plugin_system/plugin_manager.h"
 
-#include "hal_core/plugin_system/plugin_interface_cli.h"
 #include "hal_core/plugin_system/plugin_interface_ui.h"
 #include "hal_core/plugin_system/fac_extension_interface.h"
+#include "hal_core/plugin_system/cli_extension_interface.h"
 #include "hal_core/plugin_system/runtime_library.h"
 #include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser_manager.h"
 #include "hal_core/netlist/gate_library/gate_library_writer/gate_library_writer_manager.h"
@@ -33,11 +33,8 @@ namespace hal
             // stores special features offered by plugin
             std::unordered_map<std::string, std::vector<PluginFeature>> m_plugin_features;
 
-            // stores the CLI parser option for CLI plugins
-            std::unordered_map<std::string, std::string> m_cli_option_to_cli_plugin_name;
-
-            // stores the CLI parser option for UI plugins
-            std::unordered_map<std::string, std::string> m_cli_option_to_ui_plugin_name;
+            // stores the CLI parser option for plugins [0=base_plugin] [1=UI_plugin]
+            std::unordered_map<std::string, std::string> m_cli_option_to_plugin_name[2];
 
             // stores the GUI callback
             CallbackHook<void(bool, std::string const&, std::string const&)> m_hook;
@@ -133,12 +130,12 @@ namespace hal
 
         std::unordered_map<std::string, std::string> get_cli_plugin_flags()
         {
-            return m_cli_option_to_cli_plugin_name;
+            return m_cli_option_to_plugin_name[0];
         }
 
         std::unordered_map<std::string, std::string> get_ui_plugin_flags()
         {
-            return m_cli_option_to_ui_plugin_name;
+            return m_cli_option_to_plugin_name[1];
         }
 
         ProgramOptions get_cli_plugin_options()
@@ -221,15 +218,17 @@ namespace hal
             }
 
             /* add cli options */
-            if (instance->has_type(PluginInterfaceType::cli))
+            CliExtensionInterface* ceif = instance->get_first_extension<CliExtensionInterface>();
+            if (ceif)
             {
-                auto plugin = dynamic_cast<CLIPluginInterface*>(instance.get());
+                BasePluginInterface* plugin = instance.get();
                 if (plugin == nullptr)
                 {
                     return false;
                 }
 
-                auto cli_options = plugin->get_cli_options();
+                auto cli_options = ceif->get_cli_options();
+                UIPluginInterface* ui_plugin = dynamic_cast<UIPluginInterface*>(plugin);
                 for (const auto& cli_option : cli_options.get_options())
                 {
                     for (const auto& flag : std::get<0>(cli_option))
@@ -239,49 +238,14 @@ namespace hal
                             log_error("core", "command line option '{}' is already used by generic program options -- use another one.", flag);
                             return false;
                         }
-                        if (m_cli_option_to_cli_plugin_name.find(flag) != m_cli_option_to_cli_plugin_name.end())
-                        {
-                            log_error(
-                                "core", "command line option '{}' is already used by plugin '{}' -- use another option in plugin '{}'.", flag, m_cli_option_to_cli_plugin_name[flag], plugin_name);
-                            return false;
-                        }
-                        m_cli_option_to_cli_plugin_name[flag] = plugin_name;
-                        log_debug("core", "registered command line option '{}' for plugin '{}'.", flag, plugin->get_name());
-                    }
-                }
-                m_plugin_options.add(cli_options);
-            }
-            if (instance->has_type(PluginInterfaceType::interactive_ui))
-            {
-                auto plugin = dynamic_cast<UIPluginInterface*>(instance.get());
-                if (plugin == nullptr)
-                {
-                    return false;
-                }
 
-                auto cli_options = plugin->get_cli_options();
-                for (const auto& cli_option : cli_options.get_options())
-                {
-                    for (const auto& flag : std::get<0>(cli_option))
-                    {
-                        if (m_existing_options.is_registered(flag))
-                        {
-                            log_error("core", "command line option '{}' is already used by generic program options -- use another one.", flag);
+                        for (int iplugType = 0; iplugType<2; iplugType++)
+                            if (m_cli_option_to_plugin_name[iplugType].find(flag) != m_cli_option_to_plugin_name[iplugType].end())
+                            {
+                                log_error("core", "command line option '{}' is already used by plugin '{}' -- use another option in plugin '{}'.", flag, m_cli_option_to_plugin_name[iplugType][flag], plugin_name);
                             return false;
                         }
-                        if (m_cli_option_to_cli_plugin_name.find(flag) != m_cli_option_to_cli_plugin_name.end())
-                        {
-                            log_error(
-                                "core", "command line option '{}' is already used by cli plugin '{}' -- use another option in plugin '{}'.", flag, m_cli_option_to_cli_plugin_name[flag], plugin_name);
-                            return false;
-                        }
-                        if (m_cli_option_to_ui_plugin_name.find(flag) != m_cli_option_to_ui_plugin_name.end())
-                        {
-                            log_error(
-                                "core", "command line option '{}' is already used by ui plugin '{}' -- use another option in plugin '{}'.", flag, m_cli_option_to_ui_plugin_name[flag], plugin_name);
-                            return false;
-                        }
-                        m_cli_option_to_ui_plugin_name[flag] = plugin_name;
+                        m_cli_option_to_plugin_name[ui_plugin?1:0][flag] = plugin_name;
                         log_debug("core", "registered command line option '{}' for plugin '{}'.", flag, plugin->get_name());
                     }
                 }
@@ -372,32 +336,27 @@ namespace hal
 
             log_info("core", "unloading plugin '{}'...", plugin_name);
 
-            {
-                auto tmp = m_cli_option_to_cli_plugin_name;
-                for (auto [flag, name] : tmp)
-                {
-                    if (name == plugin_name)
-                    {
-                        m_cli_option_to_cli_plugin_name.erase(flag);
-                        m_plugin_options.remove(flag);
-                    }
-                }
-            }
-            {
-                auto tmp = m_cli_option_to_ui_plugin_name;
-                for (auto [flag, name] : tmp)
-                {
-                    if (name == plugin_name)
-                    {
-                        m_cli_option_to_ui_plugin_name.erase(flag);
-                        m_plugin_options.remove(flag);
-                    }
-                }
-            }
-
 
             auto rt_library  = std::move(std::get<1>(it->second));
             auto plugin_inst = std::move(std::get<0>(it->second));
+
+            {
+                auto iplugType = dynamic_cast<UIPluginInterface*>(plugin_inst.get()) ? 1 : 0;
+                auto it = m_cli_option_to_plugin_name[iplugType].begin();
+                while (it != m_cli_option_to_plugin_name[iplugType].end())
+                {
+                    auto flag = it->first;
+                    auto name = it->second;
+                    if (name == plugin_name)
+                    {
+                        m_plugin_options.remove(flag);
+                        it = m_cli_option_to_plugin_name[iplugType].erase(it);
+                    }
+                    else
+                        ++it;
+                }
+            }
+
             m_loaded_plugins.erase(it);
 
             for (AbstractExtensionInterface* aeif : plugin_inst->get_extensions())

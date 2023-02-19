@@ -26,15 +26,33 @@
 #pragma once
 
 #include "hal_core/plugin_system/plugin_interface_ui.h"
+#include "hal_core/plugin_system/cli_extension_interface.h"
 
 namespace hal
 {
-    class PluginPythonShell : virtual public UIPluginInterface
+    class CliExtensionPythonShell : public CliExtensionInterface
     {
     public:
-        PluginPythonShell() = default;
+        CliExtensionPythonShell() = default;
+        ~CliExtensionPythonShell() = default;
 
-        ~PluginPythonShell() = default;
+        /**
+         * Returns command line interface options
+         *
+         * @returns The program options description.
+         */
+        ProgramOptions get_cli_options() const override;
+
+        virtual bool handle_cli_call(Netlist*, ProgramArguments&) override {return false; }
+    };
+
+    class PluginPythonShell : virtual public UIPluginInterface
+    {
+        CliExtensionPythonShell* mCliExtensions;
+    public:
+        PluginPythonShell() { mCliExtensions = new CliExtensionPythonShell; }
+
+        ~PluginPythonShell() { delete mCliExtensions; }
 
         /*
          *      interface implementations
@@ -55,13 +73,6 @@ namespace hal
         std::string get_version() const override;
 
         /**
-         * Returns command line interface options
-         *
-         * @returns The program options description.
-         */
-        ProgramOptions get_cli_options() const override;
-
-        /**
          * Excutes the plugin with given command line parameters.
          *
          * @param[in] args - The command line parameters.
@@ -74,5 +85,12 @@ namespace hal
          * @param enable[in] unused
          */
         void set_layout_locker(bool) override {;}
+
+        /**
+         * Extension to return CLI options
+         * @return pointer to instance implementing extensions
+         */
+        std::vector<AbstractExtensionInterface*> get_extensions() const override;
+
     };
 }    // namespace hal

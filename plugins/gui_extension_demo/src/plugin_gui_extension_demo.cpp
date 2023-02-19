@@ -38,6 +38,11 @@ namespace hal
         return std::string("0.1");
     }
 
+    std::string GuiExtensionDemoPlugin::get_description() const
+    {
+        return std::string("Demo: extension of GUI menu by pluggable python scripts");
+    }
+
     void GuiExtensionDemoPlugin::initialize()
     {
         std::cerr << "GuiExtensionDemoPlugin::initialize()" << std::endl;

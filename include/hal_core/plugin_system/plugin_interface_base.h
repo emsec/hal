@@ -50,19 +50,6 @@ namespace hal
 #endif
 
     /**
-     * Enum for all possible plugin types
-     * 
-     * @ingroup plugins
-     */
-    enum class CORE_API PluginInterfaceType
-    {
-        base,
-        cli,
-        interactive_ui,
-        gui
-    };
-
-    /**
      * @ingroup plugins
      */
     class CORE_API BasePluginInterface
@@ -98,14 +85,6 @@ namespace hal
          * @return description should not have more than 40 characters
          */
         virtual std::string get_description() const {return std::string(); };
-
-        /**
-         * Check whether the plugin has a specific type.
-         *
-         * @param[in] t - the type to check
-         * @returns True, if the type is supported.
-         */
-        bool has_type(PluginInterfaceType t) const;
 
         /**
          * Shorthand for fast text logging.
@@ -145,7 +124,21 @@ namespace hal
          * Get GUI/CLI/FAC extension functionality if implemented by derived class
          * @return pointer to instance implementing extensions
          */
-        virtual std::vector<AbstractExtensionInterface*> get_extensions() const { return std::vector<AbstractExtensionInterface*>(); }
+        virtual std::vector<AbstractExtensionInterface*> get_extensions() const {
+            return std::vector<AbstractExtensionInterface*>(); }
+
+        /**
+         * Get first extension of given type T.
+         * @return pointer to first extension of type T or nullptr if no such extension exists.
+         */
+        template<typename T> T* get_first_extension() const {
+            for (AbstractExtensionInterface* aeif : get_extensions())
+            {
+                T* retval = dynamic_cast<T*>(aeif);
+                if (retval) return retval;
+            }
+            return nullptr;
+        }
     };
 
     using instantiate_plugin_function = std::unique_ptr<BasePluginInterface> (*)();

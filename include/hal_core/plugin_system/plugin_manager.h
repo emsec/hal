@@ -150,6 +150,21 @@ namespace hal
         }
 
         /**
+         * Get first plugin extension of given type T.
+         *
+         * @param[in] plugin_name - The name of the plugin.
+         * @param[in] initialize - If false, the plugin's initialize function is not called.
+         * @return pointer to first extension of type T or nullptr if no such extension exists.
+         */
+        template<typename T>
+        T* get_first_extension(const std::string& plugin_name, bool initialize = true)
+        {
+            BasePluginInterface* bpif = get_plugin_instance(plugin_name, initialize);
+            if (!bpif) return nullptr;
+            return bpif->get_first_extension<T>();
+        }
+
+        /**
          * TODO Python binding.
          * 
          * Add a callback to notify the GUI about loaded or unloaded plugins.

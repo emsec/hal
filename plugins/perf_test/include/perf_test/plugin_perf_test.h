@@ -25,28 +25,43 @@
 
 #pragma once
 
-#include "hal_core/plugin_system/plugin_interface_cli.h"
+#include "hal_core/plugin_system/plugin_interface_base.h"
+#include "hal_core/plugin_system/cli_extension_interface.h"
 
 namespace hal
 {
     class NetlistSimulatorController;
+    class PerfTestPlugin;
 
     /* forward declaration */
 
-    class PLUGIN_API PerfTestPlugin : public CLIPluginInterface
+    class CliExtensionsPerfTest : public CliExtensionInterface
     {
+        PerfTestPlugin* mParent;
     public:
-        std::string get_name() const override;
-        std::string get_version() const override;
-
-        void initialize() override;
+        CliExtensionsPerfTest(PerfTestPlugin* p) : mParent(p) {;}
 
         /** interface implementation: i_cli */
         ProgramOptions get_cli_options() const override;
 
         /** interface implementation: i_cli */
         bool handle_cli_call(hal::Netlist* nl, hal::ProgramArguments& args) override;
+    };
+
+    class PLUGIN_API PerfTestPlugin : public BasePluginInterface
+    {
+        CliExtensionInterface* mCliExtensions;
+    public:
+        PerfTestPlugin();
+        ~PerfTestPlugin();
+
+        std::string get_name() const override;
+        std::string get_version() const override;
+
+        void initialize() override;
 
         bool cmp_sim_data(hal::NetlistSimulatorController* reference_simulation_ctrl, hal::NetlistSimulatorController* simulation_ctrl, int tolerance = 200);
+
+        std::vector<AbstractExtensionInterface *> get_extensions() const override;
     };
 }    // namespace hal

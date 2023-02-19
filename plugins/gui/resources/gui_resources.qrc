@@ -98,6 +98,7 @@
         <file alias="insert_plugin">icons/insert_plugin.png</file>
         <file alias="invoke_gui">icons/invoke_gui.png</file>
         <file alias="disabled_gui">icons/disabled_gui.png</file>
+        <file alias="cli_options">icons/cli_options.png</file>
         <file alias="check-mark">icons/check-mark.png</file>
         <file alias="attention">icons/attention.png</file> 
    </qresource>

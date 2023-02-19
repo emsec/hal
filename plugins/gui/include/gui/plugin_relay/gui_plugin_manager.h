@@ -36,6 +36,7 @@
 #include <QItemDelegate>
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/plugin_system/fac_extension_interface.h"
+#include "hal_core/utilities/program_options.h"
 
 class QSettings;
 class QPushButton;
@@ -57,8 +58,9 @@ namespace hal {
         QStringList mDependencies;
         FacExtensionInterface::Feature mFeature;
         QStringList mFeatureArguments;
+        bool mUserInterface;
         bool mGuiExtensions;
-        bool mCliExtensions;
+        QString mCliOptions;
 
     public:
         GuiPluginEntry(const QFileInfo& info);
@@ -79,6 +81,7 @@ namespace hal {
         QIcon mIconUnload;
         QIcon mIconInvokeGui;
         QIcon mIconDisabledGui;
+        QIcon mIconCliOptions;
         QPoint mMousePos;
         QModelIndex mMouseIndex;
         QPushButton* mTemplateButton[3];
@@ -100,14 +103,19 @@ namespace hal {
         QList<GuiPluginEntry*> mAvoid;
         QMap<QString,int> mLookup;
         QSettings* mSettings;
+        bool mWaitForRefresh;
 
         void changeState(const QString& pluginName, GuiPluginEntry::State state);
+        void populateTable(bool refresh);
+        void clearMemory();
     Q_SIGNALS:
         void triggerInvokeGui(QString pluginName);
+        void showCliOptions(QString pluginName, QString cliOptions);
     public Q_SLOTS:
         void handleButtonPressed(const QModelIndex& buttonIndex);
         void handlePluginLoaded(const QString& pluginName, const QString& path);
         void handlePluginUnloaded(const QString& pluginName, const QString& path);
+        void handleRefresh();
     public:
         GuiPluginTable(QObject* parent = nullptr);
         ~GuiPluginTable();
@@ -121,6 +129,7 @@ namespace hal {
         void persist();
         bool isLoaded(const QModelIndex& index) const;
         bool hasGuiExtension(const QModelIndex& index) const;
+        bool hasCliExtension(const QModelIndex& index) const;
         bool isHalGui(const QModelIndex& index) const;
         void loadFeature(FacExtensionInterface::Feature ft, const QString& extension=QString());
     };
@@ -141,8 +150,8 @@ namespace hal {
         void backToNetlist(QString invokeGui);
     private Q_SLOTS:
         void handleButtonCancel();
-        void handleButtonRefresh();
         void handleInvokeGui(const QString& pluginName);
+        void handleShowCliOptions(const QString& pluginName, const QString& cliOptions);
     public:
         GuiPluginManager(QWidget* parent = nullptr);
         static QMap<QString,GuiExtensionInterface*> getGuiExtensions();

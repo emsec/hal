@@ -24,6 +24,16 @@ namespace hal
         return std::make_unique<PerfTestPlugin>();
     }
 
+    PerfTestPlugin::PerfTestPlugin()
+    {
+        mCliExtensions = new CliExtensionsPerfTest(this);
+    }
+
+    PerfTestPlugin::~PerfTestPlugin()
+    {
+        delete mCliExtensions;
+    }
+
     std::string PerfTestPlugin::get_name() const
     {
         return std::string("perf_test");
@@ -38,7 +48,7 @@ namespace hal
     {
     }
 
-    ProgramOptions PerfTestPlugin::get_cli_options() const
+    ProgramOptions CliExtensionsPerfTest::get_cli_options() const
     {
         ProgramOptions description;
 
@@ -300,7 +310,7 @@ namespace hal
         return no_errors;
     }
 
-    bool PerfTestPlugin::handle_cli_call(Netlist* nl, ProgramArguments& args)
+    bool CliExtensionsPerfTest::handle_cli_call(Netlist* nl, ProgramArguments& args)
     {
         std::string base_path;
 
@@ -479,8 +489,12 @@ namespace hal
         //EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() <= (int)nl->get_nets().size());    // net might have additional '0' and '1'
 
         //Test if maps are equal
-        bool equal = cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get());
+        bool equal = mParent->cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get());
         return true;
     }
 
+    std::vector<AbstractExtensionInterface *> PerfTestPlugin::get_extensions() const
+    {
+        return std::vector<AbstractExtensionInterface*>({mCliExtensions});
+    }
 }    // namespace hal
