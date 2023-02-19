@@ -341,17 +341,6 @@ namespace hal
         const QAction* act = static_cast<const QAction*>(sender());
         if (!act) return;
 
-        // check if verilator is installed
-        if (act->text().toStdString() == "verilator")
-        {
-            std::string cmd = "which verilator";
-            if (std::system(cmd.c_str()) != 0)
-            {
-                log_warning("simulation_plugin", "Verilator is not installed");
-            }
-        }
-
-
         mCurrentWaveWidget->createEngine(act->text());
     }
 
