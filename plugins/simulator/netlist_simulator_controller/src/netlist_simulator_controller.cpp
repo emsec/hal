@@ -431,6 +431,7 @@ namespace hal
             return false;
         }
 
+        // start simulation process (might be external process)
         if (!mSimulationEngine->run(this))
         {
             log_warning(get_name(), "simulation engine error during startup.");
