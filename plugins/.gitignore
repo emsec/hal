@@ -1,4 +1,6 @@
 *
+!bitorder_propagation*
+!bitorder_propagation/**/*
 !boolean_influence*
 !boolean_influence/**/*
 !dataflow_analysis*

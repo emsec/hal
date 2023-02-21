@@ -60,8 +60,20 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
 
     qt5_wrap_cpp(MOC_source ${SRC})
 
+    foreach(i IN ITEMS "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
+        foreach(j IN ITEMS "RUNTIME" "ARCHIVE" "LIBRARY")
+            set(STORE_${j}_OUTDIR${i} ${CMAKE_${j}_OUTPUT_DIRECTORY${i}})
+            set(CMAKE_${j}_OUTPUT_DIRECTORY${i} "${CMAKE_BINARY_DIR}/lib")
+        endforeach()
+    endforeach()
     set (QUAZIP_SUBDIR "${CMAKE_SOURCE_DIR}/deps/quazip-1.3")
     add_subdirectory(${QUAZIP_SUBDIR} ${CMAKE_BINARY_DIR}/quazip)
+
+    foreach(i IN ITEMS "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
+        foreach(j IN ITEMS "RUNTIME" "ARCHIVE" "LIBRARY")
+            set(CMAKE_${j}_OUTPUT_DIRECTORY${i} ${STORE_${j}_OUTDIR${i}})
+        endforeach()
+    endforeach()
 
     qt5_wrap_cpp(MOC_HDR ${HDR})
     qt5_wrap_ui(MOC_UI ${UI})
