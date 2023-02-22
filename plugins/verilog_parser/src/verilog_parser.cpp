@@ -1543,8 +1543,7 @@ namespace hal
             }
             else
             {
-                continue;
-                // return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': failed to find alias for net '" + a + "'");
+                return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': failed to find alias for net '" + a + "'");
             }
 
             if (const auto parent_it = parent_module_assignments.find(b); parent_it != parent_module_assignments.end())
