@@ -1,7 +1,9 @@
 #pragma once
 
+#include "hal_core/defines.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
 #include "hal_core/utilities/result.h"
+#include "hal_core/netlist/netlist.h"
 
 namespace hal
 {
