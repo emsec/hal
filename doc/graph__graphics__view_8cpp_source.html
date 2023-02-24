@@ -1672,254 +1672,253 @@ $(document).ready(function(){initNavTree('graph__graphics__view_8cpp_source.html
 <div class="line"><a name="l01584"></a><span class="lineno"> 1584</span>&#160;    <span class="keywordtype">void</span> GraphGraphicsView::handleFoldParentAll()</div>
 <div class="line"><a name="l01585"></a><span class="lineno"> 1585</span>&#160;    {</div>
 <div class="line"><a name="l01586"></a><span class="lineno"> 1586</span>&#160;        GraphContext* context = mGraphWidget-&gt;<a class="code" href="classhal_1_1_graph_widget.html#a5a6cbeadb67e9674001cd5302e339b56">getContext</a>();</div>
-<div class="line"><a name="l01587"></a><span class="lineno"> 1587</span>&#160;        <span class="keyword">const</span> NodeBoxes boxes = context-&gt;<a class="code" href="classhal_1_1_graph_context.html#ab4ff1193f5bdd31d5863e33832e28c13">getLayouter</a>()-&gt;<a class="code" href="classhal_1_1_graph_layouter.html#af3c01b3f53761de10a07641a4fef1b7e">boxes</a>();</div>
-<div class="line"><a name="l01588"></a><span class="lineno"> 1588</span>&#160; </div>
-<div class="line"><a name="l01589"></a><span class="lineno"> 1589</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;const Module*&gt;</a> modSet;</div>
-<div class="line"><a name="l01590"></a><span class="lineno"> 1590</span>&#160; </div>
-<div class="line"><a name="l01591"></a><span class="lineno"> 1591</span>&#160;        <span class="keywordflow">for</span> (Node&amp; nd : <a class="code" href="namespacehal.html#a6ba6e6ec49eb58d0b35a604e16187112">gSelectionRelay</a>-&gt;<a class="code" href="classhal_1_1_selection_relay.html#a412b6703ed3b76ba5c5a04b558c83b47">selectedNodesList</a>())</div>
-<div class="line"><a name="l01592"></a><span class="lineno"> 1592</span>&#160;        {</div>
-<div class="line"><a name="l01593"></a><span class="lineno"> 1593</span>&#160;            <span class="keywordflow">if</span> (!context-&gt;getLayouter()-&gt;boxes().boxForNode(nd)) <span class="keywordflow">continue</span>; <span class="comment">// not in view</span></div>
-<div class="line"><a name="l01594"></a><span class="lineno"> 1594</span>&#160; </div>
-<div class="line"><a name="l01595"></a><span class="lineno"> 1595</span>&#160;            <span class="keywordflow">switch</span> (nd.type())</div>
-<div class="line"><a name="l01596"></a><span class="lineno"> 1596</span>&#160;            {</div>
-<div class="line"><a name="l01597"></a><span class="lineno"> 1597</span>&#160;            <span class="keywordflow">case</span> <a class="code" href="classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34a62114aae0cfe74a2f09f2bbdced26fa6">Node::Gate</a>:</div>
-<div class="line"><a name="l01598"></a><span class="lineno"> 1598</span>&#160;                modSet.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#insert">insert</a>(<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#a26d0f67be01c66f22422f40938e29237">get_gate_by_id</a>(nd.id())-&gt;<a class="code" href="classhal_1_1_gate.html#a8ebbb9b79db2666beadc913467436a1f">get_module</a>());</div>
-<div class="line"><a name="l01599"></a><span class="lineno"> 1599</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l01600"></a><span class="lineno"> 1600</span>&#160;            <span class="keywordflow">case</span> <a class="code" href="classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34a2b02efee2cb6afc1c319874996e97f25">Node::Module</a>:</div>
-<div class="line"><a name="l01601"></a><span class="lineno"> 1601</span>&#160;                modSet.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#insert">insert</a>(<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#aa963e38a4ce49c0e440be5e36f46369a">get_module_by_id</a>(nd.id())-&gt;<a class="code" href="classhal_1_1_module.html#a1af5f0f3f5ea75b8762d65d5fcfab3e3">get_parent_module</a>());</div>
-<div class="line"><a name="l01602"></a><span class="lineno"> 1602</span>&#160;            <span class="keywordflow">default</span>:</div>
-<div class="line"><a name="l01603"></a><span class="lineno"> 1603</span>&#160;                <span class="keywordflow">continue</span>;</div>
-<div class="line"><a name="l01604"></a><span class="lineno"> 1604</span>&#160;            }</div>
-<div class="line"><a name="l01605"></a><span class="lineno"> 1605</span>&#160;        }</div>
-<div class="line"><a name="l01606"></a><span class="lineno"> 1606</span>&#160; </div>
-<div class="line"><a name="l01607"></a><span class="lineno"> 1607</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qmultimap.html">QMultiMap&lt;int,const Module*&gt;</a> modDepth;</div>
-<div class="line"><a name="l01608"></a><span class="lineno"> 1608</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> Module* m : modSet)</div>
-<div class="line"><a name="l01609"></a><span class="lineno"> 1609</span>&#160;            <span class="keywordflow">if</span> (m) modDepth.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap-obsolete.html#insertMulti">insertMulti</a>(m-&gt;get_submodule_depth(),m);</div>
-<div class="line"><a name="l01610"></a><span class="lineno"> 1610</span>&#160; </div>
-<div class="line"><a name="l01611"></a><span class="lineno"> 1611</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qmapiterator.html">QMapIterator&lt;int,const Module*&gt;</a> it(modDepth);</div>
-<div class="line"><a name="l01612"></a><span class="lineno"> 1612</span>&#160;        it.toBack();</div>
-<div class="line"><a name="l01613"></a><span class="lineno"> 1613</span>&#160;        <span class="keywordflow">while</span> (it.hasPrevious())</div>
-<div class="line"><a name="l01614"></a><span class="lineno"> 1614</span>&#160;        {</div>
-<div class="line"><a name="l01615"></a><span class="lineno"> 1615</span>&#160;            it.previous();</div>
-<div class="line"><a name="l01616"></a><span class="lineno"> 1616</span>&#160;            <span class="keyword">const</span> <a class="code" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ae55f75a29310d7b60f7ac1d390c8ae42">Module</a>* m = it.value();</div>
-<div class="line"><a name="l01617"></a><span class="lineno"> 1617</span>&#160;            ActionFoldModule* act = <span class="keyword">new</span> ActionFoldModule(m-&gt;get_id());</div>
-<div class="line"><a name="l01618"></a><span class="lineno"> 1618</span>&#160;            act-&gt;setContextId(context-&gt;id());</div>
-<div class="line"><a name="l01619"></a><span class="lineno"> 1619</span>&#160;            act-&gt;exec();</div>
-<div class="line"><a name="l01620"></a><span class="lineno"> 1620</span>&#160;        }</div>
-<div class="line"><a name="l01621"></a><span class="lineno"> 1621</span>&#160;    }</div>
-<div class="line"><a name="l01622"></a><span class="lineno"> 1622</span>&#160; </div>
-<div class="line"><a name="l01623"></a><span class="lineno"> 1623</span>&#160;    <span class="keywordtype">void</span> GraphGraphicsView::handleUnfoldAllAction()</div>
-<div class="line"><a name="l01624"></a><span class="lineno"> 1624</span>&#160;    {</div>
-<div class="line"><a name="l01625"></a><span class="lineno"> 1625</span>&#160;        <span class="keyword">auto</span> context = mGraphWidget-&gt;<a class="code" href="classhal_1_1_graph_widget.html#a5a6cbeadb67e9674001cd5302e339b56">getContext</a>();</div>
-<div class="line"><a name="l01626"></a><span class="lineno"> 1626</span>&#160; </div>
-<div class="line"><a name="l01627"></a><span class="lineno"> 1627</span>&#160;        context-&gt;<a class="code" href="classhal_1_1_graph_context.html#a13df27071c670c4bd04c08be3058afe1">beginChange</a>();</div>
-<div class="line"><a name="l01628"></a><span class="lineno"> 1628</span>&#160;        UserActionCompound* act = <span class="keyword">new</span> UserActionCompound;</div>
-<div class="line"><a name="l01629"></a><span class="lineno"> 1629</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span> : <a class="code" href="namespacehal.html#a6ba6e6ec49eb58d0b35a604e16187112">gSelectionRelay</a>-&gt;<a class="code" href="classhal_1_1_selection_relay.html#a494254b4bad811cdc998dcc0e0a736ea">selectedModulesList</a>())</div>
-<div class="line"><a name="l01630"></a><span class="lineno"> 1630</span>&#160;        {</div>
-<div class="line"><a name="l01631"></a><span class="lineno"> 1631</span>&#160;            ActionUnfoldModule* ufo = <span class="keyword">new</span> ActionUnfoldModule(<span class="keywordtype">id</span>);</div>
-<div class="line"><a name="l01632"></a><span class="lineno"> 1632</span>&#160;            ufo-&gt;setContextId(context-&gt;id());</div>
-<div class="line"><a name="l01633"></a><span class="lineno"> 1633</span>&#160;            act-&gt;addAction(ufo);</div>
-<div class="line"><a name="l01634"></a><span class="lineno"> 1634</span>&#160;        }</div>
-<div class="line"><a name="l01635"></a><span class="lineno"> 1635</span>&#160;        act-&gt;exec();</div>
-<div class="line"><a name="l01636"></a><span class="lineno"> 1636</span>&#160;        context-&gt;endChange();</div>
-<div class="line"><a name="l01637"></a><span class="lineno"> 1637</span>&#160;    }</div>
-<div class="line"><a name="l01638"></a><span class="lineno"> 1638</span>&#160; </div>
-<div class="line"><a name="l01639"></a><span class="lineno"> 1639</span>&#160;    <span class="keywordtype">void</span> GraphGraphicsView::handleGroupingUnassign()</div>
-<div class="line"><a name="l01640"></a><span class="lineno"> 1640</span>&#160;    {</div>
-<div class="line"><a name="l01641"></a><span class="lineno"> 1641</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;UserAction*&gt;</a> actList;</div>
-<div class="line"><a name="l01642"></a><span class="lineno"> 1642</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> UserActionObject&amp; obj : <a class="code" href="namespacehal.html#a6ba6e6ec49eb58d0b35a604e16187112">gSelectionRelay</a>-&gt;<a class="code" href="classhal_1_1_selection_relay.html#a1162df01f394b8e7347377d4fe8e7d4f">toUserActionObject</a>())</div>
-<div class="line"><a name="l01643"></a><span class="lineno"> 1643</span>&#160;        {</div>
-<div class="line"><a name="l01644"></a><span class="lineno"> 1644</span>&#160;            UserAction* act = <a class="code" href="namespacehal.html#a36ac15c9dc231bbb2cff96b936a5b8d4">gContentManager</a>-&gt;<a class="code" href="classhal_1_1_content_manager.html#a28e77316a27e08b40d5f05fe87f67442">getSelectionDetailsWidget</a>()-&gt;<a class="code" href="classhal_1_1_selection_details_widget.html#ab3e209462aed3084f6482d2c23d9251b">groupingUnassignActionFactory</a>(obj);</div>
-<div class="line"><a name="l01645"></a><span class="lineno"> 1645</span>&#160;            <span class="keywordflow">if</span> (act) actList.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#append">append</a>(act);</div>
-<div class="line"><a name="l01646"></a><span class="lineno"> 1646</span>&#160;        }</div>
-<div class="line"><a name="l01647"></a><span class="lineno"> 1647</span>&#160;        <span class="keywordflow">if</span> (actList.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#isEmpty">isEmpty</a>()) <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l01648"></a><span class="lineno"> 1648</span>&#160;        <span class="keywordflow">if</span> (actList.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#size">size</a>() == 1)</div>
-<div class="line"><a name="l01649"></a><span class="lineno"> 1649</span>&#160;        {</div>
-<div class="line"><a name="l01650"></a><span class="lineno"> 1650</span>&#160;            actList.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#at">at</a>(0)-&gt;exec();</div>
-<div class="line"><a name="l01651"></a><span class="lineno"> 1651</span>&#160;            <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l01652"></a><span class="lineno"> 1652</span>&#160;        }</div>
-<div class="line"><a name="l01653"></a><span class="lineno"> 1653</span>&#160;        UserActionCompound* compound = <span class="keyword">new</span> UserActionCompound;</div>
-<div class="line"><a name="l01654"></a><span class="lineno"> 1654</span>&#160;        <span class="keywordflow">for</span> (UserAction* act : actList) compound-&gt;addAction(act);</div>
-<div class="line"><a name="l01655"></a><span class="lineno"> 1655</span>&#160;        compound-&gt;exec();</div>
-<div class="line"><a name="l01656"></a><span class="lineno"> 1656</span>&#160;    }</div>
-<div class="line"><a name="l01657"></a><span class="lineno"> 1657</span>&#160; </div>
-<div class="line"><a name="l01658"></a><span class="lineno"> 1658</span>&#160;    <span class="keywordtype">void</span> GraphGraphicsView::handleGroupingDialog()</div>
-<div class="line"><a name="l01659"></a><span class="lineno"> 1659</span>&#160;    {</div>
-<div class="line"><a name="l01660"></a><span class="lineno"> 1660</span>&#160;        GroupingDialog gd(<span class="keyword">this</span>);</div>
-<div class="line"><a name="l01661"></a><span class="lineno"> 1661</span>&#160;        <span class="keywordflow">if</span> (gd.exec() != <a class="codeRef" href="https://doc.qt.io/qt-5/qdialog.html#DialogCode-enum">QDialog::Accepted</a>) <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l01662"></a><span class="lineno"> 1662</span>&#160;        <span class="keywordflow">if</span> (gd.isNewGrouping())</div>
-<div class="line"><a name="l01663"></a><span class="lineno"> 1663</span>&#160;        {</div>
-<div class="line"><a name="l01664"></a><span class="lineno"> 1664</span>&#160;            <a class="code" href="namespacehal.html#a36ac15c9dc231bbb2cff96b936a5b8d4">gContentManager</a>-&gt;<a class="code" href="classhal_1_1_content_manager.html#a28e77316a27e08b40d5f05fe87f67442">getSelectionDetailsWidget</a>()-&gt;<a class="code" href="classhal_1_1_selection_details_widget.html#aa5b8c37993e3d5c95bce10aac8314880">selectionToGroupingAction</a>();</div>
-<div class="line"><a name="l01665"></a><span class="lineno"> 1665</span>&#160;            <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l01666"></a><span class="lineno"> 1666</span>&#160;        }</div>
-<div class="line"><a name="l01667"></a><span class="lineno"> 1667</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> groupName = <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#ae41916880e2d766ab5367d26ee6cb2b3">get_grouping_by_id</a>(gd.groupId())-&gt;<a class="code" href="classhal_1_1_grouping.html#a8036479cd8276ae940d4ec370b1e53e3">get_name</a>());</div>
-<div class="line"><a name="l01668"></a><span class="lineno"> 1668</span>&#160;        <a class="code" href="namespacehal.html#a36ac15c9dc231bbb2cff96b936a5b8d4">gContentManager</a>-&gt;<a class="code" href="classhal_1_1_content_manager.html#a28e77316a27e08b40d5f05fe87f67442">getSelectionDetailsWidget</a>()-&gt;<a class="code" href="classhal_1_1_selection_details_widget.html#aa5b8c37993e3d5c95bce10aac8314880">selectionToGroupingAction</a>(groupName);</div>
-<div class="line"><a name="l01669"></a><span class="lineno"> 1669</span>&#160;    }</div>
-<div class="line"><a name="l01670"></a><span class="lineno"> 1670</span>&#160; </div>
-<div class="line"><a name="l01671"></a><span class="lineno"> 1671</span>&#160;    <span class="keywordtype">void</span> GraphGraphicsView::handleGroupingAssignNew()</div>
-<div class="line"><a name="l01672"></a><span class="lineno"> 1672</span>&#160;    {</div>
-<div class="line"><a name="l01673"></a><span class="lineno"> 1673</span>&#160;        <a class="code" href="namespacehal.html#a36ac15c9dc231bbb2cff96b936a5b8d4">gContentManager</a>-&gt;<a class="code" href="classhal_1_1_content_manager.html#a28e77316a27e08b40d5f05fe87f67442">getSelectionDetailsWidget</a>()-&gt;<a class="code" href="classhal_1_1_selection_details_widget.html#aa5b8c37993e3d5c95bce10aac8314880">selectionToGroupingAction</a>();</div>
-<div class="line"><a name="l01674"></a><span class="lineno"> 1674</span>&#160;    }</div>
-<div class="line"><a name="l01675"></a><span class="lineno"> 1675</span>&#160; </div>
-<div class="line"><a name="l01676"></a><span class="lineno"> 1676</span>&#160;    <span class="keywordtype">void</span> GraphGraphicsView::handleGroupingAssingExisting()</div>
-<div class="line"><a name="l01677"></a><span class="lineno"> 1677</span>&#160;    {</div>
-<div class="line"><a name="l01678"></a><span class="lineno"> 1678</span>&#160;        handleGroupingUnassign();</div>
-<div class="line"><a name="l01679"></a><span class="lineno"> 1679</span>&#160;        <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qaction.html">QAction</a>* <a class="code" href="namespacecontrol.html#a27d3a5443c46266e0263e8ccbb40d0a9">action</a> = <span class="keyword">static_cast&lt;</span><span class="keyword">const </span><a class="codeRef" href="https://doc.qt.io/qt-5/qaction.html">QAction</a>*<span class="keyword">&gt;</span>(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#sender">QObject::sender</a>());</div>
-<div class="line"><a name="l01680"></a><span class="lineno"> 1680</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> grpName       = <a class="code" href="namespacecontrol.html#a27d3a5443c46266e0263e8ccbb40d0a9">action</a>-&gt;text();</div>
-<div class="line"><a name="l01681"></a><span class="lineno"> 1681</span>&#160;        <span class="keywordflow">if</span> (grpName.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#startsWith">startsWith</a>(sAssignToGrouping)) <span class="comment">// remove trailing &quot;Assign to..&quot;</span></div>
-<div class="line"><a name="l01682"></a><span class="lineno"> 1682</span>&#160;            grpName.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#remove">remove</a>(0,sAssignToGrouping.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#length">length</a>());</div>
-<div class="line"><a name="l01683"></a><span class="lineno"> 1683</span>&#160;        <a class="code" href="namespacehal.html#a36ac15c9dc231bbb2cff96b936a5b8d4">gContentManager</a>-&gt;<a class="code" href="classhal_1_1_content_manager.html#a28e77316a27e08b40d5f05fe87f67442">getSelectionDetailsWidget</a>()-&gt;<a class="code" href="classhal_1_1_selection_details_widget.html#aa5b8c37993e3d5c95bce10aac8314880">selectionToGroupingAction</a>(grpName);</div>
-<div class="line"><a name="l01684"></a><span class="lineno"> 1684</span>&#160;    }</div>
-<div class="line"><a name="l01685"></a><span class="lineno"> 1685</span>&#160; </div>
-<div class="line"><a name="l01686"></a><span class="lineno"> 1686</span>&#160;<span class="preprocessor">#ifdef GUI_DEBUG_GRID</span></div>
-<div class="line"><a name="l01687"></a><span class="lineno"> 1687</span>&#160;    <span class="keywordtype">void</span> GraphGraphicsView::debugShowLayouterGridpos(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a>&amp; mouse_pos)</div>
-<div class="line"><a name="l01688"></a><span class="lineno"> 1688</span>&#160;    {</div>
-<div class="line"><a name="l01689"></a><span class="lineno"> 1689</span>&#160;        <span class="keyword">auto</span> context = mGraphWidget-&gt;<a class="code" href="classhal_1_1_graph_widget.html#a5a6cbeadb67e9674001cd5302e339b56">getContext</a>();</div>
-<div class="line"><a name="l01690"></a><span class="lineno"> 1690</span>&#160;        <span class="keywordflow">if</span> (!context)</div>
-<div class="line"><a name="l01691"></a><span class="lineno"> 1691</span>&#160;            <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l01692"></a><span class="lineno"> 1692</span>&#160; </div>
-<div class="line"><a name="l01693"></a><span class="lineno"> 1693</span>&#160;        <span class="keyword">const</span> GraphLayouter* layouter = context-&gt;<a class="code" href="classhal_1_1_graph_context.html#ab4ff1193f5bdd31d5863e33832e28c13">getLayouter</a>();</div>
-<div class="line"><a name="l01694"></a><span class="lineno"> 1694</span>&#160;        <span class="keywordflow">if</span> (!(layouter-&gt;done()))</div>
-<div class="line"><a name="l01695"></a><span class="lineno"> 1695</span>&#160;            <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l01696"></a><span class="lineno"> 1696</span>&#160; </div>
-<div class="line"><a name="l01697"></a><span class="lineno"> 1697</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a> scene_mouse_pos = <a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#mapToScene">mapToScene</a>(mouse_pos);</div>
-<div class="line"><a name="l01698"></a><span class="lineno"> 1698</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a> layouter_pos     = closestLayouterPos(scene_mouse_pos)[0];</div>
-<div class="line"><a name="l01699"></a><span class="lineno"> 1699</span>&#160;        m_debug_gridpos         = layouter_pos;</div>
-<div class="line"><a name="l01700"></a><span class="lineno"> 1700</span>&#160;    }</div>
-<div class="line"><a name="l01701"></a><span class="lineno"> 1701</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l01702"></a><span class="lineno"> 1702</span>&#160; </div>
-<div class="line"><a name="l01703"></a><span class="lineno"> 1703</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html">QVector&lt;QPoint&gt;</a> GraphGraphicsView::closestLayouterPos(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a>&amp; scene_pos)<span class="keyword"> const</span></div>
-<div class="line"><a name="l01704"></a><span class="lineno"> 1704</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l01705"></a><span class="lineno"> 1705</span>&#160;        <span class="keyword">auto</span> context = mGraphWidget-&gt;<a class="code" href="classhal_1_1_graph_widget.html#a5a6cbeadb67e9674001cd5302e339b56">getContext</a>();</div>
-<div class="line"><a name="l01706"></a><span class="lineno"> 1706</span>&#160;        assert(context);</div>
-<div class="line"><a name="l01707"></a><span class="lineno"> 1707</span>&#160; </div>
-<div class="line"><a name="l01708"></a><span class="lineno"> 1708</span>&#160;        <span class="keyword">const</span> GraphLayouter* layouter = context-&gt;getLayouter();</div>
-<div class="line"><a name="l01709"></a><span class="lineno"> 1709</span>&#160;        assert(layouter-&gt;done());    <span class="comment">// ensure grid stable</span></div>
-<div class="line"><a name="l01710"></a><span class="lineno"> 1710</span>&#160; </div>
-<div class="line"><a name="l01711"></a><span class="lineno"> 1711</span>&#160;        <span class="keywordtype">int</span> default_width      = layouter-&gt;defaultGridWidth();</div>
-<div class="line"><a name="l01712"></a><span class="lineno"> 1712</span>&#160;        <span class="keywordtype">int</span> default_height     = layouter-&gt;defaultGridHeight();</div>
-<div class="line"><a name="l01713"></a><span class="lineno"> 1713</span>&#160;        <span class="keywordtype">int</span> min_x              = layouter-&gt;minXIndex();</div>
-<div class="line"><a name="l01714"></a><span class="lineno"> 1714</span>&#160;        <span class="keywordtype">int</span> min_y              = layouter-&gt;minYIndex();</div>
-<div class="line"><a name="l01715"></a><span class="lineno"> 1715</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html">QVector&lt;qreal&gt;</a> x_vals  = layouter-&gt;xValues();</div>
-<div class="line"><a name="l01716"></a><span class="lineno"> 1716</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html">QVector&lt;qreal&gt;</a> y_vals  = layouter-&gt;yValues();</div>
-<div class="line"><a name="l01717"></a><span class="lineno"> 1717</span>&#160;        LayouterPoint x_point = closestLayouterPoint(scene_pos.<a class="codeRef" href="https://doc.qt.io/qt-5/qpointf.html#x">x</a>(), default_width, min_x, x_vals);</div>
-<div class="line"><a name="l01718"></a><span class="lineno"> 1718</span>&#160;        LayouterPoint y_point = closestLayouterPoint(scene_pos.<a class="codeRef" href="https://doc.qt.io/qt-5/qpointf.html#y">y</a>(), default_height, min_y, y_vals);</div>
-<div class="line"><a name="l01719"></a><span class="lineno"> 1719</span>&#160;        <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html">QVector</a>({<a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a>(x_point.mIndex, y_point.mIndex), <a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a>(x_point.mPos, y_point.mPos)});</div>
-<div class="line"><a name="l01720"></a><span class="lineno"> 1720</span>&#160;    }</div>
-<div class="line"><a name="l01721"></a><span class="lineno"> 1721</span>&#160; </div>
-<div class="line"><a name="l01722"></a><span class="lineno"> 1722</span>&#160;    GraphGraphicsView::LayouterPoint GraphGraphicsView::closestLayouterPoint(qreal scene_pos, <span class="keywordtype">int</span> default_spacing, <span class="keywordtype">int</span> min_index, <a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html">QVector&lt;qreal&gt;</a> sections)<span class="keyword"> const</span></div>
-<div class="line"><a name="l01723"></a><span class="lineno"> 1723</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l01724"></a><span class="lineno"> 1724</span>&#160;        <span class="keywordtype">int</span> index = min_index;</div>
-<div class="line"><a name="l01725"></a><span class="lineno"> 1725</span>&#160;        qreal <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#pos-prop">pos</a> = 0;</div>
-<div class="line"><a name="l01726"></a><span class="lineno"> 1726</span>&#160;        <span class="keywordflow">if</span> (sections.<a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html#first">first</a>() &gt; scene_pos)</div>
-<div class="line"><a name="l01727"></a><span class="lineno"> 1727</span>&#160;        {</div>
-<div class="line"><a name="l01728"></a><span class="lineno"> 1728</span>&#160;            <span class="keywordtype">int</span> distance   = sections.<a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html#first">first</a>() - scene_pos;</div>
-<div class="line"><a name="l01729"></a><span class="lineno"> 1729</span>&#160;            <span class="keywordtype">int</span> nSections  = distance / default_spacing;    <span class="comment">// this rounds down</span></div>
-<div class="line"><a name="l01730"></a><span class="lineno"> 1730</span>&#160;            qreal posThis  = sections.<a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html#first">first</a>() - nSections * default_spacing;</div>
-<div class="line"><a name="l01731"></a><span class="lineno"> 1731</span>&#160;            qreal distThis = qAbs(scene_pos - posThis);</div>
-<div class="line"><a name="l01732"></a><span class="lineno"> 1732</span>&#160;            qreal posPrev  = posThis - default_spacing;</div>
-<div class="line"><a name="l01733"></a><span class="lineno"> 1733</span>&#160;            qreal distPrev = qAbs(scene_pos - posPrev);</div>
-<div class="line"><a name="l01734"></a><span class="lineno"> 1734</span>&#160;            <span class="keywordflow">if</span> (distPrev &lt; distThis)</div>
-<div class="line"><a name="l01735"></a><span class="lineno"> 1735</span>&#160;            {</div>
-<div class="line"><a name="l01736"></a><span class="lineno"> 1736</span>&#160;                index -= nSections + 1;</div>
-<div class="line"><a name="l01737"></a><span class="lineno"> 1737</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#pos-prop">pos</a> = posPrev;</div>
-<div class="line"><a name="l01738"></a><span class="lineno"> 1738</span>&#160;            }</div>
-<div class="line"><a name="l01739"></a><span class="lineno"> 1739</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l01740"></a><span class="lineno"> 1740</span>&#160;            {</div>
-<div class="line"><a name="l01741"></a><span class="lineno"> 1741</span>&#160;                index -= nSections;</div>
-<div class="line"><a name="l01742"></a><span class="lineno"> 1742</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#pos-prop">pos</a> = posThis;</div>
-<div class="line"><a name="l01743"></a><span class="lineno"> 1743</span>&#160;            }</div>
-<div class="line"><a name="l01744"></a><span class="lineno"> 1744</span>&#160;        }</div>
-<div class="line"><a name="l01745"></a><span class="lineno"> 1745</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (sections.<a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html#last">last</a>() &lt; scene_pos)</div>
-<div class="line"><a name="l01746"></a><span class="lineno"> 1746</span>&#160;        {</div>
-<div class="line"><a name="l01747"></a><span class="lineno"> 1747</span>&#160;            <span class="keywordtype">int</span> distance   = scene_pos - sections.<a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html#last">last</a>();</div>
-<div class="line"><a name="l01748"></a><span class="lineno"> 1748</span>&#160;            <span class="keywordtype">int</span> nSections  = distance / default_spacing;    <span class="comment">// this rounds down</span></div>
-<div class="line"><a name="l01749"></a><span class="lineno"> 1749</span>&#160;            qreal posThis  = sections.<a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html#last">last</a>() + nSections * default_spacing;</div>
-<div class="line"><a name="l01750"></a><span class="lineno"> 1750</span>&#160;            qreal distThis = qAbs(scene_pos - posThis);</div>
-<div class="line"><a name="l01751"></a><span class="lineno"> 1751</span>&#160;            qreal posNext  = posThis + default_spacing;</div>
-<div class="line"><a name="l01752"></a><span class="lineno"> 1752</span>&#160;            qreal distNext = qAbs(scene_pos - posNext);</div>
-<div class="line"><a name="l01753"></a><span class="lineno"> 1753</span>&#160;            <span class="keywordflow">if</span> (distNext &lt; distThis)</div>
-<div class="line"><a name="l01754"></a><span class="lineno"> 1754</span>&#160;            {</div>
-<div class="line"><a name="l01755"></a><span class="lineno"> 1755</span>&#160;                index += nSections + sections.<a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html#size">size</a>();</div>
-<div class="line"><a name="l01756"></a><span class="lineno"> 1756</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#pos-prop">pos</a> = posNext;</div>
-<div class="line"><a name="l01757"></a><span class="lineno"> 1757</span>&#160;            }</div>
-<div class="line"><a name="l01758"></a><span class="lineno"> 1758</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l01759"></a><span class="lineno"> 1759</span>&#160;            {</div>
-<div class="line"><a name="l01760"></a><span class="lineno"> 1760</span>&#160;                index += nSections + sections.<a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html#size">size</a>() - 1;</div>
-<div class="line"><a name="l01761"></a><span class="lineno"> 1761</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#pos-prop">pos</a> = posThis;</div>
-<div class="line"><a name="l01762"></a><span class="lineno"> 1762</span>&#160;            }</div>
-<div class="line"><a name="l01763"></a><span class="lineno"> 1763</span>&#160;        }</div>
-<div class="line"><a name="l01764"></a><span class="lineno"> 1764</span>&#160;        <span class="keywordflow">else</span></div>
-<div class="line"><a name="l01765"></a><span class="lineno"> 1765</span>&#160;        {</div>
-<div class="line"><a name="l01766"></a><span class="lineno"> 1766</span>&#160;            <span class="comment">// binary search for first value in sections larger than or equal to scene_pos</span></div>
-<div class="line"><a name="l01767"></a><span class="lineno"> 1767</span>&#160;            <span class="keyword">const</span> qreal* needle = std::lower_bound(sections.<a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html#constBegin">constBegin</a>(), sections.<a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html#constEnd">constEnd</a>(), scene_pos);</div>
-<div class="line"><a name="l01768"></a><span class="lineno"> 1768</span>&#160;            <span class="keywordtype">int</span> i               = needle - sections.<a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html#begin">begin</a>();    <span class="comment">// position of needle in the vector</span></div>
-<div class="line"><a name="l01769"></a><span class="lineno"> 1769</span>&#160;            index += i;</div>
-<div class="line"><a name="l01770"></a><span class="lineno"> 1770</span>&#160;            <span class="comment">// check if we&#39;re closer to this or the next position</span></div>
-<div class="line"><a name="l01771"></a><span class="lineno"> 1771</span>&#160;            qreal posThis  = *needle;</div>
-<div class="line"><a name="l01772"></a><span class="lineno"> 1772</span>&#160;            qreal distThis = qAbs(scene_pos - posThis);</div>
-<div class="line"><a name="l01773"></a><span class="lineno"> 1773</span>&#160;            qreal posPrev  = (i &gt; 0) ? sections[i - 1] : (sections.<a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html#first">first</a>() - default_spacing);</div>
-<div class="line"><a name="l01774"></a><span class="lineno"> 1774</span>&#160;            qreal distPrev = qAbs(scene_pos - posPrev);</div>
-<div class="line"><a name="l01775"></a><span class="lineno"> 1775</span>&#160;            <span class="keywordflow">if</span> (distPrev &lt; distThis)</div>
-<div class="line"><a name="l01776"></a><span class="lineno"> 1776</span>&#160;            {</div>
-<div class="line"><a name="l01777"></a><span class="lineno"> 1777</span>&#160;                index--;</div>
-<div class="line"><a name="l01778"></a><span class="lineno"> 1778</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#pos-prop">pos</a> = posPrev;</div>
-<div class="line"><a name="l01779"></a><span class="lineno"> 1779</span>&#160;            }</div>
-<div class="line"><a name="l01780"></a><span class="lineno"> 1780</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l01781"></a><span class="lineno"> 1781</span>&#160;            {</div>
-<div class="line"><a name="l01782"></a><span class="lineno"> 1782</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#pos-prop">pos</a> = posThis;</div>
-<div class="line"><a name="l01783"></a><span class="lineno"> 1783</span>&#160;            }</div>
-<div class="line"><a name="l01784"></a><span class="lineno"> 1784</span>&#160;        }</div>
-<div class="line"><a name="l01785"></a><span class="lineno"> 1785</span>&#160;        <span class="keywordflow">return</span> LayouterPoint{index, <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#pos-prop">pos</a>};</div>
-<div class="line"><a name="l01786"></a><span class="lineno"> 1786</span>&#160;    }</div>
-<div class="line"><a name="l01787"></a><span class="lineno"> 1787</span>&#160; </div>
-<div class="line"><a name="l01788"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_graphics_view.html#a97baf9d89b508f4168006103e2b1c0ba"> 1788</a></span>&#160;    <a class="code" href="classhal_1_1_graphics_scene.html#a389c6d75b6d7acbb83523ba1a62637fd">GraphicsScene::GridType</a> <a class="code" href="classhal_1_1_graph_graphics_view.html#a97baf9d89b508f4168006103e2b1c0ba">GraphGraphicsView::gridType</a>()</div>
-<div class="line"><a name="l01789"></a><span class="lineno"> 1789</span>&#160;    {</div>
-<div class="line"><a name="l01790"></a><span class="lineno"> 1790</span>&#160;        <span class="keywordflow">return</span> mGridType;</div>
-<div class="line"><a name="l01791"></a><span class="lineno"> 1791</span>&#160;    }</div>
-<div class="line"><a name="l01792"></a><span class="lineno"> 1792</span>&#160; </div>
-<div class="line"><a name="l01793"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_graphics_view.html#a1284b4d251c36b76d29fa316da85c03c"> 1793</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_graphics_view.html#a1284b4d251c36b76d29fa316da85c03c">GraphGraphicsView::setGridType</a>(<a class="code" href="classhal_1_1_graphics_scene.html#a389c6d75b6d7acbb83523ba1a62637fd">GraphicsScene::GridType</a> gridType)</div>
-<div class="line"><a name="l01794"></a><span class="lineno"> 1794</span>&#160;    {</div>
-<div class="line"><a name="l01795"></a><span class="lineno"> 1795</span>&#160;        mGridType = <a class="code" href="classhal_1_1_graph_graphics_view.html#a97baf9d89b508f4168006103e2b1c0ba">gridType</a>;</div>
-<div class="line"><a name="l01796"></a><span class="lineno"> 1796</span>&#160;    }</div>
-<div class="line"><a name="l01797"></a><span class="lineno"> 1797</span>&#160; </div>
-<div class="line"><a name="l01798"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_graphics_view.html#a77130e314eac3a7453b67494b613270c"> 1798</a></span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#KeyboardModifier-enum">Qt::KeyboardModifier</a> <a class="code" href="classhal_1_1_graph_graphics_view.html#a77130e314eac3a7453b67494b613270c">GraphGraphicsView::dragModifier</a>()</div>
-<div class="line"><a name="l01799"></a><span class="lineno"> 1799</span>&#160;    {</div>
-<div class="line"><a name="l01800"></a><span class="lineno"> 1800</span>&#160;        <span class="keywordflow">return</span> mDragModifier;</div>
-<div class="line"><a name="l01801"></a><span class="lineno"> 1801</span>&#160;    }</div>
-<div class="line"><a name="l01802"></a><span class="lineno"> 1802</span>&#160; </div>
-<div class="line"><a name="l01803"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_graphics_view.html#a4b1419d80f01aea4229d54ba95f93dc7"> 1803</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_graphics_view.html#a4b1419d80f01aea4229d54ba95f93dc7">GraphGraphicsView::setDragModifier</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#KeyboardModifier-enum">Qt::KeyboardModifier</a> dragModifier)</div>
-<div class="line"><a name="l01804"></a><span class="lineno"> 1804</span>&#160;    {</div>
-<div class="line"><a name="l01805"></a><span class="lineno"> 1805</span>&#160;        mDragModifier = <a class="code" href="classhal_1_1_graph_graphics_view.html#a77130e314eac3a7453b67494b613270c">dragModifier</a>;</div>
-<div class="line"><a name="l01806"></a><span class="lineno"> 1806</span>&#160;    }</div>
-<div class="line"><a name="l01807"></a><span class="lineno"> 1807</span>&#160; </div>
-<div class="line"><a name="l01808"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_graphics_view.html#a2bc64975cbb5fd2c68d83be32d2f04e9"> 1808</a></span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#KeyboardModifier-enum">Qt::KeyboardModifier</a> <a class="code" href="classhal_1_1_graph_graphics_view.html#a2bc64975cbb5fd2c68d83be32d2f04e9">GraphGraphicsView::panModifier</a>()</div>
-<div class="line"><a name="l01809"></a><span class="lineno"> 1809</span>&#160;    {</div>
-<div class="line"><a name="l01810"></a><span class="lineno"> 1810</span>&#160;        <span class="keywordflow">return</span> mPanModifier;</div>
-<div class="line"><a name="l01811"></a><span class="lineno"> 1811</span>&#160;    }</div>
-<div class="line"><a name="l01812"></a><span class="lineno"> 1812</span>&#160; </div>
-<div class="line"><a name="l01813"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_graphics_view.html#a2a0580d1bee10998a43badc5f8435c31"> 1813</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_graphics_view.html#a2a0580d1bee10998a43badc5f8435c31">GraphGraphicsView::setPanModifier</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#KeyboardModifier-enum">Qt::KeyboardModifier</a> panModifier)</div>
-<div class="line"><a name="l01814"></a><span class="lineno"> 1814</span>&#160;    {</div>
-<div class="line"><a name="l01815"></a><span class="lineno"> 1815</span>&#160;        mPanModifier = <a class="code" href="classhal_1_1_graph_graphics_view.html#a2bc64975cbb5fd2c68d83be32d2f04e9">panModifier</a>;</div>
-<div class="line"><a name="l01816"></a><span class="lineno"> 1816</span>&#160;    }</div>
-<div class="line"><a name="l01817"></a><span class="lineno"> 1817</span>&#160; </div>
-<div class="line"><a name="l01818"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_graphics_view_neighbor_selector.html#a4dac085098436663c7db95d750475956"> 1818</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_graphics_view_neighbor_selector.html#a4dac085098436663c7db95d750475956">GraphGraphicsViewNeighborSelector::handleGatesPicked</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a>&amp; gats)</div>
-<div class="line"><a name="l01819"></a><span class="lineno"> 1819</span>&#160;    {</div>
-<div class="line"><a name="l01820"></a><span class="lineno"> 1820</span>&#160;        <span class="keywordflow">if</span> (!gats.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#empty">empty</a>())</div>
-<div class="line"><a name="l01821"></a><span class="lineno"> 1821</span>&#160;        {</div>
-<div class="line"><a name="l01822"></a><span class="lineno"> 1822</span>&#160;            <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> pickedGate = *gats.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#constBegin">constBegin</a>();</div>
-<div class="line"><a name="l01823"></a><span class="lineno"> 1823</span>&#160;            <a class="code" href="classhal_1_1_graph_graphics_view.html">GraphGraphicsView</a>* ggv = <span class="keyword">dynamic_cast&lt;</span><a class="code" href="classhal_1_1_graph_graphics_view.html">GraphGraphicsView</a>*<span class="keyword">&gt;</span>(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a>());</div>
-<div class="line"><a name="l01824"></a><span class="lineno"> 1824</span>&#160;            <span class="keywordflow">if</span> (ggv)</div>
-<div class="line"><a name="l01825"></a><span class="lineno"> 1825</span>&#160;            {</div>
-<div class="line"><a name="l01826"></a><span class="lineno"> 1826</span>&#160;                <span class="keywordflow">if</span> (mPickSuccessor)</div>
-<div class="line"><a name="l01827"></a><span class="lineno"> 1827</span>&#160;                    ggv-&gt;<a class="code" href="classhal_1_1_graph_graphics_view.html#abeb84861a826fdce426fab17c819d6f8">handleShortestPath</a>(mOrigin,pickedGate);</div>
-<div class="line"><a name="l01828"></a><span class="lineno"> 1828</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l01829"></a><span class="lineno"> 1829</span>&#160;                    ggv-&gt;<a class="code" href="classhal_1_1_graph_graphics_view.html#abeb84861a826fdce426fab17c819d6f8">handleShortestPath</a>(pickedGate,mOrigin);</div>
-<div class="line"><a name="l01830"></a><span class="lineno"> 1830</span>&#160;            }</div>
-<div class="line"><a name="l01831"></a><span class="lineno"> 1831</span>&#160;        }</div>
-<div class="line"><a name="l01832"></a><span class="lineno"> 1832</span>&#160;        this-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#deleteLater">deleteLater</a>();</div>
-<div class="line"><a name="l01833"></a><span class="lineno"> 1833</span>&#160;    }</div>
-<div class="line"><a name="l01834"></a><span class="lineno"> 1834</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l01587"></a><span class="lineno"> 1587</span>&#160; </div>
+<div class="line"><a name="l01588"></a><span class="lineno"> 1588</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;const Module*&gt;</a> modSet;</div>
+<div class="line"><a name="l01589"></a><span class="lineno"> 1589</span>&#160; </div>
+<div class="line"><a name="l01590"></a><span class="lineno"> 1590</span>&#160;        <span class="keywordflow">for</span> (Node&amp; nd : <a class="code" href="namespacehal.html#a6ba6e6ec49eb58d0b35a604e16187112">gSelectionRelay</a>-&gt;<a class="code" href="classhal_1_1_selection_relay.html#a412b6703ed3b76ba5c5a04b558c83b47">selectedNodesList</a>())</div>
+<div class="line"><a name="l01591"></a><span class="lineno"> 1591</span>&#160;        {</div>
+<div class="line"><a name="l01592"></a><span class="lineno"> 1592</span>&#160;            <span class="keywordflow">if</span> (!context-&gt;getLayouter()-&gt;boxes().boxForNode(nd)) <span class="keywordflow">continue</span>; <span class="comment">// not in view</span></div>
+<div class="line"><a name="l01593"></a><span class="lineno"> 1593</span>&#160; </div>
+<div class="line"><a name="l01594"></a><span class="lineno"> 1594</span>&#160;            <span class="keywordflow">switch</span> (nd.type())</div>
+<div class="line"><a name="l01595"></a><span class="lineno"> 1595</span>&#160;            {</div>
+<div class="line"><a name="l01596"></a><span class="lineno"> 1596</span>&#160;            <span class="keywordflow">case</span> <a class="code" href="classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34a62114aae0cfe74a2f09f2bbdced26fa6">Node::Gate</a>:</div>
+<div class="line"><a name="l01597"></a><span class="lineno"> 1597</span>&#160;                modSet.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#insert">insert</a>(<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#a26d0f67be01c66f22422f40938e29237">get_gate_by_id</a>(nd.id())-&gt;<a class="code" href="classhal_1_1_gate.html#a8ebbb9b79db2666beadc913467436a1f">get_module</a>());</div>
+<div class="line"><a name="l01598"></a><span class="lineno"> 1598</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l01599"></a><span class="lineno"> 1599</span>&#160;            <span class="keywordflow">case</span> <a class="code" href="classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34a2b02efee2cb6afc1c319874996e97f25">Node::Module</a>:</div>
+<div class="line"><a name="l01600"></a><span class="lineno"> 1600</span>&#160;                modSet.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#insert">insert</a>(<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#aa963e38a4ce49c0e440be5e36f46369a">get_module_by_id</a>(nd.id())-&gt;<a class="code" href="classhal_1_1_module.html#a1af5f0f3f5ea75b8762d65d5fcfab3e3">get_parent_module</a>());</div>
+<div class="line"><a name="l01601"></a><span class="lineno"> 1601</span>&#160;            <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l01602"></a><span class="lineno"> 1602</span>&#160;                <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l01603"></a><span class="lineno"> 1603</span>&#160;            }</div>
+<div class="line"><a name="l01604"></a><span class="lineno"> 1604</span>&#160;        }</div>
+<div class="line"><a name="l01605"></a><span class="lineno"> 1605</span>&#160; </div>
+<div class="line"><a name="l01606"></a><span class="lineno"> 1606</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qmultimap.html">QMultiMap&lt;int,const Module*&gt;</a> modDepth;</div>
+<div class="line"><a name="l01607"></a><span class="lineno"> 1607</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> Module* m : modSet)</div>
+<div class="line"><a name="l01608"></a><span class="lineno"> 1608</span>&#160;            <span class="keywordflow">if</span> (m) modDepth.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap-obsolete.html#insertMulti">insertMulti</a>(m-&gt;get_submodule_depth(),m);</div>
+<div class="line"><a name="l01609"></a><span class="lineno"> 1609</span>&#160; </div>
+<div class="line"><a name="l01610"></a><span class="lineno"> 1610</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qmapiterator.html">QMapIterator&lt;int,const Module*&gt;</a> it(modDepth);</div>
+<div class="line"><a name="l01611"></a><span class="lineno"> 1611</span>&#160;        it.toBack();</div>
+<div class="line"><a name="l01612"></a><span class="lineno"> 1612</span>&#160;        <span class="keywordflow">while</span> (it.hasPrevious())</div>
+<div class="line"><a name="l01613"></a><span class="lineno"> 1613</span>&#160;        {</div>
+<div class="line"><a name="l01614"></a><span class="lineno"> 1614</span>&#160;            it.previous();</div>
+<div class="line"><a name="l01615"></a><span class="lineno"> 1615</span>&#160;            <span class="keyword">const</span> <a class="code" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ae55f75a29310d7b60f7ac1d390c8ae42">Module</a>* m = it.value();</div>
+<div class="line"><a name="l01616"></a><span class="lineno"> 1616</span>&#160;            ActionFoldModule* act = <span class="keyword">new</span> ActionFoldModule(m-&gt;get_id());</div>
+<div class="line"><a name="l01617"></a><span class="lineno"> 1617</span>&#160;            act-&gt;setContextId(context-&gt;id());</div>
+<div class="line"><a name="l01618"></a><span class="lineno"> 1618</span>&#160;            act-&gt;exec();</div>
+<div class="line"><a name="l01619"></a><span class="lineno"> 1619</span>&#160;        }</div>
+<div class="line"><a name="l01620"></a><span class="lineno"> 1620</span>&#160;    }</div>
+<div class="line"><a name="l01621"></a><span class="lineno"> 1621</span>&#160; </div>
+<div class="line"><a name="l01622"></a><span class="lineno"> 1622</span>&#160;    <span class="keywordtype">void</span> GraphGraphicsView::handleUnfoldAllAction()</div>
+<div class="line"><a name="l01623"></a><span class="lineno"> 1623</span>&#160;    {</div>
+<div class="line"><a name="l01624"></a><span class="lineno"> 1624</span>&#160;        <span class="keyword">auto</span> context = mGraphWidget-&gt;<a class="code" href="classhal_1_1_graph_widget.html#a5a6cbeadb67e9674001cd5302e339b56">getContext</a>();</div>
+<div class="line"><a name="l01625"></a><span class="lineno"> 1625</span>&#160; </div>
+<div class="line"><a name="l01626"></a><span class="lineno"> 1626</span>&#160;        context-&gt;<a class="code" href="classhal_1_1_graph_context.html#a13df27071c670c4bd04c08be3058afe1">beginChange</a>();</div>
+<div class="line"><a name="l01627"></a><span class="lineno"> 1627</span>&#160;        UserActionCompound* act = <span class="keyword">new</span> UserActionCompound;</div>
+<div class="line"><a name="l01628"></a><span class="lineno"> 1628</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span> : <a class="code" href="namespacehal.html#a6ba6e6ec49eb58d0b35a604e16187112">gSelectionRelay</a>-&gt;<a class="code" href="classhal_1_1_selection_relay.html#a494254b4bad811cdc998dcc0e0a736ea">selectedModulesList</a>())</div>
+<div class="line"><a name="l01629"></a><span class="lineno"> 1629</span>&#160;        {</div>
+<div class="line"><a name="l01630"></a><span class="lineno"> 1630</span>&#160;            ActionUnfoldModule* ufo = <span class="keyword">new</span> ActionUnfoldModule(<span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l01631"></a><span class="lineno"> 1631</span>&#160;            ufo-&gt;setContextId(context-&gt;id());</div>
+<div class="line"><a name="l01632"></a><span class="lineno"> 1632</span>&#160;            act-&gt;addAction(ufo);</div>
+<div class="line"><a name="l01633"></a><span class="lineno"> 1633</span>&#160;        }</div>
+<div class="line"><a name="l01634"></a><span class="lineno"> 1634</span>&#160;        act-&gt;exec();</div>
+<div class="line"><a name="l01635"></a><span class="lineno"> 1635</span>&#160;        context-&gt;endChange();</div>
+<div class="line"><a name="l01636"></a><span class="lineno"> 1636</span>&#160;    }</div>
+<div class="line"><a name="l01637"></a><span class="lineno"> 1637</span>&#160; </div>
+<div class="line"><a name="l01638"></a><span class="lineno"> 1638</span>&#160;    <span class="keywordtype">void</span> GraphGraphicsView::handleGroupingUnassign()</div>
+<div class="line"><a name="l01639"></a><span class="lineno"> 1639</span>&#160;    {</div>
+<div class="line"><a name="l01640"></a><span class="lineno"> 1640</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;UserAction*&gt;</a> actList;</div>
+<div class="line"><a name="l01641"></a><span class="lineno"> 1641</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> UserActionObject&amp; obj : <a class="code" href="namespacehal.html#a6ba6e6ec49eb58d0b35a604e16187112">gSelectionRelay</a>-&gt;<a class="code" href="classhal_1_1_selection_relay.html#a1162df01f394b8e7347377d4fe8e7d4f">toUserActionObject</a>())</div>
+<div class="line"><a name="l01642"></a><span class="lineno"> 1642</span>&#160;        {</div>
+<div class="line"><a name="l01643"></a><span class="lineno"> 1643</span>&#160;            UserAction* act = <a class="code" href="namespacehal.html#a36ac15c9dc231bbb2cff96b936a5b8d4">gContentManager</a>-&gt;<a class="code" href="classhal_1_1_content_manager.html#a28e77316a27e08b40d5f05fe87f67442">getSelectionDetailsWidget</a>()-&gt;<a class="code" href="classhal_1_1_selection_details_widget.html#ab3e209462aed3084f6482d2c23d9251b">groupingUnassignActionFactory</a>(obj);</div>
+<div class="line"><a name="l01644"></a><span class="lineno"> 1644</span>&#160;            <span class="keywordflow">if</span> (act) actList.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#append">append</a>(act);</div>
+<div class="line"><a name="l01645"></a><span class="lineno"> 1645</span>&#160;        }</div>
+<div class="line"><a name="l01646"></a><span class="lineno"> 1646</span>&#160;        <span class="keywordflow">if</span> (actList.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#isEmpty">isEmpty</a>()) <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l01647"></a><span class="lineno"> 1647</span>&#160;        <span class="keywordflow">if</span> (actList.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#size">size</a>() == 1)</div>
+<div class="line"><a name="l01648"></a><span class="lineno"> 1648</span>&#160;        {</div>
+<div class="line"><a name="l01649"></a><span class="lineno"> 1649</span>&#160;            actList.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#at">at</a>(0)-&gt;exec();</div>
+<div class="line"><a name="l01650"></a><span class="lineno"> 1650</span>&#160;            <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l01651"></a><span class="lineno"> 1651</span>&#160;        }</div>
+<div class="line"><a name="l01652"></a><span class="lineno"> 1652</span>&#160;        UserActionCompound* compound = <span class="keyword">new</span> UserActionCompound;</div>
+<div class="line"><a name="l01653"></a><span class="lineno"> 1653</span>&#160;        <span class="keywordflow">for</span> (UserAction* act : actList) compound-&gt;addAction(act);</div>
+<div class="line"><a name="l01654"></a><span class="lineno"> 1654</span>&#160;        compound-&gt;exec();</div>
+<div class="line"><a name="l01655"></a><span class="lineno"> 1655</span>&#160;    }</div>
+<div class="line"><a name="l01656"></a><span class="lineno"> 1656</span>&#160; </div>
+<div class="line"><a name="l01657"></a><span class="lineno"> 1657</span>&#160;    <span class="keywordtype">void</span> GraphGraphicsView::handleGroupingDialog()</div>
+<div class="line"><a name="l01658"></a><span class="lineno"> 1658</span>&#160;    {</div>
+<div class="line"><a name="l01659"></a><span class="lineno"> 1659</span>&#160;        GroupingDialog gd(<span class="keyword">this</span>);</div>
+<div class="line"><a name="l01660"></a><span class="lineno"> 1660</span>&#160;        <span class="keywordflow">if</span> (gd.exec() != <a class="codeRef" href="https://doc.qt.io/qt-5/qdialog.html#DialogCode-enum">QDialog::Accepted</a>) <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l01661"></a><span class="lineno"> 1661</span>&#160;        <span class="keywordflow">if</span> (gd.isNewGrouping())</div>
+<div class="line"><a name="l01662"></a><span class="lineno"> 1662</span>&#160;        {</div>
+<div class="line"><a name="l01663"></a><span class="lineno"> 1663</span>&#160;            <a class="code" href="namespacehal.html#a36ac15c9dc231bbb2cff96b936a5b8d4">gContentManager</a>-&gt;<a class="code" href="classhal_1_1_content_manager.html#a28e77316a27e08b40d5f05fe87f67442">getSelectionDetailsWidget</a>()-&gt;<a class="code" href="classhal_1_1_selection_details_widget.html#aa5b8c37993e3d5c95bce10aac8314880">selectionToGroupingAction</a>();</div>
+<div class="line"><a name="l01664"></a><span class="lineno"> 1664</span>&#160;            <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l01665"></a><span class="lineno"> 1665</span>&#160;        }</div>
+<div class="line"><a name="l01666"></a><span class="lineno"> 1666</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> groupName = <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#ae41916880e2d766ab5367d26ee6cb2b3">get_grouping_by_id</a>(gd.groupId())-&gt;<a class="code" href="classhal_1_1_grouping.html#a8036479cd8276ae940d4ec370b1e53e3">get_name</a>());</div>
+<div class="line"><a name="l01667"></a><span class="lineno"> 1667</span>&#160;        <a class="code" href="namespacehal.html#a36ac15c9dc231bbb2cff96b936a5b8d4">gContentManager</a>-&gt;<a class="code" href="classhal_1_1_content_manager.html#a28e77316a27e08b40d5f05fe87f67442">getSelectionDetailsWidget</a>()-&gt;<a class="code" href="classhal_1_1_selection_details_widget.html#aa5b8c37993e3d5c95bce10aac8314880">selectionToGroupingAction</a>(groupName);</div>
+<div class="line"><a name="l01668"></a><span class="lineno"> 1668</span>&#160;    }</div>
+<div class="line"><a name="l01669"></a><span class="lineno"> 1669</span>&#160; </div>
+<div class="line"><a name="l01670"></a><span class="lineno"> 1670</span>&#160;    <span class="keywordtype">void</span> GraphGraphicsView::handleGroupingAssignNew()</div>
+<div class="line"><a name="l01671"></a><span class="lineno"> 1671</span>&#160;    {</div>
+<div class="line"><a name="l01672"></a><span class="lineno"> 1672</span>&#160;        <a class="code" href="namespacehal.html#a36ac15c9dc231bbb2cff96b936a5b8d4">gContentManager</a>-&gt;<a class="code" href="classhal_1_1_content_manager.html#a28e77316a27e08b40d5f05fe87f67442">getSelectionDetailsWidget</a>()-&gt;<a class="code" href="classhal_1_1_selection_details_widget.html#aa5b8c37993e3d5c95bce10aac8314880">selectionToGroupingAction</a>();</div>
+<div class="line"><a name="l01673"></a><span class="lineno"> 1673</span>&#160;    }</div>
+<div class="line"><a name="l01674"></a><span class="lineno"> 1674</span>&#160; </div>
+<div class="line"><a name="l01675"></a><span class="lineno"> 1675</span>&#160;    <span class="keywordtype">void</span> GraphGraphicsView::handleGroupingAssingExisting()</div>
+<div class="line"><a name="l01676"></a><span class="lineno"> 1676</span>&#160;    {</div>
+<div class="line"><a name="l01677"></a><span class="lineno"> 1677</span>&#160;        handleGroupingUnassign();</div>
+<div class="line"><a name="l01678"></a><span class="lineno"> 1678</span>&#160;        <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qaction.html">QAction</a>* <a class="code" href="namespacecontrol.html#a27d3a5443c46266e0263e8ccbb40d0a9">action</a> = <span class="keyword">static_cast&lt;</span><span class="keyword">const </span><a class="codeRef" href="https://doc.qt.io/qt-5/qaction.html">QAction</a>*<span class="keyword">&gt;</span>(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#sender">QObject::sender</a>());</div>
+<div class="line"><a name="l01679"></a><span class="lineno"> 1679</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> grpName       = <a class="code" href="namespacecontrol.html#a27d3a5443c46266e0263e8ccbb40d0a9">action</a>-&gt;text();</div>
+<div class="line"><a name="l01680"></a><span class="lineno"> 1680</span>&#160;        <span class="keywordflow">if</span> (grpName.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#startsWith">startsWith</a>(sAssignToGrouping)) <span class="comment">// remove trailing &quot;Assign to..&quot;</span></div>
+<div class="line"><a name="l01681"></a><span class="lineno"> 1681</span>&#160;            grpName.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#remove">remove</a>(0,sAssignToGrouping.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#length">length</a>());</div>
+<div class="line"><a name="l01682"></a><span class="lineno"> 1682</span>&#160;        <a class="code" href="namespacehal.html#a36ac15c9dc231bbb2cff96b936a5b8d4">gContentManager</a>-&gt;<a class="code" href="classhal_1_1_content_manager.html#a28e77316a27e08b40d5f05fe87f67442">getSelectionDetailsWidget</a>()-&gt;<a class="code" href="classhal_1_1_selection_details_widget.html#aa5b8c37993e3d5c95bce10aac8314880">selectionToGroupingAction</a>(grpName);</div>
+<div class="line"><a name="l01683"></a><span class="lineno"> 1683</span>&#160;    }</div>
+<div class="line"><a name="l01684"></a><span class="lineno"> 1684</span>&#160; </div>
+<div class="line"><a name="l01685"></a><span class="lineno"> 1685</span>&#160;<span class="preprocessor">#ifdef GUI_DEBUG_GRID</span></div>
+<div class="line"><a name="l01686"></a><span class="lineno"> 1686</span>&#160;    <span class="keywordtype">void</span> GraphGraphicsView::debugShowLayouterGridpos(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a>&amp; mouse_pos)</div>
+<div class="line"><a name="l01687"></a><span class="lineno"> 1687</span>&#160;    {</div>
+<div class="line"><a name="l01688"></a><span class="lineno"> 1688</span>&#160;        <span class="keyword">auto</span> context = mGraphWidget-&gt;<a class="code" href="classhal_1_1_graph_widget.html#a5a6cbeadb67e9674001cd5302e339b56">getContext</a>();</div>
+<div class="line"><a name="l01689"></a><span class="lineno"> 1689</span>&#160;        <span class="keywordflow">if</span> (!context)</div>
+<div class="line"><a name="l01690"></a><span class="lineno"> 1690</span>&#160;            <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l01691"></a><span class="lineno"> 1691</span>&#160; </div>
+<div class="line"><a name="l01692"></a><span class="lineno"> 1692</span>&#160;        <span class="keyword">const</span> GraphLayouter* layouter = context-&gt;<a class="code" href="classhal_1_1_graph_context.html#ab4ff1193f5bdd31d5863e33832e28c13">getLayouter</a>();</div>
+<div class="line"><a name="l01693"></a><span class="lineno"> 1693</span>&#160;        <span class="keywordflow">if</span> (!(layouter-&gt;done()))</div>
+<div class="line"><a name="l01694"></a><span class="lineno"> 1694</span>&#160;            <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l01695"></a><span class="lineno"> 1695</span>&#160; </div>
+<div class="line"><a name="l01696"></a><span class="lineno"> 1696</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a> scene_mouse_pos = <a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#mapToScene">mapToScene</a>(mouse_pos);</div>
+<div class="line"><a name="l01697"></a><span class="lineno"> 1697</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a> layouter_pos     = closestLayouterPos(scene_mouse_pos)[0];</div>
+<div class="line"><a name="l01698"></a><span class="lineno"> 1698</span>&#160;        m_debug_gridpos         = layouter_pos;</div>
+<div class="line"><a name="l01699"></a><span class="lineno"> 1699</span>&#160;    }</div>
+<div class="line"><a name="l01700"></a><span class="lineno"> 1700</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l01701"></a><span class="lineno"> 1701</span>&#160; </div>
+<div class="line"><a name="l01702"></a><span class="lineno"> 1702</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html">QVector&lt;QPoint&gt;</a> GraphGraphicsView::closestLayouterPos(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a>&amp; scene_pos)<span class="keyword"> const</span></div>
+<div class="line"><a name="l01703"></a><span class="lineno"> 1703</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l01704"></a><span class="lineno"> 1704</span>&#160;        <span class="keyword">auto</span> context = mGraphWidget-&gt;<a class="code" href="classhal_1_1_graph_widget.html#a5a6cbeadb67e9674001cd5302e339b56">getContext</a>();</div>
+<div class="line"><a name="l01705"></a><span class="lineno"> 1705</span>&#160;        assert(context);</div>
+<div class="line"><a name="l01706"></a><span class="lineno"> 1706</span>&#160; </div>
+<div class="line"><a name="l01707"></a><span class="lineno"> 1707</span>&#160;        <span class="keyword">const</span> GraphLayouter* layouter = context-&gt;getLayouter();</div>
+<div class="line"><a name="l01708"></a><span class="lineno"> 1708</span>&#160;        assert(layouter-&gt;done());    <span class="comment">// ensure grid stable</span></div>
+<div class="line"><a name="l01709"></a><span class="lineno"> 1709</span>&#160; </div>
+<div class="line"><a name="l01710"></a><span class="lineno"> 1710</span>&#160;        <span class="keywordtype">int</span> default_width      = layouter-&gt;defaultGridWidth();</div>
+<div class="line"><a name="l01711"></a><span class="lineno"> 1711</span>&#160;        <span class="keywordtype">int</span> default_height     = layouter-&gt;defaultGridHeight();</div>
+<div class="line"><a name="l01712"></a><span class="lineno"> 1712</span>&#160;        <span class="keywordtype">int</span> min_x              = layouter-&gt;minXIndex();</div>
+<div class="line"><a name="l01713"></a><span class="lineno"> 1713</span>&#160;        <span class="keywordtype">int</span> min_y              = layouter-&gt;minYIndex();</div>
+<div class="line"><a name="l01714"></a><span class="lineno"> 1714</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html">QVector&lt;qreal&gt;</a> x_vals  = layouter-&gt;xValues();</div>
+<div class="line"><a name="l01715"></a><span class="lineno"> 1715</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html">QVector&lt;qreal&gt;</a> y_vals  = layouter-&gt;yValues();</div>
+<div class="line"><a name="l01716"></a><span class="lineno"> 1716</span>&#160;        LayouterPoint x_point = closestLayouterPoint(scene_pos.<a class="codeRef" href="https://doc.qt.io/qt-5/qpointf.html#x">x</a>(), default_width, min_x, x_vals);</div>
+<div class="line"><a name="l01717"></a><span class="lineno"> 1717</span>&#160;        LayouterPoint y_point = closestLayouterPoint(scene_pos.<a class="codeRef" href="https://doc.qt.io/qt-5/qpointf.html#y">y</a>(), default_height, min_y, y_vals);</div>
+<div class="line"><a name="l01718"></a><span class="lineno"> 1718</span>&#160;        <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html">QVector</a>({<a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a>(x_point.mIndex, y_point.mIndex), <a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a>(x_point.mPos, y_point.mPos)});</div>
+<div class="line"><a name="l01719"></a><span class="lineno"> 1719</span>&#160;    }</div>
+<div class="line"><a name="l01720"></a><span class="lineno"> 1720</span>&#160; </div>
+<div class="line"><a name="l01721"></a><span class="lineno"> 1721</span>&#160;    GraphGraphicsView::LayouterPoint GraphGraphicsView::closestLayouterPoint(qreal scene_pos, <span class="keywordtype">int</span> default_spacing, <span class="keywordtype">int</span> min_index, <a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html">QVector&lt;qreal&gt;</a> sections)<span class="keyword"> const</span></div>
+<div class="line"><a name="l01722"></a><span class="lineno"> 1722</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l01723"></a><span class="lineno"> 1723</span>&#160;        <span class="keywordtype">int</span> index = min_index;</div>
+<div class="line"><a name="l01724"></a><span class="lineno"> 1724</span>&#160;        qreal <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#pos-prop">pos</a> = 0;</div>
+<div class="line"><a name="l01725"></a><span class="lineno"> 1725</span>&#160;        <span class="keywordflow">if</span> (sections.<a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html#first">first</a>() &gt; scene_pos)</div>
+<div class="line"><a name="l01726"></a><span class="lineno"> 1726</span>&#160;        {</div>
+<div class="line"><a name="l01727"></a><span class="lineno"> 1727</span>&#160;            <span class="keywordtype">int</span> distance   = sections.<a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html#first">first</a>() - scene_pos;</div>
+<div class="line"><a name="l01728"></a><span class="lineno"> 1728</span>&#160;            <span class="keywordtype">int</span> nSections  = distance / default_spacing;    <span class="comment">// this rounds down</span></div>
+<div class="line"><a name="l01729"></a><span class="lineno"> 1729</span>&#160;            qreal posThis  = sections.<a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html#first">first</a>() - nSections * default_spacing;</div>
+<div class="line"><a name="l01730"></a><span class="lineno"> 1730</span>&#160;            qreal distThis = qAbs(scene_pos - posThis);</div>
+<div class="line"><a name="l01731"></a><span class="lineno"> 1731</span>&#160;            qreal posPrev  = posThis - default_spacing;</div>
+<div class="line"><a name="l01732"></a><span class="lineno"> 1732</span>&#160;            qreal distPrev = qAbs(scene_pos - posPrev);</div>
+<div class="line"><a name="l01733"></a><span class="lineno"> 1733</span>&#160;            <span class="keywordflow">if</span> (distPrev &lt; distThis)</div>
+<div class="line"><a name="l01734"></a><span class="lineno"> 1734</span>&#160;            {</div>
+<div class="line"><a name="l01735"></a><span class="lineno"> 1735</span>&#160;                index -= nSections + 1;</div>
+<div class="line"><a name="l01736"></a><span class="lineno"> 1736</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#pos-prop">pos</a> = posPrev;</div>
+<div class="line"><a name="l01737"></a><span class="lineno"> 1737</span>&#160;            }</div>
+<div class="line"><a name="l01738"></a><span class="lineno"> 1738</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l01739"></a><span class="lineno"> 1739</span>&#160;            {</div>
+<div class="line"><a name="l01740"></a><span class="lineno"> 1740</span>&#160;                index -= nSections;</div>
+<div class="line"><a name="l01741"></a><span class="lineno"> 1741</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#pos-prop">pos</a> = posThis;</div>
+<div class="line"><a name="l01742"></a><span class="lineno"> 1742</span>&#160;            }</div>
+<div class="line"><a name="l01743"></a><span class="lineno"> 1743</span>&#160;        }</div>
+<div class="line"><a name="l01744"></a><span class="lineno"> 1744</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (sections.<a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html#last">last</a>() &lt; scene_pos)</div>
+<div class="line"><a name="l01745"></a><span class="lineno"> 1745</span>&#160;        {</div>
+<div class="line"><a name="l01746"></a><span class="lineno"> 1746</span>&#160;            <span class="keywordtype">int</span> distance   = scene_pos - sections.<a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html#last">last</a>();</div>
+<div class="line"><a name="l01747"></a><span class="lineno"> 1747</span>&#160;            <span class="keywordtype">int</span> nSections  = distance / default_spacing;    <span class="comment">// this rounds down</span></div>
+<div class="line"><a name="l01748"></a><span class="lineno"> 1748</span>&#160;            qreal posThis  = sections.<a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html#last">last</a>() + nSections * default_spacing;</div>
+<div class="line"><a name="l01749"></a><span class="lineno"> 1749</span>&#160;            qreal distThis = qAbs(scene_pos - posThis);</div>
+<div class="line"><a name="l01750"></a><span class="lineno"> 1750</span>&#160;            qreal posNext  = posThis + default_spacing;</div>
+<div class="line"><a name="l01751"></a><span class="lineno"> 1751</span>&#160;            qreal distNext = qAbs(scene_pos - posNext);</div>
+<div class="line"><a name="l01752"></a><span class="lineno"> 1752</span>&#160;            <span class="keywordflow">if</span> (distNext &lt; distThis)</div>
+<div class="line"><a name="l01753"></a><span class="lineno"> 1753</span>&#160;            {</div>
+<div class="line"><a name="l01754"></a><span class="lineno"> 1754</span>&#160;                index += nSections + sections.<a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html#size">size</a>();</div>
+<div class="line"><a name="l01755"></a><span class="lineno"> 1755</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#pos-prop">pos</a> = posNext;</div>
+<div class="line"><a name="l01756"></a><span class="lineno"> 1756</span>&#160;            }</div>
+<div class="line"><a name="l01757"></a><span class="lineno"> 1757</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l01758"></a><span class="lineno"> 1758</span>&#160;            {</div>
+<div class="line"><a name="l01759"></a><span class="lineno"> 1759</span>&#160;                index += nSections + sections.<a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html#size">size</a>() - 1;</div>
+<div class="line"><a name="l01760"></a><span class="lineno"> 1760</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#pos-prop">pos</a> = posThis;</div>
+<div class="line"><a name="l01761"></a><span class="lineno"> 1761</span>&#160;            }</div>
+<div class="line"><a name="l01762"></a><span class="lineno"> 1762</span>&#160;        }</div>
+<div class="line"><a name="l01763"></a><span class="lineno"> 1763</span>&#160;        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l01764"></a><span class="lineno"> 1764</span>&#160;        {</div>
+<div class="line"><a name="l01765"></a><span class="lineno"> 1765</span>&#160;            <span class="comment">// binary search for first value in sections larger than or equal to scene_pos</span></div>
+<div class="line"><a name="l01766"></a><span class="lineno"> 1766</span>&#160;            <span class="keyword">const</span> qreal* needle = std::lower_bound(sections.<a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html#constBegin">constBegin</a>(), sections.<a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html#constEnd">constEnd</a>(), scene_pos);</div>
+<div class="line"><a name="l01767"></a><span class="lineno"> 1767</span>&#160;            <span class="keywordtype">int</span> i               = needle - sections.<a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html#begin">begin</a>();    <span class="comment">// position of needle in the vector</span></div>
+<div class="line"><a name="l01768"></a><span class="lineno"> 1768</span>&#160;            index += i;</div>
+<div class="line"><a name="l01769"></a><span class="lineno"> 1769</span>&#160;            <span class="comment">// check if we&#39;re closer to this or the next position</span></div>
+<div class="line"><a name="l01770"></a><span class="lineno"> 1770</span>&#160;            qreal posThis  = *needle;</div>
+<div class="line"><a name="l01771"></a><span class="lineno"> 1771</span>&#160;            qreal distThis = qAbs(scene_pos - posThis);</div>
+<div class="line"><a name="l01772"></a><span class="lineno"> 1772</span>&#160;            qreal posPrev  = (i &gt; 0) ? sections[i - 1] : (sections.<a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html#first">first</a>() - default_spacing);</div>
+<div class="line"><a name="l01773"></a><span class="lineno"> 1773</span>&#160;            qreal distPrev = qAbs(scene_pos - posPrev);</div>
+<div class="line"><a name="l01774"></a><span class="lineno"> 1774</span>&#160;            <span class="keywordflow">if</span> (distPrev &lt; distThis)</div>
+<div class="line"><a name="l01775"></a><span class="lineno"> 1775</span>&#160;            {</div>
+<div class="line"><a name="l01776"></a><span class="lineno"> 1776</span>&#160;                index--;</div>
+<div class="line"><a name="l01777"></a><span class="lineno"> 1777</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#pos-prop">pos</a> = posPrev;</div>
+<div class="line"><a name="l01778"></a><span class="lineno"> 1778</span>&#160;            }</div>
+<div class="line"><a name="l01779"></a><span class="lineno"> 1779</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l01780"></a><span class="lineno"> 1780</span>&#160;            {</div>
+<div class="line"><a name="l01781"></a><span class="lineno"> 1781</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#pos-prop">pos</a> = posThis;</div>
+<div class="line"><a name="l01782"></a><span class="lineno"> 1782</span>&#160;            }</div>
+<div class="line"><a name="l01783"></a><span class="lineno"> 1783</span>&#160;        }</div>
+<div class="line"><a name="l01784"></a><span class="lineno"> 1784</span>&#160;        <span class="keywordflow">return</span> LayouterPoint{index, <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#pos-prop">pos</a>};</div>
+<div class="line"><a name="l01785"></a><span class="lineno"> 1785</span>&#160;    }</div>
+<div class="line"><a name="l01786"></a><span class="lineno"> 1786</span>&#160; </div>
+<div class="line"><a name="l01787"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_graphics_view.html#a97baf9d89b508f4168006103e2b1c0ba"> 1787</a></span>&#160;    <a class="code" href="classhal_1_1_graphics_scene.html#a389c6d75b6d7acbb83523ba1a62637fd">GraphicsScene::GridType</a> <a class="code" href="classhal_1_1_graph_graphics_view.html#a97baf9d89b508f4168006103e2b1c0ba">GraphGraphicsView::gridType</a>()</div>
+<div class="line"><a name="l01788"></a><span class="lineno"> 1788</span>&#160;    {</div>
+<div class="line"><a name="l01789"></a><span class="lineno"> 1789</span>&#160;        <span class="keywordflow">return</span> mGridType;</div>
+<div class="line"><a name="l01790"></a><span class="lineno"> 1790</span>&#160;    }</div>
+<div class="line"><a name="l01791"></a><span class="lineno"> 1791</span>&#160; </div>
+<div class="line"><a name="l01792"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_graphics_view.html#a1284b4d251c36b76d29fa316da85c03c"> 1792</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_graphics_view.html#a1284b4d251c36b76d29fa316da85c03c">GraphGraphicsView::setGridType</a>(<a class="code" href="classhal_1_1_graphics_scene.html#a389c6d75b6d7acbb83523ba1a62637fd">GraphicsScene::GridType</a> gridType)</div>
+<div class="line"><a name="l01793"></a><span class="lineno"> 1793</span>&#160;    {</div>
+<div class="line"><a name="l01794"></a><span class="lineno"> 1794</span>&#160;        mGridType = <a class="code" href="classhal_1_1_graph_graphics_view.html#a97baf9d89b508f4168006103e2b1c0ba">gridType</a>;</div>
+<div class="line"><a name="l01795"></a><span class="lineno"> 1795</span>&#160;    }</div>
+<div class="line"><a name="l01796"></a><span class="lineno"> 1796</span>&#160; </div>
+<div class="line"><a name="l01797"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_graphics_view.html#a77130e314eac3a7453b67494b613270c"> 1797</a></span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#KeyboardModifier-enum">Qt::KeyboardModifier</a> <a class="code" href="classhal_1_1_graph_graphics_view.html#a77130e314eac3a7453b67494b613270c">GraphGraphicsView::dragModifier</a>()</div>
+<div class="line"><a name="l01798"></a><span class="lineno"> 1798</span>&#160;    {</div>
+<div class="line"><a name="l01799"></a><span class="lineno"> 1799</span>&#160;        <span class="keywordflow">return</span> mDragModifier;</div>
+<div class="line"><a name="l01800"></a><span class="lineno"> 1800</span>&#160;    }</div>
+<div class="line"><a name="l01801"></a><span class="lineno"> 1801</span>&#160; </div>
+<div class="line"><a name="l01802"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_graphics_view.html#a4b1419d80f01aea4229d54ba95f93dc7"> 1802</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_graphics_view.html#a4b1419d80f01aea4229d54ba95f93dc7">GraphGraphicsView::setDragModifier</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#KeyboardModifier-enum">Qt::KeyboardModifier</a> dragModifier)</div>
+<div class="line"><a name="l01803"></a><span class="lineno"> 1803</span>&#160;    {</div>
+<div class="line"><a name="l01804"></a><span class="lineno"> 1804</span>&#160;        mDragModifier = <a class="code" href="classhal_1_1_graph_graphics_view.html#a77130e314eac3a7453b67494b613270c">dragModifier</a>;</div>
+<div class="line"><a name="l01805"></a><span class="lineno"> 1805</span>&#160;    }</div>
+<div class="line"><a name="l01806"></a><span class="lineno"> 1806</span>&#160; </div>
+<div class="line"><a name="l01807"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_graphics_view.html#a2bc64975cbb5fd2c68d83be32d2f04e9"> 1807</a></span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#KeyboardModifier-enum">Qt::KeyboardModifier</a> <a class="code" href="classhal_1_1_graph_graphics_view.html#a2bc64975cbb5fd2c68d83be32d2f04e9">GraphGraphicsView::panModifier</a>()</div>
+<div class="line"><a name="l01808"></a><span class="lineno"> 1808</span>&#160;    {</div>
+<div class="line"><a name="l01809"></a><span class="lineno"> 1809</span>&#160;        <span class="keywordflow">return</span> mPanModifier;</div>
+<div class="line"><a name="l01810"></a><span class="lineno"> 1810</span>&#160;    }</div>
+<div class="line"><a name="l01811"></a><span class="lineno"> 1811</span>&#160; </div>
+<div class="line"><a name="l01812"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_graphics_view.html#a2a0580d1bee10998a43badc5f8435c31"> 1812</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_graphics_view.html#a2a0580d1bee10998a43badc5f8435c31">GraphGraphicsView::setPanModifier</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#KeyboardModifier-enum">Qt::KeyboardModifier</a> panModifier)</div>
+<div class="line"><a name="l01813"></a><span class="lineno"> 1813</span>&#160;    {</div>
+<div class="line"><a name="l01814"></a><span class="lineno"> 1814</span>&#160;        mPanModifier = <a class="code" href="classhal_1_1_graph_graphics_view.html#a2bc64975cbb5fd2c68d83be32d2f04e9">panModifier</a>;</div>
+<div class="line"><a name="l01815"></a><span class="lineno"> 1815</span>&#160;    }</div>
+<div class="line"><a name="l01816"></a><span class="lineno"> 1816</span>&#160; </div>
+<div class="line"><a name="l01817"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_graphics_view_neighbor_selector.html#a4dac085098436663c7db95d750475956"> 1817</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_graphics_view_neighbor_selector.html#a4dac085098436663c7db95d750475956">GraphGraphicsViewNeighborSelector::handleGatesPicked</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a>&amp; gats)</div>
+<div class="line"><a name="l01818"></a><span class="lineno"> 1818</span>&#160;    {</div>
+<div class="line"><a name="l01819"></a><span class="lineno"> 1819</span>&#160;        <span class="keywordflow">if</span> (!gats.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#empty">empty</a>())</div>
+<div class="line"><a name="l01820"></a><span class="lineno"> 1820</span>&#160;        {</div>
+<div class="line"><a name="l01821"></a><span class="lineno"> 1821</span>&#160;            <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> pickedGate = *gats.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#constBegin">constBegin</a>();</div>
+<div class="line"><a name="l01822"></a><span class="lineno"> 1822</span>&#160;            <a class="code" href="classhal_1_1_graph_graphics_view.html">GraphGraphicsView</a>* ggv = <span class="keyword">dynamic_cast&lt;</span><a class="code" href="classhal_1_1_graph_graphics_view.html">GraphGraphicsView</a>*<span class="keyword">&gt;</span>(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a>());</div>
+<div class="line"><a name="l01823"></a><span class="lineno"> 1823</span>&#160;            <span class="keywordflow">if</span> (ggv)</div>
+<div class="line"><a name="l01824"></a><span class="lineno"> 1824</span>&#160;            {</div>
+<div class="line"><a name="l01825"></a><span class="lineno"> 1825</span>&#160;                <span class="keywordflow">if</span> (mPickSuccessor)</div>
+<div class="line"><a name="l01826"></a><span class="lineno"> 1826</span>&#160;                    ggv-&gt;<a class="code" href="classhal_1_1_graph_graphics_view.html#abeb84861a826fdce426fab17c819d6f8">handleShortestPath</a>(mOrigin,pickedGate);</div>
+<div class="line"><a name="l01827"></a><span class="lineno"> 1827</span>&#160;                <span class="keywordflow">else</span></div>
+<div class="line"><a name="l01828"></a><span class="lineno"> 1828</span>&#160;                    ggv-&gt;<a class="code" href="classhal_1_1_graph_graphics_view.html#abeb84861a826fdce426fab17c819d6f8">handleShortestPath</a>(pickedGate,mOrigin);</div>
+<div class="line"><a name="l01829"></a><span class="lineno"> 1829</span>&#160;            }</div>
+<div class="line"><a name="l01830"></a><span class="lineno"> 1830</span>&#160;        }</div>
+<div class="line"><a name="l01831"></a><span class="lineno"> 1831</span>&#160;        this-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#deleteLater">deleteLater</a>();</div>
+<div class="line"><a name="l01832"></a><span class="lineno"> 1832</span>&#160;    }</div>
+<div class="line"><a name="l01833"></a><span class="lineno"> 1833</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aqwheelevent_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwheelevent.html">QWheelEvent</a></div></div>
@@ -1929,13 +1928,13 @@ $(document).ready(function(){initNavTree('graph__graphics__view_8cpp_source.html
 <div class="ttc" id="aclasshal_1_1_module_html_af771e486709f93e4abab9f0fe092010b"><div class="ttname"><a href="classhal_1_1_module.html#af771e486709f93e4abab9f0fe092010b">hal::Module::get_id</a></div><div class="ttdeci">u32 get_id() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2module_8cpp_source.html#l00082">module.cpp:82</a></div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_html_a0d6c2c4b712ac8964253627e7adf3266"><div class="ttname"><a href="classhal_1_1_netlist.html#a0d6c2c4b712ac8964253627e7adf3266">hal::Netlist::get_gates</a></div><div class="ttdeci">const std::vector&lt; Gate * &gt; &amp; get_gates() const</div><div class="ttdef"><b>Definition:</b> <a href="src_2netlist_2netlist_8cpp_source.html#l00204">netlist.cpp:204</a></div></div>
 <div class="ttc" id="aqabstractscrollarea_html_verticalScrollBar"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractscrollarea.html#verticalScrollBar">QAbstractScrollArea::verticalScrollBar</a></div><div class="ttdeci">QScrollBar * verticalScrollBar() const const</div></div>
-<div class="ttc" id="aclasshal_1_1_graph_graphics_view_html_a77130e314eac3a7453b67494b613270c"><div class="ttname"><a href="classhal_1_1_graph_graphics_view.html#a77130e314eac3a7453b67494b613270c">hal::GraphGraphicsView::dragModifier</a></div><div class="ttdeci">Qt::KeyboardModifier dragModifier()</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l01798">graph_graphics_view.cpp:1798</a></div></div>
+<div class="ttc" id="aclasshal_1_1_graph_graphics_view_html_a77130e314eac3a7453b67494b613270c"><div class="ttname"><a href="classhal_1_1_graph_graphics_view.html#a77130e314eac3a7453b67494b613270c">hal::GraphGraphicsView::dragModifier</a></div><div class="ttdeci">Qt::KeyboardModifier dragModifier()</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l01797">graph_graphics_view.cpp:1797</a></div></div>
 <div class="ttc" id="agraphics__item_8h_html"><div class="ttname"><a href="graphics__item_8h.html">graphics_item.h</a></div></div>
 <div class="ttc" id="aqset_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qset.html">QSet&lt; u32 &gt;</a></div></div>
 <div class="ttc" id="aqcolor_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qcolor.html">QColor</a></div></div>
 <div class="ttc" id="aqdragenterevent_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qdragenterevent.html">QDragEnterEvent</a></div></div>
 <div class="ttc" id="aclasshal_1_1_action_add_items_to_object_html"><div class="ttname"><a href="classhal_1_1_action_add_items_to_object.html">hal::ActionAddItemsToObject</a></div><div class="ttdoc">Adds an item to a module or grouping.</div><div class="ttdef"><b>Definition:</b> <a href="action__add__items__to__object_8h_source.html#l00041">action_add_items_to_object.h:41</a></div></div>
-<div class="ttc" id="aclasshal_1_1_graph_graphics_view_html_a4b1419d80f01aea4229d54ba95f93dc7"><div class="ttname"><a href="classhal_1_1_graph_graphics_view.html#a4b1419d80f01aea4229d54ba95f93dc7">hal::GraphGraphicsView::setDragModifier</a></div><div class="ttdeci">void setDragModifier(Qt::KeyboardModifier dragModifier)</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l01803">graph_graphics_view.cpp:1803</a></div></div>
+<div class="ttc" id="aclasshal_1_1_graph_graphics_view_html_a4b1419d80f01aea4229d54ba95f93dc7"><div class="ttname"><a href="classhal_1_1_graph_graphics_view.html#a4b1419d80f01aea4229d54ba95f93dc7">hal::GraphGraphicsView::setDragModifier</a></div><div class="ttdeci">void setDragModifier(Qt::KeyboardModifier dragModifier)</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l01802">graph_graphics_view.cpp:1802</a></div></div>
 <div class="ttc" id="aqmultimap_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmultimap.html">QMultiMap</a></div></div>
 <div class="ttc" id="aqwidget_html_y-prop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html#y-prop">QWidget::y</a></div><div class="ttdeci">y</div></div>
 <div class="ttc" id="aclasshal_1_1_graph_layouter_html_af3c01b3f53761de10a07641a4fef1b7e"><div class="ttname"><a href="classhal_1_1_graph_layouter.html#af3c01b3f53761de10a07641a4fef1b7e">hal::GraphLayouter::boxes</a></div><div class="ttdeci">const NodeBoxes &amp; boxes() const</div><div class="ttdef"><b>Definition:</b> <a href="graph__layouter_8h_source.html#l00327">graph_layouter.h:327</a></div></div>
@@ -1948,7 +1947,7 @@ $(document).ready(function(){initNavTree('graph__graphics__view_8cpp_source.html
 <div class="ttc" id="aclasshal_1_1_node_html"><div class="ttname"><a href="classhal_1_1_node.html">hal::Node</a></div><div class="ttdoc">The Node class object represents a module or a gate.</div><div class="ttdef"><b>Definition:</b> <a href="gui__def_8h_source.html#l00058">gui_def.h:58</a></div></div>
 <div class="ttc" id="anamespacehal_1_1gui__utility_html_a3706ba37634242a317cc5abe4acd919f"><div class="ttname"><a href="namespacehal_1_1gui__utility.html#a3706ba37634242a317cc5abe4acd919f">hal::gui_utility::firstCommonAncestor</a></div><div class="ttdeci">Module * firstCommonAncestor(std::unordered_set&lt; Module * &gt; modules, const std::unordered_set&lt; Gate * &gt; &amp;gates)</div><div class="ttdef"><b>Definition:</b> <a href="plugins_2gui_2src_2gui__utils_2netlist_8cpp_source.html#l00034">netlist.cpp:34</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_context_manager_html_a498710b4eafdb473943a7c62f04d69b2"><div class="ttname"><a href="classhal_1_1_graph_context_manager.html#a498710b4eafdb473943a7c62f04d69b2">hal::GraphContextManager::getContextByExclusiveModuleId</a></div><div class="ttdeci">GraphContext * getContextByExclusiveModuleId(u32 module_id) const</div><div class="ttdef"><b>Definition:</b> <a href="graph__context__manager_8cpp_source.html#l00120">graph_context_manager.cpp:120</a></div></div>
-<div class="ttc" id="aclasshal_1_1_graph_graphics_view_html_a97baf9d89b508f4168006103e2b1c0ba"><div class="ttname"><a href="classhal_1_1_graph_graphics_view.html#a97baf9d89b508f4168006103e2b1c0ba">hal::GraphGraphicsView::gridType</a></div><div class="ttdeci">GraphicsScene::GridType gridType()</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l01788">graph_graphics_view.cpp:1788</a></div></div>
+<div class="ttc" id="aclasshal_1_1_graph_graphics_view_html_a97baf9d89b508f4168006103e2b1c0ba"><div class="ttname"><a href="classhal_1_1_graph_graphics_view.html#a97baf9d89b508f4168006103e2b1c0ba">hal::GraphGraphicsView::gridType</a></div><div class="ttdeci">GraphicsScene::GridType gridType()</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l01787">graph_graphics_view.cpp:1787</a></div></div>
 <div class="ttc" id="acommon__successor__predecessor_8h_html"><div class="ttname"><a href="common__successor__predecessor_8h.html">common_successor_predecessor.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1_module_html"><div class="ttname"><a href="classhal_1_1_module.html">hal::Module</a></div><div class="ttdef"><b>Definition:</b> <a href="module_8h_source.html#l00064">module.h:64</a></div></div>
 <div class="ttc" id="aclasshal_1_1_module_html_a87cf9f30579e5e461f525ab78274e1df"><div class="ttname"><a href="classhal_1_1_module.html#a87cf9f30579e5e461f525ab78274e1df">hal::Module::get_name</a></div><div class="ttdeci">std::string get_name() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2module_8cpp_source.html#l00087">module.cpp:87</a></div></div>
@@ -2063,7 +2062,7 @@ $(document).ready(function(){initNavTree('graph__graphics__view_8cpp_source.html
 <div class="ttc" id="aqmenu_html_addAction"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmenu.html#addAction">QMenu::addAction</a></div><div class="ttdeci">QAction * addAction(const QString &amp;text)</div></div>
 <div class="ttc" id="aqabstractslider_html_value-prop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractslider.html#value-prop">QAbstractSlider::setValue</a></div><div class="ttdeci">void setValue(int)</div></div>
 <div class="ttc" id="anamespacehal_html_a7b0cfc60e8b2fee81c0ec6131190b078"><div class="ttname"><a href="namespacehal.html#a7b0cfc60e8b2fee81c0ec6131190b078">hal::gCommentManager</a></div><div class="ttdeci">CommentManager * gCommentManager</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00059">plugin_gui.cpp:59</a></div></div>
-<div class="ttc" id="aclasshal_1_1_graph_graphics_view_html_a2a0580d1bee10998a43badc5f8435c31"><div class="ttname"><a href="classhal_1_1_graph_graphics_view.html#a2a0580d1bee10998a43badc5f8435c31">hal::GraphGraphicsView::setPanModifier</a></div><div class="ttdeci">void setPanModifier(Qt::KeyboardModifier panModifier)</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l01813">graph_graphics_view.cpp:1813</a></div></div>
+<div class="ttc" id="aclasshal_1_1_graph_graphics_view_html_a2a0580d1bee10998a43badc5f8435c31"><div class="ttname"><a href="classhal_1_1_graph_graphics_view.html#a2a0580d1bee10998a43badc5f8435c31">hal::GraphGraphicsView::setPanModifier</a></div><div class="ttdeci">void setPanModifier(Qt::KeyboardModifier panModifier)</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l01812">graph_graphics_view.cpp:1812</a></div></div>
 <div class="ttc" id="aclasshal_1_1_selection_relay_html_a494254b4bad811cdc998dcc0e0a736ea"><div class="ttname"><a href="classhal_1_1_selection_relay.html#a494254b4bad811cdc998dcc0e0a736ea">hal::SelectionRelay::selectedModulesList</a></div><div class="ttdeci">QList&lt; u32 &gt; selectedModulesList() const</div><div class="ttdef"><b>Definition:</b> <a href="selection__relay_8h_source.html#l00246">selection_relay.h:246</a></div></div>
 <div class="ttc" id="aclasshal_1_1_node_drag_shadow_html_af4576f7402d28a68ff89b8fe0f00012baed0c3d91d14f803ce7606df208aeae0f"><div class="ttname"><a href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012baed0c3d91d14f803ce7606df208aeae0f">hal::NodeDragShadow::DragCue::Swappable</a></div><div class="ttdeci">@ Swappable</div></div>
 <div class="ttc" id="acontext__manager__widget_8h_html"><div class="ttname"><a href="context__manager__widget_8h.html">context_manager_widget.h</a></div></div>
@@ -2105,7 +2104,7 @@ $(document).ready(function(){initNavTree('graph__graphics__view_8cpp_source.html
 <div class="ttc" id="aqset_html_constBegin"><div class="ttname"><a href="https://doc.qt.io/qt-5/qset.html#constBegin">QSet::constBegin</a></div><div class="ttdeci">QSet::const_iterator constBegin() const const</div></div>
 <div class="ttc" id="agraph__tab__widget_8h_html"><div class="ttname"><a href="graph__tab__widget_8h.html">graph_tab_widget.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1_content_manager_html_a24cbd3d2dcc3bd6b63b5a71e584a845c"><div class="ttname"><a href="classhal_1_1_content_manager.html#a24cbd3d2dcc3bd6b63b5a71e584a845c">hal::ContentManager::getGraphTabWidget</a></div><div class="ttdeci">GraphTabWidget * getGraphTabWidget()</div><div class="ttdoc">Get hal's graph tab widget.</div><div class="ttdef"><b>Definition:</b> <a href="content__manager_8cpp_source.html#l00101">content_manager.cpp:101</a></div></div>
-<div class="ttc" id="aclasshal_1_1_graph_graphics_view_html_a1284b4d251c36b76d29fa316da85c03c"><div class="ttname"><a href="classhal_1_1_graph_graphics_view.html#a1284b4d251c36b76d29fa316da85c03c">hal::GraphGraphicsView::setGridType</a></div><div class="ttdeci">void setGridType(GraphicsScene::GridType gridType)</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l01793">graph_graphics_view.cpp:1793</a></div></div>
+<div class="ttc" id="aclasshal_1_1_graph_graphics_view_html_a1284b4d251c36b76d29fa316da85c03c"><div class="ttname"><a href="classhal_1_1_graph_graphics_view.html#a1284b4d251c36b76d29fa316da85c03c">hal::GraphGraphicsView::setGridType</a></div><div class="ttdeci">void setGridType(GraphicsScene::GridType gridType)</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l01792">graph_graphics_view.cpp:1792</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_graphics_view_html_a779ac6c86cbb72fe461d9c3d88fbc206"><div class="ttname"><a href="classhal_1_1_graph_graphics_view.html#a779ac6c86cbb72fe461d9c3d88fbc206">hal::GraphGraphicsView::resizeEvent</a></div><div class="ttdeci">void resizeEvent(QResizeEvent *event) override</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l00651">graph_graphics_view.cpp:651</a></div></div>
 <div class="ttc" id="aclasshal_1_1_user_action_compound_html_abdbb64e6236796c3784d1d66ba3bc2e6"><div class="ttname"><a href="classhal_1_1_user_action_compound.html#abdbb64e6236796c3784d1d66ba3bc2e6">hal::UserActionCompound::exec</a></div><div class="ttdeci">bool exec() override</div><div class="ttdef"><b>Definition:</b> <a href="user__action__compound_8cpp_source.html#l00030">user_action_compound.cpp:30</a></div></div>
 <div class="ttc" id="aqt_html_Orientation-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qt.html#Orientation-enum">Qt::Vertical</a></div><div class="ttdeci">Vertical</div></div>
@@ -2207,7 +2206,7 @@ $(document).ready(function(){initNavTree('graph__graphics__view_8cpp_source.html
 <div class="ttc" id="aqgraphicsview_html_centerOn"><div class="ttname"><a href="https://doc.qt.io/qt-5/qgraphicsview.html#centerOn">QGraphicsView::centerOn</a></div><div class="ttdeci">void centerOn(const QPointF &amp;pos)</div></div>
 <div class="ttc" id="aqstring_html_arg-1"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg</a></div><div class="ttdeci">QString arg(qlonglong a, int fieldWidth, int base, QChar fillChar) const const</div></div>
 <div class="ttc" id="aclasshal_1_1_graph_tab_widget_html_a3a028176881287f11d73e85ff954a3ca"><div class="ttname"><a href="classhal_1_1_graph_tab_widget.html#a3a028176881287f11d73e85ff954a3ca">hal::GraphTabWidget::ensureSelectionVisible</a></div><div class="ttdeci">void ensureSelectionVisible()</div><div class="ttdef"><b>Definition:</b> <a href="graph__tab__widget_8cpp_source.html#l00136">graph_tab_widget.cpp:136</a></div></div>
-<div class="ttc" id="aclasshal_1_1_graph_graphics_view_neighbor_selector_html_a4dac085098436663c7db95d750475956"><div class="ttname"><a href="classhal_1_1_graph_graphics_view_neighbor_selector.html#a4dac085098436663c7db95d750475956">hal::GraphGraphicsViewNeighborSelector::handleGatesPicked</a></div><div class="ttdeci">void handleGatesPicked(const QSet&lt; u32 &gt; &amp;gats) override</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l01818">graph_graphics_view.cpp:1818</a></div></div>
+<div class="ttc" id="aclasshal_1_1_graph_graphics_view_neighbor_selector_html_a4dac085098436663c7db95d750475956"><div class="ttname"><a href="classhal_1_1_graph_graphics_view_neighbor_selector.html#a4dac085098436663c7db95d750475956">hal::GraphGraphicsViewNeighborSelector::handleGatesPicked</a></div><div class="ttdeci">void handleGatesPicked(const QSet&lt; u32 &gt; &amp;gats) override</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l01817">graph_graphics_view.cpp:1817</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_tab_widget_html_ad3af62d9f03e4c4e2ee0363e8f0c3822"><div class="ttname"><a href="classhal_1_1_graph_tab_widget.html#ad3af62d9f03e4c4e2ee0363e8f0c3822">hal::GraphTabWidget::isSelectMode</a></div><div class="ttdeci">bool isSelectMode() const</div><div class="ttdef"><b>Definition:</b> <a href="graph__tab__widget_8h_source.html#l00096">graph_tab_widget.h:96</a></div></div>
 <div class="ttc" id="aclasshal_1_1_action_create_object_html"><div class="ttname"><a href="classhal_1_1_action_create_object.html">hal::ActionCreateObject</a></div><div class="ttdoc">Create a new item.</div><div class="ttdef"><b>Definition:</b> <a href="action__create__object_8h_source.html#l00039">action_create_object.h:39</a></div></div>
 <div class="ttc" id="aqapplication_html_startDragDistance-prop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qapplication.html#startDragDistance-prop">QApplication::startDragDistance</a></div><div class="ttdeci">startDragDistance</div></div>
@@ -2249,7 +2248,7 @@ $(document).ready(function(){initNavTree('graph__graphics__view_8cpp_source.html
 <div class="ttc" id="aqdrag_html_setMimeData"><div class="ttname"><a href="https://doc.qt.io/qt-5/qdrag.html#setMimeData">QDrag::setMimeData</a></div><div class="ttdeci">void setMimeData(QMimeData *data)</div></div>
 <div class="ttc" id="aclasshal_1_1_standard_graphics_net_html_a78d9483333ca22a6cda7b6dc888ddc4d"><div class="ttname"><a href="classhal_1_1_standard_graphics_net.html#a78d9483333ca22a6cda7b6dc888ddc4d">hal::StandardGraphicsNet::updateAlpha</a></div><div class="ttdeci">static void updateAlpha()</div><div class="ttdef"><b>Definition:</b> <a href="standard__graphics__net_8cpp_source.html#l00068">standard_graphics_net.cpp:68</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graphics_scene_html"><div class="ttname"><a href="classhal_1_1_graphics_scene.html">hal::GraphicsScene</a></div><div class="ttdoc">Container for a GraphGraphicsView containing gates, nets, and modules.</div><div class="ttdef"><b>Definition:</b> <a href="graphics__scene_8h_source.html#l00058">graphics_scene.h:58</a></div></div>
-<div class="ttc" id="aclasshal_1_1_graph_graphics_view_html_a2bc64975cbb5fd2c68d83be32d2f04e9"><div class="ttname"><a href="classhal_1_1_graph_graphics_view.html#a2bc64975cbb5fd2c68d83be32d2f04e9">hal::GraphGraphicsView::panModifier</a></div><div class="ttdeci">Qt::KeyboardModifier panModifier()</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l01808">graph_graphics_view.cpp:1808</a></div></div>
+<div class="ttc" id="aclasshal_1_1_graph_graphics_view_html_a2bc64975cbb5fd2c68d83be32d2f04e9"><div class="ttname"><a href="classhal_1_1_graph_graphics_view.html#a2bc64975cbb5fd2c68d83be32d2f04e9">hal::GraphGraphicsView::panModifier</a></div><div class="ttdeci">Qt::KeyboardModifier panModifier()</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l01807">graph_graphics_view.cpp:1807</a></div></div>
 <div class="ttc" id="aclasshal_1_1_selection_relay_html_a024cc6d548be6648ae580e6ee8b35855"><div class="ttname"><a href="classhal_1_1_selection_relay.html#a024cc6d548be6648ae580e6ee8b35855">hal::SelectionRelay::numberSelectedGates</a></div><div class="ttdeci">int numberSelectedGates() const</div><div class="ttdef"><b>Definition:</b> <a href="selection__relay_8h_source.html#l00302">selection_relay.h:302</a></div></div>
 <div class="ttc" id="aqwidget_html_width-prop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html#width-prop">QWidget::width</a></div><div class="ttdeci">width</div></div>
 <div class="ttc" id="ainclude_2hal__core_2netlist_2grouping_8h_html"><div class="ttname"><a href="include_2hal__core_2netlist_2grouping_8h.html">grouping.h</a></div></div>
@@ -2289,7 +2288,7 @@ $(document).ready(function(){initNavTree('graph__graphics__view_8cpp_source.html
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_62580450d675343767dbe0503393e994.html">graph_widget</a></li><li class="navelem"><a class="el" href="graph__graphics__view_8cpp.html">graph_graphics_view.cpp</a></li>
-    <li class="footer">Generated on Mon Feb 20 2023 23:10:24 for HAL by
+    <li class="footer">Generated on Fri Feb 24 2023 14:03:37 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
