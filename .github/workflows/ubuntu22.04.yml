@@ -124,9 +124,9 @@ jobs:
           CCACHE_COMPRESS: true
           CCACHE_COMPRESSLEVEL: 6
           CCACHE_MAXSIZE: 400M
-	  
+
       - name: Save core dump
         uses: actions/upload-artifact@feature/gui_extension_plugin
         with:
           name: crashes
-	  path: build/core*
+          path: build/core*
