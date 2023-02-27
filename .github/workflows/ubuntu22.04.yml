@@ -114,8 +114,7 @@ jobs:
         run: |
           cd build
           ulimit -c unlimited
-          ctest --rerun-failed --output-on-failure
-          ls -l
+          sudo ctest --rerun-failed --output-on-failure
         #  ninja -v hal_coverage
         # bash <(curl -s https://codecov.io/bash) -f hal_coverage.info.cleaned || echo "Codecov did not collect coverage reports"
         env:
@@ -127,8 +126,17 @@ jobs:
           CCACHE_COMPRESSLEVEL: 6
           CCACHE_MAXSIZE: 400M
 
+      - name: List core dump
+        shell: bash
+        continue-on-error: true
+        run: |
+          cd build
+          ls -l
+          sudo chmod -R +rwx /var/lib/apport
+          ls -l /var/lib/apport/coredump
+
       - name: Save core dump
         uses: actions/upload-artifact@v3
         with:
           name: crashes
-          path: build/core*
+          path: /var/lib/apport/coredump/core*
