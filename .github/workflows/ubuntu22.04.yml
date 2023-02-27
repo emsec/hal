@@ -134,9 +134,9 @@ jobs:
           cd build
           ls -l
           sudo chmod -R +rwx /var/lib/apport
-	  ls -l /var
-	  ls -l /var/lib
-	  ls -l /var/lib/apport
+          ls -l /var
+          ls -l /var/lib
+          ls -l /var/lib/apport
           ls -l /var/lib/apport/coredump
 
       - name: Save core dump
