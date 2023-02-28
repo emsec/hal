@@ -511,8 +511,10 @@ namespace hal
         mIgnoreEventsFlag = true;
         if(droppedPin->getParent() == onDroppedParent) // same group
         {
+            int ownRow = droppedPin->getOwnRow();
             bool bottomEdge = row == onDroppedParent->getChildCount();
             auto desiredIdx = bottomEdge ? row-1 : row;
+            if(ownRow < row && !bottomEdge) desiredIdx--; // insert item here
             ActionReorderObject* reorderObj = new ActionReorderObject(desiredIdx);
             reorderObj->setObject(UserActionObject(getIdOfItem(droppedPin), UserActionObjectType::Pin));
             reorderObj->setParentObject(UserActionObject(mModule->get_id(), UserActionObjectType::Module));
