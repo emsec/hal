@@ -134,7 +134,7 @@ jobs:
           cd build
           ls -l
           sudo chmod -R +rwx /var/lib/apport
-	  cat /var/log/apport.log
+          cat /var/log/apport.log
 
       - name: Save core dump
         uses: actions/upload-artifact@v3
