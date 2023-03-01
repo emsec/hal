@@ -1,5 +1,6 @@
 var NAVTREEINDEX14 =
 {
+"classhal_1_1_project_dir_dialog.html":[6,0,0,302],
 "classhal_1_1_project_dir_dialog.html#a07c9c0071a03844e36182bda3c0f79bf":[6,0,0,302,1],
 "classhal_1_1_project_dir_dialog.html#a243cada5096642466eb6d3da6b90e7d6":[6,0,0,302,2],
 "classhal_1_1_project_dir_dialog.html#a2694c7fc4719e69b4bd41df7eb407b18":[6,0,0,302,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX14 =
 "classhal_1_1_python_qss_adapter.html#a1e3f5a29a12c3820a5a5e8e8042cbfe7":[4,0,1,2,3],
 "classhal_1_1_python_qss_adapter.html#a299fbd4d5ab14d8065f2fd1be90b86b4":[4,0,1,2,16],
 "classhal_1_1_python_qss_adapter.html#a2d2dc366255b769a12d09b83cec9f97d":[4,0,1,2,8],
-"classhal_1_1_python_qss_adapter.html#a2e80576d06401a248ca93118ca053618":[4,0,1,2,34],
-"classhal_1_1_python_qss_adapter.html#a3b81005f2f95ee1e50a9c0d587f2f127":[4,0,1,2,6]
+"classhal_1_1_python_qss_adapter.html#a2e80576d06401a248ca93118ca053618":[4,0,1,2,34]
 };
