@@ -122,6 +122,75 @@ namespace hal
             :rtype: int or None
         )");
 
+        py_netlist_preprocessing.def_static(
+            "remove_unconnected_gates",
+            [](Netlist* nl) -> std::optional<u32> {
+                auto res = NetlistPreprocessingPlugin::remove_unconnected_gates(nl);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("nl"),
+            R"(
+            Removes gates which outputs are all unconnected and not a global output net.
+
+            :param hal_py.Netlist nl: The netlist to operate on. 
+            :returns: The number of removed gates on success, None otherwise.
+            :rtype: int or None
+        )");
+
+        py_netlist_preprocessing.def_static(
+            "remove_unconnected_nets",
+            [](Netlist* nl) -> std::optional<u32> {
+                auto res = NetlistPreprocessingPlugin::remove_unconnected_nets(nl);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("nl"),
+            R"(
+            Remove nets which have no source and not destination.
+
+            :param hal_py.Netlist nl: The netlist to operate on. 
+            :returns: The number of removed nets on success, None otherwise.
+            :rtype: int or None
+        )");
+
+        py_netlist_preprocessing.def_static(
+            "simplify_lut_inits",
+            [](Netlist* nl) -> std::optional<u32> {
+                auto res = NetlistPreprocessingPlugin::simplify_lut_inits(nl);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("nl"),
+            R"(
+            Replaces pins connected to GND/VCC with constants and simplifies the booleanfunction of a LUT but recomputing the INIT string.
+
+            :param hal_py.Netlist nl: The netlist to operate on. 
+            :returns: The number of simplified INIT strings on success, an error otherwise.
+            :rtype: int or None
+        )");
+
 #ifndef PYBIND11_MODULE
         return m.ptr();
 #endif    // PYBIND11_MODULE
