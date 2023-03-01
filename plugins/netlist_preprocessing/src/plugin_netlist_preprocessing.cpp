@@ -368,10 +368,14 @@ namespace hal
                 // ... replace the output net with the passed through net for all previous module pins
                 for (auto& [m, pin_info] : module_pins)
                 {
+                    const std::string pingroup_name = std::get<0>(pin_info);
+                    const std::string pin_name      = std::get<1>(pin_info);
+                    const PinType pin_type          = std::get<4>(pin_info);
+
                     if (auto pin = m->get_pin_by_net(buffered_net); pin != nullptr)
                     {
-                        pin->set_name(std::get<1>(pin_info));
-                        pin->set_type(std::get<4>(pin_info));
+                        pin->set_name(pin_name);
+                        pin->set_type(pin_type);
 
                         // remove pin from current pin group
                         auto current_pin_group = pin->get_group().first;
@@ -382,11 +386,11 @@ namespace hal
                         }
 
                         // check for existing pingroup otherwise create it
-                        auto pin_groups = m->get_pin_groups([pin_info](const auto& pg) { return pg->get_name() == std::get<0>(pin_info); });
+                        auto pin_groups = m->get_pin_groups([pingroup_name](const auto& pg) { return pg->get_name() == pingroup_name; });
                         PinGroup<ModulePin>* pin_group;
                         if (pin_groups.empty())
                         {
-                            pin_group = m->create_pin_group(std::get<0>(pin_info), {}, PinDirection::none, std::get<4>(pin_info)).get();
+                            pin_group = m->create_pin_group(pingroup_name, {}, PinDirection::none, pin_type).get();
                         }
                         else
                         {
@@ -398,7 +402,7 @@ namespace hal
                     }
                     else
                     {
-                        return ERR("Cannot replace buffers: Failed to get pin " + std::get<1>(pin_info) + " at module " + m->get_name() + " with ID " + std::to_string(m->get_id()));
+                        return ERR("Cannot replace buffers: Failed to get pin " + pin_name + " at module " + m->get_name() + " with ID " + std::to_string(m->get_id()));
                     }
                 }
 
