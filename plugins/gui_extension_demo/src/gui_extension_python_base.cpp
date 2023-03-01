@@ -18,33 +18,33 @@ namespace hal {
 
     void GuiExtensionPythonBase::add_main_menu(const std::vector<PluginParameter> &params)
     {
-        if (GuiExtensionDemoPlugin::sGuiExtension)
+        if (GuiExtensionContext::sInstance)
         {
-            GuiExtensionDemoPlugin::sGuiExtension->add_main_menu(this,params);
+            GuiExtensionContext::sInstance->add_main_menu(this,params);
         }
     }
 
     void GuiExtensionPythonBase::add_module_context(const std::string tagname, const std::string label)
     {
-        if (GuiExtensionDemoPlugin::sGuiExtension)
+        if (GuiExtensionContext::sInstance)
         {
-            GuiExtensionDemoPlugin::sGuiExtension->add_module_context(this,tagname,label);
+            GuiExtensionContext::sInstance->add_module_context(this,tagname,label);
         }
     }
 
     void GuiExtensionPythonBase::add_gate_context(const std::string tagname, const std::string label)
     {
-        if (GuiExtensionDemoPlugin::sGuiExtension)
+        if (GuiExtensionContext::sInstance)
         {
-            GuiExtensionDemoPlugin::sGuiExtension->add_gate_context(this,tagname,label);
+            GuiExtensionContext::sInstance->add_gate_context(this,tagname,label);
         }
     }
 
     void GuiExtensionPythonBase::add_net_context(const std::string tagname, const std::string label)
     {
-        if (GuiExtensionDemoPlugin::sGuiExtension)
+        if (GuiExtensionContext::sInstance)
         {
-            GuiExtensionDemoPlugin::sGuiExtension->add_net_context(this,tagname,label);
+            GuiExtensionContext::sInstance->add_net_context(this,tagname,label);
         }
     }
 
@@ -83,9 +83,9 @@ namespace hal {
 
     std::vector<PluginParameter> GuiExtensionPythonBase::get_parameter() const
     {
-        if (GuiExtensionDemoPlugin::sGuiExtension)
+        if (GuiExtensionContext::sInstance)
         {
-            return GuiExtensionDemoPlugin::sGuiExtension->get_parameter();
+            return GuiExtensionContext::sInstance->get_parameter();
         }
         return std::vector<PluginParameter>();
     }
@@ -101,9 +101,9 @@ namespace hal {
 
         m_function_call.clear();
 
-        if (GuiExtensionDemoPlugin::sGuiExtension)
+        if (GuiExtensionContext::sInstance)
         {
-           GuiExtensionDemoPlugin::sGuiExtension->clear();
+           GuiExtensionContext::sInstance->clear();
         }
     }
 }

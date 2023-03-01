@@ -47,10 +47,5 @@ namespace hal
 
         void on_load() override;
         void on_unload() override;
-
-        /**
-         * Get file access factory extension functionality implemented by Liberty parser
-         * @return pointer to instance implementing FAC extensions
-         */
-        std::vector<AbstractExtensionInterface*> get_extensions() const override;    };
+    };
 }    // namespace hal

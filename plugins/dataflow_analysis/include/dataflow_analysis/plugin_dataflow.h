@@ -93,8 +93,7 @@ namespace hal
 
     class PLUGIN_API plugin_dataflow : public BasePluginInterface
     {
-        CliExtensionDataflow* m_cli_extension;
-        GuiExtensionDataflow* m_gui_extension;
+
     public:
         /*
          *      interface implementations
@@ -102,16 +101,6 @@ namespace hal
 
         plugin_dataflow();
         ~plugin_dataflow() = default;
-
-        /**
-         * Instantiate m_gui_extension
-         */
-        void on_load() override;
-
-        /**
-         * Delete m_gui_extension
-         */
-        void on_unload() override;
 
         /**
          * Get the name of the plugin.
@@ -133,8 +122,6 @@ namespace hal
          * @returns The version of the plugin.
          */
         std::string get_version() const override;
-
-        std::vector<AbstractExtensionInterface*> get_extensions() const override;
 
         std::vector<std::vector<Gate*>> execute(Netlist* nl,
                                                 std::string path,

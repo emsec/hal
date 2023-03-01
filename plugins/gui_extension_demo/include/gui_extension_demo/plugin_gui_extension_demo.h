@@ -74,11 +74,15 @@ namespace hal
         void add_main_menu(GuiExtensionPythonBase* plug, const std::vector<PluginParameter>& params);
 
         void clear();
+
+        static GuiExtensionContext* sInstance;
     };
 
     class PLUGIN_API GuiExtensionDemoPlugin : public BasePluginInterface
     {
+        friend class GuiExtensionPythonBase;
     public:
+        GuiExtensionDemoPlugin();
 
         std::string get_name() const override;
         std::string get_version() const override;
@@ -86,11 +90,5 @@ namespace hal
 
         void initialize() override;
 
-        void on_load() override;
-        void on_unload() override;
-
-        std::vector<AbstractExtensionInterface*> get_extensions() const override;
-
-        static GuiExtensionContext* sGuiExtension;
     };
 }    // namespace hal

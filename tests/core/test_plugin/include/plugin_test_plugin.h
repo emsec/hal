@@ -27,13 +27,9 @@ namespace hal
 
     class PLUGIN_API PluginTestPlugin : public BasePluginInterface    //BasePluginInterface
     {
-        CliExtensionTestPlugin* mCliExtensions;
     public:
         /** constructor (= default) */
-        PluginTestPlugin() { mCliExtensions = new CliExtensionTestPlugin(this); }
-
-        /** destructor (= default) */
-        ~PluginTestPlugin() { delete mCliExtensions; }
+        PluginTestPlugin() { m_extensions.push_back(new CliExtensionTestPlugin(this)); }
 
         /*
          *      interface implementations
@@ -44,9 +40,6 @@ namespace hal
 
         /** interface implementation: BasePluginInterface */
         std::string get_version() const override;
-
-        std::vector<AbstractExtensionInterface *> get_extensions() const override {
-            return std::vector<AbstractExtensionInterface*>({mCliExtensions}); }
     };
 
 }    // namespace hal

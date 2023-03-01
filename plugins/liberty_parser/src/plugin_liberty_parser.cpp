@@ -37,15 +37,11 @@ namespace hal
     void LibertyParserPlugin::on_load()
     {
         m_extension = new LibertyParserExtension;
+        m_extensions.push_back(m_extension);
     }
 
     void LibertyParserPlugin::on_unload()
     {
-        delete m_extension;
-    }
-
-    std::vector<AbstractExtensionInterface*> LibertyParserPlugin::get_extensions() const
-    {
-        return std::vector<AbstractExtensionInterface*>({m_extension});
+        delete_extension(m_extension);
     }
 }    // namespace hal

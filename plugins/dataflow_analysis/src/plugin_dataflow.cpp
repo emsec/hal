@@ -56,9 +56,9 @@ namespace hal
 
 
     plugin_dataflow::plugin_dataflow()
-        : m_gui_extension(nullptr)
     {
-        m_cli_extension = new CliExtensionDataflow(this);
+        m_extensions.push_back(new CliExtensionDataflow(this));
+        m_extensions.push_back(new GuiExtensionDataflow(this));
     }
 
     ProgramOptions CliExtensionDataflow::get_cli_options() const
@@ -362,25 +362,6 @@ namespace hal
     }
 
     std::function<void(int, const std::string&)> GuiExtensionDataflow::s_progress_indicator_function = nullptr;
-
-    void plugin_dataflow::on_load()
-    {
-        m_gui_extension = new GuiExtensionDataflow(this);
-    }
-
-    void plugin_dataflow::on_unload()
-    {
-        if (m_gui_extension)
-        {
-            delete m_gui_extension;
-            m_gui_extension = nullptr;
-        }
-    }
-
-    std::vector<AbstractExtensionInterface*> plugin_dataflow::get_extensions() const
-    {
-        return std::vector<AbstractExtensionInterface*>({m_cli_extension,m_gui_extension});
-    }
 
     void GuiExtensionDataflow::register_progress_indicator(std::function<void(int, const std::string&)> pif)
     {

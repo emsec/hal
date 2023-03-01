@@ -37,16 +37,11 @@ namespace hal
     void HGLParserPlugin::on_load()
     {
         m_extension = new HGLParserExtension;
+        m_extensions.push_back(m_extension);
     }
 
     void HGLParserPlugin::on_unload()
     {
-        delete m_extension;
+        delete_extension(m_extension);
     }
-
-    std::vector<AbstractExtensionInterface*> HGLParserPlugin::get_extensions() const
-    {
-        return std::vector<AbstractExtensionInterface*>({m_extension});
-    }
-
 }    // namespace hal

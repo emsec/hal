@@ -39,15 +39,11 @@ namespace hal
     void VHDLParserPlugin::on_load()
     {
         m_extension = new VHDLParserExtension;
+        m_extensions.push_back(m_extension);
     }
 
     void VHDLParserPlugin::on_unload()
     {
-        delete m_extension;
-    }
-
-    std::vector<AbstractExtensionInterface*> VHDLParserPlugin::get_extensions() const
-    {
-        return std::vector<AbstractExtensionInterface*>({m_extension});
+        delete_extension(m_extension);
     }
 }    // namespace hal

@@ -120,9 +120,4 @@ namespace hal
         delete[] argv;
         return 0;
     }
-
-    std::vector<AbstractExtensionInterface*> PluginPythonShell::get_extensions() const
-    {
-        return  std::vector<AbstractExtensionInterface*>({mCliExtensions});
-    }
 }    // namespace hal

@@ -30,6 +30,7 @@
 
 #include <set>
 #include <string>
+#include <vector>
 
 namespace hal
 {
@@ -54,9 +55,12 @@ namespace hal
      */
     class CORE_API BasePluginInterface
     {
+    protected:
+        std::vector<AbstractExtensionInterface*> m_extensions;
+
     public:
-        BasePluginInterface()          = default;
-        virtual ~BasePluginInterface() = default;
+        BasePluginInterface() {;}
+        virtual ~BasePluginInterface();
 
         /**
          * Plugins utilize two phase construction.
@@ -124,8 +128,7 @@ namespace hal
          * Get GUI/CLI/FAC extension functionality if implemented by derived class
          * @return pointer to instance implementing extensions
          */
-        virtual std::vector<AbstractExtensionInterface*> get_extensions() const {
-            return std::vector<AbstractExtensionInterface*>(); }
+        virtual std::vector<AbstractExtensionInterface*> get_extensions() const;
 
         /**
          * Get first extension of given type T.
@@ -139,6 +142,12 @@ namespace hal
             }
             return nullptr;
         }
+
+        /**
+         * Delete extension instance and free memory
+         * @param aeif The extenstion instance to be deleted. Nothing will be done if not found in list.
+         */
+        void delete_extension(AbstractExtensionInterface* aeif);
     };
 
     using instantiate_plugin_function = std::unique_ptr<BasePluginInterface> (*)();

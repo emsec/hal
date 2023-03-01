@@ -48,11 +48,8 @@ namespace hal
 
     class PluginPythonShell : virtual public UIPluginInterface
     {
-        CliExtensionPythonShell* mCliExtensions;
     public:
-        PluginPythonShell() { mCliExtensions = new CliExtensionPythonShell; }
-
-        ~PluginPythonShell() { delete mCliExtensions; }
+        PluginPythonShell() { m_extensions.push_back(new CliExtensionPythonShell); }
 
         /*
          *      interface implementations
@@ -85,12 +82,5 @@ namespace hal
          * @param enable[in] unused
          */
         void set_layout_locker(bool) override {;}
-
-        /**
-         * Extension to return CLI options
-         * @return pointer to instance implementing extensions
-         */
-        std::vector<AbstractExtensionInterface*> get_extensions() const override;
-
     };
 }    // namespace hal

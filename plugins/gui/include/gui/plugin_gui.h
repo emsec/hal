@@ -59,13 +59,10 @@ namespace hal
      */
     class PluginGui : public UIPluginInterface
     {
-        CliExtensionsGui* mCliExtensions;
         QList<LayoutLocker*> mLayoutLockerList;
 
     public:
-        PluginGui() { mCliExtensions = new CliExtensionsGui; }
-
-        ~PluginGui() { delete mCliExtensions; }
+        PluginGui() { m_extensions.push_back(new CliExtensionsGui); }
 
         /**
          * Returns the plugin name: 'hal_gui'
@@ -108,11 +105,5 @@ namespace hal
          * @param[in] enable Enable lock on true, disable on false
          */
         void set_layout_locker(bool enable) override;
-
-        /**
-         * Extension to return CLI options
-         * @return pointer to instance implementing extensions
-         */
-        std::vector<AbstractExtensionInterface*> get_extensions() const override;
     };
 }    // namespace hal

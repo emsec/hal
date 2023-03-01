@@ -21,11 +21,14 @@
 
 namespace hal
 {
-    GuiExtensionContext* GuiExtensionDemoPlugin::sGuiExtension = nullptr;
-
     extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
     {
         return std::make_unique<GuiExtensionDemoPlugin>();
+    }
+
+    GuiExtensionDemoPlugin::GuiExtensionDemoPlugin()
+    {
+        m_extensions.push_back(new GuiExtensionContext);
     }
 
     std::string GuiExtensionDemoPlugin::get_name() const
@@ -45,35 +48,20 @@ namespace hal
 
     void GuiExtensionDemoPlugin::initialize()
     {
-        std::cerr << "GuiExtensionDemoPlugin::initialize()" << std::endl;
-    }
-
-    void GuiExtensionDemoPlugin::on_load()
-    {
-        std::cerr << "GuiExtensionDemoPlugin::on_load()" << std::endl;
-        sGuiExtension = new GuiExtensionContext;
-    }
-
-    void GuiExtensionDemoPlugin::on_unload()
-    {
-        delete sGuiExtension;
-    }
-
-    std::vector<AbstractExtensionInterface*> GuiExtensionDemoPlugin::get_extensions() const
-    {
-        return std::vector<AbstractExtensionInterface*>({sGuiExtension});
     }
 
 //----------------------
 
+    GuiExtensionContext* GuiExtensionContext::sInstance = nullptr;
+
     GuiExtensionContext::GuiExtensionContext()
     {
-        std::cerr << "GuiExtensionContext::GuiExtensionContext" << std::endl;
+        sInstance = this;
     }
 
     GuiExtensionContext::~GuiExtensionContext()
     {
-        std::cerr << "GuiExtensionContext::~GuiExtensionContext" << std::endl;
+        sInstance = nullptr;
     }
 
     void GuiExtensionContext::clear()

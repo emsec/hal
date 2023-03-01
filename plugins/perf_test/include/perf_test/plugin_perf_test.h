@@ -50,10 +50,8 @@ namespace hal
 
     class PLUGIN_API PerfTestPlugin : public BasePluginInterface
     {
-        CliExtensionInterface* mCliExtensions;
     public:
         PerfTestPlugin();
-        ~PerfTestPlugin();
 
         std::string get_name() const override;
         std::string get_version() const override;
@@ -61,7 +59,5 @@ namespace hal
         void initialize() override;
 
         bool cmp_sim_data(hal::NetlistSimulatorController* reference_simulation_ctrl, hal::NetlistSimulatorController* simulation_ctrl, int tolerance = 200);
-
-        std::vector<AbstractExtensionInterface *> get_extensions() const override;
     };
 }    // namespace hal

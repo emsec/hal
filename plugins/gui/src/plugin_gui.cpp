@@ -137,11 +137,6 @@ namespace hal
         return;
     }
 
-    std::vector<AbstractExtensionInterface*> PluginGui::get_extensions() const
-    {
-        return std::vector<AbstractExtensionInterface*>({mCliExtensions});
-    }
-
     bool PluginGui::exec(ProgramArguments& args)
     {
         int argc;

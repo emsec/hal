@@ -37,15 +37,11 @@ namespace hal
     void HGLWriterPlugin::on_load()
     {
         m_extension = new HGLWriterExtension;
+        m_extensions.push_back(m_extension);
     }
 
     void HGLWriterPlugin::on_unload()
     {
-        delete m_extension;
-    }
-
-    std::vector<AbstractExtensionInterface*> HGLWriterPlugin::get_extensions() const
-    {
-        return std::vector<AbstractExtensionInterface*>({m_extension});
+        delete_extension(m_extension);
     }
 }    // namespace hal

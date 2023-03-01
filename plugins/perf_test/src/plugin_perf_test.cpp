@@ -26,12 +26,7 @@ namespace hal
 
     PerfTestPlugin::PerfTestPlugin()
     {
-        mCliExtensions = new CliExtensionsPerfTest(this);
-    }
-
-    PerfTestPlugin::~PerfTestPlugin()
-    {
-        delete mCliExtensions;
+        m_extensions.push_back(new CliExtensionsPerfTest(this));
     }
 
     std::string PerfTestPlugin::get_name() const
@@ -491,10 +486,5 @@ namespace hal
         //Test if maps are equal
         bool equal = mParent->cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get());
         return true;
-    }
-
-    std::vector<AbstractExtensionInterface *> PerfTestPlugin::get_extensions() const
-    {
-        return std::vector<AbstractExtensionInterface*>({mCliExtensions});
     }
 }    // namespace hal

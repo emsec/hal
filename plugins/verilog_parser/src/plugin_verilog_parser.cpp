@@ -37,15 +37,11 @@ namespace hal
     void VerilogParserPlugin::on_load()
     {
         m_extension = new VerilogParserExtension;
+        m_extensions.push_back(m_extension);
     }
 
     void VerilogParserPlugin::on_unload()
     {
-        delete m_extension;
-    }
-
-    std::vector<AbstractExtensionInterface*> VerilogParserPlugin::get_extensions() const
-    {
-        return std::vector<AbstractExtensionInterface*>({m_extension});
+        delete_extension(m_extension);
     }
 }    // namespace hal
