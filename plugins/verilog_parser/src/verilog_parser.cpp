@@ -1305,7 +1305,7 @@ namespace hal
                     {
                         for (auto [module, index] : it->second)
                         {
-                            std::get<1>(m_module_ports.at(module).at(index)) = master_net;
+                            std::get<2>(m_module_ports.at(module).at(index)) = master_net;
                         }
                         m_module_port_by_net[master_net].insert(m_module_port_by_net[master_net].end(), it->second.begin(), it->second.end());
                         m_module_port_by_net.erase(it);
@@ -1387,9 +1387,18 @@ namespace hal
         // assign module pins
         for (const auto& [module, ports] : m_module_ports)
         {
-            for (const auto& [port_name, port_net] : ports)
+            std::unordered_set<Net*> input_nets  = module->get_input_nets();
+            std::unordered_set<Net*> output_nets = module->get_output_nets();
+
+            for (const auto& [port_name, port_direction, port_net] : ports)
             {
                 if (port_net->get_num_of_sources() == 0 && port_net->get_num_of_destinations() == 0)
+                {
+                    continue;
+                }
+
+                // Skip output ports that have GND/VCC net connected, since in the HAL netlist representation they do not originate inside of the module but from the global GND/VCC gate
+                if ((port_net->is_gnd_net() || port_net->is_vcc_net()) && (port_direction == PinDirection::output) && (output_nets.find(port_net) == output_nets.end()))
                 {
                     continue;
                 }
@@ -1401,38 +1410,6 @@ namespace hal
                                           + " within module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()));
                     // TODO: The pin creation fails when there are unused ports that never get a net assigned to them (verliog...),
                     //       but this also happens when the net just passes through the module (since there is no gate inside the module with that net as either input or output net, the net does not get listed as module input or output)
-                }
-            }
-        }
-
-        for (Module* module : m_netlist->get_modules())
-        {
-            std::unordered_set<Net*> input_nets  = module->get_input_nets();
-            std::unordered_set<Net*> output_nets = module->get_input_nets();
-
-            if (m_one_net)
-            {
-                if (!module->get_pin_by_net(m_one_net) && (input_nets.find(m_one_net) != input_nets.end() || output_nets.find(m_one_net) != input_nets.end()))
-                {
-                    if (auto res = module->create_pin("'1'", m_one_net); res.is_error())
-                    {
-                        return ERR_APPEND(res.get_error(),
-                                          "could not construct netlist: failed to create pin '1' at net '" + m_one_net->get_name() + "' with ID " + std::to_string(m_one_net->get_id())
-                                              + "within module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()));
-                    }
-                }
-            }
-
-            if (m_zero_net)
-            {
-                if (!module->get_pin_by_net(m_zero_net) && (input_nets.find(m_zero_net) != input_nets.end() || output_nets.find(m_zero_net) != input_nets.end()))
-                {
-                    if (auto res = module->create_pin("'0'", m_zero_net); res.is_error())
-                    {
-                        return ERR_APPEND(res.get_error(),
-                                          "could not construct netlist: failed to create pin '0' at net '" + m_zero_net->get_name() + "' with ID " + std::to_string(m_zero_net->get_id())
-                                              + "within module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()));
-                    }
                 }
             }
         }
@@ -1495,7 +1472,7 @@ namespace hal
                 if (const auto it = parent_module_assignments.find(expanded_port_identifier); it != parent_module_assignments.end())
                 {
                     Net* port_net = m_net_by_name.at(it->second);
-                    m_module_ports[module].push_back(std::make_pair(expanded_port_identifier, port_net));
+                    m_module_ports[module].push_back(std::make_tuple(expanded_port_identifier, port->m_direction, port_net));
                     m_module_port_by_net[port_net].push_back(std::make_pair(module, m_module_ports[module].size() - 1));
 
                     // assign port attributes
