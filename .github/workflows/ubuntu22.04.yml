@@ -142,3 +142,14 @@ jobs:
         with:
           name: crashes
           path: /var/lib/apport/coredump/core*
+
+      - name: Save test binaries
+        uses: actions/upload-artifact@v3
+        with:
+          name: runtest
+          path: |
+                ${{runner.workspace}}/hal/build/bin/runTest-gate_library_manager
+                ${{runner.workspace}}/hal/build/bin/runTest-netlist_factory
+                ${{runner.workspace}}/hal/build/bin/runTest-netlist_parser_manager
+                ${{runner.workspace}}/hal/build/bin/runTest-netlist_serializer
+                ${{runner.workspace}}/hal/build/bin/runTest-netlist_writer_manager
