@@ -54,6 +54,49 @@ namespace hal
         return OK(tmp_bf);
     }
 
+    // TODO think about moving this to its own BooleanFunctionGate Decorator
+    Result<BooleanFunction> BooleanFunctionDecorator::substitute_power_ground_pins(const Netlist* nl, const Gate* g) const
+    {
+        BooleanFunction tmp_bf = m_bf.clone();
+
+        for (const std::string& var_name : m_bf.get_variable_names())
+        {
+            const Net* net = g->get_fan_in_net(var_name);
+            if (net == nullptr)
+            {
+                return ERR("Unable to replace pins connected to GND/VCC with constants for boolean function associated with gate " + g->get_name() + " with ID " + std::to_string(g->get_id())
+                           + ": failed to find net connected to pin " + var_name);
+            }
+
+            if (const auto sources = net->get_sources(); sources.size() == 1)
+            {
+                if (sources.front()->get_gate()->get_type()->has_property(GateTypeProperty::power))
+                {
+                    if (auto subs_1_res = tmp_bf.substitute(var_name, BooleanFunction::Const(BooleanFunction::Value::ONE)); subs_1_res.is_ok())
+                    {
+                        tmp_bf = subs_1_res.get();
+                    }
+                    else
+                    {
+                        return ERR(subs_1_res.get_error());
+                    }
+                }
+                else if (sources.front()->get_gate()->get_type()->has_property(GateTypeProperty::ground))
+                {
+                    if (auto subs_0_res = tmp_bf.substitute(var_name, BooleanFunction::Const(BooleanFunction::Value::ZERO)); subs_0_res.is_ok())
+                    {
+                        tmp_bf = subs_0_res.get();
+                    }
+                    else
+                    {
+                        return ERR(subs_0_res.get_error());
+                    }
+                }
+            }
+        }
+        return OK(tmp_bf);
+    }
+
     Result<BooleanFunction> BooleanFunctionDecorator::get_boolean_function_from(const std::vector<Net*>& nets, u32 extend_to_size, bool sign_extend)
     {
         if (nets.empty())
