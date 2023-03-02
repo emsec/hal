@@ -228,6 +228,369 @@ namespace hal {
     }
 
     /**
+     * Test different variants to declare pins.
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_pins) 
+    {
+        TEST_START
+        {
+            const GateLibrary* gl = test_utils::get_gate_library();
+
+            std::string netlist_input(  "module top (a, b, c, d); "
+                                        "   input a, b;"
+                                        "   output c, d;"
+                                        ""
+                                        "   AND2 gate_0 ("
+                                        "       .I0 (a),"
+                                        "       .I1 (b),"
+                                        "       .O (c)"
+                                        "   );"
+                                        ""
+                                        "   OR2 gate_1 ("
+                                        "       .I0 (a),"
+                                        "       .I1 (b),"
+                                        "       .O (d)"
+                                        "   );"
+                                        "endmodule");
+
+            const GateLibrary* gate_lib = test_utils::get_gate_library();
+            auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+            VerilogParser verilog_parser;
+            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
+            ASSERT_TRUE(nl_res.is_ok());
+            std::unique_ptr<Netlist> nl = nl_res.get();
+            ASSERT_NE(nl, nullptr);
+
+            EXPECT_EQ(nl->get_gates().size(), 2);
+            EXPECT_EQ(nl->get_nets().size(), 4);
+            EXPECT_EQ(nl->get_modules().size(), 1);
+
+            ASSERT_EQ(nl->get_gates(test_utils::gate_filter("AND2", "gate_0")).size(), 1);
+            Gate* gate_0 = nl->get_gates(test_utils::gate_filter("AND2", "gate_0")).front();
+            Endpoint* ep_g0_net_a = gate_0->get_fan_in_endpoint("I0");
+            Endpoint* ep_g0_net_b = gate_0->get_fan_in_endpoint("I1");
+            Endpoint* ep_g0_net_c = gate_0->get_fan_out_endpoint("O");
+            ASSERT_NE(ep_g0_net_a, nullptr);
+            ASSERT_NE(ep_g0_net_b, nullptr);
+            ASSERT_NE(ep_g0_net_c, nullptr);
+            Net* net_g0_a = ep_g0_net_a->get_net();
+            Net* net_g0_b = ep_g0_net_b->get_net();
+            Net* net_g0_c = ep_g0_net_c->get_net();
+            ASSERT_NE(net_g0_a, nullptr);
+            ASSERT_NE(net_g0_b, nullptr);
+            ASSERT_NE(net_g0_c, nullptr);
+            EXPECT_EQ(net_g0_a->get_name(), "a");
+            EXPECT_EQ(net_g0_b->get_name(), "b");
+            EXPECT_EQ(net_g0_c->get_name(), "c");
+
+            ASSERT_EQ(nl->get_gates(test_utils::gate_filter("OR2", "gate_1")).size(), 1);
+            Gate* gate_1 = nl->get_gates(test_utils::gate_filter("OR2", "gate_1")).front();
+            Endpoint* ep_g1_net_a = gate_1->get_fan_in_endpoint("I0");
+            Endpoint* ep_g1_net_b = gate_1->get_fan_in_endpoint("I1");
+            Endpoint* ep_g1_net_d = gate_1->get_fan_out_endpoint("O");
+            ASSERT_NE(ep_g1_net_a, nullptr);
+            ASSERT_NE(ep_g1_net_b, nullptr);
+            ASSERT_NE(ep_g1_net_d, nullptr);
+            Net* net_g1_a = ep_g1_net_a->get_net();
+            Net* net_g1_b = ep_g1_net_b->get_net();
+            Net* net_g1_d = ep_g1_net_d->get_net();
+            ASSERT_NE(net_g1_a, nullptr);
+            ASSERT_NE(net_g1_b, nullptr);
+            ASSERT_NE(net_g1_d, nullptr);
+            EXPECT_EQ(net_g1_a->get_name(), "a");
+            EXPECT_EQ(net_g1_b->get_name(), "b");
+            EXPECT_EQ(net_g1_d->get_name(), "d");
+
+            ASSERT_EQ(net_g0_a, net_g1_a);
+            ASSERT_EQ(net_g0_b, net_g1_b);
+
+            Net* net_a = net_g0_a;
+            Net* net_b = net_g0_b;
+            Net* net_c = net_g0_c;
+            Net* net_d = net_g1_d;
+
+            Module* top = nl->get_top_module();
+            ASSERT_NE(top, nullptr);
+            EXPECT_TRUE(top->is_input_net(net_a));
+            EXPECT_TRUE(top->is_input_net(net_b));
+            EXPECT_TRUE(top->is_output_net(net_c));
+            EXPECT_TRUE(top->is_output_net(net_d));
+
+            EXPECT_TRUE(net_a->is_global_input_net());
+            EXPECT_TRUE(net_b->is_global_input_net());
+            EXPECT_TRUE(net_c->is_global_output_net());
+            EXPECT_TRUE(net_d->is_global_output_net());
+        }
+        {
+            const GateLibrary* gl = test_utils::get_gate_library();
+
+            std::string netlist_input(  "module top (input a, b, output c, d); "
+                                        ""
+                                        "   AND2 gate_0 ("
+                                        "       .I0 (a),"
+                                        "       .I1 (b),"
+                                        "       .O (c)"
+                                        "   );"
+                                        ""
+                                        "   OR2 gate_1 ("
+                                        "       .I0 (a),"
+                                        "       .I1 (b),"
+                                        "       .O (d)"
+                                        "   );"
+                                        "endmodule");
+
+            const GateLibrary* gate_lib = test_utils::get_gate_library();
+            auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+            VerilogParser verilog_parser;
+            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
+            ASSERT_TRUE(nl_res.is_ok());
+            std::unique_ptr<Netlist> nl = nl_res.get();
+            ASSERT_NE(nl, nullptr);
+
+            EXPECT_EQ(nl->get_gates().size(), 2);
+            EXPECT_EQ(nl->get_nets().size(), 4);
+            EXPECT_EQ(nl->get_modules().size(), 1);
+
+            ASSERT_EQ(nl->get_gates(test_utils::gate_filter("AND2", "gate_0")).size(), 1);
+            Gate* gate_0 = nl->get_gates(test_utils::gate_filter("AND2", "gate_0")).front();
+            Endpoint* ep_g0_net_a = gate_0->get_fan_in_endpoint("I0");
+            Endpoint* ep_g0_net_b = gate_0->get_fan_in_endpoint("I1");
+            Endpoint* ep_g0_net_c = gate_0->get_fan_out_endpoint("O");
+            ASSERT_NE(ep_g0_net_a, nullptr);
+            ASSERT_NE(ep_g0_net_b, nullptr);
+            ASSERT_NE(ep_g0_net_c, nullptr);
+            Net* net_g0_a = ep_g0_net_a->get_net();
+            Net* net_g0_b = ep_g0_net_b->get_net();
+            Net* net_g0_c = ep_g0_net_c->get_net();
+            ASSERT_NE(net_g0_a, nullptr);
+            ASSERT_NE(net_g0_b, nullptr);
+            ASSERT_NE(net_g0_c, nullptr);
+            EXPECT_EQ(net_g0_a->get_name(), "a");
+            EXPECT_EQ(net_g0_b->get_name(), "b");
+            EXPECT_EQ(net_g0_c->get_name(), "c");
+
+            ASSERT_EQ(nl->get_gates(test_utils::gate_filter("OR2", "gate_1")).size(), 1);
+            Gate* gate_1 = nl->get_gates(test_utils::gate_filter("OR2", "gate_1")).front();
+            Endpoint* ep_g1_net_a = gate_1->get_fan_in_endpoint("I0");
+            Endpoint* ep_g1_net_b = gate_1->get_fan_in_endpoint("I1");
+            Endpoint* ep_g1_net_d = gate_1->get_fan_out_endpoint("O");
+            ASSERT_NE(ep_g1_net_a, nullptr);
+            ASSERT_NE(ep_g1_net_b, nullptr);
+            ASSERT_NE(ep_g1_net_d, nullptr);
+            Net* net_g1_a = ep_g1_net_a->get_net();
+            Net* net_g1_b = ep_g1_net_b->get_net();
+            Net* net_g1_d = ep_g1_net_d->get_net();
+            ASSERT_NE(net_g1_a, nullptr);
+            ASSERT_NE(net_g1_b, nullptr);
+            ASSERT_NE(net_g1_d, nullptr);
+            EXPECT_EQ(net_g1_a->get_name(), "a");
+            EXPECT_EQ(net_g1_b->get_name(), "b");
+            EXPECT_EQ(net_g1_d->get_name(), "d");
+
+            ASSERT_EQ(net_g0_a, net_g1_a);
+            ASSERT_EQ(net_g0_b, net_g1_b);
+
+            Net* net_a = net_g0_a;
+            Net* net_b = net_g0_b;
+            Net* net_c = net_g0_c;
+            Net* net_d = net_g1_d;
+
+            Module* top = nl->get_top_module();
+            ASSERT_NE(top, nullptr);
+            EXPECT_TRUE(top->is_input_net(net_a));
+            EXPECT_TRUE(top->is_input_net(net_b));
+            EXPECT_TRUE(top->is_output_net(net_c));
+            EXPECT_TRUE(top->is_output_net(net_d));
+
+            EXPECT_TRUE(net_a->is_global_input_net());
+            EXPECT_TRUE(net_b->is_global_input_net());
+            EXPECT_TRUE(net_c->is_global_output_net());
+            EXPECT_TRUE(net_d->is_global_output_net());
+        }
+        {
+            const GateLibrary* gl = test_utils::get_gate_library();
+
+            std::string netlist_input(  "module top (input a, b, output c, d); "
+                                        "   wire a, b;"
+                                        "   wire c, d;"
+                                        ""
+                                        "   AND2 gate_0 ("
+                                        "       .I0 (a),"
+                                        "       .I1 (b),"
+                                        "       .O (c)"
+                                        "   );"
+                                        ""
+                                        "   OR2 gate_1 ("
+                                        "       .I0 (a),"
+                                        "       .I1 (b),"
+                                        "       .O (d)"
+                                        "   );"
+                                        "endmodule");
+
+            const GateLibrary* gate_lib = test_utils::get_gate_library();
+            auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+            VerilogParser verilog_parser;
+            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
+            ASSERT_TRUE(nl_res.is_ok());
+            std::unique_ptr<Netlist> nl = nl_res.get();
+            ASSERT_NE(nl, nullptr);
+
+            EXPECT_EQ(nl->get_gates().size(), 2);
+            EXPECT_EQ(nl->get_nets().size(), 4);
+            EXPECT_EQ(nl->get_modules().size(), 1);
+
+            ASSERT_EQ(nl->get_gates(test_utils::gate_filter("AND2", "gate_0")).size(), 1);
+            Gate* gate_0 = nl->get_gates(test_utils::gate_filter("AND2", "gate_0")).front();
+            Endpoint* ep_g0_net_a = gate_0->get_fan_in_endpoint("I0");
+            Endpoint* ep_g0_net_b = gate_0->get_fan_in_endpoint("I1");
+            Endpoint* ep_g0_net_c = gate_0->get_fan_out_endpoint("O");
+            ASSERT_NE(ep_g0_net_a, nullptr);
+            ASSERT_NE(ep_g0_net_b, nullptr);
+            ASSERT_NE(ep_g0_net_c, nullptr);
+            Net* net_g0_a = ep_g0_net_a->get_net();
+            Net* net_g0_b = ep_g0_net_b->get_net();
+            Net* net_g0_c = ep_g0_net_c->get_net();
+            ASSERT_NE(net_g0_a, nullptr);
+            ASSERT_NE(net_g0_b, nullptr);
+            ASSERT_NE(net_g0_c, nullptr);
+            EXPECT_EQ(net_g0_a->get_name(), "a");
+            EXPECT_EQ(net_g0_b->get_name(), "b");
+            EXPECT_EQ(net_g0_c->get_name(), "c");
+
+            ASSERT_EQ(nl->get_gates(test_utils::gate_filter("OR2", "gate_1")).size(), 1);
+            Gate* gate_1 = nl->get_gates(test_utils::gate_filter("OR2", "gate_1")).front();
+            Endpoint* ep_g1_net_a = gate_1->get_fan_in_endpoint("I0");
+            Endpoint* ep_g1_net_b = gate_1->get_fan_in_endpoint("I1");
+            Endpoint* ep_g1_net_d = gate_1->get_fan_out_endpoint("O");
+            ASSERT_NE(ep_g1_net_a, nullptr);
+            ASSERT_NE(ep_g1_net_b, nullptr);
+            ASSERT_NE(ep_g1_net_d, nullptr);
+            Net* net_g1_a = ep_g1_net_a->get_net();
+            Net* net_g1_b = ep_g1_net_b->get_net();
+            Net* net_g1_d = ep_g1_net_d->get_net();
+            ASSERT_NE(net_g1_a, nullptr);
+            ASSERT_NE(net_g1_b, nullptr);
+            ASSERT_NE(net_g1_d, nullptr);
+            EXPECT_EQ(net_g1_a->get_name(), "a");
+            EXPECT_EQ(net_g1_b->get_name(), "b");
+            EXPECT_EQ(net_g1_d->get_name(), "d");
+
+            ASSERT_EQ(net_g0_a, net_g1_a);
+            ASSERT_EQ(net_g0_b, net_g1_b);
+
+            Net* net_a = net_g0_a;
+            Net* net_b = net_g0_b;
+            Net* net_c = net_g0_c;
+            Net* net_d = net_g1_d;
+
+            Module* top = nl->get_top_module();
+            ASSERT_NE(top, nullptr);
+            EXPECT_TRUE(top->is_input_net(net_a));
+            EXPECT_TRUE(top->is_input_net(net_b));
+            EXPECT_TRUE(top->is_output_net(net_c));
+            EXPECT_TRUE(top->is_output_net(net_d));
+
+            EXPECT_TRUE(net_a->is_global_input_net());
+            EXPECT_TRUE(net_b->is_global_input_net());
+            EXPECT_TRUE(net_c->is_global_output_net());
+            EXPECT_TRUE(net_d->is_global_output_net());
+        }
+        {
+            const GateLibrary* gl = test_utils::get_gate_library();
+
+            std::string netlist_input(  "module top (a, b, c, d); "
+                                        "   input a, b;"
+                                        "   output c, d;"
+                                        "   wire a, b;"
+                                        "   wire c, d;"
+                                        ""
+                                        "   AND2 gate_0 ("
+                                        "       .I0 (a),"
+                                        "       .I1 (b),"
+                                        "       .O (c)"
+                                        "   );"
+                                        ""
+                                        "   OR2 gate_1 ("
+                                        "       .I0 (a),"
+                                        "       .I1 (b),"
+                                        "       .O (d)"
+                                        "   );"
+                                        "endmodule");
+
+            const GateLibrary* gate_lib = test_utils::get_gate_library();
+            auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+            VerilogParser verilog_parser;
+            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
+            ASSERT_TRUE(nl_res.is_ok());
+            std::unique_ptr<Netlist> nl = nl_res.get();
+            ASSERT_NE(nl, nullptr);
+
+            EXPECT_EQ(nl->get_gates().size(), 2);
+            EXPECT_EQ(nl->get_nets().size(), 4);
+            EXPECT_EQ(nl->get_modules().size(), 1);
+
+            ASSERT_EQ(nl->get_gates(test_utils::gate_filter("AND2", "gate_0")).size(), 1);
+            Gate* gate_0 = nl->get_gates(test_utils::gate_filter("AND2", "gate_0")).front();
+            Endpoint* ep_g0_net_a = gate_0->get_fan_in_endpoint("I0");
+            Endpoint* ep_g0_net_b = gate_0->get_fan_in_endpoint("I1");
+            Endpoint* ep_g0_net_c = gate_0->get_fan_out_endpoint("O");
+            ASSERT_NE(ep_g0_net_a, nullptr);
+            ASSERT_NE(ep_g0_net_b, nullptr);
+            ASSERT_NE(ep_g0_net_c, nullptr);
+            Net* net_g0_a = ep_g0_net_a->get_net();
+            Net* net_g0_b = ep_g0_net_b->get_net();
+            Net* net_g0_c = ep_g0_net_c->get_net();
+            ASSERT_NE(net_g0_a, nullptr);
+            ASSERT_NE(net_g0_b, nullptr);
+            ASSERT_NE(net_g0_c, nullptr);
+            EXPECT_EQ(net_g0_a->get_name(), "a");
+            EXPECT_EQ(net_g0_b->get_name(), "b");
+            EXPECT_EQ(net_g0_c->get_name(), "c");
+
+            ASSERT_EQ(nl->get_gates(test_utils::gate_filter("OR2", "gate_1")).size(), 1);
+            Gate* gate_1 = nl->get_gates(test_utils::gate_filter("OR2", "gate_1")).front();
+            Endpoint* ep_g1_net_a = gate_1->get_fan_in_endpoint("I0");
+            Endpoint* ep_g1_net_b = gate_1->get_fan_in_endpoint("I1");
+            Endpoint* ep_g1_net_d = gate_1->get_fan_out_endpoint("O");
+            ASSERT_NE(ep_g1_net_a, nullptr);
+            ASSERT_NE(ep_g1_net_b, nullptr);
+            ASSERT_NE(ep_g1_net_d, nullptr);
+            Net* net_g1_a = ep_g1_net_a->get_net();
+            Net* net_g1_b = ep_g1_net_b->get_net();
+            Net* net_g1_d = ep_g1_net_d->get_net();
+            ASSERT_NE(net_g1_a, nullptr);
+            ASSERT_NE(net_g1_b, nullptr);
+            ASSERT_NE(net_g1_d, nullptr);
+            EXPECT_EQ(net_g1_a->get_name(), "a");
+            EXPECT_EQ(net_g1_b->get_name(), "b");
+            EXPECT_EQ(net_g1_d->get_name(), "d");
+
+            ASSERT_EQ(net_g0_a, net_g1_a);
+            ASSERT_EQ(net_g0_b, net_g1_b);
+
+            Net* net_a = net_g0_a;
+            Net* net_b = net_g0_b;
+            Net* net_c = net_g0_c;
+            Net* net_d = net_g1_d;
+
+            Module* top = nl->get_top_module();
+            ASSERT_NE(top, nullptr);
+            EXPECT_TRUE(top->is_input_net(net_a));
+            EXPECT_TRUE(top->is_input_net(net_b));
+            EXPECT_TRUE(top->is_output_net(net_c));
+            EXPECT_TRUE(top->is_output_net(net_d));
+
+            EXPECT_TRUE(net_a->is_global_input_net());
+            EXPECT_TRUE(net_b->is_global_input_net());
+            EXPECT_TRUE(net_c->is_global_output_net());
+            EXPECT_TRUE(net_d->is_global_output_net());
+        }
+        TEST_END
+    }
+
+    /**
      * Test different variants of pin assignments to modules and gates.
      *
      * Functions: parse
