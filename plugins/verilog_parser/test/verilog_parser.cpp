@@ -1961,7 +1961,6 @@ namespace hal {
                 EXPECT_TRUE(net_master->is_global_input_net());
 
             }
-            if(test_utils::known_issue_tests_active())
             {
                 std::string netlist_input("module passthrough_test (\n"
                                         "  input net_in,\n"
@@ -1983,17 +1982,43 @@ namespace hal {
                                         "  .net_in (net_global_in ),\n"
                                         "  .net_out ()\n"
                                         " ) ;\n"
-                                        "BUF gate_1 (\n"
-                                        "  .I (net_a ),\n"
-                                        "  .O (net_global_out )\n"
-                                        ") ;\n"
                                         "endmodule");
 
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
                 auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
-                std::cout << nl_res.get_error().get() << std::endl;
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
+                ASSERT_NE(nl, nullptr);
+            }
+            {
+                std::string netlist_input("module passthrough_test (\n"
+                                        "  input net_in,\n"
+                                        "  output net_out\n"
+                                        ");\n"
+                                        "  wire net_a;\n"
+                                        "  assign net_out = net_a;\n"
+                                        "BUF gate_1 (\n"
+                                        "  .I (net_in ),\n"
+                                        "  .O (net_a )\n"
+                                        ") ;\n"
+                                        "endmodule\n"
+                                        "\n"
+                                        "module top (net_global_in, net_global_out) ;\n"
+                                        "  input net_global_in ;\n"
+                                        "  output net_global_out ;\n"
+                                        "  wire net_a ;\n"
+                                        "passthrough_test pt (\n"
+                                        "  .net_in (),\n"
+                                        "  .net_out (net_global_out)\n"
+                                        " ) ;\n"
+                                        "endmodule");
+
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VerilogParser verilog_parser;
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
