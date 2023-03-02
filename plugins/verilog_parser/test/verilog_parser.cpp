@@ -1290,7 +1290,6 @@ namespace hal {
             EXPECT_EQ(top_child_one->get_data("generic", "child_one_mod_key"),
                         std::make_tuple("integer", "1234"));
         }
-        if(test_utils::known_issue_tests_active())
         {
             // Create a netlist as follows and test its creation (due to request):
             /*                     - - - - - - - - - - - - - - - - - - - - - - .
@@ -1374,7 +1373,6 @@ namespace hal {
                                                                                             "I")})));
 
         }
-        if(test_utils::known_issue_tests_active())
         {
             // Testing the correct naming of gates and nets that occur in multiple modules by
             // creating the following netlist:
@@ -1509,14 +1507,14 @@ namespace hal {
             // Check that the gate names are correct
             std::vector<std::string> nl_gate_names;
             for(Gate* g : nl_gates) nl_gate_names.push_back(g->get_name());
-            std::vector<std::string> expected_gate_names = {"shared_gate_name__[0]__", "gate_b__[0]__",
+            std::vector<std::string> expected_gate_names = {"shared_gate_name", "gate_b",
                     "shared_gate_name__[1]__", "gate_a", "shared_gate_name__[2]__", "gate_b__[1]__", "gate_top"};
             EXPECT_EQ(nl_gate_names, expected_gate_names);
 
             // Check that the net names are correct
             std::vector<std::string> nl_net_names;
             for(Net* n : nl_nets) nl_net_names.push_back(n->get_name());
-            std::vector<std::string> expected_net_names = {"net_global_in", "shared_net_name__[0]__", "net_b__[0]__", "net_0", "shared_net_name__[1]__", "net_a",
+            std::vector<std::string> expected_net_names = {"net_global_in", "shared_net_name", "net_b", "net_0", "shared_net_name__[1]__", "net_a",
                         "net_1", "shared_net_name__[2]__", "net_b__[1]__", "net_2", "net_global_out"};
             EXPECT_EQ(nl_net_names, expected_net_names);
 
@@ -1599,6 +1597,43 @@ namespace hal {
                 // Check that net_master becomes also a global input
                 EXPECT_TRUE(net_master->is_global_input_net());
 
+            }
+            if(test_utils::known_issue_tests_active())
+            {
+                std::string netlist_input("module passthrough_test (\n"
+                                        "  input net_in,\n"
+                                        "  output net_out\n"
+                                        ");\n"
+                                        "  wire net_a;\n"
+                                        "  assign net_out = net_a;\n"
+                                        "BUF gate_1 (\n"
+                                        "  .I (net_in ),\n"
+                                        "  .O (net_a )\n"
+                                        ") ;\n"
+                                        "endmodule\n"
+                                        "\n"
+                                        "module top (net_global_in, net_global_out) ;\n"
+                                        "  input net_global_in ;\n"
+                                        "  output net_global_out ;\n"
+                                        "  wire net_a ;\n"
+                                        "passthrough_test pt (\n"
+                                        "  .net_in (net_global_in ),\n"
+                                        "  .net_out ()\n"
+                                        " ) ;\n"
+                                        "BUF gate_1 (\n"
+                                        "  .I (net_a ),\n"
+                                        "  .O (net_global_out )\n"
+                                        ") ;\n"
+                                        "endmodule");
+
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VerilogParser verilog_parser;
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
+                std::cout << nl_res.get_error().get() << std::endl;
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
+                ASSERT_NE(nl, nullptr);
             }
             // -- Verilog Specific Tests
             {

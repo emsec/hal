@@ -1593,7 +1593,6 @@ namespace hal {
                                                                                               "I")})));
 
             }
-            if(test_utils::known_issue_tests_active())
             {
                 // Testing the correct naming of gates and nets that occur in multiple modules by
                 // creating the following netlist:
@@ -1743,14 +1742,14 @@ namespace hal {
                 // Check that the gate names are correct
                 std::vector<std::string> nl_gate_names;
                 for(Gate* g : nl_gates) nl_gate_names.push_back(g->get_name());
-                std::vector<std::string> expected_gate_names = {"shared_gate_name__[0]__", "gate_b__[0]__",
+                std::vector<std::string> expected_gate_names = {"shared_gate_name", "gate_b",
                                                                 "shared_gate_name__[1]__", "gate_a", "shared_gate_name__[2]__", "gate_b__[1]__", "gate_top"};
                 EXPECT_EQ(nl_gate_names, expected_gate_names);
 
                 // Check that the net names are correct
                 std::vector<std::string> nl_net_names;
                 for(Net* n : nl_nets) nl_net_names.push_back(n->get_name());
-                std::vector<std::string> expected_net_names = {"net_global_in", "shared_net_name__[0]__", "net_b__[0]__", "net_0", "shared_net_name__[1]__", "net_a",
+                std::vector<std::string> expected_net_names = {"net_global_in", "shared_net_name", "net_b", "net_0", "shared_net_name__[1]__", "net_a",
                                                                "net_1", "shared_net_name__[2]__", "net_b__[1]__", "net_2", "net_global_out"};
                 EXPECT_EQ(nl_net_names, expected_net_names);
 

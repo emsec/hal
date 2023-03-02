@@ -1040,9 +1040,6 @@ namespace hal
         std::queue<VerilogModule*> q;
         q.push(top_module);
 
-        // top entity instance will be named after its entity, so take into account for aliases
-        m_instance_name_occurrences["top_module"]++;
-
         // global input/output signals will be named after ports, so take into account for aliases
         for (const auto& port : top_module->m_ports)
         {
@@ -1059,18 +1056,8 @@ namespace hal
 
             instantiation_count[module->m_name]++;
 
-            for (const auto& signal : module->m_signals)
-            {
-                for (const auto& expanded_name : signal->m_expanded_names)
-                {
-                    m_signal_name_occurrences[expanded_name]++;
-                }
-            }
-
             for (const auto& instance : module->m_instances)
             {
-                m_instance_name_occurrences[instance->m_name]++;
-
                 if (const auto it = m_modules_by_name.find(instance->m_type); it != m_modules_by_name.end())
                 {
                     q.push(it->second);
@@ -1819,16 +1806,22 @@ namespace hal
 
     std::string VerilogParser::get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const
     {
-        // if the name only appears once, we don't have to suffix it
-        if (name_occurrences[name] < 2)
+        std::string res_name;
+
+        if (name_occurrences[name] == 0)
         {
-            return name;
+            // if the name only appears once, we don't have to suffix it
+            res_name = name;
+        }
+        else
+        {
+            // otherwise, add a unique string to the name
+            res_name = name + "__[" + std::to_string(name_occurrences[name]) + "]__";
         }
 
         name_occurrences[name]++;
 
-        // otherwise, add a unique string to the name
-        return name + "__[" + std::to_string(name_occurrences[name]) + "]__";
+        return res_name;
     }
 
     std::vector<u32> VerilogParser::parse_range(TokenStream<std::string>& stream) const
