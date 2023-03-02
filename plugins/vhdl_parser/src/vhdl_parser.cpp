@@ -409,7 +409,7 @@ namespace hal
         }
 
         m_netlist->load_gate_locations_from_data();
-        
+
         return OK(std::move(result));
     }
 
@@ -1595,7 +1595,8 @@ namespace hal
         {
             for (const auto& [port_name, port_net] : ports)
             {
-                if (port_net->get_num_of_sources() == 0 && port_net->get_num_of_destinations() == 0)
+                // check if net is actually a port net
+                if (!module->is_input_net(port_net) && !module->is_output_net(port_net))
                 {
                     continue;
                 }
@@ -1605,8 +1606,6 @@ namespace hal
                     return ERR_APPEND(res.get_error(),
                                       "could not construct netlist: failed to create pin '" + port_name + "' at net '" + port_net->get_name() + "' with ID " + std::to_string(port_net->get_id())
                                           + " within module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()));
-                    // TODO: The pin creation fails when there are unused ports that never get a net assigned to them (verliog...),
-                    //       but this also happens when the net just passes through the module (since there is no gate inside the module with that net as either input or output net, the net does not get listed as module input or output)
                 }
             }
         }

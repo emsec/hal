@@ -1392,13 +1392,7 @@ namespace hal
 
             for (const auto& [port_name, port_direction, port_net] : ports)
             {
-                if (port_net->get_num_of_sources() == 0 && port_net->get_num_of_destinations() == 0)
-                {
-                    continue;
-                }
-
-                // Skip output ports that have GND/VCC net connected, since in the HAL netlist representation they do not originate inside of the module but from the global GND/VCC gate
-                if ((port_net->is_gnd_net() || port_net->is_vcc_net()) && (port_direction == PinDirection::output) && (output_nets.find(port_net) == output_nets.end()))
+                if (!module->is_input_net(port_net) && !module->is_output_net(port_net))
                 {
                     continue;
                 }
@@ -1408,8 +1402,6 @@ namespace hal
                     return ERR_APPEND(res.get_error(),
                                       "could not construct netlist: failed to create pin '" + port_name + "' at net '" + port_net->get_name() + "' with ID " + std::to_string(port_net->get_id())
                                           + " within module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()));
-                    // TODO: The pin creation fails when there are unused ports that never get a net assigned to them (verliog...),
-                    //       but this also happens when the net just passes through the module (since there is no gate inside the module with that net as either input or output net, the net does not get listed as module input or output)
                 }
             }
         }
