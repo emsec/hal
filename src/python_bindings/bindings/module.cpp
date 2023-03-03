@@ -684,7 +684,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("python_context", "error encountered while creating pin group:\n{}", res.get_error().get());
+                    log_error("python_context", "error encountered while deleting pin group:\n{}", res.get_error().get());
                     return false;
                 }
             },
@@ -693,6 +693,32 @@ namespace hal
             Delete the given pin group.
 
             :param hal_py.ModulePinGroup pin_group: The pin group to be deleted.
+            :returns: True on success, False otherwise.
+            :rtype: bool
+        )");
+
+        py_module.def(
+            "move_pin_group",
+            [](Module& self, PinGroup<ModulePin>* pin_group, u32 new_index) {
+                auto res = self.move_pin_group(pin_group, new_index);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while moving pin group:\n{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("pin_group"),
+            py::arg("new_index"),
+            R"(
+            Move a pin group to another index within the module.
+            The indices of some other pin groups will be incremented or decremented to make room for the moved pin group to be inserted at the desired position.
+
+            :param hal_py.ModulePinGroup pin_group: The pin group to be moved.
+            :param int new_index: The index to which the pin group is moved.
             :returns: True on success, False otherwise.
             :rtype: bool
         )");
@@ -707,7 +733,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("python_context", "error encountered while creating pin group:\n{}", res.get_error().get());
+                    log_error("python_context", "error encountered while assigning pin to pin group:\n{}", res.get_error().get());
                     return false;
                 }
             },
@@ -735,7 +761,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("python_context", "error encountered while creating pin group:\n{}", res.get_error().get());
+                    log_error("python_context", "error encountered while moving pin within pin group:\n{}", res.get_error().get());
                     return false;
                 }
             },
@@ -763,7 +789,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("python_context", "error encountered while creating pin group:\n{}", res.get_error().get());
+                    log_error("python_context", "error encountered while removing pin from pin group:\n{}", res.get_error().get());
                     return false;
                 }
             },
