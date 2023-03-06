@@ -315,7 +315,7 @@ namespace hal
                     alreadyProcessedPins.insert(item);
                 }
             }
-            else if (itemType == ModulePinsTreeModel::itemType::portMultiBit)
+            else if (itemType == ModulePinsTreeModel::itemType::group)
             {
                 onlyPins = false;
                 for (auto pinItem : item->getChildren())
