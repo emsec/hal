@@ -169,19 +169,43 @@ namespace hal
             return true;
         }
 
-        bool load(const std::string& plugin_name, const std::filesystem::path& file_name)
+        bool load(const std::string& plugin_name, const std::filesystem::path& file_path_or_empty)
         {
-            log_info("core", "loading plugin '{}'...", file_name.string());
             if (plugin_name.empty())
             {
                 log_error("core", "parameter 'plugin_name' is empty");
                 return false;
             }
-            if (file_name.empty())
+
+            std::filesystem::path file_path = file_path_or_empty;
+            if (file_path.empty())
             {
-                log_error("core", "parameter 'file_name' is empty");
-                return false;
+                // file name not provided, search plugin folders
+                auto directories = m_plugin_folders;
+                for (const auto& directory : directories)
+                {
+                    if (!std::filesystem::exists(directory))
+                    {
+                        continue;
+                    }
+
+                    std::filesystem::path test_path = directory / (plugin_name + std::string(".") + std::string(LIBRARY_FILE_EXTENSION));
+                    if (std::filesystem::is_regular_file(test_path))
+                    {
+                        log_info("core", "loading plugin '{}' found in at '{}'...", plugin_name, file_path.string());
+                        file_path = test_path;
+                        break;
+                    }
+                }
+
+                if (file_path.empty())
+                {
+                    log_error("core", "path for plugin '{}' not found", plugin_name);
+                    return false;
+                }
             }
+            else
+                log_info("core", "loading plugin '{}'...", file_path.string());
 
             if (m_loaded_plugins.find(plugin_name) != m_loaded_plugins.end())
             {
@@ -191,7 +215,7 @@ namespace hal
 
             /* load library */
             auto lib = std::make_unique<RuntimeLibrary>();
-            if (!lib->load_library(file_name.string()))
+            if (!lib->load_library(file_path.string()))
             {
                 return false;
             }
@@ -300,7 +324,7 @@ namespace hal
             m_loaded_plugins[plugin_name] = std::make_tuple(std::move(instance), std::move(lib));
 
             /* notify callback that a plugin was loaded*/
-            m_hook(true, plugin_name, file_name.string());
+            m_hook(true, plugin_name, file_path.string());
 
             log_debug("core", "loaded plugin '{}'.", plugin_name);
             return true;

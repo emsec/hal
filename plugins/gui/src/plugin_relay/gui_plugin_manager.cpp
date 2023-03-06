@@ -253,13 +253,11 @@ namespace hal {
             GuiPluginEntry* gpe = it.value();
             if (gpe->isPlugin())
             {
-                qDebug() << gpe->mName << "++++++++++++++++++++++++";
                 mLookup.insert(gpe->mName,mEntries.size());
                 mEntries.append(gpe);
             }
             else
             {
-                qDebug() << gpe->mName << "------------------------";
                 mAvoid.append(gpe);
             }
         }

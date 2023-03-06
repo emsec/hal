@@ -105,7 +105,7 @@ namespace hal
          * @param[in] file_path - The path to the plugin file.
          * @returns True on success, false otherwise.
          */
-        bool load(const std::string& plugin_name, const std::filesystem::path& file_path);
+        bool load(const std::string& plugin_name, const std::filesystem::path& file_path_or_empty = std::filesystem::path());
 
         /**
          * Releases all plugins and their associated resources.

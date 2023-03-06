@@ -108,7 +108,7 @@ int main(int argc, const char* argv[])
         return cleanup(ERROR);
     }
 */
-    plugin_manager::load("hal_gui", "/home/langhein/src/hal/build/lib/hal_plugins/hal_gui.so");
+    plugin_manager::load("hal_gui");
 
 
     /* add plugin cli options */
