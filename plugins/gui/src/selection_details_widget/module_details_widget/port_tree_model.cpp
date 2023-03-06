@@ -129,6 +129,8 @@ namespace hal
                 //qDebug() << "pin was dropped on a group...";
                 dndPinOnGroup(droppedItem, parentItem);
         }
+
+        return true;
     }
 
 //    bool ModulePinsTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent)
@@ -474,7 +476,7 @@ namespace hal
         delete item;
     }
 
-    bool ModulePinsTreeModel::dndGroupOnGroup(TreeItem *droppedGroup, TreeItem *onDroppedGroup)
+    void ModulePinsTreeModel::dndGroupOnGroup(TreeItem *droppedGroup, TreeItem *onDroppedGroup)
     {
         // SPECIFY: 1) create completely new group, all pins in that, delete old 2 groups
         // 2) just add all pins from dropped group to "ondroppedgroup", then rename?
@@ -494,7 +496,7 @@ namespace hal
 
     }
 
-    bool ModulePinsTreeModel::dndPinOnGroup(TreeItem *droppedPin, TreeItem *onDroppedGroup)
+    void ModulePinsTreeModel::dndPinOnGroup(TreeItem *droppedPin, TreeItem *onDroppedGroup)
     {
         mIgnoreEventsFlag = true;
         QSet<u32> e;
@@ -506,7 +508,7 @@ namespace hal
         mIgnoreEventsFlag = false;
     }
 
-    bool ModulePinsTreeModel::dndPinBetweenPin(TreeItem *droppedPin, TreeItem *onDroppedParent, int row)
+    void ModulePinsTreeModel::dndPinBetweenPin(TreeItem *droppedPin, TreeItem *onDroppedParent, int row)
     {
         mIgnoreEventsFlag = true;
         if(droppedPin->getParent() == onDroppedParent) // same group
@@ -538,7 +540,7 @@ namespace hal
         mIgnoreEventsFlag = false;
     }
 
-    bool ModulePinsTreeModel::dndPinBetweenGroup(TreeItem *droppedPin, int row)
+    void ModulePinsTreeModel::dndPinBetweenGroup(TreeItem *droppedPin, int row)
     {
         // row is needed for when groups can change its order within the module
         Q_UNUSED(row)
