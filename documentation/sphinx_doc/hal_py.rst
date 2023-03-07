@@ -26,8 +26,8 @@ HAL Core Documentation
    module_pin_group
    net
    netlist
-   netlist_manipulation_decorator
    netlist_factory
+   netlist_manipulation_decorator
    netlist_utils
    netlist_serializer
    netlist_writer_manager
