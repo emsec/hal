@@ -204,6 +204,7 @@ namespace hal
         mMenuFile->addAction(mActionGateLibraryManager);
 
         QMenu* menuImport = new QMenu("Import …", this);
+        menuImport->addAction(mActionImportNetlist);
         menuImport->addAction(mActionImportProject);
 
         QMenu* menuExport = new QMenu("Export …", this);
