@@ -137,7 +137,7 @@ namespace hal
          * Get the inputs of the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
          * This does not actually build the boolean function but only determines the inputs the subgraph function would have, which is a lot faster.
          * 
-         * @param[in] subgraph_module - The module making up the subgraph to consider.
+         * @param[in] subgraph_gates - The subgraph gates making up the subgraph to consider.
          * @param[in] subgraph_output - The subgraph oputput net from which to start the back propagation from.
          * @return The input nets that would be the input for the subgraph function on success, an error otherwise;
          */
@@ -147,7 +147,7 @@ namespace hal
          * Get the inputs of the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
          * This does not actually build the boolean function but only determines the inputs the subgraph function would have, which is a lot faster.
          * 
-         * @param[in] subgraph_module - The module making up the subgraph to consider.
+         * @param[in] subgraph_gates - The subgraph gates making up the subgraph to consider.
          * @param[in] subgraph_output - The subgraph oputput net from which to start the back propagation from.
          * @return The input nets that would be the input for the subgraph function on success, an error otherwise;
          */
