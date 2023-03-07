@@ -28,7 +28,7 @@ namespace hal
         return OK({});
     }
 
-    Result<std::monostate> NetlistManipulationDecorator::replace_gate(Gate* gate, GateType* target_type, std::map<GatePin*, GatePin*> pin_map)
+    Result<std::monostate> NetlistManipulationDecorator::replace_gate(Gate* gate, GateType* target_type, const std::map<GatePin*, GatePin*>& pin_map)
     {
         if (gate == nullptr)
         {

@@ -60,7 +60,7 @@ namespace hal
          * @param[in] pin_map - A map from old to new pins.
          * @returns Ok on success, an error otherwise.
          */
-        Result<std::monostate> replace_gate(Gate* gate, GateType* target_type, std::map<GatePin*, GatePin*> pin_map);
+        Result<std::monostate> replace_gate(Gate* gate, GateType* target_type, const std::map<GatePin*, GatePin*>& pin_map);
 
     private:
         Netlist& m_netlist;

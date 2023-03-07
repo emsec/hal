@@ -38,7 +38,7 @@ namespace hal
 
         py_netlist_manipulation_decorator.def(
             "replace_gate",
-            [](NetlistManipulationDecorator& self, Gate* gate, GateType* target_type, std::map<GatePin*, GatePin*> pin_map) -> bool {
+            [](NetlistManipulationDecorator& self, Gate* gate, GateType* target_type, const std::map<GatePin*, GatePin*>& pin_map) -> bool {
                 auto res = self.replace_gate(gate, target_type, pin_map);
                 if (res.is_ok())
                 {
