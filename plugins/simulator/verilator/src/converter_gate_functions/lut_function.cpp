@@ -22,9 +22,9 @@ namespace hal
             std::string get_function_for_lut(const GateType* gt)
             {
                 std::stringstream function;
-                u32 lut_size                      = gt->get_input_pins().size();
                 std::vector<GatePin*> input_pins  = gt->get_input_pins();
                 std::vector<GatePin*> output_pins = gt->get_output_pins();
+                u32 lut_size                      = input_pins.size();
 
                 // check if LUTComponent exists, if not abort
                 if (LUTComponent* lut_component = gt->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); }); lut_component != nullptr)
@@ -53,7 +53,7 @@ namespace hal
                 function << "};" << std::endl;
 
                 InitComponent* init_component = gt->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
-                    
+
                 if (init_component == nullptr)
                 {
                     log_error("verilator", "Could not get init component for gate type {}!", gt->get_name());
