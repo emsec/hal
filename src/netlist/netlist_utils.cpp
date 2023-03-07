@@ -682,7 +682,7 @@ namespace hal
             Net* gnd_net = gnd_gates.front()->get_fan_out_nets().front();
 
             // iterate all LUT gates
-            for (const auto& gate : netlist->get_gates([](Gate* g) { return g->get_type()->has_property(GateTypeProperty::c_lut); }))
+            for (const auto& gate : netlist->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::c_lut); }))
             {
                 std::vector<Endpoint*> fan_in                              = gate->get_fan_in_endpoints();
                 std::unordered_map<std::string, BooleanFunction> functions = gate->get_boolean_functions();

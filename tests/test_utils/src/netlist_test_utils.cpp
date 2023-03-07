@@ -1115,62 +1115,62 @@ namespace hal
 
     // Filter Functions
 
-    std::function<bool(Module*)> test_utils::module_name_filter(const std::string& name)
+    std::function<bool(const Module*)> test_utils::module_name_filter(const std::string& name)
     {
-        return [name](auto m) { return m->get_name() == name; };
+        return [name](const Module* m) { return m->get_name() == name; };
     }
 
-    std::function<bool(Grouping*)> test_utils::grouping_name_filter(const std::string& name)
+    std::function<bool(const Grouping*)> test_utils::grouping_name_filter(const std::string& name)
     {
-        return [name](auto m) { return m->get_name() == name; };
+        return [name](const Grouping* g) { return g->get_name() == name; };
     }
 
-    std::function<bool(Gate*)> test_utils::gate_filter(const std::string& type, const std::string& name)
+    std::function<bool(const Gate*)> test_utils::gate_filter(const std::string& type, const std::string& name)
     {
-        return [name, type](auto g) { return g->get_name() == name && g->get_type()->get_name() == type; };
+        return [name, type](const Gate* g) { return g->get_name() == name && g->get_type()->get_name() == type; };
     }
 
-    std::function<bool(Gate*)> test_utils::gate_name_filter(const std::string& name)
+    std::function<bool(const Gate*)> test_utils::gate_name_filter(const std::string& name)
     {
-        return [name](auto g) { return g->get_name() == name; };
+        return [name](const Gate* g) { return g->get_name() == name; };
     }
 
-    std::function<bool(Gate*)> test_utils::gate_type_filter(const std::string& type)
+    std::function<bool(const Gate*)> test_utils::gate_type_filter(const std::string& type)
     {
-        return [type](auto g) { return g->get_type()->get_name() == type; };
+        return [type](const Gate* g) { return g->get_type()->get_name() == type; };
     }
 
-    std::function<bool(Net*)> test_utils::net_name_filter(const std::string& name)
+    std::function<bool(const Net*)> test_utils::net_name_filter(const std::string& name)
     {
-        return [name](auto n) { return n->get_name() == name; };
+        return [name](const Net* n) { return n->get_name() == name; };
     }
 
-    std::function<bool(Endpoint*)> test_utils::endpoint_gate_type_filter(const std::string& gate_type)
+    std::function<bool(const Endpoint*)> test_utils::endpoint_gate_type_filter(const std::string& gate_type)
     {
-        return [gate_type](auto ep) { return ep->get_gate()->get_type()->get_name() == gate_type; };
+        return [gate_type](const Endpoint* ep) { return ep->get_gate()->get_type()->get_name() == gate_type; };
     }
 
-    std::function<bool(Endpoint*)> test_utils::endpoint_gate_name_filter(const std::string& name)
+    std::function<bool(const Endpoint*)> test_utils::endpoint_gate_name_filter(const std::string& name)
     {
-        return [name](auto ep) { return ep->get_gate()->get_name() == name; };
+        return [name](const Endpoint* ep) { return ep->get_gate()->get_name() == name; };
     }
 
-    std::function<bool(Endpoint*)> test_utils::endpoint_pin_filter(const GatePin* pin)
+    std::function<bool(const Endpoint*)> test_utils::endpoint_pin_filter(const GatePin* pin)
     {
-        return [pin](auto ep) { return *ep->get_pin() == *pin; };
+        return [pin](const Endpoint* ep) { return *ep->get_pin() == *pin; };
     }
 
-    std::function<bool(const GatePin*, Endpoint*)> test_utils::adjacent_pin_filter(const std::string& pin_name)
+    std::function<bool(const GatePin*, const Endpoint*)> test_utils::adjacent_pin_filter(const std::string& pin_name)
     {
-        return [pin_name](auto, auto ep) { return ep->get_pin()->get_name() == pin_name; };
+        return [pin_name](const GatePin*, const Endpoint* ep) { return ep->get_pin()->get_name() == pin_name; };
     }
-    std::function<bool(const GatePin*, Endpoint*)> test_utils::starting_pin_filter(const std::string& pin_name)
+    std::function<bool(const GatePin*,const Endpoint*)> test_utils::starting_pin_filter(const std::string& pin_name)
     {
-        return [pin_name](auto* starting_pin, auto) { return starting_pin->get_name() == pin_name; };
+        return [pin_name](const GatePin* starting_pin, const Endpoint*) { return starting_pin->get_name() == pin_name; };
     }
 
-    std::function<bool(const GatePin*, Endpoint*)> test_utils::adjacent_gate_type_filter(const std::string& type)
+    std::function<bool(const GatePin*, const Endpoint*)> test_utils::adjacent_gate_type_filter(const std::string& type)
     {
-        return [type](auto, auto ep) { return ep->get_gate()->get_type()->get_name() == type; };
+        return [type](const GatePin*, const Endpoint* ep) { return ep->get_gate()->get_type()->get_name() == type; };
     }
 }    // namespace hal
