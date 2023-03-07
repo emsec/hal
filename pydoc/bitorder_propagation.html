@@ -1,0 +1,302 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Bitorder Propagation &mdash; hal_py v4.0.1-238-g3e08ba0b0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Boolean Influence" href="boolean_influence.html" />
+    <link rel="prev" title="HAL Plugins Documentation" href="plugins.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> hal_py
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v4.0.1-238-g3e08ba0b0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="hal_py.html">HAL Core Documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="plugins.html">HAL Plugins Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Bitorder Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="boolean_influence.html">Boolean Influence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataflow.html">Dataflow Analysis (DANA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graph_algorithm.html">Graph Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gui.html">GUI API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netlist_preprocessing.html">Netlist Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netlist_simulator.html">Netlist Simulator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netlist_simulator_controller.html">Netlist Simulator Controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="verilator.html">Verilator Simulator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solve_fsm.html">Solve FSM</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">hal_py</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="plugins.html">HAL Plugins Documentation</a> &raquo;</li>
+        
+      <li>Bitorder Propagation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/bitorder_propagation.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="bitorder-propagation">
+<h1>Bitorder Propagation<a class="headerlink" href="#bitorder-propagation" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="bitorder_propagation.BitorderPropagationPlugin">
+<em class="property">class </em><code class="descclassname">bitorder_propagation.</code><code class="descname">BitorderPropagationPlugin</code><a class="headerlink" href="#bitorder_propagation.BitorderPropagationPlugin" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="bitorder_propagation.BitorderPropagationPlugin.get_name">
+<code class="descname">get_name</code><span class="sig-paren">(</span><em>self: bitorder_propagation.BitorderPropagationPlugin</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#bitorder_propagation.BitorderPropagationPlugin.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bitorder_propagation.BitorderPropagationPlugin.get_version">
+<code class="descname">get_version</code><span class="sig-paren">(</span><em>self: bitorder_propagation.BitorderPropagationPlugin</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#bitorder_propagation.BitorderPropagationPlugin.get_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="bitorder_propagation.BitorderPropagationPlugin.propagate_bitorder">
+<em class="property">static </em><code class="descname">propagate_bitorder</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#bitorder_propagation.BitorderPropagationPlugin.propagate_bitorder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">propagate_bitorder(nl: hal_py.Netlist, src: Tuple[int, str], dst: Tuple[int, str]) -&gt; Optional[Dict[Tuple[hal_py.Module, hal_py.ModulePinGroup], Dict[hal_py.Net, int]]]</p>
+<blockquote>
+<div><p>This funtion tries to propagate the bit order of the src pin group to the dst pin group</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.netlist nl:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param tuple src:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">A pair of module id and pin group name representing the source.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param tuple dst:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">A pair of module id and pin group name representing the destination.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">All wellformed bitorders</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">dict()</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">propagate_bitorder(nl: hal_py.Netlist, src: List[Tuple[int, str]], dst: List[Tuple[int, str]]) -&gt; Optional[Dict[Tuple[hal_py.Module, hal_py.ModulePinGroup], Dict[hal_py.Net, int]]]</p>
+<blockquote>
+<div><p>This funtion tries to propagate the bit order of the src pin groups to the dst pin groups</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.netlist nl:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><p class="first">The netlist.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">param list src:</th><td class="field-body"><p class="first">A list of pairs of module id and pin group name representing the source.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">param list dst:</th><td class="field-body"><p class="first">A list of pairs of module id and pin group name representing the destination.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body"><table class="first docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">All wellformed bitorders</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body"><p class="first last">dict()</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="boolean_influence.html" class="btn btn-neutral float-right" title="Boolean Influence" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="plugins.html" class="btn btn-neutral float-left" title="HAL Plugins Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2023, Marc Fyrbiak, Sebastian Wallat, Max Hoffmann
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

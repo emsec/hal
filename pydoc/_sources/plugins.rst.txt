@@ -4,6 +4,7 @@ HAL Plugins Documentation
 .. toctree::
    :maxdepth: 1
 
+   bitorder_propagation
    boolean_influence
    dataflow
    graph_algorithm
