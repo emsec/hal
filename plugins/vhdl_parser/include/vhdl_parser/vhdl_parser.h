@@ -96,7 +96,6 @@ namespace hal
             ci_string m_identifier;
             PinDirection m_direction;
             std::vector<std::vector<u32>> m_ranges;
-            std::vector<VhdlDataEntry> m_attributes;
             std::vector<ci_string> m_expanded_identifiers;
         };
 
@@ -209,7 +208,7 @@ namespace hal
         Net* m_zero_net;
         Net* m_one_net;
         std::unordered_map<ci_string, Net*> m_net_by_name;
-        std::unordered_map<ci_string, std::vector<ci_string>> m_nets_to_merge;
+        std::vector<std::pair<ci_string, ci_string>> m_nets_to_merge;
 
         // parse HDL into intermediate format
         void tokenize();
