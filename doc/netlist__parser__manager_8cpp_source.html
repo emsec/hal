@@ -243,13 +243,13 @@ $(document).ready(function(){initNavTree('netlist__parser__manager_8cpp_source.h
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;                }</div>
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">auto</span> it = m_extension_to_parser.find(ext); it != m_extension_to_parser.end())</div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;                {</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;                    <a class="code" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>(<span class="stringliteral">&quot;hdl_parser&quot;</span>, <span class="stringliteral">&quot;file type &#39;{}&#39; already has associated parser &#39;{}&#39;, it remains unchanged&quot;</span>, ext, it-&gt;second.first);</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;                    <a class="code" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>(<span class="stringliteral">&quot;netlist_parser&quot;</span>, <span class="stringliteral">&quot;file type &#39;{}&#39; already has associated parser &#39;{}&#39;, it remains unchanged&quot;</span>, ext, it-&gt;second.first);</div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;                    <span class="keywordflow">continue</span>;</div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;                }</div>
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;                m_extension_to_parser.emplace(ext, std::make_pair(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, parser_factory));</div>
 <div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;                m_parser_to_extensions[<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>].push_back(ext);</div>
 <div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160; </div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;                <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;hdl_parser&quot;</span>, <span class="stringliteral">&quot;registered hdl parser &#39;{}&#39; for file type &#39;{}&#39;&quot;</span>, <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, ext);</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;                <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;netlist_parser&quot;</span>, <span class="stringliteral">&quot;registered netlist parser &#39;{}&#39; for file type &#39;{}&#39;&quot;</span>, <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, ext);</div>
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;            }</div>
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;        }</div>
 <div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160; </div>
@@ -262,7 +262,7 @@ $(document).ready(function(){initNavTree('netlist__parser__manager_8cpp_source.h
 <div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;                    <span class="keywordflow">if</span> (<span class="keyword">auto</span> rm_it = m_extension_to_parser.find(ext); rm_it != m_extension_to_parser.end())</div>
 <div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;                    {</div>
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;                        m_extension_to_parser.erase(rm_it);</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;                        <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;hdl_parser&quot;</span>, <span class="stringliteral">&quot;unregistered hdl parser &#39;{}&#39; which was registered for file type &#39;{}&#39;&quot;</span>, <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, ext);</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;                        <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;netlist_parser&quot;</span>, <span class="stringliteral">&quot;unregistered netlist parser &#39;{}&#39; which was registered for file type &#39;{}&#39;&quot;</span>, <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, ext);</div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;                    }</div>
 <div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;                }</div>
 <div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;                m_parser_to_extensions.erase(it);</div>
@@ -285,7 +285,7 @@ $(document).ready(function(){initNavTree('netlist__parser__manager_8cpp_source.h
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;                gate_library                  = <a class="code" href="namespacehal_1_1gate__library__manager.html#a99efc94447f62ce59b3aea6409c46d14">gate_library_manager::get_gate_library</a>(gate_library_file);</div>
 <div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;                <span class="keywordflow">if</span> (gate_library == <span class="keyword">nullptr</span>)</div>
 <div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;                {</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;hdl_parser&quot;</span>, <span class="stringliteral">&quot;invalid gate library &#39;{}&#39; specified by user.&quot;</span>, gate_library_file);</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;netlist_parser&quot;</span>, <span class="stringliteral">&quot;invalid gate library &#39;{}&#39; specified by user.&quot;</span>, gate_library_file);</div>
 <div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;                    <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
 <div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;                }</div>
 <div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;            }</div>
@@ -359,7 +359,7 @@ $(document).ready(function(){initNavTree('netlist__parser__manager_8cpp_source.h
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="dir_13551ef05da0f8cff948ade59013ecb9.html">netlist_parser</a></li><li class="navelem"><a class="el" href="netlist__parser__manager_8cpp.html">netlist_parser_manager.cpp</a></li>
-    <li class="footer">Generated on Mon Mar 6 2023 16:31:06 for HAL by
+    <li class="footer">Generated on Tue Mar 7 2023 10:32:57 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
