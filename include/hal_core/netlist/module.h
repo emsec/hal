@@ -457,15 +457,6 @@ namespace hal
         bool set_pin_name(ModulePin* pin, const std::string& new_name);
 
         /**
-         * Set the name of the given pin group.
-         * 
-         * @param[in] pin_group - The pin group.
-         * @param[in] new_name - The name to be assigned to the pin group.
-         * @returns `true` on success, `false` otherwise.
-         */
-        bool set_pin_group_name(PinGroup<ModulePin>* pin_group, const std::string& new_name);
-
-        /**
          * Set the type of the given pin.
          * 
          * @param[in] pin - The pin.
@@ -473,24 +464,6 @@ namespace hal
          * @returns `true` on success, `false` otherwise.
          */
         bool set_pin_type(ModulePin* pin, PinType new_type);
-
-        /**
-         * Set the type of the given pin group.
-         * 
-         * @param[in] pin_group - The pin group.
-         * @param[in] new_type - The type to be assigned to the pin group.
-         * @returns `true` on success, `false` otherwise.
-         */
-        bool set_pin_group_type(PinGroup<ModulePin>* pin_group, PinType new_type);
-
-        /**
-         * Set the direction of the given pin group.
-         * 
-         * @param[in] pin_group - The pin group.
-         * @param[in] new_direction - The direction to be assigned to the pin group.
-         * @returns `true` on success, `false` otherwise.
-         */
-        bool set_pin_group_direction(PinGroup<ModulePin>* pin_group, PinDirection new_direction);
 
         /**
          * Create a new pin group with the given name.
@@ -542,6 +515,33 @@ namespace hal
          * @returns Ok on success, an error message otherwise.
          */
         Result<std::monostate> delete_pin_group(PinGroup<ModulePin>* pin_group);
+
+        /**
+         * Set the name of the given pin group.
+         * 
+         * @param[in] pin_group - The pin group.
+         * @param[in] new_name - The name to be assigned to the pin group.
+         * @returns `true` on success, `false` otherwise.
+         */
+        bool set_pin_group_name(PinGroup<ModulePin>* pin_group, const std::string& new_name);
+
+        /**
+         * Set the type of the given pin group.
+         * 
+         * @param[in] pin_group - The pin group.
+         * @param[in] new_type - The type to be assigned to the pin group.
+         * @returns `true` on success, `false` otherwise.
+         */
+        bool set_pin_group_type(PinGroup<ModulePin>* pin_group, PinType new_type);
+
+        /**
+         * Set the direction of the given pin group.
+         * 
+         * @param[in] pin_group - The pin group.
+         * @param[in] new_direction - The direction to be assigned to the pin group.
+         * @returns `true` on success, `false` otherwise.
+         */
+        bool set_pin_group_direction(PinGroup<ModulePin>* pin_group, PinDirection new_direction);
 
         /**
          * Assign a pin to a pin group.
