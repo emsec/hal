@@ -124,13 +124,13 @@ namespace hal {
     }
 
     /**
-     * Test BooleanFunctionDecorator.
+     * Test NetlistManipulationDecorator.
      */
     TEST_F(DecoratorTest, check_netlist_manipulation_decorator)
     {
         TEST_START
         {
-            // test NetlistManipulationDecorator::delete_modules()
+            // test NetlistManipulationDecorator::delete_modules
             auto nl = test_utils::create_empty_netlist();
             ASSERT_NE(nl, nullptr);
 
@@ -176,6 +176,131 @@ namespace hal {
             EXPECT_TRUE(NetlistManipulationDecorator(*(nl.get())).delete_modules().is_ok());
 
             EXPECT_EQ(nl->get_modules().size(), 1);
+        }
+        {
+            // test NetlistManipulationDecorator::replace_gate
+            auto nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+
+            auto gl = nl->get_gate_library();
+            ASSERT_NE(gl, nullptr);
+
+            GateType* and_type = gl->get_gate_type_by_name("AND2");
+            GateType* or_type = gl->get_gate_type_by_name("OR2");
+            GateType* xor_type = gl->get_gate_type_by_name("XOR2");
+
+            Gate* a0 = nl->create_gate(and_type, "A0");
+            Gate* a1 = nl->create_gate(and_type, "A1");
+            Gate* a2 = nl->create_gate(and_type, "A2");
+            Gate* a3 = nl->create_gate(and_type, "A3");            
+            Gate* a4 = nl->create_gate(and_type, "A4");
+            Gate* a5 = nl->create_gate(and_type, "A5");
+            Gate* a6 = nl->create_gate(or_type, "A6");
+            Gate* a7 = nl->create_gate(or_type, "A7");
+
+            ASSERT_NE(a0, nullptr);
+            ASSERT_NE(a1, nullptr);
+            ASSERT_NE(a2, nullptr);
+            ASSERT_NE(a3, nullptr);
+            ASSERT_NE(a4, nullptr);
+            ASSERT_NE(a5, nullptr);
+            ASSERT_NE(a6, nullptr);
+            ASSERT_NE(a7, nullptr);
+
+            ASSERT_NE(test_utils::connect_global_in(nl.get(), a0, "I0"), nullptr);
+            ASSERT_NE(test_utils::connect_global_in(nl.get(), a0, "I1"), nullptr);
+            ASSERT_NE(test_utils::connect_global_in(nl.get(), a1, "I0"), nullptr);
+            ASSERT_NE(test_utils::connect_global_in(nl.get(), a1, "I1"), nullptr);
+            ASSERT_NE(test_utils::connect_global_in(nl.get(), a2, "I0"), nullptr);
+            ASSERT_NE(test_utils::connect_global_in(nl.get(), a2, "I1"), nullptr);
+            Net* i0_net = test_utils::connect(nl.get(), a0, "O", a3, "I0");
+            ASSERT_NE(i0_net, nullptr);
+            Net* i1_net = test_utils::connect(nl.get(), a1, "O", a3, "I1");
+            ASSERT_NE(i1_net, nullptr);
+            ASSERT_NE(test_utils::connect(nl.get(), a0, "O", a4, "I0"), nullptr);
+            ASSERT_NE(test_utils::connect(nl.get(), a2, "O", a4, "I1"), nullptr);
+            ASSERT_NE(test_utils::connect(nl.get(), a1, "O", a5, "I0"), nullptr);
+            Net* i2_net = test_utils::connect(nl.get(), a2, "O", a5, "I1");
+            ASSERT_NE(i2_net, nullptr);
+            Net* o0_net = test_utils::connect(nl.get(), a3, "O", a6, "I0");
+            ASSERT_NE(o0_net, nullptr);
+            Net* o1_net = test_utils::connect(nl.get(), a4, "O", a6, "I1");
+            ASSERT_NE(o1_net, nullptr);
+            ASSERT_NE(test_utils::connect(nl.get(), a4, "O", a7, "I0"), nullptr);
+            Net* o2_net = test_utils::connect(nl.get(), a5, "O", a7, "I1");
+            ASSERT_NE(o2_net, nullptr);
+            ASSERT_NE(test_utils::connect_global_out(nl.get(), a6, "O"), nullptr);
+            ASSERT_NE(test_utils::connect_global_out(nl.get(), a7, "O"), nullptr);
+
+            auto mod = nl->create_module("mod", nl->get_top_module(), {a3, a4, a5});
+            ASSERT_NE(mod, nullptr);
+
+            ModulePin* i0 = mod->get_pin_by_net(i0_net);
+            ASSERT_NE(i0, nullptr);
+            ModulePin* i1 = mod->get_pin_by_net(i1_net);
+            ASSERT_NE(i1, nullptr);
+            ModulePin* i2 = mod->get_pin_by_net(i2_net);
+            ASSERT_NE(i2, nullptr);
+            ModulePin* o0 = mod->get_pin_by_net(o0_net);
+            ASSERT_NE(o0, nullptr);
+            ModulePin* o1 = mod->get_pin_by_net(o1_net);
+            ASSERT_NE(o1, nullptr);
+            ModulePin* o2 = mod->get_pin_by_net(o2_net);
+            ASSERT_NE(o2, nullptr);
+
+            EXPECT_TRUE(mod->set_pin_name(i0, "I0"));
+            EXPECT_TRUE(mod->set_pin_name(i1, "I1"));
+            EXPECT_TRUE(mod->set_pin_name(i2, "I2"));
+            EXPECT_TRUE(mod->set_pin_name(o0, "O0"));
+            EXPECT_TRUE(mod->set_pin_name(o1, "O1"));
+            EXPECT_TRUE(mod->set_pin_name(o2, "O2"));
+
+            EXPECT_TRUE(mod->create_pin_group("I", {i0, i1, i2}).is_ok());
+            EXPECT_TRUE(mod->create_pin_group("O", {o0, o1, o2}).is_ok());
+
+            EXPECT_EQ(nl->get_gates().size(), 8);
+            EXPECT_EQ(nl->get_nets().size(), 14);
+            EXPECT_EQ(nl->get_modules().size(), 2);
+
+
+            std::map<GatePin*, GatePin*> pin_map;
+            pin_map[and_type->get_pin_by_name("I0")] = xor_type->get_pin_by_name("I0");
+            pin_map[and_type->get_pin_by_name("I1")] = xor_type->get_pin_by_name("I1");
+            pin_map[and_type->get_pin_by_name("O")] = xor_type->get_pin_by_name("O");
+
+            const auto replace_res = NetlistManipulationDecorator(*(nl.get())).replace_gate(a4, xor_type, pin_map);
+            EXPECT_TRUE(replace_res.is_ok());
+            Gate* new_gate = replace_res.get();
+            EXPECT_NE(new_gate, nullptr);
+
+            EXPECT_EQ(new_gate->get_fan_in_net("I0"), i0_net);
+            EXPECT_EQ(new_gate->get_fan_in_net("I1"), i2_net);
+            EXPECT_EQ(new_gate->get_fan_out_net("O"), o1_net);
+
+            i0 = mod->get_pin_by_net(i0_net);
+            ASSERT_NE(i0, nullptr);
+            EXPECT_EQ(i0->get_name(), "I0");
+            EXPECT_EQ(i0->get_direction(), PinDirection::input);
+            i1 = mod->get_pin_by_net(i1_net);
+            ASSERT_NE(i1, nullptr);
+            EXPECT_EQ(i1->get_name(), "I1");
+            EXPECT_EQ(i1->get_direction(), PinDirection::input);
+            i2 = mod->get_pin_by_net(i2_net);
+            ASSERT_NE(i2, nullptr);
+            EXPECT_EQ(i2->get_name(), "I2");
+            EXPECT_EQ(i2->get_direction(), PinDirection::input);
+            o0 = mod->get_pin_by_net(o0_net);
+            ASSERT_NE(o0, nullptr);
+            EXPECT_EQ(o0->get_name(), "O0");
+            EXPECT_EQ(o0->get_direction(), PinDirection::output);
+            o1 = mod->get_pin_by_net(o1_net);
+            ASSERT_NE(o1, nullptr);
+            EXPECT_EQ(o1->get_name(), "O1");
+            EXPECT_EQ(o1->get_direction(), PinDirection::output);
+            o2 = mod->get_pin_by_net(o2_net);
+            ASSERT_NE(o2, nullptr);
+            EXPECT_EQ(o2->get_name(), "O2");
+            EXPECT_EQ(o2->get_direction(), PinDirection::output);
         }
         TEST_END
     }
