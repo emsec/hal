@@ -58,9 +58,9 @@ namespace hal
          * @param[in] gate - The gate to be replaced.
          * @param[in] target_type - The gate type of the replacement gate.
          * @param[in] pin_map - A map from old to new pins.
-         * @returns Ok on success, an error otherwise.
+         * @returns The new gate on success, an error otherwise.
          */
-        Result<std::monostate> replace_gate(Gate* gate, GateType* target_type, const std::map<GatePin*, GatePin*>& pin_map);
+        Result<Gate*> replace_gate(Gate* gate, GateType* target_type, const std::map<GatePin*, GatePin*>& pin_map);
 
         /**
          * Connects two gates through the specified pins.

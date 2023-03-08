@@ -769,7 +769,7 @@ namespace hal
         {
             if (auto res = NetlistManipulationDecorator(*(gate->get_netlist())).replace_gate(gate, target_type, pin_map); res.is_ok())
             {
-                return res;
+                return OK({});
             }
             else
             {

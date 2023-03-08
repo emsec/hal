@@ -28,7 +28,7 @@ namespace hal
         return OK({});
     }
 
-    Result<std::monostate> NetlistManipulationDecorator::replace_gate(Gate* gate, GateType* target_type, const std::map<GatePin*, GatePin*>& pin_map)
+    Result<Gate*> NetlistManipulationDecorator::replace_gate(Gate* gate, GateType* target_type, const std::map<GatePin*, GatePin*>& pin_map)
     {
         if (gate == nullptr)
         {
@@ -113,7 +113,7 @@ namespace hal
             new_gate->set_data_map(gate_data);
         }
 
-        return OK({});
+        return OK(new_gate);
     }
 
     Result<std::monostate> NetlistManipulationDecorator::connect_gates(Gate* src_gate, GatePin* src_pin, Gate* dst_gate, GatePin* dst_pin)
@@ -193,7 +193,7 @@ namespace hal
     {
         if (master_net == nullptr || slave_net == nullptr)
         {
-            return ERR("");
+            return ERR("could connect master net to slave net: master net or slave net is a nullptr");
         }
 
         // safe all module pin information from the net soon to be deleted
@@ -211,8 +211,18 @@ namespace hal
             auto* src_gate = src_ep->get_gate();
             auto* src_pin  = src_ep->get_pin();
 
-            slave_net->remove_source(src_ep);
-            master_net->add_source(src_gate, src_pin);
+            if (!slave_net->remove_source(src_ep))
+            {
+                return ERR("could not connect master net '" + master_net->get_name() + "' with ID " + std::to_string(master_net->get_id()) + " with slave net '" + slave_net->get_name() + "' with ID "
+                           + std::to_string(slave_net->get_id()) + ": failed to remove output pin '" + src_pin->get_name() + "' of gate '" + src_gate->get_name() + "' with ID "
+                           + std::to_string(src_gate->get_id()) + " as source from slave net");
+            }
+            if (!master_net->add_source(src_gate, src_pin))
+            {
+                return ERR("could not connect master net '" + master_net->get_name() + "' with ID " + std::to_string(master_net->get_id()) + " with slave net '" + slave_net->get_name() + "' with ID "
+                           + std::to_string(slave_net->get_id()) + ": failed to add output pin '" + src_pin->get_name() + "' of gate '" + src_gate->get_name() + "' with ID "
+                           + std::to_string(src_gate->get_id()) + " as source to master net");
+            }
         }
 
         for (auto* dst_ep : slave_net->get_destinations())
@@ -220,20 +230,42 @@ namespace hal
             auto* dst_gate = dst_ep->get_gate();
             auto* dst_pin  = dst_ep->get_pin();
 
-            slave_net->remove_destination(dst_ep);
-            master_net->add_destination(dst_gate, dst_pin);
+            if (!slave_net->remove_destination(dst_ep))
+            {
+                return ERR("could not connect master net '" + master_net->get_name() + "' with ID " + std::to_string(master_net->get_id()) + " with slave net '" + slave_net->get_name() + "' with ID "
+                           + std::to_string(slave_net->get_id()) + ": failed to remove input pin '" + dst_pin->get_name() + "' of gate '" + dst_gate->get_name() + "' with ID "
+                           + std::to_string(dst_gate->get_id()) + " as destination from slave net");
+            }
+            if (!master_net->add_destination(dst_gate, dst_pin))
+            {
+                return ERR("could not connect master net '" + master_net->get_name() + "' with ID " + std::to_string(master_net->get_id()) + " with slave net '" + slave_net->get_name() + "' with ID "
+                           + std::to_string(slave_net->get_id()) + ": failed to add input pin '" + dst_pin->get_name() + "' of gate '" + dst_gate->get_name() + "' with ID "
+                           + std::to_string(dst_gate->get_id()) + " as destination to master net");
+            }
         }
 
         if (slave_net->is_global_input_net())
         {
-            m_netlist.mark_global_input_net(master_net);
+            if (!m_netlist.mark_global_input_net(master_net))
+            {
+                return ERR("could not connect master net '" + master_net->get_name() + "' with ID " + std::to_string(master_net->get_id()) + " with slave net '" + slave_net->get_name() + "' with ID "
+                           + std::to_string(slave_net->get_id()) + ": failed to mark master net as global input");
+            }
         }
         if (slave_net->is_global_output_net())
         {
-            m_netlist.mark_global_output_net(master_net);
+            if (!m_netlist.mark_global_output_net(master_net))
+            {
+                return ERR("could not connect master net '" + master_net->get_name() + "' with ID " + std::to_string(master_net->get_id()) + " with slave net '" + slave_net->get_name() + "' with ID "
+                           + std::to_string(slave_net->get_id()) + ": failed to mark master net as global output");
+            }
         }
 
-        m_netlist.delete_net(slave_net);
+        if (!m_netlist.delete_net(slave_net))
+        {
+            return ERR("could not connect master net '" + master_net->get_name() + "' with ID " + std::to_string(master_net->get_id()) + " with slave net '" + slave_net->get_name() + "' with ID "
+                       + std::to_string(slave_net->get_id()) + ": failed to delete slave net");
+        }
 
         for (auto& [m, pin_info] : module_pins)
         {
@@ -251,7 +283,7 @@ namespace hal
                 current_pin_group->remove_pin(pin).get();
                 if (current_pin_group->get_pins().empty())
                 {
-                    m->delete_pin_group(current_pin_group);
+                    m->delete_pin_group(current_pin_group).get();
                 }
 
                 // check for existing pingroup otherwise create it
@@ -271,7 +303,8 @@ namespace hal
             }
             else
             {
-                return ERR("Cannot replace buffers: Failed to get pin " + pin_name + " at module " + m->get_name() + " with ID " + std::to_string(m->get_id()));
+                return ERR("could not connect master net '" + master_net->get_name() + "' with ID " + std::to_string(master_net->get_id()) + " with slave net '" + slave_net->get_name() + "' with ID "
+                           + std::to_string(slave_net->get_id()) + ": failed to get pin " + pin_name + " at module " + m->get_name() + " with ID " + std::to_string(m->get_id()));
             }
         }
 
