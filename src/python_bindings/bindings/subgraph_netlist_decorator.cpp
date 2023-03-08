@@ -171,5 +171,57 @@ namespace hal
             :returns: The combined Boolean function of the subgraph on success, None otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
+
+        py_subgraph_netlist_decorator.def(
+            "get_subgraph_function_inputs",
+            [](SubgraphNetlistDecorator& self, const std::vector<Gate*>& subgraph_gates, const Net* subgraph_output) -> std::optional<std::set<const Net*>> {
+                auto res = self.get_subgraph_function_inputs(subgraph_gates, subgraph_output);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while generating subgraph function:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("subgraph_gates"),
+            py::arg("subgraph_output"),
+            R"(
+            Get the inputs of the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
+            This does not actually build the boolean function but only determines the inputs the subgraph function would have, which is a lot faster.
+
+            :param list[hal_py.Gate] subgraph_gates: The subgraph_gates making up the subgraph to consider.
+            :param hal_py.Net subgraph_output: The subgraph oputput net from which to start the back propagation from.
+            :returns: The input nets that would be the input for the subgraph function
+            :rtype: set(hal_py.Net) or None
+        )");
+
+        py_subgraph_netlist_decorator.def(
+            "get_subgraph_function_inputs",
+            [](SubgraphNetlistDecorator& self, const Module* subgraph_module, const Net* subgraph_output) -> std::optional<std::set<const Net*>> {
+                auto res = self.get_subgraph_function_inputs(subgraph_module, subgraph_output);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while generating subgraph function:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("subgraph_module"),
+            py::arg("subgraph_output"),
+            R"(
+            Get the inputs of the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
+            This does not actually build the boolean function but only determines the inputs the subgraph function would have, which is a lot faster.
+
+            :param hal_py.Module subgraph_module:The module making up the subgraph to consider.
+            :param hal_py.Net subgraph_output: The subgraph oputput net from which to start the back propagation from.
+            :returns: The input nets that would be the input for the subgraph function
+            :rtype: set(hal_py.Net) or None
+        )");
     }
 }    // namespace hal

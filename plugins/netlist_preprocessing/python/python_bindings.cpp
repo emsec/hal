@@ -184,7 +184,7 @@ namespace hal
             },
             py::arg("nl"),
             R"(
-            Replaces pins connected to GND/VCC with constants and simplifies the booleanfunction of a LUT but recomputing the INIT string.
+            Replaces pins connected to GND/VCC with constants and simplifies the boolean function of a LUT by recomputing the INIT string.
 
             :param hal_py.Netlist nl: The netlist to operate on. 
             :returns: The number of simplified INIT strings on success, an error otherwise.

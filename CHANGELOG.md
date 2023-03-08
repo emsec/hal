@@ -1,27 +1,53 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
-
 ## [Unreleased]
+
+
+## [4.1.0] - 2023-03-08 16:57:06+01:00 (urgency: medium)
 * selection details
   * module icons reflect module color
   * gate icons shape according to gate type
-  * user setting to adjust size or omit icon in upper right corner
-=======
-* project export
-  * added export feature: generate zipped project file including external gate libraries and python source files
-  * added import feature by extracting zipped project file
-  * added quazip library sources(deps) since recent distributions link binary packages not longer against qt5
+  * user setting to adjust size of or omit icon in upper right corner
+* project import/export
+  * added export feature: generate zipped project including external gate libraries and python source files
+  * added import feature by extracting zipped project
+  * added quazip library sources (deps) since recent distributions no longer link binary packages against qt5
 * netlist parsers
   * added (limited) support for 'defparam' statements to Verilog parser
   * added support for pin assignments by order instead of name to Verilog and VHDL parser
+* GUI comments
+  * user can add comments to gates and modules to take notes on the reverse engineering progress
+  * comments are shown in the graph view (as little notes on the gate/module boxes) and in the selection details widget
+* plugin `netlist_preprocessing`
+  * collection of utility functions preparing a raw netlist for further analysis
+  * remove LUT fan-in endpoints that do not show up in the LUT's boolean function via `remove_unused_lut_inputs`
+  * remove buffer gates via `remove_buffers`, also dynamically by analyzing Boolean function and connected inputs
+  * remove redundant gates via `remove_redundant_logic`, i.e., gates of equal type with identical inputs
+  * remove unconnected gates/nets via `remove_unconnected_gates` and `remove_unconnected_nets`
+  * simplify LUT configuration strings based on constant inputs via `simplify_lut_inits`
+* plugin `bitorder_propagation`
+  * propagate a known order of input/output pins within module pin groups to other connected modules
+* decorators
+  * `BooleanFunctionDecorator`
+    * substitute power and ground nets/pins by constant values in Boolean functions via `substitute_power_ground_nets` and `substitute_power_ground_pins`
+    * get a concatenated Boolean function corresponding to a vector of nets or Boolean functions via get_boolean_function_from`
+  * `BooleanFunctionNetDecorator`
+    * get a unique Boolean function variable for a net via `get_boolean_variable` and `get_boolean_variable_name`
+    * get the net corresponding to a unique Boolean function variable via `get_net_from`
+    * get the net ID corresponding to a unique Boolean function variable via `get_net_id_from`
+  * `SubgraphNetlistDecorator`
+    * copy a subgraph of the netlist via `copy_subgraph_netlist`
+    * get the Boolean function of a subgraph via `get_subgraph_function`
+    * get the inputs to the Boolean function of a subgraph without computing the Boolean function via `get_subgraph_function_inputs`
 * miscellaneous
   * added functions `get_pin_names`, `get_input_pins`, `get_input_pin_names`, `get_output_pins`, and `get_output_pin_names` to class `Module`
   * added function `BooleanFunction::get_truth_table_as_string` that returns the truth table of a Boolean function as a formatted string
   * added missing GND, VCC, and RAM gate types to the `ICE40ULTRA` gate library
   * added Python bindings for the HAL project manager
   * added new GUI dialog for creating an empty project (without providing a netlist)
+  * changed all example netlists to be HAL projects
+  * API cleanup for plugin `solve_fsm` 
 * bugfixes
   * fixed Verilog and VHDL parser ignoring pin order of modules
   * fixed order of module pins in Verilog writer  
@@ -32,6 +58,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   * fixed saving absolute paths for Python files and not copying them to the new project folder when using `Save as...`
   * fixed some project manager bugs related to inaccessible files
   * fixed missing Python binding for `GateType::get_pin_groups`
+  * fixed incorrect undo action for "fold parent module"
+  * fixed some internal data structure of the Verilog and VHDL parsers not being cleared after each instantiation attempt
+  * fixed wrong gate type properties for MUX gates in various gate libraries
+  * fixed net and instance aliasing in VHDL and Verilog parser
+  * fixed netlist parser bug related to unconnected module pins that are being directly assigned to another wire/signal in the module/entity body
+  * fixed `get_pins` returning pins in wrong order if no filter is specified
 
 ## [4.0.1] - 2022-10-24 15:33:15+02:00 (urgency: medium)
 * **WARNING:** this release breaks multiple APIs, please make sure to adjust your code accordingly.
@@ -93,6 +125,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   * fixed description of flip-flops and latches in all FPGA gate libraries
 
 ## [3.3.0] - 2021-10-13 16:20:00+02:00 (urgency: medium)
+* Serialize to and deserialize from hal project directory
   * Layouts from all views are saved and restored
   * Grouping names and colors are saved and restored
   * Command line option -p to open project added
