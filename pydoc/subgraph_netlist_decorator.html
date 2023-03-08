@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Subgraph Netlist Decorator &mdash; hal_py v4.0.1-239-g14d2633ed documentation</title>
+  <title>Subgraph Netlist Decorator &mdash; hal_py v4.0.1-242-g34b356727 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.0.1-239-g14d2633ed
+                v4.0.1-242-g34b356727
               </div>
             
           
@@ -338,6 +338,46 @@ The variables of the resulting Boolean function are created from the subgraph in
 :param hal_py.Net subgraph_output: The subgraph oputput net for which to generate the Boolean function.
 :returns: The combined Boolean function of the subgraph on success, None otherwise.
 :rtype: hal_py.BooleanFunction or None</p>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.SubgraphNetlistDecorator.get_subgraph_function_inputs">
+<code class="descname">get_subgraph_function_inputs</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.SubgraphNetlistDecorator.get_subgraph_function_inputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">get_subgraph_function_inputs(self: hal_py.SubgraphNetlistDecorator, subgraph_gates: List[hal_py.Gate], subgraph_output: hal_py.Net) -&gt; Optional[Set[hal_py.Net]]</p>
+<blockquote>
+<div><p>Get the inputs of the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
+This does not actually build the boolean function but only determines the inputs the subgraph function would have, which is a lot faster.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.Gate] subgraph_gates:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The subgraph_gates making up the subgraph to consider.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param hal_py.Net subgraph_output:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The subgraph oputput net from which to start the back propagation from.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The input nets that would be the input for the subgraph function</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">set(hal_py.Net) or None</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">get_subgraph_function_inputs(self: hal_py.SubgraphNetlistDecorator, subgraph_module: hal_py.Module, subgraph_output: hal_py.Net) -&gt; Optional[Set[hal_py.Net]]</p>
+<blockquote>
+<div><p>Get the inputs of the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
+This does not actually build the boolean function but only determines the inputs the subgraph function would have, which is a lot faster.</p>
+<p>:param hal_py.Module subgraph_module:The module making up the subgraph to consider.
+:param hal_py.Net subgraph_output: The subgraph oputput net from which to start the back propagation from.
+:returns: The input nets that would be the input for the subgraph function
+:rtype: set(hal_py.Net) or None</p>
 </div></blockquote>
 </li>
 </ol>

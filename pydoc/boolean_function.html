@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Boolean Function &mdash; hal_py v4.0.1-239-g14d2633ed documentation</title>
+  <title>Boolean Function &mdash; hal_py v4.0.1-242-g34b356727 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.0.1-239-g14d2633ed
+                v4.0.1-242-g34b356727
               </div>
             
           
@@ -2315,6 +2315,25 @@ The operation is applied to all instances of the variable in the function.</p>
 <tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The resulting Boolean function on success, None otherwise.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">hal_py.BooleanFunction or None</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">substitute(self: hal_py.BooleanFunction, substitutions: Dict[str, hal_py.BooleanFunction]) -&gt; Optional[hal_py.BooleanFunction]</p>
+<blockquote>
+<div><p>Substitute multiple variables with other boolean functions at once.
+The operation is applied to all instances of the variable in the function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param dict substitutions:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">A map from the variable names to the function to replace the variable with.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The resulting Boolean function on success, None otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.BooleanFunction or None</td>
 </tr>
 </tbody>
 </table>

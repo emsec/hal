@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Bitorder Propagation &mdash; hal_py v4.0.1-239-g14d2633ed documentation</title>
+  <title>Bitorder Propagation &mdash; hal_py v4.0.1-242-g34b356727 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.0.1-239-g14d2633ed
+                v4.0.1-242-g34b356727
               </div>
             
           
@@ -187,7 +187,9 @@
 <ol class="arabic">
 <li><p class="first">propagate_bitorder(nl: hal_py.Netlist, src: Tuple[int, str], dst: Tuple[int, str]) -&gt; Optional[Dict[Tuple[hal_py.Module, hal_py.ModulePinGroup], Dict[hal_py.Net, int]]]</p>
 <blockquote>
-<div><p>This funtion tries to propagate the bit order of the src pin group to the dst pin group</p>
+<div><p>Propagates known bit order information to module pin groups with unknown bit order.
+Afterwards the algorithm tries to reconstruct valid bit orders from the propagated information.
+The valid bit orders are then annotated to the module pin groups.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -209,9 +211,37 @@
 </table>
 </div></blockquote>
 </li>
+<li><p class="first">propagate_bitorder(src: Tuple[hal_py.Module, hal_py.ModulePinGroup], dst: Tuple[hal_py.Module, hal_py.ModulePinGroup]) -&gt; Optional[Dict[Tuple[hal_py.Module, hal_py.ModulePinGroup], Dict[hal_py.Net, int]]]</p>
+<blockquote>
+<div><p>Propagates known bit order information to module pin groups with unknown bit order.
+Afterwards the algorithm tries to reconstruct valid bit orders from the propagated information.
+The valid bit orders are then annotated to the module pin groups.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.netlist nl:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param tuple src:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">A pair of module and pin group representing the source.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param tuple dst:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">A pair of module and pin group representing the destination.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">All wellformed bitorders</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">dict()</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
 <li><p class="first">propagate_bitorder(nl: hal_py.Netlist, src: List[Tuple[int, str]], dst: List[Tuple[int, str]]) -&gt; Optional[Dict[Tuple[hal_py.Module, hal_py.ModulePinGroup], Dict[hal_py.Net, int]]]</p>
 <blockquote>
-<div><p>This funtion tries to propagate the bit order of the src pin groups to the dst pin groups</p>
+<div><p>Propagates known bit order information to module pin groups with unknown bit order.
+Afterwards the algorithm tries to reconstruct valid bit orders from the propagated information.
+The valid bit orders are then annotated to the module pin groups.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -220,10 +250,46 @@
 <tr class="field-odd field"><td>&#160;</td><td class="field-body"><p class="first">The netlist.</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">param list src:</th><td class="field-body"><p class="first">A list of pairs of module id and pin group name representing the source.</p>
+<tr class="field-even field"><th class="field-name">param list src:</th><td class="field-body"><p class="first">A list of pairs of module id and pin group name representing the sources.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">param list dst:</th><td class="field-body"><p class="first">A list of pairs of module id and pin group name representing the destination.</p>
+<tr class="field-odd field"><th class="field-name">param list dst:</th><td class="field-body"><p class="first">A list of pairs of module id and pin group name representing the destinations.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body"><table class="first docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">All wellformed bitorders</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body"><p class="first last">dict()</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">propagate_bitorder(src: List[Tuple[hal_py.Module, hal_py.ModulePinGroup]], dst: List[Tuple[hal_py.Module, hal_py.ModulePinGroup]]) -&gt; Optional[Dict[Tuple[hal_py.Module, hal_py.ModulePinGroup], Dict[hal_py.Net, int]]]</p>
+<blockquote>
+<div><p>Propagates known bit order information to module pin groups with unknown bit order.
+Afterwards the algorithm tries to reconstruct valid bit orders from the propagated information.
+The valid bit orders are then annotated to the module pin groups.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.netlist nl:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><p class="first">The netlist.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">param list src:</th><td class="field-body"><p class="first">A list of pairs of modules and pin groups representing the sources.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">param list dst:</th><td class="field-body"><p class="first">A list of pairs of modules and pin groups representing the destinations.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">returns:</th><td class="field-body"><table class="first docutils field-list" frame="void" rules="none">
@@ -244,6 +310,43 @@
 </div></blockquote>
 </li>
 </ol>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="bitorder_propagation.BitorderPropagationPlugin.propagate_module_pingroup_bitorder">
+<em class="property">static </em><code class="descname">propagate_module_pingroup_bitorder</code><span class="sig-paren">(</span><em>known_bitorders: Dict[Tuple[hal_py.Module, hal_py.ModulePinGroup], Dict[hal_py.Net, int]], unknown_bitorders: Set[Tuple[hal_py.Module, hal_py.ModulePinGroup]], strict_consens_finding: bool = False</em><span class="sig-paren">)</span> &#x2192; Optional[Dict[Tuple[hal_py.Module, hal_py.ModulePinGroup], Dict[hal_py.Net, int]]]<a class="headerlink" href="#bitorder_propagation.BitorderPropagationPlugin.propagate_module_pingroup_bitorder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Propagates known bit order information to module pin groups with unknown bit order.
+Afterwards the algorithm tries to reconstruct valid bit orders from the propagated information.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>known_bitorders</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – The known indices for the nets belonging to module pin groups.</td>
+</tr>
+</tbody>
+</table>
+<p>:param unknown_bitorders set : The module pin groups with yet unknown bit order.
+:param strict_consens_finding bool: When set to true this option only allows for complete and continous bitorders, while false would allow for bit orders to be formed that are either not complete or not continous.
+:returns: A mapping of all the known bit orders consisting of the new and already known.
+:rtype: dict()</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="bitorder_propagation.BitorderPropagationPlugin.reorder_module_pin_groups">
+<em class="property">static </em><code class="descname">reorder_module_pin_groups</code><span class="sig-paren">(</span><em>ordered_module_pin_groups: Dict[Tuple[hal_py.Module, hal_py.ModulePinGroup], Dict[hal_py.Net, int]]</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#bitorder_propagation.BitorderPropagationPlugin.reorder_module_pin_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>This funtion tries to propagate the bit order of the src pin groups to the dst pin groups</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ordered_module_pin_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – A mapping from all the modules and pin groups with known bit order information to the knonw bit order information mapping every net to its corresponding index.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">true in case of sucess, false otherwise</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
