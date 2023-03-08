@@ -62,6 +62,30 @@ namespace hal
          */
         Result<std::monostate> replace_gate(Gate* gate, GateType* target_type, const std::map<GatePin*, GatePin*>& pin_map);
 
+        /**
+         * Connects two gates through the specified pins.
+         * If both pins are not yet connected to a net, a new net is created to connect both pins.
+         * If one of the pins is already connected to a net, that net is connected to the other pin.
+         * If both pins are already connected to a net, an error is returned.
+         * 
+         * @param[in] src_gate - The source gate.
+         * @param[in] src_pin - The output pin of the source gate.
+         * @param[in] dst_gate - The destination gate.
+         * @param[in] dst_pin - The input pin of the destination gate.
+         * @returns Ok on success, an error otherwise.
+         */
+        Result<std::monostate> connect_gates(Gate* src_gate, GatePin* src_pin, Gate* dst_gate, GatePin* dst_pin);
+
+        /**
+         * Connects (and thereby merges) two nets.
+         * All properties of the slave net are transfered to the master net and the slave net is subsequently deleted.
+         * 
+         * @param[in] master_net - The net that receives all properties from the slave net. 
+         * @param[in] slave_net - The net that transfers all properties to the master net and is subsequently deleted.
+         * @returns Ok on success, an error otherwise.
+         */
+        Result<std::monostate> connect_nets(Net* master_net, Net* slave_net);
+
     private:
         Netlist& m_netlist;
     };
