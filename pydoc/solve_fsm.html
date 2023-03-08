@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Solve FSM &mdash; hal_py v4.0.1-242-g34b356727 documentation</title>
+  <title>Solve FSM &mdash; hal_py v4.0.1-243-ge3c095eab documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                v4.0.1-242-g34b356727
+                v4.0.1-243-ge3c095eab
               </div>
             
           
@@ -209,7 +209,9 @@
 <dl class="staticmethod">
 <dt id="solve_fsm.SolveFsmPlugin.solve_fsm">
 <em class="property">static </em><code class="descname">solve_fsm</code><span class="sig-paren">(</span><em>nl: hal_py.Netlist, state_reg: List[hal_py.Gate], transition_logic: List[hal_py.Gate], intial_state: Dict[hal_py.Gate, bool], graph_path: str, timeout: int</em><span class="sig-paren">)</span> &#x2192; Optional[Dict[int, Dict[int, hal_py.BooleanFunction]]]<a class="headerlink" href="#solve_fsm.SolveFsmPlugin.solve_fsm" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates the state graph of a finite state machine and returns a mapping from each state to all its possible successor states using z3 as sat solver.</p>
+<dd><p>Generates the state graph of a finite state machine and returns a mapping from each state to a all its possible transitions.
+The transitions are another mapping from all the possible successor states to the corresponding condition under which the transition is taken.
+This function uses an SMT solver to find all possible successors and afterwards computes the necessary conditions.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -224,10 +226,7 @@
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A mapping from each state to all its possible successors states</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>()</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A mapping from each state to all its possible transitions.</p>
 </td>
 </tr>
 </tbody>
@@ -236,8 +235,10 @@
 
 <dl class="staticmethod">
 <dt id="solve_fsm.SolveFsmPlugin.solve_fsm_brute_force">
-<em class="property">static </em><code class="descname">solve_fsm_brute_force</code><span class="sig-paren">(</span><em>nl: hal_py.Netlist, state_reg: List[hal_py.Gate], transition_logic: List[hal_py.Gate], graph_path: str = ''</em><span class="sig-paren">)</span> &#x2192; Optional[Dict[int, Set[int]]]<a class="headerlink" href="#solve_fsm.SolveFsmPlugin.solve_fsm_brute_force" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates the state graph of a finite state machine and returns a mapping from each state to all its possible successor states using a simple brute force approach.</p>
+<em class="property">static </em><code class="descname">solve_fsm_brute_force</code><span class="sig-paren">(</span><em>nl: hal_py.Netlist, state_reg: List[hal_py.Gate], transition_logic: List[hal_py.Gate], graph_path: str = ''</em><span class="sig-paren">)</span> &#x2192; Optional[Dict[int, Dict[int, hal_py.BooleanFunction]]]<a class="headerlink" href="#solve_fsm.SolveFsmPlugin.solve_fsm_brute_force" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates the state graph of a finite state machine and returns a mapping from each state to a all its possible transitions.
+The transitions are another mapping from all the possible successor states to the corresponding condition under which the transition is taken.
+This function uses a brute force approach to find all possible successors and afterwards computes the necessary conditions.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -250,7 +251,7 @@
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A mapping from each state to all its possible successors states.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A mapping from each state to all its possible transitions.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>()</p>

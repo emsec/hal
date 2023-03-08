@@ -91,30 +91,60 @@ $(document).ready(function(){initNavTree('namespacetest__plugin.html',''); initR
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:aa4fffead015a08990ce71a31a9c78d1e"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetest__plugin.html#aa4fffead015a08990ce71a31a9c78d1e">netlist_to_read</a> = &quot;netlist.v&quot;</td></tr>
-<tr class="separator:aa4fffead015a08990ce71a31a9c78d1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a893c49b19b7982532e76acefed43c028"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetest__plugin.html#a893c49b19b7982532e76acefed43c028">gate_library_path</a> = &quot;gate_library.lib&quot;</td></tr>
-<tr class="separator:a893c49b19b7982532e76acefed43c028"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad09c016caf9f059f6d8c9eb9f3c0f3d9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetest__plugin.html#ad09c016caf9f059f6d8c9eb9f3c0f3d9">netlist</a> = hal_py.NetlistFactory.load_netlist(<a class="el" href="namespacetest__plugin.html#aa4fffead015a08990ce71a31a9c78d1e">netlist_to_read</a>, <a class="el" href="namespacetest__plugin.html#a893c49b19b7982532e76acefed43c028">gate_library_path</a>)</td></tr>
+<tr class="memitem:a0cdd8d0a4db94689375f04ce4546f816"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetest__plugin.html#a0cdd8d0a4db94689375f04ce4546f816">base_path</a> = &quot;/home/simon/projects/hal/&quot;</td></tr>
+<tr class="separator:a0cdd8d0a4db94689375f04ce4546f816"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad09c016caf9f059f6d8c9eb9f3c0f3d9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetest__plugin.html#ad09c016caf9f059f6d8c9eb9f3c0f3d9">netlist</a> = hal_py.NetlistFactory.load_netlist(<a class="el" href="namespacetest__plugin.html#a0cdd8d0a4db94689375f04ce4546f816">base_path</a> + &quot;examples/fsm/fsm.v&quot;, base_path + &quot;examples/fsm/example_library.hgl&quot;)</td></tr>
 <tr class="separator:ad09c016caf9f059f6d8c9eb9f3c0f3d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79feb4c3846c15acf42a9a2908ecefec"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetest__plugin.html#a79feb4c3846c15acf42a9a2908ecefec">pl_fsm</a> = hal_py.plugin_manager.get_plugin_instance(&quot;solve_fsm&quot;)</td></tr>
 <tr class="separator:a79feb4c3846c15acf42a9a2908ecefec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6eff8fde0bddd6877f006c0ca464bd37"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetest__plugin.html#a6eff8fde0bddd6877f006c0ca464bd37">state_mod</a> = netlist.get_module_by_id(0)</td></tr>
-<tr class="separator:a6eff8fde0bddd6877f006c0ca464bd37"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7cb5ce24d6558a5b58d4c01d30701736"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetest__plugin.html#a7cb5ce24d6558a5b58d4c01d30701736">transition_mod</a> = netlist.get_module_by_id(0)</td></tr>
-<tr class="separator:a7cb5ce24d6558a5b58d4c01d30701736"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa70027ccf79a6a3022ae58e8db5e5e01"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetest__plugin.html#aa70027ccf79a6a3022ae58e8db5e5e01">transition_gates</a> = transition_mod.gates</td></tr>
+<tr class="memitem:a7efa8a9ff852d172d85bb93479bc913b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetest__plugin.html#a7efa8a9ff852d172d85bb93479bc913b">fsm_mod</a> = netlist.get_module_by_id(1)</td></tr>
+<tr class="separator:a7efa8a9ff852d172d85bb93479bc913b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa70027ccf79a6a3022ae58e8db5e5e01"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetest__plugin.html#aa70027ccf79a6a3022ae58e8db5e5e01">transition_gates</a> = fsm_mod.get_gates(lambda <a class="el" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a> : g.type.has_property(hal_py.GateTypeProperty.combinational))</td></tr>
 <tr class="separator:aa70027ccf79a6a3022ae58e8db5e5e01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae1adf1f65b9b3fb48bbe3118597914dd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetest__plugin.html#ae1adf1f65b9b3fb48bbe3118597914dd">state_gates</a> = state_mod.gates</td></tr>
+<tr class="memitem:ae1adf1f65b9b3fb48bbe3118597914dd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetest__plugin.html#ae1adf1f65b9b3fb48bbe3118597914dd">state_gates</a> = fsm_mod.get_gates(lambda <a class="el" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a> : g.type.has_property(hal_py.GateTypeProperty.sequential))</td></tr>
 <tr class="separator:ae1adf1f65b9b3fb48bbe3118597914dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8cd40629c5013844954ad61ed2ab0f9f"><td class="memItemLeft" align="right" valign="top">dictionary&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetest__plugin.html#a8cd40629c5013844954ad61ed2ab0f9f">initial_state</a> = {}</td></tr>
 <tr class="separator:a8cd40629c5013844954ad61ed2ab0f9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2bf2b4c4b4a2cc5295fb68bbc4f39a42"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetest__plugin.html#a2bf2b4c4b4a2cc5295fb68bbc4f39a42">graph_path</a> = <a class="el" href="namespacetest__plugin.html#a0cdd8d0a4db94689375f04ce4546f816">base_path</a> + &quot;examples/fsm/graph.dot&quot;</td></tr>
+<tr class="separator:a2bf2b4c4b4a2cc5295fb68bbc4f39a42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa3a2af994aa8c91f5227558bb4c57542"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetest__plugin.html#aa3a2af994aa8c91f5227558bb4c57542">timeout</a> = 600000</td></tr>
 <tr class="separator:aa3a2af994aa8c91f5227558bb4c57542"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd3083aec6bd8d3b9851214d6d355740"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a> = pl_fsm.solve_fsm(<a class="el" href="namespacetest__plugin.html#ad09c016caf9f059f6d8c9eb9f3c0f3d9">netlist</a>, <a class="el" href="namespacetest__plugin.html#ae1adf1f65b9b3fb48bbe3118597914dd">state_gates</a>, <a class="el" href="namespacetest__plugin.html#aa70027ccf79a6a3022ae58e8db5e5e01">transition_gates</a>, <a class="el" href="namespacetest__plugin.html#a8cd40629c5013844954ad61ed2ab0f9f">initial_state</a>, <a class="el" href="namespacetest__plugin.html#aa3a2af994aa8c91f5227558bb4c57542">timeout</a>)</td></tr>
+<tr class="memitem:abd3083aec6bd8d3b9851214d6d355740"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a> = pl_fsm.solve_fsm(<a class="el" href="namespacetest__plugin.html#ad09c016caf9f059f6d8c9eb9f3c0f3d9">netlist</a>, <a class="el" href="namespacetest__plugin.html#ae1adf1f65b9b3fb48bbe3118597914dd">state_gates</a>, <a class="el" href="namespacetest__plugin.html#aa70027ccf79a6a3022ae58e8db5e5e01">transition_gates</a>, <a class="el" href="namespacetest__plugin.html#a8cd40629c5013844954ad61ed2ab0f9f">initial_state</a>, <a class="el" href="namespacetest__plugin.html#a2bf2b4c4b4a2cc5295fb68bbc4f39a42">graph_path</a>, <a class="el" href="namespacetest__plugin.html#aa3a2af994aa8c91f5227558bb4c57542">timeout</a>)</td></tr>
 <tr class="separator:abd3083aec6bd8d3b9851214d6d355740"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Variable Documentation</h2>
+<a id="a0cdd8d0a4db94689375f04ce4546f816"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0cdd8d0a4db94689375f04ce4546f816">&#9670;&nbsp;</a></span>base_path</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">string test_plugin.base_path = &quot;/home/simon/projects/hal/&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="test__plugin_8py_source.html#l00005">5</a> of file <a class="el" href="test__plugin_8py_source.html">test_plugin.py</a>.</p>
+
+</div>
+</div>
+<a id="a7efa8a9ff852d172d85bb93479bc913b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7efa8a9ff852d172d85bb93479bc913b">&#9670;&nbsp;</a></span>fsm_mod</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">test_plugin.fsm_mod = netlist.get_module_by_id(1)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="test__plugin_8py_source.html#l00023">23</a> of file <a class="el" href="test__plugin_8py_source.html">test_plugin.py</a>.</p>
+
+</div>
+</div>
 <a id="abd3083aec6bd8d3b9851214d6d355740"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abd3083aec6bd8d3b9851214d6d355740">&#9670;&nbsp;</a></span>g</h2>
 
@@ -122,7 +152,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">test_plugin.g = pl_fsm.solve_fsm(<a class="el" href="namespacetest__plugin.html#ad09c016caf9f059f6d8c9eb9f3c0f3d9">netlist</a>, <a class="el" href="namespacetest__plugin.html#ae1adf1f65b9b3fb48bbe3118597914dd">state_gates</a>, <a class="el" href="namespacetest__plugin.html#aa70027ccf79a6a3022ae58e8db5e5e01">transition_gates</a>, <a class="el" href="namespacetest__plugin.html#a8cd40629c5013844954ad61ed2ab0f9f">initial_state</a>, <a class="el" href="namespacetest__plugin.html#aa3a2af994aa8c91f5227558bb4c57542">timeout</a>)</td>
+          <td class="memname">test_plugin.g = pl_fsm.solve_fsm(<a class="el" href="namespacetest__plugin.html#ad09c016caf9f059f6d8c9eb9f3c0f3d9">netlist</a>, <a class="el" href="namespacetest__plugin.html#ae1adf1f65b9b3fb48bbe3118597914dd">state_gates</a>, <a class="el" href="namespacetest__plugin.html#aa70027ccf79a6a3022ae58e8db5e5e01">transition_gates</a>, <a class="el" href="namespacetest__plugin.html#a8cd40629c5013844954ad61ed2ab0f9f">initial_state</a>, <a class="el" href="namespacetest__plugin.html#a2bf2b4c4b4a2cc5295fb68bbc4f39a42">graph_path</a>, <a class="el" href="namespacetest__plugin.html#aa3a2af994aa8c91f5227558bb4c57542">timeout</a>)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -131,19 +161,21 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a893c49b19b7982532e76acefed43c028"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a893c49b19b7982532e76acefed43c028">&#9670;&nbsp;</a></span>gate_library_path</h2>
+<a id="a2bf2b4c4b4a2cc5295fb68bbc4f39a42"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2bf2b4c4b4a2cc5295fb68bbc4f39a42">&#9670;&nbsp;</a></span>graph_path</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">string test_plugin.gate_library_path = &quot;gate_library.lib&quot;</td>
+          <td class="memname">string test_plugin.graph_path = <a class="el" href="namespacetest__plugin.html#a0cdd8d0a4db94689375f04ce4546f816">base_path</a> + &quot;examples/fsm/graph.dot&quot;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test__plugin_8py_source.html#l00010">10</a> of file <a class="el" href="test__plugin_8py_source.html">test_plugin.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test__plugin_8py_source.html#l00029">29</a> of file <a class="el" href="test__plugin_8py_source.html">test_plugin.py</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00446">hal::SolveFsmPlugin.generate_dot_graph()</a>, <a class="el" href="plugins_2solve__fsm_2python_2python__bindings_8cpp_source.html#l00024">hal.PYBIND11_PLUGIN()</a>, <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00294">hal::SolveFsmPlugin.solve_fsm()</a>, and <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00198">hal::SolveFsmPlugin.solve_fsm_brute_force()</a>.</p>
 
 </div>
 </div>
@@ -159,9 +191,9 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test__plugin_8py_source.html#l00029">29</a> of file <a class="el" href="test__plugin_8py_source.html">test_plugin.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test__plugin_8py_source.html#l00028">28</a> of file <a class="el" href="test__plugin_8py_source.html">test_plugin.py</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugins_2solve__fsm_2python_2python__bindings_8cpp_source.html#l00024">hal.PYBIND11_PLUGIN()</a>, and <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00274">hal::SolveFsmPlugin.solve_fsm()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugins_2solve__fsm_2python_2python__bindings_8cpp_source.html#l00024">hal.PYBIND11_PLUGIN()</a>, and <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00294">hal::SolveFsmPlugin.solve_fsm()</a>.</p>
 
 </div>
 </div>
@@ -172,28 +204,12 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">test_plugin.netlist = hal_py.NetlistFactory.load_netlist(<a class="el" href="namespacetest__plugin.html#aa4fffead015a08990ce71a31a9c78d1e">netlist_to_read</a>, <a class="el" href="namespacetest__plugin.html#a893c49b19b7982532e76acefed43c028">gate_library_path</a>)</td>
+          <td class="memname">test_plugin.netlist = hal_py.NetlistFactory.load_netlist(<a class="el" href="namespacetest__plugin.html#a0cdd8d0a4db94689375f04ce4546f816">base_path</a> + &quot;examples/fsm/fsm.v&quot;, base_path + &quot;examples/fsm/example_library.hgl&quot;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="test__plugin_8py_source.html#l00016">16</a> of file <a class="el" href="test__plugin_8py_source.html">test_plugin.py</a>.</p>
-
-</div>
-</div>
-<a id="aa4fffead015a08990ce71a31a9c78d1e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa4fffead015a08990ce71a31a9c78d1e">&#9670;&nbsp;</a></span>netlist_to_read</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">string test_plugin.netlist_to_read = &quot;netlist.v&quot;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="test__plugin_8py_source.html#l00009">9</a> of file <a class="el" href="test__plugin_8py_source.html">test_plugin.py</a>.</p>
 
 </div>
 </div>
@@ -220,28 +236,12 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">test_plugin.state_gates = state_mod.gates</td>
+          <td class="memname">test_plugin.state_gates = fsm_mod.get_gates(lambda <a class="el" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a> : g.type.has_property(hal_py.GateTypeProperty.sequential))</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test__plugin_8py_source.html#l00027">27</a> of file <a class="el" href="test__plugin_8py_source.html">test_plugin.py</a>.</p>
-
-</div>
-</div>
-<a id="a6eff8fde0bddd6877f006c0ca464bd37"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6eff8fde0bddd6877f006c0ca464bd37">&#9670;&nbsp;</a></span>state_mod</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">test_plugin.state_mod = netlist.get_module_by_id(0)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="test__plugin_8py_source.html#l00023">23</a> of file <a class="el" href="test__plugin_8py_source.html">test_plugin.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test__plugin_8py_source.html#l00026">26</a> of file <a class="el" href="test__plugin_8py_source.html">test_plugin.py</a>.</p>
 
 </div>
 </div>
@@ -259,7 +259,7 @@ Variables</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="test__plugin_8py_source.html#l00030">30</a> of file <a class="el" href="test__plugin_8py_source.html">test_plugin.py</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugins_2solve__fsm_2python_2python__bindings_8cpp_source.html#l00024">hal.PYBIND11_PLUGIN()</a>, and <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00274">hal::SolveFsmPlugin.solve_fsm()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugins_2solve__fsm_2python_2python__bindings_8cpp_source.html#l00024">hal.PYBIND11_PLUGIN()</a>, and <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00294">hal::SolveFsmPlugin.solve_fsm()</a>.</p>
 
 </div>
 </div>
@@ -270,28 +270,12 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">test_plugin.transition_gates = transition_mod.gates</td>
+          <td class="memname">test_plugin.transition_gates = fsm_mod.get_gates(lambda <a class="el" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a> : g.type.has_property(hal_py.GateTypeProperty.combinational))</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test__plugin_8py_source.html#l00026">26</a> of file <a class="el" href="test__plugin_8py_source.html">test_plugin.py</a>.</p>
-
-</div>
-</div>
-<a id="a7cb5ce24d6558a5b58d4c01d30701736"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7cb5ce24d6558a5b58d4c01d30701736">&#9670;&nbsp;</a></span>transition_mod</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">test_plugin.transition_mod = netlist.get_module_by_id(0)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="test__plugin_8py_source.html#l00024">24</a> of file <a class="el" href="test__plugin_8py_source.html">test_plugin.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test__plugin_8py_source.html#l00025">25</a> of file <a class="el" href="test__plugin_8py_source.html">test_plugin.py</a>.</p>
 
 </div>
 </div>
@@ -301,7 +285,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacetest__plugin.html">test_plugin</a></li>
-    <li class="footer">Generated on Wed Mar 8 2023 10:31:46 for HAL by
+    <li class="footer">Generated on Wed Mar 8 2023 11:56:50 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
