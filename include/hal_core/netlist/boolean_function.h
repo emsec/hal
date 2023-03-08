@@ -804,13 +804,16 @@ namespace hal
         Result<std::string> get_truth_table_as_string(const std::vector<std::string>& ordered_variables = {}, std::string function_name = "", bool remove_unknown_variables = false) const;
 
         /**
+         * \deprecated
+         * DEPRECATED <br>
          * Translates the Boolean function into the z3 expression representation.
          *
          * @param[in,out] context - Z3 context to generate expressions.
          * @param[in] var2expr - Maps input variables to expression.
          * @returns Z3 representation of the Boolean function.
          */
-        z3::expr to_z3(z3::context& context, const std::map<std::string, z3::expr>& var2expr = {}) const;
+        [[deprecated("Will be removed in a future version. Use z3_utils::to_z3() in the z3_utils plugin instead.")]] z3::expr to_z3(z3::context& context,
+                                                                                                                                    const std::map<std::string, z3::expr>& var2expr = {}) const;
 
     private:
         ////////////////////////////////////////////////////////////////////////

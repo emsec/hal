@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
   * remove unconnected gates/nets via `remove_unconnected_gates` and `remove_unconnected_nets`
   * simplify LUT configuration strings based on constant inputs via `simplify_lut_inits`
 * plugin `bitorder_propagation`
+  * initial version of the bitorder_propagation plugin that allows the user to propagate known bit orders of module pin groups to other pin groups with unknown bit order.
 * decorators
   * `BooleanFunctionDecorator`
     * substitute power and ground nets/pins by constant values in Boolean functions via `substitute_power_ground_nets` and `substitute_power_ground_pins`
