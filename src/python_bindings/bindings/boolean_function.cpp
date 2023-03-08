@@ -1080,6 +1080,30 @@ namespace hal
         )");
 
         py_boolean_function.def(
+            "substitute",
+            [](const BooleanFunction& self, const std::map<std::string, BooleanFunction>& substitutions) -> std::optional<BooleanFunction> {
+                auto res = self.substitute(substitutions);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("substitutions"),
+            R"(
+            Substitute multiple variables with other boolean functions at once.
+            The operation is applied to all instances of the variable in the function.
+
+            :param dict substitutions: A map from the variable names to the function to replace the variable with.
+            :returns: The resulting Boolean function on success, None otherwise.
+            :rtype: hal_py.BooleanFunction or None
+        )");
+
+        py_boolean_function.def(
             "evaluate",
             [](const BooleanFunction& self, const std::unordered_map<std::string, BooleanFunction::Value>& inputs) -> std::optional<BooleanFunction::Value> {
                 auto res = self.evaluate(inputs);

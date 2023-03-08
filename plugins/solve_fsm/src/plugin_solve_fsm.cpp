@@ -2,6 +2,7 @@
 
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/boolean_function/solver.h"
+#include "hal_core/netlist/decorators/boolean_function_decorator.h"
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
 #include "hal_core/netlist/endpoint.h"
@@ -43,6 +44,7 @@ namespace hal
 
     namespace
     {
+        // generates a list of state flip flop output nets and the corresponding boolean function at their data input
         Result<std::vector<std::pair<Net*, BooleanFunction>>> generate_state_bfs(Netlist* nl, const std::vector<Gate*> state_reg, const std::vector<Gate*> transition_logic)
         {
             std::map<Net*, Net*> output_net_to_input_net;
@@ -52,7 +54,8 @@ namespace hal
                 const std::vector<GatePin*> d_ports = ff->get_type()->get_pins([](const GatePin* pin) { return pin->get_type() == PinType::data; });
                 if (d_ports.size() != 1)
                 {
-                    return ERR("failed to create input - output mapping: currently not supporting flip-flops with multiple or no data inputs, but found " + std::to_string(d_ports.size()) + " for gate type " + ff->get_type()->get_name() + ".");
+                    return ERR("failed to create input - output mapping: currently not supporting flip-flops with multiple or no data inputs, but found " + std::to_string(d_ports.size())
+                               + " for gate type " + ff->get_type()->get_name() + ".");
                 }
 
                 hal::Net* input_net;
@@ -74,7 +77,7 @@ namespace hal
             std::vector<std::pair<Net*, BooleanFunction>> state_bfs;
 
             const std::vector<const Gate*> subgraph_gates = {transition_logic.begin(), transition_logic.end()};
-            const auto nl_dec = SubgraphNetlistDecorator(*nl);
+            const auto nl_dec                             = SubgraphNetlistDecorator(*nl);
 
             for (const auto& ff : state_reg)
             {
@@ -85,51 +88,15 @@ namespace hal
                 BooleanFunction bf;
                 if (auto res = nl_dec.get_subgraph_function(subgraph_gates, input_net); res.is_error())
                 {
-                    return ERR_APPEND(res.get_error(), "failed to generate boolean functions of state: could not generate subgraph function for state net " + std::to_string(input_net->get_id()) + ".");
+                    return ERR_APPEND(res.get_error(),
+                                      "failed to generate boolean functions of state: could not generate subgraph function for state net " + std::to_string(input_net->get_id()) + ".");
                 }
                 else
                 {
                     bf = res.get();
                 }
-                
-                // replace all vcc and gnd nets with constant zeros and ones
-                for (const auto& gnd_gate : nl->get_gnd_gates())
-                {
-                    if (gnd_gate->get_fan_out_nets().size() != 1)
-                    {
-                        return ERR("failed to generate boolean functions of state: found GND gate " + std::to_string(gnd_gate->get_id()) + " with " + std::to_string(gnd_gate->get_fan_out_nets().size()) + " fan-out nets, but can handle only one.");
-                    }
 
-                    Net* gnd_net = gnd_gate->get_fan_out_nets().at(0);
-
-                    if (auto res = bf.substitute(BooleanFunctionNetDecorator(*gnd_net).get_boolean_variable_name(), BooleanFunction::Const(0, 1)); res.is_error())
-                    {
-                        return ERR("failed to generate boolean functions of state: unable to replace GND net " + std::to_string(gnd_net->get_id()) + " with constant.");
-                    }
-                    else 
-                    {
-                        bf = res.get();
-                    }
-                }
-
-                for (const auto& vcc_gate : nl->get_vcc_gates())
-                {
-                    if (vcc_gate->get_fan_out_nets().size() != 1)
-                    {
-                        return ERR("failed to generate boolean functions of state: found VCC gate " + std::to_string(vcc_gate->get_id()) + " with " + std::to_string(vcc_gate->get_fan_out_nets().size()) + " fan-out nets, but can handle only one.");
-                    }
-
-                    Net* vcc_net = vcc_gate->get_fan_out_nets().at(0);
-
-                    if (auto res = bf.substitute(BooleanFunctionNetDecorator(*vcc_net).get_boolean_variable_name(), BooleanFunction::Const(1, 1)); res.is_error())
-                    {
-                        return ERR("failed to generate boolean functions of state: unable to replace VCC net " + std::to_string(vcc_net->get_id()) + " with constant.");
-                    }
-                    else
-                    {
-                        bf = res.get();
-                    }
-                }
+                BooleanFunctionDecorator(bf).substitute_power_ground_nets(nl);
 
                 bf.simplify();
 
@@ -171,13 +138,64 @@ namespace hal
 
                 state_bfs.push_back({input_net, bf});
             }
-        
+
             return OK(state_bfs);
         }
 
-    }  // namespace
+        // takes a map of unconditional transitions and reconstructs the conditions under which each condition is taken
+        Result<std::map<u64, std::map<u64, BooleanFunction>>> generate_conditional_transitions(const std::vector<std::pair<Net*, BooleanFunction>>& state_bfs,
+                                                                                               const std::map<u64, std::set<u64>>& transitions)
+        {
+            // generate all transitions that are reachable from the inital state.
+            std::map<u64, std::map<u64, BooleanFunction>> conditional_transitions;
 
-    Result<std::map<u64, std::set<u64>>> SolveFsmPlugin::solve_fsm_brute_force(Netlist* nl, const std::vector<Gate*> state_reg, const std::vector<Gate*> transition_logic, const std::string graph_path)
+            // for all possible and previously found successor states we build the condition to reach them
+            for (const auto& [prev, successors] : transitions)
+            {
+                // this builds a mapping for all the output net variables of the state vector to the current starting state
+                std::map<std::string, BooleanFunction> prev_mapping;
+                for (u32 i = 0; i < state_bfs.size(); i++)
+                {
+                    prev_mapping.insert(
+                        {BooleanFunctionNetDecorator(*(state_bfs.at(i).first)).get_boolean_variable_name(), ((prev >> i) & 1) ? BooleanFunction::Const(1, 1) : BooleanFunction::Const(0, 1)});
+                }
+
+                for (const auto& suc : successors)
+                {
+                    // this all the boolean functions of incoming data nets to the state vector either vanilla incase the corresponding state bit is 1 in the successor state or negated incase the state bit is 0 in the successor state.
+                    BooleanFunction condition;
+
+                    for (u32 i = 0; i < state_bfs.size(); i++)
+                    {
+                        auto next_state_bit_bf = ((suc >> i) & 1) ? state_bfs.at(i).second : BooleanFunction::Not(state_bfs.at(i).second.clone(), 1).get();
+
+                        if (condition.is_empty())
+                        {
+                            condition = next_state_bit_bf;
+                        }
+                        else
+                        {
+                            condition = BooleanFunction::And(std::move(condition), std::move(next_state_bit_bf), 1).get();
+                        }
+                    }
+
+                    // replace all the variables of the previous state with their real values for our current state n and simplify.
+                    condition = condition.substitute(prev_mapping).get();
+
+                    // we are left with a condition that only includes the inputs to the fsm that needs to be fullfilled to reach the successor state from state n.
+                    condition = condition.simplify();
+
+                    conditional_transitions[prev].insert({suc, condition});
+                }
+            }
+
+            return OK(conditional_transitions);
+        }
+
+    }    // namespace
+
+    Result<std::map<u64, std::map<u64, BooleanFunction>>>
+        SolveFsmPlugin::solve_fsm_brute_force(Netlist* nl, const std::vector<Gate*> state_reg, const std::vector<Gate*> transition_logic, const std::string graph_path)
     {
         const u32 state_size = state_reg.size();
         if (state_size > 64)
@@ -186,7 +204,7 @@ namespace hal
         }
 
         // extract Boolean functions for each state flip-flop
-        const auto state_bfs_res = generate_state_bfs(nl, state_reg, transition_logic); 
+        const auto state_bfs_res = generate_state_bfs(nl, state_reg, transition_logic);
         if (state_bfs_res.is_error())
         {
             return ERR_APPEND(state_bfs_res.get_error(), "failed to solve fsm: unable to generate Boolean functions for state.");
@@ -197,7 +215,7 @@ namespace hal
         BooleanFunction next_state_vec = state_bfs.front().second;
         for (u32 i = 1; i < state_reg.size(); i++)
         {
-            next_state_vec = BooleanFunction::Concat(state_bfs.at(i).second.clone(), std::move(next_state_vec), next_state_vec.size() +1 ).get();
+            next_state_vec = BooleanFunction::Concat(state_bfs.at(i).second.clone(), std::move(next_state_vec), next_state_vec.size() + 1).get();
         }
 
         std::map<u64, std::set<u64>> all_transitions;
@@ -220,7 +238,7 @@ namespace hal
             }
 
             const auto state_bf = sub_res.get().simplify();
-            const auto inputs = utils::to_vector(state_bf.get_variable_names());
+            const auto inputs   = utils::to_vector(state_bf.get_variable_names());
 
             // brute force over all external inputs
             for (u64 input_val = 0; input_val < (u64(1) << inputs.size()); input_val++)
@@ -252,23 +270,25 @@ namespace hal
             }
         }
 
+        const auto conditional_transitions = generate_conditional_transitions(state_bfs, all_transitions).get();
+
         /* DEBUG PRINTING */
-        for (const auto& [org, successors] : all_transitions)
+        for (const auto& [org, successors] : conditional_transitions)
         {
             std::cout << org << ": " << std::endl;
-            for (const auto& suc : successors)
+            for (const auto& [suc, condition] : successors)
             {
-                std::cout << "\t" << suc << std::endl;
+                std::cout << "\t" << suc << ": " << condition.to_string() << std::endl;
             }
         }
         /* END DEBUG PRINTING */
 
-        if (auto graph_res = generate_dot_graph(state_reg, all_transitions, graph_path, 0); graph_res.is_error())
+        if (auto graph_res = generate_dot_graph(state_reg, conditional_transitions, graph_path); graph_res.is_error())
         {
             return ERR_APPEND(graph_res.get_error(), "failed to solve fsm: unable to generate dot graph.");
         }
-    
-        return OK(all_transitions);
+
+        return OK(conditional_transitions);
     }
 
     Result<std::map<u64, std::map<u64, BooleanFunction>>> SolveFsmPlugin::solve_fsm(Netlist* nl,
@@ -285,7 +305,7 @@ namespace hal
         }
 
         // extract Boolean functions for each state flip-flop
-        const auto state_bfs_res = generate_state_bfs(nl, state_reg, transition_logic); 
+        const auto state_bfs_res = generate_state_bfs(nl, state_reg, transition_logic);
         if (state_bfs_res.is_error())
         {
             return ERR_APPEND(state_bfs_res.get_error(), "failed to solve fsm: unable to generate Boolean functions for state.");
@@ -297,12 +317,12 @@ namespace hal
         for (u32 i = 1; i < state_reg.size(); i++)
         {
             // bitvector representing the previous state
-            prev_state_vec = BooleanFunction::Concat(BooleanFunctionNetDecorator(*(state_bfs.at(i).first)).get_boolean_variable(), std::move(prev_state_vec), i+1).get();
-            
+            prev_state_vec = BooleanFunction::Concat(BooleanFunctionNetDecorator(*(state_bfs.at(i).first)).get_boolean_variable(), std::move(prev_state_vec), i + 1).get();
+
             // bitvector including all the functions to calculate the next state
-            next_state_vec = BooleanFunction::Concat(state_bfs.at(i).second.clone(), std::move(next_state_vec), i+1).get();
+            next_state_vec = BooleanFunction::Concat(state_bfs.at(i).second.clone(), std::move(next_state_vec), i + 1).get();
         }
- 
+
         // generate initial state
         u64 initial_state_num = 0;
         if (!initial_state.empty())
@@ -320,7 +340,7 @@ namespace hal
         }
 
         // generate all transitions that are reachable from the inital state.
-        std::map<u64, std::map<u64, BooleanFunction>> all_transitions;
+        std::map<u64, std::set<u64>> all_transitions;
 
         std::deque<u64> q;
         std::unordered_set<u64> visited;
@@ -342,9 +362,11 @@ namespace hal
 
             // generate new transitions and add them to the queue
             SMT::Solver s;
+
+            // set prev_state_vec to starting state
             s = s.with_constraint(SMT::Constraint{prev_state_vec.clone(), BooleanFunction::Const(n, state_size)});
 
-            while(true)
+            while (true)
             {
                 if (auto res = s.query(SMT::QueryConfig().with_model_generation().with_timeout(timeout)); res.is_error())
                 {
@@ -353,7 +375,7 @@ namespace hal
                 else
                 {
                     auto s_res = res.get();
-                    
+
                     if (s_res.is_unsat())
                     {
                         break;
@@ -363,17 +385,20 @@ namespace hal
                     {
                         return ERR("failed to solve fsm: received an unknown solver result for state " + std::to_string(n) + ".");
                     }
-                    
-                    auto m = s_res.model.value();
-                    auto suc = m.evaluate(next_state_vec).get();
 
+                    auto m       = s_res.model.value();
+                    auto suc     = m.evaluate(next_state_vec).get();
+                    auto suc_num = 0;
+
+                    // a constant (numeral) successor state
                     if (suc.is_constant())
                     {
-                        successor_states.push_back(suc.get_constant_value().get());
-                        s = s.with_constraint(SMT::Constraint(BooleanFunction::Not(BooleanFunction::Eq(next_state_vec.clone(), suc.clone(), 1).get(), 1).get()));
+                        suc_num = suc.get_constant_value().get();
                     }
+                    // a successor state that includes boolean functions (for example in form of input variables)
                     else
                     {
+                        // to resolve such a successor state, we simpply set all variables left in the state to zero (which is one possible solution) and continue to search for more valid solutions
                         std::unordered_map<std::string, std::vector<BooleanFunction::Value>> zero_mapping;
                         for (const auto& var : suc.get_variable_names())
                         {
@@ -382,50 +407,25 @@ namespace hal
 
                         if (auto eval_res = suc.evaluate(zero_mapping); eval_res.is_error())
                         {
-                            return ERR_APPEND(eval_res.get_error(), "failed to solve fsm: could not evaluate successors state to constant.");
+                            return ERR_APPEND(eval_res.get_error(), "failed to solve fsm: could not evaluate successor state to constant.");
                         }
                         else
                         {
-                            const auto suc_num = BooleanFunction::to_u64(eval_res.get()).get();
-                            successor_states.push_back(suc_num);
-                            s = s.with_constraint(SMT::Constraint(BooleanFunction::Not(BooleanFunction::Eq(next_state_vec.clone(), BooleanFunction::Const(suc_num, eval_res.get().size()), 1).get(), 1).get()));
+                            suc_num = BooleanFunction::to_u64(eval_res.get()).get();
                         }
                     }
+
+                    q.push_back(suc_num);
+                    all_transitions[n].insert(suc_num);
+                    s = s.with_constraint(SMT::Constraint(BooleanFunction::Not(BooleanFunction::Eq(next_state_vec.clone(), BooleanFunction::Const(suc_num, suc.size()), 1).get(), 1).get()));
                 }
-            }
-
-            for (const auto& suc : successor_states)
-            {
-                // generate n mapping
-                std::map<std::string, BooleanFunction> n_mapping;
-                BooleanFunction condition;
-
-                for (u32 i = 0; i < state_reg.size(); i++)
-                {
-                    n_mapping.insert({BooleanFunctionNetDecorator(*(state_bfs.at(i).first)).get_boolean_variable_name(), ((n >> i) & 1) ? BooleanFunction::Const(1, 1): BooleanFunction::Const(0, 1)});
-
-                    auto next_state_bit_bf = ((suc >> i) & 1) ? state_bfs.at(i).second : BooleanFunction::Not(state_bfs.at(i).second.clone(), 1).get();
-                    
-                    if (condition.is_empty())
-                    {
-                        condition = next_state_bit_bf;
-                    }
-                    else
-                    {
-                        condition = BooleanFunction::And(std::move(condition), std::move(next_state_bit_bf), 1).get();
-                    }
-                }
-
-                condition = condition.substitute(n_mapping).get();
-                condition = condition.simplify();
-
-                all_transitions[n].insert({suc, condition});
-                q.push_back(suc);
             }
         }
 
+        const auto conditional_transitions = generate_conditional_transitions(state_bfs, all_transitions).get();
+
         /* DEBUG PRINTING */
-        for (const auto& [org, successors] : all_transitions)
+        for (const auto& [org, successors] : conditional_transitions)
         {
             std::cout << org << ": " << std::endl;
             for (const auto& [suc, condition] : successors)
@@ -435,30 +435,19 @@ namespace hal
         }
         /* END DEBUG PRINTING */
 
-        if (auto graph_res = generate_dot_graph(state_reg, all_transitions, graph_path); graph_res.is_error())
+        if (auto graph_res = generate_dot_graph(state_reg, conditional_transitions, graph_path); graph_res.is_error())
         {
             return ERR_APPEND(graph_res.get_error(), "failed to solve fsm: unable to generate dot graph.");
         }
-    
-        return OK(all_transitions);
+
+        return OK(conditional_transitions);
     }
 
-    Result<std::string> SolveFsmPlugin::generate_dot_graph(const std::vector<Gate*>& state_reg, const std::map<u64, std::set<u64>>& transitions, const std::string& graph_path, const u32 max_condition_length, const u32 base)
-   {
-        std::map<u64, std::map<u64, BooleanFunction>> dummy_conditional_transitions;
-
-        for (const auto& [org, successors] : transitions)
-        {
-            for (const auto& suc : successors)
-            {
-                dummy_conditional_transitions[org].insert({suc, BooleanFunction()});
-            }
-        }
-
-        return generate_dot_graph(state_reg, dummy_conditional_transitions, graph_path, max_condition_length, base);
-   }
-
-    Result<std::string> SolveFsmPlugin::generate_dot_graph(const std::vector<Gate*>& state_reg, const std::map<u64, std::map<u64, BooleanFunction>>& transitions, const std::string& graph_path, const u32 max_condition_length, const u32 base)
+    Result<std::string> SolveFsmPlugin::generate_dot_graph(const std::vector<Gate*>& state_reg,
+                                                           const std::map<u64, std::map<u64, BooleanFunction>>& transitions,
+                                                           const std::string& graph_path,
+                                                           const u32 max_condition_length,
+                                                           const u32 base)
     {
         auto generate_legend = [](const std::vector<Gate*>& reg) -> std::string {
             std::string name_str = "";
@@ -484,21 +473,23 @@ namespace hal
                 std::string start_name;
                 std::string end_name;
 
-                switch(base)
+                switch (base)
                 {
                     case 2:
                         start_name = std::bitset<64>(org).to_string().substr(64 - state_reg.size(), 64);
-                        end_name = std::bitset<64>(suc).to_string().substr(64 - state_reg.size(), 64);
+                        end_name   = std::bitset<64>(suc).to_string().substr(64 - state_reg.size(), 64);
                         break;
                     case 10:
                         start_name = std::to_string(org);
-                        end_name = std::to_string(suc);
+                        end_name   = std::to_string(suc);
                         break;
                     default:
                         return ERR("failed to generate dot graph: base " + std::to_string(base) + "not implemented.");
                 }
 
-                graph_str += start_name+ " -> " + end_name + "[label=\"" + cond.to_string().substr(0, max_condition_length) + "\", weight=\"" + cond.to_string().substr(0, max_condition_length) + "\"];\n";;
+                graph_str +=
+                    start_name + " -> " + end_name + "[label=\"" + cond.to_string().substr(0, max_condition_length) + "\", weight=\"" + cond.to_string().substr(0, max_condition_length) + "\"];\n";
+                ;
             }
         }
 
@@ -515,8 +506,29 @@ namespace hal
             ofs << graph_str;
             ofs.close();
         }
-        
+
         return OK(graph_str);
     }
+
+    /*
+    Result<std::string> SolveFsmPlugin::generate_dot_graph(const std::vector<Gate*>& state_reg,
+                                                           const std::map<u64, std::set<u64>>& transitions,
+                                                           const std::string& graph_path,
+                                                           const u32 max_condition_length,
+                                                           const u32 base)
+    {
+        std::map<u64, std::map<u64, BooleanFunction>> dummy_conditional_transitions;
+
+        for (const auto& [org, successors] : transitions)
+        {
+            for (const auto& suc : successors)
+            {
+                dummy_conditional_transitions[org].insert({suc, BooleanFunction()});
+            }
+        }
+
+        return generate_dot_graph(state_reg, dummy_conditional_transitions, graph_path, max_condition_length, base);
+    }
+    */
 
 }    // namespace hal

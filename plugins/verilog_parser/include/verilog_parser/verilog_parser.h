@@ -95,7 +95,6 @@ namespace hal
             std::string m_expression;
             PinDirection m_direction;
             std::vector<std::vector<u32>> m_ranges;
-            std::vector<VerilogDataEntry> m_attributes;
             std::vector<std::string> m_expanded_identifiers;
         };
 
@@ -182,7 +181,7 @@ namespace hal
         std::unordered_map<std::string, GateType*> m_vcc_gate_types;
         std::unordered_map<std::string, GateType*> m_gnd_gate_types;
         std::unordered_map<Net*, std::vector<std::pair<Module*, u32>>> m_module_port_by_net;
-        std::unordered_map<Module*, std::vector<std::pair<std::string, Net*>>> m_module_ports;
+        std::unordered_map<Module*, std::vector<std::tuple<std::string, Net*>>> m_module_ports;
 
         // unique aliases
         std::unordered_map<std::string, u32> m_signal_name_occurrences;
@@ -192,7 +191,7 @@ namespace hal
         Net* m_zero_net;
         Net* m_one_net;
         std::unordered_map<std::string, Net*> m_net_by_name;
-        std::unordered_map<std::string, std::vector<std::string>> m_nets_to_merge;
+        std::vector<std::pair<std::string, std::string>> m_nets_to_merge;
 
         // parse HDL into intermediate format
         void tokenize();

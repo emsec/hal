@@ -1,8 +1,10 @@
 #include "netlist_preprocessing/plugin_netlist_preprocessing.h"
 
 #include "hal_core/netlist/boolean_function/solver.h"
+#include "hal_core/netlist/decorators/boolean_function_decorator.h"
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/result.h"
 
@@ -10,6 +12,36 @@
 
 namespace hal
 {
+    namespace
+    {
+        std::string generate_hex_truth_table_string(const std::vector<BooleanFunction::Value>& tt)
+        {
+            std::string tt_str = "";
+
+            u32 acc = 0;
+            for (u32 i = 0; i < tt.size(); i++)
+            {
+                const BooleanFunction::Value bit = tt.at(i);
+                if (bit == BooleanFunction::Value::ONE)
+                {
+                    acc += (1 << (i % 4));
+                }
+
+                if ((i % 4) == 3)
+                {
+                    std::stringstream stream;
+                    stream << std::hex << acc;
+
+                    tt_str = stream.str() + tt_str;
+
+                    acc = 0;
+                }
+            }
+
+            return tt_str;
+        }
+    }    // namespace
+
     extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
     {
         return std::make_unique<NetlistPreprocessingPlugin>();
@@ -23,6 +55,78 @@ namespace hal
     std::string NetlistPreprocessingPlugin::get_version() const
     {
         return std::string("0.1");
+    }
+
+    Result<u32> NetlistPreprocessingPlugin::simplify_lut_inits(Netlist* nl)
+    {
+        u32 num_inits = 0;
+
+        for (auto g : nl->get_gates([](const auto& g) { return g->get_type()->has_property(GateTypeProperty::c_lut); }))
+        {
+            // TODO remove
+            // if (g->get_id() != 1102)
+            // {
+            //     continue;
+            // }
+
+            // skip if the gate type has more than one fan out endpoints
+            if (g->get_type()->get_output_pins().size() != 1)
+            {
+                continue;
+            }
+
+            const auto out_ep = g->get_fan_out_endpoints().front();
+
+            // skip if the gate has more than one boolean function
+            if (g->get_boolean_functions().size() != 1)
+            {
+                continue;
+            }
+
+            const auto bf_org   = g->get_boolean_function(out_ep->get_pin());
+            const auto org_vars = bf_org.get_variable_names();
+
+            const auto bf_replaced   = BooleanFunctionDecorator(bf_org).substitute_power_ground_pins(nl, g).get();
+            const auto bf_simplified = bf_replaced.simplify_local();
+
+            const auto new_vars = bf_simplified.get_variable_names();
+
+            if (org_vars.size() == new_vars.size())
+            {
+                continue;
+            }
+
+            auto bf_extended = bf_simplified.clone();
+            for (const auto& in_pin : g->get_type()->get_input_pin_names())
+            {
+                if (new_vars.find(in_pin) == new_vars.end())
+                {
+                    auto bf_filler = BooleanFunction::Var(in_pin) | (~BooleanFunction::Var(in_pin));
+                    bf_extended    = BooleanFunction::And(std::move(bf_extended), std::move(bf_filler), 1).get();
+                }
+            }
+
+            const auto tt              = bf_extended.compute_truth_table().get();
+            const auto new_init_string = generate_hex_truth_table_string(tt.front());
+
+            // std::cout << "Org Init: " << g->get_init_data().get().front() << std::endl;
+            // std::cout << "New Init: " << new_init_string << std::endl;
+
+            g->set_init_data({new_init_string}).get();
+
+            const auto bf_test = g->get_boolean_function(out_ep->get_pin());
+
+            // std::cout << "Org: " << bf_org << std::endl;
+            // std::cout << "Rep: " << bf_replaced << std::endl;
+            // std::cout << "Simp: " << bf_simplified << std::endl;
+            // std::cout << "Test: " << bf_test << std::endl;
+            // std::cout << "Ext: " << bf_extended << std::endl;
+
+            num_inits++;
+        }
+
+        log_info("netlist_preprocessing", "simplified {} LUT INIT strings inside of netlist with ID {}.", num_inits, nl->get_id());
+        return OK(num_inits);
     }
 
     Result<u32> NetlistPreprocessingPlugin::remove_unused_lut_inputs(Netlist* nl)
@@ -78,7 +182,7 @@ namespace hal
             }
         }
 
-        log_debug("netlist_preprocessing", "removed {} unused LUT endpoints from netlist with ID {}.", num_eps, nl->get_id());
+        log_info("netlist_preprocessing", "removed {} unused LUT endpoints from netlist with ID {}.", num_eps, nl->get_id());
         return OK(num_eps);
     }
 
@@ -156,13 +260,17 @@ namespace hal
                 }
             }
 
-            func = func.simplify();
+            func = func.simplify_local();
 
             bool failed                      = false;
             std::vector<std::string> in_pins = gt->get_input_pin_names();
             if (func.is_variable() && std::find(in_pins.begin(), in_pins.end(), func.get_variable_name().get()) != in_pins.end())
             {
-                Net* out_net = out_endpoint->get_net();
+                Net* out_net      = out_endpoint->get_net();
+                Net* buffered_net = nullptr;
+
+                bool is_global_output = out_net->is_global_output_net();
+                std::map<Module*, std::tuple<std::string, std::string, u32, PinDirection, PinType>> module_pins;
 
                 // check all input endpoints and ...
                 for (Endpoint* in_endpoint : fan_in)
@@ -170,6 +278,16 @@ namespace hal
                     Net* in_net = in_endpoint->get_net();
                     if (in_endpoint->get_pin()->get_name() == func.get_variable_name().get())
                     {
+                        buffered_net = in_net;
+                        // safe all module pin information from the net soon to be deleted
+                        for (const auto& m : nl->get_modules())
+                        {
+                            if (const auto pin = m->get_pin_by_net(out_net); pin != nullptr)
+                            {
+                                module_pins.insert({m, {pin->get_group().first->get_name(), pin->get_name(), pin->get_group().second, pin->get_direction(), pin->get_type()}});
+                            }
+                        }
+
                         // ... reconnect outputs if the input is passed through the buffer
                         for (Endpoint* dst : out_net->get_destinations())
                         {
@@ -240,6 +358,54 @@ namespace hal
                                 nl->get_id());
                     continue;
                 }
+
+                // ... mark the passed through net as global output
+                if (is_global_output)
+                {
+                    nl->mark_global_output_net(buffered_net);
+                }
+
+                // ... replace the output net with the passed through net for all previous module pins
+                for (auto& [m, pin_info] : module_pins)
+                {
+                    const std::string pingroup_name = std::get<0>(pin_info);
+                    const std::string pin_name      = std::get<1>(pin_info);
+                    const PinType pin_type          = std::get<4>(pin_info);
+
+                    if (auto pin = m->get_pin_by_net(buffered_net); pin != nullptr)
+                    {
+                        pin->set_name(pin_name);
+                        pin->set_type(pin_type);
+
+                        // remove pin from current pin group
+                        auto current_pin_group = pin->get_group().first;
+                        current_pin_group->remove_pin(pin).get();
+                        if (current_pin_group->get_pins().empty())
+                        {
+                            m->delete_pin_group(current_pin_group);
+                        }
+
+                        // check for existing pingroup otherwise create it
+                        auto pin_groups = m->get_pin_groups([pingroup_name](const auto& pg) { return pg->get_name() == pingroup_name; });
+                        PinGroup<ModulePin>* pin_group;
+                        if (pin_groups.empty())
+                        {
+                            pin_group = m->create_pin_group(pingroup_name, {}, PinDirection::none, pin_type).get();
+                        }
+                        else
+                        {
+                            pin_group = pin_groups.front();
+                        }
+
+                        pin_group->assign_pin(pin).get();
+                        pin_group->move_pin(pin, std::get<2>(pin_info)).get();
+                    }
+                    else
+                    {
+                        return ERR("Cannot replace buffers: Failed to get pin " + pin_name + " at module " + m->get_name() + " with ID " + std::to_string(m->get_id()));
+                    }
+                }
+
                 if (!failed)
                 {
                     gates_to_be_deleted.push(gate);
@@ -582,7 +748,79 @@ namespace hal
             }
         }
 
-        log_debug("netlist_preprocessing", "removed {} redundant logic gates from netlist with ID {}.", num_gates, nl->get_id());
+        log_info("netlist_preprocessing", "removed {} redundant logic gates from netlist with ID {}.", num_gates, nl->get_id());
         return OK(num_gates);
+    }
+
+    Result<u32> NetlistPreprocessingPlugin::remove_unconnected_gates(Netlist* nl)
+    {
+        u32 num_gates = 0;
+        std::vector<Gate*> to_delete;
+        do
+        {
+            to_delete.clear();
+
+            for (const auto& g : nl->get_gates())
+            {
+                bool is_unconnected = true;
+                for (const auto& on : g->get_fan_out_nets())
+                {
+                    if (!on->get_destinations().empty() || on->is_global_output_net())
+                    {
+                        is_unconnected = false;
+                    }
+                }
+
+                if (is_unconnected)
+                {
+                    to_delete.push_back(g);
+                }
+            }
+
+            for (const auto& g : to_delete)
+            {
+                if (!nl->delete_gate(g))
+                {
+                    log_warning("netlist_preprocessing", "could not delete gate '{}' with ID {} from netlist with ID {}.", g->get_name(), g->get_id(), nl->get_id());
+                }
+                else
+                {
+                    num_gates++;
+                }
+            }
+        } while (!to_delete.empty());
+
+        log_info("netlist_preprocessing", "removed {} unconnected gates from netlist with ID {}.", num_gates, nl->get_id());
+        return OK(num_gates);
+    }
+
+    Result<u32> NetlistPreprocessingPlugin::remove_unconnected_nets(Netlist* nl)
+    {
+        u32 num_nets = 0;
+
+        std::vector<Net*> to_delete;
+
+        for (const auto& n : nl->get_nets())
+        {
+            if (!n->is_global_input_net() && n->get_sources().empty() && !n->is_global_output_net() && n->get_destinations().empty())
+            {
+                to_delete.push_back(n);
+            }
+        }
+
+        for (const auto& n : to_delete)
+        {
+            if (!nl->delete_net(n))
+            {
+                log_warning("netlist_preprocessing", "could not delete net '{}' with ID {} from netlist with ID {}.", n->get_name(), n->get_id(), nl->get_id());
+            }
+            else
+            {
+                num_nets++;
+            }
+        }
+
+        log_info("netlist_preprocessing", "removed {} unconnected nets from netlist with ID {}.", num_nets, nl->get_id());
+        return OK(num_nets);
     }
 }    // namespace hal
