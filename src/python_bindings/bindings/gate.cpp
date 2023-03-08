@@ -174,6 +174,24 @@ namespace hal
             :rtype: hal_py.Module
         )");
 
+        py_gate.def_property_readonly(
+            "modules", [](Gate* g) { return g->get_modules(); }, R"(
+            A list of all modules that contain this gate, either directly or as parent of another module.
+
+            :type: list[hal_py.Module]
+        )");
+
+        py_gate.def("get_modules", &Gate::get_modules, R"(
+            Get all modules that contain this gate, either directly or as parent of another module.
+            If recursive is set to True, indirect parent modules are also included. Otherwise, only the module containing the gate directly is returned.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+
+            :param lambda filter: An optional filter.
+            :param bool recursive: Set True to include indirect parents as well, False otherwise.
+            :returns: A list of modules.
+            :rtype: list[hal_py.Module]
+        )");
+
         py_gate.def("get_grouping", &Gate::get_grouping, R"(
             Gets the grouping in which this gate is contained.
             If no grouping contains this gate, *None* is returned.
