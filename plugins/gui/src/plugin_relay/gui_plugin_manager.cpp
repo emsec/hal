@@ -5,7 +5,7 @@
 #include "hal_core/plugin_system/cli_extension_interface.h"
 #include "hal_core/plugin_system/plugin_interface_ui.h"
 #include "hal_core/netlist/netlist_parser/netlist_parser_manager.h"
-#include <QDebug>
+#include "hal_core/utilities/log.h"
 #include <QMap>
 #include <QDir>
 #include <iostream>
@@ -183,7 +183,7 @@ namespace hal {
                     // plugin already loaded ?
                     bool alreadyLoaded = loadedPlugins.find(pluginName.toStdString())!=loadedPlugins.end();
                     gpe->updateFromLoaded(bpif, alreadyLoaded);
-                    qDebug() << pluginName << "already loaded" << alreadyLoaded;
+                    log_debug("gui", "GuiPluginManager: '{}' already loaded.", pluginName.toStdString());
                     continue;
                 }
                 else if (gpe->requestLoad())
@@ -193,19 +193,19 @@ namespace hal {
                     if (!bpif)
                     {
                         gpe->mState = GuiPluginEntry::NotAPlugin; // however, load failed
-                        qDebug() << pluginName << "load failed";
+                        log_warning("gui", "GuiPluginManager: loading of requested plugin '{}' failed.", pluginName.toStdString());
                     }
                     else
                     {
                         gpe->updateFromLoaded(bpif, true, info.lastModified());
-                        qDebug() << pluginName << "load upon user request";
+                        log_info("gui", "GuiPluginManager: '{}' loaded upon user request.", pluginName.toStdString());
                     }
                     continue;
                 }
 
                 if (!needUpdate)
                 {
-                    qDebug() << pluginName << "don't need update" << gpe->mState;
+                    log_debug("gui", "GuiPluginManager: '{}' not modified, no update required.", pluginName.toStdString());
                     // known plugin, load only when needed
                     if (gpe->isPlugin())
                         gpe->mState = GuiPluginEntry::NotLoaded;
@@ -216,19 +216,19 @@ namespace hal {
                 bpif = load(pluginName, info.absoluteFilePath());
                 if (!bpif)
                 {
-                    qDebug() << pluginName << "dummy load failed" << info.absoluteFilePath();
+                    log_warning("gui", "GuiPluginManager: loading of '{}' failed, is it really a HAL plugin?", pluginName.toStdString());
                     gpe->mState = GuiPluginEntry::NotAPlugin;
                     continue;
                 }
 
                 if (bpif->get_name().empty() || bpif->get_version().empty())
                 {
-                    qDebug() << pluginName << "name or version empty, discarded";
+                    log_warning("gui", "GuiPluginManager: '{}' has empty name or version, plugin ignored.", pluginName.toStdString());
                     gpe->mState = GuiPluginEntry::NotAPlugin;
                 }
                 else
                 {
-                    qDebug() << pluginName << "dummy load success";
+                    log_info("gui", "GuiPluginManager: '{}' loaded to retrieve information about plugin features.", pluginName.toStdString());
                     gpe->updateFromLoaded(bpif, false, info.lastModified());    // load success
                 }
             }

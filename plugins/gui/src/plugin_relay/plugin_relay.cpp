@@ -20,8 +20,6 @@ namespace hal
         QString name = QString::fromStdString(plugin_name);
         QString path = QString::fromStdString(plugin_path);
 
-        qDebug() << name << path << is_load;
-
         if (is_load)
             Q_EMIT pluginLoaded(name, path);
         else

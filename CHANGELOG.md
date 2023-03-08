@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+* GUI plugin manager
+  * added overview about loaded plugins and their feature
+  * added interactive buttons to load or unload plugins
+  * added feature to load plugin automatically if needed for file parsing
+  * prevent unload of plugin if needed as dependency
+  * changed plugin load policy to have only mandatory or user required plugins loaded at startup
+  * note for developer: modified plugin core API, fewer base classes but can have multiple extensions
 * selection details
   * module icons reflect module color
   * gate icons shape according to gate type
