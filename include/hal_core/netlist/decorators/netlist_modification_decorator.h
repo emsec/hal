@@ -72,9 +72,9 @@ namespace hal
          * @param[in] src_pin - The output pin of the source gate.
          * @param[in] dst_gate - The destination gate.
          * @param[in] dst_pin - The input pin of the destination gate.
-         * @returns Ok on success, an error otherwise.
+         * @returns The connecting net on success, an error otherwise.
          */
-        Result<std::monostate> connect_gates(Gate* src_gate, GatePin* src_pin, Gate* dst_gate, GatePin* dst_pin);
+        Result<Net*> connect_gates(Gate* src_gate, GatePin* src_pin, Gate* dst_gate, GatePin* dst_pin);
 
         /**
          * Connects (and thereby merges) two nets.

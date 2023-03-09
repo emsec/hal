@@ -186,8 +186,11 @@ namespace hal {
             ASSERT_NE(gl, nullptr);
 
             GateType* and_type = gl->get_gate_type_by_name("AND2");
+            ASSERT_NE(and_type, nullptr);
             GateType* or_type = gl->get_gate_type_by_name("OR2");
+            ASSERT_NE(or_type, nullptr);
             GateType* xor_type = gl->get_gate_type_by_name("XOR2");
+            ASSERT_NE(xor_type, nullptr);
 
             Gate* a0 = nl->create_gate(and_type, "A0");
             Gate* a1 = nl->create_gate(and_type, "A1");
@@ -301,6 +304,115 @@ namespace hal {
             ASSERT_NE(o2, nullptr);
             EXPECT_EQ(o2->get_name(), "O2");
             EXPECT_EQ(o2->get_direction(), PinDirection::output);
+
+            PinGroup<ModulePin>* o_group = mod->get_pin_group_by_name("O");
+            EXPECT_TRUE(o_group->contains_pin(o0));
+            EXPECT_TRUE(o_group->contains_pin(o1));
+            EXPECT_TRUE(o_group->contains_pin(o2));
+
+            PinGroup<ModulePin>* i_group = mod->get_pin_group_by_name("I");
+            EXPECT_TRUE(i_group->contains_pin(i0));
+            EXPECT_TRUE(i_group->contains_pin(i1));
+            EXPECT_TRUE(i_group->contains_pin(i2));
+        }
+        {
+            // test NetlistModificationDecorator::connect_gates
+            auto nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+
+            auto gl = nl->get_gate_library();
+            ASSERT_NE(gl, nullptr);
+
+            GateType* and_type = gl->get_gate_type_by_name("AND2");
+            ASSERT_NE(and_type, nullptr);
+            GatePin* i0_pin = and_type->get_pin_by_name("I0");
+            ASSERT_NE(i0_pin, nullptr);
+            GatePin* i1_pin = and_type->get_pin_by_name("I1");
+            ASSERT_NE(i1_pin, nullptr);
+            GatePin* o_pin = and_type->get_pin_by_name("O");
+            ASSERT_NE(o_pin, nullptr);
+
+            Gate* a0 = nl->create_gate(and_type, "A0");
+            Gate* a1 = nl->create_gate(and_type, "A1");
+            Gate* a2 = nl->create_gate(and_type, "A2");
+            Gate* a3 = nl->create_gate(and_type, "A3");            
+
+            ASSERT_NE(a0, nullptr);
+            ASSERT_NE(a1, nullptr);
+            ASSERT_NE(a2, nullptr);
+            ASSERT_NE(a3, nullptr);
+
+            auto nl_dec = NetlistModificationDecorator(*(nl.get()));
+
+            // no connection from A0 exists
+            const auto net0_res = nl_dec.connect_gates(a0, o_pin, a1, i0_pin);
+            ASSERT_TRUE(net0_res.is_ok());  
+            const Net* net0 = net0_res.get();
+            ASSERT_NE(net0, nullptr);
+            EXPECT_EQ(net0->get_num_of_sources(), 1);
+            EXPECT_EQ(net0->get_num_of_destinations(), 1);
+            const Endpoint* ep0 = net0->get_sources([a0](const Endpoint* ep) { return ep->get_gate() == a0; }).front();
+            ASSERT_NE(ep0, nullptr);
+            EXPECT_EQ(ep0->get_gate(), a0);
+            EXPECT_EQ(ep0->get_pin(), o_pin);
+            const Endpoint* ep1 = net0->get_destinations([a1](const Endpoint* ep) { return ep->get_gate() == a1; }).front();
+            ASSERT_NE(ep1, nullptr);
+            EXPECT_EQ(ep1->get_gate(), a1);
+            EXPECT_EQ(ep1->get_pin(), i0_pin);
+
+            // reuse net0 with A0 as source for connection of A2
+            const auto net1_res = nl_dec.connect_gates(a0, o_pin, a2, i0_pin);
+            ASSERT_TRUE(net1_res.is_ok());  
+            const Net* net1 = net1_res.get();
+            ASSERT_NE(net1, nullptr);
+            EXPECT_EQ(net0, net1);
+            EXPECT_EQ(net0->get_num_of_sources(), 1);
+            EXPECT_EQ(net0->get_num_of_destinations(), 2);
+            const Endpoint* ep2 = net0->get_sources([a0](const Endpoint* ep) { return ep->get_gate() == a0; }).front();
+            ASSERT_NE(ep2, nullptr);
+            EXPECT_EQ(ep2->get_gate(), a0);
+            EXPECT_EQ(ep2->get_pin(), o_pin);
+            const Endpoint* ep3 = net0->get_destinations([a2](const Endpoint* ep) { return ep->get_gate() == a2; }).front();
+            ASSERT_NE(ep3, nullptr);
+            EXPECT_EQ(ep3->get_gate(), a2);
+            EXPECT_EQ(ep3->get_pin(), i0_pin);
+
+            // no connection to A3 exists
+            const auto net2_res = nl_dec.connect_gates(a1, o_pin, a3, i0_pin);
+            ASSERT_TRUE(net2_res.is_ok());  
+            const Net* net2 = net2_res.get();
+            ASSERT_NE(net2, nullptr);
+            EXPECT_EQ(net2->get_num_of_sources(), 1);
+            EXPECT_EQ(net2->get_num_of_destinations(), 1);
+            const Endpoint* ep4 = net2->get_sources([a1](const Endpoint* ep) { return ep->get_gate() == a1; }).front();
+            ASSERT_NE(ep4, nullptr);
+            EXPECT_EQ(ep4->get_gate(), a1);
+            EXPECT_EQ(ep4->get_pin(), o_pin);
+            const Endpoint* ep5 = net2->get_destinations([a3](const Endpoint* ep) { return ep->get_gate() == a3; }).front();
+            ASSERT_NE(ep5, nullptr);
+            EXPECT_EQ(ep5->get_gate(), a3);
+            EXPECT_EQ(ep5->get_pin(), i0_pin);
+
+            // reuse net2 with A3 as destination for connection of A2
+            const auto net3_res = nl_dec.connect_gates(a2, o_pin, a3, i0_pin);
+            ASSERT_TRUE(net3_res.is_ok());  
+            const Net* net3 = net3_res.get();
+            ASSERT_NE(net3, nullptr);
+            EXPECT_EQ(net2, net3);
+            EXPECT_EQ(net2->get_num_of_sources(), 2);
+            EXPECT_EQ(net2->get_num_of_destinations(), 1);
+            const Endpoint* ep6 = net2->get_sources([a2](const Endpoint* ep) { return ep->get_gate() == a2; }).front();
+            ASSERT_NE(ep6, nullptr);
+            EXPECT_EQ(ep6->get_gate(), a2);
+            EXPECT_EQ(ep6->get_pin(), o_pin);
+            const Endpoint* ep7 = net2->get_destinations([a3](const Endpoint* ep) { return ep->get_gate() == a3; }).front();
+            ASSERT_NE(ep7, nullptr);
+            EXPECT_EQ(ep7->get_gate(), a3);
+            EXPECT_EQ(ep7->get_pin(), i0_pin);
+
+            // try invalid connection as A0 already has fan-out and A3 already has fan-in
+            const auto net4_res = nl_dec.connect_gates(a0, o_pin, a3, i0_pin);
+            ASSERT_TRUE(net4_res.is_error());  
         }
         TEST_END
     }

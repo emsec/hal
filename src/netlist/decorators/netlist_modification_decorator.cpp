@@ -117,7 +117,7 @@ namespace hal
         return OK(new_gate);
     }
 
-    Result<std::monostate> NetlistModificationDecorator::connect_gates(Gate* src_gate, GatePin* src_pin, Gate* dst_gate, GatePin* dst_pin)
+    Result<Net*> NetlistModificationDecorator::connect_gates(Gate* src_gate, GatePin* src_pin, Gate* dst_gate, GatePin* dst_pin)
     {
         if (src_gate == nullptr || dst_gate == nullptr)
         {
@@ -187,7 +187,7 @@ namespace hal
             }
         }
 
-        return OK({});
+        return OK(net);
     }
 
     Result<std::monostate> NetlistModificationDecorator::connect_nets(Net* master_net, Net* slave_net)

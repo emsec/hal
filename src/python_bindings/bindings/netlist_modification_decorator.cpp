@@ -67,16 +67,16 @@ namespace hal
 
         py_netlist_modification_decorator.def(
             "connect_gates",
-            [](NetlistModificationDecorator& self, Gate* src_gate, GatePin* src_pin, Gate* dst_gate, GatePin* dst_pin) -> bool {
+            [](NetlistModificationDecorator& self, Gate* src_gate, GatePin* src_pin, Gate* dst_gate, GatePin* dst_pin) -> Net* {
                 auto res = self.connect_gates(src_gate, src_pin, dst_gate, dst_pin);
                 if (res.is_ok())
                 {
-                    return true;
+                    return res.get();
                 }
                 else
                 {
                     log_error("python_context", "error encountered while connecting gates:\n{}", res.get_error().get());
-                    return false;
+                    return nullptr;
                 }
             },
             py::arg("src_gate"),
@@ -93,8 +93,8 @@ namespace hal
             :param hal_py.GatePin src_pin: The output pin of the source gate.
             :param hal_py.Gate dst_gate: The destination gate.
             :param hal_py.GatePin dst_pin: The input pin of the destination gate.
-            :returns: True on success, False otherwise.
-            :rtype: bool
+            :returns: The connecting net on success, None otherwise.
+            :rtype: hal_py.Net or None
         )");
 
         py_netlist_modification_decorator.def(
