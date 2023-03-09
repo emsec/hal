@@ -15,7 +15,7 @@ namespace hal
                 Write the given netlist into a file at the given location.
 
                 :param hal_py.Netlist netlist: The netlist.
-                :param hal_py.hal_path file_path: The output path.
+                :param pathlib.Path file_path: The output path.
                 :returns: True on success, false otherwise.
                 :rtype: bool
                 )");
