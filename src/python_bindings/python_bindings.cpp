@@ -43,9 +43,11 @@ namespace hal
 
         gate_pin_init(m);
 
+        gate_pin_group_init(m);
+
         module_pin_init(m);
 
-        pin_group_init(m);
+        module_pin_group_init(m);
 
         gate_init(m);
 

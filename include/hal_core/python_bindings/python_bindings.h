@@ -208,6 +208,13 @@ namespace hal
     void gate_pin_init(py::module& m);
 
     /**
+     * Initializes Python bindings for the HAL gate pin groups in a python module.
+     *
+     * @param[in] m - the python module
+     */
+    void gate_pin_group_init(py::module& m);
+
+    /**
      * Initializes Python bindings for the HAL module pins in a python module.
      *
      * @param[in] m - the python module
@@ -215,11 +222,11 @@ namespace hal
     void module_pin_init(py::module& m);
 
     /**
-     * Initializes Python bindings for the HAL pin groups in a python module.
+     * Initializes Python bindings for the HAL module pin groups in a python module.
      *
      * @param[in] m - the python module
      */
-    void pin_group_init(py::module& m);
+    void module_pin_group_init(py::module& m);
 
     /**
      * Initializes Python bindings for the HAL gate in a python module.
