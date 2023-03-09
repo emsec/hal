@@ -32,15 +32,15 @@
 
 namespace hal
 {
-    class NETLIST_API NetlistManipulationDecorator
+    class NETLIST_API NetlistModificationDecorator
     {
     public:
         /**
-         * Construct new NetlistDecorator object.
+         * Construct new NetlistModificationDecorator object.
          * 
          * @param[in] netlist - The netlist to operate on.
          */
-        NetlistManipulationDecorator(Netlist& netlist);
+        NetlistModificationDecorator(Netlist& netlist);
 
         /**
          * Delete all modules in the  netlist except the top module.

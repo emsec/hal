@@ -283,7 +283,7 @@ namespace hal
          * @param[in] pin_map - A map from old to new pins.
          * @returns Ok on success, an error otherwise.
          */
-        [[deprecated("Will be removed in a future version, use NetlistManipulationDecorator::replace_gate instead.")]] CORE_API Result<std::monostate>
+        [[deprecated("Will be removed in a future version, use NetlistModificationDecorator::replace_gate instead.")]] CORE_API Result<std::monostate>
             replace_gate(Gate* gate, GateType* target_type, std::map<GatePin*, GatePin*> pin_map);
 
         /**

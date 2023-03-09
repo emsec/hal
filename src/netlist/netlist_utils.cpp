@@ -1,6 +1,6 @@
 #include "hal_core/netlist/netlist_utils.h"
 
-#include "hal_core/netlist/decorators/netlist_manipulation_decorator.h"
+#include "hal_core/netlist/decorators/netlist_modification_decorator.h"
 #include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
@@ -767,7 +767,7 @@ namespace hal
 
         Result<std::monostate> replace_gate(Gate* gate, GateType* target_type, std::map<GatePin*, GatePin*> pin_map)
         {
-            if (auto res = NetlistManipulationDecorator(*(gate->get_netlist())).replace_gate(gate, target_type, pin_map); res.is_ok())
+            if (auto res = NetlistModificationDecorator(*(gate->get_netlist())).replace_gate(gate, target_type, pin_map); res.is_ok())
             {
                 return OK({});
             }

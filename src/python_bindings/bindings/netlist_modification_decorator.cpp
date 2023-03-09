@@ -2,19 +2,19 @@
 
 namespace hal
 {
-    void netlist_manipulation_decorator_init(py::module& m)
+    void netlist_modification_decorator_init(py::module& m)
     {
-        py::class_<NetlistManipulationDecorator> py_netlist_manipulation_decorator(m, "NetlistManipulationDecorator", R"()");
+        py::class_<NetlistModificationDecorator> py_netlist_modification_decorator(m, "NetlistModificationDecorator", R"()");
 
-        py_netlist_manipulation_decorator.def(py::init<Netlist&>(), py::arg("netlist"), R"(
-            Construct new NetlistDecorator object.
+        py_netlist_modification_decorator.def(py::init<Netlist&>(), py::arg("netlist"), R"(
+            Construct new NetlistModificationDecorator object.
 
             :param hal_py.Netlist netlist: The netlist to operate on.
         )");
 
-        py_netlist_manipulation_decorator.def(
+        py_netlist_modification_decorator.def(
             "delete_modules",
-            [](NetlistManipulationDecorator& self, const std::function<bool(const Module*)>& filter = nullptr) -> bool {
+            [](NetlistModificationDecorator& self, const std::function<bool(const Module*)>& filter = nullptr) -> bool {
                 auto res = self.delete_modules(filter);
                 if (res.is_ok())
                 {
@@ -36,9 +36,9 @@ namespace hal
             :rtype: bool
         )");
 
-        py_netlist_manipulation_decorator.def(
+        py_netlist_modification_decorator.def(
             "replace_gate",
-            [](NetlistManipulationDecorator& self, Gate* gate, GateType* target_type, const std::map<GatePin*, GatePin*>& pin_map) -> Gate* {
+            [](NetlistModificationDecorator& self, Gate* gate, GateType* target_type, const std::map<GatePin*, GatePin*>& pin_map) -> Gate* {
                 auto res = self.replace_gate(gate, target_type, pin_map);
                 if (res.is_ok())
                 {
@@ -65,9 +65,9 @@ namespace hal
             :rtype: hal_py.Gate or None
         )");
 
-        py_netlist_manipulation_decorator.def(
+        py_netlist_modification_decorator.def(
             "connect_gates",
-            [](NetlistManipulationDecorator& self, Gate* src_gate, GatePin* src_pin, Gate* dst_gate, GatePin* dst_pin) -> bool {
+            [](NetlistModificationDecorator& self, Gate* src_gate, GatePin* src_pin, Gate* dst_gate, GatePin* dst_pin) -> bool {
                 auto res = self.connect_gates(src_gate, src_pin, dst_gate, dst_pin);
                 if (res.is_ok())
                 {
@@ -97,9 +97,9 @@ namespace hal
             :rtype: bool
         )");
 
-        py_netlist_manipulation_decorator.def(
+        py_netlist_modification_decorator.def(
             "connect_nets",
-            [](NetlistManipulationDecorator& self, Net* master_net, Net* slave_net) -> bool {
+            [](NetlistModificationDecorator& self, Net* master_net, Net* slave_net) -> bool {
                 auto res = self.connect_nets(master_net, slave_net);
                 if (res.is_ok())
                 {

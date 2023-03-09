@@ -6,7 +6,7 @@
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/netlist/decorators/boolean_function_decorator.h"
-#include "hal_core/netlist/decorators/netlist_manipulation_decorator.h"
+#include "hal_core/netlist/decorators/netlist_modification_decorator.h"
 #include "netlist_test_utils.h"
 
 
@@ -124,13 +124,13 @@ namespace hal {
     }
 
     /**
-     * Test NetlistManipulationDecorator.
+     * Test NetlistModificationDecorator.
      */
-    TEST_F(DecoratorTest, check_netlist_manipulation_decorator)
+    TEST_F(DecoratorTest, check_netlist_modification_decorator)
     {
         TEST_START
         {
-            // test NetlistManipulationDecorator::delete_modules
+            // test NetlistModificationDecorator::delete_modules
             auto nl = test_utils::create_empty_netlist();
             ASSERT_NE(nl, nullptr);
 
@@ -169,16 +169,16 @@ namespace hal {
             EXPECT_EQ(m1->get_parent_module(), nl->get_top_module());
             EXPECT_EQ(m2->get_parent_module(), m1);
 
-            EXPECT_TRUE(NetlistManipulationDecorator(*(nl.get())).delete_modules([](const Module* m) { return m->get_name() == "m0"; }).is_ok());
+            EXPECT_TRUE(NetlistModificationDecorator(*(nl.get())).delete_modules([](const Module* m) { return m->get_name() == "m0"; }).is_ok());
 
             EXPECT_EQ(nl->get_modules().size(), 3);
 
-            EXPECT_TRUE(NetlistManipulationDecorator(*(nl.get())).delete_modules().is_ok());
+            EXPECT_TRUE(NetlistModificationDecorator(*(nl.get())).delete_modules().is_ok());
 
             EXPECT_EQ(nl->get_modules().size(), 1);
         }
         {
-            // test NetlistManipulationDecorator::replace_gate
+            // test NetlistModificationDecorator::replace_gate
             auto nl = test_utils::create_empty_netlist();
             ASSERT_NE(nl, nullptr);
 
@@ -268,10 +268,10 @@ namespace hal {
             pin_map[and_type->get_pin_by_name("I1")] = xor_type->get_pin_by_name("I1");
             pin_map[and_type->get_pin_by_name("O")] = xor_type->get_pin_by_name("O");
 
-            const auto replace_res = NetlistManipulationDecorator(*(nl.get())).replace_gate(a4, xor_type, pin_map);
-            EXPECT_TRUE(replace_res.is_ok());
+            const auto replace_res = NetlistModificationDecorator(*(nl.get())).replace_gate(a4, xor_type, pin_map);
+            ASSERT_TRUE(replace_res.is_ok());
             Gate* new_gate = replace_res.get();
-            EXPECT_NE(new_gate, nullptr);
+            ASSERT_NE(new_gate, nullptr);
 
             EXPECT_EQ(new_gate->get_fan_in_net("I0"), i0_net);
             EXPECT_EQ(new_gate->get_fan_in_net("I1"), i2_net);

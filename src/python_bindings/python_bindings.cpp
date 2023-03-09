@@ -73,7 +73,7 @@ namespace hal
 
         boolean_function_decorator_init(m);
 
-        netlist_manipulation_decorator_init(m);
+        netlist_modification_decorator_init(m);
 
 #ifndef PYBIND11_MODULE
         return m.ptr();

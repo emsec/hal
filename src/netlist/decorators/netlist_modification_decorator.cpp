@@ -1,4 +1,4 @@
-#include "hal_core/netlist/decorators/netlist_manipulation_decorator.h"
+#include "hal_core/netlist/decorators/netlist_modification_decorator.h"
 
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
@@ -8,11 +8,11 @@
 
 namespace hal
 {
-    NetlistManipulationDecorator::NetlistManipulationDecorator(Netlist& netlist) : m_netlist(netlist)
+    NetlistModificationDecorator::NetlistModificationDecorator(Netlist& netlist) : m_netlist(netlist)
     {
     }
 
-    Result<std::monostate> NetlistManipulationDecorator::delete_modules(const std::function<bool(const Module*)>& filter)
+    Result<std::monostate> NetlistModificationDecorator::delete_modules(const std::function<bool(const Module*)>& filter)
     {
         for (auto module : m_netlist.get_modules(filter))
         {
@@ -28,7 +28,7 @@ namespace hal
         return OK({});
     }
 
-    Result<Gate*> NetlistManipulationDecorator::replace_gate(Gate* gate, GateType* target_type, const std::map<GatePin*, GatePin*>& pin_map)
+    Result<Gate*> NetlistModificationDecorator::replace_gate(Gate* gate, GateType* target_type, const std::map<GatePin*, GatePin*>& pin_map)
     {
         if (gate == nullptr)
         {
@@ -68,13 +68,8 @@ namespace hal
             }
         }
 
-        // remove old gate
-        if (m_netlist.delete_gate(gate) == false)
-        {
-            return ERR("could not replace gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": failed to delete old gate of type '" + gate->get_type()->get_name() + "'");
-        }
         // create new gate
-        Gate* new_gate = m_netlist.create_gate(gate_id, target_type, gate_name, gate_location.first, gate_location.second);
+        Gate* new_gate = m_netlist.create_gate(target_type, gate_name, gate_location.first, gate_location.second);
         if (new_gate == nullptr)
         {
             return ERR("could not replace gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": failed to create replacement gate of type '" + target_type->get_name() + "'");
@@ -113,10 +108,16 @@ namespace hal
             new_gate->set_data_map(gate_data);
         }
 
+        // remove old gate
+        if (m_netlist.delete_gate(gate) == false)
+        {
+            return ERR("could not replace gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": failed to delete old gate of type '" + gate->get_type()->get_name() + "'");
+        }
+
         return OK(new_gate);
     }
 
-    Result<std::monostate> NetlistManipulationDecorator::connect_gates(Gate* src_gate, GatePin* src_pin, Gate* dst_gate, GatePin* dst_pin)
+    Result<std::monostate> NetlistModificationDecorator::connect_gates(Gate* src_gate, GatePin* src_pin, Gate* dst_gate, GatePin* dst_pin)
     {
         if (src_gate == nullptr || dst_gate == nullptr)
         {
@@ -189,7 +190,7 @@ namespace hal
         return OK({});
     }
 
-    Result<std::monostate> NetlistManipulationDecorator::connect_nets(Net* master_net, Net* slave_net)
+    Result<std::monostate> NetlistModificationDecorator::connect_nets(Net* master_net, Net* slave_net)
     {
         if (master_net == nullptr || slave_net == nullptr)
         {
