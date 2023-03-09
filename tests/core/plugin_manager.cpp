@@ -206,11 +206,12 @@ namespace hal
             EXPECT_FALSE(suc);
         }
         {
-            // Path is empty string
+            // Path is empty string, however,
+            //   since shared library file can be found in HAL plugin directory test should succeed
             NO_COUT_TEST_BLOCK;
             plugin_manager::unload_all_plugins();
             bool suc = plugin_manager::load(m_reference_library_name, std::filesystem::path(""));
-            EXPECT_FALSE(suc);
+            EXPECT_TRUE(suc);
         }
         {
             // Load an already loaded plugin (should return true)
