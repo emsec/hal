@@ -39,7 +39,6 @@ namespace hal
             return ERR("could not replace gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": target gate type is a 'nullptr'");
         }
 
-        u32 gate_id                       = gate->get_id();
         std::string gate_name             = gate->get_name();
         std::pair<i32, i32> gate_location = gate->get_location();
         std::vector<Endpoint*> fan_in     = gate->get_fan_in_endpoints();
@@ -190,21 +189,11 @@ namespace hal
         return OK(net);
     }
 
-    Result<std::monostate> NetlistModificationDecorator::connect_nets(Net* master_net, Net* slave_net)
+    Result<Net*> NetlistModificationDecorator::connect_nets(Net* master_net, Net* slave_net)
     {
         if (master_net == nullptr || slave_net == nullptr)
         {
             return ERR("could connect master net to slave net: master net or slave net is a nullptr");
-        }
-
-        // safe all module pin information from the net soon to be deleted
-        std::map<Module*, std::tuple<std::string, std::string, u32, PinDirection, PinType>> module_pins;
-        for (const auto& m : m_netlist.get_modules())
-        {
-            if (const auto pin = m->get_pin_by_net(slave_net); pin != nullptr)
-            {
-                module_pins.insert({m, {pin->get_group().first->get_name(), pin->get_name(), pin->get_group().second, pin->get_direction(), pin->get_type()}});
-            }
         }
 
         for (auto* src_ep : slave_net->get_sources())
@@ -262,53 +251,17 @@ namespace hal
             }
         }
 
+        if (const auto& data_map = slave_net->get_data_map(); !data_map.empty())
+        {
+            master_net->set_data_map(data_map);
+        }
+
         if (!m_netlist.delete_net(slave_net))
         {
             return ERR("could not connect master net '" + master_net->get_name() + "' with ID " + std::to_string(master_net->get_id()) + " with slave net '" + slave_net->get_name() + "' with ID "
                        + std::to_string(slave_net->get_id()) + ": failed to delete slave net");
         }
 
-        for (auto& [m, pin_info] : module_pins)
-        {
-            const std::string pingroup_name = std::get<0>(pin_info);
-            const std::string pin_name      = std::get<1>(pin_info);
-            const PinType pin_type          = std::get<4>(pin_info);
-
-            if (auto* pin = m->get_pin_by_net(master_net); pin != nullptr)
-            {
-                pin->set_name(pin_name);
-                pin->set_type(pin_type);
-
-                // remove pin from current pin group
-                auto current_pin_group = pin->get_group().first;
-                current_pin_group->remove_pin(pin).get();
-                if (current_pin_group->get_pins().empty())
-                {
-                    m->delete_pin_group(current_pin_group).get();
-                }
-
-                // check for existing pingroup otherwise create it
-                auto pin_groups = m->get_pin_groups([pingroup_name](const auto& pg) { return pg->get_name() == pingroup_name; });
-                PinGroup<ModulePin>* pin_group;
-                if (pin_groups.empty())
-                {
-                    pin_group = m->create_pin_group(pingroup_name, {}, PinDirection::none, pin_type).get();
-                }
-                else
-                {
-                    pin_group = pin_groups.front();
-                }
-
-                pin_group->assign_pin(pin).get();
-                pin_group->move_pin(pin, std::get<2>(pin_info)).get();
-            }
-            else
-            {
-                return ERR("could not connect master net '" + master_net->get_name() + "' with ID " + std::to_string(master_net->get_id()) + " with slave net '" + slave_net->get_name() + "' with ID "
-                           + std::to_string(slave_net->get_id()) + ": failed to get pin " + pin_name + " at module " + m->get_name() + " with ID " + std::to_string(m->get_id()));
-            }
-        }
-
-        return OK({});
+        return OK(master_net);
     }
 }    // namespace hal

@@ -82,9 +82,9 @@ namespace hal
          * 
          * @param[in] master_net - The net that receives all properties from the slave net. 
          * @param[in] slave_net - The net that transfers all properties to the master net and is subsequently deleted.
-         * @returns Ok on success, an error otherwise.
+         * @returns The merged net on success, an error otherwise.
          */
-        Result<std::monostate> connect_nets(Net* master_net, Net* slave_net);
+        Result<Net*> connect_nets(Net* master_net, Net* slave_net);
 
     private:
         Netlist& m_netlist;

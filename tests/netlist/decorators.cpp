@@ -276,6 +276,12 @@ namespace hal {
             Gate* new_gate = replace_res.get();
             ASSERT_NE(new_gate, nullptr);
 
+            EXPECT_EQ(nl->get_gates().size(), 8);
+            EXPECT_EQ(nl->get_nets().size(), 14);
+            EXPECT_EQ(nl->get_modules().size(), 2);
+
+            EXPECT_EQ(new_gate->get_module(), mod);
+
             EXPECT_EQ(new_gate->get_fan_in_net("I0"), i0_net);
             EXPECT_EQ(new_gate->get_fan_in_net("I1"), i2_net);
             EXPECT_EQ(new_gate->get_fan_out_net("O"), o1_net);
@@ -413,6 +419,90 @@ namespace hal {
             // try invalid connection as A0 already has fan-out and A3 already has fan-in
             const auto net4_res = nl_dec.connect_gates(a0, o_pin, a3, i0_pin);
             ASSERT_TRUE(net4_res.is_error());  
+        }
+        {
+            // test NetlistModificationDecorator::connect_nets
+            auto nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+
+            auto gl = nl->get_gate_library();
+            ASSERT_NE(gl, nullptr);
+
+            GateType* and_type = gl->get_gate_type_by_name("AND2");
+            ASSERT_NE(and_type, nullptr);
+            GatePin* i0_pin = and_type->get_pin_by_name("I0");
+            ASSERT_NE(i0_pin, nullptr);
+            GatePin* i1_pin = and_type->get_pin_by_name("I1");
+            ASSERT_NE(i1_pin, nullptr);
+            GatePin* o_pin = and_type->get_pin_by_name("O");
+            ASSERT_NE(o_pin, nullptr);
+
+            Gate* a0 = nl->create_gate(and_type, "A0");
+            Gate* a1 = nl->create_gate(and_type, "A1");
+            Gate* a2 = nl->create_gate(and_type, "A2");
+            Gate* a3 = nl->create_gate(and_type, "A3");            
+
+            ASSERT_NE(a0, nullptr);
+            ASSERT_NE(a1, nullptr);
+            ASSERT_NE(a2, nullptr);
+            ASSERT_NE(a3, nullptr);
+
+            Net* net0 = test_utils::connect_global_in(nl.get(), a0, "I0");
+            Net* net1 = test_utils::connect_global_in(nl.get(), a2, "I0");
+            Net* net2 = test_utils::connect(nl.get(), a0, "O", a1, "I0");
+            Net* net3 = test_utils::connect(nl.get(), a2, "O", a3, "I0");
+            Net* net4 = test_utils::connect_global_out(nl.get(), a1, "O");
+            Net* net5 = test_utils::connect_global_out(nl.get(), a3, "O");
+
+            ASSERT_NE(net0, nullptr);
+            ASSERT_NE(net1, nullptr);
+            ASSERT_NE(net2, nullptr);
+            ASSERT_NE(net3, nullptr);
+            ASSERT_NE(net4, nullptr);
+            ASSERT_NE(net5, nullptr);
+
+            auto nl_dec = NetlistModificationDecorator(*(nl.get()));
+
+            // merge global inputs
+            const auto merged_net01_res = nl_dec.connect_nets(net0, net1);
+            ASSERT_TRUE(merged_net01_res.is_ok());
+            Net* m_net01 = merged_net01_res.get();
+            ASSERT_NE(m_net01, nullptr);
+            EXPECT_EQ(m_net01, net0);
+            EXPECT_TRUE(m_net01->is_global_input_net());
+            EXPECT_FALSE(m_net01->is_global_output_net());
+            EXPECT_EQ(m_net01->get_num_of_sources(), 0);
+            EXPECT_EQ(m_net01->get_num_of_destinations(), 2);
+            EXPECT_TRUE(m_net01->is_a_destination(a0, "I0"));
+            EXPECT_TRUE(m_net01->is_a_destination(a2, "I0"));
+
+            // merge internal nets
+            const auto merged_net23_res = nl_dec.connect_nets(net2, net3);
+            ASSERT_TRUE(merged_net23_res.is_ok());
+            Net* m_net23 = merged_net23_res.get();
+            ASSERT_NE(m_net23, nullptr);
+            EXPECT_EQ(m_net23, net2);
+            EXPECT_FALSE(m_net23->is_global_input_net());
+            EXPECT_FALSE(m_net23->is_global_output_net());
+            EXPECT_EQ(m_net23->get_num_of_sources(), 2);
+            EXPECT_EQ(m_net23->get_num_of_destinations(), 2);
+            EXPECT_TRUE(m_net23->is_a_source(a0, "O"));
+            EXPECT_TRUE(m_net23->is_a_source(a2, "O"));
+            EXPECT_TRUE(m_net23->is_a_destination(a1, "I0"));
+            EXPECT_TRUE(m_net23->is_a_destination(a3, "I0"));
+
+            // merge global outputs
+            const auto merged_net45_res = nl_dec.connect_nets(net4, net5);
+            ASSERT_TRUE(merged_net45_res.is_ok());
+            Net* m_net45 = merged_net45_res.get();
+            ASSERT_NE(m_net45, nullptr);
+            EXPECT_EQ(m_net45, net4);
+            EXPECT_FALSE(m_net45->is_global_input_net());
+            EXPECT_TRUE(m_net45->is_global_output_net());
+            EXPECT_EQ(m_net45->get_num_of_sources(), 2);
+            EXPECT_EQ(m_net45->get_num_of_destinations(), 0);
+            EXPECT_TRUE(m_net45->is_a_source(a1, "O"));
+            EXPECT_TRUE(m_net45->is_a_source(a3, "O"));
         }
         TEST_END
     }

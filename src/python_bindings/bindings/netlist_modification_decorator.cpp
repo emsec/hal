@@ -99,16 +99,16 @@ namespace hal
 
         py_netlist_modification_decorator.def(
             "connect_nets",
-            [](NetlistModificationDecorator& self, Net* master_net, Net* slave_net) -> bool {
+            [](NetlistModificationDecorator& self, Net* master_net, Net* slave_net) -> Net* {
                 auto res = self.connect_nets(master_net, slave_net);
                 if (res.is_ok())
                 {
-                    return true;
+                    return res.get();
                 }
                 else
                 {
                     log_error("python_context", "error encountered while connecting nets:\n{}", res.get_error().get());
-                    return false;
+                    return nullptr;
                 }
             },
             py::arg("master_net"),
@@ -119,8 +119,8 @@ namespace hal
 
             :param hal_py.Net master_net: The net that receives all properties from the slave net. 
             :param hal_py.Net slave_net: The net that transfers all properties to the master net and is subsequently deleted.
-            :returns: True on success, False otherwise.
-            :rtype: bool
+            :returns: The merged net on success, None otherwise.
+            :rtype: hal_py.Net or None
         )");
     }
 }    // namespace hal
