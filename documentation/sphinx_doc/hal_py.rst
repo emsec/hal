@@ -31,7 +31,6 @@ HAL Core Documentation
    netlist_utils
    netlist_serializer
    netlist_writer_manager
-   path
    pin_direction
    pin_type
    plugin_manager

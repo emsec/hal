@@ -63,13 +63,13 @@ namespace hal
             Get the path to the input file.
 
             :returns: The path to the input file.
-            :rtype: hal_py.hal_path
+            :rtype: pathlib.Path
         )");
 
         py_netlist.def("set_input_filename", &Netlist::set_input_filename, py::arg("path"), R"(
             Set the path to the input file.
 
-            :param hal_py.hal_path filename: The path to the input file.
+            :param pathlib.Path filename: The path to the input file.
         )");
 
         py_netlist.def_property("design_name", &Netlist::get_design_name, &Netlist::set_design_name, R"(

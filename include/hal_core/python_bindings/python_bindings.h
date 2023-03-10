@@ -72,6 +72,7 @@
 #include "pybind11/operators.h"
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
+#include "pybind11/stl/filesystem.h"
 #include "pybind11/stl_bind.h"
 
 #pragma GCC diagnostic pop
@@ -94,13 +95,6 @@ namespace hal
      * @ingroup pybind
      * @{
      */
-
-    /**
-     * Initializes Python bindings for the HAL path in a python module.
-     *
-     * @param[in] m - the python module
-     */
-    void path_init(py::module& m);
 
     /**
      * Initializes Python bindings for the HAL data container in a python module.

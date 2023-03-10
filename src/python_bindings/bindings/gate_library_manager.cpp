@@ -16,7 +16,7 @@ namespace hal
             R"(
             Load a gate library from file.
 
-            :param hal_py.hal_path file_path: The input path.
+            :param pathlib.Path file_path: The input path.
             :param bool reload: If true, reloads the library in case it is already loaded.
             :returns: The gate library on success, None otherwise.
             :rtype: hal_py.GateLibrary or None
@@ -31,7 +31,7 @@ namespace hal
         py_gate_library_manager.def("save", &gate_library_manager::save, py::arg("file_path"), py::arg("gate_lib"), py::arg("overwrite") = false, R"(
             Save a gate library to file.
 
-            :param hal_py.hal_path file_path: The output path. 
+            :param pathlib.Path file_path: The output path. 
             :param hal_py.GateLibrary gate_lib: The gate library.
             :param bool overwrite: If true, overwrites already existing files.
             :returns: True on success, false otherwise.
