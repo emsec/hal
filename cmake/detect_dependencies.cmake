@@ -132,13 +132,13 @@ endif()
 # ###############################
 
 # Need Version 2.2.4 Not available in ubuntu bionic
-find_package(pybind11 2.4.3 CONFIG)
+find_package(pybind11 2.7 CONFIG)
 
 if(${pybind11_FOUND})
     message(VERBOSE "Found pybind11 v${pybind11_VERSION}: ${pybind11_INCLUDE_DIRS}")
-    message(VERBOSE "Found pybind11 >= 2.4.3")
+    message(VERBOSE "Found pybind11 >= 2.7")
 else()
-    message(STATUS "pybind11 >= 2.4.3 not found, will build our provided version")
+    message(STATUS "pybind11 >= 2.7 not found, will build our provided version")
     add_subdirectory(deps/pybind11)
 endif()
 
