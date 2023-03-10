@@ -1079,6 +1079,18 @@ namespace hal
             :rtype: hal_py.BooleanFunction or None
         )");
 
+        py_boolean_function.def("substitute",
+                                py::overload_cast<const std::map<std::string, std::string>&>(&BooleanFunction::substitute, py::const_),
+                                py::arg("substitutions"),
+                                R"(
+            Substitute multiple variable names with different names at once, i.e., rename the variables.
+            The operation is applied to all instances of the variable in the function.
+
+            :param dict[str,str] substitutions: A dict from old variable names to new variable names.
+            :returns: The resulting Boolean function.
+            :rtype: hal_py.BooleanFunction
+        )");
+
         py_boolean_function.def(
             "substitute",
             [](const BooleanFunction& self, const std::map<std::string, BooleanFunction>& substitutions) -> std::optional<BooleanFunction> {

@@ -1027,6 +1027,23 @@ namespace hal
         }
     }
 
+    BooleanFunction BooleanFunction::substitute(const std::map<std::string, std::string>& substitutions) const
+    {
+        auto function = this->clone();
+        for (auto i = 0u; i < this->m_nodes.size(); i++)
+        {
+            if (const auto var_name_res = this->m_nodes[i].get_variable_name(); var_name_res.is_ok())
+            {
+                if (const auto it = substitutions.find(var_name_res.get()); it != substitutions.end())
+                {
+                    function.m_nodes[i] = Node::Variable(it->second, this->m_nodes[i].size);
+                }
+            }
+        }
+
+        return function;
+    }
+
     Result<BooleanFunction> BooleanFunction::substitute(const std::map<std::string, BooleanFunction>& substitutions) const
     {
         /// Helper function to find the replacement for a variable and substitute it with a Boolean function.

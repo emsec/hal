@@ -758,10 +758,19 @@ namespace hal
         Result<BooleanFunction> substitute(const std::string& variable_name, const BooleanFunction& function) const;
 
         /**
-         * Substitute multiple variables with other Boolean functions at once.
+         * Substitute multiple variable names with different names at once, i.e., rename the variables.
          * The operation is applied to all instances of the variable in the function.
          *
-         * @param[in] substitutions - A map from the variable name to the function to replace the variable with.
+         * @param[in] substitutions - A map from old variable names to new variable names.
+         * @returns The resulting Boolean function.
+         */
+        BooleanFunction substitute(const std::map<std::string, std::string>& substitutions) const;
+
+        /**
+         * Substitute multiple variables with Boolean functions at once.
+         * The operation is applied to all instances of the variable in the function.
+         *
+         * @param[in] substitutions - A map from variable names to Boolean functions.
          * @returns Ok() and the resulting Boolean function on success, an error otherwise.
          */
         Result<BooleanFunction> substitute(const std::map<std::string, BooleanFunction>& substitutions) const;
