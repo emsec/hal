@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Gate Library &mdash; hal_py v4.0.1-244-ga3d645a31 documentation</title>
+  <title>Gate Library &mdash; hal_py v4.1.0-3-g29a161249 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.0.1-244-ga3d645a31
+                v4.1.0-3-g29a161249
               </div>
             
           
@@ -112,7 +112,6 @@
 <li class="toctree-l2"><a class="reference internal" href="netlist_utils.html">Netlist Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_serializer.html">Netlist Serializer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_writer_manager.html">Netlist Writer Manager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="path.html">HAL Path</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_direction.html">Pin Direction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_type.html">Pin Type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
@@ -196,14 +195,14 @@
 <dd><p>A gate library is a collection of gate types including their pins and Boolean functions.</p>
 <dl class="method">
 <dt id="hal_py.GateLibrary.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>self: hal_py.GateLibrary</em>, <em>path: hal_py.HalPath</em>, <em>name: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateLibrary.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>self: hal_py.GateLibrary</em>, <em>path: os.PathLike</em>, <em>name: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateLibrary.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct a gate library by specifying its name and the path to the file that describes the library.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>path</strong> (<em>hal_py.hal_path</em>) – The path to the gate library file.</li>
+<li><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) – The path to the gate library file.</li>
 <li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name of the gate library.</li>
 </ul>
 </td>
@@ -409,7 +408,7 @@ In case a filter is applied, only the gate types matching the filter condition a
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The path to the gate library file.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">hal_py.hal_path</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)">pathlib.Path</a></td>
 </tr>
 </tbody>
 </table>
@@ -517,7 +516,7 @@ In case a filter is applied, only the gate types matching the filter condition a
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">hal_py.hal_path</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)">pathlib.Path</a></td>
 </tr>
 </tbody>
 </table>

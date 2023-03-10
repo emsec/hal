@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Gate Library Manager &mdash; hal_py v4.0.1-244-ga3d645a31 documentation</title>
+  <title>Gate Library Manager &mdash; hal_py v4.1.0-3-g29a161249 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.0.1-244-ga3d645a31
+                v4.1.0-3-g29a161249
               </div>
             
           
@@ -112,7 +112,6 @@
 <li class="toctree-l2"><a class="reference internal" href="netlist_utils.html">Netlist Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_serializer.html">Netlist Serializer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_writer_manager.html">Netlist Writer Manager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="path.html">HAL Path</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_direction.html">Pin Direction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_type.html">Pin Type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
@@ -245,14 +244,14 @@
 
 <dl class="function">
 <dt id="hal_py.GateLibraryManager.load">
-<code class="descclassname">hal_py.GateLibraryManager.</code><code class="descname">load</code><span class="sig-paren">(</span><em>file_path: hal_py.HalPath</em>, <em>reload: bool = False</em><span class="sig-paren">)</span> &#x2192; hal_py.GateLibrary<a class="headerlink" href="#hal_py.GateLibraryManager.load" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">hal_py.GateLibraryManager.</code><code class="descname">load</code><span class="sig-paren">(</span><em>file_path: os.PathLike</em>, <em>reload: bool = False</em><span class="sig-paren">)</span> &#x2192; hal_py.GateLibrary<a class="headerlink" href="#hal_py.GateLibraryManager.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load a gate library from file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>file_path</strong> (<em>hal_py.hal_path</em>) – The input path.</li>
+<li><strong>file_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) – The input path.</li>
 <li><strong>reload</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – If true, reloads the library in case it is already loaded.</li>
 </ul>
 </td>
@@ -283,14 +282,14 @@
 
 <dl class="function">
 <dt id="hal_py.GateLibraryManager.save">
-<code class="descclassname">hal_py.GateLibraryManager.</code><code class="descname">save</code><span class="sig-paren">(</span><em>file_path: hal_py.HalPath</em>, <em>gate_lib: hal_py.GateLibrary</em>, <em>overwrite: bool = False</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GateLibraryManager.save" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">hal_py.GateLibraryManager.</code><code class="descname">save</code><span class="sig-paren">(</span><em>file_path: os.PathLike</em>, <em>gate_lib: hal_py.GateLibrary</em>, <em>overwrite: bool = False</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GateLibraryManager.save" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save a gate library to file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>file_path</strong> (<em>hal_py.hal_path</em>) – The output path.</li>
+<li><strong>file_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) – The output path.</li>
 <li><strong>gate_lib</strong> (<a class="reference internal" href="gate_library.html#hal_py.GateLibrary" title="hal_py.GateLibrary"><em>hal_py.GateLibrary</em></a>) – The gate library.</li>
 <li><strong>overwrite</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – If true, overwrites already existing files.</li>
 </ul>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist &mdash; hal_py v4.0.1-244-ga3d645a31 documentation</title>
+  <title>Netlist &mdash; hal_py v4.1.0-3-g29a161249 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.0.1-244-ga3d645a31
+                v4.1.0-3-g29a161249
               </div>
             
           
@@ -112,7 +112,6 @@
 <li class="toctree-l2"><a class="reference internal" href="netlist_utils.html">Netlist Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_serializer.html">Netlist Serializer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_writer_manager.html">Netlist Writer Manager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="path.html">HAL Path</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_direction.html">Pin Direction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_type.html">Pin Type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
@@ -846,7 +845,7 @@ If not explicitly set, the ID defaults to 0.</p>
 
 <dl class="method">
 <dt id="hal_py.Netlist.get_input_filename">
-<code class="descname">get_input_filename</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; hal_py.HalPath<a class="headerlink" href="#hal_py.Netlist.get_input_filename" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_input_filename</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; os.PathLike<a class="headerlink" href="#hal_py.Netlist.get_input_filename" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the path to the input file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -854,7 +853,7 @@ If not explicitly set, the ID defaults to 0.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The path to the input file.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">hal_py.hal_path</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)">pathlib.Path</a></td>
 </tr>
 </tbody>
 </table>
@@ -1662,13 +1661,13 @@ If no parameter is given, the data is querried using the default category and id
 
 <dl class="method">
 <dt id="hal_py.Netlist.set_input_filename">
-<code class="descname">set_input_filename</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em>, <em>path: hal_py.HalPath</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Netlist.set_input_filename" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_input_filename</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em>, <em>path: os.PathLike</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Netlist.set_input_filename" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the path to the input file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<em>hal_py.hal_path</em>) – The path to the input file.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) – The path to the input file.</td>
 </tr>
 </tbody>
 </table>

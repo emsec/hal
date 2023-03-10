@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Module &mdash; hal_py v4.0.1-244-ga3d645a31 documentation</title>
+  <title>Module &mdash; hal_py v4.1.0-3-g29a161249 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.0.1-244-ga3d645a31
+                v4.1.0-3-g29a161249
               </div>
             
           
@@ -112,7 +112,6 @@
 <li class="toctree-l2"><a class="reference internal" href="netlist_utils.html">Netlist Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_serializer.html">Netlist Serializer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_writer_manager.html">Netlist Writer Manager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="path.html">HAL Path</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_direction.html">Pin Direction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_type.html">Pin Type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
@@ -337,7 +336,7 @@ If recursive is set to true, nets in submodules are considered as well.</p>
 
 <dl class="method">
 <dt id="hal_py.Module.create_pin">
-<code class="descname">create_pin</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>name: str</em>, <em>net: hal_py.Net</em>, <em>type: hal_py.PinType = PinType.none</em>, <em>create_group: bool = True</em><span class="sig-paren">)</span> &#x2192; hal_py.ModulePin<a class="headerlink" href="#hal_py.Module.create_pin" title="Permalink to this definition">¶</a></dt>
+<code class="descname">create_pin</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>name: str</em>, <em>net: hal_py.Net</em>, <em>type: hal_py.PinType = &lt;PinType.none: 0&gt;</em>, <em>create_group: bool = True</em><span class="sig-paren">)</span> &#x2192; hal_py.ModulePin<a class="headerlink" href="#hal_py.Module.create_pin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Manually assign a module pin to a net.
 Checks whether the given direction matches the actual properties of the net, i.e., checks whether the net actually is an input and/or output to the module.
 Hence, make sure to update the module nets beforehand using hal_py.Module.update_net.
@@ -367,7 +366,7 @@ If create_group is set to False, the pin will not be added to a pin group.</p>
 
 <dl class="method">
 <dt id="hal_py.Module.create_pin_group">
-<code class="descname">create_pin_group</code><span class="sig-paren">(</span><em>self: hal_py.Module, name: str, pins: List[hal_py.ModulePin], direction: hal_py.PinDirection = PinDirection.none, type: hal_py.PinType = PinType.none, ascending: bool = False, start_index: int = 0, delete_empty_groups: bool = True</em><span class="sig-paren">)</span> &#x2192; hal_py.ModulePinGroup<a class="headerlink" href="#hal_py.Module.create_pin_group" title="Permalink to this definition">¶</a></dt>
+<code class="descname">create_pin_group</code><span class="sig-paren">(</span><em>self: hal_py.Module, name: str, pins: List[hal_py.ModulePin], direction: hal_py.PinDirection = &lt;PinDirection.none: 0&gt;, type: hal_py.PinType = &lt;PinType.none: 0&gt;, ascending: bool = False, start_index: int = 0, delete_empty_groups: bool = True</em><span class="sig-paren">)</span> &#x2192; hal_py.ModulePinGroup<a class="headerlink" href="#hal_py.Module.create_pin_group" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new pin group with the given name.
 All pins to be added to the pin group must have the same direction and type.</p>
 <table class="docutils field-list" frame="void" rules="none">

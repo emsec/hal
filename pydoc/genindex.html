@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; hal_py v4.0.1-244-ga3d645a31 documentation</title>
+  <title>Index &mdash; hal_py v4.1.0-3-g29a161249 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                v4.0.1-244-ga3d645a31
+                v4.1.0-3-g29a161249
               </div>
             
           
@@ -205,6 +205,14 @@
         <li><a href="smt.html#hal_py.SMT.SolverType.__getstate__">(hal_py.SMT.SolverType method)</a>
 </li>
       </ul></li>
+      <li><a href="boolean_function.html#hal_py.BooleanFunction.__hash__">__hash__ (hal_py.BooleanFunction attribute)</a>
+
+      <ul>
+        <li><a href="boolean_function.html#hal_py.BooleanFunction.Node.__hash__">(hal_py.BooleanFunction.Node attribute)</a>
+</li>
+        <li><a href="smt.html#hal_py.SMT.Model.__hash__">(hal_py.SMT.Model attribute)</a>
+</li>
+      </ul></li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.Value.__hash__">__hash__() (hal_py.BooleanFunction.Value method)</a>
 
       <ul>
@@ -245,8 +253,6 @@
         <li><a href="gate_library.html#hal_py.GateLibrary.__init__">(hal_py.GateLibrary method)</a>
 </li>
         <li><a href="gate_type.html#hal_py.GateType.__init__">(hal_py.GateType method)</a>
-</li>
-        <li><a href="path.html#hal_py.HalPath.__init__">(hal_py.HalPath method)</a>
 </li>
         <li><a href="smt.html#hal_py.SMT.Constraint.__init__">(hal_py.SMT.Constraint method)</a>
 </li>
@@ -364,7 +370,9 @@
 </li>
         <li><a href="boolean_function.html#hal_py.BooleanFunction.Value.__str__">(hal_py.BooleanFunction.Value method)</a>
 </li>
-        <li><a href="path.html#hal_py.HalPath.__str__">(hal_py.HalPath method)</a>
+        <li><a href="smt.html#hal_py.SMT.SolverResultType.__str__">(hal_py.SMT.SolverResultType method)</a>
+</li>
+        <li><a href="smt.html#hal_py.SMT.SolverType.__str__">(hal_py.SMT.SolverType method)</a>
 </li>
       </ul></li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.__xor__">__xor__() (hal_py.BooleanFunction method)</a>
@@ -1517,8 +1525,6 @@
 </li>
       <li><a href="smt.html#module-hal_py.SMT">hal_py.SMT (module)</a>
 </li>
-      <li><a href="path.html#hal_py.HalPath">HalPath (class in hal_py)</a>
-</li>
       <li><a href="gate_type.html#hal_py.GateType.has_component_of_type">has_component_of_type() (hal_py.GateType method)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.has_constant_value">has_constant_value() (hal_py.BooleanFunction method)</a>
@@ -1896,8 +1902,6 @@
 </li>
         <li><a href="base_plugin_interface.html#hal_py.BasePluginInterface.name">(hal_py.BasePluginInterface attribute)</a>
 </li>
-        <li><a href="boolean_function.html#hal_py.BooleanFunction.Value.name">(hal_py.BooleanFunction.Value attribute)</a>
-</li>
         <li><a href="gate.html#hal_py.Gate.name">(hal_py.Gate attribute)</a>
 </li>
         <li><a href="gate_library.html#hal_py.GateLibrary.name">(hal_py.GateLibrary attribute)</a>
@@ -1937,8 +1941,12 @@
         <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorControllerPlugin.name">(netlist_simulator_controller.NetlistSimulatorControllerPlugin attribute)</a>
 </li>
       </ul></li>
-      <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.SimulationEngine.name">name() (netlist_simulator_controller.SimulationEngine method)</a>
+      <li><a href="boolean_function.html#hal_py.BooleanFunction.Value.name">name() (hal_py.BooleanFunction.Value method)</a>
+
+      <ul>
+        <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.SimulationEngine.name">(netlist_simulator_controller.SimulationEngine method)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gate_type_component.html#hal_py.StateComponent.neg_state_identifier">neg_state_identifier (hal_py.StateComponent attribute)</a>
@@ -2575,6 +2583,14 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="boolean_function.html#hal_py.BooleanFunction.Value.value">value (hal_py.BooleanFunction.Value attribute)</a>
+
+      <ul>
+        <li><a href="smt.html#hal_py.SMT.SolverResultType.value">(hal_py.SMT.SolverResultType attribute)</a>
+</li>
+        <li><a href="smt.html#hal_py.SMT.SolverType.value">(hal_py.SMT.SolverType attribute)</a>
+</li>
+      </ul></li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.Var">Var() (hal_py.BooleanFunction static method)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.Node.variable">variable (hal_py.BooleanFunction.Node attribute)</a>
@@ -2585,12 +2601,12 @@
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.variable_names">variable_names (hal_py.BooleanFunction attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gate_library.html#hal_py.GateLibrary.vcc_gate_types">vcc_gate_types (hal_py.GateLibrary attribute)</a>
 </li>
       <li><a href="netlist.html#hal_py.Netlist.vcc_gates">vcc_gates (hal_py.Netlist attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="verilator.html#verilator.VerilatorSimulatorPlugin">VerilatorSimulatorPlugin (class in verilator)</a>
 </li>
       <li><a href="dataflow.html#dataflow.DataflowPlugin.version">version (dataflow.DataflowPlugin attribute)</a>

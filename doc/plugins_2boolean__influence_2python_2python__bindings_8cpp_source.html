@@ -117,91 +117,112 @@ $(document).ready(function(){initNavTree('plugins_2boolean__influence_2python_2p
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;            .def(<span class="stringliteral">&quot;get_name&quot;</span>, &amp;<a class="code" href="classhal_1_1_boolean_influence_plugin.html#a7163b39b267151fe1c3e88af349f3663">BooleanInfluencePlugin::get_name</a>)</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;            .def_property_readonly(<span class="stringliteral">&quot;version&quot;</span>, &amp;<a class="code" href="classhal_1_1_boolean_influence_plugin.html#a78a598b6d687a4d8fb170e103d808aff">BooleanInfluencePlugin::get_version</a>)</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;            .def(<span class="stringliteral">&quot;get_version&quot;</span>, &amp;<a class="code" href="classhal_1_1_boolean_influence_plugin.html#a78a598b6d687a4d8fb170e103d808aff">BooleanInfluencePlugin::get_version</a>)</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;            .def_static(<span class="stringliteral">&quot;get_boolean_influence&quot;</span>, [](<span class="keyword">const</span> <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&amp; bf, <span class="keyword">const</span> <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> num_evaluations=32000) -&gt; std::optional&lt;std::unordered_map&lt;std::string, double&gt;&gt; {</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> res = <a class="code" href="classhal_1_1_boolean_influence_plugin.html#a1c693c3d0a79feacdaa2480de0618c54">BooleanInfluencePlugin::get_boolean_influence</a>(bf, num_evaluations);</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;                <span class="keywordflow">if</span> (res.is_ok())</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;                {</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;                }</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                {</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;                    <span class="keywordflow">return</span> std::nullopt;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                }</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            }, py::arg(<span class="stringliteral">&quot;gates&quot;</span>), py::arg(<span class="stringliteral">&quot;start_net&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="stringliteral">                The Boolean function gets translated to a z3::expr and afterwards efficent c code.</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="stringliteral">                The program is compiled and executed many times to meassure the Boolean influence of each input variable.</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="stringliteral">                :param hal_py.BooleanFunction bf: The Boolean function.</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="stringliteral">                :param int num_evaluations: Amount specifying how often to evaluate the function for each input.</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="stringliteral">                :returns: A mapping of the input variable of the function to their boolean influence.</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="stringliteral">                :rtype: dict</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="stringliteral">            )&quot;)</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="stringliteral">            .def_static(</span><span class="stringliteral">&quot;get_boolean_influences_of_subcircuit&quot;</span>, [](<span class="keyword">const</span> std::vector&lt;Gate*&gt;&amp; gates, <span class="keyword">const</span> <a class="code" href="classhal_1_1_net.html">Net</a>* start_net) -&gt; std::optional&lt;std::map&lt;Net*, double&gt;&gt; {</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> res = <a class="code" href="classhal_1_1_boolean_influence_plugin.html#a0cb81e101a5dae8106c39f3c01b86cc6">BooleanInfluencePlugin::get_boolean_influences_of_subcircuit</a>(gates, start_net);</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                <span class="keywordflow">if</span> (res.is_ok())</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                {</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                }</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                {</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                    <span class="keywordflow">return</span> std::nullopt;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                }</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            }, py::arg(<span class="stringliteral">&quot;gates&quot;</span>), py::arg(<span class="stringliteral">&quot;start_net&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="stringliteral">                Generates the function of the net using only the given gates.</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="stringliteral">                Afterwards the generated function gets translated from a z3::expr to efficent c code, compiled, executed and evalated.</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="stringliteral">                :param list[hal_py.Gate] gates: The gates of the subcircuit.</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="stringliteral">                :param hal_py.Net start_net: The output net of the subcircuit at which to start the analysis.</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="stringliteral">                :returns: A mapping of the nets that appear in the function of the data net to their boolean influence in said function.</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="stringliteral">                :rtype: dict</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="stringliteral">            )&quot;)</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="stringliteral">            .def_static(</span><span class="stringliteral">&quot;get_boolean_influences_of_gate&quot;</span>, [](<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate.html">Gate</a>* gate) -&gt; std::optional&lt;std::map&lt;Net*, double&gt;&gt; {</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> res = <a class="code" href="classhal_1_1_boolean_influence_plugin.html#a13b51b48783e88ba10e169735055587b">BooleanInfluencePlugin::get_boolean_influences_of_gate</a>(gate);</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                <span class="keywordflow">if</span> (res.is_ok())</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                {</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                }</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                {</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                    <span class="keywordflow">return</span> std::nullopt;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                }</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            }, py::arg(<span class="stringliteral">&quot;gate&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="stringliteral">                Generates the function of the dataport net of the given flip-flop.</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="stringliteral">                Afterwards the generated function gets translated from a z3::expr to efficent c code, compiled, executed and evalated.</span></div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="stringliteral">                :param hal_py.Gate gate: The flip-flop which data input net is used to build the boolean function.</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="stringliteral">                :returns: A mapping of the nets that appear in the function of the data net to their boolean influence in said function.</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="stringliteral">                :rtype: dict</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="stringliteral">            )&quot;)</span></div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="stringliteral">            .def_static(</span><span class="stringliteral">&quot;get_ff_dependency_matrix&quot;</span>, [](<span class="keyword">const</span> <a class="code" href="classhal_1_1_netlist.html">Netlist</a>* nl, <span class="keywordtype">bool</span> with_boolean_influence) -&gt; std::optional&lt;std::pair&lt;std::map&lt;u32, Gate*&gt;, std::vector&lt;std::vector&lt;double&gt;&gt;&gt;&gt; {</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> res = <a class="code" href="classhal_1_1_boolean_influence_plugin.html#a4414a642f5f41569c7d4254795d9eea0">BooleanInfluencePlugin::get_ff_dependency_matrix</a>(nl, with_boolean_influence);</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                <span class="keywordflow">if</span> (res.is_ok())</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;                {</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                }</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                {</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;                    <span class="keywordflow">return</span> std::nullopt;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                }</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            }, py::arg(<span class="stringliteral">&quot;netlist&quot;</span>), py::arg(<span class="stringliteral">&quot;with_boolean_influence&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="stringliteral">                Get the FF dependency matrix of a netlist, with or without boolean influences.</span></div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="stringliteral">                :param hal_py.Netlist netlist: The netlist to extract the dependency matrix from.</span></div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="stringliteral">                :param bool with_boolean_influence: True -- set boolean influence, False -- sets 1.0 if connection between FFs</span></div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="stringliteral">                :returns: A pair consisting of std::map&lt;u32, Gate*&gt;, which includes the mapping from the original gate</span></div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="stringliteral">                :rtype: pair(dict(int, hal_py.Gate), list[list[double]])</span></div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="stringliteral">        ;</span></div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="stringliteral"></span><span class="preprocessor">#ifndef PYBIND11_MODULE</span></div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <span class="keywordflow">return</span> m.ptr();</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="preprocessor">#endif    // PYBIND11_MODULE</span></div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    }</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;            .def_static(</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;                <span class="stringliteral">&quot;get_boolean_influence&quot;</span>,</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;                [](<span class="keyword">const</span> <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&amp; bf, <span class="keyword">const</span> <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> num_evaluations = 32000, <span class="keyword">const</span> std::string&amp; unique_identifier = <span class="stringliteral">&quot;&quot;</span>) -&gt; std::optional&lt;std::unordered_map&lt;std::string, double&gt;&gt; {</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;                    <span class="keyword">const</span> <span class="keyword">auto</span> res = <a class="code" href="classhal_1_1_boolean_influence_plugin.html#a1c693c3d0a79feacdaa2480de0618c54">BooleanInfluencePlugin::get_boolean_influence</a>(bf, num_evaluations, unique_identifier);</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;                    <span class="keywordflow">if</span> (res.is_ok())</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;                    {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;                        <span class="keywordflow">return</span> res.get();</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                    }</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;                    {</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                        <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;cannot get Boolean influence of Boolean function:\n{}&quot;</span>, res.get_error().get());</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;                        <span class="keywordflow">return</span> std::nullopt;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                    }</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;                },</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;                py::arg(<span class="stringliteral">&quot;bf&quot;</span>),</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                py::arg(<span class="stringliteral">&quot;num_evaluations&quot;</span>)   = 32000,</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                py::arg(<span class="stringliteral">&quot;unique_identifier&quot;</span>) = <span class="stringliteral">&quot;&quot;</span>,</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="stringliteral">                The Boolean function gets translated to a z3::expr and afterwards efficent c code.</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="stringliteral">                The program is compiled and executed many times to meassure the Boolean influence of each input variable.</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="stringliteral">                :param hal_py.BooleanFunction bf: The Boolean function.</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="stringliteral">                :param int num_evaluations: The amount of evaluations that are performed for each input variable.</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="stringliteral">                :param str unique_identifier: A unique identifier that is applied to file names to prevent collisions during multi-threading.</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="stringliteral">                :returns: A dict from the variables that appear in the function to their Boolean influence on said function on success, None otherwise.</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="stringliteral">                :rtype: dict[str,float] or None</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="stringliteral">            )&quot;)</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="stringliteral">            .def_static(</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="stringliteral">                </span><span class="stringliteral">&quot;get_boolean_influences_of_subcircuit&quot;</span>,</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                [](<span class="keyword">const</span> std::vector&lt;Gate*&gt;&amp; gates, <span class="keyword">const</span> <a class="code" href="classhal_1_1_net.html">Net</a>* start_net) -&gt; std::optional&lt;std::map&lt;Net*, double&gt;&gt; {</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                    <span class="keyword">const</span> <span class="keyword">auto</span> res = <a class="code" href="classhal_1_1_boolean_influence_plugin.html#a0cb81e101a5dae8106c39f3c01b86cc6">BooleanInfluencePlugin::get_boolean_influences_of_subcircuit</a>(gates, start_net);</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                    <span class="keywordflow">if</span> (res.is_ok())</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                    {</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                        <span class="keywordflow">return</span> res.get();</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                    }</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                    {</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                        <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;cannot get Boolean influence of subcircuit function:\n{}&quot;</span>, res.get_error().get());</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                        <span class="keywordflow">return</span> std::nullopt;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                    }</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                },</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                py::arg(<span class="stringliteral">&quot;gates&quot;</span>),</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                py::arg(<span class="stringliteral">&quot;start_net&quot;</span>),</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="stringliteral">                Generates the function of the net using only the given gates.</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="stringliteral">                Afterwards the generated function gets translated from a z3::expr to efficent c code, compiled, executed and evalated.</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="stringliteral">                :param list[hal_py.Gate] gates: The gates of the subcircuit.</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="stringliteral">                :param hal_py.Net start_net: The output net of the subcircuit at which to start the analysis.</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="stringliteral">                :returns: A dict from the nets that appear in the function of the start net to their Boolean influence on said function on success, None otherwise.</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="stringliteral">                :rtype: dict[hal_py.Net,float] or None</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="stringliteral">            )&quot;)</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="stringliteral">            .def_static(</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="stringliteral">                </span><span class="stringliteral">&quot;get_boolean_influences_of_gate&quot;</span>,</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                [](<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate.html">Gate</a>* gate) -&gt; std::optional&lt;std::map&lt;Net*, double&gt;&gt; {</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                    <span class="keyword">const</span> <span class="keyword">auto</span> res = <a class="code" href="classhal_1_1_boolean_influence_plugin.html#a13b51b48783e88ba10e169735055587b">BooleanInfluencePlugin::get_boolean_influences_of_gate</a>(gate);</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;                    <span class="keywordflow">if</span> (res.is_ok())</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                    {</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                        <span class="keywordflow">return</span> res.get();</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                    }</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;                    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                    {</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;                        <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;cannot get Boolean influence of flip-flop data fan-in:\n{}&quot;</span>, res.get_error().get());</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                        <span class="keywordflow">return</span> std::nullopt;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                    }</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                },</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                py::arg(<span class="stringliteral">&quot;gate&quot;</span>),</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="stringliteral">                Generates the function of the dataport net of the given flip-flop.</span></div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="stringliteral">                Afterwards the generated function gets translated from a z3::expr to efficent c code, compiled, executed and evalated.</span></div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="stringliteral">                :param hal_py.Gate gate: The flip-flop which data input net is used to build the boolean function.</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="stringliteral">                :returns: A dict from the nets that appear in the function of the data net to their Boolean influence on said function on success, None otherwise.</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="stringliteral">                :rtype: dict[hal_py.Net,float]</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="stringliteral">            )&quot;)</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="stringliteral">            .def_static(</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="stringliteral">                </span><span class="stringliteral">&quot;get_ff_dependency_matrix&quot;</span>,</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;                [](<span class="keyword">const</span> <a class="code" href="classhal_1_1_netlist.html">Netlist</a>* nl, <span class="keywordtype">bool</span> with_boolean_influence) -&gt; std::optional&lt;std::pair&lt;std::map&lt;u32, Gate*&gt;, std::vector&lt;std::vector&lt;double&gt;&gt;&gt;&gt; {</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;                    <span class="keyword">const</span> <span class="keyword">auto</span> res = <a class="code" href="classhal_1_1_boolean_influence_plugin.html#a4414a642f5f41569c7d4254795d9eea0">BooleanInfluencePlugin::get_ff_dependency_matrix</a>(nl, with_boolean_influence);</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;                    <span class="keywordflow">if</span> (res.is_ok())</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;                    {</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;                        <span class="keywordflow">return</span> res.get();</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;                    }</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;                    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;                    {</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;                        <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;                        <span class="keywordflow">return</span> std::nullopt;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;                    }</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;                },</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;                py::arg(<span class="stringliteral">&quot;netlist&quot;</span>),</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;                py::arg(<span class="stringliteral">&quot;with_boolean_influence&quot;</span>),</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;                R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="stringliteral">                Get the FF dependency matrix of a netlist, with or without boolean influences.</span></div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="stringliteral">                :param hal_py.Netlist netlist: The netlist to extract the dependency matrix from.</span></div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="stringliteral">                :param bool with_boolean_influence: True -- set boolean influence, False -- sets 1.0 if connection between FFs</span></div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="stringliteral">                :returns: A pair consisting of std::map&lt;u32, Gate*&gt;, which includes the mapping from the original gate</span></div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="stringliteral">                :rtype: pair(dict(int, hal_py.Gate), list[list[double]])</span></div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="stringliteral">        ;</span></div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="stringliteral"></span><span class="preprocessor">#ifndef PYBIND11_MODULE</span></div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        <span class="keywordflow">return</span> m.ptr();</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="preprocessor">#endif    // PYBIND11_MODULE</span></div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    }</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclasshal_1_1_boolean_influence_plugin_html_a78a598b6d687a4d8fb170e103d808aff"><div class="ttname"><a href="classhal_1_1_boolean_influence_plugin.html#a78a598b6d687a4d8fb170e103d808aff">hal::BooleanInfluencePlugin::get_version</a></div><div class="ttdeci">std::string get_version() const override</div><div class="ttdef"><b>Definition:</b> <a href="plugin__boolean__influence_8cpp_source.html#l00024">plugin_boolean_influence.cpp:24</a></div></div>
@@ -226,7 +247,7 @@ $(document).ready(function(){initNavTree('plugins_2boolean__influence_2python_2p
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_e66abdd4ce1958cbb4df6935267b2aa1.html">boolean_influence</a></li><li class="navelem"><a class="el" href="dir_a3c86f1e877becb5671321c9fbe5901d.html">python</a></li><li class="navelem"><a class="el" href="plugins_2boolean__influence_2python_2python__bindings_8cpp.html">python_bindings.cpp</a></li>
-    <li class="footer">Generated on Wed Mar 8 2023 16:48:48 for HAL by
+    <li class="footer">Generated on Fri Mar 10 2023 11:54:41 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

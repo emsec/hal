@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Core Utils &mdash; hal_py v4.0.1-244-ga3d645a31 documentation</title>
+  <title>Core Utils &mdash; hal_py v4.1.0-3-g29a161249 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.0.1-244-ga3d645a31
+                v4.1.0-3-g29a161249
               </div>
             
           
@@ -112,7 +112,6 @@
 <li class="toctree-l2"><a class="reference internal" href="netlist_utils.html">Netlist Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_serializer.html">Netlist Serializer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_writer_manager.html">Netlist Writer Manager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="path.html">HAL Path</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_direction.html">Pin Direction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_type.html">Pin Type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
@@ -193,7 +192,7 @@
 <p>HAL Core Utility functions.</p>
 <dl class="function">
 <dt id="hal_py.CoreUtils.get_base_directory">
-<code class="descclassname">hal_py.CoreUtils.</code><code class="descname">get_base_directory</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; hal_py.HalPath<a class="headerlink" href="#hal_py.CoreUtils.get_base_directory" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">hal_py.CoreUtils.</code><code class="descname">get_base_directory</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; os.PathLike<a class="headerlink" href="#hal_py.CoreUtils.get_base_directory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the base path to the HAL installation.
 1. Use Environment Variable HAL_BASE_PATH
 2. If current executable is hal (not e.g. python3 interpreter) use it’s path to determine base path.
@@ -204,7 +203,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The path.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">hal_py.hal_path</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)">pathlib.Path</a></td>
 </tr>
 </tbody>
 </table>
@@ -212,7 +211,7 @@
 
 <dl class="function">
 <dt id="hal_py.CoreUtils.get_binary_directory">
-<code class="descclassname">hal_py.CoreUtils.</code><code class="descname">get_binary_directory</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; hal_py.HalPath<a class="headerlink" href="#hal_py.CoreUtils.get_binary_directory" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">hal_py.CoreUtils.</code><code class="descname">get_binary_directory</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; os.PathLike<a class="headerlink" href="#hal_py.CoreUtils.get_binary_directory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the path to the executable of HAL.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -220,7 +219,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The path.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">hal_py.hal_path</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)">pathlib.Path</a></td>
 </tr>
 </tbody>
 </table>
@@ -228,18 +227,18 @@
 
 <dl class="function">
 <dt id="hal_py.CoreUtils.get_default_log_directory">
-<code class="descclassname">hal_py.CoreUtils.</code><code class="descname">get_default_log_directory</code><span class="sig-paren">(</span><em>source_file: hal_py.HalPath = ''</em><span class="sig-paren">)</span> &#x2192; hal_py.HalPath<a class="headerlink" href="#hal_py.CoreUtils.get_default_log_directory" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">hal_py.CoreUtils.</code><code class="descname">get_default_log_directory</code><span class="sig-paren">(</span><em>source_file: os.PathLike = ''</em><span class="sig-paren">)</span> &#x2192; os.PathLike<a class="headerlink" href="#hal_py.CoreUtils.get_default_log_directory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the path to the default directory for log files.
 If an hdl source file is provided, the function returns the parent directory, otherwise get_user_share_directory() / “log”.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>source_file</strong> (<em>hal_py.hal_path</em>) – The hdl source file.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>source_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) – The hdl source file.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The path.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">hal_py.hal_path</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)">pathlib.Path</a></td>
 </tr>
 </tbody>
 </table>
@@ -247,7 +246,7 @@ If an hdl source file is provided, the function returns the parent directory, ot
 
 <dl class="function">
 <dt id="hal_py.CoreUtils.get_gate_library_directories">
-<code class="descclassname">hal_py.CoreUtils.</code><code class="descname">get_gate_library_directories</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[hal_py.HalPath]<a class="headerlink" href="#hal_py.CoreUtils.get_gate_library_directories" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">hal_py.CoreUtils.</code><code class="descname">get_gate_library_directories</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[os.PathLike]<a class="headerlink" href="#hal_py.CoreUtils.get_gate_library_directories" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the paths where gate libraries are searched.
 Contains the share and user share directories.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -256,7 +255,7 @@ Contains the share and user share directories.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of paths.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[hal_py.hal_path]</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)">pathlib.Path</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -264,7 +263,7 @@ Contains the share and user share directories.</p>
 
 <dl class="function">
 <dt id="hal_py.CoreUtils.get_library_directory">
-<code class="descclassname">hal_py.CoreUtils.</code><code class="descname">get_library_directory</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; hal_py.HalPath<a class="headerlink" href="#hal_py.CoreUtils.get_library_directory" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">hal_py.CoreUtils.</code><code class="descname">get_library_directory</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; os.PathLike<a class="headerlink" href="#hal_py.CoreUtils.get_library_directory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the path to the shared and static libraries of HAL.
 Relative to the binary directory.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -273,7 +272,7 @@ Relative to the binary directory.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The path.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">hal_py.hal_path</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)">pathlib.Path</a></td>
 </tr>
 </tbody>
 </table>
@@ -281,7 +280,7 @@ Relative to the binary directory.</p>
 
 <dl class="function">
 <dt id="hal_py.CoreUtils.get_plugin_directories">
-<code class="descclassname">hal_py.CoreUtils.</code><code class="descname">get_plugin_directories</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[hal_py.HalPath]<a class="headerlink" href="#hal_py.CoreUtils.get_plugin_directories" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">hal_py.CoreUtils.</code><code class="descname">get_plugin_directories</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[os.PathLike]<a class="headerlink" href="#hal_py.CoreUtils.get_plugin_directories" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the paths where plugins are searched.
 Contains the library and user share directories.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -296,7 +295,7 @@ Contains the library and user share directories.</p>
 
 <dl class="function">
 <dt id="hal_py.CoreUtils.get_share_directory">
-<code class="descclassname">hal_py.CoreUtils.</code><code class="descname">get_share_directory</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; hal_py.HalPath<a class="headerlink" href="#hal_py.CoreUtils.get_share_directory" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">hal_py.CoreUtils.</code><code class="descname">get_share_directory</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; os.PathLike<a class="headerlink" href="#hal_py.CoreUtils.get_share_directory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the path to the sh
 Relative to the binary</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -305,7 +304,7 @@ Relative to the binary</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The path.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">hal_py.hal_path</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)">pathlib.Path</a></td>
 </tr>
 </tbody>
 </table>
@@ -313,7 +312,7 @@ Relative to the binary</p>
 
 <dl class="function">
 <dt id="hal_py.CoreUtils.get_user_config_directory">
-<code class="descclassname">hal_py.CoreUtils.</code><code class="descname">get_user_config_directory</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; hal_py.HalPath<a class="headerlink" href="#hal_py.CoreUtils.get_user_config_directory" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">hal_py.CoreUtils.</code><code class="descname">get_user_config_directory</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; os.PathLike<a class="headerlink" href="#hal_py.CoreUtils.get_user_config_directory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the path to the configuration directory of the user.
 home/.config/hal for Unix</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -322,7 +321,7 @@ home/.config/hal for Unix</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The path.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">hal_py.hal_path</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)">pathlib.Path</a></td>
 </tr>
 </tbody>
 </table>
@@ -330,7 +329,7 @@ home/.config/hal for Unix</p>
 
 <dl class="function">
 <dt id="hal_py.CoreUtils.get_user_share_directory">
-<code class="descclassname">hal_py.CoreUtils.</code><code class="descname">get_user_share_directory</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; hal_py.HalPath<a class="headerlink" href="#hal_py.CoreUtils.get_user_share_directory" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">hal_py.CoreUtils.</code><code class="descname">get_user_share_directory</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; os.PathLike<a class="headerlink" href="#hal_py.CoreUtils.get_user_share_directory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the path to shared objects and files provided by the user.
 home/.local/share for Unix</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -339,7 +338,7 @@ home/.local/share for Unix</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The path.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">hal_py.hal_path</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)">pathlib.Path</a></td>
 </tr>
 </tbody>
 </table>

@@ -1,6 +1,5 @@
 var NAVTREEINDEX28 =
 {
-"netlist_2netlist__utils_8cpp.html#a91da9ccb1b2005faf2ec66b2e0618aba":[7,0,2,0,18,22],
 "netlist_2netlist__utils_8cpp.html#aaee8c9cb19883060c6efff0b260cf907":[7,0,2,0,18,5],
 "netlist_2netlist__utils_8cpp.html#ab4c23f16593143c305d3d5de79dcb196":[7,0,2,0,18,21],
 "netlist_2netlist__utils_8cpp.html#ab8c3054566941b75019e3f599ec16814":[7,0,2,0,18,19],
@@ -200,9 +199,6 @@ var NAVTREEINDEX28 =
 "pass__collection_8h.html#a73c487ffc8a98c8e2eb7b67a44685dfd":[7,0,1,1,0,0,4,3,3],
 "pass__collection_8h.html#abd858d2b1516853fd1bf07bf327086c8":[7,0,1,1,0,0,4,3,1],
 "pass__collection_8h_source.html":[7,0,1,1,0,0,4,3],
-"path_8cpp.html":[7,0,2,2,0,22],
-"path_8cpp.html#ga12b7d19dc09194a879bf4d0b8b7641c7":[7,0,2,2,0,22,0],
-"path_8cpp_source.html":[7,0,2,2,0,22],
 "physical__graph__layouter_8cpp.html":[7,0,1,3,2,19,2,5],
 "physical__graph__layouter_8cpp_source.html":[7,0,1,3,2,19,2,5],
 "physical__graph__layouter_8h.html":[7,0,1,3,0,0,20,2,5],
@@ -217,9 +213,9 @@ var NAVTREEINDEX28 =
 "pin__direction_8h.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967":[7,0,0,0,1,3,0,2,0,1],
 "pin__direction_8h.html#a119eb4e25d047caa41d83e762cbed8ecad1efad72dc5b17dc66a46767c32fff40":[7,0,0,0,1,3,0,2,0,4],
 "pin__direction_8h_source.html":[7,0,0,0,1,3,0,2],
-"pin__group_8cpp.html":[7,0,2,2,0,23],
-"pin__group_8cpp.html#gab64ceab82875b23e9764f07fe5329da0":[7,0,2,2,0,23,0],
-"pin__group_8cpp_source.html":[7,0,2,2,0,23],
+"pin__group_8cpp.html":[7,0,2,2,0,22],
+"pin__group_8cpp.html#gab64ceab82875b23e9764f07fe5329da0":[7,0,2,2,0,22,0],
+"pin__group_8cpp_source.html":[7,0,2,2,0,22],
 "pin__group_8h.html":[7,0,0,0,1,7,3],
 "pin__group_8h_source.html":[7,0,0,0,1,7,3],
 "pin__tree__model_8cpp.html":[7,0,1,3,2,38,0,6],
@@ -249,5 +245,9 @@ var NAVTREEINDEX28 =
 "pin__type_8h_source.html":[7,0,0,0,1,3,0,3],
 "pingroup__selector__dialog_8cpp.html":[7,0,1,3,2,25,2],
 "pingroup__selector__dialog_8cpp_source.html":[7,0,1,3,2,25,2],
-"pingroup__selector__dialog_8h.html":[7,0,1,3,0,0,27,2]
+"pingroup__selector__dialog_8h.html":[7,0,1,3,0,0,27,2],
+"pingroup__selector__dialog_8h_source.html":[7,0,1,3,0,0,27,2],
+"plugin__boolean__influence_8cpp.html":[7,0,1,0,2,0],
+"plugin__boolean__influence_8cpp.html#aa8127688230d54c42984bdd3c2bb1f72":[7,0,1,0,2,0,0],
+"plugin__boolean__influence_8cpp_source.html":[7,0,1,0,2,0]
 };

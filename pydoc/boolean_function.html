@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Boolean Function &mdash; hal_py v4.0.1-244-ga3d645a31 documentation</title>
+  <title>Boolean Function &mdash; hal_py v4.1.0-3-g29a161249 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.0.1-244-ga3d645a31
+                v4.1.0-3-g29a161249
               </div>
             
           
@@ -112,7 +112,6 @@
 <li class="toctree-l2"><a class="reference internal" href="netlist_utils.html">Netlist Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_serializer.html">Netlist Serializer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_writer_manager.html">Netlist Writer Manager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="path.html">HAL Path</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_direction.html">Pin Direction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_type.html">Pin Type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
@@ -546,6 +545,11 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 </tbody>
 </table>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.BooleanFunction.Node.__hash__">
+<code class="descname">__hash__</code><em class="property"> = None</em><a class="headerlink" href="#hal_py.BooleanFunction.Node.__hash__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="hal_py.BooleanFunction.Node.__init__">
@@ -1072,7 +1076,7 @@ Requires the Boolean function to be of the specified bit-size and produces a new
 
 <dl class="attribute">
 <dt id="hal_py.BooleanFunction.ONE">
-<code class="descname">ONE</code><em class="property"> = Value.ONE</em><a class="headerlink" href="#hal_py.BooleanFunction.ONE" title="Permalink to this definition">¶</a></dt>
+<code class="descname">ONE</code><em class="property"> = &lt;Value.ONE: 1&gt;</em><a class="headerlink" href="#hal_py.BooleanFunction.ONE" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="staticmethod">
@@ -1397,41 +1401,38 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 </div></blockquote>
 <dl class="attribute">
 <dt id="hal_py.BooleanFunction.Value.ONE">
-<code class="descname">ONE</code><em class="property"> = Value.ONE</em><a class="headerlink" href="#hal_py.BooleanFunction.Value.ONE" title="Permalink to this definition">¶</a></dt>
+<code class="descname">ONE</code><em class="property"> = &lt;Value.ONE: 1&gt;</em><a class="headerlink" href="#hal_py.BooleanFunction.Value.ONE" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="hal_py.BooleanFunction.Value.X">
-<code class="descname">X</code><em class="property"> = Value.X</em><a class="headerlink" href="#hal_py.BooleanFunction.Value.X" title="Permalink to this definition">¶</a></dt>
+<code class="descname">X</code><em class="property"> = &lt;Value.X: -1&gt;</em><a class="headerlink" href="#hal_py.BooleanFunction.Value.X" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="hal_py.BooleanFunction.Value.Z">
-<code class="descname">Z</code><em class="property"> = Value.Z</em><a class="headerlink" href="#hal_py.BooleanFunction.Value.Z" title="Permalink to this definition">¶</a></dt>
+<code class="descname">Z</code><em class="property"> = &lt;Value.Z: -2&gt;</em><a class="headerlink" href="#hal_py.BooleanFunction.Value.Z" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="hal_py.BooleanFunction.Value.ZERO">
-<code class="descname">ZERO</code><em class="property"> = Value.ZERO</em><a class="headerlink" href="#hal_py.BooleanFunction.Value.ZERO" title="Permalink to this definition">¶</a></dt>
+<code class="descname">ZERO</code><em class="property"> = &lt;Value.ZERO: 0&gt;</em><a class="headerlink" href="#hal_py.BooleanFunction.Value.ZERO" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hal_py.BooleanFunction.Value.__eq__">
-<code class="descname">__eq__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.BooleanFunction.Value.__eq__" title="Permalink to this definition">¶</a></dt>
-<dd><p>(self: object, arg0: object) -&gt; bool</p>
-</dd></dl>
+<code class="descname">__eq__</code><span class="sig-paren">(</span><em>self: object</em>, <em>other: object</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.BooleanFunction.Value.__eq__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="hal_py.BooleanFunction.Value.__getstate__">
-<code class="descname">__getstate__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.BooleanFunction.Value.__getstate__" title="Permalink to this definition">¶</a></dt>
-<dd><p>(self: object) -&gt; <a href="#id1"><span class="problematic" id="id2">int_</span></a></p>
-</dd></dl>
+<code class="descname">__getstate__</code><span class="sig-paren">(</span><em>self: object</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.BooleanFunction.Value.__getstate__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="hal_py.BooleanFunction.Value.__hash__">
-<code class="descname">__hash__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.BooleanFunction.Value.__hash__" title="Permalink to this definition">¶</a></dt>
-<dd><p>(self: object) -&gt; <a href="#id3"><span class="problematic" id="id4">int_</span></a></p>
-</dd></dl>
+<code class="descname">__hash__</code><span class="sig-paren">(</span><em>self: object</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.BooleanFunction.Value.__hash__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="hal_py.BooleanFunction.Value.__index__">
@@ -1440,7 +1441,7 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 
 <dl class="method">
 <dt id="hal_py.BooleanFunction.Value.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction.Value</em>, <em>arg0: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.BooleanFunction.Value.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction.Value</em>, <em>value: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.BooleanFunction.Value.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1450,7 +1451,7 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 
 <dl class="attribute">
 <dt id="hal_py.BooleanFunction.Value.__members__">
-<code class="descname">__members__</code><em class="property"> = {'ONE': Value.ONE, 'X': Value.X, 'Z': Value.Z, 'ZERO': Value.ZERO}</em><a class="headerlink" href="#hal_py.BooleanFunction.Value.__members__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__members__</code><em class="property"> = {'ONE': &lt;Value.ONE: 1&gt;, 'X': &lt;Value.X: -1&gt;, 'Z': &lt;Value.Z: -2&gt;, 'ZERO': &lt;Value.ZERO: 0&gt;}</em><a class="headerlink" href="#hal_py.BooleanFunction.Value.__members__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1460,43 +1461,74 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 
 <dl class="method">
 <dt id="hal_py.BooleanFunction.Value.__ne__">
-<code class="descname">__ne__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.BooleanFunction.Value.__ne__" title="Permalink to this definition">¶</a></dt>
-<dd><p>(self: object, arg0: object) -&gt; bool</p>
-</dd></dl>
+<code class="descname">__ne__</code><span class="sig-paren">(</span><em>self: object</em>, <em>other: object</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.BooleanFunction.Value.__ne__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="hal_py.BooleanFunction.Value.__repr__">
-<code class="descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.BooleanFunction.Value.__repr__" title="Permalink to this definition">¶</a></dt>
-<dd><p>(self: handle) -&gt; str</p>
-</dd></dl>
+<code class="descname">__repr__</code><span class="sig-paren">(</span><em>self: object</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.BooleanFunction.Value.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="hal_py.BooleanFunction.Value.__setstate__">
-<code class="descname">__setstate__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.BooleanFunction.Value.__setstate__" title="Permalink to this definition">¶</a></dt>
-<dd><p>(self: hal_py.BooleanFunction.Value, arg0: int) -&gt; None</p>
-</dd></dl>
+<code class="descname">__setstate__</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction.Value</em>, <em>state: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.BooleanFunction.Value.__setstate__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="hal_py.BooleanFunction.Value.__str__">
-<code class="descname">__str__</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction.Value</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.BooleanFunction.Value.__str__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Translates the Boolean function value into its string representation.</p>
+<code class="descname">__str__</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.BooleanFunction.Value.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">__str__(self: handle) -&gt; str</p>
+</li>
+<li><p class="first">__str__(self: hal_py.BooleanFunction.Value) -&gt; str</p>
+<blockquote>
+<div><p>Translates the Boolean function value into its string representation.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The value as a string.</td>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The value as a string.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></td>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">str</td>
 </tr>
 </tbody>
 </table>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.BooleanFunction.Value.name">
+<code class="descname">name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.BooleanFunction.Value.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>__str__(<a href="#id1"><span class="problematic" id="id2">*</span></a>args, <a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs)
+Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">__str__(self: handle) -&gt; str</p>
+</li>
+<li><p class="first">__str__(self: hal_py.BooleanFunction.Value) -&gt; str</p>
+<blockquote>
+<div><p>Translates the Boolean function value into its string representation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The value as a string.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="hal_py.BooleanFunction.Value.name">
-<code class="descname">name</code><a class="headerlink" href="#hal_py.BooleanFunction.Value.name" title="Permalink to this definition">¶</a></dt>
-<dd><p>(self: handle) -&gt; str</p>
-</dd></dl>
+<dt id="hal_py.BooleanFunction.Value.value">
+<code class="descname">value</code><a class="headerlink" href="#hal_py.BooleanFunction.Value.value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -1526,7 +1558,7 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 
 <dl class="attribute">
 <dt id="hal_py.BooleanFunction.X">
-<code class="descname">X</code><em class="property"> = Value.X</em><a class="headerlink" href="#hal_py.BooleanFunction.X" title="Permalink to this definition">¶</a></dt>
+<code class="descname">X</code><em class="property"> = &lt;Value.X: -1&gt;</em><a class="headerlink" href="#hal_py.BooleanFunction.X" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="staticmethod">
@@ -1557,12 +1589,12 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 
 <dl class="attribute">
 <dt id="hal_py.BooleanFunction.Z">
-<code class="descname">Z</code><em class="property"> = Value.Z</em><a class="headerlink" href="#hal_py.BooleanFunction.Z" title="Permalink to this definition">¶</a></dt>
+<code class="descname">Z</code><em class="property"> = &lt;Value.Z: -2&gt;</em><a class="headerlink" href="#hal_py.BooleanFunction.Z" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="hal_py.BooleanFunction.ZERO">
-<code class="descname">ZERO</code><em class="property"> = Value.ZERO</em><a class="headerlink" href="#hal_py.BooleanFunction.ZERO" title="Permalink to this definition">¶</a></dt>
+<code class="descname">ZERO</code><em class="property"> = &lt;Value.ZERO: 0&gt;</em><a class="headerlink" href="#hal_py.BooleanFunction.ZERO" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="staticmethod">
@@ -1623,6 +1655,11 @@ Requires both Boolean functions to be of the same bit-size.</p>
 </tbody>
 </table>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.BooleanFunction.__hash__">
+<code class="descname">__hash__</code><em class="property"> = None</em><a class="headerlink" href="#hal_py.BooleanFunction.__hash__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="hal_py.BooleanFunction.__iand__">

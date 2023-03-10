@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist Simulator &mdash; hal_py v4.0.1-244-ga3d645a31 documentation</title>
+  <title>Netlist Simulator &mdash; hal_py v4.1.0-3-g29a161249 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.0.1-244-ga3d645a31
+                v4.1.0-3-g29a161249
               </div>
             
           
@@ -237,14 +237,14 @@
 <em class="property">class </em><code class="descclassname">netlist_simulator.</code><code class="descname">NetlistSimulator</code><a class="headerlink" href="#netlist_simulator.NetlistSimulator" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
 <dt id="netlist_simulator.NetlistSimulator.generate_vcd">
-<code class="descname">generate_vcd</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulator</em>, <em>path: hal_py.HalPath</em>, <em>start_time: int</em>, <em>end_time: int</em>, <em>nets: Set[hal_py.Net] = set()</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#netlist_simulator.NetlistSimulator.generate_vcd" title="Permalink to this definition">¶</a></dt>
+<code class="descname">generate_vcd</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulator</em>, <em>path: os.PathLike</em>, <em>start_time: int</em>, <em>end_time: int</em>, <em>nets: Set[hal_py.Net] = set()</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#netlist_simulator.NetlistSimulator.generate_vcd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates the a VCD file for parts the simulated netlist.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>path</strong> (<em>hal_py.hal_path</em>) – The path to the VCD file.</li>
+<li><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) – The path to the VCD file.</li>
 <li><strong>start_time</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Start of the timeframe to write to the file (in picoseconds).</li>
 <li><strong>end_time</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – End of the timeframe to write to the file (in picoseconds).</li>
 <li><strong>nets</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)"><em>set</em></a><em>[</em><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a><em>]</em>) – Nets to include in the VCD file.</li>

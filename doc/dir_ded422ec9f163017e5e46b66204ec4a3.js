@@ -22,7 +22,6 @@ var dir_ded422ec9f163017e5e46b66204ec4a3 =
     [ "netlist_serializer.cpp", "python__bindings_2bindings_2netlist__serializer_8cpp.html", "python__bindings_2bindings_2netlist__serializer_8cpp" ],
     [ "netlist_utils.cpp", "python__bindings_2bindings_2netlist__utils_8cpp.html", "python__bindings_2bindings_2netlist__utils_8cpp" ],
     [ "netlist_writer_manager.cpp", "python__bindings_2bindings_2netlist__writer__manager_8cpp.html", "python__bindings_2bindings_2netlist__writer__manager_8cpp" ],
-    [ "path.cpp", "path_8cpp.html", "path_8cpp" ],
     [ "pin_group.cpp", "pin__group_8cpp.html", "pin__group_8cpp" ],
     [ "plugin_interfaces.cpp", "plugin__interfaces_8cpp.html", "plugin__interfaces_8cpp" ],
     [ "plugin_manager.cpp", "python__bindings_2bindings_2plugin__manager_8cpp.html", "python__bindings_2bindings_2plugin__manager_8cpp" ],

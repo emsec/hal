@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist Serializer &mdash; hal_py v4.0.1-244-ga3d645a31 documentation</title>
+  <title>Netlist Serializer &mdash; hal_py v4.1.0-3-g29a161249 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.0.1-244-ga3d645a31
+                v4.1.0-3-g29a161249
               </div>
             
           
@@ -112,7 +112,6 @@
 <li class="toctree-l2"><a class="reference internal" href="netlist_utils.html">Netlist Utils</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Netlist Serializer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_writer_manager.html">Netlist Writer Manager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="path.html">HAL Path</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_direction.html">Pin Direction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_type.html">Pin Type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
@@ -193,13 +192,13 @@
 <p>HAL Netlist Serializer functions.</p>
 <dl class="function">
 <dt id="hal_py.NetlistSerializer.deserialize_from_file">
-<code class="descclassname">hal_py.NetlistSerializer.</code><code class="descname">deserialize_from_file</code><span class="sig-paren">(</span><em>hal_file: hal_py.HalPath</em><span class="sig-paren">)</span> &#x2192; hal_py.Netlist<a class="headerlink" href="#hal_py.NetlistSerializer.deserialize_from_file" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">hal_py.NetlistSerializer.</code><code class="descname">deserialize_from_file</code><span class="sig-paren">(</span><em>hal_file: os.PathLike</em><span class="sig-paren">)</span> &#x2192; hal_py.Netlist<a class="headerlink" href="#hal_py.NetlistSerializer.deserialize_from_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deserializes a netlist from a .hal file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hal_file</strong> (<em>hal_py.hal_path</em>) – The source .hal file.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hal_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) – The source .hal file.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The deserialized netlist.</td>
 </tr>
@@ -211,7 +210,7 @@
 
 <dl class="function">
 <dt id="hal_py.NetlistSerializer.serialize_to_file">
-<code class="descclassname">hal_py.NetlistSerializer.</code><code class="descname">serialize_to_file</code><span class="sig-paren">(</span><em>netlist: hal_py.Netlist</em>, <em>hal_file: hal_py.HalPath</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.NetlistSerializer.serialize_to_file" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">hal_py.NetlistSerializer.</code><code class="descname">serialize_to_file</code><span class="sig-paren">(</span><em>netlist: hal_py.Netlist</em>, <em>hal_file: os.PathLike</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.NetlistSerializer.serialize_to_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Serializes a netlist into a .hal file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -219,7 +218,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>netlist</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to serialize.</li>
-<li><strong>hal_file</strong> (<em>hal_py.hal_path</em>) – The destination .hal file.</li>
+<li><strong>hal_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) – The destination .hal file.</li>
 </ul>
 </td>
 </tr>

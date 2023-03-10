@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Boolean Influence &mdash; hal_py v4.0.1-244-ga3d645a31 documentation</title>
+  <title>Boolean Influence &mdash; hal_py v4.1.0-3-g29a161249 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.0.1-244-ga3d645a31
+                v4.1.0-3-g29a161249
               </div>
             
           
@@ -172,7 +172,7 @@
 <em class="property">class </em><code class="descclassname">boolean_influence.</code><code class="descname">BooleanInfluencePlugin</code><a class="headerlink" href="#boolean_influence.BooleanInfluencePlugin" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="staticmethod">
 <dt id="boolean_influence.BooleanInfluencePlugin.get_boolean_influence">
-<em class="property">static </em><code class="descname">get_boolean_influence</code><span class="sig-paren">(</span><em>gates: hal_py.BooleanFunction</em>, <em>start_net: int</em><span class="sig-paren">)</span> &#x2192; Optional[Dict[str, float]]<a class="headerlink" href="#boolean_influence.BooleanInfluencePlugin.get_boolean_influence" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">get_boolean_influence</code><span class="sig-paren">(</span><em>bf: hal_py.BooleanFunction</em>, <em>num_evaluations: int = 32000</em>, <em>unique_identifier: str = ''</em><span class="sig-paren">)</span> &#x2192; Optional[Dict[str, float]]<a class="headerlink" href="#boolean_influence.BooleanInfluencePlugin.get_boolean_influence" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Boolean function gets translated to a z3::expr and afterwards efficent c code.
 The program is compiled and executed many times to meassure the Boolean influence of each input variable.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -181,14 +181,15 @@ The program is compiled and executed many times to meassure the Boolean influenc
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>bf</strong> (<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – The Boolean function.</li>
-<li><strong>num_evaluations</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Amount specifying how often to evaluate the function for each input.</li>
+<li><strong>num_evaluations</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The amount of evaluations that are performed for each input variable.</li>
+<li><strong>unique_identifier</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – A unique identifier that is applied to file names to prevent collisions during multi-threading.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A mapping of the input variable of the function to their boolean influence.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A dict from the variables that appear in the function to their Boolean influence on said function on success, None otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a>] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></p>
 </td>
 </tr>
 </tbody>
@@ -206,9 +207,9 @@ Afterwards the generated function gets translated from a z3::expr to efficent c 
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The flip-flop which data input net is used to build the boolean function.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A mapping of the nets that appear in the function of the data net to their boolean influence in said function.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A dict from the nets that appear in the function of the data net to their Boolean influence on said function on success, None otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -229,10 +230,10 @@ Afterwards the generated function gets translated from a z3::expr to efficent c 
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A mapping of the nets that appear in the function of the data net to their boolean influence in said function.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A dict from the nets that appear in the function of the start net to their Boolean influence on said function on success, None otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a>] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></p>
 </td>
 </tr>
 </tbody>

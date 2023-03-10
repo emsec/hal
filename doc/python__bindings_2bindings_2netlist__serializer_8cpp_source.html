@@ -100,7 +100,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2netlist__s
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="stringliteral">            Serializes a netlist into a .hal file.</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="stringliteral">        </span></div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="stringliteral">            :param hal_py.Netlist netlist: The netlist to serialize.</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="stringliteral">            :param hal_py.hal_path hal_file: The destination .hal file.</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="stringliteral">            :param pathlib.Path hal_file: The destination .hal file.</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="stringliteral">            :returns: True on success, false otherwise.</span></div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
@@ -108,12 +108,12 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2netlist__s
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="stringliteral">        py_netlist_serializer.def(</span><span class="stringliteral">&quot;deserialize_from_file&quot;</span>, <a class="code" href="namespacehal_1_1netlist__serializer.html#a4a821370b9753da547dcbe238a249f97">netlist_serializer::deserialize_from_file</a>, py::arg(<span class="stringliteral">&quot;hal_file&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="stringliteral">            Deserializes a netlist from a .hal file.</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="stringliteral">        </span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="stringliteral">            :param hal_py.hal_path hal_file: The source .hal file.</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="stringliteral">            :param pathlib.Path hal_file: The source .hal file.</span></div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="stringliteral">            :returns: The deserialized netlist.</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="stringliteral">            :rtype: hal_py.Netlist</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="stringliteral">    }</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="stringliteral">}</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="stringliteral">}    </span><span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="anamespacehal_1_1netlist__serializer_html_a4a821370b9753da547dcbe238a249f97"><div class="ttname"><a href="namespacehal_1_1netlist__serializer.html#a4a821370b9753da547dcbe238a249f97">hal::netlist_serializer::deserialize_from_file</a></div><div class="ttdeci">std::unique_ptr&lt; Netlist &gt; deserialize_from_file(const std::filesystem::path &amp;hal_file)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00899">netlist_serializer.cpp:899</a></div></div>
@@ -126,7 +126,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2netlist__s
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2089f1c86a5c695e25bdd8ee7b7d2080.html">python_bindings</a></li><li class="navelem"><a class="el" href="dir_ded422ec9f163017e5e46b66204ec4a3.html">bindings</a></li><li class="navelem"><a class="el" href="python__bindings_2bindings_2netlist__serializer_8cpp.html">netlist_serializer.cpp</a></li>
-    <li class="footer">Generated on Wed Mar 8 2023 16:48:48 for HAL by
+    <li class="footer">Generated on Fri Mar 10 2023 11:54:41 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

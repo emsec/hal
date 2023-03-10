@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Gate Type &mdash; hal_py v4.0.1-244-ga3d645a31 documentation</title>
+  <title>Gate Type &mdash; hal_py v4.1.0-3-g29a161249 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.0.1-244-ga3d645a31
+                v4.1.0-3-g29a161249
               </div>
             
           
@@ -112,7 +112,6 @@
 <li class="toctree-l2"><a class="reference internal" href="netlist_utils.html">Netlist Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_serializer.html">Netlist Serializer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_writer_manager.html">Netlist Writer Manager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="path.html">HAL Path</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_direction.html">Pin Direction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_type.html">Pin Type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
@@ -279,7 +278,7 @@
 <code class="descname">create_pin</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.GateType.create_pin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
-<li><p class="first">create_pin(self: hal_py.GateType, id: int, name: str, direction: hal_py.PinDirection, type: hal_py.PinType = PinType.none, create_group: bool = True) -&gt; hal::GatePin</p>
+<li><p class="first">create_pin(self: hal_py.GateType, id: int, name: str, direction: hal_py.PinDirection, type: hal_py.PinType = &lt;PinType.none: 0&gt;, create_group: bool = True) -&gt; hal::GatePin</p>
 <blockquote>
 <div><p>Create a gate pin with the specified name.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -307,7 +306,7 @@
 </table>
 </div></blockquote>
 </li>
-<li><p class="first">create_pin(self: hal_py.GateType, name: str, direction: hal_py.PinDirection, type: hal_py.PinType = PinType.none, create_group: bool = True) -&gt; hal::GatePin</p>
+<li><p class="first">create_pin(self: hal_py.GateType, name: str, direction: hal_py.PinDirection, type: hal_py.PinType = &lt;PinType.none: 0&gt;, create_group: bool = True) -&gt; hal::GatePin</p>
 <blockquote>
 <div><p>Create a gate pin with the specified name.
 The ID of the pin is set automatically.</p>
@@ -342,7 +341,7 @@ The ID of the pin is set automatically.</p>
 <code class="descname">create_pin_group</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.GateType.create_pin_group" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
-<li><p class="first">create_pin_group(self: hal_py.GateType, id: int, name: str, pins: List[hal::GatePin] = [], direction: hal_py.PinDirection = PinDirection.none, type: hal_py.PinType = PinType.none, ascending: bool = False, start_index: int = 0) -&gt; hal::PinGroup&lt;hal::GatePin&gt;</p>
+<li><p class="first">create_pin_group(self: hal_py.GateType, id: int, name: str, pins: List[hal::GatePin] = [], direction: hal_py.PinDirection = &lt;PinDirection.none: 0&gt;, type: hal_py.PinType = &lt;PinType.none: 0&gt;, ascending: bool = False, start_index: int = 0) -&gt; hal::PinGroup&lt;hal::GatePin&gt;</p>
 <blockquote>
 <div><p>Create a gate pin group with the given name.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -376,7 +375,7 @@ The ID of the pin is set automatically.</p>
 </table>
 </div></blockquote>
 </li>
-<li><p class="first">create_pin_group(self: hal_py.GateType, name: str, pins: List[hal::GatePin] = [], direction: hal_py.PinDirection = PinDirection.none, type: hal_py.PinType = PinType.none, ascending: bool = False, start_index: int = 0) -&gt; hal::PinGroup&lt;hal::GatePin&gt;</p>
+<li><p class="first">create_pin_group(self: hal_py.GateType, name: str, pins: List[hal::GatePin] = [], direction: hal_py.PinDirection = &lt;PinDirection.none: 0&gt;, type: hal_py.PinType = &lt;PinType.none: 0&gt;, ascending: bool = False, start_index: int = 0) -&gt; hal::PinGroup&lt;hal::GatePin&gt;</p>
 <blockquote>
 <div><p>Create a gate pin group with the given name.
 The ID of the pin group is set automatically.</p>
@@ -787,13 +786,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dl class="method">
 <dt id="hal_py.GateType.get_property_list">
 <code class="descname">get_property_list</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em><span class="sig-paren">)</span> &#x2192; List[hal_py.GateTypeProperty]<a class="headerlink" href="#hal_py.GateType.get_property_list" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Get the properties assigned to the gate type as list where the most significant property stands at first position.</dt>
-<dd><ul class="first last simple">
-<li></li>
-</ul>
-</dd>
-</dl>
+<dd><p>Get the properties assigned to the gate type as list where the most significant property stands at first position.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

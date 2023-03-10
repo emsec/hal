@@ -103,8 +103,6 @@ Typedefs</h2></td></tr>
 <tr class="memitem:ga81181bacca930bfda574ce3a51a01e9c"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr class="memitem:ga81181bacca930bfda574ce3a51a01e9c"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__pybind.html#ga81181bacca930bfda574ce3a51a01e9c">hal::RawPtrWrapper</a> = std::unique_ptr&lt; T, py::nodelete &gt;</td></tr>
 <tr class="separator:ga81181bacca930bfda574ce3a51a01e9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga12b7d19dc09194a879bf4d0b8b7641c7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#ga12b7d19dc09194a879bf4d0b8b7641c7">hal::path_init</a> (py::module &amp;m)</td></tr>
-<tr class="separator:ga12b7d19dc09194a879bf4d0b8b7641c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gadc243ad319cf87e17b4593eec859d1f4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#gadc243ad319cf87e17b4593eec859d1f4">hal::data_container_init</a> (py::module &amp;m)</td></tr>
 <tr class="separator:gadc243ad319cf87e17b4593eec859d1f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae67f2029fac093c1e1990401edbcfd0a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#gae67f2029fac093c1e1990401edbcfd0a">hal::core_utils_init</a> (py::module &amp;m)</td></tr>
@@ -183,7 +181,7 @@ template&lt;class T &gt; </div>
 </div><div class="memdoc">
 <p>Wrapper class so that PyBind can work with raw pointers to classes that are managed by HAL. </p>
 
-<p class="definition">Definition at line <a class="el" href="python__bindings_8h_source.html#l00088">88</a> of file <a class="el" href="python__bindings_8h_source.html">python_bindings.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__bindings_8h_source.html#l00089">89</a> of file <a class="el" href="python__bindings_8h_source.html">python_bindings.h</a>.</p>
 
 </div>
 </div>
@@ -356,7 +354,7 @@ template&lt;class T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Initializes Python bindings for the HAL data container in a python module.</p>
+<p>TODO move into own namespace Initializes Python bindings for the HAL data container in a python module.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>- the python module </td></tr>
@@ -916,35 +914,6 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a id="ga12b7d19dc09194a879bf4d0b8b7641c7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga12b7d19dc09194a879bf4d0b8b7641c7">&#9670;&nbsp;</a></span>path_init()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void hal::path_init </td>
-          <td>(</td>
-          <td class="paramtype">py::module &amp;&#160;</td>
-          <td class="paramname"><em>m</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>TODO move into own namespace Initializes Python bindings for the HAL path in a python module.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>- the python module </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="path_8cpp_source.html#l00005">5</a> of file <a class="el" href="path_8cpp_source.html">path.cpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="src_2python__bindings_2python__bindings_8cpp_source.html#l00010">hal::PYBIND11_PLUGIN()</a>.</p>
-
-</div>
-</div>
 <a id="gab64ceab82875b23e9764f07fe5329da0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gab64ceab82875b23e9764f07fe5329da0">&#9670;&nbsp;</a></span>pin_group_init()</h2>
 
@@ -1136,7 +1105,7 @@ template&lt;class T &gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Mar 8 2023 16:48:49 for HAL by
+    <li class="footer">Generated on Fri Mar 10 2023 11:54:41 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
