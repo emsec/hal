@@ -153,7 +153,7 @@ namespace hal
 
         // helper functions for dnd for more clarity
         void dndGroupOnGroup(TreeItem* droppedGroup, TreeItem* onDroppedGroup);
-        void dndGroupBetweenGroup();
+        void dndGroupBetweenGroup(TreeItem* droppedGroup, int row);
         void dndPinOnGroup(TreeItem* droppedPin, TreeItem* onDroppedGroup);
         void dndPinBetweenPin(TreeItem* droppedPin, TreeItem* onDroppedParent, int row);
         void dndPinBetweenGroup(TreeItem* droppedPin, int row);

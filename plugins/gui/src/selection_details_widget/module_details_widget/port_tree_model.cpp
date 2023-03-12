@@ -109,10 +109,13 @@ namespace hal
         // 3. pin between groups
         // 4. pin between pins
 
+        // put ignore flags here? perhaps needed specifically in other places in functions..
+
         if(type == "group")
         {
             if(!parentItem)
-                qDebug() << "group was dropped between groups... with row: " << row; //check in canDropMine if its not an adjacent row?
+                //qDebug() << "group was dropped between groups... with row: " << row; //check in canDropMine if its not an adjacent row?
+                dndGroupBetweenGroup(droppedItem, row);
             else
                 //qDebug() << "group was dropped on a group?";
                 dndGroupOnGroup(droppedItem, parentItem);
@@ -494,6 +497,19 @@ namespace hal
         setModule(mModule);
         mIgnoreEventsFlag = false;
 
+    }
+
+    void ModulePinsTreeModel::dndGroupBetweenGroup(TreeItem *droppedGroup, int row)
+    {
+        mIgnoreEventsFlag = true;
+        int ownRow = droppedGroup->getOwnRow();
+        bool bottomEdge = row == mRootItem->getChildCount();
+        auto desiredIdx = bottomEdge ? row-1 : row;
+        if(ownRow < row && !bottomEdge) desiredIdx--;
+        // todo: reorderaction for pingroups
+        mModule->move_pin_group(mModule->get_pin_group_by_id(getIdOfItem(droppedGroup)), desiredIdx);
+        setModule(mModule);
+        mIgnoreEventsFlag = false;
     }
 
     void ModulePinsTreeModel::dndPinOnGroup(TreeItem *droppedPin, TreeItem *onDroppedGroup)
