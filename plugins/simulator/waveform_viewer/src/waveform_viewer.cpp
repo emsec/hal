@@ -6,6 +6,8 @@
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
 #include "netlist_simulator_controller/simulation_engine.h"
 
+#include "waveform_viewer/wizard.h"
+
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
 #include "waveform_viewer/gate_selection_dialog.h"
 #include "waveform_viewer/clock_set_dialog.h"
@@ -341,6 +343,17 @@ namespace hal
         const QAction* act = static_cast<const QAction*>(sender());
         if (!act) return;
 
+        // check if verilator is installed
+        if (act->text().toStdString() == "verilator")
+        {
+            std::string cmd = "which verilator";
+            if (std::system(cmd.c_str()) != 0)
+            {
+                log_warning("simulation_plugin", "Verilator is not installed");
+            }
+        }
+
+
         mCurrentWaveWidget->createEngine(act->text());
     }
 
@@ -485,9 +498,11 @@ namespace hal
 
     void WaveformViewer::handleRunSimulation()
     {
-        if (!mCurrentWaveWidget) return;
-        connect(mCurrentWaveWidget->controller(),&NetlistSimulatorController::engineFinished,mCurrentWaveWidget,&WaveWidget::handleEngineFinished);
-        mCurrentWaveWidget->controller()->run_simulation();
+        Wizard wizard(this);
+        wizard.exec();
+        //if (!mCurrentWaveWidget) return;
+        //connect(mCurrentWaveWidget->controller(),&NetlistSimulatorController::engineFinished,mCurrentWaveWidget,&WaveWidget::handleEngineFinished);
+        //mCurrentWaveWidget->controller()->run_simulation();
     }
 
     void WaveformViewer::handleToggleMaxZoom()

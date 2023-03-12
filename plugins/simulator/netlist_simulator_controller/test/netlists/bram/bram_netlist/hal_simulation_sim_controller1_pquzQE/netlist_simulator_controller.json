@@ -1,0 +1,1 @@
+{"netlist_simulator_controller":{"id":1,"name":"sim_controller1","gates":[{"id":1,"name":"ram256x16_inst"}],"clocks":[],"engine":{"name":"hal_simulator","properties":{}}}}

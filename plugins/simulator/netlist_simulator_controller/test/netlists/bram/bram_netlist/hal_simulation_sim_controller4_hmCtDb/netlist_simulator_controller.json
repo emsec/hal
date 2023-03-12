@@ -1,0 +1,1 @@
+{"netlist_simulator_controller":{"id":4,"name":"sim_controller4","gates":[{"id":1,"name":"ram256x16_inst"}],"clocks":[],"engine":{"name":"verilator","properties":{"provided_models":"/home/parallels/hal/plugins/simulator/netlist_simulator_controller/test/netlists/bram"}}}}
