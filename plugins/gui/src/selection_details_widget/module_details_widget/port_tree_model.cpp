@@ -475,8 +475,9 @@ namespace hal
         endRemoveRows();
         //mNameToTreeItem.remove(item->getData(sNameColumn).toString());
         //for now, only ids of pin-items (since these functions are only relevant for dnd)
-        mIdToPinItem.remove(getIdOfItem(item));
-        delete item;
+        getTypeOfItem(item) == itemType::pin ? mIdToPinItem.remove(getIdOfItem(item)) : mIdToGroupItem.remove(getIdOfItem(item));
+        //mIdToPinItem.remove(getIdOfItem(item));
+        //delete item;
     }
 
     void ModulePinsTreeModel::dndGroupOnGroup(TreeItem *droppedGroup, TreeItem *onDroppedGroup)
@@ -494,6 +495,8 @@ namespace hal
         addAct->setObject(UserActionObject(getIdOfItem(onDroppedGroup), UserActionObjectType::PinGroup));
         addAct->setParentObject(UserActionObject(mModuleId, UserActionObjectType::Module));
         addAct->exec();
+        // too keep the order, ActionAddItemsToObject cannot be executed with all pins, but a ComAction must be created
+        // with many ActionAddItemsToObject that contain a single pin each -> set destroys order of pins in source pingroup
         setModule(mModule);
         mIgnoreEventsFlag = false;
 
@@ -508,7 +511,9 @@ namespace hal
         if(ownRow < row && !bottomEdge) desiredIdx--;
         // todo: reorderaction for pingroups
         mModule->move_pin_group(mModule->get_pin_group_by_id(getIdOfItem(droppedGroup)), desiredIdx);
-        setModule(mModule);
+        removeItem(droppedGroup);
+        insertItem(droppedGroup, mRootItem, desiredIdx);
+        //setModule(mModule);
         mIgnoreEventsFlag = false;
     }
 
@@ -519,19 +524,27 @@ namespace hal
         ActionAddItemsToObject* addAct = new ActionAddItemsToObject(e,e,e, QSet<u32>() << getIdOfItem(droppedPin));
         addAct->setObject(UserActionObject(getIdOfItem(onDroppedGroup), UserActionObjectType::PinGroup));
         addAct->setParentObject(UserActionObject(mModuleId, UserActionObjectType::Module));
-        addAct->exec();;
-        setModule(mModule);
+        addAct->exec();
+        auto oldParent = droppedPin->getParent();
+        removeItem(droppedPin);
+        insertItem(droppedPin, onDroppedGroup, onDroppedGroup->getChildCount());
+        if(!(oldParent->getChildCount())){
+            removeItem(oldParent);
+            delete oldParent;
+        }
+        //setModule(mModule);
         mIgnoreEventsFlag = false;
     }
 
     void ModulePinsTreeModel::dndPinBetweenPin(TreeItem *droppedPin, TreeItem *onDroppedParent, int row)
     {
         mIgnoreEventsFlag = true;
+        int desiredIdx = row;
         if(droppedPin->getParent() == onDroppedParent) // same group
         {
             int ownRow = droppedPin->getOwnRow();
             bool bottomEdge = row == onDroppedParent->getChildCount();
-            auto desiredIdx = bottomEdge ? row-1 : row;
+            desiredIdx = bottomEdge ? row-1 : row;
             if(ownRow < row && !bottomEdge) desiredIdx--; // insert item here
             ActionReorderObject* reorderObj = new ActionReorderObject(desiredIdx);
             reorderObj->setObject(UserActionObject(getIdOfItem(droppedPin), UserActionObjectType::Pin));
@@ -552,7 +565,14 @@ namespace hal
             compAct->addAction(reorderAct);
             compAct->exec();
         }
-        setModule(mModule);
+        auto oldParent = droppedPin->getParent();
+        removeItem(droppedPin);
+        insertItem(droppedPin, onDroppedParent, desiredIdx);
+        if(!(oldParent->getChildCount())){
+            removeItem(oldParent);
+            delete oldParent;
+        }
+        //setModule(mModule);
         mIgnoreEventsFlag = false;
     }
 
@@ -566,17 +586,37 @@ namespace hal
         ActionRemoveItemsFromObject* removeAct = new ActionRemoveItemsFromObject(e,e,e, QSet<u32>() << getIdOfItem(droppedPin));
         removeAct->setObject(UserActionObject(pinGroup->get_id(), UserActionObjectType::PinGroup));
         removeAct->setParentObject(UserActionObject(mModuleId, UserActionObjectType::Module));
-        removeAct->exec();
-        setModule(mModule);
+        bool ret = removeAct->exec();
+        // i must search for the created group (must secure way is to serve for a group that contains the pin id)
+        // and then move that group (the source group cannot be empty after the pin was removed -> canDropMimeData)
+        if(ret) // can fail if the pins name that one wants to remove has the same name as another group that already exists
+        {
+//            auto newGroup = mModule->get_pin_by_id(getIdOfItem(droppedPin))->get_group().first;
+//            auto pinGroupName = QString::fromStdString(newGroup->get_name());
+//            auto pinGroupDirection = QString::fromStdString(enum_to_string((newGroup->get_direction())));
+//            auto pinGroupType = QString::fromStdString(enum_to_string(newGroup->get_type()));
+//            TreeItem* pinGroupItem = new TreeItem(QList<QVariant>() << pinGroupName << pinGroupDirection << pinGroupType << "");
+//            pinGroupItem->setAdditionalData(keyType, QVariant::fromValue(itemType::group));
+//            pinGroupItem->setAdditionalData(keyId, newGroup->get_id());
+//            insertItem(pinGroupItem, mRootItem, mRootItem->getChildCount()-1);
+            // ??????
+//            TreeItem* dummy = new TreeItem(QList<QVariant>() << "dummy" << "dummy" << "dummy" << "");
+//            dummy->setAdditionalData(keyType, QVariant::fromValue(itemType::group));
+//            dummy->setAdditionalData(keyId, 60);
+//            insertItem(dummy, mRootItem, 0);
+            setModule(mModule);
+        }
         mIgnoreEventsFlag = false;
     }
 
     void ModulePinsTreeModel::insertItem(TreeItem* item, TreeItem* parent, int index)
     {
+        // fun fact: if an item is inserted above an item that is expanded, the tree collapses all indeces
         beginInsertRows(getIndexFromItem(parent), index, index);
         parent->insertChild(index, item);
         endInsertRows();
         //mNameToTreeItem.insert(item->getData(sNameColumn).toString(), item);
-        mIdToPinItem.insert(getIdOfItem(item), item);
+        getTypeOfItem(item) == itemType::pin ? mIdToPinItem.insert(getIdOfItem(item), item) : mIdToGroupItem.insert(getIdOfItem(item), item);
+        //mIdToPinItem.insert(getIdOfItem(item), item);
     }
 }    // namespace hal
