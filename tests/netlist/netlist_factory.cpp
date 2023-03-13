@@ -12,7 +12,7 @@
 #include "netlist_test_utils.h"
 #include "gate_library_test_utils.h"
 
-#include <experimental/filesystem>
+#include <filesystem>
 
 /*
  * In this file aren't the tests for the various parsers, however it uses the vhdl parser as an example. If there occure

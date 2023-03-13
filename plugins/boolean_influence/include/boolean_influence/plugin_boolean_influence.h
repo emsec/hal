@@ -48,10 +48,10 @@ namespace hal
          *
          * @param[in] bf - The Boolean function.
          * @param[in] num_evaluations - The amount of evaluations that are performed for each input variable.
-         * @param[in] unique_identifier - A unique identifier that is applied to file names to prevent collisions during multi threadin.
-         * @returns A mapping of the variables that appear in the function to their boolean influence in said function.
+         * @param[in] unique_identifier - A unique identifier that is applied to file names to prevent collisions during multi-threading.
+         * @returns A map from the variables that appear in the function to their Boolean influence on said function on success, an error otherwise.
          */
-        static Result<std::unordered_map<std::string, double>> get_boolean_influence(const BooleanFunction& bf, const u32 num_evaluations=32000, const std::string& unique_identifier="");
+        static Result<std::unordered_map<std::string, double>> get_boolean_influence(const BooleanFunction& bf, const u32 num_evaluations = 32000, const std::string& unique_identifier = "");
 
         /**
          * Generates the Boolean influence of each input variable of a Boolean function.
@@ -59,9 +59,9 @@ namespace hal
          * @param[in] e - The z3 expression representing a Boolean function.
          * @param[in] num_evaluations - The amount of evaluations that are performed for each input variable.
          * @param[in] unique_identifier - A unique identifier that is applied to file names to prevent collisions during multi threadin.
-         * @returns A mapping of the variables that appear in the function to their boolean influence in said function.
+         * @returns A map from the variables that appear in the function to their Boolean influence on said function on success, an error otherwise.
          */
-        static Result<std::unordered_map<std::string, double>> get_boolean_influence(const z3::expr& e, const u32 num_evaluations=32000, const std::string& unique_identifier="");
+        static Result<std::unordered_map<std::string, double>> get_boolean_influence(const z3::expr& e, const u32 num_evaluations = 32000, const std::string& unique_identifier = "");
 
         /**
          * Generates the function of the net using only the given gates.
@@ -69,7 +69,7 @@ namespace hal
          *
          * @param[in] gates - The gates of the subcircuit.
          * @param[in] start_net - The output net of the subcircuit at which to start the analysis.
-         * @returns A mapping of the nets that appear in the function of the starting net to their Boolean influence in said function.
+         * @returns A map from the nets that appear in the function of the start net to their Boolean influence on said function on success, an error otherwise.
          */
         static Result<std::map<Net*, double>> get_boolean_influences_of_subcircuit(const std::vector<Gate*>& gates, const Net* start_net);
 
@@ -78,7 +78,7 @@ namespace hal
          * Afterwards the generated function gets translated from a z3::expr to efficent c code, compiled, executed and evaluated.
          *
          * @param[in] gate - Pointer to the flip-flop which data input net is used to build the Boolean function.
-         * @returns A mapping of the gates that appear in the function of the data net to their Boolean influence in said function.
+         * @returns A map from the nets that appear in the function of the data net to their Boolean influence on said function on success, an error otherwise.
          */
         static Result<std::map<Net*, double>> get_boolean_influences_of_gate(const Gate* gate);
 

@@ -9,7 +9,7 @@ namespace hal
                 "create_netlist", [](const GateLibrary* gate_library) { return std::shared_ptr<Netlist>(netlist_factory::create_netlist(gate_library)); }, py::arg("gate_library"), R"(
                 Create a new empty netlist using the specified gate library.
 
-                :param str gate_library: The gate library.
+                :param hal_py.GateLibrary gate_library: The gate library.
                 :returns: The netlist on success, None otherwise.
                 :rtype: hal_py.Netlist or None
             )")
@@ -24,10 +24,8 @@ namespace hal
                 R"(
                 Create a netlist from the given file using the specified gate library file.
 
-                :param hdl_file: Path to the file.
-                :type hdl_file: hal_py.hal_path
-                :param gate_library_file: Path to the gate library file.
-                :type gate_library_file: hal_py.hal_path
+                :param pathlib.Path hdl_file: Path to the file.
+                :param pathlib.Path gate_library_file: Path to the gate library file.
                 :returns: The netlist on success, None otherwise.
                 :rtype: hal_py.Netlist
             )")
@@ -36,18 +34,16 @@ namespace hal
                 "load_netlist", [](const std::filesystem::path& hal_file) { return std::shared_ptr<Netlist>(netlist_factory::load_netlist(hal_file)); }, py::arg("hal_file"), R"(
                 Create a netlist from the given .hal file.
 
-                :param hal_file: Path to the '.hal' file.
-                :type hal_file: hal_py.hal_path
+                :param pathlib.Path hal_file: Path to the '.hal' file.
                 :returns: The netlist on success, None otherwise.
                 :rtype: hal_py.Netlist
             )")
 
-           .def(
-               "load_hal_project", [](const std::filesystem::path& project_dir) { return std::shared_ptr<Netlist>(netlist_factory::load_hal_project(project_dir)); }, py::arg("project_dir"), R"(
+            .def(
+                "load_hal_project", [](const std::filesystem::path& project_dir) { return std::shared_ptr<Netlist>(netlist_factory::load_hal_project(project_dir)); }, py::arg("project_dir"), R"(
                 Create a netlist from the given .hal file.
 
-                :param project_dir: Path to the hal project directory.
-                :type project_dir: hal_py.hal_path
+                :param pathlib.Path project_dir: Path to the hal project directory.
                 :returns: The netlist on success, None otherwise.
                 :rtype: hal_py.Netlist
             )")
@@ -66,8 +62,7 @@ namespace hal
                 R"(
                 Create a netlist from a given file for each matching pre-loaded gate library.
 
-                :param hdl_file: Path to the file.
-                :type hdl_file: hal_py.hal_path
+                :param pathlib.Path hdl_file: Path to the file.
                 :returns: A list of netlists.
                 :rtype: list[hal_py.Netlist]
             )");

@@ -29,77 +29,98 @@ namespace hal
             .def("get_name", &BooleanInfluencePlugin::get_name)
             .def_property_readonly("version", &BooleanInfluencePlugin::get_version)
             .def("get_version", &BooleanInfluencePlugin::get_version)
-            .def_static("get_boolean_influence", [](const BooleanFunction& bf, const u32 num_evaluations=32000) -> std::optional<std::unordered_map<std::string, double>> {
-                const auto res = BooleanInfluencePlugin::get_boolean_influence(bf, num_evaluations);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return std::nullopt;
-                }
-            }, py::arg("gates"), py::arg("start_net"), R"(
+            .def_static(
+                "get_boolean_influence",
+                [](const BooleanFunction& bf, const u32 num_evaluations = 32000, const std::string& unique_identifier = "") -> std::optional<std::unordered_map<std::string, double>> {
+                    const auto res = BooleanInfluencePlugin::get_boolean_influence(bf, num_evaluations, unique_identifier);
+                    if (res.is_ok())
+                    {
+                        return res.get();
+                    }
+                    else
+                    {
+                        log_error("python_context", "cannot get Boolean influence of Boolean function:\n{}", res.get_error().get());
+                        return std::nullopt;
+                    }
+                },
+                py::arg("bf"),
+                py::arg("num_evaluations")   = 32000,
+                py::arg("unique_identifier") = "",
+                R"(
                 The Boolean function gets translated to a z3::expr and afterwards efficent c code.
                 The program is compiled and executed many times to meassure the Boolean influence of each input variable.
 
                 :param hal_py.BooleanFunction bf: The Boolean function.
-                :param int num_evaluations: Amount specifying how often to evaluate the function for each input.
-                :returns: A mapping of the input variable of the function to their boolean influence.
-                :rtype: dict
+                :param int num_evaluations: The amount of evaluations that are performed for each input variable.
+                :param str unique_identifier: A unique identifier that is applied to file names to prevent collisions during multi-threading.
+                :returns: A dict from the variables that appear in the function to their Boolean influence on said function on success, None otherwise.
+                :rtype: dict[str,float] or None
             )")
-            .def_static("get_boolean_influences_of_subcircuit", [](const std::vector<Gate*>& gates, const Net* start_net) -> std::optional<std::map<Net*, double>> {
-                const auto res = BooleanInfluencePlugin::get_boolean_influences_of_subcircuit(gates, start_net);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return std::nullopt;
-                }
-            }, py::arg("gates"), py::arg("start_net"), R"(
+            .def_static(
+                "get_boolean_influences_of_subcircuit",
+                [](const std::vector<Gate*>& gates, const Net* start_net) -> std::optional<std::map<Net*, double>> {
+                    const auto res = BooleanInfluencePlugin::get_boolean_influences_of_subcircuit(gates, start_net);
+                    if (res.is_ok())
+                    {
+                        return res.get();
+                    }
+                    else
+                    {
+                        log_error("python_context", "cannot get Boolean influence of subcircuit function:\n{}", res.get_error().get());
+                        return std::nullopt;
+                    }
+                },
+                py::arg("gates"),
+                py::arg("start_net"),
+                R"(
                 Generates the function of the net using only the given gates.
                 Afterwards the generated function gets translated from a z3::expr to efficent c code, compiled, executed and evalated.
 
                 :param list[hal_py.Gate] gates: The gates of the subcircuit.
                 :param hal_py.Net start_net: The output net of the subcircuit at which to start the analysis.
-                :returns: A mapping of the nets that appear in the function of the data net to their boolean influence in said function.
-                :rtype: dict
+                :returns: A dict from the nets that appear in the function of the start net to their Boolean influence on said function on success, None otherwise.
+                :rtype: dict[hal_py.Net,float] or None
             )")
-            .def_static("get_boolean_influences_of_gate", [](const Gate* gate) -> std::optional<std::map<Net*, double>> {
-                const auto res = BooleanInfluencePlugin::get_boolean_influences_of_gate(gate);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return std::nullopt;
-                }
-            }, py::arg("gate"), R"(
+            .def_static(
+                "get_boolean_influences_of_gate",
+                [](const Gate* gate) -> std::optional<std::map<Net*, double>> {
+                    const auto res = BooleanInfluencePlugin::get_boolean_influences_of_gate(gate);
+                    if (res.is_ok())
+                    {
+                        return res.get();
+                    }
+                    else
+                    {
+                        log_error("python_context", "cannot get Boolean influence of flip-flop data fan-in:\n{}", res.get_error().get());
+                        return std::nullopt;
+                    }
+                },
+                py::arg("gate"),
+                R"(
                 Generates the function of the dataport net of the given flip-flop.
                 Afterwards the generated function gets translated from a z3::expr to efficent c code, compiled, executed and evalated.
 
                 :param hal_py.Gate gate: The flip-flop which data input net is used to build the boolean function.
-                :returns: A mapping of the nets that appear in the function of the data net to their boolean influence in said function.
-                :rtype: dict
+                :returns: A dict from the nets that appear in the function of the data net to their Boolean influence on said function on success, None otherwise.
+                :rtype: dict[hal_py.Net,float]
             )")
-            .def_static("get_ff_dependency_matrix", [](const Netlist* nl, bool with_boolean_influence) -> std::optional<std::pair<std::map<u32, Gate*>, std::vector<std::vector<double>>>> {
-                const auto res = BooleanInfluencePlugin::get_ff_dependency_matrix(nl, with_boolean_influence);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return std::nullopt;
-                }
-            }, py::arg("netlist"), py::arg("with_boolean_influence"), R"(
+            .def_static(
+                "get_ff_dependency_matrix",
+                [](const Netlist* nl, bool with_boolean_influence) -> std::optional<std::pair<std::map<u32, Gate*>, std::vector<std::vector<double>>>> {
+                    const auto res = BooleanInfluencePlugin::get_ff_dependency_matrix(nl, with_boolean_influence);
+                    if (res.is_ok())
+                    {
+                        return res.get();
+                    }
+                    else
+                    {
+                        log_error("python_context", "{}", res.get_error().get());
+                        return std::nullopt;
+                    }
+                },
+                py::arg("netlist"),
+                py::arg("with_boolean_influence"),
+                R"(
                 Get the FF dependency matrix of a netlist, with or without boolean influences.
 
                 :param hal_py.Netlist netlist: The netlist to extract the dependency matrix from.

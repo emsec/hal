@@ -31,7 +31,7 @@ All notable changes to this project will be documented in this file.
   * remove unconnected gates/nets via `remove_unconnected_gates` and `remove_unconnected_nets`
   * simplify LUT configuration strings based on constant inputs via `simplify_lut_inits`
 * plugin `bitorder_propagation`
-  * initial version of the bitorder_propagation plugin that allows the user to propagate known bit orders of module pin groups to other pin groups with unknown bit order.
+  * propagate a known order of input/output pins within module pin groups to other connected modules
 * decorators
   * `BooleanFunctionDecorator`
     * substitute power and ground nets/pins by constant values in Boolean functions via `substitute_power_ground_nets` and `substitute_power_ground_pins`
@@ -51,6 +51,7 @@ All notable changes to this project will be documented in this file.
   * added Python bindings for the HAL project manager
   * added new GUI dialog for creating an empty project (without providing a netlist)
   * changed all example netlists to be HAL projects
+  * API cleanup for plugin `solve_fsm` 
 * bugfixes
   * fixed Verilog and VHDL parser ignoring pin order of modules
   * fixed order of module pins in Verilog writer  
