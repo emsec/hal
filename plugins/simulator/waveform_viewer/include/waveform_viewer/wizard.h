@@ -87,4 +87,4 @@ private:
     QLabel *label;
 };
 
-#endif // WIZARD_H
+#endif

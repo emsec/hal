@@ -56,7 +56,7 @@ QWizardPage *Wizard::createPage4()
 QWizardPage *Wizard::createConclusionPage()
 {
     QWizardPage *page = new ConclusionPage;
-    page->setTitle(tr("Conclusion"));
+    page->setTitle(tr("End"));
     page->setSubTitle(tr("Run Simulation"));
     return page;
 }
