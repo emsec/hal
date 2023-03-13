@@ -817,7 +817,7 @@ namespace hal {
                 const GateLibrary* gl = test_utils::get_gate_library();
 
                 std::string netlist_input("module sub_mod (as, .bs(bs_int), cs);"
-                                          "   input as, bs;"
+                                          "   input as, bs_int;"
                                           "   output cs;"
                                           ""
                                           "   AND2 gate_0 ("
