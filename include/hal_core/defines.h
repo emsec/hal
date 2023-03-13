@@ -25,11 +25,7 @@
 
 #pragma once
 
-#if defined(__GNUC__) && ((__GNUC__ == 7 && __GNUC_MINOR__ >= 4))
-#include <experimental/filesystem>
-#else
 #include <filesystem>
-#endif
 
 #include <inttypes.h>
 #include <stdexcept>
