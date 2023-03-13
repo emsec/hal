@@ -71,5 +71,29 @@ namespace hal
          * @return The number of removed gates on success, an error otherwise.
          */
         static Result<u32> remove_redundant_logic(Netlist* nl);
+
+        /**
+         * Removes gates which outputs are all unconnected and not a global output net.
+         * 
+         * @param[in] nl - The netlist to operate on. 
+         * @return The number of removed gates on success, an error otherwise.
+         */
+        static Result<u32> remove_unconnected_gates(Netlist* nl);
+
+        /**
+         * Remove nets which have no source and not destination.
+         * 
+         * @param[in] nl - The netlist to operate on. 
+         * @return The number of removed nets on success, an error otherwise.
+         */
+        static Result<u32> remove_unconnected_nets(Netlist* nl);
+
+        /**
+         * Replaces pins connected to GND/VCC with constants and simplifies the boolean function of a LUT by recomputing the INIT string.
+         * 
+         * @param[in] nl - The netlist to operate on. 
+         * @return The number of simplified INIT strings on success, an error otherwise.
+         */
+        static Result<u32> simplify_lut_inits(Netlist* nl);
     };
 }    // namespace hal

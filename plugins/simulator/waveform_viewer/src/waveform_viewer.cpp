@@ -340,6 +340,7 @@ namespace hal
         if (!checked || !mCurrentWaveWidget) return;
         const QAction* act = static_cast<const QAction*>(sender());
         if (!act) return;
+
         mCurrentWaveWidget->createEngine(act->text());
     }
 

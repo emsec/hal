@@ -620,11 +620,12 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
     }
     for (int id : ids_not_in_1)
     {
-        std::cout << "- Waveform ID " << id << " found in database 2 but not in database 1\n" << std::endl;
+        std::cout << "- Waveform ID " << id  << " found in database 2 but not in database 1\n" << std::endl;
     }
     for (net_t cur_net : diff_vec)
     {
-        if (cur_net.name_diff && !cur_net.data_diff)
+        bool name_diff_bool = cur_net.name_diff && !cur_net.data_diff;
+        if (name_diff_bool)
         {
             // only diffrent name
             std::cout << "- Waveform ID " << cur_net.id << " is named \"" << cur_net.name_1 << "\" in database 1 but \"" << cur_net.name_2 << "\" in database 2\n" << std::endl;
@@ -633,7 +634,12 @@ void saleae_diff(std::string path_1, std::string path_2, std::string ids, bool o
         {
             // diffrent data
             // header row
-            std::cout << "\n- Waveform ID " << cur_net.id << " has a data difference" << std::endl;
+            if (name_diff_bool) {
+                std::cout << "\n- Waveform ID " << cur_net.id << " has a data difference" << std::endl;
+            }
+            else {
+                std::cout << "\n- Waveform ID " << " ("<< cur_net.name_1 << ") " << cur_net.id << " has a data difference" << std::endl;
+            }
             int abs_length = cur_net.format_length[0] + cur_net.format_length[1] + cur_net.format_length[2] + cur_net.format_length[3] + 10;
             std::cout << std::string(abs_length + 2, '-') << std::endl;
             std::string diff_char = cur_net.name_diff ? "*" : " ";

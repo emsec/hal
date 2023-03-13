@@ -18,7 +18,7 @@ namespace hal
             If directory is empty, the default directories will be searched.
 
             :param directory_names: A list of directory paths.
-            :type directory_names: hal_py.hal_path
+            :type directory_names: pathlib.Path
             :returns: True on success, false otherwise.
             :rtype: bool
         )");
@@ -28,7 +28,7 @@ namespace hal
 
             :param str plugin_name: The desired name that is unique in the framework.
             :param file_path: The path to the plugin file.
-            :type file_path: hal_py.hal_path
+            :type file_path: pathlib.Path
             :returns: True on success, false otherwise.
             :rtype: bool
         )");

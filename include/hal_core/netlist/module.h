@@ -243,7 +243,6 @@ namespace hal
         bool contains_net(Net* net, bool recursive = false) const;
 
         /**
-         * TODO add pybind
          * Get all nets that have at least one source or one destination within the module.
          * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          * If \p recursive is true, nets in submodules are considered as well.
@@ -255,7 +254,6 @@ namespace hal
         std::unordered_set<Net*> get_nets(const std::function<bool(Net*)>& filter = nullptr, bool recursive = false) const;
 
         /**
-         * TODO add pybind
          * Get all nets that are either a global input to the netlist or have at least one source outside of the module.
          *
          * @returns An unordered set of input nets.
@@ -263,7 +261,6 @@ namespace hal
         const std::unordered_set<Net*>& get_input_nets() const;
 
         /**
-         * TODO add pybind
          * Get all nets that are either a global output to the netlist or have at least one destination outside of the module.
          *
          * @returns An unordered set of output nets.
@@ -271,7 +268,6 @@ namespace hal
         const std::unordered_set<Net*>& get_output_nets() const;
 
         /**
-         * TODO add pybind
          * Get all nets that have at least one source and one destination within the module, including its submodules. The result may contain nets that are also regarded as input or output nets.
          *
          * @returns An unordered set of internal nets.
@@ -309,7 +305,6 @@ namespace hal
          */
 
         /**
-         * TODO test
          * Get a spare pin ID.<br>
          * The value of 0 is reserved and represents an invalid ID.
          * 
@@ -318,7 +313,6 @@ namespace hal
         u32 get_unique_pin_id();
 
         /**
-         * TODO test
          * Get a spare pin group ID.<br>
          * The value of 0 is reserved and represents an invalid ID.
          * 
@@ -422,7 +416,6 @@ namespace hal
         ModulePin* get_pin_by_id(const u32 id) const;
 
         /**
-         * TODO test
          * Get the pin corresponding to the given name.
          * 
          * @param[in] name - The name of the pin.
@@ -447,7 +440,6 @@ namespace hal
         PinGroup<ModulePin>* get_pin_group_by_id(const u32 id) const;
 
         /**
-         * TODO test
          * Get the pin group corresponding to the given name.
          * 
          * @param[in] name - The name of the pin group.

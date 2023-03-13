@@ -12,7 +12,7 @@ namespace hal
             Get the path to the executable of HAL.
 
             :returns: The path.
-            :rtype: hal_py.hal_path
+            :rtype: pathlib.Path
     )");
 
         py_core_utils.def("get_base_directory", &utils::get_base_directory, R"(
@@ -22,7 +22,7 @@ namespace hal
             3. Try to find hal executable in path and use its base path.
 
             :returns: The path.
-            :rtype: hal_py.hal_path
+            :rtype: pathlib.Path
     )");
 
         py_core_utils.def("get_library_directory", &utils::get_library_directory, R"(
@@ -30,7 +30,7 @@ namespace hal
             Relative to the binary directory.
 
             :returns: The path.
-            :rtype: hal_py.hal_path
+            :rtype: pathlib.Path
     )");
 
         py_core_utils.def("get_share_directory", &utils::get_share_directory, R"(
@@ -38,7 +38,7 @@ namespace hal
             Relative to the binary
 
             :returns: The path.
-            :rtype: hal_py.hal_path
+            :rtype: pathlib.Path
     )");
 
         py_core_utils.def("get_user_share_directory", &utils::get_user_share_directory, R"(
@@ -46,7 +46,7 @@ namespace hal
             home/.local/share for Unix
 
             :returns: The path.
-            :rtype: hal_py.hal_path
+            :rtype: pathlib.Path
     )");
 
         py_core_utils.def("get_user_config_directory", &utils::get_user_config_directory, R"(
@@ -54,7 +54,7 @@ namespace hal
             home/.config/hal for Unix
 
             :returns: The path.
-            :rtype: hal_py.hal_path
+            :rtype: pathlib.Path
     )");
 
         py_core_utils.def("get_default_log_directory", &utils::get_default_log_directory, py::arg("source_file") = "", R"(
@@ -62,9 +62,9 @@ namespace hal
             If an hdl source file is provided, the function returns the parent directory, otherwise get_user_share_directory() / "log".
 
             :param source_file: The hdl source file.
-            :type source_file: hal_py.hal_path
+            :type source_file: pathlib.Path
             :returns: The path.
-            :rtype: hal_py.hal_path
+            :rtype: pathlib.Path
     )");
 
         py_core_utils.def("get_gate_library_directories", &utils::get_gate_library_directories, R"(
@@ -72,7 +72,7 @@ namespace hal
             Contains the share and user share directories.
 
             :returns: A list of paths.
-            :rtype: list[hal_py.hal_path]
+            :rtype: list[pathlib.Path]
     )");
 
         py_core_utils.def("get_plugin_directories", &utils::get_plugin_directories, R"(

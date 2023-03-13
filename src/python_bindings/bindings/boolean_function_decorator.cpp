@@ -35,6 +35,31 @@ namespace hal
             :rtype: hal_py.BooleanFunction or None
         )");
 
+        py_boolean_function_decorator.def(
+            "substitute_power_ground_pins",
+            [](const BooleanFunctionDecorator& self, const Netlist* nl, const Gate* g) -> std::optional<BooleanFunction> {
+                auto res = self.substitute_power_ground_pins(nl, g);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while substituting power and ground pins:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("nl"),
+            py::arg("g"),
+            R"(
+            Substitute all Boolean function variables that belong to a pin connected to a power or ground gate by constant '1' and '0'.  
+
+            :param hal_py.Netlist nl: The netlist to operate on.
+            :param hal_py.Gate: The gate which is connected to the pins and belongs to the boolean function under inspection.
+            :returns: The resulting Boolean function on success, None otherwise.
+            :rtype: hal_py.BooleanFunction or None
+        )");
+
         py_boolean_function_decorator.def_static(
             "get_boolean_function_from",
             [](const std::vector<Net*>& nets, u32 extend_to_size = 0, bool sign_extend = false) -> std::optional<BooleanFunction> {

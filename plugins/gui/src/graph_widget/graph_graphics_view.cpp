@@ -1584,7 +1584,6 @@ namespace hal
     void GraphGraphicsView::handleFoldParentAll()
     {
         GraphContext* context = mGraphWidget->getContext();
-        const NodeBoxes boxes = context->getLayouter()->boxes();
 
         QSet<const Module*> modSet;
 

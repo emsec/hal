@@ -1,9 +1,9 @@
+#include "hal_core/utilities/log.h"
 #include "netlist_simulator_controller/simulation_process.h"
 
 #include "netlist_simulator_controller/netlist_simulator_controller.h"
 #include "netlist_simulator_controller/saleae_directory.h"
 
-#include <QDebug>
 #include <QDir>
 #include <QFileInfo>
 #include <QProcess>
@@ -97,7 +97,7 @@ namespace hal
         QFile ff(shellScriptName);
         if (!ff.open(QIODevice::WriteOnly))
         {
-            qDebug() << "cannot open remote script for writing" << shellScriptName;
+            log_warning("simulation_plugin", "cannot open remote script '{}' for writing", shellScriptName.toStdString());
             return abortOnError();
         }
         ff.write("set -x\n");    // echo commands
@@ -212,7 +212,10 @@ namespace hal
 
         if (!process->waitForStarted())
         {
-            qDebug() << "process wont start" << prog;
+            log_warning("simulation_plugin", "Cannot start process '{}' with args '{}'",
+                        prog.toStdString(), args.join(' ').toStdString());
+            if (prog == "verilator")
+                log_warning("simulation_plugin", "You might want to check whether verilator has been installed on system");
             return false;
         }
 
