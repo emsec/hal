@@ -2602,7 +2602,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 <p>Testing the usage of attributes for gates nets and modules</p>
 <p>Functions: parse </p>
 
-<p class="definition">Definition at line <a class="el" href="test_2verilog__parser_8cpp_source.html#l02743">2743</a> of file <a class="el" href="test_2verilog__parser_8cpp_source.html">verilog_parser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2verilog__parser_8cpp_source.html#l02812">2812</a> of file <a class="el" href="test_2verilog__parser_8cpp_source.html">verilog_parser.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2data__container_8cpp_source.html#l00097">hal::DataContainer::get_data()</a>, <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00174">hal::gate_library_manager::get_gate_library()</a>, and <a class="el" href="netlist__parser_8h_source.html#l00071">hal::NetlistParser::parse_and_instantiate()</a>.</p>
 
@@ -2636,7 +2636,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 <p>Testing the correct detection of single line comments (with '//') and comment blocks(with '/ *' and '* /').</p>
 <p>Functions: parse </p>
 
-<p class="definition">Definition at line <a class="el" href="test_2verilog__parser_8cpp_source.html#l02669">2669</a> of file <a class="el" href="test_2verilog__parser_8cpp_source.html">verilog_parser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2verilog__parser_8cpp_source.html#l02738">2738</a> of file <a class="el" href="test_2verilog__parser_8cpp_source.html">verilog_parser.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2data__container_8cpp_source.html#l00097">hal::DataContainer::get_data()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00660">hal::Gate::get_fan_out_net()</a>, <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00174">hal::gate_library_manager::get_gate_library()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00098">hal::Net::get_name()</a>, and <a class="el" href="netlist__parser_8h_source.html#l00071">hal::NetlistParser::parse_and_instantiate()</a>.</p>
 
@@ -2672,7 +2672,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 <p>However, logic expressions like 'assign A = B ^ C' are NOT supported.</p>
 <p>Functions: parse </p>
 
-<p class="definition">Definition at line <a class="el" href="test_2verilog__parser_8cpp_source.html#l01934">1934</a> of file <a class="el" href="test_2verilog__parser_8cpp_source.html">verilog_parser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2verilog__parser_8cpp_source.html#l02003">2003</a> of file <a class="el" href="test_2verilog__parser_8cpp_source.html">verilog_parser.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2net_8cpp_source.html#l00365">hal::Net::get_destinations()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00558">hal::Gate::get_fan_in_net()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00660">hal::Gate::get_fan_out_net()</a>, <a class="el" href="netlist_2endpoint_8cpp_source.html#l00023">hal::Endpoint::get_gate()</a>, <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00174">hal::gate_library_manager::get_gate_library()</a>, <a class="el" href="base__pin_8h_source.html#l00098">hal::BasePin&lt; T &gt;::get_name()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00105">hal::Gate::get_name()</a>, <a class="el" href="netlist_2endpoint_8cpp_source.html#l00028">hal::Endpoint::get_pin()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00419">hal::Net::is_global_input_net()</a>, <a class="el" href="netlist__parser_8h_source.html#l00071">hal::NetlistParser::parse_and_instantiate()</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
@@ -2706,7 +2706,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 <p>Testing the correct handling of invalid input</p>
 <p>Functions: parse </p>
 
-<p class="definition">Definition at line <a class="el" href="test_2verilog__parser_8cpp_source.html#l03018">3018</a> of file <a class="el" href="test_2verilog__parser_8cpp_source.html">verilog_parser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2verilog__parser_8cpp_source.html#l03087">3087</a> of file <a class="el" href="test_2verilog__parser_8cpp_source.html">verilog_parser.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00174">hal::gate_library_manager::get_gate_library()</a>, and <a class="el" href="netlist__parser_8h_source.html#l00071">hal::NetlistParser::parse_and_instantiate()</a>.</p>
 
@@ -2774,7 +2774,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 <p>Testing the usage of additional entities. Entities that are used by the main entity (the last one) are recursively split in gates that are part of the <a class="el" href="classhal_1_1_gate.html">Gate</a> library, while the original entity hierarchy is represented by the Module- hierarchy of the netlist. Therefore, there can be multiple gates with the same name, so names that occur twice or more will be extended by a unique suffix.</p>
 <p>Functions: parse </p>
 
-<p class="definition">Definition at line <a class="el" href="test_2verilog__parser_8cpp_source.html#l01440">1440</a> of file <a class="el" href="test_2verilog__parser_8cpp_source.html">verilog_parser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2verilog__parser_8cpp_source.html#l01509">1509</a> of file <a class="el" href="test_2verilog__parser_8cpp_source.html">verilog_parser.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="test_8py_source.html#l00005">test::g</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00097">hal::DataContainer::get_data()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00365">hal::Net::get_destinations()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00558">hal::Gate::get_fan_in_net()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00660">hal::Gate::get_fan_out_net()</a>, <a class="el" href="netlist_2endpoint_8cpp_source.html#l00023">hal::Endpoint::get_gate()</a>, <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00174">hal::gate_library_manager::get_gate_library()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00393">hal::Module::get_gates()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00087">hal::Module::get_name()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00105">hal::Gate::get_name()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00537">hal::Module::get_output_nets()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00261">hal::Module::get_submodules()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00896">hal::Gate::get_successor()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00107">hal::Module::get_type()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00314">hal::Module::is_top_module()</a>, <a class="el" href="netlist__parser_8h_source.html#l00071">hal::NetlistParser::parse_and_instantiate()</a>, <a class="el" href="utils_8h_source.html#l00165">hal::utils::starts_with()</a>, and <a class="el" href="utils_8h_source.html#l00076">hal::utils::vectors_have_same_content()</a>.</p>
 
@@ -2808,7 +2808,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 <p>Testing the handling of Net-vectors in dimension 1-3</p>
 <p>Functions: parse </p>
 
-<p class="definition">Definition at line <a class="el" href="test_2verilog__parser_8cpp_source.html#l01133">1133</a> of file <a class="el" href="test_2verilog__parser_8cpp_source.html">verilog_parser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2verilog__parser_8cpp_source.html#l01202">1202</a> of file <a class="el" href="test_2verilog__parser_8cpp_source.html">verilog_parser.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2net_8cpp_source.html#l00365">hal::Net::get_destinations()</a>, <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00174">hal::gate_library_manager::get_gate_library()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00235">hal::Net::get_sources()</a>, <a class="el" href="netlist__parser_8h_source.html#l00071">hal::NetlistParser::parse_and_instantiate()</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
@@ -2842,7 +2842,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 <p>Testing the declaration of multiple wire vectors within one single line.</p>
 <p>Functions: parse </p>
 
-<p class="definition">Definition at line <a class="el" href="test_2verilog__parser_8cpp_source.html#l02830">2830</a> of file <a class="el" href="test_2verilog__parser_8cpp_source.html">verilog_parser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2verilog__parser_8cpp_source.html#l02899">2899</a> of file <a class="el" href="test_2verilog__parser_8cpp_source.html">verilog_parser.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00174">hal::gate_library_manager::get_gate_library()</a>, and <a class="el" href="netlist__parser_8h_source.html#l00071">hal::NetlistParser::parse_and_instantiate()</a>.</p>
 
@@ -2876,7 +2876,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 <p>Testing the correct storage of data of the following data types: integer, floating_point, string, bit_vector (hexadecimal, decimal, octal, binary)</p>
 <p>Functions: parse </p>
 
-<p class="definition">Definition at line <a class="el" href="test_2verilog__parser_8cpp_source.html#l01039">1039</a> of file <a class="el" href="test_2verilog__parser_8cpp_source.html">verilog_parser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2verilog__parser_8cpp_source.html#l01108">1108</a> of file <a class="el" href="test_2verilog__parser_8cpp_source.html">verilog_parser.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2data__container_8cpp_source.html#l00097">hal::DataContainer::get_data()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00558">hal::Gate::get_fan_in_net()</a>, <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00174">hal::gate_library_manager::get_gate_library()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00098">hal::Net::get_name()</a>, and <a class="el" href="netlist__parser_8h_source.html#l00071">hal::NetlistParser::parse_and_instantiate()</a>.</p>
 
@@ -2944,7 +2944,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 <p>Testing the port assignment of multiple pins and nets using pin groups and signal vectors</p>
 <p>Functions: parse </p>
 
-<p class="definition">Definition at line <a class="el" href="test_2verilog__parser_8cpp_source.html#l02356">2356</a> of file <a class="el" href="test_2verilog__parser_8cpp_source.html">verilog_parser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2verilog__parser_8cpp_source.html#l02425">2425</a> of file <a class="el" href="test_2verilog__parser_8cpp_source.html">verilog_parser.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2gate_8cpp_source.html#l00558">hal::Gate::get_fan_in_net()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00553">hal::Gate::get_fan_in_nets()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00660">hal::Gate::get_fan_out_net()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00655">hal::Gate::get_fan_out_nets()</a>, <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00174">hal::gate_library_manager::get_gate_library()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00098">hal::Net::get_name()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00055">net</a>, and <a class="el" href="netlist__parser_8h_source.html#l00071">hal::NetlistParser::parse_and_instantiate()</a>.</p>
 
@@ -3012,7 +3012,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 <p>Testing the port declaration within the list of ports.</p>
 <p>Functions: parse </p>
 
-<p class="definition">Definition at line <a class="el" href="test_2verilog__parser_8cpp_source.html#l02891">2891</a> of file <a class="el" href="test_2verilog__parser_8cpp_source.html">verilog_parser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2verilog__parser_8cpp_source.html#l02960">2960</a> of file <a class="el" href="test_2verilog__parser_8cpp_source.html">verilog_parser.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00174">hal::gate_library_manager::get_gate_library()</a>, and <a class="el" href="netlist__parser_8h_source.html#l00071">hal::NetlistParser::parse_and_instantiate()</a>.</p>
 
@@ -3046,7 +3046,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 <p>Testing assignment of '0', '1', 'Z', and 'X'.</p>
 <p>Functions: parse </p>
 
-<p class="definition">Definition at line <a class="el" href="test_2verilog__parser_8cpp_source.html#l01359">1359</a> of file <a class="el" href="test_2verilog__parser_8cpp_source.html">verilog_parser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2verilog__parser_8cpp_source.html#l01428">1428</a> of file <a class="el" href="test_2verilog__parser_8cpp_source.html">verilog_parser.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2gate_8cpp_source.html#l00558">hal::Gate::get_fan_in_net()</a>, <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00174">hal::gate_library_manager::get_gate_library()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00098">hal::Net::get_name()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00235">hal::Net::get_sources()</a>, and <a class="el" href="netlist__parser_8h_source.html#l00071">hal::NetlistParser::parse_and_instantiate()</a>.</p>
 
@@ -3115,7 +3115,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 <p>Test zero parsing and (implicit) zero padding.</p>
 <p>Functions: parse </p>
 
-<p class="definition">Definition at line <a class="el" href="test_2verilog__parser_8cpp_source.html#l01314">1314</a> of file <a class="el" href="test_2verilog__parser_8cpp_source.html">verilog_parser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2verilog__parser_8cpp_source.html#l01383">1383</a> of file <a class="el" href="test_2verilog__parser_8cpp_source.html">verilog_parser.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2gate_8cpp_source.html#l00594">hal::Gate::get_fan_in_endpoints()</a>, <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00174">hal::gate_library_manager::get_gate_library()</a>, and <a class="el" href="netlist__parser_8h_source.html#l00071">hal::NetlistParser::parse_and_instantiate()</a>.</p>
 
@@ -4058,7 +4058,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li>
-    <li class="footer">Generated on Mon Mar 13 2023 12:15:18 for HAL by
+    <li class="footer">Generated on Mon Mar 13 2023 16:36:23 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

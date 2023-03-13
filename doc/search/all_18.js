@@ -162,7 +162,7 @@ var searchData=
   ['weekdays_17772',['weekdays',['https://doc.qt.io/qt-5/qlocale.html#weekdays',1,'QLocale']]],
   ['weekdaytextformat_17773',['weekdayTextFormat',['https://doc.qt.io/qt-5/qcalendarwidget.html#weekdayTextFormat',1,'QCalendarWidget']]],
   ['weeknumber_17774',['weekNumber',['https://doc.qt.io/qt-5/qdate.html#weekNumber',1,'QDate']]],
-  ['weight_17775',['weight',['https://doc.qt.io/qt-5/qfont.html#weight',1,'QFont::weight()'],['https://doc.qt.io/qt-5/qfontdatabase.html#weight',1,'QFontDatabase::weight()'],['https://doc.qt.io/qt-5/qfontinfo.html#weight',1,'QFontInfo::weight()'],['https://doc.qt.io/qt-5/qrawfont.html#weight',1,'QRawFont::weight()'],['https://doc.qt.io/qt-5/qfont.html#Weight-enum',1,'QFont::Weight()']]],
+  ['weight_17775',['Weight',['https://doc.qt.io/qt-5/qfont.html#Weight-enum',1,'QFont::Weight()'],['https://doc.qt.io/qt-5/qfont.html#weight',1,'QFont::weight() const const'],['https://doc.qt.io/qt-5/qfontdatabase.html#weight',1,'QFontDatabase::weight()'],['https://doc.qt.io/qt-5/qfontinfo.html#weight',1,'QFontInfo::weight()'],['https://doc.qt.io/qt-5/qrawfont.html#weight',1,'QRawFont::weight()']]],
   ['welcome_5fscreen_2ecpp_17776',['welcome_screen.cpp',['../welcome__screen_8cpp.html',1,'']]],
   ['welcome_5fscreen_2eh_17777',['welcome_screen.h',['../welcome__screen_8h.html',1,'']]],
   ['welcomescreen_17778',['WelcomeScreen',['../classhal_1_1_welcome_screen.html',1,'hal::WelcomeScreen'],['../classhal_1_1_welcome_screen.html#a338efc18d7bb5d79cc373d241dbcbbc9',1,'hal::WelcomeScreen::WelcomeScreen()']]],
