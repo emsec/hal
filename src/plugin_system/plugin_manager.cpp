@@ -51,6 +51,17 @@ namespace hal
             // stores name of plugin while loading
             std::string m_current_loading;
 
+            std::filesystem::path get_plugin_path(std::string plugin_name)
+            {
+                std::filesystem::path retval;
+                if (plugin_name.empty()) return retval;
+                std::string file_name = plugin_name + "." + LIBRARY_FILE_EXTENSION;
+                retval = utils::get_file(file_name, m_plugin_folders);
+                if (!retval.empty() || !strlen(ALTERNATE_LIBRARY_FILE_EXTENSION)) return retval;
+                file_name = plugin_name + "." + ALTERNATE_LIBRARY_FILE_EXTENSION;
+                return utils::get_file(file_name, m_plugin_folders);
+            }
+
             bool solve_dependencies(std::string plugin_name, std::set<std::string> dep_file_name)
             {
                 if (plugin_name.empty())
@@ -66,28 +77,19 @@ namespace hal
                 for (const auto& file_name : dep_file_name)
                 {
                     auto dep_plugin_name        = std::filesystem::path(file_name).stem().string();
-                    auto dep_file_name_with_ext = file_name + "." + LIBRARY_FILE_EXTENSION;
 
+                    // dependency already loaded
                     if (m_loaded_plugins.find(dep_plugin_name) != m_loaded_plugins.end())
                     {
                         continue;
                     }
-                    std::filesystem::path file_path = utils::get_file(dep_file_name_with_ext, m_plugin_folders);
-                    if (file_path == "" || !load(dep_plugin_name, file_path))
+
+                    // search in plugin directories
+                    std::filesystem::path file_path = get_plugin_path(dep_plugin_name);
+                    if (file_path.empty() || !load(dep_plugin_name, file_path))
                     {
-                        bool lib_load_failed = true;
-                        if (strlen(ALTERNATE_LIBRARY_FILE_EXTENSION))
-                        {
-                            dep_file_name_with_ext = file_name + "." + ALTERNATE_LIBRARY_FILE_EXTENSION;
-                            file_path = utils::get_file(dep_file_name_with_ext, m_plugin_folders);
-                            if (file_path != "" && load(dep_plugin_name, file_path))
-                                lib_load_failed  = false;
-                        }
-                        if (lib_load_failed)
-                        {
-                            log_error("core", "cannot solve dependency '{}' for plugin '{}'", dep_plugin_name, plugin_name);
-                            return false;
-                        }
+                        log_error("core", "cannot solve dependency '{}' for plugin '{}'", dep_plugin_name, plugin_name);
+                        return false;
                     }
 
                     log_debug("core", "solved dependency '{}' for plugin '{}'", dep_plugin_name, plugin_name);
@@ -108,7 +110,14 @@ namespace hal
             if (utils::ends_with(file_name.string(), std::string(".icloud")))
                 return false;
 #endif
-            return (utils::ends_with(file_name.string(), std::string(".") + std::string(LIBRARY_FILE_EXTENSION)));
+            // file has regular shared library extension
+            if (utils::ends_with(file_name.string(), std::string(".") + std::string(LIBRARY_FILE_EXTENSION))) return true;
+
+            // there is no alternate extension
+            if (!strlen(ALTERNATE_LIBRARY_FILE_EXTENSION)) return false;
+
+            // test whether file has alternate extension
+            return (utils::ends_with(file_name.string(), std::string(".") + std::string(ALTERNATE_LIBRARY_FILE_EXTENSION)));
         }
 
         std::set<std::string> get_plugin_names()
@@ -181,22 +190,7 @@ namespace hal
             if (file_path.empty())
             {
                 // file name not provided, search plugin folders
-                auto directories = m_plugin_folders;
-                for (const auto& directory : directories)
-                {
-                    if (!std::filesystem::exists(directory))
-                    {
-                        continue;
-                    }
-
-                    std::filesystem::path test_path = directory / (plugin_name + std::string(".") + std::string(LIBRARY_FILE_EXTENSION));
-                    if (std::filesystem::is_regular_file(test_path))
-                    {
-                        log_info("core", "loading plugin '{}' found in at '{}'...", plugin_name, file_path.string());
-                        file_path = test_path;
-                        break;
-                    }
-                }
+                file_path = get_plugin_path(plugin_name);
 
                 if (file_path.empty())
                 {
