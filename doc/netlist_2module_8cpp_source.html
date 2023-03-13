@@ -973,7 +973,7 @@ $(document).ready(function(){initNavTree('netlist_2module_8cpp_source.html','');
 <div class="line"><a name="l00885"></a><span class="lineno">  885</span>&#160;        <span class="keywordflow">if</span> (!filter)</div>
 <div class="line"><a name="l00886"></a><span class="lineno">  886</span>&#160;        {</div>
 <div class="line"><a name="l00887"></a><span class="lineno">  887</span>&#160;            res.reserve(m_pins.size());</div>
-<div class="line"><a name="l00888"></a><span class="lineno">  888</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; group : m_pin_groups)</div>
+<div class="line"><a name="l00888"></a><span class="lineno">  888</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; group : m_pin_groups_ordered)</div>
 <div class="line"><a name="l00889"></a><span class="lineno">  889</span>&#160;            {</div>
 <div class="line"><a name="l00890"></a><span class="lineno">  890</span>&#160;                std::vector&lt;ModulePin*&gt; <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a1e273622affc5aefcd63c0036e5ce1b9">pins</a> = group-&gt;get_pins();</div>
 <div class="line"><a name="l00891"></a><span class="lineno">  891</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span> pin : group-&gt;get_pins())</div>
@@ -1884,7 +1884,7 @@ $(document).ready(function(){initNavTree('netlist_2module_8cpp_source.html','');
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="netlist_2module_8cpp.html">module.cpp</a></li>
-    <li class="footer">Generated on Fri Mar 10 2023 16:14:41 for HAL by
+    <li class="footer">Generated on Mon Mar 13 2023 09:09:38 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
