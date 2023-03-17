@@ -47,7 +47,7 @@ namespace hal
          * @param[in] var2expr - Optional replacements for variables.
          * @returns A z3 expression equivalent to the Boolean function.
          */
-        z3::expr to_z3(const BooleanFunction& bf, z3::context& context, const std::map<std::string, z3::expr>& var2expr = {});
+        z3::expr from_bf(const BooleanFunction& bf, z3::context& context, const std::map<std::string, z3::expr>& var2expr = {});
 
         /**
          * Translates a z3 expression into an equivalent hal Boolean function.
@@ -55,7 +55,7 @@ namespace hal
          * @param[in] e - The expression to translate.
          * @returns A Boolean function equivalent to the  z3 expression.
          */
-        BooleanFunction to_hal(const z3::expr& e);
+        Result<BooleanFunction> to_bf(const z3::expr& e);
 
         /**
          * Translates a z3 expression into an equivalent smt2 representation. 

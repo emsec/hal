@@ -1,9 +1,8 @@
 #include "boolean_influence/plugin_boolean_influence.h"
 
-#include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
+#include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/netlist_utils.h"
-
 #include "z3_utils/include/plugin_z3_utils.h"
 
 #include <filesystem>
@@ -62,21 +61,19 @@ namespace hal
 
             return {function_gates.begin(), function_gates.end()};
         }
-    }  // namespace
+    }    // namespace
 
     Result<std::unordered_map<std::string, double>> BooleanInfluencePlugin::get_boolean_influence(const BooleanFunction& bf, const u32 num_evaluations, const std::string& unique_identifier)
     {
-        auto ctx = z3::context();
-        const auto z3_bf = z3_utils::to_z3(bf, ctx);
+        auto ctx         = z3::context();
+        const auto z3_bf = z3_utils::from_bf(bf, ctx);
 
         return get_boolean_influence(z3_bf, num_evaluations, unique_identifier);
     }
 
     Result<std::unordered_map<std::string, double>> BooleanInfluencePlugin::get_boolean_influence(const z3::expr& expr, const u32 num_evaluations, const std::string& unique_identifier)
     {
-        const auto to_replacement_var = [](const u32 var_idx) -> std::string {
-            return "var_" + std::to_string(var_idx);
-        };
+        const auto to_replacement_var = [](const u32 var_idx) -> std::string { return "var_" + std::to_string(var_idx); };
 
         const auto extract_index = [](const std::string& var) -> Result<u32> {
             if (!utils::starts_with(var, std::string("var_")))
@@ -108,7 +105,8 @@ namespace hal
 
             if (var_idx > original_vars.size())
             {
-                return ERR("unable to reconstruct original variable from replacement variable" + replacement_var + ": extracted index " + std::to_string(var_idx) + " is bigger than the size of the original vars (" + std::to_string(original_vars.size()) + ").");
+                return ERR("unable to reconstruct original variable from replacement variable" + replacement_var + ": extracted index " + std::to_string(var_idx)
+                           + " is bigger than the size of the original vars (" + std::to_string(original_vars.size()) + ").");
             }
 
             return OK(original_vars.at(var_idx));
@@ -136,15 +134,15 @@ namespace hal
         }
 
         auto replaced_e = expr;
-        replaced_e = replaced_e.substitute(from_vec, to_vec);
+        replaced_e      = replaced_e.substitute(from_vec, to_vec);
 
         // translate expression into a c program
         const std::filesystem::path directory = "/tmp/boolean_influence_tmp/";
         std::filesystem::create_directory(directory);
 
-        const std::filesystem::path file_path = directory / (unique_identifier.empty() ? ("boolean_func.cpp") :  ("boolean_func_" + unique_identifier + ".cpp"));
+        const std::filesystem::path file_path = directory / (unique_identifier.empty() ? ("boolean_func.cpp") : ("boolean_func_" + unique_identifier + ".cpp"));
 
-        const auto c_func    = z3_utils::to_cpp(replaced_e);
+        const auto c_func = z3_utils::to_cpp(replaced_e);
 
         // write c program to file
         std::ofstream ofs(file_path);
@@ -217,7 +215,8 @@ namespace hal
         {
             if (!gate->get_type()->has_property(GateTypeProperty::combinational) || gate->is_vcc_gate() || gate->is_gnd_gate())
             {
-                return ERR("unable to get Boolean influence for net " + start_net->get_name() + " with ID " + std::to_string(start_net->get_id()) + ": sub circuit gates include gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + " that is either not a combinational gate or is a VCC / GND gate.");
+                return ERR("unable to get Boolean influence for net " + start_net->get_name() + " with ID " + std::to_string(start_net->get_id()) + ": sub circuit gates include gate "
+                           + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + " that is either not a combinational gate or is a VCC / GND gate.");
             }
         }
 
@@ -230,7 +229,8 @@ namespace hal
             const auto func_res = z3_utils::get_subgraph_z3_function(gates, start_net, ctx);
             if (func_res.is_error())
             {
-                return ERR_APPEND(func_res.get_error(), "unable to get Boolean influence for net " + start_net->get_name() + " with ID " + std::to_string(start_net->get_id()) + ": failed to build subgraph function");
+                return ERR_APPEND(func_res.get_error(),
+                                  "unable to get Boolean influence for net " + start_net->get_name() + " with ID " + std::to_string(start_net->get_id()) + ": failed to build subgraph function");
             }
             func = func_res.get();
         }
@@ -244,7 +244,9 @@ namespace hal
         const auto inf_res = get_boolean_influence(func, 32000);
         if (inf_res.is_error())
         {
-            return ERR_APPEND(inf_res.get_error(), "unable to get Boolean influence for net " + start_net->get_name() + " with ID " + std::to_string(start_net->get_id()) + ": failed to get boolean influence for net " + start_net->get_name() + " with ID " + std::to_string(start_net->get_id()) + ".");
+            return ERR_APPEND(inf_res.get_error(),
+                              "unable to get Boolean influence for net " + start_net->get_name() + " with ID " + std::to_string(start_net->get_id()) + ": failed to get boolean influence for net "
+                                  + start_net->get_name() + " with ID " + std::to_string(start_net->get_id()) + ".");
         }
         const std::unordered_map<std::string, double> var_names_to_inf = inf_res.get();
 
@@ -257,7 +259,9 @@ namespace hal
             const auto net_res = BooleanFunctionNetDecorator::get_net_from(nl, var_name);
             if (net_res.is_error())
             {
-                return ERR_APPEND(net_res.get_error(), "unable to get Boolean influence for net " + start_net->get_name() + " with ID " + std::to_string(start_net->get_id()) + ": failed to reconstruct net from variable " + var_name + ".");
+                return ERR_APPEND(net_res.get_error(),
+                                  "unable to get Boolean influence for net " + start_net->get_name() + " with ID " + std::to_string(start_net->get_id()) + ": failed to reconstruct net from variable "
+                                      + var_name + ".");
             }
             const auto net = net_res.get();
 
@@ -271,26 +275,30 @@ namespace hal
     {
         if (!gate->get_type()->has_property(GateTypeProperty::ff))
         {
-            return ERR("unable to get Boolean influence for gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + ": can only handle flip-flops but found gate type " + gate->get_type()->get_name() + ".");
+            return ERR("unable to get Boolean influence for gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + ": can only handle flip-flops but found gate type "
+                       + gate->get_type()->get_name() + ".");
         }
 
         // Check for the data port pin
         auto d_pins = gate->get_type()->get_pins([](const GatePin* p) { return p->get_direction() == PinDirection::input && p->get_type() == PinType::data; });
         if (d_pins.size() != 1)
         {
-            return ERR("unable to get Boolean influence for gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + ": can only handle flip-flops with exactly one data port, but found " + std::to_string(d_pins.size()) + ".");
+            return ERR("unable to get Boolean influence for gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id())
+                       + ": can only handle flip-flops with exactly one data port, but found " + std::to_string(d_pins.size()) + ".");
         }
         const GatePin* data_pin = d_pins.front();
 
         // Extract all gates in front of the data port and iterate backwards until another flip flop is found.
         const auto function_gates = extract_function_gates(gate, data_pin);
-        const auto in_net = gate->get_fan_in_net(data_pin);
+        const auto in_net         = gate->get_fan_in_net(data_pin);
 
         // Generate Boolean influences
         const auto inf_res = get_boolean_influences_of_subcircuit(function_gates, in_net);
         if (inf_res.is_error())
         {
-            return ERR_APPEND(inf_res.get_error(), "unable to get Boolean influence for gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + ": failed to get Boolean influence for data net " + in_net->get_name() + " with ID "+ std::to_string(in_net->get_id()) + ".");
+            return ERR_APPEND(inf_res.get_error(),
+                              "unable to get Boolean influence for gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + ": failed to get Boolean influence for data net "
+                                  + in_net->get_name() + " with ID " + std::to_string(in_net->get_id()) + ".");
         }
 
         return inf_res;
@@ -337,7 +345,9 @@ namespace hal
                 const auto inf_res = get_boolean_influences_of_gate(gate);
                 if (inf_res.is_error())
                 {
-                    return ERR_APPEND(inf_res.get_error(), "unable to generate ff dependency matrix: failed to generate Boolean influence for gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + ".");
+                    return ERR_APPEND(inf_res.get_error(),
+                                      "unable to generate ff dependency matrix: failed to generate Boolean influence for gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id())
+                                          + ".");
                 }
                 boolean_influence_for_gate = inf_res.get();
             }

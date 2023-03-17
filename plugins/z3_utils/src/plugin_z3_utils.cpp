@@ -2,14 +2,13 @@
 
 #include "converter/cpp_converter.h"
 #include "converter/verilog_converter.h"
-
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 
 namespace hal
 {
     namespace z3_utils
     {
-        z3::expr to_z3(const BooleanFunction& bf, z3::context& context, const std::map<std::string, z3::expr>& var2expr)
+        z3::expr from_bf(const BooleanFunction& bf, z3::context& context, const std::map<std::string, z3::expr>& var2expr)
         {
             /// Helper function to reduce a abstract syntax subtree to z3 expressions
             ///
@@ -54,12 +53,40 @@ namespace hal
                         return {true, ~p[0]};
                     case BooleanFunction::NodeType::Xor:
                         return {true, p[0] ^ p[1]};
+                    case BooleanFunction::NodeType::Add:
+                        return {true, p[0] + p[1]};
+                    case BooleanFunction::NodeType::Sub:
+                        return {true, p[0] - p[1]};
+                    case BooleanFunction::NodeType::Mul:
+                        return {true, p[0] * p[1]};
+                    case BooleanFunction::NodeType::Sdiv:
+                        return {true, p[0] / p[1]};
+                    case BooleanFunction::NodeType::Udiv:
+                        return {true, z3::udiv(p[0], p[1])};
+                    case BooleanFunction::NodeType::Srem:
+                        return {true, z3::srem(p[0], p[1])};
+                    case BooleanFunction::NodeType::Urem:
+                        return {true, z3::urem(p[0], p[1])};
                     case BooleanFunction::NodeType::Slice:
                         return {true, p[0].extract(p[2].get_numeral_uint(), p[1].get_numeral_uint())};
                     case BooleanFunction::NodeType::Concat:
                         return {true, z3::concat(p[0], p[1])};
-                    case BooleanFunction::NodeType::Sext:
+                    case BooleanFunction::NodeType::Zext:
                         return {true, z3::sext(p[0], p[1].get_numeral_uint())};
+                    case BooleanFunction::NodeType::Sext:
+                        return {true, z3::zext(p[0], p[1].get_numeral_uint())};
+                    case BooleanFunction::NodeType::Eq:
+                        return {true, p[0] == p[1]};
+                    case BooleanFunction::NodeType::Sle:
+                        return {true, z3::sle(p[0], p[1])};
+                    case BooleanFunction::NodeType::Slt:
+                        return {true, z3::slt(p[0], p[1])};
+                    case BooleanFunction::NodeType::Ule:
+                        return {true, z3::ule(p[0], p[1])};
+                    case BooleanFunction::NodeType::Ult:
+                        return {true, z3::ult(p[0], p[1])};
+                    case BooleanFunction::NodeType::Ite:
+                        return {true, z3::ite(p[0], p[1], p[2])};
 
                     default:
                         log_error("netlist", "Not implemented reached for nodetype {} in z3 conversion", node.type);
@@ -93,119 +120,89 @@ namespace hal
             }
         }
 
-        BooleanFunction to_hal(const z3::expr& e)
+        Result<BooleanFunction> to_bf(const z3::expr& e)    // TODO return Result<BooleanFunction>
         {
-            if (!e.is_bv()) 
+            if (!e.is_bv())
             {
-                log_error("z3_utils", "Currently only support bit vector expressions! Got {} with sort {}.", e.to_string(), e.get_sort().name().str());
-                return BooleanFunction();
+                return ERR("input is not a bit vector expression: '" + e.to_string() + "' is of sort '" + e.get_sort().name().str() + "'");
             }
 
             const u64 size = e.get_sort().bv_size();
 
             if (size > 64)
             {
-                log_error("z3_utils", "Can only handle bit vectors with a max size of 64 bits! Got {}.", size);
-                return BooleanFunction();
+                return ERR("can only translate bit vector sizes < 64, but input bit vector has size " + std::to_string(size));
             }
 
-            if (e.is_numeral())
+            if (e.is_numeral())    // TODO somehow handle Index type
             {
-                const u64 numeral = e.get_numeral_uint64();
-                return BooleanFunction::Const(numeral, size);
+                return OK(BooleanFunction::Const(e.get_numeral_uint64(), size));
             }
-
-            if (e.is_const())
+            else if (e.is_const())
             {
-                auto var = e.to_string();
-                return BooleanFunction::Var(var, size);
+                return OK(BooleanFunction::Var(e.to_string(), size));
             }
 
-            const std::string op = e.decl().name().str();
-            auto num_args        = e.num_args();
+            const auto op = e.decl().decl_kind();
+            auto num_args = e.num_args();
+            std::vector<BooleanFunction> args;
 
-            if (op == "bvnot" || op == "not")
+            for (const auto& arg : e.args())
             {
-                if (num_args != 1)
+                if (const auto res = to_bf(arg); res.is_ok())
                 {
-                    log_error("z3_utils", "For the NOT operation we only suppport exactly one operand.");
-                    return BooleanFunction();
+                    args.push_back(std::move(res.get()));
                 }
-
-                return BooleanFunction::Not(to_hal(e.arg(0)), size).get();
+                else
+                {
+                    return ERR(res.get_error());
+                }
             }
 
-            if (op == "bvor" || op == "or")
+            if (num_args == 1)
             {
-                if (num_args < 2)
+                if (op == Z3_OP_BNOT)
                 {
-                    log_error("z3_utils", "For the OR operation we require at least 2 operands.");
-                    return BooleanFunction();
+                    return BooleanFunction::Not(std::move(args.at(0)), size);
                 }
-
-                BooleanFunction ret = BooleanFunction::Or(to_hal(e.arg(0)), to_hal(e.arg(1)), size).get();
-
-                for (u32 i = 2; i < num_args; i++)
+                else
                 {
-                    ret = BooleanFunction::Or(std::move(ret), to_hal(e.arg(i)), size).get();
+                    return ERR("operation '" + e.decl().name().str() + "' with arity 1 is not yet implemented");
                 }
-
-                return ret;
             }
-
-            if (op == "bvand" || op == "and")
+            else if (num_args == 2)
             {
-                if (num_args < 2)
+                switch (op)
                 {
-                    log_error("z3_utils", "For the AND operation we require at least 2 operands.");
-                    return BooleanFunction();
+                    case Z3_OP_BOR:
+                        return BooleanFunction::Or(std::move(args.at(0)), std::move(args.at(1)), size);
+                    case Z3_OP_BAND:
+                        return BooleanFunction::And(std::move(args.at(0)), std::move(args.at(1)), size);
+                    case Z3_OP_BXOR:
+                        return BooleanFunction::Xor(std::move(args.at(0)), std::move(args.at(1)), size);
+                    case Z3_OP_BADD:
+                        return BooleanFunction::Add(std::move(args.at(0)), std::move(args.at(1)), size);
+                    case Z3_OP_BSUB:
+                        return BooleanFunction::Sub(std::move(args.at(0)), std::move(args.at(1)), size);
+                    case Z3_OP_BMUL:
+                        return BooleanFunction::Mul(std::move(args.at(0)), std::move(args.at(1)), size);
+                    case Z3_OP_BSDIV:
+                        return BooleanFunction::Sdiv(std::move(args.at(0)), std::move(args.at(1)), size);
+                    case Z3_OP_BUDIV:
+                        return BooleanFunction::Udiv(std::move(args.at(0)), std::move(args.at(1)), size);
+                    case Z3_OP_BUREM:
+                        return BooleanFunction::Urem(std::move(args.at(0)), std::move(args.at(1)), size);
+                    case Z3_OP_BSREM:
+                        return BooleanFunction::Srem(std::move(args.at(0)), std::move(args.at(1)), size);
+                    default:
+                        break;
+                        return ERR("operation '" + e.decl().name().str() + "' with arity 2 is not yet implemented");
                 }
-
-                BooleanFunction ret = BooleanFunction::And(to_hal(e.arg(0)), to_hal(e.arg(1)), size).get();
-
-                for (u32 i = 2; i < num_args; i++)
-                {
-                    ret = BooleanFunction::And(std::move(ret), to_hal(e.arg(i)), size).get();
-                }
-
-                return ret;
             }
 
-            if (op == "bvxor" || op == "xor")
-            {
-                if (num_args < 2)
-                {
-                    log_error("z3_utils", "For the XOR operation we require at least 2 operands.");
-                    return BooleanFunction();
-                }
-
-                BooleanFunction ret = BooleanFunction::Xor(to_hal(e.arg(0)), to_hal(e.arg(1)), size).get();
-
-                for (u32 i = 2; i < num_args; i++)
-                {
-                    ret = BooleanFunction::Xor(std::move(ret), to_hal(e.arg(i)), size).get();
-                }
-
-                return ret;
-            }
-
-            /*
-            if (op == "if")
-            {
-                if (num_args != 3)
-                {
-                    log_error("z3_utils", "For the IF operation we only suppport exactly three operands.");
-                    return BooleanFunction();
-                }
-
-                return BooleanFunction::Ite(to_hal(e.arg(0)), to_hal(e.arg(1)), to_hal(e.arg(2)), size).get();
-            }
-            */
-
-            log_error("z3_utils", "found unhandled operation {}", op);
-            return BooleanFunction();
+            return ERR("operation '" + e.decl().name().str() + "' with arity " + std::to_string(num_args) + " is not yet implemented");
         }
-    
+
         std::string to_smt2(const z3::expr& e)
         {
             auto s = z3::solver(e.ctx());
@@ -230,14 +227,14 @@ namespace hal
 
             return verilog_file;
         }
-        
+
         std::set<std::string> get_variable_names(const z3::expr& e)
         {
             std::set<std::string> var_names;
 
             // get inputs from smt2 string, much faster than iterating over z3 things
             const auto smt = to_smt2(e);
-            
+
             std::istringstream iss(smt);
             for (std::string line; std::getline(iss, line);)
             {
@@ -248,8 +245,7 @@ namespace hal
 
                     if (start_index == std::string::npos + 1 || end_index == std::string::npos)
                     {
-                        log_error("z3_utils",
-                                  "Some variables in line '{}' do not seem to fit in our handled format!", line);
+                        log_error("z3_utils", "Some variables in line '{}' do not seem to fit in our handled format!", line);
                         continue;
                     }
 
@@ -260,7 +256,7 @@ namespace hal
 
             return var_names;
         }
-        
+
         std::set<u32> extract_net_ids(const z3::expr& e)
         {
             return extract_net_ids(get_variable_names(e));
@@ -281,14 +277,14 @@ namespace hal
             }
 
             return net_ids;
-        } 
-    
-        z3::expr get_expr_in_ctx(const z3::expr& e, z3::context& ctx) 
+        }
+
+        z3::expr get_expr_in_ctx(const z3::expr& e, z3::context& ctx)
         {
             auto expr_vec = ctx.parse_string(to_smt2(e).c_str());
             return expr_vec.back().arg(0).simplify();
         }
-    }   // namespace z3_utils
+    }    // namespace z3_utils
 
     extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
     {
@@ -312,17 +308,17 @@ namespace hal
     BooleanFunction Z3UtilsPlugin::get_subgraph_function_py(const Net* n, const std::vector<Gate*>& sub_graph_gates) const
     {
         z3::context ctx;
-        
+
         const auto res = z3_utils::get_subgraph_z3_function(sub_graph_gates, n, ctx);
         if (res.is_error())
         {
             log_error("z3_utils", "{}", res.get_error().get());
         }
 
-        BooleanFunction bf = z3_utils::to_hal(res.get());
+        BooleanFunction bf = z3_utils::to_bf(res.get()).get();
         // std::cout << "Got bf: " << bf.to_string() << std::endl;
 
         return bf;
     }
-    
+
 }    // namespace hal
