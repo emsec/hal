@@ -116,10 +116,10 @@ namespace hal
 
             const auto return_var = extract_lhs(last_line);
 
-            func = replace_all(func, "<INIT>", initalization);
+            // func = replace_all(func, "<INIT>", initalization);
             func = replace_all(func, "<ASSIGNMENTS>", assignments);
             func = replace_all(func, "<RETURN>", return_var);
-            func = replace_all(func, "<INPUT_SIZE>", std::to_string(input_vars.size() + 1));
+            // func = replace_all(func, "<INPUT_SIZE>", std::to_string(input_vars.size() + 1));
 
             return func;
         }

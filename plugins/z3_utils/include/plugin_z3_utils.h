@@ -27,7 +27,6 @@
 
 #include "hal_core/plugin_system/plugin_interface_base.h"
 #include "z3++.h"
-#include "z3_wrapper.h"
 
 namespace hal
 {

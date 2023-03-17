@@ -61,17 +61,113 @@ namespace hal
 
             return {function_gates.begin(), function_gates.end()};
         }
+
     }    // namespace
 
-    Result<std::unordered_map<std::string, double>> BooleanInfluencePlugin::get_boolean_influence(const BooleanFunction& bf, const u32 num_evaluations, const std::string& unique_identifier)
-    {
-        auto ctx         = z3::context();
-        const auto z3_bf = z3_utils::from_bf(bf, ctx);
+    const std::string BooleanInfluencePlugin::probabilistic_function = R"(
+#include <stdbool.h> 
+#include <stdio.h>
+#include <stdlib.h>
 
-        return get_boolean_influence(z3_bf, num_evaluations, unique_identifier);
+static unsigned long x=123456789, y=362436069, z=521288629;
+
+// period 2^96-1
+unsigned long xorshf96(void) {          
+    unsigned long t;
+
+    x ^= x << 16;
+    x ^= x >> 5;
+    x ^= x << 1;
+
+    t = x;
+    x = y;
+    y = z;
+    z = t ^ x ^ y;
+
+    return z;
+}
+
+<C_FUNCTION>
+
+const int input_size = <INPUT_SIZE>;
+
+void build_values(bool* values) {
+    for (int i = 0; i < input_size; i++) {
+        bool random_value = xorshf96() % 2;
+        values[i] = random_value;
     }
 
-    Result<std::unordered_map<std::string, double>> BooleanInfluencePlugin::get_boolean_influence(const z3::expr& expr, const u32 num_evaluations, const std::string& unique_identifier)
+    return;
+}
+
+int main(int argc, char *argv[]) {
+    unsigned long long b     = strtoull(argv[1], 0, 10);
+    unsigned long long num   = strtoull(argv[2], 0, 10);
+    unsigned long long count = 0;
+
+    bool values[input_size];
+    for (unsigned long long i = 0; i < num; i++) {
+        build_values(values);
+
+        values[b] = true;
+        bool r1 = func(values);
+
+        values[b] = false;
+        bool r2 = func(values);
+
+        if (r1 != r2) {
+            count++;
+        }
+    }
+
+    printf("%lld\n", count);
+
+    return int(count);
+})";
+
+    const std::string BooleanInfluencePlugin::deterministic_function = R"(
+#include <stdbool.h> 
+#include <stdio.h>
+#include <stdlib.h>
+
+<C_FUNCTION>
+
+const int input_size = <INPUT_SIZE>;
+
+void build_values(bool* values, unsigned long long val) {
+    for (int idx = 0; idx < input_size; idx++) {
+        values[idx] = (val >> idx) & 0x1;
+    }
+
+    return;
+}
+
+int main(int argc, char *argv[]) {
+    unsigned long long b     = strtoull(argv[1], 0, 10);
+    unsigned long long count = 0;
+
+    bool values[input_size];
+    for (unsigned long long i = 0; i < (1 << input_size); i++) {
+        build_values(values, i);
+
+        values[b] = true;
+        bool r1 = func(values);
+
+        values[b] = false;
+        bool r2 = func(values);
+
+        if (r1 != r2) {
+            count++;
+        }
+    }
+
+    printf("%lld\n", count);
+
+    return int(count);
+})";
+
+    Result<std::unordered_map<std::string, double>>
+        BooleanInfluencePlugin::get_boolean_influence_internal(const z3::expr& expr, const u32 num_evaluations, const bool deterministic, const std::string& unique_identifier)
     {
         const auto to_replacement_var = [](const u32 var_idx) -> std::string { return "var_" + std::to_string(var_idx); };
 
@@ -117,6 +213,12 @@ namespace hal
         // substitute all variables in the expression to be of the format var_<INDEX>.
         // This allows for a more efficient translation into a c function
         std::vector<std::string> input_vars = utils::to_vector(z3_utils::get_variable_names(expr));
+
+        if (deterministic && input_vars.size() > 16)
+        {
+            return ERR("unable to generate Boolean influence: Cannot evaluate Boolean function deterministically for more than 16 variables but got " + std::to_string(input_vars.size()));
+        }
+
         std::vector<std::string> replacement_vars;
 
         z3::expr_vector from_vec(expr.ctx());
@@ -142,19 +244,21 @@ namespace hal
 
         const std::filesystem::path file_path = directory / (unique_identifier.empty() ? ("boolean_func.cpp") : ("boolean_func_" + unique_identifier + ".cpp"));
 
-        const auto c_func = z3_utils::to_cpp(replaced_e);
+        std::string cpp_program = deterministic ? deterministic_function : probabilistic_function;
+        cpp_program             = utils::replace(cpp_program, std::string("<C_FUNCTION>"), z3_utils::to_cpp(replaced_e));
+        cpp_program             = utils::replace(cpp_program, std::string("<INPUT_SIZE>"), std::to_string(replacement_vars.size()));
 
-        // write c program to file
+        // write cpp program to file
         std::ofstream ofs(file_path);
         if (!ofs.is_open())
         {
             return ERR("unable to generate Boolean influence: could not open file " + file_path.string() + ".");
         }
-        ofs << c_func;
+        ofs << cpp_program;
 
         ofs.close();
 
-        // compile the c file
+        // compile the cpp file
         const std::string program_name    = file_path.string().substr(0, file_path.string().size() - 4);
         const std::string compile_command = "g++ -o " + program_name + " " + file_path.string() + " -O3";
         int res                           = system(compile_command.c_str());
@@ -170,7 +274,9 @@ namespace hal
             }
             const auto idx = idx_res.get();
 
-            const std::string run_command = program_name + " " + std::to_string(idx) + " " + std::to_string(num_evaluations) + " 2>&1";
+            const std::string num_evaluations_str = deterministic ? "" : std::to_string(num_evaluations);
+
+            const std::string run_command = program_name + " " + std::to_string(idx) + " " + num_evaluations_str + " 2>&1";
 
             std::array<char, 128> buffer;
             std::string result;
@@ -187,8 +293,9 @@ namespace hal
 
             pclose(pipe);
 
-            const u32 count = std::stoi(result);
-            double cv       = (double)(count) / (double)(num_evaluations);
+            const u32 count            = std::stoi(result);
+            const u32 real_evaluations = deterministic ? (1 << input_vars.size()) : num_evaluations;
+            double cv                  = (double)(count) / (double)(real_evaluations);
 
             const auto org_var_res = to_original_var(var, input_vars);
             if (org_var_res.is_error())
@@ -209,7 +316,11 @@ namespace hal
         return OK(influences);
     }
 
-    Result<std::map<Net*, double>> BooleanInfluencePlugin::get_boolean_influences_of_subcircuit(const std::vector<Gate*>& gates, const Net* start_net)
+    Result<std::map<Net*, double>> BooleanInfluencePlugin::get_boolean_influences_of_subcircuit_internal(const std::vector<Gate*>& gates,
+                                                                                                         const Net* start_net,
+                                                                                                         const u32 num_evaluations,
+                                                                                                         const bool deterministic,
+                                                                                                         const std::string& unique_identifier)
     {
         for (const auto* gate : gates)
         {
@@ -241,7 +352,7 @@ namespace hal
         }
 
         // Generate Boolean influences
-        const auto inf_res = get_boolean_influence(func, 32000);
+        const auto inf_res = get_boolean_influence_internal(func, num_evaluations, deterministic, unique_identifier);
         if (inf_res.is_error())
         {
             return ERR_APPEND(inf_res.get_error(),
@@ -271,7 +382,8 @@ namespace hal
         return OK(nets_to_inf);
     }
 
-    Result<std::map<Net*, double>> BooleanInfluencePlugin::get_boolean_influences_of_gate(const Gate* gate)
+    Result<std::map<Net*, double>>
+        BooleanInfluencePlugin::get_boolean_influences_of_gate_internal(const Gate* gate, const u32 num_evaluations, const bool deterministic, const std::string& unique_identifier)
     {
         if (!gate->get_type()->has_property(GateTypeProperty::ff))
         {
@@ -293,7 +405,7 @@ namespace hal
         const auto in_net         = gate->get_fan_in_net(data_pin);
 
         // Generate Boolean influences
-        const auto inf_res = get_boolean_influences_of_subcircuit(function_gates, in_net);
+        const auto inf_res = get_boolean_influences_of_subcircuit_internal(function_gates, in_net, num_evaluations, deterministic, unique_identifier);
         if (inf_res.is_error())
         {
             return ERR_APPEND(inf_res.get_error(),
@@ -302,6 +414,54 @@ namespace hal
         }
 
         return inf_res;
+    }
+
+    Result<std::unordered_map<std::string, double>> BooleanInfluencePlugin::get_boolean_influence(const BooleanFunction& bf, const u32 num_evaluations, const std::string& unique_identifier)
+    {
+        auto ctx         = z3::context();
+        const auto z3_bf = z3_utils::to_z3(bf, ctx);
+
+        return get_boolean_influence(z3_bf, num_evaluations, unique_identifier);
+    }
+
+    Result<std::unordered_map<std::string, double>> BooleanInfluencePlugin::get_boolean_influence(const z3::expr& expr, const u32 num_evaluations, const std::string& unique_identifier)
+    {
+        return get_boolean_influence_internal(expr, num_evaluations, false, unique_identifier);
+    }
+
+    Result<std::unordered_map<std::string, double>> BooleanInfluencePlugin::get_boolean_influence_deterministic(const BooleanFunction& bf, const std::string& unique_identifier)
+    {
+        auto ctx         = z3::context();
+        const auto z3_bf = z3_utils::to_z3(bf, ctx);
+
+        return get_boolean_influence_deterministic(z3_bf, unique_identifier);
+    }
+
+    Result<std::unordered_map<std::string, double>> BooleanInfluencePlugin::get_boolean_influence_deterministic(const z3::expr& expr, const std::string& unique_identifier)
+    {
+        return get_boolean_influence_internal(expr, 0, true, unique_identifier);
+    }
+
+    Result<std::map<Net*, double>>
+        BooleanInfluencePlugin::get_boolean_influences_of_subcircuit(const std::vector<Gate*>& gates, const Net* start_net, const u32 num_evaluations, const std::string& unique_identifier)
+    {
+        return get_boolean_influences_of_subcircuit_internal(gates, start_net, num_evaluations, false, unique_identifier);
+    }
+
+    Result<std::map<Net*, double>> BooleanInfluencePlugin::get_boolean_influences_of_gate(const Gate* gate, const u32 num_evaluations, const std::string& unique_identifier)
+    {
+        return get_boolean_influences_of_gate_internal(gate, num_evaluations, false, unique_identifier);
+    }
+
+    Result<std::map<Net*, double>>
+        BooleanInfluencePlugin::get_boolean_influences_of_subcircuit_deterministic(const std::vector<Gate*>& gates, const Net* start_net, const std::string& unique_identifier)
+    {
+        return get_boolean_influences_of_subcircuit_internal(gates, start_net, 0, true, unique_identifier);
+    }
+
+    Result<std::map<Net*, double>> BooleanInfluencePlugin::get_boolean_influences_of_gate_deterministic(const Gate* gate, const std::string& unique_identifier)
+    {
+        return get_boolean_influences_of_gate_internal(gate, 0, true, unique_identifier);
     }
 
     Result<std::pair<std::map<u32, Gate*>, std::vector<std::vector<double>>>> BooleanInfluencePlugin::get_ff_dependency_matrix(const Netlist* nl, bool with_boolean_influence)
