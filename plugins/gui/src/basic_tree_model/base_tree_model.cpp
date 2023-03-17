@@ -66,8 +66,10 @@ namespace hal
 
     int BaseTreeModel::rowCount(const QModelIndex &parent) const
     {
-        if(!parent.isValid()) //no valid parent = root item
+        if(!parent.isValid()) // no valid parent = root item
             return mRootItem->getChildCount();
+        else if (parent.column()) // only first column is allowed to have children
+            return 0;
         else
             return getItemFromIndex(parent)->getChildCount();
     }
@@ -112,7 +114,7 @@ namespace hal
 
         // if the given item has no parent, it is the root item
         if(!parentItem)
-            return createIndex(0,0,mRootItem);
+            return QModelIndex();
 
         // get the row of the item and create the modelindex
         int itemRow = parentItem->getRowForChild(item);

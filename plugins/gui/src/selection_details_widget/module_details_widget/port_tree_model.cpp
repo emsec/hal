@@ -600,11 +600,13 @@ namespace hal
 //            pinGroupItem->setAdditionalData(keyId, newGroup->get_id());
 //            insertItem(pinGroupItem, mRootItem, mRootItem->getChildCount()-1);
             // ??????
-//            TreeItem* dummy = new TreeItem(QList<QVariant>() << "dummy" << "dummy" << "dummy" << "");
-//            dummy->setAdditionalData(keyType, QVariant::fromValue(itemType::group));
-//            dummy->setAdditionalData(keyId, 60);
-//            insertItem(dummy, mRootItem, 0);
-            setModule(mModule);
+            TreeItem* dummy = new TreeItem(QList<QVariant>() << "dummy" << "dummy" << "dummy" << "");
+            TreeItem* dummyc = new TreeItem(QList<QVariant>() << "dummyc" << "dummyc" << "dummyc" << "");
+            dummy->appendChild(dummyc);
+            dummy->setAdditionalData(keyType, QVariant::fromValue(itemType::group));
+            dummy->setAdditionalData(keyId, 60);
+            insertItem(dummy, mRootItem, 0);
+//            setModule(mModule);
         }
         mIgnoreEventsFlag = false;
     }
