@@ -661,9 +661,9 @@ namespace hal
                         {
                             const auto solver_res =
                                 master_gate->get_resolved_boolean_function(pin)
-                                    .map<BooleanFunction>([pin, current_gate](auto&& bf_master) {
+                                    .map<BooleanFunction>([pin, current_gate](BooleanFunction&& bf_master) {
                                         return current_gate->get_resolved_boolean_function(pin).map<BooleanFunction>(
-                                            [bf_master = std::move(bf_master)](auto&& bf_current) mutable { return BooleanFunction::Eq(std::move(bf_master), bf_current.clone(), 1); });
+                                            [bf_master = std::move(bf_master)](BooleanFunction&& bf_current) mutable { return BooleanFunction::Eq(std::move(bf_master), std::move(bf_current), 1); });
                                     })
                                     .map<BooleanFunction>([](auto&& bf_eq) { return BooleanFunction::Not(bf_eq.clone(), 1); })
                                     .map<SMT::SolverResult>([](auto&& bf_not) -> Result<SMT::SolverResult> { return SMT::Solver({SMT::Constraint(std::move(bf_not))}).query(SMT::QueryConfig()); });
