@@ -41,12 +41,12 @@
 namespace hal
 {
     /**
-     * A BooleanFunction represents a symbolic expression (e.g., "A & B") in 
+     * A BooleanFunction represents a symbolic expression (e.g., `A & B`) in 
      * order to abstract the (semantic) functionality of a single netlist gate 
      * (or even a complex subcircuit comprising multiple gates) in a formal 
-     * manner. To this end, the BooleanFunction class is able to construct and 
-     * display arbitrarily-nested expressions, enable symbolic simplification
-     * (e.g., simplify "A & 0" to "0"), and translate Boolean functions to the
+     * manner. To this end, the `BooleanFunction` class is able to construct and 
+     * display arbitrarily nested expressions, enable symbolic simplification
+     * (e.g., simplify `A & 0` to `0`), and translate Boolean functions to the
      * SAT / SMT solver domain to use the solve constraint formulas.
      *
      * @ingroup netlist
@@ -104,7 +104,7 @@ namespace hal
         static Result<u64> to_u64(const std::vector<BooleanFunction::Value>& value);
 
         /**
-         * Output stream operator that forwards to_string of a value.
+         * Output stream operator that forwards `to_string` of a value.
          *
          * @param[in] os - The stream to write to.
          * @param[in] value - The value.
@@ -173,7 +173,7 @@ namespace hal
         static BooleanFunction Index(u16 index, u16 size);
 
         /**
-         * Joins two Boolean functions by applying an 'AND' operation. 
+         * Joins two Boolean functions by applying an AND operation. 
          * Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.
          * 
          * @param[in] p0 - First Boolean function.
@@ -184,7 +184,7 @@ namespace hal
         static Result<BooleanFunction> And(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
-         * Joins two Boolean functions by applying an 'OR' operation. 
+         * Joins two Boolean functions by applying an OR operation. 
          * Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.
          * 
          * @param[in] p0 - First Boolean function.
@@ -205,7 +205,7 @@ namespace hal
         static Result<BooleanFunction> Not(BooleanFunction&& p0, u16 size);
 
         /**
-         * Joins two Boolean functions by applying an 'XOR' operation. 
+         * Joins two Boolean functions by applying an XOR operation. 
          * Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.
          * 
          * 
@@ -217,7 +217,7 @@ namespace hal
         static Result<BooleanFunction> Xor(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
-         * Joins two Boolean functions by applying an 'ADD' operation. 
+         * Joins two Boolean functions by applying an ADD operation. 
          * Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.
          * 
          * 
@@ -229,7 +229,7 @@ namespace hal
         static Result<BooleanFunction> Add(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
-         * Joins two Boolean functions by applying an 'SUB' operation. 
+         * Joins two Boolean functions by applying an SUB operation. 
          * Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.
          * 
          * 
@@ -241,7 +241,7 @@ namespace hal
         static Result<BooleanFunction> Sub(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
-         * Joins two Boolean functions by applying an 'MUL' operation. 
+         * Joins two Boolean functions by applying an MUL operation. 
          * Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.
          * 
          * 
@@ -253,7 +253,7 @@ namespace hal
         static Result<BooleanFunction> Mul(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
-         * Joins two Boolean functions by applying an 'SDIV' operation. 
+         * Joins two Boolean functions by applying an SDIV operation. 
          * Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.
          * 
          * 
@@ -265,7 +265,7 @@ namespace hal
         static Result<BooleanFunction> Sdiv(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
-         * Joins two Boolean functions by applying an 'UDIV' operation. 
+         * Joins two Boolean functions by applying an UDIV operation. 
          * Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.
          * 
          * 
@@ -277,7 +277,7 @@ namespace hal
         static Result<BooleanFunction> Udiv(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
-         * Joins two Boolean functions by applying an 'SREM' operation. 
+         * Joins two Boolean functions by applying an SREM operation. 
          * Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.
          * 
          * 
@@ -289,7 +289,7 @@ namespace hal
         static Result<BooleanFunction> Srem(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
-         * Joins two Boolean functions by applying an 'UREM' operation. 
+         * Joins two Boolean functions by applying an UREM operation. 
          * Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.
          * 
          * 
@@ -305,19 +305,19 @@ namespace hal
          * Note that slice `[i:j]` includes positions `i` and `j` as well. 
          * 
          * @param[in] p0 - Boolean function to slice.
-         * @param[in] p1 - Boolean function start index.
-         * @param[in] p2 - Boolean function end index.
-         * @param[in] size - Bit-size of the resulting Boolean function slice, i.e., |p2| - |p1| + 1.
+         * @param[in] p1 - Boolean function of type `Index` encoding start index `i`.
+         * @param[in] p2 - Boolean function of type `Index` encoding end index `j`.
+         * @param[in] size - Bit-size of the resulting Boolean function slice, i.e., `j - i + 1`.
          * @returns OK() and the Boolean function slice on success, an error otherwise.
          */
         static Result<BooleanFunction> Slice(BooleanFunction&& p0, BooleanFunction&& p1, BooleanFunction&& p2, u16 size);
 
         /**
-         * Concatenates two Boolean functions of potentially different bit-sizes `n` and `m` to form a single Boolean function of bit-size `n+m`.
+         * Concatenates two Boolean functions of bit-sizes `n` and `m` to form a single Boolean function of bit-size `n + m`.
          * 
          * @param[in] p0 - First Boolean function (MSBs).
          * @param[in] p1 - Second Boolean function (LSBs).
-         * @param[in] size - Bit-size of the concatenated Boolean function.
+         * @param[in] size - Bit-size of the concatenated Boolean function, i.e., `n + m`.
          * @returns Ok() and the concatenated Boolean function on success, an error otherwise.
          */
         static Result<BooleanFunction> Concat(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
@@ -326,7 +326,7 @@ namespace hal
          * Zero-extends a Boolean function to the specified bit-size.
          * 
          * @param[in] p0 - Boolean function to extend.
-         * @param[in] p1 - Constant Boolean function describing the size of the zero-extended result.
+         * @param[in] p1 - Boolean function of type `Index` encoding the bit-size of the zero-extended result.
          * @param[in] size - Bit-size of the zero-extended Boolean function.
          * @returns Ok() and the extended Boolean function on success, an error otherwise.
          */
@@ -336,7 +336,7 @@ namespace hal
          * Sign-extends a Boolean function to the specified bit-size.
          * 
          * @param[in] p0 - Boolean function to extend.
-         * @param[in] p1 - Constant Boolean function describing the size of the sign-extended result.
+         * @param[in] p1 - Boolean function of type `Index` encoding the bit-size of the sign-extended result.
          * @param[in] size - Bit-size of the sign-extended Boolean function.
          * @returns Ok() and the extended Boolean function on success, an error otherwise.
          */
@@ -394,12 +394,13 @@ namespace hal
 
         /**
          * Joins three Boolean functions by an if-then-else operation with p0 as the condition, p1 as true-case, and p2 as false-case.
-         * Requires `p1` to be of bit-size 1, both Boolean functions `p1` and `p2` to be of the specified bit-size, and produces a new Boolean function of the specified bit-size.
+         * Requires `p1` to be of bit-size 1 and both Boolean functions `p1` and `p2` to be of the same bit-size.
+         * Produces a new Boolean function of the specified bit-size that must be equal to the size of `p1` and `p2`.
          * 
          * @param[in] p0 - Boolean function condition.
-         * @param[in] p1 - Boolean function for true-case.
-         * @param[in] p2 - Boolean function for false-case.
-         * @param[in] size - Bit-size of the operation, i.e., size of p1 and p2.
+         * @param[in] p1 - Boolean function for `true`-case.
+         * @param[in] p2 - Boolean function for `false`-case.
+         * @param[in] size - Bit-size of the operation, i.e., size of `p1` and `p2`.
          * @returns Ok() and the joined Boolean function on success, an error otherwise.
          */
         static Result<BooleanFunction> Ite(BooleanFunction&& p0, BooleanFunction&& p1, BooleanFunction&& p2, u16 size);
@@ -414,7 +415,7 @@ namespace hal
         friend std::ostream& operator<<(std::ostream& os, const BooleanFunction& f);
 
         /**
-         * Joins two Boolean functions by an 'AND' operation. 
+         * Joins two Boolean functions by an AND operation. 
          * Requires both Boolean functions to be of the same bit-size.
          * \warning Fails if the Boolean functions have different bit-sizes.
          * 
@@ -424,7 +425,7 @@ namespace hal
         BooleanFunction operator&(const BooleanFunction& other) const;
 
         /**
-         * Joins two Boolean functions by an 'AND' operation in-place. 
+         * Joins two Boolean functions by an AND operation in-place. 
          * Requires both Boolean functions to be of the same bit-size.
          * \warning Fails if the Boolean functions have different bit-sizes.
          * 
@@ -441,7 +442,7 @@ namespace hal
         BooleanFunction operator~() const;
 
         /**
-         * Joins two Boolean functions by an 'OR' operation. 
+         * Joins two Boolean functions by an OR operation. 
          * Requires both Boolean functions to be of the same bit-size.
          * \warning Fails if the Boolean functions have different bit-sizes.
          * 
@@ -451,7 +452,7 @@ namespace hal
         BooleanFunction operator|(const BooleanFunction& other) const;
 
         /**
-         * Joins two Boolean functions by an 'OR' operation in-place. 
+         * Joins two Boolean functions by an OR operation in-place. 
          * Requires both Boolean functions to be of the same bit-size.
          * \warning Fails if the Boolean functions have different bit-sizes.
          * 
@@ -461,7 +462,7 @@ namespace hal
         BooleanFunction& operator|=(const BooleanFunction& other);
 
         /**
-         * Joins two Boolean functions by an 'XOR' operation. 
+         * Joins two Boolean functions by an XOR operation. 
          * Requires both Boolean functions to be of the same bit-size.
          * \warning Fails if the Boolean functions have different bit-sizes.
          * 
@@ -471,7 +472,7 @@ namespace hal
         BooleanFunction operator^(const BooleanFunction& other) const;
 
         /**
-         * Joins two Boolean functions by an 'XOR' operation in-place. 
+         * Joins two Boolean functions by an XOR operation in-place. 
          * Requires both Boolean functions to be of the same bit-size.
          * \warning Fails if the Boolean functions have different bit-sizes.
          * 
@@ -481,7 +482,7 @@ namespace hal
         BooleanFunction& operator^=(const BooleanFunction& other);
 
         /**
-         * Joins two Boolean functions by an 'ADD' operation. 
+         * Joins two Boolean functions by an ADD operation. 
          * Requires both Boolean functions to be of the same bit-size.
          * \warning Fails if the Boolean functions have different bit-sizes.
          * 
@@ -491,7 +492,7 @@ namespace hal
         BooleanFunction operator+(const BooleanFunction& other) const;
 
         /**
-         * Joins two Boolean functions by an 'ADD' operation in-place. 
+         * Joins two Boolean functions by an ADD operation in-place. 
          * Requires both Boolean functions to be of the same bit-size.
          * \warning Fails if the Boolean functions have different bit-sizes.
          * 
@@ -501,7 +502,7 @@ namespace hal
         BooleanFunction& operator+=(const BooleanFunction& other);
 
         /**
-         * Joins two Boolean functions by an 'SUB' operation. 
+         * Joins two Boolean functions by an SUB operation. 
          * Requires both Boolean functions to be of the same bit-size.
          * \warning Fails if the Boolean functions have different bit-sizes.
          * 
@@ -511,7 +512,7 @@ namespace hal
         BooleanFunction operator-(const BooleanFunction& other) const;
 
         /**
-         * Joins two Boolean functions by an 'SUB' operation in-place. 
+         * Joins two Boolean functions by an SUB operation in-place. 
          * Requires both Boolean functions to be of the same bit-size.
          * \warning Fails if the Boolean functions have different bit-sizes.
          * 
@@ -521,7 +522,7 @@ namespace hal
         BooleanFunction& operator-=(const BooleanFunction& other);
 
         /**
-         * Joins two Boolean functions by an 'MUL' operation. 
+         * Joins two Boolean functions by an MUL operation. 
          * Requires both Boolean functions to be of the same bit-size.
          * \warning Fails if the Boolean functions have different bit-sizes.
          * 
@@ -531,7 +532,7 @@ namespace hal
         BooleanFunction operator*(const BooleanFunction& other) const;
 
         /**
-         * Joins two Boolean functions by an 'MUL' operation in-place. 
+         * Joins two Boolean functions by an MUL operation in-place. 
          * Requires both Boolean functions to be of the same bit-size.
          * \warning Fails if the Boolean functions have different bit-sizes.
          * 
