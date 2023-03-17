@@ -1,9 +1,8 @@
-#include "plugin_z3_utils.h"
-
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
+#include "z3_utils/include/z3_utils.h"
 
 namespace hal
 {

@@ -2,6 +2,7 @@
 
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/utilities/utils.h"
 
 #include <algorithm>
 

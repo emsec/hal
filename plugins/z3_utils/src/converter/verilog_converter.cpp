@@ -1,7 +1,6 @@
 #include "converter/verilog_converter.h"
 
 #include "hal_core/utilities/log.h"
-#include "z3++.h"
 
 namespace hal
 {
