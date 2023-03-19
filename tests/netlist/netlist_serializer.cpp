@@ -11,7 +11,7 @@
 #include "gate_library_test_utils.h"
 #include "netlist_test_utils.h"
 
-#include <experimental/filesystem>
+#include <filesystem>
 
 namespace hal {
     using test_utils::MIN_GATE_ID;

@@ -885,7 +885,7 @@ namespace hal
         if (!filter)
         {
             res.reserve(m_pins.size());
-            for (const auto& group : m_pin_groups)
+            for (const auto& group : m_pin_groups_ordered)
             {
                 std::vector<ModulePin*> pins = group->get_pins();
                 for (const auto pin : group->get_pins())

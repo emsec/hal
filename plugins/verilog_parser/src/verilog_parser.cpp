@@ -75,12 +75,10 @@ namespace hal
                     if (!port->m_ranges.empty())
                     {
                         port->m_expanded_identifiers = expand_ranges(port->m_identifier, port->m_ranges);
-                        verilog_module->m_expanded_port_expressions.insert(port->m_expanded_identifiers.begin(), port->m_expanded_identifiers.end());
                     }
                     else
                     {
                         port->m_expanded_identifiers = {port->m_identifier};
-                        verilog_module->m_expanded_port_expressions.insert(port->m_identifier);
                     }
                 }
                 else
@@ -89,12 +87,17 @@ namespace hal
                     {
                         port->m_expanded_identifiers = expand_ranges(port->m_identifier, port->m_ranges);
                         auto expanded_expression     = expand_ranges(port->m_expression, port->m_ranges);
-                        verilog_module->m_expanded_port_expressions.insert(expanded_expression.begin(), expanded_expression.end());
+
+                        std::transform(port->m_expanded_identifiers.begin(),
+                                       port->m_expanded_identifiers.end(),
+                                       expanded_expression.begin(),
+                                       std::inserter(verilog_module->m_expanded_port_identifiers_to_expressions, verilog_module->m_expanded_port_identifiers_to_expressions.end()),
+                                       std::make_pair<const std::string&, const std::string&>);
                     }
                     else
                     {
-                        port->m_expanded_identifiers = {port->m_identifier};
-                        verilog_module->m_expanded_port_expressions.insert(port->m_expression);
+                        port->m_expanded_identifiers                                                   = {port->m_identifier};
+                        verilog_module->m_expanded_port_identifiers_to_expressions[port->m_identifier] = port->m_expression;
                     }
                 }
             }
@@ -1561,15 +1564,26 @@ namespace hal
         }
 
         // schedule assigned port nets for merging
-        for (const auto& [port_expression, net_name] : parent_module_assignments)
+        for (const auto& [port_identifier, net_name] : parent_module_assignments)
         {
-            if (const auto alias_it = signal_alias.find(port_expression); alias_it != signal_alias.end())
+            std::string signal_name;
+            if (const auto expr_it = verilog_module->m_expanded_port_identifiers_to_expressions.find(port_identifier); expr_it == verilog_module->m_expanded_port_identifiers_to_expressions.end())
+            {
+                signal_name = port_identifier;
+            }
+            else
+            {
+                signal_name = expr_it->second;
+            }
+
+            // TODO handle identifier != expression
+            if (const auto alias_it = signal_alias.find(signal_name); alias_it != signal_alias.end())
             {
                 m_nets_to_merge.push_back(std::make_pair(net_name, alias_it->second));
             }
             else
             {
-                return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': failed to find alias for net '" + port_expression + "'");
+                return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': failed to find alias for net '" + signal_name + "'");
             }
         }
 
