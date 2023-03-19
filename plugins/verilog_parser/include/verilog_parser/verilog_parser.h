@@ -147,7 +147,7 @@ namespace hal
             std::vector<std::unique_ptr<VerilogPort>> m_ports;
             std::map<std::string, VerilogPort*> m_ports_by_identifier;
             std::map<std::string, VerilogPort*> m_ports_by_expression;
-            std::set<std::string> m_expanded_port_expressions;
+            std::map<std::string, std::string> m_expanded_port_identifiers_to_expressions;
 
             // signals
             std::vector<std::unique_ptr<VerilogSignal>> m_signals;
