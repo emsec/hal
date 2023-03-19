@@ -26,6 +26,7 @@ var classhal_1_1_gate =
     [ "get_location_x", "classhal_1_1_gate.html#a056960130aa9f9fe61daf9f0ee7df60c", null ],
     [ "get_location_y", "classhal_1_1_gate.html#a24b3bfe5d03a6f61b4e8be79b69b256c", null ],
     [ "get_module", "classhal_1_1_gate.html#a8ebbb9b79db2666beadc913467436a1f", null ],
+    [ "get_modules", "classhal_1_1_gate.html#ab40f6f6b7cbe6ada763ed36b45f9ad33", null ],
     [ "get_name", "classhal_1_1_gate.html#a55ca16fc3905a6c0cb87a6427189de31", null ],
     [ "get_netlist", "classhal_1_1_gate.html#ae77f8b10587bddd7b80fe0ab008953e3", null ],
     [ "get_predecessor", "classhal_1_1_gate.html#ad1e7415916bb54dfde18b30fbb547f77", null ],

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Gate Pin Group &mdash; hal_py v4.1.0-9-gc055535a9 documentation</title>
+  <title>Gate Pin Group &mdash; hal_py v4.1.0-10-g929821190 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.1.0-9-gc055535a9
+                v4.1.0-10-g929821190
               </div>
             
           
@@ -109,6 +109,7 @@
 <li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist.html">Netlist</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_factory.html">Netlist Factory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netlist_manipulation_decorator.html">Netlist Manipulation Decorator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_utils.html">Netlist Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_serializer.html">Netlist Serializer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_writer_manager.html">Netlist Writer Manager</a></li>
@@ -193,6 +194,309 @@
 <dt id="hal_py.GatePinGroup">
 <em class="property">class </em><code class="descclassname">hal_py.</code><code class="descname">GatePinGroup</code><a class="headerlink" href="#hal_py.GatePinGroup" title="Permalink to this definition">¶</a></dt>
 <dd><p>A group of gate pins made up of a name, the pins, a pin order, and a start index.</p>
+<dl class="attribute">
+<dt id="hal_py.GatePinGroup.ascending">
+<code class="descname">ascending</code><a class="headerlink" href="#hal_py.GatePinGroup.ascending" title="Permalink to this definition">¶</a></dt>
+<dd><p>True if the pin order of a pin group comprising n pins is ascending (from 0 to n-1), False if it is descending (from n-1 to 0).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GatePinGroup.contains_pin">
+<code class="descname">contains_pin</code><span class="sig-paren">(</span><em>self: hal_py.GatePinGroup</em>, <em>pin: hal_py.GatePin</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GatePinGroup.contains_pin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the pin group contains the given pin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin</strong> (<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a>) – The pin to check.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the pin group contains the pin, True otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.GatePinGroup.direction">
+<code class="descname">direction</code><a class="headerlink" href="#hal_py.GatePinGroup.direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>The direction of the pin group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="pin_direction.html#hal_py.PinDirection" title="hal_py.PinDirection">hal_py.PinDirection</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GatePinGroup.empty">
+<code class="descname">empty</code><span class="sig-paren">(</span><em>self: hal_py.GatePinGroup</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GatePinGroup.empty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the pin group is empty, i.e., contains no pins.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the pin group is empty, False otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GatePinGroup.get_direction">
+<code class="descname">get_direction</code><span class="sig-paren">(</span><em>self: hal_py.GatePinGroup</em><span class="sig-paren">)</span> &#x2192; hal_py.PinDirection<a class="headerlink" href="#hal_py.GatePinGroup.get_direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the direction of the pin group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The direction of the pin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="pin_direction.html#hal_py.PinDirection" title="hal_py.PinDirection">hal_py.PinDirection</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GatePinGroup.get_id">
+<code class="descname">get_id</code><span class="sig-paren">(</span><em>self: hal_py.GatePinGroup</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.GatePinGroup.get_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the ID of the gate pin group. The ID is unique within a gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The ID of the pin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GatePinGroup.get_index">
+<code class="descname">get_index</code><span class="sig-paren">(</span><em>self: hal_py.GatePinGroup</em>, <em>pin: hal_py.GatePin</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.GatePinGroup.get_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the index within the pin group of the given pin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin</strong> (<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a>) – The pin</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The index of the pin on success, -1 otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GatePinGroup.get_name">
+<code class="descname">get_name</code><span class="sig-paren">(</span><em>self: hal_py.GatePinGroup</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.GatePinGroup.get_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the name of the pin group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The name of the pin group.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GatePinGroup.get_pin_at_index">
+<code class="descname">get_pin_at_index</code><span class="sig-paren">(</span><em>self: hal_py.GatePinGroup</em>, <em>index: int</em><span class="sig-paren">)</span> &#x2192; hal_py.GatePin<a class="headerlink" href="#hal_py.GatePinGroup.get_pin_at_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the pin specified by the given index.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The index of the pin within the pin group.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pin on success, None otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GatePinGroup.get_pins">
+<code class="descname">get_pins</code><span class="sig-paren">(</span><em>self: hal_py.GatePinGroup, filter: Callable[[hal_py.GatePin], bool] = None</em><span class="sig-paren">)</span> &#x2192; List[hal_py.GatePin]<a class="headerlink" href="#hal_py.GatePinGroup.get_pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the (ordered) pins of the pin groups.
+The optional filter is evaluated on every pin such that the result only contains pins matching the specified condition.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filter</strong> (<em>lambda</em>) – Filter function to be evaluated on each pin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The ordered pins.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GatePinGroup.get_start_index">
+<code class="descname">get_start_index</code><span class="sig-paren">(</span><em>self: hal_py.GatePinGroup</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.GatePinGroup.get_start_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the start index of the pin group.
+Commonly, pin groups start at index 0, but this may not always be the case.
+Note that the start index for a pin group comprising n pins is 0 independent of whether it is ascending or descending.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The start index.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GatePinGroup.get_type">
+<code class="descname">get_type</code><span class="sig-paren">(</span><em>self: hal_py.GatePinGroup</em><span class="sig-paren">)</span> &#x2192; hal_py.PinType<a class="headerlink" href="#hal_py.GatePinGroup.get_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the type of the pin group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The type of the pin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType">hal_py.PinType</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.GatePinGroup.id">
+<code class="descname">id</code><a class="headerlink" href="#hal_py.GatePinGroup.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ID of the gate pin group. The ID is unique within a gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GatePinGroup.is_ascending">
+<code class="descname">is_ascending</code><span class="sig-paren">(</span><em>self: hal_py.GatePinGroup</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GatePinGroup.is_ascending" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the pin order of a pin group comprising n pins is ascending (from 0 to n-1) or descending (from n-1 to 0).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True for ascending bit order, False otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.GatePinGroup.name">
+<code class="descname">name</code><a class="headerlink" href="#hal_py.GatePinGroup.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the pin group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.GatePinGroup.pins">
+<code class="descname">pins</code><a class="headerlink" href="#hal_py.GatePinGroup.pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>The (ordered) pins of the pin groups.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GatePinGroup.size">
+<code class="descname">size</code><span class="sig-paren">(</span><em>self: hal_py.GatePinGroup</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.GatePinGroup.size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the size, i.e., the number of pins, of the pin group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The size of the pin group.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.GatePinGroup.start_index">
+<code class="descname">start_index</code><a class="headerlink" href="#hal_py.GatePinGroup.start_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>The start index of the pin group.
+Commonly, pin groups start at index 0, but this may not always be the case.
+Note that the start index for a pin group comprising n pins is 0 independent of whether it is ascending or descending.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.GatePinGroup.type">
+<code class="descname">type</code><a class="headerlink" href="#hal_py.GatePinGroup.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>The type of the pin group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType">hal_py.PinType</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 </div>

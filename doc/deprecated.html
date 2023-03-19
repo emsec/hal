@@ -104,6 +104,8 @@ $(document).ready(function(){initNavTree('deprecated.html',''); initResizable();
 <dd><a class="anchor" id="_deprecated000010"></a> Remove all buffer gates from the netlist and connect their fan-in to their fan-out nets. If enabled, analyzes every gate's inputs and removes fixed '0' or '1' inputs from the Boolean function. </dd>
 <dt>Member <a class="el" href="namespacehal_1_1netlist__utils.html#ab4c23f16593143c305d3d5de79dcb196">hal::netlist_utils::remove_unused_lut_endpoints</a>  (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *netlist)</dt>
 <dd><a class="anchor" id="_deprecated000011"></a> Remove all LUT fan-in endpoints that are not present within the Boolean function of the output of a gate. </dd>
+<dt>Member <a class="el" href="namespacehal_1_1netlist__utils.html#a91da9ccb1b2005faf2ec66b2e0618aba">hal::netlist_utils::replace_gate</a>  (<a class="el" href="classhal_1_1_gate.html">Gate</a> *gate, <a class="el" href="classhal_1_1_gate_type.html">GateType</a> *target_type, std::map&lt; GatePin *, GatePin * &gt; pin_map)</dt>
+<dd><a class="anchor" id="_deprecated000012"></a> Replace the given gate with a gate of the specified gate type. A map from old to new pins must be provided in order to correctly connect the gates inputs and outputs. A pin can be omitted if no connection at that pin is desired. </dd>
 <dt>Member <a class="el" href="classnlohmann_1_1basic__json.html#a5e4212986136ca1220f351c60e89906b">nlohmann::basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt;::iterator_wrapper</a>  (reference ref) noexcept</dt>
 <dd><a class="anchor" id="_deprecated000002"></a>This stream operator is deprecated and will be removed in future 4.0.0 of the library. Please use <a class="el" href="classnlohmann_1_1basic__json.html#afe3e137ace692efa08590d8df40f58dd">items()</a> instead; that is, replace <code>json::iterator_wrapper(j)</code> with <code>j.items()</code>.  </dd>
 <dt>Member <a class="el" href="classnlohmann_1_1basic__json.html#a60ca396028b8d9714c6e10efbf475af6">nlohmann::basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt;::operator&lt;&lt;</a>  (<a class="el" href="classnlohmann_1_1basic__json.html" title="a class to store JSON values">basic_json</a> &amp;j, std::istream &amp;i)</dt>
@@ -117,7 +119,7 @@ $(document).ready(function(){initNavTree('deprecated.html',''); initResizable();
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sun Mar 19 2023 08:20:21 for HAL by
+    <li class="footer">Generated on Sun Mar 19 2023 08:27:01 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

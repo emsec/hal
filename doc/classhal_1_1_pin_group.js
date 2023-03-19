@@ -3,6 +3,7 @@ var classhal_1_1_pin_group =
     [ "PinGroup", "classhal_1_1_pin_group.html#a005abdb38bda7b960ea5216cc735461f", null ],
     [ "~PinGroup", "classhal_1_1_pin_group.html#ac444df030e6ebf92a98fda0584577308", null ],
     [ "assign_pin", "classhal_1_1_pin_group.html#a22cc6275e512ed0dc066c67257d31f29", null ],
+    [ "contains_pin", "classhal_1_1_pin_group.html#a479771519511c2aa3643cd4e12fa2558", null ],
     [ "empty", "classhal_1_1_pin_group.html#af6dcfc8a11f2e2099066a2a84da0cfec", null ],
     [ "get_direction", "classhal_1_1_pin_group.html#ac9b30b31956f5c9670d61f1163f737b7", null ],
     [ "get_id", "classhal_1_1_pin_group.html#a6a4bef72226eb6232a603ebd17ac52f7", null ],

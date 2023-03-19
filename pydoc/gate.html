@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Gate &mdash; hal_py v4.1.0-9-gc055535a9 documentation</title>
+  <title>Gate &mdash; hal_py v4.1.0-10-g929821190 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.1.0-9-gc055535a9
+                v4.1.0-10-g929821190
               </div>
             
           
@@ -109,6 +109,7 @@
 <li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist.html">Netlist</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_factory.html">Netlist Factory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netlist_manipulation_decorator.html">Netlist Manipulation Decorator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_utils.html">Netlist Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_serializer.html">Netlist Serializer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_writer_manager.html">Netlist Writer Manager</a></li>
@@ -824,6 +825,32 @@ If no valid physical location y-coordinate is assigned, a negative value is retu
 </dd></dl>
 
 <dl class="method">
+<dt id="hal_py.Gate.get_modules">
+<code class="descname">get_modules</code><span class="sig-paren">(</span><em>self: hal_py.Gate, arg0: Callable[[hal::Module], bool], arg1: bool</em><span class="sig-paren">)</span> &#x2192; List[hal::Module]<a class="headerlink" href="#hal_py.Gate.get_modules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all modules that contain this gate, either directly or as parent of another module.
+If recursive is set to True, indirect parent modules are also included. Otherwise, only the module containing the gate directly is returned.
+The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filter</strong> (<em>lambda</em>) – An optional filter.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set True to include indirect parents as well, False otherwise.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of modules.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="module.html#hal_py.Module" title="hal_py.Module">hal_py.Module</a>]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="hal_py.Gate.get_name">
 <code class="descname">get_name</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.Gate.get_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the name of the gate.</p>
@@ -1264,6 +1291,20 @@ Only positive values are valid, negative values will be regarded as no location 
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="module.html#hal_py.Module" title="hal_py.Module">hal_py.Module</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Gate.modules">
+<code class="descname">modules</code><a class="headerlink" href="#hal_py.Gate.modules" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of all modules that contain this gate, either directly or as parent of another module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="module.html#hal_py.Module" title="hal_py.Module">hal_py.Module</a>]</td>
 </tr>
 </tbody>
 </table>

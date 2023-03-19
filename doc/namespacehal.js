@@ -276,6 +276,7 @@ var namespacehal =
     [ "NetlistElementsTreeModel", "classhal_1_1_netlist_elements_tree_model.html", "classhal_1_1_netlist_elements_tree_model" ],
     [ "NetlistEvent", "classhal_1_1_netlist_event.html", "classhal_1_1_netlist_event" ],
     [ "NetlistInternalManager", "classhal_1_1_netlist_internal_manager.html", "classhal_1_1_netlist_internal_manager" ],
+    [ "NetlistModificationDecorator", "classhal_1_1_netlist_modification_decorator.html", "classhal_1_1_netlist_modification_decorator" ],
     [ "NetlistParser", "classhal_1_1_netlist_parser.html", "classhal_1_1_netlist_parser" ],
     [ "NetlistRelay", "classhal_1_1_netlist_relay.html", "classhal_1_1_netlist_relay" ],
     [ "NetlistWriter", "classhal_1_1_netlist_writer.html", "classhal_1_1_netlist_writer" ],

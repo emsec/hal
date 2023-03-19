@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Module Pin Group &mdash; hal_py v4.1.0-9-gc055535a9 documentation</title>
+  <title>Module Pin Group &mdash; hal_py v4.1.0-10-g929821190 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.1.0-9-gc055535a9
+                v4.1.0-10-g929821190
               </div>
             
           
@@ -109,6 +109,7 @@
 <li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist.html">Netlist</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_factory.html">Netlist Factory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netlist_manipulation_decorator.html">Netlist Manipulation Decorator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_utils.html">Netlist Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_serializer.html">Netlist Serializer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_writer_manager.html">Netlist Writer Manager</a></li>
@@ -202,6 +203,24 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.ModulePinGroup.contains_pin">
+<code class="descname">contains_pin</code><span class="sig-paren">(</span><em>self: hal_py.ModulePinGroup</em>, <em>pin: hal_py.ModulePin</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.ModulePinGroup.contains_pin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the pin group contaisn the given pin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin</strong> (<a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin"><em>hal_py.ModulePin</em></a>) – The pin to check.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the pin group contains the pin, True otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
 </tr>
 </tbody>
 </table>

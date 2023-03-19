@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist &mdash; hal_py v4.1.0-9-gc055535a9 documentation</title>
+  <title>Netlist &mdash; hal_py v4.1.0-10-g929821190 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.1.0-9-gc055535a9
+                v4.1.0-10-g929821190
               </div>
             
           
@@ -109,6 +109,7 @@
 <li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Netlist</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_factory.html">Netlist Factory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netlist_manipulation_decorator.html">Netlist Manipulation Decorator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_utils.html">Netlist Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_serializer.html">Netlist Serializer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_writer_manager.html">Netlist Writer Manager</a></li>
@@ -809,21 +810,44 @@ The filter is evaluated on every gate such that the result only contains gates m
 
 <dl class="method">
 <dt id="hal_py.Netlist.get_groupings">
-<code class="descname">get_groupings</code><span class="sig-paren">(</span><em>self: hal_py.Netlist, filter: Callable[[hal::Grouping], bool] = None</em><span class="sig-paren">)</span> &#x2192; List[hal::Grouping]<a class="headerlink" href="#hal_py.Netlist.get_groupings" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get all groupings contained within the netlist.
-A filter can be applied to the result to only get groupings matching the specified condition.</p>
+<code class="descname">get_groupings</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.Netlist.get_groupings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">get_groupings(self: hal_py.Netlist) -&gt; List[hal::Grouping]</p>
+<blockquote>
+<div><p>Get all groupings contained within the netlist.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filter</strong> (<em>lambda</em>) – Filter to be applied to the groupings.</td>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">A list of groupings.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of groupings.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="grouping.html#hal_py.Grouping" title="hal_py.Grouping">hal_py.Grouping</a>]</td>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">list[hal_py.Grouping]</td>
 </tr>
 </tbody>
 </table>
+</div></blockquote>
+</li>
+<li><p class="first">get_groupings(self: hal_py.Netlist, filter: Callable[[hal::Grouping], bool]) -&gt; List[hal::Grouping]</p>
+<blockquote>
+<div><p>Get all groupings contained within the netlist.
+The filter is evaluated on every grouping such that the result only contains groupings matching the specified condition.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param lambda filter:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Filter function to be evaluated on each grouping.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">A list of groupings.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">list[hal_py.Grouping]</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
 </dd></dl>
 
 <dl class="method">
@@ -1257,7 +1281,7 @@ The value of 0 is reserved and represents an invalid ID.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="grouping.html#hal_py.Grouping" title="hal_py.Grouping">hal_py.Grouping</a>]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="grouping.html#hal_py.Grouping" title="hal_py.Grouping">hal_py.Grouping</a>]</td>
 </tr>
 </tbody>
 </table>

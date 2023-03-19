@@ -1,5 +1,16 @@
 var NAVTREEINDEX16 =
 {
+"classhal_1_1_selection_details_widget.html#aa3d852f49cac30e3d6fb5730b50f719c":[4,0,7,3,18,21],
+"classhal_1_1_selection_details_widget.html#aa5b8c37993e3d5c95bce10aac8314880":[4,0,7,3,18,12],
+"classhal_1_1_selection_details_widget.html#aa83df22ab5bfcb6074dbf3ac1851ef70":[4,0,7,3,18,27],
+"classhal_1_1_selection_details_widget.html#aad0a40377baae57ca6e8eaeb79df4bcd":[4,0,7,3,18,14],
+"classhal_1_1_selection_details_widget.html#ab3e209462aed3084f6482d2c23d9251b":[4,0,7,3,18,6],
+"classhal_1_1_selection_details_widget.html#ab79714f917bf12326f8885518f48931e":[4,0,7,3,18,34],
+"classhal_1_1_selection_details_widget.html#ac9fce7b5132c6322acb670e39e7631a5":[4,0,7,3,18,22],
+"classhal_1_1_selection_details_widget.html#ad33fdda076a48dbfc7b76db3fa9a0159":[4,0,7,3,18,7],
+"classhal_1_1_selection_details_widget.html#ad7f764ee5c4f032562b22b5d01ee4b92":[4,0,7,3,18,4],
+"classhal_1_1_selection_details_widget.html#adccb5d0277796a9a7d6752592f15b5a8":[4,0,7,3,18,32],
+"classhal_1_1_selection_details_widget.html#adfa9a0ad386344d045c9f448bc6cfc49":[4,0,7,3,18,15],
 "classhal_1_1_selection_details_widget.html#ae8e71a4860e44e6093ccd7ae359b52c3":[4,0,7,3,18,10],
 "classhal_1_1_selection_details_widget.html#ae8fb8a4e4da6256d965e45b8700c41f7":[4,0,7,3,18,23],
 "classhal_1_1_selection_details_widget.html#af7bea19b748dfc54a047b824ee8d87d5":[4,0,7,3,18,2],
@@ -238,16 +249,5 @@ var NAVTREEINDEX16 =
 "classhal_1_1_settings_item_spinbox.html#a4a7b3ac9bf5bbc8c12eb27b65782e7c5":[4,0,4,14,4],
 "classhal_1_1_settings_item_spinbox.html#a5a73be0797e9423d5b10219f97e7922a":[4,0,4,14,9],
 "classhal_1_1_settings_item_spinbox.html#a6234c6a384de9ccfe56564003202fcc8":[4,0,4,14,8],
-"classhal_1_1_settings_item_spinbox.html#a6b3a02ebfa2c9d82f41a9038d1501a90":[4,0,4,14,2],
-"classhal_1_1_settings_item_spinbox.html#a784e03d4820d7622ac211821feb8af75":[4,0,4,14,5],
-"classhal_1_1_settings_item_spinbox.html#ad7453d8c486472254eceaabedd4ea867":[4,0,4,14,7],
-"classhal_1_1_settings_item_text.html":[4,0,4,15],
-"classhal_1_1_settings_item_text.html#a44ab5c25233d45540805b9853e4b7bbe":[4,0,4,15,4],
-"classhal_1_1_settings_item_text.html#a51c2ac9a65a24fe41ecce502c597ca93":[4,0,4,15,1],
-"classhal_1_1_settings_item_text.html#a559e237d5d9eec88eacfdff3fc280116":[4,0,4,15,6],
-"classhal_1_1_settings_item_text.html#a6fde0d6545a47daf9c40ec83cc9470bf":[4,0,4,15,2],
-"classhal_1_1_settings_item_text.html#a7ea8d8d62eff6f1dbab96ec8cf43bbd6":[4,0,4,15,0],
-"classhal_1_1_settings_item_text.html#aa1fadc402d9a20d0d663bb6ebabd3585":[4,0,4,15,5],
-"classhal_1_1_settings_item_text.html#acebf14359fae37de8a5fd1e72c6f6bb0":[4,0,4,15,3],
-"classhal_1_1_settings_manager.html":[4,0,4,16]
+"classhal_1_1_settings_item_spinbox.html#a6b3a02ebfa2c9d82f41a9038d1501a90":[4,0,4,14,2]
 };

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Net &mdash; hal_py v4.1.0-9-gc055535a9 documentation</title>
+  <title>Net &mdash; hal_py v4.1.0-10-g929821190 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.1.0-9-gc055535a9
+                v4.1.0-10-g929821190
               </div>
             
           
@@ -109,6 +109,7 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Net</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist.html">Netlist</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_factory.html">Netlist Factory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netlist_manipulation_decorator.html">Netlist Manipulation Decorator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_utils.html">Netlist Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_serializer.html">Netlist Serializer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_writer_manager.html">Netlist Writer Manager</a></li>
@@ -569,6 +570,24 @@ The optional filter is evaluated on every candidate such that the result only co
 <code class="descname">is_a_destination</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.Net.is_a_destination" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
+<li><p class="first">is_a_destination(self: hal_py.Net, gate: hal_py.Gate) -&gt; bool</p>
+<blockquote>
+<div><p>Check whether a gate is a destination of the net independent of the pin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Gate gate:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The gate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">True if the gate is a destination of the net, False otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
 <li><p class="first">is_a_destination(self: hal_py.Net, gate: hal_py.Gate, pin_name: str) -&gt; bool</p>
 <blockquote>
 <div><p>Check whether an endpoint is a destination of the net.
@@ -639,6 +658,24 @@ The endpoint is specified by a tuple of a gate and an input pin of that gate.</p
 <code class="descname">is_a_source</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.Net.is_a_source" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
+<li><p class="first">is_a_source(self: hal_py.Net, gate: hal_py.Gate) -&gt; bool</p>
+<blockquote>
+<div><p>Check whether a gate is a source of the net independent of the pin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Gate gate:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The gate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">True if the gate is a source of the net, False otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
 <li><p class="first">is_a_source(self: hal_py.Net, gate: hal_py.Gate, pin_name: str) -&gt; bool</p>
 <blockquote>
 <div><p>Check whether an endpoint is a source of the net.

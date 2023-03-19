@@ -1,5 +1,6 @@
 var NAVTREEINDEX7 =
 {
+"classhal_1_1_graph_widget.html#a9bcc225353026c99b9a99dbc06115187":[4,0,0,7,8],
 "classhal_1_1_graph_widget.html#a9ea3d35683d49169fd015c6562348093":[4,0,0,7,3],
 "classhal_1_1_graph_widget.html#aa095d87d96b9269e98e8e38006cbb670":[4,0,0,7,14],
 "classhal_1_1_graph_widget.html#abc032294c0ba3084763faa1bd940610c":[4,0,0,7,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX7 =
 "classhal_1_1_grouping_manager_widget.html#a94f36e46a84a53b59eac224d44ecd2a9":[4,0,7,2,2,29],
 "classhal_1_1_grouping_manager_widget.html#a9ab8f5b08ba5b1762f543aebe8d29efb":[4,0,7,2,2,1],
 "classhal_1_1_grouping_manager_widget.html#aa85690118217c20a6d9b0db28c709af4":[4,0,7,2,2,64],
-"classhal_1_1_grouping_manager_widget.html#aa9ed2ca35ee8afb1d0e41cb8a0720e4d":[4,0,7,2,2,36],
-"classhal_1_1_grouping_manager_widget.html#aae28563e5626e3e9cf6f9b86f61e88cd":[4,0,7,2,2,19]
+"classhal_1_1_grouping_manager_widget.html#aa9ed2ca35ee8afb1d0e41cb8a0720e4d":[4,0,7,2,2,36]
 };

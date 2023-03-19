@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Module &mdash; hal_py v4.1.0-9-gc055535a9 documentation</title>
+  <title>Module &mdash; hal_py v4.1.0-10-g929821190 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.1.0-9-gc055535a9
+                v4.1.0-10-g929821190
               </div>
             
           
@@ -109,6 +109,7 @@
 <li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist.html">Netlist</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_factory.html">Netlist Factory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netlist_manipulation_decorator.html">Netlist Manipulation Decorator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_utils.html">Netlist Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_serializer.html">Netlist Serializer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_writer_manager.html">Netlist Writer Manager</a></li>
@@ -295,7 +296,7 @@ If recursive is set to true, all indirect submodules are also included.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>other</strong> (<a class="reference internal" href="#hal_py.Module" title="hal_py.Module"><em>hal_py.Module</em></a>) – Other module to check for.</li>
-<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True to include indirect submodules as well.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set True to include indirect submodules as well, False otherwise.</li>
 </ul>
 </td>
 </tr>
@@ -778,7 +779,7 @@ For the top module, None is returned.</p>
 <dl class="method">
 <dt id="hal_py.Module.get_parent_modules">
 <code class="descname">get_parent_modules</code><span class="sig-paren">(</span><em>self: hal_py.Module, filter: Callable[[hal_py.Module], bool] = None, recursive: bool = True</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Module]<a class="headerlink" href="#hal_py.Module.get_parent_modules" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get all direct parent of this module.
+<dd><p>Get all parents of this module.
 If recursive is set to True, all indirect parents are also included.
 The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -787,7 +788,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>filter</strong> (<em>lambda</em>) – An optional filter.</li>
-<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True to include indirect parents as well, False otherwise.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set True to include indirect parents as well, False otherwise.</li>
 </ul>
 </td>
 </tr>
@@ -978,7 +979,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>filter</strong> (<em>lambda</em>) – An optional filter.</li>
-<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True to include indirect submodules as well, False otherwise.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set True to include indirect submodules as well, False otherwise.</li>
 </ul>
 </td>
 </tr>
@@ -1200,7 +1201,7 @@ The value of 0 is reserved and represents an invalid ID.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>module</strong> (<a class="reference internal" href="#hal_py.Module" title="hal_py.Module"><em>hal_py.Module</em></a>) – The module.</li>
-<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True to check recursively, False otherwise.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set True to check recursively, False otherwise.</li>
 </ul>
 </td>
 </tr>
@@ -1224,7 +1225,7 @@ The value of 0 is reserved and represents an invalid ID.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>module</strong> (<a class="reference internal" href="#hal_py.Module" title="hal_py.Module"><em>hal_py.Module</em></a>) – The module.</li>
-<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True to check recursively, False otherwise.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set True to check recursively, False otherwise.</li>
 </ul>
 </td>
 </tr>
