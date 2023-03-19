@@ -2,7 +2,18 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
-
+* decorators
+  * added `NetlistModificationDecorator`
+    * added `delete_modules` to delete all (or a filtered subset of) the modules in a netlist
+    * moved `replace_gate` from `netlist_utils`, now returns pointer to replacement gate
+    * added `connect_gates` to connect two gates at the specified pins via a new or already existing net
+    * added `connect_nets` to merge two nets into one, thereby connecting them
+* miscellaneous
+  * added `Gate::get_modules` to recursively get all modules that contain the gate by traversing the module hierarchy
+  * added `Net::is_a_source(const Gate*)` and `Net::is_a_destination(const Gate*)` that check whether a gate is a source/destination independent of the gate pin
+  * added `PinGroup<T>::contains_pin` to check whether a pin is part of the respective gate or module pin group
+* bugfixes
+  * fixed missing Python bindings for `GatePinGroup`
 
 ## [4.1.0] - 2023-03-08 16:57:06+01:00 (urgency: medium)
 * selection details

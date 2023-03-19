@@ -611,69 +611,111 @@ namespace hal {
             {
                 auto nl = test_utils::create_empty_netlist();
                 ASSERT_NE(nl, nullptr);
+                const GateLibrary* gl = nl->get_gate_library();
+                ASSERT_NE(gl, nullptr);
+
+                GateType* buf_type = gl->get_gate_type_by_name("BUF");
+                ASSERT_NE(buf_type, nullptr);
+
+                GatePin* o_pin = buf_type->get_pin_by_name("O");
+                ASSERT_NE(o_pin, nullptr);
+
                 Net* test_net = nl->create_net("test_net");
                 ASSERT_NE(test_net, nullptr);
-                Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate");
+                Gate* test_gate = nl->create_gate(buf_type, "test_gate");
                 ASSERT_NE(test_gate, nullptr);
                 Endpoint* ep = test_net->add_source(test_gate, "O");
                 ASSERT_NE(ep, nullptr);
 
-                EXPECT_TRUE(test_net->is_a_source(test_gate, "O"));
-                EXPECT_FALSE(test_net->is_a_destination(test_gate, "O"));
-
                 EXPECT_TRUE(test_net->is_a_source(ep));
+                EXPECT_TRUE(test_net->is_a_source(test_gate));
+                EXPECT_TRUE(test_net->is_a_source(test_gate, "O"));
+                EXPECT_TRUE(test_net->is_a_source(test_gate, o_pin));
+
                 EXPECT_FALSE(test_net->is_a_destination(ep));
+                EXPECT_FALSE(test_net->is_a_destination(test_gate));
+                EXPECT_FALSE(test_net->is_a_destination(test_gate, "O"));
+                EXPECT_FALSE(test_net->is_a_destination(test_gate, o_pin));
             }
             {
                 auto nl = test_utils::create_empty_netlist();
                 ASSERT_NE(nl, nullptr);
+                const GateLibrary* gl = nl->get_gate_library();
+                ASSERT_NE(gl, nullptr);
+
+                GateType* buf_type = gl->get_gate_type_by_name("BUF");
+                ASSERT_NE(buf_type, nullptr);
+
+                GatePin* i_pin = buf_type->get_pin_by_name("I");
+                ASSERT_NE(i_pin, nullptr);
+
                 Net* test_net = nl->create_net("test_net");
                 ASSERT_NE(test_net, nullptr);
-                Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate");
+                Gate* test_gate = nl->create_gate(buf_type, "test_gate");
                 ASSERT_NE(test_gate, nullptr);
                 Endpoint* ep = test_net->add_destination(test_gate, "I");
                 ASSERT_NE(ep, nullptr);
 
-                EXPECT_FALSE(test_net->is_a_source(test_gate, "I"));
-                EXPECT_TRUE(test_net->is_a_destination(test_gate, "I"));
-
                 EXPECT_FALSE(test_net->is_a_source(ep));
+                EXPECT_FALSE(test_net->is_a_source(test_gate));
+                EXPECT_FALSE(test_net->is_a_source(test_gate, "I"));
+                EXPECT_FALSE(test_net->is_a_source(test_gate, i_pin));
+
                 EXPECT_TRUE(test_net->is_a_destination(ep));
+                EXPECT_TRUE(test_net->is_a_destination(test_gate));
+                EXPECT_TRUE(test_net->is_a_destination(test_gate, "I"));
+                EXPECT_TRUE(test_net->is_a_destination(test_gate, i_pin));
             }
             // NEGATIVE
             {
                 // invalid source
                 auto nl = test_utils::create_empty_netlist();
                 ASSERT_NE(nl, nullptr);
+                const GateLibrary* gl = nl->get_gate_library();
+                ASSERT_NE(gl, nullptr);
+
+                GateType* buf_type = gl->get_gate_type_by_name("BUF");
+                ASSERT_NE(buf_type, nullptr);
+
                 Net* test_net = nl->create_net("test_net");
                 ASSERT_NE(test_net, nullptr);
-                Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate");
+                Gate* test_gate = nl->create_gate(buf_type, "test_gate");
                 ASSERT_NE(test_gate, nullptr);
                 Endpoint* ep = test_net->add_source(test_gate, "O");
                 ASSERT_NE(ep, nullptr);
 
+                EXPECT_FALSE(test_net->is_a_source(test_gate, nullptr));
                 EXPECT_FALSE(test_net->is_a_source(test_gate, "INVALID"));
                 EXPECT_FALSE(test_net->is_a_source(test_gate, ""));
                 EXPECT_FALSE(test_net->is_a_source(test_gate, "I"));
                 EXPECT_FALSE(test_net->is_a_source(nullptr, "O"));
-                EXPECT_FALSE(test_net->is_a_source(nullptr));
+                EXPECT_FALSE(test_net->is_a_source((Endpoint*)nullptr));
+                EXPECT_FALSE(test_net->is_a_source((Gate*)nullptr));
             }
             {
                 // invalid destination
                 auto nl = test_utils::create_empty_netlist();
                 ASSERT_NE(nl, nullptr);
+                const GateLibrary* gl = nl->get_gate_library();
+                ASSERT_NE(gl, nullptr);
+
+                GateType* buf_type = gl->get_gate_type_by_name("BUF");
+                ASSERT_NE(buf_type, nullptr);
+
                 Net* test_net = nl->create_net("test_net");
                 ASSERT_NE(test_net, nullptr);
-                Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate");
+                Gate* test_gate = nl->create_gate(buf_type, "test_gate");
                 ASSERT_NE(test_gate, nullptr);
                 Endpoint* ep = test_net->add_destination(test_gate, "I");
                 ASSERT_NE(ep, nullptr);
 
+                EXPECT_FALSE(test_net->is_a_destination(test_gate, nullptr));
                 EXPECT_FALSE(test_net->is_a_destination(test_gate, "INVALID"));
                 EXPECT_FALSE(test_net->is_a_destination(test_gate, ""));
                 EXPECT_FALSE(test_net->is_a_destination(test_gate, "O"));
                 EXPECT_FALSE(test_net->is_a_destination(nullptr, "I"));
-                EXPECT_FALSE(test_net->is_a_destination(nullptr));
+                EXPECT_FALSE(test_net->is_a_destination((Endpoint*)nullptr));
+                EXPECT_FALSE(test_net->is_a_destination((Gate*)nullptr));
             }
         TEST_END
     }

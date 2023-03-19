@@ -27,6 +27,7 @@ HAL Core Documentation
    net
    netlist
    netlist_factory
+   netlist_manipulation_decorator
    netlist_utils
    netlist_serializer
    netlist_writer_manager

@@ -232,7 +232,7 @@ namespace hal
          * @param[in] filter - Filter function to be evaluated on each gate.
          * @return A vector of gates.
          */
-        std::vector<Gate*> get_gates(const std::function<bool(Gate*)>& filter) const;
+        std::vector<Gate*> get_gates(const std::function<bool(const Gate*)>& filter) const;
 
         /**
          * Mark a gate as a global VCC gate.
@@ -366,7 +366,7 @@ namespace hal
          * @param[in] filter - Filter function to be evaluated on each net.
          * @return A vector of nets.
          */
-        std::vector<Net*> get_nets(const std::function<bool(Net*)>& filter) const;
+        std::vector<Net*> get_nets(const std::function<bool(const Net*)>& filter) const;
 
         /**
          * Mark a net as a global input net.
@@ -512,7 +512,7 @@ namespace hal
          * @param[in] filter - Filter function to be evaluated on each module.
          * @return A vector of modules.
          */
-        std::vector<Module*> get_modules(const std::function<bool(Module*)>& filter) const;
+        std::vector<Module*> get_modules(const std::function<bool(const Module*)>& filter) const;
 
         /**
          * Get the top module of the netlist.
@@ -578,13 +578,20 @@ namespace hal
         Grouping* get_grouping_by_id(u32 grouping_id) const;
 
         /**
-         * Get all groupings contained within the netlist.<br>
-         * A filter can be applied to the result to only get groupings matching the specified condition.
+         * Get all groupings contained within the netlist.
          *
-         * @param[in] filter - Filter to be applied to the groupings.
          * @return A vector of groupings.
          */
-        std::vector<Grouping*> get_groupings(const std::function<bool(Grouping*)>& filter = nullptr) const;
+        const std::vector<Grouping*>& get_groupings() const;
+
+        /**
+         * Get all groupings contained within the netlist.<br>
+         * The filter is evaluated on every grouping such that the result only contains groupings matching the specified condition.
+         *
+         * @param[in] filter - Filter function to be evaluated on each grouping.
+         * @return A vector of groupings.
+         */
+        std::vector<Grouping*> get_groupings(const std::function<bool(const Grouping*)>& filter) const;
 
         /*
          * ################################################################
