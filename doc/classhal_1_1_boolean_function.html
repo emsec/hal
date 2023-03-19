@@ -203,6 +203,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae9242e7d969fc9b6eb402fc5c2386153"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a535e68b32ac7bfd72cd9c166699e5138"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function.html#a535e68b32ac7bfd72cd9c166699e5138">substitute</a> (const std::string &amp;variable_name, const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;function) const</td></tr>
 <tr class="separator:a535e68b32ac7bfd72cd9c166699e5138"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a710893df5a2372be84ea4576de9e3e6b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function.html#a710893df5a2372be84ea4576de9e3e6b">substitute</a> (const std::map&lt; std::string, std::string &gt; &amp;substitutions) const</td></tr>
+<tr class="separator:a710893df5a2372be84ea4576de9e3e6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4074a3313f582aa925e783d633b86d90"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function.html#a4074a3313f582aa925e783d633b86d90">substitute</a> (const std::map&lt; std::string, <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &gt; &amp;substitutions) const</td></tr>
 <tr class="separator:a4074a3313f582aa925e783d633b86d90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8780c328ce092a458df30d3fb4ceb76c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="classhal_1_1_boolean_function.html#aac7bb4fda3bf06664f6bc717c3be92fb">Value</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function.html#a8780c328ce092a458df30d3fb4ceb76c">evaluate</a> (const std::unordered_map&lt; std::string, <a class="el" href="classhal_1_1_boolean_function.html#aac7bb4fda3bf06664f6bc717c3be92fb">Value</a> &gt; &amp;inputs) const</td></tr>
@@ -406,7 +408,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00325">325</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="boolean__function_8h_source.html#l01109">hal::BooleanFunction::NodeType::Add</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01480">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
+<p class="reference">References <a class="el" href="boolean__function_8h_source.html#l01139">hal::BooleanFunction::NodeType::Add</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01497">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00576">operator+()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00581">operator+=()</a>.</p>
 
@@ -464,7 +466,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00282">282</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="boolean__function_8h_source.html#l01104">hal::BooleanFunction::NodeType::And</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01480">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
+<p class="reference">References <a class="el" href="boolean__function_8h_source.html#l01134">hal::BooleanFunction::NodeType::And</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01497">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00538">operator&amp;()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00543">operator&amp;=()</a>.</p>
 
@@ -570,11 +572,11 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok() and a vector of values representing the truth table output on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01141">1141</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01158">1158</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01067">evaluate()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00805">get_variable_names()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01644">hal::BooleanFunction::Node::is_variable()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, <a class="el" href="boolean__function_8h_source.html#l00911">hal::BooleanFunction::Node::size</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00023">to_string()</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01084">evaluate()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00805">get_variable_names()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01698">hal::BooleanFunction::Node::is_variable()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, <a class="el" href="boolean__function_8h_source.html#l00920">hal::BooleanFunction::Node::size</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00023">to_string()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2gate_8cpp_source.html#l00461">hal::Gate::add_boolean_function()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01210">get_truth_table_as_string()</a>, and <a class="el" href="lut__table__model_8cpp_source.html#l00078">hal::LUTTableModel::setBooleanFunction()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2gate_8cpp_source.html#l00461">hal::Gate::add_boolean_function()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01227">get_truth_table_as_string()</a>, and <a class="el" href="lut__table__model_8cpp_source.html#l00078">hal::LUTTableModel::setBooleanFunction()</a>.</p>
 
 </div>
 </div>
@@ -630,7 +632,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00424">424</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="boolean__function_8h_source.html#l01117">hal::BooleanFunction::NodeType::Concat</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01480">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="boolean__function_8h_source.html#l01147">hal::BooleanFunction::NodeType::Concat</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01497">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html#l00100">hal::BooleanFunctionDecorator::get_boolean_function_from()</a>, <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00294">hal::SolveFsmPlugin::solve_fsm()</a>, and <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00198">hal::SolveFsmPlugin::solve_fsm_brute_force()</a>.</p>
 
@@ -670,9 +672,9 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00255">255</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01485">hal::BooleanFunction::Node::Constant()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01502">hal::BooleanFunction::Node::Constant()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="symbolic__execution_8cpp_source.html#l00133">hal::SMT::ConstantPropagation::Add()</a>, <a class="el" href="symbolic__execution_8cpp_source.html#l00018">hal::SMT::ConstantPropagation::And()</a>, <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00265">Const()</a>, <a class="el" href="types_8cpp_source.html#l00262">hal::SMT::Model::evaluate()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01098">evaluate()</a>, <a class="el" href="symbolic__execution_8cpp_source.html#l00354">hal::SMT::ConstantPropagation::Ite()</a>, <a class="el" href="symbolic__execution_8cpp_source.html#l00187">hal::SMT::ConstantPropagation::Mul()</a>, <a class="el" href="symbolic__execution_8cpp_source.html#l00075">hal::SMT::ConstantPropagation::Not()</a>, <a class="el" href="symbolic__execution_8cpp_source.html#l00047">hal::SMT::ConstantPropagation::Or()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00483">hal::netlist_utils::remove_buffers()</a>, <a class="el" href="symbolic__execution_8cpp_source.html#l00217">hal::SMT::ConstantPropagation::Sle()</a>, <a class="el" href="symbolic__execution_8cpp_source.html#l00257">hal::SMT::ConstantPropagation::Slt()</a>, <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00294">hal::SolveFsmPlugin::solve_fsm()</a>, <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00198">hal::SolveFsmPlugin::solve_fsm_brute_force()</a>, <a class="el" href="symbolic__execution_8cpp_source.html#l00160">hal::SMT::ConstantPropagation::Sub()</a>, <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html#l00015">hal::BooleanFunctionDecorator::substitute_power_ground_nets()</a>, <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html#l00058">hal::BooleanFunctionDecorator::substitute_power_ground_pins()</a>, <a class="el" href="symbolic__execution_8cpp_source.html#l00295">hal::SMT::ConstantPropagation::Ule()</a>, <a class="el" href="symbolic__execution_8cpp_source.html#l00324">hal::SMT::ConstantPropagation::Ult()</a>, and <a class="el" href="symbolic__execution_8cpp_source.html#l00104">hal::SMT::ConstantPropagation::Xor()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="symbolic__execution_8cpp_source.html#l00133">hal::SMT::ConstantPropagation::Add()</a>, <a class="el" href="symbolic__execution_8cpp_source.html#l00018">hal::SMT::ConstantPropagation::And()</a>, <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00265">Const()</a>, <a class="el" href="types_8cpp_source.html#l00262">hal::SMT::Model::evaluate()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01115">evaluate()</a>, <a class="el" href="symbolic__execution_8cpp_source.html#l00354">hal::SMT::ConstantPropagation::Ite()</a>, <a class="el" href="symbolic__execution_8cpp_source.html#l00187">hal::SMT::ConstantPropagation::Mul()</a>, <a class="el" href="symbolic__execution_8cpp_source.html#l00075">hal::SMT::ConstantPropagation::Not()</a>, <a class="el" href="symbolic__execution_8cpp_source.html#l00047">hal::SMT::ConstantPropagation::Or()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00483">hal::netlist_utils::remove_buffers()</a>, <a class="el" href="symbolic__execution_8cpp_source.html#l00217">hal::SMT::ConstantPropagation::Sle()</a>, <a class="el" href="symbolic__execution_8cpp_source.html#l00257">hal::SMT::ConstantPropagation::Slt()</a>, <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00294">hal::SolveFsmPlugin::solve_fsm()</a>, <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00198">hal::SolveFsmPlugin::solve_fsm_brute_force()</a>, <a class="el" href="symbolic__execution_8cpp_source.html#l00160">hal::SMT::ConstantPropagation::Sub()</a>, <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html#l00015">hal::BooleanFunctionDecorator::substitute_power_ground_nets()</a>, <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html#l00058">hal::BooleanFunctionDecorator::substitute_power_ground_pins()</a>, <a class="el" href="symbolic__execution_8cpp_source.html#l00295">hal::SMT::ConstantPropagation::Ule()</a>, <a class="el" href="symbolic__execution_8cpp_source.html#l00324">hal::SMT::ConstantPropagation::Ult()</a>, and <a class="el" href="symbolic__execution_8cpp_source.html#l00104">hal::SMT::ConstantPropagation::Xor()</a>.</p>
 
 </div>
 </div>
@@ -710,7 +712,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00260">260</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01485">hal::BooleanFunction::Node::Constant()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01502">hal::BooleanFunction::Node::Constant()</a>.</p>
 
 </div>
 </div>
@@ -815,7 +817,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00467">467</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="boolean__function_8h_source.html#l01122">hal::BooleanFunction::NodeType::Eq</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01480">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="boolean__function_8h_source.html#l01152">hal::BooleanFunction::NodeType::Eq</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01497">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, and <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00294">hal::SolveFsmPlugin::solve_fsm()</a>.</p>
 
@@ -845,9 +847,9 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok() and the resulting value on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01098">1098</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01115">1115</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00255">Const()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01649">hal::BooleanFunction::Node::has_variable_name()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, <a class="el" href="boolean__function_8h_source.html#l00911">hal::BooleanFunction::Node::size</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00023">to_string()</a>, <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00250">Var()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00255">Const()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01703">hal::BooleanFunction::Node::has_variable_name()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, <a class="el" href="boolean__function_8h_source.html#l00920">hal::BooleanFunction::Node::size</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00023">to_string()</a>, <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00250">Var()</a>.</p>
 
 </div>
 </div>
@@ -875,11 +877,11 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok() and the resulting value on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01067">1067</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01084">1084</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00023">to_string()</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01141">compute_truth_table()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01158">compute_truth_table()</a>.</p>
 
 </div>
 </div>
@@ -937,7 +939,7 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the value of the top-level node of the Boolean function of type <code>Constant</code> as long as it has a size &lt;= 64-bit.</p>
+<p>Get the constant value of the top-level node of the Boolean function of type <code>Constant</code> as long as it has a size &lt;= 64-bit.</p>
 <dl class="section return"><dt>Returns</dt><dd>The constant value on success, an error otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00703">703</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
@@ -960,7 +962,7 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the value of the top-level node of the Boolean function of type <code>Index</code>.</p>
+<p>Get the index value of the top-level node of the Boolean function of type <code>Index</code>.</p>
 <dl class="section return"><dt>Returns</dt><dd>The constant value on success, an error otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00740">740</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
@@ -1085,9 +1087,9 @@ Developer Note</h1>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok() and a string representing the truth table on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01210">1210</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01227">1227</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01141">compute_truth_table()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00805">get_variable_names()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="control_8py_source.html#l00014">control::str</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01158">compute_truth_table()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00805">get_variable_names()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="control_8py_source.html#l00014">control::str</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
 </div>
 </div>
@@ -1112,7 +1114,7 @@ Developer Note</h1>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00673">is_variable()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html#l00044">hal::BooleanFunctionNetDecorator::get_net_from()</a>, and <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html#l00084">hal::BooleanFunctionNetDecorator::get_net_id_from()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html#l00044">hal::BooleanFunctionNetDecorator::get_net_from()</a>, <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html#l00084">hal::BooleanFunctionNetDecorator::get_net_id_from()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01030">substitute()</a>.</p>
 
 </div>
 </div>
@@ -1135,7 +1137,7 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00805">805</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01141">compute_truth_table()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00264">hal::Gate::get_resolved_boolean_function()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01210">get_truth_table_as_string()</a>, <a class="el" href="lut__table__model_8cpp_source.html#l00078">hal::LUTTableModel::setBooleanFunction()</a>, <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html#l00015">hal::BooleanFunctionDecorator::substitute_power_ground_nets()</a>, and <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html#l00058">hal::BooleanFunctionDecorator::substitute_power_ground_pins()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01158">compute_truth_table()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00264">hal::Gate::get_resolved_boolean_function()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01227">get_truth_table_as_string()</a>, <a class="el" href="lut__table__model_8cpp_source.html#l00078">hal::LUTTableModel::setBooleanFunction()</a>, <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html#l00015">hal::BooleanFunctionDecorator::substitute_power_ground_nets()</a>, and <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html#l00058">hal::BooleanFunctionDecorator::substitute_power_ground_pins()</a>.</p>
 
 </div>
 </div>
@@ -1165,7 +1167,7 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00698">698</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00750">get_top_level_node()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01618">hal::BooleanFunction::Node::has_constant_value()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00645">is_empty()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00750">get_top_level_node()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01635">hal::BooleanFunction::Node::has_constant_value()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00645">is_empty()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>.</p>
 
@@ -1197,7 +1199,7 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00735">735</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00750">get_top_level_node()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01639">hal::BooleanFunction::Node::has_index_value()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00645">is_empty()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00750">get_top_level_node()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01683">hal::BooleanFunction::Node::has_index_value()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00645">is_empty()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>.</p>
 
@@ -1229,7 +1231,7 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00678">678</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00750">get_top_level_node()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01649">hal::BooleanFunction::Node::has_variable_name()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00645">is_empty()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00750">get_top_level_node()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01703">hal::BooleanFunction::Node::has_variable_name()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00645">is_empty()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00980">substitute()</a>.</p>
 
@@ -1280,7 +1282,7 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00277">277</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01490">hal::BooleanFunction::Node::Index()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01507">hal::BooleanFunction::Node::Index()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, and <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html#l00100">hal::BooleanFunctionDecorator::get_boolean_function_from()</a>.</p>
 
@@ -1312,9 +1314,9 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00668">668</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00750">get_top_level_node()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01608">hal::BooleanFunction::Node::is()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00645">is_empty()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00750">get_top_level_node()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01625">hal::BooleanFunction::Node::is()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00645">is_empty()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01613">hal::BooleanFunction::Node::is_constant()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01634">hal::BooleanFunction::Node::is_index()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01644">hal::BooleanFunction::Node::is_variable()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01630">hal::BooleanFunction::Node::is_constant()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01678">hal::BooleanFunction::Node::is_index()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01698">hal::BooleanFunction::Node::is_variable()</a>.</p>
 
 </div>
 </div>
@@ -1337,9 +1339,9 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00693">693</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00750">get_top_level_node()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01613">hal::BooleanFunction::Node::is_constant()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00645">is_empty()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00750">get_top_level_node()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01630">hal::BooleanFunction::Node::is_constant()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00645">is_empty()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00703">get_constant_value()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01618">hal::BooleanFunction::Node::has_constant_value()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01659">hal::BooleanFunction::Node::is_operand()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00703">get_constant_value()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01651">hal::BooleanFunction::Node::get_constant_value()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01635">hal::BooleanFunction::Node::has_constant_value()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01723">hal::BooleanFunction::Node::is_operand()</a>.</p>
 
 </div>
 </div>
@@ -1385,9 +1387,9 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00730">730</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00750">get_top_level_node()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00645">is_empty()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01634">hal::BooleanFunction::Node::is_index()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00750">get_top_level_node()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00645">is_empty()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01678">hal::BooleanFunction::Node::is_index()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00740">get_index_value()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01639">hal::BooleanFunction::Node::has_index_value()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01659">hal::BooleanFunction::Node::is_operand()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00740">get_index_value()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01688">hal::BooleanFunction::Node::get_index_value()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01683">hal::BooleanFunction::Node::has_index_value()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01723">hal::BooleanFunction::Node::is_operand()</a>.</p>
 
 </div>
 </div>
@@ -1410,9 +1412,9 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00673">673</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00750">get_top_level_node()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00645">is_empty()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01644">hal::BooleanFunction::Node::is_variable()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00750">get_top_level_node()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00645">is_empty()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01698">hal::BooleanFunction::Node::is_variable()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00683">get_variable_name()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01649">hal::BooleanFunction::Node::has_variable_name()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01659">hal::BooleanFunction::Node::is_operand()</a>, and <a class="el" href="symbolic__state_8cpp_source.html#l00024">hal::SMT::SymbolicState::set()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00683">get_variable_name()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01708">hal::BooleanFunction::Node::get_variable_name()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01703">hal::BooleanFunction::Node::has_variable_name()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01723">hal::BooleanFunction::Node::is_operand()</a>, and <a class="el" href="symbolic__state_8cpp_source.html#l00024">hal::SMT::SymbolicState::set()</a>.</p>
 
 </div>
 </div>
@@ -1475,7 +1477,7 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00522">522</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="boolean__function_8h_source.html#l01127">hal::BooleanFunction::NodeType::Ite</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01480">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="boolean__function_8h_source.html#l01157">hal::BooleanFunction::NodeType::Ite</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01497">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>.</p>
 
@@ -1556,7 +1558,7 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00347">347</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="boolean__function_8h_source.html#l01111">hal::BooleanFunction::NodeType::Mul</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01480">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="boolean__function_8h_source.html#l01141">hal::BooleanFunction::NodeType::Mul</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01497">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00598">operator*()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00603">operator*=()</a>.</p>
 
@@ -1607,7 +1609,7 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00304">304</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="boolean__function_8h_source.html#l01106">hal::BooleanFunction::NodeType::Not</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01480">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="boolean__function_8h_source.html#l01136">hal::BooleanFunction::NodeType::Not</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01497">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00549">operator~()</a>, and <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00294">hal::SolveFsmPlugin::solve_fsm()</a>.</p>
 
@@ -2132,7 +2134,7 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00293">293</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01480">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="boolean__function_8h_source.html#l01105">hal::BooleanFunction::NodeType::Or</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01497">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="boolean__function_8h_source.html#l01135">hal::BooleanFunction::NodeType::Or</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00554">operator|()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00559">operator|=()</a>.</p>
 
@@ -2190,7 +2192,7 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00358">358</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01480">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="boolean__function_8h_source.html#l01112">hal::BooleanFunction::NodeType::Sdiv</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01497">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="boolean__function_8h_source.html#l01142">hal::BooleanFunction::NodeType::Sdiv</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>.</p>
 
@@ -2248,7 +2250,7 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00451">451</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01480">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="boolean__function_8h_source.html#l01120">hal::BooleanFunction::NodeType::Sext</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01497">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="boolean__function_8h_source.html#l01150">hal::BooleanFunction::NodeType::Sext</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, and <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html#l00100">hal::BooleanFunctionDecorator::get_boolean_function_from()</a>.</p>
 
@@ -2321,7 +2323,7 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">663</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00325">Add()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00282">And()</a>, <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01515">hal::BooleanFunction::Node::clone()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01141">compute_truth_table()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00424">Concat()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00265">Const()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00467">Eq()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01067">evaluate()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00703">get_constant_value()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01618">hal::BooleanFunction::Node::has_constant_value()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00277">Index()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00522">Ite()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00347">Mul()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00304">Not()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00538">operator&amp;()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00543">operator&amp;=()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00598">operator*()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00603">operator*=()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00576">operator+()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00581">operator+=()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00587">operator-()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00592">operator-=()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01510">hal::BooleanFunction::Node::operator&lt;()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01500">hal::BooleanFunction::Node::operator==()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00565">operator^()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00570">operator^=()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00554">operator|()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00559">operator|=()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00549">operator~()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00293">Or()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00358">Sdiv()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00451">Sext()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00478">Sle()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00402">Slice()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00489">Slt()</a>, <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00198">hal::SolveFsmPlugin::solve_fsm_brute_force()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00380">Srem()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00336">Sub()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00980">substitute()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00369">Udiv()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00500">Ule()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00511">Ult()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00391">Urem()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00250">Var()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00314">Xor()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00435">Zext()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00325">Add()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00282">And()</a>, <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01532">hal::BooleanFunction::Node::clone()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01158">compute_truth_table()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00424">Concat()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00265">Const()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00467">Eq()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01084">evaluate()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00703">get_constant_value()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01651">hal::BooleanFunction::Node::get_constant_value()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01635">hal::BooleanFunction::Node::has_constant_value()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00277">Index()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00522">Ite()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00347">Mul()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00304">Not()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00538">operator&amp;()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00543">operator&amp;=()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00598">operator*()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00603">operator*=()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00576">operator+()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00581">operator+=()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00587">operator-()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00592">operator-=()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01527">hal::BooleanFunction::Node::operator&lt;()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01517">hal::BooleanFunction::Node::operator==()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00565">operator^()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00570">operator^=()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00554">operator|()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00559">operator|=()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00549">operator~()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00293">Or()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00358">Sdiv()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00451">Sext()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00478">Sle()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00402">Slice()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00489">Slt()</a>, <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00198">hal::SolveFsmPlugin::solve_fsm_brute_force()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00380">Srem()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00336">Sub()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00980">substitute()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00369">Udiv()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00500">Ule()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00511">Ult()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00391">Urem()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00250">Var()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00314">Xor()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00435">Zext()</a>.</p>
 
 </div>
 </div>
@@ -2377,7 +2379,7 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00478">478</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01480">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, <a class="el" href="boolean__function_8h_source.html#l01123">hal::BooleanFunction::NodeType::Sle</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01497">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, <a class="el" href="boolean__function_8h_source.html#l01153">hal::BooleanFunction::NodeType::Sle</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>.</p>
 
@@ -2442,7 +2444,7 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00402">402</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01480">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, <a class="el" href="boolean__function_8h_source.html#l01118">hal::BooleanFunction::NodeType::Slice</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01497">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, <a class="el" href="boolean__function_8h_source.html#l01148">hal::BooleanFunction::NodeType::Slice</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>.</p>
 
@@ -2500,7 +2502,7 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00489">489</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01480">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, <a class="el" href="boolean__function_8h_source.html#l01124">hal::BooleanFunction::NodeType::Slt</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01497">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, <a class="el" href="boolean__function_8h_source.html#l01154">hal::BooleanFunction::NodeType::Slt</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>.</p>
 
@@ -2558,7 +2560,7 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00380">380</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01480">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, <a class="el" href="boolean__function_8h_source.html#l01114">hal::BooleanFunction::NodeType::Srem</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01497">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, <a class="el" href="boolean__function_8h_source.html#l01144">hal::BooleanFunction::NodeType::Srem</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>.</p>
 
@@ -2616,14 +2618,14 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00336">336</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01480">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, <a class="el" href="boolean__function_8h_source.html#l01110">hal::BooleanFunction::NodeType::Sub</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01497">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, <a class="el" href="boolean__function_8h_source.html#l01140">hal::BooleanFunction::NodeType::Sub</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00587">operator-()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00592">operator-=()</a>.</p>
 
 </div>
 </div>
 <a id="a4074a3313f582aa925e783d633b86d90"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4074a3313f582aa925e783d633b86d90">&#9670;&nbsp;</a></span>substitute() <span class="overload">[1/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a4074a3313f582aa925e783d633b86d90">&#9670;&nbsp;</a></span>substitute() <span class="overload">[1/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2637,10 +2639,10 @@ Developer Note</h1>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Substitute multiple variables with other Boolean functions at once. The operation is applied to all instances of the variable in the function.</p>
+<p>Substitute multiple variables with Boolean functions at once. The operation is applied to all instances of the variable in the function.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">substitutions</td><td>- A map from the variable name to the function to replace the variable with. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">substitutions</td><td>- A map from variable names to Boolean functions. </td></tr>
   </table>
   </dd>
 </dl>
@@ -2655,14 +2657,44 @@ Developer Note</h1>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>AST replacement.</dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01047">1047</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00650">clone()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01532">hal::BooleanFunction::Node::clone()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01606">hal::BooleanFunction::Node::get_arity()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01698">hal::BooleanFunction::Node::is_variable()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, and <a class="el" href="boolean__function_8h_source.html#l00926">hal::BooleanFunction::Node::variable</a>.</p>
+
+</div>
+</div>
+<a id="a710893df5a2372be84ea4576de9e3e6b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a710893df5a2372be84ea4576de9e3e6b">&#9670;&nbsp;</a></span>substitute() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> hal::BooleanFunction::substitute </td>
+          <td>(</td>
+          <td class="paramtype">const std::map&lt; std::string, std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>substitutions</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Substitute multiple variable names with different names at once, i.e., rename the variables. The operation is applied to all instances of the variable in the function.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">substitutions</td><td>- A map from old variable names to new variable names. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The resulting Boolean function. </dd></dl>
+
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01030">1030</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00650">clone()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01515">hal::BooleanFunction::Node::clone()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01589">hal::BooleanFunction::Node::get_arity()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01644">hal::BooleanFunction::Node::is_variable()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, and <a class="el" href="boolean__function_8h_source.html#l00917">hal::BooleanFunction::Node::variable</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00650">clone()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00683">get_variable_name()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01512">hal::BooleanFunction::Node::Variable()</a>.</p>
 
 </div>
 </div>
 <a id="ae9242e7d969fc9b6eb402fc5c2386153"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae9242e7d969fc9b6eb402fc5c2386153">&#9670;&nbsp;</a></span>substitute() <span class="overload">[2/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9242e7d969fc9b6eb402fc5c2386153">&#9670;&nbsp;</a></span>substitute() <span class="overload">[3/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2698,14 +2730,14 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00980">980</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00650">clone()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00678">has_variable_name()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01495">hal::BooleanFunction::Node::Variable()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00650">clone()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00678">has_variable_name()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01512">hal::BooleanFunction::Node::Variable()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00264">hal::Gate::get_resolved_boolean_function()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00483">hal::netlist_utils::remove_buffers()</a>, <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00198">hal::SolveFsmPlugin::solve_fsm_brute_force()</a>, <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html#l00015">hal::BooleanFunctionDecorator::substitute_power_ground_nets()</a>, and <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html#l00058">hal::BooleanFunctionDecorator::substitute_power_ground_pins()</a>.</p>
 
 </div>
 </div>
 <a id="a535e68b32ac7bfd72cd9c166699e5138"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a535e68b32ac7bfd72cd9c166699e5138">&#9670;&nbsp;</a></span>substitute() <span class="overload">[3/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a535e68b32ac7bfd72cd9c166699e5138">&#9670;&nbsp;</a></span>substitute() <span class="overload">[4/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2752,7 +2784,7 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00994">994</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00650">clone()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01515">hal::BooleanFunction::Node::clone()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01589">hal::BooleanFunction::Node::get_arity()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01649">hal::BooleanFunction::Node::has_variable_name()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00023">to_string()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00650">clone()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01532">hal::BooleanFunction::Node::clone()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01606">hal::BooleanFunction::Node::get_arity()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01703">hal::BooleanFunction::Node::has_variable_name()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00023">to_string()</a>.</p>
 
 </div>
 </div>
@@ -2831,7 +2863,7 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00883">883</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01589">hal::BooleanFunction::Node::get_arity()</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01520">hal::BooleanFunction::Node::to_string()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01606">hal::BooleanFunction::Node::get_arity()</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01537">hal::BooleanFunction::Node::to_string()</a>.</p>
 
 </div>
 </div>
@@ -2871,7 +2903,7 @@ Developer Note</h1>
 
 <p class="reference">References <a class="el" href="boolean__function_8h_source.html#l00076">ONE</a>, <a class="el" href="boolean__function_8h_source.html#l00077">X</a>, <a class="el" href="boolean__function_8h_source.html#l00078">Z</a>, and <a class="el" href="boolean__function_8h_source.html#l00075">ZERO</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2gate_8cpp_source.html#l00461">hal::Gate::add_boolean_function()</a>, <a class="el" href="action__add__boolean__function_8cpp_source.html#l00065">hal::ActionAddBooleanFunction::addToHash()</a>, <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="boolean__function__table__model_8cpp_source.html#l00043">hal::BooleanFunctionEntry::BooleanFunctionEntry()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01141">compute_truth_table()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01067">evaluate()</a>, <a class="el" href="boolean__function__table__model_8cpp_source.html#l00217">hal::FFComponentEntry::FFComponentEntry()</a>, <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html#l00044">hal::BooleanFunctionNetDecorator::get_net_from()</a>, <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html#l00084">hal::BooleanFunctionNetDecorator::get_net_id_from()</a>, <a class="el" href="boolean__function__table__model_8cpp_source.html#l00265">hal::LatchComponentEntry::LatchComponentEntry()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00229">hal::operator&lt;&lt;()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00483">hal::netlist_utils::remove_buffers()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00994">substitute()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00207">to_u64()</a>, and <a class="el" href="action__add__boolean__function_8cpp_source.html#l00044">hal::ActionAddBooleanFunction::writeToXml()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2gate_8cpp_source.html#l00461">hal::Gate::add_boolean_function()</a>, <a class="el" href="action__add__boolean__function_8cpp_source.html#l00065">hal::ActionAddBooleanFunction::addToHash()</a>, <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="boolean__function__table__model_8cpp_source.html#l00043">hal::BooleanFunctionEntry::BooleanFunctionEntry()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01158">compute_truth_table()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01084">evaluate()</a>, <a class="el" href="boolean__function__table__model_8cpp_source.html#l00217">hal::FFComponentEntry::FFComponentEntry()</a>, <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html#l00044">hal::BooleanFunctionNetDecorator::get_net_from()</a>, <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html#l00084">hal::BooleanFunctionNetDecorator::get_net_id_from()</a>, <a class="el" href="boolean__function__table__model_8cpp_source.html#l00265">hal::LatchComponentEntry::LatchComponentEntry()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00229">hal::operator&lt;&lt;()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00483">hal::netlist_utils::remove_buffers()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00994">substitute()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00207">to_u64()</a>, and <a class="el" href="action__add__boolean__function_8cpp_source.html#l00044">hal::ActionAddBooleanFunction::writeToXml()</a>.</p>
 
 </div>
 </div>
@@ -2960,9 +2992,9 @@ Developer Note</h1>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>(1) status (true on success, false otherwise), (2) SMT-LIB string representation of node and operands.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01297">1297</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01314">1314</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="boolean__function_8h_source.html#l01104">hal::BooleanFunction::NodeType::And</a>, <a class="el" href="boolean__function_8h_source.html#l01117">hal::BooleanFunction::NodeType::Concat</a>, <a class="el" href="boolean__function_8h_source.html#l01129">hal::BooleanFunction::NodeType::Constant</a>, <a class="el" href="boolean__function_8h_source.html#l01130">hal::BooleanFunction::NodeType::Index</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="boolean__function_8h_source.html#l01106">hal::BooleanFunction::NodeType::Not</a>, <a class="el" href="boolean__function_8h_source.html#l01105">hal::BooleanFunction::NodeType::Or</a>, <a class="el" href="boolean__function_8h_source.html#l01120">hal::BooleanFunction::NodeType::Sext</a>, <a class="el" href="boolean__function_8h_source.html#l01118">hal::BooleanFunction::NodeType::Slice</a>, <a class="el" href="boolean__function_8h_source.html#l01131">hal::BooleanFunction::NodeType::Variable</a>, and <a class="el" href="boolean__function_8h_source.html#l01107">hal::BooleanFunction::NodeType::Xor</a>.</p>
+<p class="reference">References <a class="el" href="boolean__function_8h_source.html#l01134">hal::BooleanFunction::NodeType::And</a>, <a class="el" href="boolean__function_8h_source.html#l01147">hal::BooleanFunction::NodeType::Concat</a>, <a class="el" href="boolean__function_8h_source.html#l01159">hal::BooleanFunction::NodeType::Constant</a>, <a class="el" href="boolean__function_8h_source.html#l01160">hal::BooleanFunction::NodeType::Index</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="boolean__function_8h_source.html#l01136">hal::BooleanFunction::NodeType::Not</a>, <a class="el" href="boolean__function_8h_source.html#l01135">hal::BooleanFunction::NodeType::Or</a>, <a class="el" href="boolean__function_8h_source.html#l01150">hal::BooleanFunction::NodeType::Sext</a>, <a class="el" href="boolean__function_8h_source.html#l01148">hal::BooleanFunction::NodeType::Slice</a>, <a class="el" href="boolean__function_8h_source.html#l01161">hal::BooleanFunction::NodeType::Variable</a>, and <a class="el" href="boolean__function_8h_source.html#l01137">hal::BooleanFunction::NodeType::Xor</a>.</p>
 
 </div>
 </div>
@@ -3018,7 +3050,7 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00369">369</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01480">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>, and <a class="el" href="boolean__function_8h_source.html#l01113">hal::BooleanFunction::NodeType::Udiv</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01497">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>, and <a class="el" href="boolean__function_8h_source.html#l01143">hal::BooleanFunction::NodeType::Udiv</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>.</p>
 
@@ -3076,7 +3108,7 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00500">500</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01480">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>, and <a class="el" href="boolean__function_8h_source.html#l01125">hal::BooleanFunction::NodeType::Ule</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01497">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>, and <a class="el" href="boolean__function_8h_source.html#l01155">hal::BooleanFunction::NodeType::Ule</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>.</p>
 
@@ -3134,7 +3166,7 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00511">511</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01480">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>, and <a class="el" href="boolean__function_8h_source.html#l01126">hal::BooleanFunction::NodeType::Ult</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01497">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>, and <a class="el" href="boolean__function_8h_source.html#l01156">hal::BooleanFunction::NodeType::Ult</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>.</p>
 
@@ -3192,7 +3224,7 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00391">391</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01480">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>, and <a class="el" href="boolean__function_8h_source.html#l01115">hal::BooleanFunction::NodeType::Urem</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01497">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>, and <a class="el" href="boolean__function_8h_source.html#l01145">hal::BooleanFunction::NodeType::Urem</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>.</p>
 
@@ -3243,9 +3275,9 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00250">250</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01495">hal::BooleanFunction::Node::Variable()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01512">hal::BooleanFunction::Node::Variable()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01098">evaluate()</a>, <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html#l00100">hal::BooleanFunctionDecorator::get_boolean_function_from()</a>, <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html#l00013">hal::BooleanFunctionNetDecorator::get_boolean_variable()</a>, and <a class="el" href="test_2liberty__parser_8cpp_source.html#l00026">hal::TEST_F()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01115">evaluate()</a>, <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html#l00100">hal::BooleanFunctionDecorator::get_boolean_function_from()</a>, <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html#l00013">hal::BooleanFunctionNetDecorator::get_boolean_variable()</a>, and <a class="el" href="test_2liberty__parser_8cpp_source.html#l00026">hal::TEST_F()</a>.</p>
 
 </div>
 </div>
@@ -3301,7 +3333,7 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00314">314</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01480">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>, and <a class="el" href="boolean__function_8h_source.html#l01107">hal::BooleanFunction::NodeType::Xor</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01497">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>, and <a class="el" href="boolean__function_8h_source.html#l01137">hal::BooleanFunction::NodeType::Xor</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00565">operator^()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00570">operator^=()</a>.</p>
 
@@ -3359,7 +3391,7 @@ Developer Note</h1>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00435">435</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01480">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>, and <a class="el" href="boolean__function_8h_source.html#l01119">hal::BooleanFunction::NodeType::Zext</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00234">BooleanFunction()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01497">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00663">size()</a>, <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>, and <a class="el" href="boolean__function_8h_source.html#l01149">hal::BooleanFunction::NodeType::Zext</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, and <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html#l00100">hal::BooleanFunctionDecorator::get_boolean_function_from()</a>.</p>
 
@@ -3470,7 +3502,7 @@ Developer Note</h1>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a></li>
-    <li class="footer">Generated on Mon Mar 13 2023 16:36:23 for HAL by
+    <li class="footer">Generated on Sun Mar 19 2023 08:20:21 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

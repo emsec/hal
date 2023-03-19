@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Boolean Function &mdash; hal_py v4.1.0-8-ge8c480e84 documentation</title>
+  <title>Boolean Function &mdash; hal_py v4.1.0-9-gc055535a9 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.1.0-8-ge8c480e84
+                v4.1.0-9-gc055535a9
               </div>
             
           
@@ -681,6 +681,54 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The arity.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.BooleanFunction.Node.get_constant_value">
+<code class="descname">get_constant_value</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction.Node</em><span class="sig-paren">)</span> &#x2192; Optional[int]<a class="headerlink" href="#hal_py.BooleanFunction.Node.get_constant_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the constant value of the node of type <cite>Constant</cite> as long as it has a size &lt;= 64-bit.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The constant value on success, None otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.BooleanFunction.Node.get_index_value">
+<code class="descname">get_index_value</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction.Node</em><span class="sig-paren">)</span> &#x2192; Optional[int]<a class="headerlink" href="#hal_py.BooleanFunction.Node.get_index_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the index value of node of type <cite>Index</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The index value on success, None otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.BooleanFunction.Node.get_variable_name">
+<code class="descname">get_variable_name</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction.Node</em><span class="sig-paren">)</span> &#x2192; Optional[str]<a class="headerlink" href="#hal_py.BooleanFunction.Node.get_variable_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the variable name of node of type <cite>Variable</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The variable name on success, None otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
 </tr>
 </tbody>
 </table>
@@ -1932,7 +1980,7 @@ Requires both Boolean functions to be of the same bit-size.</p>
 <dl class="method">
 <dt id="hal_py.BooleanFunction.get_constant_value">
 <code class="descname">get_constant_value</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; Optional[int]<a class="headerlink" href="#hal_py.BooleanFunction.get_constant_value" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the value of the top-level node of the Boolean function of type Constant as long as it has a size &lt;= 64-bit.</p>
+<dd><p>Get the constant value of the top-level node of the Boolean function of type Constant as long as it has a size &lt;= 64-bit.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1948,7 +1996,7 @@ Requires both Boolean functions to be of the same bit-size.</p>
 <dl class="method">
 <dt id="hal_py.BooleanFunction.get_index_value">
 <code class="descname">get_index_value</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; Optional[int]<a class="headerlink" href="#hal_py.BooleanFunction.get_index_value" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the value of the top-level node of the Boolean function of type Index.</p>
+<dd><p>Get the index value of the top-level node of the Boolean function of type Index.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -2352,6 +2400,25 @@ The operation is applied to all instances of the variable in the function.</p>
 <tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The resulting Boolean function on success, None otherwise.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">hal_py.BooleanFunction or None</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">substitute(self: hal_py.BooleanFunction, substitutions: Dict[str, str]) -&gt; hal_py.BooleanFunction</p>
+<blockquote>
+<div><p>Substitute multiple variable names with different names at once, i.e., rename the variables.
+The operation is applied to all instances of the variable in the function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param dict[str,str] substitutions:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">A dict from old variable names to new variable names.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The resulting Boolean function.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.BooleanFunction</td>
 </tr>
 </tbody>
 </table>

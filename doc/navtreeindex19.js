@@ -1,5 +1,6 @@
 var NAVTREEINDEX19 =
 {
+"classnlohmann_1_1basic__json.html#a404cfe1bdbf1dc6b229627fcf2afb95f":[6,0,1,2,93],
 "classnlohmann_1_1basic__json.html#a4057c5425f4faacfe39a8046871786ca":[6,0,1,2,5],
 "classnlohmann_1_1basic__json.html#a412895af9a582869a4d369a64fb1b6d6":[6,0,1,2,172],
 "classnlohmann_1_1basic__json.html#a41a70cf9993951836d129bb1c2b3126a":[6,0,1,2,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX19 =
 "classnlohmann_1_1detail_1_1json__ref.html":[6,0,1,0,75],
 "classnlohmann_1_1detail_1_1json__ref.html#a4c68db46934e03588bbd73b00147c0dd":[6,0,1,0,75,6],
 "classnlohmann_1_1detail_1_1json__ref.html#a59221ddbd756ca24d289c787fab38dbc":[6,0,1,0,75,5],
-"classnlohmann_1_1detail_1_1json__ref.html#a78d76cf288141049568c0d670ed670ef":[6,0,1,0,75,0],
-"classnlohmann_1_1detail_1_1json__ref.html#a8a31d6c588d6c3c06b62008fd5d36c6c":[6,0,1,0,75,4]
+"classnlohmann_1_1detail_1_1json__ref.html#a78d76cf288141049568c0d670ed670ef":[6,0,1,0,75,0]
 };

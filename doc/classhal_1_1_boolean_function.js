@@ -48,6 +48,7 @@ var classhal_1_1_boolean_function =
     [ "simplify_local", "classhal_1_1_boolean_function.html#acce561ac2183c0f586284e7580b410a4", null ],
     [ "size", "classhal_1_1_boolean_function.html#af98903ba34ce51e73df303318996d4ea", null ],
     [ "substitute", "classhal_1_1_boolean_function.html#a4074a3313f582aa925e783d633b86d90", null ],
+    [ "substitute", "classhal_1_1_boolean_function.html#a710893df5a2372be84ea4576de9e3e6b", null ],
     [ "substitute", "classhal_1_1_boolean_function.html#ae9242e7d969fc9b6eb402fc5c2386153", null ],
     [ "substitute", "classhal_1_1_boolean_function.html#a535e68b32ac7bfd72cd9c166699e5138", null ],
     [ "to_string", "classhal_1_1_boolean_function.html#a4d7c7ffa15944b4caf6e33571875a204", null ],

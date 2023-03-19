@@ -25,6 +25,9 @@ var group__netlist =
     [ "Node", "structhal_1_1_boolean_function_1_1_node.html", [
       [ "clone", "structhal_1_1_boolean_function_1_1_node.html#ac14f6eb42a80b1ed987b1aadd112a9cd", null ],
       [ "get_arity", "structhal_1_1_boolean_function_1_1_node.html#a43c91ca11b662b751f9c105124a510cc", null ],
+      [ "get_constant_value", "structhal_1_1_boolean_function_1_1_node.html#ab384112f224843d4b5477087302b9dde", null ],
+      [ "get_index_value", "structhal_1_1_boolean_function_1_1_node.html#ae164b1cfbfb7acac586710a68fa39d2b", null ],
+      [ "get_variable_name", "structhal_1_1_boolean_function_1_1_node.html#af8f9586576661e884620d4aaeedc7c90", null ],
       [ "has_constant_value", "structhal_1_1_boolean_function_1_1_node.html#a2864ba0bac7f292a2202f538b86c3cbe", null ],
       [ "has_index_value", "structhal_1_1_boolean_function_1_1_node.html#a864612168420ece94949dbc8c5b74d5d", null ],
       [ "has_variable_name", "structhal_1_1_boolean_function_1_1_node.html#a8ef4e740560fbb4eb134b012ea393a2d", null ],
@@ -95,6 +98,7 @@ var group__netlist =
       [ "simplify_local", "classhal_1_1_boolean_function.html#acce561ac2183c0f586284e7580b410a4", null ],
       [ "size", "classhal_1_1_boolean_function.html#af98903ba34ce51e73df303318996d4ea", null ],
       [ "substitute", "classhal_1_1_boolean_function.html#a4074a3313f582aa925e783d633b86d90", null ],
+      [ "substitute", "classhal_1_1_boolean_function.html#a710893df5a2372be84ea4576de9e3e6b", null ],
       [ "substitute", "classhal_1_1_boolean_function.html#ae9242e7d969fc9b6eb402fc5c2386153", null ],
       [ "substitute", "classhal_1_1_boolean_function.html#a535e68b32ac7bfd72cd9c166699e5138", null ],
       [ "to_string", "classhal_1_1_boolean_function.html#a4d7c7ffa15944b4caf6e33571875a204", null ],
