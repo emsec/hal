@@ -1027,6 +1027,23 @@ namespace hal
         }
     }
 
+    BooleanFunction BooleanFunction::substitute(const std::map<std::string, std::string>& substitutions) const
+    {
+        auto function = this->clone();
+        for (auto i = 0u; i < this->m_nodes.size(); i++)
+        {
+            if (const auto var_name_res = this->m_nodes[i].get_variable_name(); var_name_res.is_ok())
+            {
+                if (const auto it = substitutions.find(var_name_res.get()); it != substitutions.end())
+                {
+                    function.m_nodes[i] = Node::Variable(it->second, this->m_nodes[i].size);
+                }
+            }
+        }
+
+        return function;
+    }
+
     Result<BooleanFunction> BooleanFunction::substitute(const std::map<std::string, BooleanFunction>& substitutions) const
     {
         /// Helper function to find the replacement for a variable and substitute it with a Boolean function.
@@ -1631,6 +1648,33 @@ namespace hal
         return this->constant == bv_value;
     }
 
+    Result<u64> BooleanFunction::Node::get_constant_value() const
+    {
+        if (!this->is_constant())
+        {
+            return ERR("Node is not a constant");
+        }
+
+        if (this->size > 64)
+        {
+            return ERR("Node constant has size > 64");
+        }
+
+        if (std::any_of(this->constant.begin(), this->constant.end(), [](auto v) { return v != BooleanFunction::Value::ONE && v != BooleanFunction::Value::ZERO; }))
+        {
+            return ERR("Node constant is undefined or high-impedance");
+        }
+
+        u64 val = 0;
+        for (auto it = this->constant.rbegin(); it != this->constant.rend(); it++)
+        {
+            val <<= 1;
+            val |= *it;
+        }
+
+        return OK(val);
+    }
+
     bool BooleanFunction::Node::is_index() const
     {
         return this->is(BooleanFunction::NodeType::Index);
@@ -1641,6 +1685,16 @@ namespace hal
         return this->is_index() && (this->index == value);
     }
 
+    Result<u16> BooleanFunction::Node::get_index_value() const
+    {
+        if (!this->is_index())
+        {
+            return ERR("Node is not an index");
+        }
+
+        return OK(this->index);
+    }
+
     bool BooleanFunction::Node::is_variable() const
     {
         return this->is(BooleanFunction::NodeType::Variable);
@@ -1649,6 +1703,16 @@ namespace hal
     bool BooleanFunction::Node::has_variable_name(const std::string& value) const
     {
         return this->is_variable() && (this->variable == value);
+    }
+
+    Result<std::string> BooleanFunction::Node::get_variable_name() const
+    {
+        if (!this->is_variable())
+        {
+            return ERR("Node is not a variable");
+        }
+
+        return OK(this->variable);
     }
 
     bool BooleanFunction::Node::is_operation() const
