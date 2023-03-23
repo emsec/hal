@@ -20,7 +20,7 @@ namespace hal
     }
 
 
-    ProgramOptions PluginTestPlugin::get_cli_options() const
+    ProgramOptions CliExtensionTestPlugin::get_cli_options() const
     {
         ProgramOptions description;
         description.add("--option_one", "option_one_description");
@@ -28,7 +28,7 @@ namespace hal
         return description;
     }
 
-    bool PluginTestPlugin::handle_cli_call(Netlist* nl, ProgramArguments& args)
+    bool CliExtensionTestPlugin::handle_cli_call(Netlist* nl, ProgramArguments& args)
     {
         UNUSED(nl);
         UNUSED(args);

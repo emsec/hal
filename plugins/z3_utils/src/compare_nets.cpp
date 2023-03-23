@@ -34,11 +34,11 @@ namespace hal
                 return false;
             }
 
-            std::vector<Gate*> gates_a = netlist_a->get_gates([](Gate* g) {
+            std::vector<Gate*> gates_a = netlist_a->get_gates([](const Gate* g) {
                 auto props = g->get_type()->get_properties();
                 return props.find(GateTypeProperty::combinational) != props.end();
             });
-            std::vector<Gate*> gates_b = netlist_b->get_gates([](Gate* g) {
+            std::vector<Gate*> gates_b = netlist_b->get_gates([](const Gate* g) {
                 auto props = g->get_type()->get_properties();
                 return props.find(GateTypeProperty::combinational) != props.end();
             });

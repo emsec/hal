@@ -28,8 +28,8 @@ namespace hal {
         {
             progress = std::clamp(progress,0.f,1.f);
             u32 int_progress = (u32)(progress * 100.0f);
-            if (plugin_dataflow::s_progress_indicator_function)
-                plugin_dataflow::s_progress_indicator_function(int_progress<100 ? int_progress : 99, "dataflow analysis running ...");
+            if (GuiExtensionDataflow::s_progress_indicator_function)
+                GuiExtensionDataflow::s_progress_indicator_function(int_progress<100 ? int_progress : 99, "dataflow analysis running ...");
 
             if (m_terminal_width <= 8) return;
 

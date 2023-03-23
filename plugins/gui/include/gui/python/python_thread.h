@@ -38,7 +38,7 @@ namespace hal {
     class PythonThread : public QThread, public PythonContextSubscriber
     {
     public:
-        enum InputType {ConsoleInput, StringInput, NumberInput, ModuleInput, GateInput, FilenameInput};
+        enum InputType {ConsoleInput, StringInput, NumberInput, ModuleInput, GateInput, FilenameInput, WaitForMenuSelection};
     private:
         Q_OBJECT
         QString mScript;
@@ -52,7 +52,6 @@ namespace hal {
         bool mSingleStatement;
         bool mAbortRequested;
         int mSpamCount;
-        bool getInput(InputType type, QString prompt, QVariant defaultValue);
     Q_SIGNALS:
         void stdOutput(QString txt);
         void stdError(QString txt);
@@ -74,6 +73,8 @@ namespace hal {
         std::string handleFilenameInput(const QString& prompt, const QString& filetype);
         void clear() override;
         void setInput(const QVariant& inp);
+        bool getInput(InputType type, QString prompt, QVariant defaultValue);
+        void unlock();
         const QString& stdoutBuffer() const { return mStdoutBuffer; }
         QString flushStdout();
      };

@@ -107,7 +107,6 @@ namespace hal
      * The global CommentManager
      */
     extern CommentManager* gCommentManager;
-    ///@}
 
     // Comment this out to not compile the debug code for the graph grid.
     // This will also hide the respective debug setting from the settings page.

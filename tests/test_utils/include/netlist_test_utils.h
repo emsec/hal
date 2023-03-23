@@ -443,7 +443,7 @@ namespace hal
          * @param name - the name of the modules the filter is searching for
          * @return the std::function object of the filter function
          */
-        std::function<bool(Module*)> module_name_filter(const std::string& name);
+        std::function<bool(const Module*)> module_name_filter(const std::string& name);
 
         // +++ Grouping Filter +++
 
@@ -453,7 +453,7 @@ namespace hal
          * @param name - the name of the grouping the filter is searching for
          * @return the std::function object of the filter function
          */
-        std::function<bool(Grouping*)> grouping_name_filter(const std::string& name);
+        std::function<bool(const Grouping*)> grouping_name_filter(const std::string& name);
 
         // +++ Gate Filter +++
 
@@ -464,7 +464,7 @@ namespace hal
          * @param name - the name of the gates the filter is searching for
          * @return the std::function object of the filter function
          */
-        std::function<bool(Gate*)> gate_filter(const std::string& type, const std::string& name);
+        std::function<bool(const Gate*)> gate_filter(const std::string& type, const std::string& name);
 
         /**
          * Filter returns true for gates with the name 'name'
@@ -472,7 +472,7 @@ namespace hal
          * @param name - the name of the gates the filter is searching for
          * @return the std::function object of the filter function
          */
-        std::function<bool(Gate*)> gate_name_filter(const std::string& name);
+        std::function<bool(const Gate*)> gate_name_filter(const std::string& name);
 
         /**
          * Filter returns true for gates of type 'type'
@@ -480,7 +480,7 @@ namespace hal
          * @param type - the type of the gates the filter is searching for
          * @return the std::function object of the filter function
          */
-        std::function<bool(Gate*)> gate_type_filter(const std::string& type);
+        std::function<bool(const Gate*)> gate_type_filter(const std::string& type);
 
         // +++ Net Filter +++
 
@@ -490,7 +490,7 @@ namespace hal
          * @param name - the name of the nets the filter is searching for
          * @return the std::function object of the filter function
          */
-        std::function<bool(Net*)> net_name_filter(const std::string& name);
+        std::function<bool(const Net*)> net_name_filter(const std::string& name);
 
         // +++ Endpoint* Filter +++
 
@@ -500,7 +500,7 @@ namespace hal
          * @param gate_type - the type of the gates the filter is searching for
          * @return the std::function object of the filter function
          */
-        std::function<bool(Endpoint*)> endpoint_gate_type_filter(const std::string& gate_type);
+        std::function<bool(const Endpoint*)> endpoint_gate_type_filter(const std::string& gate_type);
 
         /**
          * Filter returns true, if the type of the Gate, the Endpoint* is connected to, has the name 'name'
@@ -508,7 +508,7 @@ namespace hal
          * @param type - the name of the gates the filter is searching for
          * @return the std::function object of the filter function
          */
-        std::function<bool(Endpoint*)> endpoint_gate_name_filter(const std::string& name);
+        std::function<bool(const Endpoint*)> endpoint_gate_name_filter(const std::string& name);
 
         /**
          * Filter returns true for endpoints connected to the pin.
@@ -516,7 +516,7 @@ namespace hal
          * @param pin - The pin.
          * @return the std::function object of the filter function
          */
-        std::function<bool(Endpoint*)> endpoint_pin_filter(const GatePin* pin);
+        std::function<bool(const Endpoint*)> endpoint_pin_filter(const GatePin* pin);
 
         /**
          * Filter returns true, for all connected Endpoints (of adjacent gates) of type 'pin'
@@ -524,7 +524,7 @@ namespace hal
          * @param pin_name - The pin name.
          * @return the std::function object of the filter function
          */
-        std::function<bool(const GatePin*, Endpoint*)> adjacent_pin_filter(const std::string& pin_name);
+        std::function<bool(const GatePin*, const Endpoint*)> adjacent_pin_filter(const std::string& pin_name);
 
         /**
          * Filter returns true for all endpoints, that are connected to the pin of pintype 'pin' of the calling Gate
@@ -532,7 +532,7 @@ namespace hal
          * @param pin_name - The pin name.
          * @return the std::function object of the filter function
          */
-        std::function<bool(const GatePin*, Endpoint*)> starting_pin_filter(const std::string& pin_name);
+        std::function<bool(const GatePin*, const Endpoint*)> starting_pin_filter(const std::string& pin_name);
 
         /**
          * Filter returns true for all endpoints of adjacent gates of Gate type 'type'
@@ -540,7 +540,7 @@ namespace hal
          * @param type - the type of adjacent gates, the filter is searching for
          * @return the std::function object of the filter function
          */
-        std::function<bool(const GatePin*, Endpoint*)> adjacent_gate_type_filter(const std::string& type);
+        std::function<bool(const GatePin*, const Endpoint*)> adjacent_gate_type_filter(const std::string& type);
 
         /**
          * Used to test the event system. It can create callback hooks (via get_callback/get_conditional_callback) and

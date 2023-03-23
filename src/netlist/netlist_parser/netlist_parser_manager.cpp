@@ -5,6 +5,7 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_parser/netlist_parser.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/plugin_system/plugin_manager.h"
 
 #include <fstream>
 
@@ -233,5 +234,11 @@ namespace hal
 
             return dispatch_parse(file_name, factory(), nullptr, false);
         }
+
+        std::unordered_map<std::string, std::vector<std::string>> get_parser_to_extensions()
+        {
+            return m_parser_to_extensions;
+        }
+
     }    // namespace netlist_parser_manager
 }    // namespace hal

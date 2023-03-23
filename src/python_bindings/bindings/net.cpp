@@ -130,6 +130,14 @@ namespace hal
             :rtype: bool
         )");
 
+        py_net.def("is_a_source", py::overload_cast<const Gate*>(&Net::is_a_source, py::const_), py::arg("gate"), R"(
+            Check whether a gate is a source of the net independent of the pin.
+
+            :param hal_py.Gate gate: The gate.
+            :returns: True if the gate is a source of the net, False otherwise.
+            :rtype: bool
+        )");
+
         py_net.def("is_a_source", py::overload_cast<const Gate*, const std::string&>(&Net::is_a_source, py::const_), py::arg("gate"), py::arg("pin_name"), R"(
             Check whether an endpoint is a source of the net.
             The endpoint is specified by a tuple of a gate and the name of an output pin of that gate.
@@ -232,6 +240,14 @@ namespace hal
 
             :param hal_py.Endpoint ep: The destination endpoint.
             :returns: True on success, False otherwise.
+            :rtype: bool
+        )");
+
+        py_net.def("is_a_destination", py::overload_cast<const Gate*>(&Net::is_a_destination, py::const_), py::arg("gate"), R"(
+            Check whether a gate is a destination of the net independent of the pin.
+
+            :param hal_py.Gate gate: The gate.
+            :returns: True if the gate is a destination of the net, False otherwise.
             :rtype: bool
         )");
 

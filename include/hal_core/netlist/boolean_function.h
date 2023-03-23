@@ -673,7 +673,7 @@ namespace hal
         bool has_index_value(u16 index) const;
 
         /**
-         * Get the value of the top-level node of the Boolean function of type `Index`.
+         * Get the index value of the top-level node of the Boolean function of type `Index`.
          * 
          * @returns The constant value on success, an error otherwise.
          */
@@ -774,10 +774,19 @@ namespace hal
         Result<BooleanFunction> substitute(const std::string& variable_name, const BooleanFunction& function) const;
 
         /**
-         * Substitute multiple variables with other Boolean functions at once.
+         * Substitute multiple variable names with different names at once, i.e., rename the variables.
          * The operation is applied to all instances of the variable in the function.
          *
-         * @param[in] substitutions - A map from the variable name to the function to replace the variable with.
+         * @param[in] substitutions - A map from old variable names to new variable names.
+         * @returns The resulting Boolean function.
+         */
+        BooleanFunction substitute(const std::map<std::string, std::string>& substitutions) const;
+
+        /**
+         * Substitute multiple variables with Boolean functions at once.
+         * The operation is applied to all instances of the variable in the function.
+         *
+         * @param[in] substitutions - A map from variable names to Boolean functions.
          * @returns Ok() and the resulting Boolean function on success, an error otherwise.
          */
         Result<BooleanFunction> substitute(const std::map<std::string, BooleanFunction>& substitutions) const;
@@ -1059,6 +1068,13 @@ namespace hal
         bool has_constant_value(u64 value) const;
 
         /**
+         * Get the constant value of the node of type `Constant` as long as it has a size <= 64-bit.
+         * 
+         * @returns The constant value on success, an error otherwise.
+         */
+        Result<u64> get_constant_value() const;
+
+        /**
          * Checks whether the Boolean function node is of type `Index`.
          * 
          * @returns `true` if the Boolean function node is of type `Index`, `false` otherwise.
@@ -1074,6 +1090,13 @@ namespace hal
         bool has_index_value(u16 value) const;
 
         /**
+         * Get the index value of node of type `Index`.
+         * 
+         * @returns The index value on success, an error otherwise.
+         */
+        Result<u16> get_index_value() const;
+
+        /**
          * Checks whether the Boolean function node is of type `Variable`.
          * 
          * @returns `true` if the Boolean function node is of type `Variable`, `false` otherwise.
@@ -1087,6 +1110,13 @@ namespace hal
          * @returns `true` if the Boolean function node is of type `Variable` and holds the given variable name, `false` otherwise.
          */
         bool has_variable_name(const std::string& variable_name) const;
+
+        /**
+         * Get the variable name of node of type `Variable`.
+         * 
+         * @returns The variable name on success, an error otherwise.
+         */
+        Result<std::string> get_variable_name() const;
 
         /**
          * Checks whether the Boolean function node is an operation node.

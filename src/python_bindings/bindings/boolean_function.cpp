@@ -954,7 +954,7 @@ namespace hal
                 }
             },
             R"(
-            Get the value of the top-level node of the Boolean function of type Constant as long as it has a size <= 64-bit.
+            Get the constant value of the top-level node of the Boolean function of type Constant as long as it has a size <= 64-bit.
 
             :returns: The constant value on success, None otherwise.
             :rtype: int or None
@@ -990,7 +990,7 @@ namespace hal
                 }
             },
             R"(
-            Get the value of the top-level node of the Boolean function of type Index.
+            Get the index value of the top-level node of the Boolean function of type Index.
 
             :returns: The index value on success, None otherwise.
             :rtype: int or None
@@ -1138,6 +1138,18 @@ namespace hal
             :param hal_py.BooleanFunction function: The function replace the variable with.
             :returns: The resulting Boolean function on success, None otherwise.
             :rtype: hal_py.BooleanFunction or None
+        )");
+
+        py_boolean_function.def("substitute",
+                                py::overload_cast<const std::map<std::string, std::string>&>(&BooleanFunction::substitute, py::const_),
+                                py::arg("substitutions"),
+                                R"(
+            Substitute multiple variable names with different names at once, i.e., rename the variables.
+            The operation is applied to all instances of the variable in the function.
+
+            :param dict[str,str] substitutions: A dict from old variable names to new variable names.
+            :returns: The resulting Boolean function.
+            :rtype: hal_py.BooleanFunction
         )");
 
         py_boolean_function.def(
@@ -1414,6 +1426,26 @@ namespace hal
             :rtype: bool
         )");
 
+        py_boolean_function_node.def(
+            "get_constant_value",
+            [](const BooleanFunction::Node& self) -> std::optional<u64> {
+                if (const auto res = self.get_constant_value(); res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "could not get constant value:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            R"(
+            Get the constant value of the node of type `Constant` as long as it has a size <= 64-bit.
+
+            :returns: The constant value on success, None otherwise. 
+            :rtype: int or None
+        )");
+
         py_boolean_function_node.def("is_index", &BooleanFunction::Node::is_index, R"(
             Checks whether the Boolean function node is of type Index.
 
@@ -1429,6 +1461,26 @@ namespace hal
             :rtype: bool
         )");
 
+        py_boolean_function_node.def(
+            "get_index_value",
+            [](const BooleanFunction::Node& self) -> std::optional<u64> {
+                if (const auto res = self.get_index_value(); res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "could not get index value:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            R"(
+            Get the index value of node of type `Index`.
+
+            :returns: The index value on success, None otherwise. 
+            :rtype: int or None
+        )");
+
         py_boolean_function_node.def("is_variable", &BooleanFunction::Node::is_variable, R"(
             Checks whether the Boolean function node is of type Variable.
 
@@ -1442,6 +1494,26 @@ namespace hal
             :param str variable_name: The variable name to check for.
             :returns: True if the Boolean function node is of type Variable and holds the given variable name, False otherwise.
             :rtype: bool
+        )");
+
+        py_boolean_function_node.def(
+            "get_variable_name",
+            [](const BooleanFunction::Node& self) -> std::optional<std::string> {
+                if (const auto res = self.get_variable_name(); res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "could not get variable name:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            R"(
+            Get the variable name of node of type `Variable`.
+
+            :returns: The variable name on success, None otherwise. 
+            :rtype: str or None
         )");
 
         py_boolean_function_node.def("is_operation", &BooleanFunction::Node::is_operation, R"(

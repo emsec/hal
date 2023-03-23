@@ -15,12 +15,12 @@ namespace hal {
         : QThread(parent), mScript(script), mSingleStatement(singleStatement),
           mAbortRequested(false), mSpamCount(0)
     {
-//        qDebug() << "+++PythonThread" << hex << (quintptr) this;
+          qDebug() << "+++PythonThread" << hex << (quintptr) this;
     }
 
     PythonThread::~PythonThread()
     {
-//        qDebug() << "---PythonThread" << hex << (quintptr) this;
+          qDebug() << "---PythonThread" << hex << (quintptr) this;
     }
 
     void PythonThread::run()
@@ -138,7 +138,8 @@ namespace hal {
             qDebug() << "Oh no! Function already locked waiting for input.";
             return false;
         }
-        Q_EMIT requireInput(type,prompt,defaultValue);
+        if (type != WaitForMenuSelection)
+            Q_EMIT requireInput(type,prompt,defaultValue);
         mInputMutex.lock(); // wait for set Input
         mInputMutex.unlock();
         if (mAbortRequested)
@@ -189,5 +190,12 @@ namespace hal {
     {
         mInput = inp;
         mInputMutex.unlock();
+    }
+
+    void PythonThread::unlock()
+    {
+       // unlocking if not locked might cause undefined behavior
+       mInputMutex.tryLock();
+       mInputMutex.unlock();
     }
 }
