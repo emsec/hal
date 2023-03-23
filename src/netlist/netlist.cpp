@@ -206,7 +206,7 @@ namespace hal
         return m_gates;
     }
 
-    std::vector<Gate*> Netlist::get_gates(const std::function<bool(Gate*)>& filter) const
+    std::vector<Gate*> Netlist::get_gates(const std::function<bool(const Gate*)>& filter) const
     {
         if (!filter)
         {
@@ -366,7 +366,7 @@ namespace hal
         return m_nets;
     }
 
-    std::vector<Net*> Netlist::get_nets(const std::function<bool(Net*)>& filter) const
+    std::vector<Net*> Netlist::get_nets(const std::function<bool(const Net*)>& filter) const
     {
         if (!filter)
         {
@@ -592,7 +592,7 @@ namespace hal
         return m_modules;
     }
 
-    std::vector<Module*> Netlist::get_modules(const std::function<bool(Module*)>& filter) const
+    std::vector<Module*> Netlist::get_modules(const std::function<bool(const Module*)>& filter) const
     {
         if (!filter)
         {
@@ -665,7 +665,12 @@ namespace hal
         return nullptr;
     }
 
-    std::vector<Grouping*> Netlist::get_groupings(const std::function<bool(Grouping*)>& filter) const
+    const std::vector<Grouping*>& Netlist::get_groupings() const
+    {
+        return m_groupings;  
+    }
+
+    std::vector<Grouping*> Netlist::get_groupings(const std::function<bool(const Grouping*)>& filter) const
     {
         if (!filter)
         {
